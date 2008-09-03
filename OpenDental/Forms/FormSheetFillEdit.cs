@@ -430,6 +430,16 @@ namespace OpenDental {
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
 			SheetField field;
+			//Images------------------------------------------------------
+			foreach(SheetField fld in SheetCur.SheetFields){
+				if(!fld.IsNew){
+					continue;//so it only saves them when the sheet is first created because user can't edit.
+				}
+				if(fld.FieldType==SheetFieldType.Image){
+					fld.SheetNum=SheetCur.SheetNum;
+					SheetFields.WriteObject(fld);
+				}
+			}
 			//RichTextBoxes-----------------------------------------------
 			foreach(Control control in panelMain.Controls){
 				if(control.GetType()!=typeof(RichTextBox)){
