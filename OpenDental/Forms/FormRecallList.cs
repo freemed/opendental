@@ -659,10 +659,8 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
-			List<int> patNums=new List<int>();
-			patNums.Add(SelectedPatNum);
-			List<Recall> recalls=Recalls.GetList(patNums);
-			FormRecallListEdit FormRE=new FormRecallListEdit(recalls[0]);
+			Recall recall=Recalls.GetRecall(PIn.PInt(table.Rows[e.Row]["RecallNum"].ToString()));
+			FormRecallListEdit FormRE=new FormRecallListEdit(recall);
 			FormRE.ShowDialog();
 			if(FormRE.PinClicked){
 				PinClicked=true;

@@ -21,12 +21,13 @@ namespace OpenDental{
 			}
 			string command=
 				"SELECT recall.*, "
-				+"(SELECT MAX(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
+				+"(SELECT appointment.AptDateTime FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
-				+"AND procedurelog.ProcStatus=1) "//TP
+				+"AND (appointment.AptStatus=1 "//Scheduled
+				+"OR appointment.AptStatus=4))"//ASAP
 				+"FROM recall "
 				+"WHERE "+wherePats;
 			return RefreshAndFill(command);
@@ -45,6 +46,11 @@ namespace OpenDental{
 				patNums.Add(patients[i].PatNum);
 			}
 			return GetList(patNums);
+		}
+
+		public static Recall GetRecall(int recallNum){
+			string command="SELECT * FROM recall WHERE RecallNum="+POut.PInt(recallNum);
+			return RefreshAndFill(command)[0];
 		}
 
 		private static List<Recall> RefreshAndFill(string command){
@@ -116,22 +122,19 @@ namespace OpenDental{
 				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
 			}
 			command+=
-				"AND NOT EXISTS("//test for future appt.
-				+"SELECT * FROM appointment,procedurelog,procedurecode "
-				+"WHERE procedurelog.PatNum = recall.PatNum "
-				+"AND appointment.PatNum = recall.PatNum "
-				+"AND procedurelog.CodeNum = procedurecode.CodeNum "
-				+"AND procedurelog.AptNum = appointment.AptNum "
-				+"AND appointment.AptDateTime >= ";//'"+DateTime.Today.ToString("yyyy-MM-dd")+"' "
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+=POut.PDate(MiscData.GetNowDateTime());
-				}else{//Assume MySQL
-					command+="CURDATE()";
-				}
-				command+=" AND procedurecode.SetRecall = '1') "//end of NOT EXISTS
+				"AND NOT EXISTS("//test for scheduled appt.
+				+"SELECT * FROM appointment,procedurelog,recalltrigger "
+				+"WHERE appointment.AptNum=procedurelog.AptNum "
+				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
+				+"AND recall.PatNum=procedurelog.PatNum "
+				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
+				+"AND (appointment.AptStatus=1 "//Scheduled
+				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
 				+"AND recall.DateDue >= "+POut.PDate(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
 				+"AND patient.patstatus=0 "
+				+"AND (recall.RecallTypeNum="+RecallTypes.ProphyType+" "
+				+"OR recall.RecallTypeNum="+RecallTypes.PerioType+") "
 				+"ORDER BY ";
 			if(groupByFamilies){
 				command+="patient.Guarantor, ";
