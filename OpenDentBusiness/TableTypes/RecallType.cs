@@ -3,7 +3,7 @@ using System.Collections;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
-	///<summary>a procedure will just be linked to one recall type for now.  The link will remain as a field in the procedurecode table.  The interface will move to the recall setup window.  Later, we could allow attaching one procedure to multiple recall types, but it will require a linking table.</summary>
+	///<summary>All recalls are based on these recall types.  Recall triggers are in their own table.</summary>
 	[DataObject("recalltype")]
 	public class RecallType : DataObjectBase{
 		[DataField("RecallTypeNum",PrimaryKey=true,AutoNumber=true)]
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 			get{return proceduresChanged;}
 		}
 
-		[DataField("TriggerProcs")]
+		/*[DataField("TriggerProcs")]
 		private string triggerProcs;
 		private bool triggerProcsChanged;
 		///<summary>Procedures that trigger this recall.  Used to be a bool: procedurecode.SetRecall.  Comma delimited set of ProcCodes.  (We may change this to CodeNums).</summary>
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 		}
 		public bool TriggerProcsChanged{
 			get{return triggerProcsChanged;}
-		}
+		}*/
 		
 		public RecallType Copy(){
 			return (RecallType)Clone();

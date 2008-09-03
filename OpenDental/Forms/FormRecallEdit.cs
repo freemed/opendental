@@ -456,10 +456,12 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
+			#if !DEBUG
 			if(RecallCur.DatePrevious.Year>1880){
 				MsgBox.Show(this,"This recall can not be deleted because the Previous Date has a value.  You should use the Disabled checkBox instead.");
 				return;
 			}
+			#endif
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -524,7 +526,7 @@ namespace OpenDental{
 				Recalls.Update(RecallCur);
 				//}
 			}
-//Recalls.Synch(PatCur.PatNum,RecallCur);
+			//Recalls.Synch(PatCur.PatNum,RecallCur);//This was moved up into FormRecallsPat.FillGrid.  This is the only way to access a recall.
 			DialogResult=DialogResult.OK;
 		}
 

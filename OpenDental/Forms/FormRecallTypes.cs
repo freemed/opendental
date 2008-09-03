@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -190,13 +191,28 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(RecallTypeC.Listt[i].Description);
 				row.Cells.Add(RecallTypes.GetSpecialTypeStr(RecallTypeC.Listt[i].RecallTypeNum));
-				row.Cells.Add(RecallTypeC.Listt[i].TriggerProcs);
+				row.Cells.Add(GetStringForType(RecallTypeC.Listt[i].RecallTypeNum));
 				row.Cells.Add(RecallTypeC.Listt[i].DefaultInterval.ToString());
 				row.Cells.Add(RecallTypeC.Listt[i].TimePattern);
 				row.Cells.Add(RecallTypeC.Listt[i].Procedures);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private string GetStringForType(int recallTypeNum){
+			if(recallTypeNum==0){
+				return "";
+			}
+			List<RecallTrigger> triggerList=RecallTriggers.GetForType(recallTypeNum);
+			string retVal="";
+			for(int i=0;i<triggerList.Count;i++){
+				if(i>0){
+					retVal+=",";
+				}
+				retVal+=ProcedureCodes.GetStringProcCode(triggerList[i].CodeNum);
+			}
+			return retVal;
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {

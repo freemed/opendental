@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 		//DateTStamp
 		///<summary>FK to recalltype.RecallTypeNum.</summary>
 		public int RecallTypeNum;
+		///<summary>Not a database column.  Just used internally.</summary>
+		public DateTime DateScheduled;
 
 		///<summary>Returns a copy of this Recall.</summary>
 		public Recall Copy(){

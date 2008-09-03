@@ -722,7 +722,8 @@ namespace OpenDental{
 				return;
 			}
 			ODGridRow row;
-			string recallinfo;
+			DateTime recallDate;
+			ODGridCell cell;
 			for(int i=0;i<FamCur.List.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(FamCur.GetNameInFamLFI(i));
@@ -730,15 +731,24 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString()));
 				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
 				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
-				recallinfo="";
+				recallDate=DateTime.MinValue;
 				for(int j=0;j<RecallList.Count;j++){
-					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
-						if(RecallList[j].DateDue.Year>1880){
-							recallinfo=RecallList[j].DateDue.ToShortDateString();
-						}
+					if(RecallList[j].PatNum==FamCur.List[i].PatNum
+						&& (RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")
+						|| RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")))
+					{
+						recallDate=RecallList[j].DateDue;
 					}
 				}
-				row.Cells.Add(recallinfo);
+				cell=new ODGridCell();
+				if(recallDate.Year>1880){
+					cell.Text=recallDate.ToShortDateString();
+					if(recallDate<DateTime.Today){
+						cell.Bold=YN.Yes;
+						cell.ColorText=Color.Firebrick;
+					}
+				}
+				row.Cells.Add(cell);
 				if(i==0){//guarantor
 					row.Bold=true;
 				}
@@ -986,6 +996,7 @@ namespace OpenDental{
 				}
 			}
 			ODGridRow row;
+			ODGridCell cell;
 			for(int i=0;i<recallListPat.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(RecallTypes.GetDescription(recallListPat[i].RecallTypeNum));
@@ -999,7 +1010,12 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(recallListPat[i].DateDue.ToShortDateString());
+					cell=new ODGridCell(recallListPat[i].DateDue.ToShortDateString());
+					if(recallListPat[i].DateDue<DateTime.Today){
+						cell.Bold=YN.Yes;
+						cell.ColorText=Color.Firebrick;
+					}
+					row.Cells.Add(cell);
 				}
 				row.Cells.Add("");
 				gridRecall.Rows.Add(row);
@@ -1018,9 +1034,6 @@ namespace OpenDental{
 			FormRecallsPat FormR=new FormRecallsPat();
 			FormR.PatNum=PatCur.PatNum;
 			FormR.ShowDialog();
-			if(FormR.DialogResult!=DialogResult.OK){
-				return;
-			}
 			ModuleSelected(PatCur.PatNum);
 		}
 		#endregion gridRecall

@@ -46,6 +46,7 @@ namespace OpenDental{
 		private Label labelSpecial;
 		private Label label2;
 		public RecallType RecallCur;
+		private List<RecallTrigger> TriggerList;
 
 		///<summary></summary>
 		public FormRecallTypeEdit()
@@ -475,6 +476,7 @@ namespace OpenDental{
 			else if(PrefC.GetInt("RecallTypeSpecialPerio")==RecallCur.RecallTypeNum){
 				comboSpecial.SelectedIndex=3;
 			}
+			TriggerList=RecallTriggers.GetForType(RecallCur.RecallTypeNum);//works if 0, too.
 			SetSpecialText();
 			FillTriggers();
 			textYears.Text=RecallCur.DefaultInterval.Years.ToString();
@@ -508,7 +510,7 @@ namespace OpenDental{
 			}
 			else if(comboSpecial.SelectedIndex==2){//childProphy
 				labelSpecial.Text="Automatically used if a Prophy patient is under 12.  Does not include triggers or interval since the triggers and interval from the Prophy type are used instead.";
-				RecallCur.TriggerProcs="";
+				TriggerList.Clear();
 				listTriggers.Items.Clear();
 				textDays.Text="0";
 				textWeeks.Text="0";
@@ -532,14 +534,13 @@ namespace OpenDental{
 
 		private void FillTriggers(){
 			listTriggers.Items.Clear();
-			if(RecallCur.TriggerProcs==null || RecallCur.TriggerProcs==""){
+			if(TriggerList.Count==0){
 				return;
 			}
-			string[] strArray=RecallCur.TriggerProcs.Split(',');
 			string str;
-			for(int i=0;i<strArray.Length;i++){
-				str=strArray[i];
-				str+="- "+ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetProcCode(str).CodeNum);
+			for(int i=0;i<TriggerList.Count;i++){
+				str=ProcedureCodes.GetStringProcCode(TriggerList[i].CodeNum);
+				str+="- "+ProcedureCodes.GetLaymanTerm(TriggerList[i].CodeNum);
 				listTriggers.Items.Add(str);
 			}
 		}
@@ -551,10 +552,10 @@ namespace OpenDental{
 			if(FormP.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(RecallCur.TriggerProcs!=""){
-				RecallCur.TriggerProcs+=",";
-			}
-			RecallCur.TriggerProcs+=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
+			RecallTrigger trigger=new RecallTrigger();
+			trigger.CodeNum=FormP.SelectedCodeNum;
+			//RecallTypeNum handled during save.
+			TriggerList.Add(trigger);
 			FillTriggers();
 		}
 
@@ -563,16 +564,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a trigger code first.");
 				return;
 			}
-			string[] strArray=RecallCur.TriggerProcs.Split(',');
-			List<string> strList=new List<string>(strArray);
-			strList.RemoveAt(listTriggers.SelectedIndex);
-			RecallCur.TriggerProcs="";
-			for(int i=0;i<strList.Count;i++){
-				if(i>0){
-					RecallCur.TriggerProcs+=",";
-				}
-				RecallCur.TriggerProcs+=strList[i];
-			}
+			TriggerList.RemoveAt(listTriggers.SelectedIndex);
 			FillTriggers();
 		}
 
@@ -654,9 +646,6 @@ namespace OpenDental{
 				return;
 			}
 			RecallCur.Description=textDescription.Text;
-			if(listTriggers.Items.Count==0){
-				RecallCur.TriggerProcs="";
-			}
 			Interval interval=new Interval(
 				PIn.PInt(textDays.Text),
 				PIn.PInt(textWeeks.Text),
@@ -675,7 +664,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//RecallTypes.SetSpecial(RecallCur.RecallTypeNum,comboSpecial.SelectedIndex);
+			RecallTriggers.SetForType(RecallCur.RecallTypeNum,TriggerList);
 			bool changed=false;
 			if(comboSpecial.SelectedIndex==0){//none
 				if(PrefC.GetInt("RecallTypeSpecialProphy")==RecallCur.RecallTypeNum){
@@ -730,9 +719,11 @@ namespace OpenDental{
 					changed=true;
 				}
 			}
+			InvalidType itype=InvalidType.RecallTypes;
 			if(changed){
-				DataValid.SetInvalid(InvalidType.Prefs);
+				itype=itype | InvalidType.Prefs;
 			}
+			DataValid.SetInvalid(itype);
 			DialogResult=DialogResult.OK;
 		}
 

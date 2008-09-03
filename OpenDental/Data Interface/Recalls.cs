@@ -20,7 +20,10 @@ namespace OpenDental{
 				wherePats+="PatNum="+patNums[i].ToString();
 			}
 			string command=
-				"SELECT * FROM recall "
+				"SELECT * "
+				//+"(SELECT MAX(appointment.AptDateTime) FROM appointment,procedurelog "
+				//+"WHERE appointment.AptNum=procedurelog.AptNum AND recall.PatNum) "
+				+"FROM recall "
 				+"WHERE "+wherePats;
 			return RefreshAndFill(command);
 		}
@@ -57,6 +60,9 @@ namespace OpenDental{
 				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
 				//DateTStamp
 				recall.RecallTypeNum  = PIn.PInt   (table.Rows[i][10].ToString());
+				if(table.Columns.Count>11){
+					recall.DateScheduled= PIn.PDate  (table.Rows[i][11].ToString());
+				}
 				list.Add(recall);
 			}
 			return list;
@@ -255,7 +261,6 @@ namespace OpenDental{
 
 		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted.  Instead, the dateDueCalc just gets cleared.</summary>
 		public static void Synch(int patNum){
-			DateTime previousDate;
 			List<RecallType> typeList=RecallTypes.GetActive();
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
 			List<Recall> recallList=RefreshAndFill(command);
@@ -282,14 +287,37 @@ namespace OpenDental{
 					}
 				}
 			}
+			//get previous dates for all types at once
+			command="SELECT RecallTypeNum,MAX(ProcDate) _procDate "
+				+"FROM procedurelog,recalltrigger "
+				+"WHERE PatNum="+POut.PInt(patNum)
+				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
+				+"AND (";
+			for(int i=0;i<typeList.Count;i++){
+				if(i>0){
+					command+=" OR";
+				}
+				command+=" RecallTypeNum="+POut.PInt(typeList[i].RecallTypeNum);
+			}
+			command+=") AND (ProcStatus = 2 "
+				+"OR ProcStatus = 3 "
+				+"OR ProcStatus = 4) "
+				+"GROUP BY RecallTypeNum";
+			DataTable tableDates=General.GetTable(command);
 			//Go through the type list and either update recalls, or create new recalls.
 			//Recalls that are no longer active because their type has no triggers will be ignored.
-			//It is assumed that there are not duplicate recalls.
+			//It is assumed that there are no duplicate recall types for a patient.
 			DateTime prevDate;
 			Recall matchingRecall;
 			Recall recallNew;
 			for(int i=0;i<typeList.Count;i++){
-				prevDate=GetPreviousDate(patNum,typeList[i].RecallTypeNum);
+				prevDate=DateTime.MinValue;
+				for(int d=0;d<tableDates.Rows.Count;d++){
+					if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeList[i].RecallTypeNum.ToString()){
+						prevDate=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
+						break;
+					}
+				}
 				matchingRecall=null;
 				for(int r=0;r<recallList.Count;r++){
 					if(recallList[r].RecallTypeNum==typeList[i].RecallTypeNum){
@@ -300,6 +328,7 @@ namespace OpenDental{
 					if(prevDate.Year>1880){//if date is not minVal, then add a recall
 						//add a recall
 						recallNew=new Recall();
+						recallNew.RecallTypeNum=typeList[i].RecallTypeNum;
 						recallNew.PatNum=patNum;
 						recallNew.DatePrevious=prevDate;
 						recallNew.RecallInterval=typeList[i].DefaultInterval;
@@ -344,16 +373,12 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary>This is not very efficient because it runs a separate query for each recalltype.  It is planned to later add triggers as a separate database table.  This will allow us to get previous dates for all recall types at once.</summary>
 		private static DateTime GetPreviousDate(int patNum,int recallTypeNum){
-			string triggerStr=RecallTypes.GetTriggers(recallTypeNum);
-			if(triggerStr==""){
+			List<RecallTrigger> triggers=RecallTriggers.GetForType(recallTypeNum);
+			if(triggers.Count==0){
 				return DateTime.MinValue;
-			}
-			string[] triggerArrayProcs=triggerStr.Split(',');
-			int[] triggerArray=new int[triggerArrayProcs.Length];
-			for(int i=0;i<triggerArray.Length;i++){
-				triggerArray[i]=ProcedureCodes.GetCodeNum(triggerArrayProcs[i]);
 			}
 			string command= 
 				"SELECT MAX(ProcDate) "
@@ -375,7 +400,7 @@ namespace OpenDental{
 				return DateTime.MinValue;
 			}
 			return PIn.PDate(table.Rows[0][0].ToString());
-		}
+		}*/
 
 		///<summary>Only called when editing certain procedurecodes, but only very rarely as needed. For power users, this is a good little trick to use to synch recall for all patients.</summary>
 		public static void SynchAllPatients(){

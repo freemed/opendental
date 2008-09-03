@@ -1,0 +1,97 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using OpenDental.DataAccess;
+
+namespace OpenDentBusiness{
+	///<summary></summary>
+	public class RecallTriggers{
+		///<summary></summary>
+		public static DataTable RefreshCache(){
+			string c="SELECT * FROM recalltrigger";
+			DataTable table=General.GetTable(c);
+			table.TableName="RecallTrigger";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			RecallTriggerC.Listt=new List<RecallTrigger>();
+			RecallTrigger trig;
+			for(int i=0;i<table.Rows.Count;i++){
+				trig=new RecallTrigger();
+				trig.IsNew=false;
+				trig.RecallTriggerNum = PIn.PInt   (table.Rows[i][0].ToString());
+				trig.RecallTypeNum    = PIn.PInt   (table.Rows[i][1].ToString());
+				trig.CodeNum          = PIn.PInt   (table.Rows[i][2].ToString());
+				RecallTriggerC.Listt.Add(trig);
+			}
+		}
+
+		/*
+		///<Summary>Gets one RecallTrigger from the database.</Summary>
+		public static RecallTrigger CreateObject(int RecallTriggerNum){
+			return DataObjectFactory<RecallTrigger>.CreateObject(RecallTriggerNum);
+		}
+
+		public static List<RecallTrigger> GetRecallTriggers(int[] RecallTriggerNums){
+			Collection<RecallTrigger> collectState=DataObjectFactory<RecallTrigger>.CreateObjects(RecallTriggerNums);
+			return new List<RecallTrigger>(collectState);		
+		}*/
+
+		///<summary></summary>
+		public static void WriteObject(RecallTrigger trigger){
+			DataObjectFactory<RecallTrigger>.WriteObject(trigger);
+		}
+
+		/*//<summary></summary>
+		public static void DeleteObject(int RecallTriggerNum){
+			//validate that not already in use.
+			string command="SELECT LName,FName FROM patient WHERE RecallTriggerNum="+POut.PInt(RecallTriggerNum);
+			DataTable table=General.GetTable(command);
+			//int count=PIn.PInt(General.GetCount(command));
+			string pats="";
+			for(int i=0;i<table.Rows.Count;i++){
+				if(i>0){
+					pats+=", ";
+				}
+				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
+			}
+			if(table.Rows.Count>0){
+				throw new ApplicationException(Lan.g("RecallTriggers","RecallTrigger is already in use by patient(s). Not allowed to delete. ")+pats);
+			}
+			DataObjectFactory<RecallTrigger>.DeleteObject(RecallTriggerNum);
+		}*/
+
+		//public static void DeleteObject(int RecallTriggerNum){
+		//	DataObjectFactory<RecallTrigger>.DeleteObject(RecallTriggerNum);
+		//}
+
+		public static List<RecallTrigger> GetForType(int recallTypeNum){
+			List<RecallTrigger> triggerList=new List<RecallTrigger>();
+			if(recallTypeNum==0){
+				return triggerList;
+			}
+			for(int i=0;i<RecallTriggerC.Listt.Count;i++){
+				if(RecallTriggerC.Listt[i].RecallTypeNum==recallTypeNum){
+					triggerList.Add(RecallTriggerC.Listt[i].Copy());
+				}
+			}
+			return triggerList;
+		}
+
+		public static void SetForType(int recallTypeNum,List<RecallTrigger> triggerList){
+			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.PInt(recallTypeNum);
+			General.NonQ(command);
+			for(int i=0;i<triggerList.Count;i++){
+				triggerList[i].RecallTypeNum=recallTypeNum;
+				WriteObject(triggerList[i]);
+			}
+		}
+
+		
+
+	}
+}

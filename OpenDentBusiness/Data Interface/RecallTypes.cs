@@ -28,7 +28,6 @@ namespace OpenDentBusiness{
 				rtype.DefaultInterval= new Interval(PIn.PInt(table.Rows[i][2].ToString()));
 				rtype.TimePattern    = PIn.PString(table.Rows[i][3].ToString());
 				rtype.Procedures     = PIn.PString(table.Rows[i][4].ToString());
-				rtype.TriggerProcs   = PIn.PString(table.Rows[i][5].ToString());
 				list.Add(rtype);
 			}
 			//reorder rows for better usability
@@ -121,18 +120,6 @@ namespace OpenDentBusiness{
 			return new Interval(0,0,0,0);
 		}
 
-		public static string GetTriggers(int recallTypeNum){
-			if(recallTypeNum==0){
-				return "";
-			}
-			for(int i=0;i<RecallTypeC.Listt.Count;i++){
-				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
-					return RecallTypeC.Listt[i].TriggerProcs;
-				}
-			}
-			return "";
-		}
-
 		public static string GetSpecialTypeStr(int recallTypeNum){
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
 				return Lan.g("FormRecallTypeEdit","Prophy");
@@ -149,8 +136,10 @@ namespace OpenDentBusiness{
 		///<summary>Gets a list of all active recall types.  Those without triggers are excluded.  Perio and Prophy are both included.  One of them should later be removed from the collection.</summary>
 		public static List<RecallType> GetActive(){
 			List<RecallType> retVal=new List<RecallType>();
+			List<RecallTrigger> triggers;
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
-				if(RecallTypeC.Listt[i].TriggerProcs!=""){
+				triggers=RecallTriggers.GetForType(RecallTypeC.Listt[i].RecallTypeNum);
+				if(triggers.Count>0){
 					retVal.Add(RecallTypeC.Listt[i].Copy());
 				}
 			}

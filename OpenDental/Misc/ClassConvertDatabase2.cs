@@ -236,8 +236,18 @@ namespace OpenDental{
 						DefaultInterval int NOT NULL,
 						TimePattern varchar(255),
 						Procedures varchar(255),
-						TriggerProcs varchar(255),
 						PRIMARY KEY (RecallTypeNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+					command="DROP TABLE IF EXISTS recalltrigger";
+					General.NonQ(command);
+					command=@"CREATE TABLE recalltrigger (
+						RecallTriggerNum int NOT NULL auto_increment,
+						RecallTypeNum int NOT NULL,
+						CodeNum int NOT NULL,
+						PRIMARY KEY (RecallTriggerNum),
+						INDEX (CodeNum),
+						INDEX (RecallTypeNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 					//Basic recall-----------------------------------------------------------------------------
@@ -245,22 +255,18 @@ namespace OpenDental{
 					string timepattern=General.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProcedures'";
 					string procs=General.GetCount(command);
-					command="SELECT ProcCode FROM procedurecode WHERE SetRecall=1";
-					DataTable table=General.GetTable(command);
-					string triggers="";
-					for(int i=0;i<table.Rows.Count;i++){
-						if(i>0){
-							triggers+=",";
-						}
-						triggers+=table.Rows[i][0].ToString();
-					}
-					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(1,'Prophy',"
 						+"393216,"//six months
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
-						+"'"+POut.PString(procs)+"',"
-						+"'"+POut.PString(triggers)+"')";
+						+"'"+POut.PString(procs)+"')";
 					General.NonQ(command);
+					command="SELECT CodeNum FROM procedurecode WHERE SetRecall=1";
+					DataTable table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(1,"+table.Rows[i][0].ToString()+")";
+						General.NonQ(command);
+					}
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialProphy','1','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					//Child recall-----------------------------------------------------------------------------
@@ -268,14 +274,13 @@ namespace OpenDental{
 					timepattern=General.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresChild'";
 					procs=General.GetCount(command);
-					triggers="";
-					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(2,'Child Prophy',"
 						+"0,"
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
-						+"'"+POut.PString(procs)+"',"
-						+"'"+POut.PString(triggers)+"')";
+						+"'"+POut.PString(procs)+"')";
 					General.NonQ(command);
+					//no triggers
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialChildProphy','2','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					//Perio recall-----------------------------------------------------------------------------
@@ -283,39 +288,41 @@ namespace OpenDental{
 					timepattern=General.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresPerio'";
 					procs=General.GetCount(command);
-					command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
-					triggers=General.GetCount(command);
-					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(3,'Perio',"
 						+"262144,"//4 months.
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
-						+"'"+POut.PString(procs)+"',"
-						+"'"+POut.PString(triggers)+"')";
+						+"'"+POut.PString(procs)+"')";
 					General.NonQ(command);
+	//todo:perio triggers:
+					//command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
+					//triggers=General.GetCount(command);
+
+
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialPerio','3','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					if(CultureInfo.CurrentCulture.Name=="en-US"){
 						//4BWX-----------------------------------------------------------------------------
 						timepattern="";
 						procs="D0274";
-						triggers="D0274";
-						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 							+"VALUES(4,'4BW',"
 							+"16777216,"//one year.
 							+"'"+timepattern+"',"
-							+"'"+POut.PString(procs)+"',"
-							+"'"+POut.PString(triggers)+"')";
+							+"'"+POut.PString(procs)+"')";
+						General.NonQ(command);
+						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(4,'D0274')";
 						General.NonQ(command);
 						//Pano-----------------------------------------------------------------------------
 						timepattern="";
 						procs="D0330";
-						triggers="D0330";
-						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 							+"VALUES(5,'Pano',"
 							+"83886080,"//5 years.
 							+"'"+timepattern+"',"
-							+"'"+POut.PString(procs)+"',"
-							+"'"+POut.PString(triggers)+"')";
+							+"'"+POut.PString(procs)+"')";
+						General.NonQ(command);
+						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(5,'D0330')";
 						General.NonQ(command);
 					}
 //Set existing recall objects to new types (incomplete)
