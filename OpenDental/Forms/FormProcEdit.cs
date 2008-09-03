@@ -1141,7 +1141,6 @@ namespace OpenDental{
 			this.textMedicalCode.Name = "textMedicalCode";
 			this.textMedicalCode.Size = new System.Drawing.Size(76,20);
 			this.textMedicalCode.TabIndex = 98;
-			this.textMedicalCode.TextChanged += new System.EventHandler(this.textMedicalCode_TextChanged);
 			// 
 			// labelClaim
 			// 
@@ -1155,7 +1154,6 @@ namespace OpenDental{
     "ou should reprint the claim if any significant changes are made.";
 			this.labelClaim.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.labelClaim.Visible = false;
-			this.labelClaim.Click += new System.EventHandler(this.labelClaim_Click);
 			// 
 			// comboPlaceService
 			// 
@@ -3183,6 +3181,7 @@ namespace OpenDental{
 					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
 				}
 				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				return;
 			}
 			if(IsNew){//if cancelling on a new procedure
 				//delete any newly created claimprocs
@@ -3204,19 +3203,9 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void textMedicalCode_TextChanged(object sender, EventArgs e){
-
-		}
-
-		private void labelClaim_Click(object sender,EventArgs e) {
-
-		}
-
 	
 
-	//private void richTextBox1_TextChanged(object sender, System.EventArgs e) {
-		//	textBox1.Text=richTextBox1.Rtf;
-		//}
+	
 
 
 
