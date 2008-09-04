@@ -51,10 +51,21 @@ namespace OpenDental {
 			string householdPercentOfPovertyStr="Percent of Poverty";
 			string statusStr="Patient Status";
 			string command="";
+			//Locate the payment definition number for copayments of patients using the Arizona Primary Care program.
+			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			DataTable copayDefNumTab=General.GetTable(command);
+			if(copayDefNumTab.Rows.Count!=1){
+				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
+					"This payment type must be used on copayments made by Arizona Primary Care patients.");
+				return;
+			}
+			int copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
 			//Get the list of all Arizona Primary Care patients, based on the patient's available in the
 			//patfieldef table.
-			command="SELECT DISTINCT PatNum FROM patfield WHERE LOWER(FieldName) IN ("+
-				"LOWER('"+patientsIdNumberStr+"'),LOWER('"+householdGrossIncomeStr+"'),LOWER('"+householdPercentOfPovertyStr+"'),LOWER('"+statusStr+"'))";
+			//command="SELECT DISTINCT PatNum FROM patfield WHERE LOWER(FieldName) IN ("+
+			//	"LOWER('"+patientsIdNumberStr+"'),LOWER('"+householdGrossIncomeStr+"'),LOWER('"+householdPercentOfPovertyStr+"'),LOWER('"+statusStr+"'))";
+			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
+				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah'";
 			DataTable primaryCarePatients=General.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
@@ -63,8 +74,11 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1) PCIN, "+//Patient's Care ID Number
 					""+//TODO: Site ID Number
 					"p.BirthDate,"+
-					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
-					""+//TODO: patient race
+					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
+						"WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
+					"CASE p.Race WHEN "+((int)PatientRace.Asian)+" THEN 'A' WHEN "+((int)PatientRace.HispanicLatino)+" THEN 'H' "+
+						"WHEN "+((int)PatientRace.HawaiiOrPacIsland)+" THEN 'P' WHEN "+((int)PatientRace.AfricanAmerican)+" THEN 'B' "+
+						"WHEN "+((int)PatientRace.AmericanIndian)+" THEN 'I' WHEN "+((int)PatientRace.White)+" THEN 'W' ELSE 'O' END PatRace,"+
 					"CONCAT(CONCAT(TRIM(p.Address),' '),TRIM(p.Address2)) HouseholdAddress,"+//Patient address
 					"p.City HouseholdCity,"+//Household residence city
 					"p.State HouseholdState,"+//Household residence state
@@ -73,8 +87,9 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') LIMIT 1) HGI, "+//Household gross income
 					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1) HPP, "+//Household % of poverty
-					""+//TODO: Household sliding fee scale
-					""+//TODO: Date of elegibility status
+					"(SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
+						copayDefNum+" ORDER BY AdjDate DESC LIMIT 1) HSFS,"+//Household sliding fee scale
+					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1)"+//Date of elegibility status
 					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1) CareStatus "+//Status
 					"FROM patient p WHERE "+
@@ -98,7 +113,7 @@ namespace OpenDental {
 				outputRow+="";//TODO: Site ID Number
 				outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");//Patient's Date of Birth
 				outputRow+=POut.PInt(PIn.PInt(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
-				outputRow+="";//TODO: Race
+				outputRow+=primaryCareReportRow.Rows[0]["PatRace"].ToString();
 				//Household residence address
 				string householdAddress=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["HouseholdAddress"].ToString()));
 				if(householdAddress.Length>29) {
@@ -133,7 +148,7 @@ namespace OpenDental {
 				string householdZip=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["HouseholdZip"].ToString()));
 				if(householdZip.Length>5) {
 					string newHouseholdZip=householdZip.Substring(0,5);
-					rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 15 characters and "+
+					rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 5 characters and "+
 						"was truncated in the report ouput. The zipcode was changed from '"+
 						householdZip+"' to '"+newHouseholdZip+"'"+Environment.NewLine;
 					householdZip=newHouseholdZip;
@@ -173,8 +188,28 @@ namespace OpenDental {
 						householdPercentPoverty+"' for the patient with the patnum of "+patNum+Environment.NewLine;
 				}
 				outputRow+=householdPercentPoverty;
-				//TODO: Household sliding fee scale
-				//TODO: Date of elegibility status
+				string householdSlidingFeeScale=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["HSFS"].ToString()));
+				if(householdSlidingFeeScale.Length==0){
+					householdSlidingFeeScale="0";
+				}
+				string newHouseholdSlidingFeeScale=Regex.Replace(householdSlidingFeeScale,"[^0-9]","");
+				if(newHouseholdSlidingFeeScale!=householdSlidingFeeScale){
+					rowWarnings+="WARNING: The household sliding fee scale (latest NOAH copay amount) for the patient with a patnum of "+patNum+
+						" contains invalid characters and was changed from '"+householdSlidingFeeScale+"' to '"+newHouseholdSlidingFeeScale+"'.";
+					householdSlidingFeeScale=newHouseholdSlidingFeeScale;
+				}
+				if(householdSlidingFeeScale.Length>3 || Convert.ToInt16(householdSlidingFeeScale)>100){
+					rowWarnings+="The household sliding fee scale (latest NOAH copay amount) for the patient with a patnum of "+patNum+
+						" is '"+householdSlidingFeeScale+"', but will be reported as 100.";
+					householdSlidingFeeScale="100";
+				}
+				outputRow+=householdSlidingFeeScale.PadLeft(3,'0');
+				string dateOfEligibilityStatusStr=primaryCareReportRow.Rows[0]["HSFS"].ToString();
+				DateTime dateOfEligibilityStatus=DateTime.MinValue;
+				if(dateOfEligibilityStatusStr!="" && dateOfEligibilityStatusStr!="null"){
+					dateOfEligibilityStatus=PIn.PDate(dateOfEligibilityStatusStr);
+				}
+				outputRow+=dateOfEligibilityStatus.ToString("MMddyyyy");
 				//Primary care status
 				string primaryCareStatus=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["CareStatus"].ToString())).ToUpper();
 				if(primaryCareStatus!="A"&&primaryCareStatus!="B"&&primaryCareStatus!="C"&&primaryCareStatus!="D") {
