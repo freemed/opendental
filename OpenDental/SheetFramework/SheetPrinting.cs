@@ -232,18 +232,17 @@ namespace OpenDental {
 
 		public static void CreatePdf(Sheet sheet,string fullFileName){
 			PdfDocument document=new PdfDocument();
-			//document.PageLayout=new PdfPageLayout()
 			PdfPage page=document.AddPage();
+			page.Width=p(sheet.Width);//XUnit.FromInch((double)sheet.Width/100);  //new XUnit((double)sheet.Width/100,XGraphicsUnit.Inch);
+			page.Height=p(sheet.Height);//new XUnit((double)sheet.Height/100,XGraphicsUnit.Inch);
+			if(sheet.IsLandscape){
+				page.Orientation=PageOrientation.Landscape;
+			}
 			XGraphics g=XGraphics.FromPdfPage(page);
 			g.SmoothingMode=XSmoothingMode.HighQuality;
 			//g.PageUnit=XGraphicsUnit. //wish they had pixel
 			XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
 			//tf.Alignment=XParagraphAlignment.Left;
-			if(sheet.IsLandscape){
-				page.Orientation=PageOrientation.Landscape;
-			}
-			page.Width=p(sheet.Width);//XUnit.FromInch((double)sheet.Width/100);  //new XUnit((double)sheet.Width/100,XGraphicsUnit.Inch);
-			page.Height=p(sheet.Height);//new XUnit((double)sheet.Height/100,XGraphicsUnit.Inch);
 			//pd.DefaultPageSettings.Landscape=
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			XFont font;
