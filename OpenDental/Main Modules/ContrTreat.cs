@@ -2126,6 +2126,7 @@ namespace OpenDental{
 						procDummy.ToothNum=Tooth.FromInternat(ProcTPSelectList[i].ToothNumTP);
 					}
 					procDummy.Surf=ProcTPSelectList[i].Surf;
+					procDummy.ToothRange="";
 					//procDummy.HideGraphical??
 					procDummy.ProcStatus=ProcStat.TP;
 					procDummy.CodeNum=ProcedureCodes.GetProcCode(ProcTPSelectList[i].ProcCode).CodeNum;
