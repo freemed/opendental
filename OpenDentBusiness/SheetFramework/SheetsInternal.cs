@@ -178,6 +178,8 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.address",sheet.FontSize,sheet.FontName,false,150,yPos,200,rowH,GrowthBehaviorEnum.DownLocal));
 			yPos+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.cityStateZip",sheet.FontSize,sheet.FontName,false,150,yPos,200,rowH));
+			yPos+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.phone",sheet.FontSize,sheet.FontName,false,150,yPos,200,rowH));
 			yPos+=rowH+30;
 			//Patient--------------------------------------------------------------------------------------------
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Patient",9,sheet.FontName,true,25,yPos,100,rowH));

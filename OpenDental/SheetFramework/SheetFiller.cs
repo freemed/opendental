@@ -139,6 +139,14 @@ namespace OpenDental{
 					case "referral.cityStateZip":
 						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
+					case "referral.phone":
+						field.FieldValue="";
+						if(refer.Telephone.Length==10){
+							field.FieldValue="("+refer.Telephone.Substring(0,3)+")"
+								+refer.Telephone.Substring(3,3)+"-"
+								+refer.Telephone.Substring(6);
+						}
+						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
 						break;

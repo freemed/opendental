@@ -91,6 +91,7 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("referral.nameFL"));
 				list.Add(NewOutput("referral.address"));
 				list.Add(NewOutput("referral.cityStateZip"));
+				list.Add(NewOutput("referral.phone"));
 				list.Add(NewOutput("patient.nameFL"));
 				list.Add(NewOutput("dateTime.Today"));
 				list.Add(NewOutput("patient.WkPhone"));
