@@ -526,7 +526,7 @@ namespace OpenDental{
 					+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
 					+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
 					+"AND SchedType="+POut.PInt((int)ScheduleType.Provider)
-					+"AND ("+orClause+")";
+					+" AND ("+orClause+")";
 				DataTable table=General.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++){
 					DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PInt(table.Rows[i][0].ToString()));
