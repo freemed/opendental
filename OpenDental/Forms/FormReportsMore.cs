@@ -365,10 +365,38 @@ namespace OpenDental{
 			});
 			//Arizona primary care list and label must only be visible when the Arizona primary
 			//care option is checked in the miscellaneous options.
-			if(PatFieldDefs.UsingArizonaPrimaryCare()){
+			if(UsingArizonaPrimaryCare()){
 				labelArizonaPrimaryCare.Visible=true;
 				listArizonaPrimaryCare.Visible=true;
 			}
+		}
+
+		///<summary>When using Arizona Primary Care, there must be a handful of pre-defined patient fields which are required  to generate the Arizona Primary Care reports. This function will return true if all of the required patient fields exist which are necessary to run the Arizona Primary Care reports. Otherwise, false is returned.</summary>
+		public static bool UsingArizonaPrimaryCare() {
+			PatFieldDefs.Refresh();
+			string[] patientFieldNames=new string[] {
+				"SPID#",
+				"Eligibility Status",
+				"Household Gross Income",
+				"Household % of Poverty",
+			};
+			int[] fieldCounts=new int[patientFieldNames.Length];
+			foreach(PatFieldDef pfd in PatFieldDefs.List) {
+				for(int i=0;i<patientFieldNames.Length;i++) {
+					if(pfd.FieldName.ToLower()==patientFieldNames[i].ToLower()) {
+						fieldCounts[i]++;
+						break;
+					}
+				}
+			}
+			for(int i=0;i<fieldCounts.Length;i++) {
+				//Each field must be defined exactly once. This verifies that each requied field
+				//both exists and is not ambiguous with another field of the same name.
+				if(fieldCounts[i]!=1) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		private void butUserQuery_Click(object sender,EventArgs e) {
@@ -613,9 +641,9 @@ namespace OpenDental{
 			}
 			switch(selected) {
 				case 0://Elegibility File
-					FormRpArizonaPrimaryCareElegibility frapce=new FormRpArizonaPrimaryCareElegibility();
+					FormRpArizonaPrimaryCareEligibility frapce=new FormRpArizonaPrimaryCareEligibility();
 					frapce.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Elegibility");
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Eligibility");
 					break;
 			}
 		}

@@ -11,11 +11,16 @@ using System.Text.RegularExpressions;
 using CodeBase;
 
 namespace OpenDental {
-	public partial class FormRpArizonaPrimaryCareElegibility:Form {
+	public partial class FormRpArizonaPrimaryCareEligibility:Form {
 
-		public FormRpArizonaPrimaryCareElegibility() {
+		public FormRpArizonaPrimaryCareEligibility() {
 			InitializeComponent();
 			Lan.F(this);
+		}
+
+		private void FormRpArizonaPrimaryCareEligibility_Load(object sender,EventArgs e) {
+			dateTimeTo.Value=DateTime.Today;
+			dateTimeFrom.Value=DateTime.Today.AddMonths(-1);
 		}
 
 		private void butFinished_Click(object sender,EventArgs e) {
@@ -27,8 +32,8 @@ namespace OpenDental {
 		}
 
 		private void butBrowse_Click(object sender,EventArgs e) {
-			if(folderElegibilityPath.ShowDialog()==DialogResult.OK){
-				textElegibilityFolder.Text=folderElegibilityPath.SelectedPath;
+			if(folderEligibilityPath.ShowDialog()==DialogResult.OK){
+				textEligibilityFolder.Text=folderEligibilityPath.SelectedPath;
 			}
 		}
 
@@ -38,7 +43,7 @@ namespace OpenDental {
 
 		private void butRun_Click(object sender,EventArgs e) {
 			this.textLog.Text="";
-			string outFile=ODFileUtils.CombinePaths(textElegibilityFolder.Text,textElegibilityFile.Text);
+			string outFile=ODFileUtils.CombinePaths(textEligibilityFolder.Text,textEligibilityFile.Text);
 			if(File.Exists(outFile)) {
 				if(MessageBox.Show("The file at "+outFile+" already exists. Overwrite?","Overwrite File?",
 					MessageBoxButtons.YesNo)!=DialogResult.Yes) {
@@ -47,9 +52,9 @@ namespace OpenDental {
 			}
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
-			string householdGrossIncomeStr="Income";
-			string householdPercentOfPovertyStr="Percent of Poverty";
-			string statusStr="Patient Status";
+			string householdGrossIncomeStr="Household Gross Income";
+			string householdPercentOfPovertyStr="Household % of Poverty";
+			string statusStr="Eligibility Status";
 			string command="";
 			//Locate the payment definition number for copayments of patients using the Arizona Primary Care program.
 			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
@@ -60,18 +65,18 @@ namespace OpenDental {
 				return;
 			}
 			int copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
-			//Get the list of all Arizona Primary Care patients, based on the patient's available in the
-			//patfieldef table.
-			//command="SELECT DISTINCT PatNum FROM patfield WHERE LOWER(FieldName) IN ("+
-			//	"LOWER('"+patientsIdNumberStr+"'),LOWER('"+householdGrossIncomeStr+"'),LOWER('"+householdPercentOfPovertyStr+"'),LOWER('"+statusStr+"'))";
+			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
-				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah'";
+				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
+				"AND LOWER(TRIM(c.CarrierName))='noah' AND "+
+				"(SELECT MAX(pl.DateEntryC) FROM procedurelog pl WHERE pl.PatNum=p.PatNum AND pl.ProcStatus="+((int)ProcStat.C)+") BETWEEN "+
+					POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
 			DataTable primaryCarePatients=General.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
 				command="SELECT "+
-					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1) PCIN, "+//Patient's Care ID Number
+					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
+						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
 					""+//TODO: Site ID Number
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
@@ -83,15 +88,15 @@ namespace OpenDental {
 					"p.City HouseholdCity,"+//Household residence city
 					"p.State HouseholdState,"+//Household residence state
 					"p.Zip HouseholdZip,"+//Household residence zip code
-					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') LIMIT 1) HGI, "+//Household gross income
-					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1) HPP, "+//Household % of poverty
+					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
+						"LOWER(f.FieldName)=LOWER('"+householdGrossIncomeStr+"') LIMIT 1)) HGI, "+//Household gross income
+					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
+						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1)) HPP, "+//Household % of poverty
 					"(SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 						copayDefNum+" ORDER BY AdjDate DESC LIMIT 1) HSFS,"+//Household sliding fee scale
-					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1)"+//Date of elegibility status
-					"(SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
-						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1) CareStatus "+//Status
+					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1),"+//Date of eligibility status
+					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
+						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1)) CareStatus "+//Status
 					"FROM patient p WHERE "+
 					"p.PatNum="+patNum;
 				DataTable primaryCareReportRow=General.GetTable(command);
