@@ -388,11 +388,11 @@ LEFT JOIN referral ON referral.ReferralNum=refattach.ReferralNum
 WHERE DateFirstVisit >= "+POut.PDate(dateFrom)+" "
 				+"AND DateFirstVisit <= "+POut.PDate(dateTo)+" "
 				+whereProv;
+			Queries.CurReport.Query+="GROUP BY patient.PatNum ";
 			if(checkProd.Checked){
-				Queries.CurReport.Query+="AND $HowMuch > 0 ";
+				Queries.CurReport.Query+="HAVING $HowMuch > 0 ";
 			}
-			Queries.CurReport.Query+=@"GROUP BY patient.PatNum
-ORDER BY DateFirstVisit,patient.LName,patient.FName";
+			Queries.CurReport.Query+="ORDER BY DateFirstVisit,patient.LName,patient.FName";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
