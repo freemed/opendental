@@ -304,9 +304,9 @@ namespace OpenDental
 			float x=0;
 			string str;
 			float sizeW;//used when measuring text for placement
-			Font fontTitle=new Font(FontFamily.GenericSansSerif,11,FontStyle.Bold);
-			Font fontHeading=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
-			Font font=new Font(FontFamily.GenericSansSerif,8);
+			Font fontTitle=new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold);
+			Font fontHeading=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
+			Font font=new Font(FontFamily.GenericSansSerif,10);
 			SolidBrush brush=new SolidBrush(Color.Black);
 			//Title----------------------------------------------------------------------------------------------------------
 			str=Lan.g(this,"Routing Slip");
