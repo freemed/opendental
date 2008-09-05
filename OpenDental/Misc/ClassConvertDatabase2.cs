@@ -23,7 +23,7 @@ namespace OpenDental{
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ClassConvertDatabase{
-		private System.Version LatestVersion=new Version("6.0.0.0");//This value must be changed when a new conversion is to be triggered.
+		private System.Version LatestVersion=new Version("6.1.0.0");//This value must be changed when a new conversion is to be triggered.
 		
 		private void To5_9_1() {
 			if(FromVersion<new Version("5.9.1.0")) {
@@ -162,11 +162,11 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.9.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To6_0_0();
+			To6_0_1();
 		}
 
-		private void To6_0_0() {
-			if(FromVersion<new Version("6.0.0.0")) {
+		private void To6_0_1() {
+			if(FromVersion<new Version("6.0.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject','Continuing Care Reminder','')";
@@ -406,13 +406,28 @@ namespace OpenDental{
 				else {//oracle
 					
 				}
-				command="UPDATE preference SET ValueString = '6.0.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '6.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			//To6_0_?();
+			To6_1_0();
 		}
 
-		/*For 6.0:
+		private void To6_1_0() {
+			if(FromVersion<new Version("6.1.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+
+				} 
+				else {//oracle
+					
+				}
+				command="UPDATE preference SET ValueString = '6.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			//To6_2_?();
+		}
+
+		/*For 6.1:
 		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
 ALTER TABLE schedule ADD INDEX (ProvNum)
 ALTER TABLE schedule ADD INDEX (SchedDate)*/
