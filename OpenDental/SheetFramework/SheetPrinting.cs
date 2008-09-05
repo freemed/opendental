@@ -103,6 +103,7 @@ namespace OpenDental {
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
+				case SheetTypeEnum.LabelAppointment:
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
