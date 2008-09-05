@@ -69,7 +69,7 @@ namespace OpenDental {
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
 				"AND LOWER(TRIM(c.CarrierName))='noah' AND "+
-				"(SELECT MAX(pl.DateEntryC) FROM procedurelog pl WHERE pl.PatNum=p.PatNum AND pl.ProcStatus="+((int)ProcStat.C)+") BETWEEN "+
+				"(SELECT MAX(a.AptDateTime) FROM appointment a WHERE a.PatNum=p.PatNum AND a.AptStatus="+((int)ApptStatus.Complete)+") BETWEEN "+
 					POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
 			DataTable primaryCarePatients=General.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
@@ -77,7 +77,8 @@ namespace OpenDental {
 				command="SELECT "+
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
-					""+//TODO: Site ID Number
+					"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.PatNum="+patNum+" AND "+
+						"ap.AptStatus="+((int)ApptStatus.Complete)+" AND ap.ClinicNum=cl.ClinicNum ORDER BY ap.AptDateTime DESC LIMIT 1)) SiteIDNumber,"+
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
 						"WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
@@ -115,7 +116,18 @@ namespace OpenDental {
 						". Patient ID Number '"+pcin+"' is not 9 characters long."+Environment.NewLine;
 				}
 				outputRow+=pcin.PadLeft(15,'0');//Patient's ID Number
-				outputRow+="";//TODO: Site ID Number
+				string siteId=primaryCareReportRow.Rows[0]["SiteIDNumber"].ToString();
+				if(siteId=="null"){
+					siteId="";
+				}
+				if(!Regex.IsMatch(siteId,".*_[0-9]{5}")){
+					rowErrors+="ERROR: The clinic description for the clinic associated with the last completed appointment "+
+						"for the patient with a patnum of "+patNum+" must be the clinic name, follwed by a '_', followed by the 5-digit Site ID Number "+
+						"for the clinic. i.e. ClinicName_12345. The current clinic description is '"+siteId+"'."+Environment.NewLine;
+				}else{
+					siteId=siteId.Substring(siteId.Length-5);
+				}
+				outputRow+=siteId;
 				outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");//Patient's Date of Birth
 				outputRow+=POut.PInt(PIn.PInt(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
 				outputRow+=primaryCareReportRow.Rows[0]["PatRace"].ToString();
@@ -200,12 +212,12 @@ namespace OpenDental {
 				string newHouseholdSlidingFeeScale=Regex.Replace(householdSlidingFeeScale,"[^0-9]","");
 				if(newHouseholdSlidingFeeScale!=householdSlidingFeeScale){
 					rowWarnings+="WARNING: The household sliding fee scale (latest NOAH copay amount) for the patient with a patnum of "+patNum+
-						" contains invalid characters and was changed from '"+householdSlidingFeeScale+"' to '"+newHouseholdSlidingFeeScale+"'.";
+						" contains invalid characters and was changed from '"+householdSlidingFeeScale+"' to '"+newHouseholdSlidingFeeScale+"'."+Environment.NewLine;
 					householdSlidingFeeScale=newHouseholdSlidingFeeScale;
 				}
 				if(householdSlidingFeeScale.Length>3 || Convert.ToInt16(householdSlidingFeeScale)>100){
-					rowWarnings+="The household sliding fee scale (latest NOAH copay amount) for the patient with a patnum of "+patNum+
-						" is '"+householdSlidingFeeScale+"', but will be reported as 100.";
+					rowWarnings+="WARNING: The household sliding fee scale (latest NOAH copay amount) for the patient with a patnum of "+patNum+
+						" is '"+householdSlidingFeeScale+"', but will be reported as 100."+Environment.NewLine;
 					householdSlidingFeeScale="100";
 				}
 				outputRow+=householdSlidingFeeScale.PadLeft(3,'0');
@@ -218,7 +230,7 @@ namespace OpenDental {
 				//Primary care status
 				string primaryCareStatus=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["CareStatus"].ToString())).ToUpper();
 				if(primaryCareStatus!="A"&&primaryCareStatus!="B"&&primaryCareStatus!="C"&&primaryCareStatus!="D") {
-					rowErrors+="The primary care status of the patient with a patnum of "+patNum+" is set to '"+primaryCareStatus+
+					rowErrors+="ERROR: The primary care status of the patient with a patnum of "+patNum+" is set to '"+primaryCareStatus+
 						"', but must be set to A, B, C or D. "+Environment.NewLine;
 				}
 				outputRow+=primaryCareStatus;

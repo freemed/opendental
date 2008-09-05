@@ -33,9 +33,9 @@ namespace OpenDental{
 			this.textEligibilityFile=new System.Windows.Forms.TextBox();
 			this.dateTimeFrom=new System.Windows.Forms.DateTimePicker();
 			this.groupBox1=new System.Windows.Forms.GroupBox();
-			this.label4=new System.Windows.Forms.Label();
-			this.dateTimeTo=new System.Windows.Forms.DateTimePicker();
 			this.label5=new System.Windows.Forms.Label();
+			this.dateTimeTo=new System.Windows.Forms.DateTimePicker();
+			this.label4=new System.Windows.Forms.Label();
 			this.butRun=new OpenDental.UI.Button();
 			this.butCopy=new OpenDental.UI.Button();
 			this.butBrowse=new OpenDental.UI.Button();
@@ -116,23 +116,7 @@ namespace OpenDental{
 			this.groupBox1.Size=new System.Drawing.Size(603,71);
 			this.groupBox1.TabIndex=15;
 			this.groupBox1.TabStop=false;
-			this.groupBox1.Text="Date of Last Completed Procedure";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize=true;
-			this.label4.Location=new System.Drawing.Point(7,23);
-			this.label4.Name="label4";
-			this.label4.Size=new System.Drawing.Size(30,13);
-			this.label4.TabIndex=15;
-			this.label4.Text="From";
-			// 
-			// dateTimeTo
-			// 
-			this.dateTimeTo.Location=new System.Drawing.Point(262,41);
-			this.dateTimeTo.Name="dateTimeTo";
-			this.dateTimeTo.Size=new System.Drawing.Size(200,20);
-			this.dateTimeTo.TabIndex=16;
+			this.groupBox1.Text="Date of Last Completed Appointment";
 			// 
 			// label5
 			// 
@@ -142,6 +126,22 @@ namespace OpenDental{
 			this.label5.Size=new System.Drawing.Size(20,13);
 			this.label5.TabIndex=17;
 			this.label5.Text="To";
+			// 
+			// dateTimeTo
+			// 
+			this.dateTimeTo.Location=new System.Drawing.Point(262,41);
+			this.dateTimeTo.Name="dateTimeTo";
+			this.dateTimeTo.Size=new System.Drawing.Size(200,20);
+			this.dateTimeTo.TabIndex=16;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize=true;
+			this.label4.Location=new System.Drawing.Point(7,23);
+			this.label4.Name="label4";
+			this.label4.Size=new System.Drawing.Size(30,13);
+			this.label4.TabIndex=15;
+			this.label4.Text="From";
 			// 
 			// butRun
 			// 
