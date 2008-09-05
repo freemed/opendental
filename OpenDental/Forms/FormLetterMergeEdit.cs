@@ -386,7 +386,8 @@ namespace OpenDental{
 			listPatSelect.Items.Add("FName");
 			listPatSelect.Items.Add("MiddleI"); 
       listPatSelect.Items.Add("Preferred");
-      listPatSelect.Items.Add("Salutation"); 
+      listPatSelect.Items.Add("Title");
+      listPatSelect.Items.Add("Salutation");
       listPatSelect.Items.Add("Address"); 
       listPatSelect.Items.Add("Address2");
       listPatSelect.Items.Add("City"); 
