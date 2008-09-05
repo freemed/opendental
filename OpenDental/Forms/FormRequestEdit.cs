@@ -197,6 +197,7 @@ namespace OpenDental {
 			myPointsUsed=PIn.PInt(row["myPointsUsed"]);
 			//textMyPointsRemain.Text=;this will be filled automatically when myPoints changes
 			textMyPoints.Text=row["myPoints"];
+			RecalcMyPoints();
 			checkIsCritical.Checked=PIn.PBool(row["IsCritical"]);
 			textMyPledge.Text=row["myPledge"];
 			textTotalPoints.Text=row["totalPoints"];
@@ -207,6 +208,10 @@ namespace OpenDental {
 		}
 
 		private void textMyPoints_TextChanged(object sender,EventArgs e) {
+			RecalcMyPoints();
+		}
+
+		private void RecalcMyPoints(){
 			try{
 				int mypoints=0;
 				if(textMyPoints.Text!=""){
