@@ -204,7 +204,6 @@ namespace OpenDental {
 			textTotalCritical.Text=row["totalCritical"];
 			textTotalPledged.Text=row["totalPledged"];
 			textWeight.Text=row["Weight"];
-			
 		}
 
 		private void textMyPoints_TextChanged(object sender,EventArgs e) {

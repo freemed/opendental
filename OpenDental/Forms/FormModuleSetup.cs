@@ -67,6 +67,7 @@ namespace OpenDental{
 		private Label label3;
 		private ComboBox comboTimeArrived;
 		private CheckBox checkApptRefreshEveryMinute;
+		private CheckBox checkChartQuickAddHideAmalgam;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -119,6 +120,7 @@ namespace OpenDental{
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkApptRefreshEveryMinute = new System.Windows.Forms.CheckBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.comboTimeDismissed = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
@@ -140,7 +142,7 @@ namespace OpenDental{
 			this.checkAutoClearEntryStatus = new System.Windows.Forms.CheckBox();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.checkApptRefreshEveryMinute = new System.Windows.Forms.CheckBox();
+			this.checkChartQuickAddHideAmalgam = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
@@ -493,6 +495,17 @@ namespace OpenDental{
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
 			// 
+			// checkApptRefreshEveryMinute
+			// 
+			this.checkApptRefreshEveryMinute.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApptRefreshEveryMinute.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkApptRefreshEveryMinute.Location = new System.Drawing.Point(10,195);
+			this.checkApptRefreshEveryMinute.Name = "checkApptRefreshEveryMinute";
+			this.checkApptRefreshEveryMinute.Size = new System.Drawing.Size(406,17);
+			this.checkApptRefreshEveryMinute.TabIndex = 198;
+			this.checkApptRefreshEveryMinute.Text = "Refresh every 60 seconds.  Keeps waiting room times refreshed.";
+			this.checkApptRefreshEveryMinute.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// label6
 			// 
 			this.label6.Location = new System.Drawing.Point(6,174);
@@ -642,13 +655,14 @@ namespace OpenDental{
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.checkChartQuickAddHideAmalgam);
 			this.groupBox3.Controls.Add(this.label11);
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.comboToothNomenclature);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
 			this.groupBox3.Location = new System.Drawing.Point(454,366);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(422,83);
+			this.groupBox3.Size = new System.Drawing.Size(422,117);
 			this.groupBox3.TabIndex = 191;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Chart module";
@@ -719,16 +733,17 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
 			// 
-			// checkApptRefreshEveryMinute
+			// checkChartQuickAddHideAmalgam
 			// 
-			this.checkApptRefreshEveryMinute.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkApptRefreshEveryMinute.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApptRefreshEveryMinute.Location = new System.Drawing.Point(10,195);
-			this.checkApptRefreshEveryMinute.Name = "checkApptRefreshEveryMinute";
-			this.checkApptRefreshEveryMinute.Size = new System.Drawing.Size(406,17);
-			this.checkApptRefreshEveryMinute.TabIndex = 198;
-			this.checkApptRefreshEveryMinute.Text = "Refresh every 60 seconds.  Keeps waiting room times refreshed.";
-			this.checkApptRefreshEveryMinute.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartQuickAddHideAmalgam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartQuickAddHideAmalgam.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkChartQuickAddHideAmalgam.Location = new System.Drawing.Point(35,80);
+			this.checkChartQuickAddHideAmalgam.Name = "checkChartQuickAddHideAmalgam";
+			this.checkChartQuickAddHideAmalgam.Size = new System.Drawing.Size(381,15);
+			this.checkChartQuickAddHideAmalgam.TabIndex = 195;
+			this.checkChartQuickAddHideAmalgam.Text = "Hide amalgam buttons in Quick Buttons section";
+			this.checkChartQuickAddHideAmalgam.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartQuickAddHideAmalgam.UseVisualStyleBackColor = true;
 			// 
 			// butCancel
 			// 
@@ -739,7 +754,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(768,505);
+			this.butCancel.Location = new System.Drawing.Point(768,533);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -754,7 +769,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(663,505);
+			this.butOK.Location = new System.Drawing.Point(663,533);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -784,7 +799,7 @@ namespace OpenDental{
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(890,555);
+			this.ClientSize = new System.Drawing.Size(890,583);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox4);
@@ -896,6 +911,7 @@ namespace OpenDental{
 			comboToothNomenclature.SelectedIndex = PrefC.GetInt("UseInternationalToothNumbers");
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool("AutoResetTPEntryStatus");
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool("AllowSettingProcsComplete");
+			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool("ChartQuickAddHideAmalgam");
 		}
 
 		private void checkDeductibleBeforePercent_Click(object sender,EventArgs e) {
@@ -959,6 +975,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("InsDefaultPPOpercent",checkPPOpercentage.Checked)
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)
 				| Prefs.UpdateBool("ApptModuleRefreshesEveryMinute", checkApptRefreshEveryMinute.Checked)
+				| Prefs.UpdateBool("ChartQuickAddHideAmalgam", checkChartQuickAddHideAmalgam.Checked)
 				)
 			{
 				changed=true;

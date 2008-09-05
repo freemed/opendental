@@ -400,6 +400,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="UPDATE payplan SET CompletedAmt=(SELECT SUM(Principal) FROM payplancharge WHERE payplan.PayPlanNum=payplancharge.PayPlanNum)";
 					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ChartQuickAddHideAmalgam','0','')";
+					General.NonQ(command);
 				} 
 				else {//oracle
 					
