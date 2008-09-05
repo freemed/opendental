@@ -396,6 +396,10 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES (21,8,'Family Module Referral','',-2823993,0)";
 					General.NonQ(command);
+					command="ALTER TABLE payplan ADD CompletedAmt double NOT NULL";
+					General.NonQ(command);
+					command="UPDATE payplan SET CompletedAmt=(SELECT SUM(Principal) FROM payplancharge WHERE payplan.PayPlanNum=payplancharge.PayPlanNum)";
+					General.NonQ(command);
 				} 
 				else {//oracle
 					

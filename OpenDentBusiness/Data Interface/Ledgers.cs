@@ -174,35 +174,20 @@ namespace OpenDentBusiness{
 			Debug.WriteLine("Sum Paysplits: "+SumDebugPaysplit.ToString("c"));
 			ComputePayments(pairs);
 			//PAYMENT PLAN princ:
-			command="SELECT PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
-				//"SELECT currentdue,totalamount,patnum,guarantor FROM payplan"
+			command="SELECT CompletedAmt FROM payplan"//PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
 				+" WHERE"
 				+wherePats
-				//+" OR"
-				//+whereGuars
-				+" ORDER BY ChargeDate";
+				+" ORDER BY PayPlanDate";//ChargeDate";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[1];//always just one single combined entry
 			pairs[0].Date=DateTime.Today;
-			//foreach(int patNum in ALpatNums){
-				for(int i=0;i<table.Rows.Count;i++){
-					//one or both of these conditions may be met:
-					//if is guarantor
-					//if(PIn.PInt(table.Rows[i][1].ToString())==patNum){
-					//	if(PIn.PDate(table.Rows[i][4].ToString())<=DateTime.Today){
-					//		pairs[0].Value+=PIn.PDouble(table.Rows[i][2].ToString())
-					//			+PIn.PDouble(table.Rows[i][3].ToString());
-					//	}
-					//}
-					//if is patient
-					//if(PIn.PInt(table.Rows[i][0].ToString())==patNum){
-						pairs[0].Value-=PIn.PDouble(table.Rows[i][2].ToString());//just always subtract princ from patient aging.
-					Debug.WriteLine("PayPlan: "+pairs[0].Date.ToShortDateString()+" "+pairs[0].Value.ToString("c"));
-					//}
-				}
-			//}
-			if(pairs[0].Value>0)
+			for(int i=0;i<table.Rows.Count;i++){
+				pairs[0].Value-=PIn.PDouble(table.Rows[i][0].ToString());//just always subtract princ from patient aging.
+				Debug.WriteLine("PayPlan: "+pairs[0].Date.ToShortDateString()+" "+pairs[0].Value.ToString("c"));
+			}
+			if(pairs[0].Value>0){
 				Bal[GetAgingType(pairs[0].Date)]+=pairs[0].Value;
+			}
 			else if(pairs[0].Value<0){
 				pairs[0].Value=-pairs[0].Value;
 				ComputePayments(pairs);

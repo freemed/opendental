@@ -1076,7 +1076,7 @@ namespace OpenDentBusiness {
 					+"AND ChargeDate <= "+datesql+@") principalDue_,"
 				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
 					+"AND ChargeDate <= "+datesql+@") interestDue_,"
-				+"CarrierName,payplan.Guarantor,"
+				+"CarrierName,CompletedAmt,payplan.Guarantor,"
 				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
 				+"payplan.PlanNum "
 				+"FROM payplan "
@@ -1106,7 +1106,8 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
-				amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
+				//amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
+				amt=PIn.PDouble(rawPayPlan.Rows[i]["CompletedAmt"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());

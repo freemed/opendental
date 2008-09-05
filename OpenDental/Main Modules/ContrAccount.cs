@@ -3112,6 +3112,7 @@ namespace OpenDental {
 			payPlan.PatNum=PatCur.PatNum;
 			payPlan.Guarantor=PatCur.Guarantor;
 			payPlan.PayPlanDate=DateTime.Today;
+			payPlan.CompletedAmt=PatCur.EstBalance;
 			PayPlans.Insert(payPlan);
 			FormPayPlan FormPP=new FormPayPlan(PatCur,payPlan);
 			FormPP.TotalAmt=PatCur.EstBalance;

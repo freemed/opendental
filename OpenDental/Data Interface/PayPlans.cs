@@ -43,13 +43,14 @@ namespace OpenDental{
 			PayPlan payplan;
 			for(int i=0;i<table.Rows.Count;i++) {
 				payplan=new PayPlan();
-				payplan.PayPlanNum    = PIn.PInt(table.Rows[i][0].ToString());
-				payplan.PatNum        = PIn.PInt(table.Rows[i][1].ToString());
-				payplan.Guarantor     = PIn.PInt(table.Rows[i][2].ToString());
-				payplan.PayPlanDate   = PIn.PDate(table.Rows[i][3].ToString());
+				payplan.PayPlanNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				payplan.PatNum        = PIn.PInt   (table.Rows[i][1].ToString());
+				payplan.Guarantor     = PIn.PInt   (table.Rows[i][2].ToString());
+				payplan.PayPlanDate   = PIn.PDate  (table.Rows[i][3].ToString());
 				payplan.APR           = PIn.PDouble(table.Rows[i][4].ToString());
 				payplan.Note          = PIn.PString(table.Rows[i][5].ToString());
-				payplan.PlanNum       = PIn.PInt(table.Rows[i][6].ToString());
+				payplan.PlanNum       = PIn.PInt   (table.Rows[i][6].ToString());
+				payplan.CompletedAmt  = PIn.PDouble(table.Rows[i][7].ToString());
 				retVal.Add(payplan);
 			}
 			return retVal;
@@ -60,10 +61,11 @@ namespace OpenDental{
 			string command="UPDATE payplan SET " 
 				+"PatNum = '"         +POut.PInt   (plan.PatNum)+"'"
 				+",Guarantor = '"     +POut.PInt   (plan.Guarantor)+"'"
-				+",PayPlanDate = "   +POut.PDate  (plan.PayPlanDate)
+				+",PayPlanDate = "    +POut.PDate  (plan.PayPlanDate)
 				+",APR = '"           +POut.PDouble(plan.APR)+"'"
 				+",Note = '"          +POut.PString(plan.Note)+"'"
 				+",PlanNum = '"       +POut.PInt   (plan.PlanNum)+"'"
+				+",CompletedAmt = '"  +POut.PDouble(plan.CompletedAmt)+"'"
 				+" WHERE PayPlanNum = '" +POut.PInt(plan.PayPlanNum)+"'";
  			General.NonQ(command);
 		}
@@ -77,7 +79,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys){
 				command+="PayPlanNum,";
 			}
-			command+="PatNum,Guarantor,PayPlanDate,APR,Note,PlanNum) VALUES(";
+			command+="PatNum,Guarantor,PayPlanDate,APR,Note,PlanNum,CompletedAmt) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(plan.PayPlanNum)+"', ";
 			}
@@ -87,7 +89,8 @@ namespace OpenDental{
 				+POut.PDate  (plan.PayPlanDate)+", "
 				+"'"+POut.PDouble(plan.APR)+"', "
 				+"'"+POut.PString(plan.Note)+"', "
-				+"'"+POut.PInt   (plan.PlanNum)+"')";
+				+"'"+POut.PInt   (plan.PlanNum)+"', "
+				+"'"+POut.PDouble(plan.CompletedAmt)+"')";
 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
