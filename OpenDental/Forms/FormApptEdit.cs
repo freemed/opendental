@@ -155,7 +155,9 @@ namespace OpenDental{
 			this.textTimeArrived = new System.Windows.Forms.TextBox();
 			this.labelTimeArrived = new System.Windows.Forms.Label();
 			this.textRequirement = new System.Windows.Forms.TextBox();
+			this.butRequirement = new OpenDental.UI.Button();
 			this.textLabCase = new System.Windows.Forms.TextBox();
+			this.butLab = new OpenDental.UI.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.checkTimeLocked = new System.Windows.Forms.CheckBox();
 			this.contextMenuTimeArrived = new System.Windows.Forms.ContextMenu();
@@ -165,8 +167,6 @@ namespace OpenDental{
 			this.contextMenuTimeDismissed = new System.Windows.Forms.ContextMenu();
 			this.menuItemDismissedNow = new System.Windows.Forms.MenuItem();
 			this.textNote = new OpenDental.ODtextBox();
-			this.butRequirement = new OpenDental.UI.Button();
-			this.butLab = new OpenDental.UI.Button();
 			this.butAddComm = new OpenDental.UI.Button();
 			this.tbTime = new OpenDental.TableTimeBar();
 			this.gridPatient = new OpenDental.UI.ODGrid();
@@ -486,6 +486,20 @@ namespace OpenDental{
 			this.textRequirement.Size = new System.Drawing.Size(188,150);
 			this.textRequirement.TabIndex = 144;
 			// 
+			// butRequirement
+			// 
+			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRequirement.Autosize = true;
+			this.butRequirement.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRequirement.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRequirement.CornerRadius = 4F;
+			this.butRequirement.Location = new System.Drawing.Point(4,278);
+			this.butRequirement.Name = "butRequirement";
+			this.butRequirement.Size = new System.Drawing.Size(46,20);
+			this.butRequirement.TabIndex = 143;
+			this.butRequirement.Text = "Req";
+			this.butRequirement.Click += new System.EventHandler(this.butRequirement_Click);
+			// 
 			// textLabCase
 			// 
 			this.textLabCase.AcceptsReturn = true;
@@ -496,6 +510,20 @@ namespace OpenDental{
 			this.textLabCase.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textLabCase.Size = new System.Drawing.Size(188,34);
 			this.textLabCase.TabIndex = 142;
+			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.Location = new System.Drawing.Point(4,182);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(46,20);
+			this.butLab.TabIndex = 141;
+			this.butLab.Text = "Lab";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
 			// 
 			// checkTimeLocked
 			// 
@@ -551,34 +579,6 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(312,101);
 			this.textNote.TabIndex = 142;
 			// 
-			// butRequirement
-			// 
-			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRequirement.Autosize = true;
-			this.butRequirement.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRequirement.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRequirement.CornerRadius = 4F;
-			this.butRequirement.Location = new System.Drawing.Point(4,278);
-			this.butRequirement.Name = "butRequirement";
-			this.butRequirement.Size = new System.Drawing.Size(46,20);
-			this.butRequirement.TabIndex = 143;
-			this.butRequirement.Text = "Req";
-			this.butRequirement.Click += new System.EventHandler(this.butRequirement_Click);
-			// 
-			// butLab
-			// 
-			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLab.Autosize = true;
-			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLab.CornerRadius = 4F;
-			this.butLab.Location = new System.Drawing.Point(4,182);
-			this.butLab.Name = "butLab";
-			this.butLab.Size = new System.Drawing.Size(46,20);
-			this.butLab.TabIndex = 141;
-			this.butLab.Text = "Lab";
-			this.butLab.Click += new System.EventHandler(this.butLab_Click);
-			// 
 			// butAddComm
 			// 
 			this.butAddComm.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -589,7 +589,7 @@ namespace OpenDental{
 			this.butAddComm.CornerRadius = 4F;
 			this.butAddComm.Image = global::OpenDental.Properties.Resources.commlog;
 			this.butAddComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddComm.Location = new System.Drawing.Point(870,345);
+			this.butAddComm.Location = new System.Drawing.Point(872,366);
 			this.butAddComm.Name = "butAddComm";
 			this.butAddComm.Size = new System.Drawing.Size(92,26);
 			this.butAddComm.TabIndex = 143;
@@ -654,7 +654,7 @@ namespace OpenDental{
 			this.butAudit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAudit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAudit.CornerRadius = 4F;
-			this.butAudit.Location = new System.Drawing.Point(870,486);
+			this.butAudit.Location = new System.Drawing.Point(872,507);
 			this.butAudit.Name = "butAudit";
 			this.butAudit.Size = new System.Drawing.Size(92,26);
 			this.butAudit.TabIndex = 125;
@@ -669,7 +669,7 @@ namespace OpenDental{
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(870,518);
+			this.butTask.Location = new System.Drawing.Point(872,539);
 			this.butTask.Name = "butTask";
 			this.butTask.Size = new System.Drawing.Size(92,26);
 			this.butTask.TabIndex = 124;
@@ -686,7 +686,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(870,582);
+			this.butDelete.Location = new System.Drawing.Point(872,603);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92,26);
 			this.butDelete.TabIndex = 123;
@@ -703,7 +703,7 @@ namespace OpenDental{
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = ((System.Drawing.Image)(resources.GetObject("butPin.Image")));
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(870,550);
+			this.butPin.Location = new System.Drawing.Point(872,571);
 			this.butPin.Name = "butPin";
 			this.butPin.Size = new System.Drawing.Size(92,26);
 			this.butPin.TabIndex = 122;
@@ -718,7 +718,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(870,614);
+			this.butOK.Location = new System.Drawing.Point(872,635);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(92,26);
 			this.butOK.TabIndex = 1;
@@ -733,7 +733,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(870,646);
+			this.butCancel.Location = new System.Drawing.Point(872,667);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(92,26);
 			this.butCancel.TabIndex = 0;
@@ -743,7 +743,7 @@ namespace OpenDental{
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(974,683);
+			this.ClientSize = new System.Drawing.Size(976,704);
 			this.Controls.Add(this.checkTimeLocked);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.labelApptNote);

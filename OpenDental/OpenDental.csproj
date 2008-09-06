@@ -381,6 +381,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormApptProcs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormApptProcs.designer.cs">
+      <DependentUpon>FormApptProcs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormRecallsPat.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3551,6 +3557,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormApptProcs.resx">
+      <DependentUpon>FormApptProcs.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormRecallsPat.resx">
