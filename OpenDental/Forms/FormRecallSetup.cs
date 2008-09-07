@@ -464,29 +464,29 @@ namespace OpenDental{
 				MsgBox.Show(this,"Both status options at the bottom must be set.");
 				return; 
 			}
-
 			Prefs.UpdateString("RecallEmailSubject",textEmailSubject.Text);
-			Prefs.UpdateString("RecallPostcardMessage",textPostcardMessage.Text);
-			
+			Prefs.UpdateString("RecallPostcardMessage",textPostcardMessage.Text);		
 			Prefs.UpdateString("RecallPostcardFamMsg",textPostcardFamMsg.Text);
-
 			Prefs.UpdateString("ConfirmPostcardMessage",textConfirmPostcardMessage.Text);
-
 			Prefs.UpdateString("RecallPostcardsPerSheet",textPostcardsPerSheet.Text);
-
 			Prefs.UpdateBool("RecallCardsShowReturnAdd",checkReturnAdd.Checked);
-
 			Prefs.UpdateBool("RecallGroupByFamily",checkGroupFamilies.Checked);
-
 			Prefs.UpdateInt("RecallDaysPast",PIn.PInt(textDaysPast.Text));
 			Prefs.UpdateInt("RecallDaysFuture",PIn.PInt(textDaysFuture.Text));
-
 			Prefs.UpdateDouble("RecallAdjustRight",PIn.PDouble(textRight.Text));
 			Prefs.UpdateDouble("RecallAdjustDown",PIn.PDouble(textDown.Text));
-
-			Prefs.UpdateInt("RecallStatusEmailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusEmailedRecall.SelectedIndex].DefNum);
-			Prefs.UpdateInt("RecallStatusMailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
-			
+			if(comboStatusEmailedRecall.SelectedIndex==-1){
+				Prefs.UpdateInt("RecallStatusEmailed",0);
+			}
+			else{
+				Prefs.UpdateInt("RecallStatusEmailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusEmailedRecall.SelectedIndex].DefNum);
+			}
+			if(comboStatusMailedRecall.SelectedIndex==-1){
+				Prefs.UpdateInt("RecallStatusMailed",0);
+			}
+			else{
+				Prefs.UpdateInt("RecallStatusMailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
+			}
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
