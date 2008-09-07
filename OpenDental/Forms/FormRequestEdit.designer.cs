@@ -126,6 +126,7 @@ namespace OpenDental{
 			this.textDetail.Multiline = true;
 			this.textDetail.Name = "textDetail";
 			this.textDetail.ReadOnly = true;
+			this.textDetail.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textDetail.Size = new System.Drawing.Size(410,98);
 			this.textDetail.TabIndex = 1;
 			// 
