@@ -416,6 +416,28 @@ namespace OpenDental{
 			if(FromVersion<new Version("6.1.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS plannedappt";
+					General.NonQ(command);
+					command=@"CREATE TABLE plannedappt (
+						PlannedApptNum int NOT NULL auto_increment,
+						PatNum int NOT NULL,
+						AptNum int NOT NULL,
+						ItemOrder int NOT NULL,
+						PRIMARY KEY (PlannedApptNum),
+						INDEX (PatNum),
+						INDEX (AptNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+
+
+
+
+
+
+
+
+
 
 				} 
 				else {//oracle
