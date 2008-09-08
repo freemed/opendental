@@ -162,7 +162,6 @@ namespace OpenDental{
 		private CheckBox checkDedBeforePerc;
 		private CheckBox checkCodeSubst;
 		private CheckBox checkIsHidden;
-		private Label labelViewRequestDocument;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
 
@@ -217,7 +216,7 @@ namespace OpenDental{
 				labelCitySTZip.Text=Lan.g(this,"City,Postcode");
 			}
 			panelPat.BackColor=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
-			labelViewRequestDocument.Text="         ";
+			//labelViewRequestDocument.Text="         ";
 			//if(!PrefC.GetBool("CustomizedForPracticeWeb")) {
 			//	butEligibility.Visible=false;
 			//	labelViewRequestDocument.Visible=false;
@@ -272,7 +271,6 @@ namespace OpenDental{
 			this.label14 = new System.Windows.Forms.Label();
 			this.textSubscriber = new System.Windows.Forms.TextBox();
 			this.groupSubscriber = new System.Windows.Forms.GroupBox();
-			this.labelViewRequestDocument = new System.Windows.Forms.Label();
 			this.butEligibility = new OpenDental.UI.Button();
 			this.label25 = new System.Windows.Forms.Label();
 			this.textSubscriberID = new System.Windows.Forms.TextBox();
@@ -331,6 +329,7 @@ namespace OpenDental{
 			this.groupCarrier = new System.Windows.Forms.GroupBox();
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
+			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.checkCodeSubst = new System.Windows.Forms.CheckBox();
 			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
 			this.checkShowBaseUnits = new System.Windows.Forms.CheckBox();
@@ -346,7 +345,6 @@ namespace OpenDental{
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -637,7 +635,6 @@ namespace OpenDental{
 			// 
 			// groupSubscriber
 			// 
-			this.groupSubscriber.Controls.Add(this.labelViewRequestDocument);
 			this.groupSubscriber.Controls.Add(this.butEligibility);
 			this.groupSubscriber.Controls.Add(this.checkAssign);
 			this.groupSubscriber.Controls.Add(this.label25);
@@ -658,15 +655,6 @@ namespace OpenDental{
 			this.groupSubscriber.TabIndex = 9;
 			this.groupSubscriber.TabStop = false;
 			this.groupSubscriber.Text = "Subscriber";
-			// 
-			// labelViewRequestDocument
-			// 
-			this.labelViewRequestDocument.Location = new System.Drawing.Point(483,11);
-			this.labelViewRequestDocument.Name = "labelViewRequestDocument";
-			this.labelViewRequestDocument.Size = new System.Drawing.Size(18,23);
-			this.labelViewRequestDocument.TabIndex = 117;
-			this.labelViewRequestDocument.Text = "labelViewRequestDocument";
-			this.labelViewRequestDocument.Click += new System.EventHandler(this.labelViewRequestDocument_Click);
 			// 
 			// butEligibility
 			// 
@@ -1314,6 +1302,15 @@ namespace OpenDental{
 			this.panelPlan.Size = new System.Drawing.Size(454,438);
 			this.panelPlan.TabIndex = 157;
 			// 
+			// checkIsHidden
+			// 
+			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsHidden.Location = new System.Drawing.Point(112,357);
+			this.checkIsHidden.Name = "checkIsHidden";
+			this.checkIsHidden.Size = new System.Drawing.Size(275,16);
+			this.checkIsHidden.TabIndex = 165;
+			this.checkIsHidden.Text = "Hidden";
+			// 
 			// checkCodeSubst
 			// 
 			this.checkCodeSubst.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -1494,15 +1491,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// checkIsHidden
-			// 
-			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHidden.Location = new System.Drawing.Point(112,357);
-			this.checkIsHidden.Name = "checkIsHidden";
-			this.checkIsHidden.Size = new System.Drawing.Size(275,16);
-			this.checkIsHidden.TabIndex = 165;
-			this.checkIsHidden.Text = "Hidden";
 			// 
 			// FormInsPlan
 			// 
@@ -3188,7 +3176,7 @@ namespace OpenDental{
 			}
 			MsgBox.Show(this,"We do not have eligibility checks functional with your default clearinghouse.");
 		}
-		
+
 		#region EligibilityCheckDentalXchange
 		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
 		//PraciceWeb seems to have a partnership agreement with this clearinghouse, but we do not yet.
@@ -3206,7 +3194,7 @@ namespace OpenDental{
 			string command;
 			// Get Login / Password
 			command = @"select loginid,password from clearinghouse where isDefault=1";
-			table =General.GetTable(command);
+			table = General.GetTable(command);
 			if(table.Rows.Count != 0) {
 				loginID = PIn.PString(table.Rows[0][0].ToString());
 				passWord = PIn.PString(table.Rows[0][1].ToString());
@@ -3234,8 +3222,9 @@ namespace OpenDental{
 				//DisplayEligibilityStatus();
 				ProcessEligibilityResponseDentalXchange(DCIResponse.content.ToString());
 			}
-			catch(Exception ex) {
-				MessageBox.Show("Error : " + ex.Message);
+			catch{//Exception ex) {
+				// SPK /AAD 8/16/08 Display more user friendly error message
+				MessageBox.Show("Error : Inadequate data for response. Payer site may be unavailable.");
 			}
 			Cursor = Cursors.Default;
 		}
@@ -3376,6 +3365,16 @@ namespace OpenDental{
 			InfoAddress.AppendChild(InfoState);
 			InfoAddress.AppendChild(InfoZip);
 			InfoReceiver.AppendChild(InfoAddress);
+			//SPK / AAD 8/13/08 Add NPI -- Begin
+			XmlNode InfoReceiverProviderNPI = doc.CreateNode(XmlNodeType.Element,"NPI","");
+			//Get Provider NPI #
+			command = @"SELECT NationalProvID FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+			table = General.GetTable(command);
+			if(table.Rows.Count != 0) {
+				InfoReceiverProviderNPI.InnerText = PIn.PString(table.Rows[0][0].ToString());
+			};
+			InfoReceiver.AppendChild(InfoReceiverProviderNPI);
+			//SPK / AAD 8/13/08 Add NPI -- End
 			XmlNode InfoCredential = doc.CreateNode(XmlNodeType.Element,"Credential","");
 			XmlNode InfoCredentialType = doc.CreateNode(XmlNodeType.Element,"Type","");
 			XmlNode InfoCredentialValue = doc.CreateNode(XmlNodeType.Element,"Value","");
@@ -3499,6 +3498,9 @@ namespace OpenDental{
 			EligNode.AppendChild(Subscriber);
 			//  Prepare Information Receiver Node
 			XmlNode RenderingProvider = doc.CreateNode(XmlNodeType.Element,"RenderingProvider","");
+			// SPK / AAD 8/13/08 Add Rendering Provider NPI It is same as Info Receiver NPI -- Start
+			XmlNode RenderingProviderNPI = doc.CreateNode(XmlNodeType.Element,"NPI","");
+			// SPK / AAD 8/13/08 Add Rendering Provider NPI It is same as Info Receiver NPI -- End
 			XmlNode RenderingAddress = doc.CreateNode(XmlNodeType.Element,"Address","");
 			XmlNode RenderingAddressName = doc.CreateNode(XmlNodeType.Element,"Name","");
 			XmlNode RenderingAddressFirstName = doc.CreateNode(XmlNodeType.Element,"FirstName","");
@@ -3527,6 +3529,7 @@ namespace OpenDental{
 			XmlNode RenderingCity = doc.CreateNode(XmlNodeType.Element,"City","");
 			XmlNode RenderingState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode RenderingZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
+			RenderingProviderNPI.InnerText = InfoReceiverProviderNPI.InnerText;
 			RenderingAddressLine1.InnerText = practiceAddress1;
 			RenderingAddressLine2.InnerText = practiceAddress2;
 			RenderingPhone.InnerText = practicePhone;
@@ -3550,6 +3553,9 @@ namespace OpenDental{
 			XmlNode RenderingTaxonomyCode = doc.CreateNode(XmlNodeType.Element,"TaxonomyCode","");
 			RenderingTaxonomyCode.InnerText = TaxoCode;
 			RenderingProvider.AppendChild(RenderingAddress);
+			// SPK / AAD 8/13/08 Add Rendering Provider NPI It is same as Info Receiver NPI -- Start
+			RenderingProvider.AppendChild(RenderingProviderNPI);
+			// SPK / AAD 8/13/08 Add NPI -- End
 			RenderingProvider.AppendChild(RenderingCredential);
 			RenderingProvider.AppendChild(RenderingTaxonomyCode);
 			//  Append RenderingProvider To EligNode
@@ -3565,10 +3571,10 @@ namespace OpenDental{
 			IsEligibleNode = doc.SelectSingleNode("EligBenefitResponse/isEligible");
 			switch(IsEligibleNode.InnerText) {
 				case "0": // SPK
-					IsEligibleStatus = textSubscriber.Text + " is Eligible";
-					XmlNode GroupNum;
-					GroupNum = doc.SelectSingleNode("EligBenefitResponse/Subscriber/Plan/GroupNum");
-					textGroupNum.Text = GroupNum.InnerText;
+					// HINA Added 9/2. 
+					// Open new form to display complete response Detail
+					Form formDisplayEligibilityResponse = new FormEligibilityResponseDisplay(doc,PatPlanCur.PatNum);
+					formDisplayEligibilityResponse.ShowDialog();
 					break;
 				case "1": // SPK
 					// Process Error code and Message Node AAD
@@ -3578,33 +3584,15 @@ namespace OpenDental{
 					ErrorMessage = doc.SelectSingleNode("EligBenefitResponse/Response/ErrorMsg");
 					IsEligibleStatus = textSubscriber.Text + " is Not Eligible. Error Code:";
 					IsEligibleStatus += ErrorCode.InnerText + " Error Description:" + ErrorMessage.InnerText;
+					MessageBox.Show(IsEligibleStatus);
 					break;
 				default:
 					IsEligibleStatus = textSubscriber.Text + " Eligibility status is Unknown";
+					MessageBox.Show(IsEligibleStatus);
 					break;
-			};
-			MessageBox.Show(IsEligibleStatus);
+			}
 		}
 
-		private void labelViewRequestDocument_Click(object sender,EventArgs e) {
-			DataTable table;
-			string loginID;
-			string passWord;
-			string command;
-			// Get Login / Password
-			command = @"select loginid,password from clearinghouse where isDefault=1";
-			table = General.GetTable(command);
-			if(table.Rows.Count != 0) {
-				loginID = PIn.PString(table.Rows[0][0].ToString());
-				passWord = PIn.PString(table.Rows[0][1].ToString());
-			}
-			else {
-				loginID = "";
-				passWord = "";
-			}
-			MsgBoxCopyPaste MB = new MsgBoxCopyPaste(PrepareEligibilityRequestDentalXchange(loginID,passWord));
-			MB.ShowDialog();
-		}
 		#endregion
 
 		private void butOK_Click(object sender,System.EventArgs e) {

@@ -170,7 +170,7 @@ namespace OpenDentBusiness{
 			return TableToObjects(table);
 		}
 
-		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
+		/*//<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
 		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
 			//detach all procs from this appt.
 			string command;
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 				}
 				General.NonQ(command);
 			}
-		}
+		}*/
 
 		///<summary>If IsNew, just supply null for oldApt.</summary>
 		public static void InsertOrUpdate(Appointment appt, Appointment oldApt,bool IsNew){
@@ -1240,7 +1240,7 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable("Procedure");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("attached");//0 or 1
+			//table.Columns.Add("attached");//0 or 1
 			table.Columns.Add("CodeNum");
 			table.Columns.Add("descript");
 			table.Columns.Add("fee");
@@ -1258,8 +1258,9 @@ namespace OpenDentBusiness{
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 			//1. All TP procs
-				+" AND (ProcStatus=1 OR ";//tp
+			//	+" AND (ProcStatus=1 OR ";//tp
 			//2. All attached procs
+				+" AND ";
 			if(apptStatus=="6"){//planned
 				command+="PlannedAptNum="+aptNum;
 			}
@@ -1269,22 +1270,22 @@ namespace OpenDentBusiness{
 			}
 			//3. All unattached completed procs with same date as appt.
 			//but only if one of these types
-			if(apptStatus=="1" || apptStatus=="2" || apptStatus=="4" || apptStatus=="5"){//sched,C,ASAP,broken
-				DateTime aptDate=PIn.PDateT(aptDateTime);
-				command+=" OR (AptNum=0 "//unattached
-					+"AND ProcStatus=2 "//complete
-					+"AND Date(ProcDate)="+POut.PDate(aptDate)+")";//same date
-			}
-			command+=")";
+			//if(apptStatus=="1" || apptStatus=="2" || apptStatus=="4" || apptStatus=="5"){//sched,C,ASAP,broken
+			//	DateTime aptDate=PIn.PDateT(aptDateTime);
+			//	command+=" OR (AptNum=0 "//unattached
+			//		+"AND ProcStatus=2 "//complete
+			//		+"AND Date(ProcDate)="+POut.PDate(aptDate)+")";//same date
+			//}
+			//command+=")";
 			DataTable rawProc=General.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
 				row=table.NewRow();
-				if(apptStatus=="6"){//planned
-					row["attached"]=(rawProc.Rows[i]["PlannedAptNum"].ToString()==aptNum) ? "1" : "0";
-				}
-				else{
-					row["attached"]=(rawProc.Rows[i]["AptNum"].ToString()==aptNum) ? "1" : "0";
-				}
+				//if(apptStatus=="6"){//planned
+				//	row["attached"]=(rawProc.Rows[i]["PlannedAptNum"].ToString()==aptNum) ? "1" : "0";
+				//}
+				//else{
+				//	row["attached"]=(rawProc.Rows[i]["AptNum"].ToString()==aptNum) ? "1" : "0";
+				//}
 				row["CodeNum"]=rawProc.Rows[i]["CodeNum"].ToString();
 				row["descript"]="";
 				if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {

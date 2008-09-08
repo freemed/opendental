@@ -930,7 +930,47 @@ namespace OpenDental{
 			return extracted;
 		}
 
+		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned){
+			if(procNums.Count==0){
+				return;
+			}
+			string command="UPDATE procedurelog SET ";
+			if(isPlanned){
+				command+="PlannedAptNum";
+			}
+			else{
+				command+="AptNum";
+			}
+			command+="="+POut.PInt(aptNum)+" WHERE ";
+			for(int i=0;i<procNums.Count;i++){
+				if(i>0){
+					command+=" OR ";
+				}
+				command+="ProcNum="+POut.PInt(procNums[i]);
+			}
+			General.NonQ(command);
+		}
 
+		public static void DetachFromApt(List<int> procNums,bool isPlanned){
+			if(procNums.Count==0){
+				return;
+			}
+			string command="UPDATE procedurelog SET ";
+			if(isPlanned){
+				command+="PlannedAptNum";
+			}
+			else{
+				command+="AptNum";
+			}
+			command+="=0 WHERE ";
+			for(int i=0;i<procNums.Count;i++){
+				if(i>0){
+					command+=" OR ";
+				}
+				command+="ProcNum="+POut.PInt(procNums[i]);
+			}
+			General.NonQ(command);
+		}
 
 
 		//--------------------Taken from Procedure class--------------------------------------------------
