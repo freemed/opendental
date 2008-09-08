@@ -857,6 +857,9 @@ namespace OpenDental{
 					butTask.Enabled=false;
 					gridProc.Enabled=false;
 					listQuickAdd.Enabled=false;
+					butRemove.Enabled=false;
+					butAdd.Enabled=false;
+					butDeleteProc.Enabled=false;
 				}
 			}
 			//The four objects below are needed when adding procs to this appt.

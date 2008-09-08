@@ -24,6 +24,10 @@ namespace OpenDental {
 		}
 
 		private void FormApptProcs_Load(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void FillGrid(){
 			Procedure[] entireList=Procedures.Refresh(AptCur.PatNum);
 			ProcList=new List<Procedure>();
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
@@ -57,10 +61,6 @@ namespace OpenDental {
 				}
 				ProcList.Add(entireList[i]);
 			}
-			FillGrid();
-		}
-
-		private void FillGrid(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -78,7 +78,6 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			for(int i=0;i<ProcList.Count;i++){
 				row=new ODGridRow();
 				if(ProcList[i].ProcStatus==ProcStat.C){//so unattached
@@ -110,6 +109,88 @@ namespace OpenDental {
 			//Maybe edit proc?
 		}
 
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormProcCodes FormP=new FormProcCodes();
+			FormP.IsSelectionMode=true;
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			Procedure ProcCur;
+			ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
+			ProcCur.CodeNum = FormP.SelectedCodeNum;
+			//procnum
+			ProcCur.PatNum=AptCur.PatNum;
+			//aptnum
+			//proccode
+			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
+			ProcCur.ProcDate=DateTime.Today;
+			ProcCur.DateTP=ProcCur.ProcDate;
+			//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
+			InsPlan priplan=null;
+			Family fam=Patients.GetFamily(AptCur.PatNum);
+			Patient pat=fam.GetPatient(AptCur.PatNum);
+			InsPlan[] planList=InsPlans.Refresh(fam);
+			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
+			if(patPlanList.Length>0) {
+				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+			}
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,planList,patPlanList));
+			if(priplan!=null && priplan.PlanType=="p") {//PPO
+				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
+				if(standardfee>insfee) {
+					ProcCur.ProcFee=standardfee;
+				}
+				else {
+					ProcCur.ProcFee=insfee;
+				}
+			}
+			else {
+				ProcCur.ProcFee=insfee;
+			}
+			//surf
+			//ToothNum
+			//Procedures.Cur.ToothRange
+			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
+			ProcCur.Priority=0;
+			ProcCur.ProcStatus=ProcStat.TP;
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
+				&& pat.SecProv != 0){
+				ProcCur.ProvNum=pat.SecProv;
+			}
+			else{
+				ProcCur.ProvNum=pat.PriProv;
+			}
+			ProcCur.Note="";
+			ProcCur.ClinicNum=pat.ClinicNum;
+			//dx
+			//nextaptnum
+			ProcCur.DateEntryC=DateTime.Now;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+			ProcCur.SiteNum=pat.SiteNum;
+			Procedures.Insert(ProcCur);
+			Benefit[] benefitList=Benefits.Refresh(patPlanList);
+			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,planList,patPlanList,benefitList);
+			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
+			FormPE.IsNew=true;
+			FormPE.ShowDialog();
+			if(FormPE.DialogResult==DialogResult.Cancel){
+				//any created claimprocs are automatically deleted from within procEdit window.
+				try{
+					Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+				}
+			}
+			else{
+				//not needed because always TP
+				//Recalls.Synch(PatCur.PatNum);
+			}
+			FillGrid();
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(gridMain.SelectedIndices.Length==0){
 				MsgBox.Show(this,"Please select items first.");
@@ -139,6 +220,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 	}
