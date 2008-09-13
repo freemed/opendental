@@ -1051,6 +1051,7 @@ namespace OpenDental{
 			this.buttonAMODB.TabIndex = 227;
 			this.buttonAMODB.Text = "MODB";
 			this.buttonAMODB.UseVisualStyleBackColor = false;
+			this.buttonAMODB.Click += new System.EventHandler(this.buttonAMODB_Click);
 			// 
 			// buttonAMODL
 			// 
@@ -1066,6 +1067,7 @@ namespace OpenDental{
 			this.buttonAMODL.TabIndex = 226;
 			this.buttonAMODL.Text = "MODL";
 			this.buttonAMODL.UseVisualStyleBackColor = false;
+			this.buttonAMODL.Click += new System.EventHandler(this.buttonAMODL_Click);
 			// 
 			// buttonAOB
 			// 
@@ -1081,6 +1083,7 @@ namespace OpenDental{
 			this.buttonAOB.TabIndex = 225;
 			this.buttonAOB.Text = "OB";
 			this.buttonAOB.UseVisualStyleBackColor = false;
+			this.buttonAOB.Click += new System.EventHandler(this.buttonAOB_Click);
 			// 
 			// buttonAOL
 			// 
@@ -1096,6 +1099,7 @@ namespace OpenDental{
 			this.buttonAOL.TabIndex = 224;
 			this.buttonAOL.Text = "OL";
 			this.buttonAOL.UseVisualStyleBackColor = false;
+			this.buttonAOL.Click += new System.EventHandler(this.buttonAOL_Click);
 			// 
 			// buttonAO
 			// 
@@ -1111,6 +1115,7 @@ namespace OpenDental{
 			this.buttonAO.TabIndex = 223;
 			this.buttonAO.Text = "O";
 			this.buttonAO.UseVisualStyleBackColor = false;
+			this.buttonAO.Click += new System.EventHandler(this.buttonAO_Click);
 			// 
 			// buttonAMO
 			// 
@@ -1126,6 +1131,7 @@ namespace OpenDental{
 			this.buttonAMO.TabIndex = 222;
 			this.buttonAMO.Text = "MO";
 			this.buttonAMO.UseVisualStyleBackColor = false;
+			this.buttonAMO.Click += new System.EventHandler(this.buttonAMO_Click);
 			// 
 			// buttonAMOD
 			// 
@@ -1141,6 +1147,7 @@ namespace OpenDental{
 			this.buttonAMOD.TabIndex = 221;
 			this.buttonAMOD.Text = "MOD";
 			this.buttonAMOD.UseVisualStyleBackColor = false;
+			this.buttonAMOD.Click += new System.EventHandler(this.buttonAMOD_Click);
 			// 
 			// buttonADO
 			// 
@@ -1156,6 +1163,7 @@ namespace OpenDental{
 			this.buttonADO.TabIndex = 220;
 			this.buttonADO.Text = "DO";
 			this.buttonADO.UseVisualStyleBackColor = false;
+			this.buttonADO.Click += new System.EventHandler(this.buttonADO_Click);
 			// 
 			// label24
 			// 
