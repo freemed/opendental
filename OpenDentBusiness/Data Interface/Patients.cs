@@ -581,8 +581,9 @@ namespace OpenDentBusiness{
 		//This can never be used anymore, or it will mess up 
 		///<summary>This is only used when entering a new patient and user clicks cancel.  It used to actually delete the patient, but that will mess up UAppoint synch function.  DateTStamp needs to track deleted patients. So now, the PatStatus is simply changed to 4.</summary>
 		public static void Delete(Patient pat) {
-			string command="UPDATE patient SET PatStatus="+POut.PInt((int)PatientStatus.Deleted)
-				+" WHERE PatNum ="+pat.PatNum.ToString();
+			string command="UPDATE patient SET PatStatus="+POut.PInt((int)PatientStatus.Deleted)+", "
+				+"Guarantor=PatNum "
+				+"WHERE PatNum ="+pat.PatNum.ToString();
 			General.NonQ(command);
 		}
 
