@@ -70,6 +70,8 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textRequestId = new System.Windows.Forms.TextBox();
+			this.labelReqId = new System.Windows.Forms.Label();
 			this.groupMyVotes.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -580,10 +582,30 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textRequestId
+			// 
+			this.textRequestId.Location = new System.Drawing.Point(64,71);
+			this.textRequestId.Name = "textRequestId";
+			this.textRequestId.Size = new System.Drawing.Size(41,20);
+			this.textRequestId.TabIndex = 93;
+			this.textRequestId.Visible = false;
+			// 
+			// labelReqId
+			// 
+			this.labelReqId.Location = new System.Drawing.Point(7,71);
+			this.labelReqId.Name = "labelReqId";
+			this.labelReqId.Size = new System.Drawing.Size(56,18);
+			this.labelReqId.TabIndex = 92;
+			this.labelReqId.Text = "Req Id";
+			this.labelReqId.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelReqId.Visible = false;
+			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(883,668);
+			this.Controls.Add(this.textRequestId);
+			this.Controls.Add(this.labelReqId);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butAddDiscuss);
 			this.Controls.Add(this.labelDiscuss);
@@ -673,5 +695,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelDiscuss;
 		private OpenDental.UI.Button butAddDiscuss;
 		private System.Windows.Forms.TextBox textNote;
+		private System.Windows.Forms.TextBox textRequestId;
+		private System.Windows.Forms.Label labelReqId;
 	}
 }

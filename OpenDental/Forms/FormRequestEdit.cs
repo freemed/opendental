@@ -42,6 +42,9 @@ namespace OpenDental {
 				textDifficulty.ReadOnly=false;
 				groupMyVotes.Visible=false;
 				butJordan.Visible=true;
+				labelReqId.Visible=true;
+				textRequestId.Visible=true;
+				textRequestId.Text=RequestId.ToString();
 				labelAdmin.Visible=true;
 				labelAdmin.Location=groupMyVotes.Location;
 				labelAdmin.Size=groupMyVotes.Size;
