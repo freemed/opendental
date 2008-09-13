@@ -223,6 +223,8 @@ namespace SparksToothChart {
 			}
 			ALSelectedTeeth.Clear();
 			selectedTeeth=new string[0];
+			PointList=new List<Point>();
+			DrawingSegmentList=new List<ToothInitial>();
 			this.Invalidate();
 		}
 
