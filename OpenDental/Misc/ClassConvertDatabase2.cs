@@ -428,9 +428,10 @@ namespace OpenDental{
 						INDEX (AptNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
+	//todo:convert existing planned appts
 
-
-
+					command="ALTER TABLE patient DROP NextAptNum";
+					General.NonQ(command);
 
 
 

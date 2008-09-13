@@ -125,6 +125,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />

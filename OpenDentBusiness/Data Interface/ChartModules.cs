@@ -6,9 +6,12 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class ChartModules {
+		private static DataTable rawApt;
+
 		public static DataSet GetAll(int patNum,bool isAuditMode) {
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetProgNotes(patNum,isAuditMode));
+			retVal.Tables.Add(GetPlannedApt(patNum));
 			return retVal;
 		}
 
@@ -465,7 +468,7 @@ namespace OpenDentBusiness {
 			command="SELECT * FROM appointment WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY AptDateTime";
 			//+" AND AptStatus != 6"//do not include planned appts.
-			DataTable rawApt=dcon.GetTable(command);
+			rawApt=dcon.GetTable(command);
 			int apptStatus;
 			for(int i=0;i<rawApt.Rows.Count;i++) {
 				row=table.NewRow();
@@ -677,6 +680,68 @@ namespace OpenDentBusiness {
 						break;
 					}
 				}
+			}
+			for(int i=0;i<rows.Count;i++){
+				table.Rows.Add(rows[i]);
+			}
+			return table;
+		}
+
+		private static DataTable GetPlannedApt(int patNum){
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("Planned");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("AptNum");
+			table.Columns.Add("dateSched");
+			table.Columns.Add("ItemOrder");
+			table.Columns.Add("Note");
+			table.Columns.Add("ProcDescript");
+			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
+			List<DataRow> rows=new List<DataRow>();
+			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime "
+				+"FROM plannedappt "
+				+"LEFT JOIN appointment ON appointment.NextAptNum=plannedappt.AptNum "
+				+"WHERE plannedappt.PatNum="+POut.PInt(patNum)+" "
+				+"GROUP BY plannedappt.AptNum "
+				+"ORDER BY ItemOrder";
+			DataTable rawPlannedAppts=dcon.GetTable(command);
+			//int apptStatus;
+			DataRow aptRow;
+			int itemOrder=1;
+			DateTime dateSched;
+			for(int i=0;i<rawPlannedAppts.Rows.Count;i++) {
+				aptRow=null;
+				for(int a=0;a<rawApt.Rows.Count;a++){
+					if(rawApt.Rows[a]["AptNum"].ToString()==rawPlannedAppts.Rows[i]["AptNum"].ToString()){
+						aptRow=rawApt.Rows[a];
+						break;
+					}
+				}
+				if(aptRow==null){
+					continue;//this will have to be fixed in dbmaint.
+				}
+				//repair any item orders here rather than in dbmaint. It's really fast.
+				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()){
+					command="UPDATE plannedappt SET ItemOrder="+POut.PInt(itemOrder)
+						+" WHERE PlannedApptNum="+rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
+					dcon.NonQ(command);
+				}
+				//end of repair
+				row=table.NewRow();
+				row["AptNum"]=aptRow["AptNum"].ToString();
+				dateSched=PIn.PDate(rawPlannedAppts.Rows[i]["AptDateTime"].ToString());
+				if(dateSched.Year<1880){
+					row["dateSched"]="";
+				}
+				else{
+					row["dateSched"]=dateSched.ToShortDateString();
+				}
+				row["ItemOrder"]=itemOrder.ToString();
+				row["Note"]=aptRow["Note"].ToString();
+				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
+				rows.Add(row);
+				itemOrder++;
 			}
 			for(int i=0;i<rows.Count;i++){
 				table.Rows.Add(rows[i]);

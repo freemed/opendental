@@ -2372,11 +2372,11 @@ namespace OpenDental{
 				this.ActiveControl=this.ContrAccount2;
 				ContrAccount2.ModuleSelected(CurPatNum,e.ClaimNum);
 			}
-			else if(e.PinAppt!=0){
+			else if(e.PinAppts.Count!=0){
 				myOutlookBar.SelectedIndex=e.IModule;
 				ContrAppt2.Visible=true;
 				this.ActiveControl=this.ContrAppt2;
-				ContrAppt2.ModuleSelected(CurPatNum,e.PinAppt);
+				ContrAppt2.ModuleSelected(CurPatNum,e.PinAppts);
 			}
 			else if(e.IModule!=-1){
 				myOutlookBar.SelectedIndex=e.IModule;

@@ -1624,10 +1624,11 @@ namespace OpenDental{
 			AptCur.DateTimeSeated=dateTimeSeated;
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			AptCur.ProcDescript="";
-			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-				if(i>0) AptCur.ProcDescript+=", ";
-				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
+			for(int i=0;i<gridProc.Rows.Count;i++) {
+				if(i>0){
+					AptCur.ProcDescript+=", ";
+				}
+				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(PIn.PInt(DS.Tables["Procedure"].Rows[i]["CodeNum"].ToString())).AbbrDesc;
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){
@@ -1690,7 +1691,7 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if (AptCur.AptStatus == ApptStatus.PtNote | AptCur.AptStatus == ApptStatus.PtNoteCompleted) {
+			if (AptCur.AptStatus == ApptStatus.PtNote || AptCur.AptStatus == ApptStatus.PtNoteCompleted) {
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
 				}
@@ -1708,7 +1709,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			else {
+			else {//ordinary appointment
 				if (MessageBox.Show(Lan.g(this, "Delete appointment?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
 					return;
 				}
@@ -1754,8 +1755,9 @@ namespace OpenDental{
 		}
 
 		private void FormApptEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+			if(DialogResult==DialogResult.OK){
 				return;
+			}
 			if(IsNew) {
 				AppointmentL.Delete(AptCur.AptNum);
 			}

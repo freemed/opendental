@@ -463,12 +463,7 @@ namespace OpenDental{
 				}
 				listFamily.Items.Add(item);
 			}
-			if(PatCur.NextAptNum==-1){ 
-        checkDone.Checked=true;
-      }
-			else{ 
-        checkDone.Checked=false;
-      }
+      checkDone.Checked=PatCur.PlannedIsDone;
 			ListOth=Appointments.GetForPat(PatCur.PatNum);
 			tbApts.ResetRows(ListOth.Length);
 			tbApts.SetGridColor(Color.DarkGray);
@@ -775,7 +770,7 @@ namespace OpenDental{
 			if(AptCur.AptStatus==ApptStatus.Planned){//if is a Planned appointment
 				bool PlannedIsSched=false;
 				for(int i=0;i<ListOth.Length;i++){
-					if(ListOth[i].NextAptNum==PatCur.NextAptNum){//if the planned appointment is already sched
+					if(ListOth[i].NextAptNum==AptCur.AptNum){//if the planned appointment is already sched
 						PlannedIsSched=true;
 					}
 				}

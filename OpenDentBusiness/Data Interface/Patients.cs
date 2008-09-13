@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be one more than the count of fields,
+					+" ORDER BY 68,Birthdate";//just asking for bugs. Must be one more than the count of fields,
 				//which is two more than the last number in the [] of GetPatient
 			}
 			return command;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			command+="lname,fname,middlei,preferred,patstatus,gender,"
 				+"position,birthdate,ssn,address,address2,city,state,zip,hmphone,wkphone,wirelessphone,"
 				+"guarantor,credittype,email,salutation,"
-				+"estbalance,nextaptnum,priprov,secprov,feesched,billingtype,"
+				+"estbalance,priprov,secprov,feesched,billingtype,"
 				+"imagefolder,addrnote,famfinurgnote,medurgnote,apptmodnote,"
 				+"studentstatus,schoolname,chartnumber,medicaidid"
 				+",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,insest,BalTotal"
@@ -127,7 +127,6 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(pat.Email)+"', "
 				+"'"+POut.PString(pat.Salutation)+"', "
 				+"'"+POut.PDouble(pat.EstBalance)+"', "
-				+"'"+POut.PInt(pat.NextAptNum)+"', "
 				+"'"+POut.PInt(pat.PriProv)+"', "
 				+"'"+POut.PInt(pat.SecProv)+"', "
 				+"'"+POut.PInt(pat.FeeSched)+"', "
@@ -312,12 +311,6 @@ namespace OpenDentBusiness{
 				if(comma)
 					c+=",";
 				c+="EstBalance = '"     +POut.PDouble(pat.EstBalance)+"'";
-				comma=true;
-			}
-			if(pat.NextAptNum!=CurOld.NextAptNum) {
-				if(comma)
-					c+=",";
-				c+="NextAptNum = '"     +POut.PInt(pat.NextAptNum)+"'";
 				comma=true;
 			}
 			if(pat.PriProv!=CurOld.PriProv) {
@@ -780,50 +773,49 @@ namespace OpenDentBusiness{
 				pat.Email        = PIn.PString(table.Rows[i][20].ToString());
 				pat.Salutation   = PIn.PString(table.Rows[i][21].ToString());
 				pat.EstBalance   = PIn.PDouble(table.Rows[i][22].ToString());
-				pat.NextAptNum   = PIn.PInt   (table.Rows[i][23].ToString());
-				pat.PriProv      = PIn.PInt   (table.Rows[i][24].ToString());
-				pat.SecProv      = PIn.PInt   (table.Rows[i][25].ToString());
-				pat.FeeSched     = PIn.PInt   (table.Rows[i][26].ToString());
-				pat.BillingType  = PIn.PInt   (table.Rows[i][27].ToString());
-				pat.ImageFolder  = PIn.PString(table.Rows[i][28].ToString());
-				pat.AddrNote     = PIn.PString(table.Rows[i][29].ToString());
-				pat.FamFinUrgNote= PIn.PString(table.Rows[i][30].ToString());
-				pat.MedUrgNote   = PIn.PString(table.Rows[i][31].ToString());
-				pat.ApptModNote  = PIn.PString(table.Rows[i][32].ToString());
-				pat.StudentStatus= PIn.PString(table.Rows[i][33].ToString());
-				pat.SchoolName   = PIn.PString(table.Rows[i][34].ToString());
-				pat.ChartNumber  = PIn.PString(table.Rows[i][35].ToString());
-				pat.MedicaidID   = PIn.PString(table.Rows[i][36].ToString());
-				pat.Bal_0_30     = PIn.PDouble(table.Rows[i][37].ToString());
-				pat.Bal_31_60    = PIn.PDouble(table.Rows[i][38].ToString());
-				pat.Bal_61_90    = PIn.PDouble(table.Rows[i][39].ToString());
-				pat.BalOver90    = PIn.PDouble(table.Rows[i][40].ToString());
-				pat.InsEst       = PIn.PDouble(table.Rows[i][41].ToString());
-				pat.BalTotal     = PIn.PDouble(table.Rows[i][42].ToString());
-				pat.EmployerNum  = PIn.PInt   (table.Rows[i][43].ToString());
-				pat.EmploymentNote=PIn.PString(table.Rows[i][44].ToString());
-				pat.Race         = (PatientRace)PIn.PInt(table.Rows[i][45].ToString());
-				pat.County       = PIn.PString(table.Rows[i][46].ToString());
-				pat.GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][47].ToString());
-				pat.Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][48].ToString());
-				pat.DateFirstVisit=PIn.PDate  (table.Rows[i][49].ToString());
-				pat.ClinicNum    = PIn.PInt   (table.Rows[i][50].ToString());
-				pat.HasIns       = PIn.PString(table.Rows[i][51].ToString());
-				pat.TrophyFolder = PIn.PString(table.Rows[i][52].ToString());
-				pat.PlannedIsDone= PIn.PBool  (table.Rows[i][53].ToString());
-				pat.Premed       = PIn.PBool  (table.Rows[i][54].ToString());
-				pat.Ward         = PIn.PString(table.Rows[i][55].ToString());
-				pat.PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][56].ToString());
-				pat.PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][57].ToString());
-				pat.PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
-				pat.SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][59].ToString());
-				pat.SchedAfterTime= PIn.PTimeSpan(table.Rows[i][60].ToString());
-				pat.SchedDayOfWeek= PIn.PByte(table.Rows[i][61].ToString());
-				pat.Language     = PIn.PString(table.Rows[i][62].ToString());
-				pat.AdmitDate    = PIn.PDate(table.Rows[i][63].ToString());
-				pat.Title        = PIn.PString(table.Rows[i][64].ToString());
-				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][65].ToString());
-				pat.SiteNum      = PIn.PInt   (table.Rows[i][66].ToString());
+				pat.PriProv      = PIn.PInt   (table.Rows[i][23].ToString());
+				pat.SecProv      = PIn.PInt   (table.Rows[i][24].ToString());
+				pat.FeeSched     = PIn.PInt   (table.Rows[i][25].ToString());
+				pat.BillingType  = PIn.PInt   (table.Rows[i][26].ToString());
+				pat.ImageFolder  = PIn.PString(table.Rows[i][27].ToString());
+				pat.AddrNote     = PIn.PString(table.Rows[i][28].ToString());
+				pat.FamFinUrgNote= PIn.PString(table.Rows[i][29].ToString());
+				pat.MedUrgNote   = PIn.PString(table.Rows[i][30].ToString());
+				pat.ApptModNote  = PIn.PString(table.Rows[i][31].ToString());
+				pat.StudentStatus= PIn.PString(table.Rows[i][32].ToString());
+				pat.SchoolName   = PIn.PString(table.Rows[i][33].ToString());
+				pat.ChartNumber  = PIn.PString(table.Rows[i][34].ToString());
+				pat.MedicaidID   = PIn.PString(table.Rows[i][35].ToString());
+				pat.Bal_0_30     = PIn.PDouble(table.Rows[i][36].ToString());
+				pat.Bal_31_60    = PIn.PDouble(table.Rows[i][37].ToString());
+				pat.Bal_61_90    = PIn.PDouble(table.Rows[i][38].ToString());
+				pat.BalOver90    = PIn.PDouble(table.Rows[i][39].ToString());
+				pat.InsEst       = PIn.PDouble(table.Rows[i][40].ToString());
+				pat.BalTotal     = PIn.PDouble(table.Rows[i][41].ToString());
+				pat.EmployerNum  = PIn.PInt   (table.Rows[i][42].ToString());
+				pat.EmploymentNote=PIn.PString(table.Rows[i][43].ToString());
+				pat.Race         = (PatientRace)PIn.PInt(table.Rows[i][44].ToString());
+				pat.County       = PIn.PString(table.Rows[i][45].ToString());
+				pat.GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][46].ToString());
+				pat.Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][47].ToString());
+				pat.DateFirstVisit=PIn.PDate  (table.Rows[i][48].ToString());
+				pat.ClinicNum    = PIn.PInt   (table.Rows[i][49].ToString());
+				pat.HasIns       = PIn.PString(table.Rows[i][50].ToString());
+				pat.TrophyFolder = PIn.PString(table.Rows[i][51].ToString());
+				pat.PlannedIsDone= PIn.PBool  (table.Rows[i][52].ToString());
+				pat.Premed       = PIn.PBool  (table.Rows[i][53].ToString());
+				pat.Ward         = PIn.PString(table.Rows[i][54].ToString());
+				pat.PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][55].ToString());
+				pat.PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][56].ToString());
+				pat.PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][57].ToString());
+				pat.SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][58].ToString());
+				pat.SchedAfterTime= PIn.PTimeSpan(table.Rows[i][59].ToString());
+				pat.SchedDayOfWeek=PIn.PByte  (table.Rows[i][60].ToString());
+				pat.Language     = PIn.PString(table.Rows[i][61].ToString());
+				pat.AdmitDate    = PIn.PDate  (table.Rows[i][62].ToString());
+				pat.Title        = PIn.PString(table.Rows[i][63].ToString());
+				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][64].ToString());
+				pat.SiteNum      = PIn.PInt   (table.Rows[i][65].ToString());
 				//DateTStamp
 				patList.Add(pat);
 			}

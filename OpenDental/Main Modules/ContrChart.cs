@@ -44,9 +44,8 @@ namespace OpenDental{
 		//private bool dataValid=false;
 		private System.Windows.Forms.ListBox listDx;
 		private int[] hiLightedRows=new int[1];
-		private ContrApptSingle ApptPlanned;
+		//private ContrApptSingle ApptPlanned;
 		private System.Windows.Forms.CheckBox checkDone;
-		private System.Windows.Forms.Label labelMinutes;
 		private System.Windows.Forms.RadioButton radioEntryR;
 		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.CheckBox checkNotes;
@@ -210,12 +209,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonCMODB;
 		private OpenDental.UI.Button butAddKey;
 		private CheckBox checkExtraNotes;
-		private Label label2;
-		private Panel panelApptLinked;
-		private System.Windows.Forms.PictureBox picCheck;
-		private Label label3;
-		private Label labelApptDate;
-		private Label labelApptStatus;
 		//private MenuItem menuItemDeleteSelected;
 		private CheckBox checkCommFamily;
 		private OpenDental.UI.Button butForeignKey;
@@ -260,8 +253,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonAMOD;
 		private OpenDental.UI.Button buttonADO;
 		private Label label24;
+		private ODGrid gridPlanned;
 		private int Chartscrollval;
-
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -301,7 +294,6 @@ namespace OpenDental{
 			this.radioEntryTP = new System.Windows.Forms.RadioButton();
 			this.listDx = new System.Windows.Forms.ListBox();
 			this.labelDx = new System.Windows.Forms.Label();
-			this.labelMinutes = new System.Windows.Forms.Label();
 			this.checkDone = new System.Windows.Forms.CheckBox();
 			this.listViewButtons = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -344,6 +336,16 @@ namespace OpenDental{
 			this.tabProc = new System.Windows.Forms.TabControl();
 			this.tabEnterTx = new System.Windows.Forms.TabPage();
 			this.panelQuickButtons = new System.Windows.Forms.Panel();
+			this.panelQuickPasteAmalgam = new System.Windows.Forms.Panel();
+			this.buttonAMODB = new OpenDental.UI.Button();
+			this.buttonAMODL = new OpenDental.UI.Button();
+			this.buttonAOB = new OpenDental.UI.Button();
+			this.buttonAOL = new OpenDental.UI.Button();
+			this.buttonAO = new OpenDental.UI.Button();
+			this.buttonAMO = new OpenDental.UI.Button();
+			this.buttonAMOD = new OpenDental.UI.Button();
+			this.buttonADO = new OpenDental.UI.Button();
+			this.label24 = new System.Windows.Forms.Label();
 			this.buttonCMODB = new OpenDental.UI.Button();
 			this.buttonCMODL = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -414,12 +416,7 @@ namespace OpenDental{
 			this.butAllPrimary = new OpenDental.UI.Button();
 			this.butAllPerm = new OpenDental.UI.Button();
 			this.tabPlanned = new System.Windows.Forms.TabPage();
-			this.panelApptLinked = new System.Windows.Forms.Panel();
-			this.picCheck = new System.Windows.Forms.PictureBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.labelApptDate = new System.Windows.Forms.Label();
-			this.labelApptStatus = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.gridPlanned = new OpenDental.UI.ODGrid();
 			this.butPin = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
@@ -471,22 +468,13 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.panelQuickPasteAmalgam = new System.Windows.Forms.Panel();
-			this.buttonAMODB = new OpenDental.UI.Button();
-			this.buttonAMODL = new OpenDental.UI.Button();
-			this.buttonAOB = new OpenDental.UI.Button();
-			this.buttonAOL = new OpenDental.UI.Button();
-			this.buttonAO = new OpenDental.UI.Button();
-			this.buttonAMO = new OpenDental.UI.Button();
-			this.buttonAMOD = new OpenDental.UI.Button();
-			this.buttonADO = new OpenDental.UI.Button();
-			this.label24 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
 			this.tabProc.SuspendLayout();
 			this.tabEnterTx.SuspendLayout();
 			this.panelQuickButtons.SuspendLayout();
+			this.panelQuickPasteAmalgam.SuspendLayout();
 			this.tabMissing.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabMovements.SuspendLayout();
@@ -495,14 +483,11 @@ namespace OpenDental{
 			this.tabPrimary.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabPlanned.SuspendLayout();
-			this.panelApptLinked.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picCheck)).BeginInit();
 			this.tabShow.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.tabDraw.SuspendLayout();
 			this.groupBox8.SuspendLayout();
-			this.panelQuickPasteAmalgam.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textSurf
@@ -600,19 +585,12 @@ namespace OpenDental{
 			this.labelDx.Text = "Diagnosis";
 			this.labelDx.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// labelMinutes
-			// 
-			this.labelMinutes.Location = new System.Drawing.Point(121,81);
-			this.labelMinutes.Name = "labelMinutes";
-			this.labelMinutes.Size = new System.Drawing.Size(66,14);
-			this.labelMinutes.TabIndex = 3;
-			// 
 			// checkDone
 			// 
 			this.checkDone.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDone.Location = new System.Drawing.Point(120,3);
+			this.checkDone.Location = new System.Drawing.Point(248,5);
 			this.checkDone.Name = "checkDone";
-			this.checkDone.Size = new System.Drawing.Size(56,16);
+			this.checkDone.Size = new System.Drawing.Size(67,16);
 			this.checkDone.TabIndex = 0;
 			this.checkDone.Text = "Done";
 			this.checkDone.Click += new System.EventHandler(this.checkDone_Click);
@@ -1042,6 +1020,150 @@ namespace OpenDental{
 			this.panelQuickButtons.TabIndex = 198;
 			this.panelQuickButtons.Visible = false;
 			this.panelQuickButtons.Paint += new System.Windows.Forms.PaintEventHandler(this.panelQuickButtons_Paint);
+			// 
+			// panelQuickPasteAmalgam
+			// 
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMODB);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMODL);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAOB);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAOL);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAO);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMO);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMOD);
+			this.panelQuickPasteAmalgam.Controls.Add(this.buttonADO);
+			this.panelQuickPasteAmalgam.Controls.Add(this.label24);
+			this.panelQuickPasteAmalgam.Location = new System.Drawing.Point(0,106);
+			this.panelQuickPasteAmalgam.Name = "panelQuickPasteAmalgam";
+			this.panelQuickPasteAmalgam.Size = new System.Drawing.Size(173,77);
+			this.panelQuickPasteAmalgam.TabIndex = 221;
+			// 
+			// buttonAMODB
+			// 
+			this.buttonAMODB.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAMODB.Autosize = true;
+			this.buttonAMODB.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAMODB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAMODB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAMODB.CornerRadius = 4F;
+			this.buttonAMODB.Location = new System.Drawing.Point(94,37);
+			this.buttonAMODB.Name = "buttonAMODB";
+			this.buttonAMODB.Size = new System.Drawing.Size(43,18);
+			this.buttonAMODB.TabIndex = 227;
+			this.buttonAMODB.Text = "MODB";
+			this.buttonAMODB.UseVisualStyleBackColor = false;
+			// 
+			// buttonAMODL
+			// 
+			this.buttonAMODL.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAMODL.Autosize = true;
+			this.buttonAMODL.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAMODL.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAMODL.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAMODL.CornerRadius = 4F;
+			this.buttonAMODL.Location = new System.Drawing.Point(52,37);
+			this.buttonAMODL.Name = "buttonAMODL";
+			this.buttonAMODL.Size = new System.Drawing.Size(42,18);
+			this.buttonAMODL.TabIndex = 226;
+			this.buttonAMODL.Text = "MODL";
+			this.buttonAMODL.UseVisualStyleBackColor = false;
+			// 
+			// buttonAOB
+			// 
+			this.buttonAOB.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAOB.Autosize = true;
+			this.buttonAOB.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAOB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAOB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAOB.CornerRadius = 4F;
+			this.buttonAOB.Location = new System.Drawing.Point(26,37);
+			this.buttonAOB.Name = "buttonAOB";
+			this.buttonAOB.Size = new System.Drawing.Size(26,18);
+			this.buttonAOB.TabIndex = 225;
+			this.buttonAOB.Text = "OB";
+			this.buttonAOB.UseVisualStyleBackColor = false;
+			// 
+			// buttonAOL
+			// 
+			this.buttonAOL.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAOL.Autosize = true;
+			this.buttonAOL.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAOL.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAOL.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAOL.CornerRadius = 4F;
+			this.buttonAOL.Location = new System.Drawing.Point(0,37);
+			this.buttonAOL.Name = "buttonAOL";
+			this.buttonAOL.Size = new System.Drawing.Size(26,18);
+			this.buttonAOL.TabIndex = 224;
+			this.buttonAOL.Text = "OL";
+			this.buttonAOL.UseVisualStyleBackColor = false;
+			// 
+			// buttonAO
+			// 
+			this.buttonAO.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAO.Autosize = true;
+			this.buttonAO.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAO.CornerRadius = 4F;
+			this.buttonAO.Location = new System.Drawing.Point(62,19);
+			this.buttonAO.Name = "buttonAO";
+			this.buttonAO.Size = new System.Drawing.Size(18,18);
+			this.buttonAO.TabIndex = 223;
+			this.buttonAO.Text = "O";
+			this.buttonAO.UseVisualStyleBackColor = false;
+			// 
+			// buttonAMO
+			// 
+			this.buttonAMO.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAMO.Autosize = true;
+			this.buttonAMO.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAMO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAMO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAMO.CornerRadius = 4F;
+			this.buttonAMO.Location = new System.Drawing.Point(0,19);
+			this.buttonAMO.Name = "buttonAMO";
+			this.buttonAMO.Size = new System.Drawing.Size(27,18);
+			this.buttonAMO.TabIndex = 222;
+			this.buttonAMO.Text = "MO";
+			this.buttonAMO.UseVisualStyleBackColor = false;
+			// 
+			// buttonAMOD
+			// 
+			this.buttonAMOD.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonAMOD.Autosize = true;
+			this.buttonAMOD.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonAMOD.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonAMOD.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonAMOD.CornerRadius = 4F;
+			this.buttonAMOD.Location = new System.Drawing.Point(27,19);
+			this.buttonAMOD.Name = "buttonAMOD";
+			this.buttonAMOD.Size = new System.Drawing.Size(36,18);
+			this.buttonAMOD.TabIndex = 221;
+			this.buttonAMOD.Text = "MOD";
+			this.buttonAMOD.UseVisualStyleBackColor = false;
+			// 
+			// buttonADO
+			// 
+			this.buttonADO.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonADO.Autosize = true;
+			this.buttonADO.BackColor = System.Drawing.SystemColors.Control;
+			this.buttonADO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonADO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonADO.CornerRadius = 4F;
+			this.buttonADO.Location = new System.Drawing.Point(80,19);
+			this.buttonADO.Name = "buttonADO";
+			this.buttonADO.Size = new System.Drawing.Size(26,18);
+			this.buttonADO.TabIndex = 220;
+			this.buttonADO.Text = "DO";
+			this.buttonADO.UseVisualStyleBackColor = false;
+			// 
+			// label24
+			// 
+			this.label24.Location = new System.Drawing.Point(4,2);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(56,13);
+			this.label24.TabIndex = 219;
+			this.label24.Text = "Amalgam";
 			// 
 			// buttonCMODB
 			// 
@@ -1966,80 +2088,33 @@ namespace OpenDental{
 			// tabPlanned
 			// 
 			this.tabPlanned.BackColor = System.Drawing.Color.White;
-			this.tabPlanned.Controls.Add(this.panelApptLinked);
-			this.tabPlanned.Controls.Add(this.label2);
+			this.tabPlanned.Controls.Add(this.gridPlanned);
 			this.tabPlanned.Controls.Add(this.butPin);
 			this.tabPlanned.Controls.Add(this.butClear);
 			this.tabPlanned.Controls.Add(this.butNew);
 			this.tabPlanned.Controls.Add(this.checkDone);
-			this.tabPlanned.Controls.Add(this.labelMinutes);
 			this.tabPlanned.Location = new System.Drawing.Point(4,22);
 			this.tabPlanned.Name = "tabPlanned";
 			this.tabPlanned.Size = new System.Drawing.Size(516,235);
 			this.tabPlanned.TabIndex = 4;
-			this.tabPlanned.Text = "Planned Appointment";
+			this.tabPlanned.Text = "Planned Appts";
 			this.tabPlanned.UseVisualStyleBackColor = true;
 			// 
-			// panelApptLinked
+			// gridPlanned
 			// 
-			this.panelApptLinked.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelApptLinked.Controls.Add(this.picCheck);
-			this.panelApptLinked.Controls.Add(this.label3);
-			this.panelApptLinked.Controls.Add(this.labelApptDate);
-			this.panelApptLinked.Controls.Add(this.labelApptStatus);
-			this.panelApptLinked.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.panelApptLinked.Location = new System.Drawing.Point(216,3);
-			this.panelApptLinked.Name = "panelApptLinked";
-			this.panelApptLinked.Size = new System.Drawing.Size(200,66);
-			this.panelApptLinked.TabIndex = 13;
-			// 
-			// picCheck
-			// 
-			this.picCheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.picCheck.Image = global::OpenDental.Properties.Resources.Check_mark_23x20_02;
-			this.picCheck.Location = new System.Drawing.Point(176,0);
-			this.picCheck.Name = "picCheck";
-			this.picCheck.Size = new System.Drawing.Size(23,23);
-			this.picCheck.TabIndex = 12;
-			this.picCheck.TabStop = false;
-			this.picCheck.Visible = false;
-			// 
-			// label3
-			// 
-			this.label3.BackColor = System.Drawing.Color.Transparent;
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Underline,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(3,3);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(167,17);
-			this.label3.TabIndex = 11;
-			this.label3.Text = "Linked Appointment";
-			// 
-			// labelApptDate
-			// 
-			this.labelApptDate.ForeColor = System.Drawing.Color.Black;
-			this.labelApptDate.Location = new System.Drawing.Point(3,44);
-			this.labelApptDate.Name = "labelApptDate";
-			this.labelApptDate.Size = new System.Drawing.Size(180,19);
-			this.labelApptDate.TabIndex = 10;
-			this.labelApptDate.Text = "DateTime";
-			// 
-			// labelApptStatus
-			// 
-			this.labelApptStatus.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelApptStatus.ForeColor = System.Drawing.Color.Black;
-			this.labelApptStatus.Location = new System.Drawing.Point(3,23);
-			this.labelApptStatus.Name = "labelApptStatus";
-			this.labelApptStatus.Size = new System.Drawing.Size(180,18);
-			this.labelApptStatus.TabIndex = 9;
-			this.labelApptStatus.Text = "Status";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(122,103);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(66,14);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "minutes";
+			this.gridPlanned.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridPlanned.HScrollVisible = false;
+			this.gridPlanned.Location = new System.Drawing.Point(0,25);
+			this.gridPlanned.Name = "gridPlanned";
+			this.gridPlanned.ScrollValue = 0;
+			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPlanned.Size = new System.Drawing.Size(516,210);
+			this.gridPlanned.TabIndex = 193;
+			this.gridPlanned.Title = "Planned Appointments";
+			this.gridPlanned.TranslationName = "TablePlannedAppts";
+			this.gridPlanned.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlanned_CellDoubleClick);
 			// 
 			// butPin
 			// 
@@ -2049,7 +2124,7 @@ namespace OpenDental{
 			this.butPin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPin.CornerRadius = 4F;
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(120,75);
+			this.butPin.Location = new System.Drawing.Point(163,1);
 			this.butPin.Name = "butPin";
 			this.butPin.Size = new System.Drawing.Size(75,23);
 			this.butPin.TabIndex = 6;
@@ -2063,12 +2138,13 @@ namespace OpenDental{
 			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClear.CornerRadius = 4F;
+			this.butClear.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(120,48);
+			this.butClear.Location = new System.Drawing.Point(82,1);
 			this.butClear.Name = "butClear";
 			this.butClear.Size = new System.Drawing.Size(75,23);
 			this.butClear.TabIndex = 5;
-			this.butClear.Text = "Clear";
+			this.butClear.Text = "Delete";
 			this.butClear.Click += new System.EventHandler(this.butClear_Click);
 			// 
 			// butNew
@@ -2078,12 +2154,13 @@ namespace OpenDental{
 			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNew.CornerRadius = 4F;
+			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(120,21);
+			this.butNew.Location = new System.Drawing.Point(1,1);
 			this.butNew.Name = "butNew";
 			this.butNew.Size = new System.Drawing.Size(75,23);
 			this.butNew.TabIndex = 4;
-			this.butNew.Text = "New";
+			this.butNew.Text = "Add";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// tabShow
@@ -2662,150 +2739,6 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// panelQuickPasteAmalgam
-			// 
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMODB);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMODL);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAOB);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAOL);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAO);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMO);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonAMOD);
-			this.panelQuickPasteAmalgam.Controls.Add(this.buttonADO);
-			this.panelQuickPasteAmalgam.Controls.Add(this.label24);
-			this.panelQuickPasteAmalgam.Location = new System.Drawing.Point(0,106);
-			this.panelQuickPasteAmalgam.Name = "panelQuickPasteAmalgam";
-			this.panelQuickPasteAmalgam.Size = new System.Drawing.Size(173,77);
-			this.panelQuickPasteAmalgam.TabIndex = 221;
-			// 
-			// buttonAMODB
-			// 
-			this.buttonAMODB.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAMODB.Autosize = true;
-			this.buttonAMODB.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAMODB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAMODB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAMODB.CornerRadius = 4F;
-			this.buttonAMODB.Location = new System.Drawing.Point(94,37);
-			this.buttonAMODB.Name = "buttonAMODB";
-			this.buttonAMODB.Size = new System.Drawing.Size(43,18);
-			this.buttonAMODB.TabIndex = 227;
-			this.buttonAMODB.Text = "MODB";
-			this.buttonAMODB.UseVisualStyleBackColor = false;
-			// 
-			// buttonAMODL
-			// 
-			this.buttonAMODL.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAMODL.Autosize = true;
-			this.buttonAMODL.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAMODL.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAMODL.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAMODL.CornerRadius = 4F;
-			this.buttonAMODL.Location = new System.Drawing.Point(52,37);
-			this.buttonAMODL.Name = "buttonAMODL";
-			this.buttonAMODL.Size = new System.Drawing.Size(42,18);
-			this.buttonAMODL.TabIndex = 226;
-			this.buttonAMODL.Text = "MODL";
-			this.buttonAMODL.UseVisualStyleBackColor = false;
-			// 
-			// buttonAOB
-			// 
-			this.buttonAOB.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAOB.Autosize = true;
-			this.buttonAOB.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAOB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAOB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAOB.CornerRadius = 4F;
-			this.buttonAOB.Location = new System.Drawing.Point(26,37);
-			this.buttonAOB.Name = "buttonAOB";
-			this.buttonAOB.Size = new System.Drawing.Size(26,18);
-			this.buttonAOB.TabIndex = 225;
-			this.buttonAOB.Text = "OB";
-			this.buttonAOB.UseVisualStyleBackColor = false;
-			// 
-			// buttonAOL
-			// 
-			this.buttonAOL.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAOL.Autosize = true;
-			this.buttonAOL.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAOL.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAOL.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAOL.CornerRadius = 4F;
-			this.buttonAOL.Location = new System.Drawing.Point(0,37);
-			this.buttonAOL.Name = "buttonAOL";
-			this.buttonAOL.Size = new System.Drawing.Size(26,18);
-			this.buttonAOL.TabIndex = 224;
-			this.buttonAOL.Text = "OL";
-			this.buttonAOL.UseVisualStyleBackColor = false;
-			// 
-			// buttonAO
-			// 
-			this.buttonAO.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAO.Autosize = true;
-			this.buttonAO.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAO.CornerRadius = 4F;
-			this.buttonAO.Location = new System.Drawing.Point(62,19);
-			this.buttonAO.Name = "buttonAO";
-			this.buttonAO.Size = new System.Drawing.Size(18,18);
-			this.buttonAO.TabIndex = 223;
-			this.buttonAO.Text = "O";
-			this.buttonAO.UseVisualStyleBackColor = false;
-			// 
-			// buttonAMO
-			// 
-			this.buttonAMO.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAMO.Autosize = true;
-			this.buttonAMO.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAMO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAMO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAMO.CornerRadius = 4F;
-			this.buttonAMO.Location = new System.Drawing.Point(0,19);
-			this.buttonAMO.Name = "buttonAMO";
-			this.buttonAMO.Size = new System.Drawing.Size(27,18);
-			this.buttonAMO.TabIndex = 222;
-			this.buttonAMO.Text = "MO";
-			this.buttonAMO.UseVisualStyleBackColor = false;
-			// 
-			// buttonAMOD
-			// 
-			this.buttonAMOD.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonAMOD.Autosize = true;
-			this.buttonAMOD.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonAMOD.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonAMOD.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonAMOD.CornerRadius = 4F;
-			this.buttonAMOD.Location = new System.Drawing.Point(27,19);
-			this.buttonAMOD.Name = "buttonAMOD";
-			this.buttonAMOD.Size = new System.Drawing.Size(36,18);
-			this.buttonAMOD.TabIndex = 221;
-			this.buttonAMOD.Text = "MOD";
-			this.buttonAMOD.UseVisualStyleBackColor = false;
-			// 
-			// buttonADO
-			// 
-			this.buttonADO.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonADO.Autosize = true;
-			this.buttonADO.BackColor = System.Drawing.SystemColors.Control;
-			this.buttonADO.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonADO.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonADO.CornerRadius = 4F;
-			this.buttonADO.Location = new System.Drawing.Point(80,19);
-			this.buttonADO.Name = "buttonADO";
-			this.buttonADO.Size = new System.Drawing.Size(26,18);
-			this.buttonADO.TabIndex = 220;
-			this.buttonADO.Text = "DO";
-			this.buttonADO.UseVisualStyleBackColor = false;
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(4,2);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(56,13);
-			this.label24.TabIndex = 219;
-			this.label24.Text = "Amalgam";
-			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.butForeignKey);
@@ -2832,6 +2765,7 @@ namespace OpenDental{
 			this.tabEnterTx.ResumeLayout(false);
 			this.tabEnterTx.PerformLayout();
 			this.panelQuickButtons.ResumeLayout(false);
+			this.panelQuickPasteAmalgam.ResumeLayout(false);
 			this.tabMissing.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.tabMovements.ResumeLayout(false);
@@ -2842,14 +2776,11 @@ namespace OpenDental{
 			this.tabPrimary.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.tabPlanned.ResumeLayout(false);
-			this.panelApptLinked.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.picCheck)).EndInit();
 			this.tabShow.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.tabDraw.ResumeLayout(false);
 			this.groupBox8.ResumeLayout(false);
-			this.panelQuickPasteAmalgam.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -2894,12 +2825,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public void InitializeOnStartup(){
 			newStatus=ProcStat.TP;
-			ApptPlanned=new ContrApptSingle();
-			//ApptPlanned.IsPlanned=true;
-			ApptPlanned.Location=new Point(1,3);
-			ApptPlanned.Visible=false;
-			tabPlanned.Controls.Add(ApptPlanned);
-			ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
+			//ApptPlanned=new ContrApptSingle();
+			//ApptPlanned.Location=new Point(1,3);
+			//ApptPlanned.Visible=false;
+			//tabPlanned.Controls.Add(ApptPlanned);
+			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
 			tabProc.SelectedIndex=0;
 			tabProc.Height=253;
 			gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
@@ -3237,103 +3167,6 @@ namespace OpenDental{
 		private void OnAnestheticRecord_Click(){
 			FormAnestheticRecord FormP=new FormAnestheticRecord(PatCur);
 			FormP.ShowDialog();
-		}
-
-		private void FillPlanned(){
-			if(PatCur==null){
-				ApptPlanned.Visible=false;
-				checkDone.Checked=false;
-				butPin.Enabled=false;
-				butClear.Enabled=false;
-				labelMinutes.Text="";
-				panelApptLinked.Visible=false;
-				return;
-			}
-			if(PatCur.PlannedIsDone) {
-				checkDone.Checked=true;
-			}
-			else {
-				checkDone.Checked=false;
-			}
-			if(PatCur.NextAptNum==0){
-				ApptPlanned.Visible=false;
-				butPin.Enabled=false;
-				butClear.Enabled=false;
-				labelMinutes.Text="";
-				panelApptLinked.Visible=false;
-				return;
-			}
-			//MessageBox.Show
-			Appointment schedPlanapt=Appointments.GetScheduledPlannedApt(PatCur.NextAptNum);
-			Appointment apt=Appointments.GetOneApt(PatCur.NextAptNum);//although apt won't be used
-			if(apt==null){//next appointment not found
-				Patient patOld=PatCur.Copy();
-				PatCur.NextAptNum=0;
-				Patients.Update(PatCur,patOld);
-				FamCur=Patients.GetFamily(PatCur.PatNum);//might be overkill
-				ApptPlanned.Visible=false;
-				checkDone.Checked=false;
-				butPin.Enabled=false;
-				butClear.Enabled=false;
-				labelMinutes.Text="";
-				panelApptLinked.Visible=false;
-				return;
-			}
-			panelApptLinked.Visible=true;
-			picCheck.Visible=false;
-			if(schedPlanapt!=null){//planned appt has been created
-				//this logic now matches that in the Progress Notes
-				if(schedPlanapt.AptDateTime.Date==DateTime.Today.Date) {
-					labelApptStatus.Text=Lan.g(this,"Today");
-					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
-					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
-				}
-				else if(schedPlanapt.AptDateTime.Date<DateTime.Today.Date) {
-					labelApptStatus.Text=Lan.g(this,"");
-					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
-					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
-				}
-				else if(schedPlanapt.AptDateTime.Date>DateTime.Today.Date) {
-					labelApptStatus.Text=Lan.g(this,"");
-					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
-					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
-				}
-				if(schedPlanapt.AptStatus==ApptStatus.Complete) {//this is the only section that varies from the logic in Progress Notes
-					picCheck.Visible=true;
-				}
-				if(schedPlanapt.AptStatus==ApptStatus.Broken) {
-					labelApptStatus.Text=Lan.g(this,"Broken");
-					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
-				}
-				else if(schedPlanapt.AptStatus==ApptStatus.UnschedList) {
-					labelApptStatus.Text=Lan.g(this,"UnschedList");
-					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
-				}
-				labelApptDate.Visible=true;
-				labelApptDate.ForeColor=labelApptStatus.ForeColor;
-				labelApptDate.BackColor=labelApptStatus.BackColor;
-				panelApptLinked.BackColor=labelApptStatus.BackColor;
-			}
-			else{//planned appt is not created
-				labelApptStatus.Text=Lan.g(this,"none");
-				labelApptDate.Visible=false;
-			}
-			ApptPlanned.DataRoww=AppointmentL.RefreshOneApt(apt.AptNum,true).Rows[0];
-			ApptPlanned.SetSize();
-			ApptPlanned.Width=114;
-			ApptPlanned.CreateShadow();
-			ApptPlanned.Visible=true;
-			ApptPlanned.Refresh();
-			butPin.Enabled=true;
-			butClear.Enabled=true;
-			labelMinutes.Text=(ApptPlanned.DataRoww["Pattern"].ToString().Length*5).ToString()+" minutes";
 		}
 
 		private void FillPtInfo(){
@@ -5693,6 +5526,162 @@ namespace OpenDental{
 		}
 		#endregion Primary
 
+		#region Planned
+		private void FillPlanned(){
+			if(PatCur==null){
+				checkDone.Checked=false;
+				butNew.Enabled=false;
+				butPin.Enabled=false;
+				butClear.Enabled=false;
+				gridPlanned.Enabled=false;
+				return;
+			}
+			if(PatCur.PlannedIsDone) {
+				checkDone.Checked=true;
+			}
+			else {
+				checkDone.Checked=false;
+			}
+			//Fill grid
+			gridPlanned.BeginUpdate();
+			gridPlanned.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),30,HorizontalAlignment.Center);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),190);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Note"),190);
+			gridPlanned.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","DateSched"),80);
+			gridPlanned.Columns.Add(col);
+			gridPlanned.Rows.Clear();
+			ODGridRow row;
+			DataTable table=DataSetMain.Tables["Planned"];
+			for(int i=0;i<table.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["ItemOrder"].ToString());
+				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
+				row.Cells.Add(table.Rows[i]["Note"].ToString());
+				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
+				gridPlanned.Rows.Add(row);
+			}
+			gridPlanned.EndUpdate();
+		}
+
+		private void butNew_Click(object sender, System.EventArgs e) {
+			/*if(ApptPlanned.Visible){
+				if(MessageBox.Show(Lan.g(this,"Replace existing planned appointment?")
+					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+					return;
+				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
+				AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+			}*/
+			Appointment AptCur=new Appointment();
+			AptCur.PatNum=PatCur.PatNum;
+			AptCur.ProvNum=PatCur.PriProv;
+			AptCur.ClinicNum=PatCur.ClinicNum;
+			AptCur.AptStatus=ApptStatus.Planned;
+			AptCur.AptDateTime=DateTime.Today;
+			AptCur.Pattern="/X/";
+			Appointments.InsertOrUpdate(AptCur,null,true);
+			PlannedAppt plannedAppt=new PlannedAppt();
+			plannedAppt.AptNum=AptCur.AptNum;
+			plannedAppt.PatNum=PatCur.PatNum;
+			plannedAppt.ItemOrder=DataSetMain.Tables["Planned"].Rows.Count+1;
+			PlannedAppts.WriteObject(plannedAppt);
+			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
+			FormApptEdit2.IsNew=true;
+			FormApptEdit2.ShowDialog();
+			if(FormApptEdit2.DialogResult!=DialogResult.OK){
+				//delete new appt, delete plannedappt, and unattach procs already handled in dialog
+				FillPlanned();
+				return;
+			}
+			Procedure[] myProcList=Procedures.Refresh(PatCur.PatNum);
+			bool allProcsHyg=true;
+			for(int i=0;i<myProcList.Length;i++){
+				if(myProcList[i].PlannedAptNum!=AptCur.AptNum)
+					continue;//only concerned with procs on this plannedAppt
+				if(!ProcedureCodes.GetProcCode(myProcList[i].CodeNum).IsHygiene){
+					allProcsHyg=false;
+					break;
+				}
+			}
+			if(allProcsHyg && PatCur.SecProv!=0){
+				Appointment aptOld=AptCur.Copy();
+				AptCur.ProvNum=PatCur.SecProv;
+				Appointments.InsertOrUpdate(AptCur,aptOld,false);
+			}
+			Patient patOld=PatCur.Copy();
+			//PatCur.NextAptNum=AptCur.AptNum;
+			PatCur.PlannedIsDone=false;
+			Patients.Update(PatCur,patOld);
+			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
+		}
+
+		///<summary></summary>
+		private void butClear_Click(object sender, System.EventArgs e) {
+			if(gridPlanned.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select an item first");
+				return;
+			}
+			if(MsgBox.Show(this,true,"Delete planned appointment(s)?")){
+				return;
+			}
+			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
+				AppointmentL.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+			}
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		///<summary></summary>
+		private void butPin_Click(object sender,EventArgs e) {
+			if(gridPlanned.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select an item first");
+				return;
+			}
+			List<int> aptNums=new List<int>();
+			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
+				aptNums.Add(PIn.PInt(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+			}
+			GotoModule.PinToAppt(aptNums);
+		}
+
+		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			int aptnum=PIn.PInt(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
+			FormApptEdit FormAE=new FormApptEdit(aptnum);
+			FormAE.ShowDialog();
+			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+			for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
+				if(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()==aptnum.ToString()){
+					gridPlanned.SetSelected(i,true);
+				}
+			}
+		}
+
+		private void checkDone_Click(object sender, System.EventArgs e) {
+			Patient oldPat=PatCur.Copy();
+			if(checkDone.Checked){
+				if(DataSetMain.Tables["Planned"].Rows.Count>0){
+					if(!MsgBox.Show(this,true,"Existing planned appointment(s) will be deleted. Continue?")){
+						checkDone.Checked=false;
+						return; 
+					}
+					for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
+						AppointmentL.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()));
+					}
+				}
+				PatCur.PlannedIsDone=true;
+				Patients.Update(PatCur,oldPat);
+			}
+			else{
+				PatCur.PlannedIsDone=false;
+				Patients.Update(PatCur,oldPat);
+			}
+			ModuleSelected(PatCur.PatNum);
+		}
+		#endregion
+
 		#region Show
 		private void button1_Click(object sender, System.EventArgs e) {
 			//sometimes used for testing purposes
@@ -5999,99 +5988,6 @@ namespace OpenDental{
 				FillPtInfo();
 				return;
 			}
-		}
-
-		private void checkDone_Click(object sender, System.EventArgs e) {
-			Patient oldPat=PatCur.Copy();
-			if(checkDone.Checked){
-				if(ApptPlanned.Visible){
-					if(!MsgBox.Show(this,true,"Existing planned appointment will be deleted. Continue?")){
-						checkDone.Checked=false;
-						return; 
-					}
-					//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-					AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
-				}
-				PatCur.NextAptNum=0;//-1;
-				PatCur.PlannedIsDone=true;
-				Patients.Update(PatCur,oldPat);
-			}
-			else{
-				PatCur.NextAptNum=0;
-				PatCur.PlannedIsDone=false;
-				Patients.Update(PatCur,oldPat);
-			}
-			ModuleSelected(PatCur.PatNum);
-		}
-
-		private void butNew_Click(object sender, System.EventArgs e) {
-			if(ApptPlanned.Visible){
-				if(MessageBox.Show(Lan.g(this,"Replace existing planned appointment?")
-					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-					return;
-				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-				AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
-			}
-			Appointment AptCur=new Appointment();
-			AptCur.PatNum=PatCur.PatNum;
-			AptCur.ProvNum=PatCur.PriProv;
-			AptCur.ClinicNum=PatCur.ClinicNum;
-			AptCur.AptStatus=ApptStatus.Planned;
-			AptCur.AptDateTime=DateTime.Today;
-			AptCur.Pattern="/X/";
-			Appointments.InsertOrUpdate(AptCur,null,true);
-			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
-			FormApptEdit2.IsNew=true;
-			FormApptEdit2.ShowDialog();
-			if(FormApptEdit2.DialogResult!=DialogResult.OK){
-				//delete new appt and unattach procs already handled in dialog
-				//not needed: Patients.Cur.NextAptNum=0;
-				FillPlanned();
-				return;
-			}
-			Procedure[] myProcList=Procedures.Refresh(PatCur.PatNum);
-			bool allProcsHyg=true;
-			for(int i=0;i<myProcList.Length;i++){
-				if(myProcList[i].PlannedAptNum!=AptCur.AptNum)
-					continue;//only concerned with procs on this nextApt
-				if(!ProcedureCodes.GetProcCode(myProcList[i].CodeNum).IsHygiene){
-					allProcsHyg=false;
-					break;
-				}
-			}
-			if(allProcsHyg && PatCur.SecProv!=0){
-				Appointment aptOld=AptCur.Copy();
-				AptCur.ProvNum=PatCur.SecProv;
-				Appointments.InsertOrUpdate(AptCur,aptOld,false);
-			}
-			Patient patOld=PatCur.Copy();
-			PatCur.NextAptNum=AptCur.AptNum;
-			PatCur.PlannedIsDone=false;
-			Patients.Update(PatCur,patOld);
-			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
-		}
-
-		///<summary>Not enabled if there is no planned appointment.</summary>
-		private void butClear_Click(object sender, System.EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-				return;
-			//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-			AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
-			Patient patOld=PatCur.Copy();
-			PatCur.NextAptNum=0;
-			Patients.Update(PatCur,patOld);
-			ModuleSelected(PatCur.PatNum);
-		}
-
-		///<summary>Not enabled if there is no planned appointment.</summary>
-		private void butPin_Click(object sender,EventArgs e) {
-			GotoModule.PinToAppt(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
-		}
-
-		private void ApptPlanned_DoubleClick(object sender, System.EventArgs e){
-			FormApptEdit FormAE=new FormApptEdit(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
-			FormAE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
 		}
 
 		private void toothChart_Click(object sender,EventArgs e) {
@@ -6828,6 +6724,8 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+		
 
 		
 

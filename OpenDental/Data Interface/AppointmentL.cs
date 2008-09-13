@@ -203,6 +203,10 @@ namespace OpenDental{
 				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
 			}
 			General.NonQ(command);
+			//plannedappt
+			command="DELETE FROM plannedappt WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+			//we will not reset item orders here
 			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
  			General.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);

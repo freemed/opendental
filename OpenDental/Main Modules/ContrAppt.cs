@@ -999,12 +999,10 @@ namespace OpenDental{
 			ContrApptSheet2.Location=new Point(0,-vScrollBar1.Value);
     }
 
-		///<summary>Includes RefreshModulePatient.  One overload is used when jumping here from another module, and you want to place an appointment on the pinboard.</summary>
-		public void ModuleSelected(int patNum,int pinAptNum){
+		///<summary>Overload used when jumping here from another module, and you want to place appointments on the pinboard.</summary>
+		public void ModuleSelected(int patNum,List<int> pinAptNums){
 			ModuleSelected(patNum);
-			List<int> list=new List<int>();
-			list.Add(pinAptNum);
-			SendToPinBoard(list);
+			SendToPinBoard(pinAptNums);
 		}
 
 		///<summary></summary>
@@ -1869,6 +1867,7 @@ namespace OpenDental{
 			aptCur.IsHygiene=curOp.IsHygiene;
 			aptCur.ClinicNum=curOp.ClinicNum;
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
+				int plannedAptNum=aptCur.AptNum;
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
 				aptCur.NextAptNum=aptCur.AptNum;
 				aptCur.AptStatus=ApptStatus.Scheduled;
@@ -1886,7 +1885,7 @@ namespace OpenDental{
 				Procedure[] ProcList=Procedures.Refresh(PatCurNum);
 				bool procAlreadyAttached=false;
 				for(int i=0;i<ProcList.Length;i++){
-					if(ProcList[i].PlannedAptNum==pat.NextAptNum){//if on the planned apt
+					if(ProcList[i].PlannedAptNum==plannedAptNum){//if on the planned apt
 						if(ProcList[i].AptNum>0){//already attached to another appt
 							procAlreadyAttached=true;
 						}
@@ -3107,15 +3106,12 @@ namespace OpenDental{
 			else if(PIn.PDateT(row["AptDateTime"].ToString()).Year>1880){//already scheduled
 				//do nothing to database
 			}
-			else{
-				Patient pat=Patients.GetPat(PIn.PInt(row["PatNum"].ToString()));//so we can test for planned apt.
-				if(row["AptNum"].ToString()==pat.NextAptNum.ToString()){//if is planned apt
-					//do nothing except remove it from pinboard
-				}
-				else{//for normal appt:
-					//this gets rid of new appointments that never made it off the pinboard
-					AppointmentL.Delete(PIn.PInt(row["AptNum"].ToString()));
-				}
+			else if(row["AptStatus"].ToString()==((int)ApptStatus.Planned).ToString()){
+				//do nothing except remove it from pinboard
+			}
+			else{//for normal appt:
+				//this gets rid of new appointments that never made it off the pinboard
+				AppointmentL.Delete(PIn.PInt(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModulePatient(0);

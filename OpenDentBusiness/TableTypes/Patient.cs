@@ -290,18 +290,6 @@ namespace OpenDentBusiness{
 			get { return estBalanceChanged; }
 		}
 
-		[DataField("NextAptNum")]
-		private int nextAptNum;
-		bool nextAptNumChanged;
-		/// <summary>May be 0. Also see the PlannedIsDone field. Otherwise it is the foreign key to appointment.AptNum.  This is the appointment that will show in the Chart module and in the Planned appointment tracker.  It will never show in the Appointments module. In other words, it is the suggested next appoinment rather than an appointment that has already been scheduled.</summary>
-		public int NextAptNum {
-			get { return nextAptNum; }
-			set { if(nextAptNum!=value){nextAptNum = value; MarkDirty(); nextAptNumChanged = true; }}
-		}
-		public bool NextAptNumChanged {
-			get { return nextAptNumChanged; }
-		}
-
 		[DataField("PriProv")]
 		private int priProv;
 		bool priProvChanged;
