@@ -428,8 +428,14 @@ namespace OpenDental{
 						INDEX (AptNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-	//todo:convert existing planned appts
-
+					command="SELECT PatNum,NextAptNum FROM patient WHERE NextAptNum != 0";
+					DataTable table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						command="INSERT INTO plannedappt (PatNum,AptNum,ItemOrder) VALUES("
+							+table.Rows[i]["PatNum"].ToString()+","
+							+table.Rows[i]["NextAptNum"].ToString()+",0)";
+						General.NonQ(command);
+					}
 					command="ALTER TABLE patient DROP NextAptNum";
 					General.NonQ(command);
 
