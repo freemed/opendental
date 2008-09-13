@@ -113,6 +113,7 @@ namespace OpenDental{
 			table.Columns.Add("PreferRecallMethod");
 			table.Columns.Add("recallInterval");
 			table.Columns.Add("RecallNum");
+			table.Columns.Add("recallType");
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command=
@@ -120,9 +121,10 @@ namespace OpenDental{
 				+"recall.RecallInterval,recall.RecallStatus,recall.Note,"
 				+"patient.LName,patient.FName,patient.Preferred,patient.Birthdate, "
 				+"patient.HmPhone,patient.WkPhone,patient.WirelessPhone,patient.Email, "
-				+"patient.Guarantor, patient.PreferRecallMethod "
-				+"FROM recall,patient "
-				+"WHERE recall.PatNum=patient.PatNum ";
+				+"patient.Guarantor, patient.PreferRecallMethod,recalltype.Description "
+				+"FROM recall,patient,recalltype "
+				+"WHERE recall.PatNum=patient.PatNum "
+				+"AND recall.RecallTypeNum=recalltype.RecallTypeNum ";
 			if(provNum>0){
 				command+="AND (patient.PriProv="+POut.PInt(provNum)+" "
 					+"OR patient.SecProv="+POut.PInt(provNum)+") ";
@@ -194,6 +196,7 @@ namespace OpenDental{
 				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
+				row["recallType"]=rawtable.Rows[i]["Description"].ToString();
 				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
 			}

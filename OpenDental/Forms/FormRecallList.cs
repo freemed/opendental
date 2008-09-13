@@ -595,6 +595,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Age"),30);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallList","Type"),60);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Interval"),50);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Contact"),120);
@@ -610,6 +612,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["dueDate"].ToString());
 				row.Cells.Add(table.Rows[i]["patientName"].ToString());
 				row.Cells.Add(table.Rows[i]["age"].ToString());
+				row.Cells.Add(table.Rows[i]["recallType"].ToString());
 				row.Cells.Add(table.Rows[i]["recallInterval"].ToString());
 				row.Cells.Add(table.Rows[i]["contactMethod"].ToString());
 				row.Cells.Add(table.Rows[i]["status"].ToString());
