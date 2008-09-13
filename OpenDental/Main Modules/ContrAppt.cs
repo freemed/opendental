@@ -2452,13 +2452,19 @@ namespace OpenDental{
 			}
 			if(curOp.ProvDentist!=0){
 				//if no dentist is assigned to op, then keep the original dentist without prompt.  All appts must have prov.
-				if(MsgBox.Show(this,true,"Change provider?")){
-					apt.ProvNum=curOp.ProvDentist;
-					if(curOp.ProvHygienist!=0){//the hygienist will only be changed if the op has a hygienist.
-						apt.ProvHyg=curOp.ProvHygienist;
-						apt.IsHygiene=curOp.IsHygiene;
+				if(apt.ProvNum!=curOp.ProvDentist
+					|| apt.ProvHyg!=curOp.ProvHygienist
+					|| apt.IsHygiene!=curOp.IsHygiene
+					|| apt.ClinicNum!=curOp.ClinicNum)
+				{
+					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
+						apt.ProvNum=curOp.ProvDentist;
+						if(curOp.ProvHygienist!=0){//the hygienist will only be changed if the op has a hygienist.
+							apt.ProvHyg=curOp.ProvHygienist;
+							apt.IsHygiene=curOp.IsHygiene;
+						}
+						apt.ClinicNum=curOp.ClinicNum;
 					}
-					apt.ClinicNum=curOp.ClinicNum;
 				}
 			}
 			try {
