@@ -121,7 +121,7 @@ namespace OpenDental{
 				+"recall.RecallInterval,recall.RecallStatus,recall.Note,"
 				+"patient.LName,patient.FName,patient.Preferred,patient.Birthdate, "
 				+"patient.HmPhone,patient.WkPhone,patient.WirelessPhone,patient.Email, "
-				+"patient.Guarantor, patient.PreferRecallMethod,recalltype.Description "
+				+"patient.Guarantor, patient.PreferRecallMethod,recalltype.Description _recalltype "
 				+"FROM recall,patient,recalltype "
 				+"WHERE recall.PatNum=patient.PatNum "
 				+"AND recall.RecallTypeNum=recalltype.RecallTypeNum ";
@@ -146,14 +146,31 @@ namespace OpenDental{
 				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
 				+"AND recall.DateDue >= "+POut.PDate(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
-				+"AND patient.patstatus=0 "
-				+"AND (recall.RecallTypeNum="+RecallTypes.ProphyType+" "
-				+"OR recall.RecallTypeNum="+RecallTypes.PerioType+") "
-				+"ORDER BY ";
-			if(groupByFamilies){
-				command+="patient.Guarantor, ";
+				+"AND patient.patstatus=0 ";
+			List<int> recalltypes=new List<int>();
+			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
+			if(typearray.Length>0){
+				for(int i=0;i<typearray.Length;i++){
+					recalltypes.Add(PIn.PInt(typearray[i]));
+				}
 			}
-			command+="recall.DateDue";
+			if(recalltypes.Count>0){
+				command+="AND (";
+				for(int i=0;i<recalltypes.Count;i++){
+					if(i>0){
+						command+=" OR ";
+					}
+					command+="recall.RecallTypeNum="+POut.PInt(recalltypes[i]);
+				}
+				command+=") ";
+				//+"AND (recall.RecallTypeNum="+RecallTypes.ProphyType+" "
+				//+"OR recall.RecallTypeNum="+RecallTypes.PerioType+") "
+			}
+			command+="ORDER BY ";// ";
+			if(groupByFamilies){
+				command+="patient.Guarantor,";
+			}
+			command+="recall.RecallTypeNum,recall.DateDue";
  			DataTable rawtable=General.GetTable(command);
 			DateTime date;
 			Interval interv;
@@ -196,7 +213,7 @@ namespace OpenDental{
 				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
-				row["recallType"]=rawtable.Rows[i]["Description"].ToString();
+				row["recallType"]=rawtable.Rows[i]["_recalltype"].ToString();
 				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
 			}

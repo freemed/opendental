@@ -409,6 +409,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '6.0.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To6_0_2();
+		}
+
+		private void To6_0_2() {
+			if(FromVersion<new Version("6.0.2.0")) {
+				string command;
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypesShowingInList','1,3','Comma-delimited list. FK to recalltype.RecallTypeNum.')";//1=prophy,3=perio
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.0.2.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To6_1_0();
 		}
 

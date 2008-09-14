@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
@@ -37,6 +38,8 @@ namespace OpenDental{
 		private ComboBox comboStatusMailedRecall;
 		private ComboBox comboStatusEmailedRecall;
 		private Label label26;
+		private ListBox listTypes;
+		private Label label1;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -77,24 +80,26 @@ namespace OpenDental{
 			this.textPostcardFamMsg = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textDown = new OpenDental.ValidDouble();
 			this.label12 = new System.Windows.Forms.Label();
+			this.textRight = new OpenDental.ValidDouble();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkGroupFamilies = new System.Windows.Forms.CheckBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.textDaysFuture = new OpenDental.ValidNum();
+			this.textDaysPast = new OpenDental.ValidNum();
 			this.textEmailSubject = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
 			this.comboStatusMailedRecall = new System.Windows.Forms.ComboBox();
 			this.comboStatusEmailedRecall = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.textDaysFuture = new OpenDental.ValidNum();
-			this.textDaysPast = new OpenDental.ValidNum();
-			this.textDown = new OpenDental.ValidDouble();
-			this.textRight = new OpenDental.ValidDouble();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.listTypes = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -192,25 +197,39 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label12);
 			this.groupBox2.Controls.Add(this.textRight);
 			this.groupBox2.Controls.Add(this.label13);
-			this.groupBox2.Location = new System.Drawing.Point(450,236);
+			this.groupBox2.Location = new System.Drawing.Point(435,239);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(190,74);
+			this.groupBox2.Size = new System.Drawing.Size(205,74);
 			this.groupBox2.TabIndex = 48;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Adjust Postcard Position in Inches";
 			// 
+			// textDown
+			// 
+			this.textDown.Location = new System.Drawing.Point(113,46);
+			this.textDown.Name = "textDown";
+			this.textDown.Size = new System.Drawing.Size(73,20);
+			this.textDown.TabIndex = 6;
+			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(34,46);
+			this.label12.Location = new System.Drawing.Point(49,45);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(60,20);
 			this.label12.TabIndex = 5;
 			this.label12.Text = "Down";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textRight
+			// 
+			this.textRight.Location = new System.Drawing.Point(113,21);
+			this.textRight.Name = "textRight";
+			this.textRight.Size = new System.Drawing.Size(73,20);
+			this.textRight.TabIndex = 4;
+			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(34,21);
+			this.label13.Location = new System.Drawing.Point(49,20);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(60,20);
 			this.label13.TabIndex = 4;
@@ -253,12 +272,30 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.label14);
 			this.groupBox3.Controls.Add(this.label15);
 			this.groupBox3.Controls.Add(this.textDaysPast);
-			this.groupBox3.Location = new System.Drawing.Point(61,338);
+			this.groupBox3.Location = new System.Drawing.Point(435,332);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(242,78);
+			this.groupBox3.Size = new System.Drawing.Size(205,78);
 			this.groupBox3.TabIndex = 54;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Recall List Default View";
+			// 
+			// textDaysFuture
+			// 
+			this.textDaysFuture.Location = new System.Drawing.Point(113,54);
+			this.textDaysFuture.MaxVal = 10000;
+			this.textDaysFuture.MinVal = -10000;
+			this.textDaysFuture.Name = "textDaysFuture";
+			this.textDaysFuture.Size = new System.Drawing.Size(53,20);
+			this.textDaysFuture.TabIndex = 53;
+			// 
+			// textDaysPast
+			// 
+			this.textDaysPast.Location = new System.Drawing.Point(113,33);
+			this.textDaysPast.MaxVal = 10000;
+			this.textDaysPast.MinVal = -10000;
+			this.textDaysPast.Name = "textDaysPast";
+			this.textDaysPast.Size = new System.Drawing.Size(53,20);
+			this.textDaysPast.TabIndex = 51;
 			// 
 			// textEmailSubject
 			// 
@@ -314,38 +351,6 @@ namespace OpenDental{
 			this.label26.Text = "Status for e-mailed recall";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textDaysFuture
-			// 
-			this.textDaysFuture.Location = new System.Drawing.Point(113,54);
-			this.textDaysFuture.MaxVal = 10000;
-			this.textDaysFuture.MinVal = -10000;
-			this.textDaysFuture.Name = "textDaysFuture";
-			this.textDaysFuture.Size = new System.Drawing.Size(53,20);
-			this.textDaysFuture.TabIndex = 53;
-			// 
-			// textDaysPast
-			// 
-			this.textDaysPast.Location = new System.Drawing.Point(113,33);
-			this.textDaysPast.MaxVal = 10000;
-			this.textDaysPast.MinVal = -10000;
-			this.textDaysPast.Name = "textDaysPast";
-			this.textDaysPast.Size = new System.Drawing.Size(53,20);
-			this.textDaysPast.TabIndex = 51;
-			// 
-			// textDown
-			// 
-			this.textDown.Location = new System.Drawing.Point(98,47);
-			this.textDown.Name = "textDown";
-			this.textDown.Size = new System.Drawing.Size(73,20);
-			this.textDown.TabIndex = 6;
-			// 
-			// textRight
-			// 
-			this.textRight.Location = new System.Drawing.Point(98,22);
-			this.textRight.Name = "textRight";
-			this.textRight.Size = new System.Drawing.Size(73,20);
-			this.textRight.TabIndex = 4;
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -354,7 +359,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(638,369);
+			this.butOK.Location = new System.Drawing.Point(677,384);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -370,17 +375,38 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(638,407);
+			this.butCancel.Location = new System.Drawing.Point(677,422);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// listTypes
+			// 
+			this.listTypes.FormattingEnabled = true;
+			this.listTypes.Location = new System.Drawing.Point(174,338);
+			this.listTypes.Name = "listTypes";
+			this.listTypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listTypes.Size = new System.Drawing.Size(120,108);
+			this.listTypes.TabIndex = 64;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(17,340);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(157,65);
+			this.label1.TabIndex = 63;
+			this.label1.Text = "Types to show in recall list (typically just prophy, perio, and user-added types)" +
+    "";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormRecallSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(737,448);
+			this.ClientSize = new System.Drawing.Size(776,463);
+			this.Controls.Add(this.listTypes);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboStatusEmailedRecall);
 			this.Controls.Add(this.label26);
 			this.Controls.Add(this.comboStatusMailedRecall);
@@ -442,6 +468,19 @@ namespace OpenDental{
 					comboStatusEmailedRecall.SelectedIndex=i;
 				}
 			}
+			List<int> recalltypes=new List<int>();
+			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
+			if(typearray.Length>0){
+				for(int i=0;i<typearray.Length;i++){
+					recalltypes.Add(PIn.PInt(typearray[i]));
+				}
+			}
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				listTypes.Items.Add(RecallTypeC.Listt[i].Description);
+				if(recalltypes.Contains(RecallTypeC.Listt[i].RecallTypeNum)){
+					listTypes.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -487,6 +526,14 @@ namespace OpenDental{
 			else{
 				Prefs.UpdateInt("RecallStatusMailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
 			}
+			string recalltypes="";
+			for(int i=0;i<listTypes.SelectedIndices.Count;i++){
+				if(i>0){
+					recalltypes+=",";
+				}
+				recalltypes+=RecallTypeC.Listt[listTypes.SelectedIndices[i]].RecallTypeNum.ToString();
+			}
+			Prefs.UpdateString("RecallTypesShowingInList",recalltypes);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
