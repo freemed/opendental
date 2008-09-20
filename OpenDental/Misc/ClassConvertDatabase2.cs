@@ -468,7 +468,17 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAmount', '2','')";
 					General.NonQ(command);
-
+					command="DROP TABLE IF EXISTS scheduleop";
+					General.NonQ(command);
+					command=@"CREATE TABLE scheduleop (
+						ScheduleOpNum int NOT NULL auto_increment,
+						ScheduleNum int NOT NULL,
+						OperatoryNum int NOT NULL,
+						PRIMARY KEY (ScheduleOpNum),
+						INDEX (ScheduleNum),
+						INDEX (OperatoryNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
 

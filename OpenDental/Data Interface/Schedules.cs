@@ -7,39 +7,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	///<summary></summary>
-	public class Schedules {
-		///<summary>Used in the schedule setup window</summary>
-		public static Schedule[] RefreshMonth(DateTime CurDate,ScheduleType schedType,int provNum) {
-			string command=
-				//"SELECT * FROM schedule WHERE SchedDate > '"+POut.PDate(startDate.AddDays(-1))+"' "
-				//+"AND SchedDate < '"+POut.PDate(stopDate.AddDays(1))+"' "
-				/*"SELECT * FROM schedule WHERE MONTH(SchedDate)='"+CurDate.Month.ToString()
-				+"' AND YEAR(SchedDate)='"+CurDate.Year.ToString()+"' "
-				+"AND SchedType="+POut.PInt((int)schedType)
-				+" AND ProvNum="+POut.PInt(provNum)
-				+" ORDER BY starttime";*/
-				"SELECT * FROM schedule WHERE ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+="TO_CHAR(SchedDate,'MM')='"+CurDate.Month.ToString()+"' AND TO_CHAR(SchedDate,'YYYY')";
-			}else{//Assume MySQL
-				command+="MONTH(SchedDate)='"+CurDate.Month.ToString()+"' AND YEAR(SchedDate)";
-			}
-			command+="='"+CurDate.Year.ToString()+"'"
-				+" AND SchedType="+POut.PInt((int)schedType)
-				+" AND ProvNum="+POut.PInt(provNum)
-				+" ORDER BY starttime";
-			return RefreshAndFill(command).ToArray();
-		}
-
-		/*
-		///<summary>Called every time the day is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
-		public static Schedule[] RefreshDay(DateTime thisDay) {
-			string command=
-				"SELECT * FROM schedule WHERE SchedDate= "+POut.PDate(thisDay)
-				+" ORDER BY StartTime";
-			return RefreshAndFill(command).ToArray();
-		}*/
-		
+	public class Schedules {		
 		///<summary>Gets a list of Schedule items for one date.</summary>
 		public static List<Schedule> GetDayList(DateTime date){
 			string command="SELECT * FROM schedule "
@@ -158,7 +126,7 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.</summary>
+		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
 		public static void Insert(Schedule sched){
 			if(PrefC.RandomKeys){
 				sched.ScheduleNum=MiscData.GetKey("schedule","ScheduleNum");
@@ -254,10 +222,6 @@ namespace OpenDental{
 			if(sched.SchedType==ScheduleType.Provider){
 				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,sched.ScheduleNum);
 			}
-			//if this was the last blockout for a day, then create a blockout for 'closed'
-			//if(sched.SchedType==ScheduleType.Blockout){
-			//	Schedules.CheckIfDeletedLastBlockout(sched.SchedDate);
-			//}
 		}
 	
 		///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
@@ -273,43 +237,6 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		/*
-		///<summary>If a particular day already has some non-default schedule items, then this does nothing and returns false.  But if the day is all default, then it converts each default entry into an actual schedule entry and returns true.  The user would not notice this change, but now they can edit or add.</summary>
-		public static bool ConvertFromDefault(DateTime forDate,ScheduleType schedType,int provNum){
-			Schedule[] List=RefreshDay(forDate);
-			Schedule[] ListForType=GetForType(List,schedType,provNum);
-			if(ListForType.Length>0){
-				return false;//do nothing, since it has already been converted from default.
-				//it is also possible there will be no default entries to convert, but that's ok.
-			}
-			SchedDefault[] ListDefaults=SchedDefaults.GetForType(schedType,provNum);
-			for(int i=0;i<ListDefaults.Length;i++){
-				if(ListDefaults[i].DayOfWeek!=(int)forDate.DayOfWeek){
-					continue;//if day of week doesn't match, then skip
-				}
-				Schedule SchedCur=new Schedule();
-				SchedCur.Status=SchedStatus.Open;
-				SchedCur.SchedDate=forDate;
-				SchedCur.StartTime=ListDefaults[i].StartTime;
-				SchedCur.StopTime=ListDefaults[i].StopTime; 
-				SchedCur.SchedType=schedType;
-				SchedCur.ProvNum=provNum;
-				SchedCur.Op=ListDefaults[i].Op;
-				SchedCur.BlockoutType=ListDefaults[i].BlockoutType;
-				InsertOrUpdate(SchedCur,true);     
-			}
-			return true;
-		}
-
-		///<summary></summary>
-		public static void SetAllDefault(DateTime forDate,ScheduleType schedType,int provNum){
-			string command="DELETE from schedule WHERE "
-				+"SchedDate="    +POut.PDate (forDate)+" "
-				+"AND SchedType='"+POut.PInt((int)schedType)+"' "
-				+"AND ProvNum='"  +POut.PInt(provNum)+"'";
- 			General.NonQ(command);
-		}*/
-
 		///<summary>Clears all blockouts for day.  But then defaults would show.  So adds a "closed" blockout.</summary>
 		public static void ClearBlockoutsForDay(DateTime date){
 			//SetAllDefault(date,ScheduleType.Blockout,0);
@@ -320,21 +247,6 @@ namespace OpenDental{
 			General.NonQ(command);
 			//CheckIfDeletedLastBlockout(date);
 		}
-
-		/*
-		///<summary></summary>
-		public static void CheckIfDeletedLastBlockout(DateTime schedDate){
-			string command="SELECT COUNT(*) FROM schedule WHERE SchedType='"+POut.PInt((int)ScheduleType.Blockout)+"' "
-					+"AND SchedDate="+POut.PDate(schedDate);
-			DataTable table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()=="0") {
-				Schedule sched=new Schedule();
-				sched.SchedDate=schedDate;
-				sched.SchedType=ScheduleType.Blockout;
-				sched.Status=SchedStatus.Closed;
-				Insert(sched);
-			}
-		}*/
 
 		public static bool DateIsHoliday(DateTime date){
 			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday

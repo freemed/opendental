@@ -217,6 +217,7 @@
     <Compile Include="Data Interface\AutoCodeL.cs" />
     <Compile Include="Data Interface\AutoCodeItemL.cs" />
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
+    <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovSpanL.cs" />
     <Compile Include="Data Interface\CovCatL.cs" />

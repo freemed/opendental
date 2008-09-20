@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 
-	///<summary>One block of time that overrides the default sched.  Either for practice, provider, or blockout.</summary>
+	///<summary>One block of time.  Either for practice, provider, or blockout.</summary>
 	public class Schedule{
 		///<summary>Primary key.</summary>
 		public int ScheduleNum;
