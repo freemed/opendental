@@ -78,6 +78,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPay;
 		private TextBox textDeposit;
 		private Label labelDeposit;
+		private TextBox textFamAfterIns;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
 
@@ -137,6 +138,9 @@ namespace OpenDental{
 			this.textFamStart = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textFamEnd = new System.Windows.Forms.TextBox();
+			this.textDeposit = new System.Windows.Forms.TextBox();
+			this.labelDeposit = new System.Windows.Forms.Label();
+			this.textFamAfterIns = new System.Windows.Forms.TextBox();
 			this.butPay = new OpenDental.UI.Button();
 			this.gridBal = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -148,8 +152,6 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
-			this.textDeposit = new System.Windows.Forms.TextBox();
-			this.labelDeposit = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -222,7 +224,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(323,464);
+			this.label7.Location = new System.Drawing.Point(252,464);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(286,14);
 			this.label7.TabIndex = 18;
@@ -231,7 +233,7 @@ namespace OpenDental{
 			// 
 			// textTotal
 			// 
-			this.textTotal.Location = new System.Drawing.Point(536,438);
+			this.textTotal.Location = new System.Drawing.Point(465,438);
 			this.textTotal.Name = "textTotal";
 			this.textTotal.ReadOnly = true;
 			this.textTotal.Size = new System.Drawing.Size(67,20);
@@ -240,7 +242,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(435,442);
+			this.label8.Location = new System.Drawing.Point(364,442);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(100,16);
 			this.label8.TabIndex = 22;
@@ -258,7 +260,7 @@ namespace OpenDental{
 			// label9
 			// 
 			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label9.Location = new System.Drawing.Point(135,525);
+			this.label9.Location = new System.Drawing.Point(125,525);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(126,37);
 			this.label9.TabIndex = 28;
@@ -269,7 +271,7 @@ namespace OpenDental{
 			// 
 			this.checkPayPlan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkPayPlan.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPayPlan.Location = new System.Drawing.Point(337,541);
+			this.checkPayPlan.Location = new System.Drawing.Point(327,541);
 			this.checkPayPlan.Name = "checkPayPlan";
 			this.checkPayPlan.Size = new System.Drawing.Size(216,18);
 			this.checkPayPlan.TabIndex = 30;
@@ -368,16 +370,16 @@ namespace OpenDental{
 			// 
 			// textFamStart
 			// 
-			this.textFamStart.Location = new System.Drawing.Point(750,438);
+			this.textFamStart.Location = new System.Drawing.Point(679,438);
 			this.textFamStart.Name = "textFamStart";
 			this.textFamStart.ReadOnly = true;
-			this.textFamStart.Size = new System.Drawing.Size(61,20);
+			this.textFamStart.Size = new System.Drawing.Size(60,20);
 			this.textFamStart.TabIndex = 121;
 			this.textFamStart.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(649,441);
+			this.label10.Location = new System.Drawing.Point(578,441);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(100,16);
 			this.label10.TabIndex = 122;
@@ -386,12 +388,38 @@ namespace OpenDental{
 			// 
 			// textFamEnd
 			// 
-			this.textFamEnd.Location = new System.Drawing.Point(811,438);
+			this.textFamEnd.Location = new System.Drawing.Point(799,438);
 			this.textFamEnd.Name = "textFamEnd";
 			this.textFamEnd.ReadOnly = true;
-			this.textFamEnd.Size = new System.Drawing.Size(56,20);
+			this.textFamEnd.Size = new System.Drawing.Size(60,20);
 			this.textFamEnd.TabIndex = 123;
 			this.textFamEnd.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textDeposit
+			// 
+			this.textDeposit.Location = new System.Drawing.Point(35,502);
+			this.textDeposit.Name = "textDeposit";
+			this.textDeposit.ReadOnly = true;
+			this.textDeposit.Size = new System.Drawing.Size(100,20);
+			this.textDeposit.TabIndex = 125;
+			// 
+			// labelDeposit
+			// 
+			this.labelDeposit.Location = new System.Drawing.Point(32,483);
+			this.labelDeposit.Name = "labelDeposit";
+			this.labelDeposit.Size = new System.Drawing.Size(219,16);
+			this.labelDeposit.TabIndex = 126;
+			this.labelDeposit.Text = "Attached to deposit";
+			this.labelDeposit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textFamAfterIns
+			// 
+			this.textFamAfterIns.Location = new System.Drawing.Point(739,438);
+			this.textFamAfterIns.Name = "textFamAfterIns";
+			this.textFamAfterIns.ReadOnly = true;
+			this.textFamAfterIns.Size = new System.Drawing.Size(60,20);
+			this.textFamAfterIns.TabIndex = 127;
+			this.textFamAfterIns.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butPay
 			// 
@@ -402,7 +430,7 @@ namespace OpenDental{
 			this.butPay.CornerRadius = 4F;
 			this.butPay.Image = global::OpenDental.Properties.Resources.Left;
 			this.butPay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPay.Location = new System.Drawing.Point(627,205);
+			this.butPay.Location = new System.Drawing.Point(556,205);
 			this.butPay.Name = "butPay";
 			this.butPay.Size = new System.Drawing.Size(70,26);
 			this.butPay.TabIndex = 124;
@@ -412,11 +440,11 @@ namespace OpenDental{
 			// gridBal
 			// 
 			this.gridBal.HScrollVisible = false;
-			this.gridBal.Location = new System.Drawing.Point(627,234);
+			this.gridBal.Location = new System.Drawing.Point(556,234);
 			this.gridBal.Name = "gridBal";
 			this.gridBal.ScrollValue = 0;
 			this.gridBal.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridBal.Size = new System.Drawing.Size(254,198);
+			this.gridBal.Size = new System.Drawing.Size(319,198);
 			this.gridBal.TabIndex = 120;
 			this.gridBal.Title = "Family Balances";
 			this.gridBal.TranslationName = "TablePaymentBal";
@@ -425,7 +453,7 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(106,234);
+			this.gridMain.Location = new System.Drawing.Point(35,234);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(515,198);
@@ -477,7 +505,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(806,536);
+			this.butCancel.Location = new System.Drawing.Point(804,536);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 9;
@@ -492,7 +520,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(806,500);
+			this.butOK.Location = new System.Drawing.Point(804,500);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 8;
@@ -509,7 +537,7 @@ namespace OpenDental{
 			this.butDeleteAll.CornerRadius = 4F;
 			this.butDeleteAll.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDeleteAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteAll.Location = new System.Drawing.Point(45,536);
+			this.butDeleteAll.Location = new System.Drawing.Point(35,536);
 			this.butDeleteAll.Name = "butDeleteAll";
 			this.butDeleteAll.Size = new System.Drawing.Size(84,26);
 			this.butDeleteAll.TabIndex = 7;
@@ -525,34 +553,18 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(105,435);
+			this.butAdd.Location = new System.Drawing.Point(35,435);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(92,26);
 			this.butAdd.TabIndex = 30;
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// textDeposit
-			// 
-			this.textDeposit.Location = new System.Drawing.Point(45,502);
-			this.textDeposit.Name = "textDeposit";
-			this.textDeposit.ReadOnly = true;
-			this.textDeposit.Size = new System.Drawing.Size(100,20);
-			this.textDeposit.TabIndex = 125;
-			// 
-			// labelDeposit
-			// 
-			this.labelDeposit.Location = new System.Drawing.Point(42,483);
-			this.labelDeposit.Name = "labelDeposit";
-			this.labelDeposit.Size = new System.Drawing.Size(219,16);
-			this.labelDeposit.TabIndex = 126;
-			this.labelDeposit.Text = "Attached to deposit";
-			this.labelDeposit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,588);
+			this.Controls.Add(this.textFamAfterIns);
 			this.Controls.Add(this.textDeposit);
 			this.Controls.Add(this.labelDeposit);
 			this.Controls.Add(this.butPay);
@@ -800,9 +812,21 @@ namespace OpenDental{
 				famstart+=PIn.PDouble(tableBalances.Rows[i]["StartBal"].ToString());
 			}
 			textFamStart.Text=famstart.ToString("N");
+			double famafterins=0;
+			for(int i=0;i<tableBalances.Rows.Count;i++) {
+				famafterins+=PIn.PDouble(tableBalances.Rows[i]["AfterIns"].ToString());
+			}
+			if(!PrefC.GetBool("BalancesDontSubtractIns")){
+				textFamAfterIns.Text=famafterins.ToString("N");
+			}
 			//compute ending balances-----------------------------------------------------------------------------
 			for(int i=0;i<tableBalances.Rows.Count;i++){
-				tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["StartBal"].ToString();
+				if(PrefC.GetBool("BalancesDontSubtractIns")){
+					tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["StartBal"].ToString();
+				}
+				else{
+					tableBalances.Rows[i]["EndBal"]=tableBalances.Rows[i]["AfterIns"].ToString();
+				}
 			}
 			double amt;
 			for(int i=0;i<SplitList.Count;i++) {
@@ -831,6 +855,13 @@ namespace OpenDental{
 			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","Start"),60,HorizontalAlignment.Right);
 			gridBal.Columns.Add(col);
+			if(PrefC.GetBool("BalancesDontSubtractIns")){
+				col=new ODGridColumn("",60);
+			}
+			else{
+				col=new ODGridColumn(Lan.g("TablePaymentBal","After Ins"),60,HorizontalAlignment.Right);
+			}
+			gridBal.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentBal","End"),60,HorizontalAlignment.Right);
 			gridBal.Columns.Add(col);
 			gridBal.Rows.Clear();
@@ -845,6 +876,12 @@ namespace OpenDental{
 					row.Cells.Add("'"+tableBalances.Rows[i]["Preferred"].ToString()+"'");
 				}
 				row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["StartBal"].ToString()).ToString("N"));
+				if(PrefC.GetBool("BalancesDontSubtractIns")){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["AfterIns"].ToString()).ToString("N"));
+				}
 				row.Cells.Add(PIn.PDouble(tableBalances.Rows[i]["EndBal"].ToString()).ToString("N"));
 				//row.ColorBackG=SystemColors.Control;//Color.FromArgb(240,240,240);
 				gridBal.Rows.Add(row);
@@ -891,7 +928,12 @@ namespace OpenDental{
 			double amt;
 			PaySplit split;
 			for(int i=0;i<gridBal.SelectedIndices.Length;i++){
-				amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
+				if(PrefC.GetBool("BalancesDontSubtractIns")){
+					amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["StartBal"].ToString());
+				}
+				else{
+					amt=PIn.PDouble(tableBalances.Rows[gridBal.SelectedIndices[i]]["AfterIns"].ToString());
+				}
 				if(amt==0){
 					continue;
 				}

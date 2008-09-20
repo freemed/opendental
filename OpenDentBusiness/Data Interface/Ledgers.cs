@@ -203,7 +203,8 @@ namespace OpenDentBusiness{
 				}
 				command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+"))"
 					+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
-			} else {//oracle
+			}
+			else {//oracle
 				command="SELECT (SELECT CASE SUM(Principal+Interest) WHEN NULL THEN 0 ELSE SUM(Principal+Interest) END "+
 				"FROM payplancharge WHERE (";
 				for(int i=0;i<ALpatNums.Count;i++) {

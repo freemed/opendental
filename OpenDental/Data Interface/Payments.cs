@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -211,7 +212,21 @@ namespace OpenDental{
 		public static bool AllocationRequired(double payAmt, int patNum){
 			string command="SELECT EstBalance FROM patient "
 				+"WHERE PatNum = "+POut.PInt(patNum);
-			double estBal=PIn.PDouble(General.GetCount(command));
+			DataTable table=General.GetTable(command);
+			double estBal=0;
+			if(table.Rows.Count>0){
+				estBal=PIn.PDouble(table.Rows[0][0].ToString());
+			}
+			if(!PrefC.GetBool("BalancesDontSubtractIns")){
+				command=@"SELECT SUM(InsPayEst)+SUM(Writeoff) 
+					FROM claimproc
+					WHERE PatNum="+POut.PInt(patNum)+" "
+					+"AND Status=0"; //NotReceived
+				table=General.GetTable(command);
+				if(table.Rows.Count>0){
+					estBal-=PIn.PDouble(table.Rows[0][0].ToString());
+				}
+			}
 			if(payAmt>estBal){
 				return true;
 			}
@@ -228,8 +243,12 @@ namespace OpenDental{
 				return new List<PaySplit>();
 			}
 			command= 
-				"SELECT PatNum,EstBalance,PriProv FROM patient "
-				+"WHERE Guarantor = "+table.Rows[0][0].ToString();
+				"SELECT patient.PatNum,EstBalance,PriProv,SUM(InsPayEst)+SUM(Writeoff) _insEst "
+				+"FROM patient "
+				+"LEFT JOIN claimproc ON patient.PatNum=claimproc.PatNum "
+				+"AND Status=0 "//NotReceived
+				+"WHERE Guarantor = "+table.Rows[0][0].ToString()+" "
+				+"GROUP BY patient.PatNum";
 				//+" ORDER BY PatNum!="+POut.PInt(pay.PatNum);//puts current patient in position 0 //Oracle does not allow
  			table=General.GetTable(command);
 			List<Patient> pats=new List<Patient>();
@@ -240,6 +259,9 @@ namespace OpenDental{
 					pat=new Patient();
 					pat.PatNum    = PIn.PInt(table.Rows[i][0].ToString());
 					pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
+					if(!PrefC.GetBool("BalancesDontSubtractIns")){
+						pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
+					}
 					pat.PriProv   = PIn.PInt(table.Rows[i][2].ToString());
 					pats.Add(pat.Copy());
 				}
@@ -252,6 +274,9 @@ namespace OpenDental{
 				pat=new Patient();
 				pat.PatNum    = PIn.PInt   (table.Rows[i][0].ToString());
 				pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
+				if(!PrefC.GetBool("BalancesDontSubtractIns")){
+					pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
+				}
 				pat.PriProv   = PIn.PInt   (table.Rows[i][2].ToString());
 				pats.Add(pat.Copy());
 			}
@@ -288,7 +313,7 @@ namespace OpenDental{
 				PaySplitCur.ProcDate=pay.PayDate;
 				PaySplitCur.DatePay=pay.PayDate;
 				PaySplitCur.ProvNum=Patients.GetProvNum(pats[i]);
-				PaySplitCur.SplitAmt=amtSplits[i];
+				PaySplitCur.SplitAmt=Math.Round(amtSplits[i],CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits);
 				//PaySplitCur.InsertOrUpdate(true);
 				retVal.Add(PaySplitCur);
 			}

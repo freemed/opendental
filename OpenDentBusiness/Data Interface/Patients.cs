@@ -881,8 +881,10 @@ namespace OpenDentBusiness{
 					PatNum int NOT NULL,
 					ProvNum int NOT NULL,
 					AmtBal double NOT NULL,
+					InsEst double NOT NULL,
 					PRIMARY KEY (FamBalNum));
 				
+				/*Completed procedures*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
 				SELECT patient.PatNum,procedurelog.ProvNum,SUM(ProcFee)
 				FROM procedurelog,patient
@@ -891,14 +893,25 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
 			
+				/*Received insurance payments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
 				SELECT patient.PatNum,claimproc.ProvNum,-SUM(InsPayAmt)-SUM(Writeoff)
 				FROM claimproc,patient
 				WHERE patient.PatNum=claimproc.PatNum
-				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim*/
+				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim. (7-capcomplete writeoff)*/
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
 
+				/*Insurance estimates*/
+				INSERT INTO tempfambal (PatNum,ProvNum,InsEst)
+				SELECT patient.PatNum,claimproc.ProvNum,SUM(InsPayEst)+SUM(Writeoff)
+				FROM claimproc,patient
+				WHERE patient.PatNum=claimproc.PatNum
+				AND Status=0 /*NotReceived*/
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				/*Adjustments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
 				SELECT patient.PatNum,adjustment.ProvNum,SUM(AdjAmt)
 				FROM adjustment,patient
@@ -906,6 +919,7 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
 
+				/*Patient payments*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
 				SELECT patient.PatNum,paysplit.ProvNum,-SUM(SplitAmt)
 				FROM paysplit,patient
@@ -913,15 +927,6 @@ namespace OpenDentBusiness{
 				AND paysplit.PayNum!=@ExcludePayNum
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
-
-				/*payplan amount due
-				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
-				SELECT patient.PatNum,payplancharge.ProvNum,SUM(Principal+Interest)
-				FROM payplancharge,patient
-				WHERE patient.PatNum=payplancharge.Guarantor
-				AND ChargeDate <= NOW()
-				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;*/
 
 				/*payplan princ reduction*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
@@ -931,7 +936,7 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
 
-				SELECT tempfambal.PatNum,tempfambal.ProvNum,SUM(AmtBal) StartBal,FName,Preferred,'0' EndBal
+				SELECT tempfambal.PatNum,tempfambal.ProvNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum
