@@ -928,7 +928,7 @@ namespace OpenDental{
 			// menuItemFinanceCharge
 			// 
 			this.menuItemFinanceCharge.Index = 7;
-			this.menuItemFinanceCharge.Text = "Run &Finance Charges";
+			this.menuItemFinanceCharge.Text = "Run &Finance/Billing Charges";
 			this.menuItemFinanceCharge.Click += new System.EventHandler(this.menuItemFinanceCharge_Click);
 			// 
 			// menuItemRepeatingCharges

@@ -449,6 +449,31 @@ namespace OpenDental{
 					}
 					command="ALTER TABLE patient DROP NextAptNum";
 					General.NonQ(command);
+					//Billing charges------------------------------------------------------------------------------------------
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeOrFinanceIsDefault', 'Finance','Value is a string, either Billing or Finance.')";
+					General.NonQ(command);
+					command="SELECT Max(ItemOrder) FROM definition WHERE Category=1";
+					table=General.GetTable(command);
+					int billingchargeItemOrder=PIn.PInt(table.Rows[0][0].ToString())+1;
+					command="INSERT INTO definition (category,itemorder,itemname,itemvalue) VALUES("
+						+"1, "//category=AdjTypes
+						+"'"+POut.PInt(billingchargeItemOrder)+"', "//itemOrder
+						+"'Billing Charge', "//itemname
+						+"'+')";//itemValue
+					int numAdj=General.NonQ(command,true);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAdjustmentType', "
+						+"'"+POut.PInt(numAdj)+"','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeLastRun', '0001-01-01','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAmount', '2','')";
+					General.NonQ(command);
+
+
+
+
+
+
 
 
 
@@ -472,7 +497,5 @@ namespace OpenDental{
 ALTER TABLE schedule ADD INDEX (ProvNum)
 ALTER TABLE schedule ADD INDEX (SchedDate)*/
 
-
 	}
-
 }

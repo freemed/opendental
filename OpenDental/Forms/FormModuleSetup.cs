@@ -68,6 +68,7 @@ namespace OpenDental{
 		private ComboBox comboTimeArrived;
 		private CheckBox checkApptRefreshEveryMinute;
 		private CheckBox checkChartQuickAddHideAmalgam;
+		private ComboBox comboBillingChargeAdjType;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -101,6 +102,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textClaimAttachPath = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
@@ -115,6 +117,7 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
@@ -136,17 +139,16 @@ namespace OpenDental{
 			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.checkChartQuickAddHideAmalgam = new System.Windows.Forms.CheckBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.checkAllowSettingProcsComplete = new System.Windows.Forms.CheckBox();
 			this.comboToothNomenclature = new System.Windows.Forms.ComboBox();
 			this.checkAutoClearEntryStatus = new System.Windows.Forms.CheckBox();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.checkChartQuickAddHideAmalgam = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.comboBillingChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -221,6 +223,7 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.comboBillingChargeAdjType);
 			this.groupBox5.Controls.Add(this.label4);
 			this.groupBox5.Controls.Add(this.checkClaimFormTreatDentSaysSigOnFile);
 			this.groupBox5.Controls.Add(this.checkStatementSummaryShowInsInfo);
@@ -245,7 +248,7 @@ namespace OpenDental{
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox5.Location = new System.Drawing.Point(454,9);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(422,344);
+			this.groupBox5.Size = new System.Drawing.Size(422,366);
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
@@ -263,7 +266,7 @@ namespace OpenDental{
 			// 
 			this.checkClaimFormTreatDentSaysSigOnFile.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkClaimFormTreatDentSaysSigOnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkClaimFormTreatDentSaysSigOnFile.Location = new System.Drawing.Point(35,255);
+			this.checkClaimFormTreatDentSaysSigOnFile.Location = new System.Drawing.Point(35,277);
 			this.checkClaimFormTreatDentSaysSigOnFile.Name = "checkClaimFormTreatDentSaysSigOnFile";
 			this.checkClaimFormTreatDentSaysSigOnFile.Size = new System.Drawing.Size(381,17);
 			this.checkClaimFormTreatDentSaysSigOnFile.TabIndex = 197;
@@ -274,12 +277,22 @@ namespace OpenDental{
 			// 
 			this.checkStatementSummaryShowInsInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStatementSummaryShowInsInfo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStatementSummaryShowInsInfo.Location = new System.Drawing.Point(48,272);
+			this.checkStatementSummaryShowInsInfo.Location = new System.Drawing.Point(48,294);
 			this.checkStatementSummaryShowInsInfo.Name = "checkStatementSummaryShowInsInfo";
 			this.checkStatementSummaryShowInsInfo.Size = new System.Drawing.Size(368,17);
 			this.checkStatementSummaryShowInsInfo.TabIndex = 195;
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label18
 			// 
@@ -292,14 +305,14 @@ namespace OpenDental{
 			// 
 			// textClaimAttachPath
 			// 
-			this.textClaimAttachPath.Location = new System.Drawing.Point(220,295);
+			this.textClaimAttachPath.Location = new System.Drawing.Point(219,318);
 			this.textClaimAttachPath.Name = "textClaimAttachPath";
 			this.textClaimAttachPath.Size = new System.Drawing.Size(197,20);
 			this.textClaimAttachPath.TabIndex = 189;
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(30,299);
+			this.label20.Location = new System.Drawing.Point(30,321);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(188,13);
 			this.label20.TabIndex = 190;
@@ -310,7 +323,7 @@ namespace OpenDental{
 			// 
 			this.checkShowFamilyCommByDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowFamilyCommByDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowFamilyCommByDefault.Location = new System.Drawing.Point(35,238);
+			this.checkShowFamilyCommByDefault.Location = new System.Drawing.Point(35,260);
 			this.checkShowFamilyCommByDefault.Name = "checkShowFamilyCommByDefault";
 			this.checkShowFamilyCommByDefault.Size = new System.Drawing.Size(381,17);
 			this.checkShowFamilyCommByDefault.TabIndex = 75;
@@ -324,7 +337,7 @@ namespace OpenDental{
 			// 
 			this.checkProviderIncomeShows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkProviderIncomeShows.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkProviderIncomeShows.Location = new System.Drawing.Point(35,221);
+			this.checkProviderIncomeShows.Location = new System.Drawing.Point(35,243);
 			this.checkProviderIncomeShows.Name = "checkProviderIncomeShows";
 			this.checkProviderIncomeShows.Size = new System.Drawing.Size(381,17);
 			this.checkProviderIncomeShows.TabIndex = 74;
@@ -338,7 +351,7 @@ namespace OpenDental{
 			// 
 			this.checkEclaimsSeparateTreatProv.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEclaimsSeparateTreatProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(70,318);
+			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(70,340);
 			this.checkEclaimsSeparateTreatProv.Name = "checkEclaimsSeparateTreatProv";
 			this.checkEclaimsSeparateTreatProv.Size = new System.Drawing.Size(346,17);
 			this.checkEclaimsSeparateTreatProv.TabIndex = 53;
@@ -347,11 +360,11 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(32,219);
+			this.label12.Location = new System.Drawing.Point(32,225);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(221,15);
 			this.label12.TabIndex = 73;
-			this.label12.Text = "Finance charge adj type";
+			this.label12.Text = "Billing charge adj type";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// comboFinanceChargeAdjType
@@ -426,6 +439,16 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -660,12 +683,24 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.comboToothNomenclature);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
-			this.groupBox3.Location = new System.Drawing.Point(454,366);
+			this.groupBox3.Location = new System.Drawing.Point(454,381);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(422,117);
 			this.groupBox3.TabIndex = 191;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Chart module";
+			// 
+			// checkChartQuickAddHideAmalgam
+			// 
+			this.checkChartQuickAddHideAmalgam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartQuickAddHideAmalgam.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkChartQuickAddHideAmalgam.Location = new System.Drawing.Point(35,80);
+			this.checkChartQuickAddHideAmalgam.Name = "checkChartQuickAddHideAmalgam";
+			this.checkChartQuickAddHideAmalgam.Size = new System.Drawing.Size(381,15);
+			this.checkChartQuickAddHideAmalgam.TabIndex = 195;
+			this.checkChartQuickAddHideAmalgam.Text = "Hide amalgam buttons in Quick Buttons section";
+			this.checkChartQuickAddHideAmalgam.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkChartQuickAddHideAmalgam.UseVisualStyleBackColor = true;
 			// 
 			// label11
 			// 
@@ -733,18 +768,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
 			// 
-			// checkChartQuickAddHideAmalgam
-			// 
-			this.checkChartQuickAddHideAmalgam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkChartQuickAddHideAmalgam.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkChartQuickAddHideAmalgam.Location = new System.Drawing.Point(35,80);
-			this.checkChartQuickAddHideAmalgam.Name = "checkChartQuickAddHideAmalgam";
-			this.checkChartQuickAddHideAmalgam.Size = new System.Drawing.Size(381,15);
-			this.checkChartQuickAddHideAmalgam.TabIndex = 195;
-			this.checkChartQuickAddHideAmalgam.Text = "Hide amalgam buttons in Quick Buttons section";
-			this.checkChartQuickAddHideAmalgam.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkChartQuickAddHideAmalgam.UseVisualStyleBackColor = true;
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -776,25 +799,15 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textPayPlansBillInAdvanceDays
+			// comboBillingChargeAdjType
 			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.comboBillingChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBillingChargeAdjType.FormattingEnabled = true;
+			this.comboBillingChargeAdjType.Location = new System.Drawing.Point(254,222);
+			this.comboBillingChargeAdjType.MaxDropDownItems = 30;
+			this.comboBillingChargeAdjType.Name = "comboBillingChargeAdjType";
+			this.comboBillingChargeAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboBillingChargeAdjType.TabIndex = 199;
 			// 
 			// FormModuleSetup
 			// 
@@ -838,6 +851,10 @@ namespace OpenDental{
 				comboFinanceChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
 				if(PrefC.GetInt("FinanceChargeAdjustmentType")==posAdjTypes[i].DefNum){
 					comboFinanceChargeAdjType.SelectedIndex=i;
+				}
+				comboBillingChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
+				if(PrefC.GetInt("BillingChargeAdjustmentType")==posAdjTypes[i].DefNum) {
+					comboBillingChargeAdjType.SelectedIndex=i;
 				}
 				comboBrokenApptAdjType.Items.Add(posAdjTypes[i].ItemName);
 				if(PrefC.GetInt("BrokenAppointmentAdjustmentType")==posAdjTypes[i].DefNum) {
@@ -938,6 +955,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter an adjustment type for finance charges.");
 				return;
 			}
+			if(comboBillingChargeAdjType.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please enter an adjustment type for billing charges.");
+				return;
+			}
 			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!=""
 				| textPayPlansBillInAdvanceDays.errorProvider1.GetError(textPayPlansBillInAdvanceDays)!="")
 			{
@@ -965,6 +986,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked)
 				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked)
 				| Prefs.UpdateInt("FinanceChargeAdjustmentType",posAdjTypes[comboFinanceChargeAdjType.SelectedIndex].DefNum)
+				| Prefs.UpdateInt("BillingChargeAdjustmentType",posAdjTypes[comboBillingChargeAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("ApptExclamationShowForUnsentIns", checkApptExclamation.Checked)
 				| Prefs.UpdateBool("ProviderIncomeTransferShows", checkProviderIncomeShows.Checked)
@@ -1022,6 +1044,7 @@ namespace OpenDental{
 		}
 	}
 }
+
 
 
 

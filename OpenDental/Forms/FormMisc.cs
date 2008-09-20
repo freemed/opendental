@@ -68,43 +68,43 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			this.components=new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormMisc));
-			this.textMainWindowTitle=new System.Windows.Forms.TextBox();
-			this.checkRandomPrimaryKeys=new System.Windows.Forms.CheckBox();
-			this.label3=new System.Windows.Forms.Label();
-			this.label4=new System.Windows.Forms.Label();
-			this.groupBox7=new System.Windows.Forms.GroupBox();
-			this.label9=new System.Windows.Forms.Label();
-			this.textBoxDocPath=new System.Windows.Forms.TextBox();
-			this.label8=new System.Windows.Forms.Label();
-			this.textBoxStationary=new System.Windows.Forms.TextBox();
-			this.textBoxLogo=new System.Windows.Forms.TextBox();
-			this.label6=new System.Windows.Forms.Label();
-			this.label5=new System.Windows.Forms.Label();
-			this.toolTip1=new System.Windows.Forms.ToolTip(this.components);
-			this.radioBottom=new System.Windows.Forms.RadioButton();
-			this.radioRight=new System.Windows.Forms.RadioButton();
-			this.checkTaskListAlwaysShow=new System.Windows.Forms.CheckBox();
-			this.checkTasksCheckOnStartup=new System.Windows.Forms.CheckBox();
-			this.checkBoxTaskKeepListHidden=new System.Windows.Forms.CheckBox();
-			this.labelX=new System.Windows.Forms.Label();
-			this.labelY=new System.Windows.Forms.Label();
-			this.pictureBox1=new System.Windows.Forms.PictureBox();
-			this.comboShowID=new System.Windows.Forms.ComboBox();
-			this.groupBox2=new System.Windows.Forms.GroupBox();
-			this.groupBoxTaskDefaults=new System.Windows.Forms.GroupBox();
-			this.label15=new System.Windows.Forms.Label();
-			this.label17=new System.Windows.Forms.Label();
-			this.groupBox6=new System.Windows.Forms.GroupBox();
-			this.checkTitleBarShowSite=new System.Windows.Forms.CheckBox();
-			this.label1=new System.Windows.Forms.Label();
-			this.validNumY=new OpenDental.ValidNumber();
-			this.validNumX=new OpenDental.ValidNumber();
-			this.butLanguages=new OpenDental.UI.Button();
-			this.textSigInterval=new OpenDental.ValidNumber();
-			this.butCancel=new OpenDental.UI.Button();
-			this.butOK=new OpenDental.UI.Button();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMisc));
+			this.textMainWindowTitle = new System.Windows.Forms.TextBox();
+			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.textBoxDocPath = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.textBoxStationary = new System.Windows.Forms.TextBox();
+			this.textBoxLogo = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.radioBottom = new System.Windows.Forms.RadioButton();
+			this.radioRight = new System.Windows.Forms.RadioButton();
+			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
+			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
+			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
+			this.validNumY = new OpenDental.ValidNumber();
+			this.validNumX = new OpenDental.ValidNumber();
+			this.labelX = new System.Windows.Forms.Label();
+			this.labelY = new System.Windows.Forms.Label();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.comboShowID = new System.Windows.Forms.ComboBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.groupBoxTaskDefaults = new System.Windows.Forms.GroupBox();
+			this.label15 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkTitleBarShowSite = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butLanguages = new OpenDental.UI.Button();
+			this.textSigInterval = new OpenDental.ValidNumber();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupBox7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -114,41 +114,41 @@ namespace OpenDental{
 			// 
 			// textMainWindowTitle
 			// 
-			this.textMainWindowTitle.Location=new System.Drawing.Point(170,14);
-			this.textMainWindowTitle.Name="textMainWindowTitle";
-			this.textMainWindowTitle.Size=new System.Drawing.Size(267,20);
-			this.textMainWindowTitle.TabIndex=38;
+			this.textMainWindowTitle.Location = new System.Drawing.Point(170,14);
+			this.textMainWindowTitle.Name = "textMainWindowTitle";
+			this.textMainWindowTitle.Size = new System.Drawing.Size(267,20);
+			this.textMainWindowTitle.TabIndex = 38;
 			// 
 			// checkRandomPrimaryKeys
 			// 
-			this.checkRandomPrimaryKeys.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRandomPrimaryKeys.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location=new System.Drawing.Point(102,179);
-			this.checkRandomPrimaryKeys.Name="checkRandomPrimaryKeys";
-			this.checkRandomPrimaryKeys.Size=new System.Drawing.Size(346,17);
-			this.checkRandomPrimaryKeys.TabIndex=55;
-			this.checkRandomPrimaryKeys.Text="Use Random Primary Keys (BE VERY CAREFUL.  IRREVERSIBLE)";
-			this.checkRandomPrimaryKeys.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRandomPrimaryKeys.Click+=new System.EventHandler(this.checkRandomPrimaryKeys_Click);
+			this.checkRandomPrimaryKeys.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(102,179);
+			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
+			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
+			this.checkRandomPrimaryKeys.TabIndex = 55;
+			this.checkRandomPrimaryKeys.Text = "Use Random Primary Keys (BE VERY CAREFUL.  IRREVERSIBLE)";
+			this.checkRandomPrimaryKeys.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkRandomPrimaryKeys.Click += new System.EventHandler(this.checkRandomPrimaryKeys_Click);
 			// 
 			// label3
 			// 
-			this.label3.Location=new System.Drawing.Point(41,138);
-			this.label3.Name="label3";
-			this.label3.Size=new System.Drawing.Size(333,35);
-			this.label3.TabIndex=56;
-			this.label3.Text="Process Signal Interval in seconds.  Usually every 6 to 20 seconds.  Leave blank "+
-					"to disable autorefresh";
-			this.label3.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label3.Location = new System.Drawing.Point(41,138);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(333,35);
+			this.label3.TabIndex = 56;
+			this.label3.Text = "Process Signal Interval in seconds.  Usually every 6 to 20 seconds.  Leave blank " +
+    "to disable autorefresh";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location=new System.Drawing.Point(59,216);
-			this.label4.Name="label4";
-			this.label4.Size=new System.Drawing.Size(298,17);
-			this.label4.TabIndex=64;
-			this.label4.Text="Languages used by patients.";
-			this.label4.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label4.Location = new System.Drawing.Point(59,205);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(298,17);
+			this.label4.TabIndex = 64;
+			this.label4.Text = "Languages used by patients.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox7
 			// 
@@ -159,205 +159,231 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.textBoxLogo);
 			this.groupBox7.Controls.Add(this.label6);
 			this.groupBox7.Controls.Add(this.label5);
-			this.groupBox7.Location=new System.Drawing.Point(12,427);
-			this.groupBox7.Name="groupBox7";
-			this.groupBox7.Size=new System.Drawing.Size(346,124);
-			this.groupBox7.TabIndex=69;
-			this.groupBox7.TabStop=false;
-			this.groupBox7.Text="Communications Files (located in document path A-Z folder)";
+			this.groupBox7.Location = new System.Drawing.Point(12,427);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Size = new System.Drawing.Size(346,124);
+			this.groupBox7.TabIndex = 69;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "Communications Files (located in document path A-Z folder)";
 			// 
 			// label9
 			// 
-			this.label9.Location=new System.Drawing.Point(321,49);
-			this.label9.Name="label9";
-			this.label9.Size=new System.Drawing.Size(22,18);
-			this.label9.TabIndex=63;
-			this.label9.Text="-->";
-			this.label9.TextAlign=System.Drawing.ContentAlignment.MiddleLeft;
+			this.label9.Location = new System.Drawing.Point(321,49);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(22,18);
+			this.label9.TabIndex = 63;
+			this.label9.Text = "-->";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBoxDocPath
 			// 
-			this.textBoxDocPath.Location=new System.Drawing.Point(82,21);
-			this.textBoxDocPath.Name="textBoxDocPath";
-			this.textBoxDocPath.ReadOnly=true;
-			this.textBoxDocPath.Size=new System.Drawing.Size(236,20);
-			this.textBoxDocPath.TabIndex=62;
-			this.toolTip1.SetToolTip(this.textBoxDocPath,"This shows you where you have your document path setup and where you should place"+
-							" your files specified below.");
+			this.textBoxDocPath.Location = new System.Drawing.Point(82,21);
+			this.textBoxDocPath.Name = "textBoxDocPath";
+			this.textBoxDocPath.ReadOnly = true;
+			this.textBoxDocPath.Size = new System.Drawing.Size(236,20);
+			this.textBoxDocPath.TabIndex = 62;
+			this.toolTip1.SetToolTip(this.textBoxDocPath,"This shows you where you have your document path setup and where you should place" +
+        " your files specified below.");
 			// 
 			// label8
 			// 
-			this.label8.Location=new System.Drawing.Point(6,22);
-			this.label8.Name="label8";
-			this.label8.Size=new System.Drawing.Size(70,20);
-			this.label8.TabIndex=61;
-			this.label8.Text="A-Z path";
-			this.label8.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.label8,"This shows you where you have your document path setup and where you should place"+
-							" your files specified below.");
+			this.label8.Location = new System.Drawing.Point(6,22);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(70,20);
+			this.label8.TabIndex = 61;
+			this.label8.Text = "A-Z path";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.label8,"This shows you where you have your document path setup and where you should place" +
+        " your files specified below.");
 			// 
 			// textBoxStationary
 			// 
-			this.textBoxStationary.Location=new System.Drawing.Point(172,73);
-			this.textBoxStationary.Name="textBoxStationary";
-			this.textBoxStationary.Size=new System.Drawing.Size(146,20);
-			this.textBoxStationary.TabIndex=60;
+			this.textBoxStationary.Location = new System.Drawing.Point(172,73);
+			this.textBoxStationary.Name = "textBoxStationary";
+			this.textBoxStationary.Size = new System.Drawing.Size(146,20);
+			this.textBoxStationary.TabIndex = 60;
 			this.toolTip1.SetToolTip(this.textBoxStationary,resources.GetString("textBoxStationary.ToolTip"));
 			// 
 			// textBoxLogo
 			// 
-			this.textBoxLogo.Location=new System.Drawing.Point(172,47);
-			this.textBoxLogo.Name="textBoxLogo";
-			this.textBoxLogo.Size=new System.Drawing.Size(146,20);
-			this.textBoxLogo.TabIndex=59;
+			this.textBoxLogo.Location = new System.Drawing.Point(172,47);
+			this.textBoxLogo.Name = "textBoxLogo";
+			this.textBoxLogo.Size = new System.Drawing.Size(146,20);
+			this.textBoxLogo.TabIndex = 59;
 			this.toolTip1.SetToolTip(this.textBoxLogo,resources.GetString("textBoxLogo.ToolTip"));
 			// 
 			// label6
 			// 
-			this.label6.Location=new System.Drawing.Point(10,69);
-			this.label6.Name="label6";
-			this.label6.Size=new System.Drawing.Size(156,17);
-			this.label6.TabIndex=58;
-			this.label6.Text="Stationery Document (*.doc)";
-			this.label6.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label6.Location = new System.Drawing.Point(10,69);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(156,17);
+			this.label6.TabIndex = 58;
+			this.label6.Text = "Stationery Document (*.doc)";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip1.SetToolTip(this.label6,resources.GetString("label6.ToolTip"));
 			// 
 			// label5
 			// 
-			this.label5.Location=new System.Drawing.Point(10,49);
-			this.label5.Name="label5";
-			this.label5.Size=new System.Drawing.Size(156,18);
-			this.label5.TabIndex=57;
-			this.label5.Text="Letter Background (*.jpg)";
-			this.label5.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label5.Location = new System.Drawing.Point(10,49);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(156,18);
+			this.label5.TabIndex = 57;
+			this.label5.Text = "Letter Background (*.jpg)";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip1.SetToolTip(this.label5,resources.GetString("label5.ToolTip"));
 			// 
 			// toolTip1
 			// 
-			this.toolTip1.AutomaticDelay=0;
-			this.toolTip1.AutoPopDelay=600000;
-			this.toolTip1.InitialDelay=0;
-			this.toolTip1.IsBalloon=true;
-			this.toolTip1.ReshowDelay=0;
-			this.toolTip1.ToolTipIcon=System.Windows.Forms.ToolTipIcon.Info;
-			this.toolTip1.ToolTipTitle="Help";
+			this.toolTip1.AutomaticDelay = 0;
+			this.toolTip1.AutoPopDelay = 600000;
+			this.toolTip1.InitialDelay = 0;
+			this.toolTip1.IsBalloon = true;
+			this.toolTip1.ReshowDelay = 0;
+			this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+			this.toolTip1.ToolTipTitle = "Help";
 			// 
 			// radioBottom
 			// 
-			this.radioBottom.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.radioBottom.Location=new System.Drawing.Point(170,45);
-			this.radioBottom.Name="radioBottom";
-			this.radioBottom.Size=new System.Drawing.Size(111,17);
-			this.radioBottom.TabIndex=190;
-			this.radioBottom.TabStop=true;
-			this.radioBottom.Text="Dock Bottom";
-			this.radioBottom.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.radioBottom,"Will show task list on the bottom of the main screen.\r\nYou can also change this s"+
-							"etting by right clicking on the splitter bar between the task list and main prog"+
-							"ram.");
-			this.radioBottom.UseVisualStyleBackColor=true;
+			this.radioBottom.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioBottom.Location = new System.Drawing.Point(170,45);
+			this.radioBottom.Name = "radioBottom";
+			this.radioBottom.Size = new System.Drawing.Size(111,17);
+			this.radioBottom.TabIndex = 190;
+			this.radioBottom.TabStop = true;
+			this.radioBottom.Text = "Dock Bottom";
+			this.radioBottom.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.radioBottom,"Will show task list on the bottom of the main screen.\r\nYou can also change this s" +
+        "etting by right clicking on the splitter bar between the task list and main prog" +
+        "ram.");
+			this.radioBottom.UseVisualStyleBackColor = true;
 			// 
 			// radioRight
 			// 
-			this.radioRight.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.radioRight.Location=new System.Drawing.Point(63,45);
-			this.radioRight.Name="radioRight";
-			this.radioRight.Size=new System.Drawing.Size(99,17);
-			this.radioRight.TabIndex=191;
-			this.radioRight.TabStop=true;
-			this.radioRight.Text="Dock Right";
-			this.radioRight.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.radioRight,"Will show task list on the right side of the main screen.\r\nYou can also change th"+
-							"is setting by right clicking on the splitter bar between the task list and main "+
-							"program.");
-			this.radioRight.UseVisualStyleBackColor=true;
+			this.radioRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioRight.Location = new System.Drawing.Point(63,45);
+			this.radioRight.Name = "radioRight";
+			this.radioRight.Size = new System.Drawing.Size(99,17);
+			this.radioRight.TabIndex = 191;
+			this.radioRight.TabStop = true;
+			this.radioRight.Text = "Dock Right";
+			this.radioRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.radioRight,"Will show task list on the right side of the main screen.\r\nYou can also change th" +
+        "is setting by right clicking on the splitter bar between the task list and main " +
+        "program.");
+			this.radioRight.UseVisualStyleBackColor = true;
 			// 
 			// checkTaskListAlwaysShow
 			// 
-			this.checkTaskListAlwaysShow.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTaskListAlwaysShow.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkTaskListAlwaysShow.Location=new System.Drawing.Point(106,34);
-			this.checkTaskListAlwaysShow.Name="checkTaskListAlwaysShow";
-			this.checkTaskListAlwaysShow.Size=new System.Drawing.Size(190,14);
-			this.checkTaskListAlwaysShow.TabIndex=74;
-			this.checkTaskListAlwaysShow.Text="Global - Always show Task List";
-			this.checkTaskListAlwaysShow.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTaskListAlwaysShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTaskListAlwaysShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(106,34);
+			this.checkTaskListAlwaysShow.Name = "checkTaskListAlwaysShow";
+			this.checkTaskListAlwaysShow.Size = new System.Drawing.Size(190,14);
+			this.checkTaskListAlwaysShow.TabIndex = 74;
+			this.checkTaskListAlwaysShow.Text = "Global - Always show Task List";
+			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip1.SetToolTip(this.checkTaskListAlwaysShow,resources.GetString("checkTaskListAlwaysShow.ToolTip"));
-			this.checkTaskListAlwaysShow.CheckedChanged+=new System.EventHandler(this.checkTaskListAlwaysShow_CheckedChanged);
+			this.checkTaskListAlwaysShow.CheckedChanged += new System.EventHandler(this.checkTaskListAlwaysShow_CheckedChanged);
 			// 
 			// checkTasksCheckOnStartup
 			// 
-			this.checkTasksCheckOnStartup.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTasksCheckOnStartup.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkTasksCheckOnStartup.Location=new System.Drawing.Point(66,12);
-			this.checkTasksCheckOnStartup.Name="checkTasksCheckOnStartup";
-			this.checkTasksCheckOnStartup.Size=new System.Drawing.Size(230,19);
-			this.checkTasksCheckOnStartup.TabIndex=75;
-			this.checkTasksCheckOnStartup.Text="Check for new user tasks on startup";
-			this.checkTasksCheckOnStartup.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTasksCheckOnStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTasksCheckOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTasksCheckOnStartup.Location = new System.Drawing.Point(66,12);
+			this.checkTasksCheckOnStartup.Name = "checkTasksCheckOnStartup";
+			this.checkTasksCheckOnStartup.Size = new System.Drawing.Size(230,19);
+			this.checkTasksCheckOnStartup.TabIndex = 75;
+			this.checkTasksCheckOnStartup.Text = "Check for new user tasks on startup";
+			this.checkTasksCheckOnStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip1.SetToolTip(this.checkTasksCheckOnStartup,"This will alert you to new tasks when you log in.");
 			// 
 			// checkBoxTaskKeepListHidden
 			// 
-			this.checkBoxTaskKeepListHidden.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoxTaskKeepListHidden.Location=new System.Drawing.Point(63,19);
-			this.checkBoxTaskKeepListHidden.Name="checkBoxTaskKeepListHidden";
-			this.checkBoxTaskKeepListHidden.Size=new System.Drawing.Size(218,20);
-			this.checkBoxTaskKeepListHidden.TabIndex=185;
-			this.checkBoxTaskKeepListHidden.Text="Don\'t show on this computer";
-			this.checkBoxTaskKeepListHidden.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.checkBoxTaskKeepListHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoxTaskKeepListHidden.Location = new System.Drawing.Point(63,19);
+			this.checkBoxTaskKeepListHidden.Name = "checkBoxTaskKeepListHidden";
+			this.checkBoxTaskKeepListHidden.Size = new System.Drawing.Size(218,20);
+			this.checkBoxTaskKeepListHidden.TabIndex = 185;
+			this.checkBoxTaskKeepListHidden.Text = "Don\'t show on this computer";
+			this.checkBoxTaskKeepListHidden.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.toolTip1.SetToolTip(this.checkBoxTaskKeepListHidden,resources.GetString("checkBoxTaskKeepListHidden.ToolTip"));
-			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor=true;
-			this.checkBoxTaskKeepListHidden.CheckedChanged+=new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
+			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor = true;
+			this.checkBoxTaskKeepListHidden.CheckedChanged += new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
+			// 
+			// validNumY
+			// 
+			this.validNumY.Location = new System.Drawing.Point(235,77);
+			this.validNumY.MaxLength = 4;
+			this.validNumY.MaxVal = 1200;
+			this.validNumY.MinVal = 300;
+			this.validNumY.Name = "validNumY";
+			this.validNumY.Size = new System.Drawing.Size(47,20);
+			this.validNumY.TabIndex = 188;
+			this.validNumY.Text = "542";
+			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
+			// 
+			// validNumX
+			// 
+			this.validNumX.Location = new System.Drawing.Point(115,77);
+			this.validNumX.MaxLength = 4;
+			this.validNumX.MaxVal = 2000;
+			this.validNumX.MinVal = 300;
+			this.validNumX.Name = "validNumX";
+			this.validNumX.Size = new System.Drawing.Size(47,20);
+			this.validNumX.TabIndex = 186;
+			this.validNumX.Text = "542";
+			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
 			// 
 			// labelX
 			// 
-			this.labelX.Location=new System.Drawing.Point(47,77);
-			this.labelX.Name="labelX";
-			this.labelX.Size=new System.Drawing.Size(62,18);
-			this.labelX.TabIndex=187;
-			this.labelX.Text="X Default";
-			this.labelX.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.labelX.Location = new System.Drawing.Point(47,77);
+			this.labelX.Name = "labelX";
+			this.labelX.Size = new System.Drawing.Size(62,18);
+			this.labelX.TabIndex = 187;
+			this.labelX.Text = "X Default";
+			this.labelX.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelY
 			// 
-			this.labelY.Location=new System.Drawing.Point(167,77);
-			this.labelY.Name="labelY";
-			this.labelY.Size=new System.Drawing.Size(62,18);
-			this.labelY.TabIndex=189;
-			this.labelY.Text="Y Default";
-			this.labelY.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.labelY.Location = new System.Drawing.Point(167,77);
+			this.labelY.Name = "labelY";
+			this.labelY.Size = new System.Drawing.Size(62,18);
+			this.labelY.TabIndex = 189;
+			this.labelY.Text = "Y Default";
+			this.labelY.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.BackgroundImage=global::OpenDental.Properties.Resources.stationary_sample1;
-			this.pictureBox1.BackgroundImageLayout=System.Windows.Forms.ImageLayout.None;
-			this.pictureBox1.Location=new System.Drawing.Point(364,427);
-			this.pictureBox1.Name="pictureBox1";
-			this.pictureBox1.Size=new System.Drawing.Size(101,124);
-			this.pictureBox1.TabIndex=71;
-			this.pictureBox1.TabStop=false;
+			this.pictureBox1.BackgroundImage = global::OpenDental.Properties.Resources.stationary_sample1;
+			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.pictureBox1.Location = new System.Drawing.Point(364,427);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(101,124);
+			this.pictureBox1.TabIndex = 71;
+			this.pictureBox1.TabStop = false;
 			// 
 			// comboShowID
 			// 
-			this.comboShowID.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboShowID.FormattingEnabled=true;
-			this.comboShowID.Location=new System.Drawing.Point(307,36);
-			this.comboShowID.Name="comboShowID";
-			this.comboShowID.Size=new System.Drawing.Size(130,21);
-			this.comboShowID.TabIndex=72;
+			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboShowID.FormattingEnabled = true;
+			this.comboShowID.Location = new System.Drawing.Point(307,36);
+			this.comboShowID.Name = "comboShowID";
+			this.comboShowID.Size = new System.Drawing.Size(130,21);
+			this.comboShowID.TabIndex = 72;
 			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.groupBoxTaskDefaults);
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
 			this.groupBox2.Controls.Add(this.checkTasksCheckOnStartup);
-			this.groupBox2.Location=new System.Drawing.Point(12,244);
-			this.groupBox2.Name="groupBox2";
-			this.groupBox2.Size=new System.Drawing.Size(346,166);
-			this.groupBox2.TabIndex=188;
-			this.groupBox2.TabStop=false;
-			this.groupBox2.Text="Task List";
+			this.groupBox2.Location = new System.Drawing.Point(12,244);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(346,166);
+			this.groupBox2.TabIndex = 188;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Task List";
 			// 
 			// groupBoxTaskDefaults
 			// 
@@ -368,31 +394,31 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.Controls.Add(this.validNumX);
 			this.groupBoxTaskDefaults.Controls.Add(this.labelX);
 			this.groupBoxTaskDefaults.Controls.Add(this.checkBoxTaskKeepListHidden);
-			this.groupBoxTaskDefaults.Enabled=false;
-			this.groupBoxTaskDefaults.Location=new System.Drawing.Point(15,59);
-			this.groupBoxTaskDefaults.Name="groupBoxTaskDefaults";
-			this.groupBoxTaskDefaults.Size=new System.Drawing.Size(312,101);
-			this.groupBoxTaskDefaults.TabIndex=76;
-			this.groupBoxTaskDefaults.TabStop=false;
-			this.groupBoxTaskDefaults.Text="Local Computer Default Settings";
+			this.groupBoxTaskDefaults.Enabled = false;
+			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(15,59);
+			this.groupBoxTaskDefaults.Name = "groupBoxTaskDefaults";
+			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(312,101);
+			this.groupBoxTaskDefaults.TabIndex = 76;
+			this.groupBoxTaskDefaults.TabStop = false;
+			this.groupBoxTaskDefaults.Text = "Local Computer Default Settings";
 			// 
 			// label15
 			// 
-			this.label15.Location=new System.Drawing.Point(86,17);
-			this.label15.Name="label15";
-			this.label15.Size=new System.Drawing.Size(83,17);
-			this.label15.TabIndex=39;
-			this.label15.Text="Title Text";
-			this.label15.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label15.Location = new System.Drawing.Point(86,17);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(83,17);
+			this.label15.TabIndex = 39;
+			this.label15.Text = "Title Text";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label17
 			// 
-			this.label17.Location=new System.Drawing.Point(110,39);
-			this.label17.Name="label17";
-			this.label17.Size=new System.Drawing.Size(195,15);
-			this.label17.TabIndex=73;
-			this.label17.Text="Show ID in title bar";
-			this.label17.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label17.Location = new System.Drawing.Point(110,39);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(195,15);
+			this.label17.TabIndex = 73;
+			this.label17.Text = "Show ID in title bar";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// groupBox6
 			// 
@@ -401,117 +427,91 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.label15);
 			this.groupBox6.Controls.Add(this.comboShowID);
 			this.groupBox6.Controls.Add(this.label17);
-			this.groupBox6.Location=new System.Drawing.Point(12,46);
-			this.groupBox6.Name="groupBox6";
-			this.groupBox6.Size=new System.Drawing.Size(453,83);
-			this.groupBox6.TabIndex=195;
-			this.groupBox6.TabStop=false;
-			this.groupBox6.Text="Main Window Title";
+			this.groupBox6.Location = new System.Drawing.Point(12,46);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(453,83);
+			this.groupBox6.TabIndex = 195;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Main Window Title";
 			// 
 			// checkTitleBarShowSite
 			// 
-			this.checkTitleBarShowSite.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTitleBarShowSite.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkTitleBarShowSite.Location=new System.Drawing.Point(74,60);
-			this.checkTitleBarShowSite.Name="checkTitleBarShowSite";
-			this.checkTitleBarShowSite.Size=new System.Drawing.Size(362,17);
-			this.checkTitleBarShowSite.TabIndex=74;
-			this.checkTitleBarShowSite.Text="Show Site (public health must also be turned on)";
-			this.checkTitleBarShowSite.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTitleBarShowSite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTitleBarShowSite.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTitleBarShowSite.Location = new System.Drawing.Point(74,60);
+			this.checkTitleBarShowSite.Name = "checkTitleBarShowSite";
+			this.checkTitleBarShowSite.Size = new System.Drawing.Size(362,17);
+			this.checkTitleBarShowSite.TabIndex = 74;
+			this.checkTitleBarShowSite.Text = "Show Site (public health must also be turned on)";
+			this.checkTitleBarShowSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label1
 			// 
-			this.label1.Location=new System.Drawing.Point(12,9);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(410,17);
-			this.label1.TabIndex=196;
-			this.label1.Text="See Setup | Modules for setup options that were previously in this window.";
-			// 
-			// validNumY
-			// 
-			this.validNumY.Location=new System.Drawing.Point(235,77);
-			this.validNumY.MaxLength=4;
-			this.validNumY.MaxVal=1200;
-			this.validNumY.MinVal=300;
-			this.validNumY.Name="validNumY";
-			this.validNumY.Size=new System.Drawing.Size(47,20);
-			this.validNumY.TabIndex=188;
-			this.validNumY.Text="542";
-			this.validNumY.TextAlign=System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
-			// 
-			// validNumX
-			// 
-			this.validNumX.Location=new System.Drawing.Point(115,77);
-			this.validNumX.MaxLength=4;
-			this.validNumX.MaxVal=2000;
-			this.validNumX.MinVal=300;
-			this.validNumX.Name="validNumX";
-			this.validNumX.Size=new System.Drawing.Size(47,20);
-			this.validNumX.TabIndex=186;
-			this.validNumX.Text="542";
-			this.validNumX.TextAlign=System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
+			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(410,17);
+			this.label1.TabIndex = 196;
+			this.label1.Text = "See Setup | Modules for setup options that were previously in this window.";
 			// 
 			// butLanguages
 			// 
-			this.butLanguages.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butLanguages.Autosize=true;
-			this.butLanguages.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLanguages.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLanguages.CornerRadius=4F;
-			this.butLanguages.Location=new System.Drawing.Point(360,200);
-			this.butLanguages.Name="butLanguages";
-			this.butLanguages.Size=new System.Drawing.Size(88,24);
-			this.butLanguages.TabIndex=63;
-			this.butLanguages.Text="Edit Languages";
-			this.butLanguages.Click+=new System.EventHandler(this.butLanguages_Click);
+			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLanguages.Autosize = true;
+			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLanguages.CornerRadius = 4F;
+			this.butLanguages.Location = new System.Drawing.Point(360,200);
+			this.butLanguages.Name = "butLanguages";
+			this.butLanguages.Size = new System.Drawing.Size(88,24);
+			this.butLanguages.TabIndex = 63;
+			this.butLanguages.Text = "Edit Languages";
+			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
 			// 
 			// textSigInterval
 			// 
-			this.textSigInterval.Location=new System.Drawing.Point(375,147);
-			this.textSigInterval.MaxVal=1000000;
-			this.textSigInterval.MinVal=1;
-			this.textSigInterval.Name="textSigInterval";
-			this.textSigInterval.Size=new System.Drawing.Size(74,20);
-			this.textSigInterval.TabIndex=57;
-			this.textSigInterval.TextAlign=System.Windows.Forms.HorizontalAlignment.Right;
+			this.textSigInterval.Location = new System.Drawing.Point(375,147);
+			this.textSigInterval.MaxVal = 1000000;
+			this.textSigInterval.MinVal = 1;
+			this.textSigInterval.Name = "textSigInterval";
+			this.textSigInterval.Size = new System.Drawing.Size(74,20);
+			this.textSigInterval.TabIndex = 57;
+			this.textSigInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butCancel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize=true;
-			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius=4F;
-			this.butCancel.DialogResult=System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location=new System.Drawing.Point(513,553);
-			this.butCancel.Name="butCancel";
-			this.butCancel.Size=new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex=8;
-			this.butCancel.Text="&Cancel";
-			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(513,553);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 8;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butOK.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize=true;
-			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(513,515);
-			this.butOK.Name="butOK";
-			this.butOK.Size=new System.Drawing.Size(75,24);
-			this.butOK.TabIndex=7;
-			this.butOK.Text="&OK";
-			this.butOK.Click+=new System.EventHandler(this.butOK_Click);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(513,515);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 7;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// FormMisc
 			// 
-			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(635,603);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(635,603);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox2);
@@ -524,14 +524,14 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.checkRandomPrimaryKeys);
-			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox=false;
-			this.MinimizeBox=false;
-			this.Name="FormMisc";
-			this.ShowInTaskbar=false;
-			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text="Miscellaneous Setup";
-			this.Load+=new System.EventHandler(this.FormMisc_Load);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FormMisc";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Miscellaneous Setup";
+			this.Load += new System.EventHandler(this.FormMisc_Load);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

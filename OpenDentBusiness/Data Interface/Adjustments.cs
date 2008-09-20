@@ -152,12 +152,31 @@ namespace OpenDentBusiness{
 			return retVal;
 		}*/
 
-		///<summary>Returns the number of adjustments deleted.</summary>
+		///<summary>Returns the number of finance charges deleted.</summary>
 		public static int UndoFinanceCharges(DateTime dateUndo){
-			string command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo);
+			string command;
+			int numAdj;
+			DataTable table;
+			command="SELECT ValueString FROM preference WHERE PrefName = 'FinanceChargeAdjustmentType'";
+			table=General.GetTable(command);
+			numAdj=PIn.PInt(table.Rows[0][0].ToString());
+			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
+				+" AND AdjType="+POut.PInt(numAdj);
 			return General.NonQ(command);
 		}
 
+		///<summary>Returns the number of billing charges deleted.</summary>
+		public static int UndoBillingCharges(DateTime dateUndo) {
+			string command;
+			int numAdj;
+			DataTable table;
+			command="SELECT ValueString FROM preference WHERE PrefName = 'BillingChargeAdjustmentType'";
+			table=General.GetTable(command);
+			numAdj=PIn.PInt(table.Rows[0][0].ToString());
+			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
+				+" AND AdjType="+POut.PInt(numAdj);
+			return General.NonQ(command);
+		}
 
 	}
 
@@ -168,6 +187,7 @@ namespace OpenDentBusiness{
 
 
 }
+
 
 
 
