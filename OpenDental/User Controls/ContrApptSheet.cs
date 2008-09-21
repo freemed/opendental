@@ -51,7 +51,7 @@ namespace OpenDental{
 		public List<Schedule> SchedListPeriod;
 		public static bool IsWeeklyView;
 		///<summary>Typically 5. Only used with weekview.</summary>
-		public static int NumOfWeekDaysToDisplay=5;
+		public static int NumOfWeekDaysToDisplay=7;
 		///<summary>The width of an entire day if using week view.</summary>
 		public static int ColDayWidth;
 		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
