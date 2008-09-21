@@ -2149,21 +2149,22 @@ namespace OpenDental{
 				if(e.Button==MouseButtons.Right){
 					bool clickedOnBlock=false;
 					Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
+					//List<ScheduleOp> listForSched;
 					for(int i=0;i<ListForType.Length;i++){
-						//skip if op doesn't match
-						if(ListForType[i].Op!=0){//if op is zero, it doesn't matter which op.
-							if(ListForType[i].Op != SheetClickedonOp){
-								continue;
-							}
-						}
 						if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay).Date){
 							continue;
 						}
-						if(ListForType[i].StartTime.TimeOfDay <= sheetClickedOnTime
-							&& sheetClickedOnTime < ListForType[i].StopTime.TimeOfDay)
+						if(ListForType[i].StartTime.TimeOfDay > sheetClickedOnTime
+							|| ListForType[i].StopTime.TimeOfDay <= sheetClickedOnTime)
 						{
-							clickedOnBlock=true;
-							break;
+							continue;
+						}
+						//listForSched=ScheduleOps.GetForSched(ListForType[i].ScheduleNum);
+						for(int p=0;p<ListForType[i].Ops.Count;p++){
+							if(ListForType[i].Ops[p]==SheetClickedonOp){
+								clickedOnBlock=true;
+								break;
+							}
 						}
 					}
 					if(clickedOnBlock){
@@ -3483,7 +3484,8 @@ namespace OpenDental{
 				return;
 			}
 			Schedule sched=BlockoutClipboard.Copy();
-			sched.Op=SheetClickedonOp;
+			sched.Ops=new List<int>();
+			sched.Ops.Add(SheetClickedonOp);
 			sched.SchedDate=Appointments.DateSelected;
 			if(ContrApptSheet.IsWeeklyView){
 				sched.SchedDate=WeekStartDate.AddDays(SheetClickedonDay);
@@ -3536,10 +3538,8 @@ namespace OpenDental{
 			DateTime SheetClickedonTime=new DateTime(2000,1,1,SheetClickedonHour,SheetClickedonMin,0);
 			for(int i=0;i<ListForType.Length;i++) {
 				//skip if op doesn't match
-				if(ListForType[i].Op!=0) {//if op is zero, it doesn't matter which op.
-					if(ListForType[i].Op != SheetClickedonOp) {
-						continue;
-					}
+				if(!ListForType[i].Ops.Contains(SheetClickedonOp)){
+					continue;
 				}
 				if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay)){
 					continue;

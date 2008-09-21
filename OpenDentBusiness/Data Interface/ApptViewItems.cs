@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using OpenDentBusiness;
@@ -110,15 +111,16 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		public static int[] GetOpsForView(int apptViewNum){
-			ArrayList AL=new ArrayList();
+		public static List<int> GetOpsForView(int apptViewNum){
+			//ArrayList AL=new ArrayList();
+			List<int> retVal=new List<int>();
 			for(int i=0;i<ApptViewItemC.List.Length;i++){
 				if(ApptViewItemC.List[i].ApptViewNum==apptViewNum && ApptViewItemC.List[i].OpNum!=0){
-					AL.Add(ApptViewItemC.List[i].OpNum);
+					retVal.Add(ApptViewItemC.List[i].OpNum);
 				}
 			}
 			//int[] retVal=new int[AL.Count]();
-			return (int[])AL.ToArray(typeof(int));
+			return retVal;//(int[])AL.ToArray(typeof(int));
 		}
 
 

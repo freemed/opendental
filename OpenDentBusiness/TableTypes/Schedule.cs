@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenDentBusiness{
 
@@ -23,21 +24,23 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>Enum:SchedStatus enumeration 0=Open,1=Closed,2=Holiday.  All blocks have a status of Open, but user doesn't see the status.  The "closed" status was previously used to override the defaults when the last timeblock was deleted.  But it's nearly phased out now.  Still used by blockouts.  Holidays are a special type of practice schedule item which do not have providers attached.</summary>
 		public SchedStatus Status;
-		///<summary>FK to operatory.OperatoryNum.  Only used right now for Blockouts.  If 0, then it applies to all ops.</summary>
-		public int Op;
 		///<summary>FK to employee.EmployeeNum.</summary>
 		public int EmployeeNum;
+		///<summary>Not a db column.  Holds a list of ops that this schedule is assigned to.</summary>
+		public List<int> Ops;
 
 		public Schedule Copy(){
-			return (Schedule)this.MemberwiseClone();
+			Schedule retVal=(Schedule)this.MemberwiseClone();
+			retVal.Ops=new List<int>(Ops);
+			return retVal;
 		}
 
 		public Schedule(){
-
+			Ops=new List<int>();
 		}
 
 		public Schedule(int scheduleNum,DateTime schedDate,DateTime startTime,DateTime stopTime,ScheduleType schedType,
-			int provNum,int blockoutType,string note,SchedStatus status,int op,int employeeNum)
+			int provNum,int blockoutType,string note,SchedStatus status,int employeeNum)
 		{
 			ScheduleNum=scheduleNum;
 			SchedDate=schedDate;
@@ -48,7 +51,6 @@ namespace OpenDentBusiness{
 			BlockoutType=blockoutType;
 			Note=note;
 			Status=status;
-			Op=op;
 			EmployeeNum=employeeNum;
 		}
 		

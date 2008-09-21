@@ -1096,11 +1096,14 @@ namespace OpenDentBusiness{
 			table.Columns.Add("BlockoutType");
 			table.Columns.Add("Note");
 			table.Columns.Add("Status");
-			table.Columns.Add("Op");
+			table.Columns.Add("ops");
 			table.Columns.Add("EmployeeNum");
-			string command="SELECT * FROM schedule "
+			string command="SELECT schedule.*,GROUP_CONCAT(scheduleop.OperatoryNum) _ops "
+				+"FROM schedule "
+				+"LEFT JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
 				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
 				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"GROUP BY schedule.ScheduleNum "
 				+"ORDER BY StartTime";
 			DataTable raw=General.GetTable(command);
 			//the times come back as times rather than datetimes.  This causes problems.  That's why we're not just returning raw.
@@ -1116,7 +1119,7 @@ namespace OpenDentBusiness{
 				row["BlockoutType"]=raw.Rows[i]["BlockoutType"].ToString();
 				row["Note"]=raw.Rows[i]["Note"].ToString();
 				row["Status"]=raw.Rows[i]["Status"].ToString();
-				row["Op"]=raw.Rows[i]["Op"].ToString();
+				row["ops"]=PIn.PByteArray(raw.Rows[i]["_ops"]);
 				row["EmployeeNum"]=raw.Rows[i]["EmployeeNum"].ToString();
 				table.Rows.Add(row);
 			}

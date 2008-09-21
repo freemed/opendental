@@ -479,8 +479,9 @@ namespace OpenDental{
 						INDEX (OperatoryNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-
+	//conversion script needs to go here
+					command="ALTER TABLE schedule DROP Op";
+					General.NonQ(command);
 
 
 

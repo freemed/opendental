@@ -47,15 +47,23 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		///<summary>The opNums array does not include 0.  0 indicates all ops and so it's always included in the output list.</summary>
-		public static List<Schedule> RefreshPeriodBlockouts(DateTime dateStart,DateTime dateEnd,int[] opNums){
-			string command="SELECT * FROM schedule "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+		///<summary></summary>
+		public static List<Schedule> RefreshPeriodBlockouts(DateTime dateStart,DateTime dateEnd,List<int> opNums){
+			if(opNums.Count==0){
+				return new List<Schedule>();
+			}
+			string command="SELECT schedule.* "
+				+"FROM schedule,scheduleop "
+				+"WHERE schedule.ScheduleNum=scheduleop.ScheduleNum "
+				+"AND SchedDate >= "+POut.PDate(dateStart)+" "
 				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
 				+"AND SchedType=2 "//blockouts
-				+"AND (Op=0 ";
-			for(int i=0;i<opNums.Length;i++) {
-				command+="OR Op="+POut.PInt(opNums[i])+" ";
+				+"AND (";//OperatoryNum=0 ";
+			for(int i=0;i<opNums.Count;i++) {
+				if(i>0){
+					command+=" OR ";
+				}
+				command+="OperatoryNum="+POut.PInt(opNums[i]);
 			}
 			command+=")";
 			return RefreshAndFill(command);
@@ -84,26 +92,59 @@ namespace OpenDental{
 
 		private static List<Schedule> RefreshAndFill(string command) {
 			DataTable table=General.GetTable(command);
-			return ConvertTableToList(table);
+			List<Schedule> retVal=ConvertTableToList(table);
+			//now, get all the ops----------------------------------------------------------
+			if(retVal.Count==0){
+				return retVal;
+			}
+			command="SELECT * FROM scheduleop WHERE (";
+			for(int i=0;i<retVal.Count;i++){
+				if(i>0){
+					command+=" OR ";
+				}
+				command+="ScheduleNum="+POut.PInt(retVal[i].ScheduleNum);
+			}
+			command+=")";
+			table=General.GetTable(command);
+			for(int i=0;i<retVal.Count;i++){
+				for(int p=0;p<table.Rows.Count;p++){
+					if(table.Rows[p]["ScheduleNum"].ToString()==retVal[i].ScheduleNum.ToString()){
+						retVal[i].Ops.Add(PIn.PInt(table.Rows[p]["OperatoryNum"].ToString()));
+						break;
+					}
+				}
+			}
+			return retVal;
 		}
 
 		public static List<Schedule> ConvertTableToList(DataTable table){
 			List<Schedule> retVal=new List<Schedule>();
 			//Schedule[] List=new Schedule[table.Rows.Count];
 			Schedule sched;
+			string opstr;
+			string[] oparray;
 			for(int i=0;i<table.Rows.Count;i++) {
 				sched=new Schedule();
-				sched.ScheduleNum    = PIn.PInt(table.Rows[i][0].ToString());
-				sched.SchedDate      = PIn.PDate(table.Rows[i][1].ToString());
-				sched.StartTime      = PIn.PDateT(table.Rows[i][2].ToString());
-				sched.StopTime       = PIn.PDateT(table.Rows[i][3].ToString());
-				sched.SchedType      = (ScheduleType)PIn.PInt(table.Rows[i][4].ToString());
-				sched.ProvNum        = PIn.PInt(table.Rows[i][5].ToString());
-				sched.BlockoutType   = PIn.PInt(table.Rows[i][6].ToString());
-				sched.Note           = PIn.PString(table.Rows[i][7].ToString());
-				sched.Status         = (SchedStatus)PIn.PInt(table.Rows[i][8].ToString());
-				sched.Op             = PIn.PInt(table.Rows[i][9].ToString());
-				sched.EmployeeNum    = PIn.PInt(table.Rows[i][10].ToString());
+				sched.ScheduleNum    = PIn.PInt   (table.Rows[i]["ScheduleNum"].ToString());
+				sched.SchedDate      = PIn.PDate  (table.Rows[i]["SchedDate"].ToString());
+				sched.StartTime      = PIn.PDateT (table.Rows[i]["StartTime"].ToString());
+				sched.StopTime       = PIn.PDateT (table.Rows[i]["StopTime"].ToString());
+				sched.SchedType      = (ScheduleType)PIn.PInt(table.Rows[i]["SchedType"].ToString());
+				sched.ProvNum        = PIn.PInt   (table.Rows[i]["ProvNum"].ToString());
+				sched.BlockoutType   = PIn.PInt   (table.Rows[i]["BlockoutType"].ToString());
+				sched.Note           = PIn.PString(table.Rows[i]["Note"].ToString());
+				sched.Status         = (SchedStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
+				sched.EmployeeNum    = PIn.PInt   (table.Rows[i]["EmployeeNum"].ToString());
+				if(table.Columns.Contains("ops")){
+					sched.Ops=new List<int>();
+					opstr=PIn.PString(table.Rows[i]["ops"].ToString());
+					if(opstr!=""){
+						oparray=opstr.Split(',');
+						for(int o=0;o<oparray.Length;o++){
+							sched.Ops.Add(PIn.PInt(oparray[o]));
+						}
+					}
+				}
 				retVal.Add(sched);
 			}
 			return retVal;
@@ -112,18 +153,26 @@ namespace OpenDental{
 		///<summary></summary>
 		private static void Update(Schedule sched){
 			string command= "UPDATE schedule SET " 
-				+ "scheddate = "    +POut.PDate  (sched.SchedDate)
-				+ ",starttime = "   +POut.PDateT (sched.StartTime)
-				+ ",stoptime = "    +POut.PDateT (sched.StopTime)
+				+ "SchedDate = "    +POut.PDate  (sched.SchedDate)
+				+ ",StartTime = "   +POut.PDateT (sched.StartTime)
+				+ ",StopTime = "    +POut.PDateT (sched.StopTime)
 				+ ",SchedType = '"   +POut.PInt   ((int)sched.SchedType)+"'"
 				+ ",ProvNum = '"     +POut.PInt   (sched.ProvNum)+"'"
 				+ ",BlockoutType = '"+POut.PInt   (sched.BlockoutType)+"'"
-				+ ",note = '"        +POut.PString(sched.Note)+"'"
-				+ ",status = '"      +POut.PInt   ((int)sched.Status)+"'"
-				+ ",Op = '"          +POut.PInt   (sched.Op)+"'"
+				+ ",Note = '"        +POut.PString(sched.Note)+"'"
+				+ ",Status = '"      +POut.PInt   ((int)sched.Status)+"'"
 				+ ",EmployeeNum = '" +POut.PInt   (sched.EmployeeNum)+"'"
 				+" WHERE ScheduleNum = '" +POut.PInt (sched.ScheduleNum)+"'";
  			General.NonQ(command);
+			command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.PInt (sched.ScheduleNum);
+			General.NonQ(command);
+			ScheduleOp op;
+			for(int i=0;i<sched.Ops.Count;i++){
+				op=new ScheduleOp();
+				op.ScheduleNum=sched.ScheduleNum;
+				op.OperatoryNum=sched.Ops[i];
+				ScheduleOps.Insert(op);
+			}
 		}
 
 		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
@@ -136,7 +185,7 @@ namespace OpenDental{
 				command+="ScheduleNum,";
 			}
 			command+="scheddate,starttime,stoptime,"
-				+"SchedType,ProvNum,BlockoutType,Note,Status,Op,EmployeeNum) VALUES(";
+				+"SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(sched.ScheduleNum)+"', ";
 			}
@@ -149,13 +198,19 @@ namespace OpenDental{
 				+"'"+POut.PInt   (sched.BlockoutType)+"', "
 				+"'"+POut.PString(sched.Note)+"', "
 				+"'"+POut.PInt   ((int)sched.Status)+"', "
-				+"'"+POut.PInt   (sched.Op)+"', "
 				+"'"+POut.PInt   (sched.EmployeeNum)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {
 				sched.ScheduleNum=General.NonQ(command,true);
+			}
+			ScheduleOp op;
+			for(int i=0;i<sched.Ops.Count;i++){
+				op=new ScheduleOp();
+				op.ScheduleNum=sched.ScheduleNum;
+				op.OperatoryNum=sched.Ops[i];
+				ScheduleOps.Insert(op);
 			}
 		}
 
@@ -184,13 +239,19 @@ namespace OpenDental{
 		private static bool Overlaps(Schedule sched){
 			List<Schedule> SchedListDay=Schedules.GetDayList(sched.SchedDate);
 			Schedule[] ListForType=Schedules.GetForType(SchedListDay,sched.SchedType,sched.ProvNum);
+			bool opsMatch;
 			for(int i=0;i<ListForType.Length;i++){
 				if(ListForType[i].SchedType==ScheduleType.Blockout){
 					//skip if blockout, and ops don't interfere
-					if(sched.Op!=0 && ListForType[i].Op!=0){//neither op can be zero, or they will interfere
-						if(sched.Op != ListForType[i].Op){
-							continue;
+					opsMatch=false;
+					for(int s1=0;s1<sched.Ops.Count;s1++){
+						if(ListForType[i].Ops.Contains(sched.Ops[s1])){
+							opsMatch=true;
+							break;
 						}
+					}
+					if(!opsMatch){
+						continue;
 					}
 				}
 				if(sched.ScheduleNum!=ListForType[i].ScheduleNum
@@ -470,17 +531,32 @@ namespace OpenDental{
 		}
 
 		///<summary>Clears all Blockout schedule entries for the given date range and the given ops.</summary>
-		public static void ClearBlockouts(DateTime dateStart,DateTime dateEnd,int[] opNums) {
-			string command="DELETE FROM schedule "
-				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+		public static void ClearBlockouts(DateTime dateStart,DateTime dateEnd,List<int> opNums) {
+			string command="SELECT * FROM schedule WHERE "
+				+"SchedDate >= "+POut.PDate(dateStart)+" "
 				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
-				+"AND SchedType=2 "//blockouts
-				+"AND (Op=0 ";
-			for(int i=0;i<opNums.Length;i++) {
-				command+="OR Op="+POut.PInt(opNums[i])+" ";
+				+"AND SchedType=2";//blockouts
+			List<Schedule> listSched=RefreshAndFill(command);
+			//First, remove all the given ScheduleOps.
+			for(int i=0;i<listSched.Count;i++){
+				for(int o=0;o<opNums.Count;o++){
+					if(listSched[i].Ops.Contains(opNums[o])){
+						command="DELETE FROM scheduleop "
+							+"WHERE ScheduleNum="+POut.PInt(listSched[i].ScheduleNum)+" "
+							+"AND OperatoryNum="+POut.PInt(opNums[o]);
+						General.NonQ(command);
+						listSched[i].Ops.Remove(opNums[o]);
+					}
+				}
 			}
-			command+=")";
-			General.NonQ(command);
+			//Then, delete any blockouts that no longer have any opnums.
+			for(int i=0;i<listSched.Count;i++){
+				if(listSched[i].Ops.Count>0){
+					continue;
+				}
+				command="DELETE FROM schedule WHERE ScheduleNum="+POut.PInt(listSched[i].ScheduleNum);
+				General.NonQ(command);
+			}			
 		}
 
 		

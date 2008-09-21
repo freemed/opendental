@@ -395,63 +395,43 @@ namespace OpenDental{
 				blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
 				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
-				if(IsWeeklyView){
-					if(schedForType[i].Op==0) {//all ops
-						rect=new RectangleF(
-							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
-							,ColDayWidth-1
-							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
-					}
-					else {//just one op
-						if(ApptViewItemL.GetIndexOp(schedForType[i].Op)==-1) {
+				for(int o=0;o<schedForType[i].Ops.Count;o++){	
+					if(IsWeeklyView){
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
-							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Op)+1
+							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColAptWidth-1
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
-				}
-				else{
-					if(schedForType[i].Op==0){//all ops
-						rect=new RectangleF(
-							TimeWidth+ProvWidth*ProvCount+1
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
-							,ColWidth*ColCount-1
-							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
-					}
-					else{//just one op
-						if(ApptViewItemL.GetIndexOp(schedForType[i].Op)==-1){
+					else{
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1){
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
-							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Op)+1
+							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColWidth-1
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
+					//paint either solid block or outline
+					if(PrefC.GetBool("SolidBlockouts")){
+						g.FillRectangle(blockBrush,rect);
+						g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
+					}
+					else{
+						g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
+					}				
+					g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
 				}
-				//paint either solid block or outline
-				if(PrefC.GetBool("SolidBlockouts")){
-					g.FillRectangle(blockBrush,rect);
-					g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
-				}
-				else{
-					g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
-				}				
-				g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
 			}         
 		}
 

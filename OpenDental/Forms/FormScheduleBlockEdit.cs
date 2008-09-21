@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(483,243);
+			this.butCancel.Location = new System.Drawing.Point(539,382);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 14;
@@ -91,7 +91,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(483,209);
+			this.butOK.Location = new System.Drawing.Point(539,348);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 12;
@@ -143,7 +143,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(18,243);
+			this.butDelete.Location = new System.Drawing.Point(18,382);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84,26);
 			this.butDelete.TabIndex = 17;
@@ -154,7 +154,8 @@ namespace OpenDental{
 			// 
 			this.listOp.Location = new System.Drawing.Point(443,43);
 			this.listOp.Name = "listOp";
-			this.listOp.Size = new System.Drawing.Size(115,134);
+			this.listOp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listOp.Size = new System.Drawing.Size(171,290);
 			this.listOp.TabIndex = 21;
 			// 
 			// labelOp
@@ -163,7 +164,7 @@ namespace OpenDental{
 			this.labelOp.Name = "labelOp";
 			this.labelOp.Size = new System.Drawing.Size(128,16);
 			this.labelOp.TabIndex = 20;
-			this.labelOp.Text = "Operatory";
+			this.labelOp.Text = "Operatories";
 			this.labelOp.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listType
@@ -205,7 +206,7 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(582,287);
+			this.ClientSize = new System.Drawing.Size(638,426);
 			this.Controls.Add(this.comboStop);
 			this.Controls.Add(this.comboStart);
 			this.Controls.Add(this.listOp);
@@ -251,12 +252,12 @@ namespace OpenDental{
 				listType.SelectedIndex=0;
 			}
 			listOp.Items.Clear();
-			listOp.Items.Add(Lan.g(this,"All Ops"));
-			listOp.SelectedIndex=0;
+			//listOp.Items.Add(Lan.g(this,"All Ops"));
+			//listOp.SelectedIndex=0;
 			for(int i=0;i<OperatoryC.ListShort.Count ;i++){
 				listOp.Items.Add(OperatoryC.ListShort[i].Abbrev);
-				if(SchedCur.Op==OperatoryC.ListShort[i].OperatoryNum){
-					listOp.SelectedIndex=i+1;
+				if(SchedCur.Ops.Contains(OperatoryC.ListShort[i].OperatoryNum)){
+					listOp.SetSelected(i,true);
 				}
 			}
 			DateTime time;
@@ -285,21 +286,23 @@ namespace OpenDental{
 		}
 
     private void butOK_Click(object sender, System.EventArgs e) { 
+			if(listOp.SelectedIndices.Count==0){
+				MsgBox.Show(this,"Please select at least one operatory first.");
+				return;
+			}
 		  try{
 				SchedCur.StartTime=DateTime.Parse(comboStart.Text);
 				SchedCur.StopTime=DateTime.Parse(comboStop.Text);
 			}
 			catch{
-				MessageBox.Show(Lan.g(this,"Incorrect time format"));
+				MsgBox.Show(this,"Incorrect time format");
 				return;
 			}
       SchedCur.Note=textNote.Text;
 			SchedCur.BlockoutType=DefC.Short[(int)DefCat.BlockoutTypes][listType.SelectedIndex].DefNum;
-			if(listOp.SelectedIndex==0){
-				SchedCur.Op=0;
-			}
-			else{
-				SchedCur.Op=OperatoryC.ListShort[listOp.SelectedIndex-1].OperatoryNum;
+			SchedCur.Ops=new List<int>();
+			for(int i=0;i<listOp.SelectedIndices.Count;i++){
+				SchedCur.Ops.Add(OperatoryC.ListShort[listOp.SelectedIndices[i]].OperatoryNum);
 			}
 			try{
 				Schedules.InsertOrUpdate(SchedCur,IsNew);
