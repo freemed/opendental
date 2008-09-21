@@ -479,10 +479,40 @@ namespace OpenDental{
 						INDEX (OperatoryNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-	//conversion script needs to go here
+					//conversion to new operatory paradigm for blockouts-------------------------------------------------------------------
+					//get all visible ops
+					command="SELECT OperatoryNum FROM operatory WHERE IsHidden=0";
+					table=General.GetTable(command);
+					List<int> visibleOps=new List<int>();
+					for(int i=0;i<table.Rows.Count;i++){
+						visibleOps.Add(PIn.PInt(table.Rows[i]["OperatoryNum"].ToString()));
+					}
+					//convert blockouts with op=0
+					command="SELECT ScheduleNum FROM schedule WHERE SchedType=2 "//blockout
+						+"AND Op=0";//indicates all ops
+					table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						//for each schedule, we need to insert a separate scheduleop for each visible op
+						for(int o=0;o<visibleOps.Count;o++){
+							command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
+								+table.Rows[i]["ScheduleNum"].ToString()+","
+								+POut.PInt(visibleOps[o])+")";
+							General.NonQ(command);
+						}
+					}
+					//convert blockouts with op>0
+					command="SELECT ScheduleNum,Op FROM schedule WHERE SchedType=2 "//blockout
+						+"AND Op>0";//indicates one assigned op
+					table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
+							+table.Rows[i]["ScheduleNum"].ToString()+","
+							+table.Rows[i]["Op"].ToString()+")";
+						General.NonQ(command);
+					}
 					command="ALTER TABLE schedule DROP Op";
 					General.NonQ(command);
-
+					//end of operatory conversion-------------------------------------------------------------------------------
 
 
 
