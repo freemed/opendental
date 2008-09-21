@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -201,10 +202,15 @@ namespace OpenDental{
 			comboStart.Text=SchedCur.StartTime.ToShortTimeString();
       comboStop.Text=SchedCur.StopTime.ToShortTimeString();
 			listOps.Items.Add(Lan.g(this,"not specified"));
-			//for(int i=0;i<OperatoryC.ListShort.Count;i++){
-			//	listOps.Items.Add(OperatoryC.ListShort[i].OpName);
-			//}
-			listOps.SetSelected(0,true);
+			for(int i=0;i<OperatoryC.ListShort.Count;i++){
+				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
+				if(SchedCur.Ops.Contains(OperatoryC.ListShort[i].OperatoryNum)){
+					listOps.SetSelected(i+1,true);
+				}
+			}
+			if(listOps.SelectedIndices.Count==0){
+				listOps.SetSelected(0,true);
+			}
 			textNote.Text=SchedCur.Note;
 			if(SchedCur.StartTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay 
 				&& SchedCur.StopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
@@ -223,19 +229,35 @@ namespace OpenDental{
 		}
 
     private void butOK_Click(object sender, System.EventArgs e) { 
+			if(listOps.Visible){
+				if(listOps.SelectedIndices.Count>1 && listOps.SelectedIndices.Contains(0)){
+					MsgBox.Show(this,"Invalid selection of ops.");
+					return;
+				}
+				if(listOps.SelectedIndices.Count==0){
+					MsgBox.Show(this,"Please select ops first.");
+					return;
+				}
+			}
       if(comboStart.Visible){   
 			  try{
 					DateTime.Parse(comboStart.Text);
 					DateTime.Parse(comboStop.Text);
 				}
 				catch{
-					MessageBox.Show(Lan.g(this,"Incorrect time format"));
+					MsgBox.Show(this,"Incorrect time format");
 					return;
 				}
 			}
 			SchedCur.StartTime=DateTime.Parse(comboStart.Text);
 			SchedCur.StopTime=DateTime.Parse(comboStop.Text);
       SchedCur.Note=textNote.Text;
+			SchedCur.Ops=new List<int>();
+			if(!listOps.SelectedIndices.Contains(0)){
+				for(int i=0;i<listOps.SelectedIndices.Count;i++){
+					SchedCur.Ops.Add(OperatoryC.ListShort[listOps.SelectedIndices[i]-1].OperatoryNum);
+				}
+			}
 			DialogResult=DialogResult.OK;		  
     }
 

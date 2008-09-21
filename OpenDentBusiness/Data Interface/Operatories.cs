@@ -102,6 +102,15 @@ namespace OpenDentBusiness{
 			DataTable table=General.GetTable(command);
 			return TableToList(table);
 		}
+
+		public static string GetAbbrev(int operatoryNum){
+			for(int i=0;i<OperatoryC.Listt.Count;i++){
+				if(OperatoryC.Listt[i].OperatoryNum==operatoryNum){
+					return OperatoryC.Listt[i].Abbrev;
+				}
+			}
+			return "";
+		}
 		
 	
 	}

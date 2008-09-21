@@ -298,6 +298,95 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		///<summary>This overload is for when the listForPeriod includes multiple days.</summary>
+		public static List<Schedule> GetSchedsForOp(List<Schedule> listForPeriod,DayOfWeek dayOfWeek,Operatory op){
+			List<Schedule> listForDay=new List<Schedule>();
+			for(int i=0;i<listForPeriod.Count;i++){
+				//if day of week doesn't match, then skip
+				if(listForPeriod[i].SchedDate.DayOfWeek!=dayOfWeek){
+					continue;
+				}
+				listForDay.Add(listForPeriod[i].Copy());
+			}
+			return GetSchedsForOp(listForDay,op);
+		}
+
+		///<summary>This overload is for when the listForPeriod includes only one day.</summary>
+		public static List<Schedule> GetSchedsForOp(List<Schedule> listForPeriod,Operatory op){
+			List<Schedule> retVal=new List<Schedule>();
+			for(int i=0;i<listForPeriod.Count;i++){
+				//if a schedule is not a provider type, then skip it
+				if(listForPeriod[i].SchedType!=ScheduleType.Provider){
+					continue;
+				}
+				//if the schedule has ops set, then only apply the schedule to those ops
+				if(listForPeriod[i].Ops.Count>0){
+					if(listForPeriod[i].Ops.Contains(op.OperatoryNum)){
+						retVal.Add(listForPeriod[i].Copy());
+					}
+				}
+				//but if the schedule does not have ops set, then look at the op settings to determine whether to use it.
+				else{
+					if(op.ProvDentist!=0 && !op.IsHygiene) {//op uses dentist
+						if(listForPeriod[i].ProvNum==op.ProvDentist){
+							retVal.Add(listForPeriod[i].Copy());
+						}
+					}
+					else if(op.ProvHygienist!=0 && op.IsHygiene) {//op uses hygienist
+						if(listForPeriod[i].ProvNum==op.ProvHygienist){
+							retVal.Add(listForPeriod[i].Copy());
+						}
+					}
+					else {//op has no provider set
+						//so use the provider that's set for unassigned ops
+						if(listForPeriod[i].ProvNum==PrefC.GetInt("ScheduleProvUnassigned")){
+							retVal.Add(listForPeriod[i].Copy());
+						}
+					}
+				}
+			}
+			return retVal;
+		}
+
+		public static int GetAssignedProvNumForSpot(List<Schedule> listForPeriod,Operatory op,bool isSecondary,DateTime aptDateTime){
+			//first, look for a sched assigned specifically to that spot
+			for(int i=0;i<listForPeriod.Count;i++){
+				if(listForPeriod[i].SchedType!=ScheduleType.Provider){
+					continue;
+				}
+				if(aptDateTime.Date!=listForPeriod[i].SchedDate){
+					continue;
+				}
+				if(!listForPeriod[i].Ops.Contains(op.OperatoryNum)){
+					continue;
+				}
+				if(isSecondary && !Providers.GetIsSec(listForPeriod[i].ProvNum)){
+					continue;
+				}
+				if(!isSecondary && Providers.GetIsSec(listForPeriod[i].ProvNum)){
+					continue;
+				}
+				//for the time, if the sched starts later than the apt starts
+				if(listForPeriod[i].StartTime.TimeOfDay > aptDateTime.TimeOfDay){
+					continue;
+				}
+				//or if the sched ends (before or at same time) as the apt starts
+				if(listForPeriod[i].StopTime.TimeOfDay <= aptDateTime.TimeOfDay){
+					continue;
+				}
+				//matching sched found
+				return listForPeriod[i].ProvNum;
+			}
+			//if no matching sched found, then use the operatory
+			if(isSecondary){
+				return op.ProvHygienist;
+			}
+			else{
+				return op.ProvDentist;
+			}
+			return 0;//none
+		}
+
 		///<summary>Clears all blockouts for day.  But then defaults would show.  So adds a "closed" blockout.</summary>
 		public static void ClearBlockoutsForDay(DateTime date){
 			//SetAllDefault(date,ScheduleType.Blockout,0);

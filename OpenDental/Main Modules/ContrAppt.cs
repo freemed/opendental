@@ -1860,12 +1860,20 @@ namespace OpenDental{
 			if(aptCur.AptStatus==ApptStatus.UnschedList){
 				aptCur.AptStatus=ApptStatus.Scheduled;
 			}
-			if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
-				aptCur.ProvNum=curOp.ProvDentist;
+			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
+			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
+			if(assignedDent!=0){
+				//if no dentist is assigned to spot, then keep the original dentist without prompt.  All appts must have prov.
+				if(aptCur.ProvNum!=assignedDent	|| aptCur.ProvHyg!=assignedHyg){
+					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
+						aptCur.ProvNum=assignedDent;
+						if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
+							aptCur.ProvHyg=assignedHyg;
+						}
+					}
+				}
 			}
-			aptCur.ProvHyg=curOp.ProvHygienist;
-			aptCur.IsHygiene=curOp.IsHygiene;
-			aptCur.ClinicNum=curOp.ClinicNum;
+			aptCur.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
 				int plannedAptNum=aptCur.AptNum;
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
@@ -2241,8 +2249,9 @@ namespace OpenDental{
 
 		///<summary>Used by parent form when a dialog needs to be displayed on the mouse down.</summary>
 		public void MouseUpForced(){
-			if(!mouseIsDown)
+			if(!mouseIsDown){
 				return;
+			}
 			mouseIsDown=false;
 			if(TempApptSingle!=null){
 				TempApptSingle.Dispose();
@@ -2451,23 +2460,20 @@ namespace OpenDental{
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
-			if(curOp.ProvDentist!=0){
-				//if no dentist is assigned to op, then keep the original dentist without prompt.  All appts must have prov.
-				if(apt.ProvNum!=curOp.ProvDentist
-					|| apt.ProvHyg!=curOp.ProvHygienist
-					|| apt.IsHygiene!=curOp.IsHygiene
-					|| apt.ClinicNum!=curOp.ClinicNum)
-				{
+			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
+			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
+			if(assignedDent!=0){
+				//if no dentist is assigned to spot, then keep the original dentist without prompt.  All appts must have prov.
+				if(apt.ProvNum!=assignedDent	|| apt.ProvHyg!=assignedHyg){
 					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
-						apt.ProvNum=curOp.ProvDentist;
-						if(curOp.ProvHygienist!=0){//the hygienist will only be changed if the op has a hygienist.
-							apt.ProvHyg=curOp.ProvHygienist;
-							apt.IsHygiene=curOp.IsHygiene;
+						apt.ProvNum=assignedDent;
+						if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
+							apt.ProvHyg=assignedHyg;
 						}
-						apt.ClinicNum=curOp.ClinicNum;
 					}
 				}
 			}
+			apt.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			try {
 				Appointments.InsertOrUpdate(apt,aptOld,false);
 			}

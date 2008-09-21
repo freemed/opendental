@@ -290,7 +290,7 @@ namespace OpenDental{
 		///<summary>Including the practice schedule</summary>
 		private void DrawMainBackground(Graphics g){
 			//SchedDefault[] schedDefs;//for one type at a time
-			Schedule[] schedForType;
+			List<Schedule> schedsForOp;
 			//one giant rectangle for everything closed
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
 			//then, loop through each day and operatory
@@ -316,32 +316,21 @@ namespace OpenDental{
 						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,Height);
 					}
 					for(int j=0;j<ColCount;j++) {
-						curOp=OperatoryC.ListShort[ApptViewItems.VisOps[j]];
-						if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
-							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
-						}
-						else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {//hygienist
-							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
-						}
-						else {//no provider set
-							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefC.GetInt("ScheduleProvUnassigned"));
-						}
-						for(int i=0;i<schedForType.Length;i++) {
-							if((int)schedForType[i].SchedDate.DayOfWeek!=d+1){
-								continue;
-							}
+						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,(DayOfWeek)(d+1),OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
+						for(int i=0;i<schedsForOp.Count;i++) {
 							g.FillRectangle(openBrush
 								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
-								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
 								,ColAptWidth
-								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-								+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
 						}
 					}
 				}
 			}
 			else{//only one day showing
 				isHoliday=false;
+				//Schedule[] schedForType;
 				for(int i=0;i<SchedListPeriod.Count;i++) {
 					if(SchedListPeriod[i].SchedType!=ScheduleType.Practice) {
 						continue;
@@ -353,27 +342,36 @@ namespace OpenDental{
 					break;
 				}
 				for(int j=0;j<ColCount;j++) {
-					curOp=OperatoryC.ListShort[ApptViewItems.VisOps[j]];
-					if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
-						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
+					schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
+					//first, do all the backgrounds
+					for(int i=0;i<schedsForOp.Count;i++) {
+						g.FillRectangle(openBrush
+							,TimeWidth+ProvWidth*ProvCount+j*ColWidth
+							,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+							,ColWidth
+							,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+							+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
 					}
-					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {//hygienist
-						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
-					}
-					else {//no provider set
-						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefC.GetInt("ScheduleProvUnassigned"));
-					}
-					if(isHoliday) {
-						g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
-					}
-					else{
-						for(int i=0;i<schedForType.Length;i++) {
-							g.FillRectangle(openBrush
+					//now, fill up to 2 timebars along the left side of each rectangle.
+					for(int i=0;i<schedsForOp.Count;i++) {
+						if(schedsForOp[i].Ops.Count==0){//if this schedule is not assigned to specific ops, skip
+							continue;
+						}
+						if(!Providers.GetIsSec(schedsForOp[i].ProvNum)){//if the provider is a dentist
+							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
 								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
-								,ColWidth
-								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,ProvWidth
+								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
+						}
+						else{//hygienist
+							g.FillRectangle(new SolidBrush(Providers.GetColor(schedsForOp[i].ProvNum))
+								,TimeWidth+ProvWidth*ProvCount+j*ColWidth+ProvWidth
+								,schedsForOp[i].StartTime.Hour*Lh*RowsPerHr+(int)schedsForOp[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,ProvWidth
+								,(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Hours*Lh*RowsPerHr//6
+								+(schedsForOp[i].StopTime-schedsForOp[i].StartTime).Minutes*Lh/MinPerRow);//10
 						}
 					}
 				}
@@ -416,9 +414,10 @@ namespace OpenDental{
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
 							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+							+ProvWidth*2//so they don't overlap prov bars
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
-							,ColWidth-1
+							,ColWidth-1-ProvWidth*2
 							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
