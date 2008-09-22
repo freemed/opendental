@@ -33,16 +33,14 @@
 			this.labelQty = new System.Windows.Forms.Label();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.groupSupplier = new System.Windows.Forms.GroupBox();
 			this.labelInvoice = new System.Windows.Forms.Label();
 			this.textDate = new System.Windows.Forms.TextBox();
 			this.labelDate = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.butAddAnesthetic = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butSetupAnesthMeds = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupSupplier.SuspendLayout();
 			this.SuspendLayout();
@@ -51,7 +49,7 @@
 			// 
 			this.textQty.Location = new System.Drawing.Point(247, 20);
 			this.textQty.Name = "textQty";
-			this.textQty.Size = new System.Drawing.Size(100, 20);
+			this.textQty.Size = new System.Drawing.Size(219, 20);
 			this.textQty.TabIndex = 2;
 			// 
 			// labelQty
@@ -66,6 +64,8 @@
 			// comboSupplier
 			// 
 			this.comboSupplier.FormattingEnabled = true;
+			this.comboSupplier.Items.AddRange(new object[] {
+            "Add new..."});
 			this.comboSupplier.Location = new System.Drawing.Point(42, 110);
 			this.comboSupplier.Name = "comboSupplier";
 			this.comboSupplier.Size = new System.Drawing.Size(229, 21);
@@ -73,7 +73,6 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.butAddAnesthetic);
 			this.groupBox1.Controls.Add(this.comboBox1);
 			this.groupBox1.Controls.Add(this.textQty);
 			this.groupBox1.Controls.Add(this.labelQty);
@@ -84,6 +83,14 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Anesthetic Medication";
 			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(10, 19);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(231, 21);
+			this.comboBox1.TabIndex = 0;
+			// 
 			// textBox1
 			// 
 			this.textBox1.Location = new System.Drawing.Point(280, 110);
@@ -93,7 +100,6 @@
 			// 
 			// groupSupplier
 			// 
-			this.groupSupplier.Controls.Add(this.butSetupAnesthMeds);
 			this.groupSupplier.Controls.Add(this.butClose);
 			this.groupSupplier.Controls.Add(this.butCancel);
 			this.groupSupplier.Controls.Add(this.labelInvoice);
@@ -131,30 +137,6 @@
 			this.labelDate.TabIndex = 10;
 			this.labelDate.Text = "Date";
 			// 
-			// comboBox1
-			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(10, 19);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(231, 21);
-			this.comboBox1.TabIndex = 0;
-			// 
-			// butAddAnesthetic
-			// 
-			this.butAddAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddAnesthetic.Autosize = true;
-			this.butAddAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddAnesthetic.CornerRadius = 4F;
-			this.butAddAnesthetic.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddAnesthetic.Location = new System.Drawing.Point(366, 16);
-			this.butAddAnesthetic.Name = "butAddAnesthetic";
-			this.butAddAnesthetic.Size = new System.Drawing.Size(90, 26);
-			this.butAddAnesthetic.TabIndex = 54;
-			this.butAddAnesthetic.Text = "Add new...";
-			this.butAddAnesthetic.UseVisualStyleBackColor = true;
-			// 
 			// butClose
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -187,27 +169,11 @@
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butSetupAnesthMeds
-			// 
-			this.butSetupAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSetupAnesthMeds.Autosize = true;
-			this.butSetupAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetupAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSetupAnesthMeds.CornerRadius = 4F;
-			this.butSetupAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSetupAnesthMeds.Location = new System.Drawing.Point(12, 53);
-			this.butSetupAnesthMeds.Name = "butSetupAnesthMeds";
-			this.butSetupAnesthMeds.Size = new System.Drawing.Size(90, 26);
-			this.butSetupAnesthMeds.TabIndex = 138;
-			this.butSetupAnesthMeds.Text = "Setup inventory";
-			this.butSetupAnesthMeds.UseVisualStyleBackColor = true;
-			this.butSetupAnesthMeds.Click += new System.EventHandler(this.butSetupAnesthMeds_Click);
-			// 
 			// FormAnestheticMedsIntake
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(532, 230);
+			this.ClientSize = new System.Drawing.Size(532, 209);
 			this.Controls.Add(this.labelDate);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.textBox1);
@@ -240,7 +206,5 @@
 		private System.Windows.Forms.TextBox textDate;
 		private System.Windows.Forms.Label labelDate;
 		private System.Windows.Forms.ComboBox comboBox1;
-		private OpenDental.UI.Button butAddAnesthetic;
-		private OpenDental.UI.Button butSetupAnesthMeds;
 	}
 }

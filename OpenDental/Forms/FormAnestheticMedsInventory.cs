@@ -10,15 +10,19 @@ using OpenDental.UI;
 
 namespace OpenDental
 {
-	public partial class FormAnestheticMedsInventory : Form{
-		private DataGridViewTextBoxColumn AnestheticMed;
-		private DataGridViewTextBoxColumn HowSupplied;
-		private DataGridViewTextBoxColumn QtyOnHand;
+	public partial class FormAnestheticMedsInventory : Form
+	{
 		private GroupBox groupAnestheticMeds;
 		private OpenDental.UI.Button butDelAnesthMeds;
 		private OpenDental.UI.Button butAddAnesthMeds;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butCancel;
+		private OpenDental.UI.Button butAnesthMedIntake;
+		private Label labelIntakeNewMeds;
+		private OpenDental.UI.Button butAdjustQtys;
+		private DataGridViewTextBoxColumn AnestheticMed;
+		private DataGridViewTextBoxColumn HowSupplied;
+		private DataGridViewTextBoxColumn QtyOnHand;
 		private DataGridView gridAnesthMeds;
 		
 		public FormAnestheticMedsInventory()
@@ -32,14 +36,17 @@ namespace OpenDental
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsInventory));
 			this.gridAnesthMeds = new System.Windows.Forms.DataGridView();
-			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupAnestheticMeds = new System.Windows.Forms.GroupBox();
+			this.labelIntakeNewMeds = new System.Windows.Forms.Label();
+			this.butAdjustQtys = new OpenDental.UI.Button();
+			this.butAnesthMedIntake = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelAnesthMeds = new OpenDental.UI.Button();
 			this.butAddAnesthMeds = new OpenDental.UI.Button();
+			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMeds)).BeginInit();
 			this.groupAnestheticMeds.SuspendLayout();
 			this.SuspendLayout();
@@ -57,26 +64,11 @@ namespace OpenDental
 			this.gridAnesthMeds.TabIndex = 0;
 			this.gridAnesthMeds.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAnesthMeds_CellContentClick);
 			// 
-			// AnestheticMed
-			// 
-			this.AnestheticMed.HeaderText = "Anesthetic";
-			this.AnestheticMed.Name = "AnestheticMed";
-			this.AnestheticMed.Width = 240;
-			// 
-			// HowSupplied
-			// 
-			this.HowSupplied.HeaderText = "How supplied";
-			this.HowSupplied.Name = "HowSupplied";
-			this.HowSupplied.Width = 160;
-			// 
-			// QtyOnHand
-			// 
-			this.QtyOnHand.HeaderText = "Quantity on hand";
-			this.QtyOnHand.Name = "QtyOnHand";
-			this.QtyOnHand.Width = 140;
-			// 
 			// groupAnestheticMeds
 			// 
+			this.groupAnestheticMeds.Controls.Add(this.butAdjustQtys);
+			this.groupAnestheticMeds.Controls.Add(this.labelIntakeNewMeds);
+			this.groupAnestheticMeds.Controls.Add(this.butAnesthMedIntake);
 			this.groupAnestheticMeds.Controls.Add(this.butClose);
 			this.groupAnestheticMeds.Controls.Add(this.butCancel);
 			this.groupAnestheticMeds.Controls.Add(this.gridAnesthMeds);
@@ -84,10 +76,54 @@ namespace OpenDental
 			this.groupAnestheticMeds.Controls.Add(this.butAddAnesthMeds);
 			this.groupAnestheticMeds.Location = new System.Drawing.Point(24, 24);
 			this.groupAnestheticMeds.Name = "groupAnestheticMeds";
-			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 403);
+			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 459);
 			this.groupAnestheticMeds.TabIndex = 1;
 			this.groupAnestheticMeds.TabStop = false;
 			this.groupAnestheticMeds.Text = "Anesthetic Medications";
+			// 
+			// labelIntakeNewMeds
+			// 
+			this.labelIntakeNewMeds.Location = new System.Drawing.Point(248, 360);
+			this.labelIntakeNewMeds.Name = "labelIntakeNewMeds";
+			this.labelIntakeNewMeds.Size = new System.Drawing.Size(272, 26);
+			this.labelIntakeNewMeds.TabIndex = 142;
+			this.labelIntakeNewMeds.Text = "This button should only be used after anesthetic  medications are added to the li" +
+				"st above";
+			this.labelIntakeNewMeds.Click += new System.EventHandler(this.labelIntakeNewMeds_Click);
+			// 
+			// butAdjustQtys
+			// 
+			this.butAdjustQtys.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdjustQtys.Autosize = true;
+			this.butAdjustQtys.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdjustQtys.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdjustQtys.CornerRadius = 4F;
+			this.butAdjustQtys.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdjustQtys.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdjustQtys.Location = new System.Drawing.Point(106, 392);
+			this.butAdjustQtys.Name = "butAdjustQtys";
+			this.butAdjustQtys.Size = new System.Drawing.Size(136, 26);
+			this.butAdjustQtys.TabIndex = 143;
+			this.butAdjustQtys.Text = "Adjust Qty on hand";
+			this.butAdjustQtys.UseVisualStyleBackColor = true;
+			this.butAdjustQtys.Click += new System.EventHandler(this.butAdjustQtys_Click);
+			// 
+			// butAnesthMedIntake
+			// 
+			this.butAnesthMedIntake.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthMedIntake.Autosize = true;
+			this.butAnesthMedIntake.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthMedIntake.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthMedIntake.CornerRadius = 4F;
+			this.butAnesthMedIntake.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAnesthMedIntake.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAnesthMedIntake.Location = new System.Drawing.Point(106, 360);
+			this.butAnesthMedIntake.Name = "butAnesthMedIntake";
+			this.butAnesthMedIntake.Size = new System.Drawing.Size(136, 26);
+			this.butAnesthMedIntake.TabIndex = 141;
+			this.butAnesthMedIntake.Text = "Intake new meds";
+			this.butAnesthMedIntake.UseVisualStyleBackColor = true;
+			this.butAnesthMedIntake.Click += new System.EventHandler(this.butAnesthMedIntake_Click);
 			// 
 			// butClose
 			// 
@@ -103,6 +139,7 @@ namespace OpenDental
 			this.butClose.TabIndex = 140;
 			this.butClose.Text = "Save and Close";
 			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butCancel
 			// 
@@ -154,9 +191,27 @@ namespace OpenDental
 			this.butAddAnesthMeds.UseVisualStyleBackColor = true;
 			this.butAddAnesthMeds.Click += new System.EventHandler(this.butAddAnesthMeds_Click);
 			// 
+			// AnestheticMed
+			// 
+			this.AnestheticMed.HeaderText = "Anesthetic medication";
+			this.AnestheticMed.Name = "AnestheticMed";
+			this.AnestheticMed.Width = 240;
+			// 
+			// HowSupplied
+			// 
+			this.HowSupplied.HeaderText = "How supplied";
+			this.HowSupplied.Name = "HowSupplied";
+			this.HowSupplied.Width = 160;
+			// 
+			// QtyOnHand
+			// 
+			this.QtyOnHand.HeaderText = "Quantity on hand (mL)";
+			this.QtyOnHand.Name = "QtyOnHand";
+			this.QtyOnHand.Width = 140;
+			// 
 			// FormAnestheticMedsInventory
 			// 
-			this.ClientSize = new System.Drawing.Size(755, 451);
+			this.ClientSize = new System.Drawing.Size(755, 510);
 			this.Controls.Add(this.groupAnestheticMeds);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsInventory";
@@ -182,6 +237,28 @@ namespace OpenDental
 		}
 
 		private void gridAnesthMeds_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
+		}
+
+		private void butAnesthMedIntake_Click(object sender, EventArgs e)
+		{
+			FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
+			FormI.ShowDialog();
+		}
+
+		private void labelIntakeNewMeds_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void butAdjustQtys_Click(object sender, EventArgs e)
+		{
+			FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+			FormA.ShowDialog();
+		}
+
+		private void butClose_Click(object sender, EventArgs e)
 		{
 
 		}
