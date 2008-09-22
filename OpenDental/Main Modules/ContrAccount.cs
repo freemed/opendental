@@ -3179,6 +3179,10 @@ namespace OpenDental {
 			stmt.SinglePatient=false;
 			stmt.Intermingled=false;
 			stmt.DateRangeFrom=DateTime.MinValue;
+			if (PrefC.GetBool("IntermingleFamilyDefault"))
+			{
+				stmt.Intermingled = true;
+			}
 			if (PrefC.GetBool("FuchsOptionsOn"))
 			{
 				stmt.DateRangeFrom = PIn.PDate(DateTime.Today.AddDays(-45).ToShortDateString());
@@ -3217,6 +3221,10 @@ namespace OpenDental {
 			stmt.DateRangeTo=DateTime.Today;
 			stmt.Note="";
 			stmt.NoteBold="";
+			if (PrefC.GetBool("IntermingleFamilyDefault"))
+			{
+				stmt.Intermingled = true;
+			}
 			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3229,11 +3237,10 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.Email;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
-			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+			stmt.Intermingled = false;
+			if (PrefC.GetBool("IntermingleFamilyDefault"))
+			{
 				stmt.Intermingled=true;
-			}
-			else {
-				stmt.Intermingled=false;
 			}
 			stmt.DateRangeFrom=DateTime.MinValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
