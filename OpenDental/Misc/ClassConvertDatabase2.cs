@@ -512,10 +512,37 @@ namespace OpenDental{
 					}
 					command="ALTER TABLE schedule DROP Op";
 					General.NonQ(command);
-					//end of operatory conversion-------------------------------------------------------------------------------
-
-
-
+					//Fee schedule name conversion-------------------------------------------------------------------------------
+					command="DROP TABLE IF EXISTS feesched";
+					General.NonQ(command);
+					command=@"CREATE TABLE feesched (
+						FeeSchedNum int NOT NULL auto_increment,
+						Description varchar(255),
+						FeeSchedType int NOT NULL,
+						ItemOrder int NOT NULL,
+						IsHidden tinyint(1) NOT NULL,
+						PRIMARY KEY (FeeSchedNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+					command="SELECT DefNum,ItemName,ItemValue,ItemOrder,IsHidden FROM definition WHERE Category=7";//fee schedule names
+					table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						command="INSERT INTO feesched(FeeSchedNum,Description,FeeSchedType,ItemOrder,IsHidden) VALUES("
+							+table.Rows[i]["DefNum"].ToString()+","
+							+"'"+POut.PString(table.Rows[i]["ItemName"].ToString())+"',";
+						if(table.Rows[i]["ItemValue"].ToString()=="A"){
+							command+=POut.PInt((int)FeeScheduleType.Allowed)+",";
+						}
+						else if(table.Rows[i]["ItemValue"].ToString()=="C"){
+							command+=POut.PInt((int)FeeScheduleType.CoPay)+",";
+						}
+						else{
+							command+=POut.PInt((int)FeeScheduleType.Normal)+",";
+						}
+						command+=table.Rows[i]["ItemOrder"].ToString()+","//although this will be reset in the UI
+							+table.Rows[i]["IsHidden"].ToString()+")";
+						General.NonQ(command);
+					}
 
 
 
