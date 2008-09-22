@@ -254,8 +254,8 @@ namespace OpenDental
 
 		private void butAdjustQtys_Click(object sender, EventArgs e)
 		{
-			//FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
-			//FormA.ShowDialog();
+			FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+			FormA.ShowDialog();
 		}
 
 		private void butClose_Click(object sender, EventArgs e)
