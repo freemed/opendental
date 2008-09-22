@@ -277,7 +277,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		Sheets,
 		///<summary></summary>
-		RecallTypes
+		RecallTypes,
+		///<summary></summary>
+		FeeSchedules
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

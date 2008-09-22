@@ -388,6 +388,9 @@
     <Compile Include="Forms\FormAnestheticMedAdjQtys.designer.cs">
       <DependentUpon>FormAnestheticMedAdjQtys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFeeScheds.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormApptProcs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3571,6 +3574,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticMedAdjQtys.resx">
       <DependentUpon>FormAnestheticMedAdjQtys.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFeeScheds.resx">
+      <DependentUpon>FormFeeScheds.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptProcs.resx">

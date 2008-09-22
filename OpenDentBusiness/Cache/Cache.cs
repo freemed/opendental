@@ -57,6 +57,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
 				//Fees.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.FeeSchedules) || isAll){
+				ds.Tables.Add(FeeScheds.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				//CovCatL.Refresh();
 				//CovSpanL.Refresh();
