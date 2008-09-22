@@ -382,6 +382,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAnestheticMedAdjQtys.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedAdjQtys.designer.cs">
+      <DependentUpon>FormAnestheticMedAdjQtys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormApptProcs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3561,6 +3567,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnestheticMedAdjQtys.resx">
+      <DependentUpon>FormAnestheticMedAdjQtys.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptProcs.resx">
