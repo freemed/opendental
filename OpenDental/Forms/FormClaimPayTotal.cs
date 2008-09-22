@@ -547,6 +547,68 @@ namespace OpenDental
 			FillGrid();
 		}
 
+		private void SaveAllowedFees(){
+			//if no allowed fees entered, then nothing to do 
+			bool allowedFeesEntered=false;
+			for(int i=0;i<gridMain.Rows.Count;i++){
+				if(gridMain.Rows[i].Cells[7].Text!=""){
+					allowedFeesEntered=true;
+					break;
+				}
+			}
+			if(!allowedFeesEntered){
+				return;
+			}
+			//if no allowed fee schedule, then nothing to do
+			InsPlan plan=InsPlans.GetPlan(ClaimProcsToEdit[0].PlanNum,PlanList);
+			if(plan.PlanType!="p" && plan.AllowedFeeSched==0){//not ppo, and no allowed fee sched
+				return;
+			}
+			//ask user if they want to save the fees
+			if(!MsgBox.Show(this,true,"Save the allowed amounts to the allowed fee schedule?")){
+				return;
+			}
+			//select the feeSchedule
+			int feeSched=-1;
+			if(plan.PlanType=="p"){//ppo
+				feeSched=plan.FeeSched;
+			}
+			else if(plan.AllowedFeeSched!=0){//an allowed fee schedule exists
+				feeSched=plan.AllowedFeeSched;
+			}
+			int feeOrder=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
+			if(feeOrder==-1){
+				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
+				return;
+			}
+			Fee FeeCur=null;
+			int codeNum;
+			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
+			Procedure proc;
+			for(int i=0;i<ClaimProcsToEdit.Length;i++){
+				//this gives error message if proc not found:
+				proc=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum);
+				codeNum=proc.CodeNum;
+				if(codeNum==0){
+					continue;
+				}
+				FeeCur=Fees.GetFeeByOrder(codeNum,feeOrder);
+				if(FeeCur==null){
+					FeeCur=new Fee();
+					FeeCur.FeeSched=feeSched;
+					FeeCur.CodeNum=codeNum;
+					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
+					Fees.Insert(FeeCur);
+				}
+				else{
+					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
+					Fees.Update(FeeCur);
+				}
+			}
+			//Fees.Refresh();//redundant?
+			DataValid.SetInvalid(InvalidType.Fees);
+		}
+
 		private void butOK_Click(object sender,System.EventArgs e) {
 			try {
 				SaveGridChanges();
@@ -555,8 +617,7 @@ namespace OpenDental
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//if an allowed fee schedule exists, then ask user if they want to update it.
-
+			SaveAllowedFees();
 			DialogResult=DialogResult.OK;
 		}
 
