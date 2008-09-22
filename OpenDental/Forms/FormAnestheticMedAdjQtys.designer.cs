@@ -26,15 +26,15 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsAdjQtys));
 			this.gridAnesthMedsAdjQtys = new System.Windows.Forms.DataGridView();
-			this.labelAdjustQtys = new System.Windows.Forms.Label();
-			this.groupBoxAdjQtys = new System.Windows.Forms.GroupBox();
-			this.button1 = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
 			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyAdjustment = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.labelAdjustQtys = new System.Windows.Forms.Label();
+			this.groupBoxAdjQtys = new System.Windows.Forms.GroupBox();
+			this.button1 = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMedsAdjQtys)).BeginInit();
 			this.groupBoxAdjQtys.SuspendLayout();
 			this.SuspendLayout();
@@ -53,6 +53,36 @@ namespace OpenDental{
 			this.gridAnesthMedsAdjQtys.Size = new System.Drawing.Size(803, 307);
 			this.gridAnesthMedsAdjQtys.TabIndex = 4;
 			this.gridAnesthMedsAdjQtys.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAnesthMeds_CellContentClick);
+			// 
+			// AnestheticMed
+			// 
+			this.AnestheticMed.HeaderText = "Anesthetic medication";
+			this.AnestheticMed.Name = "AnestheticMed";
+			this.AnestheticMed.Width = 240;
+			// 
+			// HowSupplied
+			// 
+			this.HowSupplied.HeaderText = "How supplied";
+			this.HowSupplied.Name = "HowSupplied";
+			this.HowSupplied.Width = 160;
+			// 
+			// QtyOnHand
+			// 
+			this.QtyOnHand.HeaderText = "Quantity on hand";
+			this.QtyOnHand.Name = "QtyOnHand";
+			this.QtyOnHand.Width = 80;
+			// 
+			// QtyAdjustment
+			// 
+			this.QtyAdjustment.HeaderText = "Quantity Adjustment";
+			this.QtyAdjustment.Name = "QtyAdjustment";
+			this.QtyAdjustment.Width = 80;
+			// 
+			// Notes
+			// 
+			this.Notes.HeaderText = "Notes";
+			this.Notes.Name = "Notes";
+			this.Notes.Width = 200;
 			// 
 			// labelAdjustQtys
 			// 
@@ -85,7 +115,7 @@ namespace OpenDental{
 			this.button1.CornerRadius = 4F;
 			this.button1.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(653, 380);
+			this.button1.Location = new System.Drawing.Point(653, 379);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(66, 26);
 			this.button1.TabIndex = 141;
@@ -100,43 +130,13 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(725, 380);
+			this.butClose.Location = new System.Drawing.Point(725, 379);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(90, 26);
 			this.butClose.TabIndex = 142;
 			this.butClose.Text = "Save and Close";
 			this.butClose.UseVisualStyleBackColor = true;
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// AnestheticMed
-			// 
-			this.AnestheticMed.HeaderText = "Anesthetic medication";
-			this.AnestheticMed.Name = "AnestheticMed";
-			this.AnestheticMed.Width = 240;
-			// 
-			// HowSupplied
-			// 
-			this.HowSupplied.HeaderText = "How supplied";
-			this.HowSupplied.Name = "HowSupplied";
-			this.HowSupplied.Width = 160;
-			// 
-			// QtyOnHand
-			// 
-			this.QtyOnHand.HeaderText = "Quantity on hand";
-			this.QtyOnHand.Name = "QtyOnHand";
-			this.QtyOnHand.Width = 80;
-			// 
-			// QtyAdjustment
-			// 
-			this.QtyAdjustment.HeaderText = "Quantity Adjustment";
-			this.QtyAdjustment.Name = "QtyAdjustment";
-			this.QtyAdjustment.Width = 80;
-			// 
-			// Notes
-			// 
-			this.Notes.HeaderText = "Notes";
-			this.Notes.Name = "Notes";
-			this.Notes.Width = 200;
 			// 
 			// FormAnestheticMedsAdjQtys
 			// 
