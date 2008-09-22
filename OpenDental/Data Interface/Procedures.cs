@@ -829,7 +829,7 @@ namespace OpenDental{
 			return PIn.PDouble(table.Rows[0][0].ToString());
 		}
 
-		///<summary>Used once in FormClaimProc.</summary>
+		///<summary>Used twice in FormClaimProc.  Gets value directly from database.</summary>
 		public static string GetToothNum(int procNum){
 			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
 			DataTable table=General.GetTable(command);

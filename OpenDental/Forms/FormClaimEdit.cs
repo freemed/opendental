@@ -3162,12 +3162,11 @@ namespace OpenDental{
 		
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			//ClaimProcs.Cur=(ClaimProc)ClaimProcs.ForClaim[e.Row];
-			if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.  Then, don't forget to finish by creating the check using the button below this section. You should probably click cancel unless you are just editing estimates. Continue anyway?")){
+			if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.\r\nThen, don't forget to finish by creating the check using the button below this section.\r\nYou should probably click cancel unless you are just editing estimates.\r\nContinue anyway?")){
 				return;
 			}
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PlanList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList);
 			FormCP.IsInClaim=true;
-
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
 				return;
@@ -3269,7 +3268,7 @@ namespace OpenDental{
 			ClaimProcCur.ProcDate=ClaimCur.DateService;
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcs.Insert(ClaimProcCur);
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PlanList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){

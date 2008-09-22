@@ -1271,10 +1271,33 @@ namespace OpenDental.UI{
 		void editBox_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Enter){
 				editBox.Dispose();
-				if(selectedCell.Y<rows.Count-1) {
-					selectedCell=new Point(selectedCell.X,selectedCell.Y+1);
-					CreateEditBox();
+				//find the next editable cell to the right.
+				int nextCellToRight=-1;
+				for(int i=selectedCell.X+1;i<columns.Count;i++){
+					if(columns[i].IsEditable){
+						nextCellToRight=i;
+						break;
+					}
 				}
+				if(nextCellToRight!=-1){
+					selectedCell=new Point(nextCellToRight,selectedCell.Y);
+					CreateEditBox();
+					return;
+				}
+				//can't move to the right, so attempt to move down.
+				if(selectedCell.Y==rows.Count-1) {
+					return;//can't move down
+				}
+				nextCellToRight=-1;
+				for(int i=0;i<columns.Count;i++){
+					if(columns[i].IsEditable){
+						nextCellToRight=i;
+						break;
+					}
+				}
+				//guaranteed to have a value
+				selectedCell=new Point(nextCellToRight,selectedCell.Y+1);
+				CreateEditBox();
 			}
 			if(e.KeyCode==Keys.Down) {
 				if(selectedCell.Y<rows.Count-1) {

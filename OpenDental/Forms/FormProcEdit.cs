@@ -2271,7 +2271,7 @@ namespace OpenDental{
 		}
 
 		private void tbIns_CellDoubleClicked(object sender, OpenDental.CellEventArgs e) {
-			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PlanList);
+			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList);
 			if(!butOK.Enabled){
 				FormC.NoPermission=true;
 			}
@@ -2294,7 +2294,7 @@ namespace OpenDental{
 			else if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,2)){
 				ClaimProcs.ComputeBaseEst(cp,ProcCur,PriSecTot.Sec,PlanList,PatPlanList,benList);
 			}
-			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PlanList);
+			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.Cancel){

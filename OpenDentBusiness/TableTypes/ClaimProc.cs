@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		public double WriteOff;
 		///<summary>The procedure code that was sent to insurance. This is not necessarily the usual procedure code.  It will already have been trimmed to 5 char if it started with "D", or it could be the alternate code.  Not allowed to be blank if it is procedure.</summary>
 		public string CodeSent;
-		///<summary>-1 if blank which indicates allowed is same as fee. This is the amount that the percentage is based on. Usually the same as the fee, unless this ins plan has lower UCR. Could also be different for ins substitutions, like posterior composites. It is never changed automatically except to sometimes set it to -1.  During Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst, an allowed amount is calculated on the fly, but is no longer saved here.</summary>
+		///<summary>The allowed fee (not the override) is a complex calculation which is performed on the fly in Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  It is the amount that the percentage is based on.  If this carrier has a lower UCR than the office, then the allowed fee is where that is handled.  It can be pulled from an allowed fee schedule.  It is also where substitutions for posterior composites are handled.  The AllowedOverride allows the user to override the calculation.  -1 indicates blank.  A new use of this field is for when entering insurance payments.  On the eob, it will tell you what the allowed/UCR fee is.  The user will now be able to enter this information into the AllowedOverride field.  They will simultaneously pass the info to the allowed fee schedule.  AllowedOverride is never changed automatically by the program except to sometimes set it to -1 if NoBillIns.</summary>
 		public double AllowedOverride;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
 		public int Percentage;
@@ -68,38 +68,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this ClaimProc.</summary>
 		public ClaimProc Copy(){
-			ClaimProc cp=new ClaimProc();
-			cp.ClaimProcNum=ClaimProcNum;
-			cp.ProcNum=ProcNum;
-			cp.ClaimNum=ClaimNum;
-			cp.PatNum=PatNum;
-			cp.ProvNum=ProvNum;
-			cp.FeeBilled=FeeBilled;
-			cp.InsPayEst=InsPayEst;
-			cp.DedApplied=DedApplied;
-			cp.Status=Status;
-			cp.InsPayAmt=InsPayAmt;
-			cp.Remarks=Remarks;
-			cp.ClaimPaymentNum=ClaimPaymentNum;
-			cp.PlanNum=PlanNum;
-			cp.DateCP=DateCP;
-			cp.WriteOff=WriteOff;
-			cp.CodeSent=CodeSent;
-			cp.AllowedOverride=AllowedOverride;
-			cp.Percentage=Percentage;
-			cp.PercentOverride=PercentOverride;
-      cp.CopayAmt=CopayAmt;
-			cp.OverrideInsEst=OverrideInsEst;
-			cp.NoBillIns=NoBillIns;
-			cp.DedBeforePerc=DedBeforePerc;
-			cp.OverAnnualMax=OverAnnualMax;
-			cp.PaidOtherIns=PaidOtherIns;
-			cp.BaseEst=BaseEst;
-			cp.CopayOverride=CopayOverride;
-			cp.ProcDate=ProcDate;
-			cp.DateEntry=DateEntry;
-			cp.LineNumber=LineNumber;
-			return cp;
+			return (ClaimProc)MemberwiseClone();
 		}
 
 		

@@ -499,18 +499,20 @@ namespace OpenDental {
 			if(!plan.CodeSubstNone){
 				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
 			}			
+			//PPO always returns the PPO fee for the code or substituted code.
 			if(plan.PlanType=="p"){
 				return Fees.GetAmount(substCodeNum,plan.FeeSched);
 			}
-			if(plan.AllowedFeeSched!=0){//if an allowed fee schedule exists
+			//or, if not PPO, and an allowed fee schedule exists, then we use that.
+			if(plan.AllowedFeeSched!=0){ 
 				return Fees.GetAmount(substCodeNum,plan.AllowedFeeSched);//whether post composite or not
 			}
-			//ordinary fee schedule
+			//must be an ordinary fee schedule, so if no substitution code, then no allowed override
 			if(codeNum==substCodeNum){
 				return -1;
 			}
-			//posterior composite
-			//we're going to make a little shortcut here.  If the fe
+			//must be posterior composite with an ordinary fee schedule
+			//Although it won't happen very often, it's possible that there is no fee schedule assigned to the plan.
 			if(plan.FeeSched==0){
 				return Fees.GetAmount(substCodeNum,Providers.GetProv(provNum).FeeSched);
 			}

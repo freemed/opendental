@@ -50,7 +50,7 @@ namespace OpenDental{
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
 		public List<Schedule> SchedListPeriod;
 		public static bool IsWeeklyView;
-		///<summary>Typically 5. Only used with weekview.</summary>
+		///<summary>Typically 5 or 7. Only used with weekview.</summary>
 		public static int NumOfWeekDaysToDisplay=7;
 		///<summary>The width of an entire day if using week view.</summary>
 		public static int ColDayWidth;
