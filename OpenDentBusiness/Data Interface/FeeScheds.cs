@@ -41,14 +41,14 @@ namespace OpenDentBusiness{
 		public static List<FeeSched> GetFeeScheds(int[] FeeSchedNums){
 			Collection<FeeSched> collectState=DataObjectFactory<FeeSched>.CreateObjects(FeeSchedNums);
 			return new List<FeeSched>(collectState);		
-		}
+		}*/
 
 		///<summary></summary>
-		public static void WriteObject(FeeSched FeeSched){
-			DataObjectFactory<FeeSched>.WriteObject(FeeSched);
+		public static void WriteObject(FeeSched feeSched){
+			DataObjectFactory<FeeSched>.WriteObject(feeSched);
 		}
 
-		///<summary></summary>
+		/*//<summary></summary>
 		public static void DeleteObject(int FeeSchedNum){
 			//validate that not already in use.
 			string command="SELECT LName,FName FROM patient WHERE FeeSchedNum="+POut.PInt(FeeSchedNum);

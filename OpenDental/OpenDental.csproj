@@ -382,6 +382,9 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFeeSchedEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormAnestheticMedAdjQtys.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3559,6 +3562,7 @@
     <Content Include="Misc\TerminalMgr.ico" />
     <EmbeddedResource Include="Forms Reports\FormRpArizonaPrimaryCareEligibility.resx">
       <DependentUpon>FormRpArizonaPrimaryCareEligibility.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpNewPatients.resx">
       <DependentUpon>FormRpNewPatients.cs</DependentUpon>
@@ -3570,6 +3574,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFeeSchedEdit.resx">
+      <DependentUpon>FormFeeSchedEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticMedAdjQtys.resx">
