@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 		///<summary>6- Not used.</summary>
 		DunningMessages,
 		///<summary>7- Not used.</summary>
-		FeeSchedNames,
+		FeeSchedNamesOld,
 		///<summary>8- Medical notes for quick paste.</summary>
 		MedicalNotes,
 		///<summary>9- No longer used</summary>

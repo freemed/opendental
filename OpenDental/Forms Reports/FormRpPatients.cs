@@ -1028,10 +1028,11 @@ namespace OpenDental{
    		  case "FeeSched":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<DefC.Long[(int)DefCat.FeeSchedNames].Length;i++){
-						sItem=DefC.Long[(int)DefCat.FeeSchedNames][i].ItemName.ToString();
-						if(DefC.Long[(int)DefCat.FeeSchedNames][i].IsHidden)
+          for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+						sItem=FeeSchedC.ListLong[i].Description;
+						if(FeeSchedC.ListLong[i].IsHidden){
 							sItem+="(hidden)";
+						}
             ComboBox.Items.Add(sItem);
 					}
 					break;
@@ -1270,7 +1271,7 @@ namespace OpenDental{
               sItem="OR ";
             }  
 						sItem+="patient.FeeSched "+ListConditions.SelectedItem.ToString()+" '"
-							+DefC.Long[(int)DefCat.FeeSchedNames][ComboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
+							+FeeSchedC.ListLong[ComboBox.SelectedIndices[i]].FeeSchedNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
 							sItem+=")";
             }  

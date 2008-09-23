@@ -103,7 +103,7 @@ namespace OpenDental{
 			}
 			FeeKey key=new FeeKey();
 			key.codeNum=codeNum;
-			key.feeSchedNum=codeNum;
+			key.feeSchedNum=feeSchedNum;
 			if(Dict.ContainsKey(key)){
 				return Dict[key].Amount;
 			}

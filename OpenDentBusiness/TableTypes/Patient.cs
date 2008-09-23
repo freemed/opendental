@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 		[DataField("FeeSched")]
 		private int feeSched;
 		bool feeSchedChanged;
-		/// <summary>FK to definition.DefNum.  Fee schedule for this patient.  Usually not used.  If missing, the practice default fee schedule is used. If patient has insurance, then the fee schedule for the insplan is used.</summary>
+		/// <summary>FK to feesched.FeeSchedNum.  Fee schedule for this patient.  Usually not used.  If missing, the practice default fee schedule is used. If patient has insurance, then the fee schedule for the insplan is used.</summary>
 		public int FeeSched {
 			get { return feeSched; }
 			set { if(feeSched!=value){feeSched = value; MarkDirty(); feeSchedChanged = true; }}
