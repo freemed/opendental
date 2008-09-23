@@ -888,22 +888,23 @@ namespace OpenDental{
 				Fee FeeCur=null;
 				int feesched=0;
 				if(e.Col==4){
-					FeeCur=Fees.GetFeeByOrder(codeNum,listFeeSched.SelectedIndex);
-					feesched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
+					feesched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
+					FeeCur=Fees.GetFee(codeNum,feesched);
 				}
 				if(e.Col==5) {
 					if(comboCompare1.SelectedIndex==0){
 						return;
 					}
-					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare1.SelectedIndex-1);
-					feesched=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
+					feesched=FeeSchedC.ListShort[comboCompare1.SelectedIndex-1].FeeSchedNum;
+					FeeCur=Fees.GetFee(codeNum,feesched);
+					
 				}
 				if(e.Col==6) {
 					if(comboCompare2.SelectedIndex==0) {
 						return;
 					}
-					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare2.SelectedIndex-1);
-					feesched=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
+					feesched=FeeSchedC.ListShort[comboCompare2.SelectedIndex-1].FeeSchedNum;
+					FeeCur=Fees.GetFee(codeNum,feesched);
 				}
 				FormFeeEdit FormFE=new FormFeeEdit();
 				if(FeeCur==null) {

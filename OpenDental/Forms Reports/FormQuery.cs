@@ -834,10 +834,6 @@ namespace OpenDental{
 							tableOut.Rows[i][j]
 								=DefC.GetName(DefCat.ImageCats,PIn.PInt(tableOut.Rows[i][j].ToString()));
 							break;
-						case "feesched":
-							tableOut.Rows[i][j]
-								=DefC.GetName(DefCat.FeeSchedNames,PIn.PInt(tableOut.Rows[i][j].ToString()));
-							break;
 						case "op":
 							tableOut.Rows[i][j]
 								=OperatoryL.GetAbbrev(PIn.PInt(tableOut.Rows[i][j].ToString()));
@@ -866,7 +862,6 @@ namespace OpenDental{
 						case "secpatnum":
 						case "subscriber":
             case "withpat":
-							 
 							if(Patients.HList.ContainsKey(PIn.PInt(tableOut.Rows[i][j].ToString()))){
 								//MessageBox.Show((string)Patients.HList[PIn.PInt(tableOut.Rows[i][j].ToString())]);
 								tableOut.Rows[i][j]=Patients.HList[PIn.PInt(tableOut.Rows[i][j].ToString())];
@@ -995,6 +990,10 @@ namespace OpenDental{
             case "addtime":
 							if(tableOut.Rows[i][j].ToString()!="0")
 								tableOut.Rows[i][j]+="0";
+							break;
+						case "feesched":
+						case "feeschednum":
+							tableOut.Rows[i][j]=FeeScheds.GetDescription(PIn.PInt(tableOut.Rows[i][j].ToString()));
 							break;
 					}//end switch column caption
 					}//end try

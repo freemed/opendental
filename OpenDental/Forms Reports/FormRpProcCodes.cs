@@ -153,14 +153,14 @@ namespace OpenDental{
 		}
 		#endregion
 		private void FormRpProcCodes_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				listFeeSched.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
+				listFeeSched.Items.Add(FeeSchedC.ListShort[i].Description);
 			}		
 			listFeeSched.SelectedIndex=0;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			int feeSched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;	
+			int feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;	
       string catName="";  //string to hold current category name
 			Fees fee=new Fees();
 			Queries.CurReport=new ReportOld();
@@ -176,7 +176,7 @@ namespace OpenDental{
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[2];
 				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=DefC.GetName(DefCat.FeeSchedNames,feeSched);
+				Queries.CurReport.SubTitle[1]=FeeScheds.GetDescription(feeSched);
 				Queries.CurReport.ColPos=new int[6];
 				Queries.CurReport.ColCaption=new string[5];
 				Queries.CurReport.ColAlign=new HorizontalAlignment[5];
@@ -240,7 +240,7 @@ namespace OpenDental{
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[5];
 				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=DefC.GetName(DefCat.FeeSchedNames,feeSched);
+				Queries.CurReport.SubTitle[1]=FeeScheds.GetDescription(feeSched);
 				Queries.CurReport.ColPos[0]=20;
 				Queries.CurReport.ColPos[1]=120;
 				Queries.CurReport.ColPos[2]=270;

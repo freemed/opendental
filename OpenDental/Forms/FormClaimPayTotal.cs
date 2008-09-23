@@ -576,8 +576,7 @@ namespace OpenDental
 			else if(plan.AllowedFeeSched!=0){//an allowed fee schedule exists
 				feeSched=plan.AllowedFeeSched;
 			}
-			int feeOrder=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
-			if(feeOrder==-1){
+			if(FeeScheds.GetIsHidden(feeSched)){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
 			}
@@ -592,7 +591,7 @@ namespace OpenDental
 				if(codeNum==0){
 					continue;
 				}
-				FeeCur=Fees.GetFeeByOrder(codeNum,feeOrder);
+				FeeCur=Fees.GetFee(codeNum,feeSched);
 				if(FeeCur==null){
 					FeeCur=new Fee();
 					FeeCur.FeeSched=feeSched;

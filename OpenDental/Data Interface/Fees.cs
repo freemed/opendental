@@ -90,10 +90,6 @@ namespace OpenDental{
 			return null;
 		}
 
-		public static Fee GetFeeByOrder(int codeNum,int order){
-			return null;//this is a stub
-		}
-
 		///<summary>Returns an amount if a fee has been entered.  Otherwise returns -1.  Not usually used directly.</summary>
 		public static double GetAmount(int codeNum, int feeSchedNum){
 			if(codeNum==0){
@@ -202,51 +198,47 @@ namespace OpenDental{
 		}
 
 		///<summary>schedI is the currently displayed index of the fee schedule to save to.  Empty fees never even make it this far and should be skipped earlier in the process.</summary>
-		public static void Import(string codeText,double amt,int schedI){
+		public static void Import(string codeText,double amt,int feeSchedNum){
 			if(!ProcedureCodes.IsValidCode(codeText)){
 				return;//skip for now. Possibly insert a code in a future version.
 			}
-			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(codeText),schedI);
+			Fee fee=GetFee(ProcedureCodes.GetCodeNum(codeText),feeSchedNum);
 			if(fee!=null){
 				Delete(fee);
 			}
 			fee=new Fee();
 			fee.Amount=amt;
-			fee.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][schedI].DefNum;
+			fee.FeeSched=feeSchedNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
 		}
 
 		///<summary>If the named fee schedule does not exist, then it will be created.  It always returns the defnum for the feesched used, regardless of whether it already existed.  procCode must have already been tested for valid code, and feeSchedName must not be blank.</summary>
 		public static int ImportTrojan(string procCode,double amt,string feeSchedName){
-			Def def;
-			int feeSched=DefC.GetByExactName(DefCat.FeeSchedNames,feeSchedName);
+			FeeSched feeSched=FeeScheds.GetByExactName(feeSchedName);
 			//if isManaged, then this should be done differently from here on out.
-			if(feeSched==0){
+			if(feeSched==null){
 				//add the new fee schedule
-				def=new Def();
-				def.Category=DefCat.FeeSchedNames;
-				def.ItemName=feeSchedName;
-				def.ItemOrder=DefC.Long[(int)DefCat.FeeSchedNames].Length;
-				Defs.Insert(def);
-				feeSched=def.DefNum;
-				CacheL.Refresh(InvalidType.Defs);
+				feeSched=new FeeSched();
+				feeSched.ItemOrder=FeeSchedC.ListLong.Count;
+				feeSched.Description=feeSchedName;
+				feeSched.FeeSchedType=FeeScheduleType.Normal;
+				feeSched.IsNew=true;
+				FeeScheds.WriteObject(feeSched);
+				CacheL.Refresh(InvalidType.FeeScheds);
 				Fees.Refresh();
-				DataValid.SetInvalid(InvalidType.Defs, InvalidType.Fees);
+				DataValid.SetInvalid(InvalidType.FeeScheds, InvalidType.Fees);
 			}
-			else{
-				def=DefC.GetDef(DefCat.FeeSchedNames,feeSched);
+			if(feeSched.IsHidden){
+				feeSched.IsHidden=false;//unhide it
+				FeeScheds.WriteObject(feeSched);
+				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
-			if(def.IsHidden){//if the fee schedule is hidden
-				def.IsHidden=false;//unhide it
-				Defs.Update(def);
-				DataValid.SetInvalid(InvalidType.Defs);
-			}
-			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(procCode),DefC.GetOrder(DefCat.FeeSchedNames,def.DefNum));
+			Fee fee=GetFee(ProcedureCodes.GetCodeNum(procCode),feeSched.FeeSchedNum);
 			if(fee==null) {
 				fee=new Fee();
 				fee.Amount=amt;
-				fee.FeeSched=def.DefNum;
+				fee.FeeSched=feeSched.FeeSchedNum;
 				fee.CodeNum=ProcedureCodes.GetCodeNum(procCode);
 				Insert(fee);
 			}
@@ -254,7 +246,7 @@ namespace OpenDental{
 				fee.Amount=amt;
 				Update(fee);
 			}
-			return def.DefNum;
+			return feeSched.FeeSchedNum;
 		}
 
 	

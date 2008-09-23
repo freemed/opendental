@@ -204,7 +204,7 @@ namespace OpenDental{
 
 		private void FormFeeSchedules_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidType.FeeSchedules);
+				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
 		}
 

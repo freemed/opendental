@@ -96,6 +96,15 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static FeeSched GetByExactName(string description){
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FeeSchedC.ListLong[i].Description==description){
+					return FeeSchedC.ListLong[i].Copy();
+				}
+			}
+			return null;
+		}
+
 		///<summary>Only used in FormInsPlan.</summary>
 		public static List<FeeSched> GetListForType(FeeScheduleType feeSchedType) {
 			List<FeeSched> retVal=new List<FeeSched>();

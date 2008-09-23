@@ -1268,7 +1268,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Fee Schedule"));
 			for(int i=0;i<planArray.Length;i++) {
-				row.Cells.Add(DefC.GetName(DefCat.FeeSchedNames,planArray[i].FeeSched));
+				row.Cells.Add(FeeScheds.GetDescription(planArray[i].FeeSched));
 			}
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);

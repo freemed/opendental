@@ -448,8 +448,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFeeSchedTools_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				comboCopyFrom.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
+				comboCopyFrom.Items.Add(FeeSchedC.ListShort[i].Description);
 			}
 		}
 
@@ -516,7 +516,7 @@ namespace OpenDental{
 			}else if(Directory.Exists("C:\\")){
 				Dlg.InitialDirectory="C:\\";
 			}
-			Dlg.FileName="Fees"+DefC.GetName(DefCat.FeeSchedNames,SchedNum)+".txt";
+			Dlg.FileName="Fees"+FeeScheds.GetDescription(SchedNum)+".txt";
 			if(Dlg.ShowDialog()!=DialogResult.OK){
 				Cursor=Cursors.Default;
 				return;
@@ -563,15 +563,14 @@ namespace OpenDental{
 				return;
 			}
 			string[] fields;
-			double fee;
-			int schedI=DefC.GetOrder(DefCat.FeeSchedNames,SchedNum);
+			double feeAmt;
 			using(StreamReader sr=new StreamReader(Dlg.FileName)){
 				string line=sr.ReadLine();
 				while(line!=null){
 					fields=line.Split(new string[1] {"\t"},StringSplitOptions.None);
 					if(fields.Length>1 && fields[1]!=""){//skips blank fees
-						fee=PIn.PDouble(fields[1]);
-						Fees.Import(fields[0],fee,schedI);
+						feeAmt=PIn.PDouble(fields[1]);
+						Fees.Import(fields[0],feeAmt,SchedNum);
 					}
 					line=sr.ReadLine();
 				}

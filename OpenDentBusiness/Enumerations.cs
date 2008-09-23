@@ -279,7 +279,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		RecallTypes,
 		///<summary></summary>
-		FeeSchedules
+		FeeScheds
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

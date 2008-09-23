@@ -65,6 +65,9 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
 				//Fees.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll){
+				FeeScheds.FillCache(ds.Tables["FeeSched"]);
+			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				//CovCatL.Refresh();
 				//CovSpanL.Refresh();

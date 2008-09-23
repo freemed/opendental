@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public double Amount;
 		///<summary>Do not use.</summary>
 		public string OldCode;
-		///<summary>FK to definition.DefNum.</summary>
+		///<summary>FK to feesched.FeeSchedNum.</summary>
 		public int FeeSched;
 		///<summary>Not used.</summary>
 		public bool UseDefaultFee;
@@ -22,13 +22,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public Fee Copy(){
-			Fee f=new Fee();
-			f.FeeNum=FeeNum;
-			f.Amount=Amount;
-			//f.OldCode=OldCode;
-			f.FeeSched=FeeSched;
-			f.CodeNum=CodeNum;
-			return f;
+			return (Fee)MemberwiseClone();
 		}
 
 	}

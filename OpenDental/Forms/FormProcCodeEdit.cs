@@ -740,10 +740,10 @@ namespace OpenDental{
 			gridFees.Rows.Clear();
 			ODGridRow row;
 			Fee fee;
-			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				fee=Fees.GetFeeByOrder(ProcCode.CodeNum,i);
+			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
+				fee=Fees.GetFee(ProcCode.CodeNum,FeeSchedC.ListShort[i].FeeSchedNum);
 				row=new ODGridRow();
-				row.Cells.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+				row.Cells.Add(FeeSchedC.ListShort[i].Description);
 				if(fee==null){
 					row.Cells.Add("");
 				}
@@ -756,13 +756,13 @@ namespace OpenDental{
 		}
 
 		private void gridFees_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			Fee FeeCur=Fees.GetFeeByOrder(ProcCode.CodeNum,e.Row);
+			Fee FeeCur=Fees.GetFee(ProcCode.CodeNum,FeeSchedC.ListShort[e.Row].FeeSchedNum);
 			//tbFees.SelectedRow=e.Row;
 			//tbFees.ColorRow(e.Row,Color.LightGray);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null) {
 				FeeCur=new Fee();
-				FeeCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][e.Row].DefNum;
+				FeeCur.FeeSched=FeeSchedC.ListShort[e.Row].FeeSchedNum;
 				FeeCur.CodeNum=ProcCode.CodeNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;
