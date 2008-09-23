@@ -1651,9 +1651,9 @@ namespace OpenDental{
 				else
 					textDateTerm.Text=PlanCur.DateTerm.ToString("d");
 			}
-			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal);
-			FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay);
-			FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed);
+			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
+			FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay,false);
+			FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed,false);
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
 				butEligibility.Visible=false;
@@ -2468,9 +2468,9 @@ namespace OpenDental{
 			}
 			FillBenefits();
 			if(resetFeeSched){
-				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal);
-				FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay);
-				FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed);
+				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
+				FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay,false);
+				FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed,false);
 				//if managed care, then do it a bit differently
 				comboFeeSched.Items.Clear();
 				comboFeeSched.Items.Add(Lan.g(this,"none"));

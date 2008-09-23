@@ -105,10 +105,13 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Only used in FormInsPlan.</summary>
-		public static List<FeeSched> GetListForType(FeeScheduleType feeSchedType) {
+		///<summary>Only used in FormInsPlan and FormFeeScheds.</summary>
+		public static List<FeeSched> GetListForType(FeeScheduleType feeSchedType,bool includeHidden) {
 			List<FeeSched> retVal=new List<FeeSched>();
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++) {
+				if(!includeHidden && FeeSchedC.ListLong[i].IsHidden){
+					continue;
+				}
 				if(FeeSchedC.ListLong[i].FeeSchedType==feeSchedType){
 					retVal.Add(FeeSchedC.ListLong[i].Copy());
 				}

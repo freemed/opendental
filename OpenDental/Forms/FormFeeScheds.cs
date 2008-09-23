@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -18,10 +19,11 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
+		private ListBox listType;
 		private bool changed;
-		//public bool IsSelectionMode;
-		//<summary>Only used if IsSelectionMode.  On OK, contains selected pharmacyNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-		//public int SelectedPharmacyNum;
+		private OpenDental.UI.Button butDown;
+		private OpenDental.UI.Button butUp;
+		private List<FeeSched> FeeSchedsForType;
 
 		///<summary></summary>
 		public FormFeeScheds()
@@ -56,10 +58,22 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFeeScheds));
+			this.listType = new System.Windows.Forms.ListBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// listType
+			// 
+			this.listType.FormattingEnabled = true;
+			this.listType.Location = new System.Drawing.Point(318,12);
+			this.listType.Name = "listType";
+			this.listType.Size = new System.Drawing.Size(120,56);
+			this.listType.TabIndex = 12;
+			this.listType.Click += new System.EventHandler(this.listType_Click);
 			// 
 			// gridMain
 			// 
@@ -67,7 +81,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(17,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(289,602);
+			this.gridMain.Size = new System.Drawing.Size(278,602);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "FeeSchedules";
 			this.gridMain.TranslationName = "TableFeeScheds";
@@ -83,7 +97,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(389,469);
+			this.butAdd.Location = new System.Drawing.Point(363,454);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 10;
@@ -98,17 +112,54 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(389,590);
+			this.butClose.Location = new System.Drawing.Point(363,590);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDown.Location = new System.Drawing.Point(363,176);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(75,24);
+			this.butDown.TabIndex = 16;
+			this.butDown.Text = "&Down";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butUp.Location = new System.Drawing.Point(363,144);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(75,24);
+			this.butUp.TabIndex = 15;
+			this.butUp.Text = "&Up";
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
 			// FormFeeScheds
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(492,630);
+			this.ClientSize = new System.Drawing.Size(466,630);
+			this.Controls.Add(this.butDown);
+			this.Controls.Add(this.butUp);
+			this.Controls.Add(this.listType);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -127,23 +178,35 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFeeSchedules_Load(object sender, System.EventArgs e) {
+			listType.Items.Add(Lan.g(this,"all"));
+			for(int i=0;i<Enum.GetNames(typeof(FeeScheduleType)).Length;i++){
+				listType.Items.Add(((FeeScheduleType)i).ToString());
+			}
+			listType.SelectedIndex=0;
 			FillGrid();
 		}
 
 		private void FillGrid(){
 			FeeScheds.RefreshCache();
-			//synch the itemorders just in case
-			bool outOfSynch=false;
-			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
-				if(FeeSchedC.ListLong[i].ItemOrder!=i){
-					FeeSchedC.ListLong[i].ItemOrder=i;
-					FeeScheds.WriteObject(FeeSchedC.ListLong[i]);
-					outOfSynch=true;
-					changed=true;
+			if(listType.SelectedIndex==0){
+				FeeSchedsForType=new List<FeeSched>(FeeSchedC.ListLong);
+				//synch the itemorders just in case
+				bool outOfSynch=false;
+				for(int i=0;i<FeeSchedsForType.Count;i++){
+					if(FeeSchedsForType[i].ItemOrder!=i){
+						FeeSchedsForType[i].ItemOrder=i;
+						FeeScheds.WriteObject(FeeSchedsForType[i]);
+						outOfSynch=true;
+						changed=true;
+					}
+				}
+				if(outOfSynch){
+					FeeScheds.RefreshCache();
+					FeeSchedsForType=new List<FeeSched>(FeeSchedC.ListLong);
 				}
 			}
-			if(outOfSynch){
-				FeeScheds.RefreshCache();
+			else{
+				FeeSchedsForType=FeeScheds.GetListForType((FeeScheduleType)(listType.SelectedIndex-1),true);
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -155,11 +218,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+			for(int i=0;i<FeeSchedsForType.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(FeeSchedC.ListLong[i].Description);
-				row.Cells.Add(FeeSchedC.ListLong[i].FeeSchedType.ToString());
-				if(FeeSchedC.ListLong[i].IsHidden){
+				row.Cells.Add(FeeSchedsForType[i].Description);
+				row.Cells.Add(FeeSchedsForType[i].FeeSchedType.ToString());
+				if(FeeSchedsForType[i].IsHidden){
 					row.Cells.Add("X");
 				}
 				else{
@@ -178,8 +241,8 @@ namespace OpenDental{
 			FormF.ShowDialog();
 			FillGrid();
 			changed=true;
-			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
-				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.ListLong[i].FeeSchedNum){
+			for(int i=0;i<FeeSchedsForType.Count;i++){
+				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedsForType[i].FeeSchedNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
@@ -191,11 +254,54 @@ namespace OpenDental{
 			FormF.ShowDialog();
 			FillGrid();
 			changed=true;
-			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
-				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.ListLong[i].FeeSchedNum){
+			for(int i=0;i<FeeSchedsForType.Count;i++){
+				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedsForType[i].FeeSchedNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
+		}
+
+		private void listType_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void butUp_Click(object sender,EventArgs e) {
+			int idx=gridMain.GetSelectedIndex();
+			if(idx==-1){
+				MsgBox.Show(this,"Please select a fee schedule first.");
+				return;
+			}
+			if(idx==0){
+				return;
+			}
+			//swap the orders.  This makes it work no matter which types are being viewed.
+			int order1=FeeSchedsForType[idx-1].ItemOrder;
+			int order2=FeeSchedsForType[idx].ItemOrder;
+			FeeSchedsForType[idx-1].ItemOrder=order2;
+			FeeScheds.WriteObject(FeeSchedsForType[idx-1]);
+			FeeSchedsForType[idx].ItemOrder=order1;
+			FeeScheds.WriteObject(FeeSchedsForType[idx]);
+			FillGrid();
+			gridMain.SetSelected(idx-1,true);
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+			int idx=gridMain.GetSelectedIndex();
+			if(idx==-1){
+				MsgBox.Show(this,"Please select a fee schedule first.");
+				return;
+			}
+			if(idx==FeeSchedsForType.Count-1){
+				return;
+			}
+			int order1=FeeSchedsForType[idx].ItemOrder;
+			int order2=FeeSchedsForType[idx+1].ItemOrder;
+			FeeSchedsForType[idx].ItemOrder=order2;
+			FeeScheds.WriteObject(FeeSchedsForType[idx]);
+			FeeSchedsForType[idx+1].ItemOrder=order1;
+			FeeScheds.WriteObject(FeeSchedsForType[idx+1]);
+			FillGrid();
+			gridMain.SetSelected(idx+1,true);
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
@@ -207,6 +313,10 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
 		}
+
+		
+
+		
 
 	
 

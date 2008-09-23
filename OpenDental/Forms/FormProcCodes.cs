@@ -506,8 +506,13 @@ namespace OpenDental{
 
 		private void FillFeeSchedules(){
 			listFeeSched.Items.Clear();
+			string str;
 			for(int i=0;i<FeeSchedC.ListShort.Count;i++) {
-				listFeeSched.Items.Add(FeeSchedC.ListShort[i].Description);
+				str=FeeSchedC.ListShort[i].Description;
+				if(FeeSchedC.ListShort[i].FeeSchedType!=FeeScheduleType.Normal){
+					str+=" ("+FeeSchedC.ListShort[i].FeeSchedType.ToString()+")";
+				}
+				listFeeSched.Items.Add(str);
 			}
 			if(listFeeSched.Items.Count>0) {
 				listFeeSched.SelectedIndex=0;
@@ -519,8 +524,12 @@ namespace OpenDental{
 			comboCompare2.Items.Add(Lan.g(this,"none"));
 			comboCompare2.SelectedIndex=0;
 			for(int i=0;i<FeeSchedC.ListShort.Count;i++) {
-				comboCompare1.Items.Add(FeeSchedC.ListShort[i].Description);
-				comboCompare2.Items.Add(FeeSchedC.ListShort[i].Description);
+				str=FeeSchedC.ListShort[i].Description;
+				if(FeeSchedC.ListShort[i].FeeSchedType!=FeeScheduleType.Normal){
+					str+=" ("+FeeSchedC.ListShort[i].FeeSchedType.ToString()+")";
+				}
+				comboCompare1.Items.Add(str);
+				comboCompare2.Items.Add(str);
 			}
 		}
 
