@@ -355,7 +355,7 @@ namespace OpenDental{
 						textValue.Text="";
 					}
 					break;
-				case DefCat.FeeSchedNames:
+				/*case DefCat.FeeSchedNames:
 					if(textValue.Text=="C" || textValue.Text=="c") {
 						textValue.Text="C";
 					}
@@ -363,7 +363,7 @@ namespace OpenDental{
 						textValue.Text="A";
 					}
 					else textValue.Text="";
-					break;
+					break;*/
 			}//end switch
 			DefCur.ItemName=textName.Text;
 			if(EnableValue) DefCur.ItemValue=textValue.Text;

@@ -167,6 +167,9 @@ namespace OpenDental{
 
 		private void FormFeeSchedEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=FeeSchedCur.Description;
+			if(!FeeSchedCur.IsNew){
+				listType.Enabled=false;
+			}
 			for(int i=0;i<Enum.GetNames(typeof(FeeScheduleType)).Length;i++){
 				listType.Items.Add(Enum.GetNames(typeof(FeeScheduleType))[i]);
 				if((int)FeeSchedCur.FeeSchedType==i){

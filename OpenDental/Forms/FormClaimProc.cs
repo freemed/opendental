@@ -1570,10 +1570,10 @@ namespace OpenDental
 				InsPlan plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 				if(plan.PlanType=="p"){//if ppo, then show the standard fee schedule
 					int standardFeeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
-					textFeeSched.Text=DefC.GetName(DefCat.FeeSchedNames,standardFeeSched);
+					textFeeSched.Text=FeeScheds.GetDescription(standardFeeSched);
 				}
 				else{//otherwise, show the plan fee schedule
-					textFeeSched.Text=DefC.GetName(DefCat.FeeSchedNames,plan.FeeSched);
+					textFeeSched.Text=FeeScheds.GetDescription(plan.FeeSched);
 				}
 				string toothnum;
 				if(proc==null){
@@ -1592,13 +1592,13 @@ namespace OpenDental
 					textSubstCode.Text=ProcedureCodes.GetStringProcCode(substCodeNum);
 				}
 				if(plan.PlanType=="p"){//if ppo
-					textPPOFeeSched.Text=DefC.GetName(DefCat.FeeSchedNames,plan.FeeSched);
+					textPPOFeeSched.Text=FeeScheds.GetDescription(plan.FeeSched);
 					textAllowedFeeSched.Text="---";
 				}
 				else{
 					textPPOFeeSched.Text="---";
 					if(plan.AllowedFeeSched!=0){
-						textAllowedFeeSched.Text=DefC.GetName(DefCat.FeeSchedNames,plan.AllowedFeeSched);
+						textAllowedFeeSched.Text=FeeScheds.GetDescription(plan.AllowedFeeSched);
 					}
 					else{
 						textAllowedFeeSched.Text="---";
@@ -1689,12 +1689,11 @@ namespace OpenDental
 			else if(plan.PlanType=="p") {
 				feeSched=plan.FeeSched;
 			}
-			int feeOrder=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
-			if(feeOrder==-1){
+			if(FeeScheds.GetIsHidden(feeSched)){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
 			}
-			Fee FeeCur=Fees.GetFeeByOrder(ProcCodeNum,feeOrder);
+			Fee FeeCur=Fees.GetFee(ProcCodeNum,feeSched);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null){
 				FeeCur=new Fee();

@@ -18,7 +18,8 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
-			FeeSchedC.Listt=new List<FeeSched>();
+			FeeSchedC.ListLong=new List<FeeSched>();
+			FeeSchedC.ListShort=new List<FeeSched>();
 			FeeSched sched;
 			for(int i=0;i<table.Rows.Count;i++){
 				sched=new FeeSched();
@@ -28,7 +29,10 @@ namespace OpenDentBusiness{
 				sched.FeeSchedType= (FeeScheduleType)PIn.PInt(table.Rows[i][2].ToString());
 				sched.ItemOrder   = PIn.PInt   (table.Rows[i][3].ToString());
 				sched.IsHidden    = PIn.PBool  (table.Rows[i][4].ToString());
-				FeeSchedC.Listt.Add(sched);
+				FeeSchedC.ListLong.Add(sched);
+				if(!sched.IsHidden){
+					FeeSchedC.ListShort.Add(sched);
+				}
 			}
 		}
 
@@ -75,12 +79,32 @@ namespace OpenDentBusiness{
 			if(feeSchedNum==0){
 				return "";
 			}
-			for(int i=0;i<FeeSchedC.Listt.Count;i++){
-				if(FeeSchedC.Listt[i].FeeSchedNum==feeSchedNum){
-					return FeeSchedC.Listt[i].Description;
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FeeSchedC.ListLong[i].FeeSchedNum==feeSchedNum){
+					return FeeSchedC.ListLong[i].Description;
 				}
 			}
 			return "";
+		}
+
+		public static bool GetIsHidden(int feeSchedNum){
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FeeSchedC.ListLong[i].FeeSchedNum==feeSchedNum){
+					return FeeSchedC.ListLong[i].IsHidden;
+				}
+			}
+			return true;
+		}
+
+		///<summary>Only used in FormInsPlan.</summary>
+		public static List<FeeSched> GetListForType(FeeScheduleType feeSchedType) {
+			List<FeeSched> retVal=new List<FeeSched>();
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++) {
+				if(FeeSchedC.ListLong[i].FeeSchedType==feeSchedType){
+					retVal.Add(FeeSchedC.ListLong[i].Copy());
+				}
+			}
+			return retVal;
 		}
 
 	}

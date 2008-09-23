@@ -472,7 +472,7 @@ namespace OpenDental{
 			//clear current
 			Fees.ClearFeeSched(SchedNum);
 			//copy any values over
-			Fees.CopyFees(comboCopyFrom.SelectedIndex,SchedNum);
+			Fees.CopyFees(FeeSchedC.ListShort[comboCopyFrom.SelectedIndex].FeeSchedNum,SchedNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -504,7 +504,7 @@ namespace OpenDental{
 			if(radioPenny.Checked){
 				round=2;
 			}
-			Fees.Increase(DefC.GetOrder(DefCat.FeeSchedNames,SchedNum),percent,round);
+			Fees.Increase(SchedNum,percent,round);
 			DialogResult=DialogResult.OK;
 		}
 

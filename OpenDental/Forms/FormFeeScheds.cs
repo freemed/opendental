@@ -127,32 +127,17 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFeeSchedules_Load(object sender, System.EventArgs e) {
-			//if(IsSelectionMode){
-			//	butClose.Text=Lan.g(this,"Cancel");
-			//}
-			//else{
-			//	butOK.Visible=false;
-			//	butNone.Visible=false;
-			//}
 			FillGrid();
-			/*if(SelectedPharmacyNum!=0){
-				for(int i=0;i<PharmacyC.Listt.Count;i++){
-					if(PharmacyC.Listt[i].PharmacyNum==SelectedPharmacyNum){
-						gridMain.SetSelected(i,true);
-						break;
-					}
-				}
-			}*/
 		}
 
 		private void FillGrid(){
 			FeeScheds.RefreshCache();
 			//synch the itemorders just in case
 			bool outOfSynch=false;
-			for(int i=0;i<FeeSchedC.Listt.Count;i++){
-				if(FeeSchedC.Listt[i].ItemOrder!=i){
-					FeeSchedC.Listt[i].ItemOrder=i;
-					FeeScheds.WriteObject(FeeSchedC.Listt[i]);
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FeeSchedC.ListLong[i].ItemOrder!=i){
+					FeeSchedC.ListLong[i].ItemOrder=i;
+					FeeScheds.WriteObject(FeeSchedC.ListLong[i]);
 					outOfSynch=true;
 					changed=true;
 				}
@@ -170,12 +155,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			//string txt;
-			for(int i=0;i<FeeSchedC.Listt.Count;i++){
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(FeeSchedC.Listt[i].Description);
-				row.Cells.Add(FeeSchedC.Listt[i].FeeSchedType.ToString());
-				if(FeeSchedC.Listt[i].IsHidden){
+				row.Cells.Add(FeeSchedC.ListLong[i].Description);
+				row.Cells.Add(FeeSchedC.ListLong[i].FeeSchedType.ToString());
+				if(FeeSchedC.ListLong[i].IsHidden){
 					row.Cells.Add("X");
 				}
 				else{
@@ -194,45 +178,25 @@ namespace OpenDental{
 			FormF.ShowDialog();
 			FillGrid();
 			changed=true;
-			for(int i=0;i<FeeSchedC.Listt.Count;i++){
-				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.Listt[i].FeeSchedNum){
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.ListLong[i].FeeSchedNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//int selectedFeeSchedNum=FeeSchedC.Listt[e.Row].FeeSchedNum;
 			FormFeeSchedEdit FormF=new FormFeeSchedEdit();
-			FormF.FeeSchedCur=FeeSchedC.Listt[e.Row];
+			FormF.FeeSchedCur=FeeSchedC.ListLong[e.Row];
 			FormF.ShowDialog();
 			FillGrid();
 			changed=true;
-			for(int i=0;i<FeeSchedC.Listt.Count;i++){
-				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.Listt[i].FeeSchedNum){
+			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
+				if(FormF.FeeSchedCur.FeeSchedNum==FeeSchedC.ListLong[i].FeeSchedNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
 		}
-
-		/*private void butNone_Click(object sender,EventArgs e) {
-			//not even visible unless is selection mode
-			//SelectedPharmacyNum=0;
-			//DialogResult=DialogResult.OK;
-		}
-
-		private void butOK_Click(object sender,EventArgs e) {
-			//not even visible unless is selection mode
-			if(gridMain.GetSelectedIndex()==-1){
-			//	MsgBox.Show(this,"Please select an item first.");
-			//	return;
-				SelectedPharmacyNum=0;
-			}
-			else{
-				SelectedPharmacyNum=PharmacyC.Listt[gridMain.GetSelectedIndex()].PharmacyNum;
-			}
-			DialogResult=DialogResult.OK;
-		}*/
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();

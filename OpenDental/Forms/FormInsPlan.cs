@@ -145,10 +145,10 @@ namespace OpenDental{
 		public bool IsForAll;
 		///<summary>Set to true from FormInsPlansMerge.  In this case, the insplan is read only, because it's much more complicated to allow user to change.</summary>
 		public bool IsReadOnly;
-		private Def[] FeeSchedsStandard;
-		private Def[] FeeSchedsCopay;
+		private List<FeeSched> FeeSchedsStandard;
+		private List<FeeSched> FeeSchedsCopay;
 		private GroupBox groupPlan;
-		private Def[] FeeSchedsAllowed;
+		private List<FeeSched> FeeSchedsAllowed;
 		private Panel panelPlan;
 		private Label label13;
 		private ComboBox comboFilingCode;
@@ -1651,9 +1651,9 @@ namespace OpenDental{
 				else
 					textDateTerm.Text=PlanCur.DateTerm.ToString("d");
 			}
-			FeeSchedsStandard=DefC.GetFeeSchedList("");
-			FeeSchedsCopay=DefC.GetFeeSchedList("C");
-			FeeSchedsAllowed=DefC.GetFeeSchedList("A");
+			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal);
+			FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay);
+			FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed);
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
 				butEligibility.Visible=false;
@@ -1695,25 +1695,25 @@ namespace OpenDental{
 			comboFeeSched.Items.Clear();
 			comboFeeSched.Items.Add(Lan.g(this,"none"));
 			comboFeeSched.SelectedIndex=0;
-			for(int i=0;i<FeeSchedsStandard.Length;i++) {
-				comboFeeSched.Items.Add(FeeSchedsStandard[i].ItemName);
-				if(FeeSchedsStandard[i].DefNum==PlanCur.FeeSched)
+			for(int i=0;i<FeeSchedsStandard.Count;i++) {
+				comboFeeSched.Items.Add(FeeSchedsStandard[i].Description);
+				if(FeeSchedsStandard[i].FeeSchedNum==PlanCur.FeeSched)
 					comboFeeSched.SelectedIndex=i+1;
 			}
 			comboCopay.Items.Clear();
 			comboCopay.Items.Add(Lan.g(this,"none"));
 			comboCopay.SelectedIndex=0;
-			for(int i=0;i<FeeSchedsCopay.Length;i++) {
-				comboCopay.Items.Add(FeeSchedsCopay[i].ItemName);
-				if(FeeSchedsCopay[i].DefNum==PlanCur.CopayFeeSched)
+			for(int i=0;i<FeeSchedsCopay.Count;i++) {
+				comboCopay.Items.Add(FeeSchedsCopay[i].Description);
+				if(FeeSchedsCopay[i].FeeSchedNum==PlanCur.CopayFeeSched)
 					comboCopay.SelectedIndex=i+1;
 			}
 			comboAllowedFeeSched.Items.Clear();
 			comboAllowedFeeSched.Items.Add(Lan.g(this,"none"));
 			comboAllowedFeeSched.SelectedIndex=0;
-			for(int i=0;i<FeeSchedsAllowed.Length;i++) {
-				comboAllowedFeeSched.Items.Add(FeeSchedsAllowed[i].ItemName);
-				if(FeeSchedsAllowed[i].DefNum==PlanCur.AllowedFeeSched)
+			for(int i=0;i<FeeSchedsAllowed.Count;i++) {
+				comboAllowedFeeSched.Items.Add(FeeSchedsAllowed[i].Description);
+				if(FeeSchedsAllowed[i].FeeSchedNum==PlanCur.AllowedFeeSched)
 					comboAllowedFeeSched.SelectedIndex=i+1;
 			}
 			comboClaimForm.Items.Clear();
@@ -2468,23 +2468,23 @@ namespace OpenDental{
 			}
 			FillBenefits();
 			if(resetFeeSched){
-				FeeSchedsStandard=DefC.GetFeeSchedList("");
-				FeeSchedsCopay=DefC.GetFeeSchedList("C");
-				FeeSchedsAllowed=DefC.GetFeeSchedList("A");
+				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal);
+				FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay);
+				FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed);
 				//if managed care, then do it a bit differently
 				comboFeeSched.Items.Clear();
 				comboFeeSched.Items.Add(Lan.g(this,"none"));
 				comboFeeSched.SelectedIndex=0;
-				for(int i=0;i<FeeSchedsStandard.Length;i++) {
-					comboFeeSched.Items.Add(FeeSchedsStandard[i].ItemName);
-					if(FeeSchedsStandard[i].DefNum==feeSchedNum)
+				for(int i=0;i<FeeSchedsStandard.Count;i++) {
+					comboFeeSched.Items.Add(FeeSchedsStandard[i].Description);
+					if(FeeSchedsStandard[i].FeeSchedNum==feeSchedNum)
 						comboFeeSched.SelectedIndex=i+1;
 				}
 				comboCopay.Items.Clear();
 				comboCopay.Items.Add(Lan.g(this,"none"));
 				comboCopay.SelectedIndex=0;
-				for(int i=0;i<FeeSchedsCopay.Length;i++) {
-					comboCopay.Items.Add(FeeSchedsCopay[i].ItemName);
+				for(int i=0;i<FeeSchedsCopay.Count;i++) {
+					comboCopay.Items.Add(FeeSchedsCopay[i].Description);
 					//This will get set for managed care
 					//if(FeeSchedsCopay[i].DefNum==PlanCur.CopayFeeSched)
 					//	comboCopay.SelectedIndex=i+1;
@@ -2492,8 +2492,8 @@ namespace OpenDental{
 				comboAllowedFeeSched.Items.Clear();
 				comboAllowedFeeSched.Items.Add(Lan.g(this,"none"));
 				comboAllowedFeeSched.SelectedIndex=0;
-				for(int i=0;i<FeeSchedsAllowed.Length;i++) {
-					comboAllowedFeeSched.Items.Add(FeeSchedsAllowed[i].ItemName);
+				for(int i=0;i<FeeSchedsAllowed.Count;i++) {
+					comboAllowedFeeSched.Items.Add(FeeSchedsAllowed[i].Description);
 					//I would have set allowed for PPO, but we are probably going to deprecate this when we do coverage tables.
 					//if(FeeSchedsAllowed[i].DefNum==PlanCur.AllowedFeeSched)
 					//	comboAllowedFeeSched.SelectedIndex=i+1;
@@ -3656,15 +3656,15 @@ namespace OpenDental{
 			if(comboFeeSched.SelectedIndex==0)
 				PlanCur.FeeSched=0;
 			else
-				PlanCur.FeeSched=FeeSchedsStandard[comboFeeSched.SelectedIndex-1].DefNum;
+				PlanCur.FeeSched=FeeSchedsStandard[comboFeeSched.SelectedIndex-1].FeeSchedNum;
 			if(comboCopay.SelectedIndex==0)
 				PlanCur.CopayFeeSched=0;
 			else
-				PlanCur.CopayFeeSched=FeeSchedsCopay[comboCopay.SelectedIndex-1].DefNum;
+				PlanCur.CopayFeeSched=FeeSchedsCopay[comboCopay.SelectedIndex-1].FeeSchedNum;
 			if(comboAllowedFeeSched.SelectedIndex==0)
 				PlanCur.AllowedFeeSched=0;
 			else
-				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].DefNum;
+				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].FeeSchedNum;
 			PlanCur.FilingCode=(InsFilingCode)comboFilingCode.SelectedIndex;
 			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;

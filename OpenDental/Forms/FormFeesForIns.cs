@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -24,7 +25,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private Def[] FeeSchedsStandard;
+		private List<FeeSched> FeeSchedsStandard;
 		private ComboBox comboFeeSchedWith;
 		private Label label4;
 		private ComboBox comboFeeSchedNew;
@@ -265,11 +266,11 @@ namespace OpenDental{
 			comboFeeSchedWithout.SelectedIndex=0;
 			comboFeeSchedWith.SelectedIndex=0;
 			comboFeeSchedNew.SelectedIndex=0;
-			FeeSchedsStandard=DefC.GetFeeSchedList("");
-			for(int i=0;i<FeeSchedsStandard.Length;i++){
-				comboFeeSchedWithout.Items.Add(FeeSchedsStandard[i].ItemName);
-				comboFeeSchedWith.Items.Add(FeeSchedsStandard[i].ItemName);
-				comboFeeSchedNew.Items.Add(FeeSchedsStandard[i].ItemName);
+			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal);
+			for(int i=0;i<FeeSchedsStandard.Count;i++){
+				comboFeeSchedWithout.Items.Add(FeeSchedsStandard[i].Description);
+				comboFeeSchedWith.Items.Add(FeeSchedsStandard[i].Description);
+				comboFeeSchedNew.Items.Add(FeeSchedsStandard[i].Description);
 			}
 			FillGrid();
 		}
@@ -286,10 +287,10 @@ namespace OpenDental{
 			int feeSchedWithout=0;
 			int feeSchedWith=0;
 			if(comboFeeSchedWithout.SelectedIndex!=0){
-				feeSchedWithout=FeeSchedsStandard[comboFeeSchedWithout.SelectedIndex-1].DefNum;
+				feeSchedWithout=FeeSchedsStandard[comboFeeSchedWithout.SelectedIndex-1].FeeSchedNum;
 			}
 			if(comboFeeSchedWith.SelectedIndex!=0) {
-				feeSchedWith=FeeSchedsStandard[comboFeeSchedWith.SelectedIndex-1].DefNum;
+				feeSchedWith=FeeSchedsStandard[comboFeeSchedWith.SelectedIndex-1].FeeSchedNum;
 			}
 			table=InsPlans.GetListFeeCheck(textCarrier.Text,textCarrierNot.Text,feeSchedWithout,feeSchedWith);
 			gridMain.BeginUpdate();
@@ -351,7 +352,7 @@ namespace OpenDental{
 			string groupName;
 			int newFeeSchedNum=0;
 			if(comboFeeSchedNew.SelectedIndex!=0){
-				newFeeSchedNum=FeeSchedsStandard[comboFeeSchedNew.SelectedIndex-1].DefNum;
+				newFeeSchedNum=FeeSchedsStandard[comboFeeSchedNew.SelectedIndex-1].FeeSchedNum;
 			}
 			int oldFeeSchedNum;
 			int rowsChanged=0;

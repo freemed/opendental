@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public string MI;
 		///<summary>eg. DMD or DDS. Was 'title' in previous versions.</summary>
 		public string Suffix;
-		///<summary>FK to Definition.DefNum.</summary>
+		///<summary>FK to feesched.FeeSchedNum.</summary>
 		public int FeeSched;
 		///<summary>Enum:DentalSpecialty</summary>
 		public DentalSpecialty Specialty;

@@ -683,9 +683,9 @@ namespace OpenDental{
 				if(SchoolClasses.List[i].SchoolClassNum==ProvCur.SchoolClassNum)
 					comboSchoolClass.SelectedIndex=i+1;
 			}
-			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				this.listFeeSched.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
-				if(DefC.Short[(int)DefCat.FeeSchedNames][i].DefNum==ProvCur.FeeSched){
+			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
+				this.listFeeSched.Items.Add(FeeSchedC.ListShort[i].Description);
+				if(FeeSchedC.ListShort[i].FeeSchedNum==ProvCur.FeeSched){
 					listFeeSched.SelectedIndex=i;
 				}
 			}
@@ -811,12 +811,15 @@ namespace OpenDental{
 			ProvCur.IsHidden=checkIsHidden.Checked;
 			ProvCur.ProvColor=butColor.BackColor;
 			ProvCur.OutlineColor=butOutlineColor.BackColor;
-			if(comboSchoolClass.SelectedIndex==0)//none
+			if(comboSchoolClass.SelectedIndex==0){//none
 				ProvCur.SchoolClassNum=0;
-			else
+			}
+			else{
 				ProvCur.SchoolClassNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
-			if(listFeeSched.SelectedIndex!=-1)
-				ProvCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
+			}
+			if(listFeeSched.SelectedIndex!=-1){
+				ProvCur.FeeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
+			}
 			ProvCur.Specialty=(DentalSpecialty)listSpecialty.SelectedIndex;
 			if(IsNew){
 				Providers.Insert(ProvCur);

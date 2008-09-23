@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 		ClaimFormats,
 		///<summary>6- Not used.</summary>
 		DunningMessages,
-		///<summary>7- Fee schedule names.</summary>
+		///<summary>7- Not used.</summary>
 		FeeSchedNames,
 		///<summary>8- Medical notes for quick paste.</summary>
 		MedicalNotes,

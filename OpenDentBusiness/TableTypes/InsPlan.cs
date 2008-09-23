@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public string GroupNum;
 		///<summary>Note for all plans identical to this one.  Always stays in synch with other identical plans regardless of user actions.  If they change it on one, it gets changed on all.</summary>
 		public string PlanNote;
-		///<summary>FK to definition.DefNum.  Name of fee schedule is stored in definition.ItemName.</summary>
+		///<summary>FK to feesched.FeeSchedNum.</summary>
 		public int FeeSched;
 		///<summary>Release of information signature is on file.</summary>
 		public bool ReleaseInfo;

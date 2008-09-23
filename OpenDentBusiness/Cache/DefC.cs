@@ -90,7 +90,7 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		///<summary>Allowed types are blank, C, or A.  Only used in FormInsPlan.</summary>
+		/*//<summary>Allowed types are blank, C, or A.  Only used in FormInsPlan.</summary>
 		public static Def[] GetFeeSchedList(string type) {
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++) {
@@ -101,7 +101,7 @@ namespace OpenDentBusiness {
 			Def[] retVal=new Def[AL.Count];
 			AL.CopyTo(retVal);
 			return retVal;
-		}
+		}*/
 
 		///<summary></summary>
 		public static List<Def> GetPositiveAdjTypes() {

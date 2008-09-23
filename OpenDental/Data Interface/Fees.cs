@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -7,16 +8,15 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Fees {
-		///<summary>An array of hashtables, one for each non-hidden fee schedule.  For each hashtable, key is CodeNum, value is Fee object.</summary>
-		private static Hashtable[] HList;
+		private static Dictionary<FeeKey,Fee> Dict;
+		private static List<Fee> Listt;
 
-		///<summary>Refreshes all fees and loads them into HList array.  </summary>
+		///<summary>Refreshes all fees and loads them into dict and list.  </summary>
 		public static void Refresh() {
-			HList=new Hashtable[DefC.Short[(int)DefCat.FeeSchedNames].Length];
-			for(int i=0;i<HList.Length;i++) {
-				HList[i]=new Hashtable();
-			}
+			Dict=new Dictionary<FeeKey,Fee>();
+			Listt=new List<Fee>();
 			Fee fee;
+			FeeKey key;
 			string command="SELECT * FROM fee";
 			DataTable table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -28,15 +28,16 @@ namespace OpenDental{
 				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
 				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
 				fee.CodeNum      =PIn.PInt(table.Rows[i][6].ToString());
-				if(DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)!=-1) {//if fee sched is visible
-					if(HList[DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].ContainsKey(fee.CodeNum)) {
-						//if fee was already loaded for this code, delete this duplicate.
-						command="DELETE FROM fee WHERE feenum = '"+fee.FeeNum+"'";
-						General.NonQ(command);
-					}
-					else {
-						HList[DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].Add(fee.CodeNum,fee);
-					}
+				key.codeNum=fee.CodeNum;
+				key.feeSchedNum=fee.FeeSched;
+				if(Dict.ContainsKey(key)){
+					//if fee was already loaded for this code, delete this duplicate.
+					command="DELETE FROM fee WHERE FeeNum ="+POut.PInt(fee.FeeNum);
+					General.NonQ(command);
+				}
+				else{
+					Dict.Add(key,fee);
+					Listt.Add(fee);
 				}
 			}
 		}
@@ -73,28 +74,42 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Used in FormProcCodeEdit,FormProcedures, and FormClaimProc to get Fees for display and for editing. Returns null if no matching fee found.  Warning, "order" is within Def.Short, not Long.</summary>
-		public static Fee GetFeeByOrder(int codeNum, int order){
-			if(codeNum==0)
+		public static Fee GetFee(int codeNum,int feeSchedNum){
+			if(codeNum==0){
 				return null;
-			if(HList[order].Contains(codeNum)){
-				return (Fee)HList[order][codeNum];
+			}
+			if(feeSchedNum==0){
+				return null;
+			}
+			FeeKey key=new FeeKey();
+			key.codeNum=codeNum;
+			key.feeSchedNum=feeSchedNum;
+			if(Dict.ContainsKey(key)){
+				return Dict[key].Copy();
 			}
 			return null;
 		}
 
+		public static Fee GetFeeByOrder(int codeNum,int order){
+			return null;//this is a stub
+		}
+
 		///<summary>Returns an amount if a fee has been entered.  Otherwise returns -1.  Not usually used directly.</summary>
-		public static double GetAmount(int codeNum, int feeSched){
-			if(codeNum==0)
+		public static double GetAmount(int codeNum, int feeSchedNum){
+			if(codeNum==0){
 				return -1;
-			if(feeSched==0)
+			}
+			if(feeSchedNum==0){
 				return -1;
-			int i=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
-			if(i==-1){
+			}
+			if(FeeScheds.GetIsHidden(feeSchedNum)){
 				return -1;//you cannot obtain fees for hidden fee schedules
 			}
-			if(HList[i].Contains(codeNum)){
-				return ((Fee)HList[i][codeNum]).Amount;
+			FeeKey key=new FeeKey();
+			key.codeNum=codeNum;
+			key.feeSchedNum=codeNum;
+			if(Dict.ContainsKey(key)){
+				return Dict[key].Amount;
 			}
 			return -1;//code not found
 		}
@@ -156,29 +171,33 @@ namespace OpenDental{
 		}
 
 		///<summary>Copies any fee objects over to the new fee schedule.  Usually run ClearFeeSched first.  Be careful exactly which int's you supply.</summary>
-		public static void CopyFees(int fromSchedI,int toSchedNum){
-			//Fee fee;
-			Fee[] feeArray=new Fee[HList[fromSchedI].Values.Count];
-			HList[fromSchedI].Values.CopyTo(feeArray,0);
-			for(int i=0;i<feeArray.Length;i++){
-				//fee=((Fee)HList[fromSchedI].Values  [i]).Copy();
-				feeArray[i].FeeSched=toSchedNum;
-				Fees.Insert(feeArray[i]);
+		public static void CopyFees(int fromFeeSched,int toFeeSched){
+			Fee fee;
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].FeeSched!=fromFeeSched){
+					continue;
+				}
+				fee=Listt[i].Copy();
+				fee.FeeSched=toFeeSched;
+				Fees.Insert(fee);
 			}
 		}
 
 		///<summary>Increases the fee schedule by percent.  Round should be the number of decimal places, either 0,1,or 2.</summary>
-		public static void Increase(int schedI,int percent,int round){
-			Fee[] feeArray=new Fee[HList[schedI].Values.Count];
-			HList[schedI].Values.CopyTo(feeArray,0);
+		public static void Increase(int feeSched,int percent,int round){
+			Fee fee;
 			double newVal;
-			for(int i=0;i<feeArray.Length;i++){
-				if(feeArray[i].Amount==0){
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].FeeSched!=feeSched){
 					continue;
 				}
-				newVal=(double)feeArray[i].Amount*(1+(double)percent/100);
-				feeArray[i].Amount=Math.Round(newVal,round);
-				Fees.Update(feeArray[i]);
+				if(Listt[i].Amount==0){
+					continue;
+				}
+				fee=Listt[i].Copy();
+				newVal=(double)fee.Amount*(1+(double)percent/100);
+				fee.Amount=Math.Round(newVal,round);
+				Fees.Update(fee);
 			}
 		}
 
@@ -240,6 +259,11 @@ namespace OpenDental{
 
 	
 
+	}
+
+	public struct FeeKey{
+		public int codeNum;
+		public int feeSchedNum;
 	}
 
 	
