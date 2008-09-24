@@ -26,7 +26,6 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthMedSuppliers));
 			this.groupBoxSupplier = new System.Windows.Forms.GroupBox();
-			this.textSupplierPhone = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textSupplierZip = new System.Windows.Forms.TextBox();
@@ -42,12 +41,21 @@ namespace OpenDental{
 			this.textSupplier = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label20 = new System.Windows.Forms.Label();
+			this.textPhone3 = new System.Windows.Forms.TextBox();
+			this.textPhone2 = new System.Windows.Forms.TextBox();
+			this.textPhone1 = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
 			this.groupBoxSupplier.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBoxSupplier
 			// 
-			this.groupBoxSupplier.Controls.Add(this.textSupplierPhone);
+			this.groupBoxSupplier.Controls.Add(this.label20);
+			this.groupBoxSupplier.Controls.Add(this.textPhone3);
+			this.groupBoxSupplier.Controls.Add(this.textPhone2);
+			this.groupBoxSupplier.Controls.Add(this.textPhone1);
+			this.groupBoxSupplier.Controls.Add(this.label12);
 			this.groupBoxSupplier.Controls.Add(this.label7);
 			this.groupBoxSupplier.Controls.Add(this.label6);
 			this.groupBoxSupplier.Controls.Add(this.textSupplierZip);
@@ -67,13 +75,6 @@ namespace OpenDental{
 			this.groupBoxSupplier.TabIndex = 4;
 			this.groupBoxSupplier.TabStop = false;
 			this.groupBoxSupplier.Text = "Suppliers";
-			// 
-			// textSupplierPhone
-			// 
-			this.textSupplierPhone.Location = new System.Drawing.Point(367, 150);
-			this.textSupplierPhone.Name = "textSupplierPhone";
-			this.textSupplierPhone.Size = new System.Drawing.Size(176, 20);
-			this.textSupplierPhone.TabIndex = 13;
 			// 
 			// label7
 			// 
@@ -211,6 +212,48 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(401, 150);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(11, 16);
+			this.label20.TabIndex = 82;
+			this.label20.Text = ")";
+			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textPhone3
+			// 
+			this.textPhone3.Location = new System.Drawing.Point(454, 147);
+			this.textPhone3.MaxLength = 4;
+			this.textPhone3.Name = "textPhone3";
+			this.textPhone3.Size = new System.Drawing.Size(39, 20);
+			this.textPhone3.TabIndex = 81;
+			// 
+			// textPhone2
+			// 
+			this.textPhone2.Location = new System.Drawing.Point(414, 147);
+			this.textPhone2.MaxLength = 3;
+			this.textPhone2.Name = "textPhone2";
+			this.textPhone2.Size = new System.Drawing.Size(28, 20);
+			this.textPhone2.TabIndex = 80;
+			// 
+			// textPhone1
+			// 
+			this.textPhone1.Location = new System.Drawing.Point(373, 147);
+			this.textPhone1.MaxLength = 3;
+			this.textPhone1.Name = "textPhone1";
+			this.textPhone1.Size = new System.Drawing.Size(28, 20);
+			this.textPhone1.TabIndex = 79;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(363, 149);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(11, 16);
+			this.label12.TabIndex = 78;
+			this.label12.Text = "(";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormAnesthMedSuppliers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -241,11 +284,15 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSupplierAddr1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textSupplier;
-		private System.Windows.Forms.TextBox textSupplierPhone;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.TextBox textSupplierZip;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textSupplierState;
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.TextBox textPhone3;
+		private System.Windows.Forms.TextBox textPhone2;
+		private System.Windows.Forms.TextBox textPhone1;
+		private System.Windows.Forms.Label label12;
 	}
 }
