@@ -868,6 +868,22 @@ namespace OpenDental {
 			return General.NonQ(command);
 		}
 
+		///<summary>Returns the number of fee schedules added.  It doesn't inform the user of how many plans were affected, but there will obviously be a certain number of plans for every new fee schedule.</summary>
+		public static int GenerateAllowedFeeSchedules(){
+			//get carrier names for all plans without an allowed fee schedule.
+			string command="SELECT carrier.CarrierName "
+				+"FROM insplan,carrier "
+				+"WHERE carrier.CarrierNum=insplan.CarrierNum "
+				+"AND " 
+				+"GROUP BY carrier.CarrierName";
+			//loop through all the carrier names
+				//add a fee schedule
+				//assign the new fee sched to many plans
+
+
+			return 40;//stub
+		}
+
 	}
 
 	

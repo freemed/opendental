@@ -69,6 +69,7 @@ namespace OpenDental{
 		private CheckBox checkApptRefreshEveryMinute;
 		private CheckBox checkChartQuickAddHideAmalgam;
 		private ComboBox comboBillingChargeAdjType;
+		private CheckBox checkAllowedFeeSchedsAutomate;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -99,10 +100,10 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.comboBillingChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textClaimAttachPath = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
@@ -117,7 +118,6 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
@@ -146,9 +146,11 @@ namespace OpenDental{
 			this.checkAutoClearEntryStatus = new System.Windows.Forms.CheckBox();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.comboBillingChargeAdjType = new System.Windows.Forms.ComboBox();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -214,7 +216,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(12,351);
+			this.groupBox1.Location = new System.Drawing.Point(12,366);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(422,132);
 			this.groupBox1.TabIndex = 48;
@@ -253,6 +255,16 @@ namespace OpenDental{
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
 			// 
+			// comboBillingChargeAdjType
+			// 
+			this.comboBillingChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBillingChargeAdjType.FormattingEnabled = true;
+			this.comboBillingChargeAdjType.Location = new System.Drawing.Point(254,222);
+			this.comboBillingChargeAdjType.MaxDropDownItems = 30;
+			this.comboBillingChargeAdjType.Name = "comboBillingChargeAdjType";
+			this.comboBillingChargeAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboBillingChargeAdjType.TabIndex = 199;
+			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(32,203);
@@ -283,16 +295,6 @@ namespace OpenDental{
 			this.checkStatementSummaryShowInsInfo.TabIndex = 195;
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textPayPlansBillInAdvanceDays
-			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label18
 			// 
@@ -439,16 +441,6 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -757,16 +749,29 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkAllowedFeeSchedsAutomate);
 			this.groupBox2.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.groupBox2.Controls.Add(this.checkPPOpercentage);
 			this.groupBox2.Controls.Add(this.checkDeductibleBeforePercent);
 			this.groupBox2.Controls.Add(this.checkInsurancePlansShared);
-			this.groupBox2.Location = new System.Drawing.Point(12,234);
+			this.groupBox2.Location = new System.Drawing.Point(12,233);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(422,111);
+			this.groupBox2.Size = new System.Drawing.Size(422,128);
 			this.groupBox2.TabIndex = 193;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
+			// 
+			// checkAllowedFeeSchedsAutomate
+			// 
+			this.checkAllowedFeeSchedsAutomate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAllowedFeeSchedsAutomate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllowedFeeSchedsAutomate.Location = new System.Drawing.Point(3,103);
+			this.checkAllowedFeeSchedsAutomate.Name = "checkAllowedFeeSchedsAutomate";
+			this.checkAllowedFeeSchedsAutomate.Size = new System.Drawing.Size(413,17);
+			this.checkAllowedFeeSchedsAutomate.TabIndex = 193;
+			this.checkAllowedFeeSchedsAutomate.Text = "Automatically generate allowed fee schedules for category percentage plans";
+			this.checkAllowedFeeSchedsAutomate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAllowedFeeSchedsAutomate.Click += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_Click);
 			// 
 			// butCancel
 			// 
@@ -799,15 +804,25 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// comboBillingChargeAdjType
+			// textPayPlansBillInAdvanceDays
 			// 
-			this.comboBillingChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBillingChargeAdjType.FormattingEnabled = true;
-			this.comboBillingChargeAdjType.Location = new System.Drawing.Point(254,222);
-			this.comboBillingChargeAdjType.MaxDropDownItems = 30;
-			this.comboBillingChargeAdjType.Name = "comboBillingChargeAdjType";
-			this.comboBillingChargeAdjType.Size = new System.Drawing.Size(163,21);
-			this.comboBillingChargeAdjType.TabIndex = 199;
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// FormModuleSetup
 			// 
@@ -892,6 +907,7 @@ namespace OpenDental{
 			checkDeductibleBeforePercent.Checked=PrefC.GetBool("DeductibleBeforePercentAsDefault");
 			checkInsurancePlansShared.Checked=PrefC.GetBool("InsurancePlansShared");
 			checkPPOpercentage.Checked=PrefC.GetBool("InsDefaultPPOpercent");
+			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool("AllowedFeeSchedsAutomate");
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool("StatementShowReturnAddress");
 			checkShowCC.Checked=PrefC.GetBool("StatementShowCreditCard");
@@ -946,6 +962,20 @@ namespace OpenDental{
 			MessageBox.Show(Lan.g(this,"Plans changed: ")+result.ToString());
 		}
 
+		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {
+			if(!checkAllowedFeeSchedsAutomate.Checked){
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Allowed fee schedules will now be set up for all insurance plans that do not already have one.\r\nThe name of each fee schedule will exactly match the name of the carrier.\r\nOnce created, allowed fee schedules can be easily managed from the fee schedules window.\r\nContinue?")){
+				checkAllowedFeeSchedsAutomate.Checked=false;
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			int schedsAdded=InsPlans.GenerateAllowedFeeSchedules();
+			Cursor=Cursors.Default;
+			MessageBox.Show(Lan.g(this,"Done.  Allowed fee schedules added: ")+schedsAdded.ToString());
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(comboBrokenApptAdjType.SelectedIndex==-1){
 				MsgBox.Show(this,"Please enter an adjustment type for broken appointments.");
@@ -998,6 +1028,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)
 				| Prefs.UpdateBool("ApptModuleRefreshesEveryMinute", checkApptRefreshEveryMinute.Checked)
 				| Prefs.UpdateBool("ChartQuickAddHideAmalgam", checkChartQuickAddHideAmalgam.Checked)
+				| Prefs.UpdateBool("AllowedFeeSchedsAutomate",checkAllowedFeeSchedsAutomate.Checked)
 				)
 			{
 				changed=true;
@@ -1042,6 +1073,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 	}
 }
 

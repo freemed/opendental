@@ -545,7 +545,16 @@ namespace OpenDental{
 					}
 					command="DELETE FROM definition WHERE Category=7";
 					General.NonQ(command);
+					//end of fee schedule
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('AllowedFeeSchedsAutomate','0','0 or 1')";
+					General.NonQ(command);
 
+
+
+
+
+
+					
 
 
 
