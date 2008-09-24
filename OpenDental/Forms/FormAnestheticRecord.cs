@@ -10,8 +10,10 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-namespace OpenDental {
-	public class FormAnestheticRecord : System.Windows.Forms.Form{
+namespace OpenDental
+{
+	public class FormAnestheticRecord : System.Windows.Forms.Form
+	{
 		private AnestheticRecord AnestheticRecordCur;
 		private Patient PatCur;
 		private TextBox textBoxPatient;
@@ -84,7 +86,7 @@ namespace OpenDental {
 		private ComboBox comboBoxO2LMin;
 		private ComboBox comboBoxN2OLMin;
 		private CheckBox checkBoxInhN20;
-		private CheckBox CheckBoxInhO2;	
+		private CheckBox CheckBoxInhO2;
 		private Label labelIVF;
 		private ComboBox comboBoxIVF;
 		private Label labelIVFVol;
@@ -133,9 +135,10 @@ namespace OpenDental {
 		private DataGridViewTextBoxColumn AnesthDose;
 		private DataGridViewTextBoxColumn AnesthTimeStamp;
 		private PrintDialog printDialog;
-		
 
-		private void InitializeComponent(){
+
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.listAnesthetics = new System.Windows.Forms.ListBox();
 			this.labelAnesthMed = new System.Windows.Forms.Label();
@@ -197,6 +200,9 @@ namespace OpenDental {
 			this.textBoxPatient = new System.Windows.Forms.TextBox();
 			this.labelAnesthetist = new System.Windows.Forms.Label();
 			this.dataGridAnestheticMeds = new System.Windows.Forms.DataGridView();
+			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.AnesthDose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.AnesthTimeStamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.labelDose = new System.Windows.Forms.Label();
 			this.textBoxAnesthDose = new System.Windows.Forms.TextBox();
 			this.labelSurgeon = new System.Windows.Forms.Label();
@@ -208,6 +214,10 @@ namespace OpenDental {
 			this.groupBoxNotes = new System.Windows.Forms.GroupBox();
 			this.groupBoxSig = new System.Windows.Forms.GroupBox();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.groupBoxVS = new System.Windows.Forms.GroupBox();
 			this.textBoxVSMSerNum = new System.Windows.Forms.TextBox();
 			this.dataGridVS = new System.Windows.Forms.DataGridView();
@@ -218,10 +228,6 @@ namespace OpenDental {
 			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.textBoxVSM = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.radioButton1 = new System.Windows.Forms.RadioButton();
-			this.radioButton2 = new System.Windows.Forms.RadioButton();
-			this.label1 = new System.Windows.Forms.Label();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
 			this.butDose8 = new OpenDental.UI.Button();
@@ -251,9 +257,6 @@ namespace OpenDental {
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.butClearSig = new OpenDental.UI.Button();
-			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.AnesthDose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.AnesthTimeStamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
 			this.groupBoxIVAccess.SuspendLayout();
@@ -265,9 +268,9 @@ namespace OpenDental {
 			this.groupBoxNotes.SuspendLayout();
 			this.groupBoxSig.SuspendLayout();
 			this.groupBoxHgtWgt.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.groupBoxVS.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridVS)).BeginInit();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listAnesthetics
@@ -933,6 +936,24 @@ namespace OpenDental {
 			this.dataGridAnestheticMeds.TabIndex = 101;
 			this.dataGridAnestheticMeds.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridAnestheticMeds_CellContentClick_1);
 			// 
+			// AnestheticMed
+			// 
+			this.AnestheticMed.HeaderText = "Anesthetic medication";
+			this.AnestheticMed.Name = "AnestheticMed";
+			this.AnestheticMed.Width = 150;
+			// 
+			// AnesthDose
+			// 
+			this.AnesthDose.HeaderText = "Dose";
+			this.AnesthDose.Name = "AnesthDose";
+			this.AnesthDose.Width = 70;
+			// 
+			// AnesthTimeStamp
+			// 
+			this.AnesthTimeStamp.HeaderText = "Time Stamp";
+			this.AnesthTimeStamp.Name = "AnesthTimeStamp";
+			this.AnesthTimeStamp.Width = 90;
+			// 
 			// labelDose
 			// 
 			this.labelDose.AutoSize = true;
@@ -944,7 +965,7 @@ namespace OpenDental {
 			// 
 			// textBoxAnesthDose
 			// 
-			this.textBoxAnesthDose.Location = new System.Drawing.Point(318, 147);
+			this.textBoxAnesthDose.Location = new System.Drawing.Point(318, 148);
 			this.textBoxAnesthDose.Name = "textBoxAnesthDose";
 			this.textBoxAnesthDose.Size = new System.Drawing.Size(54, 20);
 			this.textBoxAnesthDose.TabIndex = 99;
@@ -1068,6 +1089,53 @@ namespace OpenDental {
 			this.groupBoxHgtWgt.TabStop = false;
 			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.radioButton2);
+			this.groupBox1.Controls.Add(this.comboBoxNPOTime);
+			this.groupBox1.Controls.Add(this.radioButton1);
+			this.groupBox1.Controls.Add(this.textBoxPatHgt);
+			this.groupBox1.Controls.Add(this.labelPatWgt);
+			this.groupBox1.Controls.Add(this.labelPatHgt);
+			this.groupBox1.Controls.Add(this.textBoxPatWgt);
+			this.groupBox1.Location = new System.Drawing.Point(0, 0);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(331, 70);
+			this.groupBox1.TabIndex = 133;
+			this.groupBox1.TabStop = false;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(245, 16);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(60, 13);
+			this.label1.TabIndex = 133;
+			this.label1.Text = "NPO Since";
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Location = new System.Drawing.Point(166, 39);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(37, 17);
+			this.radioButton2.TabIndex = 1;
+			this.radioButton2.TabStop = true;
+			this.radioButton2.Text = "kg";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Location = new System.Drawing.Point(122, 39);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(41, 17);
+			this.radioButton1.TabIndex = 0;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "lbs.";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			// 
 			// groupBoxVS
 			// 
 			this.groupBoxVS.Controls.Add(this.textBoxVSMSerNum);
@@ -1135,53 +1203,6 @@ namespace OpenDental {
 			this.textBoxVSM.Name = "textBoxVSM";
 			this.textBoxVSM.Size = new System.Drawing.Size(88, 20);
 			this.textBoxVSM.TabIndex = 130;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.radioButton2);
-			this.groupBox1.Controls.Add(this.comboBoxNPOTime);
-			this.groupBox1.Controls.Add(this.radioButton1);
-			this.groupBox1.Controls.Add(this.textBoxPatHgt);
-			this.groupBox1.Controls.Add(this.labelPatWgt);
-			this.groupBox1.Controls.Add(this.labelPatHgt);
-			this.groupBox1.Controls.Add(this.textBoxPatWgt);
-			this.groupBox1.Location = new System.Drawing.Point(0, 0);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(331, 70);
-			this.groupBox1.TabIndex = 133;
-			this.groupBox1.TabStop = false;
-			// 
-			// radioButton1
-			// 
-			this.radioButton1.AutoSize = true;
-			this.radioButton1.Location = new System.Drawing.Point(122, 39);
-			this.radioButton1.Name = "radioButton1";
-			this.radioButton1.Size = new System.Drawing.Size(41, 17);
-			this.radioButton1.TabIndex = 0;
-			this.radioButton1.TabStop = true;
-			this.radioButton1.Text = "lbs.";
-			this.radioButton1.UseVisualStyleBackColor = true;
-			// 
-			// radioButton2
-			// 
-			this.radioButton2.AutoSize = true;
-			this.radioButton2.Location = new System.Drawing.Point(166, 39);
-			this.radioButton2.Name = "radioButton2";
-			this.radioButton2.Size = new System.Drawing.Size(37, 17);
-			this.radioButton2.TabIndex = 1;
-			this.radioButton2.TabStop = true;
-			this.radioButton2.Text = "kg";
-			this.radioButton2.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(245, 16);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(60, 13);
-			this.label1.TabIndex = 133;
-			this.label1.Text = "NPO Since";
 			// 
 			// butDose10
 			// 
@@ -1545,6 +1566,7 @@ namespace OpenDental {
 			this.butAnesthScore.TabIndex = 129;
 			this.butAnesthScore.Text = "Post-anesthesia score";
 			this.butAnesthScore.UseVisualStyleBackColor = true;
+			this.butAnesthScore.Click += new System.EventHandler(this.butAnesthScore_Click_1);
 			// 
 			// butClose
 			// 
@@ -1615,24 +1637,6 @@ namespace OpenDental {
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
-			// AnestheticMed
-			// 
-			this.AnestheticMed.HeaderText = "Anesthetic medication";
-			this.AnestheticMed.Name = "AnestheticMed";
-			this.AnestheticMed.Width = 150;
-			// 
-			// AnesthDose
-			// 
-			this.AnesthDose.HeaderText = "Dose";
-			this.AnesthDose.Name = "AnesthDose";
-			this.AnesthDose.Width = 70;
-			// 
-			// AnesthTimeStamp
-			// 
-			this.AnesthTimeStamp.HeaderText = "Time Stamp";
-			this.AnesthTimeStamp.Name = "AnesthTimeStamp";
-			this.AnesthTimeStamp.Width = 90;
-			// 
 			// FormAnestheticRecord
 			// 
 			this.ClientSize = new System.Drawing.Size(784, 732);
@@ -1643,7 +1647,7 @@ namespace OpenDental {
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticRecord";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Anesthetic Record";
+			this.Text = " ";
 			this.Load += new System.EventHandler(this.FormAnestheticRecord_Load);
 			this.groupBoxSidebarRt.ResumeLayout(false);
 			this.groupBoxSidebarRt.PerformLayout();
@@ -1663,34 +1667,35 @@ namespace OpenDental {
 			this.groupBoxSig.ResumeLayout(false);
 			this.groupBoxHgtWgt.ResumeLayout(false);
 			this.groupBoxHgtWgt.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.groupBoxVS.ResumeLayout(false);
 			this.groupBoxVS.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridVS)).EndInit();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
-				public FormAnestheticRecord(Patient patCur)
+		public FormAnestheticRecord(Patient patCur)
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			PatCur=patCur;
+			PatCur = patCur;
 			Lan.F(this);
 		}
 
 
 
-		private void FormAnestheticRecord_Load(object sender, EventArgs e){
+		private void FormAnestheticRecord_Load(object sender, EventArgs e)
+		{
 			//display Patient name
 			textBoxPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textBoxPatID.Text = PatCur.PatNum.ToString();
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length-1;//This works even if no items.
-			
+			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//This works even if no items.
+
 			/*
 			//ADDING FUNCTIONALITY 2008-03-18: fills provider and assistant comboboxes
 
@@ -1723,30 +1728,32 @@ namespace OpenDental {
 				//if (ProviderC.List[i].ProvNum == PatCur.SecProv)
 					//comboSecProv.SelectedIndex = i + 1;
 			 */
-			
-			}
 
-		private void RefreshListAnesthetics(){
+		}
+
+		private void RefreshListAnesthetics()
+		{
 			//most recent date at the top
 			AnestheticRecords.Refresh(PatCur.PatNum);
 			listAnesthetics.Items.Clear();
-	
+
 			for (int i = 0; i < AnestheticRecords.List.Length; i++)
 			{
-				
+
 				listAnesthetics.Items.Add(AnestheticRecords.List[i].AnestheticDate);
 			}
 		}
 
-		private void butAddAnesthetic_Click(object sender, EventArgs e){
-			 
-			AnestheticRecordCur=new AnestheticRecord();
-			AnestheticRecordCur.PatNum=PatCur.PatNum;
+		private void butAddAnesthetic_Click(object sender, EventArgs e)
+		{
+
+			AnestheticRecordCur = new AnestheticRecord();
+			AnestheticRecordCur.PatNum = PatCur.PatNum;
 			AnestheticRecordCur.AnestheticDate = DateTime.Now;
-			AnestheticRecordCur.ProvNum=PatCur.PriProv;
+			AnestheticRecordCur.ProvNum = PatCur.PriProv;
 			AnestheticRecords.Insert(AnestheticRecordCur);
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex=AnestheticRecords.List.Length-1;//Add -1 after List.Length to select in ascending order
+			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//Add -1 after List.Length to select in ascending order
 		}
 
 		private void butDelAnesthetic_Click(object sender, System.EventArgs e)
@@ -1776,32 +1783,40 @@ namespace OpenDental {
 			DialogResult = DialogResult.Cancel;
 		}
 
-		private void butAnesthScore_Click(object sender, EventArgs e){
+		private void butAnesthScore_Click(object sender, EventArgs e)
+		{
 
 		}
 
-		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+		{
 
 		}
 
-		private void checkBox7_CheckedChanged(object sender, EventArgs e){
+		private void checkBox7_CheckedChanged(object sender, EventArgs e)
+		{
 
 		}
 
-		private void label26_Click(object sender, EventArgs e){
+		private void label26_Click(object sender, EventArgs e)
+		{
 
 		}
 
-		 private void butClose_Click(object sender, System.EventArgs e){
-			Close();}
+		private void butClose_Click(object sender, System.EventArgs e)
+		{
+			Close();
+		}
 
-		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
+		{
 
 		}
 
 
 
-		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e){
+		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e)
+		{
 
 		}
 
@@ -1812,9 +1827,9 @@ namespace OpenDental {
 
 		private void button20_Click_1(object sender, EventArgs e)
 		{
-			
+
 		}
-		
+
 		private void Text1_TextChanged(object sender, EventArgs e)
 		{
 
@@ -1822,22 +1837,22 @@ namespace OpenDental {
 
 		private void Text3_TextChanged(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void textBoxSurgOpen_TextChanged(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void textBoxSurgClose_TextChanged_1(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void butAnesthOpen_Click(object sender, EventArgs e)
@@ -2032,7 +2047,8 @@ namespace OpenDental {
 
 		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (listAnesthetics.SelectedIndex != -1){
+			if (listAnesthetics.SelectedIndex != -1)
+			{
 				//SaveCurAnesthetic(AnestheticRecordCur.AnestheticRecordNum);
 			}
 		}
@@ -2042,19 +2058,18 @@ namespace OpenDental {
 
 		}
 
-		private void butAnesthMedIntake_Click(object sender, EventArgs e)
-		{
-			FormAnestheticMedsIntake FormM = new FormAnestheticMedsIntake();
-			//FormM.AnestheticMedsCur = new AnestheticMeds();
-			//FormM.IsNew = true;
-			FormM.ShowDialog();
-			//FillGrid();
-		}
 
 		private void labelRoute_Click(object sender, EventArgs e)
 		{
 
 		}
-		
+
+		private void butAnesthScore_Click_1(object sender, EventArgs e)
+		{
+
+			FormAnesthesiaScore FormAS = new FormAnesthesiaScore();
+			FormAS.ShowDialog();
+
 		}
 	}
+}
