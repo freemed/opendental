@@ -74,6 +74,7 @@ namespace OpenDental.UI{
 		private int noteSpanStop;
 		private TextBox editBox;
 		private MouseButtons lastButtonPressed;
+		private ArrayList selectedIndicesWhenMouseDown;
 
 		///<summary></summary>
 		public ODGrid(){
@@ -1205,6 +1206,10 @@ namespace OpenDental.UI{
 					break;
 				case GridSelectionMode.MultiExtended:
 					if(ControlIsDown){
+						//we need to remember exactly which rows were selected the moment the mouse down started.
+						//Then, if the mouse gets dragged up or down, the rows between mouse start and mouse end
+						//will be set to the opposite of these remembered values.
+						selectedIndicesWhenMouseDown=new ArrayList(selectedIndices);
 						if(selectedIndices.Contains(MouseDownRow)){
 							selectedIndices.Remove(MouseDownRow);
 						}
@@ -1335,19 +1340,26 @@ namespace OpenDental.UI{
 				return;
 			}
 			//because mouse might have moved faster than computer could keep up, we have to loop through all rows between
+			selectedIndices=new ArrayList(selectedIndicesWhenMouseDown);
 			if(MouseDownRow<curRow){//dragging down
 				for(int i=MouseDownRow;i<=curRow;i++){
 					if(i==-1) {
 						continue;
 					}
-					if(!selectedIndices.Contains(i)){
+					if(selectedIndices.Contains(i)){
+						selectedIndices.Remove(i);
+					}
+					else{
 						selectedIndices.Add(i);
 					}
 				}
 			}
-			else{
+			else{//dragging up
 				for(int i=curRow;i<=MouseDownRow;i++){
-					if(!selectedIndices.Contains(i)){
+					if(selectedIndices.Contains(i)){
+						selectedIndices.Remove(i);
+					}
+					else{
 						selectedIndices.Add(i);
 					}
 				}

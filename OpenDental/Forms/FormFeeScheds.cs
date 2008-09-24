@@ -27,6 +27,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butIns;
 		private Label label6;
 		private Label label1;
+		private OpenDental.UI.Button butSort;
 		private List<FeeSched> FeeSchedsForType;
 
 		///<summary></summary>
@@ -65,13 +66,14 @@ namespace OpenDental{
 			this.listType = new System.Windows.Forms.ListBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.butIns = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.butSort = new OpenDental.UI.Button();
 			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -104,6 +106,15 @@ namespace OpenDental{
 			this.label6.TabIndex = 5;
 			this.label6.Text = "This tool will help make sure your insurance plans have the right fee schedules s" +
     "et.";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(315,5);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100,18);
+			this.label1.TabIndex = 18;
+			this.label1.Text = "Type";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butIns
 			// 
@@ -194,19 +205,26 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// label1
+			// butSort
 			// 
-			this.label1.Location = new System.Drawing.Point(315,5);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,18);
-			this.label1.TabIndex = 18;
-			this.label1.Text = "Type";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.butSort.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSort.Autosize = true;
+			this.butSort.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSort.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSort.CornerRadius = 4F;
+			this.butSort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSort.Location = new System.Drawing.Point(318,214);
+			this.butSort.Name = "butSort";
+			this.butSort.Size = new System.Drawing.Size(75,24);
+			this.butSort.TabIndex = 19;
+			this.butSort.Text = "Sort by Type";
+			this.butSort.Click += new System.EventHandler(this.butSort_Click);
 			// 
 			// FormFeeScheds
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(515,644);
+			this.Controls.Add(this.butSort);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.butDown);
@@ -263,7 +281,7 @@ namespace OpenDental{
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableFeeScheds","Description"),150);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableFeeScheds","Description"),145);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableFeeScheds","Type"),70);
 			gridMain.Columns.Add(col);
@@ -318,6 +336,12 @@ namespace OpenDental{
 		}
 
 		private void listType_Click(object sender,EventArgs e) {
+			if(listType.SelectedIndex==0){
+				butSort.Enabled=true;
+			}
+			else{
+				butSort.Enabled=false;
+			}
 			FillGrid();
 		}
 
@@ -337,6 +361,7 @@ namespace OpenDental{
 			FeeScheds.WriteObject(FeeSchedsForType[idx-1]);
 			FeeSchedsForType[idx].ItemOrder=order1;
 			FeeScheds.WriteObject(FeeSchedsForType[idx]);
+			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx-1,true);
 		}
@@ -356,8 +381,37 @@ namespace OpenDental{
 			FeeScheds.WriteObject(FeeSchedsForType[idx]);
 			FeeSchedsForType[idx+1].ItemOrder=order1;
 			FeeScheds.WriteObject(FeeSchedsForType[idx+1]);
+			changed=true;
 			FillGrid();
 			gridMain.SetSelected(idx+1,true);
+		}
+
+		private void butSort_Click(object sender,EventArgs e) {
+			//only enabled if viewing all types
+			List<FeeSched> sortedList=new List<FeeSched>();
+			for(int i=0;i<FeeSchedsForType.Count;i++){
+				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.Normal){
+					sortedList.Add(FeeSchedsForType[i].Copy());
+				}
+			}
+			for(int i=0;i<FeeSchedsForType.Count;i++){
+				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.CoPay){
+					sortedList.Add(FeeSchedsForType[i].Copy());
+				}
+			}
+			for(int i=0;i<FeeSchedsForType.Count;i++){
+				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.Allowed){
+					sortedList.Add(FeeSchedsForType[i].Copy());
+				}
+			}
+			for(int i=0;i<sortedList.Count;i++){
+				if(sortedList[i].ItemOrder!=i){
+					sortedList[i].ItemOrder=i;
+					FeeScheds.WriteObject(sortedList[i]);
+				}
+			}
+			changed=true;
+			FillGrid();
 		}
 
 		private void butIns_Click(object sender,EventArgs e) {
@@ -375,6 +429,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.FeeScheds);
 			}
 		}
+
+		
 
 		
 

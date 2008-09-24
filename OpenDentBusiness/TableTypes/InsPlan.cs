@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		public bool UseAltCode;
 		///<summary>Fee billed on claim should be the UCR fee for the patient's provider.</summary>
 		public bool ClaimsUseUCR;
-		///<summary>FK to definition.DefNum. Not usually used. This fee schedule holds only co-pays(patient portions).  Only used for Capitation or for fixed copay plans.</summary>
+		///<summary>FK to feesched.FeeSchedNum. Not usually used. This fee schedule holds only co-pays(patient portions).  Only used for Capitation or for fixed copay plans.</summary>
 		public int CopayFeeSched;
 		///<summary>Usually SSN, but can also be changed by user.  No dashes. Not allowed to be blank.</summary>
 		public string SubscriberID;
@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		public int EmployerNum;
 		///<summary>FK to carrier.CarrierNum.</summary>
 		public int CarrierNum;
-		///<summary>FK to Definition.DefNum. Not usually used.  This fee schedule holds amounts allowed by carriers.</summary>
+		///<summary>FK to feesched.FeeSchedNum. Not usually used.  This fee schedule holds amounts allowed by carriers.</summary>
 		public int AllowedFeeSched;
 		///<summary>.</summary>
 		public string TrojanID;

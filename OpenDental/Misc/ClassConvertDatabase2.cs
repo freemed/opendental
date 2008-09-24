@@ -543,8 +543,8 @@ namespace OpenDental{
 							+table.Rows[i]["IsHidden"].ToString()+")";
 						General.NonQ(command);
 					}
-
-
+					command="DELETE FROM definition WHERE Category=7";
+					General.NonQ(command);
 
 
 

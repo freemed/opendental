@@ -779,31 +779,44 @@ namespace OpenDental {
 		}
 
 		///<summary>Used in FormFeesForIns</summary>
-		public static DataTable GetListFeeCheck(string carrierName,string carrierNameNot,int feeSchedWithout,int feeSchedWith){
+		public static DataTable GetListFeeCheck(string carrierName,string carrierNameNot,int feeSchedWithout,int feeSchedWith,
+			FeeScheduleType feeSchedType)
+		{
+			string pFeeSched="FeeSched";
+			if(feeSchedType==FeeScheduleType.Allowed){
+				pFeeSched="AllowedFeeSched";
+			}
+			if(feeSchedType==FeeScheduleType.CoPay){
+				pFeeSched="CopayFeeSched";
+			}
 			string command=
-				"SELECT insplan.GroupName,insplan.GroupNum,insplan.FeeSched,COUNT(*) AS Plans,employer.EmpName,carrier.CarrierName, "
-				+"insplan.EmployerNum,insplan.CarrierNum,definition.ItemName AS FeeSchedName "
+				"SELECT insplan.GroupName,insplan.GroupNum,COUNT(*) AS Plans,employer.EmpName,carrier.CarrierName,"
+				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description AS FeeSchedName,"
+				+"insplan."+pFeeSched+" feeSched "
 				+"FROM insplan "
 				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"LEFT JOIN definition ON definition.DefNum = insplan.FeeSched "
+				+"LEFT JOIN feesched ON feesched.FeeSchedNum = insplan."+pFeeSched+" "
 				+"WHERE carrier.CarrierName LIKE '%"+POut.PString(carrierName)+"%' ";
 			if(carrierNameNot!=""){
 				command+="AND carrier.CarrierName NOT LIKE '%"+POut.PString(carrierNameNot)+"%' ";
 			}
 			if(feeSchedWithout!=0){
-				command+="AND insplan.FeeSched !="+POut.PInt(feeSchedWithout)+" ";
+				command+="AND insplan."+pFeeSched+" !="+POut.PInt(feeSchedWithout)+" ";
 			}
 			if(feeSchedWith!=0) {
-				command+="AND insplan.FeeSched ="+POut.PInt(feeSchedWith)+" ";
+				command+="AND insplan."+pFeeSched+" ="+POut.PInt(feeSchedWith)+" ";
 			}
-			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,insplan.FeeSched "
+			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,"
+				+"insplan."+pFeeSched+" "
 				+"ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
 			return General.GetTable(command);
 		}
 
 		///<summary>Based on the four supplied parameters, it updates all similar plans.  Used in a specific tool: FormFeesForIns.</summary>
-		public static int SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,int feeSchedNum){
+		public static int SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,int feeSchedNum,
+			FeeScheduleType feeSchedType)
+		{
 			//FIXME:UPDATE-MULTIPLE-TABLES
 			/*string command="UPDATE insplan,carrier SET insplan.FeeSched="+POut.PInt(feeSchedNum)
 				+" WHERE carrier.CarrierNum = insplan.CarrierNum "//employer.EmployerNum = insplan.EmployerNum "
@@ -824,9 +837,20 @@ namespace OpenDental {
 			if(table.Rows.Count==0){
 				return 0;
 			}
-			command="UPDATE insplan SET insplan.FeeSched="+POut.PInt(feeSchedNum)
-				+" WHERE insplan.FeeSched !="+POut.PInt(feeSchedNum)
-				+" AND (";
+			command="UPDATE insplan SET ";
+			if(feeSchedType==FeeScheduleType.Normal){
+				command+="insplan.FeeSched ="+POut.PInt(feeSchedNum)
+					+" WHERE insplan.FeeSched !="+POut.PInt(feeSchedNum);
+			}
+			else if(feeSchedType==FeeScheduleType.Allowed){
+				command+="insplan.AllowedFeeSched ="+POut.PInt(feeSchedNum)
+					+" WHERE insplan.AllowedFeeSched !="+POut.PInt(feeSchedNum);
+			}
+			else if(feeSchedType==FeeScheduleType.CoPay){
+				command+="insplan.CopayFeeSched ="+POut.PInt(feeSchedNum)
+					+" WHERE insplan.CopayFeeSched !="+POut.PInt(feeSchedNum);
+			}
+			command+=" AND (";
 			for(int i=0;i<table.Rows.Count;i++){
 				command+="PlanNum="+table.Rows[i][0].ToString();
 				if(i<table.Rows.Count-1){
