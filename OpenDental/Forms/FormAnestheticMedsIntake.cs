@@ -47,10 +47,15 @@ namespace OpenDental
 		private void butSetupAnesthMeds_Click(object sender, EventArgs e)
 		{
 			FormAnestheticMedsInventory FormI = new FormAnestheticMedsInventory();
-			//FormI.AnestheticMedsCur = new AnestheticMeds();
-			//FormI.IsNew = true;
 			FormI.ShowDialog();
-			//FillGrid();
+			
+		}
+
+		private void butAddSupplier_Click(object sender, EventArgs e)
+
+		{
+			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
+			FormMS.ShowDialog();
 		}
 
 
