@@ -140,7 +140,6 @@ namespace OpenDental{
 			this.groupFeeScheds.Size = new System.Drawing.Size(200,51);
 			this.groupFeeScheds.TabIndex = 14;
 			this.groupFeeScheds.TabStop = false;
-			this.groupFeeScheds.Text = "Fee Schedules";
 			// 
 			// butTools
 			// 
@@ -149,11 +148,11 @@ namespace OpenDental{
 			this.butTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTools.CornerRadius = 4F;
-			this.butTools.Location = new System.Drawing.Point(109,18);
+			this.butTools.Location = new System.Drawing.Point(109,16);
 			this.butTools.Name = "butTools";
 			this.butTools.Size = new System.Drawing.Size(81,26);
 			this.butTools.TabIndex = 14;
-			this.butTools.Text = "Tools";
+			this.butTools.Text = "Fee Tools";
 			this.butTools.Click += new System.EventHandler(this.butTools_Click);
 			// 
 			// butEditFeeSched
@@ -163,11 +162,11 @@ namespace OpenDental{
 			this.butEditFeeSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEditFeeSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEditFeeSched.CornerRadius = 4F;
-			this.butEditFeeSched.Location = new System.Drawing.Point(12,18);
+			this.butEditFeeSched.Location = new System.Drawing.Point(12,16);
 			this.butEditFeeSched.Name = "butEditFeeSched";
 			this.butEditFeeSched.Size = new System.Drawing.Size(81,26);
 			this.butEditFeeSched.TabIndex = 13;
-			this.butEditFeeSched.Text = "Edit Names";
+			this.butEditFeeSched.Text = "Fee Scheds";
 			this.butEditFeeSched.Click += new System.EventHandler(this.butEditFeeSched_Click);
 			// 
 			// listCategories
@@ -470,8 +469,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Codes";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcedures_Closing);
 			this.Load += new System.EventHandler(this.FormProcCodes_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcedures_Closing);
 			this.groupFeeScheds.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();

@@ -32,6 +32,8 @@ namespace OpenDental{
 		private Label label5;
 		private TextBox textCarrierNot;
 		private Label label6;
+		private Label label7;
+		private ListBox listType;
 		private DataTable table;
 
 		///<summary></summary>
@@ -76,11 +78,13 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.comboFeeSchedNew = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.textCarrierNot = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textCarrierNot = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.listType = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// textCarrier
@@ -167,48 +171,6 @@ namespace OpenDental{
 			this.label5.Text = "New Fee Schedule";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,79);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(676,510);
-			this.gridMain.TabIndex = 2;
-			this.gridMain.Title = "Ins Plans that might need to be changed";
-			this.gridMain.TranslationName = null;
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(613,595);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 2;
-			this.butOK.Text = "Change";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(716,595);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 3;
-			this.butCancel.Text = "&Close";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
 			// textCarrierNot
 			// 
 			this.textCarrierNot.Location = new System.Drawing.Point(135,53);
@@ -227,10 +189,73 @@ namespace OpenDental{
 			this.label6.Text = "Carrier Not Like";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,79);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(676,510);
+			this.gridMain.TabIndex = 2;
+			this.gridMain.Title = "Ins Plans that might need to be changed";
+			this.gridMain.TranslationName = null;
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(613,596);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 2;
+			this.butOK.Text = "Change";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(716,596);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 3;
+			this.butCancel.Text = "&Close";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(702,119);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(100,18);
+			this.label7.TabIndex = 30;
+			this.label7.Text = "Type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listType
+			// 
+			this.listType.FormattingEnabled = true;
+			this.listType.Location = new System.Drawing.Point(705,140);
+			this.listType.Name = "listType";
+			this.listType.Size = new System.Drawing.Size(120,43);
+			this.listType.TabIndex = 29;
+			// 
 			// FormFeesForIns
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(803,633);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.listType);
 			this.Controls.Add(this.textCarrierNot);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.comboFeeSchedNew);

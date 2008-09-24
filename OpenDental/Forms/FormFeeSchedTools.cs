@@ -39,9 +39,6 @@ namespace OpenDental{
 		private Label label4;
 		private OpenDental.UI.Button butUpdate;
 		private Label label5;
-		private GroupBox groupBox7;
-		private OpenDental.UI.Button butIns;
-		private Label label6;
 		///<summary>The defNum of the fee schedule that is currently displayed in the main window.</summary>
 		private int SchedNum;
 
@@ -102,16 +99,12 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.butUpdate = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.butIns = new OpenDental.UI.Button();
-			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox6.SuspendLayout();
-			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -136,7 +129,7 @@ namespace OpenDental{
 			this.butCopy.CornerRadius = 4F;
 			this.butCopy.Location = new System.Drawing.Point(10,66);
 			this.butCopy.Name = "butCopy";
-			this.butCopy.Size = new System.Drawing.Size(75,26);
+			this.butCopy.Size = new System.Drawing.Size(75,24);
 			this.butCopy.TabIndex = 4;
 			this.butCopy.Text = "Copy";
 			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
@@ -178,7 +171,7 @@ namespace OpenDental{
 			this.butClear.CornerRadius = 4F;
 			this.butClear.Location = new System.Drawing.Point(10,25);
 			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(75,26);
+			this.butClear.Size = new System.Drawing.Size(75,24);
 			this.butClear.TabIndex = 4;
 			this.butClear.Text = "Clear";
 			this.butClear.Click += new System.EventHandler(this.butClear_Click);
@@ -201,10 +194,9 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(92,143);
+			this.label5.Location = new System.Drawing.Point(92,142);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(69,13);
+			this.label5.Size = new System.Drawing.Size(90,18);
 			this.label5.TabIndex = 11;
 			this.label5.Text = "(or decrease)";
 			// 
@@ -268,7 +260,7 @@ namespace OpenDental{
 			this.butIncrease.CornerRadius = 4F;
 			this.butIncrease.Location = new System.Drawing.Point(11,135);
 			this.butIncrease.Name = "butIncrease";
-			this.butIncrease.Size = new System.Drawing.Size(75,26);
+			this.butIncrease.Size = new System.Drawing.Size(75,24);
 			this.butIncrease.TabIndex = 4;
 			this.butIncrease.Text = "Increase";
 			this.butIncrease.Click += new System.EventHandler(this.butIncrease_Click);
@@ -310,7 +302,7 @@ namespace OpenDental{
 			this.butImport.CornerRadius = 4F;
 			this.butImport.Location = new System.Drawing.Point(116,25);
 			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75,26);
+			this.butImport.Size = new System.Drawing.Size(75,24);
 			this.butImport.TabIndex = 5;
 			this.butImport.Text = "Import";
 			this.butImport.Click += new System.EventHandler(this.butImport_Click);
@@ -324,7 +316,7 @@ namespace OpenDental{
 			this.butExport.CornerRadius = 4F;
 			this.butExport.Location = new System.Drawing.Point(10,25);
 			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(75,26);
+			this.butExport.Size = new System.Drawing.Size(75,24);
 			this.butExport.TabIndex = 4;
 			this.butExport.Text = "Export";
 			this.butExport.Click += new System.EventHandler(this.butExport_Click);
@@ -343,10 +335,9 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(91,32);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(72,13);
+			this.label4.Size = new System.Drawing.Size(91,18);
 			this.label4.TabIndex = 5;
 			this.label4.Text = "for all patients";
 			// 
@@ -359,7 +350,7 @@ namespace OpenDental{
 			this.butUpdate.CornerRadius = 4F;
 			this.butUpdate.Location = new System.Drawing.Point(10,25);
 			this.butUpdate.Name = "butUpdate";
-			this.butUpdate.Size = new System.Drawing.Size(75,26);
+			this.butUpdate.Size = new System.Drawing.Size(75,24);
 			this.butUpdate.TabIndex = 4;
 			this.butUpdate.Text = "Update";
 			this.butUpdate.Click += new System.EventHandler(this.butUpdate_Click);
@@ -372,53 +363,17 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(406,319);
+			this.butClose.Location = new System.Drawing.Point(392,290);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Cancel";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// groupBox7
-			// 
-			this.groupBox7.Controls.Add(this.butIns);
-			this.groupBox7.Controls.Add(this.label6);
-			this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox7.Location = new System.Drawing.Point(15,256);
-			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(205,98);
-			this.groupBox7.TabIndex = 7;
-			this.groupBox7.TabStop = false;
-			this.groupBox7.Text = "Check Ins Plan Fees";
-			// 
-			// butIns
-			// 
-			this.butIns.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butIns.Autosize = true;
-			this.butIns.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butIns.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butIns.CornerRadius = 4F;
-			this.butIns.Location = new System.Drawing.Point(116,62);
-			this.butIns.Name = "butIns";
-			this.butIns.Size = new System.Drawing.Size(75,26);
-			this.butIns.TabIndex = 4;
-			this.butIns.Text = "Go";
-			this.butIns.Click += new System.EventHandler(this.butIns_Click);
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(6,16);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(196,47);
-			this.label6.TabIndex = 5;
-			this.label6.Text = "This tool will help make sure your insurance plans have the right fee schedules s" +
-    "et.";
-			// 
 			// FormFeeSchedTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(506,370);
-			this.Controls.Add(this.groupBox7);
+			this.ClientSize = new System.Drawing.Size(492,341);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox3);
@@ -431,7 +386,7 @@ namespace OpenDental{
 			this.Name = "FormFeeSchedTools";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Fee Schedule Tools";
+			this.Text = "Fee Tools";
 			this.Load += new System.EventHandler(this.FormFeeSchedTools_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
@@ -440,8 +395,6 @@ namespace OpenDental{
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
-			this.groupBox6.PerformLayout();
-			this.groupBox7.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -587,12 +540,6 @@ namespace OpenDental{
 			int rowsChanged=Procedures.GlobalUpdateFees();
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Fees changed: ")+rowsChanged.ToString());
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butIns_Click(object sender,EventArgs e) {
-			FormFeesForIns FormF=new FormFeesForIns();
-			FormF.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
 

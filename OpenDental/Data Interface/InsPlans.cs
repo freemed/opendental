@@ -824,13 +824,16 @@ namespace OpenDental {
 			if(table.Rows.Count==0){
 				return 0;
 			}
-			command="UPDATE insplan SET insplan.FeeSched="+POut.PInt(feeSchedNum)+" WHERE ";
+			command="UPDATE insplan SET insplan.FeeSched="+POut.PInt(feeSchedNum)
+				+" WHERE insplan.FeeSched !="+POut.PInt(feeSchedNum)
+				+" AND (";
 			for(int i=0;i<table.Rows.Count;i++){
 				command+="PlanNum="+table.Rows[i][0].ToString();
 				if(i<table.Rows.Count-1){
 					command+=" OR ";
 				}
 			}
+			command+=")";
 			return General.NonQ(command);
 		}
 
