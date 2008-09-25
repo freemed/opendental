@@ -54,7 +54,7 @@ namespace OpenDental
 		private void butAddSupplier_Click(object sender, EventArgs e)
 
 		{
-			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
+			FormAnesthMedSuppliersEdit FormMS = new FormAnesthMedSuppliersEdit();
 			FormMS.ShowDialog();
 		}
 

@@ -7,9 +7,9 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental {
-	public partial class FormAnesthMedSuppliers : Form
+	public partial class FormAnesthMedSuppliersEdit : Form
 	{
-		public FormAnesthMedSuppliers()
+		public FormAnesthMedSuppliersEdit()
 		{
 			InitializeComponent();
 			Lan.F(this);
