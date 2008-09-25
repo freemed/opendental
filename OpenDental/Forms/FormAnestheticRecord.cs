@@ -117,7 +117,6 @@ namespace OpenDental
 		private OpenDental.UI.Button butSignTopaz;
 		private OpenDental.UI.Button butClearSig;
 		private OpenDental.UI.Button butPrint;
-		private OpenDental.UI.Button butClose;
 		private GroupBox groupBoxDeliveryMethod;
 		private RadioButton radButRteETT;
 		private RadioButton radButRteNasCan;
@@ -134,6 +133,10 @@ namespace OpenDental
 		private DataGridViewTextBoxColumn AnestheticMed;
 		private DataGridViewTextBoxColumn AnesthDose;
 		private DataGridViewTextBoxColumn AnesthTimeStamp;
+		private OpenDental.UI.Button butClose;
+		private OpenDental.UI.Button butCancel;
+		private Label label2;
+		private OpenDental.UI.Button butWasteQty;
 		private PrintDialog printDialog;
 
 
@@ -228,6 +231,7 @@ namespace OpenDental
 			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.textBoxVSM = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
 			this.butDose8 = new OpenDental.UI.Button();
@@ -253,10 +257,12 @@ namespace OpenDental
 			this.butSurgOpen = new OpenDental.UI.Button();
 			this.butAnesthScore = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.butClearSig = new OpenDental.UI.Button();
+			this.butWasteQty = new OpenDental.UI.Button();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
 			this.groupBoxIVAccess.SuspendLayout();
@@ -430,7 +436,7 @@ namespace OpenDental
             "9 PM",
             "10 PM",
             "11 PM"});
-			this.comboBoxNPOTime.Location = new System.Drawing.Point(248, 35);
+			this.comboBoxNPOTime.Location = new System.Drawing.Point(215, 35);
 			this.comboBoxNPOTime.Name = "comboBoxNPOTime";
 			this.comboBoxNPOTime.Size = new System.Drawing.Size(54, 21);
 			this.comboBoxNPOTime.TabIndex = 124;
@@ -845,6 +851,8 @@ namespace OpenDental
 			// 
 			// groupBoxAnesthMeds
 			// 
+			this.groupBoxAnesthMeds.Controls.Add(this.butWasteQty);
+			this.groupBoxAnesthMeds.Controls.Add(this.label2);
 			this.groupBoxAnesthMeds.Controls.Add(this.textBoxPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatient);
@@ -1052,6 +1060,7 @@ namespace OpenDental
 			// groupBoxNotes
 			// 
 			this.groupBoxNotes.Controls.Add(this.butClose);
+			this.groupBoxNotes.Controls.Add(this.butCancel);
 			this.groupBoxNotes.Controls.Add(this.richTextBoxNotes);
 			this.groupBoxNotes.Controls.Add(this.butPrint);
 			this.groupBoxNotes.Controls.Add(this.groupBoxSig);
@@ -1068,9 +1077,9 @@ namespace OpenDental
 			this.groupBoxSig.Controls.Add(this.butSignTopaz);
 			this.groupBoxSig.Controls.Add(this.sigBox);
 			this.groupBoxSig.Controls.Add(this.butClearSig);
-			this.groupBoxSig.Location = new System.Drawing.Point(540, 0);
+			this.groupBoxSig.Location = new System.Drawing.Point(488, 0);
 			this.groupBoxSig.Name = "groupBoxSig";
-			this.groupBoxSig.Size = new System.Drawing.Size(229, 105);
+			this.groupBoxSig.Size = new System.Drawing.Size(281, 105);
 			this.groupBoxSig.TabIndex = 139;
 			this.groupBoxSig.TabStop = false;
 			this.groupBoxSig.Text = "Signature/Initials";
@@ -1084,7 +1093,7 @@ namespace OpenDental
 			this.groupBoxHgtWgt.Controls.Add(this.textBoxEscortRel);
 			this.groupBoxHgtWgt.Location = new System.Drawing.Point(203, 19);
 			this.groupBoxHgtWgt.Name = "groupBoxHgtWgt";
-			this.groupBoxHgtWgt.Size = new System.Drawing.Size(331, 130);
+			this.groupBoxHgtWgt.Size = new System.Drawing.Size(278, 130);
 			this.groupBoxHgtWgt.TabIndex = 138;
 			this.groupBoxHgtWgt.TabStop = false;
 			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
@@ -1101,14 +1110,14 @@ namespace OpenDental
 			this.groupBox1.Controls.Add(this.textBoxPatWgt);
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(331, 70);
+			this.groupBox1.Size = new System.Drawing.Size(278, 70);
 			this.groupBox1.TabIndex = 133;
 			this.groupBox1.TabStop = false;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(245, 16);
+			this.label1.Location = new System.Drawing.Point(212, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(60, 13);
 			this.label1.TabIndex = 133;
@@ -1203,6 +1212,15 @@ namespace OpenDental
 			this.textBoxVSM.Name = "textBoxVSM";
 			this.textBoxVSM.Size = new System.Drawing.Size(88, 20);
 			this.textBoxVSM.TabIndex = 130;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(406, 321);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(150, 13);
+			this.label2.TabIndex = 107;
+			this.label2.Text = "(Doses must be entered in mL)";
 			// 
 			// butDose10
 			// 
@@ -1562,7 +1580,7 @@ namespace OpenDental
 			this.butAnesthScore.CornerRadius = 4F;
 			this.butAnesthScore.Location = new System.Drawing.Point(18, 508);
 			this.butAnesthScore.Name = "butAnesthScore";
-			this.butAnesthScore.Size = new System.Drawing.Size(131, 32);
+			this.butAnesthScore.Size = new System.Drawing.Size(131, 26);
 			this.butAnesthScore.TabIndex = 129;
 			this.butAnesthScore.Text = "Post-anesthesia score";
 			this.butAnesthScore.UseVisualStyleBackColor = true;
@@ -1576,13 +1594,28 @@ namespace OpenDental
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(671, 111);
+			this.butClose.Location = new System.Drawing.Point(673, 116);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(88, 32);
-			this.butClose.TabIndex = 136;
-			this.butClose.Text = "Close";
+			this.butClose.Size = new System.Drawing.Size(90, 26);
+			this.butClose.TabIndex = 142;
+			this.butClose.Text = "Save and Close";
 			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(601, 116);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 141;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
 			// 
 			// butPrint
 			// 
@@ -1593,9 +1626,9 @@ namespace OpenDental
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(572, 111);
+			this.butPrint.Location = new System.Drawing.Point(488, 116);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88, 32);
+			this.butPrint.Size = new System.Drawing.Size(88, 26);
 			this.butPrint.TabIndex = 102;
 			this.butPrint.Text = "Print";
 			this.butPrint.UseVisualStyleBackColor = true;
@@ -1608,9 +1641,9 @@ namespace OpenDental
 			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSignTopaz.CornerRadius = 4F;
-			this.butSignTopaz.Location = new System.Drawing.Point(146, 19);
+			this.butSignTopaz.Location = new System.Drawing.Point(195, 19);
 			this.butSignTopaz.Name = "butSignTopaz";
-			this.butSignTopaz.Size = new System.Drawing.Size(75, 25);
+			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
 			this.butSignTopaz.TabIndex = 136;
 			this.butSignTopaz.Text = "Sign Topaz";
 			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
@@ -1619,7 +1652,7 @@ namespace OpenDental
 			// 
 			this.sigBox.Location = new System.Drawing.Point(10, 19);
 			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(118, 74);
+			this.sigBox.Size = new System.Drawing.Size(158, 74);
 			this.sigBox.TabIndex = 135;
 			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
 			// 
@@ -1630,15 +1663,31 @@ namespace OpenDental
 			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(146, 53);
+			this.butClearSig.Location = new System.Drawing.Point(195, 53);
 			this.butClearSig.Name = "butClearSig";
-			this.butClearSig.Size = new System.Drawing.Size(75, 25);
+			this.butClearSig.Size = new System.Drawing.Size(75, 26);
 			this.butClearSig.TabIndex = 134;
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
+			// butWasteQty
+			// 
+			this.butWasteQty.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butWasteQty.Autosize = true;
+			this.butWasteQty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butWasteQty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWasteQty.CornerRadius = 4F;
+			this.butWasteQty.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butWasteQty.Location = new System.Drawing.Point(37, 308);
+			this.butWasteQty.Name = "butWasteQty";
+			this.butWasteQty.Size = new System.Drawing.Size(84, 26);
+			this.butWasteQty.TabIndex = 108;
+			this.butWasteQty.Text = "Waste";
+			this.butWasteQty.UseVisualStyleBackColor = true;
+			// 
 			// FormAnestheticRecord
 			// 
+			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(784, 732);
 			this.Controls.Add(this.groupBoxAnesthMeds);
 			this.Controls.Add(this.groupBoxSidebarRt);
@@ -1780,7 +1829,7 @@ namespace OpenDental
 
 		private void butCancel_Click(object sender, EventArgs e)
 		{
-			DialogResult = DialogResult.Cancel;
+
 		}
 
 		private void butAnesthScore_Click(object sender, EventArgs e)
