@@ -1573,7 +1573,9 @@ namespace OpenDental
 					textFeeSched.Text=FeeScheds.GetDescription(standardFeeSched);
 				}
 				else{//otherwise, show the plan fee schedule
-					textFeeSched.Text=FeeScheds.GetDescription(plan.FeeSched);
+					PatPlan[] patPlanList=PatPlans.Refresh(PatCur.PatNum);
+					int feeSched=Fees.GetFeeSched(PatCur,PlanList,patPlanList);
+					textFeeSched.Text=FeeScheds.GetDescription(feeSched);
 				}
 				string toothnum;
 				if(proc==null){
