@@ -66,224 +66,224 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormReportsMore));
-			this.label1=new System.Windows.Forms.Label();
-			this.label2=new System.Windows.Forms.Label();
-			this.label3=new System.Windows.Forms.Label();
-			this.label4=new System.Windows.Forms.Label();
-			this.label5=new System.Windows.Forms.Label();
-			this.label6=new System.Windows.Forms.Label();
-			this.labelArizonaPrimaryCare=new System.Windows.Forms.Label();
-			this.listArizonaPrimaryCare=new OpenDental.UI.ListBoxClickable();
-			this.butLaserLabels=new OpenDental.UI.Button();
-			this.listDaily=new OpenDental.UI.ListBoxClickable();
-			this.listProdInc=new OpenDental.UI.ListBoxClickable();
-			this.butPW=new OpenDental.UI.Button();
-			this.butUserQuery=new OpenDental.UI.Button();
-			this.listPublicHealth=new OpenDental.UI.ListBoxClickable();
-			this.listLists=new OpenDental.UI.ListBoxClickable();
-			this.listMonthly=new OpenDental.UI.ListBoxClickable();
-			this.butClose=new OpenDental.UI.Button();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportsMore));
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.labelArizonaPrimaryCare = new System.Windows.Forms.Label();
+			this.listArizonaPrimaryCare = new OpenDental.UI.ListBoxClickable();
+			this.butLaserLabels = new OpenDental.UI.Button();
+			this.listDaily = new OpenDental.UI.ListBoxClickable();
+			this.listProdInc = new OpenDental.UI.ListBoxClickable();
+			this.butPW = new OpenDental.UI.Button();
+			this.butUserQuery = new OpenDental.UI.Button();
+			this.listPublicHealth = new OpenDental.UI.ListBoxClickable();
+			this.listLists = new OpenDental.UI.ListBoxClickable();
+			this.listMonthly = new OpenDental.UI.ListBoxClickable();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location=new System.Drawing.Point(312,205);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(118,18);
-			this.label1.TabIndex=2;
-			this.label1.Text="Public Health";
-			this.label1.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.Location = new System.Drawing.Point(312,222);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(118,18);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "Public Health";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label2
 			// 
-			this.label2.Location=new System.Drawing.Point(312,43);
-			this.label2.Name="label2";
-			this.label2.Size=new System.Drawing.Size(118,18);
-			this.label2.TabIndex=4;
-			this.label2.Text="Lists";
-			this.label2.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label2.Location = new System.Drawing.Point(312,43);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(118,18);
+			this.label2.TabIndex = 4;
+			this.label2.Text = "Lists";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label3
 			// 
-			this.label3.Location=new System.Drawing.Point(9,276);
-			this.label3.Name="label3";
-			this.label3.Size=new System.Drawing.Size(118,18);
-			this.label3.TabIndex=6;
-			this.label3.Text="Monthly";
-			this.label3.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label3.Location = new System.Drawing.Point(9,276);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(118,18);
+			this.label3.TabIndex = 6;
+			this.label3.Text = "Monthly";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label4
 			// 
-			this.label4.Location=new System.Drawing.Point(9,43);
-			this.label4.Name="label4";
-			this.label4.Size=new System.Drawing.Size(207,18);
-			this.label4.TabIndex=13;
-			this.label4.Text="Production and Income";
-			this.label4.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label4.Location = new System.Drawing.Point(9,43);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(207,18);
+			this.label4.TabIndex = 13;
+			this.label4.Text = "Production and Income";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label5
 			// 
-			this.label5.Location=new System.Drawing.Point(9,159);
-			this.label5.Name="label5";
-			this.label5.Size=new System.Drawing.Size(118,18);
-			this.label5.TabIndex=15;
-			this.label5.Text="Daily";
-			this.label5.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label5.Location = new System.Drawing.Point(9,159);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(118,18);
+			this.label5.TabIndex = 15;
+			this.label5.Text = "Daily";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label6
 			// 
-			this.label6.Location=new System.Drawing.Point(9,435);
-			this.label6.Name="label6";
-			this.label6.Size=new System.Drawing.Size(479,100);
-			this.label6.TabIndex=17;
-			this.label6.Text=resources.GetString("label6.Text");
+			this.label6.Location = new System.Drawing.Point(9,435);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(479,100);
+			this.label6.TabIndex = 17;
+			this.label6.Text = resources.GetString("label6.Text");
 			// 
 			// labelArizonaPrimaryCare
 			// 
-			this.labelArizonaPrimaryCare.AutoSize=true;
-			this.labelArizonaPrimaryCare.Location=new System.Drawing.Point(312,265);
-			this.labelArizonaPrimaryCare.Name="labelArizonaPrimaryCare";
-			this.labelArizonaPrimaryCare.Size=new System.Drawing.Size(104,13);
-			this.labelArizonaPrimaryCare.TabIndex=20;
-			this.labelArizonaPrimaryCare.Text="Arizona Primary Care";
-			this.labelArizonaPrimaryCare.Visible=false;
+			this.labelArizonaPrimaryCare.AutoSize = true;
+			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,282);
+			this.labelArizonaPrimaryCare.Name = "labelArizonaPrimaryCare";
+			this.labelArizonaPrimaryCare.Size = new System.Drawing.Size(104,13);
+			this.labelArizonaPrimaryCare.TabIndex = 20;
+			this.labelArizonaPrimaryCare.Text = "Arizona Primary Care";
+			this.labelArizonaPrimaryCare.Visible = false;
 			// 
 			// listArizonaPrimaryCare
 			// 
-			this.listArizonaPrimaryCare.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listArizonaPrimaryCare.FormattingEnabled=true;
-			this.listArizonaPrimaryCare.ItemHeight=15;
-			this.listArizonaPrimaryCare.Location=new System.Drawing.Point(315,283);
-			this.listArizonaPrimaryCare.Name="listArizonaPrimaryCare";
-			this.listArizonaPrimaryCare.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listArizonaPrimaryCare.Size=new System.Drawing.Size(204,34);
-			this.listArizonaPrimaryCare.TabIndex=19;
-			this.listArizonaPrimaryCare.Visible=false;
-			this.listArizonaPrimaryCare.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listArizonaPrimaryCare_MouseDown);
+			this.listArizonaPrimaryCare.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listArizonaPrimaryCare.FormattingEnabled = true;
+			this.listArizonaPrimaryCare.ItemHeight = 15;
+			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,300);
+			this.listArizonaPrimaryCare.Name = "listArizonaPrimaryCare";
+			this.listArizonaPrimaryCare.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listArizonaPrimaryCare.Size = new System.Drawing.Size(204,34);
+			this.listArizonaPrimaryCare.TabIndex = 19;
+			this.listArizonaPrimaryCare.Visible = false;
+			this.listArizonaPrimaryCare.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listArizonaPrimaryCare_MouseDown);
 			// 
 			// butLaserLabels
 			// 
-			this.butLaserLabels.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butLaserLabels.Autosize=true;
-			this.butLaserLabels.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLaserLabels.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLaserLabels.CornerRadius=4F;
-			this.butLaserLabels.Location=new System.Drawing.Point(315,12);
-			this.butLaserLabels.Name="butLaserLabels";
-			this.butLaserLabels.Size=new System.Drawing.Size(75,24);
-			this.butLaserLabels.TabIndex=18;
-			this.butLaserLabels.Text="Laser Labels";
-			this.butLaserLabels.UseVisualStyleBackColor=true;
-			this.butLaserLabels.Click+=new System.EventHandler(this.butLaserLabels_Click);
+			this.butLaserLabels.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLaserLabels.Autosize = true;
+			this.butLaserLabels.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLaserLabels.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLaserLabels.CornerRadius = 4F;
+			this.butLaserLabels.Location = new System.Drawing.Point(315,12);
+			this.butLaserLabels.Name = "butLaserLabels";
+			this.butLaserLabels.Size = new System.Drawing.Size(75,24);
+			this.butLaserLabels.TabIndex = 18;
+			this.butLaserLabels.Text = "Laser Labels";
+			this.butLaserLabels.UseVisualStyleBackColor = true;
+			this.butLaserLabels.Click += new System.EventHandler(this.butLaserLabels_Click);
 			// 
 			// listDaily
 			// 
-			this.listDaily.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listDaily.FormattingEnabled=true;
-			this.listDaily.ItemHeight=15;
-			this.listDaily.Location=new System.Drawing.Point(12,180);
-			this.listDaily.Name="listDaily";
-			this.listDaily.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listDaily.Size=new System.Drawing.Size(204,94);
-			this.listDaily.TabIndex=16;
-			this.listDaily.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listDaily_MouseDown);
+			this.listDaily.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listDaily.FormattingEnabled = true;
+			this.listDaily.ItemHeight = 15;
+			this.listDaily.Location = new System.Drawing.Point(12,180);
+			this.listDaily.Name = "listDaily";
+			this.listDaily.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listDaily.Size = new System.Drawing.Size(204,94);
+			this.listDaily.TabIndex = 16;
+			this.listDaily.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listDaily_MouseDown);
 			// 
 			// listProdInc
 			// 
-			this.listProdInc.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listProdInc.FormattingEnabled=true;
-			this.listProdInc.ItemHeight=15;
-			this.listProdInc.Location=new System.Drawing.Point(12,64);
-			this.listProdInc.Name="listProdInc";
-			this.listProdInc.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listProdInc.Size=new System.Drawing.Size(204,94);
-			this.listProdInc.TabIndex=14;
-			this.listProdInc.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listProdInc_MouseDown);
+			this.listProdInc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listProdInc.FormattingEnabled = true;
+			this.listProdInc.ItemHeight = 15;
+			this.listProdInc.Location = new System.Drawing.Point(12,64);
+			this.listProdInc.Name = "listProdInc";
+			this.listProdInc.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listProdInc.Size = new System.Drawing.Size(204,94);
+			this.listProdInc.TabIndex = 14;
+			this.listProdInc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listProdInc_MouseDown);
 			// 
 			// butPW
 			// 
-			this.butPW.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butPW.Autosize=true;
-			this.butPW.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPW.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPW.CornerRadius=4F;
-			this.butPW.Location=new System.Drawing.Point(135,12);
-			this.butPW.Name="butPW";
-			this.butPW.Size=new System.Drawing.Size(84,24);
-			this.butPW.TabIndex=12;
-			this.butPW.Text="PW Reports";
-			this.butPW.Click+=new System.EventHandler(this.butPW_Click);
+			this.butPW.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPW.Autosize = true;
+			this.butPW.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPW.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPW.CornerRadius = 4F;
+			this.butPW.Location = new System.Drawing.Point(135,12);
+			this.butPW.Name = "butPW";
+			this.butPW.Size = new System.Drawing.Size(84,24);
+			this.butPW.TabIndex = 12;
+			this.butPW.Text = "PW Reports";
+			this.butPW.Click += new System.EventHandler(this.butPW_Click);
 			// 
 			// butUserQuery
 			// 
-			this.butUserQuery.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butUserQuery.Autosize=true;
-			this.butUserQuery.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUserQuery.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUserQuery.CornerRadius=4F;
-			this.butUserQuery.Location=new System.Drawing.Point(12,12);
-			this.butUserQuery.Name="butUserQuery";
-			this.butUserQuery.Size=new System.Drawing.Size(84,24);
-			this.butUserQuery.TabIndex=11;
-			this.butUserQuery.Text="User Query";
-			this.butUserQuery.Click+=new System.EventHandler(this.butUserQuery_Click);
+			this.butUserQuery.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUserQuery.Autosize = true;
+			this.butUserQuery.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUserQuery.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUserQuery.CornerRadius = 4F;
+			this.butUserQuery.Location = new System.Drawing.Point(12,12);
+			this.butUserQuery.Name = "butUserQuery";
+			this.butUserQuery.Size = new System.Drawing.Size(84,24);
+			this.butUserQuery.TabIndex = 11;
+			this.butUserQuery.Text = "User Query";
+			this.butUserQuery.Click += new System.EventHandler(this.butUserQuery_Click);
 			// 
 			// listPublicHealth
 			// 
-			this.listPublicHealth.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listPublicHealth.FormattingEnabled=true;
-			this.listPublicHealth.ItemHeight=15;
-			this.listPublicHealth.Location=new System.Drawing.Point(315,226);
-			this.listPublicHealth.Name="listPublicHealth";
-			this.listPublicHealth.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listPublicHealth.Size=new System.Drawing.Size(204,34);
-			this.listPublicHealth.TabIndex=10;
-			this.listPublicHealth.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listPublicHealth_MouseDown);
+			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listPublicHealth.FormattingEnabled = true;
+			this.listPublicHealth.ItemHeight = 15;
+			this.listPublicHealth.Location = new System.Drawing.Point(315,243);
+			this.listPublicHealth.Name = "listPublicHealth";
+			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
+			this.listPublicHealth.TabIndex = 10;
+			this.listPublicHealth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listPublicHealth_MouseDown);
 			// 
 			// listLists
 			// 
-			this.listLists.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listLists.FormattingEnabled=true;
-			this.listLists.ItemHeight=15;
-			this.listLists.Location=new System.Drawing.Point(315,64);
-			this.listLists.Name="listLists";
-			this.listLists.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size=new System.Drawing.Size(204,139);
-			this.listLists.TabIndex=9;
-			this.listLists.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
+			this.listLists.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listLists.FormattingEnabled = true;
+			this.listLists.ItemHeight = 15;
+			this.listLists.Location = new System.Drawing.Point(315,64);
+			this.listLists.Name = "listLists";
+			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listLists.Size = new System.Drawing.Size(204,154);
+			this.listLists.TabIndex = 9;
+			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
 			// listMonthly
 			// 
-			this.listMonthly.DrawMode=System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listMonthly.FormattingEnabled=true;
-			this.listMonthly.ItemHeight=15;
-			this.listMonthly.Location=new System.Drawing.Point(12,297);
-			this.listMonthly.Name="listMonthly";
-			this.listMonthly.SelectionMode=System.Windows.Forms.SelectionMode.None;
-			this.listMonthly.Size=new System.Drawing.Size(204,124);
-			this.listMonthly.TabIndex=8;
-			this.listMonthly.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.listMonthly_MouseDown);
+			this.listMonthly.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.listMonthly.FormattingEnabled = true;
+			this.listMonthly.ItemHeight = 15;
+			this.listMonthly.Location = new System.Drawing.Point(12,297);
+			this.listMonthly.Name = "listMonthly";
+			this.listMonthly.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listMonthly.Size = new System.Drawing.Size(204,124);
+			this.listMonthly.TabIndex = 8;
+			this.listMonthly.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listMonthly_MouseDown);
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butClose.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize=true;
-			this.butClose.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius=4F;
-			this.butClose.Location=new System.Drawing.Point(554,491);
-			this.butClose.Name="butClose";
-			this.butClose.Size=new System.Drawing.Size(75,26);
-			this.butClose.TabIndex=0;
-			this.butClose.Text="Close";
-			this.butClose.Click+=new System.EventHandler(this.butClose_Click);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(554,491);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormReportsMore
 			// 
-			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(676,553);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(676,553);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
 			this.Controls.Add(this.listArizonaPrimaryCare);
 			this.Controls.Add(this.butLaserLabels);
@@ -301,14 +301,14 @@ namespace OpenDental{
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butClose);
-			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox=false;
-			this.MinimizeBox=false;
-			this.Name="FormReportsMore";
-			this.ShowInTaskbar=false;
-			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text="Reports";
-			this.Load+=new System.EventHandler(this.FormReportsMore_Load);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FormReportsMore";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Reports";
+			this.Load += new System.EventHandler(this.FormReportsMore_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -352,8 +352,8 @@ namespace OpenDental{
 				Lan.g(this,"Prescriptions"),
 				Lan.g(this,"Procedure Codes"),
 				Lan.g(this,"Referrals - Raw"),
-				Lan.g(this,"Referral Analysis")
-				//Lan.g(this,"Routing Slips")
+				Lan.g(this,"Referral Analysis"),
+				Lan.g(this,"Treatment Finder")
 			});
 			listPublicHealth.Items.AddRange(new string[] {
 				Lan.g(this,"Raw Screening Data"),
@@ -601,6 +601,11 @@ namespace OpenDental{
 					FormRpReferralAnalysis FormRA=new FormRpReferralAnalysis();
 					FormRA.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referral Analysis");
+					break;
+				case 9://Treatment Finder
+					FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
+					FormT.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
 					break;
 			}
 		}
