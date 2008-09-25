@@ -133,6 +133,7 @@ namespace OpenDental{
 		private TabPage tabWaiting;
 		private TabPage tabSched;
 		private ODGrid gridWaiting;
+		private OpenDental.UI.Button butMonth;
 		//<summary></summary>
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
@@ -239,6 +240,7 @@ namespace OpenDental{
 			this.tabWaiting = new System.Windows.Forms.TabPage();
 			this.gridWaiting = new OpenDental.UI.ODGrid();
 			this.tabSched = new System.Windows.Forms.TabPage();
+			this.butMonth = new OpenDental.UI.Button();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -490,6 +492,7 @@ namespace OpenDental{
 			// 
 			// panelCalendar
 			// 
+			this.panelCalendar.Controls.Add(this.butMonth);
 			this.panelCalendar.Controls.Add(this.pinBoard);
 			this.panelCalendar.Controls.Add(this.butLab);
 			this.panelCalendar.Controls.Add(this.butSearch);
@@ -546,7 +549,7 @@ namespace OpenDental{
 			this.butSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butSearch.Location = new System.Drawing.Point(28,259);
 			this.butSearch.Name = "butSearch";
-			this.butSearch.Size = new System.Drawing.Size(75,26);
+			this.butSearch.Size = new System.Drawing.Size(75,24);
 			this.butSearch.TabIndex = 40;
 			this.butSearch.Text = "Search";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
@@ -610,9 +613,9 @@ namespace OpenDental{
 			this.butClearPin.CornerRadius = 4F;
 			this.butClearPin.Image = ((System.Drawing.Image)(resources.GetObject("butClearPin.Image")));
 			this.butClearPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClearPin.Location = new System.Drawing.Point(28,233);
+			this.butClearPin.Location = new System.Drawing.Point(28,234);
 			this.butClearPin.Name = "butClearPin";
-			this.butClearPin.Size = new System.Drawing.Size(75,26);
+			this.butClearPin.Size = new System.Drawing.Size(75,24);
 			this.butClearPin.TabIndex = 33;
 			this.butClearPin.Text = "Clear";
 			this.butClearPin.Click += new System.EventHandler(this.butClearPin_Click);
@@ -889,7 +892,7 @@ namespace OpenDental{
 			this.butOther.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butOther.Location = new System.Drawing.Point(712,465);
 			this.butOther.Name = "butOther";
-			this.butOther.Size = new System.Drawing.Size(92,26);
+			this.butOther.Size = new System.Drawing.Size(92,24);
 			this.butOther.TabIndex = 76;
 			this.butOther.Text = "Make/Find Appt";
 			this.butOther.Click += new System.EventHandler(this.butOther_Click);
@@ -951,6 +954,21 @@ namespace OpenDental{
 			this.tabSched.TabIndex = 1;
 			this.tabSched.Text = "Emp";
 			this.tabSched.UseVisualStyleBackColor = true;
+			// 
+			// butMonth
+			// 
+			this.butMonth.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMonth.Autosize = false;
+			this.butMonth.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMonth.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMonth.CornerRadius = 4F;
+			this.butMonth.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butMonth.Location = new System.Drawing.Point(152,1);
+			this.butMonth.Name = "butMonth";
+			this.butMonth.Size = new System.Drawing.Size(65,22);
+			this.butMonth.TabIndex = 79;
+			this.butMonth.Text = "Month";
+			this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
 			// 
 			// ContrAppt
 			// 
@@ -3929,6 +3947,11 @@ namespace OpenDental{
 		private void timerInfoBubble_Tick(object sender,EventArgs e) {
 			InfoBubbleDraw(bubbleLocation);
 			timerInfoBubble.Enabled =false;
+		}
+
+		private void butMonth_Click(object sender,EventArgs e) {
+			FormMonthView FormM=new FormMonthView();
+			FormM.ShowDialog();
 		}
 
 		
