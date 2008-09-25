@@ -243,7 +243,7 @@ namespace OpenDental
 
 		private void butAnesthMedIntake_Click(object sender, EventArgs e)
 		{
-			FormAnesthMedSuppliers FormI = new FormAnesthMedSuppliers();
+			FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
 			FormI.ShowDialog();
 		}
 
