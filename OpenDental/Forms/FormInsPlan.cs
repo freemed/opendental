@@ -3653,18 +3653,43 @@ namespace OpenDental{
 			PlanCur.DedBeforePerc=checkDedBeforePerc.Checked;
 			PlanCur.IsHidden=checkIsHidden.Checked;
 			PlanCur.ShowBaseUnits=checkShowBaseUnits.Checked;
-			if(comboFeeSched.SelectedIndex==0)
+			if(comboFeeSched.SelectedIndex==0){
 				PlanCur.FeeSched=0;
-			else
+			}
+			else{
 				PlanCur.FeeSched=FeeSchedsStandard[comboFeeSched.SelectedIndex-1].FeeSchedNum;
-			if(comboCopay.SelectedIndex==0)
+			}
+			if(comboCopay.SelectedIndex==0){
 				PlanCur.CopayFeeSched=0;
-			else
+			}
+			else{
 				PlanCur.CopayFeeSched=FeeSchedsCopay[comboCopay.SelectedIndex-1].FeeSchedNum;
-			if(comboAllowedFeeSched.SelectedIndex==0)
-				PlanCur.AllowedFeeSched=0;
-			else
+			}
+			if(comboAllowedFeeSched.SelectedIndex==0){
+				if(IsNewPlan
+					&& PlanCur.PlanType==""//percentage
+					&& PrefC.GetBool("AllowedFeeSchedsAutomate"))
+				{
+					//add a fee schedule if needed
+					FeeSched sched=FeeScheds.GetByExactName(CarrierCur.CarrierName,FeeScheduleType.Allowed);
+					if(sched==null){
+						sched=new FeeSched();
+						sched.Description=CarrierCur.CarrierName;
+						sched.FeeSchedType=FeeScheduleType.Allowed;
+						sched.IsNew=true;
+						sched.ItemOrder=FeeSchedC.ListLong.Count;
+						FeeScheds.WriteObject(sched);
+						DataValid.SetInvalid(InvalidType.FeeScheds);
+					}
+					PlanCur.AllowedFeeSched=sched.FeeSchedNum;
+				}
+				else{
+					PlanCur.AllowedFeeSched=0;
+				}
+			}
+			else{
 				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].FeeSchedNum;
+			}
 			PlanCur.FilingCode=(InsFilingCode)comboFilingCode.SelectedIndex;
 			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;

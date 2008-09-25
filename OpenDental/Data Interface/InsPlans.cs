@@ -924,6 +924,14 @@ namespace OpenDental {
 			return retVal;
 		}
 
+		//public static int GenerateOneAllowedFeeSchedule(){
+
+		//}
+
+
+
+
+
 	}
 
 	
