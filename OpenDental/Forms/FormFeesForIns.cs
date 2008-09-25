@@ -119,6 +119,7 @@ namespace OpenDental{
 			// 
 			this.comboFeeSchedWithout.FormattingEnabled = true;
 			this.comboFeeSchedWithout.Location = new System.Drawing.Point(550,47);
+			this.comboFeeSchedWithout.MaxDropDownItems = 40;
 			this.comboFeeSchedWithout.Name = "comboFeeSchedWithout";
 			this.comboFeeSchedWithout.Size = new System.Drawing.Size(228,21);
 			this.comboFeeSchedWithout.TabIndex = 1;
@@ -138,6 +139,7 @@ namespace OpenDental{
 			// 
 			this.comboFeeSchedWith.FormattingEnabled = true;
 			this.comboFeeSchedWith.Location = new System.Drawing.Point(550,25);
+			this.comboFeeSchedWith.MaxDropDownItems = 40;
 			this.comboFeeSchedWith.Name = "comboFeeSchedWith";
 			this.comboFeeSchedWith.Size = new System.Drawing.Size(228,21);
 			this.comboFeeSchedWith.TabIndex = 23;
@@ -158,6 +160,7 @@ namespace OpenDental{
 			this.comboFeeSchedNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.comboFeeSchedNew.FormattingEnabled = true;
 			this.comboFeeSchedNew.Location = new System.Drawing.Point(370,633);
+			this.comboFeeSchedNew.MaxDropDownItems = 40;
 			this.comboFeeSchedNew.Name = "comboFeeSchedNew";
 			this.comboFeeSchedNew.Size = new System.Drawing.Size(228,21);
 			this.comboFeeSchedNew.TabIndex = 25;
@@ -224,7 +227,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(676,552);
+			this.gridMain.Size = new System.Drawing.Size(732,552);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Ins Plans that might need to be changed";
 			this.gridMain.TranslationName = null;
@@ -363,18 +366,34 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Group Name",100);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Plan Type",65);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Fee Schedule",90);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Plans",40);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			string planType;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["EmpName"].ToString());
 				row.Cells.Add(table.Rows[i]["CarrierName"].ToString());
 				row.Cells.Add(table.Rows[i]["GroupNum"].ToString());
 				row.Cells.Add(table.Rows[i]["GroupName"].ToString());
+				planType=table.Rows[i]["PlanType"].ToString();
+				if(planType=="p"){
+					row.Cells.Add("PPO");
+				}
+				else if(planType=="f"){
+					row.Cells.Add("FlatCopay");
+				}
+				else if(planType=="c"){
+					row.Cells.Add("Capitation");
+				}
+				else{
+					row.Cells.Add("Cat%");
+				}
 				row.Cells.Add(table.Rows[i]["FeeSchedName"].ToString());
 				row.Cells.Add(table.Rows[i]["Plans"].ToString());
 				gridMain.Rows.Add(row);

@@ -28,6 +28,7 @@ namespace OpenDental{
 		private Label label6;
 		private Label label1;
 		private OpenDental.UI.Button butSort;
+		private Label label2;
 		private List<FeeSched> FeeSchedsForType;
 
 		///<summary></summary>
@@ -67,13 +68,14 @@ namespace OpenDental{
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
+			this.butSort = new OpenDental.UI.Button();
 			this.butIns = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butSort = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -115,6 +117,21 @@ namespace OpenDental{
 			this.label1.TabIndex = 18;
 			this.label1.Text = "Type";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butSort
+			// 
+			this.butSort.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSort.Autosize = true;
+			this.butSort.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSort.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSort.CornerRadius = 4F;
+			this.butSort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSort.Location = new System.Drawing.Point(318,214);
+			this.butSort.Name = "butSort";
+			this.butSort.Size = new System.Drawing.Size(75,24);
+			this.butSort.TabIndex = 19;
+			this.butSort.Text = "Sort";
+			this.butSort.Click += new System.EventHandler(this.butSort_Click);
 			// 
 			// butIns
 			// 
@@ -205,25 +222,19 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butSort
+			// label2
 			// 
-			this.butSort.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSort.Autosize = true;
-			this.butSort.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSort.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSort.CornerRadius = 4F;
-			this.butSort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSort.Location = new System.Drawing.Point(318,214);
-			this.butSort.Name = "butSort";
-			this.butSort.Size = new System.Drawing.Size(75,24);
-			this.butSort.TabIndex = 19;
-			this.butSort.Text = "Sort by Type";
-			this.butSort.Click += new System.EventHandler(this.butSort_Click);
+			this.label2.Location = new System.Drawing.Point(315,241);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(123,44);
+			this.label2.TabIndex = 20;
+			this.label2.Text = "Sorts by type and alphabetically";
 			// 
 			// FormFeeScheds
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(515,644);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butSort);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox7);
@@ -388,30 +399,35 @@ namespace OpenDental{
 
 		private void butSort_Click(object sender,EventArgs e) {
 			//only enabled if viewing all types
-			List<FeeSched> sortedList=new List<FeeSched>();
+			//FeeSchedComparer comparer=new FeeSchedComparer();
+			FeeSchedsForType.Sort(CompareFeeScheds);
 			for(int i=0;i<FeeSchedsForType.Count;i++){
-				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.Normal){
-					sortedList.Add(FeeSchedsForType[i].Copy());
-				}
-			}
-			for(int i=0;i<FeeSchedsForType.Count;i++){
-				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.CoPay){
-					sortedList.Add(FeeSchedsForType[i].Copy());
-				}
-			}
-			for(int i=0;i<FeeSchedsForType.Count;i++){
-				if(FeeSchedsForType[i].FeeSchedType==FeeScheduleType.Allowed){
-					sortedList.Add(FeeSchedsForType[i].Copy());
-				}
-			}
-			for(int i=0;i<sortedList.Count;i++){
-				if(sortedList[i].ItemOrder!=i){
-					sortedList[i].ItemOrder=i;
-					FeeScheds.WriteObject(sortedList[i]);
+				if(FeeSchedsForType[i].ItemOrder!=i){
+					FeeSchedsForType[i].ItemOrder=i;
+					FeeScheds.WriteObject(FeeSchedsForType[i]);
 				}
 			}
 			changed=true;
 			FillGrid();
+		}
+
+		///<summary>This sorts feescheds by type and alphabetically.</summary>
+		private static int CompareFeeScheds(FeeSched feeSched1,FeeSched feeSched2) {
+			if(feeSched1==null){
+				if(feeSched2==null){
+					return 0;//both null, so equal
+				}
+				else{
+					return -1;
+				}
+			}
+			if(feeSched2==null){
+				return 1;
+			}
+			if(feeSched1.FeeSchedType!=feeSched2.FeeSchedType){
+				return feeSched1.FeeSchedType.CompareTo(feeSched2.FeeSchedType);
+			}
+			return feeSched1.Description.CompareTo(feeSched2.Description);
 		}
 
 		private void butIns_Click(object sender,EventArgs e) {
@@ -433,23 +449,13 @@ namespace OpenDental{
 		
 
 		
-
 		
+	}
 
+	
 		
 
 	
-
-		
-
-		
-
-		
-
-
-
-		
-	}
 }
 
 

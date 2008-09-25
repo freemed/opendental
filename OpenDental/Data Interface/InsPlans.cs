@@ -791,7 +791,7 @@ namespace OpenDental {
 			}
 			string command=
 				"SELECT insplan.GroupName,insplan.GroupNum,COUNT(*) AS Plans,employer.EmpName,carrier.CarrierName,"
-				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description AS FeeSchedName,"
+				+"insplan.EmployerNum,insplan.CarrierNum,feesched.Description AS FeeSchedName,insplan.PlanType,"
 				+"insplan."+pFeeSched+" feeSched "
 				+"FROM insplan "
 				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
@@ -807,7 +807,7 @@ namespace OpenDental {
 			if(feeSchedWith!=0) {
 				command+="AND insplan."+pFeeSched+" ="+POut.PInt(feeSchedWith)+" ";
 			}
-			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,"
+			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,insplan.PlanType,"
 				+"insplan."+pFeeSched+" "
 				+"ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
 			return General.GetTable(command);
@@ -874,14 +874,54 @@ namespace OpenDental {
 			string command="SELECT carrier.CarrierName "
 				+"FROM insplan,carrier "
 				+"WHERE carrier.CarrierNum=insplan.CarrierNum "
-				+"AND " 
+				+"AND insplan.AllowedFeeSched=0 "
+				+"AND insplan.PlanType='' "
 				+"GROUP BY carrier.CarrierName";
+			DataTable table=General.GetTable(command);
 			//loop through all the carrier names
-				//add a fee schedule
-				//assign the new fee sched to many plans
-
-
-			return 40;//stub
+			string carrierName;
+			FeeSched sched;
+			int itemOrder=FeeSchedC.ListLong.Count;
+			DataTable tableCarrierNums;
+			int retVal=0;
+			for(int i=0;i<table.Rows.Count;i++){
+				carrierName=PIn.PString(table.Rows[i]["CarrierName"].ToString());
+				if(carrierName=="" || carrierName==" "){
+					continue;
+				}
+				//add a fee schedule if needed
+				sched=FeeScheds.GetByExactName(carrierName,FeeScheduleType.Allowed);
+				if(sched==null){
+					sched=new FeeSched();
+					sched.Description=carrierName;
+					sched.FeeSchedType=FeeScheduleType.Allowed;
+					sched.IsNew=true;
+					sched.ItemOrder=itemOrder;
+					FeeScheds.WriteObject(sched);
+					itemOrder++;
+				}
+				//assign the fee sched to many plans
+				//for compatibility with Oracle, get a list of all carrierNums that use the carriername
+				command="SELECT CarrierNum FROM carrier WHERE CarrierName='"+POut.PString(carrierName)+"'";
+				tableCarrierNums=General.GetTable(command);
+				if(tableCarrierNums.Rows.Count==0){
+					continue;//I don't see how this could happen
+				}
+				command="UPDATE insplan "
+					+"SET AllowedFeeSched="+POut.PInt(sched.FeeSchedNum)+" "
+					+"WHERE AllowedFeeSched=0 "
+					+"AND PlanType='' "
+					+"AND (";
+				for(int c=0;c<tableCarrierNums.Rows.Count;c++){
+					if(c>0){
+						command+=" OR ";
+					}
+					command+="CarrierNum="+tableCarrierNums.Rows[c]["CarrierNum"].ToString();
+				}
+				command+=")";
+				retVal+=General.NonQ(command);
+			}
+			return retVal;
 		}
 
 	}

@@ -974,6 +974,7 @@ namespace OpenDental{
 			int schedsAdded=InsPlans.GenerateAllowedFeeSchedules();
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Done.  Allowed fee schedules added: ")+schedsAdded.ToString());
+			DataValid.SetInvalid(InvalidType.FeeScheds);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

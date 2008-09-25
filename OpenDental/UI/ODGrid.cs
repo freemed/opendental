@@ -1340,7 +1340,12 @@ namespace OpenDental.UI{
 				return;
 			}
 			//because mouse might have moved faster than computer could keep up, we have to loop through all rows between
-			selectedIndices=new ArrayList(selectedIndicesWhenMouseDown);
+			if(ControlIsDown){
+				selectedIndices=new ArrayList(selectedIndicesWhenMouseDown);
+			}
+			else{
+				selectedIndices=new ArrayList();
+			}
 			if(MouseDownRow<curRow){//dragging down
 				for(int i=MouseDownRow;i<=curRow;i++){
 					if(i==-1) {
