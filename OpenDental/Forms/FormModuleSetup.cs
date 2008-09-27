@@ -1026,6 +1026,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("AllowSettingProcsComplete",checkAllowSettingProcsComplete.Checked)
 				| Prefs.UpdateBool("ShowAccountFamilyCommEntries",checkShowFamilyCommByDefault.Checked)
 				| Prefs.UpdateBool("InsDefaultPPOpercent",checkPPOpercentage.Checked)
+				| Prefs.UpdateBool("ClaimFormTreatDentSaysSigOnFile",checkClaimFormTreatDentSaysSigOnFile.Checked)
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)
 				| Prefs.UpdateBool("ApptModuleRefreshesEveryMinute", checkApptRefreshEveryMinute.Checked)
 				| Prefs.UpdateBool("ChartQuickAddHideAmalgam", checkChartQuickAddHideAmalgam.Checked)
