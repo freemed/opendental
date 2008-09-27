@@ -425,7 +425,7 @@ namespace OpenDental{
 		}
 
 		/// <summary></summary>
-		public static DataTable GetAddrTable(int[] patNums,bool groupByFamily){
+		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily){
 			string command="SELECT patient.LName,patient.FName,patient.MiddleI,patient.Preferred,"//0-3
 				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,recall.DateDue, "//4-9
 				+"patient.Guarantor,"//10
@@ -436,11 +436,11 @@ namespace OpenDental{
 			command+="FROM patient,recall "
 				+"WHERE patient.PatNum=recall.PatNum "
 				+"AND (";
-      for(int i=0;i<patNums.Length;i++){
+      for(int i=0;i<recallNums.Count;i++){
         if(i>0){
 					command+=" OR ";
 				}
-        command+="patient.PatNum="+patNums[i].ToString();
+        command+="recall.RecallNum="+POut.PInt(recallNums[i]);
       }
 			command+=") ";
 			if(groupByFamily){

@@ -816,13 +816,11 @@ namespace OpenDental{
 					return;
 				}
 			}
-      int[] PatNums;
-      PatNums=new int[gridMain.SelectedIndices.Length];
-      for(int i=0;i<PatNums.Length;i++){
-        PatNums[i]=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
-					//((RecallItem)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).PatNum;
+      List<int> recallNums=new List<int>();
+      for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+        recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
-			AddrTable=Recalls.GetAddrTable(PatNums,false);//can never group by family because there's no room to display the list.
+			AddrTable=Recalls.GetAddrTable(recallNums,false);//can never group by family because there's no room to display the list.
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
@@ -835,9 +833,9 @@ namespace OpenDental{
 			//printPreview.TotalPages=;
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,true,"Change statuses and make commlog entries for all of the selected patients?")) {
-				for(int i=0;i<PatNums.Length;i++){
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PatNums[i],CommItemMode.Mail);
+					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail);
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					Recalls.UpdateStatus(
@@ -876,13 +874,11 @@ namespace OpenDental{
 					return;
 				}
 			}
-      int[] PatNums;
-      PatNums=new int[gridMain.SelectedIndices.Length];
-			for(int i=0;i<PatNums.Length;i++) {
-				PatNums[i]=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
-					//((RecallItem)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).PatNum;
-			}
-			AddrTable=Recalls.GetAddrTable(PatNums,checkGroupFamilies.Checked);
+      List<int> recallNums=new List<int>();
+      for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+        recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+      }
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked);
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
@@ -904,9 +900,9 @@ namespace OpenDental{
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,totalPages);
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,true,"Change statuses and make commlog entries for all of the selected patients?")) {
-				for(int i=0;i<PatNums.Length;i++){
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PatNums[i],CommItemMode.Mail);
+					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail);
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					Recalls.UpdateStatus(
