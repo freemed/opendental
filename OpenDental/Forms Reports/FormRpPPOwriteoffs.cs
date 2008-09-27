@@ -299,7 +299,7 @@ namespace OpenDental{
 					GROUP BY claimproc.ClaimNum 
 					ORDER BY claimproc.DateCP";
 			}
-			else{
+			else{//use procedure date
 				report.Query+=@"SELECT claimproc.ProcDate,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
 					carrier.CarrierName,
@@ -346,23 +346,44 @@ namespace OpenDental{
 			if(textCarrier.Text!="") {
 				report.AddSubTitle(Lan.g(this,"Carrier like: ")+textCarrier.Text);
 			}
-			report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
-				+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';"
-				+@"SELECT carrier.CarrierName,
-				SUM(claimproc.FeeBilled),
-				SUM(claimproc.FeeBilled-claimproc.WriteOff),
-				SUM(claimproc.WriteOff),
-				claimproc.ClaimNum
-				FROM claimproc,insplan,carrier
-				WHERE claimproc.PlanNum = insplan.PlanNum
-				AND carrier.CarrierNum = insplan.CarrierNum
-				AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
-				AND claimproc.DateCP >= @DateFrom
-				AND claimproc.DateCP <= @DateTo
-				AND insplan.PlanType='p'
-				AND carrier.CarrierName LIKE @CarrierName
-				GROUP BY carrier.CarrierNum 
-				ORDER BY carrier.CarrierName";
+			if(radioWriteoffPay.Checked){
+				report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
+					+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';"
+					+@"SELECT carrier.CarrierName,
+					SUM(claimproc.FeeBilled),
+					SUM(claimproc.FeeBilled-claimproc.WriteOff),
+					SUM(claimproc.WriteOff),
+					claimproc.ClaimNum
+					FROM claimproc,insplan,carrier
+					WHERE claimproc.PlanNum = insplan.PlanNum
+					AND carrier.CarrierNum = insplan.CarrierNum
+					AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
+					AND claimproc.DateCP >= @DateFrom
+					AND claimproc.DateCP <= @DateTo
+					AND insplan.PlanType='p'
+					AND carrier.CarrierName LIKE @CarrierName
+					GROUP BY carrier.CarrierNum 
+					ORDER BY carrier.CarrierName";
+			}
+			else{
+				report.Query="SET @DateFrom="+POut.PDate(date1.SelectionStart)+", @DateTo="+POut.PDate(date2.SelectionStart)
+					+", @CarrierName='%"+POut.PString(textCarrier.Text)+"%';"
+					+@"SELECT carrier.CarrierName,
+					SUM(claimproc.FeeBilled),
+					SUM(claimproc.FeeBilled-claimproc.WriteOff),
+					SUM(claimproc.WriteOff),
+					claimproc.ClaimNum
+					FROM claimproc,insplan,carrier
+					WHERE claimproc.PlanNum = insplan.PlanNum
+					AND carrier.CarrierNum = insplan.CarrierNum
+					AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
+					AND claimproc.ProcDate >= @DateFrom
+					AND claimproc.ProcDate <= @DateTo
+					AND insplan.PlanType='p'
+					AND carrier.CarrierName LIKE @CarrierName
+					GROUP BY carrier.CarrierNum 
+					ORDER BY carrier.CarrierName";
+			}
 			report.AddColumn("Carrier",180,FieldValueType.String);
 			report.AddColumn("Stand Fee",80,FieldValueType.Number);
 			report.AddColumn("PPO Fee",80,FieldValueType.Number);
