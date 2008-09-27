@@ -196,6 +196,7 @@ namespace OpenDental{
 			this.butDelete = new System.Windows.Forms.Button();
 			this.butBreak = new System.Windows.Forms.Button();
 			this.panelCalendar = new System.Windows.Forms.Panel();
+			this.butMonth = new OpenDental.UI.Button();
 			this.pinBoard = new OpenDental.UI.PinBoard();
 			this.butLab = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
@@ -240,7 +241,6 @@ namespace OpenDental{
 			this.tabWaiting = new System.Windows.Forms.TabPage();
 			this.gridWaiting = new OpenDental.UI.ODGrid();
 			this.tabSched = new System.Windows.Forms.TabPage();
-			this.butMonth = new OpenDental.UI.Button();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -510,6 +510,22 @@ namespace OpenDental{
 			this.panelCalendar.Name = "panelCalendar";
 			this.panelCalendar.Size = new System.Drawing.Size(219,351);
 			this.panelCalendar.TabIndex = 46;
+			// 
+			// butMonth
+			// 
+			this.butMonth.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMonth.Autosize = false;
+			this.butMonth.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMonth.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMonth.CornerRadius = 4F;
+			this.butMonth.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butMonth.Location = new System.Drawing.Point(152,1);
+			this.butMonth.Name = "butMonth";
+			this.butMonth.Size = new System.Drawing.Size(65,22);
+			this.butMonth.TabIndex = 79;
+			this.butMonth.Text = "Month";
+			this.butMonth.Visible = false;
+			this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
 			// 
 			// pinBoard
 			// 
@@ -954,21 +970,6 @@ namespace OpenDental{
 			this.tabSched.TabIndex = 1;
 			this.tabSched.Text = "Emp";
 			this.tabSched.UseVisualStyleBackColor = true;
-			// 
-			// butMonth
-			// 
-			this.butMonth.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butMonth.Autosize = false;
-			this.butMonth.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMonth.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMonth.CornerRadius = 4F;
-			this.butMonth.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butMonth.Location = new System.Drawing.Point(152,1);
-			this.butMonth.Name = "butMonth";
-			this.butMonth.Size = new System.Drawing.Size(65,22);
-			this.butMonth.TabIndex = 79;
-			this.butMonth.Text = "Month";
-			this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
 			// 
 			// ContrAppt
 			// 
