@@ -58,9 +58,9 @@
 			this.labelQty.AutoSize = true;
 			this.labelQty.Location = new System.Drawing.Point(246, 0);
 			this.labelQty.Name = "labelQty";
-			this.labelQty.Size = new System.Drawing.Size(46, 13);
+			this.labelQty.Size = new System.Drawing.Size(173, 13);
 			this.labelQty.TabIndex = 4;
-			this.labelQty.Text = "Quantity";
+			this.labelQty.Text = "Quantity (units must be in total mLs)";
 			// 
 			// groupBox1
 			// 

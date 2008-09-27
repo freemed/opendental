@@ -24,6 +24,8 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsAdjQtys));
 			this.gridAnesthMedsAdjQtys = new System.Windows.Forms.DataGridView();
 			this.labelAdjustQtys = new System.Windows.Forms.Label();
@@ -48,7 +50,7 @@ namespace OpenDental{
             this.QtyOnHand,
             this.QtyAdjustment,
             this.Notes});
-			this.gridAnesthMedsAdjQtys.Location = new System.Drawing.Point(30, 66);
+			this.gridAnesthMedsAdjQtys.Location = new System.Drawing.Point(12, 43);
 			this.gridAnesthMedsAdjQtys.Name = "gridAnesthMedsAdjQtys";
 			this.gridAnesthMedsAdjQtys.Size = new System.Drawing.Size(803, 307);
 			this.gridAnesthMedsAdjQtys.TabIndex = 4;
@@ -57,7 +59,7 @@ namespace OpenDental{
 			// labelAdjustQtys
 			// 
 			this.labelAdjustQtys.AutoSize = true;
-			this.labelAdjustQtys.Location = new System.Drawing.Point(28, 27);
+			this.labelAdjustQtys.Location = new System.Drawing.Point(27, 16);
 			this.labelAdjustQtys.Name = "labelAdjustQtys";
 			this.labelAdjustQtys.Size = new System.Drawing.Size(472, 13);
 			this.labelAdjustQtys.TabIndex = 143;
@@ -66,15 +68,15 @@ namespace OpenDental{
 			// 
 			// groupBoxAdjQtys
 			// 
+			this.groupBoxAdjQtys.Controls.Add(this.gridAnesthMedsAdjQtys);
 			this.groupBoxAdjQtys.Controls.Add(this.labelAdjustQtys);
 			this.groupBoxAdjQtys.Controls.Add(this.button1);
 			this.groupBoxAdjQtys.Controls.Add(this.butClose);
 			this.groupBoxAdjQtys.Location = new System.Drawing.Point(12, 12);
 			this.groupBoxAdjQtys.Name = "groupBoxAdjQtys";
-			this.groupBoxAdjQtys.Size = new System.Drawing.Size(840, 431);
+			this.groupBoxAdjQtys.Size = new System.Drawing.Size(832, 410);
 			this.groupBoxAdjQtys.TabIndex = 144;
 			this.groupBoxAdjQtys.TabStop = false;
-			this.groupBoxAdjQtys.Text = "Adjust Anesthetic Medication Inventory Quantities";
 			// 
 			// button1
 			// 
@@ -85,7 +87,7 @@ namespace OpenDental{
 			this.button1.CornerRadius = 4F;
 			this.button1.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(653, 379);
+			this.button1.Location = new System.Drawing.Point(653, 367);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(66, 26);
 			this.button1.TabIndex = 141;
@@ -100,7 +102,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(725, 379);
+			this.butClose.Location = new System.Drawing.Point(725, 367);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(90, 26);
 			this.butClose.TabIndex = 142;
@@ -124,16 +126,19 @@ namespace OpenDental{
 			// 
 			// QtyOnHand
 			// 
-			this.QtyOnHand.HeaderText = "Quantity on hand";
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.QtyOnHand.DefaultCellStyle = dataGridViewCellStyle1;
+			this.QtyOnHand.HeaderText = "Quantity on hand (mLs)";
 			this.QtyOnHand.Name = "QtyOnHand";
 			this.QtyOnHand.ReadOnly = true;
 			this.QtyOnHand.Width = 80;
 			// 
 			// QtyAdjustment
 			// 
-			this.QtyAdjustment.HeaderText = "Quantity Adjustment";
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			this.QtyAdjustment.DefaultCellStyle = dataGridViewCellStyle2;
+			this.QtyAdjustment.HeaderText = "Quantity Adjustment (mLs)";
 			this.QtyAdjustment.Name = "QtyAdjustment";
-			this.QtyAdjustment.Width = 80;
 			// 
 			// Notes
 			// 
@@ -144,12 +149,12 @@ namespace OpenDental{
 			// FormAnestheticMedsAdjQtys
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(864, 479);
-			this.Controls.Add(this.gridAnesthMedsAdjQtys);
+			this.ClientSize = new System.Drawing.Size(864, 442);
 			this.Controls.Add(this.groupBoxAdjQtys);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsAdjQtys";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Adjust Anesthetic Medication Inventory Quantities";
 			this.Load += new System.EventHandler(this.BasicTemplate_Load);
 			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMedsAdjQtys)).EndInit();
 			this.groupBoxAdjQtys.ResumeLayout(false);

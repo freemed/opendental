@@ -27,6 +27,7 @@ namespace OpenDental {
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
+
 			DialogResult=DialogResult.Cancel;
 		}
 
@@ -49,5 +50,12 @@ namespace OpenDental {
 			//FormAnesthesiaReports FormAR = new FormAnesthesiaReports();
 			//FormAR.ShowDialog();
 		}
+
+		private void butCancel_Click_1(object sender, EventArgs e)
+		{
+
+		}
+
+
 	}
 }

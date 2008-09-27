@@ -601,7 +601,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(128, 660);
+			this.butPrint.Location = new System.Drawing.Point(129, 659);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(88, 26);
 			this.butPrint.TabIndex = 150;
@@ -616,11 +616,11 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(493, 662);
+			this.butOK.Location = new System.Drawing.Point(479, 662);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.Size = new System.Drawing.Size(89, 24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "Save and Close";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
@@ -631,11 +631,13 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(412, 662);
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(398, 662);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormAnesthesiaScore
