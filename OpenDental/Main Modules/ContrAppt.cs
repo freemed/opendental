@@ -2110,6 +2110,9 @@ namespace OpenDental{
 			if(ApptViewItems.VisOps.Length==0){//no ops visible.
 				return;
 			}
+			if(mouseIsDown){//if user clicks right mouse button while dragging
+				return;
+			}
 			//some of this is a little redundant, but still necessary for now.
 			SheetClickedonHour=ContrApptSheet.YPosToHour(e.Y);
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
