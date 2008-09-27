@@ -39,6 +39,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ClockEvent ce) {
+			DateTime serverTime=MiscData.GetNowDateTime();
 			if(PrefC.RandomKeys) {
 				ce.ClockEventNum=MiscData.GetKey("clockevent","ClockEventNum");
 			}
@@ -53,8 +54,8 @@ namespace OpenDental{
 			}
 			command+=
 				 "'"+POut.PInt   (ce.EmployeeNum)+"', "
-				+POut.PDateT (ce.TimeEntered)+", "
-				+POut.PDateT (ce.TimeDisplayed)+", "
+				+POut.PDateT (serverTime)+", "
+				+POut.PDateT (serverTime)+", "
 				+"'"+POut.PBool  (ce.ClockIn)+"', "
 				+"'"+POut.PInt   ((int)ce.ClockStatus)+"', "
 				+"'"+POut.PString(ce.Note)+"')";

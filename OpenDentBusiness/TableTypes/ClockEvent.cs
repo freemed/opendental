@@ -27,15 +27,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public ClockEvent Copy() {
-			ClockEvent c=new ClockEvent();
-			c.ClockEventNum=ClockEventNum;
-			c.EmployeeNum=EmployeeNum;
-			c.TimeEntered=TimeEntered;
-			c.TimeDisplayed=TimeDisplayed;
-			c.ClockIn=ClockIn;
-			c.ClockStatus=ClockStatus;
-			c.Note=Note;
-			return c;
+			return (ClockEvent)MemberwiseClone();
 		}
 
 
