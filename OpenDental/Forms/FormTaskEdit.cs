@@ -638,7 +638,9 @@ namespace OpenDental{
 					break;
 			}
 			textUser.Text=Userods.GetName(Cur.UserNum);//might be blank.
-			textTaskList.Text=TaskListCur.Descript; 
+			if(TaskListCur!=null){
+				textTaskList.Text=TaskListCur.Descript;
+			}
 			if(Cur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
@@ -693,7 +695,7 @@ namespace OpenDental{
 				labelViewed.Visible=false;
 				butViewed.Visible=false;
 			}
-			if(TaskListCur.TaskListNum!=Security.CurUser.TaskListInBox){//if this task is not in my inbox
+			if(TaskListCur==null || TaskListCur.TaskListNum!=Security.CurUser.TaskListInBox){//if this task is not in my inbox
 				labelReply.Visible=false;
 				butReply.Visible=false;
 			}
