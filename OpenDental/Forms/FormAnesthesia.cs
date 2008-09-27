@@ -11,13 +11,14 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormAnesthesia : Form
 	{
-		public Patient PatCur;
-		public bool isNew;
+		private Patient PatCur;
+		
+		
 
-		public FormAnesthesia()
+		public FormAnesthesia(Patient patCur)
 		{
 			InitializeComponent();
-			
+			PatCur = patCur;
 			Lan.F(this);
 		}
 
@@ -33,7 +34,7 @@ namespace OpenDental {
 
 		private void butAnestheticRecord_Click(object sender, EventArgs e)
 		{
-			FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur);
+			FormAnestheticRecord FormAR=new FormAnestheticRecord(PatCur);
 			FormAR.ShowDialog();
 		}
 
