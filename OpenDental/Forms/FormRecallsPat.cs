@@ -109,8 +109,8 @@ namespace OpenDental {
 
 		private void butPerio_Click(object sender,EventArgs e) {
 			//make sure we have both special types properly setup.
-			if(PrefC.GetInt("RecallTypeSpecialProphy")==0 || PrefC.GetInt("RecallTypeSpecialPerio")==0){
-				MsgBox.Show(this,"Prophy and Perio special recall types are not setup properly.  Please do that first.");
+			if(!RecallTypes.PerioAndProphyBothHaveTriggers()){
+				MsgBox.Show(this,"Prophy and Perio special recall types are not setup properly.  They must both exist, and they must both have a trigger.");
 				return;
 			}
 			if(IsPerio){

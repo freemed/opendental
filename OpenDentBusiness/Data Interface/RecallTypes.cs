@@ -139,6 +139,20 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Also makes sure both types are defined as special types.</summary>
+		public static bool PerioAndProphyBothHaveTriggers(){
+			if(RecallTypes.PerioType==0 || RecallTypes.ProphyType==0){
+				return false;
+			}
+			if(RecallTriggers.GetForType(RecallTypes.PerioType).Count==0){
+				return false;
+			}
+			if(RecallTriggers.GetForType(RecallTypes.ProphyType).Count==0){
+				return false;
+			}
+			return true;
+		}
+
 		public static string GetTimePattern(int recallTypeNum){
 			if(recallTypeNum==0){
 				return "";
