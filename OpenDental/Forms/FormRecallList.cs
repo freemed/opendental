@@ -770,20 +770,18 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to run report."));    
         return;
       }
-      int[] PatNums;
+      List<int> recallNums=new List<int>();
       if(gridMain.SelectedIndices.Length < 1){
-        PatNums=new int[gridMain.Rows.Count];
-        for(int i=0;i<PatNums.Length;i++){
-          PatNums[i]=PIn.PInt(table.Rows[i]["PatNum"].ToString());
+        for(int i=0;i<gridMain.Rows.Count;i++){
+          recallNums.Add(PIn.PInt(table.Rows[i]["RecallNum"].ToString()));
         }
       }
       else{
-        PatNums=new int[gridMain.SelectedIndices.Length];
-        for(int i=0;i<PatNums.Length;i++){
-          PatNums[i]=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
+        for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+          recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
         }
       }
-      FormRpRecall FormRPR=new FormRpRecall(PatNums);
+      FormRpRecall FormRPR=new FormRpRecall(recallNums);
       FormRPR.ShowDialog();      
 		}
 

@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -22,7 +24,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listPatientSelect2;
 		private System.Windows.Forms.ListBox listPatientSelect; 
-    private int[] Apatnums;
+    private List<int> RecallNumList;
 
 		///<summary></summary>
 		public FormRpRecall(){
@@ -36,9 +38,9 @@ namespace OpenDental{
 		}
   
 		///<summary></summary>
-		public FormRpRecall(int[] array){
+		public FormRpRecall(List<int> recallNumList){
 			InitializeComponent();
-      Apatnums=array;
+      RecallNumList=new List<int>(recallNumList);
       ALpatSelect=new ArrayList();
 			ALpatSelect2=new ArrayList();
 			SQLselect="";
@@ -204,7 +206,7 @@ namespace OpenDental{
       ALpatSelect2.Add(Lan.g(this,"SchoolName")); 
 			ALpatSelect2.Add(Lan.g(this,"PriProv")); 
       ALpatSelect2.Add(Lan.g(this,"SecProv"));
-			ALpatSelect2.Add(Lan.g(this,"NextAptNum")); 
+			//ALpatSelect2.Add(Lan.g(this,"NextAptNum")); 
 			ALpatSelect2.Add(Lan.g(this,"Guarantor")); 
 			ALpatSelect2.Add(Lan.g(this,"ImageFolder"));
  		}
@@ -267,10 +269,12 @@ namespace OpenDental{
     }
 
     private void CreateSQLwhere(){  
-      SQLwhere="WHERE patient.PatNum=recall.PatNum AND(";       
-      for(int i=0;i<Apatnums.Length;i++){
-        if(i>0) SQLwhere+=" OR";
-        SQLwhere+=" patient.patnum='"+Apatnums[i]+"'";
+      SQLwhere="WHERE patient.PatNum=recall.PatNum AND (";       
+      for(int i=0;i<RecallNumList.Count;i++){
+        if(i>0){
+					SQLwhere+=" OR ";
+				}
+        SQLwhere+="recall.RecallNum="+POut.PInt(RecallNumList[i]);
       }
 			SQLwhere+=")";
     }
