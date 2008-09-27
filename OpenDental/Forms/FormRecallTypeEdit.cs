@@ -719,11 +719,10 @@ namespace OpenDental{
 					changed=true;
 				}
 			}
-			InvalidType itype=InvalidType.RecallTypes;
+			DataValid.SetInvalid(InvalidType.RecallTypes);
 			if(changed){
-				itype=itype | InvalidType.Prefs;
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			DataValid.SetInvalid(itype);
 			DialogResult=DialogResult.OK;
 		}
 
