@@ -279,7 +279,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Delete(Recall recall) {
-			string command= "DELETE from recall WHERE RecallNum = '"+POut.PInt(recall.RecallNum)+"'";
+			string command= "DELETE from recall WHERE RecallNum = "+POut.PInt(recall.RecallNum);
 			General.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
 		}
@@ -298,7 +298,7 @@ namespace OpenDental{
 			return true;
 		}*/
 
-		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted.  Instead, the dateDueCalc just gets cleared.</summary>
+		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted except when all triggers are removed.  Otherwise, the dateDueCalc just gets cleared.</summary>
 		public static void Synch(int patNum){
 			List<RecallType> typeList=RecallTypes.GetActive();
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
@@ -410,9 +410,32 @@ namespace OpenDental{
 					}
 				}
 			}
+			//now, we need to loop through all the inactive recall types and clear the DateDueCalc
+			List<RecallType> typeListInactive=RecallTypes.GetInactive();
+			for(int i=0;i<typeListInactive.Count;i++){
+				matchingRecall=null;
+				for(int r=0;r<recallList.Count;r++){
+					if(recallList[r].RecallTypeNum==typeListInactive[i].RecallTypeNum){
+						matchingRecall=recallList[r];
+					}
+				}
+				if(matchingRecall==null){//if there is no existing recall,
+					continue;
+				}
+				Recalls.Delete(matchingRecall);//we'll just delete it
+				/*
+				//There is an existing recall, so alter it if certain conditions are met
+				matchingRecall.DatePrevious=DateTime.MinValue;
+				if(matchingRecall.DateDue==matchingRecall.DateDueCalc){//if user did not enter a DateDue
+					//we can safely alter the DateDue
+					matchingRecall.DateDue=DateTime.MinValue;
+				}
+				matchingRecall.DateDueCalc=DateTime.MinValue;
+				Recalls.Update(matchingRecall);*/
+			}
 		}
 
-		///<summary>Only called when editing certain procedurecodes, but only very rarely as needed. For power users, this is a good little trick to use to synch recall for all patients.</summary>
+		///<summary></summary>
 		public static void SynchAllPatients(){
 			//get all active patients
 			string command="SELECT PatNum "

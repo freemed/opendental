@@ -177,6 +177,19 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Gets a list of all inactive recall types.  Only those without triggers are included.</summary>
+		public static List<RecallType> GetInactive(){
+			List<RecallType> retVal=new List<RecallType>();
+			List<RecallTrigger> triggers;
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				triggers=RecallTriggers.GetForType(RecallTypeC.Listt[i].RecallTypeNum);
+				if(triggers.Count==0){
+					retVal.Add(RecallTypeC.Listt[i].Copy());
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Gets the pref table RecallTypeSpecialProphy RecallTypeNum.</summary>
 		public static int ProphyType{
 			get{
