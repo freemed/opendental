@@ -261,6 +261,7 @@ namespace OpenDental{
 			this.menuItemDisplayFields = new System.Windows.Forms.MenuItem();
 			this.menuItemEasy = new System.Windows.Forms.MenuItem();
 			this.menuItemEmail = new System.Windows.Forms.MenuItem();
+			this.menuItemFeeScheds = new System.Windows.Forms.MenuItem();
 			this.menuItemImaging = new System.Windows.Forms.MenuItem();
 			this.menuItemInsCats = new System.Windows.Forms.MenuItem();
 			this.menuItemLaboratories = new System.Windows.Forms.MenuItem();
@@ -356,7 +357,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
-			this.menuItemFeeScheds = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -556,6 +556,12 @@ namespace OpenDental{
 			this.menuItemEmail.Index = 13;
 			this.menuItemEmail.Text = "E-mail";
 			this.menuItemEmail.Click += new System.EventHandler(this.menuItemEmail_Click);
+			// 
+			// menuItemFeeScheds
+			// 
+			this.menuItemFeeScheds.Index = 14;
+			this.menuItemFeeScheds.Text = "Fee Schedules";
+			this.menuItemFeeScheds.Click += new System.EventHandler(this.menuItemFeeScheds_Click);
 			// 
 			// menuItemImaging
 			// 
@@ -1036,13 +1042,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
-			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
-			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
-			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4,"chart32.gif");
-			this.imageList32.Images.SetKeyName(5,"Images32.gif");
-			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
+			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
+			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
+			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
+			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4, "chart32.gif");
+			this.imageList32.Images.SetKeyName(5, "Images32.gif");
+			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -1052,9 +1058,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
@@ -1082,11 +1088,11 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
-			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
-			this.imageListMain.Images.SetKeyName(2,"email.gif");
-			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4,"label.gif");
+			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
+			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
+			this.imageListMain.Images.SetKeyName(2, "email.gif");
+			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4, "label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1114,82 +1120,82 @@ namespace OpenDental{
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
+			this.ToolBarMain.Location = new System.Drawing.Point(51, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(931,25);
+			this.ToolBarMain.Size = new System.Drawing.Size(931, 25);
 			this.ToolBarMain.TabIndex = 178;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// userControlTasks1
 			// 
-			this.userControlTasks1.Location = new System.Drawing.Point(57,498);
+			this.userControlTasks1.Location = new System.Drawing.Point(57, 498);
 			this.userControlTasks1.Name = "userControlTasks1";
-			this.userControlTasks1.Size = new System.Drawing.Size(783,139);
+			this.userControlTasks1.Size = new System.Drawing.Size(783, 139);
 			this.userControlTasks1.TabIndex = 28;
 			this.userControlTasks1.Visible = false;
 			this.userControlTasks1.GoToChanged += new System.EventHandler(this.userControlTasks1_GoToChanged);
 			// 
 			// ContrManage2
 			// 
-			this.ContrManage2.Location = new System.Drawing.Point(77,31);
+			this.ContrManage2.Location = new System.Drawing.Point(77, 31);
 			this.ContrManage2.Name = "ContrManage2";
-			this.ContrManage2.Size = new System.Drawing.Size(877,547);
+			this.ContrManage2.Size = new System.Drawing.Size(877, 547);
 			this.ContrManage2.TabIndex = 27;
 			this.ContrManage2.Visible = false;
 			// 
 			// ContrChart2
 			// 
-			this.ContrChart2.Location = new System.Drawing.Point(77,49);
+			this.ContrChart2.Location = new System.Drawing.Point(77, 49);
 			this.ContrChart2.Name = "ContrChart2";
-			this.ContrChart2.Size = new System.Drawing.Size(865,589);
+			this.ContrChart2.Size = new System.Drawing.Size(865, 589);
 			this.ContrChart2.TabIndex = 26;
 			this.ContrChart2.Visible = false;
 			// 
 			// ContrDocs2
 			// 
-			this.ContrDocs2.Location = new System.Drawing.Point(97,41);
+			this.ContrDocs2.Location = new System.Drawing.Point(97, 41);
 			this.ContrDocs2.Name = "ContrDocs2";
-			this.ContrDocs2.Size = new System.Drawing.Size(845,606);
+			this.ContrDocs2.Size = new System.Drawing.Size(845, 606);
 			this.ContrDocs2.TabIndex = 25;
 			this.ContrDocs2.Visible = false;
 			// 
 			// ContrTreat2
 			// 
-			this.ContrTreat2.Location = new System.Drawing.Point(97,47);
+			this.ContrTreat2.Location = new System.Drawing.Point(97, 47);
 			this.ContrTreat2.Name = "ContrTreat2";
-			this.ContrTreat2.Size = new System.Drawing.Size(857,612);
+			this.ContrTreat2.Size = new System.Drawing.Size(857, 612);
 			this.ContrTreat2.TabIndex = 24;
 			this.ContrTreat2.Visible = false;
 			// 
 			// ContrAccount2
 			// 
-			this.ContrAccount2.Location = new System.Drawing.Point(109,38);
+			this.ContrAccount2.Location = new System.Drawing.Point(109, 38);
 			this.ContrAccount2.Name = "ContrAccount2";
-			this.ContrAccount2.Size = new System.Drawing.Size(796,599);
+			this.ContrAccount2.Size = new System.Drawing.Size(796, 599);
 			this.ContrAccount2.TabIndex = 23;
 			this.ContrAccount2.Visible = false;
 			// 
 			// ContrFamily2
 			// 
-			this.ContrFamily2.Location = new System.Drawing.Point(109,38);
+			this.ContrFamily2.Location = new System.Drawing.Point(109, 38);
 			this.ContrFamily2.Name = "ContrFamily2";
-			this.ContrFamily2.Size = new System.Drawing.Size(845,599);
+			this.ContrFamily2.Size = new System.Drawing.Size(845, 599);
 			this.ContrFamily2.TabIndex = 22;
 			this.ContrFamily2.Visible = false;
 			// 
 			// ContrAppt2
 			// 
-			this.ContrAppt2.Location = new System.Drawing.Point(97,42);
+			this.ContrAppt2.Location = new System.Drawing.Point(97, 42);
 			this.ContrAppt2.Name = "ContrAppt2";
-			this.ContrAppt2.Size = new System.Drawing.Size(857,643);
+			this.ContrAppt2.Size = new System.Drawing.Size(857, 643);
 			this.ContrAppt2.TabIndex = 21;
 			this.ContrAppt2.Visible = false;
 			// 
 			// lightSignalGrid1
 			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
 			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
@@ -1198,9 +1204,9 @@ namespace OpenDental{
 			// 
 			this.myOutlookBar.Dock = System.Windows.Forms.DockStyle.Left;
 			this.myOutlookBar.ImageList = this.imageList32;
-			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
+			this.myOutlookBar.Location = new System.Drawing.Point(0, 0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,640);
+			this.myOutlookBar.Size = new System.Drawing.Size(51, 0);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1209,15 +1215,9 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
-			// menuItemFeeScheds
-			// 
-			this.menuItemFeeScheds.Index = 14;
-			this.menuItemFeeScheds.Text = "Fee Schedules";
-			this.menuItemFeeScheds.Click += new System.EventHandler(this.menuItemFeeScheds_Click);
-			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,640);
+			this.ClientSize = new System.Drawing.Size(982, 0);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);

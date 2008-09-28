@@ -2924,7 +2924,7 @@ namespace OpenDental{
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 //This button cannot be added back until conversion code to add tables to db has been included.
 //And until a flag has been included to turn it off for most offices.
-//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","AnestheticRecord"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuEmail;
@@ -3041,7 +3041,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled=false;
-				//ToolBarMain.Buttons["AnestheticRecord"].Enabled=false; 
+				ToolBarMain.Buttons["Anesthesia"].Enabled=false; 
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3056,7 +3056,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled=true;
-				//ToolBarMain.Buttons["AnestheticRecord"].Enabled=true;
+				ToolBarMain.Buttons["Anesthesia"].Enabled=true;
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
@@ -3121,8 +3121,8 @@ namespace OpenDental{
 					case "Perio":
 						OnPerio_Click();
 						break;
-					case "AnestheticRecord":
-						OnAnestheticRecord_Click();
+					case "Anesthesia":
+						OnAnesthesia_Click();
 						break;
 					//case "Commlog":
 					//	OnCommlog_Click();
@@ -3172,9 +3172,9 @@ namespace OpenDental{
 			FormP.ShowDialog();
 		}
 
-		private void OnAnestheticRecord_Click(){
-			FormAnestheticRecord FormP=new FormAnestheticRecord(PatCur);
-			FormP.ShowDialog();
+		private void OnAnesthesia_Click(){
+			FormAnesthesia FormA = new FormAnesthesia(PatCur);
+			FormA.ShowDialog();
 		}
 
 		private void FillPtInfo(){

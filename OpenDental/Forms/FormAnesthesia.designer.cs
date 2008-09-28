@@ -179,6 +179,7 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnesthesia";
 			this.Text = "Anesthesia & Sedation Module";
+			this.Text = "Blah";
 			this.groupBoxAnesthesia.ResumeLayout(false);
 			this.groupBoxAnesthesia.PerformLayout();
 			this.ResumeLayout(false);
