@@ -2857,6 +2857,17 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
 			}
+			try{
+				int unitqty=int.Parse(textUnitQty.Text);
+				if(unitqty<1){
+					MsgBox.Show(this,"Qty not valid.  Typical value is 1.");
+					return false;
+				}
+			}
+			catch{
+				MsgBox.Show(this,"Qty not valid.  Typical value is 1.");
+				return false;
+			}
 			if(errorProvider2.GetError(textSurfaces)!=""
 				|| errorProvider2.GetError(textTooth)!=""
 				){

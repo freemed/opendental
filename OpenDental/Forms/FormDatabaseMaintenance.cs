@@ -305,6 +305,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ProcedurelogUndeleteAttachedToClaim();
 			Application.DoEvents();
+			ProcedurelogUnitQtyZero();
+			Application.DoEvents();
 			ProviderHiddenWithClaimPayments();
 			Application.DoEvents();
 			SchedulesDeleteShort();
@@ -1362,6 +1364,16 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Procedures undeleted because found attached to claims: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ProcedurelogUnitQtyZero() {
+			command=@"UPDATE procedurelog        
+				SET UnitQty=1
+				WHERE UnitQty=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Procedures changed from UnitQty=0 to UnitQty=1: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
