@@ -138,10 +138,12 @@ namespace OpenDental
 		private Label label2;
 		private OpenDental.UI.Button butWasteQty;
 		private PrintDialog printDialog;
+		
 
 
 		private void InitializeComponent()
 		{
+
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.listAnesthetics = new System.Windows.Forms.ListBox();
 			this.labelAnesthMed = new System.Windows.Forms.Label();
@@ -1698,7 +1700,7 @@ namespace OpenDental
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticRecord";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = " Anesthetic Record";
+			this.Text = "Anesthetic Record";
 			this.Load += new System.EventHandler(this.FormAnestheticRecord_Load);
 			this.groupBoxSidebarRt.ResumeLayout(false);
 			this.groupBoxSidebarRt.PerformLayout();
@@ -1747,13 +1749,15 @@ namespace OpenDental
 			RefreshListAnesthetics();
 			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//This works even if no items.
 
-			/*
-			//ADDING FUNCTIONALITY 2008-03-18: fills provider and assistant comboboxes
 
+			//Fills provider and assistant comboboxes
+
+			comboBoxSurgeon.Items.Add(Lan.g(this, ""));
 			for (int i = 0; i < ProviderC.List.Length; i++)
 			{
 				comboBoxSurgeon.Items.Add(ProviderC.List[i].Abbr);
-				if (ProviderC.List[i].ProvNum == PatCur.Surgeon)
+				
+				if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 					comboBoxSurgeon.SelectedIndex = i;
 			}
 
@@ -1770,16 +1774,18 @@ namespace OpenDental
 				}
 			}
 			//Change to suit for Anesthetist, Circulator, Assistant
-			//comboSecProv.Items.Clear();
-			//comboSecProv.Items.Add(Lan.g(this, "none"));
-			//comboSecProv.SelectedIndex = 0;
-			//for (int i = 0; i < ProviderC.List.Length; i++)
-			//{
-				//comboSecProv.Items.Add(ProviderC.List[i].Abbr);
-				//if (ProviderC.List[i].ProvNum == PatCur.SecProv)
-					//comboSecProv.SelectedIndex = i + 1;
-			 */
+			{
+				comboBoxAsst.Items.Clear();
+				comboBoxAsst.Items.Add(Lan.g(this, ""));
+				comboBoxAsst.SelectedIndex = 0;
+				for (int i = 0; i < ProviderC.List.Length; i++)
+				{
+					comboBoxAsst.Items.Add(ProviderC.List[i].Abbr);
+					if (ProviderC.List[i].ProvNum == PatCur.SecProv)
+						comboBoxAsst.SelectedIndex = i + 1;
 
+				}
+			}
 		}
 
 		private void RefreshListAnesthetics()

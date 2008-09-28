@@ -22,9 +22,7 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
+
 
 		private void butCancel_Click(object sender,EventArgs e) {
 
@@ -51,10 +49,11 @@ namespace OpenDental {
 			//FormAR.ShowDialog();
 		}
 
-		private void butCancel_Click_1(object sender, EventArgs e)
+		private void butClose_Click(object sender, EventArgs e)
 		{
-
+			DialogResult = DialogResult.Cancel;
 		}
+
 
 
 	}
