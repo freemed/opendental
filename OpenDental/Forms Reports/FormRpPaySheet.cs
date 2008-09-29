@@ -274,19 +274,20 @@ namespace OpenDental{
 				@"SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
 				payment.PayType,provider.Abbr,payment.CheckNum,
 				SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
-				FROM payment,patient,provider,paysplit,definition
-				WHERE payment.PayNum=paysplit.PayNum 
-				AND patient.PatNum=paysplit.PatNum 
-				AND provider.ProvNum=paysplit.ProvNum
-				AND definition.DefNum=payment.PayType "
+				FROM paysplit
+				LEFT JOIN payment ON payment.PayNum=paysplit.PayNum 
+				LEFT JOIN patient ON patient.PatNum=paysplit.PatNum
+				LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum
+				LEFT JOIN definition ON definition.DefNum=payment.PayType 
+				WHERE 1 "
 				+whereProv+" "
 				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
 			if(radioPatient.Checked){
-				queryPat+="GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum";
+				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,patient.PatNum,provider.ProvNum";
 			}
 			else{
-				queryPat+="GROUP BY payment.PayNum,provider.ProvNum";
+				queryPat+="GROUP BY paysplit.DatePay,paysplit.PayNum,provider.ProvNum";
 			}
 			queryPat+=" ORDER BY paysplit.DatePay";
 			DataTable tableIns=General.GetTable(queryIns);
