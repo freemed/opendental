@@ -413,7 +413,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
-			string filePathAndName=Path.GetFileNameWithoutExtension(Path.GetTempFileName())+".pdf";
+			string filePathAndName=Path.ChangeExtension(Path.GetTempFileName(),".pdf");
 			SheetPrinting.CreatePdf(SheetCur,filePathAndName);
 			Process.Start(filePathAndName);
 			DialogResult=DialogResult.OK;
