@@ -2930,7 +2930,7 @@ namespace OpenDental{
 			//if (PrefC.GetBoolSilent("EnableAnesthMod",true))
 			//{
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
-				
+				  
 			//}
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;

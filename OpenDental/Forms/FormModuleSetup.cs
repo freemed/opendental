@@ -964,7 +964,7 @@ namespace OpenDental{
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool("AutoResetTPEntryStatus");
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool("AllowSettingProcsComplete");
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool("ChartQuickAddHideAmalgam");
-			checkEnableAnesthMod.Checked = PrefC.GetBool("EnableAnesthMod");
+			//checkEnableAnesthMod.Checked = PrefC.GetBool("EnableAnesthMod");
 		}
 
 		private void checkDeductibleBeforePercent_Click(object sender,EventArgs e) {
@@ -1051,7 +1051,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ApptModuleRefreshesEveryMinute", checkApptRefreshEveryMinute.Checked)
 				| Prefs.UpdateBool("ChartQuickAddHideAmalgam", checkChartQuickAddHideAmalgam.Checked)
 				| Prefs.UpdateBool("AllowedFeeSchedsAutomate",checkAllowedFeeSchedsAutomate.Checked)
-				| Prefs.UpdateBool("EnableAnesthMod", checkEnableAnesthMod.Checked)
+				//| Prefs.UpdateBool("EnableAnesthMod", checkEnableAnesthMod.Checked)
 				)
 			{
 				changed=true;
