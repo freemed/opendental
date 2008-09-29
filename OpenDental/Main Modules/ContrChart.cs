@@ -802,8 +802,9 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
 			this.imageListMain.Images.SetKeyName(1,"Rx.gif");
 			this.imageListMain.Images.SetKeyName(2,"Probe.gif");
-			this.imageListMain.Images.SetKeyName(3,"Anesth.gif");
-			this.imageListMain.Images.SetKeyName(4,"commlog.gif");
+			this.imageListMain.Images.SetKeyName(3, "Anesth.gif"); 
+			this.imageListMain.Images.SetKeyName(4, "commlog.gif");
+
 			// 
 			// label4
 			// 
@@ -2924,7 +2925,13 @@ namespace OpenDental{
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 //This button cannot be added back until conversion code to add tables to db has been included.
 //And until a flag has been included to turn it off for most offices.
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
+			//This toggles Anesthesia ToolBar Button on or off depending on setting in Module Prefs
+			//if (((Pref)PrefC.HList["EnableAnesthMod"]).ValueString == "1")
+			//if (PrefC.GetBoolSilent("EnableAnesthMod",true))
+			//{
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
+				
+			//}
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuEmail;
@@ -3040,8 +3047,8 @@ namespace OpenDental{
 				butBig.Enabled=false;
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
-				ToolBarMain.Buttons["Perio"].Enabled=false;
-				ToolBarMain.Buttons["Anesthesia"].Enabled=false; 
+				ToolBarMain.Buttons["Perio"].Enabled = false;
+				ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3055,8 +3062,8 @@ namespace OpenDental{
 				butBig.Enabled=true;
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
-				ToolBarMain.Buttons["Perio"].Enabled=true;
-				ToolBarMain.Buttons["Anesthesia"].Enabled=true;
+				ToolBarMain.Buttons["Perio"].Enabled = true; 
+				ToolBarMain.Buttons["Anesthesia"].Enabled = true;
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
@@ -3064,6 +3071,7 @@ namespace OpenDental{
 					radioEntryTP.Select();
 					PrevPtNum = PatCur.PatNum;
 				}
+				
 			}
 			ToolBarMain.Invalidate();
 			ClearButtons();
