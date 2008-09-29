@@ -524,7 +524,6 @@ namespace OpenDental{
 			this.butMonth.Size = new System.Drawing.Size(65,22);
 			this.butMonth.TabIndex = 79;
 			this.butMonth.Text = "Month";
-			this.butMonth.Visible = false;
 			this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
 			// 
 			// pinBoard

@@ -18,43 +18,21 @@ namespace OpenDental {
 	///<summary></summary>
 	public class ContrCalendar:System.Windows.Forms.UserControl {
 		private System.ComponentModel.Container components = null;
-		private OpenDental.UI.Button butPrevious;
-		private OpenDental.UI.Button butNext;
 		private int RowCount;
 		private int ColCount;
 		private int RowHeight;
 		private int ColWidth;
 		private int HeaderHeight;
-		//private float FixedWidth;
 		private int DayHeadHeight;
-		//private Rectangle RecBG;
-		private Rectangle RecHead;
-		private Rectangle RecDayHead;
-		private Rectangle RecFoot;
-		//private Rectangle RecBG2;
-		private Color colorBG;
-		private Color HeadColor;
-		private Color DayHeadColor;
-		private Color FootColor;
-		private Color TextColor;
-		private Color DayOpenColor;
-		//private Color SelectedDayColor;
-		private Pen LinePen;
-		private Font FontText;
-		private Font FontText2;
-		private Font FontHeader;
-		private string Header;
-		private string Footer;
-		private int DaysInMonth;
 		private DateTime selectedDate;
 		///<summary></summary>
 		public List<OneCalendarDay> ListDays;
-		///<summary></summary>
-		public int SelectedDay;
-		///<summary>Was called CurrentDay</summary>
-		public OneCalendarDay Today;
-		///<summary></summary>
-		public int MaxRowsText;
+		//<summary></summary>
+		//public int SelectedDay;
+		//<summary>Was called CurrentDay</summary>
+		//public OneCalendarDay Today;
+		//<summary></summary>
+		//public int MaxRowsText;
 		//private int count=0;
 
 		///<summary></summary>
@@ -63,22 +41,20 @@ namespace OpenDental {
 			RowCount=6;
 			ColCount=7;
 			HeaderHeight=25;
-			//FixedWidth=25;
-			//BGColor=SystemColors.Window;
-			colorBG=SystemColors.Control;
-			HeadColor=SystemColors.Control;
-			FootColor=SystemColors.Control;
-			DayHeadColor=SystemColors.Window;
-			TextColor=Color.Black;//SystemColors.ControlText;
-			DayOpenColor=Color.White;//SystemColors.Window; Was ActiveDayColor
+			DayHeadHeight=15;//(int)FontText.GetHeight()+6;
+			//colorBG=SystemColors.Control;
+			//HeadColor=SystemColors.Control;
+			//FootColor=SystemColors.Control;
+			//DayHeadColor=SystemColors.Window;
+			//TextColor=Color.Black;//SystemColors.ControlText;
+			//DayOpenColor=Color.White;//SystemColors.Window; Was ActiveDayColor
 			//SelectedDayColor=Color.White;//SystemColors.Highlight;  
-			LinePen=new Pen(Color.SlateGray,2);
-			FontText=new Font("Microsoft Sans Serif",8,FontStyle.Bold);
-			FontText2=new Font("Microsoft Sans Serif",8,FontStyle.Regular);
-			DayHeadHeight=(int)FontText.GetHeight()+6;
-			FontHeader = new Font("Microsoft Sans Serif",9,FontStyle.Bold);
-			MaxRowsText=5;
-			ListDays=new List<OneCalendarDay>();
+			//LinePen=new Pen(Color.SlateGray,1);
+			//FontText=new Font("Microsoft Sans Serif",8,FontStyle.Bold);
+			//FontText2=new Font("Microsoft Sans Serif",8,FontStyle.Regular);
+			//FontHeader = new Font("Microsoft Sans Serif",9,FontStyle.Bold);
+			//MaxRowsText=5;
+			//ListDays=new List<OneCalendarDay>();
 			//for(int i=0;i<List.Length;i++){
 			//	List[i]=new OneCalendarDay();
 			//  List[i].RowsOfText=new string[MaxRowsText];
@@ -98,50 +74,14 @@ namespace OpenDental {
 		#region Component Designer generated code
 
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrCalendar));
-			this.butPrevious = new OpenDental.UI.Button();
-			this.butNext = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butPrevious
-			// 
-			this.butPrevious.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrevious.Autosize = true;
-			this.butPrevious.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrevious.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrevious.CornerRadius = 4F;
-			this.butPrevious.Image = ((System.Drawing.Image)(resources.GetObject("butPrevious.Image")));
-			this.butPrevious.Location = new System.Drawing.Point(32,34);
-			this.butPrevious.Name = "butPrevious";
-			this.butPrevious.Size = new System.Drawing.Size(22,22);
-			this.butPrevious.TabIndex = 0;
-			this.butPrevious.Click += new System.EventHandler(this.butPrevious_Click);
-			// 
-			// butNext
-			// 
-			this.butNext.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNext.Autosize = true;
-			this.butNext.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNext.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNext.CornerRadius = 4F;
-			this.butNext.Image = ((System.Drawing.Image)(resources.GetObject("butNext.Image")));
-			this.butNext.Location = new System.Drawing.Point(538,22);
-			this.butNext.Name = "butNext";
-			this.butNext.Size = new System.Drawing.Size(22,22);
-			this.butNext.TabIndex = 1;
-			this.butNext.Click += new System.EventHandler(this.butNext_Click);
 			// 
 			// ContrCalendar
 			// 
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.Controls.Add(this.butNext);
-			this.Controls.Add(this.butPrevious);
 			this.DoubleBuffered = true;
 			this.Name = "ContrCalendar";
-			this.Size = new System.Drawing.Size(600,600);
-			this.Load += new System.EventHandler(this.ContrCalendar_Load);
-			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrCalendar_MouseDown);
-			this.Resize += new System.EventHandler(this.ContrCalendar_Resize);
+			this.Size = new System.Drawing.Size(535,374);
 			this.ResumeLayout(false);
 
 		}
@@ -149,9 +89,9 @@ namespace OpenDental {
 
 
 		///<summary></summary>
-		[Category("AAA Custom"),
-			Description("SelectedDate. Keeps track of the date selected")
-		]
+		//[Category("AAA Custom"),
+		//	Description("SelectedDate. Keeps track of the date selected")
+		//]
 		public DateTime SelectedDate {
 			get {
 				return selectedDate;
@@ -161,51 +101,77 @@ namespace OpenDental {
 			}
 		}
 
-		private void ContrCalendar_Load(object sender,System.EventArgs e) {
+		/*private void ContrCalendar_Load(object sender,System.EventArgs e) {
 			selectedDate=DateTime.Today;
 			SelectedDay=SelectedDate.Day;
 			//this needs work.  should be a simple invalidate instead:
 			//Graphics g=this.CreateGraphics();
 			//this.OnPaint(new PaintEventArgs(g,this.ClientRectangle));
 			//g.Dispose();
-			FillDaysInMonth();
-			this.Invalidate();
-		}
+			//FillDaysInMonth();
+			//this.Invalidate();
+		}*/
 
-		protected override void OnPaint(PaintEventArgs e) {
-			base.OnPaint(e);
-		}
-		private void ContrCalendar_Paint(object sender,System.Windows.Forms.PaintEventArgs e) {
-			//background:
-			Graphics g=e.Graphics;
-			g.FillRectangle(new SolidBrush(colorBG),new Rectangle(0,0,Width,Height));
+		/*protected override void OnResize(EventArgs e) {
+			base.OnResize(e);
 			RecHead=new Rectangle(0,0,Width,HeaderHeight);
 			RecFoot=new Rectangle(0,Height-HeaderHeight,Width,HeaderHeight);
 			RecDayHead=new Rectangle(0,HeaderHeight,Width,DayHeadHeight);
 			RowHeight=(Height-(HeaderHeight*2)-DayHeadHeight)/RowCount;
 			ColWidth=Width/ColCount;
-			g.DrawRectangle(LinePen,new Rectangle(0,0,Width-1,Height-1));
-			DrawHeader(g);
+			//Graphics g=this.CreateGraphics();
+			//g.FillRectangle(new SolidBrush(Color.BlueViolet),new Rectangle(0,0,Width,Height));
+			//g.Dispose();
+			//this.Invalidate();
+			//this.OnPaint(new PaintEventArgs(this.CreateGraphics(),this.ClientRectangle)); 
+		}*/
+
+		//private void ContrCalendar_Resize(object sender,System.EventArgs e) {
+			
+		//}
+
+		protected override void OnPaint(PaintEventArgs e) {
+			base.OnPaint(e);
+			Graphics g=e.Graphics;//this.CreateGraphics();//e.Graphics doesn't work for some reason
+			g.FillRectangle(new SolidBrush(SystemColors.Control),new Rectangle(0,0,Width,Height));
+			g.DrawRectangle(Pens.SlateGray,new Rectangle(0,0,Width-1,Height-1));
+			//DrawHeader(g);
 			//FillDaysInMonth();
-			DrawDays(g);
-			DrawDayHeaders(g);
-			PositionButtons();  
-			DrawFooter(g);
-			MarkTodayDate(g);
-			g.Dispose();
+			//DrawDays(g);
+			//DrawDayHeaders(g);
+			//PositionButtons();  
+			//DrawFooter(g);
+			//MarkTodayDate(g);
+			//g.Dispose();
 		}
 
+		//private void ContrCalendar_Paint(object sender,System.Windows.Forms.PaintEventArgs e) {
+			//base.OnPaint(e);//this causes VS to crash
+			//background:
+			//Graphics g=this.CreateGraphics();//e.Graphics doesn't work for some reason
+			//g.FillRectangle(new SolidBrush(colorBG),new Rectangle(0,0,Width,Height));
+			//g.DrawRectangle(LinePen,new Rectangle(0,0,Width-1,Height-1));
+			//DrawHeader(g);
+			//FillDaysInMonth();
+			//DrawDays(g);
+			//DrawDayHeaders(g);
+			//PositionButtons();  
+			//DrawFooter(g);
+			//MarkTodayDate(g);
+			//g.Dispose();
+		//}
+
 		private void DrawHeader(Graphics g) {
-			g.FillRectangle(new SolidBrush(HeadColor),RecHead);
+			/*g.FillRectangle(new SolidBrush(HeadColor),RecHead);
 			g.DrawRectangle(LinePen,RecHead);
 			Header=selectedDate.ToString("MMMM, yyyy");
 			int xPos=Width/2-(int)(g.MeasureString(Header,FontHeader).Width/2f);
 			int yPos=5;
-			g.DrawString(Header,FontHeader,Brushes.Black,xPos,yPos);
+			g.DrawString(Header,FontHeader,Brushes.Black,xPos,yPos);*/
 		}
 
 		private void FillDaysInMonth() {
-			int row=0;
+			/*int row=0;
 			int column=(int)(new DateTime(selectedDate.Year,selectedDate.Month,1).DayOfWeek)-1;
 			DaysInMonth=DateTime.DaysInMonth(selectedDate.Year,selectedDate.Month);
 			OneCalendarDay oneday;
@@ -234,12 +200,12 @@ namespace OpenDental {
 				else {
 					column++;
 				}
-			}
+			}*/
 		}
 
 		///<summary></summary>
 		public void DrawDays(Graphics g) {
-			StringFormat format=new StringFormat();
+			/*StringFormat format=new StringFormat();
 			format.LineAlignment=StringAlignment.Far;//right
 			format.Alignment=StringAlignment.Near;//top
 			RectangleF rectF;
@@ -262,12 +228,12 @@ namespace OpenDental {
 				DrawRowsOfText(i,g);
 			}
 			DrawMonthGrid(g);
-			MarkTodayDate(g);
+			MarkTodayDate(g);*/
 		}
 
 		///<summary>Draws the names of the days of the week</summary>
 		private void DrawDayHeaders(Graphics g) {
-			g.FillRectangle(new SolidBrush(DayHeadColor),RecDayHead);
+			/*g.FillRectangle(new SolidBrush(DayHeadColor),RecDayHead);
 			g.DrawRectangle(LinePen,RecDayHead);
 			for(int i=0;i<=ColCount;i++) {
 				g.DrawLine(LinePen,ColWidth*i,HeaderHeight,ColWidth*i,HeaderHeight+DayHeadHeight);
@@ -277,33 +243,33 @@ namespace OpenDental {
 				int xPos=i*ColWidth+ColWidth/2-(int)(g.MeasureString(daysOfWeek[i],FontText).Width/2f);
 				int yPos=HeaderHeight+DayHeadHeight-(int)(FontText.GetHeight()/2f);
 				g.DrawString(daysOfWeek[i],FontText,Brushes.Black,xPos,yPos);
-			}
+			}*/
 		}
 
-		private void PositionButtons() {
+		/*private void PositionButtons() {
 			butPrevious.Location=new Point(2,2);
 			butNext.Location=new Point(Width-butNext.Size.Width-1,2);
 			butPrevious.BackColor=SystemColors.Control;
 			butNext.BackColor=SystemColors.Control;
-		}
+		}*/
 
 		private void DrawFooter(Graphics g) {
-			g.FillRectangle(new SolidBrush(FootColor),RecFoot);
+			/*g.FillRectangle(new SolidBrush(FootColor),RecFoot);
 			g.DrawRectangle(LinePen,RecFoot);
 			Footer="Today: "+DateTime.Today.ToShortDateString();
 			int xPos=Width/2-(int)(g.MeasureString(Footer,FontText).Width/2f);
 			int yPos=Height-(int)(FontText.GetHeight()/2f);
-			g.DrawString(Lan.g(this,Footer),FontText,Brushes.Black,xPos,yPos);
+			g.DrawString(Lan.g(this,Footer),FontText,Brushes.Black,xPos,yPos);*/
 		}
 
 		private void MarkTodayDate(Graphics g) {
-			if(ListDays[SelectedDay].Date.Month==DateTime.Today.Month) {
-				g.DrawRectangle(new Pen(Color.Red),Today.Bounds);
-			}
+			//if(ListDays[SelectedDay].Date.Month==DateTime.Today.Month) {
+			//	g.DrawRectangle(new Pen(Color.Red),Today.Bounds);
+			//}
 		}
 
 		private void DrawRowsOfText(int day,Graphics g) {
-			float extra=2;
+			/*float extra=2;
 			float xCoord=(int)(ListDays[day].Bounds.X+extra);
 			float yCoord=(float)(ListDays[day].Bounds.Y+(FontText2.GetHeight()*1.5));
 			RectangleF r=new RectangleF(xCoord,yCoord,ListDays[day].Bounds.Width-(2*extra)
@@ -319,10 +285,11 @@ namespace OpenDental {
 						,new RectangleF(xCoord,yCoord,ListDays[day].Bounds.Width-(2*extra),FontText2.GetHeight()));
 					yCoord+=FontText2.GetHeight();
 				}
-			}
+			}*/
 		}
 
 		private void DrawMonthGrid(Graphics g) {
+			/*
 			//horizontal lines:  
 			for(int i=1;i<=RowCount;i++) {
 				g.DrawLine(LinePen,0,HeaderHeight+DayHeadHeight+RowHeight*i,Width,HeaderHeight+DayHeadHeight+RowHeight*i);
@@ -330,10 +297,10 @@ namespace OpenDental {
 			//vertical lines
 			for(int i=0;i<=ColCount;i++) {
 				g.DrawLine(LinePen,ColWidth*i,HeaderHeight,ColWidth*i,Height-HeaderHeight);
-			}
+			}*/
 		}
 
-		private void ContrCalendar_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+		/*private void ContrCalendar_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			//Graphics g=this.CreateGraphics();
 			int OldSelected=SelectedDay;
 			for(int i=1;i<=DaysInMonth;i++) {
@@ -363,20 +330,20 @@ namespace OpenDental {
 						,FontText,Brushes.Black,List[i].xPos,List[i].yPos);
 					DrawRowsOfText(i,grfx);
 					DrawMonthGrid(grfx); 
-					MarkTodayDate(grfx); */
+					MarkTodayDate(grfx); 
 				}
 			}
 			//g.Dispose();
-		}
+		}*/
 
-		///<summary></summary>
-		public void ChangeColor(int day,Color color) {
-			ListDays[day].color=color;
-		}
+		//<summary></summary>
+		//public void ChangeColor(int day,Color color) {
+		//	ListDays[day].color=color;
+		//}
 
-		///<summary></summary>
-		public void AddText(int day,string s) {
-			if(ListDays[day].NumRowsText!=MaxRowsText) {
+		//<summary></summary>
+		//public void AddText(int day,string s) {
+			/*if(ListDays[day].NumRowsText!=MaxRowsText) {
 				for(int i=0;i<ListDays[day].RowsOfText.Count;i++) {
 					if(ListDays[day].RowsOfText[i]=="" || ListDays[day].RowsOfText[i]==null) {
 						ListDays[day].RowsOfText[i]=s;
@@ -384,27 +351,22 @@ namespace OpenDental {
 						return;
 					}
 				}
-			}
+			}*/
 			//else{
 			//MessageBox.Show(Lan.g(this,"Too Many Rows of Text.  Can Only Have "+MaxRowsText.ToString()));  
 			//}  
-		}
+		//}
 
-		///<summary></summary>
+		/*//<summary></summary>
 		public void ResetList() {
 			for(int i=1;i<ListDays.Count;i++) {
 				ListDays[i].color=Color.Empty;
 				ListDays[i].RowsOfText=new List<string>();
 				ListDays[i].NumRowsText=0;
 			}
-		}
+		}*/
 
-		private void ContrCalendar_Resize(object sender,System.EventArgs e) {
-			this.Invalidate();
-			//this.OnPaint(new PaintEventArgs(this.CreateGraphics(),this.ClientRectangle)); 
-		}
-
-		private void butPrevious_Click(object sender,System.EventArgs e) {
+		/*private void butPrevious_Click(object sender,System.EventArgs e) {
 			//Graphics g=this.CreateGraphics();
 			selectedDate=selectedDate.AddMonths(-1);
 			//DisplayDaysInMonth(g);
@@ -422,8 +384,9 @@ namespace OpenDental {
 			OnChangeMonth(e);
 			this.Invalidate();
 			//this.OnPaint(new PaintEventArgs(this.CreateGraphics(),this.ClientRectangle)); 	
-		}
+		}*/
 
+		/*
 		///<summary></summary>
 		public delegate void CellEventHandler(object sender,CellEventArgs e);
 		///<summary></summary>
@@ -454,7 +417,7 @@ namespace OpenDental {
 			if(ChangeMonth !=null) {
 				ChangeMonth(this,e);
 			}
-		}
+		}*/
 	}
 
 
@@ -467,16 +430,16 @@ namespace OpenDental {
 		public DateTime Date;
 		///<summary></summary>
 		public Color color;
+		//<summary></summary>
+		//public bool IsSelected;
 		///<summary></summary>
-		public bool IsSelected;
-		///<summary></summary>
-		public List<string> RowsOfText;
-		///<summary></summary>
-		public int NumRowsText;
+		public string RowsOfText;
+		//<summary></summary>
+		//public int NumRowsText;
 
-		public OneCalendarDay() {
-			RowsOfText=new List<string>();
-		}
+		//public OneCalendarDay() {
+		//	RowsOfText=new List<string>();
+		//}
 
 		public OneCalendarDay Copy() {
 			return (OneCalendarDay)this.MemberwiseClone();
