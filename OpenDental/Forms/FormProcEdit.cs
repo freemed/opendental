@@ -2436,7 +2436,21 @@ namespace OpenDental{
       ProcCur.CodeNum=FormP.SelectedCodeNum;
       ProcedureCode2=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
       textDesc.Text=ProcedureCode2.Descript;
-      ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+			int priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			InsPlan priplan=InsPlans.GetPlan(priPlanNum,PlanList);//can handle a plannum=0
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+			if(priplan!=null && priplan.PlanType=="p") {//PPO
+				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+				if(standardfee>insfee) {
+					ProcCur.ProcFee=standardfee;
+				}
+				else {
+					ProcCur.ProcFee=insfee;
+				}
+			}
+			else {
+				ProcCur.ProcFee=insfee;
+			}
 			switch(ProcedureCode2.TreatArea){ 
 				case TreatmentArea.Quad:
 					ProcCur.Surf="UR";
