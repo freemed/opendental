@@ -189,7 +189,7 @@ namespace OpenDental
 			this.butEditAnesthMeds.Name = "butEditAnesthMeds";
 			this.butEditAnesthMeds.Size = new System.Drawing.Size(82, 26);
 			this.butEditAnesthMeds.TabIndex = 76;
-			this.butEditAnesthMeds.Text = "Edit";
+			this.butEditAnesthMeds.Text = "Edit     ";
 			this.butEditAnesthMeds.UseVisualStyleBackColor = true;
 			this.butEditAnesthMeds.Click += new System.EventHandler(this.butEditAnesthMeds_Click);
 			// 

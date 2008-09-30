@@ -36,11 +36,13 @@ namespace OpenDental{
 			this.labelAnesthMedName = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.labelChanges = new System.Windows.Forms.Label();
 			this.groupAnesthMedsEdit.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupAnesthMedsEdit
 			// 
+			this.groupAnesthMedsEdit.Controls.Add(this.labelChanges);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelHowSuppl);
 			this.groupAnesthMedsEdit.Controls.Add(this.textHowSupplied);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelHowSupplied);
@@ -49,7 +51,7 @@ namespace OpenDental{
 			this.groupAnesthMedsEdit.Controls.Add(this.labelAnesthMedName);
 			this.groupAnesthMedsEdit.Location = new System.Drawing.Point(22, 28);
 			this.groupAnesthMedsEdit.Name = "groupAnesthMedsEdit";
-			this.groupAnesthMedsEdit.Size = new System.Drawing.Size(532, 166);
+			this.groupAnesthMedsEdit.Size = new System.Drawing.Size(532, 185);
 			this.groupAnesthMedsEdit.TabIndex = 4;
 			this.groupAnesthMedsEdit.TabStop = false;
 			this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
@@ -113,11 +115,11 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(384, 219);
+			this.butOK.Location = new System.Drawing.Point(458, 219);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
+			this.butOK.Size = new System.Drawing.Size(96, 26);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "&Save and Close";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
@@ -129,13 +131,23 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(465, 219);
+			this.butCancel.Location = new System.Drawing.Point(378, 219);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(74, 26);
 			this.butCancel.TabIndex = 55;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// labelChanges
+			// 
+			this.labelChanges.Location = new System.Drawing.Point(37, 140);
+			this.labelChanges.Name = "labelChanges";
+			this.labelChanges.Size = new System.Drawing.Size(477, 30);
+			this.labelChanges.TabIndex = 6;
+			this.labelChanges.Text = "NOTE: Once a medication has been added, spelling changes can be made here, but th" +
+				"e name and type of medication should not be changed or the inventory system will" +
+				" be adversely affected...";
 			// 
 			// FormAnestheticMedsEdit
 			// 
@@ -165,5 +177,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelUnitDose;
 		private System.Windows.Forms.TextBox textAnesthMed;
 		private OpenDental.UI.Button butCancel;
+		private System.Windows.Forms.Label labelChanges;
 	}
 }
