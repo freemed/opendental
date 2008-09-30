@@ -28,15 +28,15 @@ namespace OpenDental{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsAdjQtys));
 			this.gridAnesthMedsAdjQtys = new System.Windows.Forms.DataGridView();
-			this.labelAdjustQtys = new System.Windows.Forms.Label();
-			this.groupBoxAdjQtys = new System.Windows.Forms.GroupBox();
-			this.button1 = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
 			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyAdjustment = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.labelAdjustQtys = new System.Windows.Forms.Label();
+			this.groupBoxAdjQtys = new System.Windows.Forms.GroupBox();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMedsAdjQtys)).BeginInit();
 			this.groupBoxAdjQtys.SuspendLayout();
 			this.SuspendLayout();
@@ -55,60 +55,6 @@ namespace OpenDental{
 			this.gridAnesthMedsAdjQtys.Size = new System.Drawing.Size(803, 307);
 			this.gridAnesthMedsAdjQtys.TabIndex = 4;
 			this.gridAnesthMedsAdjQtys.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAnesthMeds_CellContentClick);
-			// 
-			// labelAdjustQtys
-			// 
-			this.labelAdjustQtys.AutoSize = true;
-			this.labelAdjustQtys.Location = new System.Drawing.Point(27, 16);
-			this.labelAdjustQtys.Name = "labelAdjustQtys";
-			this.labelAdjustQtys.Size = new System.Drawing.Size(472, 13);
-			this.labelAdjustQtys.TabIndex = 143;
-			this.labelAdjustQtys.Text = "You may adjust quantities by entering positive or negative values in the \"Quantit" +
-				"y Adjustment\" Field";
-			// 
-			// groupBoxAdjQtys
-			// 
-			this.groupBoxAdjQtys.Controls.Add(this.gridAnesthMedsAdjQtys);
-			this.groupBoxAdjQtys.Controls.Add(this.labelAdjustQtys);
-			this.groupBoxAdjQtys.Controls.Add(this.button1);
-			this.groupBoxAdjQtys.Controls.Add(this.butClose);
-			this.groupBoxAdjQtys.Location = new System.Drawing.Point(12, 12);
-			this.groupBoxAdjQtys.Name = "groupBoxAdjQtys";
-			this.groupBoxAdjQtys.Size = new System.Drawing.Size(832, 410);
-			this.groupBoxAdjQtys.TabIndex = 144;
-			this.groupBoxAdjQtys.TabStop = false;
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(653, 367);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(66, 26);
-			this.button1.TabIndex = 141;
-			this.button1.Text = "Cancel";
-			this.button1.UseVisualStyleBackColor = true;
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(725, 367);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(90, 26);
-			this.butClose.TabIndex = 142;
-			this.butClose.Text = "Save and Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// AnestheticMed
 			// 
@@ -146,6 +92,61 @@ namespace OpenDental{
 			this.Notes.Name = "Notes";
 			this.Notes.Width = 200;
 			// 
+			// labelAdjustQtys
+			// 
+			this.labelAdjustQtys.AutoSize = true;
+			this.labelAdjustQtys.Location = new System.Drawing.Point(27, 16);
+			this.labelAdjustQtys.Name = "labelAdjustQtys";
+			this.labelAdjustQtys.Size = new System.Drawing.Size(472, 13);
+			this.labelAdjustQtys.TabIndex = 143;
+			this.labelAdjustQtys.Text = "You may adjust quantities by entering positive or negative values in the \"Quantit" +
+				"y Adjustment\" Field";
+			// 
+			// groupBoxAdjQtys
+			// 
+			this.groupBoxAdjQtys.Controls.Add(this.gridAnesthMedsAdjQtys);
+			this.groupBoxAdjQtys.Controls.Add(this.labelAdjustQtys);
+			this.groupBoxAdjQtys.Controls.Add(this.butCancel);
+			this.groupBoxAdjQtys.Controls.Add(this.butClose);
+			this.groupBoxAdjQtys.Location = new System.Drawing.Point(12, 12);
+			this.groupBoxAdjQtys.Name = "groupBoxAdjQtys";
+			this.groupBoxAdjQtys.Size = new System.Drawing.Size(832, 410);
+			this.groupBoxAdjQtys.TabIndex = 144;
+			this.groupBoxAdjQtys.TabStop = false;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(653, 367);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 141;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.button_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClose.Location = new System.Drawing.Point(725, 367);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(90, 26);
+			this.butClose.TabIndex = 142;
+			this.butClose.Text = "Save and Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormAnestheticMedsAdjQtys
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -167,7 +168,7 @@ namespace OpenDental{
 
 		private System.Windows.Forms.DataGridView gridAnesthMedsAdjQtys;
 		private OpenDental.UI.Button butClose;
-		private OpenDental.UI.Button button1;
+		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label labelAdjustQtys;
 		private System.Windows.Forms.GroupBox groupBoxAdjQtys;
 		private System.Windows.Forms.DataGridViewTextBoxColumn AnestheticMed;

@@ -90,7 +90,7 @@ namespace OpenDental{
 			// 
 			// textContact
 			// 
-			this.textContact.Location = new System.Drawing.Point(441, 64);
+			this.textContact.Location = new System.Drawing.Point(443, 64);
 			this.textContact.Name = "textContact";
 			this.textContact.Size = new System.Drawing.Size(118, 20);
 			this.textContact.TabIndex = 111;
@@ -106,7 +106,7 @@ namespace OpenDental{
 			// 
 			// textPhoneExt
 			// 
-			this.textPhoneExt.Location = new System.Drawing.Point(221, 64);
+			this.textPhoneExt.Location = new System.Drawing.Point(224, 64);
 			this.textPhoneExt.MaxLength = 5;
 			this.textPhoneExt.Name = "textPhoneExt";
 			this.textPhoneExt.Size = new System.Drawing.Size(39, 20);
@@ -132,7 +132,7 @@ namespace OpenDental{
 			// labelID
 			// 
 			this.labelID.AutoSize = true;
-			this.labelID.Location = new System.Drawing.Point(406, 35);
+			this.labelID.Location = new System.Drawing.Point(407, 35);
 			this.labelID.Name = "labelID";
 			this.labelID.Size = new System.Drawing.Size(28, 13);
 			this.labelID.TabIndex = 106;
@@ -157,7 +157,7 @@ namespace OpenDental{
 			// 
 			// textPhone
 			// 
-			this.textPhone.Location = new System.Drawing.Point(108, 64);
+			this.textPhone.Location = new System.Drawing.Point(105, 64);
 			this.textPhone.MaxLength = 13;
 			this.textPhone.Name = "textPhone";
 			this.textPhone.Size = new System.Drawing.Size(80, 20);
@@ -192,7 +192,7 @@ namespace OpenDental{
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(279, 150);
+			this.label5.Location = new System.Drawing.Point(279, 153);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(79, 13);
 			this.label5.TabIndex = 9;
@@ -200,7 +200,7 @@ namespace OpenDental{
 			// 
 			// textState
 			// 
-			this.textState.Location = new System.Drawing.Point(364, 147);
+			this.textState.Location = new System.Drawing.Point(364, 150);
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(195, 20);
 			this.textState.TabIndex = 8;
@@ -208,7 +208,7 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(66, 150);
+			this.label4.Location = new System.Drawing.Point(69, 153);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(24, 13);
 			this.label4.TabIndex = 7;
@@ -224,7 +224,7 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(39, 124);
+			this.label3.Location = new System.Drawing.Point(39, 127);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(54, 13);
 			this.label3.TabIndex = 5;
@@ -233,7 +233,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(39, 98);
+			this.label2.Location = new System.Drawing.Point(39, 101);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(54, 13);
 			this.label2.TabIndex = 3;
@@ -249,7 +249,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(29, 36);
+			this.label1.Location = new System.Drawing.Point(23, 35);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(70, 13);
 			this.label1.TabIndex = 1;
@@ -280,7 +280,7 @@ namespace OpenDental{
 			// 
 			// textFax
 			// 
-			this.textFax.Location = new System.Drawing.Point(305, 64);
+			this.textFax.Location = new System.Drawing.Point(307, 64);
 			this.textFax.MaxLength = 13;
 			this.textFax.Name = "textFax";
 			this.textFax.Size = new System.Drawing.Size(80, 20);
@@ -294,7 +294,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(481, 353);
+			this.butOK.Location = new System.Drawing.Point(499, 353);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(91, 24);
 			this.butOK.TabIndex = 3;
@@ -311,7 +311,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(400, 353);
+			this.butCancel.Location = new System.Drawing.Point(416, 353);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;

@@ -19,10 +19,6 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
 		private void gridAnesthMeds_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 
@@ -36,6 +32,11 @@ namespace OpenDental {
 		private void butClose_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void button_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
 		}
 	}
 }
