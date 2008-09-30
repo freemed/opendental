@@ -247,7 +247,7 @@ namespace OpenDental{
 						}
 						break;
 					case "pat.nameFL":
-						field.FieldValue=pat.GetNameFirstOrPrefML();
+						field.FieldValue=pat.GetNameFLFormal();
 						break;
 					case "pat.Birthdate":
 						if(pat.Birthdate.Year<1880){
