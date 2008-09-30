@@ -247,7 +247,8 @@ namespace OpenDental{
 						}
 						break;
 					case "pat.nameFL":
-						field.FieldValue=pat.GetNameFLFormal();
+						//Can't include preferred, so:
+						field.FieldValue=pat.FName+" "+pat.MiddleI+"  "+pat.LName;
 						break;
 					case "pat.Birthdate":
 						if(pat.Birthdate.Year<1880){
