@@ -32,11 +32,11 @@ namespace OpenDental{
 			this.labelAnesthReports = new System.Windows.Forms.Label();
 			this.labelAnesthMedInv = new System.Windows.Forms.Label();
 			this.labelOpenAnesthRecord = new System.Windows.Forms.Label();
-			this.butClose = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.butReports = new OpenDental.UI.Button();
 			this.butAnestheticInventory = new OpenDental.UI.Button();
 			this.butAnestheticRecord = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBoxAnesthesia.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -84,44 +84,11 @@ namespace OpenDental{
 			// labelOpenAnesthRecord
 			// 
 			this.labelOpenAnesthRecord.AutoSize = true;
-			this.labelOpenAnesthRecord.Location = new System.Drawing.Point(245, 25);
+			this.labelOpenAnesthRecord.Location = new System.Drawing.Point(245, 26);
 			this.labelOpenAnesthRecord.Name = "labelOpenAnesthRecord";
 			this.labelOpenAnesthRecord.Size = new System.Drawing.Size(223, 13);
 			this.labelOpenAnesthRecord.TabIndex = 3;
 			this.labelOpenAnesthRecord.Text = "Create a new anesthetic record for a patient...";
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(499, 154);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(66, 26);
-			this.butClose.TabIndex = 148;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(425, 154);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(66, 26);
-			this.butCancel.TabIndex = 142;
-			this.butCancel.Text = "Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butReports
 			// 
@@ -168,6 +135,39 @@ namespace OpenDental{
 			this.butAnestheticRecord.UseVisualStyleBackColor = true;
 			this.butAnestheticRecord.Click += new System.EventHandler(this.butAnestheticRecord_Click);
 			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClose.Location = new System.Drawing.Point(499, 154);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(66, 26);
+			this.butClose.TabIndex = 148;
+			this.butClose.Text = "Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(425, 154);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 142;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormAnesthesia
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -178,8 +178,7 @@ namespace OpenDental{
 			this.Controls.Add(this.groupBoxAnesthesia);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnesthesia";
-			this.Text = "Anesthesia & Sedation Module";
-			this.Text = "Blah";
+			this.Text = "Anesthesia Module";
 			this.groupBoxAnesthesia.ResumeLayout(false);
 			this.groupBoxAnesthesia.PerformLayout();
 			this.ResumeLayout(false);

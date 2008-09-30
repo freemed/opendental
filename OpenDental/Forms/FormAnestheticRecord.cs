@@ -130,14 +130,14 @@ namespace OpenDental
 		private Label label1;
 		private RadioButton radioButton2;
 		private RadioButton radioButton1;
-		private DataGridViewTextBoxColumn AnestheticMed;
-		private DataGridViewTextBoxColumn AnesthDose;
-		private DataGridViewTextBoxColumn AnesthTimeStamp;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butCancel;
 		private Label label2;
 		private OpenDental.UI.Button butWasteQty;
 		private PrintDialog printDialog;
+		private DataGridViewTextBoxColumn AnestheticMed;
+		private DataGridViewTextBoxColumn AnesthDose;
+		private DataGridViewTextBoxColumn AnesthTimeStamp;
 		private Patient patCur;
 		
 
@@ -208,9 +208,6 @@ namespace OpenDental
 			this.textBoxPatient = new System.Windows.Forms.TextBox();
 			this.labelAnesthetist = new System.Windows.Forms.Label();
 			this.dataGridAnestheticMeds = new System.Windows.Forms.DataGridView();
-			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.AnesthDose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.AnesthTimeStamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.labelDose = new System.Windows.Forms.Label();
 			this.textBoxAnesthDose = new System.Windows.Forms.TextBox();
 			this.labelSurgeon = new System.Windows.Forms.Label();
@@ -265,6 +262,9 @@ namespace OpenDental
 			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.textBoxVSM = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
+			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.AnesthDose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.AnesthTimeStamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
 			this.groupBoxIVAccess.SuspendLayout();
@@ -292,7 +292,7 @@ namespace OpenDental
 			// labelAnesthMed
 			// 
 			this.labelAnesthMed.AutoSize = true;
-			this.labelAnesthMed.Location = new System.Drawing.Point(200, 131);
+			this.labelAnesthMed.Location = new System.Drawing.Point(184, 131);
 			this.labelAnesthMed.Name = "labelAnesthMed";
 			this.labelAnesthMed.Size = new System.Drawing.Size(111, 13);
 			this.labelAnesthMed.TabIndex = 55;
@@ -986,32 +986,14 @@ namespace OpenDental
 			this.dataGridAnestheticMeds.TabIndex = 101;
 			this.dataGridAnestheticMeds.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridAnestheticMeds_CellContentClick_1);
 			// 
-			// AnestheticMed
-			// 
-			this.AnestheticMed.HeaderText = "Anesthetic medication";
-			this.AnestheticMed.Name = "AnestheticMed";
-			this.AnestheticMed.Width = 150;
-			// 
-			// AnesthDose
-			// 
-			this.AnesthDose.HeaderText = "Dose";
-			this.AnesthDose.Name = "AnesthDose";
-			this.AnesthDose.Width = 70;
-			// 
-			// AnesthTimeStamp
-			// 
-			this.AnesthTimeStamp.HeaderText = "Time Stamp";
-			this.AnesthTimeStamp.Name = "AnesthTimeStamp";
-			this.AnesthTimeStamp.Width = 90;
-			// 
 			// labelDose
 			// 
 			this.labelDose.AutoSize = true;
-			this.labelDose.Location = new System.Drawing.Point(340, 131);
+			this.labelDose.Location = new System.Drawing.Point(319, 131);
 			this.labelDose.Name = "labelDose";
-			this.labelDose.Size = new System.Drawing.Size(32, 13);
+			this.labelDose.Size = new System.Drawing.Size(55, 13);
 			this.labelDose.TabIndex = 100;
-			this.labelDose.Text = "Dose";
+			this.labelDose.Text = "Dose (mL)";
 			// 
 			// textBoxAnesthDose
 			// 
@@ -1689,6 +1671,24 @@ namespace OpenDental
 			this.textBoxVSM.Name = "textBoxVSM";
 			this.textBoxVSM.Size = new System.Drawing.Size(88, 20);
 			this.textBoxVSM.TabIndex = 130;
+			// 
+			// AnestheticMed
+			// 
+			this.AnestheticMed.HeaderText = "Anesthetic medication";
+			this.AnestheticMed.Name = "AnestheticMed";
+			this.AnestheticMed.Width = 150;
+			// 
+			// AnesthDose
+			// 
+			this.AnesthDose.HeaderText = "Dose (mL)";
+			this.AnesthDose.Name = "AnesthDose";
+			this.AnesthDose.Width = 70;
+			// 
+			// AnesthTimeStamp
+			// 
+			this.AnesthTimeStamp.HeaderText = "Time Stamp";
+			this.AnesthTimeStamp.Name = "AnesthTimeStamp";
+			this.AnesthTimeStamp.Width = 90;
 			// 
 			// FormAnestheticRecord
 			// 
