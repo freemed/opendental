@@ -40,8 +40,8 @@ namespace OpenDental
 			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupAnestheticMeds = new System.Windows.Forms.GroupBox();
-			this.butAdjustQtys = new OpenDental.UI.Button();
 			this.labelIntakeNewMeds = new System.Windows.Forms.Label();
+			this.butAdjustQtys = new OpenDental.UI.Button();
 			this.butAnesthMedIntake = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -94,10 +94,20 @@ namespace OpenDental
 			this.groupAnestheticMeds.Controls.Add(this.butAddAnesthMeds);
 			this.groupAnestheticMeds.Location = new System.Drawing.Point(24, 24);
 			this.groupAnestheticMeds.Name = "groupAnestheticMeds";
-			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 459);
+			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 439);
 			this.groupAnestheticMeds.TabIndex = 1;
 			this.groupAnestheticMeds.TabStop = false;
 			this.groupAnestheticMeds.Text = "Anesthetic Medications";
+			// 
+			// labelIntakeNewMeds
+			// 
+			this.labelIntakeNewMeds.Location = new System.Drawing.Point(248, 360);
+			this.labelIntakeNewMeds.Name = "labelIntakeNewMeds";
+			this.labelIntakeNewMeds.Size = new System.Drawing.Size(272, 26);
+			this.labelIntakeNewMeds.TabIndex = 142;
+			this.labelIntakeNewMeds.Text = "This button should only be used after anesthetic  medications are added to the li" +
+				"st above";
+			this.labelIntakeNewMeds.Click += new System.EventHandler(this.labelIntakeNewMeds_Click);
 			// 
 			// butAdjustQtys
 			// 
@@ -115,16 +125,6 @@ namespace OpenDental
 			this.butAdjustQtys.Text = "Adjust Qty on hand";
 			this.butAdjustQtys.UseVisualStyleBackColor = true;
 			this.butAdjustQtys.Click += new System.EventHandler(this.butAdjustQtys_Click);
-			// 
-			// labelIntakeNewMeds
-			// 
-			this.labelIntakeNewMeds.Location = new System.Drawing.Point(248, 360);
-			this.labelIntakeNewMeds.Name = "labelIntakeNewMeds";
-			this.labelIntakeNewMeds.Size = new System.Drawing.Size(272, 26);
-			this.labelIntakeNewMeds.TabIndex = 142;
-			this.labelIntakeNewMeds.Text = "This button should only be used after anesthetic  medications are added to the li" +
-				"st above";
-			this.labelIntakeNewMeds.Click += new System.EventHandler(this.labelIntakeNewMeds_Click);
 			// 
 			// butAnesthMedIntake
 			// 
@@ -212,7 +212,7 @@ namespace OpenDental
 			// 
 			// FormAnestheticMedsInventory
 			// 
-			this.ClientSize = new System.Drawing.Size(755, 510);
+			this.ClientSize = new System.Drawing.Size(755, 488);
 			this.Controls.Add(this.groupAnestheticMeds);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsInventory";

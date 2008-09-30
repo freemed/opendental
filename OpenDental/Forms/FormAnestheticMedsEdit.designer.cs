@@ -28,6 +28,7 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsEdit));
 			this.groupAnesthMedsEdit = new System.Windows.Forms.GroupBox();
+			this.labelChanges = new System.Windows.Forms.Label();
 			this.labelHowSuppl = new System.Windows.Forms.Label();
 			this.textHowSupplied = new System.Windows.Forms.TextBox();
 			this.labelHowSupplied = new System.Windows.Forms.Label();
@@ -36,7 +37,6 @@ namespace OpenDental{
 			this.labelAnesthMedName = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.labelChanges = new System.Windows.Forms.Label();
 			this.groupAnesthMedsEdit.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -55,6 +55,16 @@ namespace OpenDental{
 			this.groupAnesthMedsEdit.TabIndex = 4;
 			this.groupAnesthMedsEdit.TabStop = false;
 			this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
+			// 
+			// labelChanges
+			// 
+			this.labelChanges.Location = new System.Drawing.Point(6, 137);
+			this.labelChanges.Name = "labelChanges";
+			this.labelChanges.Size = new System.Drawing.Size(508, 33);
+			this.labelChanges.TabIndex = 6;
+			this.labelChanges.Text = "NOTE: Once a medication has been added, spelling changes can be made here, but th" +
+				"e name and type of medication should not be changed or the inventory system will" +
+				" be adversely affected...";
 			// 
 			// labelHowSuppl
 			// 
@@ -138,16 +148,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// labelChanges
-			// 
-			this.labelChanges.Location = new System.Drawing.Point(37, 140);
-			this.labelChanges.Name = "labelChanges";
-			this.labelChanges.Size = new System.Drawing.Size(477, 30);
-			this.labelChanges.TabIndex = 6;
-			this.labelChanges.Text = "NOTE: Once a medication has been added, spelling changes can be made here, but th" +
-				"e name and type of medication should not be changed or the inventory system will" +
-				" be adversely affected...";
 			// 
 			// FormAnestheticMedsEdit
 			// 
