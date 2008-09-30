@@ -11,7 +11,7 @@ namespace OpenDental{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormAnesthMedSuppliers:System.Windows.Forms.Form {
-		private OpenDental.UI.Button butAdd;
+		private OpenDental.UI.Button butAddNew;
 		private OpenDental.UI.Button butClose;
 		/// <summary>
 		/// Required designer variable.
@@ -22,6 +22,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private bool changed;
 		public bool IsSelectionMode;
+		private OpenDental.UI.Button butEditSupplier;
+		private Label label1;
 		///<summary>Only used if IsSelectionMode.  On OK, contains selected anesthMedSuppliersNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		public int SelectedAnesthMedSupplierNum;
 
@@ -61,8 +63,10 @@ namespace OpenDental{
 			this.butNone = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
+			this.butAddNew = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butEditSupplier = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butNone
@@ -108,22 +112,22 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableAnesthMedSuppliers";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butAdd
+			// butAddNew
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17, 590);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80, 24);
-			this.butAdd.TabIndex = 10;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.butAddNew.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddNew.Autosize = true;
+			this.butAddNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddNew.CornerRadius = 4F;
+			this.butAddNew.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddNew.Location = new System.Drawing.Point(17, 590);
+			this.butAddNew.Name = "butAddNew";
+			this.butAddNew.Size = new System.Drawing.Size(85, 24);
+			this.butAddNew.TabIndex = 10;
+			this.butAddNew.Text = "&Add New";
+			this.butAddNew.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butClose
 			// 
@@ -140,14 +144,41 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butEditSupplier
+			// 
+			this.butEditSupplier.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEditSupplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butEditSupplier.Autosize = true;
+			this.butEditSupplier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEditSupplier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditSupplier.CornerRadius = 4F;
+			this.butEditSupplier.Image = global::OpenDental.Properties.Resources.butCopy;
+			this.butEditSupplier.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butEditSupplier.Location = new System.Drawing.Point(108, 590);
+			this.butEditSupplier.Name = "butEditSupplier";
+			this.butEditSupplier.Size = new System.Drawing.Size(85, 24);
+			this.butEditSupplier.TabIndex = 17;
+			this.butEditSupplier.Text = "&Edit";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(199, 596);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(205, 13);
+			this.label1.TabIndex = 18;
+			this.label1.Text = "<--- This Edit button may not be necessary";
+			// 
 			// FormAnesthMedSuppliers
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(810, 630);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butEditSupplier);
 			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butAdd);
+			this.Controls.Add(this.butAddNew);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -159,6 +190,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormAnesthMedSuppliers_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAnesthMedSuppliers_FormClosing);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion

@@ -10,9 +10,9 @@ namespace OpenDentBusiness{
 	public class AnesthMedSuppliers{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
-			string c="SELECT * FROM supplier ORDER BY SupplierName";
+			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
 			DataTable table=General.GetTable(c);
-			table.TableName="AnesthMedSupplier";
+			table.TableName="AnesthMedSuppliers";
 			FillCache(table);
 			return table;
 		}

@@ -26,15 +26,15 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthMedSuppliersEdit));
 			this.groupBoxSupplier = new System.Windows.Forms.GroupBox();
+			this.textContact = new System.Windows.Forms.TextBox();
+			this.labelContact = new System.Windows.Forms.Label();
+			this.textPhoneExt = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.textSupplierIDNum = new System.Windows.Forms.TextBox();
 			this.labelID = new System.Windows.Forms.Label();
 			this.labelSupplierNotes = new System.Windows.Forms.Label();
 			this.richTextNotes = new System.Windows.Forms.RichTextBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.textPhone3 = new System.Windows.Forms.TextBox();
-			this.textPhone2 = new System.Windows.Forms.TextBox();
-			this.textPhone1 = new System.Windows.Forms.TextBox();
-			this.label12 = new System.Windows.Forms.Label();
+			this.textPhone = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textZip = new System.Windows.Forms.TextBox();
@@ -48,10 +48,8 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textSupplierName = new System.Windows.Forms.TextBox();
 			this.textAddr2 = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.textPhoneExt = new System.Windows.Forms.TextBox();
-			this.labelContact = new System.Windows.Forms.Label();
-			this.textContact = new System.Windows.Forms.TextBox();
+			this.labelFax = new System.Windows.Forms.Label();
+			this.textFax = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBoxSupplier.SuspendLayout();
@@ -59,6 +57,8 @@ namespace OpenDental{
 			// 
 			// groupBoxSupplier
 			// 
+			this.groupBoxSupplier.Controls.Add(this.textFax);
+			this.groupBoxSupplier.Controls.Add(this.labelFax);
 			this.groupBoxSupplier.Controls.Add(this.textContact);
 			this.groupBoxSupplier.Controls.Add(this.labelContact);
 			this.groupBoxSupplier.Controls.Add(this.textPhoneExt);
@@ -67,11 +67,7 @@ namespace OpenDental{
 			this.groupBoxSupplier.Controls.Add(this.labelID);
 			this.groupBoxSupplier.Controls.Add(this.labelSupplierNotes);
 			this.groupBoxSupplier.Controls.Add(this.richTextNotes);
-			this.groupBoxSupplier.Controls.Add(this.label20);
-			this.groupBoxSupplier.Controls.Add(this.textPhone3);
-			this.groupBoxSupplier.Controls.Add(this.textPhone2);
-			this.groupBoxSupplier.Controls.Add(this.textPhone1);
-			this.groupBoxSupplier.Controls.Add(this.label12);
+			this.groupBoxSupplier.Controls.Add(this.textPhone);
 			this.groupBoxSupplier.Controls.Add(this.label7);
 			this.groupBoxSupplier.Controls.Add(this.label6);
 			this.groupBoxSupplier.Controls.Add(this.textZip);
@@ -87,23 +83,56 @@ namespace OpenDental{
 			this.groupBoxSupplier.Controls.Add(this.textAddr2);
 			this.groupBoxSupplier.Location = new System.Drawing.Point(23, 26);
 			this.groupBoxSupplier.Name = "groupBoxSupplier";
-			this.groupBoxSupplier.Size = new System.Drawing.Size(565, 309);
+			this.groupBoxSupplier.Size = new System.Drawing.Size(579, 310);
 			this.groupBoxSupplier.TabIndex = 4;
 			this.groupBoxSupplier.TabStop = false;
 			this.groupBoxSupplier.Text = "Suppliers";
 			// 
+			// textContact
+			// 
+			this.textContact.Location = new System.Drawing.Point(441, 64);
+			this.textContact.Name = "textContact";
+			this.textContact.Size = new System.Drawing.Size(118, 20);
+			this.textContact.TabIndex = 111;
+			// 
+			// labelContact
+			// 
+			this.labelContact.AutoSize = true;
+			this.labelContact.Location = new System.Drawing.Point(393, 67);
+			this.labelContact.Name = "labelContact";
+			this.labelContact.Size = new System.Drawing.Size(44, 13);
+			this.labelContact.TabIndex = 110;
+			this.labelContact.Text = "Contact";
+			// 
+			// textPhoneExt
+			// 
+			this.textPhoneExt.Location = new System.Drawing.Point(221, 64);
+			this.textPhoneExt.MaxLength = 5;
+			this.textPhoneExt.Name = "textPhoneExt";
+			this.textPhoneExt.Size = new System.Drawing.Size(39, 20);
+			this.textPhoneExt.TabIndex = 109;
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(193, 67);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(25, 13);
+			this.label8.TabIndex = 108;
+			this.label8.Text = "Ext.";
+			// 
 			// textSupplierIDNum
 			// 
-			this.textSupplierIDNum.Location = new System.Drawing.Point(444, 33);
+			this.textSupplierIDNum.Location = new System.Drawing.Point(441, 33);
 			this.textSupplierIDNum.Name = "textSupplierIDNum";
 			this.textSupplierIDNum.ReadOnly = true;
-			this.textSupplierIDNum.Size = new System.Drawing.Size(99, 20);
+			this.textSupplierIDNum.Size = new System.Drawing.Size(118, 20);
 			this.textSupplierIDNum.TabIndex = 107;
 			// 
 			// labelID
 			// 
 			this.labelID.AutoSize = true;
-			this.labelID.Location = new System.Drawing.Point(409, 35);
+			this.labelID.Location = new System.Drawing.Point(406, 35);
 			this.labelID.Name = "labelID";
 			this.labelID.Size = new System.Drawing.Size(28, 13);
 			this.labelID.TabIndex = 106;
@@ -112,7 +141,7 @@ namespace OpenDental{
 			// labelSupplierNotes
 			// 
 			this.labelSupplierNotes.AutoSize = true;
-			this.labelSupplierNotes.Location = new System.Drawing.Point(35, 215);
+			this.labelSupplierNotes.Location = new System.Drawing.Point(58, 209);
 			this.labelSupplierNotes.Name = "labelSupplierNotes";
 			this.labelSupplierNotes.Size = new System.Drawing.Size(35, 13);
 			this.labelSupplierNotes.TabIndex = 105;
@@ -120,58 +149,24 @@ namespace OpenDental{
 			// 
 			// richTextNotes
 			// 
-			this.richTextNotes.Location = new System.Drawing.Point(108, 215);
+			this.richTextNotes.Location = new System.Drawing.Point(105, 209);
 			this.richTextNotes.Name = "richTextNotes";
 			this.richTextNotes.Size = new System.Drawing.Size(435, 79);
 			this.richTextNotes.TabIndex = 104;
 			this.richTextNotes.Text = "";
 			// 
-			// label20
+			// textPhone
 			// 
-			this.label20.Location = new System.Drawing.Point(143, 67);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(11, 16);
-			this.label20.TabIndex = 88;
-			this.label20.Text = ")";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textPhone3
-			// 
-			this.textPhone3.Location = new System.Drawing.Point(196, 64);
-			this.textPhone3.MaxLength = 4;
-			this.textPhone3.Name = "textPhone3";
-			this.textPhone3.Size = new System.Drawing.Size(39, 20);
-			this.textPhone3.TabIndex = 87;
-			// 
-			// textPhone2
-			// 
-			this.textPhone2.Location = new System.Drawing.Point(156, 64);
-			this.textPhone2.MaxLength = 3;
-			this.textPhone2.Name = "textPhone2";
-			this.textPhone2.Size = new System.Drawing.Size(28, 20);
-			this.textPhone2.TabIndex = 86;
-			// 
-			// textPhone1
-			// 
-			this.textPhone1.Location = new System.Drawing.Point(115, 64);
-			this.textPhone1.MaxLength = 3;
-			this.textPhone1.Name = "textPhone1";
-			this.textPhone1.Size = new System.Drawing.Size(28, 20);
-			this.textPhone1.TabIndex = 85;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(105, 66);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(11, 16);
-			this.label12.TabIndex = 84;
-			this.label12.Text = "(";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.textPhone.Location = new System.Drawing.Point(108, 64);
+			this.textPhone.MaxLength = 13;
+			this.textPhone.Name = "textPhone";
+			this.textPhone.Size = new System.Drawing.Size(80, 20);
+			this.textPhone.TabIndex = 85;
 			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(52, 67);
+			this.label7.Location = new System.Drawing.Point(49, 67);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(48, 13);
 			this.label7.TabIndex = 83;
@@ -180,7 +175,7 @@ namespace OpenDental{
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(20, 179);
+			this.label6.Location = new System.Drawing.Point(17, 179);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(82, 13);
 			this.label6.TabIndex = 11;
@@ -188,7 +183,7 @@ namespace OpenDental{
 			// 
 			// textZip
 			// 
-			this.textZip.Location = new System.Drawing.Point(108, 176);
+			this.textZip.Location = new System.Drawing.Point(105, 176);
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(168, 20);
 			this.textZip.TabIndex = 10;
@@ -197,7 +192,7 @@ namespace OpenDental{
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(282, 150);
+			this.label5.Location = new System.Drawing.Point(279, 150);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(79, 13);
 			this.label5.TabIndex = 9;
@@ -205,15 +200,15 @@ namespace OpenDental{
 			// 
 			// textState
 			// 
-			this.textState.Location = new System.Drawing.Point(367, 147);
+			this.textState.Location = new System.Drawing.Point(364, 147);
 			this.textState.Name = "textState";
-			this.textState.Size = new System.Drawing.Size(176, 20);
+			this.textState.Size = new System.Drawing.Size(195, 20);
 			this.textState.TabIndex = 8;
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(61, 150);
+			this.label4.Location = new System.Drawing.Point(66, 150);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(24, 13);
 			this.label4.TabIndex = 7;
@@ -221,7 +216,7 @@ namespace OpenDental{
 			// 
 			// textCity
 			// 
-			this.textCity.Location = new System.Drawing.Point(108, 150);
+			this.textCity.Location = new System.Drawing.Point(105, 150);
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(168, 20);
 			this.textCity.TabIndex = 6;
@@ -229,7 +224,7 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(35, 124);
+			this.label3.Location = new System.Drawing.Point(39, 124);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(54, 13);
 			this.label3.TabIndex = 5;
@@ -238,7 +233,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(35, 98);
+			this.label2.Location = new System.Drawing.Point(39, 98);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(54, 13);
 			this.label2.TabIndex = 3;
@@ -246,15 +241,15 @@ namespace OpenDental{
 			// 
 			// textAddr1
 			// 
-			this.textAddr1.Location = new System.Drawing.Point(108, 98);
+			this.textAddr1.Location = new System.Drawing.Point(105, 98);
 			this.textAddr1.Name = "textAddr1";
-			this.textAddr1.Size = new System.Drawing.Size(435, 20);
+			this.textAddr1.Size = new System.Drawing.Size(454, 20);
 			this.textAddr1.TabIndex = 2;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(32, 36);
+			this.label1.Location = new System.Drawing.Point(29, 36);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(70, 13);
 			this.label1.TabIndex = 1;
@@ -262,50 +257,34 @@ namespace OpenDental{
 			// 
 			// textSupplierName
 			// 
-			this.textSupplierName.Location = new System.Drawing.Point(108, 33);
+			this.textSupplierName.Location = new System.Drawing.Point(105, 33);
 			this.textSupplierName.Name = "textSupplierName";
 			this.textSupplierName.Size = new System.Drawing.Size(290, 20);
 			this.textSupplierName.TabIndex = 0;
 			// 
 			// textAddr2
 			// 
-			this.textAddr2.Location = new System.Drawing.Point(108, 124);
+			this.textAddr2.Location = new System.Drawing.Point(105, 124);
 			this.textAddr2.Name = "textAddr2";
-			this.textAddr2.Size = new System.Drawing.Size(435, 20);
+			this.textAddr2.Size = new System.Drawing.Size(454, 20);
 			this.textAddr2.TabIndex = 4;
 			// 
-			// label8
+			// labelFax
 			// 
-			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(250, 67);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(25, 13);
-			this.label8.TabIndex = 108;
-			this.label8.Text = "Ext.";
+			this.labelFax.AutoSize = true;
+			this.labelFax.Location = new System.Drawing.Point(269, 67);
+			this.labelFax.Name = "labelFax";
+			this.labelFax.Size = new System.Drawing.Size(34, 13);
+			this.labelFax.TabIndex = 112;
+			this.labelFax.Text = "Fax #";
 			// 
-			// textPhoneExt
+			// textFax
 			// 
-			this.textPhoneExt.Location = new System.Drawing.Point(272, 64);
-			this.textPhoneExt.MaxLength = 4;
-			this.textPhoneExt.Name = "textPhoneExt";
-			this.textPhoneExt.Size = new System.Drawing.Size(39, 20);
-			this.textPhoneExt.TabIndex = 109;
-			// 
-			// labelContact
-			// 
-			this.labelContact.AutoSize = true;
-			this.labelContact.Location = new System.Drawing.Point(317, 66);
-			this.labelContact.Name = "labelContact";
-			this.labelContact.Size = new System.Drawing.Size(44, 13);
-			this.labelContact.TabIndex = 110;
-			this.labelContact.Text = "Contact";
-			// 
-			// textContact
-			// 
-			this.textContact.Location = new System.Drawing.Point(367, 64);
-			this.textContact.Name = "textContact";
-			this.textContact.Size = new System.Drawing.Size(176, 20);
-			this.textContact.TabIndex = 111;
+			this.textFax.Location = new System.Drawing.Point(305, 64);
+			this.textFax.MaxLength = 13;
+			this.textFax.Name = "textFax";
+			this.textFax.Size = new System.Drawing.Size(80, 20);
+			this.textFax.TabIndex = 113;
 			// 
 			// butOK
 			// 
@@ -315,7 +294,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(500, 353);
+			this.butOK.Location = new System.Drawing.Point(481, 353);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(91, 24);
 			this.butOK.TabIndex = 3;
@@ -332,7 +311,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(419, 353);
+			this.butCancel.Location = new System.Drawing.Point(400, 353);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -342,7 +321,7 @@ namespace OpenDental{
 			// FormAnesthMedSuppliersEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(634, 389);
+			this.ClientSize = new System.Drawing.Size(625, 389);
 			this.Controls.Add(this.groupBoxSupplier);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -373,11 +352,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textZip;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textState;
-		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.TextBox textPhone3;
-		private System.Windows.Forms.TextBox textPhone2;
-		private System.Windows.Forms.TextBox textPhone1;
-		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.TextBox textPhone;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label labelSupplierNotes;
 		private System.Windows.Forms.RichTextBox richTextNotes;
@@ -387,5 +362,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox textContact;
 		private System.Windows.Forms.Label labelContact;
+		private System.Windows.Forms.TextBox textFax;
+		private System.Windows.Forms.Label labelFax;
 	}
 }
