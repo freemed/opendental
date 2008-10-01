@@ -548,7 +548,8 @@ namespace OpenDental{
 					//end of fee schedule
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('AllowedFeeSchedsAutomate','0','0 or 1')";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BackupReminderLastDateRun','0001-01-01','')";
+					General.NonQ(command);
 
 
 

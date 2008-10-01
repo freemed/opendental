@@ -1395,6 +1395,19 @@ namespace OpenDental{
 			}
 			Bridges.Trojan.StartupCheck();
 			FormUAppoint.StartThreadIfEnabled();
+			#if !TRIALONLY
+				if(PrefC.GetDate("BackupReminderLastDateRun").AddMonths(1)<DateTime.Today) {
+					FormBackupReminder FormBR=new FormBackupReminder();
+					FormBR.ShowDialog();
+					if(FormBR.DialogResult==DialogResult.OK){
+						Prefs.UpdateDateT("BackupReminderLastDateRun",DateTime.Today);
+					}
+					else{
+						Application.Exit();
+						return;
+					}
+				}
+			#endif
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
