@@ -3542,6 +3542,7 @@ namespace OpenDental{
 			}
 			FormScheduleBlockEdit FormSB=new FormScheduleBlockEdit(SchedCur);
       FormSB.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout edit.");
 			RefreshPeriod();
 		}
 
@@ -3590,6 +3591,7 @@ namespace OpenDental{
 				return;//should never happen
 			}
 			Schedules.Delete(SchedCur);
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout delete.");
 			RefreshPeriod();
 		}
 
@@ -3606,6 +3608,7 @@ namespace OpenDental{
 		  FormScheduleBlockEdit FormSB=new FormScheduleBlockEdit(SchedCur);
       FormSB.IsNew=true;
       FormSB.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout add.");
 			RefreshPeriod();
 		}
 
@@ -3625,6 +3628,7 @@ namespace OpenDental{
 				FormB.ApptViewNumCur=ApptViewC.List[comboView.SelectedIndex-1].ApptViewNum;
 			}
 			FormB.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout cut copy paste.");
 			RefreshPeriod();
 		}
 
@@ -3641,6 +3645,7 @@ namespace OpenDental{
 			else{
 				Schedules.ClearBlockoutsForDay(Appointments.DateSelected);
 			}
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout clear.");
 			RefreshPeriod();
 		}
 
@@ -3650,6 +3655,7 @@ namespace OpenDental{
 			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.BlockoutTypes);
 			FormD.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Definitions.");
 			RefreshPeriod();
 		}
 
