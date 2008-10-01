@@ -2231,12 +2231,13 @@ namespace OpenDental{
 		}
 
 		private void butImportTrojan_Click(object sender,System.EventArgs e) {
-			if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)==null
+			if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)==null
+				|| CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Restorative)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Endodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Periodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics)==null) {
-				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: RoutinePreventive, Restorative, Endodontics, Periodontics, and Prosthodontics");
+				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, and Prosthodontics");
 				return;
 			}
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
@@ -2261,6 +2262,7 @@ namespace OpenDental{
 					string line;
 					string[] fields;
 					int percent;
+					double amt;
 					string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
 					while((line=sr.ReadLine())!=null) {
 						fields=line.Split(new char[] { '\t' });
@@ -2355,19 +2357,34 @@ namespace OpenDental{
 								}
 								break;
 							case "DEDUCT"://eg There is no deductible
+								if(!fields[2].StartsWith("$")) {
+									amt=0;
+								}
+								else {
+									fields[2]=fields[2].Remove(0,1);
+									fields[2]=fields[2].Split(new char[] { ' ' })[0];
+									amt=PIn.PDouble(fields[2]);
+								}
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Deductible;
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								if(!fields[2].StartsWith("$")) {
-									ben.MonetaryAmt=0;
-								}
-								else {
-									fields[2]=fields[2].Remove(0,1);
-									fields[2]=fields[2].Split(new char[] { ' ' })[0];
-									ben.MonetaryAmt=PIn.PDouble(fields[2]);
-								}
+								ben.MonetaryAmt=amt;
+								benefitList.Add(ben.Copy());
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Deductible;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								ben.MonetaryAmt=amt;
+								benefitList.Add(ben.Copy());
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Deductible;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								ben.MonetaryAmt=amt;
 								benefitList.Add(ben.Copy());
 								break;
 							case "PREV"://eg 100%
@@ -2380,6 +2397,13 @@ namespace OpenDental{
 								if(percent<0 || percent>100) {
 									break;
 								}
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Percentage;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+								ben.Percent=percent;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								benefitList.Add(ben.Copy());
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Percentage;
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
@@ -2450,6 +2474,12 @@ namespace OpenDental{
 								//the step above probably created a new feeschedule, requiring a reset of the three listboxes.
 								resetFeeSched=true;
 								break;
+							case "NOTES"://typically multiple instances
+								if(textPlanNote.Text!=""){
+									textPlanNote.Text+="\r\n";
+								}
+								textPlanNote.Text+=fields[2];
+								break;
 						}
 					}
 				}
@@ -2461,11 +2491,16 @@ namespace OpenDental{
 			}
 			if(usesAnnivers) {
 				for(int i=0;i<benefitList.Count;i++) {
-					if(((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.CalendarYear) {
-						((Benefit)benefitList[i]).TimePeriod=BenefitTimePeriod.ServiceYear;
+					if(benefitList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
+						benefitList[i].TimePeriod=BenefitTimePeriod.ServiceYear;
 					}
 				}
 			}
+			//if there is no deductible, add one for $0
+			//bool deductExists=false;
+			//for(int i=0;i<benefitList.Count;i++) {
+				//if(benefitList[i].
+			//}
 			FillBenefits();
 			if(resetFeeSched){
 				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
