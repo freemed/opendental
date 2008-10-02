@@ -2138,8 +2138,10 @@ namespace OpenDental{
 					ContrApptSingle.SelectedAptNum=ContrApptSingle.ClickedAptNum;
 					if(prevSel!=-1){
 						ContrApptSingle3[prevSel].CreateShadow();
-						grfx.DrawImage(ContrApptSingle3[prevSel].Shadow,ContrApptSingle3[prevSel].Location.X
-							,ContrApptSingle3[prevSel].Location.Y);
+						if(ContrApptSingle3[prevSel].Shadow!=null) {
+							grfx.DrawImage(ContrApptSingle3[prevSel].Shadow,ContrApptSingle3[prevSel].Location.X
+								,ContrApptSingle3[prevSel].Location.Y);
+						}
 					}
 				}
 				//again, in case missed in loop above:
