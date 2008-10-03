@@ -2923,15 +2923,7 @@ namespace OpenDental{
 		 	//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-//This button cannot be added back until conversion code to add tables to db has been included.
-//And until a flag has been included to turn it off for most offices.
-			//This toggles Anesthesia ToolBar Button on or off depending on setting in Module Prefs
-			//if (((Pref)PrefC.HList["EnableAnesthMod"]).ValueString == "1")
-			//if (PrefC.GetBoolSilent("EnableAnesthMod",true))
-			//{
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
-				  
-			//}
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuEmail;
@@ -3062,8 +3054,19 @@ namespace OpenDental{
 				butBig.Enabled=true;
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
-				ToolBarMain.Buttons["Perio"].Enabled = true; 
-				ToolBarMain.Buttons["Anesthesia"].Enabled = true;
+				ToolBarMain.Buttons["Perio"].Enabled = true;
+				//turns off Anesthesia Module button if pref is not checked in Module Setup
+				if (PrefC.GetBoolSilent("EnableAnesthMod", true)){
+
+					ToolBarMain.Buttons["Anesthesia"].Enabled = true;
+
+				}
+				else{
+
+					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
+
+				}
+				
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;

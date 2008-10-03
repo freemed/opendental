@@ -551,8 +551,10 @@ namespace OpenDental{
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BackupReminderLastDateRun','0001-01-01','')";
 					General.NonQ(command);
 
-
-
+					//Anesthesia Module Conversions-----------------------------------------------------
+					//field to toggle Anesthesia Module on or off. Turned 'off' by default
+					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','')";
+					General.NonQ(command);
 
 
 					
