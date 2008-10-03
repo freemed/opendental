@@ -163,7 +163,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(199, 596);
+			this.label1.Location = new System.Drawing.Point(242, 596);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(205, 13);
 			this.label1.TabIndex = 18;

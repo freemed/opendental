@@ -10,7 +10,7 @@
     <RootNamespace>OpenDental</RootNamespace>
     <AssemblyName>OpenDental</AssemblyName>
     <TargetZone>LocalIntranet</TargetZone>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
     <ApplicationIcon>Misc\App.ico</ApplicationIcon>
     <StartupObject>OpenDental.FormOpenDental</StartupObject>
     <FileUpgradeFlags>
@@ -18,22 +18,25 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>http://localhost/OpenDental/</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ManifestCertificateThumbprint>62D3A68E51D08B093701B759BC7466849C6833B5</ManifestCertificateThumbprint>
+    <ManifestKeyFile>OpenDental_TemporaryKey.pfx</ManifestKeyFile>
+    <SignManifests>true</SignManifests>
+    <PublishUrl>C:\Users\wjs\Desktop\OD6.1testRelease\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -3809,6 +3812,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Resources\Anesth.gif" />
+    <None Include="OpenDental_TemporaryKey.pfx" />
     <None Include="Resources\Med History.gif" />
     <None Include="Resources\Patient Info.gif" />
     <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
