@@ -493,6 +493,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Paths must end with "+Path.DirectorySeparatorChar+".");
 				return;
 			}
+			//Ensure that the backup from and backup to paths are different. This is to prevent the live database
+			//from becoming corrupt.
+			if(this.textBackupFromPath.Text.ToLower()==this.textBackupToPath.Text.ToLower()) {
+				MsgBox.Show(this,"The backup from path and backup to path must be different.");
+				return;
+			}
 			//test saving defaults
 			if(textBackupFromPath.Text!=PrefC.GetString("BackupFromPath")
 				|| textBackupToPath.Text!=PrefC.GetString("BackupToPath")
