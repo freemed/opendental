@@ -571,7 +571,8 @@ namespace OpenDental{
 
 					//data recorded for an individual anesthetic on a given date and time
 					command = @"CREATE TABLE anestheticdata (
-						AnestheticRecordNum int(11) NOT NULL auto_increment,
+						AnestheticDataNum int(11) NOT NULL auto_increment,
+						AnestheticRecordNum int(11) NOT NULL,
 						AnesthOpen datetime NOT NULL,
 						AnesthClose datetime NOT NULL,
 						SurgOpen datetime NOT NULL,
@@ -611,13 +612,13 @@ namespace OpenDental{
 						WgtUnits tinyint(1) NOT NULL,
 						PatHgt char(10) NOT NULL,
 						EscortName char(32) NOT NULL,
-						EscortCellNum char(12) NOT NULL,
+						EscortCellNum char(13) NOT NULL,
 						EscortRel char(16) NOT NULL,
 						NPOTime char(5) NOT NULL,
 						SigIsTopaz tinyint(3) NOT NULL,
 						Signature text NOT NULL,
-						PRIMARY KEY (AnestheticRecordNum),
-						INDEX (AnesthMed)
+						PRIMARY KEY (AnestheticDataNum),
+						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 

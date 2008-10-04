@@ -178,11 +178,19 @@ namespace OpenDental
 			this.labelPatWgt = new System.Windows.Forms.Label();
 			this.textPatWgt = new System.Windows.Forms.TextBox();
 			this.groupBoxSidebarRt = new System.Windows.Forms.GroupBox();
+			this.labelEMod = new System.Windows.Forms.Label();
+			this.comboASA_EModifier = new System.Windows.Forms.ComboBox();
 			this.groupBoxIVSite = new System.Windows.Forms.GroupBox();
 			this.comboIVSite = new System.Windows.Forms.ComboBox();
 			this.radButIVSiteR = new System.Windows.Forms.RadioButton();
 			this.radButIVSiteL = new System.Windows.Forms.RadioButton();
+			this.comboIVAtt = new System.Windows.Forms.ComboBox();
+			this.labelIVAtt = new System.Windows.Forms.Label();
 			this.groupBoxMedRoute = new System.Windows.Forms.GroupBox();
+			this.radioButMedRouteRectal = new System.Windows.Forms.RadioButton();
+			this.radioButMedRouteNasal = new System.Windows.Forms.RadioButton();
+			this.radioButMedRouteIM = new System.Windows.Forms.RadioButton();
+			this.radioButMedRoutePO = new System.Windows.Forms.RadioButton();
 			this.radButMedRouteIVButFly = new System.Windows.Forms.RadioButton();
 			this.radButMedRouteIVCath = new System.Windows.Forms.RadioButton();
 			this.groupBoxDeliveryMethod = new System.Windows.Forms.GroupBox();
@@ -199,8 +207,6 @@ namespace OpenDental
 			this.textIVFVol = new System.Windows.Forms.TextBox();
 			this.labelIVF = new System.Windows.Forms.Label();
 			this.comboIVF = new System.Windows.Forms.ComboBox();
-			this.labelIVAtt = new System.Windows.Forms.Label();
-			this.comboIVAtt = new System.Windows.Forms.ComboBox();
 			this.labelInh = new System.Windows.Forms.Label();
 			this.comboN2OLMin = new System.Windows.Forms.ComboBox();
 			this.checkBoxInhN20 = new System.Windows.Forms.CheckBox();
@@ -229,6 +235,8 @@ namespace OpenDental
 			this.groupBoxNotes = new System.Windows.Forms.GroupBox();
 			this.groupBoxSig = new System.Windows.Forms.GroupBox();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
+			this.labelEscortCellNum = new System.Windows.Forms.Label();
+			this.textEscortCellNum = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -243,8 +251,6 @@ namespace OpenDental
 			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.textVSM = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
-			this.comboASA_EModifier = new System.Windows.Forms.ComboBox();
-			this.labelEMod = new System.Windows.Forms.Label();
 			this.butWasteQty = new OpenDental.UI.Button();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
@@ -277,12 +283,6 @@ namespace OpenDental
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.butClearSig = new OpenDental.UI.Button();
-			this.textEscortCellNum = new System.Windows.Forms.TextBox();
-			this.labelEscortCellNum = new System.Windows.Forms.Label();
-			this.radioButMedRoutePO = new System.Windows.Forms.RadioButton();
-			this.radioButMedRouteIM = new System.Windows.Forms.RadioButton();
-			this.radioButMedRouteRectal = new System.Windows.Forms.RadioButton();
-			this.radioButMedRouteNasal = new System.Windows.Forms.RadioButton();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
 			this.groupBoxMedRoute.SuspendLayout();
@@ -557,6 +557,28 @@ namespace OpenDental
 			this.groupBoxSidebarRt.TabStop = false;
 			this.groupBoxSidebarRt.Enter += new System.EventHandler(this.groupBox1_Enter);
 			// 
+			// labelEMod
+			// 
+			this.labelEMod.AutoSize = true;
+			this.labelEMod.Location = new System.Drawing.Point(133, 36);
+			this.labelEMod.Name = "labelEMod";
+			this.labelEMod.Size = new System.Drawing.Size(54, 13);
+			this.labelEMod.TabIndex = 164;
+			this.labelEMod.Text = "E Modifier";
+			// 
+			// comboASA_EModifier
+			// 
+			this.comboASA_EModifier.AutoCompleteCustomSource.AddRange(new string[] {
+            "I"});
+			this.comboASA_EModifier.FormattingEnabled = true;
+			this.comboASA_EModifier.Items.AddRange(new object[] {
+            "",
+            "E"});
+			this.comboASA_EModifier.Location = new System.Drawing.Point(80, 33);
+			this.comboASA_EModifier.Name = "comboASA_EModifier";
+			this.comboASA_EModifier.Size = new System.Drawing.Size(50, 21);
+			this.comboASA_EModifier.TabIndex = 163;
+			// 
 			// groupBoxIVSite
 			// 
 			this.groupBoxIVSite.Controls.Add(this.comboIVSite);
@@ -609,6 +631,29 @@ namespace OpenDental
 			this.radButIVSiteL.Text = "Left";
 			this.radButIVSiteL.UseVisualStyleBackColor = true;
 			// 
+			// comboIVAtt
+			// 
+			this.comboIVAtt.FormattingEnabled = true;
+			this.comboIVAtt.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+			this.comboIVAtt.Location = new System.Drawing.Point(11, 48);
+			this.comboIVAtt.Name = "comboIVAtt";
+			this.comboIVAtt.Size = new System.Drawing.Size(30, 21);
+			this.comboIVAtt.TabIndex = 144;
+			// 
+			// labelIVAtt
+			// 
+			this.labelIVAtt.AutoSize = true;
+			this.labelIVAtt.Location = new System.Drawing.Point(47, 51);
+			this.labelIVAtt.Name = "labelIVAtt";
+			this.labelIVAtt.Size = new System.Drawing.Size(61, 13);
+			this.labelIVAtt.TabIndex = 145;
+			this.labelIVAtt.Text = "IV Attempts";
+			// 
 			// groupBoxMedRoute
 			// 
 			this.groupBoxMedRoute.Controls.Add(this.radioButMedRouteRectal);
@@ -623,6 +668,50 @@ namespace OpenDental
 			this.groupBoxMedRoute.TabIndex = 162;
 			this.groupBoxMedRoute.TabStop = false;
 			this.groupBoxMedRoute.Text = "Administration Route";
+			// 
+			// radioButMedRouteRectal
+			// 
+			this.radioButMedRouteRectal.AutoSize = true;
+			this.radioButMedRouteRectal.Location = new System.Drawing.Point(84, 50);
+			this.radioButMedRouteRectal.Name = "radioButMedRouteRectal";
+			this.radioButMedRouteRectal.Size = new System.Drawing.Size(56, 17);
+			this.radioButMedRouteRectal.TabIndex = 162;
+			this.radioButMedRouteRectal.TabStop = true;
+			this.radioButMedRouteRectal.Text = "Rectal";
+			this.radioButMedRouteRectal.UseVisualStyleBackColor = true;
+			// 
+			// radioButMedRouteNasal
+			// 
+			this.radioButMedRouteNasal.AutoSize = true;
+			this.radioButMedRouteNasal.Location = new System.Drawing.Point(6, 50);
+			this.radioButMedRouteNasal.Name = "radioButMedRouteNasal";
+			this.radioButMedRouteNasal.Size = new System.Drawing.Size(52, 17);
+			this.radioButMedRouteNasal.TabIndex = 161;
+			this.radioButMedRouteNasal.TabStop = true;
+			this.radioButMedRouteNasal.Text = "Nasal";
+			this.radioButMedRouteNasal.UseVisualStyleBackColor = true;
+			// 
+			// radioButMedRouteIM
+			// 
+			this.radioButMedRouteIM.AutoSize = true;
+			this.radioButMedRouteIM.Location = new System.Drawing.Point(84, 34);
+			this.radioButMedRouteIM.Name = "radioButMedRouteIM";
+			this.radioButMedRouteIM.Size = new System.Drawing.Size(37, 17);
+			this.radioButMedRouteIM.TabIndex = 160;
+			this.radioButMedRouteIM.TabStop = true;
+			this.radioButMedRouteIM.Text = "IM";
+			this.radioButMedRouteIM.UseVisualStyleBackColor = true;
+			// 
+			// radioButMedRoutePO
+			// 
+			this.radioButMedRoutePO.AutoSize = true;
+			this.radioButMedRoutePO.Location = new System.Drawing.Point(6, 34);
+			this.radioButMedRoutePO.Name = "radioButMedRoutePO";
+			this.radioButMedRoutePO.Size = new System.Drawing.Size(40, 17);
+			this.radioButMedRoutePO.TabIndex = 159;
+			this.radioButMedRoutePO.TabStop = true;
+			this.radioButMedRoutePO.Text = "PO";
+			this.radioButMedRoutePO.UseVisualStyleBackColor = true;
 			// 
 			// radButMedRouteIVButFly
 			// 
@@ -797,29 +886,6 @@ namespace OpenDental
 			this.comboIVF.Name = "comboIVF";
 			this.comboIVF.Size = new System.Drawing.Size(119, 21);
 			this.comboIVF.TabIndex = 146;
-			// 
-			// labelIVAtt
-			// 
-			this.labelIVAtt.AutoSize = true;
-			this.labelIVAtt.Location = new System.Drawing.Point(47, 51);
-			this.labelIVAtt.Name = "labelIVAtt";
-			this.labelIVAtt.Size = new System.Drawing.Size(61, 13);
-			this.labelIVAtt.TabIndex = 145;
-			this.labelIVAtt.Text = "IV Attempts";
-			// 
-			// comboIVAtt
-			// 
-			this.comboIVAtt.FormattingEnabled = true;
-			this.comboIVAtt.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
-			this.comboIVAtt.Location = new System.Drawing.Point(11, 48);
-			this.comboIVAtt.Name = "comboIVAtt";
-			this.comboIVAtt.Size = new System.Drawing.Size(30, 21);
-			this.comboIVAtt.TabIndex = 144;
 			// 
 			// labelInh
 			// 
@@ -1154,6 +1220,24 @@ namespace OpenDental
 			this.groupBoxHgtWgt.TabStop = false;
 			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
 			// 
+			// labelEscortCellNum
+			// 
+			this.labelEscortCellNum.AutoSize = true;
+			this.labelEscortCellNum.Location = new System.Drawing.Point(15, 80);
+			this.labelEscortCellNum.Name = "labelEscortCellNum";
+			this.labelEscortCellNum.Size = new System.Drawing.Size(67, 13);
+			this.labelEscortCellNum.TabIndex = 135;
+			this.labelEscortCellNum.Text = "Escort Cell #";
+			// 
+			// textEscortCellNum
+			// 
+			this.textEscortCellNum.Location = new System.Drawing.Point(90, 77);
+			this.textEscortCellNum.MaxLength = 13;
+			this.textEscortCellNum.Name = "textEscortCellNum";
+			this.textEscortCellNum.Size = new System.Drawing.Size(170, 20);
+			this.textEscortCellNum.TabIndex = 134;
+			this.textEscortCellNum.TextChanged += new System.EventHandler(this.textEscortCellNum_TextChanged);
+			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.label1);
@@ -1270,28 +1354,6 @@ namespace OpenDental
 			this.textVSM.Name = "textVSM";
 			this.textVSM.Size = new System.Drawing.Size(88, 20);
 			this.textVSM.TabIndex = 130;
-			// 
-			// comboASA_EModifier
-			// 
-			this.comboASA_EModifier.AutoCompleteCustomSource.AddRange(new string[] {
-            "I"});
-			this.comboASA_EModifier.FormattingEnabled = true;
-			this.comboASA_EModifier.Items.AddRange(new object[] {
-            "",
-            "E"});
-			this.comboASA_EModifier.Location = new System.Drawing.Point(80, 33);
-			this.comboASA_EModifier.Name = "comboASA_EModifier";
-			this.comboASA_EModifier.Size = new System.Drawing.Size(50, 21);
-			this.comboASA_EModifier.TabIndex = 163;
-			// 
-			// labelEMod
-			// 
-			this.labelEMod.AutoSize = true;
-			this.labelEMod.Location = new System.Drawing.Point(133, 36);
-			this.labelEMod.Name = "labelEMod";
-			this.labelEMod.Size = new System.Drawing.Size(54, 13);
-			this.labelEMod.TabIndex = 164;
-			this.labelEMod.Text = "E Modifier";
 			// 
 			// butWasteQty
 			// 
@@ -1775,67 +1837,6 @@ namespace OpenDental
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
-			// textEscortCellNum
-			// 
-			this.textEscortCellNum.Location = new System.Drawing.Point(90, 77);
-			this.textEscortCellNum.MaxLength = 12;
-			this.textEscortCellNum.Name = "textEscortCellNum";
-			this.textEscortCellNum.Size = new System.Drawing.Size(170, 20);
-			this.textEscortCellNum.TabIndex = 134;
-			// 
-			// labelEscortCellNum
-			// 
-			this.labelEscortCellNum.AutoSize = true;
-			this.labelEscortCellNum.Location = new System.Drawing.Point(15, 80);
-			this.labelEscortCellNum.Name = "labelEscortCellNum";
-			this.labelEscortCellNum.Size = new System.Drawing.Size(67, 13);
-			this.labelEscortCellNum.TabIndex = 135;
-			this.labelEscortCellNum.Text = "Escort Cell #";
-			// 
-			// radioButMedRoutePO
-			// 
-			this.radioButMedRoutePO.AutoSize = true;
-			this.radioButMedRoutePO.Location = new System.Drawing.Point(6, 34);
-			this.radioButMedRoutePO.Name = "radioButMedRoutePO";
-			this.radioButMedRoutePO.Size = new System.Drawing.Size(40, 17);
-			this.radioButMedRoutePO.TabIndex = 159;
-			this.radioButMedRoutePO.TabStop = true;
-			this.radioButMedRoutePO.Text = "PO";
-			this.radioButMedRoutePO.UseVisualStyleBackColor = true;
-			// 
-			// radioButMedRouteIM
-			// 
-			this.radioButMedRouteIM.AutoSize = true;
-			this.radioButMedRouteIM.Location = new System.Drawing.Point(84, 34);
-			this.radioButMedRouteIM.Name = "radioButMedRouteIM";
-			this.radioButMedRouteIM.Size = new System.Drawing.Size(37, 17);
-			this.radioButMedRouteIM.TabIndex = 160;
-			this.radioButMedRouteIM.TabStop = true;
-			this.radioButMedRouteIM.Text = "IM";
-			this.radioButMedRouteIM.UseVisualStyleBackColor = true;
-			// 
-			// radioButMedRouteRectal
-			// 
-			this.radioButMedRouteRectal.AutoSize = true;
-			this.radioButMedRouteRectal.Location = new System.Drawing.Point(84, 50);
-			this.radioButMedRouteRectal.Name = "radioButMedRouteRectal";
-			this.radioButMedRouteRectal.Size = new System.Drawing.Size(56, 17);
-			this.radioButMedRouteRectal.TabIndex = 162;
-			this.radioButMedRouteRectal.TabStop = true;
-			this.radioButMedRouteRectal.Text = "Rectal";
-			this.radioButMedRouteRectal.UseVisualStyleBackColor = true;
-			// 
-			// radioButMedRouteNasal
-			// 
-			this.radioButMedRouteNasal.AutoSize = true;
-			this.radioButMedRouteNasal.Location = new System.Drawing.Point(6, 50);
-			this.radioButMedRouteNasal.Name = "radioButMedRouteNasal";
-			this.radioButMedRouteNasal.Size = new System.Drawing.Size(52, 17);
-			this.radioButMedRouteNasal.TabIndex = 161;
-			this.radioButMedRouteNasal.TabStop = true;
-			this.radioButMedRouteNasal.Text = "Nasal";
-			this.radioButMedRouteNasal.UseVisualStyleBackColor = true;
-			// 
 			// FormAnestheticRecord
 			// 
 			this.AutoScroll = true;
@@ -1881,10 +1882,10 @@ namespace OpenDental
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
+			Lan.F(this);
 			PatCur = patCur;
 			Lan.F(this);
 		}
-
 
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e)
@@ -1893,6 +1894,28 @@ namespace OpenDental
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
+			//display Patient Escort Cell # & do some formatting
+
+			//string escortphone = EscortCellNum;
+			//if (escortphone != null && escortphone.Length == 10 && Application.CurrentCulture.Name == "en-US")
+			//{
+			//	textEscortCellNum.Text = "(" + escortphone.Substring(0, 3) + ")" + escortphone.Substring(3, 3) + "-" + escortphone.Substring(6);
+			//}
+			//else
+			//{
+				//textEscortCellNum.Text = escortphone;
+			//}
+			string escortphone = textEscortCellNum.Text;
+
+			if (escortphone != null && escortphone.Length == 10 && Application.CurrentCulture.Name == "en-US")
+			{
+				textEscortCellNum.Text = "(" + escortphone.Substring(0, 3) + ")" + escortphone.Substring(3, 3) + "-" + escortphone.Substring(6);
+			}
+			else
+			{
+				textEscortCellNum.Text = escortphone;
+			}
+
 			RefreshListAnesthetics();
 			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//This works even if no items.
 
@@ -2295,6 +2318,16 @@ namespace OpenDental
 
 		}
 
+		private void textEscortCellNum_TextChanged(object sender, EventArgs e)
+		{
+			int cursor = textEscortCellNum.SelectionStart;
+			int length = textEscortCellNum.Text.Length;
+			textEscortCellNum.Text = TelephoneNumbers.AutoFormat(textEscortCellNum.Text);
+			if (textEscortCellNum.Text.Length > length)
+				cursor++;
+			textEscortCellNum.SelectionStart = cursor;
+
+		}			
 
 	}
 }

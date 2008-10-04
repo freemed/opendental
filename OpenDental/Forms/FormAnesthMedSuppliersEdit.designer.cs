@@ -26,6 +26,8 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthMedSuppliersEdit));
 			this.groupBoxSupplier = new System.Windows.Forms.GroupBox();
+			this.textFax = new System.Windows.Forms.TextBox();
+			this.labelFax = new System.Windows.Forms.Label();
 			this.textContact = new System.Windows.Forms.TextBox();
 			this.labelContact = new System.Windows.Forms.Label();
 			this.textPhoneExt = new System.Windows.Forms.TextBox();
@@ -48,8 +50,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textSupplierName = new System.Windows.Forms.TextBox();
 			this.textAddr2 = new System.Windows.Forms.TextBox();
-			this.labelFax = new System.Windows.Forms.Label();
-			this.textFax = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBoxSupplier.SuspendLayout();
@@ -87,6 +87,23 @@ namespace OpenDental{
 			this.groupBoxSupplier.TabIndex = 4;
 			this.groupBoxSupplier.TabStop = false;
 			this.groupBoxSupplier.Text = "Suppliers";
+			// 
+			// textFax
+			// 
+			this.textFax.Location = new System.Drawing.Point(307, 64);
+			this.textFax.MaxLength = 13;
+			this.textFax.Name = "textFax";
+			this.textFax.Size = new System.Drawing.Size(80, 20);
+			this.textFax.TabIndex = 113;
+			// 
+			// labelFax
+			// 
+			this.labelFax.AutoSize = true;
+			this.labelFax.Location = new System.Drawing.Point(269, 67);
+			this.labelFax.Name = "labelFax";
+			this.labelFax.Size = new System.Drawing.Size(34, 13);
+			this.labelFax.TabIndex = 112;
+			this.labelFax.Text = "Fax #";
 			// 
 			// textContact
 			// 
@@ -162,6 +179,7 @@ namespace OpenDental{
 			this.textPhone.Name = "textPhone";
 			this.textPhone.Size = new System.Drawing.Size(80, 20);
 			this.textPhone.TabIndex = 85;
+			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
 			// 
 			// label7
 			// 
@@ -220,6 +238,7 @@ namespace OpenDental{
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(168, 20);
 			this.textCity.TabIndex = 6;
+			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
 			// 
 			// label3
 			// 
@@ -261,6 +280,7 @@ namespace OpenDental{
 			this.textSupplierName.Name = "textSupplierName";
 			this.textSupplierName.Size = new System.Drawing.Size(290, 20);
 			this.textSupplierName.TabIndex = 0;
+			this.textSupplierName.TextChanged += new System.EventHandler(this.textSupplierName_TextChanged);
 			// 
 			// textAddr2
 			// 
@@ -268,23 +288,6 @@ namespace OpenDental{
 			this.textAddr2.Name = "textAddr2";
 			this.textAddr2.Size = new System.Drawing.Size(454, 20);
 			this.textAddr2.TabIndex = 4;
-			// 
-			// labelFax
-			// 
-			this.labelFax.AutoSize = true;
-			this.labelFax.Location = new System.Drawing.Point(269, 67);
-			this.labelFax.Name = "labelFax";
-			this.labelFax.Size = new System.Drawing.Size(34, 13);
-			this.labelFax.TabIndex = 112;
-			this.labelFax.Text = "Fax #";
-			// 
-			// textFax
-			// 
-			this.textFax.Location = new System.Drawing.Point(307, 64);
-			this.textFax.MaxLength = 13;
-			this.textFax.Name = "textFax";
-			this.textFax.Size = new System.Drawing.Size(80, 20);
-			this.textFax.TabIndex = 113;
 			// 
 			// butOK
 			// 
