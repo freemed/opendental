@@ -33,6 +33,9 @@ namespace OpenDental{
 			this.labelPatID = new System.Windows.Forms.Label();
 			this.textBoxPatient = new System.Windows.Forms.TextBox();
 			this.groupBoxPARSS = new System.Windows.Forms.GroupBox();
+			this.groupBoxDischCond = new System.Windows.Forms.GroupBox();
+			this.radioButDischCondUnstable = new System.Windows.Forms.RadioButton();
+			this.radioButDischCondStable = new System.Windows.Forms.RadioButton();
 			this.textBoxPARSSTotal = new System.Windows.Forms.TextBox();
 			this.labelTotal = new System.Windows.Forms.Label();
 			this.groupBoxCirc = new System.Windows.Forms.GroupBox();
@@ -78,17 +81,14 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.radioButDischAmbulance = new System.Windows.Forms.RadioButton();
-			this.groupBoxDischCond = new System.Windows.Forms.GroupBox();
-			this.radioButDischCondUnstable = new System.Windows.Forms.RadioButton();
-			this.radioButDischCondStable = new System.Windows.Forms.RadioButton();
 			this.groupBoxPARSS.SuspendLayout();
+			this.groupBoxDischCond.SuspendLayout();
 			this.groupBoxCirc.SuspendLayout();
 			this.groupBoxResp.SuspendLayout();
 			this.groupBoxActivity.SuspendLayout();
 			this.groupBoxDischargeMethod.SuspendLayout();
 			this.groupBoxColor.SuspendLayout();
 			this.groupBoxConc.SuspendLayout();
-			this.groupBoxDischCond.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textBoxDate
@@ -158,15 +158,50 @@ namespace OpenDental{
 			this.groupBoxPARSS.Controls.Add(this.groupBoxConc);
 			this.groupBoxPARSS.Location = new System.Drawing.Point(33, 53);
 			this.groupBoxPARSS.Name = "groupBoxPARSS";
-			this.groupBoxPARSS.Size = new System.Drawing.Size(557, 610);
+			this.groupBoxPARSS.Size = new System.Drawing.Size(517, 610);
 			this.groupBoxPARSS.TabIndex = 149;
 			this.groupBoxPARSS.TabStop = false;
 			this.groupBoxPARSS.Text = "Post-Anesthesia Recovery Score System";
 			// 
+			// groupBoxDischCond
+			// 
+			this.groupBoxDischCond.Controls.Add(this.radioButDischCondUnstable);
+			this.groupBoxDischCond.Controls.Add(this.radioButDischCondStable);
+			this.groupBoxDischCond.Location = new System.Drawing.Point(354, 537);
+			this.groupBoxDischCond.Name = "groupBoxDischCond";
+			this.groupBoxDischCond.Size = new System.Drawing.Size(125, 61);
+			this.groupBoxDischCond.TabIndex = 9;
+			this.groupBoxDischCond.TabStop = false;
+			this.groupBoxDischCond.Text = "Discharge condition";
+			// 
+			// radioButDischCondUnstable
+			// 
+			this.radioButDischCondUnstable.AutoSize = true;
+			this.radioButDischCondUnstable.Location = new System.Drawing.Point(20, 35);
+			this.radioButDischCondUnstable.Name = "radioButDischCondUnstable";
+			this.radioButDischCondUnstable.Size = new System.Drawing.Size(67, 17);
+			this.radioButDischCondUnstable.TabIndex = 4;
+			this.radioButDischCondUnstable.TabStop = true;
+			this.radioButDischCondUnstable.Text = "Unstable";
+			this.radioButDischCondUnstable.UseVisualStyleBackColor = true;
+			this.radioButDischCondUnstable.CheckedChanged += new System.EventHandler(this.radioButDischUnstable_CheckedChanged);
+			// 
+			// radioButDischCondStable
+			// 
+			this.radioButDischCondStable.AutoSize = true;
+			this.radioButDischCondStable.Checked = true;
+			this.radioButDischCondStable.Location = new System.Drawing.Point(20, 18);
+			this.radioButDischCondStable.Name = "radioButDischCondStable";
+			this.radioButDischCondStable.Size = new System.Drawing.Size(55, 17);
+			this.radioButDischCondStable.TabIndex = 3;
+			this.radioButDischCondStable.TabStop = true;
+			this.radioButDischCondStable.Text = "Stable";
+			this.radioButDischCondStable.UseVisualStyleBackColor = true;
+			// 
 			// textBoxPARSSTotal
 			// 
 			this.textBoxPARSSTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxPARSSTotal.Location = new System.Drawing.Point(387, 507);
+			this.textBoxPARSSTotal.Location = new System.Drawing.Point(376, 507);
 			this.textBoxPARSSTotal.Name = "textBoxPARSSTotal";
 			this.textBoxPARSSTotal.ReadOnly = true;
 			this.textBoxPARSSTotal.Size = new System.Drawing.Size(62, 20);
@@ -176,7 +211,7 @@ namespace OpenDental{
 			// 
 			this.labelTotal.AutoSize = true;
 			this.labelTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTotal.Location = new System.Drawing.Point(101, 510);
+			this.labelTotal.Location = new System.Drawing.Point(90, 510);
 			this.labelTotal.Name = "labelTotal";
 			this.labelTotal.Size = new System.Drawing.Size(36, 13);
 			this.labelTotal.TabIndex = 6;
@@ -190,7 +225,7 @@ namespace OpenDental{
 			this.groupBoxCirc.Controls.Add(this.labelCircQ0);
 			this.groupBoxCirc.Controls.Add(this.labelCircQ1);
 			this.groupBoxCirc.Controls.Add(this.labelCircQ2);
-			this.groupBoxCirc.Location = new System.Drawing.Point(96, 252);
+			this.groupBoxCirc.Location = new System.Drawing.Point(85, 252);
 			this.groupBoxCirc.Name = "groupBoxCirc";
 			this.groupBoxCirc.Size = new System.Drawing.Size(355, 76);
 			this.groupBoxCirc.TabIndex = 3;
@@ -265,7 +300,7 @@ namespace OpenDental{
 			this.groupBoxResp.Controls.Add(this.labelRespQ0);
 			this.groupBoxResp.Controls.Add(this.labelRespQ1);
 			this.groupBoxResp.Controls.Add(this.labelRespQ2);
-			this.groupBoxResp.Location = new System.Drawing.Point(96, 167);
+			this.groupBoxResp.Location = new System.Drawing.Point(85, 167);
 			this.groupBoxResp.Name = "groupBoxResp";
 			this.groupBoxResp.Size = new System.Drawing.Size(355, 76);
 			this.groupBoxResp.TabIndex = 2;
@@ -340,7 +375,7 @@ namespace OpenDental{
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ0);
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ1);
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ2);
-			this.groupBoxActivity.Location = new System.Drawing.Point(96, 86);
+			this.groupBoxActivity.Location = new System.Drawing.Point(85, 86);
 			this.groupBoxActivity.Name = "groupBoxActivity";
 			this.groupBoxActivity.Size = new System.Drawing.Size(355, 76);
 			this.groupBoxActivity.TabIndex = 1;
@@ -420,7 +455,7 @@ namespace OpenDental{
 			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischAmbulance);
 			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischWheelChr);
 			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischAmb);
-			this.groupBoxDischargeMethod.Location = new System.Drawing.Point(43, 537);
+			this.groupBoxDischargeMethod.Location = new System.Drawing.Point(32, 537);
 			this.groupBoxDischargeMethod.Name = "groupBoxDischargeMethod";
 			this.groupBoxDischargeMethod.Size = new System.Drawing.Size(325, 61);
 			this.groupBoxDischargeMethod.TabIndex = 8;
@@ -430,7 +465,7 @@ namespace OpenDental{
 			// radioButDischWheelChr
 			// 
 			this.radioButDischWheelChr.AutoSize = true;
-			this.radioButDischWheelChr.Location = new System.Drawing.Point(14, 38);
+			this.radioButDischWheelChr.Location = new System.Drawing.Point(169, 18);
 			this.radioButDischWheelChr.Name = "radioButDischWheelChr";
 			this.radioButDischWheelChr.Size = new System.Drawing.Size(147, 17);
 			this.radioButDischWheelChr.TabIndex = 4;
@@ -441,7 +476,7 @@ namespace OpenDental{
 			// radioButDischAmb
 			// 
 			this.radioButDischAmb.AutoSize = true;
-			this.radioButDischAmb.Location = new System.Drawing.Point(14, 21);
+			this.radioButDischAmb.Location = new System.Drawing.Point(14, 18);
 			this.radioButDischAmb.Name = "radioButDischAmb";
 			this.radioButDischAmb.Size = new System.Drawing.Size(152, 17);
 			this.radioButDischAmb.TabIndex = 3;
@@ -457,7 +492,7 @@ namespace OpenDental{
 			this.groupBoxColor.Controls.Add(this.labelColorQ0);
 			this.groupBoxColor.Controls.Add(this.labelColorQ1);
 			this.groupBoxColor.Controls.Add(this.labelColorQ2);
-			this.groupBoxColor.Location = new System.Drawing.Point(96, 423);
+			this.groupBoxColor.Location = new System.Drawing.Point(85, 423);
 			this.groupBoxColor.Name = "groupBoxColor";
 			this.groupBoxColor.Size = new System.Drawing.Size(355, 76);
 			this.groupBoxColor.TabIndex = 5;
@@ -532,7 +567,7 @@ namespace OpenDental{
 			this.groupBoxConc.Controls.Add(this.labelConcQ0);
 			this.groupBoxConc.Controls.Add(this.labelConcQ1);
 			this.groupBoxConc.Controls.Add(this.labelConcQ2);
-			this.groupBoxConc.Location = new System.Drawing.Point(96, 338);
+			this.groupBoxConc.Location = new System.Drawing.Point(85, 338);
 			this.groupBoxConc.Name = "groupBoxConc";
 			this.groupBoxConc.Size = new System.Drawing.Size(355, 76);
 			this.groupBoxConc.TabIndex = 4;
@@ -584,7 +619,7 @@ namespace OpenDental{
 			// labelConcQ1
 			// 
 			this.labelConcQ1.AutoSize = true;
-			this.labelConcQ1.Location = new System.Drawing.Point(88, 31);
+			this.labelConcQ1.Location = new System.Drawing.Point(77, 31);
 			this.labelConcQ1.Name = "labelConcQ1";
 			this.labelConcQ1.Size = new System.Drawing.Size(102, 13);
 			this.labelConcQ1.TabIndex = 1;
@@ -608,7 +643,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(129, 669);
+			this.butPrint.Location = new System.Drawing.Point(108, 669);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(88, 26);
 			this.butPrint.TabIndex = 150;
@@ -623,7 +658,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(479, 669);
+			this.butOK.Location = new System.Drawing.Point(449, 669);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(89, 24);
 			this.butOK.TabIndex = 3;
@@ -640,7 +675,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(398, 669);
+			this.butCancel.Location = new System.Drawing.Point(368, 669);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -650,52 +685,18 @@ namespace OpenDental{
 			// radioButDischAmbulance
 			// 
 			this.radioButDischAmbulance.AutoSize = true;
-			this.radioButDischAmbulance.Location = new System.Drawing.Point(169, 21);
+			this.radioButDischAmbulance.Location = new System.Drawing.Point(14, 35);
 			this.radioButDischAmbulance.Name = "radioButDischAmbulance";
 			this.radioButDischAmbulance.Size = new System.Drawing.Size(154, 17);
-			this.radioButDischAmbulance.TabIndex = 5;
+			this.radioButDischAmbulance.TabIndex = 6;
 			this.radioButDischAmbulance.TabStop = true;
 			this.radioButDischAmbulance.Text = "Transported via ambulance";
 			this.radioButDischAmbulance.UseVisualStyleBackColor = true;
 			// 
-			// groupBoxDischCond
-			// 
-			this.groupBoxDischCond.Controls.Add(this.radioButDischCondUnstable);
-			this.groupBoxDischCond.Controls.Add(this.radioButDischCondStable);
-			this.groupBoxDischCond.Location = new System.Drawing.Point(365, 537);
-			this.groupBoxDischCond.Name = "groupBoxDischCond";
-			this.groupBoxDischCond.Size = new System.Drawing.Size(161, 61);
-			this.groupBoxDischCond.TabIndex = 9;
-			this.groupBoxDischCond.TabStop = false;
-			this.groupBoxDischCond.Text = "Discharge condition";
-			// 
-			// radioButDischCondUnstable
-			// 
-			this.radioButDischCondUnstable.AutoSize = true;
-			this.radioButDischCondUnstable.Location = new System.Drawing.Point(81, 21);
-			this.radioButDischCondUnstable.Name = "radioButDischCondUnstable";
-			this.radioButDischCondUnstable.Size = new System.Drawing.Size(67, 17);
-			this.radioButDischCondUnstable.TabIndex = 4;
-			this.radioButDischCondUnstable.TabStop = true;
-			this.radioButDischCondUnstable.Text = "Unstable";
-			this.radioButDischCondUnstable.UseVisualStyleBackColor = true;
-			this.radioButDischCondUnstable.CheckedChanged += new System.EventHandler(this.radioButDischUnstable_CheckedChanged);
-			// 
-			// radioButDischCondStable
-			// 
-			this.radioButDischCondStable.AutoSize = true;
-			this.radioButDischCondStable.Location = new System.Drawing.Point(20, 21);
-			this.radioButDischCondStable.Name = "radioButDischCondStable";
-			this.radioButDischCondStable.Size = new System.Drawing.Size(55, 17);
-			this.radioButDischCondStable.TabIndex = 3;
-			this.radioButDischCondStable.TabStop = true;
-			this.radioButDischCondStable.Text = "Stable";
-			this.radioButDischCondStable.UseVisualStyleBackColor = true;
-			// 
 			// FormAnesthesiaScore
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(626, 707);
+			this.ClientSize = new System.Drawing.Size(584, 707);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.textBoxDate);
 			this.Controls.Add(this.labelDate);
@@ -713,6 +714,8 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormAnesthesiaScore_Load);
 			this.groupBoxPARSS.ResumeLayout(false);
 			this.groupBoxPARSS.PerformLayout();
+			this.groupBoxDischCond.ResumeLayout(false);
+			this.groupBoxDischCond.PerformLayout();
 			this.groupBoxCirc.ResumeLayout(false);
 			this.groupBoxCirc.PerformLayout();
 			this.groupBoxResp.ResumeLayout(false);
@@ -725,8 +728,6 @@ namespace OpenDental{
 			this.groupBoxColor.PerformLayout();
 			this.groupBoxConc.ResumeLayout(false);
 			this.groupBoxConc.PerformLayout();
-			this.groupBoxDischCond.ResumeLayout(false);
-			this.groupBoxDischCond.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
