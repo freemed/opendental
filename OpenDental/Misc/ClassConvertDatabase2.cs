@@ -557,6 +557,7 @@ namespace OpenDental{
 					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','')";
 					General.NonQ(command);
 
+					//individual unique records of delivered anesthetics
 					command = @"CREATE TABLE anestheticrecord (
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
 						PatNum int(11) NOT NULL,
@@ -568,6 +569,7 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
+					//data recorded for an individual anesthetic on a given date and time
 					command = @"CREATE TABLE anestheticdata (
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
 						AnesthOpen datetime NOT NULL,
@@ -619,8 +621,110 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
+					//a list of anesthetic medications to be delivered to a patient
+					command = @"CREATE TABLE anesthmedsgiven(
+						AnestheticRecordNum int(11) NOT NULL auto_increment,
+						AnestheticMedNum int(3) NOT NULL,
+						AnestheticMedName char (20) NOT NULL,
+						AnesthHowSupplied char(16) NOT NULL,
+						QtyGiven int(4) NOT NULL,
+						TimeStamp datetime NOT NULL,
+						PRIMARY KEY (AnestheticRecordNum),
+						INDEX (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+					//a list of anesthetic medications taken into inventory from a Supplier. Qtys are always in milliLiters so inventory count works properly.
+					command = @"CREATE TABLE anesthmedsintake(
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						IntakeDate datetime NOT NULL,
+						AnestheticMedName char (20) NOT NULL,
+						Qty int(6) NOT NULL, 
+						SupplierName char(32) NOT NULL,
+						InvoiceNum char(20) NOT NULL,
+						PRIMARY KEY (AnestheticMedNum),
+						INDEX (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+					//fields required to create inventory of anesthetic medications
+					command = @"CREATE TABLE anesthmedsinventory (
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						AnestheticMedName char(20) NOT NULL,
+						AnesthHowSupplied char(20) NOT NULL,
+						QtyOnHand int(5) NOT NULL,
+						PRIMARY KEY (AnestheticMedNum),
+						INDEX (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
+					//fields required to adjust inventory of anesthetic medications
+					command = @"CREATE TABLE anesthmedsinventoryadj (
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						AdjPos int(4) NOT NULL,
+						AdjNeg int(4)NOT NULL,
+						Provider char(4) NOT NULL,
+						Notes text NOT NULL,
+						TimeStamp datetime NOT NULL,
+						PRIMARY KEY (AnestheticMedNum),
+						INDEX (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+					//a list of suppliers of anesthetic medications
+					command = @"CREATE TABLE anesthmedsuppliers (
+						SupplierIDNum int(3) NOT NULL auto_increment,
+						SupplierName char(32) NOT NULL,
+						Addr1 char(32)NOT NULL,
+						Addr2 char(32) NOT NULL,
+						City char(32) NOT NULL,
+						State char(10) NOT NULL,
+						Country char(32) NOT NULL,
+						Phone char(12) NOT NULL,
+						Fax char(12) NOT NULL,
+						PhoneExt int(5) NOT NULL,
+						Contact char(32) NOT NULL,
+						Notes text NOT NULL,
+						PRIMARY KEY (SupplierIDNum),
+						INDEX (SupplierName)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);					
+					
+					//keeps the post-anesthesia score and discharge data
+					command = @"CREATE TABLE anesthscore (
+						AnestheticRecordNum int(7) NOT NULL auto_increment,
+						QActivity smallint(1) NOT NULL,
+						QResp smallint(1) NOT NULL,
+						QCirc smallint(1) NOT NULL,
+						QConc smallint(1) NOT NULL,
+						QColor smallint(1) NOT NULL,
+						AnesthScore smallint(2) NOT NULL,
+						DischAmb tinyint(1) NOT NULL,
+						DischWheelChr tinyint(1) NOT NULL,
+						DischAmbulance tinyint(1) NOT NULL,
+						DischCondStable tinyint(1) NOT NULL,
+						PRIMARY KEY (AnestheticRecordNum),
+						INDEX (AnestheticRecordNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+					//keeps data auto-imported from networkable vital sign monitors
+					command = @"CREATE TABLE anesthvsdata (
+						AnestheticRecordNum int(7) NOT NULL auto_increment,
+						VSMName char(20) NOT NULL,
+						VSMSerNum char(20) NOT NULL,
+						BPSys int(3) NOT NULL,
+						BPDias int(3) NOT NULL,
+						BPMAP int(3) NOT NULL,
+						HR int(3) NOT NULL,
+						SpO2 int(3) NOT NULL,
+						EtCo2 int(3) NOT NULL,
+						Temp int(3) NOT NULL,
+						PRIMARY KEY (AnestheticRecordNum),
+						INDEX (AnestheticRecordNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 				} 
 				else {//oracle

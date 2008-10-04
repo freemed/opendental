@@ -36,47 +36,51 @@ namespace OpenDental{
 			this.textBoxPARSSTotal = new System.Windows.Forms.TextBox();
 			this.labelTotal = new System.Windows.Forms.Label();
 			this.groupBoxCirc = new System.Windows.Forms.GroupBox();
-			this.radioButtonCircQ0 = new System.Windows.Forms.RadioButton();
-			this.radioButtonCircQ1 = new System.Windows.Forms.RadioButton();
-			this.radioButtonCircQ2 = new System.Windows.Forms.RadioButton();
+			this.radioButCircQ0 = new System.Windows.Forms.RadioButton();
+			this.radioButCircQ1 = new System.Windows.Forms.RadioButton();
+			this.radioButCircQ2 = new System.Windows.Forms.RadioButton();
 			this.labelCircQ0 = new System.Windows.Forms.Label();
 			this.labelCircQ1 = new System.Windows.Forms.Label();
 			this.labelCircQ2 = new System.Windows.Forms.Label();
 			this.groupBoxResp = new System.Windows.Forms.GroupBox();
-			this.radioButtonRespQ0 = new System.Windows.Forms.RadioButton();
-			this.radioButtonRespQ1 = new System.Windows.Forms.RadioButton();
-			this.radioButtonRespQ2 = new System.Windows.Forms.RadioButton();
+			this.radioButRespQ0 = new System.Windows.Forms.RadioButton();
+			this.radioButRespQ1 = new System.Windows.Forms.RadioButton();
+			this.radioButRespQ2 = new System.Windows.Forms.RadioButton();
 			this.labelRespQ0 = new System.Windows.Forms.Label();
 			this.labelRespQ1 = new System.Windows.Forms.Label();
 			this.labelRespQ2 = new System.Windows.Forms.Label();
 			this.groupBoxActivity = new System.Windows.Forms.GroupBox();
-			this.radioButtonActivityQ0 = new System.Windows.Forms.RadioButton();
-			this.radioButtonActivityQ1 = new System.Windows.Forms.RadioButton();
-			this.radioButtonActivityQ2 = new System.Windows.Forms.RadioButton();
+			this.radioButActivityQ0 = new System.Windows.Forms.RadioButton();
+			this.radioButActivityQ1 = new System.Windows.Forms.RadioButton();
+			this.radioButActivityQ2 = new System.Windows.Forms.RadioButton();
 			this.labelActivityQ0 = new System.Windows.Forms.Label();
 			this.labelActivityQ1 = new System.Windows.Forms.Label();
 			this.labelActivityQ2 = new System.Windows.Forms.Label();
 			this.labelPARSS = new System.Windows.Forms.Label();
 			this.groupBoxDischargeMethod = new System.Windows.Forms.GroupBox();
-			this.radioButtonDischWheelChr = new System.Windows.Forms.RadioButton();
-			this.radioButtonDischAmb = new System.Windows.Forms.RadioButton();
+			this.radioButDischWheelChr = new System.Windows.Forms.RadioButton();
+			this.radioButDischAmb = new System.Windows.Forms.RadioButton();
 			this.groupBoxColor = new System.Windows.Forms.GroupBox();
-			this.radioButtonColorQ0 = new System.Windows.Forms.RadioButton();
-			this.radioButtonColorQ1 = new System.Windows.Forms.RadioButton();
-			this.radioButtonColorQ2 = new System.Windows.Forms.RadioButton();
+			this.radioButColorQ0 = new System.Windows.Forms.RadioButton();
+			this.radioButColorQ1 = new System.Windows.Forms.RadioButton();
+			this.radioButColorQ2 = new System.Windows.Forms.RadioButton();
 			this.labelColorQ0 = new System.Windows.Forms.Label();
 			this.labelColorQ1 = new System.Windows.Forms.Label();
 			this.labelColorQ2 = new System.Windows.Forms.Label();
 			this.groupBoxConc = new System.Windows.Forms.GroupBox();
-			this.radioButtonConcQ0 = new System.Windows.Forms.RadioButton();
-			this.radioButtonConcQ1 = new System.Windows.Forms.RadioButton();
-			this.radioButtonConcQ2 = new System.Windows.Forms.RadioButton();
+			this.radioButConcQ0 = new System.Windows.Forms.RadioButton();
+			this.radioButConcQ1 = new System.Windows.Forms.RadioButton();
+			this.radioButConcQ2 = new System.Windows.Forms.RadioButton();
 			this.labelConcQ0 = new System.Windows.Forms.Label();
 			this.labelConcQ1 = new System.Windows.Forms.Label();
 			this.labelConcQ2 = new System.Windows.Forms.Label();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.radioButDischAmbulance = new System.Windows.Forms.RadioButton();
+			this.groupBoxDischCond = new System.Windows.Forms.GroupBox();
+			this.radioButDischCondUnstable = new System.Windows.Forms.RadioButton();
+			this.radioButDischCondStable = new System.Windows.Forms.RadioButton();
 			this.groupBoxPARSS.SuspendLayout();
 			this.groupBoxCirc.SuspendLayout();
 			this.groupBoxResp.SuspendLayout();
@@ -84,6 +88,7 @@ namespace OpenDental{
 			this.groupBoxDischargeMethod.SuspendLayout();
 			this.groupBoxColor.SuspendLayout();
 			this.groupBoxConc.SuspendLayout();
+			this.groupBoxDischCond.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textBoxDate
@@ -141,6 +146,7 @@ namespace OpenDental{
 			// 
 			// groupBoxPARSS
 			// 
+			this.groupBoxPARSS.Controls.Add(this.groupBoxDischCond);
 			this.groupBoxPARSS.Controls.Add(this.textBoxPARSSTotal);
 			this.groupBoxPARSS.Controls.Add(this.labelTotal);
 			this.groupBoxPARSS.Controls.Add(this.groupBoxCirc);
@@ -152,7 +158,7 @@ namespace OpenDental{
 			this.groupBoxPARSS.Controls.Add(this.groupBoxConc);
 			this.groupBoxPARSS.Location = new System.Drawing.Point(33, 53);
 			this.groupBoxPARSS.Name = "groupBoxPARSS";
-			this.groupBoxPARSS.Size = new System.Drawing.Size(535, 600);
+			this.groupBoxPARSS.Size = new System.Drawing.Size(557, 610);
 			this.groupBoxPARSS.TabIndex = 149;
 			this.groupBoxPARSS.TabStop = false;
 			this.groupBoxPARSS.Text = "Post-Anesthesia Recovery Score System";
@@ -178,9 +184,9 @@ namespace OpenDental{
 			// 
 			// groupBoxCirc
 			// 
-			this.groupBoxCirc.Controls.Add(this.radioButtonCircQ0);
-			this.groupBoxCirc.Controls.Add(this.radioButtonCircQ1);
-			this.groupBoxCirc.Controls.Add(this.radioButtonCircQ2);
+			this.groupBoxCirc.Controls.Add(this.radioButCircQ0);
+			this.groupBoxCirc.Controls.Add(this.radioButCircQ1);
+			this.groupBoxCirc.Controls.Add(this.radioButCircQ2);
 			this.groupBoxCirc.Controls.Add(this.labelCircQ0);
 			this.groupBoxCirc.Controls.Add(this.labelCircQ1);
 			this.groupBoxCirc.Controls.Add(this.labelCircQ2);
@@ -191,38 +197,38 @@ namespace OpenDental{
 			this.groupBoxCirc.TabStop = false;
 			this.groupBoxCirc.Text = "Circulation";
 			// 
-			// radioButtonCircQ0
+			// radioButCircQ0
 			// 
-			this.radioButtonCircQ0.AutoSize = true;
-			this.radioButtonCircQ0.Location = new System.Drawing.Point(310, 47);
-			this.radioButtonCircQ0.Name = "radioButtonCircQ0";
-			this.radioButtonCircQ0.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonCircQ0.TabIndex = 5;
-			this.radioButtonCircQ0.TabStop = true;
-			this.radioButtonCircQ0.Text = "0";
-			this.radioButtonCircQ0.UseVisualStyleBackColor = true;
+			this.radioButCircQ0.AutoSize = true;
+			this.radioButCircQ0.Location = new System.Drawing.Point(310, 47);
+			this.radioButCircQ0.Name = "radioButCircQ0";
+			this.radioButCircQ0.Size = new System.Drawing.Size(31, 17);
+			this.radioButCircQ0.TabIndex = 5;
+			this.radioButCircQ0.TabStop = true;
+			this.radioButCircQ0.Text = "0";
+			this.radioButCircQ0.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonCircQ1
+			// radioButCircQ1
 			// 
-			this.radioButtonCircQ1.AutoSize = true;
-			this.radioButtonCircQ1.Location = new System.Drawing.Point(310, 29);
-			this.radioButtonCircQ1.Name = "radioButtonCircQ1";
-			this.radioButtonCircQ1.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonCircQ1.TabIndex = 4;
-			this.radioButtonCircQ1.TabStop = true;
-			this.radioButtonCircQ1.Text = "1";
-			this.radioButtonCircQ1.UseVisualStyleBackColor = true;
+			this.radioButCircQ1.AutoSize = true;
+			this.radioButCircQ1.Location = new System.Drawing.Point(310, 29);
+			this.radioButCircQ1.Name = "radioButCircQ1";
+			this.radioButCircQ1.Size = new System.Drawing.Size(31, 17);
+			this.radioButCircQ1.TabIndex = 4;
+			this.radioButCircQ1.TabStop = true;
+			this.radioButCircQ1.Text = "1";
+			this.radioButCircQ1.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonCircQ2
+			// radioButCircQ2
 			// 
-			this.radioButtonCircQ2.AutoSize = true;
-			this.radioButtonCircQ2.Location = new System.Drawing.Point(310, 11);
-			this.radioButtonCircQ2.Name = "radioButtonCircQ2";
-			this.radioButtonCircQ2.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonCircQ2.TabIndex = 3;
-			this.radioButtonCircQ2.TabStop = true;
-			this.radioButtonCircQ2.Text = "2";
-			this.radioButtonCircQ2.UseVisualStyleBackColor = true;
+			this.radioButCircQ2.AutoSize = true;
+			this.radioButCircQ2.Location = new System.Drawing.Point(310, 11);
+			this.radioButCircQ2.Name = "radioButCircQ2";
+			this.radioButCircQ2.Size = new System.Drawing.Size(31, 17);
+			this.radioButCircQ2.TabIndex = 3;
+			this.radioButCircQ2.TabStop = true;
+			this.radioButCircQ2.Text = "2";
+			this.radioButCircQ2.UseVisualStyleBackColor = true;
 			// 
 			// labelCircQ0
 			// 
@@ -253,9 +259,9 @@ namespace OpenDental{
 			// 
 			// groupBoxResp
 			// 
-			this.groupBoxResp.Controls.Add(this.radioButtonRespQ0);
-			this.groupBoxResp.Controls.Add(this.radioButtonRespQ1);
-			this.groupBoxResp.Controls.Add(this.radioButtonRespQ2);
+			this.groupBoxResp.Controls.Add(this.radioButRespQ0);
+			this.groupBoxResp.Controls.Add(this.radioButRespQ1);
+			this.groupBoxResp.Controls.Add(this.radioButRespQ2);
 			this.groupBoxResp.Controls.Add(this.labelRespQ0);
 			this.groupBoxResp.Controls.Add(this.labelRespQ1);
 			this.groupBoxResp.Controls.Add(this.labelRespQ2);
@@ -266,38 +272,38 @@ namespace OpenDental{
 			this.groupBoxResp.TabStop = false;
 			this.groupBoxResp.Text = "Respiration";
 			// 
-			// radioButtonRespQ0
+			// radioButRespQ0
 			// 
-			this.radioButtonRespQ0.AutoSize = true;
-			this.radioButtonRespQ0.Location = new System.Drawing.Point(310, 50);
-			this.radioButtonRespQ0.Name = "radioButtonRespQ0";
-			this.radioButtonRespQ0.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonRespQ0.TabIndex = 5;
-			this.radioButtonRespQ0.TabStop = true;
-			this.radioButtonRespQ0.Text = "0";
-			this.radioButtonRespQ0.UseVisualStyleBackColor = true;
+			this.radioButRespQ0.AutoSize = true;
+			this.radioButRespQ0.Location = new System.Drawing.Point(310, 50);
+			this.radioButRespQ0.Name = "radioButRespQ0";
+			this.radioButRespQ0.Size = new System.Drawing.Size(31, 17);
+			this.radioButRespQ0.TabIndex = 5;
+			this.radioButRespQ0.TabStop = true;
+			this.radioButRespQ0.Text = "0";
+			this.radioButRespQ0.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonRespQ1
+			// radioButRespQ1
 			// 
-			this.radioButtonRespQ1.AutoSize = true;
-			this.radioButtonRespQ1.Location = new System.Drawing.Point(310, 30);
-			this.radioButtonRespQ1.Name = "radioButtonRespQ1";
-			this.radioButtonRespQ1.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonRespQ1.TabIndex = 4;
-			this.radioButtonRespQ1.TabStop = true;
-			this.radioButtonRespQ1.Text = "1";
-			this.radioButtonRespQ1.UseVisualStyleBackColor = true;
+			this.radioButRespQ1.AutoSize = true;
+			this.radioButRespQ1.Location = new System.Drawing.Point(310, 30);
+			this.radioButRespQ1.Name = "radioButRespQ1";
+			this.radioButRespQ1.Size = new System.Drawing.Size(31, 17);
+			this.radioButRespQ1.TabIndex = 4;
+			this.radioButRespQ1.TabStop = true;
+			this.radioButRespQ1.Text = "1";
+			this.radioButRespQ1.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonRespQ2
+			// radioButRespQ2
 			// 
-			this.radioButtonRespQ2.AutoSize = true;
-			this.radioButtonRespQ2.Location = new System.Drawing.Point(310, 11);
-			this.radioButtonRespQ2.Name = "radioButtonRespQ2";
-			this.radioButtonRespQ2.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonRespQ2.TabIndex = 3;
-			this.radioButtonRespQ2.TabStop = true;
-			this.radioButtonRespQ2.Text = "2";
-			this.radioButtonRespQ2.UseVisualStyleBackColor = true;
+			this.radioButRespQ2.AutoSize = true;
+			this.radioButRespQ2.Location = new System.Drawing.Point(310, 11);
+			this.radioButRespQ2.Name = "radioButRespQ2";
+			this.radioButRespQ2.Size = new System.Drawing.Size(31, 17);
+			this.radioButRespQ2.TabIndex = 3;
+			this.radioButRespQ2.TabStop = true;
+			this.radioButRespQ2.Text = "2";
+			this.radioButRespQ2.UseVisualStyleBackColor = true;
 			// 
 			// labelRespQ0
 			// 
@@ -328,9 +334,9 @@ namespace OpenDental{
 			// 
 			// groupBoxActivity
 			// 
-			this.groupBoxActivity.Controls.Add(this.radioButtonActivityQ0);
-			this.groupBoxActivity.Controls.Add(this.radioButtonActivityQ1);
-			this.groupBoxActivity.Controls.Add(this.radioButtonActivityQ2);
+			this.groupBoxActivity.Controls.Add(this.radioButActivityQ0);
+			this.groupBoxActivity.Controls.Add(this.radioButActivityQ1);
+			this.groupBoxActivity.Controls.Add(this.radioButActivityQ2);
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ0);
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ1);
 			this.groupBoxActivity.Controls.Add(this.labelActivityQ2);
@@ -341,38 +347,38 @@ namespace OpenDental{
 			this.groupBoxActivity.TabStop = false;
 			this.groupBoxActivity.Text = "Activity";
 			// 
-			// radioButtonActivityQ0
+			// radioButActivityQ0
 			// 
-			this.radioButtonActivityQ0.AutoSize = true;
-			this.radioButtonActivityQ0.Location = new System.Drawing.Point(310, 50);
-			this.radioButtonActivityQ0.Name = "radioButtonActivityQ0";
-			this.radioButtonActivityQ0.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonActivityQ0.TabIndex = 5;
-			this.radioButtonActivityQ0.TabStop = true;
-			this.radioButtonActivityQ0.Text = "0";
-			this.radioButtonActivityQ0.UseVisualStyleBackColor = true;
+			this.radioButActivityQ0.AutoSize = true;
+			this.radioButActivityQ0.Location = new System.Drawing.Point(310, 50);
+			this.radioButActivityQ0.Name = "radioButActivityQ0";
+			this.radioButActivityQ0.Size = new System.Drawing.Size(31, 17);
+			this.radioButActivityQ0.TabIndex = 5;
+			this.radioButActivityQ0.TabStop = true;
+			this.radioButActivityQ0.Text = "0";
+			this.radioButActivityQ0.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonActivityQ1
+			// radioButActivityQ1
 			// 
-			this.radioButtonActivityQ1.AutoSize = true;
-			this.radioButtonActivityQ1.Location = new System.Drawing.Point(310, 30);
-			this.radioButtonActivityQ1.Name = "radioButtonActivityQ1";
-			this.radioButtonActivityQ1.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonActivityQ1.TabIndex = 4;
-			this.radioButtonActivityQ1.TabStop = true;
-			this.radioButtonActivityQ1.Text = "1";
-			this.radioButtonActivityQ1.UseVisualStyleBackColor = true;
+			this.radioButActivityQ1.AutoSize = true;
+			this.radioButActivityQ1.Location = new System.Drawing.Point(310, 30);
+			this.radioButActivityQ1.Name = "radioButActivityQ1";
+			this.radioButActivityQ1.Size = new System.Drawing.Size(31, 17);
+			this.radioButActivityQ1.TabIndex = 4;
+			this.radioButActivityQ1.TabStop = true;
+			this.radioButActivityQ1.Text = "1";
+			this.radioButActivityQ1.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonActivityQ2
+			// radioButActivityQ2
 			// 
-			this.radioButtonActivityQ2.AutoSize = true;
-			this.radioButtonActivityQ2.Location = new System.Drawing.Point(310, 11);
-			this.radioButtonActivityQ2.Name = "radioButtonActivityQ2";
-			this.radioButtonActivityQ2.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonActivityQ2.TabIndex = 3;
-			this.radioButtonActivityQ2.TabStop = true;
-			this.radioButtonActivityQ2.Text = "2";
-			this.radioButtonActivityQ2.UseVisualStyleBackColor = true;
+			this.radioButActivityQ2.AutoSize = true;
+			this.radioButActivityQ2.Location = new System.Drawing.Point(310, 11);
+			this.radioButActivityQ2.Name = "radioButActivityQ2";
+			this.radioButActivityQ2.Size = new System.Drawing.Size(31, 17);
+			this.radioButActivityQ2.TabIndex = 3;
+			this.radioButActivityQ2.TabStop = true;
+			this.radioButActivityQ2.Text = "2";
+			this.radioButActivityQ2.UseVisualStyleBackColor = true;
 			// 
 			// labelActivityQ0
 			// 
@@ -411,42 +417,43 @@ namespace OpenDental{
 			// 
 			// groupBoxDischargeMethod
 			// 
-			this.groupBoxDischargeMethod.Controls.Add(this.radioButtonDischWheelChr);
-			this.groupBoxDischargeMethod.Controls.Add(this.radioButtonDischAmb);
-			this.groupBoxDischargeMethod.Location = new System.Drawing.Point(96, 537);
+			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischAmbulance);
+			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischWheelChr);
+			this.groupBoxDischargeMethod.Controls.Add(this.radioButDischAmb);
+			this.groupBoxDischargeMethod.Location = new System.Drawing.Point(43, 537);
 			this.groupBoxDischargeMethod.Name = "groupBoxDischargeMethod";
-			this.groupBoxDischargeMethod.Size = new System.Drawing.Size(355, 50);
+			this.groupBoxDischargeMethod.Size = new System.Drawing.Size(325, 61);
 			this.groupBoxDischargeMethod.TabIndex = 8;
 			this.groupBoxDischargeMethod.TabStop = false;
 			this.groupBoxDischargeMethod.Text = "Discharge method";
 			// 
-			// radioButtonDischWheelChr
+			// radioButDischWheelChr
 			// 
-			this.radioButtonDischWheelChr.AutoSize = true;
-			this.radioButtonDischWheelChr.Location = new System.Drawing.Point(187, 21);
-			this.radioButtonDischWheelChr.Name = "radioButtonDischWheelChr";
-			this.radioButtonDischWheelChr.Size = new System.Drawing.Size(147, 17);
-			this.radioButtonDischWheelChr.TabIndex = 4;
-			this.radioButtonDischWheelChr.TabStop = true;
-			this.radioButtonDischWheelChr.Text = "Transported in wheelchair";
-			this.radioButtonDischWheelChr.UseVisualStyleBackColor = true;
+			this.radioButDischWheelChr.AutoSize = true;
+			this.radioButDischWheelChr.Location = new System.Drawing.Point(14, 38);
+			this.radioButDischWheelChr.Name = "radioButDischWheelChr";
+			this.radioButDischWheelChr.Size = new System.Drawing.Size(147, 17);
+			this.radioButDischWheelChr.TabIndex = 4;
+			this.radioButDischWheelChr.TabStop = true;
+			this.radioButDischWheelChr.Text = "Transported in wheelchair";
+			this.radioButDischWheelChr.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonDischAmb
+			// radioButDischAmb
 			// 
-			this.radioButtonDischAmb.AutoSize = true;
-			this.radioButtonDischAmb.Location = new System.Drawing.Point(20, 21);
-			this.radioButtonDischAmb.Name = "radioButtonDischAmb";
-			this.radioButtonDischAmb.Size = new System.Drawing.Size(152, 17);
-			this.radioButtonDischAmb.TabIndex = 3;
-			this.radioButtonDischAmb.TabStop = true;
-			this.radioButtonDischAmb.Text = "Ambulatory with assistance";
-			this.radioButtonDischAmb.UseVisualStyleBackColor = true;
+			this.radioButDischAmb.AutoSize = true;
+			this.radioButDischAmb.Location = new System.Drawing.Point(14, 21);
+			this.radioButDischAmb.Name = "radioButDischAmb";
+			this.radioButDischAmb.Size = new System.Drawing.Size(152, 17);
+			this.radioButDischAmb.TabIndex = 3;
+			this.radioButDischAmb.TabStop = true;
+			this.radioButDischAmb.Text = "Ambulatory with assistance";
+			this.radioButDischAmb.UseVisualStyleBackColor = true;
 			// 
 			// groupBoxColor
 			// 
-			this.groupBoxColor.Controls.Add(this.radioButtonColorQ0);
-			this.groupBoxColor.Controls.Add(this.radioButtonColorQ1);
-			this.groupBoxColor.Controls.Add(this.radioButtonColorQ2);
+			this.groupBoxColor.Controls.Add(this.radioButColorQ0);
+			this.groupBoxColor.Controls.Add(this.radioButColorQ1);
+			this.groupBoxColor.Controls.Add(this.radioButColorQ2);
 			this.groupBoxColor.Controls.Add(this.labelColorQ0);
 			this.groupBoxColor.Controls.Add(this.labelColorQ1);
 			this.groupBoxColor.Controls.Add(this.labelColorQ2);
@@ -457,38 +464,38 @@ namespace OpenDental{
 			this.groupBoxColor.TabStop = false;
 			this.groupBoxColor.Text = "Color";
 			// 
-			// radioButtonColorQ0
+			// radioButColorQ0
 			// 
-			this.radioButtonColorQ0.AutoSize = true;
-			this.radioButtonColorQ0.Location = new System.Drawing.Point(310, 50);
-			this.radioButtonColorQ0.Name = "radioButtonColorQ0";
-			this.radioButtonColorQ0.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonColorQ0.TabIndex = 5;
-			this.radioButtonColorQ0.TabStop = true;
-			this.radioButtonColorQ0.Text = "0";
-			this.radioButtonColorQ0.UseVisualStyleBackColor = true;
+			this.radioButColorQ0.AutoSize = true;
+			this.radioButColorQ0.Location = new System.Drawing.Point(310, 50);
+			this.radioButColorQ0.Name = "radioButColorQ0";
+			this.radioButColorQ0.Size = new System.Drawing.Size(31, 17);
+			this.radioButColorQ0.TabIndex = 5;
+			this.radioButColorQ0.TabStop = true;
+			this.radioButColorQ0.Text = "0";
+			this.radioButColorQ0.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonColorQ1
+			// radioButColorQ1
 			// 
-			this.radioButtonColorQ1.AutoSize = true;
-			this.radioButtonColorQ1.Location = new System.Drawing.Point(310, 30);
-			this.radioButtonColorQ1.Name = "radioButtonColorQ1";
-			this.radioButtonColorQ1.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonColorQ1.TabIndex = 4;
-			this.radioButtonColorQ1.TabStop = true;
-			this.radioButtonColorQ1.Text = "1";
-			this.radioButtonColorQ1.UseVisualStyleBackColor = true;
+			this.radioButColorQ1.AutoSize = true;
+			this.radioButColorQ1.Location = new System.Drawing.Point(310, 30);
+			this.radioButColorQ1.Name = "radioButColorQ1";
+			this.radioButColorQ1.Size = new System.Drawing.Size(31, 17);
+			this.radioButColorQ1.TabIndex = 4;
+			this.radioButColorQ1.TabStop = true;
+			this.radioButColorQ1.Text = "1";
+			this.radioButColorQ1.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonColorQ2
+			// radioButColorQ2
 			// 
-			this.radioButtonColorQ2.AutoSize = true;
-			this.radioButtonColorQ2.Location = new System.Drawing.Point(310, 11);
-			this.radioButtonColorQ2.Name = "radioButtonColorQ2";
-			this.radioButtonColorQ2.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonColorQ2.TabIndex = 3;
-			this.radioButtonColorQ2.TabStop = true;
-			this.radioButtonColorQ2.Text = "2";
-			this.radioButtonColorQ2.UseVisualStyleBackColor = true;
+			this.radioButColorQ2.AutoSize = true;
+			this.radioButColorQ2.Location = new System.Drawing.Point(310, 11);
+			this.radioButColorQ2.Name = "radioButColorQ2";
+			this.radioButColorQ2.Size = new System.Drawing.Size(31, 17);
+			this.radioButColorQ2.TabIndex = 3;
+			this.radioButColorQ2.TabStop = true;
+			this.radioButColorQ2.Text = "2";
+			this.radioButColorQ2.UseVisualStyleBackColor = true;
 			// 
 			// labelColorQ0
 			// 
@@ -519,9 +526,9 @@ namespace OpenDental{
 			// 
 			// groupBoxConc
 			// 
-			this.groupBoxConc.Controls.Add(this.radioButtonConcQ0);
-			this.groupBoxConc.Controls.Add(this.radioButtonConcQ1);
-			this.groupBoxConc.Controls.Add(this.radioButtonConcQ2);
+			this.groupBoxConc.Controls.Add(this.radioButConcQ0);
+			this.groupBoxConc.Controls.Add(this.radioButConcQ1);
+			this.groupBoxConc.Controls.Add(this.radioButConcQ2);
 			this.groupBoxConc.Controls.Add(this.labelConcQ0);
 			this.groupBoxConc.Controls.Add(this.labelConcQ1);
 			this.groupBoxConc.Controls.Add(this.labelConcQ2);
@@ -532,38 +539,38 @@ namespace OpenDental{
 			this.groupBoxConc.TabStop = false;
 			this.groupBoxConc.Text = "Consciousness";
 			// 
-			// radioButtonConcQ0
+			// radioButConcQ0
 			// 
-			this.radioButtonConcQ0.AutoSize = true;
-			this.radioButtonConcQ0.Location = new System.Drawing.Point(310, 50);
-			this.radioButtonConcQ0.Name = "radioButtonConcQ0";
-			this.radioButtonConcQ0.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonConcQ0.TabIndex = 5;
-			this.radioButtonConcQ0.TabStop = true;
-			this.radioButtonConcQ0.Text = "0";
-			this.radioButtonConcQ0.UseVisualStyleBackColor = true;
+			this.radioButConcQ0.AutoSize = true;
+			this.radioButConcQ0.Location = new System.Drawing.Point(310, 50);
+			this.radioButConcQ0.Name = "radioButConcQ0";
+			this.radioButConcQ0.Size = new System.Drawing.Size(31, 17);
+			this.radioButConcQ0.TabIndex = 5;
+			this.radioButConcQ0.TabStop = true;
+			this.radioButConcQ0.Text = "0";
+			this.radioButConcQ0.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonConcQ1
+			// radioButConcQ1
 			// 
-			this.radioButtonConcQ1.AutoSize = true;
-			this.radioButtonConcQ1.Location = new System.Drawing.Point(310, 30);
-			this.radioButtonConcQ1.Name = "radioButtonConcQ1";
-			this.radioButtonConcQ1.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonConcQ1.TabIndex = 4;
-			this.radioButtonConcQ1.TabStop = true;
-			this.radioButtonConcQ1.Text = "1";
-			this.radioButtonConcQ1.UseVisualStyleBackColor = true;
+			this.radioButConcQ1.AutoSize = true;
+			this.radioButConcQ1.Location = new System.Drawing.Point(310, 30);
+			this.radioButConcQ1.Name = "radioButConcQ1";
+			this.radioButConcQ1.Size = new System.Drawing.Size(31, 17);
+			this.radioButConcQ1.TabIndex = 4;
+			this.radioButConcQ1.TabStop = true;
+			this.radioButConcQ1.Text = "1";
+			this.radioButConcQ1.UseVisualStyleBackColor = true;
 			// 
-			// radioButtonConcQ2
+			// radioButConcQ2
 			// 
-			this.radioButtonConcQ2.AutoSize = true;
-			this.radioButtonConcQ2.Location = new System.Drawing.Point(310, 11);
-			this.radioButtonConcQ2.Name = "radioButtonConcQ2";
-			this.radioButtonConcQ2.Size = new System.Drawing.Size(31, 17);
-			this.radioButtonConcQ2.TabIndex = 3;
-			this.radioButtonConcQ2.TabStop = true;
-			this.radioButtonConcQ2.Text = "2";
-			this.radioButtonConcQ2.UseVisualStyleBackColor = true;
+			this.radioButConcQ2.AutoSize = true;
+			this.radioButConcQ2.Location = new System.Drawing.Point(310, 11);
+			this.radioButConcQ2.Name = "radioButConcQ2";
+			this.radioButConcQ2.Size = new System.Drawing.Size(31, 17);
+			this.radioButConcQ2.TabIndex = 3;
+			this.radioButConcQ2.TabStop = true;
+			this.radioButConcQ2.Text = "2";
+			this.radioButConcQ2.UseVisualStyleBackColor = true;
 			// 
 			// labelConcQ0
 			// 
@@ -601,7 +608,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(129, 659);
+			this.butPrint.Location = new System.Drawing.Point(129, 669);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(88, 26);
 			this.butPrint.TabIndex = 150;
@@ -616,7 +623,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(479, 662);
+			this.butOK.Location = new System.Drawing.Point(479, 669);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(89, 24);
 			this.butOK.TabIndex = 3;
@@ -633,17 +640,62 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(398, 662);
+			this.butCancel.Location = new System.Drawing.Point(398, 669);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// radioButDischAmbulance
+			// 
+			this.radioButDischAmbulance.AutoSize = true;
+			this.radioButDischAmbulance.Location = new System.Drawing.Point(169, 21);
+			this.radioButDischAmbulance.Name = "radioButDischAmbulance";
+			this.radioButDischAmbulance.Size = new System.Drawing.Size(154, 17);
+			this.radioButDischAmbulance.TabIndex = 5;
+			this.radioButDischAmbulance.TabStop = true;
+			this.radioButDischAmbulance.Text = "Transported via ambulance";
+			this.radioButDischAmbulance.UseVisualStyleBackColor = true;
+			// 
+			// groupBoxDischCond
+			// 
+			this.groupBoxDischCond.Controls.Add(this.radioButDischCondUnstable);
+			this.groupBoxDischCond.Controls.Add(this.radioButDischCondStable);
+			this.groupBoxDischCond.Location = new System.Drawing.Point(365, 537);
+			this.groupBoxDischCond.Name = "groupBoxDischCond";
+			this.groupBoxDischCond.Size = new System.Drawing.Size(161, 61);
+			this.groupBoxDischCond.TabIndex = 9;
+			this.groupBoxDischCond.TabStop = false;
+			this.groupBoxDischCond.Text = "Discharge condition";
+			// 
+			// radioButDischCondUnstable
+			// 
+			this.radioButDischCondUnstable.AutoSize = true;
+			this.radioButDischCondUnstable.Location = new System.Drawing.Point(81, 21);
+			this.radioButDischCondUnstable.Name = "radioButDischCondUnstable";
+			this.radioButDischCondUnstable.Size = new System.Drawing.Size(67, 17);
+			this.radioButDischCondUnstable.TabIndex = 4;
+			this.radioButDischCondUnstable.TabStop = true;
+			this.radioButDischCondUnstable.Text = "Unstable";
+			this.radioButDischCondUnstable.UseVisualStyleBackColor = true;
+			this.radioButDischCondUnstable.CheckedChanged += new System.EventHandler(this.radioButDischUnstable_CheckedChanged);
+			// 
+			// radioButDischCondStable
+			// 
+			this.radioButDischCondStable.AutoSize = true;
+			this.radioButDischCondStable.Location = new System.Drawing.Point(20, 21);
+			this.radioButDischCondStable.Name = "radioButDischCondStable";
+			this.radioButDischCondStable.Size = new System.Drawing.Size(55, 17);
+			this.radioButDischCondStable.TabIndex = 3;
+			this.radioButDischCondStable.TabStop = true;
+			this.radioButDischCondStable.Text = "Stable";
+			this.radioButDischCondStable.UseVisualStyleBackColor = true;
+			// 
 			// FormAnesthesiaScore
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725, 695);
+			this.ClientSize = new System.Drawing.Size(626, 707);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.textBoxDate);
 			this.Controls.Add(this.labelDate);
@@ -673,6 +725,8 @@ namespace OpenDental{
 			this.groupBoxColor.PerformLayout();
 			this.groupBoxConc.ResumeLayout(false);
 			this.groupBoxConc.PerformLayout();
+			this.groupBoxDischCond.ResumeLayout(false);
+			this.groupBoxDischCond.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -693,43 +747,47 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textBoxPARSSTotal;
 		private System.Windows.Forms.Label labelTotal;
 		private System.Windows.Forms.GroupBox groupBoxCirc;
-		private System.Windows.Forms.RadioButton radioButtonCircQ0;
-		private System.Windows.Forms.RadioButton radioButtonCircQ1;
-		private System.Windows.Forms.RadioButton radioButtonCircQ2;
+		private System.Windows.Forms.RadioButton radioButCircQ0;
+		private System.Windows.Forms.RadioButton radioButCircQ1;
+		private System.Windows.Forms.RadioButton radioButCircQ2;
 		private System.Windows.Forms.Label labelCircQ0;
 		private System.Windows.Forms.Label labelCircQ1;
 		private System.Windows.Forms.Label labelCircQ2;
 		private System.Windows.Forms.GroupBox groupBoxResp;
-		private System.Windows.Forms.RadioButton radioButtonRespQ0;
-		private System.Windows.Forms.RadioButton radioButtonRespQ1;
-		private System.Windows.Forms.RadioButton radioButtonRespQ2;
+		private System.Windows.Forms.RadioButton radioButRespQ0;
+		private System.Windows.Forms.RadioButton radioButRespQ1;
+		private System.Windows.Forms.RadioButton radioButRespQ2;
 		private System.Windows.Forms.Label labelRespQ0;
 		private System.Windows.Forms.Label labelRespQ1;
 		private System.Windows.Forms.Label labelRespQ2;
 		private System.Windows.Forms.GroupBox groupBoxActivity;
-		private System.Windows.Forms.RadioButton radioButtonActivityQ0;
-		private System.Windows.Forms.RadioButton radioButtonActivityQ1;
-		private System.Windows.Forms.RadioButton radioButtonActivityQ2;
+		private System.Windows.Forms.RadioButton radioButActivityQ0;
+		private System.Windows.Forms.RadioButton radioButActivityQ1;
+		private System.Windows.Forms.RadioButton radioButActivityQ2;
 		private System.Windows.Forms.Label labelActivityQ0;
 		private System.Windows.Forms.Label labelActivityQ1;
 		private System.Windows.Forms.Label labelActivityQ2;
 		private System.Windows.Forms.Label labelPARSS;
 		private System.Windows.Forms.GroupBox groupBoxDischargeMethod;
-		private System.Windows.Forms.RadioButton radioButtonDischWheelChr;
-		private System.Windows.Forms.RadioButton radioButtonDischAmb;
+		private System.Windows.Forms.RadioButton radioButDischWheelChr;
+		private System.Windows.Forms.RadioButton radioButDischAmb;
 		private System.Windows.Forms.GroupBox groupBoxColor;
-		private System.Windows.Forms.RadioButton radioButtonColorQ0;
-		private System.Windows.Forms.RadioButton radioButtonColorQ1;
-		private System.Windows.Forms.RadioButton radioButtonColorQ2;
+		private System.Windows.Forms.RadioButton radioButColorQ0;
+		private System.Windows.Forms.RadioButton radioButColorQ1;
+		private System.Windows.Forms.RadioButton radioButColorQ2;
 		private System.Windows.Forms.Label labelColorQ0;
 		private System.Windows.Forms.Label labelColorQ1;
 		private System.Windows.Forms.Label labelColorQ2;
 		private System.Windows.Forms.GroupBox groupBoxConc;
-		private System.Windows.Forms.RadioButton radioButtonConcQ0;
-		private System.Windows.Forms.RadioButton radioButtonConcQ1;
-		private System.Windows.Forms.RadioButton radioButtonConcQ2;
+		private System.Windows.Forms.RadioButton radioButConcQ0;
+		private System.Windows.Forms.RadioButton radioButConcQ1;
+		private System.Windows.Forms.RadioButton radioButConcQ2;
 		private System.Windows.Forms.Label labelConcQ0;
 		private System.Windows.Forms.Label labelConcQ1;
 		private System.Windows.Forms.Label labelConcQ2;
+		private System.Windows.Forms.GroupBox groupBoxDischCond;
+		private System.Windows.Forms.RadioButton radioButDischCondUnstable;
+		private System.Windows.Forms.RadioButton radioButDischCondStable;
+		private System.Windows.Forms.RadioButton radioButDischAmbulance;
 	}
 }

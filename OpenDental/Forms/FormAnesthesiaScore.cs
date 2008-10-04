@@ -25,5 +25,10 @@ namespace OpenDental {
 		{
 
 		}
+
+		private void radioButDischUnstable_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
