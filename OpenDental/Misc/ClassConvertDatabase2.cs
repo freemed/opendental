@@ -644,7 +644,7 @@ namespace OpenDental{
 						SupplierName char(32) NOT NULL,
 						InvoiceNum char(20) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum),
-						INDEX (AnestheticMedNum)
+						INDEX (SupplierName)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
@@ -654,8 +654,7 @@ namespace OpenDental{
 						AnestheticMedName char(20) NOT NULL,
 						AnesthHowSupplied char(20) NOT NULL,
 						QtyOnHand int(5) NOT NULL,
-						PRIMARY KEY (AnestheticMedNum),
-						INDEX (AnestheticMedNum)
+						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
@@ -687,8 +686,7 @@ namespace OpenDental{
 						PhoneExt int(5) NOT NULL,
 						Contact char(32) NOT NULL,
 						Notes text NOT NULL,
-						PRIMARY KEY (SupplierIDNum),
-						INDEX (SupplierName)
+						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);					
 					
@@ -722,8 +720,7 @@ namespace OpenDental{
 						SpO2 int(3) NOT NULL,
 						EtCo2 int(3) NOT NULL,
 						Temp int(3) NOT NULL,
-						PRIMARY KEY (AnestheticRecordNum),
-						INDEX (AnestheticRecordNum)
+						PRIMARY KEY (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
