@@ -554,7 +554,7 @@ namespace OpenDental{
 					//Anesthesia Module Conversions-----------------------------------------------------
 					
 					//field to toggle Anesthesia Module on or off. Turned 'off' by default
-					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','')";
+					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','0 or 1, Toggles Anesthesia Module Off and On. Disabled (0) by default')";
 					General.NonQ(command);
 
 					//individual unique records of delivered anesthetics
