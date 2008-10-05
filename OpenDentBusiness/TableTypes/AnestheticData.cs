@@ -6,36 +6,37 @@ namespace OpenDentBusiness
 	///<summary>Anesthetic data from an Anesthetic Record.</summary>
 	public class AnestheticData{
 		///<summary>Primary key.</summary>
-        public int AnestheticRecordNum;
-        ///<summary>FK to patient.PatNum.</summary>
-		public int AnesthOpen;
-		public int AnesthClose;
-		public int SurgOpen;
-		public int SurgClose;
+        public int AnestheticDataNum;
+        ///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
+		public int AnestheticRecordNum;
+		public DateTime AnesthOpen;
+		public DateTime AnesthClose;
+		public DateTime SurgOpen;
+		public DateTime SurgClose;
 		public string Anesthetist; //data from OD provider list
 		public string Surgeon; //data from OD provider list
-		public int Asst; //data from OD provider list
-		public int Circulator; //data from OD provider list
-		public int AnestheticMed;
-		public int Dose;
+		public string Asst; //data from OD provider list
+		public string Circulator; //data from OD provider list
+		public string VSMName;
+		public string VSMSerNum; 
+		public string AnesthMed;
+		public float AnesthDose;
 		public DateTime DoseTimeStamp;
-		public string VSM;
-		public string VSMSerialNum;
-		public string BP;
-		public int HR;
-		public int SPO2;
-		public int EtCO2;
-		public int Temp;
 		public string ASA;
-		public int InhO2;
+		public char ASA_EModifier;
+		public bool InhO2;
+		public bool InhN20;
 		public int O2Lmin;
-		public int InhN20;
 		public int N20Lmin;
-		public bool RteNasHood;
 		public bool RteNasCan;
+		public bool RteNasHood;
 		public bool RteETT;
-		public bool IVCath;
-		public bool IVButFly;
+		public bool MedRouteIVCath;
+		public bool MedRouteIVButFly;
+		public bool MedRouteIM;
+		public bool MedRoutePO;
+		public bool MedRouteNasal;
+		public bool MedRouteRectal;
 		public string IVSite;
 		public int IVGauge;
 		public bool IVSiteR;
@@ -44,13 +45,18 @@ namespace OpenDentBusiness
 		public string IVF;
 		public int IVFVol;
 		public string Notes;
-		public string PatWgt;
+		public int PatWgt;
+		public bool WgtUnitLbs;
+		public bool WgtUnitKgs;
 		public string PatHgt;
 		public string EscortName;
+		public string EscortCellNum;
 		public string EscortRel;
 		public string NPOTime;
-		//public string SigBox;
+		public bool SigIsTopaz;
+		public string SigBox;
 
+		
 	}
 
 

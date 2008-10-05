@@ -135,6 +135,9 @@ namespace OpenDental
 		private Label label2;
 		private OpenDental.UI.Button butWasteQty;
 		private PrintDialog printDialog;
+		private System.Drawing.Printing.PrintDocument pd2;
+		private System.Windows.Forms.PrintDialog printDialog2;
+		private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
 		private DataGridViewTextBoxColumn AnestheticMed;
 		private DataGridViewTextBoxColumn AnesthDose;
 		private DataGridViewTextBoxColumn AnesthTimeStamp;
@@ -2102,7 +2105,53 @@ namespace OpenDental
 
 		private void butPrint_Click(object sender, EventArgs e)
 		{
+			//pagesPrinted=0;
+			pd2=new PrintDocument();
+			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
+			pd2.OriginAtMargins=true;
+			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			//if(!Printers.SetPrinter(pd2,PrintSituation.TPPerio)){
+				//return;
+			//}
 
+			/*
+			printDialog2=new PrintDialog();
+			printDialog2.PrinterSettings=new PrinterSettings();
+			printDialog2.PrinterSettings.PrinterName=Computers.Cur.PrinterName;
+			if(printDialog2.ShowDialog()!=DialogResult.OK){
+				return;
+			}
+			if(printDialog2.PrinterSettings.IsValid){
+				pd2.PrinterSettings=printDialog2.PrinterSettings;
+			}
+			//uses default printer if selected printer not valid
+			*/
+			try{
+				pd2.Print();
+			}
+			catch{
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+			
+		}
+
+		private void pd2_PrintPage(object sender, PrintPageEventArgs ev)
+		{//raised for each page to be printed.
+			Graphics grfx = ev.Graphics;
+			//MessageBox.Show(grfx.
+			float yPos = 67 + 25 + 20 + 20 + 6;
+			float xPos = 100;
+			grfx.TranslateTransform(xPos, yPos);
+			//gridP.DrawChart(grfx);//have to print graphics first, or they cover up title.
+			grfx.TranslateTransform(-xPos, -yPos);
+			yPos = 67;
+			xPos = 100;
+			Font font = new Font("Arial", 9);
+			StringFormat format = new StringFormat();
+			format.Alignment = StringAlignment.Center;
+			//pagesPrinted++;
+			ev.HasMorePages = false;
+			grfx.Dispose();
 		}
 
 		private void label3_Click(object sender, EventArgs e)
