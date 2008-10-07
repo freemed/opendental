@@ -6,7 +6,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		private bool isNew;
+		//private bool isNew;
 
 		/// <summary>
 		/// Clean up any resources being used.

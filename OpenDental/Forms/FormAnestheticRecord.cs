@@ -15,6 +15,7 @@ namespace OpenDental
 	public class FormAnestheticRecord : System.Windows.Forms.Form
 	{
 		private AnestheticRecord AnestheticRecordCur;
+		private AnestheticData AnestheticDataCur;
 		private Patient PatCur;
 		private TextBox textPatient;
 		private Label labelPatient;
@@ -150,7 +151,7 @@ namespace OpenDental
 		private RadioButton radioButMedRoutePO;
 		private RadioButton radioButMedRouteRectal;
 		private RadioButton radioButMedRouteNasal;
-		private Patient patCur;
+		
 		
 
 
@@ -2349,7 +2350,28 @@ namespace OpenDental
 
 		private void butOK_Click(object sender, EventArgs e)
 		{
-			DialogResult = DialogResult.OK;
+			//AnestheticData anestheticData;
+			//AnestheticDataCur.AnesthOpen = textAnesthOpen.Text;
+			
+			/*try
+			{
+				if (IsNew)
+				{
+					AnestheticData.Insert(AnestheticDataCur);
+				}
+				else
+				{
+					AnestheticData.Update(AnestheticDataCur);
+				}
+				
+			}
+			catch (ApplicationException ex)
+			{
+				MessageBox.Show(ex.Message);
+				return;
+			}
+
+			DialogResult = DialogResult.OK;*/
 		}
 
 		private void button1_Click(object sender, EventArgs e)

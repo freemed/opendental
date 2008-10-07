@@ -3,16 +3,16 @@
 namespace OpenDentBusiness
 {
 
-	///<summary>Anesthetic data from an Anesthetic Record.</summary>
-	public class AnestheticData{
+	///<summary>Anesthetic data from a single Anesthetic Record.</summary>
+		public class AnestheticData{
 		///<summary>Primary key.</summary>
         public int AnestheticDataNum;
         ///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
 		public int AnestheticRecordNum;
-		public DateTime AnesthOpen;
-		public DateTime AnesthClose;
-		public DateTime SurgOpen;
-		public DateTime SurgClose;
+		public string AnesthOpen;
+		public string AnesthClose;
+		public string SurgOpen;
+		public string SurgClose;
 		public string Anesthetist; //data from OD provider list
 		public string Surgeon; //data from OD provider list
 		public string Asst; //data from OD provider list
