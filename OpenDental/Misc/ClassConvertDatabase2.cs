@@ -637,16 +637,16 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
-					//a list of anesthetic medications taken into inventory from a Supplier. Qtys are always in milliLiters so inventory count works properly.
+					//a list of DEA scheduled anesthetic medications taken into inventory from a Supplier. Qtys are always in milliLiters so inventory count works properly.
 					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
 						AnestheticMedName char (20) NOT NULL,
+                        DEASchedule char(2)NOT NULL,
 						Qty int(6) NOT NULL, 
-						SupplierName char(32) NOT NULL,
+						SupplierIDNum char(11) NOT NULL,
 						InvoiceNum char(20) NOT NULL,
-						PRIMARY KEY (AnestheticMedNum),
-						INDEX (SupplierName)
+						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
