@@ -20,7 +20,13 @@ namespace OpenDental
 
 		private void FormAnestheticMedsIntake_Load(object sender, EventArgs e)
 		{
+			if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+			{
 
+				DialogResult = DialogResult.Cancel;
+				return;
+			}
+		
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e)

@@ -5,61 +5,102 @@ using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDental
+{
 	///<summary></summary>
-	public class Anesthetics {
+	public class Anesthetics
+	{
 
-		///<summary>Refresh Anesthetic Data</summary>
-		/*public static AnestheticData Refresh() {
-			string command = "SELECT * FROM anestheticdata ORDER by AnestheticDataNum";
-			return FillFromCommand(command);
-		}*/
+			///<summary>Gets one commlog item from database.</summary>
+			/*public static AnestheticData GetOne(int AnestheticDataNum)
+			{
+				string command =
+					"SELECT * FROM anestheticdata"
+					+ " WHERE AnestheticDataNum = " + POut.PInt(AnestheticDataNum);
+				AnestheticData[] anestheticDataList = RefreshAndFill(command);
+				if (anestheticDataList.Length == 0)
+				{
+					return null;
+				}
+				return anestheticDataList[0];
+			}
 
-		///<summary>Gets one anesthetic data sheet from database</summary>
-		/*public static AnestheticData GetOne(int anestheticDataNum) {
-			string command="SELECT * FROM anestheticdata WHERE AnestheticDataNum="+POut.PInt(anestheticDataNum);
-			return FillFromCommand(command);
-		}*/
+			private static AnestheticData[] RefreshAndFill(string command)
+			{
 
-		/*private static AnestheticData FillFromCommand(string command){
-			
+				AnestheticData[] List = new AnestheticData();
+				for (int i = 0; i < List.Length; i++)
+				{
+					List[i] = new AnestheticData();
+					List[i].AnestheticDataNum = PIn.PInt(anesthOpen.ToString());
+					
+				}
+				return List;
 			}*/
-		
 
-}
-		///<summary></summary>
-		/*public static void Insert(AnestheticData AnestheticDataNum){
-			if(PrefC.RandomKeys) {
-				anestheticData.AnestheticDataNum=MiscData.GetKey("anestheticDataNum","AnestheticDataNum");
-			}
-			string command="INSERT INTO anestheticdata (";
-			if(PrefC.RandomKeys) {
-				command+="AnestheticDataNum,";
-			}
+			///<summary></summary>
+			/*public static void Insert(AnestheticData anestheticDataNum)
+			{
+				if (PrefC.RandomKeys)
+				{
+					anestheticDataNum.AnestheticDataNum = MiscData.GetKey("anestheticData", "AnestheticDataNum");
+				}
+				string command = "INSERT INTO anestheticData (";
+				if (PrefC.RandomKeys)
+				{
+					command += "AnestheticDataNum,";
+				}
+				command += "AnesthOpen) VALUES(";
+				if (PrefC.RandomKeys)
+				{
+					command += "'" + POut.PInt(AnestheticData.anestheticDataNum) + "', ";
+				}
+				command +=
+					 "'" + POut.PInt(AnestheticData.AnestheticDataNum) + "', "
+					+ POut.PDateT(AnestheticData.AnesthOpen) + ", ";
+					/*+ "'" + POut.PInt(comm.CommType) + "', "
+					+ "'" + POut.PString(comm.Note) + "', "
+					+ "'" + POut.PInt((int)comm.Mode_) + "', "
+					+ "'" + POut.PInt((int)comm.SentOrReceived) + "', "
+					//+"'"+POut.PBool  (comm.IsStatementSent)+"', "
+					+ "'" + POut.PInt(comm.UserNum) + "')";
+				if (PrefC.RandomKeys)
+				{
+					General.NonQ(command);
+				}
+				else
+				{
+					AnestheticData.AnestheticDataNum = General.NonQ(command, true);
+				}
+			}*/
 
-			if(PrefC.RandomKeys) {
+			///<summary></summary>
+			/*public static void Update(Commlog comm)
+			{
+				string command = "UPDATE commlog SET "
+					+ "PatNum = '" + POut.PInt(comm.PatNum) + "', "
+					+ "CommDateTime= " + POut.PDateT(comm.CommDateTime) + ", "
+					+ "CommType = '" + POut.PInt(comm.CommType) + "', "
+					+ "Note = '" + POut.PString(comm.Note) + "', "
+					+ "Mode_ = '" + POut.PInt((int)comm.Mode_) + "', "
+					+ "SentOrReceived = '" + POut.PInt((int)comm.SentOrReceived) + "', "
+					//+"IsStatementSent = '"+POut.PBool  (comm.IsStatementSent)+"', "
+					+ "UserNum = '" + POut.PInt(comm.UserNum) + "' "
+					+ "WHERE commlognum = '" + POut.PInt(comm.CommlogNum) + "'";
 				General.NonQ(command);
 			}
-			else {
-				anestheticDataNum.AnestheticDataNum=General.NonQ(command,true);
-			}
-		}*/
 
-		///<summary></summary>
-		/*public static void Update(AnestheticData anestheticData){
-			string command= "UPDATE anestheticData SET " 
-				+ "AnesthOpen = '"    +POut.PString(anestheticData.AnesthOpen )+"'"
-				//+ ",Phone = '"         +POut.PString(lab.Phone)+"'"
-				//+ ",Notes = '"         +POut.PString(lab.Notes)+"'"
-				//+ ",LabSlip = '"       +POut.PString(lab.LabSlip)+"'"
-				+" WHERE AnestheticDataNum = '" +POut.PInt(anestheticData.AnestheticDataNum)+"'";
- 			General.NonQ(command);
-		}*/
+			///<summary></summary>
+			public static void Delete(Commlog comm)
+			{
+				string command = "DELETE FROM commlog WHERE CommLogNum = '" + POut.PInt(comm.CommlogNum) + "'";
+				General.NonQ(command);
+			}*/
+	}
 
-
-	
-		
 }
+
+
 
 
 

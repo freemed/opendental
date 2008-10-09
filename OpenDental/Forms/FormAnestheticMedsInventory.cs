@@ -13,6 +13,7 @@ namespace OpenDental
 	public partial class FormAnestheticMedsInventory : Form
 	{
 		private GroupBox groupAnestheticMeds;
+		public bool IsNew;
 		private OpenDental.UI.Button butEditAnesthMeds;
 		private OpenDental.UI.Button butAddAnesthMeds;
 		private OpenDental.UI.Button butClose;
@@ -223,6 +224,12 @@ namespace OpenDental
 
 		}
 
+
+		private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
+		{
+
+
+		}
 		private void butAddAnesthMeds_Click(object sender, EventArgs e)
 		{
 			FormAnestheticMedsEdit FormE = new FormAnestheticMedsEdit();
@@ -244,8 +251,23 @@ namespace OpenDental
 
 		private void butAnesthMedIntake_Click(object sender, EventArgs e)
 		{
-			FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
-			FormI.ShowDialog();
+			
+				if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+				{
+
+					butAnesthMedIntake.Enabled = false;
+					return;
+				}
+			
+			else
+			{
+				FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
+				FormI.ShowDialog();
+				
+				
+			
+			} 
+			
 		}
 
 		private void labelIntakeNewMeds_Click(object sender, EventArgs e)
@@ -255,8 +277,17 @@ namespace OpenDental
 
 		private void butAdjustQtys_Click(object sender, EventArgs e)
 		{
+			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
+
+				butAdjustQtys.Enabled = false;
+				return;
+			}
+
+			else {
 			FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
 			FormA.ShowDialog();
+			}
+
 		}
 
 		private void butClose_Click(object sender, EventArgs e)

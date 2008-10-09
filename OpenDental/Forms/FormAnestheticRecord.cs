@@ -1107,7 +1107,7 @@ namespace OpenDental
             this.textVSMSerNum.Size = new System.Drawing.Size(88, 20);
             this.textVSMSerNum.TabIndex = 132;
             // 
-            // dataGridVS
+            // dataGridVS - this will be reworked as an ODGrid
             // 
             this.dataGridVS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridVS.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -1120,8 +1120,9 @@ namespace OpenDental
             this.dataGridVS.Name = "dataGridVS";
             this.dataGridVS.Size = new System.Drawing.Size(542, 141);
             this.dataGridVS.TabIndex = 131;
-            this.dataGridVS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridVS_CellContentClick);
-            // 
+            //this.dataGridVS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridVS_CellContentClick);
+            
+			// 
             // BP
             // 
             this.BP.HeaderText = "BP";
@@ -1872,17 +1873,6 @@ namespace OpenDental
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
 
-
-			//display Patient Escort Cell # & do some formatting
-			//string escortphone = EscortCellNum;
-			//if (escortphone != null && escortphone.Length == 10 && Application.CurrentCulture.Name == "en-US")
-			//{
-			//	textEscortCellNum.Text = "(" + escortphone.Substring(0, 3) + ")" + escortphone.Substring(3, 3) + "-" + escortphone.Substring(6);
-			//}
-			//else
-			//{
-				//textEscortCellNum.Text = escortphone;
-			//}
 			string escortphone = textEscortCellNum.Text;
 
 			if (escortphone != null && escortphone.Length == 10 && Application.CurrentCulture.Name == "en-US")
@@ -2157,25 +2147,11 @@ namespace OpenDental
 
 		}
 
-		/*private void dataGridAnestheticMeds_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}*/
-
-        /*private void dataGridAnestheticMeds_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-{
-
-}       */
-		private void dataGridVS_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
 
 		private void groupBox5_Enter(object sender, EventArgs e)
 		{
 
 		}
-
 
 
 		private void textBoxPatHgt_TextChanged(object sender, EventArgs e)
@@ -2343,33 +2319,32 @@ namespace OpenDental
 
 		private void butClose_Click(object sender, EventArgs e)
 		{
-			Close();
+			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
+
+				butClose.Enabled = false;
+				return;
+			}
+
+			else{
+				
+				Close();
+			}
+			
 		}
 
 		private void butOK_Click(object sender, EventArgs e)
 		{
-			//AnestheticData anestheticData;
-			//AnestheticDataCur.AnesthOpen = textAnesthOpen.Text;
-			
-			/*try
+
+			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
 			{
-				if (IsNew)
-				{
-					AnestheticData.Insert(AnestheticDataCur);
-				}
-				else
-				{
-					AnestheticData.Update(AnestheticDataCur);
-				}
-				
-			}
-			catch (ApplicationException ex)
-			{
-				MessageBox.Show(ex.Message);
+
+				butOK.Enabled = false;
 				return;
 			}
 
-			DialogResult = DialogResult.OK;*/
+			else
+			{ }
+				
 		}
 
 		private void button1_Click(object sender, EventArgs e)

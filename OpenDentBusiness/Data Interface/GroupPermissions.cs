@@ -159,6 +159,10 @@ namespace OpenDentBusiness{
 					return Lan.g("enumPermissions","Reports");
 				case Permissions.RxCreate:
 					return Lan.g("enumPermissions","Rx Create");
+				case Permissions.AnesthesiaIntakeMeds:
+					return Lan.g("enumPermissions", "Intake Anesthetic Medications into Inventory");
+				case Permissions.AnesthesiaControlMeds:
+					return Lan.g("enumPermissions", "Edit Anesthetic Records; Edit/Adjust Inventory Counts");
 				case Permissions.Schedules:
 					return Lan.g("enumPermissions","Schedules - Practice and Provider");
 				case Permissions.SecurityAdmin:

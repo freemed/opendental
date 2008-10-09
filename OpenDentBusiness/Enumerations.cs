@@ -977,7 +977,12 @@ namespace OpenDentBusiness{
 		///<summary>32</summary>
 		AccountingCreate,
 		///<summary>33</summary>
-		Accounting
+		Accounting,
+		///<summary>34</summary>
+		AnesthesiaIntakeMeds,
+		///<summary>35</summary>
+		AnesthesiaControlMeds
+
 	}
 
 	///<summary>The type of signal being sent.</summary>

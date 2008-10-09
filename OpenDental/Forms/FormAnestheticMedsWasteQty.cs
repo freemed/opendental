@@ -45,7 +45,16 @@ namespace OpenDental
 
 		private void butClose_Click(object sender, EventArgs e)
 		{
+			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
+			{
 
+				butClose.Enabled = false;
+				return;
+			}
+
+			else
+			{ }
+				
 		}
 
 		private void groupBox1_Enter(object sender, EventArgs e)

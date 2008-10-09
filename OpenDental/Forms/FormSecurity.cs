@@ -347,9 +347,15 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ProcComplEdit);
 						node2.Nodes.Add(node3);
+						node.Nodes.Add(node2);
+					node2=SetNode(Permissions.RxCreate);
 					node.Nodes.Add(node2);
-				node2=SetNode(Permissions.RxCreate);
-					node.Nodes.Add(node2);
+				node2 = SetNode("Anesthesia");
+					node3 = SetNode(Permissions.AnesthesiaIntakeMeds);
+						node2.Nodes.Add(node3);
+					node3 = SetNode(Permissions.AnesthesiaControlMeds);
+						node2.Nodes.Add(node3);
+						node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ImagesModule);
 				treePermissions.Nodes.Add(node);

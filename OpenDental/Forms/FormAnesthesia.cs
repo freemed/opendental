@@ -33,12 +33,14 @@ namespace OpenDental {
 
 		private void butAnestheticRecord_Click(object sender, EventArgs e)
 		{
-			FormAnestheticRecord FormAR=new FormAnestheticRecord(PatCur);
-			FormAR.ShowDialog();
+				FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur);
+				FormAR.ShowDialog();
+			
 		}
 
 		private void butAnestheticInventory_Click(object sender, EventArgs e)
 		{
+
 			FormAnestheticMedsInventory FormMI = new FormAnestheticMedsInventory();
 			FormMI.ShowDialog();
 		}
