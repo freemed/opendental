@@ -277,15 +277,16 @@ namespace OpenDental
 
 		private void butAdjustQtys_Click(object sender, EventArgs e)
 		{
-			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
-
-				butAdjustQtys.Enabled = false;
-				return;
+			if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
+			    FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+			    FormA.ShowDialog();
+                
 			}
 
 			else {
-			FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
-			FormA.ShowDialog();
+                
+                return;
+
 			}
 
 		}

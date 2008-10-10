@@ -2313,23 +2313,22 @@ namespace OpenDental
 
 		private void butWasteQty_Click(object sender, EventArgs e)
 		{
+            FormAnesthSecurity FormAS = new FormAnesthSecurity();
+            FormAS.ShowDialog();
 			FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
 			FormW.ShowDialog();
 		}
 
 		private void butClose_Click(object sender, EventArgs e)
 		{
-			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
+			if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
 
-				butClose.Enabled = false;
+                Close();
 				return;
 			}
 
-			else{
-				
 				Close();
-			}
-			
+	
 		}
 
 		private void butOK_Click(object sender, EventArgs e)
