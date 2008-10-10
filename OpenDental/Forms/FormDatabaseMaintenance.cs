@@ -611,6 +611,9 @@ namespace OpenDental {
 				"UPDATE adjustment SET AdjDate='0001-01-01' WHERE AdjDate='0000-00-00'"
 				,"UPDATE adjustment SET DateEntry='1980-01-01' WHERE DateEntry<'1980'"
 				,"UPDATE appointment SET AptDateTime='0001-01-01 00:00:00' WHERE AptDateTime LIKE '0000-00-00%'"
+				,"UPDATE appointment SET DateTimeArrived='0001-01-01 00:00:00' WHERE DateTimeArrived LIKE '0000-00-00%'"
+				,"UPDATE appointment SET DateTimeSeated='0001-01-01 00:00:00' WHERE DateTimeSeated LIKE '0000-00-00%'"
+				,"UPDATE appointment SET DateTimeDismissed='0001-01-01 00:00:00' WHERE DateTimeDismissed LIKE '0000-00-00%'"
 				,"UPDATE claim SET DateService='0001-01-01' WHERE DateService='0000-00-00'"
 				,"UPDATE claim SET DateSent='0001-01-01' WHERE DateSent='0000-00-00'"
 				,"UPDATE claim SET DateReceived='0001-01-01' WHERE DateReceived='0000-00-00'"
@@ -883,7 +886,7 @@ namespace OpenDental {
 		}
 
 		private void ClaimProcDateNotMatchCapComplete() {
-			command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7";
+			command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Capitation procs with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
