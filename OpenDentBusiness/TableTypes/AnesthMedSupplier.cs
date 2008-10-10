@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		[DataField("SupplierID")]
 		private string supplierID;
 		private bool supplierIDChanged;
-		///<summary>NCPDPID assigned by NCPDP.  Not used yet.</summary>
+		///<summary>The Supplier's unique ID.</summary>
 		public string SupplierID{
 			get{return SupplierID;}
 			set { if (supplierID != value) { supplierID = value; MarkDirty(); supplierIDChanged = true; } }
