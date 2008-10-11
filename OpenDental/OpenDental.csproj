@@ -218,6 +218,7 @@
     <Compile Include="Data Interface\AutoCodeItemL.cs" />
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
     <Compile Include="Data Interface\Anesthetics.cs" />
+    <Compile Include="Data Interface\AnestheticMeds.cs" />
     <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovSpanL.cs" />

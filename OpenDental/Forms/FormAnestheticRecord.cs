@@ -142,7 +142,7 @@ namespace OpenDental
         private TextBox textPatWgt;
         private ODGrid gridVitalSigns;
 		private RadioButton radioButMedRouteNasal;
-		
+		private List<AnestheticMedsGiven> listAnestheticMedsGiven;
 		
 
 
@@ -1798,6 +1798,7 @@ namespace OpenDental
 		}
 		public FormAnestheticRecord(Patient patCur)
 		{
+			
 			//
 			// Required for Windows Form Designer support
 			//
@@ -1883,7 +1884,10 @@ namespace OpenDental
 
         private void FillGridAnesthMeds()
         {
-            //AnestheticMedsGiven.RefreshCache();
+			
+
+			//listAnestheticMedsGiven = AnestheticMedsGiven.CreateObjects();
+            //AnestheticMedsGiven.RefreshCache(); //Don't know if we need this
             gridAnesthMeds.BeginUpdate();
             gridAnesthMeds.Columns.Clear();
             ODGridColumn col = new ODGridColumn(Lan.g("TableAnestheticData", "Medication"), 130);
