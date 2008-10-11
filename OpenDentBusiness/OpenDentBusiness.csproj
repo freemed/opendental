@@ -88,6 +88,7 @@
     <Compile Include="Cache\ClaimFormItemC.cs" />
     <Compile Include="Cache\AnesthMedSupplierC.cs" />
     <Compile Include="Cache\AnestheticDataC.cs" />
+    <Compile Include="Cache\AnestheticMedsGivenC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
     <Compile Include="Cache\RecallTypeC.cs" />
@@ -217,7 +218,11 @@
     </Compile>
     <Compile Include="RemotingClient.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs" />
+    <Compile Include="TableTypes\AnestheticData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TableTypes\AnesthMedSupplier.cs" />
+    <Compile Include="TableTypes\AnestheticMedsGiven.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />
@@ -263,7 +268,6 @@
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
-    <Compile Include="TableTypes\AnestheticData.cs" />
     <Compile Include="TableTypes\SheetField.cs" />
     <Compile Include="TableTypes\Files.cs" />
     <Compile Include="TableTypes\Pharmacy.cs" />

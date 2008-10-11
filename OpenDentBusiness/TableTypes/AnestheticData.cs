@@ -19,9 +19,6 @@ namespace OpenDentBusiness
 		public string Circulator; //data from OD provider list
 		public string VSMName;
 		public string VSMSerNum; 
-		public string AnesthMed;
-		public float AnesthDose;
-		public DateTime DoseTimeStamp;
 		public string ASA;
 		public char ASA_EModifier;
 		public bool InhO2;

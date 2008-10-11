@@ -582,10 +582,7 @@ namespace OpenDental{
 						Asst char(32) NOT NULL,
 						Circulator char(32) NOT NULL,						
 						VSMName char(20) NOT NULL,
-						VSMSerNum char(20) NOT NULL,
-						AnesthMed char(32) NOT NULL,
-						AnesthDose float(7) NOT NULL,
-						DoseTimeStamp datetime	NOT NULL,					
+						VSMSerNum char(20) NOT NULL,					
 						ASA char(3) NOT NULL,
 						ASA_EModifier char(1) NOT NULL,					
 						InhO2 tinyint(1) NOT NULL,
@@ -628,9 +625,10 @@ namespace OpenDental{
 					command = @"CREATE TABLE anesthmedsgiven(
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
 						AnestheticMedNum int(3) NOT NULL,
-						AnestheticMedName char (20) NOT NULL,
+						AnesthMed char (20) NOT NULL,
 						AnesthHowSupplied char(16) NOT NULL,
 						QtyGiven int(4) NOT NULL,
+						QtyWasted int(4) NOT NULL,
 						TimeStamp datetime NOT NULL,
 						PRIMARY KEY (AnestheticRecordNum),
 						INDEX (AnestheticMedNum)
