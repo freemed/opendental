@@ -624,12 +624,12 @@ namespace OpenDental{
 					//a list of anesthetic medications to be delivered to a patient
 					command = @"CREATE TABLE anesthmedsgiven(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
-						AnestheticRecordNum int(3) NOT NULL,
+						AnestheticRecordNum int(11) NOT NULL,
 						AnesthMed char (20) NOT NULL,
 						QtyGiven int(4) NOT NULL,
 						QtyWasted int(4) NOT NULL,
-						TimeStamp datetime NOT NULL,
-						PRIMARY KEY (AnestheticRecordNum),
+						DoseTimeStamp datetime NOT NULL,
+						PRIMARY KEY (AnestheticMedNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
@@ -638,7 +638,7 @@ namespace OpenDental{
 					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
-						AnestheticMedName char (20) NOT NULL,
+						AnestheticMed char (20) NOT NULL,
                         DEASchedule char(2)NOT NULL,
 						Qty int(6) NOT NULL, 
 						SupplierIDNum char(11) NOT NULL,
@@ -650,7 +650,7 @@ namespace OpenDental{
 					//fields required to create inventory of anesthetic medications
 					command = @"CREATE TABLE anesthmedsinventory (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
-						AnestheticMedName char(20) NOT NULL,
+						AnestheticMed char(20) NOT NULL,
 						AnesthHowSupplied char(20) NOT NULL,
 						QtyOnHand int(5) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
