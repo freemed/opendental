@@ -623,10 +623,9 @@ namespace OpenDental{
 
 					//a list of anesthetic medications to be delivered to a patient
 					command = @"CREATE TABLE anesthmedsgiven(
-						AnestheticRecordNum int(11) NOT NULL auto_increment,
-						AnestheticMedNum int(3) NOT NULL,
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						AnestheticRecordNum int(3) NOT NULL,
 						AnesthMed char (20) NOT NULL,
-						AnesthHowSupplied char(16) NOT NULL,
 						QtyGiven int(4) NOT NULL,
 						QtyWasted int(4) NOT NULL,
 						TimeStamp datetime NOT NULL,

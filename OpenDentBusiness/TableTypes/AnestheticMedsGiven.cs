@@ -4,9 +4,11 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 
-	///<summary>A company that provides supplies for the office, typically dental supplies.</summary>
+	///<summary>Anesthetic Medications delivered to a patient during an Anesthetic.</summary>
 	[DataObject("anestheticmedsgiven")]
 	public class AnestheticMedsGiven : DataObjectBase {
+
+		
 
 		[DataField("AnesthMedNum", PrimaryKey=true, AutoNumber=true)]
 		private int anesthMedNum;
@@ -19,6 +21,10 @@ namespace OpenDentBusiness{
 		public bool AnesthMedNumChanged {
 			get { return anesthMedNumChanged; }
 		}
+
+		//F.K. table anestheticrecord
+		private int AnestheticRecordNum;
+
 
 		[DataField("AnesthMed")]
 		private string anesthMed;
