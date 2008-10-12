@@ -1817,7 +1817,7 @@ namespace OpenDental {
 			if(ViewingInRecall || PrefC.GetBoolSilent("FuchsOptionsOn",false)) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
-				if(PrefC.GetBool("FuchsOptionsOn")) {//show prog note options
+				if(PrefC.GetBool("FuchsOptionsOn") && PatCur!=null){//show prog note options
 					groupBox6.Visible = true;
 					groupBox7.Visible = true;
 					butShowAll.Visible = true;
