@@ -1281,7 +1281,7 @@ namespace OpenDental{
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
 			PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum;
-			PaymentCur.PatNum=PatCur.PatNum;
+			//PaymentCur.PatNum=PatCur.PatNum;//this is already done before opening this window.
 			if(!comboClinic.Visible || Clinics.List.Length==0 || comboClinic.SelectedIndex==0) {
 				PaymentCur.ClinicNum=0;
 			}
