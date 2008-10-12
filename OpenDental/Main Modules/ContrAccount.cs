@@ -3217,14 +3217,14 @@ namespace OpenDental {
 			stmt.HidePayment=true;
 			stmt.SinglePatient=true;
 			stmt.Intermingled=false;
+			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+				stmt.Intermingled = true;
+				stmt.SinglePatient=false;
+			}
 			stmt.DateRangeFrom=DateTime.Today;
 			stmt.DateRangeTo=DateTime.Today;
 			stmt.Note="";
 			stmt.NoteBold="";
-			if (PrefC.GetBool("IntermingleFamilyDefault"))
-			{
-				stmt.Intermingled = true;
-			}
 			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
