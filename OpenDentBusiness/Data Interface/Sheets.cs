@@ -44,8 +44,12 @@ namespace OpenDentBusiness{
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
 		public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.PInt(patNum)
+				+" AND EXISTS(SELECT * FROM sheetfield "
+				+"WHERE sheet.SheetNum=sheetfield.SheetNum "
+				+"AND sheetfield.FieldType="+POut.PInt((int)SheetFieldType.Parameter)
+				+" AND sheetfield.FieldName='ReferralNum' "
+				+"AND sheetfield.FieldValue='"+POut.PInt(referralNum)+"')"
 				+" ORDER BY DateTimeSheet";
-			//still need to enhance query to filter by referralNum.
 			return new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
 			//Collection<sheetData> collectState=DataObjectFactory<sheetData>.CreateObjects(sheetDataNums);
 			//return new List<sheetData>(collectState);		
