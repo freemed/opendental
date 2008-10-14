@@ -405,6 +405,7 @@ namespace OpenDental{
 			// 
 			// labelDeposit
 			// 
+			this.labelDeposit.ForeColor = System.Drawing.Color.Firebrick;
 			this.labelDeposit.Location = new System.Drawing.Point(32,483);
 			this.labelDeposit.Name = "labelDeposit";
 			this.labelDeposit.Size = new System.Drawing.Size(219,16);
@@ -672,6 +673,8 @@ namespace OpenDental{
 			}
 			else{
 				textDeposit.Text=Deposits.GetOne(PaymentCur.DepositNum).DateDeposit.ToShortDateString();
+				textAmount.ReadOnly=true;
+				textAmount.BackColor=SystemColors.Control;
 			}
 			SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
 			SplitListOld=new List<PaySplit>();
