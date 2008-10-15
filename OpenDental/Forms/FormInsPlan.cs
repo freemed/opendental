@@ -2351,7 +2351,7 @@ namespace OpenDental{
 								}
 								break;
 							case "PLANYR"://eg Calendar year or Anniversary year
-								if(fields[2]!="Calendar year") {
+								if(fields[2]=="Anniversary year") {
 									usesAnnivers=true;
 									MessageBox.Show("Warning.  Plan uses Anniversary year rather than Calendar year.  Please verify the Plan Start Date.");
 								}
@@ -2377,14 +2377,14 @@ namespace OpenDental{
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=amt;
+								ben.MonetaryAmt=0;//amt;
 								benefitList.Add(ben.Copy());
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Deductible;
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-								ben.MonetaryAmt=amt;
+								ben.MonetaryAmt=0;//amt;
 								benefitList.Add(ben.Copy());
 								break;
 							case "PREV"://eg 100%
