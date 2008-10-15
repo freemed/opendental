@@ -24,11 +24,13 @@ namespace OpenDentBusiness{
 		///<summary>FK to tasklist.TaskListNum.  0 if no inbox setup yet.  It is assumed that the TaskList is in the main trunk, but this is not strictly enforced.  User can't delete an attached TaskList, but they could move it.</summary>
 		public int TaskListInBox;
 
+
 		public Userod(){
 
 		}
 
-		/*public Userod(int userNum,string userName,string password,int userGroupNum,int employeeNum,int clinicNum,int provNum,bool isHidden){
+		public Userod(int userNum, string userName, string password, int userGroupNum, int employeeNum, int clinicNum, int provNum, bool isHidden)
+		{ 
 			UserNum=userNum;
 			UserName=userName;
 			Password=password;
@@ -37,7 +39,8 @@ namespace OpenDentBusiness{
 			ClinicNum=clinicNum;
 			ProvNum=provNum;
 			IsHidden=isHidden;
-		}*/
+			
+		}
 		
 		///<summary></summary>
 		public Userod Copy(){

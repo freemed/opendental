@@ -14,6 +14,7 @@ namespace OpenDental
 {
 	public class FormAnestheticRecord : System.Windows.Forms.Form
 	{
+		public static Userod CurUser;
 		private AnestheticRecord AnestheticRecordCur;
 		private AnestheticData AnestheticDataCur;
         private Patient PatCur;
@@ -143,8 +144,8 @@ namespace OpenDental
         private ODGrid gridVitalSigns;
 		private RadioButton radioButMedRouteNasal;
 		private List<AnestheticMedsGiven> listAnestheticMedsGiven;
+		private Userod userNum;
 		
-
 
 		private void InitializeComponent()
 		{
@@ -1946,8 +1947,8 @@ namespace OpenDental
 
             else
             {
-                FormAnesthSecurity FormAS = new FormAnesthSecurity();
-                FormAS.ShowDialog();
+                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();
                 AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
                 RefreshListAnesthetics();
               
@@ -2072,8 +2073,8 @@ namespace OpenDental
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e)
 		{
-            FormAnesthSecurity FormAS = new FormAnesthSecurity();
-            FormAS.ShowDialog();
+            FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+            FormES.ShowDialog();
 
 		}
 
@@ -2303,25 +2304,40 @@ namespace OpenDental
 		}
 
 		private void butWasteQty_Click(object sender, EventArgs e)
-		{
-            FormAnesthSecurity FormAS = new FormAnesthSecurity();
-            FormAS.ShowDialog();
-            return;
-			FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
-			FormW.ShowDialog();
-		}
+        {
 
+                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();
+
+
+				
+				Userod curUser = Security.CurUser;
+
+				if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+				{
+					FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
+					FormW.ShowDialog();
+					return;
+
+				}
+				else DialogResult = DialogResult.Cancel;
+					
+		}
+			
+        
 		private void butClose_Click(object sender, EventArgs e)
 		{
-            if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)) {
+            if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)) 
+            
+            {
 
                 Close();
                 return;
             }
 
             else {
-                FormAnesthSecurity FormAS = new FormAnesthSecurity();
-                FormAS.ShowDialog();
+                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();
 
                 Close();
             }
@@ -2333,15 +2349,15 @@ namespace OpenDental
 
 			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
 			{
-                FormAnesthSecurity FormAS = new FormAnesthSecurity();
-                FormAS.ShowDialog();
+                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();
 				return;
 			}
 
 			else
             {
-                FormAnesthSecurity FormAS = new FormAnesthSecurity();
-                FormAS.ShowDialog();
+                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();
 
             }
 				

@@ -11,7 +11,7 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormAnesthSecurity: System.Windows.Forms.Form{
+	public class FormAnesthElevateSecurityPriv: System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.ListBox listUser;
@@ -27,7 +27,7 @@ namespace OpenDental{
 		private List<Userod> shortList;
 
 		///<summary></summary>
-		public FormAnesthSecurity()
+		public FormAnesthElevateSecurityPriv()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -58,7 +58,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthSecurity));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthElevateSecurityPriv));
             this.butCancel = new OpenDental.UI.Button();
             this.butOK = new OpenDental.UI.Button();
             this.listUser = new System.Windows.Forms.ListBox();
@@ -152,7 +152,7 @@ namespace OpenDental{
             this.labelAdminPrivReq.Text = "Administrative privileges are required for this action. Please enter an administr" +
                 "ative username and password.";
             // 
-            // FormAnesthSecurity
+            // FormElevateSecurityPriv
             // 
             this.AcceptButton = this.butOK;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -168,17 +168,17 @@ namespace OpenDental{
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "FormAnesthSecurity";
+            this.Name = "FormAnesthElevateSecurityPriv";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Administrative privileges required!";
-            this.Load += new System.EventHandler(this.FormAnesthSecurity_Load);
+            this.Load += new System.EventHandler(this.FormAnesthElevateSecurityPriv_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 		#endregion
 
-		private void FormAnesthSecurity_Load(object sender, System.EventArgs e) {
+		private void FormAnesthElevateSecurityPriv_Load(object sender, System.EventArgs e) {
 			FillListBox();
 		}
         
@@ -226,11 +226,16 @@ namespace OpenDental{
                     MsgBox.Show(this, "Incorrect password");
                     return;
                 }
-                if (Userods.CheckPassword(textPassword.Text, selectedUser.Password))
+				//if (selectedUser.UserGroupNum == 1) this works to elevate privs to admin
+                if (GroupPermissions.HasPermission(selectedUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
                 {
                     DialogResult = DialogResult.OK;
+					Security.CurUser = (Userod)listUser.SelectedItem;
                     return;
                 }
+                else
+                    MessageBox.Show(this,"You must be an administrator to unlock this action");
+                    return;
 			}
 			
 			

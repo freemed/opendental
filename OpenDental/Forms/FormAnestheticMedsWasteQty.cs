@@ -45,15 +45,8 @@ namespace OpenDental
 
 		private void butClose_Click(object sender, EventArgs e)
 		{
-			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
-			{
 
-				butClose.Enabled = false;
-				return;
-			}
-
-			else
-			{ }
+			DialogResult = DialogResult.OK;
 				
 		}
 
