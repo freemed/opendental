@@ -2236,8 +2236,10 @@ namespace OpenDental{
 				|| CovCats.GetForEbenCat(EbenefitCategory.Restorative)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Endodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Periodontics)==null
-				|| CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics)==null) {
-				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, and Prosthodontics");
+				|| CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics)==null
+				|| CovCats.GetForEbenCat(EbenefitCategory.Crowns)==null
+				|| CovCats.GetForEbenCat(EbenefitCategory.OralSurgery)==null) {
+				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, Crowns, OralSurgery, and Prosthodontics");
 				return;
 			}
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
@@ -2443,6 +2445,13 @@ namespace OpenDental{
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								benefitList.Add(ben.Copy());
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Percentage;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum;
+								ben.Percent=percent;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								benefitList.Add(ben.Copy());
 								break;
 							case "MAJOR":
 								splitField=fields[2].Split(new char[] { ' ' });
@@ -2461,7 +2470,13 @@ namespace OpenDental{
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								benefitList.Add(ben.Copy());
-								//does prosthodontics include crowns?
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Percentage;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+								ben.Percent=percent;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								benefitList.Add(ben.Copy());
 								break;
 							case "FEE":
 								if(!ProcedureCodes.IsValidCode(fields[1])) {
