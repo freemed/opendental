@@ -2238,8 +2238,10 @@ namespace OpenDental{
 				|| CovCats.GetForEbenCat(EbenefitCategory.Periodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Crowns)==null
-				|| CovCats.GetForEbenCat(EbenefitCategory.OralSurgery)==null) {
-				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, Crowns, OralSurgery, and Prosthodontics");
+				|| CovCats.GetForEbenCat(EbenefitCategory.OralSurgery)==null
+				|| CovCats.GetForEbenCat(EbenefitCategory.Orthodontics)==null) 
+			{
+				MsgBox.Show(this,"You must first set up your insurance categories with corresponding electronic benefit categories: Diagnostic,RoutinePreventive, Restorative, Endodontics, Periodontics, Crowns, OralSurgery, Orthodontics, and Prosthodontics");
 				return;
 			}
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
@@ -2473,6 +2475,40 @@ namespace OpenDental{
 								ben=new Benefit();
 								ben.BenefitType=InsBenefitType.Percentage;
 								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+								ben.Percent=percent;
+								ben.PlanNum=PlanCur.PlanNum;
+								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+								benefitList.Add(ben.Copy());
+								break;
+							case "ORMAX"://eg $3500 lifetime
+								if(!fields[2].StartsWith("$")){
+									break;
+								}
+								fields[2]=fields[2].Remove(0,1);
+								fields[2]=fields[2].Split(new char[] { ' ' })[0];
+								if(CovCatC.ListShort.Length>0) {
+									ben=new Benefit();
+									ben.BenefitType=InsBenefitType.Limitations;
+									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
+									ben.MonetaryAmt=PIn.PDouble(fields[2]);
+									ben.PlanNum=PlanCur.PlanNum;
+									ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+									benefitList.Add(ben.Copy());
+								}
+								break;
+							case "ORPCT":
+								splitField=fields[2].Split(new char[] { ' ' });
+								if(splitField.Length==0 || !splitField[0].EndsWith("%")) {
+									break;
+								}
+								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
+								percent=PIn.PInt(splitField[0]);
+								if(percent<0 || percent>100) {
+									break;
+								}
+								ben=new Benefit();
+								ben.BenefitType=InsBenefitType.Percentage;
+								ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
 								ben.Percent=percent;
 								ben.PlanNum=PlanCur.PlanNum;
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
