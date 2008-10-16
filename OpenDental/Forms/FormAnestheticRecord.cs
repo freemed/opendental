@@ -15,6 +15,7 @@ namespace OpenDental
 	public class FormAnestheticRecord : System.Windows.Forms.Form
 	{
 		public static Userod CurUser;
+		public static Userod TempUser;
 		private AnestheticRecord AnestheticRecordCur;
 		private AnestheticData AnestheticDataCur;
         private Patient PatCur;
@@ -182,7 +183,6 @@ namespace OpenDental
 			this.labelGauge = new System.Windows.Forms.Label();
 			this.labelIVGauge = new System.Windows.Forms.Label();
 			this.comboIVGauge = new System.Windows.Forms.ComboBox();
-			this.butAnesthScore = new OpenDental.UI.Button();
 			this.comboO2LMin = new System.Windows.Forms.ComboBox();
 			this.labelIVFVol = new System.Windows.Forms.Label();
 			this.textIVFVol = new System.Windows.Forms.TextBox();
@@ -203,30 +203,18 @@ namespace OpenDental
 			this.labelPatWgt = new System.Windows.Forms.Label();
 			this.labelPatHgt = new System.Windows.Forms.Label();
 			this.textPatWgt = new System.Windows.Forms.TextBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBoxSig = new System.Windows.Forms.GroupBox();
-			this.sigBox = new OpenDental.UI.SignatureBox();
-			this.butSignTopaz = new OpenDental.UI.Button();
-			this.butClearSig = new OpenDental.UI.Button();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
 			this.labelEscortCellNum = new System.Windows.Forms.Label();
 			this.textEscortCellNum = new System.Windows.Forms.TextBox();
 			this.groupBoxVS = new System.Windows.Forms.GroupBox();
-			this.gridVitalSigns = new OpenDental.UI.ODGrid();
 			this.textVSMSerNum = new System.Windows.Forms.TextBox();
 			this.textVSM = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
 			this.groupBoxTimes = new System.Windows.Forms.GroupBox();
 			this.textAnesthOpen = new System.Windows.Forms.TextBox();
-			this.butSurgClose = new OpenDental.UI.Button();
 			this.textSurgClose = new System.Windows.Forms.TextBox();
 			this.textAnesthClose = new System.Windows.Forms.TextBox();
-			this.butAnesthOpen = new OpenDental.UI.Button();
-			this.butAnesthClose = new OpenDental.UI.Button();
-			this.butSurgOpen = new OpenDental.UI.Button();
 			this.textSurgOpen = new System.Windows.Forms.TextBox();
 			this.labelIVAnesthetics = new System.Windows.Forms.Label();
 			this.labelAsst = new System.Windows.Forms.Label();
@@ -236,6 +224,37 @@ namespace OpenDental
 			this.listAnesthetics = new System.Windows.Forms.ListBox();
 			this.labelAnesthMed = new System.Windows.Forms.Label();
 			this.groupBoxDoseCalc = new System.Windows.Forms.GroupBox();
+			this.comboAnesthMed = new System.Windows.Forms.ComboBox();
+			this.comboSurgeon = new System.Windows.Forms.ComboBox();
+			this.labelSurgeon = new System.Windows.Forms.Label();
+			this.comboAnesthetist = new System.Windows.Forms.ComboBox();
+			this.textAnesthDose = new System.Windows.Forms.TextBox();
+			this.labelDose = new System.Windows.Forms.Label();
+			this.labelAnesthetist = new System.Windows.Forms.Label();
+			this.textPatient = new System.Windows.Forms.TextBox();
+			this.labelPatient = new System.Windows.Forms.Label();
+			this.labelPatID = new System.Windows.Forms.Label();
+			this.textPatID = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.groupBoxAnesthMeds = new System.Windows.Forms.GroupBox();
+			this.gridVitalSigns = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
+			this.sigBox = new OpenDental.UI.SignatureBox();
+			this.butSignTopaz = new OpenDental.UI.Button();
+			this.butClearSig = new OpenDental.UI.Button();
+			this.butAnesthScore = new OpenDental.UI.Button();
+			this.gridAnesthMeds = new OpenDental.UI.ODGrid();
+			this.butWasteQty = new OpenDental.UI.Button();
+			this.butAddAnesthetic = new OpenDental.UI.Button();
+			this.butDelAnesthetic = new OpenDental.UI.Button();
+			this.butDelAnesthMeds = new OpenDental.UI.Button();
+			this.butSurgClose = new OpenDental.UI.Button();
+			this.butAnesthOpen = new OpenDental.UI.Button();
+			this.butAnesthClose = new OpenDental.UI.Button();
+			this.butSurgOpen = new OpenDental.UI.Button();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
 			this.butDose8 = new OpenDental.UI.Button();
@@ -252,24 +271,6 @@ namespace OpenDental
 			this.butDoseWaste = new OpenDental.UI.Button();
 			this.butDoseEnter = new OpenDental.UI.Button();
 			this.butDoseDecPoint = new OpenDental.UI.Button();
-			this.comboAnesthMed = new System.Windows.Forms.ComboBox();
-			this.comboSurgeon = new System.Windows.Forms.ComboBox();
-			this.labelSurgeon = new System.Windows.Forms.Label();
-			this.comboAnesthetist = new System.Windows.Forms.ComboBox();
-			this.textAnesthDose = new System.Windows.Forms.TextBox();
-			this.labelDose = new System.Windows.Forms.Label();
-			this.labelAnesthetist = new System.Windows.Forms.Label();
-			this.textPatient = new System.Windows.Forms.TextBox();
-			this.labelPatient = new System.Windows.Forms.Label();
-			this.labelPatID = new System.Windows.Forms.Label();
-			this.textPatID = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.groupBoxAnesthMeds = new System.Windows.Forms.GroupBox();
-			this.gridAnesthMeds = new OpenDental.UI.ODGrid();
-			this.butWasteQty = new OpenDental.UI.Button();
-			this.butAddAnesthetic = new OpenDental.UI.Button();
-			this.butDelAnesthetic = new OpenDental.UI.Button();
-			this.butDelAnesthMeds = new OpenDental.UI.Button();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
 			this.groupBoxMedRoute.SuspendLayout();
@@ -316,7 +317,6 @@ namespace OpenDental
 			this.textEscortName.Name = "textEscortName";
 			this.textEscortName.Size = new System.Drawing.Size(170, 20);
 			this.textEscortName.TabIndex = 122;
-			this.textEscortName.TextChanged += new System.EventHandler(this.textEscortName_TextChanged);
 			// 
 			// labelEscortName
 			// 
@@ -647,21 +647,6 @@ namespace OpenDental
 			this.comboIVGauge.Size = new System.Drawing.Size(65, 21);
 			this.comboIVGauge.TabIndex = 152;
 			// 
-			// butAnesthScore
-			// 
-			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthScore.Autosize = true;
-			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthScore.CornerRadius = 4F;
-			this.butAnesthScore.Location = new System.Drawing.Point(29, 508);
-			this.butAnesthScore.Name = "butAnesthScore";
-			this.butAnesthScore.Size = new System.Drawing.Size(131, 26);
-			this.butAnesthScore.TabIndex = 129;
-			this.butAnesthScore.Text = "Post-anesthesia score";
-			this.butAnesthScore.UseVisualStyleBackColor = true;
-			this.butAnesthScore.Click += new System.EventHandler(this.butAnesthScore_Click);
-			// 
 			// comboO2LMin
 			// 
 			this.comboO2LMin.FormattingEnabled = true;
@@ -675,7 +660,6 @@ namespace OpenDental
 			this.comboO2LMin.Name = "comboO2LMin";
 			this.comboO2LMin.Size = new System.Drawing.Size(40, 21);
 			this.comboO2LMin.TabIndex = 150;
-			this.comboO2LMin.SelectedIndexChanged += new System.EventHandler(this.comboBoxO2LMin_SelectedIndexChanged);
 			// 
 			// labelIVFVol
 			// 
@@ -913,72 +897,6 @@ namespace OpenDental
 			this.textPatWgt.Size = new System.Drawing.Size(60, 20);
 			this.textPatWgt.TabIndex = 149;
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOK.Location = new System.Drawing.Point(588, 116);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 143;
-			this.butOK.Text = "&OK";
-			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(669, 116);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(96, 26);
-			this.butClose.TabIndex = 142;
-			this.butClose.Text = "&Save and Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(498, 116);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(66, 26);
-			this.butCancel.TabIndex = 141;
-			this.butCancel.Text = "Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(59, 113);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88, 26);
-			this.butPrint.TabIndex = 102;
-			this.butPrint.Text = "Print";
-			this.butPrint.UseVisualStyleBackColor = true;
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
 			// groupBoxSig
 			// 
 			this.groupBoxSig.Controls.Add(this.sigBox);
@@ -990,42 +908,6 @@ namespace OpenDental
 			this.groupBoxSig.TabIndex = 139;
 			this.groupBoxSig.TabStop = false;
 			this.groupBoxSig.Text = "Signature/Initials";
-			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(12, 19);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(158, 74);
-			this.sigBox.TabIndex = 135;
-			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
-			// 
-			// butSignTopaz
-			// 
-			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSignTopaz.Autosize = true;
-			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSignTopaz.CornerRadius = 4F;
-			this.butSignTopaz.Location = new System.Drawing.Point(195, 19);
-			this.butSignTopaz.Name = "butSignTopaz";
-			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
-			this.butSignTopaz.TabIndex = 136;
-			this.butSignTopaz.Text = "Sign Topaz";
-			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
-			// 
-			// butClearSig
-			// 
-			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClearSig.Autosize = true;
-			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(195, 53);
-			this.butClearSig.Name = "butClearSig";
-			this.butClearSig.Size = new System.Drawing.Size(75, 26);
-			this.butClearSig.TabIndex = 134;
-			this.butClearSig.Text = "Clear";
-			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
 			// groupBoxHgtWgt
 			// 
@@ -1058,7 +940,6 @@ namespace OpenDental
 			this.textEscortCellNum.Name = "textEscortCellNum";
 			this.textEscortCellNum.Size = new System.Drawing.Size(170, 20);
 			this.textEscortCellNum.TabIndex = 134;
-			this.textEscortCellNum.TextChanged += new System.EventHandler(this.textEscortCellNum_TextChanged);
 			// 
 			// groupBoxVS
 			// 
@@ -1073,18 +954,6 @@ namespace OpenDental
 			this.groupBoxVS.TabIndex = 139;
 			this.groupBoxVS.TabStop = false;
 			this.groupBoxVS.Text = "Vital Signs";
-			// 
-			// gridVitalSigns
-			// 
-			this.gridVitalSigns.HScrollVisible = false;
-			this.gridVitalSigns.Location = new System.Drawing.Point(23, 50);
-			this.gridVitalSigns.Name = "gridVitalSigns";
-			this.gridVitalSigns.ScrollValue = 0;
-			this.gridVitalSigns.Size = new System.Drawing.Size(547, 143);
-			this.gridVitalSigns.TabIndex = 133;
-			this.gridVitalSigns.Title = "Vital Signs";
-			this.gridVitalSigns.TranslationName = "TableAnestheticData";
-			this.gridVitalSigns.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridVitalSigns_CellDoubleClick);
 			// 
 			// textVSMSerNum
 			// 
@@ -1128,21 +997,6 @@ namespace OpenDental
 			this.textAnesthOpen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.textAnesthOpen.TextChanged += new System.EventHandler(this.textBoxAnesthOpen_TextChanged);
 			// 
-			// butSurgClose
-			// 
-			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgClose.Autosize = true;
-			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgClose.CornerRadius = 4F;
-			this.butSurgClose.Location = new System.Drawing.Point(211, 17);
-			this.butSurgClose.Name = "butSurgClose";
-			this.butSurgClose.Size = new System.Drawing.Size(86, 26);
-			this.butSurgClose.TabIndex = 84;
-			this.butSurgClose.Text = "Surgery Close";
-			this.butSurgClose.UseVisualStyleBackColor = true;
-			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
-			// 
 			// textSurgClose
 			// 
 			this.textSurgClose.Location = new System.Drawing.Point(212, 49);
@@ -1161,51 +1015,6 @@ namespace OpenDental
 			this.textAnesthClose.TabIndex = 96;
 			this.textAnesthClose.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.textAnesthClose.TextChanged += new System.EventHandler(this.textBoxAnesthClose_TextChanged);
-			// 
-			// butAnesthOpen
-			// 
-			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthOpen.Autosize = true;
-			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthOpen.CornerRadius = 4F;
-			this.butAnesthOpen.Location = new System.Drawing.Point(14, 17);
-			this.butAnesthOpen.Name = "butAnesthOpen";
-			this.butAnesthOpen.Size = new System.Drawing.Size(100, 26);
-			this.butAnesthOpen.TabIndex = 82;
-			this.butAnesthOpen.Text = "Anesthesia Open";
-			this.butAnesthOpen.UseVisualStyleBackColor = true;
-			this.butAnesthOpen.Click += new System.EventHandler(this.butAnesthOpen_Click);
-			// 
-			// butAnesthClose
-			// 
-			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthClose.Autosize = true;
-			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthClose.CornerRadius = 4F;
-			this.butAnesthClose.Location = new System.Drawing.Point(303, 17);
-			this.butAnesthClose.Name = "butAnesthClose";
-			this.butAnesthClose.Size = new System.Drawing.Size(100, 26);
-			this.butAnesthClose.TabIndex = 85;
-			this.butAnesthClose.Text = "Anesthesia Close";
-			this.butAnesthClose.UseVisualStyleBackColor = true;
-			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
-			// 
-			// butSurgOpen
-			// 
-			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgOpen.Autosize = true;
-			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgOpen.CornerRadius = 4F;
-			this.butSurgOpen.Location = new System.Drawing.Point(120, 17);
-			this.butSurgOpen.Name = "butSurgOpen";
-			this.butSurgOpen.Size = new System.Drawing.Size(86, 26);
-			this.butSurgOpen.TabIndex = 83;
-			this.butSurgOpen.Text = "Surgery Open";
-			this.butSurgOpen.UseVisualStyleBackColor = true;
-			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
 			// 
 			// textSurgOpen
 			// 
@@ -1301,6 +1110,413 @@ namespace OpenDental
 			this.groupBoxDoseCalc.TabStop = false;
 			this.groupBoxDoseCalc.Text = "Click to add dose ";
 			this.groupBoxDoseCalc.Enter += new System.EventHandler(this.groupBox5_Enter);
+			// 
+			// comboAnesthMed
+			// 
+			this.comboAnesthMed.FormattingEnabled = true;
+			this.comboAnesthMed.Location = new System.Drawing.Point(174, 147);
+			this.comboAnesthMed.Name = "comboAnesthMed";
+			this.comboAnesthMed.Size = new System.Drawing.Size(139, 21);
+			this.comboAnesthMed.TabIndex = 77;
+			this.comboAnesthMed.SelectedIndexChanged += new System.EventHandler(this.comboAnesthMed_SelectedIndexChanged);
+			// 
+			// comboSurgeon
+			// 
+			this.comboSurgeon.FormattingEnabled = true;
+			this.comboSurgeon.Location = new System.Drawing.Point(277, 105);
+			this.comboSurgeon.Name = "comboSurgeon";
+			this.comboSurgeon.Size = new System.Drawing.Size(100, 21);
+			this.comboSurgeon.TabIndex = 97;
+			// 
+			// labelSurgeon
+			// 
+			this.labelSurgeon.AutoSize = true;
+			this.labelSurgeon.Location = new System.Drawing.Point(329, 88);
+			this.labelSurgeon.Name = "labelSurgeon";
+			this.labelSurgeon.Size = new System.Drawing.Size(47, 13);
+			this.labelSurgeon.TabIndex = 98;
+			this.labelSurgeon.Text = "Surgeon";
+			this.labelSurgeon.Click += new System.EventHandler(this.label3_Click);
+			// 
+			// comboAnesthetist
+			// 
+			this.comboAnesthetist.FormattingEnabled = true;
+			this.comboAnesthetist.Location = new System.Drawing.Point(174, 105);
+			this.comboAnesthetist.Name = "comboAnesthetist";
+			this.comboAnesthetist.Size = new System.Drawing.Size(100, 21);
+			this.comboAnesthetist.TabIndex = 87;
+			// 
+			// textAnesthDose
+			// 
+			this.textAnesthDose.Location = new System.Drawing.Point(318, 148);
+			this.textAnesthDose.MaxLength = 7;
+			this.textAnesthDose.Name = "textAnesthDose";
+			this.textAnesthDose.Size = new System.Drawing.Size(54, 20);
+			this.textAnesthDose.TabIndex = 99;
+			// 
+			// labelDose
+			// 
+			this.labelDose.AutoSize = true;
+			this.labelDose.Location = new System.Drawing.Point(319, 131);
+			this.labelDose.Name = "labelDose";
+			this.labelDose.Size = new System.Drawing.Size(55, 13);
+			this.labelDose.TabIndex = 100;
+			this.labelDose.Text = "Dose (mL)";
+			// 
+			// labelAnesthetist
+			// 
+			this.labelAnesthetist.AutoSize = true;
+			this.labelAnesthetist.Location = new System.Drawing.Point(215, 88);
+			this.labelAnesthetist.Name = "labelAnesthetist";
+			this.labelAnesthetist.Size = new System.Drawing.Size(59, 13);
+			this.labelAnesthetist.TabIndex = 88;
+			this.labelAnesthetist.Text = "Anesthetist";
+			this.labelAnesthetist.Click += new System.EventHandler(this.labelAnesthetist_Click);
+			// 
+			// textPatient
+			// 
+			this.textPatient.Location = new System.Drawing.Point(12, 16);
+			this.textPatient.Name = "textPatient";
+			this.textPatient.ReadOnly = true;
+			this.textPatient.Size = new System.Drawing.Size(150, 20);
+			this.textPatient.TabIndex = 102;
+			this.textPatient.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textPatient.TextChanged += new System.EventHandler(this.textBoxPatient_TextChanged);
+			// 
+			// labelPatient
+			// 
+			this.labelPatient.AutoSize = true;
+			this.labelPatient.Location = new System.Drawing.Point(3, 19);
+			this.labelPatient.Name = "labelPatient";
+			this.labelPatient.Size = new System.Drawing.Size(0, 13);
+			this.labelPatient.TabIndex = 103;
+			// 
+			// labelPatID
+			// 
+			this.labelPatID.AutoSize = true;
+			this.labelPatID.Location = new System.Drawing.Point(8, 47);
+			this.labelPatID.Name = "labelPatID";
+			this.labelPatID.Size = new System.Drawing.Size(38, 13);
+			this.labelPatID.TabIndex = 104;
+			this.labelPatID.Text = "ID No.";
+			// 
+			// textPatID
+			// 
+			this.textPatID.Location = new System.Drawing.Point(49, 44);
+			this.textPatID.Name = "textPatID";
+			this.textPatID.ReadOnly = true;
+			this.textPatID.Size = new System.Drawing.Size(113, 20);
+			this.textPatID.TabIndex = 105;
+			this.textPatID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textPatID.TextChanged += new System.EventHandler(this.textBoxPatID_TextChanged);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(406, 321);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(150, 13);
+			this.label2.TabIndex = 107;
+			this.label2.Text = "(Doses must be entered in mL)";
+			// 
+			// groupBoxAnesthMeds
+			// 
+			this.groupBoxAnesthMeds.Controls.Add(this.gridAnesthMeds);
+			this.groupBoxAnesthMeds.Controls.Add(this.butWasteQty);
+			this.groupBoxAnesthMeds.Controls.Add(this.label2);
+			this.groupBoxAnesthMeds.Controls.Add(this.textPatID);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelPatID);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelPatient);
+			this.groupBoxAnesthMeds.Controls.Add(this.textPatient);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelAnesthetist);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelDose);
+			this.groupBoxAnesthMeds.Controls.Add(this.textAnesthDose);
+			this.groupBoxAnesthMeds.Controls.Add(this.comboAnesthetist);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelSurgeon);
+			this.groupBoxAnesthMeds.Controls.Add(this.comboSurgeon);
+			this.groupBoxAnesthMeds.Controls.Add(this.comboAnesthMed);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelAnesthMed);
+			this.groupBoxAnesthMeds.Controls.Add(this.listAnesthetics);
+			this.groupBoxAnesthMeds.Controls.Add(this.butAddAnesthetic);
+			this.groupBoxAnesthMeds.Controls.Add(this.comboAsst);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelCirc);
+			this.groupBoxAnesthMeds.Controls.Add(this.butDelAnesthetic);
+			this.groupBoxAnesthMeds.Controls.Add(this.comboCirc);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelAsst);
+			this.groupBoxAnesthMeds.Controls.Add(this.butDelAnesthMeds);
+			this.groupBoxAnesthMeds.Controls.Add(this.labelIVAnesthetics);
+			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxTimes);
+			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxDoseCalc);
+			this.groupBoxAnesthMeds.Location = new System.Drawing.Point(12, 6);
+			this.groupBoxAnesthMeds.Name = "groupBoxAnesthMeds";
+			this.groupBoxAnesthMeds.Size = new System.Drawing.Size(592, 342);
+			this.groupBoxAnesthMeds.TabIndex = 137;
+			this.groupBoxAnesthMeds.TabStop = false;
+			this.groupBoxAnesthMeds.Text = "Patient";
+			// 
+			// gridVitalSigns
+			// 
+			this.gridVitalSigns.HScrollVisible = false;
+			this.gridVitalSigns.Location = new System.Drawing.Point(23, 50);
+			this.gridVitalSigns.Name = "gridVitalSigns";
+			this.gridVitalSigns.ScrollValue = 0;
+			this.gridVitalSigns.Size = new System.Drawing.Size(547, 143);
+			this.gridVitalSigns.TabIndex = 133;
+			this.gridVitalSigns.Title = "Vital Signs";
+			this.gridVitalSigns.TranslationName = "TableAnestheticData";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butOK.Location = new System.Drawing.Point(588, 116);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 26);
+			this.butOK.TabIndex = 143;
+			this.butOK.Text = "&OK";
+			this.butOK.UseVisualStyleBackColor = true;
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClose.Location = new System.Drawing.Point(669, 116);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(96, 26);
+			this.butClose.TabIndex = 142;
+			this.butClose.Text = "&Save and Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(498, 116);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 141;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(59, 113);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(88, 26);
+			this.butPrint.TabIndex = 102;
+			this.butPrint.Text = "Print";
+			this.butPrint.UseVisualStyleBackColor = true;
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(12, 19);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(158, 74);
+			this.sigBox.TabIndex = 135;
+			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
+			// 
+			// butSignTopaz
+			// 
+			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSignTopaz.Autosize = true;
+			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSignTopaz.CornerRadius = 4F;
+			this.butSignTopaz.Location = new System.Drawing.Point(195, 19);
+			this.butSignTopaz.Name = "butSignTopaz";
+			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
+			this.butSignTopaz.TabIndex = 136;
+			this.butSignTopaz.Text = "Sign Topaz";
+			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
+			// 
+			// butClearSig
+			// 
+			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClearSig.Autosize = true;
+			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearSig.CornerRadius = 4F;
+			this.butClearSig.Location = new System.Drawing.Point(195, 53);
+			this.butClearSig.Name = "butClearSig";
+			this.butClearSig.Size = new System.Drawing.Size(75, 26);
+			this.butClearSig.TabIndex = 134;
+			this.butClearSig.Text = "Clear";
+			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
+			// 
+			// butAnesthScore
+			// 
+			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthScore.Autosize = true;
+			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthScore.CornerRadius = 4F;
+			this.butAnesthScore.Location = new System.Drawing.Point(29, 508);
+			this.butAnesthScore.Name = "butAnesthScore";
+			this.butAnesthScore.Size = new System.Drawing.Size(131, 26);
+			this.butAnesthScore.TabIndex = 129;
+			this.butAnesthScore.Text = "Post-anesthesia score";
+			this.butAnesthScore.UseVisualStyleBackColor = true;
+			this.butAnesthScore.Click += new System.EventHandler(this.butAnesthScore_Click);
+			// 
+			// gridAnesthMeds
+			// 
+			this.gridAnesthMeds.HScrollVisible = false;
+			this.gridAnesthMeds.Location = new System.Drawing.Point(25, 175);
+			this.gridAnesthMeds.Name = "gridAnesthMeds";
+			this.gridAnesthMeds.ScrollValue = 0;
+			this.gridAnesthMeds.Size = new System.Drawing.Size(346, 127);
+			this.gridAnesthMeds.TabIndex = 11;
+			this.gridAnesthMeds.Title = "Anesthetic Medications";
+			this.gridAnesthMeds.TranslationName = "TableAnestheticData";
+			// 
+			// butWasteQty
+			// 
+			this.butWasteQty.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butWasteQty.Autosize = true;
+			this.butWasteQty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butWasteQty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWasteQty.CornerRadius = 4F;
+			this.butWasteQty.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butWasteQty.Location = new System.Drawing.Point(37, 308);
+			this.butWasteQty.Name = "butWasteQty";
+			this.butWasteQty.Size = new System.Drawing.Size(116, 26);
+			this.butWasteQty.TabIndex = 108;
+			this.butWasteQty.Text = "Waste from inventory";
+			this.butWasteQty.UseVisualStyleBackColor = true;
+			this.butWasteQty.Click += new System.EventHandler(this.butWasteQty_Click);
+			// 
+			// butAddAnesthetic
+			// 
+			this.butAddAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddAnesthetic.Autosize = true;
+			this.butAddAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAnesthetic.CornerRadius = 4F;
+			this.butAddAnesthetic.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddAnesthetic.Location = new System.Drawing.Point(26, 144);
+			this.butAddAnesthetic.Name = "butAddAnesthetic";
+			this.butAddAnesthetic.Size = new System.Drawing.Size(65, 26);
+			this.butAddAnesthetic.TabIndex = 53;
+			this.butAddAnesthetic.Text = "New";
+			this.butAddAnesthetic.UseVisualStyleBackColor = true;
+			this.butAddAnesthetic.Click += new System.EventHandler(this.butAddAnesthetic_Click);
+			// 
+			// butDelAnesthetic
+			// 
+			this.butDelAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelAnesthetic.Autosize = true;
+			this.butDelAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelAnesthetic.CornerRadius = 4F;
+			this.butDelAnesthetic.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelAnesthetic.Location = new System.Drawing.Point(97, 144);
+			this.butDelAnesthetic.Name = "butDelAnesthetic";
+			this.butDelAnesthetic.Size = new System.Drawing.Size(65, 26);
+			this.butDelAnesthetic.TabIndex = 3;
+			this.butDelAnesthetic.Text = "Delete";
+			this.butDelAnesthetic.UseVisualStyleBackColor = true;
+			this.butDelAnesthetic.Click += new System.EventHandler(this.butDelAnesthetic_Click);
+			// 
+			// butDelAnesthMeds
+			// 
+			this.butDelAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelAnesthMeds.Autosize = true;
+			this.butDelAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelAnesthMeds.CornerRadius = 4F;
+			this.butDelAnesthMeds.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelAnesthMeds.Location = new System.Drawing.Point(290, 308);
+			this.butDelAnesthMeds.Name = "butDelAnesthMeds";
+			this.butDelAnesthMeds.Size = new System.Drawing.Size(82, 26);
+			this.butDelAnesthMeds.TabIndex = 74;
+			this.butDelAnesthMeds.Text = "Delete";
+			this.butDelAnesthMeds.UseVisualStyleBackColor = true;
+			this.butDelAnesthMeds.Click += new System.EventHandler(this.butDelAnesthMeds_Click);
+			// 
+			// butSurgClose
+			// 
+			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgClose.Autosize = true;
+			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgClose.CornerRadius = 4F;
+			this.butSurgClose.Location = new System.Drawing.Point(211, 17);
+			this.butSurgClose.Name = "butSurgClose";
+			this.butSurgClose.Size = new System.Drawing.Size(86, 26);
+			this.butSurgClose.TabIndex = 84;
+			this.butSurgClose.Text = "Surgery Close";
+			this.butSurgClose.UseVisualStyleBackColor = true;
+			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
+			// 
+			// butAnesthOpen
+			// 
+			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthOpen.Autosize = true;
+			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthOpen.CornerRadius = 4F;
+			this.butAnesthOpen.Location = new System.Drawing.Point(14, 17);
+			this.butAnesthOpen.Name = "butAnesthOpen";
+			this.butAnesthOpen.Size = new System.Drawing.Size(100, 26);
+			this.butAnesthOpen.TabIndex = 82;
+			this.butAnesthOpen.Text = "Anesthesia Open";
+			this.butAnesthOpen.UseVisualStyleBackColor = true;
+			this.butAnesthOpen.Click += new System.EventHandler(this.butAnesthOpen_Click);
+			// 
+			// butAnesthClose
+			// 
+			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthClose.Autosize = true;
+			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthClose.CornerRadius = 4F;
+			this.butAnesthClose.Location = new System.Drawing.Point(303, 17);
+			this.butAnesthClose.Name = "butAnesthClose";
+			this.butAnesthClose.Size = new System.Drawing.Size(100, 26);
+			this.butAnesthClose.TabIndex = 85;
+			this.butAnesthClose.Text = "Anesthesia Close";
+			this.butAnesthClose.UseVisualStyleBackColor = true;
+			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
+			// 
+			// butSurgOpen
+			// 
+			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgOpen.Autosize = true;
+			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgOpen.CornerRadius = 4F;
+			this.butSurgOpen.Location = new System.Drawing.Point(120, 17);
+			this.butSurgOpen.Name = "butSurgOpen";
+			this.butSurgOpen.Size = new System.Drawing.Size(86, 26);
+			this.butSurgOpen.TabIndex = 83;
+			this.butSurgOpen.Text = "Surgery Open";
+			this.butSurgOpen.UseVisualStyleBackColor = true;
+			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
 			// 
 			// butDose10
 			// 
@@ -1508,6 +1724,7 @@ namespace OpenDental
 			this.butDoseWaste.TabIndex = 70;
 			this.butDoseWaste.Text = "Waste";
 			this.butDoseWaste.UseVisualStyleBackColor = true;
+			this.butDoseWaste.Click += new System.EventHandler(this.butDoseWaste_Click);
 			// 
 			// butDoseEnter
 			// 
@@ -1538,228 +1755,6 @@ namespace OpenDental
 			this.butDoseDecPoint.Text = ".";
 			this.butDoseDecPoint.UseVisualStyleBackColor = true;
 			this.butDoseDecPoint.Click += new System.EventHandler(this.butDoseDecPoint_Click);
-			// 
-			// comboAnesthMed
-			// 
-			this.comboAnesthMed.FormattingEnabled = true;
-			this.comboAnesthMed.Location = new System.Drawing.Point(174, 147);
-			this.comboAnesthMed.Name = "comboAnesthMed";
-			this.comboAnesthMed.Size = new System.Drawing.Size(139, 21);
-			this.comboAnesthMed.TabIndex = 77;
-			this.comboAnesthMed.SelectedIndexChanged += new System.EventHandler(this.comboAnesthMed_SelectedIndexChanged);
-			// 
-			// comboSurgeon
-			// 
-			this.comboSurgeon.FormattingEnabled = true;
-			this.comboSurgeon.Location = new System.Drawing.Point(277, 105);
-			this.comboSurgeon.Name = "comboSurgeon";
-			this.comboSurgeon.Size = new System.Drawing.Size(100, 21);
-			this.comboSurgeon.TabIndex = 97;
-			// 
-			// labelSurgeon
-			// 
-			this.labelSurgeon.AutoSize = true;
-			this.labelSurgeon.Location = new System.Drawing.Point(329, 88);
-			this.labelSurgeon.Name = "labelSurgeon";
-			this.labelSurgeon.Size = new System.Drawing.Size(47, 13);
-			this.labelSurgeon.TabIndex = 98;
-			this.labelSurgeon.Text = "Surgeon";
-			this.labelSurgeon.Click += new System.EventHandler(this.label3_Click);
-			// 
-			// comboAnesthetist
-			// 
-			this.comboAnesthetist.FormattingEnabled = true;
-			this.comboAnesthetist.Location = new System.Drawing.Point(174, 105);
-			this.comboAnesthetist.Name = "comboAnesthetist";
-			this.comboAnesthetist.Size = new System.Drawing.Size(100, 21);
-			this.comboAnesthetist.TabIndex = 87;
-			// 
-			// textAnesthDose
-			// 
-			this.textAnesthDose.Location = new System.Drawing.Point(318, 148);
-			this.textAnesthDose.MaxLength = 7;
-			this.textAnesthDose.Name = "textAnesthDose";
-			this.textAnesthDose.Size = new System.Drawing.Size(54, 20);
-			this.textAnesthDose.TabIndex = 99;
-			// 
-			// labelDose
-			// 
-			this.labelDose.AutoSize = true;
-			this.labelDose.Location = new System.Drawing.Point(319, 131);
-			this.labelDose.Name = "labelDose";
-			this.labelDose.Size = new System.Drawing.Size(55, 13);
-			this.labelDose.TabIndex = 100;
-			this.labelDose.Text = "Dose (mL)";
-			// 
-			// labelAnesthetist
-			// 
-			this.labelAnesthetist.AutoSize = true;
-			this.labelAnesthetist.Location = new System.Drawing.Point(215, 88);
-			this.labelAnesthetist.Name = "labelAnesthetist";
-			this.labelAnesthetist.Size = new System.Drawing.Size(59, 13);
-			this.labelAnesthetist.TabIndex = 88;
-			this.labelAnesthetist.Text = "Anesthetist";
-			this.labelAnesthetist.Click += new System.EventHandler(this.labelAnesthetist_Click);
-			// 
-			// textPatient
-			// 
-			this.textPatient.Location = new System.Drawing.Point(12, 16);
-			this.textPatient.Name = "textPatient";
-			this.textPatient.ReadOnly = true;
-			this.textPatient.Size = new System.Drawing.Size(150, 20);
-			this.textPatient.TabIndex = 102;
-			this.textPatient.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.textPatient.TextChanged += new System.EventHandler(this.textBoxPatient_TextChanged);
-			// 
-			// labelPatient
-			// 
-			this.labelPatient.AutoSize = true;
-			this.labelPatient.Location = new System.Drawing.Point(3, 19);
-			this.labelPatient.Name = "labelPatient";
-			this.labelPatient.Size = new System.Drawing.Size(0, 13);
-			this.labelPatient.TabIndex = 103;
-			// 
-			// labelPatID
-			// 
-			this.labelPatID.AutoSize = true;
-			this.labelPatID.Location = new System.Drawing.Point(8, 47);
-			this.labelPatID.Name = "labelPatID";
-			this.labelPatID.Size = new System.Drawing.Size(38, 13);
-			this.labelPatID.TabIndex = 104;
-			this.labelPatID.Text = "ID No.";
-			// 
-			// textPatID
-			// 
-			this.textPatID.Location = new System.Drawing.Point(49, 44);
-			this.textPatID.Name = "textPatID";
-			this.textPatID.ReadOnly = true;
-			this.textPatID.Size = new System.Drawing.Size(113, 20);
-			this.textPatID.TabIndex = 105;
-			this.textPatID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.textPatID.TextChanged += new System.EventHandler(this.textBoxPatID_TextChanged);
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(406, 321);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(150, 13);
-			this.label2.TabIndex = 107;
-			this.label2.Text = "(Doses must be entered in mL)";
-			// 
-			// groupBoxAnesthMeds
-			// 
-			this.groupBoxAnesthMeds.Controls.Add(this.gridAnesthMeds);
-			this.groupBoxAnesthMeds.Controls.Add(this.butWasteQty);
-			this.groupBoxAnesthMeds.Controls.Add(this.label2);
-			this.groupBoxAnesthMeds.Controls.Add(this.textPatID);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelPatID);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelPatient);
-			this.groupBoxAnesthMeds.Controls.Add(this.textPatient);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelAnesthetist);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelDose);
-			this.groupBoxAnesthMeds.Controls.Add(this.textAnesthDose);
-			this.groupBoxAnesthMeds.Controls.Add(this.comboAnesthetist);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelSurgeon);
-			this.groupBoxAnesthMeds.Controls.Add(this.comboSurgeon);
-			this.groupBoxAnesthMeds.Controls.Add(this.comboAnesthMed);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelAnesthMed);
-			this.groupBoxAnesthMeds.Controls.Add(this.listAnesthetics);
-			this.groupBoxAnesthMeds.Controls.Add(this.butAddAnesthetic);
-			this.groupBoxAnesthMeds.Controls.Add(this.comboAsst);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelCirc);
-			this.groupBoxAnesthMeds.Controls.Add(this.butDelAnesthetic);
-			this.groupBoxAnesthMeds.Controls.Add(this.comboCirc);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelAsst);
-			this.groupBoxAnesthMeds.Controls.Add(this.butDelAnesthMeds);
-			this.groupBoxAnesthMeds.Controls.Add(this.labelIVAnesthetics);
-			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxTimes);
-			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxDoseCalc);
-			this.groupBoxAnesthMeds.Location = new System.Drawing.Point(12, 6);
-			this.groupBoxAnesthMeds.Name = "groupBoxAnesthMeds";
-			this.groupBoxAnesthMeds.Size = new System.Drawing.Size(592, 342);
-			this.groupBoxAnesthMeds.TabIndex = 137;
-			this.groupBoxAnesthMeds.TabStop = false;
-			this.groupBoxAnesthMeds.Text = "Patient";
-			// 
-			// gridAnesthMeds
-			// 
-			this.gridAnesthMeds.HScrollVisible = false;
-			this.gridAnesthMeds.Location = new System.Drawing.Point(25, 175);
-			this.gridAnesthMeds.Name = "gridAnesthMeds";
-			this.gridAnesthMeds.ScrollValue = 0;
-			this.gridAnesthMeds.Size = new System.Drawing.Size(346, 127);
-			this.gridAnesthMeds.TabIndex = 11;
-			this.gridAnesthMeds.Title = "Anesthetic Medications";
-			this.gridAnesthMeds.TranslationName = "TableAnestheticData";
-			this.gridAnesthMeds.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMeds_CellDoubleClick);
-			// 
-			// butWasteQty
-			// 
-			this.butWasteQty.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butWasteQty.Autosize = true;
-			this.butWasteQty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWasteQty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butWasteQty.CornerRadius = 4F;
-			this.butWasteQty.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butWasteQty.Location = new System.Drawing.Point(37, 308);
-			this.butWasteQty.Name = "butWasteQty";
-			this.butWasteQty.Size = new System.Drawing.Size(116, 26);
-			this.butWasteQty.TabIndex = 108;
-			this.butWasteQty.Text = "Waste from inventory";
-			this.butWasteQty.UseVisualStyleBackColor = true;
-			this.butWasteQty.Click += new System.EventHandler(this.butWasteQty_Click);
-			// 
-			// butAddAnesthetic
-			// 
-			this.butAddAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddAnesthetic.Autosize = true;
-			this.butAddAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddAnesthetic.CornerRadius = 4F;
-			this.butAddAnesthetic.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddAnesthetic.Location = new System.Drawing.Point(26, 144);
-			this.butAddAnesthetic.Name = "butAddAnesthetic";
-			this.butAddAnesthetic.Size = new System.Drawing.Size(65, 26);
-			this.butAddAnesthetic.TabIndex = 53;
-			this.butAddAnesthetic.Text = "New";
-			this.butAddAnesthetic.UseVisualStyleBackColor = true;
-			this.butAddAnesthetic.Click += new System.EventHandler(this.butAddAnesthetic_Click);
-			// 
-			// butDelAnesthetic
-			// 
-			this.butDelAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelAnesthetic.Autosize = true;
-			this.butDelAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelAnesthetic.CornerRadius = 4F;
-			this.butDelAnesthetic.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelAnesthetic.Location = new System.Drawing.Point(97, 144);
-			this.butDelAnesthetic.Name = "butDelAnesthetic";
-			this.butDelAnesthetic.Size = new System.Drawing.Size(65, 26);
-			this.butDelAnesthetic.TabIndex = 3;
-			this.butDelAnesthetic.Text = "Delete";
-			this.butDelAnesthetic.UseVisualStyleBackColor = true;
-			this.butDelAnesthetic.Click += new System.EventHandler(this.butDelAnesthetic_Click);
-			// 
-			// butDelAnesthMeds
-			// 
-			this.butDelAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelAnesthMeds.Autosize = true;
-			this.butDelAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelAnesthMeds.CornerRadius = 4F;
-			this.butDelAnesthMeds.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelAnesthMeds.Location = new System.Drawing.Point(290, 308);
-			this.butDelAnesthMeds.Name = "butDelAnesthMeds";
-			this.butDelAnesthMeds.Size = new System.Drawing.Size(82, 26);
-			this.butDelAnesthMeds.TabIndex = 74;
-			this.butDelAnesthMeds.Text = "Delete";
-			this.butDelAnesthMeds.UseVisualStyleBackColor = true;
-			this.butDelAnesthMeds.Click += new System.EventHandler(this.butDelAnesthMeds_Click);
 			// 
 			// FormAnestheticRecord
 			// 
@@ -1816,7 +1811,7 @@ namespace OpenDental
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
-
+			Userod TempUser = Security.CurUser;
 			string escortphone = textEscortCellNum.Text;
 
 			if (escortphone != null && escortphone.Length == 10 && Application.CurrentCulture.Name == "en-US")
@@ -1938,19 +1933,21 @@ namespace OpenDental
 				return;
 			}
 			//deletes an Anesthetic from the list of saved Anesthetics
-            if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
-            {
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds)){
+				
+            //if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)) //this works too
+        
                 AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
                 RefreshListAnesthetics();
                 return;
             }
 
-            else
-            {
-                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();
-                AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
-                RefreshListAnesthetics();
+            else{
+
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
               
             }
 	
@@ -2021,7 +2018,7 @@ namespace OpenDental
 
 		}
 
-		private void button20_Click_1(object sender, EventArgs e)
+		private void button20_Click(object sender, EventArgs e)
 		{
 
 		}
@@ -2073,8 +2070,22 @@ namespace OpenDental
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e)
 		{
-            FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-            FormES.ShowDialog();
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+
+				FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
+				FormW.ShowDialog();
+
+				return;
+
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
 
 		}
 
@@ -2266,11 +2277,6 @@ namespace OpenDental
 
 		}
 
-		private void butDoseWaste_Click(object sender, EventArgs e)
-		{
-
-		}
-
 		private void butDoseEnter_Click(object sender, EventArgs e)
 		{
 
@@ -2303,63 +2309,72 @@ namespace OpenDental
 
 		}
 
+
+
+
 		private void butWasteQty_Click(object sender, EventArgs e)
         {
 
-                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();
-
-
-				
+                /*FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();*/
+			
 				Userod curUser = Security.CurUser;
-
+				
 				if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 				{
+					
 					FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
 					FormW.ShowDialog();
+		
 					return;
-
+					
 				}
-				else DialogResult = DialogResult.Cancel;
+				else
+				{
+					MessageBox.Show(this, "You must be an administrator to unlock this action");
+					return;
+				}
+			    
 					
 		}
 			
         
 		private void butClose_Click(object sender, EventArgs e)
 		{
-            if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)) 
-            
-            {
+			Userod curUser = Security.CurUser;
 
-                Close();
-                return;
-            }
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+				Close();
 
-            else {
-                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
+               
 
-                Close();
-            }
 	
 		}
 
 		private void butOK_Click(object sender, EventArgs e)
 		{
 
-			if (!Security.IsAuthorized(Permissions.AnesthesiaControlMeds))
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
-                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();
+
+				DialogResult=DialogResult.OK;
+				return;
+
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
 			}
-
-			else
-            {
-                FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();
-
-            }
 				
 		}
 
@@ -2404,10 +2419,25 @@ namespace OpenDental
 
         }
 
-        private void gridAnesthMeds_CellDoubleClick_1(object sender, ODGridClickEventArgs e)
-        {
+		private void butDoseWaste_Click(object sender, EventArgs e)
+		{
+			Userod curUser = Security.CurUser;
 
-        }			
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+
+				FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
+				FormW.ShowDialog();
+
+				return;
+
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
+		}			
 
 	}
 }

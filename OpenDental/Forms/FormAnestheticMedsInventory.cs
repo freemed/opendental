@@ -277,17 +277,23 @@ namespace OpenDental
 
 		private void butAdjustQtys_Click(object sender, EventArgs e)
 		{
-			if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)){
-			    FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
-			    FormA.ShowDialog();
-                
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+
+				FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+				FormA.ShowDialog();
+				return;
 			}
 
-			else {
-                
-                return;
+			else
+			{
 
-			}
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+
+			} 
 
 		}
 

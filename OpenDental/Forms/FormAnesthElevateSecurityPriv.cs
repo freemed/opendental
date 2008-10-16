@@ -12,6 +12,8 @@ namespace OpenDental{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormAnesthElevateSecurityPriv: System.Windows.Forms.Form{
+		public static Userod CurUser;
+		public static Userod TempUser;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.ListBox listUser;
@@ -227,13 +229,14 @@ namespace OpenDental{
                     return;
                 }
 				//if (selectedUser.UserGroupNum == 1) this works to elevate privs to admin
-                if (GroupPermissions.HasPermission(selectedUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-                {
-                    DialogResult = DialogResult.OK;
+				if (GroupPermissions.HasPermission(selectedUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+				{
+					DialogResult = DialogResult.OK;
 					Security.CurUser = (Userod)listUser.SelectedItem;
-                    return;
-                }
-                else
+					return;
+				}
+				else
+					
                     MessageBox.Show(this,"You must be an administrator to unlock this action");
                     return;
 			}
@@ -242,7 +245,12 @@ namespace OpenDental{
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			{
+				DialogResult = DialogResult.Cancel;
+				return;
+			}
+			
+			
 		}
 		
 		
