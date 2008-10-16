@@ -816,7 +816,8 @@ namespace OpenDentBusiness {
 					+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 					+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
 					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
-					+"WHERE (";
+					+"WHERE ClaimType != 'PreAuth' "
+					+"AND (";
 				for(int i=0;i<fam.List.Length;i++){
 					if(i!=0){
 						command+="OR ";
@@ -837,7 +838,8 @@ namespace OpenDentBusiness {
 					+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 					+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
 					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
-					+"WHERE (";
+					+"WHERE ClaimType != 'PreAuth' "
+					+"AND (";
 				for(int i=0;i<fam.List.Length;i++) {
 					if(i!=0) {
 						command+="OR ";
@@ -905,9 +907,9 @@ namespace OpenDentBusiness {
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="S"){
 					row["description"]=Lan.g("ContrAccount","Sec")+" ";
 				}
-				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
-					row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
-				}
+				//else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
+				//	row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
+				//}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Other"){
 					row["description"]="";
 				}
@@ -921,12 +923,12 @@ namespace OpenDentBusiness {
 				claimStatus=rawClaim.Rows[i]["ClaimStatus"].ToString();
 				if(daterec.Year>1880){//and claimstatus=R
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
-					if(rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
-					} 
-					else{
+					//if(rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+					//	row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+					//} 
+					//else{
 						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
-					}
+					//}
 				} 
 				else if(claimStatus=="U"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
@@ -946,7 +948,7 @@ namespace OpenDentBusiness {
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
 				deductible=PIn.PDouble(rawClaim.Rows[i]["DedApplied"].ToString());
 				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
-					if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
+					/*if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
 						if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on PreAuth resubmits
 							row["description"] += "\r\n" + Lan.g("ContrAccount", "Est. Pre-Authorization Pending:") + " " + (insest - amtpaid).ToString("c");
 						}
@@ -954,7 +956,8 @@ namespace OpenDentBusiness {
 							row["description"] += "\r\n" + Lan.g("ContrAccount", "Est. Pre-Authorization Pending:") + " " + insest.ToString("c");
 						}
 					}
-					else if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on resubmits
+					else*/
+					if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on resubmits
 						row["description"] += "\r\n" + Lan.g("ContrAccount", "Remaining Est. Payment Pending:") + " " + (insest - amtpaid).ToString("c");
 					}
 					else {
@@ -962,20 +965,20 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(amtpaid != 0){
-					if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
-						row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment From Pre-Auth:")+" "+amtpaid.ToString("c");
-					}
-					else{
+					//if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
+					//	row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment From Pre-Auth:")+" "+amtpaid.ToString("c");
+					//}
+					//else{
 						row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
-					}
+					//}
 				} 
 				else if(amtpaid==0 && (claimStatus=="R")){
-					if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
-						row["description"]+="\r\n"+Lan.g("ContrAccount", "No Payment Authorized by Pre-Auth");
-					}
-					else {
+					//if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
+					//	row["description"]+="\r\n"+Lan.g("ContrAccount", "No Payment Authorized by Pre-Auth");
+					//}
+					//else {
 						row["description"]+="\r\n"+Lan.g("ContrAccount", "NO PAYMENT");
-					}
+					//}
 				}
 				if(writeoff!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
