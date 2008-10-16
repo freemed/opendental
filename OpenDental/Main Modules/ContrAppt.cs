@@ -972,8 +972,8 @@ namespace OpenDental{
 			// 
 			// ContrAppt
 			// 
-			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.groupSearch);
+			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.butOther);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelOps);
