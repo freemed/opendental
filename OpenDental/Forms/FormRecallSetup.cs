@@ -503,6 +503,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Both status options at the bottom must be set.");
 				return; 
 			}
+			if(textPostcardsPerSheet.Text=="1"){
+				MsgBox.Show(this,"If using 1 postcard per sheet, you must adjust the position, and also the preview will not work");
+			}
 			Prefs.UpdateString("RecallEmailSubject",textEmailSubject.Text);
 			Prefs.UpdateString("RecallPostcardMessage",textPostcardMessage.Text);		
 			Prefs.UpdateString("RecallPostcardFamMsg",textPostcardFamMsg.Text);
