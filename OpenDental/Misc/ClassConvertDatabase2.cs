@@ -550,14 +550,13 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BackupReminderLastDateRun','0001-01-01','')";
 					General.NonQ(command);
-
 					//Anesthesia Module Conversions-----------------------------------------------------
-					
 					//field to toggle Anesthesia Module on or off. Turned 'off' by default
 					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','0 or 1, Toggles Anesthesia Module Off and On. Disabled (0) by default')";
 					General.NonQ(command);
-
 					//individual unique records of delivered anesthetics
+					command="DROP TABLE IF EXISTS anestheticrecord";
+					General.NonQ(command);
 					command = @"CREATE TABLE anestheticrecord (
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
 						PatNum int(11) NOT NULL,
@@ -568,8 +567,9 @@ namespace OpenDental{
 						INDEX (ProvNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//data recorded for an individual anesthetic on a given date and time
+					command="DROP TABLE IF EXISTS anestheticdata";
+					General.NonQ(command);
 					command = @"CREATE TABLE anestheticdata (
 						AnestheticDataNum int(11) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -620,8 +620,9 @@ namespace OpenDental{
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//a list of anesthetic medications to be delivered to a patient
+					command="DROP TABLE IF EXISTS anesthmedsgiven";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsgiven(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -633,21 +634,23 @@ namespace OpenDental{
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//a list of DEA scheduled anesthetic medications taken into inventory from a Supplier. Qtys are always in milliLiters so inventory count works properly.
+					command="DROP TABLE IF EXISTS anesthmedsintake";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
 						AnestheticMed char (20) NOT NULL,
-                        DEASchedule char(2)NOT NULL,
+						DEASchedule char(2)NOT NULL,
 						Qty int(6) NOT NULL, 
 						SupplierIDNum char(11) NOT NULL,
 						InvoiceNum char(20) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//fields required to create inventory of anesthetic medications
+					command="DROP TABLE IF EXISTS anesthmedsinventory";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventory (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AnestheticMed char(20) NOT NULL,
@@ -656,9 +659,9 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-
 					//fields required to adjust inventory of anesthetic medications
+					command="DROP TABLE IF EXISTS anesthmedsinventoryadj";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventoryadj (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AdjPos int(4) NOT NULL,
@@ -670,8 +673,9 @@ namespace OpenDental{
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//a list of suppliers of anesthetic medications
+					command="DROP TABLE IF EXISTS anesthmedsuppliers";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsuppliers (
 						SupplierIDNum int(3) NOT NULL auto_increment,
 						SupplierName char(32) NOT NULL,
@@ -688,8 +692,9 @@ namespace OpenDental{
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);					
-					
 					//keeps the post-anesthesia score and discharge data
+					command="DROP TABLE IF EXISTS anesthscore";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthscore (
 						AnestheticRecordNum int(7) NOT NULL auto_increment,
 						QActivity smallint(1) NOT NULL,
@@ -706,8 +711,9 @@ namespace OpenDental{
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
 					//keeps data auto-imported from networkable vital sign monitors
+					command="DROP TABLE IF EXISTS anesthvsdata";
+					General.NonQ(command);
 					command = @"CREATE TABLE anesthvsdata (
 						AnestheticRecordNum int(7) NOT NULL auto_increment,
 						VSMName char(20) NOT NULL,
@@ -722,8 +728,7 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-                    //this field is used to temporarily elevate security privileges to adminstrator. This will probably never be used.                  
+					//this field is used to temporarily elevate security privileges to adminstrator. This will probably never be used.                 
 					// command = "ALTER TABLE userod ADD TempAdminPriv tinyint NOT NULL";
                    // General.NonQ(command);
                     
