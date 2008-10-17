@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Security;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -132,9 +133,9 @@ namespace OpenDental {
 			// 
 			this.label1.Location = new System.Drawing.Point(24,53);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(338,20);
+			this.label1.Size = new System.Drawing.Size(361,20);
 			this.label1.TabIndex = 15;
-			this.label1.Text = "Log (automatically saved in RepairLog.txt)";
+			this.label1.Text = "Log (automatically saved in RepairLog.txt if user has permission)";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// checkShow
@@ -1477,13 +1478,23 @@ namespace OpenDental {
 
 
 		private void SaveLogToFile() {
-			FileStream fs=new FileStream("RepairLog.txt",FileMode.Append,FileAccess.Write,FileShare.Read);
-			StreamWriter sw=new StreamWriter(fs);
-			sw.WriteLine(textLog.Text);
-			sw.Close();
-			sw=null;
-			fs.Close();
-			fs=null;
+			FileStream fs=null;
+			try{
+				fs=new FileStream("RepairLog.txt",FileMode.Append,FileAccess.Write,FileShare.Read);
+				StreamWriter sw=new StreamWriter(fs);
+				sw.WriteLine(textLog.Text);
+				sw.Close();
+				sw=null;
+			}
+			catch(SecurityException){
+				MsgBox.Show(this,"Log not saved to Repairlog.txt because user does not have permission to access that file.");
+			}
+			finally{
+				if(fs!=null){
+					fs.Close();
+					fs=null;
+				}
+			}
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
