@@ -736,7 +736,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					//this field is used to temporarily elevate security privileges to adminstrator. This will probably never be used.                 
 					// command = "ALTER TABLE userod ADD TempAdminPriv tinyint NOT NULL";
-                   // General.NonQ(command);
+					// General.NonQ(command);
                     
 
 				} 
