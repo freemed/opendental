@@ -77,9 +77,11 @@ namespace OpenDental{
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(int labNum){
 			string command;
-			//check patients for dependencies
-			/*string command="SELECT LName,FName FROM patient WHERE LaboratoryNum ="
-				+POut.PInt(Laboratory.LaboratoryNum);
+			//check lab cases for dependencies
+			command="SELECT LName,FName FROM patient,labcase "
+				+"WHERE patient.PatNum=labcase.PatNum "
+				+"AND LaboratoryNum ="+POut.PInt(labNum)+" "
+				+"LIMIT 30";
 			DataTable table=General.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
@@ -87,11 +89,10 @@ namespace OpenDental{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Laboratories","Cannot delete Laboratory because ")+pats);
-			}*/
+				throw new Exception(Lan.g("Laboratories","Cannot delete Laboratory because cases exist for")+pats);
+			}
 			//delete
-			command= "DELETE FROM laboratory" 
-				+" WHERE LaboratoryNum = "+POut.PInt(labNum);
+			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.PInt(labNum);
  			General.NonQ(command);
 		}
 

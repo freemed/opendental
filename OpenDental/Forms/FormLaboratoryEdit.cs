@@ -143,7 +143,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(17,111);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(81,26);
+			this.butAdd.Size = new System.Drawing.Size(81,24);
 			this.butAdd.TabIndex = 127;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -160,7 +160,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(17,423);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,26);
+			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 4;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -175,7 +175,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(606,423);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -190,7 +190,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(697,423);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -219,7 +219,7 @@ namespace OpenDental{
 			this.butDeleteTurnaround.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDeleteTurnaround.Location = new System.Drawing.Point(17,143);
 			this.butDeleteTurnaround.Name = "butDeleteTurnaround";
-			this.butDeleteTurnaround.Size = new System.Drawing.Size(81,26);
+			this.butDeleteTurnaround.Size = new System.Drawing.Size(81,24);
 			this.butDeleteTurnaround.TabIndex = 129;
 			this.butDeleteTurnaround.Text = "Delete";
 			this.butDeleteTurnaround.Click += new System.EventHandler(this.butDeleteTurnaround_Click);
