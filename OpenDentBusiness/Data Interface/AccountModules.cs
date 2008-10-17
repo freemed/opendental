@@ -921,14 +921,15 @@ namespace OpenDentBusiness {
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
 				claimStatus=rawClaim.Rows[i]["ClaimStatus"].ToString();
-				if(daterec.Year>1880){//and claimstatus=R
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
-					//if(rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-					//	row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
-					//} 
-					//else{
-						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
-					//}
+				if(claimStatus=="R"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" ";
+					if(daterec.Year<1880){
+						row["description"]+=Lan.g("ContrAccount","(no date)");//although I don't think UI allows this
+					}
+					else{
+						row["description"]+=daterec.ToShortDateString();
+					}
+					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
 				} 
 				else if(claimStatus=="U"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
