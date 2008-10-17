@@ -36,11 +36,16 @@ namespace OpenDentBusiness
 		public bool MedRouteRectal;
 		public string IVSite;
 		public int IVGauge;
-		public bool IVSiteR;
-		public bool IVSiteL;
+		public bool IVSideR;
+		public bool IVSideL;
 		public int IVAtt;
 		public string IVF;
 		public int IVFVol;
+		public bool checkBP;
+		public bool checkSpO2;
+		public bool checkEtCO2;
+		public bool checkPrecordial;
+		public bool checkTemp;
 		public string Notes;
 		public int PatWgt;
 		public bool WgtUnitLbs;
