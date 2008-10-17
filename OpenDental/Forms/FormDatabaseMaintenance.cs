@@ -222,6 +222,8 @@ namespace OpenDental {
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
 			AppointmentsNoPattern();
 			Application.DoEvents();
+			AppointmentsNoDateOrProcs();
+			Application.DoEvents();
 			AutoCodesDeleteWithNoItems();
 			Application.DoEvents();
 			ClaimPlanNum2NotValid();
@@ -682,6 +684,17 @@ namespace OpenDental {
 			int numberFixed=table.Rows.Count;
 			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void AppointmentsNoDateOrProcs() {
+			command="DELETE FROM appointment "
+				+"WHERE AptStatus=1 "//scheduled 
+				+"AND DATE(AptDateTime)='0001-01-01' "//scheduled but no date 
+				+"AND NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum)";//and no procs
+			int numberFixed=General.NonQ(command);
+			if(numberFixed!=0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Appointments deleted due to no date and no procs: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
