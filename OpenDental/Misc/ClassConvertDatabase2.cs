@@ -367,11 +367,33 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 
+                    command = "DROP TABLE IF EXISTS anesthmedsintake";
+                    General.NonQ(command);
+                    command = @"CREATE TABLE anesthmedsintake(
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						IntakeDate datetime NOT NULL,
+						AnestheticMed char (20) NOT NULL,
+						DEASchedule char(2),
+						Qty int(6) NOT NULL, 
+						SupplierIDNum char(11) NOT NULL,
+						InvoiceNum char(20) NOT NULL,
+						PRIMARY KEY (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+                    General.NonQ(command);
 
-
-
-
-
+                    command = "DROP TABLE IF EXISTS anesthmedsinventoryadj";
+                    General.NonQ(command);
+                    command = @"CREATE TABLE anesthmedsinventoryadj (
+						AnestheticMedNum int(3) NOT NULL auto_increment,
+						AdjPos int(4),
+						AdjNeg int(4),
+						Provider char(4),
+						Notes text NOT NULL,
+						TimeStamp datetime,
+						PRIMARY KEY (AnestheticMedNum),
+						INDEX (AnestheticMedNum)
+						) DEFAULT CHARSET=utf8";
+                    General.NonQ(command);
 
 
 
@@ -389,6 +411,11 @@ namespace OpenDental{
 		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
 ALTER TABLE schedule ADD INDEX (ProvNum)
 ALTER TABLE schedule ADD INDEX (SchedDate)*/
+        
+
+        
+
+
 
 	}
 }
