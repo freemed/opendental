@@ -5643,7 +5643,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an item first");
 				return;
 			}
-			if(MsgBox.Show(this,true,"Delete planned appointment(s)?")){
+			if(!MsgBox.Show(this,true,"Delete planned appointment(s)?")){
 				return;
 			}
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
