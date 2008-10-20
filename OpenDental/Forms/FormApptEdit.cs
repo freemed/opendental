@@ -84,7 +84,6 @@ namespace OpenDental{
 		private ListBox listQuickAdd;
 		private Label labelQuickAdd;
 		private OpenDental.UI.Button butAdd;
-		private OpenDental.UI.Button butRemove;
 		private OpenDental.UI.Button butDeleteProc;
 		private CheckBox checkTimeLocked;
 
@@ -167,7 +166,7 @@ namespace OpenDental{
 			this.menuItemDismissedNow = new System.Windows.Forms.MenuItem();
 			this.listQuickAdd = new System.Windows.Forms.ListBox();
 			this.labelQuickAdd = new System.Windows.Forms.Label();
-			this.butRemove = new OpenDental.UI.Button();
+			this.butDeleteProc = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.textNote = new OpenDental.ODtextBox();
 			this.butAddComm = new OpenDental.UI.Button();
@@ -181,7 +180,6 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butDeleteProc = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -572,19 +570,21 @@ namespace OpenDental{
 			this.labelQuickAdd.TabIndex = 149;
 			this.labelQuickAdd.Text = "Single click on items in the list below to add them to this appointment.";
 			// 
-			// butRemove
+			// butDeleteProc
 			// 
-			this.butRemove.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRemove.Autosize = true;
-			this.butRemove.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemove.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemove.CornerRadius = 4F;
-			this.butRemove.Location = new System.Drawing.Point(485,2);
-			this.butRemove.Name = "butRemove";
-			this.butRemove.Size = new System.Drawing.Size(75,24);
-			this.butRemove.TabIndex = 153;
-			this.butRemove.Text = "Remove";
-			this.butRemove.Click += new System.EventHandler(this.butRemove_Click);
+			this.butDeleteProc.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDeleteProc.Autosize = true;
+			this.butDeleteProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDeleteProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDeleteProc.CornerRadius = 4F;
+			this.butDeleteProc.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDeleteProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDeleteProc.Location = new System.Drawing.Point(485,2);
+			this.butDeleteProc.Name = "butDeleteProc";
+			this.butDeleteProc.Size = new System.Drawing.Size(75,24);
+			this.butDeleteProc.TabIndex = 154;
+			this.butDeleteProc.Text = "Delete";
+			this.butDeleteProc.Click += new System.EventHandler(this.butDeleteProc_Click);
 			// 
 			// butAdd
 			// 
@@ -595,7 +595,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(637,2);
+			this.butAdd.Location = new System.Drawing.Point(561,2);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 152;
@@ -673,6 +673,7 @@ namespace OpenDental{
 			// 
 			// gridProc
 			// 
+			this.gridProc.AllowSelection = false;
 			this.gridProc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridProc.HScrollVisible = false;
@@ -781,28 +782,11 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butDeleteProc
-			// 
-			this.butDeleteProc.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDeleteProc.Autosize = true;
-			this.butDeleteProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDeleteProc.CornerRadius = 4F;
-			this.butDeleteProc.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDeleteProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteProc.Location = new System.Drawing.Point(561,2);
-			this.butDeleteProc.Name = "butDeleteProc";
-			this.butDeleteProc.Size = new System.Drawing.Size(75,24);
-			this.butDeleteProc.TabIndex = 154;
-			this.butDeleteProc.Text = "Delete";
-			this.butDeleteProc.Click += new System.EventHandler(this.butDeleteProc_Click);
-			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(975,704);
 			this.Controls.Add(this.butDeleteProc);
-			this.Controls.Add(this.butRemove);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.listQuickAdd);
 			this.Controls.Add(this.labelQuickAdd);
@@ -857,7 +841,7 @@ namespace OpenDental{
 					butTask.Enabled=false;
 					gridProc.Enabled=false;
 					listQuickAdd.Enabled=false;
-					butRemove.Enabled=false;
+					//butRemove.Enabled=false;
 					butAdd.Enabled=false;
 					butDeleteProc.Enabled=false;
 				}
@@ -1102,13 +1086,15 @@ namespace OpenDental{
 		private void FillProcedures(){
 			gridProc.BeginUpdate();
 			gridProc.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableApptProcs","Stat"),40);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableApptProcs","Stat"),35);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableApptProcs","Priority"),55);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Priority"),45);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableApptProcs","Tth"),30);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Tth"),25);
 			gridProc.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableApptProcs","Surf"),40);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Surf"),50);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Code"),50);
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableApptProcs","Description"),200);
 			gridProc.Columns.Add(col);
@@ -1122,38 +1108,50 @@ namespace OpenDental{
 				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["priority"].ToString());
 				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["toothNum"].ToString());
 				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["Surf"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["ProcCode"].ToString());
 				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["descript"].ToString());
 				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["fee"].ToString());
 				gridProc.Rows.Add(row);
 			}
 			gridProc.EndUpdate();
-			//for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++){
-			//	if(DS.Tables["Procedure"].Rows[i]["attached"].ToString()=="1") {
-			//		gridProc.SetSelected(i,true);
-			//	}
-			//}
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++){
+				if(DS.Tables["Procedure"].Rows[i]["attached"].ToString()=="1") {
+					gridProc.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void gridProc_CellClick(object sender,ODGridClickEventArgs e) {
-			/*bool isSelected=false;
+			bool isSelected=false;
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++){
 				if(gridProc.SelectedIndices[i]==e.Row){
 					isSelected=true;
 				}
 			}
+			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
+			List<int> procNums=new List<int>();
+			procNums.Add(PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString()));
 			if(isSelected){
-				gridProc.SetSelected(e.Row,false);
+				//gridProc.SetSelected(e.Row,false);
+				Procedures.DetachFromApt(procNums,isPlanned);
 			}
 			else{
-				gridProc.SetSelected(e.Row,true);
+				//gridProc.SetSelected(e.Row,true);
+				Procedures.AttachToApt(procNums,AptCur.AptNum,isPlanned);
 			}
+			Recalls.Synch(AptCur.PatNum);//Maybe we should move this to the closing event?
+			//manually change existing table instead of refreshing from db?
+			DS.Tables.Remove("Procedure");
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
+			FillProcedures();
 			CalculateTime();
 			FillTime();
-			CalcPatientFeeThisAppt();*/
+			CalcPatientFeeThisAppt();
 		}
 
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Procedure proc=Procedures.GetOneProc(PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString()),true);
+			int procNum=PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString());
+			Procedure proc=Procedures.GetOneProc(procNum,true);
 			FormProcEdit FormP=new FormProcEdit(proc,pat,fam);
 			FormP.ShowDialog();
 			if(FormP.DialogResult!=DialogResult.OK){
@@ -1162,9 +1160,30 @@ namespace OpenDental{
 			DS.Tables.Remove("Procedure");
 			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
 			FillProcedures();
+			CalculateTime();
+			FillTime();
+			//make sure the one we double clicked on is highlighted if found
+			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++){
+				if(DS.Tables["Procedure"].Rows[i]["attached"].ToString()=="1"){
+					//if already attached, skip
+					continue;
+				}
+				if(DS.Tables["Procedure"].Rows[i]["ProcNum"].ToString()==procNum.ToString()){
+					Procedures.AttachToApt(procNum,AptCur.AptNum,isPlanned);
+					Recalls.Synch(AptCur.PatNum);
+					DS.Tables.Remove("Procedure");
+					DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
+					FillProcedures();
+					CalculateTime();
+					FillTime();
+					break;
+				}
+			}
+			
 		}
 
-		private void butRemove_Click(object sender,EventArgs e) {
+		/*private void butRemove_Click(object sender,EventArgs e) {
 			if(gridProc.SelectedIndices.Length==0){
 				MsgBox.Show(this,"Please select one or more procedures first.");
 				return;
@@ -1179,7 +1198,7 @@ namespace OpenDental{
 			DS.Tables.Remove("Procedure");
 			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
 			FillProcedures();
-		}
+		}*/
 
 		private void butDeleteProc_Click(object sender,EventArgs e) {
 			//this button will not be visible if user does not have permission
@@ -1187,7 +1206,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select one or more procedures first.");
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete Procedure(s)?")){
+			if(!MsgBox.Show(this,true,"Permanently delete all selected procedure(s)?")){
 				return;
 			}
 			try{
@@ -1207,9 +1226,90 @@ namespace OpenDental{
 			DS.Tables.Remove("Procedure");
 			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
 			FillProcedures();
+			CalculateTime();
+			FillTime();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			FormProcCodes FormP=new FormProcCodes();
+			FormP.IsSelectionMode=true;
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			Procedure ProcCur;
+			ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
+			ProcCur.CodeNum = FormP.SelectedCodeNum;
+			//procnum
+			ProcCur.PatNum=AptCur.PatNum;
+			//aptnum
+			//proccode
+			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
+			ProcCur.ProcDate=DateTime.Today;
+			ProcCur.DateTP=ProcCur.ProcDate;
+			//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
+			InsPlan priplan=null;
+			//Family fam=Patients.GetFamily(AptCur.PatNum);
+			//Patient pat=fam.GetPatient(AptCur.PatNum);
+			//InsPlan[] planList=InsPlans.Refresh(fam);
+			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
+			if(patPlanList.Length>0) {
+				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,PlanList);
+			}
+			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,patPlanList));
+			if(priplan!=null && priplan.PlanType=="p") {//PPO
+				double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
+				if(standardfee>insfee) {
+					ProcCur.ProcFee=standardfee;
+				}
+				else {
+					ProcCur.ProcFee=insfee;
+				}
+			}
+			else {
+				ProcCur.ProcFee=insfee;
+			}
+			//surf
+			//ToothNum
+			//Procedures.Cur.ToothRange
+			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
+			ProcCur.Priority=0;
+			ProcCur.ProcStatus=ProcStat.TP;
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
+				&& pat.SecProv != 0){
+				ProcCur.ProvNum=pat.SecProv;
+			}
+			else{
+				ProcCur.ProvNum=pat.PriProv;
+			}
+			ProcCur.Note="";
+			ProcCur.ClinicNum=pat.ClinicNum;
+			//dx
+			//nextaptnum
+			ProcCur.DateEntryC=DateTime.Now;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+			ProcCur.SiteNum=pat.SiteNum;
+			Procedures.Insert(ProcCur);
+			Benefit[] benefitList=Benefits.Refresh(patPlanList);
+			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,PlanList,patPlanList,benefitList);
+			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
+			FormPE.IsNew=true;
+			FormPE.ShowDialog();
+			if(FormPE.DialogResult==DialogResult.Cancel){
+				//any created claimprocs are automatically deleted from within procEdit window.
+				try{
+					Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+				}
+			}
+			else{
+				//not needed because always TP
+				//Recalls.Synch(PatCur.PatNum);
+			}
+			/*
 			FormApptProcs FormAP=new FormApptProcs();
 			FormAP.AptCur=AptCur.Copy();
 			//but we do need the status to be accurate:
@@ -1228,13 +1328,15 @@ namespace OpenDental{
 			FormAP.ShowDialog();
 			if(FormAP.DialogResult!=DialogResult.OK){
 				return;
-			}
+			}*/
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
-			Procedures.AttachToApt(FormAP.SelectedProcNums,AptCur.AptNum,isPlanned);
-			Recalls.Synch(AptCur.PatNum);//needs to be moved into Procedures.Delete
+			Procedures.AttachToApt(ProcCur.ProcNum,AptCur.AptNum,isPlanned);
+			Recalls.Synch(AptCur.PatNum);//might not be needed because TP?
 			DS.Tables.Remove("Procedure");
 			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
 			FillProcedures();
+			CalculateTime();
+			FillTime();
 		}
 
 		private void FillTime() {

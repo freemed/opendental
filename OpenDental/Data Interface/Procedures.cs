@@ -930,6 +930,12 @@ namespace OpenDental{
 			return extracted;
 		}
 
+		public static void AttachToApt(int procNum,int aptNum,bool isPlanned){
+			List<int> procNums=new List<int>();
+			procNums.Add(procNum);
+			AttachToApt(procNums,aptNum,isPlanned);
+		}
+
 		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned){
 			if(procNums.Count==0){
 				return;

@@ -1335,6 +1335,9 @@ namespace OpenDental.UI{
 			if(selectionMode!=GridSelectionMode.MultiExtended){
 				return;
 			}
+			if(!allowSelection){
+				return;//dragging does not change selection of rows
+			}
 			int curRow=PointToRow(e.Y);
 			if(curRow==-1 || curRow==MouseDownRow){
 				return;
