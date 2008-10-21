@@ -3045,7 +3045,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
-				ToolBarMain.Buttons["Anesthesia"].Enabled = false;
+				//ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -5553,6 +5553,12 @@ namespace OpenDental{
 				butClear.Enabled=false;
 				gridPlanned.Enabled=false;
 				return;
+			}
+			else{
+				butNew.Enabled=true;
+				butPin.Enabled=true;
+				butClear.Enabled=true;
+				gridPlanned.Enabled=true;
 			}
 			if(PatCur.PlannedIsDone) {
 				checkDone.Checked=true;
