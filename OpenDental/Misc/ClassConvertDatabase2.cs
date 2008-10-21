@@ -395,7 +395,64 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
                     General.NonQ(command);
 
-
+										command="DROP TABLE IF EXISTS anestheticdata";
+					General.NonQ(command);
+					command = @"CREATE TABLE anestheticdata (
+						AnestheticDataNum int(11) NOT NULL auto_increment,
+						AnestheticRecordNum int(11) NOT NULL,
+						AnesthOpen char(32),
+						AnesthClose char(32),
+						SurgOpen char(32),
+						SurgClose char(32),
+						Anesthetist char(32) NOT NULL,
+						Surgeon char(32) NOT NULL,						
+						Asst char(32) NOT NULL,
+						Circulator char(32) NOT NULL,						
+						VSMName char(20) NOT NULL,
+						VSMSerNum char(20) NOT NULL,					
+						ASA char(3) NOT NULL,
+						ASA_EModifier char(1) NOT NULL,					
+						InhO2 tinyint(1) NOT NULL,
+						InhN2O tinyint(1) NOT NULL,						
+						O2LMin smallint(1) NOT NULL,
+						N2OLMin smallint(1) NOT NULL,						
+						RteNasCan tinyint(1) NOT NULL,
+						RteNasHood tinyint(1) NOT NULL,
+						RteETT tinyint(1) NOT NULL,
+						MedRouteIVCath tinyint(1) NOT NULL,
+						MedRouteIVButtFly tinyint(1) NOT NULL,
+						MedRouteIM tinyint(1) NOT NULL,
+						MedRoutePO tinyint(1) NOT NULL,
+						MedRouteNasal tinyint(1) NOT NULL,
+						MedRouteRectal tinyint(1) NOT NULL,
+						IVSite char(16) NOT NULL,
+						IVGauge smallint(2) NOT NULL,
+						IVSideR smallint(2) NOT NULL,
+						IVSideL smallint(2) NOT NULL,
+						IVAtt smallint(1) NOT NULL,
+						IVF char(8) NOT NULL,
+						IVFVol int(5) NOT NULL,
+						MonBP tinyint(1) NOT NULL,
+						MonSpO2 tinyint(1)NOT NULL,
+						MonEtCO2 tinyint(1) NOT NULL,
+						MonTemp tinyint(1) NOT NULL,
+						MonPrecordial tinyint(1) NOT NULL,
+						MonEKG tinyint(1) NOT NULL,
+						Notes text NOT NULL,
+						PatWgt smallint(3) NOT NULL,
+						WgtUnitsLbs tinyint(1) NOT NULL,
+						WgtUnitsKgs tinyint(1) NOT NULL,
+						PatHgt char(10) NOT NULL,
+						EscortName char(32) NOT NULL,
+						EscortCellNum char(13) NOT NULL,
+						EscortRel char(16) NOT NULL,
+						NPOTime char(5) NOT NULL,
+						SigIsTopaz tinyint(3) NOT NULL,
+						Signature text NOT NULL,
+						PRIMARY KEY (AnestheticDataNum),
+						INDEX (AnestheticRecordNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 				}
 				else {//oracle
