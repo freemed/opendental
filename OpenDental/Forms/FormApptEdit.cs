@@ -1726,11 +1726,12 @@ namespace OpenDental{
 			AptCur.DateTimeSeated=dateTimeSeated;
 			AptCur.DateTimeDismissed=dateTimeDismissed;
 			AptCur.ProcDescript="";
-			for(int i=0;i<gridProc.Rows.Count;i++) {
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				if(i>0){
 					AptCur.ProcDescript+=", ";
 				}
-				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(PIn.PInt(DS.Tables["Procedure"].Rows[i]["CodeNum"].ToString())).AbbrDesc;
+				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
+					PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
 			}
 			//int[] procNums=new int[gridProc.SelectedIndices.Length];
 			//for(int i=0;i<procNums.Length;i++){
