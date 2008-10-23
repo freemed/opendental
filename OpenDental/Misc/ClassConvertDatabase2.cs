@@ -395,7 +395,7 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
                     General.NonQ(command);
 
-										command="DROP TABLE IF EXISTS anestheticdata";
+					command="DROP TABLE IF EXISTS anestheticdata";
 					General.NonQ(command);
 					command = @"CREATE TABLE anestheticdata (
 						AnestheticDataNum int(11) NOT NULL auto_increment,
@@ -454,6 +454,12 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
+                    string[] commands = new string[]
+				{
+					"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
+					
+				};
+                    General.NonQ(commands);
 				}
 				else {//oracle
 					

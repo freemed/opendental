@@ -39,6 +39,7 @@ namespace OpenDentBusiness {
 				user.ProvNum       = PIn.PInt   (table.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (table.Rows[i][7].ToString());
 				user.TaskListInBox = PIn.PInt   (table.Rows[i][8].ToString());
+                user.AnesthProvType = PIn.PInt  (table.Rows[i][9].ToString());
 				UserodC.Listt.Add(user);
 			}
 		}			
@@ -72,6 +73,8 @@ namespace OpenDentBusiness {
 				user.ClinicNum     = PIn.PInt(RawData.Rows[i][5].ToString());
 				user.ProvNum       = PIn.PInt(RawData.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (RawData.Rows[i][7].ToString());
+                user.TaskListInBox = PIn.PInt   (RawData.Rows[i][8].ToString());
+                user.AnesthProvType = PIn.PInt   (RawData.Rows[i][9].ToString());
 			}
 			return user;
 		}		*/
@@ -247,14 +250,15 @@ namespace OpenDentBusiness {
 				+",ProvNum = '"      +POut.PInt   (user.ProvNum)+"'"
 				+",IsHidden = '"     +POut.PBool  (user.IsHidden)+"'"
 				+",TaskListInBox = '"+POut.PInt   (user.TaskListInBox)+"'"
+                + ",AnesthProvType = '"+POut.PInt  (user.AnesthProvType)+"'"
 				+" WHERE UserNum = '"+POut.PInt   (user.UserNum)+"'";
  			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		private static void Insert(Userod user){
-			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,"
-				+"TaskListInBox) VALUES("
+			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
+				+ "AnesthProvType) VALUES("
 				+"'"+POut.PString(user.UserName)+"', "
 				+"'"+POut.PString(user.Password)+"', "
 				+"'"+POut.PInt   (user.UserGroupNum)+"', "
@@ -262,7 +266,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt   (user.ClinicNum)+"', "
 				+"'"+POut.PInt   (user.ProvNum)+"', "
 				+"'"+POut.PBool  (user.IsHidden)+"', "
-				+"'"+POut.PInt   (user.TaskListInBox)+"')";
+				+"'"+POut.PInt   (user.TaskListInBox)+"', "
+                + "'"+POut.PInt  (user.AnesthProvType)+"')";
  			user.UserNum=General.NonQ(command,true);
 		}
 
@@ -371,6 +376,19 @@ namespace OpenDentBusiness {
 			//retVal.Sort(//in a hurry, so skipping
 			return retVal;
 		}
+
+        //Return 3, which is non-admin provider type
+        public static int GetAnesthProvType(int anesthProvType)
+        {
+            for (int i = 0; i < UserodC.Listt.Count; i++)
+            {
+                if (UserodC.Listt[i].AnesthProvType == anesthProvType)
+                {
+                    return UserodC.Listt[i].AnesthProvType;
+                }
+            }
+            return 3;
+        }
 
 
 	}

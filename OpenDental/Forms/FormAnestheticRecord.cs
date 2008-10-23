@@ -1946,7 +1946,7 @@ namespace OpenDental
 			sigBox.SetTabletState(1);
 			if (!allowTopaz)
 			{
-				butTopazSign.Visible = false;
+				//butTopazSign.Visible = false; throwing exception on x86, seems OK on 32 bit
 				sigBox.Visible = true;
 			}
 			else
@@ -2262,7 +2262,7 @@ namespace OpenDental
                 sigBox.SetTabletState(1);//on-screen box is now accepting input.
                 SigChanged = true;
                // AnestheticDataCur.UserNum = Security.CurUser.UserNum;
-               // textUser.Text = Userods.GetName(ProcCur.UserNum);
+              // textUser.Text = Userods.GetName(ProcCur.UserNum);
             }
 		}
 
