@@ -397,6 +397,9 @@ namespace OpenDental{
 		///<summary>Used in TP module to get one estimate. The List must be all ClaimProcs for this patient. If estimate can't be found, then return null.  The procedure is always status TP, so there shouldn't be more than one estimate for one plan.</summary>
 		public static ClaimProc GetEstimate(ClaimProc[] List,int procNum,int planNum) {
 			for(int i=0;i<List.Length;i++) {
+				if(List[i].Status==ClaimProcStatus.Preauth){
+					continue;
+				}
 				if(List[i].ProcNum==procNum && List[i].PlanNum==planNum) {
 					return List[i];
 				}
