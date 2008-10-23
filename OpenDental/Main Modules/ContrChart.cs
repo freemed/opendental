@@ -2926,8 +2926,8 @@ namespace OpenDental{
 		 	//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			if(PrefC.GetBoolSilent("EnableAnesthMod",false)){
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
+			if(PrefC.GetBoolSilent("EnableAnesthMod",true)){
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Anesthesia"), 3, "", "Anesthesia"));
 			}
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -3045,7 +3045,10 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
-				//ToolBarMain.Buttons["Anesthesia"].Enabled = false;
+                if (PrefC.GetBoolSilent("EnableAnesthMod", false))
+                {
+                    ToolBarMain.Buttons["Anesthesia"].Enabled = false;
+                }
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3061,12 +3064,12 @@ namespace OpenDental{
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
 				//turns off Anesthesia Module button if pref is not checked in Module Setup
-				/*if(PrefC.GetBoolSilent("EnableAnesthMod", true)){
-					ToolBarMain.Buttons["Anesthesia"].Enabled = true;
-				}
-				else{
-					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
-				}*/
+                if (PrefC.GetBoolSilent("EnableAnesthMod", true))
+                {
+                    ToolBarMain.Buttons["Anesthesia"].Enabled = true;
+                }
+           
+
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;

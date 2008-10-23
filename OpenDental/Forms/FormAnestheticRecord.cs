@@ -2089,10 +2089,10 @@ namespace OpenDental
                         CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);//high encryption
                         CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);//high compression
                         CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnestheticDataCur.Signature);
-                        if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
+                       /* if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
                         {
                             labelInvalidSig.Visible = true;
-                        }
+                        }*/
                     }
                 }
             }
@@ -2110,11 +2110,11 @@ namespace OpenDental
                     //sigBox.SetEncryptionMode(2);//high encryption
                     //sigBox.SetSigCompressionMode(2);//high compression
                     sigBox.SetSigString(AnestheticDataCur.Signature);
-                    if (sigBox.NumberOfTabletPoints() == 0)
+                   /* if (sigBox.NumberOfTabletPoints() == 0)
                     {
                         labelInvalidSig.Visible = true;
                     }
-                    sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
+                    sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.*/
                 }
             }
         }
@@ -2250,7 +2250,7 @@ namespace OpenDental
 		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e)
 		{
             //CheckForCompleteNote();
-            if (!IsStartingUp//so this happens only if user changes the note
+            /*if (!IsStartingUp//so this happens only if user changes the note
                 && !SigChanged)//and the original signature is still showing.
             {
                 sigBox.ClearTablet();
@@ -2263,7 +2263,7 @@ namespace OpenDental
                 SigChanged = true;
                // AnestheticDataCur.UserNum = Security.CurUser.UserNum;
               // textUser.Text = Userods.GetName(ProcCur.UserNum);
-            }
+            }*/
 		}
 
 		private void textBoxSurgClose_TextChanged_1(object sender, EventArgs e)
