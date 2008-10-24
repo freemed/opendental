@@ -2487,11 +2487,13 @@ namespace OpenDental{
 			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
 			if(assignedDent!=0){
 				//if no dentist is assigned to spot, then keep the original dentist without prompt.  All appts must have prov.
-				if(apt.ProvNum!=assignedDent	|| apt.ProvHyg!=assignedHyg  || apt.AptStatus!=ApptStatus.PtNote || apt.AptStatus!=ApptStatus.PtNoteCompleted) {
-					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
-						apt.ProvNum=assignedDent;
-						if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
-							apt.ProvHyg=assignedHyg;
+				if(apt.ProvNum!=assignedDent	|| apt.ProvHyg!=assignedHyg){ 
+					if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
+						if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+							apt.ProvNum=assignedDent;
+							if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
+								apt.ProvHyg=assignedHyg;
+							}
 						}
 					}
 				}
