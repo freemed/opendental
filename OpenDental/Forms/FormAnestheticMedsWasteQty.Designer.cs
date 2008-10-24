@@ -267,5 +267,6 @@
 		private System.Windows.Forms.Label labelFormInfo;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label labelDate;
+        //private DataSet DataSetAnesthMedAdjQty;
 	}
 }

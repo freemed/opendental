@@ -1946,7 +1946,7 @@ namespace OpenDental
 			sigBox.SetTabletState(1);
 			if (!allowTopaz)
 			{
-				//butTopazSign.Visible = false; throwing exception on x86, seems OK on 32 bit
+				//butTopazSign.Visible = false; //this throws an exception on x86
 				sigBox.Visible = true;
 			}
 			else
