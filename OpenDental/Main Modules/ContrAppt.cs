@@ -3802,6 +3802,10 @@ namespace OpenDental{
 		}
 
 		private void butSearchMore_Click(object sender, System.EventArgs e) {
+			if(pinBoard.SelectedAppt==null){
+				MsgBox.Show(this,"There is no appointment on the pinboard.");
+				return;
+			}
 			dateSearch.Text=SearchResults[SearchResults.Length-1].ToShortDateString();
 			DoSearch();
 		}
@@ -3816,6 +3820,10 @@ namespace OpenDental{
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
+			if(pinBoard.SelectedAppt==null){
+				MsgBox.Show(this,"There is no appointment on the pinboard.");
+				return;
+			}
 			DoSearch();
 		}
 
