@@ -11,15 +11,15 @@ namespace OpenDentBusiness{
 		
 
 		[DataField("AnesthMedNum", PrimaryKey=true, AutoNumber=true)]
-		private int anesthMedNum;
-		bool anesthMedNumChanged;
+		private int anestheticMedNum;
+		bool anestheticMedNumChanged;
 		/// <summary>Primary key.</summary>
 		public int AnesthMedNum {
-			get { return anesthMedNum; }
-			set { anesthMedNum = value; MarkDirty(); anesthMedNumChanged = true; }
+			get { return anestheticMedNum; }
+			set { anestheticMedNum = value; MarkDirty(); anestheticMedNumChanged = true; }
 		}
 		public bool AnesthMedNumChanged {
-			get { return anesthMedNumChanged; }
+			get { return anestheticMedNumChanged; }
 		}
 
 		//F.K. table anestheticrecord

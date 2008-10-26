@@ -44,5 +44,8 @@
 		}
 
 		#endregion
+        private OpenDental.UI.Button butClose;
+        private OpenDental.UI.ODGrid gridAnesthMedsInventory;
+        private OpenDental.UI.Button butAdd;
 	}
 }

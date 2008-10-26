@@ -11,41 +11,43 @@ namespace OpenDental{
 	///<summary></summary>
 	public class AnestheticMeds {
 
-		///<summary>Gets all AnestheticMedsGiven.</summary>
-		/*public static List<AnestheticMedsGiven> CreateObjects() {
-			string command="SELECT * FROM anestheticMedsGiven ORDER BY AnesthMed";
-			return new List<AnestheticMedsGiven>(DataObjectFactory<AnestheticMedsGiven>.CreateObjects(command));
+		///<summary>Gets all AnestheticMeds</summary>
+		public static List<AnesthMed> CreateObjects() {
+			string command="SELECT * FROM anesthmedsinventory ORDER BY AnestheticMedNum";
+			return new List<AnesthMed>(DataObjectFactory<AnesthMed>.CreateObjects(command));
 		}
 
 		///<summary></summary>
-		public static void WriteObject(AnestheticMedsGiven med){
-			DataObjectFactory<AnestheticMedsGiven>.WriteObject(med);
+		public static void WriteObject(AnesthMed med){
+			DataObjectFactory<AnesthMed>.WriteObject(med);
 		}
 
 		///<summary>Surround with try-catch.</summary>
-		public static void DeleteObject(AnestheticMedsGiven med){
+		public static void DeleteObject(AnesthMed med){
 			//validate that not already in use.
-			string command="SELECT COUNT(*) FROM anesthmedsgiven WHERE AnestheticMedsGivenNum="+POut.PInt(med.AnestheticMedsGivenNum);
+			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			int count=PIn.PInt(General.GetCount(command));
 			if(count>0) {
-				throw new ApplicationException(Lan.g("Supplies","AnestheticMedsGiven is already in use on an order. Not allowed to delete."));
+				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}
-			command="SELECT COUNT(*) FROM supply WHERE AnestheticMedsGivenNum="+POut.PInt(med.AnestheticMedsGivenNum);
+			command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			count=PIn.PInt(General.GetCount(command));
 			if(count>0) {
-				throw new ApplicationException(Lan.g("Supplies","AnestheticMedsGiven is already in use on a supply. Not allowed to delete."));
+				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}
-			DataObjectFactory<AnestheticMedsGiven>.DeleteObject(med);
+			DataObjectFactory<AnesthMed>.DeleteObject(med);
 		}
 
-		public static string GetName(List<AnestheticMedsGiven> listAnestheticMedsGiven,int anestheticMedsGivenNum){
-			for(int i=0;i<listAnestheticMedsGiven.Count;i++){
-				if(listAnestheticMedsGiven[i].AnestheticMedsGivenNum==anestheticMedsGivenNum){
-					return listAnestheticMedsGiven[i].AnesthMed;
-				}
-			}
+		public static string GetName(List<AnesthMed>listAnesthMed,int anestheticMedNum){
+            for (int i = 0; i < listAnesthMed.Count; i++)
+            {
+                if (listAnesthMed[i].AnestheticMedNum == anestheticMedNum)
+                {
+                    return listAnesthMed[i].AnesthMedName;
+                }
+            }
 			return "";
-		}*/
+		}
 
 
 	}

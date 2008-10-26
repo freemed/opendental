@@ -13,8 +13,7 @@ namespace OpenDental
 	public partial class FormAnestheticMedsInventory : Form
 	{
 		private GroupBox groupAnestheticMeds;
-		public bool IsNew;
-		private OpenDental.UI.Button butEditAnesthMeds;
+        public bool IsNew;
 		private OpenDental.UI.Button butAddAnesthMeds;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butCancel;
@@ -22,6 +21,8 @@ namespace OpenDental
 		private Label labelIntakeNewMeds;
         private ODGrid gridAnesthMedsInventory;
         private OpenDental.UI.Button butAdjustQtys;
+        private List<AnesthMed> listAnestheticMeds;
+
 		
 		public FormAnestheticMedsInventory()
 		{
@@ -40,7 +41,6 @@ namespace OpenDental
             this.butAnesthMedIntake = new OpenDental.UI.Button();
             this.butClose = new OpenDental.UI.Button();
             this.butCancel = new OpenDental.UI.Button();
-            this.butEditAnesthMeds = new OpenDental.UI.Button();
             this.butAddAnesthMeds = new OpenDental.UI.Button();
             this.groupAnestheticMeds.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +53,6 @@ namespace OpenDental
             this.groupAnestheticMeds.Controls.Add(this.butAnesthMedIntake);
             this.groupAnestheticMeds.Controls.Add(this.butClose);
             this.groupAnestheticMeds.Controls.Add(this.butCancel);
-            this.groupAnestheticMeds.Controls.Add(this.butEditAnesthMeds);
             this.groupAnestheticMeds.Controls.Add(this.butAddAnesthMeds);
             this.groupAnestheticMeds.Location = new System.Drawing.Point(24, 24);
             this.groupAnestheticMeds.Name = "groupAnestheticMeds";
@@ -78,7 +77,7 @@ namespace OpenDental
             this.gridAnesthMedsInventory.Location = new System.Drawing.Point(117, 28);
             this.gridAnesthMedsInventory.Name = "gridAnesthMedsInventory";
             this.gridAnesthMedsInventory.ScrollValue = 0;
-            this.gridAnesthMedsInventory.Size = new System.Drawing.Size(582, 307);
+            this.gridAnesthMedsInventory.Size = new System.Drawing.Size(580, 300);
             this.gridAnesthMedsInventory.TabIndex = 144;
             this.gridAnesthMedsInventory.Title = "Anesthetic Medication Inventory";
             this.gridAnesthMedsInventory.TranslationName = "TableAnesthMedsInventory";
@@ -151,23 +150,6 @@ namespace OpenDental
             this.butCancel.UseVisualStyleBackColor = true;
             this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
-            // butEditAnesthMeds
-            // 
-            this.butEditAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butEditAnesthMeds.Autosize = true;
-            this.butEditAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butEditAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butEditAnesthMeds.CornerRadius = 4F;
-            this.butEditAnesthMeds.Image = global::OpenDental.Properties.Resources.butCopy;
-            this.butEditAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butEditAnesthMeds.Location = new System.Drawing.Point(13, 80);
-            this.butEditAnesthMeds.Name = "butEditAnesthMeds";
-            this.butEditAnesthMeds.Size = new System.Drawing.Size(82, 26);
-            this.butEditAnesthMeds.TabIndex = 76;
-            this.butEditAnesthMeds.Text = "Edit     ";
-            this.butEditAnesthMeds.UseVisualStyleBackColor = true;
-            this.butEditAnesthMeds.Click += new System.EventHandler(this.butEditAnesthMeds_Click);
-            // 
             // butAddAnesthMeds
             // 
             this.butAddAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -201,15 +183,40 @@ namespace OpenDental
 		private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
 		{
 
-
+            FillGrid();
 		}
+
+        private void FillGrid()
+        {
+            listAnestheticMeds = AnestheticMeds.CreateObjects();
+            gridAnesthMedsInventory.BeginUpdate();
+            gridAnesthMedsInventory.Columns.Clear();
+            ODGridColumn col = new ODGridColumn(Lan.g("TableAnesthMedsInventory", "Anesthetic Medication"), 200);
+            gridAnesthMedsInventory.Columns.Add(col);
+            col = new ODGridColumn(Lan.g("TableAnesthMedsInventory", "How Supplied"), 200);
+            gridAnesthMedsInventory.Columns.Add(col);
+            col = new ODGridColumn(Lan.g("TableAnesthMedsInventory", "Quantity on Hand"), 180);
+            gridAnesthMedsInventory.Columns.Add(col);
+            gridAnesthMedsInventory.Rows.Clear();
+            ODGridRow row;
+            for (int i = 0; i < listAnestheticMeds.Count; i++)
+            {
+                row = new ODGridRow();
+                row.Cells.Add(listAnestheticMeds[i].AnesthMedName);
+                row.Cells.Add(listAnestheticMeds[i].AnesthHowSupplied);
+                row.Cells.Add(listAnestheticMeds[i].QtyOnHand);
+                gridAnesthMedsInventory.Rows.Add(row);
+            }
+            gridAnesthMedsInventory.EndUpdate();
+        }
+
 		private void butAddAnesthMeds_Click(object sender, EventArgs e)
 		{
-			FormAnestheticMedsEdit FormE = new FormAnestheticMedsEdit();
+			FormAnestheticMedsEdit FormME = new FormAnestheticMedsEdit();
 			//FormE.AnestheticMedsCur = new AnestheticMeds();
 			//FormI.IsNew = true;
-			FormE.ShowDialog();
-			//FillGrid();
+			FormME.ShowDialog();
+			FillGrid();
 		}
 
 		private void butCancel_Click(object sender, EventArgs e)
@@ -287,7 +294,13 @@ namespace OpenDental
 
         private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-
+            FormAnestheticMedsEdit FormME =new FormAnestheticMedsEdit();
+			//FormME.Med=listAnestheticMeds[e.Row];
+			FormME.ShowDialog();
+            if (FormME.DialogResult == DialogResult.OK)
+            {
+                FillGrid();
+            }
         }
 	}
 }

@@ -347,9 +347,7 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-					//this field is used to temporarily elevate security privileges to adminstrator. This will probably never be used.                 
-					// command = "ALTER TABLE userod ADD TempAdminPriv tinyint NOT NULL";
-					// General.NonQ(command);
+
                     
 
 				} 
@@ -454,12 +452,19 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
-                    string[] commands = new string[]
+                  /*  string[] commands = new string[]
 				{
 					"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
+                   
 					
 				};
-                    General.NonQ(commands);
+                    General.NonQ(commands);*/
+                command = "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL";
+                General.NonQ(command);
+                command = "ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL";
+                General.NonQ(command);
+                  
+
 				}
 				else {//oracle
 					
