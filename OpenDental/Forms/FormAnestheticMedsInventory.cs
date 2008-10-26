@@ -291,7 +291,7 @@ namespace OpenDental
         private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             FormAnestheticMedsEdit FormME =new FormAnestheticMedsEdit();
-			//FormME.Med=listAnestheticMeds[e.Row];
+			FormME.Med=listAnestheticMeds[e.Row];
 			FormME.ShowDialog();
             if (FormME.DialogResult == DialogResult.OK)
             {

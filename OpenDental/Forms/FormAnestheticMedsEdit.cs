@@ -10,13 +10,28 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormAnestheticMedsEdit:Form {
+        public AnesthMed Med;
+
 		public FormAnestheticMedsEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
+
+            //if(textDate.errorProvider1.GetError(textDate)!=""){
+            //	MsgBox.Show(this,"Please fix data entry errors first.");
+            //	return;
+            //}
+            if (textAnesthMedName.Text == "")
+            {
+                MsgBox.Show(this, "Please enter a name.");
+                return;
+            }
+            Med.AnesthMedName = textAnesthMedName.Text;
+            Med.AnesthHowSupplied = textAnesthHowSupplied.Text;
+            AnestheticMeds.WriteObject(Med);
+            DialogResult = DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
@@ -25,7 +40,9 @@ namespace OpenDental {
 
 		private void AnestheticMedsEdit_Load(object sender, EventArgs e)
 		{
-
+            textAnesthMedName.Text = Med.AnesthMedName;
+            textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
+            
 		}
 
 		private void textAnesthMed_TextChanged(object sender, EventArgs e)
@@ -37,5 +54,10 @@ namespace OpenDental {
 		{
 			DialogResult = DialogResult.Cancel;
 		}
+
+        private void textAnestheticMedNum_TextChanged(object sender, EventArgs e)
+        {
+
+        }
 	}
 }
