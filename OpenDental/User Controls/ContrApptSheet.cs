@@ -341,6 +341,9 @@ namespace OpenDental{
 					isHoliday=true;
 					break;
 				}
+				if(isHoliday){
+					g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
+				}
 				for(int j=0;j<ColCount;j++) {
 					schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
 					//first, do all the backgrounds
