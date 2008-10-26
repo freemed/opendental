@@ -24,15 +24,14 @@ namespace OpenDental
         private List<AnesthMed> listAnestheticMeds;
 
 		
-		public FormAnestheticMedsInventory()
-		{
+		public FormAnestheticMedsInventory(){
 			InitializeComponent();
 			Lan.F(this);
-
+            FillGrid();
 		}
 
-		private void InitializeComponent()
-		{
+		private void InitializeComponent(){
+
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsInventory));
             this.groupAnestheticMeds = new System.Windows.Forms.GroupBox();
             this.labelIntakeNewMeds = new System.Windows.Forms.Label();
@@ -179,15 +178,13 @@ namespace OpenDental
 
 		}
 
-
-		private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
-		{
+        private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e){
 
             FillGrid();
-		}
+        }
 
-        private void FillGrid()
-        {
+        private void FillGrid(){
+
             listAnestheticMeds = AnestheticMeds.CreateObjects();
             gridAnesthMedsInventory.BeginUpdate();
             gridAnesthMedsInventory.Columns.Clear();
@@ -208,10 +205,11 @@ namespace OpenDental
                 gridAnesthMedsInventory.Rows.Add(row);
             }
             gridAnesthMedsInventory.EndUpdate();
+            
         }
 
-		private void butAddAnesthMeds_Click(object sender, EventArgs e)
-		{
+		private void butAddAnesthMeds_Click(object sender, EventArgs e){
+
 			FormAnestheticMedsEdit FormME = new FormAnestheticMedsEdit();
 			//FormE.AnestheticMedsCur = new AnestheticMeds();
 			//FormI.IsNew = true;
@@ -219,18 +217,16 @@ namespace OpenDental
 			FillGrid();
 		}
 
-		private void butCancel_Click(object sender, EventArgs e)
-		{
+		private void butCancel_Click(object sender, EventArgs e){
+
 			DialogResult = DialogResult.Cancel;
 		}
 
-		private void gridAnesthMeds_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
+		private void gridAnesthMedsInventory_CellContentClick(object sender, DataGridViewCellEventArgs e){
 
 		}
 
-		private void butAnesthMedIntake_Click(object sender, EventArgs e)
-		{
+		private void butAnesthMedIntake_Click(object sender, EventArgs e){
 			
 				if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
 				{
@@ -255,8 +251,8 @@ namespace OpenDental
 
 		}
 
-		private void butAdjustQtys_Click(object sender, EventArgs e)
-		{
+		private void butAdjustQtys_Click(object sender, EventArgs e){
+
 			Userod curUser = Security.CurUser;
 
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))

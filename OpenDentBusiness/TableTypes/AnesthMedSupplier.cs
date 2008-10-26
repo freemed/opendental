@@ -4,30 +4,19 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>An individual anesthetic medication supplier.</summary>
-	[DataObject("anesthmedsupplier")]
+	[DataObject("anesthmedsuppliers")]
 	public class AnesthMedSupplier : DataObjectBase{
-		[DataField("AnesthMedSupplierNum",PrimaryKey=true,AutoNumber=true)]
-		private int anesthmedsupplierNum;
-		private bool anesthmedsupplierNumChanged;
-		///<summary>Primary key.</summary>
-		public int AnesthMedSupplierNum{
-			get{return AnesthMedSupplierNum;}
-			set{if(anesthmedsupplierNum!=value){anesthmedsupplierNum=value;MarkDirty();anesthmedsupplierNumChanged=true;}}
-		}
-		public bool AnesthMedSupplierNumChanged{
-			get{return anesthmedsupplierNumChanged;}
-		}
 
-		[DataField("SupplierID")]
-		private string supplierID;
-		private bool supplierIDChanged;
-		///<summary>The Supplier's unique ID.</summary>
-		public string SupplierID{
-			get{return SupplierID;}
-			set { if (supplierID != value) { supplierID = value; MarkDirty(); supplierIDChanged = true; } }
+		[DataField("SupplierIDNum",PrimaryKey=true,AutoNumber=true)]
+		private int supplierIDNum;
+		private bool supplierIDNumChanged;
+		///<summary>Primary key.</summary>
+		public int SupplierIDNum{
+			get{return SupplierIDNum;}
+			set{if(supplierIDNum!=value){supplierIDNum=value;MarkDirty();supplierIDNumChanged=true;}}
 		}
-		public bool SupplierIDChanged{
-			get{return supplierIDChanged;}
+		public bool SupplierIDNumChanged{
+			get{return supplierIDNumChanged;}
 		}
 
 		[DataField("SupplierName")]
@@ -66,29 +55,29 @@ namespace OpenDentBusiness{
 			get{return faxChanged;}
 		}
 
-		[DataField("Address")]
-		private string address;
-		private bool addressChanged;
+		[DataField("Addr1")]
+		private string addr1;
+		private bool addr1Changed;
 		///<summary></summary>
-		public string Address{
-			get{return address;}
-			set{if(address!=value){address=value;MarkDirty();addressChanged=true;}}
+		public string Addr1{
+			get{return addr1;}
+			set{if(addr1!=value){addr1=value;MarkDirty();addr1Changed=true;}}
 		}
-		public bool AddressChanged{
-			get{return addressChanged;}
+		public bool Addr1Changed{
+			get{return addr1Changed;}
 		}
 
-		[DataField("Address2")]
-		private string address2;
-		private bool address2Changed;
+		/*[DataField("Addr2")]
+		private string addr2;
+		private bool addr2Changed;
 		///<summary>Optional.</summary>
-		public string Address2{
-			get{return address2;}
-			set{if(address2!=value){address2=value;MarkDirty();address2Changed=true;}}
+		public string Addr2{
+			get{return addr2;}
+			set{if(addr2!=value){addr2=value;MarkDirty();addr2Changed=true;}}
 		}
-		public bool Address2Changed{
-			get{return address2Changed;}
-		}
+		public bool Addr2Changed{
+			get{return addr2Changed;}
+		}*/
 
 		[DataField("City")]
 		private string city;
@@ -126,7 +115,21 @@ namespace OpenDentBusiness{
 			get{return zipChanged;}
 		}
 
-		[DataField("Note")]
+        [DataField("WebSite")]
+        private string webSite;
+        private bool webSiteChanged;
+        ///<summary></summary>
+        public string WebSite
+        {
+            get { return webSite; }
+            set { if (webSite != value) { webSite = value; MarkDirty(); webSiteChanged = true; } }
+        }
+        public bool WebSiteChanged
+        {
+            get { return webSiteChanged; }
+        }
+
+		/*[DataField("Note")]
 		private string note;
 		private bool noteChanged;
 		///<summary>A freeform note for any info that is needed about the Supplier, such as hours.</summary>
@@ -136,7 +139,7 @@ namespace OpenDentBusiness{
 		}
 		public bool NoteChanged{
 			get{return noteChanged;}
-		}
+		}*/
 		
 		public AnesthMedSupplier Copy(){
 			return (AnesthMedSupplier)Clone();

@@ -23,17 +23,17 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				suppl=new AnesthMedSupplier();
 				suppl.IsNew = false;
-				suppl.AnesthMedSupplierNum = PIn.PInt(table.Rows[i][0].ToString());
+				//suppl.AnesthMedSupplierNum = PIn.PInt(table.Rows[i][0].ToString());
 				//suppl.AnesthMedSupplierID = PIn.PString(table.Rows[i][1].ToString());
-				//suppl.AnesthMedSupplierName = PIn.PString(table.Rows[i][2].ToString());
-				suppl.Phone = PIn.PString(table.Rows[i][3].ToString());
-				suppl.Fax = PIn.PString(table.Rows[i][4].ToString());
-				suppl.Address = PIn.PString(table.Rows[i][5].ToString());
-				suppl.Address2 = PIn.PString(table.Rows[i][6].ToString());
-				suppl.City = PIn.PString(table.Rows[i][7].ToString());
-				suppl.State = PIn.PString(table.Rows[i][8].ToString());
-				suppl.Zip = PIn.PString(table.Rows[i][9].ToString());
-				suppl.Note = PIn.PString(table.Rows[i][10].ToString());
+				suppl.SupplierName = PIn.PString(table.Rows[i][0].ToString());
+				suppl.Phone = PIn.PString(table.Rows[i][1].ToString());
+				suppl.Fax = PIn.PString(table.Rows[i][2].ToString());
+				suppl.Addr1 = PIn.PString(table.Rows[i][3].ToString());
+				//suppl.Addr2 = PIn.PString(table.Rows[i][6].ToString());
+				suppl.City = PIn.PString(table.Rows[i][4].ToString());
+				suppl.State = PIn.PString(table.Rows[i][5].ToString());
+				suppl.Zip = PIn.PString(table.Rows[i][6].ToString());
+				suppl.WebSite = PIn.PString(table.Rows[i][7].ToString());
 				AnesthMedSupplierC.Listt.Add(suppl);
 			}
 		}
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
 		//}
 
-		public static string GetDescription(int AnesthMedSupplierNum){
+		/*public static string GetDescription(int AnesthMedSupplierNum){
 			if(AnesthMedSupplierNum==0){
 				return "";
 			}
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			return "";
-		}
+		}*/
 
 	}
 }

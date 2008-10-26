@@ -452,17 +452,33 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
-                  /*  string[] commands = new string[]
-				{
-					"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
-                   
-					
-				};
-                    General.NonQ(commands);*/
-                command = "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL";
-                General.NonQ(command);
-                command = "ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL";
-                General.NonQ(command);
+                    command = "DROP TABLE IF EXISTS anesthmedsuppliers";
+                    General.NonQ(command);
+                    command = @"CREATE TABLE anesthmedsuppliers (
+						SupplierIDNum int(3) NOT NULL auto_increment,
+						SupplierName char(32) NOT NULL,
+						Addr1 char(32),
+						Addr2 char(32),
+						City char(32),
+						State char(10),
+                        Zip char(10),
+						Country char(32),
+						Phone char(12),
+						Fax char(12),
+						PhoneExt int(6),
+						Contact char(32),
+                        WebSite char(48),
+						Notes text,
+						PRIMARY KEY (SupplierIDNum)
+						) DEFAULT CHARSET=utf8";
+                    General.NonQ(command);	
+	
+                  string[] commands = new string[]
+                  {
+                    "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
+                    ,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
+                     };
+                   General.NonQ(commands);
                   
 
 				}
