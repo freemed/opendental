@@ -694,12 +694,14 @@ namespace OpenDentBusiness {
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AptNum");
 			table.Columns.Add("dateSched");
+			table.Columns.Add("Pattern");
+			table.Columns.Add("AptStatus");
 			table.Columns.Add("ItemOrder");
 			table.Columns.Add("Note");
 			table.Columns.Add("ProcDescript");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime "
+			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime, appointment.Pattern, appointment.AptStatus "
 				+"FROM plannedappt "
 				+"LEFT JOIN appointment ON appointment.NextAptNum=plannedappt.AptNum "
 				+"WHERE plannedappt.PatNum="+POut.PInt(patNum)+" "
@@ -738,6 +740,8 @@ namespace OpenDentBusiness {
 					row["dateSched"]=dateSched.ToShortDateString();
 				}
 				row["ItemOrder"]=itemOrder.ToString();
+				row["Pattern"]=aptRow["Pattern"].ToString();
+				row["AptStatus"] = aptRow["AptStatus"].ToString();
 				row["Note"]=aptRow["Note"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
 				rows.Add(row);
