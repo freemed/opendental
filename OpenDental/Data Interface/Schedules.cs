@@ -110,7 +110,6 @@ namespace OpenDental{
 				for(int p=0;p<table.Rows.Count;p++){
 					if(table.Rows[p]["ScheduleNum"].ToString()==retVal[i].ScheduleNum.ToString()){
 						retVal[i].Ops.Add(PIn.PInt(table.Rows[p]["OperatoryNum"].ToString()));
-						break;
 					}
 				}
 			}
