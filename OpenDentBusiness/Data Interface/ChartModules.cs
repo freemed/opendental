@@ -687,7 +687,7 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		private static DataTable GetPlannedApt(int patNum){
+		private static DataTable GetPlannedApt(int patNum) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Planned");
 			DataRow row;
@@ -716,17 +716,17 @@ namespace OpenDentBusiness {
 			ApptStatus aptStatus;
 			for(int i=0;i<rawPlannedAppts.Rows.Count;i++) {
 				aptRow=null;
-				for(int a=0;a<rawApt.Rows.Count;a++){
-					if(rawApt.Rows[a]["AptNum"].ToString()==rawPlannedAppts.Rows[i]["AptNum"].ToString()){
+				for(int a=0;a<rawApt.Rows.Count;a++) {
+					if(rawApt.Rows[a]["AptNum"].ToString()==rawPlannedAppts.Rows[i]["AptNum"].ToString()) {
 						aptRow=rawApt.Rows[a];
 						break;
 					}
 				}
-				if(aptRow==null){
+				if(aptRow==null) {
 					continue;//this will have to be fixed in dbmaint.
 				}
 				//repair any item orders here rather than in dbmaint. It's really fast.
-				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()){
+				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()) {
 					command="UPDATE plannedappt SET ItemOrder="+POut.PInt(itemOrder)
 						+" WHERE PlannedApptNum="+rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
 					dcon.NonQ(command);
@@ -738,45 +738,55 @@ namespace OpenDentBusiness {
 				//Colors----------------------------------------------------------------------------
 				aptStatus=(ApptStatus)PIn.PInt(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
 				///change color if completed, broken, or unscheduled no matter the date
-				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.Complete) {
+				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.UnschedList) {
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
-				} 
-				else if(aptStatus!=ApptStatus.Scheduled) {
+				}
+				else if(aptStatus==ApptStatus.Complete) {
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
+				}
+				else if(aptStatus==ApptStatus.Scheduled && dateSched.Date!=DateTime.Today.Date) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
 				else if(dateSched.Date<DateTime.Today && dateSched!=DateTime.MinValue) {//Past
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
-				} 
+				}
 				else if(dateSched.Date == DateTime.Today.Date) { //Today
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
-				} 
+				}
 				else if(dateSched.Date > DateTime.Today) { //Future
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
-				else{
+				else {
 					row["colorBackG"]=Color.White.ToArgb().ToString();
 					row["colorText"]=Color.Black.ToArgb().ToString();
 				}
 				//end of colors------------------------------------------------------------------------------
-				if(dateSched.Year<1880){
+				if(dateSched.Year<1880) {
 					row["dateSched"]="";
 				}
-				else{
+				else {
 					row["dateSched"]=dateSched.ToShortDateString();
 				}
 				row["ItemOrder"]=itemOrder.ToString();
 				row["minutes"]=(aptRow["Pattern"].ToString().Length*5).ToString();
 				row["Note"]=aptRow["Note"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
+				if(aptStatus==ApptStatus.Complete) {
+					row["ProcDescript"]="(Completed) "+ row["ProcDescript"];
+				}
+				else if(dateSched == DateTime.Today.Date) {
+					row["ProcDescript"]="(Today's) "+ row["ProcDescript"];
+				}
 				rows.Add(row);
 				itemOrder++;
 			}
-			for(int i=0;i<rows.Count;i++){
+			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
 			return table;
