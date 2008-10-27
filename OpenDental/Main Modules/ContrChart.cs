@@ -5591,7 +5591,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
 				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
-/*				
+				
 				//change background/text according to date scheduled and/or status of attached appointment
 				//reset
 				AttachedAptStatus = 0;
@@ -5611,13 +5611,13 @@ namespace OpenDental{
 				}
 				///now change color if completed, broken, or unscheduled no matter the date
 				if(AttachedAptStatus==5 | AttachedAptStatus==3) {
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
 				} else if(AttachedAptStatus==2) {
 					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
 					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
 				}
-*/
+
 				gridPlanned.Rows.Add(row);
 			}
 			gridPlanned.EndUpdate();

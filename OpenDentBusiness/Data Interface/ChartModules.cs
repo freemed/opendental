@@ -741,7 +741,7 @@ namespace OpenDentBusiness {
 				}
 				row["ItemOrder"]=itemOrder.ToString();
 				row["Pattern"]=aptRow["Pattern"].ToString();
-				row["AptStatus"] = aptRow["AptStatus"].ToString();
+				row["AptStatus"] = rawPlannedAppts.Rows[i]["AptStatus"].ToString();
 				row["Note"]=aptRow["Note"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
 				rows.Add(row);
