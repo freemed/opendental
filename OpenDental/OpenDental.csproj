@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -379,6 +379,15 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms Reports\FormRpLaserLabels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms Reports\FormSearchPatNotes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms Reports\FormTxPlanList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms Reports\FormTxPlanManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BasicTemplate.cs">
@@ -3614,6 +3623,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpReferralAnalysis.resx">
       <DependentUpon>FormRpReferralAnalysis.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms Reports\FormSearchPatNotes.resx">
+      <DependentUpon>FormSearchPatNotes.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms Reports\FormTxPlanList.resx">
+      <DependentUpon>FormTxPlanList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms Reports\FormTxPlanManager.resx">
+      <DependentUpon>FormTxPlanManager.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
