@@ -5569,9 +5569,9 @@ namespace OpenDental{
 			gridPlanned.BeginUpdate();
 			gridPlanned.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),30,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","#"),25,HorizontalAlignment.Center);
 			gridPlanned.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),30);
+			col=new ODGridColumn(Lan.g("TablePlannedAppts","Min"),35);
 			gridPlanned.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","Procedures"),175);
 			gridPlanned.Columns.Add(col);
@@ -5580,44 +5580,17 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g("TablePlannedAppts","DateSched"),80);
 			gridPlanned.Columns.Add(col);
 			gridPlanned.Rows.Clear();
-			int AttachedAptStatus;
-			DateTime AttachedAptDateTime;
 			ODGridRow row;
 			DataTable table=DataSetMain.Tables["Planned"];
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["ItemOrder"].ToString());
-				row.Cells.Add(((table.Rows[i]["Pattern"].ToString().Length)*5).ToString());
+				row.Cells.Add(table.Rows[i]["minutes"].ToString());
 				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
 				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
-				
-				//change background/text according to date scheduled and/or status of attached appointment
-				//reset
-				AttachedAptStatus = 0;
-				AttachedAptDateTime=DateTime.MinValue;
-				AttachedAptStatus=PIn.PInt(table.Rows[i]["AptStatus"].ToString());
-				AttachedAptDateTime=PIn.PDateT(table.Rows[i]["dateSched"].ToString());
-				if(AttachedAptDateTime==DateTime.MinValue) {//notSet{
-				} else if(AttachedAptDateTime<DateTime.Today && AttachedAptDateTime!=DateTime.MinValue) {//Past
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
-				} else if(AttachedAptDateTime == DateTime.Today.Date) { //Today
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
-				} else if(AttachedAptDateTime > DateTime.Today) { //Future
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
-				}
-				///now change color if completed, broken, or unscheduled no matter the date
-				if(AttachedAptStatus==5 | AttachedAptStatus==3) {
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-				} else if(AttachedAptStatus==2) {
-					row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
-					row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
-				}
-
+				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);
 			}
 			gridPlanned.EndUpdate();

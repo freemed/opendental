@@ -693,25 +693,27 @@ namespace OpenDentBusiness {
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AptNum");
+			table.Columns.Add("colorBackG");
+			table.Columns.Add("colorText");
 			table.Columns.Add("dateSched");
-			table.Columns.Add("Pattern");
-			table.Columns.Add("AptStatus");
 			table.Columns.Add("ItemOrder");
+			table.Columns.Add("minutes");
 			table.Columns.Add("Note");
 			table.Columns.Add("ProcDescript");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime, appointment.Pattern, appointment.AptStatus "
+			string command="SELECT plannedappt.AptNum,ItemOrder,PlannedApptNum,appointment.AptDateTime,"
+				+"appointment.Pattern,appointment.AptStatus "
 				+"FROM plannedappt "
 				+"LEFT JOIN appointment ON appointment.NextAptNum=plannedappt.AptNum "
 				+"WHERE plannedappt.PatNum="+POut.PInt(patNum)+" "
 				+"GROUP BY plannedappt.AptNum "
 				+"ORDER BY ItemOrder";
 			DataTable rawPlannedAppts=dcon.GetTable(command);
-			//int apptStatus;
 			DataRow aptRow;
 			int itemOrder=1;
 			DateTime dateSched;
+			ApptStatus aptStatus;
 			for(int i=0;i<rawPlannedAppts.Rows.Count;i++) {
 				aptRow=null;
 				for(int a=0;a<rawApt.Rows.Count;a++){
@@ -733,6 +735,34 @@ namespace OpenDentBusiness {
 				row=table.NewRow();
 				row["AptNum"]=aptRow["AptNum"].ToString();
 				dateSched=PIn.PDate(rawPlannedAppts.Rows[i]["AptDateTime"].ToString());
+				//Colors----------------------------------------------------------------------------
+				aptStatus=(ApptStatus)PIn.PInt(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
+				///change color if completed, broken, or unscheduled no matter the date
+				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.Complete) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
+				} 
+				else if(aptStatus!=ApptStatus.Scheduled) {
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
+				}
+				else if(dateSched.Date<DateTime.Today && dateSched!=DateTime.MinValue) {//Past
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
+				} 
+				else if(dateSched.Date == DateTime.Today.Date) { //Today
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
+				} 
+				else if(dateSched.Date > DateTime.Today) { //Future
+					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
+				}
+				else{
+					row["colorBackG"]=Color.White.ToArgb().ToString();
+					row["colorText"]=Color.Black.ToArgb().ToString();
+				}
+				//end of colors------------------------------------------------------------------------------
 				if(dateSched.Year<1880){
 					row["dateSched"]="";
 				}
@@ -740,8 +770,7 @@ namespace OpenDentBusiness {
 					row["dateSched"]=dateSched.ToShortDateString();
 				}
 				row["ItemOrder"]=itemOrder.ToString();
-				row["Pattern"]=aptRow["Pattern"].ToString();
-				row["AptStatus"] = rawPlannedAppts.Rows[i]["AptStatus"].ToString();
+				row["minutes"]=(aptRow["Pattern"].ToString().Length*5).ToString();
 				row["Note"]=aptRow["Note"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
 				rows.Add(row);
