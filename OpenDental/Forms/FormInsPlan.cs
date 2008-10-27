@@ -2256,8 +2256,8 @@ namespace OpenDental{
 				return;
 			}
 			usesAnnivers=false;
-			bool resetFeeSched=false;//This will be set to true if a FeeSched was imported.
-			int feeSchedNum=0;//and if resetFeeSched, then this is the new feesched.
+			//bool resetFeeSched=false;//This will be set to true if a FeeSched was imported.
+			//int feeSchedNum=0;//and if resetFeeSched, then this is the new feesched.
 			Benefit ben;
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
@@ -2514,7 +2514,7 @@ namespace OpenDental{
 								ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 								benefitList.Add(ben.Copy());
 								break;
-							case "FEE":
+							/*case "FEE":
 								if(!ProcedureCodes.IsValidCode(fields[1])) {
 									break;//skip
 								}
@@ -2524,7 +2524,7 @@ namespace OpenDental{
 								feeSchedNum=Fees.ImportTrojan(fields[1],PIn.PDouble(fields[3]),textTrojanID.Text);
 								//the step above probably created a new feeschedule, requiring a reset of the three listboxes.
 								resetFeeSched=true;
-								break;
+								break;*/
 							case "NOTES"://typically multiple instances
 								if(textPlanNote.Text!=""){
 									textPlanNote.Text+="\r\n";
@@ -2553,7 +2553,7 @@ namespace OpenDental{
 				//if(benefitList[i].
 			//}
 			FillBenefits();
-			if(resetFeeSched){
+			/*if(resetFeeSched){
 				FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
 				FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay,false);
 				FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed,false);
@@ -2584,7 +2584,7 @@ namespace OpenDental{
 					//if(FeeSchedsAllowed[i].DefNum==PlanCur.AllowedFeeSched)
 					//	comboAllowedFeeSched.SelectedIndex=i+1;
 				}
-			}
+			}*/
 		}
 
 		private void butIapFind_Click(object sender,System.EventArgs e) {
