@@ -54,78 +54,79 @@ namespace OpenDental
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSearchPatNotes));
-            this.lblSearchPharse = new System.Windows.Forms.Label();
-            this.textPharse = new System.Windows.Forms.TextBox();
-            this.butCancel = new OpenDental.UI.Button();
-            this.butOK = new OpenDental.UI.Button();
-            this.SuspendLayout();
-            // 
-            // lblSearchPharse
-            // 
-            this.lblSearchPharse.AutoSize = true;
-            this.lblSearchPharse.Location = new System.Drawing.Point(8, 8);
-            this.lblSearchPharse.Name = "lblSearchPharse";
-            this.lblSearchPharse.Size = new System.Drawing.Size(142, 13);
-            this.lblSearchPharse.TabIndex = 0;
-            this.lblSearchPharse.Text = "Enter Search word or phrase";
-            // 
-            // textPharse
-            // 
-            this.textPharse.Location = new System.Drawing.Point(8, 24);
-            this.textPharse.MaxLength = 40;
-            this.textPharse.Multiline = true;
-            this.textPharse.Name = "textPharse";
-            this.textPharse.Size = new System.Drawing.Size(264, 144);
-            this.textPharse.TabIndex = 1;
-            this.textPharse.TextChanged += new System.EventHandler(this.textPharse_TextChanged);
-            // 
-            // butCancel
-            // 
-            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butCancel.Autosize = true;
-            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butCancel.CornerRadius = 4F;
-            this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.butCancel.Location = new System.Drawing.Point(200, 176);
-            this.butCancel.Name = "butCancel";
-            this.butCancel.Size = new System.Drawing.Size(75, 26);
-            this.butCancel.TabIndex = 43;
-            this.butCancel.Text = "&Cancel";
-            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-            // 
-            // butOK
-            // 
-            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butOK.Autosize = true;
-            this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butOK.CornerRadius = 4F;
-            this.butOK.Enabled = false;
-            this.butOK.Location = new System.Drawing.Point(120, 176);
-            this.butOK.Name = "butOK";
-            this.butOK.Size = new System.Drawing.Size(75, 26);
-            this.butOK.TabIndex = 44;
-            this.butOK.Text = "&OK";
-            this.butOK.Click += new System.EventHandler(this.butOK_Click);
-            // 
-            // FormSearchPatNotes
-            // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(286, 212);
-            this.Controls.Add(this.butOK);
-            this.Controls.Add(this.butCancel);
-            this.Controls.Add(this.textPharse);
-            this.Controls.Add(this.lblSearchPharse);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FormSearchPatNotes";
-            this.Text = "Search Patient Notes";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSearchPatNotes));
+			this.lblSearchPharse = new System.Windows.Forms.Label();
+			this.textPharse = new System.Windows.Forms.TextBox();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.SuspendLayout();
+			// 
+			// lblSearchPharse
+			// 
+			this.lblSearchPharse.AutoSize = true;
+			this.lblSearchPharse.Location = new System.Drawing.Point(8,8);
+			this.lblSearchPharse.Name = "lblSearchPharse";
+			this.lblSearchPharse.Size = new System.Drawing.Size(142,13);
+			this.lblSearchPharse.TabIndex = 0;
+			this.lblSearchPharse.Text = "Enter Search word or phrase";
+			// 
+			// textPharse
+			// 
+			this.textPharse.Location = new System.Drawing.Point(8,24);
+			this.textPharse.MaxLength = 40;
+			this.textPharse.Multiline = true;
+			this.textPharse.Name = "textPharse";
+			this.textPharse.Size = new System.Drawing.Size(264,144);
+			this.textPharse.TabIndex = 1;
+			this.textPharse.TextChanged += new System.EventHandler(this.textPharse_TextChanged);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(200,176);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 43;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Enabled = false;
+			this.butOK.Location = new System.Drawing.Point(120,176);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 44;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// FormSearchPatNotes
+			// 
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(286,212);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.textPharse);
+			this.Controls.Add(this.lblSearchPharse);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FormSearchPatNotes";
+			this.Text = "Search Patient Notes";
+			this.Load += new System.EventHandler(this.FormSearchPatNotes_Load);
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -164,6 +165,10 @@ namespace OpenDental
 				butOK.Enabled=true;
 			else
 				butOK.Enabled = false;
+		}
+
+		private void FormSearchPatNotes_Load(object sender,EventArgs e) {
+
 		}
 	}
 }

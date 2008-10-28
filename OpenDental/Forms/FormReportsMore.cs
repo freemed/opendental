@@ -88,7 +88,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(312,222);
+			this.label1.Location = new System.Drawing.Point(312,250);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118,18);
 			this.label1.TabIndex = 2;
@@ -142,7 +142,7 @@ namespace OpenDental{
 			// labelArizonaPrimaryCare
 			// 
 			this.labelArizonaPrimaryCare.AutoSize = true;
-			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,282);
+			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,310);
 			this.labelArizonaPrimaryCare.Name = "labelArizonaPrimaryCare";
 			this.labelArizonaPrimaryCare.Size = new System.Drawing.Size(104,13);
 			this.labelArizonaPrimaryCare.TabIndex = 20;
@@ -154,7 +154,7 @@ namespace OpenDental{
 			this.listArizonaPrimaryCare.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listArizonaPrimaryCare.FormattingEnabled = true;
 			this.listArizonaPrimaryCare.ItemHeight = 15;
-			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,300);
+			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,328);
 			this.listArizonaPrimaryCare.Name = "listArizonaPrimaryCare";
 			this.listArizonaPrimaryCare.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listArizonaPrimaryCare.Size = new System.Drawing.Size(204,34);
@@ -234,7 +234,7 @@ namespace OpenDental{
 			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listPublicHealth.FormattingEnabled = true;
 			this.listPublicHealth.ItemHeight = 15;
-			this.listPublicHealth.Location = new System.Drawing.Point(315,243);
+			this.listPublicHealth.Location = new System.Drawing.Point(315,271);
 			this.listPublicHealth.Name = "listPublicHealth";
 			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
@@ -249,7 +249,7 @@ namespace OpenDental{
 			this.listLists.Location = new System.Drawing.Point(315,64);
 			this.listLists.Name = "listLists";
 			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size = new System.Drawing.Size(204,154);
+			this.listLists.Size = new System.Drawing.Size(204,184);
 			this.listLists.TabIndex = 9;
 			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
@@ -349,11 +349,13 @@ namespace OpenDental{
 				Lan.g(this,"Insurance Plans"),
 				Lan.g(this,"New Patients"),
 				Lan.g(this,"Patients - Raw"),
+				Lan.g(this,"Patients Notes"),
 				Lan.g(this,"Prescriptions"),
 				Lan.g(this,"Procedure Codes"),
 				Lan.g(this,"Referrals - Raw"),
 				Lan.g(this,"Referral Analysis"),
-				Lan.g(this,"Treatment Finder")
+				Lan.g(this,"Treatment Finder"),
+				Lan.g(this,"Treatment Plan Manager")
 			});
 			listPublicHealth.Items.AddRange(new string[] {
 				Lan.g(this,"Raw Screening Data"),
@@ -582,30 +584,40 @@ namespace OpenDental{
 					FormPatients.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patients - Raw");
 					break;
-				case 5://Prescriptions
+				case 5://Patient Notes
+					FormSearchPatNotes FormPN=new FormSearchPatNotes();
+					FormPN.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patient Notes");
+					break;
+				case 6://Prescriptions
 					FormRpPrescriptions FormPrescript=new FormRpPrescriptions();
 					FormPrescript.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Rx");
 					break;
-				case 6://Procedure Codes
+				case 7://Procedure Codes
 					FormRpProcCodes FormProcCodes=new FormRpProcCodes();
 					FormProcCodes.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedure Codes");
 					break;
-				case 7://Referrals - Raw
+				case 8://Referrals - Raw
 					FormRpReferrals FormReferral=new FormRpReferrals();
 					FormReferral.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referrals - Raw");
 					break;
-				case 8://Referral Analysis
+				case 9://Referral Analysis
 					FormRpReferralAnalysis FormRA=new FormRpReferralAnalysis();
 					FormRA.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referral Analysis");
 					break;
-				case 9://Treatment Finder
+				case 10://Treatment Finder
 					FormRpTreatmentFinder FormT=new FormRpTreatmentFinder();
 					FormT.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
+					break;
+				case 11://Treatment Plan Manager
+					FormTxPlanManager FormTM=new FormTxPlanManager();
+					FormTM.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");
 					break;
 			}
 		}
