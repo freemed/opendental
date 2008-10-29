@@ -10,7 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormAnestheticMedsEdit:Form {
-        public AnesthMed Med;
+        public AnesthMedsInventory Med;
 
 		public FormAnestheticMedsEdit() {
 			InitializeComponent();
@@ -25,7 +25,7 @@ namespace OpenDental {
             
 		}
 
-		private void textAnesthMed_TextChanged(object sender, EventArgs e)
+		private void textAnesthMedsInventory_TextChanged(object sender, EventArgs e)
 		{
 
 		}
@@ -54,6 +54,11 @@ namespace OpenDental {
         }
 
         private void textAnestheticMedNum_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textAnesthMedName_TextChanged(object sender, EventArgs e)
         {
 
         }

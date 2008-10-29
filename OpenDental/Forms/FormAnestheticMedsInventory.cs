@@ -11,18 +11,17 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 
-        private List<AnesthMed> listAnestheticMeds;
+        private List<AnesthMedsInventory> listAnestheticMeds;
 
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
 			Lan.F(this);
-            FillGrid();
+            
 		}
 
 
         private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
         {
-
             FillGrid();
         }
 
@@ -54,7 +53,7 @@ namespace OpenDental {
 
         private void butAddAnesthMeds_Click(object sender, EventArgs e)
         {
-            AnesthMed med = new AnesthMed();
+            AnesthMedsInventory med = new AnesthMedsInventory();
             med.IsNew = true;
             FormAnestheticMedsEdit FormME = new FormAnestheticMedsEdit();
             FormME.Med = med;
