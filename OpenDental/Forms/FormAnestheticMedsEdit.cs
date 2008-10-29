@@ -15,20 +15,22 @@ namespace OpenDental {
 		public FormAnestheticMedsEdit() {
 			InitializeComponent();
 			Lan.F(this);
+            
 		}
 
 		
-		private void AnestheticMedsEdit_Load(object sender, EventArgs e)
+		private void FormAnestheticMedsEdit_Load(object sender, EventArgs e)
 		{
             textAnesthMedName.Text = Med.AnesthMedName;
             textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
             
 		}
 
-		private void textAnesthMedsInventory_TextChanged(object sender, EventArgs e)
+		/*private void textAnesthHowSupplied_TextChanged(object sender, EventArgs e)
 		{
-
-		}
+           
+           
+		}*/
 
 		private void butCancel_Click(object sender, EventArgs e)
 		{
@@ -53,14 +55,6 @@ namespace OpenDental {
             DialogResult = DialogResult.OK;
         }
 
-        private void textAnestheticMedNum_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textAnesthMedName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 	}
 }

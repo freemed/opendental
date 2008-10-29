@@ -89,6 +89,7 @@
     <Compile Include="Cache\AnesthMedSupplierC.cs" />
     <Compile Include="Cache\AnestheticDataC.cs" />
     <Compile Include="Cache\AnestheticMedsGivenC.cs" />
+    <Compile Include="Cache\AnesthMedInvC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
     <Compile Include="Cache\RecallTypeC.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
     <Compile Include="Data Interface\AnesthMedSuppliers.cs" />
+    <Compile Include="Data Interface\AnestheticMeds.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />

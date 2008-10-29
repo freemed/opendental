@@ -12,17 +12,31 @@ namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 
         private List<AnesthMedsInventory> listAnestheticMeds;
+        private bool changed;
+        public bool IsSelectionMode;
+        ///<summary>Only used if IsSelectionMode.  On OK, contains selected anestheticMedNum.  Can be 0.  Can also be set ahead of time externally.</summary>
+        public int SelectedAnestheticMedNum;
 
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
 			Lan.F(this);
-            
+            FillGrid();
 		}
 
 
         private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
         {
-            FillGrid();
+            if (SelectedAnestheticMedNum != 0)
+            {
+                for (int i = 0; i < AnesthMedInvC.Listt.Count; i++)
+                {
+                    if (AnesthMedInvC.Listt[i].AnestheticMedNum == SelectedAnestheticMedNum)
+                    {
+                        gridAnesthMedsInventory.SetSelected(i, true);
+                        break;
+                    }
+                }
+            }
         }
 
         private void FillGrid()
@@ -63,9 +77,7 @@ namespace OpenDental {
                 FillGrid();
             }
         }
-		private void butOK_Click(object sender,EventArgs e) {
-			
-		}
+		
 
         private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
@@ -78,22 +90,7 @@ namespace OpenDental {
             }
         }
 
-        private void butClose_Click(object sender, EventArgs e)
-        {
-            Close();
-            //DialogResult = DialogResult.OK;
-        }
-
-        private void butCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
-        private void butCancel_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void butAnesthMedIntake_Click(object sender, EventArgs e)
         {
 
@@ -136,7 +133,19 @@ namespace OpenDental {
             } 
 
         }
+        private void butClose_Click(object sender, EventArgs e)
+        {
+            Close();
+            //DialogResult = DialogResult.OK;
+        }
+        private void butOK_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void butCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
 	}
 }

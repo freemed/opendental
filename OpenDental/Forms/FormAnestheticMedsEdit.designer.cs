@@ -106,7 +106,7 @@ namespace OpenDental{
             this.textAnesthMedName.Name = "textAnesthMedName";
             this.textAnesthMedName.Size = new System.Drawing.Size(204, 20);
             this.textAnesthMedName.TabIndex = 1;
-            this.textAnesthMedName.TextChanged += new System.EventHandler(this.textAnesthMedName_TextChanged);
+            //this.textAnesthMedName.TextChanged += new System.EventHandler(this.textAnesthMedName_TextChanged);
             // 
             // labelAnesthMedName
             // 
