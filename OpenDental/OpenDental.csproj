@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -396,14 +396,14 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormAnesthElevateSecurityPriv.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormAnestheticMedsInventory.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAnestheticMedsInventory.designer.cs">
       <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnesthElevateSecurityPriv.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAnesthMedSuppliers.cs">
       <SubType>Form</SubType>
@@ -3640,11 +3640,12 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthElevateSecurityPriv.resx">
-      <DependentUpon>FormAnesthElevateSecurityPriv.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
+      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
+    <EmbeddedResource Include="Forms\FormAnesthElevateSecurityPriv.resx">
+      <DependentUpon>FormAnesthElevateSecurityPriv.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnesthMedSuppliers.resx">
@@ -3849,6 +3850,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Resources\Anesth.gif" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\Med History.gif" />
     <None Include="Resources\Patient Info.gif" />
     <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
