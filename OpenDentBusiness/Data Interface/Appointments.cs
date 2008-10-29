@@ -1248,16 +1248,21 @@ namespace OpenDentBusiness{
 			table.Columns.Add("descript");
 			table.Columns.Add("fee");
 			table.Columns.Add("priority");
+			table.Columns.Add("Priority");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
 			table.Columns.Add("ProcStatus");
 			table.Columns.Add("ProvNum");
 			table.Columns.Add("status");
 			table.Columns.Add("toothNum");
+			table.Columns.Add("ToothNum");
+			table.Columns.Add("ToothRange");
 			table.Columns.Add("Surf");
+			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
+			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT procedurecode.ProcCode,AptNum,LaymanTerm,"
 				+"PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
-				+"ToothRange,procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum "
+				+"ToothRange,procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum,ToothRange "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 			//1. All TP procs
@@ -1305,16 +1310,37 @@ namespace OpenDentBusiness{
 				}
 				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
 				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
+				row["Priority"]=rawProc.Rows[i]["Priority"].ToString();
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
 				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
 				row["status"]=((ProcStat)PIn.PInt(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
 				row["toothNum"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
+				row["ToothNum"]=rawProc.Rows[i]["ToothNum"].ToString();
+				row["ToothRange"]=rawProc.Rows[i]["ToothRange"].ToString();
 				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
-				table.Rows.Add(row);
+				rows.Add(row);
+			}
+			//Sorting
+			rows.Sort(CompareRows);
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
 			}
 			return table;
+		}
+
+		///<summary>The supplied DataRows must include the following columns: attached,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
+		public static int CompareRows(DataRow x,DataRow y) {
+			if(x["attached"].ToString()!=y["attached"].ToString()){//if one is attached and the other is not
+				if(x["attached"].ToString()=="1"){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			}
+			return ProcedureLogic.CompareProcedures(x,y);//sort by priority, toothnum, procCode
 		}
 
 		private static DataTable GetCommTable(string patNum) {
