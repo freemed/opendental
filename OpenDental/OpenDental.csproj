@@ -399,6 +399,12 @@
     <Compile Include="Forms\FormAnesthElevateSecurityPriv.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormAnestheticMedsInventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsInventory.designer.cs">
+      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAnesthMedSuppliers.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -626,9 +632,6 @@
     </Compile>
     <Compile Include="Forms\FormAnestheticMedsIntake.Designer.cs">
       <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsInventory.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAnestheticRecord.cs">
       <SubType>Form</SubType>
@@ -1670,10 +1673,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticMedsIntake.resx">
       <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
-      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticRecord.resx">
@@ -3643,6 +3642,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnesthElevateSecurityPriv.resx">
       <DependentUpon>FormAnesthElevateSecurityPriv.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnesthMedSuppliers.resx">

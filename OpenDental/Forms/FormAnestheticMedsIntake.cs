@@ -52,6 +52,7 @@ namespace OpenDental
 		//this will ultimately be moved to main OD setup menu, here for convenience now
 		private void butSetupAnesthMeds_Click(object sender, EventArgs e)
 		{
+            
 			FormAnestheticMedsInventory FormI = new FormAnestheticMedsInventory();
 			FormI.ShowDialog();
 			
