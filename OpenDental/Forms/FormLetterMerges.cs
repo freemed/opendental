@@ -366,9 +366,10 @@ namespace OpenDental{
 				if(i>0){
 					command+=",";
 				}
-				if(((string)letter.Fields[i]).Length>9
-					&& ((string)letter.Fields[i]).Substring(0,9)=="referral.")
-				{
+				if((string)letter.Fields[i]=="NextAptNum"){
+					command+="plannedappt.AptNum NextAptNum";
+				}
+				else if(((string)letter.Fields[i]).Length>9 && ((string)letter.Fields[i]).Substring(0,9)=="referral."){
 					command+="referral."+((string)letter.Fields[i]).Substring(9);
 				}
 				else{
@@ -378,6 +379,7 @@ namespace OpenDental{
 			command+=" FROM patient "
 				+"LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1 "
 				+"LEFT JOIN referral ON refattach.ReferralNum=referral.ReferralNum "
+				+"LEFT JOIN plannedappt ON plannedappt.PatNum=patient.PatNum AND plannedappt.ItemOrder=1 "
 				+"WHERE patient.PatNum="+POut.PInt(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "
 				+"ORDER BY refattach.ItemOrder";
@@ -446,7 +448,10 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
-#if !DISABLE_MICROSOFT_OFFICE
+#if DISABLE_MICROSOFT_OFFICE
+			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+			return;
+#endif
 			if(listLetters.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a letter first.");
 				return;
@@ -503,9 +508,6 @@ namespace OpenDental{
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent: "+letterCur.Description+". ";
 			Commlogs.Insert(CommlogCur);
-#else
-			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
-#endif
 			DialogResult=DialogResult.OK;
 		}
 
