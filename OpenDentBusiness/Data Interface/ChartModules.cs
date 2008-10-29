@@ -69,7 +69,7 @@ namespace OpenDentBusiness {
 				+" OR appointment.AptStatus="+POut.PInt((int)ApptStatus.Broken)
 				+" OR appointment.AptStatus="+POut.PInt((int)ApptStatus.Complete)
 				+") WHERE procedurelog.PatNum="+POut.PInt(patNum);
-			if(!isAuditMode){
+			if(!isAuditMode) {
 				command+=" AND ProcStatus !=6";//don't include deleted
 			}
 			command+=" ORDER BY ProcDate";//we'll just have to reorder it anyway
@@ -87,10 +87,10 @@ namespace OpenDentBusiness {
 				row["AptNum"]=0;
 				row["CodeNum"]=rawProcs.Rows[i]["CodeNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
-				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today){
+				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today) {
 					row["colorBackG"]=DefC.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
 				}
-				switch((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())){
+				switch((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())) {
 					case ProcStat.TP:
 						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][0].ItemColor.ToArgb().ToString();
 						break;
@@ -117,7 +117,7 @@ namespace OpenDentBusiness {
 				else {
 					row["description"]=rawProcs.Rows[i]["LaymanTerm"].ToString();
 				}
-				if(rawProcs.Rows[i]["ToothRange"].ToString()!=""){
+				if(rawProcs.Rows[i]["ToothRange"].ToString()!="") {
 					row["description"]+=" #"+Tooth.FormatRangeForDisplay(rawProcs.Rows[i]["ToothRange"].ToString());
 				}
 				row["dx"]=DefC.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
@@ -128,7 +128,7 @@ namespace OpenDentBusiness {
 				row["user"]="";
 				row["note"]="";
 				row["signature"]="";
-				if(isAuditMode){//we will include all notes for each proc.  We will concat and make readable.
+				if(isAuditMode) {//we will include all notes for each proc.  We will concat and make readable.
 					for(int n=0;n<rawNotes.Rows.Count;n++) {//loop through each note
 						if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 							continue;
@@ -144,8 +144,8 @@ namespace OpenDentBusiness {
 						row["note"]+="\r\n"+rawNotes.Rows[n]["Note"].ToString();
 					}
 				}
-				else{//we just want the most recent note
-					for(int n=rawNotes.Rows.Count-1;n>=0;n--){//loop through each note, backwards.
+				else {//we just want the most recent note
+					for(int n=rawNotes.Rows.Count-1;n>=0;n--) {//loop through each note, backwards.
 						if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 							continue;
 						}
@@ -154,7 +154,7 @@ namespace OpenDentBusiness {
 						if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
 							row["signature"]=Lan.g("ChartModule","Signed");
 						}
-						else{
+						else {
 							row["signature"]="";
 						}
 						break;//out of note loop.
@@ -164,16 +164,16 @@ namespace OpenDentBusiness {
 				row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
 				row["ProcCode"]=rawProcs.Rows[i]["ProcCode"].ToString();
 				dateT=PIn.PDateT(rawProcs.Rows[i]["ProcDate"].ToString());
-				if(dateT.Year<1880){
+				if(dateT.Year<1880) {
 					row["procDate"]="";
 				}
-				else{
+				else {
 					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
 				double amt = PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString());
 				int qty = PIn.PInt(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.PInt(rawProcs.Rows[i]["BaseUnits"].ToString());
-				if(qty>0){
+				if(qty>0) {
 					amt *= qty;
 				}
 				row["procFee"]=amt.ToString("F");
@@ -193,10 +193,10 @@ namespace OpenDentBusiness {
 				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
-				if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0"){//normal proc
+				if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0") {//normal proc
 					rows.Add(row);
 				}
-				else{
+				else {
 					row["description"]="-----"+row["description"].ToString();
 					labRows.Add(row);//these will be added in the loop at the end
 				}
@@ -218,10 +218,10 @@ namespace OpenDentBusiness {
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
-				if(rawComm.Rows[i]["PatNum"].ToString()==patNum.ToString()){
+				if(rawComm.Rows[i]["PatNum"].ToString()==patNum.ToString()) {
 					txt="";
 				}
-				else{
+				else {
 					txt="("+rawComm.Rows[i]["FName"].ToString()+") ";
 				}
 				row["description"]=txt+Lan.g("ChartModule","Comm - ")
@@ -235,10 +235,10 @@ namespace OpenDentBusiness {
 				row["Priority"]="";
 				row["ProcCode"]="";
 				dateT=PIn.PDateT(rawComm.Rows[i]["CommDateTime"].ToString());
-				if(dateT.Year<1880){
+				if(dateT.Year<1880) {
 					row["procDate"]="";
 				}
-				else{
+				else {
 					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
@@ -276,7 +276,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][5].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
-				if(rawRx.Rows[i]["PharmacyNum"].ToString()!="0"){
+				if(rawRx.Rows[i]["PharmacyNum"].ToString()!="0") {
 					row["description"]+="\r\n"+Pharmacies.GetDescription(PIn.PInt(rawRx.Rows[i]["PharmacyNum"].ToString()));
 				}
 				row["dx"]="";
@@ -336,7 +336,7 @@ namespace OpenDentBusiness {
 					row["description"]+="\r\n"+Lan.g("ChartModule","Due")+" "+duedate.ToString("ddd")+" "
 						+duedate.ToShortDateString()+" "+duedate.ToShortTimeString();
 				}
-				if(PIn.PDate(rawLab.Rows[i]["DateTimeChecked"].ToString()).Year>1880){
+				if(PIn.PDate(rawLab.Rows[i]["DateTimeChecked"].ToString()).Year>1880) {
 					row["description"]+="\r\n"+Lan.g("ChartModule","Quality Checked");
 				}
 				else if(PIn.PDate(rawLab.Rows[i]["DateTimeRecd"].ToString()).Year>1880) {
@@ -390,7 +390,7 @@ namespace OpenDentBusiness {
 				+"AND p1.Guarantor=p2.Guarantor "
 				+"AND p2.PatNum="+POut.PInt(patNum)
 				+" AND task.ObjectType=1 "
-				+"ORDER BY DateTimeEntry"; 
+				+"ORDER BY DateTimeEntry";
 			DataTable rawTask=dcon.GetTable(command);
 			for(int i=0;i<rawTask.Rows.Count;i++) {
 				row=table.NewRow();
@@ -402,14 +402,14 @@ namespace OpenDentBusiness {
 				row["colorBackG"] = DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
 				//row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
 				row["CommlogNum"]=0;
-				if(rawTask.Rows[i]["KeyNum"].ToString()==patNum.ToString()){
+				if(rawTask.Rows[i]["KeyNum"].ToString()==patNum.ToString()) {
 					txt="";
 				}
-				else{
+				else {
 					txt="("+rawTask.Rows[i]["FName"].ToString()+") ";
 				}
-				if(rawTask.Rows[i]["TaskStatus"].ToString()=="2"){//completed
-					txt += Lan.g("ChartModule", "Completed ");
+				if(rawTask.Rows[i]["TaskStatus"].ToString()=="2") {//completed
+					txt += Lan.g("ChartModule","Completed ");
 					row["colorBackG"] = Color.White.ToArgb();
 					//use same as note colors for completed tasks
 					row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
@@ -428,20 +428,20 @@ namespace OpenDentBusiness {
 				row["procTime"]="";
 				if(dateT.Year < 1880) {//check if due date set for task or note
 					dateT = PIn.PDateT(rawTask.Rows[i]["DateTimeEntry"].ToString());
-					if (dateT.Year < 1880) {//since dateT was just redefined, check it now
+					if(dateT.Year < 1880) {//since dateT was just redefined, check it now
 						row["procDate"] = "";
 					}
 					else {
 						row["procDate"] = dateT.ToShortDateString();
 					}
-					if (dateT.TimeOfDay != TimeSpan.Zero) {
+					if(dateT.TimeOfDay != TimeSpan.Zero) {
 						row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
 					}
 					row["ProcDate"] = dateT;
 				}
 				else {
 					row["procDate"] =dateT.ToString(Lan.GetShortDateTimeFormat());
-					if (dateT.TimeOfDay != TimeSpan.Zero) {
+					if(dateT.TimeOfDay != TimeSpan.Zero) {
 						row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
 					}
 					row["ProcDate"] = dateT;
@@ -494,33 +494,33 @@ namespace OpenDentBusiness {
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
-				if (apptStatus==(int)ApptStatus.Broken){
-					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
+				if(apptStatus==(int)ApptStatus.Broken) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","BROKEN Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 						+rawApt.Rows[i]["ProcDescript"].ToString();
 				}
-				else if (apptStatus==(int)ApptStatus.UnschedList){
-					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
+				else if(apptStatus==(int)ApptStatus.UnschedList) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","UNSCHEDULED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 						+rawApt.Rows[i]["ProcDescript"].ToString();
 				}
-				else if (apptStatus==(int)ApptStatus.Planned){
-					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString(); 
+				else if(apptStatus==(int)ApptStatus.Planned) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString();
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","PLANNED Appointment")+"\r\n"
 						+rawApt.Rows[i]["ProcDescript"].ToString();
 				}
-				else if(apptStatus==(int)ApptStatus.PtNote){
-					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString(); 
+				else if(apptStatus==(int)ApptStatus.PtNote) {
+					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString();
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
-					row["description"] = Lan.g("ChartModule", "*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
+					row["description"] = Lan.g("ChartModule","*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
 				}
-				else if (apptStatus ==(int)ApptStatus.PtNoteCompleted) {
+				else if(apptStatus ==(int)ApptStatus.PtNoteCompleted) {
 					row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
 					row["colorBackG"] = DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
-					row["description"] = Lan.g("ChartModule", "** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
+					row["description"] = Lan.g("ChartModule","** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
 				}
 				row["dx"]="";
 				row["Dx"]="";
@@ -557,7 +557,7 @@ namespace OpenDentBusiness {
 				row["ToothRange"]="";
 				row["user"]="";
 				rows.Add(row);
-			}			
+			}
 			//email------------------------------------------------------------------------------------------------------------------------------
 			command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
 				+"FROM emailmessage "
@@ -573,7 +573,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
 				txt="";
-				if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0"){
+				if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
 					txt=Lan.g("ChartModule","(unsent) ");
 				}
 				row["description"]=Lan.g("ChartModule","Email - ")+txt+rawEmail.Rows[i]["Subject"].ToString();
@@ -681,13 +681,13 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			for(int i=0;i<rows.Count;i++){
+			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
 			return table;
 		}
 
-		private static DataTable GetPlannedApt(int patNum) {
+		private static DataTable GetPlannedApt(int patNum){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Planned");
 			DataRow row;
@@ -716,17 +716,17 @@ namespace OpenDentBusiness {
 			ApptStatus aptStatus;
 			for(int i=0;i<rawPlannedAppts.Rows.Count;i++) {
 				aptRow=null;
-				for(int a=0;a<rawApt.Rows.Count;a++) {
-					if(rawApt.Rows[a]["AptNum"].ToString()==rawPlannedAppts.Rows[i]["AptNum"].ToString()) {
+				for(int a=0;a<rawApt.Rows.Count;a++){
+					if(rawApt.Rows[a]["AptNum"].ToString()==rawPlannedAppts.Rows[i]["AptNum"].ToString()){
 						aptRow=rawApt.Rows[a];
 						break;
 					}
 				}
-				if(aptRow==null) {
+				if(aptRow==null){
 					continue;//this will have to be fixed in dbmaint.
 				}
 				//repair any item orders here rather than in dbmaint. It's really fast.
-				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()) {
+				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()){
 					command="UPDATE plannedappt SET ItemOrder="+POut.PInt(itemOrder)
 						+" WHERE PlannedApptNum="+rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
 					dcon.NonQ(command);
@@ -738,62 +738,62 @@ namespace OpenDentBusiness {
 				//Colors----------------------------------------------------------------------------
 				aptStatus=(ApptStatus)PIn.PInt(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
 				///change color if completed, broken, or unscheduled no matter the date
-				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.UnschedList) {
+				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.UnschedList){
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();
 				}
-				else if(aptStatus==ApptStatus.Complete) {
+				else if(aptStatus==ApptStatus.Complete){
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
 				}
-				else if(aptStatus==ApptStatus.Scheduled && dateSched.Date!=DateTime.Today.Date) {
+				else if(aptStatus==ApptStatus.Scheduled && dateSched.Date!=DateTime.Today.Date){
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
-				else if(dateSched.Date<DateTime.Today && dateSched!=DateTime.MinValue) {//Past
+				else if(dateSched.Date<DateTime.Today && dateSched!=DateTime.MinValue){//Past
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
 				}
-				else if(dateSched.Date == DateTime.Today.Date) { //Today
+				else if(dateSched.Date == DateTime.Today.Date){ //Today
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				}
-				else if(dateSched.Date > DateTime.Today) { //Future
+				else if(dateSched.Date > DateTime.Today){ //Future
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
-				else {
+				else{
 					row["colorBackG"]=Color.White.ToArgb().ToString();
 					row["colorText"]=Color.Black.ToArgb().ToString();
 				}
 				//end of colors------------------------------------------------------------------------------
-				if(dateSched.Year<1880) {
+				if(dateSched.Year<1880){
 					row["dateSched"]="";
 				}
-				else {
+				else{
 					row["dateSched"]=dateSched.ToShortDateString();
 				}
 				row["ItemOrder"]=itemOrder.ToString();
 				row["minutes"]=(aptRow["Pattern"].ToString().Length*5).ToString();
 				row["Note"]=aptRow["Note"].ToString();
 				row["ProcDescript"]=aptRow["ProcDescript"].ToString();
-				if(aptStatus==ApptStatus.Complete) {
+				if(aptStatus==ApptStatus.Complete){
 					row["ProcDescript"]="(Completed) "+ row["ProcDescript"];
 				}
-				else if(dateSched == DateTime.Today.Date) {
+				else if(dateSched == DateTime.Today.Date){
 					row["ProcDescript"]="(Today's) "+ row["ProcDescript"];
 				}
 				rows.Add(row);
 				itemOrder++;
 			}
-			for(int i=0;i<rows.Count;i++) {
+			for(int i=0;i<rows.Count;i++){
 				table.Rows.Add(rows[i]);
 			}
 			return table;
 		}
 
 		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
-		public static int CompareChartRows(DataRow x,DataRow y){
+		public static int CompareChartRows(DataRow x,DataRow y) {
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
 					return ProcedureLogic.CompareProcedures(x,y);
@@ -808,8 +808,8 @@ namespace OpenDentBusiness {
 			//return myComparer.Compare(x,y);
 		}
 
-		
-	
+
+
 
 
 
@@ -819,7 +819,7 @@ namespace OpenDentBusiness {
 	}
 
 
-	
+
 
 	//public class DtoChartModuleGetAll:DtoQueryBase {
 	//	public int PatNum;
