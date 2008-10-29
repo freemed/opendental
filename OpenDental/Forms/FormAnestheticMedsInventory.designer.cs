@@ -24,28 +24,16 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsInventory));
-            this.gridAnesthMedsInventory = new OpenDental.UI.ODGrid();
             this.groupAnestheticMeds = new System.Windows.Forms.GroupBox();
-            this.butAddAnesthMeds = new OpenDental.UI.Button();
             this.butAdjustQtys = new OpenDental.UI.Button();
             this.labelIntakeNewMeds = new System.Windows.Forms.Label();
             this.butAnesthMedIntake = new OpenDental.UI.Button();
             this.butClose = new OpenDental.UI.Button();
             this.butCancel = new OpenDental.UI.Button();
+            this.butAddAnesthMeds = new OpenDental.UI.Button();
+            this.gridAnesthMedsInventory = new OpenDental.UI.ODGrid();
             this.groupAnestheticMeds.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // gridAnesthMedsInventory
-            // 
-            this.gridAnesthMedsInventory.HScrollVisible = false;
-            this.gridAnesthMedsInventory.Location = new System.Drawing.Point(104, 33);
-            this.gridAnesthMedsInventory.Name = "gridAnesthMedsInventory";
-            this.gridAnesthMedsInventory.ScrollValue = 0;
-            this.gridAnesthMedsInventory.Size = new System.Drawing.Size(580, 300);
-            this.gridAnesthMedsInventory.TabIndex = 4;
-            this.gridAnesthMedsInventory.Title = null;
-            this.gridAnesthMedsInventory.TranslationName = null;
-            this.gridAnesthMedsInventory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMedsInventory_CellDoubleClick);
             // 
             // groupAnestheticMeds
             // 
@@ -63,23 +51,6 @@ namespace OpenDental{
             this.groupAnestheticMeds.TabStop = false;
             this.groupAnestheticMeds.Text = "Anesthetic Medications";
             // 
-            // butAddAnesthMeds
-            // 
-            this.butAddAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butAddAnesthMeds.Autosize = true;
-            this.butAddAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butAddAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butAddAnesthMeds.CornerRadius = 4F;
-            this.butAddAnesthMeds.Image = global::OpenDental.Properties.Resources.Add;
-            this.butAddAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butAddAnesthMeds.Location = new System.Drawing.Point(11, 49);
-            this.butAddAnesthMeds.Name = "butAddAnesthMeds";
-            this.butAddAnesthMeds.Size = new System.Drawing.Size(82, 26);
-            this.butAddAnesthMeds.TabIndex = 76;
-            this.butAddAnesthMeds.Text = "Add New";
-            this.butAddAnesthMeds.UseVisualStyleBackColor = true;
-            this.butAddAnesthMeds.Click += new System.EventHandler(this.butAddAnesthMeds_Click);
-            // 
             // butAdjustQtys
             // 
             this.butAdjustQtys.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -95,6 +66,7 @@ namespace OpenDental{
             this.butAdjustQtys.TabIndex = 148;
             this.butAdjustQtys.Text = "Adjust Qty on hand";
             this.butAdjustQtys.UseVisualStyleBackColor = true;
+            this.butAdjustQtys.Click += new System.EventHandler(this.butAdjustQtys_Click);
             // 
             // labelIntakeNewMeds
             // 
@@ -120,6 +92,7 @@ namespace OpenDental{
             this.butAnesthMedIntake.TabIndex = 146;
             this.butAnesthMedIntake.Text = "Intake new meds";
             this.butAnesthMedIntake.UseVisualStyleBackColor = true;
+            this.butAnesthMedIntake.Click += new System.EventHandler(this.butAnesthMedIntake_Click);
             // 
             // butClose
             // 
@@ -152,6 +125,36 @@ namespace OpenDental{
             this.butCancel.TabIndex = 144;
             this.butCancel.Text = "Cancel";
             this.butCancel.UseVisualStyleBackColor = true;
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+            // 
+            // butAddAnesthMeds
+            // 
+            this.butAddAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butAddAnesthMeds.Autosize = true;
+            this.butAddAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butAddAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butAddAnesthMeds.CornerRadius = 4F;
+            this.butAddAnesthMeds.Image = global::OpenDental.Properties.Resources.Add;
+            this.butAddAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butAddAnesthMeds.Location = new System.Drawing.Point(11, 49);
+            this.butAddAnesthMeds.Name = "butAddAnesthMeds";
+            this.butAddAnesthMeds.Size = new System.Drawing.Size(82, 26);
+            this.butAddAnesthMeds.TabIndex = 76;
+            this.butAddAnesthMeds.Text = "Add New";
+            this.butAddAnesthMeds.UseVisualStyleBackColor = true;
+            this.butAddAnesthMeds.Click += new System.EventHandler(this.butAddAnesthMeds_Click);
+            // 
+            // gridAnesthMedsInventory
+            // 
+            this.gridAnesthMedsInventory.HScrollVisible = false;
+            this.gridAnesthMedsInventory.Location = new System.Drawing.Point(104, 33);
+            this.gridAnesthMedsInventory.Name = "gridAnesthMedsInventory";
+            this.gridAnesthMedsInventory.ScrollValue = 0;
+            this.gridAnesthMedsInventory.Size = new System.Drawing.Size(580, 300);
+            this.gridAnesthMedsInventory.TabIndex = 4;
+            this.gridAnesthMedsInventory.Title = "Anesthetic Medication Inventory";
+            this.gridAnesthMedsInventory.TranslationName = null;
+            this.gridAnesthMedsInventory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMedsInventory_CellDoubleClick);
             // 
             // FormAnestheticMedsInventory
             // 

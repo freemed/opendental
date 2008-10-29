@@ -132,7 +132,7 @@ namespace OpenDental{
             this.butCancel.TabIndex = 55;
             this.butCancel.Text = "&Cancel";
             this.butCancel.UseVisualStyleBackColor = true;
-            this.butCancel.Click += new System.EventHandler(this.button1_Click);
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
             // butOK
             // 

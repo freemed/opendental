@@ -17,7 +17,26 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
+		
+		private void AnestheticMedsEdit_Load(object sender, EventArgs e)
+		{
+            textAnesthMedName.Text = Med.AnesthMedName;
+            textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
+            
+		}
+
+		private void textAnesthMed_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void butCancel_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
+		}
+
+        private void butOK_Click(object sender, EventArgs e)
+        {
 
             //if(textDate.errorProvider1.GetError(textDate)!=""){
             //	MsgBox.Show(this,"Please fix data entry errors first.");
@@ -32,28 +51,7 @@ namespace OpenDental {
             Med.AnesthHowSupplied = textAnesthHowSupplied.Text;
             AnestheticMeds.WriteObject(Med);
             DialogResult = DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			
-		}
-
-		private void AnestheticMedsEdit_Load(object sender, EventArgs e)
-		{
-            textAnesthMedName.Text = Med.AnesthMedName;
-            textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
-            
-		}
-
-		private void textAnesthMed_TextChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Cancel;
-		}
+        }
 
         private void textAnestheticMedNum_TextChanged(object sender, EventArgs e)
         {

@@ -68,10 +68,6 @@ namespace OpenDental {
 			
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
         private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             FormAnestheticMedsEdit FormME = new FormAnestheticMedsEdit();
@@ -85,7 +81,61 @@ namespace OpenDental {
 
         private void butClose_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            Close();
+            //DialogResult = DialogResult.OK;
+        }
+
+        private void butCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private void butCancel_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void butAnesthMedIntake_Click(object sender, EventArgs e)
+        {
+
+            if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+            {
+
+                butAnesthMedIntake.Enabled = false;
+                return;
+            }
+
+            else
+            {
+                FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
+                FormI.ShowDialog();
+
+
+
+            } 
+        }
+
+        private void butAdjustQtys_Click(object sender, EventArgs e)
+        {
+
+            Userod curUser = Security.CurUser;
+
+            if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+            {
+
+                FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+                FormA.ShowDialog();
+                return;
+            }
+
+            else
+            {
+
+                MessageBox.Show(this, "You must be an administrator to unlock this action");
+                return;
+
+            } 
+
         }
 
 
