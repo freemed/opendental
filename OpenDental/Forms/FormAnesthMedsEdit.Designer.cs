@@ -166,8 +166,6 @@ namespace OpenDental{
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(590, 265);
-            this.Controls.Add(this.textAnesthMedName);
-            this.Controls.Add(this.textAnesthHowSupplied);
             this.Controls.Add(this.butDelete);
             this.Controls.Add(this.butOK);
             this.Controls.Add(this.butCancel);
