@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -396,11 +396,11 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormAnestheticMedsInventory.cs">
+    <Compile Include="Forms\FormAnesthMedsEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormAnestheticMedsInventory.designer.cs">
-      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
+    <Compile Include="Forms\FormAnesthMedsEdit.Designer.cs">
+      <DependentUpon>FormAnesthMedsEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAnesthElevateSecurityPriv.cs">
       <SubType>Form</SubType>
@@ -620,12 +620,6 @@
     </Compile>
     <Compile Include="Forms\FormAccountingLock.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsEdit.designer.cs">
-      <DependentUpon>FormAnestheticMedsEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAnestheticMedsIntake.cs">
       <SubType>Form</SubType>
@@ -3640,8 +3634,8 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
-      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAnesthMedsEdit.resx">
+      <DependentUpon>FormAnesthMedsEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnesthElevateSecurityPriv.resx">
@@ -3818,10 +3812,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientAddAll.resx">
       <DependentUpon>FormPatientAddAll.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsEdit.resx">
-      <DependentUpon>FormAnestheticMedsEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.resx">
