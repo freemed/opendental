@@ -477,6 +477,7 @@ namespace OpenDental{
                   {
                     "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
                     ,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
+                    ,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
                      };
                    General.NonQ(commands);
                   
