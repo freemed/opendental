@@ -376,7 +376,7 @@ namespace OpenDental{
 					FROM claimproc,insplan,carrier
 					WHERE claimproc.PlanNum = insplan.PlanNum
 					AND carrier.CarrierNum = insplan.CarrierNum
-					AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
+					AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) /*received or supplemental or notreceived*/
 					AND claimproc.ProcDate >= @DateFrom
 					AND claimproc.ProcDate <= @DateTo
 					AND insplan.PlanType='p'
