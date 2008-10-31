@@ -312,6 +312,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ProviderHiddenWithClaimPayments();
 			Application.DoEvents();
+			RecallTriggerDeleteBadCodeNum();
+			Application.DoEvents();
 			SchedulesDeleteShort();
 			Application.DoEvents();
 			SchedulesDeleteProvClosed();
@@ -1415,6 +1417,18 @@ namespace OpenDental {
 					+Lan.g(this,"has claim payments entered as recently as ")
 					+PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString()
 					+Lan.g(this,".  This data will be missing on income reports.")+"\r\n";
+			}
+		}
+
+		private void RecallTriggerDeleteBadCodeNum() {
+			command=@"DELETE FROM recalltrigger
+				WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0){
+				DataValid.SetInvalid(InvalidType.RecallTypes);
+			}
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Recall triggers deleted due to bad codenum: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
