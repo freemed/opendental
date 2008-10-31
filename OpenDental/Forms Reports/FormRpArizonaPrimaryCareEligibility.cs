@@ -95,7 +95,7 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1)) HPP, "+//Household % of poverty
 					"(SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 						copayDefNum+" ORDER BY AdjDate DESC LIMIT 1) HSFS,"+//Household sliding fee scale
-					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1),"+//Date of eligibility status
+					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1) DES,"+//Date of eligibility status
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1)) CareStatus "+//Status
 					"FROM patient p WHERE "+
@@ -221,7 +221,7 @@ namespace OpenDental {
 					householdSlidingFeeScale="100";
 				}
 				outputRow+=householdSlidingFeeScale.PadLeft(3,'0');
-				string dateOfEligibilityStatusStr=primaryCareReportRow.Rows[0]["HSFS"].ToString();
+				string dateOfEligibilityStatusStr=primaryCareReportRow.Rows[0]["DES"].ToString();
 				DateTime dateOfEligibilityStatus=DateTime.MinValue;
 				if(dateOfEligibilityStatusStr!="" && dateOfEligibilityStatusStr!="null"){
 					dateOfEligibilityStatus=PIn.PDate(dateOfEligibilityStatusStr);
