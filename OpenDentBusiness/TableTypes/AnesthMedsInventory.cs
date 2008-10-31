@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		/// <summary>Primary key.</summary>
 		public int AnestheticMedNum {
 			get { return anestheticMedNum; }
-            set { if (anestheticMedNum != value) { anestheticMedNum = value; MarkDirty(); anestheticMedNumChanged = true; }}
+            set { anestheticMedNum = value; MarkDirty(); anestheticMedNumChanged = true; }
 		}
 		public bool AnestheticMedNumChanged {
 			get { return anestheticMedNumChanged; }
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		/// <summary>Name of an anesthetic medication</summary>
 		public string AnesthMedName {
 			get { return anesthMedName; }
-            set { if (anesthMedName != value) { anesthMedName = value; MarkDirty(); anesthMedNameChanged = true; } }
+            set { anesthMedName = value; MarkDirty(); anesthMedNameChanged = true; }
 		}
 		public bool AnesthMedNameChanged {
 			get { return anesthMedNameChanged; }
@@ -39,10 +39,9 @@ namespace OpenDentBusiness{
         public string AnesthHowSupplied
         {
             get { return anesthHowSupplied; }
-            set { if (anesthHowSupplied != value) { anesthHowSupplied = value; MarkDirty(); anesthHowSuppliedChanged = true; } }
+            set { anesthHowSupplied = value; MarkDirty(); anesthHowSuppliedChanged = true; }
         }
-        public bool AnesthHowSuppliedChanged
-        {
+        public bool AnesthHowSuppliedChanged {
             get { return anesthHowSuppliedChanged; }
         }
 
@@ -53,15 +52,15 @@ namespace OpenDentBusiness{
 		
 		public string QtyOnHand {
 			get { return qtyOnHand; }
-            set { if (qtyOnHand != value) { qtyOnHand = value; MarkDirty(); qtyOnHandChanged = true; } }
+            set { qtyOnHand = value; MarkDirty(); qtyOnHandChanged = true; }
 		}
 		public bool QtyOnHandChanged {
 			get { return qtyOnHandChanged; }
 		}
-        public AnesthMedsInventory Copy()
+      /*  public AnesthMedsInventory Copy()
         {
             return (AnesthMedsInventory)Clone();
-        }	
+        }*/	
 	}
 
 	

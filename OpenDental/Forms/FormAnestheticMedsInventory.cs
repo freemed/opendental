@@ -11,11 +11,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 
-        private List<AnesthMedsInventory> listAnestheticMeds;
-        
-        public bool IsSelectionMode;
-        ///<summary>Only used if IsSelectionMode.  On OK, contains selected anestheticMedNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-        public int SelectedAnestheticMedNum;
+        private List<AnesthMedInventory> listAnestheticMeds;
 
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
@@ -57,7 +53,7 @@ namespace OpenDental {
 
         private void butAddAnesthMeds_Click(object sender, EventArgs e)
         {
-            AnesthMedsInventory med = new AnesthMedsInventory();
+            AnesthMedInventory med = new AnesthMedInventory();
             med.IsNew = true;
             FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
             FormM.Med = med;

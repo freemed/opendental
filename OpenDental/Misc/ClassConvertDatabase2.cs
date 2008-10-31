@@ -476,6 +476,7 @@ namespace OpenDental{
                   string[] commands = new string[]
                   {
                     "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
+                    ,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
                     ,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
                     ,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
                      };
