@@ -32,6 +32,8 @@
             this.textQty = new System.Windows.Forms.TextBox();
             this.labelQty = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboDEASchedule = new System.Windows.Forms.ComboBox();
             this.comboBoxAnesthMed = new System.Windows.Forms.ComboBox();
             this.textInvoiceNum = new System.Windows.Forms.TextBox();
             this.groupSupplier = new System.Windows.Forms.GroupBox();
@@ -42,8 +44,6 @@
             this.labelInvoice = new System.Windows.Forms.Label();
             this.textDate = new System.Windows.Forms.TextBox();
             this.labelDate = new System.Windows.Forms.Label();
-            this.comboDEASchedule = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupSupplier.SuspendLayout();
             this.SuspendLayout();
@@ -78,6 +78,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Anesthetic Medication";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(343, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "DEA Schedule";
+            // 
+            // comboDEASchedule
+            // 
+            this.comboDEASchedule.FormattingEnabled = true;
+            this.comboDEASchedule.Items.AddRange(new object[] {
+            "II",
+            "III",
+            "IV",
+            "V"});
+            this.comboDEASchedule.Location = new System.Drawing.Point(424, 19);
+            this.comboDEASchedule.Name = "comboDEASchedule";
+            this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
+            this.comboDEASchedule.TabIndex = 5;
+            // 
             // comboBoxAnesthMed
             // 
             this.comboBoxAnesthMed.FormattingEnabled = true;
@@ -85,6 +107,7 @@
             this.comboBoxAnesthMed.Name = "comboBoxAnesthMed";
             this.comboBoxAnesthMed.Size = new System.Drawing.Size(231, 21);
             this.comboBoxAnesthMed.TabIndex = 0;
+            this.comboBoxAnesthMed.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnesthMed_SelectedIndexChanged);
             // 
             // textInvoiceNum
             // 
@@ -190,28 +213,6 @@
             this.labelDate.Size = new System.Drawing.Size(30, 13);
             this.labelDate.TabIndex = 10;
             this.labelDate.Text = "Date";
-            // 
-            // comboDEASchedule
-            // 
-            this.comboDEASchedule.FormattingEnabled = true;
-            this.comboDEASchedule.Items.AddRange(new object[] {
-            "II",
-            "III",
-            "IV",
-            "V"});
-            this.comboDEASchedule.Location = new System.Drawing.Point(424, 19);
-            this.comboDEASchedule.Name = "comboDEASchedule";
-            this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
-            this.comboDEASchedule.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(343, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "DEA Schedule";
             // 
             // FormAnestheticMedsIntake
             // 

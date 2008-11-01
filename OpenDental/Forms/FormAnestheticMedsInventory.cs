@@ -35,7 +35,7 @@ namespace OpenDental {
             gridAnesthMedsInventory.Columns.Add(col);
             col = new ODGridColumn(Lan.g(this, "How Supplied"), 200);
             gridAnesthMedsInventory.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this, "Quantity on Hand"), 180);
+            col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"), 180);
             gridAnesthMedsInventory.Columns.Add(col);
             gridAnesthMedsInventory.Rows.Clear();
             ODGridRow row;

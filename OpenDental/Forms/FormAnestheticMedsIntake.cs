@@ -8,9 +8,11 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-namespace OpenDental
-{
+namespace OpenDental{
+
 	public partial class FormAnestheticMedsIntake : Form{
+
+        public bool IsNew;
 
 		public FormAnestheticMedsIntake()
 		{
@@ -20,12 +22,13 @@ namespace OpenDental
 
 		private void FormAnestheticMedsIntake_Load(object sender, EventArgs e)
 		{
-			if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
-			{
+            if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+            {
 
-				DialogResult = DialogResult.Cancel;
-				return;
-			}
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
+  
 		
 		}
 
@@ -49,21 +52,20 @@ namespace OpenDental
 			DialogResult = DialogResult.Cancel;
 		}
 
-		//this will ultimately be moved to main OD setup menu, here for convenience now
-		private void butSetupAnesthMeds_Click(object sender, EventArgs e)
-		{
-            
-			FormAnestheticMedsInventory FormI = new FormAnestheticMedsInventory();
-			FormI.ShowDialog();
-			
-		}
 
 		private void butAddSupplier_Click(object sender, EventArgs e)
 
 		{
-			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
-			FormMS.ShowDialog();
+
+            FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
+            FormMS.ShowDialog();
+
 		}
+
+        private void comboBoxAnesthMed_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
 
 
 	}

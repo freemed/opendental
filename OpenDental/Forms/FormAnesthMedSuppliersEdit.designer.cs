@@ -26,14 +26,14 @@ namespace OpenDental{
 		private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthMedSuppliersEdit));
             this.groupBoxSupplier = new System.Windows.Forms.GroupBox();
+            this.textWebSite = new System.Windows.Forms.TextBox();
+            this.labelWebSite = new System.Windows.Forms.Label();
             this.textFax = new System.Windows.Forms.TextBox();
             this.labelFax = new System.Windows.Forms.Label();
             this.textContact = new System.Windows.Forms.TextBox();
             this.labelContact = new System.Windows.Forms.Label();
             this.textPhoneExt = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.textSupplierIDNum = new System.Windows.Forms.TextBox();
-            this.labelID = new System.Windows.Forms.Label();
             this.labelSupplierNotes = new System.Windows.Forms.Label();
             this.richTextNotes = new System.Windows.Forms.RichTextBox();
             this.textPhone = new System.Windows.Forms.TextBox();
@@ -50,8 +50,6 @@ namespace OpenDental{
             this.label1 = new System.Windows.Forms.Label();
             this.textSupplierName = new System.Windows.Forms.TextBox();
             this.textAddr2 = new System.Windows.Forms.TextBox();
-            this.labelWebSite = new System.Windows.Forms.Label();
-            this.textWebSite = new System.Windows.Forms.TextBox();
             this.butOK = new OpenDental.UI.Button();
             this.butCancel = new OpenDental.UI.Button();
             this.groupBoxSupplier.SuspendLayout();
@@ -67,8 +65,6 @@ namespace OpenDental{
             this.groupBoxSupplier.Controls.Add(this.labelContact);
             this.groupBoxSupplier.Controls.Add(this.textPhoneExt);
             this.groupBoxSupplier.Controls.Add(this.label8);
-            this.groupBoxSupplier.Controls.Add(this.textSupplierIDNum);
-            this.groupBoxSupplier.Controls.Add(this.labelID);
             this.groupBoxSupplier.Controls.Add(this.labelSupplierNotes);
             this.groupBoxSupplier.Controls.Add(this.richTextNotes);
             this.groupBoxSupplier.Controls.Add(this.textPhone);
@@ -92,13 +88,29 @@ namespace OpenDental{
             this.groupBoxSupplier.TabStop = false;
             this.groupBoxSupplier.Text = "Suppliers";
             // 
+            // textWebSite
+            // 
+            this.textWebSite.Location = new System.Drawing.Point(336, 176);
+            this.textWebSite.Name = "textWebSite";
+            this.textWebSite.Size = new System.Drawing.Size(223, 20);
+            this.textWebSite.TabIndex = 10;
+            // 
+            // labelWebSite
+            // 
+            this.labelWebSite.AutoSize = true;
+            this.labelWebSite.Location = new System.Drawing.Point(279, 179);
+            this.labelWebSite.Name = "labelWebSite";
+            this.labelWebSite.Size = new System.Drawing.Size(51, 13);
+            this.labelWebSite.TabIndex = 114;
+            this.labelWebSite.Text = "Web Site";
+            // 
             // textFax
             // 
             this.textFax.Location = new System.Drawing.Point(307, 64);
             this.textFax.MaxLength = 13;
             this.textFax.Name = "textFax";
             this.textFax.Size = new System.Drawing.Size(80, 20);
-            this.textFax.TabIndex = 113;
+            this.textFax.TabIndex = 3;
             // 
             // labelFax
             // 
@@ -111,10 +123,10 @@ namespace OpenDental{
             // 
             // textContact
             // 
-            this.textContact.Location = new System.Drawing.Point(443, 64);
+            this.textContact.Location = new System.Drawing.Point(440, 64);
             this.textContact.Name = "textContact";
             this.textContact.Size = new System.Drawing.Size(118, 20);
-            this.textContact.TabIndex = 111;
+            this.textContact.TabIndex = 4;
             // 
             // labelContact
             // 
@@ -131,7 +143,7 @@ namespace OpenDental{
             this.textPhoneExt.MaxLength = 5;
             this.textPhoneExt.Name = "textPhoneExt";
             this.textPhoneExt.Size = new System.Drawing.Size(39, 20);
-            this.textPhoneExt.TabIndex = 109;
+            this.textPhoneExt.TabIndex = 2;
             // 
             // label8
             // 
@@ -141,23 +153,6 @@ namespace OpenDental{
             this.label8.Size = new System.Drawing.Size(25, 13);
             this.label8.TabIndex = 108;
             this.label8.Text = "Ext.";
-            // 
-            // textSupplierIDNum
-            // 
-            this.textSupplierIDNum.Location = new System.Drawing.Point(441, 33);
-            this.textSupplierIDNum.Name = "textSupplierIDNum";
-            this.textSupplierIDNum.ReadOnly = true;
-            this.textSupplierIDNum.Size = new System.Drawing.Size(118, 20);
-            this.textSupplierIDNum.TabIndex = 107;
-            // 
-            // labelID
-            // 
-            this.labelID.AutoSize = true;
-            this.labelID.Location = new System.Drawing.Point(407, 35);
-            this.labelID.Name = "labelID";
-            this.labelID.Size = new System.Drawing.Size(28, 13);
-            this.labelID.TabIndex = 106;
-            this.labelID.Text = "ID #";
             // 
             // labelSupplierNotes
             // 
@@ -173,7 +168,7 @@ namespace OpenDental{
             this.richTextNotes.Location = new System.Drawing.Point(105, 209);
             this.richTextNotes.Name = "richTextNotes";
             this.richTextNotes.Size = new System.Drawing.Size(454, 79);
-            this.richTextNotes.TabIndex = 104;
+            this.richTextNotes.TabIndex = 11;
             this.richTextNotes.Text = "";
             // 
             // textPhone
@@ -182,7 +177,7 @@ namespace OpenDental{
             this.textPhone.MaxLength = 13;
             this.textPhone.Name = "textPhone";
             this.textPhone.Size = new System.Drawing.Size(80, 20);
-            this.textPhone.TabIndex = 85;
+            this.textPhone.TabIndex = 1;
             this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
             // 
             // label7
@@ -208,7 +203,7 @@ namespace OpenDental{
             this.textZip.Location = new System.Drawing.Point(105, 176);
             this.textZip.Name = "textZip";
             this.textZip.Size = new System.Drawing.Size(168, 20);
-            this.textZip.TabIndex = 10;
+            this.textZip.TabIndex = 9;
             this.textZip.Tag = "";
             // 
             // label5
@@ -241,7 +236,7 @@ namespace OpenDental{
             this.textCity.Location = new System.Drawing.Point(105, 150);
             this.textCity.Name = "textCity";
             this.textCity.Size = new System.Drawing.Size(168, 20);
-            this.textCity.TabIndex = 6;
+            this.textCity.TabIndex = 7;
             this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
             // 
             // label3
@@ -267,7 +262,7 @@ namespace OpenDental{
             this.textAddr1.Location = new System.Drawing.Point(105, 98);
             this.textAddr1.Name = "textAddr1";
             this.textAddr1.Size = new System.Drawing.Size(454, 20);
-            this.textAddr1.TabIndex = 2;
+            this.textAddr1.TabIndex = 5;
             // 
             // label1
             // 
@@ -280,9 +275,9 @@ namespace OpenDental{
             // 
             // textSupplierName
             // 
-            this.textSupplierName.Location = new System.Drawing.Point(105, 33);
+            this.textSupplierName.Location = new System.Drawing.Point(104, 33);
             this.textSupplierName.Name = "textSupplierName";
-            this.textSupplierName.Size = new System.Drawing.Size(290, 20);
+            this.textSupplierName.Size = new System.Drawing.Size(454, 20);
             this.textSupplierName.TabIndex = 0;
             this.textSupplierName.TextChanged += new System.EventHandler(this.textSupplierName_TextChanged);
             // 
@@ -291,23 +286,7 @@ namespace OpenDental{
             this.textAddr2.Location = new System.Drawing.Point(105, 124);
             this.textAddr2.Name = "textAddr2";
             this.textAddr2.Size = new System.Drawing.Size(454, 20);
-            this.textAddr2.TabIndex = 4;
-            // 
-            // labelWebSite
-            // 
-            this.labelWebSite.AutoSize = true;
-            this.labelWebSite.Location = new System.Drawing.Point(279, 179);
-            this.labelWebSite.Name = "labelWebSite";
-            this.labelWebSite.Size = new System.Drawing.Size(51, 13);
-            this.labelWebSite.TabIndex = 114;
-            this.labelWebSite.Text = "Web Site";
-            // 
-            // textWebSite
-            // 
-            this.textWebSite.Location = new System.Drawing.Point(336, 176);
-            this.textWebSite.Name = "textWebSite";
-            this.textWebSite.Size = new System.Drawing.Size(223, 20);
-            this.textWebSite.TabIndex = 115;
+            this.textAddr2.TabIndex = 6;
             // 
             // butOK
             // 
@@ -352,6 +331,7 @@ namespace OpenDental{
             this.Name = "FormAnesthMedSuppliersEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Edit Anesthetic Medication Supplier";
+            this.Load += new System.EventHandler(this.FormAnesthMedSuppliersEdit_Load);
             this.groupBoxSupplier.ResumeLayout(false);
             this.groupBoxSupplier.PerformLayout();
             this.ResumeLayout(false);
@@ -378,9 +358,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textPhone;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label labelSupplierNotes;
-		private System.Windows.Forms.RichTextBox richTextNotes;
-		private System.Windows.Forms.Label labelID;
-		private System.Windows.Forms.TextBox textSupplierIDNum;
+        private System.Windows.Forms.RichTextBox richTextNotes;
 		private System.Windows.Forms.TextBox textPhoneExt;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox textContact;

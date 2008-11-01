@@ -24,6 +24,8 @@ namespace OpenDental{
         public bool IsSelectionMode;
 		///<summary>Only used if IsSelectionMode.  On OK, contains selected anesthMedSuppliersNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		public int SelectedSupplierIDNum;
+        
+
 
 		///<summary></summary>
 		public FormAnesthMedSuppliers()
@@ -171,22 +173,16 @@ namespace OpenDental{
 				butOK.Visible=false;
 				butNone.Visible=false;
 			}
+
 			FillGrid();
-			/*if(SelectedAnesthMedSupplierNum!=0){
-				for(int i=0;i<AnesthMedSupplierC.Listt.Count;i++){
-					if(AnesthMedSupplierC.Listt[i].AnesthMedSupplierNum==SelectedAnesthMedSupplierNum){
-						gridMain.SetSelected(i,true);
-						break;
-					}
-				}
-			}*/
+			
 		}
 
 		private void FillGrid(){
 			AnesthMedSuppliers.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableAnesthMedSuppliers","Supplier"),130);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableAnesthMedSuppliers","SupplierName"),130);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAnesthMedSuppliers","Phone"),80);
 			gridMain.Columns.Add(col);
@@ -209,6 +205,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(AnesthMedSupplierC.Listt[i].SupplierName);
 				row.Cells.Add(AnesthMedSupplierC.Listt[i].Phone);
+               // row.Cells.Add(AnesthMedSupplierC.Listt[i].PhoneExt);
 				row.Cells.Add(AnesthMedSupplierC.Listt[i].Fax);
 				txt=AnesthMedSupplierC.Listt[i].Addr1;
 				/*if(AnesthMedSupplierC.Listt[i].Addr2!=""){
@@ -218,20 +215,26 @@ namespace OpenDental{
 				row.Cells.Add(AnesthMedSupplierC.Listt[i].City);
                 row.Cells.Add(AnesthMedSupplierC.Listt[i].State);
                 row.Cells.Add(AnesthMedSupplierC.Listt[i].Zip);
+               // row.Cells.Add(AnesthMedSupplierC.Listt[i].Contact);
                 row.Cells.Add(AnesthMedSupplierC.Listt[i].WebSite);
-				//row.Cells.Add(AnesthMedSupplierC.Listt[i].Note);
+				//row.Cells.Add(AnesthMedSupplierC.Listt[i].Notes);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			FormAnesthMedSuppliersEdit FormMS=new FormAnesthMedSuppliersEdit();
-			//FormMS.SupplCur=new AnesthMedSupplier();
-			//FormMS.SupplCur.IsNew=true;
-			FormMS.ShowDialog();
-			FillGrid();
-			changed=true;
+
+            AnesthMedSupplier supplCur = new AnesthMedSupplier();
+			supplCur.IsNew=true;
+            FormAnesthMedSuppliersEdit FormME=new FormAnesthMedSuppliersEdit();
+            FormME.SupplCur = supplCur;
+            FormME.ShowDialog();
+            if (FormME.DialogResult == DialogResult.OK)
+            {
+                FillGrid();
+            }
+			
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -241,9 +244,9 @@ namespace OpenDental{
 				return;
 			}
 			else{
-				FormAnesthMedSuppliersEdit FormMS=new FormAnesthMedSuppliersEdit();
-				//FormMS.SupplCur=AnesthMedSupplierC.Listt[e.Row];
-				FormMS.ShowDialog();
+				FormAnesthMedSuppliersEdit FormME=new FormAnesthMedSuppliersEdit();
+				FormME.SupplCur=AnesthMedSupplierC.Listt[e.Row];
+				FormME.ShowDialog();
 				FillGrid();
 				changed=true;
 			}
@@ -258,9 +261,9 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless is selection mode
 			if(gridMain.GetSelectedIndex()==-1){
-			//	MsgBox.Show(this,"Please select an item first.");
-			//	return;
-				SelectedSupplierIDNum=0;
+			MsgBox.Show(this,"Please select an item first.");
+			return;
+		    SelectedSupplierIDNum=0;
 			}
 			else{
 				SelectedSupplierIDNum=AnesthMedSupplierC.Listt[gridMain.GetSelectedIndex()].SupplierIDNum;

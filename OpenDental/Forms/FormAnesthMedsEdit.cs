@@ -33,14 +33,16 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
-			try{
-				AnestheticMeds.DeleteObject(Med);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			DialogResult=DialogResult.OK;
+            AnestheticMeds.DeleteObject(Med);
+
+            try{
+            AnestheticMeds.DeleteObject(Med);
+            }
+            catch(ApplicationException ex){
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            DialogResult =DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -73,6 +75,11 @@ namespace OpenDental {
         private void textQtyOnHand_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void textAnesthMedName_TextChanged_1(object sender, EventArgs e)
+        {
+             
         }
 
 

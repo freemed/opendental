@@ -7,7 +7,13 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
+    ///
+   
+
 	public class AnesthMedSuppliers{
+
+        public bool IsNew;
+
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
@@ -19,32 +25,34 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			AnesthMedSupplierC.Listt=new List<AnesthMedSupplier>();
-			AnesthMedSupplier suppl;
+			AnesthMedSupplier supplCur;
 			for(int i=0;i<table.Rows.Count;i++){
-				suppl=new AnesthMedSupplier();
-				suppl.IsNew = false;
-				//suppl.AnesthMedSupplierNum = PIn.PInt(table.Rows[i][0].ToString());
-				//suppl.AnesthMedSupplierID = PIn.PString(table.Rows[i][1].ToString());
-				suppl.SupplierName = PIn.PString(table.Rows[i][0].ToString());
-				suppl.Phone = PIn.PString(table.Rows[i][1].ToString());
-				suppl.Fax = PIn.PString(table.Rows[i][2].ToString());
-				suppl.Addr1 = PIn.PString(table.Rows[i][3].ToString());
-				//suppl.Addr2 = PIn.PString(table.Rows[i][6].ToString());
-				suppl.City = PIn.PString(table.Rows[i][4].ToString());
-				suppl.State = PIn.PString(table.Rows[i][5].ToString());
-				suppl.Zip = PIn.PString(table.Rows[i][6].ToString());
-				suppl.WebSite = PIn.PString(table.Rows[i][7].ToString());
-				AnesthMedSupplierC.Listt.Add(suppl);
+				supplCur=new AnesthMedSupplier();
+				supplCur.IsNew = false;
+				supplCur.SupplierIDNum = PIn.PInt(table.Rows[i][0].ToString());
+				supplCur.SupplierName = PIn.PString(table.Rows[i][1].ToString());
+				supplCur.Phone = PIn.PString(table.Rows[i][2].ToString());
+                supplCur.PhoneExt = PIn.PString(table.Rows[i][3].ToString());
+				supplCur.Fax = PIn.PString(table.Rows[i][4].ToString());
+				supplCur.Addr1 = PIn.PString(table.Rows[i][5].ToString());
+				supplCur.Addr2 = PIn.PString(table.Rows[i][6].ToString());
+				supplCur.City = PIn.PString(table.Rows[i][7].ToString());
+				supplCur.State = PIn.PString(table.Rows[i][8].ToString());
+				supplCur.Zip = PIn.PString(table.Rows[i][9].ToString());
+                supplCur.Contact = PIn.PString(table.Rows[i][10].ToString());
+				supplCur.WebSite = PIn.PString(table.Rows[i][11].ToString());
+                supplCur.Notes = PIn.PString(table.Rows[i][12].ToString());
+				AnesthMedSupplierC.Listt.Add(supplCur);
 			}
 		}
 
 		///<Summary>Gets one AnesthMedSupplier from the database.</Summary>
-		public static AnesthMedSupplier CreateObject(int AnesthMedSupplierNum){
-			return DataObjectFactory<AnesthMedSupplier>.CreateObject(AnesthMedSupplierNum);
+		public static AnesthMedSupplier CreateObject(int SupplierIDNum){
+			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}
 
-		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] AnesthMedSupplierNums){
-			Collection<AnesthMedSupplier> collectState=DataObjectFactory<AnesthMedSupplier>.CreateObjects(AnesthMedSupplierNums);
+		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] SupplierIDNums){
+			Collection<AnesthMedSupplier> collectState=DataObjectFactory<AnesthMedSupplier>.CreateObjects(SupplierIDNums);
 			return new List<AnesthMedSupplier>(collectState);		
 		}
 
@@ -54,7 +62,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int AnesthMedSupplierNum){
+		public static void DeleteObject(int SupplierIDNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
 			DataTable table=General.GetTable(command);
@@ -68,7 +76,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lan.g("Pharmacys","Pharmacy is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
-			DataObjectFactory<AnesthMedSupplier>.DeleteObject(AnesthMedSupplierNum);
+			DataObjectFactory<AnesthMedSupplier>.DeleteObject(SupplierIDNum);
 		}
 
 		//public static void DeleteObject(int PharmacyNum){

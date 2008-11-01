@@ -28,14 +28,16 @@ namespace OpenDental{
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			int count=PIn.PInt(General.GetCount(command));
-			if(count>0) {
+            //disabled during development, will probably need to enable for release
+			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
-			}
+			}*/
 			command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			count=PIn.PInt(General.GetCount(command));
-			if(count>0) {
+            //disabled for now...
+			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
-			}
+			}*/
             DataObjectFactory<AnesthMedInventory>.DeleteObject(med);
 		}
 
