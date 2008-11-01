@@ -10,6 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAnesthMedsEdit:Form {
 		public AnesthMedInventory Med;
+        
 
 		public FormAnesthMedsEdit() {
 			InitializeComponent();
@@ -17,10 +18,12 @@ namespace OpenDental {
 		}
 
 		private void FormAnesthMedsEdit_Load(object sender,EventArgs e) {
-           
 
+           
 			textAnesthMedName.Text= Med.AnesthMedName;
 			textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
+            
+            
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -48,6 +51,12 @@ namespace OpenDental {
 			}
             Med.AnesthMedName=textAnesthMedName.Text;
 		    Med.AnesthHowSupplied=textAnesthHowSupplied.Text;
+          
+            if (Med.QtyOnHand == null)
+            {
+                Med.QtyOnHand = "0";
+            }
+
 			AnestheticMeds.WriteObject(Med);
 			DialogResult=DialogResult.OK;
 		}
@@ -57,6 +66,11 @@ namespace OpenDental {
 		}
 
         private void textAnesthMedName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textQtyOnHand_TextChanged(object sender, EventArgs e)
         {
 
         }

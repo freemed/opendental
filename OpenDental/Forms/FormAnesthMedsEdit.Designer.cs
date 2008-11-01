@@ -39,15 +39,14 @@ namespace OpenDental{
             // 
             // textAnesthMedName
             // 
-            this.textAnesthMedName.Location = new System.Drawing.Point(47, 51);
+            this.textAnesthMedName.Location = new System.Drawing.Point(36, 48);
             this.textAnesthMedName.Name = "textAnesthMedName";
             this.textAnesthMedName.Size = new System.Drawing.Size(213, 20);
             this.textAnesthMedName.TabIndex = 1;
-            //this.textAnesthMedName.TextChanged += new System.EventHandler(this.textAnesthMedName_TextChanged);
             // 
             // textAnesthHowSupplied
             // 
-            this.textAnesthHowSupplied.Location = new System.Drawing.Point(47, 101);
+            this.textAnesthHowSupplied.Location = new System.Drawing.Point(36, 101);
             this.textAnesthHowSupplied.Name = "textAnesthHowSupplied";
             this.textAnesthHowSupplied.Size = new System.Drawing.Size(213, 20);
             this.textAnesthHowSupplied.TabIndex = 5;
@@ -71,7 +70,7 @@ namespace OpenDental{
             // labelHowSupplied
             // 
             this.labelHowSupplied.AutoSize = true;
-            this.labelHowSupplied.Location = new System.Drawing.Point(44, 84);
+            this.labelHowSupplied.Location = new System.Drawing.Point(33, 84);
             this.labelHowSupplied.Name = "labelHowSupplied";
             this.labelHowSupplied.Size = new System.Drawing.Size(71, 13);
             this.labelHowSupplied.TabIndex = 4;
@@ -80,7 +79,7 @@ namespace OpenDental{
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 35);
+            this.label1.Location = new System.Drawing.Point(33, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(178, 13);
             this.label1.TabIndex = 0;
@@ -167,8 +166,6 @@ namespace OpenDental{
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(590, 265);
-            this.Controls.Add(this.textAnesthMedName);
-            this.Controls.Add(this.textAnesthHowSupplied);
             this.Controls.Add(this.butDelete);
             this.Controls.Add(this.butOK);
             this.Controls.Add(this.butCancel);
@@ -180,7 +177,6 @@ namespace OpenDental{
             this.groupAnesthMedsEdit.ResumeLayout(false);
             this.groupAnesthMedsEdit.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
 
