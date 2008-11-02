@@ -56,6 +56,12 @@ namespace OpenDental {
 			DialogResult = DialogResult.Cancel;
 		}
 
+        private void butAnesthMedSuppl_Click(object sender, EventArgs e)
+        {
+            FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
+            FormMS.ShowDialog();
+        }
+
 
 
 	}
