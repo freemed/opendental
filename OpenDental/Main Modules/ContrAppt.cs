@@ -1888,6 +1888,7 @@ namespace OpenDental{
 						if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
 							aptCur.ProvHyg=assignedHyg;
 						}
+						aptCur.IsHygiene=curOp.IsHygiene;//this is assigned by op regardless of shedule assignments
 					}
 				}
 			}
@@ -2494,6 +2495,7 @@ namespace OpenDental{
 							if(assignedHyg!=0){//the hygienist will only be changed if the spot has a hygienist.
 								apt.ProvHyg=assignedHyg;
 							}
+							apt.IsHygiene=curOp.IsHygiene;//this is assigned by op regardless of shedule assignments
 						}
 					}
 				}
