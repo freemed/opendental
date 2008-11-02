@@ -464,7 +464,7 @@ namespace OpenDental {
 						SupplierIDNum int(3) NOT NULL auto_increment,
 						SupplierName varchar(255) NOT NULL,
 						Phone char(13),
-						PhoneExt int(6),
+						PhoneExt char(6),
                         Fax char(13),
 						Addr1 varchar(48),
 						Addr2 char(32),
