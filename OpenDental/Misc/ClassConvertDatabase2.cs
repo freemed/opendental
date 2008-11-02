@@ -14,15 +14,15 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Resources;
-using System.Text; 
+using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
 
-namespace OpenDental{
+namespace OpenDental {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
-	public partial class ClassConvertDatabase{
+	public partial class ClassConvertDatabase {
 		private System.Version LatestVersion=new Version("6.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private void To6_0_2() {
@@ -54,7 +54,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="SELECT PatNum,NextAptNum FROM patient WHERE NextAptNum != 0";
 					DataTable table=General.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO plannedappt (PatNum,AptNum,ItemOrder) VALUES("
 							+table.Rows[i]["PatNum"].ToString()+","
 							+table.Rows[i]["NextAptNum"].ToString()+",0)";
@@ -97,16 +97,16 @@ namespace OpenDental{
 					command="SELECT OperatoryNum FROM operatory WHERE IsHidden=0";
 					table=General.GetTable(command);
 					List<int> visibleOps=new List<int>();
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						visibleOps.Add(PIn.PInt(table.Rows[i]["OperatoryNum"].ToString()));
 					}
 					//convert blockouts with op=0
 					command="SELECT ScheduleNum FROM schedule WHERE SchedType=2 "//blockout
 						+"AND Op=0";//indicates all ops
 					table=General.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						//for each schedule, we need to insert a separate scheduleop for each visible op
-						for(int o=0;o<visibleOps.Count;o++){
+						for(int o=0;o<visibleOps.Count;o++) {
 							command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
 								+table.Rows[i]["ScheduleNum"].ToString()+","
 								+POut.PInt(visibleOps[o])+")";
@@ -117,7 +117,7 @@ namespace OpenDental{
 					command="SELECT ScheduleNum,Op FROM schedule WHERE SchedType=2 "//blockout
 						+"AND Op>0";//indicates one assigned op
 					table=General.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
 							+table.Rows[i]["ScheduleNum"].ToString()+","
 							+table.Rows[i]["Op"].ToString()+")";
@@ -139,17 +139,17 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="SELECT DefNum,ItemName,ItemValue,ItemOrder,IsHidden FROM definition WHERE Category=7";//fee schedule names
 					table=General.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO feesched(FeeSchedNum,Description,FeeSchedType,ItemOrder,IsHidden) VALUES("
 							+table.Rows[i]["DefNum"].ToString()+","
 							+"'"+POut.PString(table.Rows[i]["ItemName"].ToString())+"',";
-						if(table.Rows[i]["ItemValue"].ToString()=="A"){
+						if(table.Rows[i]["ItemValue"].ToString()=="A") {
 							command+=POut.PInt((int)FeeScheduleType.Allowed)+",";
 						}
-						else if(table.Rows[i]["ItemValue"].ToString()=="C"){
+						else if(table.Rows[i]["ItemValue"].ToString()=="C") {
 							command+=POut.PInt((int)FeeScheduleType.CoPay)+",";
 						}
-						else{
+						else {
 							command+=POut.PInt((int)FeeScheduleType.Normal)+",";
 						}
 						command+=table.Rows[i]["ItemOrder"].ToString()+","//although this will be reset in the UI
@@ -310,7 +310,7 @@ namespace OpenDental{
 						Notes text NOT NULL,
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);					
+					General.NonQ(command);
 					//keeps the post-anesthesia score and discharge data
 					command="DROP TABLE IF EXISTS anesthscore";
 					General.NonQ(command);
@@ -348,11 +348,11 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
-                    
 
-				} 
+
+				}
 				else {//oracle
-					
+
 				}
 				command="UPDATE preference SET ValueString = '6.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
@@ -364,10 +364,9 @@ namespace OpenDental{
 			if(FromVersion<new Version("6.2.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-
-                    command = "DROP TABLE IF EXISTS anesthmedsintake";
-                    General.NonQ(command);
-                    command = @"CREATE TABLE anesthmedsintake(
+					command = "DROP TABLE IF EXISTS anesthmedsintake";
+					General.NonQ(command);
+					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
 						AnestheticMed char (20) NOT NULL,
@@ -377,11 +376,10 @@ namespace OpenDental{
 						InvoiceNum char(20) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-                    General.NonQ(command);
-
-                    command = "DROP TABLE IF EXISTS anesthmedsinventoryadj";
-                    General.NonQ(command);
-                    command = @"CREATE TABLE anesthmedsinventoryadj (
+					General.NonQ(command);
+					command = "DROP TABLE IF EXISTS anesthmedsinventoryadj";
+					General.NonQ(command);
+					command = @"CREATE TABLE anesthmedsinventoryadj (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AdjPos int(4),
 						AdjNeg int(4),
@@ -391,8 +389,7 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticMedNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-                    General.NonQ(command);
-
+					General.NonQ(command);
 					command="DROP TABLE IF EXISTS anestheticdata";
 					General.NonQ(command);
 					command = @"CREATE TABLE anestheticdata (
@@ -451,41 +448,48 @@ namespace OpenDental{
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-                    command = "DROP TABLE IF EXISTS anesthmedsuppliers";
-                    General.NonQ(command);
-                    command = @"CREATE TABLE anesthmedsuppliers (
+					command = "DROP TABLE IF EXISTS anesthmedsuppliers";
+					General.NonQ(command);
+					command = @"CREATE TABLE anesthmedsuppliers (
 						SupplierIDNum int(3) NOT NULL auto_increment,
 						SupplierName char(32) NOT NULL,
 						Addr1 char(32),
 						Addr2 char(32),
 						City char(32),
 						State char(10),
-                        Zip char(10),
+						Zip char(10),
 						Country char(32),
 						Phone char(12),
 						Fax char(12),
 						PhoneExt int(6),
 						Contact char(32),
-                        WebSite char(48),
+						WebSite char(48),
 						Notes text,
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
-                    General.NonQ(command);	
-	
-                  string[] commands = new string[]
-                  {
-                    "ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
-                    ,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
-                    ,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
-                    ,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
-                     };
-                   General.NonQ(commands);
-                  
+					General.NonQ(command);
+					string[] commands = new string[]{
+						"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
+						,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
+						,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
+						,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
+					};
+					General.NonQ(commands);
+					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
+					General.NonQ(commands);
+					command="ALTER TABLE schedule ADD INDEX (ProvNum)";
+					General.NonQ(commands);
+					command="ALTER TABLE schedule ADD INDEX (SchedDate)";
+					General.NonQ(commands);
+
+
+
+
+
 
 				}
 				else {//oracle
-					
+
 				}
 				command="UPDATE preference SET ValueString = '6.2.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
@@ -493,13 +497,10 @@ namespace OpenDental{
 			//To6_2_?();
 		}
 
-		/*For 6.2:
-		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
-ALTER TABLE schedule ADD INDEX (ProvNum)
-ALTER TABLE schedule ADD INDEX (SchedDate)*/
-        
+		
 
-        
+
+
 
 
 
