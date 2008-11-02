@@ -29,19 +29,20 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				supplCur=new AnesthMedSupplier();
 				supplCur.IsNew = false;
-				supplCur.SupplierIDNum = PIn.PInt(table.Rows[i][0].ToString());
-				supplCur.SupplierName = PIn.PString(table.Rows[i][1].ToString());
-				supplCur.Phone = PIn.PString(table.Rows[i][2].ToString());
-                supplCur.PhoneExt = PIn.PString(table.Rows[i][3].ToString());
-				supplCur.Fax = PIn.PString(table.Rows[i][4].ToString());
-				supplCur.Addr1 = PIn.PString(table.Rows[i][5].ToString());
-				supplCur.Addr2 = PIn.PString(table.Rows[i][6].ToString());
-				supplCur.City = PIn.PString(table.Rows[i][7].ToString());
-				supplCur.State = PIn.PString(table.Rows[i][8].ToString());
-				supplCur.Zip = PIn.PString(table.Rows[i][9].ToString());
-                supplCur.Contact = PIn.PString(table.Rows[i][10].ToString());
-				supplCur.WebSite = PIn.PString(table.Rows[i][11].ToString());
-                supplCur.Notes = PIn.PString(table.Rows[i][12].ToString());
+				supplCur.SupplierIDNum  = PIn.PInt(table.Rows[i][0].ToString());
+				supplCur.SupplierName   = PIn.PString(table.Rows[i][1].ToString());
+				supplCur.Phone          = PIn.PString(table.Rows[i][2].ToString());
+                supplCur.PhoneExt       = PIn.PString(table.Rows[i][3].ToString());
+				supplCur.Fax            = PIn.PString(table.Rows[i][4].ToString());
+				supplCur.Addr1          = PIn.PString(table.Rows[i][5].ToString());
+				supplCur.Addr2          = PIn.PString(table.Rows[i][6].ToString());
+				supplCur.City           = PIn.PString(table.Rows[i][7].ToString());
+				supplCur.State          = PIn.PString(table.Rows[i][8].ToString());
+				supplCur.Zip            = PIn.PString(table.Rows[i][9].ToString());
+                //supplCur.Country        = PIn.PString(table.Rows[i][10].ToString());
+                supplCur.Contact        = PIn.PString(table.Rows[i][10].ToString());
+				supplCur.WebSite        = PIn.PString(table.Rows[i][11].ToString());
+                supplCur.Notes          = PIn.PString(table.Rows[i][12].ToString());
 				AnesthMedSupplierC.Listt.Add(supplCur);
 			}
 		}
@@ -51,7 +52,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}
 
-		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] SupplierIDNums){
+		public static List<AnesthMedSupplier> GetAnesthMedsSuppliers(int[] SupplierIDNums){
 			Collection<AnesthMedSupplier> collectState=DataObjectFactory<AnesthMedSupplier>.CreateObjects(SupplierIDNums);
 			return new List<AnesthMedSupplier>(collectState);		
 		}

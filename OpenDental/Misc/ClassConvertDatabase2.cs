@@ -462,18 +462,17 @@ namespace OpenDental {
 					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsuppliers (
 						SupplierIDNum int(3) NOT NULL auto_increment,
-						SupplierName char(32) NOT NULL,
-						Addr1 char(32),
-						Addr2 char(32),
-						City char(32),
-						State char(10),
-						Zip char(10),
-						Country char(32),
-						Phone char(12),
-						Fax char(12),
+						SupplierName varchar(255) NOT NULL,
+						Phone char(13),
 						PhoneExt int(6),
-						Contact char(32),
-						WebSite char(48),
+                        Fax char(13),
+						Addr1 varchar(48),
+						Addr2 char(32),
+						City varchar(48),
+						State char(20),
+						Zip char(10),
+                        Contact char(32),
+						WebSite varchar(48),
 						Notes text,
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
@@ -486,11 +485,11 @@ namespace OpenDental {
 					};
 					General.NonQ(commands);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
-					General.NonQ(commands);
+					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (ProvNum)";
-					General.NonQ(commands);
+					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (SchedDate)";
-					General.NonQ(commands);
+					General.NonQ(command);
 
 
 

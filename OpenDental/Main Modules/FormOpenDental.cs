@@ -187,7 +187,7 @@ namespace OpenDental{
 		private MenuItem menuItemCustomerManage;
 		private System.Windows.Forms.Timer timerDisabledKey;
 		private MenuItem menuItem_ProviderAllocatorSetup;
-		private MenuItem menuItemAnestheticMeds;
+        private MenuItem menuItemAnesthesia;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 		private MenuItem menuItemPharmacies;
@@ -196,6 +196,8 @@ namespace OpenDental{
 		private MenuItem menuItemModules;
 		private MenuItem menuItemRecallTypes;
 		private MenuItem menuItemFeeScheds;
+        private MenuItem menuItemAnesthMeds;
+        private MenuItem menuItemAnesthSuppliers;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
@@ -247,7 +249,9 @@ namespace OpenDental{
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.menuItemExit = new System.Windows.Forms.MenuItem();
             this.menuItemSettings = new System.Windows.Forms.MenuItem();
-            this.menuItemAnestheticMeds = new System.Windows.Forms.MenuItem();
+            this.menuItemAnesthesia = new System.Windows.Forms.MenuItem();
+            this.menuItemAnesthMeds = new System.Windows.Forms.MenuItem();
+            this.menuItemAnesthSuppliers = new System.Windows.Forms.MenuItem();
             this.menuItemApptRules = new System.Windows.Forms.MenuItem();
             this.menuItemApptViews = new System.Windows.Forms.MenuItem();
             this.menuItemAutoCodes = new System.Windows.Forms.MenuItem();
@@ -434,7 +438,7 @@ namespace OpenDental{
             // 
             this.menuItemSettings.Index = 2;
             this.menuItemSettings.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemAnestheticMeds,
+            this.menuItemAnesthesia,
             this.menuItemApptRules,
             this.menuItemApptViews,
             this.menuItemAutoCodes,
@@ -473,11 +477,25 @@ namespace OpenDental{
             this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
             this.menuItemSettings.Text = "&Setup";
             // 
-            // menuItemAnestheticMeds
+            // menuItemAnesthesia
             // 
-            this.menuItemAnestheticMeds.Index = 0;
-            this.menuItemAnestheticMeds.Text = "Anesthetic Medications";
-            this.menuItemAnestheticMeds.Click += new System.EventHandler(this.menuItemAnestheticMedications_Click);
+            this.menuItemAnesthesia.Index = 0;
+            this.menuItemAnesthesia.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemAnesthMeds,
+            this.menuItemAnesthSuppliers});
+            this.menuItemAnesthesia.Text = "Anesthesia";
+            // 
+            // menuItemAnesthMeds
+            // 
+            this.menuItemAnesthMeds.Index = 0;
+            this.menuItemAnesthMeds.Text = "Anesthetic Medication Inventory";
+            this.menuItemAnesthMeds.Click += new System.EventHandler(this.menuItemAnesthMeds_Click);
+            // 
+            // menuItemAnesthSuppliers
+            // 
+            this.menuItemAnesthSuppliers.Index = 1;
+            this.menuItemAnesthSuppliers.Text = "Suppliers";
+            this.menuItemAnesthSuppliers.Click += new System.EventHandler(this.menuItemAnesthSuppliers_Click);
             // 
             // menuItemApptRules
             // 
@@ -2981,7 +2999,7 @@ namespace OpenDental{
 
 		//Setup
 
-		private void menuItemAnestheticMedications_Click(object sender, EventArgs e){
+		private void menuItemAnesthMeds_Click(object sender, EventArgs e){
 			if (!Security.IsAuthorized(Permissions.Setup))
 			{
 				return;
@@ -3782,6 +3800,18 @@ namespace OpenDental{
 				}
 			}
 		}
+
+        private void menuItemAnesthSuppliers_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.Setup))
+            {
+                return;
+            }
+            FormAnesthMedSuppliers FormAS = new FormAnesthMedSuppliers();
+            FormAS.ShowDialog();
+            RefreshCurrentModule();
+            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
+        }
 
 	
 

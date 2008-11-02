@@ -67,6 +67,11 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+        private void textName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
 		
 	}
 }

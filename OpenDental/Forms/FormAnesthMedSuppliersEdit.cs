@@ -28,11 +28,12 @@ namespace OpenDental {
             textCity.Text = SupplCur.City;
             textState.Text = SupplCur.State;
             textZip.Text = SupplCur.Zip;
+            textContact.Text = SupplCur.Contact;
             textWebSite.Text = SupplCur.WebSite;
             richTextNotes.Text = SupplCur.Notes;
         }
 		private void butOK_Click(object sender,EventArgs e) {
-            if (textSupplierName.Text == "")
+            /* (textSupplierName.Text == "")
             {
                 MessageBox.Show(Lan.g(this, "Supplier name cannot be blank."));
                 return;
@@ -49,7 +50,7 @@ namespace OpenDental {
                     MessageBox.Show(Lan.g(this, "Fax number must be in a 10-digit format."));
                     return;
                 }
-            }
+            }*/
             SupplCur.SupplierName = textSupplierName.Text;
             SupplCur.Phone = textPhone.Text;
             SupplCur.PhoneExt = textPhoneExt.Text;
@@ -62,7 +63,9 @@ namespace OpenDental {
             SupplCur.Contact = textContact.Text;
             SupplCur.WebSite = textWebSite.Text;
             SupplCur.Notes = richTextNotes.Text;
-            try
+            AnesthMedSuppliers.WriteObject(SupplCur);
+
+            /*try
             {
                 AnesthMedSuppliers.WriteObject(SupplCur);
             }
@@ -70,7 +73,7 @@ namespace OpenDental {
             {
                 MessageBox.Show(ex.Message);
                 return;
-            }
+            }*/
             DialogResult = DialogResult.OK;
 			
 		}
@@ -81,20 +84,30 @@ namespace OpenDental {
 
 		private void textPhone_TextChanged(object sender, EventArgs e)
 		{
-			int cursor = textPhone.SelectionStart;
+			/*int cursor = textPhone.SelectionStart;
 			int length = textPhone.Text.Length;
 			textPhone.Text = TelephoneNumbers.AutoFormat(textPhone.Text);
 			if (textPhone.Text.Length > length)
 				cursor++;
-			textPhone.SelectionStart = cursor;
+			textPhone.SelectionStart = cursor;*/
 		}
+
+        private void textFax_TextChanged(object sender, EventArgs e)
+        {
+            /*int cursor = textFax.SelectionStart;
+            int length = textFax.Text.Length;
+            textFax.Text = TelephoneNumbers.AutoFormat(textFax.Text);
+            if (textFax.Text.Length > length)
+                cursor++;
+            textFax.SelectionStart = cursor;*/
+        }
 
 		private void textSupplierName_TextChanged(object sender, EventArgs e)
 		{
-			int cursor = textSupplierName.SelectionStart;
+			/*int cursor = textSupplierName.SelectionStart;
 			int length = textSupplierName.Text.Length;
 			textSupplierName.Text = textSupplierName.Text;
-			textSupplierName.SelectionStart = cursor;
+			textSupplierName.SelectionStart = cursor;*/
 		}
 
 		private void textCity_TextChanged(object sender, EventArgs e)

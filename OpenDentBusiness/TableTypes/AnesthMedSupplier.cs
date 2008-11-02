@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		public int SupplierIDNum{
 			get{return SupplierIDNum;}
-            set { supplierIDNum = value; MarkDirty(); supplierIDNumChanged = true;}
+            set {if (supplierIDNum!=value){supplierIDNum=value; MarkDirty(); supplierIDNumChanged = true;}}
 		}
 		public bool SupplierIDNumChanged{
 			get{return supplierIDNumChanged;}
@@ -22,7 +22,6 @@ namespace OpenDentBusiness{
 		[DataField("SupplierName")]
 		private string supplierName;
 		private bool supplierNameChanged;
-		///<summary>For now, it can just be a common description.  Later, it might have to be an official designation.</summary>
 		public string SupplierName{
 			get{return supplierName;}
 			set{if(supplierName!=value){supplierName=value;MarkDirty();supplierNameChanged=true;}}
@@ -49,13 +48,13 @@ namespace OpenDentBusiness{
         ///<summary>Includes all punctuation.</summary>
         public string PhoneExt
         {
-            get { return phoneExt; }
-            set { if (phoneExt != value) { phoneExt = value; MarkDirty(); phoneExtChanged = true; } }
+            get {return phoneExt;}
+            set {if(phoneExt!=value){ phoneExt = value; MarkDirty(); phoneExtChanged = true;}}
         }
-        public bool PhoneExtChanged
-        {
-            get { return phoneExtChanged; }
+        public bool PhoneExtChanged{
+            get {return phoneExtChanged;}
         }
+
 		[DataField("Fax")]
 		private string fax;
 		private bool faxChanged;
@@ -128,38 +127,48 @@ namespace OpenDentBusiness{
 			get{return zipChanged;}
 		}
 
+        /*[DataField("Country")]
+        private string country;
+        private bool countryChanged;
+        ///<summary></summary>
+        public string Country
+        {
+            get { return country; }
+            set { if (country != value) { country = value; MarkDirty(); countryChanged = true; } }
+        }
+        public bool CountryChanged
+        {
+            get { return countryChanged; }
+        }*/
+
         [DataField("Contact")]
         private string contact;
         private bool contactChanged;
         ///<summary>Includes all punctuation.</summary>
         public string Contact
         {
-            get { return contact; }
-            set { if (contact != value) { contact = value; MarkDirty(); contactChanged = true; } }
+            get {return contact;}
+            set {if(contact!=value){contact=value; MarkDirty();contactChanged=true;}}
         }
-        public bool ContactChanged
-        {
-            get { return contactChanged; }
+        public bool ContactChanged{
+            get {return contactChanged;}
         }
 
         [DataField("WebSite")]
         private string webSite;
         private bool webSiteChanged;
         ///<summary></summary>
-        public string WebSite
-        {
-            get { return webSite; }
-            set { if (webSite != value) { webSite = value; MarkDirty(); webSiteChanged = true; } }
+        public string WebSite{
+            get {return webSite;}
+            set {if (webSite!=value){webSite=value;MarkDirty();webSiteChanged=true;}}
         }
-        public bool WebSiteChanged
-        {
+        public bool WebSiteChanged{
             get { return webSiteChanged; }
         }
 
 		[DataField("Notes")]
 		private string notes;
-		private bool notesChanged;
-		///<summary>A freeform note for any info that is needed about the Supplier, such as hours.</summary>
+        private bool notesChanged;
 		public string Notes{
 			get{return notes;}
 			set{if(notes!=value){notes=value;MarkDirty();notesChanged=true;}}
@@ -168,9 +177,9 @@ namespace OpenDentBusiness{
 			get{return notesChanged;}
 		}
 		
-		public AnesthMedSupplier Copy(){
-			return (AnesthMedSupplier)Clone();
-		}	
+		//public AnesthMedSupplier Copy(){
+			//return (AnesthMedSupplier)Clone();
+		//}	
 	}
 }
 
