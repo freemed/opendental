@@ -171,14 +171,15 @@ namespace OpenDental{
 			return "";
 		}
 	
-		///<summary>Returns office for invalid clinicNums.</summary>
+		///<summary>Returns practice default for invalid clinicNums.</summary>
 		public static PlaceOfService GetPlaceService(int clinicNum){
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
 					return List[i].DefaultPlaceService;
 				}
 			}
-			return PlaceOfService.Office;
+			return (PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
+			//return PlaceOfService.Office;
 		}
 
 	}
