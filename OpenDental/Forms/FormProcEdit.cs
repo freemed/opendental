@@ -2902,6 +2902,26 @@ namespace OpenDental{
 					return false;
 				}
 			}*/
+			//These three may be overkill, but it never hurts to check twice:
+			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
+				//if status was changed to complete
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
+					return false;
+				}
+			}
+			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){
+				//if new procedure is complete
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
+					return false;
+				}
+			}
+			else if(!IsNew){
+				if(ProcOld.ProcStatus==ProcStat.C){
+					if(!Security.IsAuthorized(Permissions.ProcComplEdit,ProcCur.DateEntryC)){
+						return false;
+					}
+				}
+			}
 			if(ProcedureCode2.IsProsth){
 				if(listProsth.SelectedIndex==0
 					|| (listProsth.SelectedIndex==2 && textDateOriginalProsth.Text==""))
@@ -3052,15 +3072,19 @@ namespace OpenDental{
 			ProcCur.ClaimNote=textClaimNote.Text;
 			Procedures.Update(ProcCur,ProcOld);
 			Recalls.Synch(ProcCur.PatNum);
-			if(IsNew){
-				if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
-					//if status was changed to complete
-					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-						PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
-						+ProcCur.ProcFee.ToString("c"));
-				}
+			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
+				//if status was changed to complete
+				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
+					PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+					+ProcCur.ProcFee.ToString("c"));
 			}
-			else{
+			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){
+				//if new procedure is complete
+				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
+					PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+					+ProcCur.ProcFee.ToString("c"));
+			}
+			else if(!IsNew){
 				if(ProcOld.ProcStatus==ProcStat.C){
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,PatCur.PatNum,
 						PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
