@@ -303,6 +303,15 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
+			//an admin user can never be hidden
+			command="SELECT COUNT(*) FROM grouppermission "
+				+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "
+				+"AND UserGroupNum="+POut.PInt(user.UserGroupNum);
+			if(General.GetCount(command)!="0"//if this user is admin
+				&& user.IsHidden)//and hidden
+			{
+				throw new Exception(Lan.g("Userods","Admins cannot be hidden."));
+			}
 			if(isNew){
 				Insert(user);
 			}
