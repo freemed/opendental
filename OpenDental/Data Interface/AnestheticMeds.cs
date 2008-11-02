@@ -12,7 +12,7 @@ namespace OpenDental{
 	///<summary></summary>
 	public class AnestheticMeds {
 
-		///<summary>Gets all AnestheticMeds</summary>
+		///<summary>Gets all Anesthetic Medications from the database</summary>
 		public static List<AnesthMedInventory> CreateObjects() {
 			string command="SELECT * FROM anesthmedsinventory ORDER BY AnestheticMedNum";
 			return new List<AnesthMedInventory>(DataObjectFactory<AnesthMedInventory>.CreateObjects(command));

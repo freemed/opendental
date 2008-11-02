@@ -6,15 +6,12 @@ using System.Data;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
-    ///
-   
-
+	///<summary>A list of Anesthetic Medication Suppliers (Vendors) </summary>
 	public class AnesthMedSuppliers{
 
         public bool IsNew;
 
-		///<summary></summary>
+		///<summary></summary> 
 		public static DataTable RefreshCache(){
 			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
 			DataTable table=General.GetTable(c);
@@ -39,7 +36,6 @@ namespace OpenDentBusiness{
 				supplCur.City           = PIn.PString(table.Rows[i][7].ToString());
 				supplCur.State          = PIn.PString(table.Rows[i][8].ToString());
 				supplCur.Zip            = PIn.PString(table.Rows[i][9].ToString());
-                //supplCur.Country        = PIn.PString(table.Rows[i][10].ToString());
                 supplCur.Contact        = PIn.PString(table.Rows[i][10].ToString());
 				supplCur.WebSite        = PIn.PString(table.Rows[i][11].ToString());
                 supplCur.Notes          = PIn.PString(table.Rows[i][12].ToString());
@@ -47,7 +43,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<Summary>Gets one AnesthMedSupplier from the database.</Summary>
+		///<Summary>Gets one Anesthetic Medication Supplier from the database.</Summary>
 		public static AnesthMedSupplier CreateObject(int SupplierIDNum){
 			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}

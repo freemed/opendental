@@ -69,7 +69,7 @@ namespace OpenDental{
             this.gridMain.Location = new System.Drawing.Point(17, 12);
             this.gridMain.Name = "gridMain";
             this.gridMain.ScrollValue = 0;
-            this.gridMain.Size = new System.Drawing.Size(1030, 560);
+            this.gridMain.Size = new System.Drawing.Size(1030, 291);
             this.gridMain.TabIndex = 11;
             this.gridMain.Title = "Anesthetic Medication Suppliers";
             this.gridMain.TranslationName = "TableAnesthMedSuppliers";
@@ -85,7 +85,7 @@ namespace OpenDental{
             this.butAddNew.CornerRadius = 4F;
             this.butAddNew.Image = global::OpenDental.Properties.Resources.Add;
             this.butAddNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butAddNew.Location = new System.Drawing.Point(17, 590);
+            this.butAddNew.Location = new System.Drawing.Point(17, 317);
             this.butAddNew.Name = "butAddNew";
             this.butAddNew.Size = new System.Drawing.Size(85, 24);
             this.butAddNew.TabIndex = 10;
@@ -100,7 +100,7 @@ namespace OpenDental{
             this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
             this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
             this.butClose.CornerRadius = 4F;
-            this.butClose.Location = new System.Drawing.Point(955, 590);
+            this.butClose.Location = new System.Drawing.Point(955, 317);
             this.butClose.Name = "butClose";
             this.butClose.Size = new System.Drawing.Size(75, 24);
             this.butClose.TabIndex = 0;
@@ -110,7 +110,7 @@ namespace OpenDental{
             // FormAnesthMedSuppliers
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(1058, 630);
+            this.ClientSize = new System.Drawing.Size(1058, 357);
             this.Controls.Add(this.gridMain);
             this.Controls.Add(this.butAddNew);
             this.Controls.Add(this.butClose);
@@ -138,7 +138,7 @@ namespace OpenDental{
 			AnesthMedSuppliers.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"SupplierName"),160);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"SupplierName"),200);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Phone"),100);
 			gridMain.Columns.Add(col);
