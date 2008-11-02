@@ -3611,8 +3611,8 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<ClaimCur.Attachments.Count;i++){
-				string curAttachPath=ODFileUtils.CombinePaths(new string[] {FormPath.GetPreferredImagePath(),
-					PatCur.LName.Substring(0,1).ToUpper(),PatCur.ImageFolder,ClaimCur.Attachments[i].DisplayedFileName});			
+				string curAttachPath=ODFileUtils.CombinePaths(new string[] {
+					FormEmailMessageEdit.GetAttachPath(),ClaimCur.Attachments[i].ActualFileName});			
 				if(!File.Exists(curAttachPath)){
 					MessageBox.Show("The attachment file "+curAttachPath+" has been moved, deleted or is inaccessible.");
 					return;
@@ -3621,12 +3621,14 @@ namespace OpenDental{
 					PatCur.FName+PatCur.LName+PatCur.PatNum+"_"+i+Path.GetExtension(curAttachPath));
 				try{
 					File.Copy(curAttachPath,newFilePath);
-				}catch{
+				}
+				catch{
 					MessageBox.Show("The attachemnt "+curAttachPath+" could not be copied to the export folder, "+
 						"probably because of an incorrect file permission. Aborting export operation.");
 					return;
 				}
 			}
+			MsgBox.Show(this,"Done");
 		}
 
 		private void contextMenuAttachments_Popup(object sender,EventArgs e) {
