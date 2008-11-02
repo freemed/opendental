@@ -347,14 +347,24 @@ namespace OpenDental {
 						PRIMARY KEY (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-
-
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.1.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To6_1_8();
+		}
+
+		private void To6_1_8() {
+			if(FromVersion<new Version("6.1.8.0")) {
+				string command="UPDATE userod SET IsHidden=0 WHERE IsHidden=1 "
+					+"AND EXISTS(SELECT * FROM grouppermission "
+					+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "//24
+					+"AND grouppermission.UserGroupNum=userod.UserGroupNum)";
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.1.8.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
 			To6_2_0();
