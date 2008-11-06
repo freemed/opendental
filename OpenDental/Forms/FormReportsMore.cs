@@ -363,7 +363,7 @@ namespace OpenDental{
 			});
 			listArizonaPrimaryCare.Items.AddRange(new string[] {
 				Lan.g(this,"Eligibility File"),
-				//Lan.g(this,"Encounter File")//TODO: Only if funding permits.
+				Lan.g(this,"Encounter File")
 			});
 			//Arizona primary care list and label must only be visible when the Arizona primary
 			//care option is checked in the miscellaneous options.
@@ -662,6 +662,10 @@ namespace OpenDental{
 					frapce.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Eligibility");
 					break;
+				case 1://Encounter File
+
+
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Encounter");
 			}
 		}
 
