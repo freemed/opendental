@@ -663,9 +663,10 @@ namespace OpenDental{
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Eligibility");
 					break;
 				case 1://Encounter File
-
-
+					FormRpArizonaPrimaryCareEncounter frapcn=new FormRpArizonaPrimaryCareEncounter();
+					frapcn.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Arizona Primary Care Encounter");
+					break;
 			}
 		}
 

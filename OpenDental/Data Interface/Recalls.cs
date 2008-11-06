@@ -332,11 +332,15 @@ namespace OpenDental{
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND (";
-			for(int i=0;i<typeList.Count;i++){
-				if(i>0){
-					command+=" OR";
+			if(typeList.Count>0) {
+				for(int i=0;i<typeList.Count;i++) {
+					if(i>0) {
+						command+=" OR";
+					}
+					command+=" RecallTypeNum="+POut.PInt(typeList[i].RecallTypeNum);
 				}
-				command+=" RecallTypeNum="+POut.PInt(typeList[i].RecallTypeNum);
+			} else {
+				command+=" RecallTypeNum=0";//Effectively forces an empty result set, without changing the returned table structure.
 			}
 			command+=") AND (ProcStatus = 2 "
 				+"OR ProcStatus = 3 "

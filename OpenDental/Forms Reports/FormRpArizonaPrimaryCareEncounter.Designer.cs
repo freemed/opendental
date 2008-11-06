@@ -36,6 +36,12 @@ namespace OpenDental{
 			this.butFinished=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
 			this.folderEncounter=new System.Windows.Forms.FolderBrowserDialog();
+			this.groupBox1=new System.Windows.Forms.GroupBox();
+			this.label5=new System.Windows.Forms.Label();
+			this.dateTimeTo=new System.Windows.Forms.DateTimePicker();
+			this.label4=new System.Windows.Forms.Label();
+			this.dateTimeFrom=new System.Windows.Forms.DateTimePicker();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butRun
@@ -89,7 +95,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.AutoSize=true;
-			this.label2.Location=new System.Drawing.Point(13,101);
+			this.label2.Location=new System.Drawing.Point(9,178);
 			this.label2.Name="label2";
 			this.label2.Size=new System.Drawing.Size(60,13);
 			this.label2.TabIndex=22;
@@ -97,12 +103,12 @@ namespace OpenDental{
 			// 
 			// textLog
 			// 
-			this.textLog.Location=new System.Drawing.Point(12,120);
+			this.textLog.Location=new System.Drawing.Point(12,196);
 			this.textLog.Multiline=true;
 			this.textLog.Name="textLog";
 			this.textLog.ReadOnly=true;
 			this.textLog.ScrollBars=System.Windows.Forms.ScrollBars.Vertical;
-			this.textLog.Size=new System.Drawing.Size(607,360);
+			this.textLog.Size=new System.Drawing.Size(607,284);
 			this.textLog.TabIndex=21;
 			// 
 			// butBrowse
@@ -165,10 +171,56 @@ namespace OpenDental{
 			this.butCancel.TabIndex=16;
 			this.butCancel.Text="&Cancel";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.dateTimeTo);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.dateTimeFrom);
+			this.groupBox1.Location=new System.Drawing.Point(12,102);
+			this.groupBox1.Name="groupBox1";
+			this.groupBox1.Size=new System.Drawing.Size(603,71);
+			this.groupBox1.TabIndex=27;
+			this.groupBox1.TabStop=false;
+			this.groupBox1.Text="Date of Last Completed Appointment";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize=true;
+			this.label5.Location=new System.Drawing.Point(262,22);
+			this.label5.Name="label5";
+			this.label5.Size=new System.Drawing.Size(20,13);
+			this.label5.TabIndex=17;
+			this.label5.Text="To";
+			// 
+			// dateTimeTo
+			// 
+			this.dateTimeTo.Location=new System.Drawing.Point(262,41);
+			this.dateTimeTo.Name="dateTimeTo";
+			this.dateTimeTo.Size=new System.Drawing.Size(200,20);
+			this.dateTimeTo.TabIndex=16;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize=true;
+			this.label4.Location=new System.Drawing.Point(7,23);
+			this.label4.Name="label4";
+			this.label4.Size=new System.Drawing.Size(30,13);
+			this.label4.TabIndex=15;
+			this.label4.Text="From";
+			// 
+			// dateTimeFrom
+			// 
+			this.dateTimeFrom.Location=new System.Drawing.Point(6,42);
+			this.dateTimeFrom.Name="dateTimeFrom";
+			this.dateTimeFrom.Size=new System.Drawing.Size(200,20);
+			this.dateTimeFrom.TabIndex=14;
+			// 
 			// FormRpArizonaPrimaryCareEncounter
 			// 
 			this.AutoScaleMode=System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize=new System.Drawing.Size(725,534);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butRun);
 			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.textEncounterFile);
@@ -184,6 +236,8 @@ namespace OpenDental{
 			this.Name="FormRpArizonaPrimaryCareEncounter";
 			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text="Arizona Primary Care Encounter Report";
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -203,6 +257,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butFinished;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.FolderBrowserDialog folderEncounter;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.DateTimePicker dateTimeTo;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.DateTimePicker dateTimeFrom;
 
 	}
 }

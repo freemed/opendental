@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental {
 	public partial class FormRpArizonaPrimaryCareEncounter:Form {
@@ -63,7 +64,7 @@ namespace OpenDental {
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
 				//that the patient has attented (completed) in the date range specified. If there are, then those appointments
 				//will be placed into the flat file.
-				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+POut.PInt(patNum);
+				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum;
 				DataTable appointmentList=General.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.PInt(PIn.PInt(appointmentList.Rows[j][0].ToString()));
