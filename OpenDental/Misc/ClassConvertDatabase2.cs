@@ -482,6 +482,8 @@ namespace OpenDental {
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(20) NOT NULL"
 						,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
+                        ,"ALTER table anesthmedsinventory ADD DEASchedule char(2)"
+                        ,"ALTER table anesthmedsintake DROP DEASchedule"
 					};
 					General.NonQ(commands);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
