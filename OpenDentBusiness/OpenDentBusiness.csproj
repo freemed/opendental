@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bindComboQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />
@@ -89,13 +90,14 @@
     <Compile Include="Cache\AnesthMedSupplierC.cs" />
     <Compile Include="Cache\AnestheticDataC.cs" />
     <Compile Include="Cache\AnestheticMedsGivenC.cs" />
-    <Compile Include="Cache\AnesthMedInvC.cs" />
+    <Compile Include="Cache\AnesthMedsC.cs" />
+    <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
     <Compile Include="Cache\RecallTypeC.cs" />
     <Compile Include="Cache\SheetFieldDefC.cs" />
     <Compile Include="Cache\SheetDefC.cs" />
-    <Compile Include="Cache\PharmacyC.cs" />
+    <Compile Include="Cache\AnesthMedInvC.cs" />
     <Compile Include="Cache\SiteC.cs" />
     <Compile Include="Cache\DisplayFieldC.cs" />
     <Compile Include="Cache\ProviderC.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
+    <Compile Include="Data Interface\AMedication.cs" />
     <Compile Include="Data Interface\AnestheticRecords.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
@@ -163,6 +166,7 @@
     <Compile Include="Data Interface\PatientNotes.cs" />
     <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\Providers.cs" />
+    <Compile Include="DataConnection.cs" />
     <Compile Include="Imaging\ApplySettings.cs" />
     <Compile Include="Imaging\FileStore.cs" />
     <Compile Include="Imaging\FileStoreSettings.cs" />
@@ -192,7 +196,6 @@
     <Compile Include="DataAccess\IDataObject.cs" />
     <Compile Include="DataAccess\InvalidDataObjectException.cs" />
     <Compile Include="DataAccess\TimeSpanSerializer.cs" />
-    <Compile Include="DataConnection.cs" />
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Imaging\SqlStore.cs" />
@@ -222,12 +225,11 @@
     <Compile Include="TableTypes\AnestheticData.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TableTypes\AnesthMedInventory.cs">
+    <Compile Include="TableTypes\AnesthMedsInventory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TableTypes\AnesthMedSupplier.cs" />
     <Compile Include="TableTypes\AnestheticMedsGiven.cs" />
-    <Compile Include="TableTypes\AnesthMedsInventory.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />

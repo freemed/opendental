@@ -31,8 +31,8 @@ namespace OpenDentBusiness{
 		private MySqlDataAdapter da;
 		///<summary>Data adapter when 'isOracle' is set to true.</summary>
 		private OracleDataAdapter daOr;
-		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
-		private MySqlConnection con;
+        ///<summary>This is the connection that is used by the data adapter for all queries.</summary>
+        private static MySqlConnection con;
 		///<summary>Connection that is being used when 'isOracle' is set to true.</summary>
 		private OracleConnection conOr;
 		///<summary>Used to get very small bits of data from the db when the data adapter would be overkill.  For instance retrieving the response after a command is sent.</summary>
@@ -450,5 +450,71 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+        /// <summary>
+        /// Gets the supplier ID from the suppliers table.
+        /// </summary>
+        public static int getSupplierID(string supplier)
+        {
+            MySqlCommand command = new MySqlCommand();
+            con.Open();
+            command.CommandText = "select SupplierNum from supplier where Name='" + supplier + "'";
+            command.Connection = con;
+            int supplierID = Convert.ToInt32(command.ExecuteScalar());
+            return supplierID;
+            con.Close();
+        }
+
+        /// <summary>
+        /// Gets the Anesthetic Record number from the anestheticrecord table.
+        /// </summary>
+        public static int getRecordNum(int patnum)
+        {
+            MySqlCommand command2 = new MySqlCommand();
+            con.Open();
+            command2.CommandText = "SELECT Max(AnestheticRecordNum)  FROM opendental_test.anestheticrecord a,opendental_test.Patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
+            command2.Connection = con;
+            int supplierID = Convert.ToInt32(command2.ExecuteScalar());
+            return supplierID;
+            con.Close();
+        }
+
+        /// <summary>
+        /// Gets the AnestheticMedNum from the anesthmedsinventory table.
+        /// </summary>
+        public static int getMedNum(string aMed, string howsupplied, int qtyOnHand)
+        {
+            MySqlCommand command2 = new MySqlCommand();
+            if (con.State == ConnectionState.Open)
+                con.Close();
+            con.Open();
+            command2.CommandText = "select AnestheticMedNum from anesthmedsinventory where AnestheticMed= '" + aMed + "' and AnesthHowSupplied='" + howsupplied + "' and QtyOnHand=" + qtyOnHand + "";
+            command2.Connection = con;
+            string mednum = Convert.ToString(command2.ExecuteScalar());
+            int medid = 0;
+            if (mednum != null && mednum != "")
+                return medid = Convert.ToInt32(mednum);
+            else
+                return medid;
+        }
+        
+        /// <summary>
+        /// Gets the anestheticmednum from the anesthmedsinventoryadj table.
+        /// </summary>
+        public static int getadjMedNum(int mednum,string notes)
+        {
+            MySqlCommand command2 = new MySqlCommand();
+            if (con.State == ConnectionState.Open)
+                con.Close();
+           
+                con.Open();
+            command2.CommandText = "select anestheticmednum from anesthmedsinventoryadj where anestheticmednum  =" + mednum + "";
+            command2.Connection = con;
+            string mednumadj = Convert.ToString(command2.ExecuteScalar());
+            int medid = 0;
+            if (mednumadj != null && mednumadj != "")
+                return medid = Convert.ToInt32(mednumadj);
+            else
+                return medid;
+        }
 	}
 }

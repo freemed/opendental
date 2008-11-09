@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormAnesthMedsEdit:Form {
-		public AnesthMedInventory Med;
+		public AnesthMedsInventory Med;
         
 
 		public FormAnesthMedsEdit() {
@@ -75,11 +75,6 @@ namespace OpenDental {
         private void textQtyOnHand_TextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void textAnesthMedName_TextChanged_1(object sender, EventArgs e)
-        {
-             
         }
 
 
