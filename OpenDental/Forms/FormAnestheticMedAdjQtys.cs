@@ -2,77 +2,64 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using OpenDental.DataAccess;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using OpenDental.UI;
+using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormAnestheticMedsAdjQtys : Form
 	{
+
+        //private ODGrid gridAnesthMedsAdjQty;
+        private List<AnesthMedsInventory> listAnestheticMeds;
+
+
 		public FormAnestheticMedsAdjQtys()
+
+       
 		{
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-       /* private void FillGrid();
-   
-	
-            DataSetAnesthMedAdjQty=null;
-			gridAnesthMedAdjQty.BeginUpdate();
-			gridAnesthMedAdjQty.Columns.Clear();
-			ODGridColumn col;
-			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.AnesthMedAdjQty);
-            DataTable table=DataSetAnesthMedAdjQty.Tables["AnesthMedAdjQty"];
-			ProcList=new List<DataRow>();
-            row=new ODGridRow();
-		    row.ColorLborder=Color.Black;
-			//remember that columns that start with lowercase are already altered for display rather than being raw data.
-			
-            for(int f=0;f<fields.Count;f++) 
-    
-                {
-				switch(fields[f].InternalName)
-                    {
-					case "Date":
-					    row.Cells.Add(table.Rows[i]["procDate"].ToString());
-					break;
-					case "Time":
-						row.Cells.Add(table.Rows[i]["procTime"].ToString());
-					break;
-					case "Th":
-						row.Cells.Add(table.Rows[i]["toothNum"].ToString());
-					break;
-					case "Surf":
-					    row.Cells.Add(table.Rows[i]["Surf"].ToString());
-					break;
-					case "Dx":
-						row.Cells.Add(table.Rows[i]["dx"].ToString());
-					break;
-					case "Description":
-						row.Cells.Add(table.Rows[i]["description"].ToString());
-					break;
-					case "Stat":
-						row.Cells.Add(table.Rows[i]["procStatus"].ToString());
-					break;
-					case "Prov":
-						row.Cells.Add(table.Rows[i]["prov"].ToString());
-					break;
-					case "Amount":
-						row.Cells.Add(table.Rows[i]["procFee"].ToString());
-					break;
-					case "ADA Code":
-						row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
-					break;
-					case "User":
-						row.Cells.Add(table.Rows[i]["user"].ToString());
-					break;
-					case "Signed":
-						row.Cells.Add(table.Rows[i]["signature"].ToString());
-					break;
-                    }
-                 }*/
+
+        private void FormAnestheticMedsAdjQtys_Load(object sender, EventArgs e)
+        {
+            FillGrid();
+        }
        
+        
+        
+        private void FillGrid(){
+
+            listAnestheticMeds = AnestheticMeds.CreateObjects();
+            gridAnesthMedsAdjQty.BeginUpdate();
+            gridAnesthMedsAdjQty.Columns.Clear();
+            ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
+            gridAnesthMedsAdjQty.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "How Supplied"), 200);
+            gridAnesthMedsAdjQty.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"), 180);
+            gridAnesthMedsAdjQty.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Adjustment (mL)"), 100);
+            gridAnesthMedsAdjQty.Columns.Add(col);
+            gridAnesthMedsAdjQty.Rows.Clear();
+            ODGridRow row;
+            for (int i = 0; i < listAnestheticMeds.Count; i++)
+            {
+                row = new ODGridRow();
+                row.Cells.Add(listAnestheticMeds[i].AnesthMedName);
+                row.Cells.Add(listAnestheticMeds[i].AnesthHowSupplied);
+                row.Cells.Add(listAnestheticMeds[i].QtyOnHand);
+                gridAnesthMedsAdjQty.Rows.Add(row);
+            }
+            gridAnesthMedsAdjQty.EndUpdate();
+        
+        }
+
 
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
@@ -97,5 +84,12 @@ namespace OpenDental {
         {
 
         }
+
+        private void groupBoxAdjQtys_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+
 	}
 }

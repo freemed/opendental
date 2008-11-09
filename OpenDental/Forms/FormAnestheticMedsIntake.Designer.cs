@@ -34,11 +34,11 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboDEASchedule = new System.Windows.Forms.ComboBox();
-            this.comboBoxAnesthMed = new System.Windows.Forms.ComboBox();
+            this.comboAnesthMedName = new System.Windows.Forms.ComboBox();
             this.textInvoiceNum = new System.Windows.Forms.TextBox();
             this.groupSupplier = new System.Windows.Forms.GroupBox();
             this.butAddSupplier = new OpenDental.UI.Button();
-            this.comboBoxSupplier = new System.Windows.Forms.ComboBox();
+            this.comboSupplierName = new System.Windows.Forms.ComboBox();
             this.butClose = new OpenDental.UI.Button();
             this.butCancel = new OpenDental.UI.Button();
             this.labelInvoice = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             // 
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboDEASchedule);
-            this.groupBox1.Controls.Add(this.comboBoxAnesthMed);
+            this.groupBox1.Controls.Add(this.comboAnesthMedName);
             this.groupBox1.Controls.Add(this.textQty);
             this.groupBox1.Controls.Add(this.labelQty);
             this.groupBox1.Location = new System.Drawing.Point(30, 39);
@@ -89,6 +89,7 @@
             // 
             // comboDEASchedule
             // 
+            this.comboDEASchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDEASchedule.FormattingEnabled = true;
             this.comboDEASchedule.Items.AddRange(new object[] {
             "II",
@@ -100,14 +101,15 @@
             this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
             this.comboDEASchedule.TabIndex = 5;
             // 
-            // comboBoxAnesthMed
+            // comboAnesthMedName
             // 
-            this.comboBoxAnesthMed.FormattingEnabled = true;
-            this.comboBoxAnesthMed.Location = new System.Drawing.Point(10, 19);
-            this.comboBoxAnesthMed.Name = "comboBoxAnesthMed";
-            this.comboBoxAnesthMed.Size = new System.Drawing.Size(231, 21);
-            this.comboBoxAnesthMed.TabIndex = 0;
-            this.comboBoxAnesthMed.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnesthMed_SelectedIndexChanged);
+            this.comboAnesthMedName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAnesthMedName.FormattingEnabled = true;
+            this.comboAnesthMedName.Location = new System.Drawing.Point(10, 19);
+            this.comboAnesthMedName.Name = "comboAnesthMedName";
+            this.comboAnesthMedName.Size = new System.Drawing.Size(231, 21);
+            this.comboAnesthMedName.TabIndex = 0;
+            this.comboAnesthMedName.SelectedIndexChanged += new System.EventHandler(this.comboAnesthMed_SelectedIndexChanged);
             // 
             // textInvoiceNum
             // 
@@ -119,7 +121,7 @@
             // groupSupplier
             // 
             this.groupSupplier.Controls.Add(this.butAddSupplier);
-            this.groupSupplier.Controls.Add(this.comboBoxSupplier);
+            this.groupSupplier.Controls.Add(this.comboSupplierName);
             this.groupSupplier.Controls.Add(this.butClose);
             this.groupSupplier.Controls.Add(this.butCancel);
             this.groupSupplier.Controls.Add(this.labelInvoice);
@@ -147,13 +149,14 @@
             this.butAddSupplier.UseVisualStyleBackColor = true;
             this.butAddSupplier.Click += new System.EventHandler(this.butAddSupplier_Click);
             // 
-            // comboBoxSupplier
+            // comboSupplierName
             // 
-            this.comboBoxSupplier.FormattingEnabled = true;
-            this.comboBoxSupplier.Location = new System.Drawing.Point(10, 15);
-            this.comboBoxSupplier.Name = "comboBoxSupplier";
-            this.comboBoxSupplier.Size = new System.Drawing.Size(231, 21);
-            this.comboBoxSupplier.TabIndex = 138;
+            this.comboSupplierName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSupplierName.FormattingEnabled = true;
+            this.comboSupplierName.Location = new System.Drawing.Point(10, 15);
+            this.comboSupplierName.Name = "comboSupplierName";
+            this.comboSupplierName.Size = new System.Drawing.Size(231, 21);
+            this.comboSupplierName.TabIndex = 138;
             // 
             // butClose
             // 
@@ -203,7 +206,6 @@
             this.textDate.ReadOnly = true;
             this.textDate.Size = new System.Drawing.Size(115, 20);
             this.textDate.TabIndex = 9;
-            this.textDate.TextChanged += new System.EventHandler(this.textDate_TextChanged_1);
             // 
             // labelDate
             // 
@@ -227,6 +229,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormAnestheticMedsIntake";
             this.Text = "Anesthetic Medication Intake Form";
+            this.Load += new System.EventHandler(this.FormAnestheticMedsIntake_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupSupplier.ResumeLayout(false);
@@ -248,8 +251,8 @@
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.TextBox textDate;
 		private System.Windows.Forms.Label labelDate;
-		private System.Windows.Forms.ComboBox comboBoxAnesthMed;
-		private System.Windows.Forms.ComboBox comboBoxSupplier;
+        private System.Windows.Forms.ComboBox comboAnesthMedName;
+        private System.Windows.Forms.ComboBox comboSupplierName;
 		private OpenDental.UI.Button butAddSupplier;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboDEASchedule;

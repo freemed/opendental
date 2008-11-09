@@ -54,6 +54,7 @@ namespace OpenDental{
             this.groupBoxAdjQtys.Size = new System.Drawing.Size(840, 410);
             this.groupBoxAdjQtys.TabIndex = 144;
             this.groupBoxAdjQtys.TabStop = false;
+            this.groupBoxAdjQtys.Enter += new System.EventHandler(this.groupBoxAdjQtys_Enter);
             // 
             // gridAnesthMedsAdjQty
             // 
@@ -109,6 +110,7 @@ namespace OpenDental{
             this.Name = "FormAnestheticMedsAdjQtys";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Adjust Anesthetic Medication Inventory Quantities";
+            this.Load += new System.EventHandler(this.FormAnestheticMedsAdjQtys_Load);
             this.groupBoxAdjQtys.ResumeLayout(false);
             this.groupBoxAdjQtys.PerformLayout();
             this.ResumeLayout(false);

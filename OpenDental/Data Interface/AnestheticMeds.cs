@@ -13,18 +13,18 @@ namespace OpenDental{
 	public class AnestheticMeds {
 
 		///<summary>Gets all Anesthetic Medications from the database</summary>
-		public static List<AnesthMedInventory> CreateObjects() {
+		public static List<AnesthMedsInventory> CreateObjects() {
 			string command="SELECT * FROM anesthmedsinventory ORDER BY AnestheticMedNum";
-			return new List<AnesthMedInventory>(DataObjectFactory<AnesthMedInventory>.CreateObjects(command));
+			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
 		}
 
 		///<summary></summary>
-		public static void WriteObject(AnesthMedInventory med){
-			DataObjectFactory<AnesthMedInventory>.WriteObject(med);
+		public static void WriteObject(AnesthMedsInventory med){
+			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
 		}
 
 		///<summary>Surround with try-catch.</summary>
-		public static void DeleteObject(AnesthMedInventory med){
+		public static void DeleteObject(AnesthMedsInventory med){
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			int count=PIn.PInt(General.GetCount(command));
@@ -38,10 +38,10 @@ namespace OpenDental{
 			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}*/
-            DataObjectFactory<AnesthMedInventory>.DeleteObject(med);
+            DataObjectFactory<AnesthMedsInventory>.DeleteObject(med);
 		}
 
-		public static string GetName(List<AnesthMedInventory> listAnesthMedInventory,int anestheticMedNum){
+		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory,int anestheticMedNum){
             for (int i = 0; i < listAnesthMedInventory.Count; i++)
             {
                 if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum)

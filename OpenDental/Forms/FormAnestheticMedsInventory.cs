@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using OpenDental.DataAccess;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -11,7 +12,8 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 
-        private List<AnesthMedInventory> listAnestheticMeds;
+        private List<AnesthMedsInventory> listAnestheticMeds;
+        public List<AnesthMedInvC> ListAnestheticMeds;
 
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
@@ -53,7 +55,7 @@ namespace OpenDental {
 
         private void butAddAnesthMeds_Click(object sender, EventArgs e)
         {
-            AnesthMedInventory med = new AnesthMedInventory();
+            AnesthMedsInventory med = new AnesthMedsInventory();
             med.IsNew = true;
             FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
             FormM.Med = med;
@@ -90,6 +92,9 @@ namespace OpenDental {
 
             else
             {
+
+                //AnesthMedsInventory med = new AnesthMedsInventory();
+                //med.AnestheticMedNum = AnesthMedInvC.List.Count;
                 FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
                 FormI.ShowDialog();
 
