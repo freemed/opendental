@@ -23,7 +23,7 @@ namespace OpenDental {
 			textAnesthMedName.Text= Med.AnesthMedName;
 			textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
             
-            
+
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -51,8 +51,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a name.");
 				return;
 			}
+
             Med.AnesthMedName=textAnesthMedName.Text;
 		    Med.AnesthHowSupplied=textAnesthHowSupplied.Text;
+            
           
             if (Med.QtyOnHand == null)
             {

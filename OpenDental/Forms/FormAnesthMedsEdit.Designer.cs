@@ -34,6 +34,8 @@ namespace OpenDental{
             this.butDelete = new OpenDental.UI.Button();
             this.butOK = new OpenDental.UI.Button();
             this.butCancel = new OpenDental.UI.Button();
+            this.labelDEASched = new System.Windows.Forms.Label();
+            this.comboDEASchedule = new System.Windows.Forms.ComboBox();
             this.groupAnesthMedsEdit.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,13 +49,15 @@ namespace OpenDental{
             // 
             // textAnesthHowSupplied
             // 
-            this.textAnesthHowSupplied.Location = new System.Drawing.Point(36, 101);
+            this.textAnesthHowSupplied.Location = new System.Drawing.Point(36, 129);
             this.textAnesthHowSupplied.Name = "textAnesthHowSupplied";
             this.textAnesthHowSupplied.Size = new System.Drawing.Size(213, 20);
             this.textAnesthHowSupplied.TabIndex = 5;
             // 
             // groupAnesthMedsEdit
             // 
+            this.groupAnesthMedsEdit.Controls.Add(this.labelDEASched);
+            this.groupAnesthMedsEdit.Controls.Add(this.comboDEASchedule);
             this.groupAnesthMedsEdit.Controls.Add(this.textAnesthMedName);
             this.groupAnesthMedsEdit.Controls.Add(this.labelHowSupplied);
             this.groupAnesthMedsEdit.Controls.Add(this.textAnesthHowSupplied);
@@ -63,7 +67,7 @@ namespace OpenDental{
             this.groupAnesthMedsEdit.Controls.Add(this.labelChanges);
             this.groupAnesthMedsEdit.Location = new System.Drawing.Point(27, 23);
             this.groupAnesthMedsEdit.Name = "groupAnesthMedsEdit";
-            this.groupAnesthMedsEdit.Size = new System.Drawing.Size(538, 185);
+            this.groupAnesthMedsEdit.Size = new System.Drawing.Size(538, 213);
             this.groupAnesthMedsEdit.TabIndex = 11;
             this.groupAnesthMedsEdit.TabStop = false;
             this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
@@ -71,7 +75,7 @@ namespace OpenDental{
             // labelHowSupplied
             // 
             this.labelHowSupplied.AutoSize = true;
-            this.labelHowSupplied.Location = new System.Drawing.Point(33, 84);
+            this.labelHowSupplied.Location = new System.Drawing.Point(33, 112);
             this.labelHowSupplied.Name = "labelHowSupplied";
             this.labelHowSupplied.Size = new System.Drawing.Size(71, 13);
             this.labelHowSupplied.TabIndex = 4;
@@ -89,7 +93,7 @@ namespace OpenDental{
             // labelHowSuppl
             // 
             this.labelHowSuppl.AutoSize = true;
-            this.labelHowSuppl.Location = new System.Drawing.Point(279, 104);
+            this.labelHowSuppl.Location = new System.Drawing.Point(279, 132);
             this.labelHowSuppl.Name = "labelHowSuppl";
             this.labelHowSuppl.Size = new System.Drawing.Size(240, 13);
             this.labelHowSuppl.TabIndex = 6;
@@ -106,7 +110,7 @@ namespace OpenDental{
             // 
             // labelChanges
             // 
-            this.labelChanges.Location = new System.Drawing.Point(6, 137);
+            this.labelChanges.Location = new System.Drawing.Point(14, 165);
             this.labelChanges.Name = "labelChanges";
             this.labelChanges.Size = new System.Drawing.Size(508, 33);
             this.labelChanges.TabIndex = 7;
@@ -124,7 +128,7 @@ namespace OpenDental{
             this.butDelete.CornerRadius = 4F;
             this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
             this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butDelete.Location = new System.Drawing.Point(27, 226);
+            this.butDelete.Location = new System.Drawing.Point(27, 265);
             this.butDelete.Name = "butDelete";
             this.butDelete.Size = new System.Drawing.Size(81, 26);
             this.butDelete.TabIndex = 10;
@@ -139,7 +143,7 @@ namespace OpenDental{
             this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
             this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
             this.butOK.CornerRadius = 4F;
-            this.butOK.Location = new System.Drawing.Point(473, 226);
+            this.butOK.Location = new System.Drawing.Point(473, 265);
             this.butOK.Name = "butOK";
             this.butOK.Size = new System.Drawing.Size(92, 26);
             this.butOK.TabIndex = 9;
@@ -156,17 +160,40 @@ namespace OpenDental{
             this.butCancel.CornerRadius = 4F;
             this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
             this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butCancel.Location = new System.Drawing.Point(383, 226);
+            this.butCancel.Location = new System.Drawing.Point(383, 265);
             this.butCancel.Name = "butCancel";
             this.butCancel.Size = new System.Drawing.Size(83, 26);
             this.butCancel.TabIndex = 8;
             this.butCancel.Text = "&Cancel";
             this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
+            // labelDEASched
+            // 
+            this.labelDEASched.AutoSize = true;
+            this.labelDEASched.Location = new System.Drawing.Point(33, 82);
+            this.labelDEASched.Name = "labelDEASched";
+            this.labelDEASched.Size = new System.Drawing.Size(77, 13);
+            this.labelDEASched.TabIndex = 9;
+            this.labelDEASched.Text = "DEA Schedule";
+            // 
+            // comboDEASchedule
+            // 
+            this.comboDEASchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboDEASchedule.FormattingEnabled = true;
+            this.comboDEASchedule.Items.AddRange(new object[] {
+            "II",
+            "III",
+            "IV",
+            "V"});
+            this.comboDEASchedule.Location = new System.Drawing.Point(116, 82);
+            this.comboDEASchedule.Name = "comboDEASchedule";
+            this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
+            this.comboDEASchedule.TabIndex = 8;
+            // 
             // FormAnesthMedsEdit
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(590, 265);
+            this.ClientSize = new System.Drawing.Size(590, 304);
             this.Controls.Add(this.butDelete);
             this.Controls.Add(this.butOK);
             this.Controls.Add(this.butCancel);
@@ -193,5 +220,7 @@ namespace OpenDental{
         private System.Windows.Forms.Label labelHowSuppl;
         private System.Windows.Forms.Label labelUnitDose;
         private System.Windows.Forms.Label labelChanges;
+        private System.Windows.Forms.Label labelDEASched;
+        private System.Windows.Forms.ComboBox comboDEASchedule;
 	}
 }

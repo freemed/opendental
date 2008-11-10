@@ -67,6 +67,21 @@ namespace OpenDentBusiness{
             get { return qtyOnHandChanged ; }
         }
 
+
+       /* [DataField("DEASchedule")]
+        private string dEASchedule;
+        bool dEAScheduleChanged;
+        ///<summary> The quantity, in inventory, of a particular Anesthetic Medication </summary>
+        public string DEASchedule
+        {
+            get { return dEASchedule; }
+            set { dEASchedule = value; MarkDirty(); dEAScheduleChanged = true; }
+        }
+        public bool DEAScheduleChanged
+        {
+            get { return dEAScheduleChanged; }
+        }*/
+
         public AnesthMedsInventory Copy()
         {
             return (AnesthMedsInventory)Clone();

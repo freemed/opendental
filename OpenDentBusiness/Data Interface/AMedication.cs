@@ -39,7 +39,7 @@ namespace OpenDentBusiness
       /// <summary>Gets the data from anesthmedsinventory table</summary>
       public static DataTable GetAMInventory()
       {
-          string command = "SELECT distinct AnestheticMed 'Anesthetic medication', AnesthHowSupplied as 'How Supplied', QtyOnHand as 'Quantity on hand(mL)' FROM anesthmedsinventory order by AnestheticMedNum desc";
+          string command = "SELECT distinct AnestheticMed 'Anesthetic Medication', AnesthHowSupplied as 'How Supplied', QtyOnHand as 'Quantity on hand(mL)' FROM anesthmedsinventory order by AnestheticMedNum desc";
           DataTable table = General.GetTable(command);
           DataTable AMDataTable = table.Clone();//does not copy any data
           AMDataTable.TableName = "anesthmedsinventory";
@@ -52,7 +52,7 @@ namespace OpenDentBusiness
           for (int i = 0; i < table.Rows.Count; i++)
           {
               r = AMDataTable.NewRow();
-              r["Anesthetic medication"] = table.Rows[i]["Anesthetic medication"].ToString();
+              r["Anesthetic Medication"] = table.Rows[i]["Anesthetic Medication"].ToString();
               r["How Supplied"] = table.Rows[i]["How Supplied"].ToString();
               r["Quantity on hand(mL)"] = table.Rows[i]["Quantity on hand(mL)"].ToString();
               AMDataTable.Rows.Add(r);
@@ -136,16 +136,16 @@ namespace OpenDentBusiness
           return AMDataTable;
       }
       /// <summary>Updates/Inserts the table anesthmedsinventoryadj</summary>
-      public static void updateMed_adj(string aMed, string howsupplied, int qtyOnHand, string qtyAdj, string notes,int oldQty)
+      public static void updateMed_adj(string anestheticmed, string howsupplied, int qtyOnHand, string qtyAdj, string notes,int oldQty)
       {
-          string notes2 = notes, aMed2 = aMed, howsupplied2 = howsupplied;
+          string notes2 = notes, aMed2 = anestheticmed, howsupplied2 = howsupplied;
           if (notes.Contains("'"))
           {
               notes2 = notes.Replace("'", "''");
           }
-          if (aMed.Contains("'"))
+          if (anestheticmed.Contains("'"))
           {
-              aMed2 = aMed.Replace("'", "''");
+              aMed2 = anestheticmed.Replace("'", "''");
           }
           if (howsupplied.Contains("'"))
           {

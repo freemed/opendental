@@ -32,18 +32,16 @@
             this.textQty = new System.Windows.Forms.TextBox();
             this.labelQty = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboDEASchedule = new System.Windows.Forms.ComboBox();
             this.comboAnesthMedName = new System.Windows.Forms.ComboBox();
             this.textInvoiceNum = new System.Windows.Forms.TextBox();
             this.groupSupplier = new System.Windows.Forms.GroupBox();
-            this.butAddSupplier = new OpenDental.UI.Button();
             this.comboSupplierName = new System.Windows.Forms.ComboBox();
-            this.butClose = new OpenDental.UI.Button();
-            this.butCancel = new OpenDental.UI.Button();
             this.labelInvoice = new System.Windows.Forms.Label();
             this.textDate = new System.Windows.Forms.TextBox();
             this.labelDate = new System.Windows.Forms.Label();
+            this.butAddSupplier = new OpenDental.UI.Button();
+            this.butClose = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
             this.groupBox1.SuspendLayout();
             this.groupSupplier.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +50,7 @@
             // 
             this.textQty.Location = new System.Drawing.Point(251, 19);
             this.textQty.Name = "textQty";
-            this.textQty.Size = new System.Drawing.Size(84, 20);
+            this.textQty.Size = new System.Drawing.Size(116, 20);
             this.textQty.TabIndex = 2;
             // 
             // labelQty
@@ -66,8 +64,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboDEASchedule);
             this.groupBox1.Controls.Add(this.comboAnesthMedName);
             this.groupBox1.Controls.Add(this.textQty);
             this.groupBox1.Controls.Add(this.labelQty);
@@ -77,29 +73,6 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Anesthetic Medication";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(343, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "DEA Schedule";
-            // 
-            // comboDEASchedule
-            // 
-            this.comboDEASchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboDEASchedule.FormattingEnabled = true;
-            this.comboDEASchedule.Items.AddRange(new object[] {
-            "II",
-            "III",
-            "IV",
-            "V"});
-            this.comboDEASchedule.Location = new System.Drawing.Point(424, 19);
-            this.comboDEASchedule.Name = "comboDEASchedule";
-            this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
-            this.comboDEASchedule.TabIndex = 5;
             // 
             // comboAnesthMedName
             // 
@@ -132,6 +105,41 @@
             this.groupSupplier.TabStop = false;
             this.groupSupplier.Text = "Supplier";
             // 
+            // comboSupplierName
+            // 
+            this.comboSupplierName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSupplierName.FormattingEnabled = true;
+            this.comboSupplierName.Location = new System.Drawing.Point(10, 15);
+            this.comboSupplierName.Name = "comboSupplierName";
+            this.comboSupplierName.Size = new System.Drawing.Size(231, 21);
+            this.comboSupplierName.TabIndex = 138;
+            // 
+            // labelInvoice
+            // 
+            this.labelInvoice.AutoSize = true;
+            this.labelInvoice.Location = new System.Drawing.Point(247, 1);
+            this.labelInvoice.Name = "labelInvoice";
+            this.labelInvoice.Size = new System.Drawing.Size(52, 13);
+            this.labelInvoice.TabIndex = 9;
+            this.labelInvoice.Text = "Invoice #";
+            // 
+            // textDate
+            // 
+            this.textDate.Location = new System.Drawing.Point(73, 12);
+            this.textDate.Name = "textDate";
+            this.textDate.ReadOnly = true;
+            this.textDate.Size = new System.Drawing.Size(115, 20);
+            this.textDate.TabIndex = 9;
+            // 
+            // labelDate
+            // 
+            this.labelDate.AutoSize = true;
+            this.labelDate.Location = new System.Drawing.Point(37, 15);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(30, 13);
+            this.labelDate.TabIndex = 10;
+            this.labelDate.Text = "Date";
+            // 
             // butAddSupplier
             // 
             this.butAddSupplier.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -148,15 +156,6 @@
             this.butAddSupplier.Text = "Add new supplier...";
             this.butAddSupplier.UseVisualStyleBackColor = true;
             this.butAddSupplier.Click += new System.EventHandler(this.butAddSupplier_Click);
-            // 
-            // comboSupplierName
-            // 
-            this.comboSupplierName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSupplierName.FormattingEnabled = true;
-            this.comboSupplierName.Location = new System.Drawing.Point(10, 15);
-            this.comboSupplierName.Name = "comboSupplierName";
-            this.comboSupplierName.Size = new System.Drawing.Size(231, 21);
-            this.comboSupplierName.TabIndex = 138;
             // 
             // butClose
             // 
@@ -189,32 +188,6 @@
             this.butCancel.Text = "Cancel";
             this.butCancel.UseVisualStyleBackColor = true;
             this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-            // 
-            // labelInvoice
-            // 
-            this.labelInvoice.AutoSize = true;
-            this.labelInvoice.Location = new System.Drawing.Point(247, 1);
-            this.labelInvoice.Name = "labelInvoice";
-            this.labelInvoice.Size = new System.Drawing.Size(52, 13);
-            this.labelInvoice.TabIndex = 9;
-            this.labelInvoice.Text = "Invoice #";
-            // 
-            // textDate
-            // 
-            this.textDate.Location = new System.Drawing.Point(73, 12);
-            this.textDate.Name = "textDate";
-            this.textDate.ReadOnly = true;
-            this.textDate.Size = new System.Drawing.Size(115, 20);
-            this.textDate.TabIndex = 9;
-            // 
-            // labelDate
-            // 
-            this.labelDate.AutoSize = true;
-            this.labelDate.Location = new System.Drawing.Point(37, 15);
-            this.labelDate.Name = "labelDate";
-            this.labelDate.Size = new System.Drawing.Size(30, 13);
-            this.labelDate.TabIndex = 10;
-            this.labelDate.Text = "Date";
             // 
             // FormAnestheticMedsIntake
             // 
@@ -253,8 +226,6 @@
 		private System.Windows.Forms.Label labelDate;
         private System.Windows.Forms.ComboBox comboAnesthMedName;
         private System.Windows.Forms.ComboBox comboSupplierName;
-		private OpenDental.UI.Button butAddSupplier;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboDEASchedule;
+        private OpenDental.UI.Button butAddSupplier;
 	}
 }

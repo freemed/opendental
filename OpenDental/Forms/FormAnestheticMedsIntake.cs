@@ -19,10 +19,7 @@ namespace OpenDental{
         
 
 		public FormAnestheticMedsIntake()
-		/*{
-			InitializeComponent();
-			Lan.F(this);
-		}*/
+
         {
             InitializeComponent();
             //Binds date to the textDate textbox.
