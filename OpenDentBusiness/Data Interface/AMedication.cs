@@ -69,7 +69,7 @@ namespace OpenDentBusiness
           return val;
       }
       /// <summary>Inserts the data from anesthetic intake form into the anesthmedsintake table in the database</summary>
-      public static void InsertMed_Intake(string AMedName,int qty,string supplier,string invoice,string DEAschedule)
+      public static void InsertMed_Intake(string AMedName,int qty,string supplier,string invoice)
       {
           string AMname = AMedName, Inum = invoice;
           if (AMedName.Contains("'"))
@@ -80,7 +80,7 @@ namespace OpenDentBusiness
           {
               Inum = invoice.Replace("'", "''");
           }
-          string command = "insert into anesthmedsintake(IntakeDate,anestheticmed,Qty,SupplierIDNum,InvoiceNum,DEASchedule)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "','" + DEAschedule + "')";
+          string command = "insert into anesthmedsintake(IntakeDate,AnestheticMed,Qty,SupplierIDNum,InvoiceNum)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "')";
           General.NonQ(command);
           string command1 = "update anesthmedsinventory set qtyonhand = '" + qty + "' where anestheticmed = '" + AMname + "'";
           General.NonQ(command1);

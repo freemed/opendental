@@ -35,13 +35,13 @@
             this.comboAnesthMedName = new System.Windows.Forms.ComboBox();
             this.textInvoiceNum = new System.Windows.Forms.TextBox();
             this.groupSupplier = new System.Windows.Forms.GroupBox();
+            this.butAddSupplier = new OpenDental.UI.Button();
             this.comboSupplierName = new System.Windows.Forms.ComboBox();
+            this.butClose = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
             this.labelInvoice = new System.Windows.Forms.Label();
             this.textDate = new System.Windows.Forms.TextBox();
             this.labelDate = new System.Windows.Forms.Label();
-            this.butAddSupplier = new OpenDental.UI.Button();
-            this.butClose = new OpenDental.UI.Button();
-            this.butCancel = new OpenDental.UI.Button();
             this.groupBox1.SuspendLayout();
             this.groupSupplier.SuspendLayout();
             this.SuspendLayout();
@@ -105,6 +105,23 @@
             this.groupSupplier.TabStop = false;
             this.groupSupplier.Text = "Supplier";
             // 
+            // butAddSupplier
+            // 
+            this.butAddSupplier.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butAddSupplier.Autosize = true;
+            this.butAddSupplier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butAddSupplier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butAddSupplier.CornerRadius = 4F;
+            this.butAddSupplier.Image = global::OpenDental.Properties.Resources.Add;
+            this.butAddSupplier.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butAddSupplier.Location = new System.Drawing.Point(43, 53);
+            this.butAddSupplier.Name = "butAddSupplier";
+            this.butAddSupplier.Size = new System.Drawing.Size(163, 26);
+            this.butAddSupplier.TabIndex = 139;
+            this.butAddSupplier.Text = "Add new supplier...";
+            this.butAddSupplier.UseVisualStyleBackColor = true;
+            this.butAddSupplier.Click += new System.EventHandler(this.butAddSupplier_Click);
+            // 
             // comboSupplierName
             // 
             this.comboSupplierName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -113,6 +130,39 @@
             this.comboSupplierName.Name = "comboSupplierName";
             this.comboSupplierName.Size = new System.Drawing.Size(231, 21);
             this.comboSupplierName.TabIndex = 138;
+            // 
+            // butClose
+            // 
+            this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butClose.Autosize = true;
+            this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butClose.CornerRadius = 4F;
+            this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butClose.Location = new System.Drawing.Point(373, 53);
+            this.butClose.Name = "butClose";
+            this.butClose.Size = new System.Drawing.Size(90, 26);
+            this.butClose.TabIndex = 137;
+            this.butClose.Text = "Save and Close";
+            this.butClose.UseVisualStyleBackColor = true;
+            this.butClose.Click += new System.EventHandler(this.butClose_Click);
+            // 
+            // butCancel
+            // 
+            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCancel.Autosize = true;
+            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butCancel.CornerRadius = 4F;
+            this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+            this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butCancel.Location = new System.Drawing.Point(301, 53);
+            this.butCancel.Name = "butCancel";
+            this.butCancel.Size = new System.Drawing.Size(66, 26);
+            this.butCancel.TabIndex = 54;
+            this.butCancel.Text = "Cancel";
+            this.butCancel.UseVisualStyleBackColor = true;
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
             // labelInvoice
             // 
@@ -139,55 +189,6 @@
             this.labelDate.Size = new System.Drawing.Size(30, 13);
             this.labelDate.TabIndex = 10;
             this.labelDate.Text = "Date";
-            // 
-            // butAddSupplier
-            // 
-            this.butAddSupplier.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butAddSupplier.Autosize = true;
-            this.butAddSupplier.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butAddSupplier.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butAddSupplier.CornerRadius = 4F;
-            this.butAddSupplier.Image = global::OpenDental.Properties.Resources.Add;
-            this.butAddSupplier.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butAddSupplier.Location = new System.Drawing.Point(43, 53);
-            this.butAddSupplier.Name = "butAddSupplier";
-            this.butAddSupplier.Size = new System.Drawing.Size(163, 26);
-            this.butAddSupplier.TabIndex = 139;
-            this.butAddSupplier.Text = "Add new supplier...";
-            this.butAddSupplier.UseVisualStyleBackColor = true;
-            this.butAddSupplier.Click += new System.EventHandler(this.butAddSupplier_Click);
-            // 
-            // butClose
-            // 
-            this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butClose.Autosize = true;
-            this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butClose.CornerRadius = 4F;
-            this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butClose.Location = new System.Drawing.Point(373, 53);
-            this.butClose.Name = "butClose";
-            this.butClose.Size = new System.Drawing.Size(90, 26);
-            this.butClose.TabIndex = 137;
-            this.butClose.Text = "Save and Close";
-            this.butClose.UseVisualStyleBackColor = true;
-            // 
-            // butCancel
-            // 
-            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butCancel.Autosize = true;
-            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butCancel.CornerRadius = 4F;
-            this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-            this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butCancel.Location = new System.Drawing.Point(301, 53);
-            this.butCancel.Name = "butCancel";
-            this.butCancel.Size = new System.Drawing.Size(66, 26);
-            this.butCancel.TabIndex = 54;
-            this.butCancel.Text = "Cancel";
-            this.butCancel.UseVisualStyleBackColor = true;
-            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
             // FormAnestheticMedsIntake
             // 

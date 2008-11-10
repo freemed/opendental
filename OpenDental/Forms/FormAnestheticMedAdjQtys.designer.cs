@@ -124,5 +124,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelAdjustQtys;
         private System.Windows.Forms.GroupBox groupBoxAdjQtys;
         private OpenDental.UI.ODGrid gridAnesthMedsAdjQty;
+        private System.Windows.Forms.DataGridView gridAnesthMedsAdjQtys;
 	}
 }
