@@ -82,7 +82,7 @@ namespace OpenDentBusiness
           }
           string command = "insert into anesthmedsintake(IntakeDate,AnestheticMed,Qty,SupplierIDNum,InvoiceNum)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "')";
           General.NonQ(command);
-          string command1 = "update anesthmedsinventory set qtyonhand = '" + qty + "' where anestheticmed = '" + AMname + "'";
+          string command1 = "update anesthmedsinventory set qtyonhand = '" + qty + "' where anesthmedname = '" + AMname + "'";
           General.NonQ(command1);
       }
       /// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
