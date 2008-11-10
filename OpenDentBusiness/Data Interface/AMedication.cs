@@ -86,12 +86,12 @@ namespace OpenDentBusiness
           General.NonQ(command1);
       }
       /// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
-      public static void Insertanesth_howsupplied(string anesthetic_Medname, string howSupplied)   
+      public static void Insertanesth_howsupplied(string anesth_Medname, string howSupplied)   
       {
-          string AMedname = anesthetic_Medname, HSupplied = howSupplied;
-          if (anesthetic_Medname.Contains("'"))
+          string AMedname = anesth_Medname, HSupplied = howSupplied;
+          if (anesth_Medname.Contains("'"))
           {
-              AMedname = anesthetic_Medname.Replace("'", "''");
+              AMedname = anesth_Medname.Replace("'", "''");
           }
           if (howSupplied.Contains("'"))
           {
@@ -101,12 +101,12 @@ namespace OpenDentBusiness
           General.NonQ(command);
       }
       /// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
-      public static void InsertanesthMed_dose(string anesthetic_Medname, decimal dose)
+      public static void InsertanesthMed_dose(string anesth_Medname, decimal dose)
       {
-          string AMName = anesthetic_Medname;
-          if (anesthetic_Medname.Contains("'"))
+          string AMName = anesth_Medname;
+          if (anesth_Medname.Contains("'"))
           {
-              AMName = anesthetic_Medname.Replace("'", "''");
+              AMName = anesth_Medname.Replace("'", "''");
           }
           string command = "insert into anesthmedsgiven(AnesthMedName,QtyGiven,DoseTimeStamp) value('" + AMName + "'," + dose + ",'" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "')";
           General.NonQ(command);
@@ -192,7 +192,7 @@ namespace OpenDentBusiness
       /// <summary>Delete rows from the table anesthmedsgiven</summary>
       public static void deleteRow(string anesthMedName, decimal  QtyGiven, string TimeStamp)
       {
-          string command = "delete from anesthmedsgiven where AnesthMed='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
+          string command = "delete from anesthmedsgiven where AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
           General.NonQ(command);
       }
       /// <summary>Updates the table anesthmedsinventory</summary>
