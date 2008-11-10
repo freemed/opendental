@@ -17,7 +17,7 @@ namespace OpenDental {
 	public partial class FormAnestheticMedsAdjQtys : Form
 	{
         DataTable PtDataTable;
-        string notes, anestheticmed, howsupplied, qty, adj, num;
+        string notes, anesthmedname, howsupplied, qty, adj, num;
         int i, newQty, oldQty, newAdj, num2 = 0, qtyOnHand = 0;
         Boolean flag = false;
        // private ODGrid gridAnesthMedsAdjQtys;
@@ -93,7 +93,7 @@ namespace OpenDental {
 		{
             {
                 i = gridAnesthMedsAdjQtys.CurrentRow.Index;
-                anestheticmed = gridAnesthMedsAdjQtys.Rows[i].Cells[0].Value.ToString();
+                anesthmedname = gridAnesthMedsAdjQtys.Rows[i].Cells[0].Value.ToString();
                 //aMed = gridAnesthMedsAdjQtys.Rows[i].Cells[0].Value.ToString();
                 howsupplied = gridAnesthMedsAdjQtys.Rows[i].Cells[1].Value.ToString();
                 qty = gridAnesthMedsAdjQtys.Rows[i].Cells[2].Value.ToString();
@@ -145,13 +145,13 @@ namespace OpenDental {
                             {
                                 notes = gridAnesthMedsAdjQtys.Rows[i].Cells[4].Value.ToString();
                                 newQty = oldQty + (newAdj);
-                                AMedication.updateMed_adj(anestheticmed, howsupplied, qtyOnHand, adj, notes, oldQty);
-                                AMedication.updateMed_adj_qty(anestheticmed, howsupplied, qtyOnHand, newQty);
+                                AMedication.updateMed_adj(anesthmedname, howsupplied, qtyOnHand, adj, notes, oldQty);
+                                AMedication.updateMed_adj_qty(anesthmedname, howsupplied, qtyOnHand, newQty);
                                 if (flag != true)
                                 {
                                     this.Hide();
-                                    FormAnestheticMedsInventory fAMI = new FormAnestheticMedsInventory();
-                                    fAMI.ShowDialog();
+                                    FormAnestheticMedsInventory FAMI = new FormAnestheticMedsInventory();
+                                    FAMI.ShowDialog();
                                 }
                             }
                         }
@@ -159,7 +159,7 @@ namespace OpenDental {
                     else
                     {
                         notes = gridAnesthMedsAdjQtys.Rows[i].Cells[4].Value.ToString();
-                        AMedication.update(anestheticmed, howsupplied, qtyOnHand, notes, qty2);
+                        AMedication.update(anesthmedname, howsupplied, qtyOnHand, notes, qty2);
                         this.Hide();
                         FormAnestheticMedsInventory fAMI = new FormAnestheticMedsInventory();
                         fAMI.ShowDialog();

@@ -16,7 +16,7 @@ namespace OpenDentBusiness
       /// <summary>Gets the data from anestheticdata table</summary>
       public static DataTable GetAMDataTable() 
       {
-          string command = "SELECT AnesthMed as 'Anesthetic Medication',AnesthDose as 'Dose',DoseTimeStamp as 'Time Stamp' FROM anestheticdata";
+          string command = "SELECT AnesthMedName as 'Anesthetic Medication',AnesthDose as 'Dose',DoseTimeStamp as 'Time Stamp' FROM anestheticdata";
           DataTable table = General.GetTable(command);
           DataTable AMDataTable = table.Clone();//does not copy any data
           AMDataTable.TableName = "anesthmedsgiven";
@@ -39,7 +39,7 @@ namespace OpenDentBusiness
       /// <summary>Gets the data from anesthmedsinventory table</summary>
       public static DataTable GetAMInventory()
       {
-          string command = "SELECT distinct AnestheticMed 'Anesthetic Medication', AnesthHowSupplied as 'How Supplied', QtyOnHand as 'Quantity on hand(mL)' FROM anesthmedsinventory order by AnestheticMedNum desc";
+          string command = "SELECT distinct AnesthMedName 'Anesthetic Medication', AnesthHowSupplied as 'How Supplied', QtyOnHand as 'Quantity on hand(mL)' FROM anesthmedsinventory order by AnestheticMedNum desc";
           DataTable table = General.GetTable(command);
           DataTable AMDataTable = table.Clone();//does not copy any data
           AMDataTable.TableName = "anesthmedsinventory";
@@ -80,7 +80,7 @@ namespace OpenDentBusiness
           {
               Inum = invoice.Replace("'", "''");
           }
-          string command = "insert into anesthmedsintake(IntakeDate,AnestheticMed,Qty,SupplierIDNum,InvoiceNum)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "')";
+          string command = "insert into anesthmedsintake(IntakeDate,AnesthMedName,Qty,SupplierIDNum,InvoiceNum)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "')";
           General.NonQ(command);
           string command1 = "update anesthmedsinventory set qtyonhand = '" + qty + "' where anesthmedname = '" + AMname + "'";
           General.NonQ(command1);
@@ -97,7 +97,7 @@ namespace OpenDentBusiness
           {
               HSupplied = howSupplied.Replace("'", "''");
           }
-          string command = "insert into anesthmedsinventory(AnestheticMed,AnesthHowSupplied) value('" + AMedname + "','" + HSupplied + "')";
+          string command = "insert into anesthmedsinventory(AnesthMedName,AnesthHowSupplied) value('" + AMedname + "','" + HSupplied + "')";
           General.NonQ(command);
       }
       /// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
@@ -108,13 +108,13 @@ namespace OpenDentBusiness
           {
               AMName = anesthetic_Medname.Replace("'", "''");
           }
-          string command = "insert into anesthmedsgiven(AnesthMed,QtyGiven,DoseTimeStamp) value('" + AMName + "'," + dose + ",'" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "')";
+          string command = "insert into anesthmedsgiven(AnesthMedName,QtyGiven,DoseTimeStamp) value('" + AMName + "'," + dose + ",'" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "')";
           General.NonQ(command);
       }
       /// <summary>Gets the data from anesthmedsgiven table</summary>
       public static DataTable GetdataForGrid() 
       {
-          string command = "SELECT AnesthMed as 'Anesthetic Medication', QtyGiven as 'Dose', QtyWasted as 'Dose Wasted',DoseTimeStamp as 'Time Stamp' FROM anesthmedsgiven order by AnestheticMedNum  desc";
+          string command = "SELECT AnesthMedName as 'Anesthetic Medication', QtyGiven as 'Dose', QtyWasted as 'Dose Wasted',DoseTimeStamp as 'Time Stamp' FROM anesthmedsgiven order by AnestheticMedNum  desc";
           DataTable table = General.GetTable(command);
           DataTable AMDataTable = table.Clone();//does not copy any data
           AMDataTable.TableName = "anesthmedsgiven";
@@ -213,7 +213,7 @@ namespace OpenDentBusiness
       /// <summary>Gets the data from anesthmedsinventory table</summary>
       public static DataTable GetdataForGridADJ()
       {
-          string command = "select distinct a.AnestheticMed as 'Anesthetic Medication',a.AnesthHowSupplied as 'How Supplied',a.QtyOnHand as 'Quantity on hand(mLs)',b.adjpos as 'Quantity Adjustment(mLs)',b.notes as 'Notes' from anesthmedsinventory a left join anesthmedsinventoryadj b  on a.AnestheticMedNum  =   b.AnestheticMedNum order by a.AnestheticMedNum desc";
+          string command = "select distinct a.AnesthMedName as 'Anesthetic Medication',a.AnesthHowSupplied as 'How Supplied',a.QtyOnHand as 'Quantity on hand(mLs)',b.adjpos as 'Quantity Adjustment(mLs)',b.notes as 'Notes' from anesthmedsinventory a left join anesthmedsinventoryadj b  on a.AnestheticMedNum  =   b.AnestheticMedNum order by a.AnestheticMedNum desc";
           DataTable dt = new DataTable();
           dt = General.GetTable(command);
           DataTable dtclone = dt.Clone();

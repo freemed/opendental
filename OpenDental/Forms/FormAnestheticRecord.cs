@@ -2145,11 +2145,11 @@ namespace OpenDental
 			}
 		}
 
-       /* private void FillGridAnesthMeds()
+        private void FillGridAnesthMeds()
         {
-			
 
-			//listAnestheticMedsGiven = AnestheticMedsGiven.CreateObjects();
+
+            //listAnestheticMedsGiven = AnestheticMedsGiven.CreateObjects();
             //AnestheticMedsGiven.RefreshCache(); //Don't know if we need this
             gridAnesthMeds.BeginUpdate();
             gridAnesthMeds.Columns.Clear();
@@ -2175,9 +2175,10 @@ namespace OpenDental
                 gridAnesthMeds.Rows.Add(row);
             }
             gridAnesthMeds.EndUpdate();
+        }
 
             //this really needs to be in the FillControl() method when we get it added
-            labelInvalidSig.Visible=false;
+            /*labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
             if (AnestheticDataCur.SigIsTopaz)
             {
@@ -2223,7 +2224,7 @@ namespace OpenDental
                     sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
                 }
             }
-        }*/
+        }*
 
         //Fills the gridview gridAnesthMeds
         /*private void FillGrid()
@@ -2297,10 +2298,10 @@ namespace OpenDental
             gridAnesthMeds.Rows.Clear();
             ODGridRow row;
             string txt;
-           /* for (int i = 0; i < AnestheticDataC.Listt.Count; i++)
+           /*for (int i = 0; i < AnestheticDataC.Listt.Count; i++)
             {
                 row = new ODGridRow();
-                row.Cells.Add(AnestheticDataC.Listt[i].AnestheticMed);
+                row.Cells.Add(AnestheticDataC.Listt[i].AnesthMedName);
                 row.Cells.Add(AnestheticDataC.Listt[i].Dose);
                 row.Cells.Add(AnestheticDataC.Listt[i].TimeStamp);
                 gridAnesthMeds.Rows.Add(row);
@@ -2515,7 +2516,8 @@ namespace OpenDental
 
 		private void comboAnesthMed_SelectedIndexChanged(object sender, EventArgs e)
 		{
-
+            textAnesthDose.Enabled = true;
+            textAnesthDose.ReadOnly = false;
 		}
 
 		private void textBoxPatient_TextChanged(object sender, EventArgs e)
@@ -2709,7 +2711,7 @@ namespace OpenDental
                 }
                 else if (comboAnesthMed.SelectedIndex == 0)
                 {
-                    MessageBox.Show("Select Anesthetic Name.");
+                    MessageBox.Show("Please select an Anesthetic Medication");
                     comboAnesthMed.Focus();
                 }
             }
