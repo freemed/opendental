@@ -136,16 +136,16 @@ namespace OpenDentBusiness
           return AMDataTable;
       }
       /// <summary>Updates/Inserts the table anesthmedsinventoryadj</summary>
-      public static void updateMed_adj(string anestheticmed, string howsupplied, int qtyOnHand, string qtyAdj, string notes,int oldQty)
+      public static void updateMed_adj(string anesthmedname, string howsupplied, int qtyOnHand, string qtyAdj, string notes,int oldQty)
       {
-          string notes2 = notes, aMed2 = anestheticmed, howsupplied2 = howsupplied;
+          string notes2 = notes, aMed2 = anesthmedname, howsupplied2 = howsupplied;
           if (notes.Contains("'"))
           {
               notes2 = notes.Replace("'", "''");
           }
-          if (anestheticmed.Contains("'"))
+          if (anesthmedname.Contains("'"))
           {
-              aMed2 = anestheticmed.Replace("'", "''");
+              aMed2 = anesthmedname.Replace("'", "''");
           }
           if (howsupplied.Contains("'"))
           {
@@ -190,9 +190,9 @@ namespace OpenDentBusiness
           General.NonQ(command);
       }
       /// <summary>Delete rows from the table anesthmedsgiven</summary>
-      public static void deleteRow(string anesthMed, decimal  QtyGiven, string TimeStamp)
+      public static void deleteRow(string anesthMedName, decimal  QtyGiven, string TimeStamp)
       {
-          string command = "delete from anesthmedsgiven where AnesthMed='" + anesthMed + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
+          string command = "delete from anesthmedsgiven where AnesthMed='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
           General.NonQ(command);
       }
       /// <summary>Updates the table anesthmedsinventory</summary>
@@ -207,7 +207,7 @@ namespace OpenDentBusiness
           {
               howsupplied2 = howsupplied.Replace("'", "''");
           }
-          string command = "update anesthmedsinventory set QtyOnHand=" + newQTY + " where AnestheticMed= '" + aMed2 + "' and AnesthHowSupplied='" + howsupplied2 + "' and QtyOnHand=" + qtyOnHand;
+          string command = "update anesthmedsinventory set QtyOnHand=" + newQTY + " where AnesthMedName= '" + aMed2 + "' and AnesthHowSupplied='" + howsupplied2 + "' and QtyOnHand=" + qtyOnHand;
           General.NonQ(command);
       }
       /// <summary>Gets the data from anesthmedsinventory table</summary>
