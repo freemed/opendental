@@ -213,7 +213,7 @@ namespace OpenDentBusiness
       /// <summary>Gets the data from anesthmedsinventory table</summary>
       public static DataTable GetdataForGridADJ()
       {
-          string command = "select distinct a.AnesthMedName as 'Anesthetic Medication',a.AnesthHowSupplied as 'How Supplied',a.QtyOnHand as 'Quantity on hand(mLs)',b.adjpos as 'Quantity Adjustment(mLs)',b.notes as 'Notes' from anesthmedsinventory a left join anesthmedsinventoryadj b  on a.AnestheticMedNum  =   b.AnestheticMedNum order by a.AnestheticMedNum desc";
+          string command = "select distinct a.AnesthMedName as 'Anesthetic Medication',a.AnesthHowSupplied as 'How Supplied',a.QtyOnHand as 'Quantity on hand(mLs)',b.adjpos as 'Quantity Adjustment(mLs)',b.notes as 'Notes' from anesthmedsinventory a left join anesthmedsinventoryadj b  on a.AnestheticMedNum  =   b.AnestheticMedNum order by a.AnestheticMedNum"; //desc";
           DataTable dt = new DataTable();
           dt = General.GetTable(command);
           DataTable dtclone = dt.Clone();

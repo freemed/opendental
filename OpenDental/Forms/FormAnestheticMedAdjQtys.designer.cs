@@ -27,10 +27,11 @@ namespace OpenDental{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsAdjQtys));
             this.labelAdjustQtys = new System.Windows.Forms.Label();
             this.groupBoxAdjQtys = new System.Windows.Forms.GroupBox();
-            this.gridAnesthMedsAdjQty = new OpenDental.UI.ODGrid();
+            this.gridAnesthMedsAdjQtys = new System.Windows.Forms.DataGridView();
             this.butCancel = new OpenDental.UI.Button();
             this.butClose = new OpenDental.UI.Button();
             this.groupBoxAdjQtys.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridAnesthMedsAdjQtys)).BeginInit();
             this.SuspendLayout();
             // 
             // labelAdjustQtys
@@ -45,7 +46,7 @@ namespace OpenDental{
             // 
             // groupBoxAdjQtys
             // 
-            this.groupBoxAdjQtys.Controls.Add(this.gridAnesthMedsAdjQty);
+            this.groupBoxAdjQtys.Controls.Add(this.gridAnesthMedsAdjQtys);
             this.groupBoxAdjQtys.Controls.Add(this.labelAdjustQtys);
             this.groupBoxAdjQtys.Controls.Add(this.butCancel);
             this.groupBoxAdjQtys.Controls.Add(this.butClose);
@@ -56,17 +57,13 @@ namespace OpenDental{
             this.groupBoxAdjQtys.TabStop = false;
             this.groupBoxAdjQtys.Enter += new System.EventHandler(this.groupBoxAdjQtys_Enter);
             // 
-            // gridAnesthMedsAdjQty
+            // gridAnesthMedsAdjQtys
             // 
-            this.gridAnesthMedsAdjQty.HScrollVisible = false;
-            this.gridAnesthMedsAdjQty.Location = new System.Drawing.Point(17, 41);
-            this.gridAnesthMedsAdjQty.Name = "gridAnesthMedsAdjQty";
-            this.gridAnesthMedsAdjQty.ScrollValue = 0;
-            this.gridAnesthMedsAdjQty.Size = new System.Drawing.Size(803, 307);
-            this.gridAnesthMedsAdjQty.TabIndex = 145;
-            this.gridAnesthMedsAdjQty.Title = "Anesthetic Medication Inventory";
-            this.gridAnesthMedsAdjQty.TranslationName = "TableAnesthMedsInventory";
-            this.gridAnesthMedsAdjQty.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMedsAdjQty_CellDoubleClick);
+            this.gridAnesthMedsAdjQtys.Location = new System.Drawing.Point(17, 41);
+            this.gridAnesthMedsAdjQtys.Name = "gridAnesthMedsAdjQtys";
+            this.gridAnesthMedsAdjQtys.Size = new System.Drawing.Size(803, 307);
+            this.gridAnesthMedsAdjQtys.TabIndex = 145;
+            this.gridAnesthMedsAdjQtys.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAnesthMedsAdjQtys_CellContentClick);
             // 
             // butCancel
             // 
@@ -113,6 +110,7 @@ namespace OpenDental{
             this.Load += new System.EventHandler(this.FormAnestheticMedsAdjQtys_Load);
             this.groupBoxAdjQtys.ResumeLayout(false);
             this.groupBoxAdjQtys.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridAnesthMedsAdjQtys)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -123,7 +121,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label labelAdjustQtys;
         private System.Windows.Forms.GroupBox groupBoxAdjQtys;
-        private OpenDental.UI.ODGrid gridAnesthMedsAdjQty;
+        //private OpenDental.UI.ODGrid gridAnesthMedsAdjQty;
         private System.Windows.Forms.DataGridView gridAnesthMedsAdjQtys;
 	}
 }

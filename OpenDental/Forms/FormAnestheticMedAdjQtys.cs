@@ -147,9 +147,10 @@ namespace OpenDental {
                                 newQty = oldQty + (newAdj);
                                 AMedication.updateMed_adj(anesthmedname, howsupplied, qtyOnHand, adj, notes, oldQty);
                                 AMedication.updateMed_adj_qty(anesthmedname, howsupplied, qtyOnHand, newQty);
-                                if (flag != true)
+                               if (flag != true)
                                 {
                                     this.Hide();
+                                    
                                     FormAnestheticMedsInventory FAMI = new FormAnestheticMedsInventory();
                                     FAMI.ShowDialog();
                                 }
@@ -161,6 +162,7 @@ namespace OpenDental {
                         notes = gridAnesthMedsAdjQtys.Rows[i].Cells[4].Value.ToString();
                         AMedication.update(anesthmedname, howsupplied, qtyOnHand, notes, qty2);
                         this.Hide();
+                        
                         FormAnestheticMedsInventory fAMI = new FormAnestheticMedsInventory();
                         fAMI.ShowDialog();
                     }
@@ -183,6 +185,11 @@ namespace OpenDental {
         }
 
         private void groupBoxAdjQtys_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gridAnesthMedsAdjQtys_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

@@ -487,7 +487,7 @@ namespace OpenDentBusiness{
             if (con.State == ConnectionState.Open)
                 con.Close();
             con.Open();
-            command2.CommandText = "select AnestheticMedNum from anesthmedsinventory where AnestheticMed= '" + aMed + "' and AnesthHowSupplied='" + howsupplied + "' and QtyOnHand=" + qtyOnHand + "";
+            command2.CommandText = "select AnestheticMedNum from anesthmedsinventory where AnesthMedName= '" + aMed + "' and AnesthHowSupplied='" + howsupplied + "' and QtyOnHand=" + qtyOnHand + "";
             command2.Connection = con;
             string mednum = Convert.ToString(command2.ExecuteScalar());
             int medid = 0;
