@@ -3283,6 +3283,10 @@ namespace OpenDental{
 		}
 
 		private void OnUnsched_Click(){
+			if(ContrApptSingle.SelectedAptNum==-1){
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)){
 				return;
