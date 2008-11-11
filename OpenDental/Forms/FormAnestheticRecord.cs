@@ -180,8 +180,8 @@ namespace OpenDental
         private System.IO.Stream streamToPrint;
         private PrintDocument printDocument1;
         private PrintDocument printDocument2;
-        private RadioButton radButHgtCm;
-        private RadioButton radButHgtIn;
+        private RadioButton radButPatHgtCm;
+        private RadioButton radButPatHgtIn;
         private GroupBox groupBox1;
         private GroupBox groupBoxHgt;
         string streamType;
@@ -297,8 +297,10 @@ namespace OpenDental
             this.textPatID = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxAnesthMeds = new System.Windows.Forms.GroupBox();
-            this.radButHgtCm = new System.Windows.Forms.RadioButton();
-            this.radButHgtIn = new System.Windows.Forms.RadioButton();
+            this.radButPatHgtCm = new System.Windows.Forms.RadioButton();
+            this.radButPatHgtIn = new System.Windows.Forms.RadioButton();
+            this.groupBoxHgt = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gridVitalSigns = new OpenDental.UI.ODGrid();
             this.butOK = new OpenDental.UI.Button();
             this.butClose = new OpenDental.UI.Button();
@@ -333,8 +335,6 @@ namespace OpenDental
             this.butDoseWaste = new OpenDental.UI.Button();
             this.butDoseEnter = new OpenDental.UI.Button();
             this.butDoseDecPoint = new OpenDental.UI.Button();
-            this.groupBoxHgt = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBoxSidebarRt.SuspendLayout();
             this.groupBoxMonitors.SuspendLayout();
             this.groupBoxIVSite.SuspendLayout();
@@ -1047,6 +1047,7 @@ namespace OpenDental
             this.textPatHgt.Name = "textPatHgt";
             this.textPatHgt.Size = new System.Drawing.Size(60, 20);
             this.textPatHgt.TabIndex = 147;
+            this.textPatHgt.TextChanged += new System.EventHandler(this.textPatHgt_TextChanged);
             // 
             // labelPatWgt
             // 
@@ -1449,27 +1450,49 @@ namespace OpenDental
             this.groupBoxAnesthMeds.TabStop = false;
             this.groupBoxAnesthMeds.Text = "Patient";
             // 
-            // radButHgtCm
+            // radButPatHgtCm
             // 
-            this.radButHgtCm.AutoSize = true;
-            this.radButHgtCm.Location = new System.Drawing.Point(55, 10);
-            this.radButHgtCm.Name = "radButHgtCm";
-            this.radButHgtCm.Size = new System.Drawing.Size(39, 17);
-            this.radButHgtCm.TabIndex = 153;
-            this.radButHgtCm.Text = "cm";
-            this.radButHgtCm.UseVisualStyleBackColor = true;
+            this.radButPatHgtCm.AutoSize = true;
+            this.radButPatHgtCm.Location = new System.Drawing.Point(55, 10);
+            this.radButPatHgtCm.Name = "radButPatHgtCm";
+            this.radButPatHgtCm.Size = new System.Drawing.Size(39, 17);
+            this.radButPatHgtCm.TabIndex = 153;
+            this.radButPatHgtCm.Text = "cm";
+            this.radButPatHgtCm.UseVisualStyleBackColor = true;
+            this.radButPatHgtCm.CheckedChanged += new System.EventHandler(this.radButHgtCm_CheckedChanged);
             // 
-            // radButHgtIn
+            // radButPatHgtIn
             // 
-            this.radButHgtIn.AutoSize = true;
-            this.radButHgtIn.Checked = true;
-            this.radButHgtIn.Location = new System.Drawing.Point(13, 10);
-            this.radButHgtIn.Name = "radButHgtIn";
-            this.radButHgtIn.Size = new System.Drawing.Size(36, 17);
-            this.radButHgtIn.TabIndex = 152;
-            this.radButHgtIn.TabStop = true;
-            this.radButHgtIn.Text = "in.";
-            this.radButHgtIn.UseVisualStyleBackColor = true;
+            this.radButPatHgtIn.AutoSize = true;
+            this.radButPatHgtIn.Checked = true;
+            this.radButPatHgtIn.Location = new System.Drawing.Point(13, 10);
+            this.radButPatHgtIn.Name = "radButPatHgtIn";
+            this.radButPatHgtIn.Size = new System.Drawing.Size(36, 17);
+            this.radButPatHgtIn.TabIndex = 152;
+            this.radButPatHgtIn.TabStop = true;
+            this.radButPatHgtIn.Text = "in.";
+            this.radButPatHgtIn.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxHgt
+            // 
+            this.groupBoxHgt.Controls.Add(this.radButPatHgtCm);
+            this.groupBoxHgt.Controls.Add(this.radButPatHgtIn);
+            this.groupBoxHgt.Location = new System.Drawing.Point(330, 9);
+            this.groupBoxHgt.Name = "groupBoxHgt";
+            this.groupBoxHgt.Size = new System.Drawing.Size(105, 33);
+            this.groupBoxHgt.TabIndex = 154;
+            this.groupBoxHgt.TabStop = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radButPatWgtKgs);
+            this.groupBox1.Controls.Add(this.radButPatWgtLbs);
+            this.groupBox1.Location = new System.Drawing.Point(330, 36);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(105, 33);
+            this.groupBox1.TabIndex = 155;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
             // gridVitalSigns
             // 
@@ -1974,27 +1997,6 @@ namespace OpenDental
             this.butDoseDecPoint.Text = ".";
             this.butDoseDecPoint.UseVisualStyleBackColor = true;
             this.butDoseDecPoint.Click += new System.EventHandler(this.butDoseDecPoint_Click);
-            // 
-            // groupBoxHgt
-            // 
-            this.groupBoxHgt.Controls.Add(this.radButHgtCm);
-            this.groupBoxHgt.Controls.Add(this.radButHgtIn);
-            this.groupBoxHgt.Location = new System.Drawing.Point(330, 9);
-            this.groupBoxHgt.Name = "groupBoxHgt";
-            this.groupBoxHgt.Size = new System.Drawing.Size(105, 33);
-            this.groupBoxHgt.TabIndex = 154;
-            this.groupBoxHgt.TabStop = false;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.radButPatWgtKgs);
-            this.groupBox1.Controls.Add(this.radButPatWgtLbs);
-            this.groupBox1.Location = new System.Drawing.Point(330, 36);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(105, 33);
-            this.groupBox1.TabIndex = 155;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
             // FormAnestheticRecord
             // 
@@ -2527,7 +2529,7 @@ namespace OpenDental
         }
         public void StartPrint(Stream streamToPrint, string streamType)
         {
-            this.printDocument2.PrintPage += new PrintPageEventHandler(printDocument2_PrintPage);
+           /* this.printDocument2.PrintPage += new PrintPageEventHandler(printDocument2_PrintPage);
             this.streamToPrint = streamToPrint;
             this.streamType = streamType;
             System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
@@ -2538,7 +2540,7 @@ namespace OpenDental
             if (result == DialogResult.OK)
             {
                 printDocument2.Print();
-            }
+            }*/
         }
 
 		private void label3_Click(object sender, EventArgs e)
@@ -2757,7 +2759,7 @@ namespace OpenDental
 
         private void butDoseEnter_Click(object sender, EventArgs e)
         {
-            if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
+           /* if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
             {
                 AMedication.InsertanesthMed_dose(comboAnesthMed.SelectedItem.ToString(), Convert.ToDecimal(textAnesthDose.Text));
             }
@@ -2805,7 +2807,7 @@ namespace OpenDental
             }
             System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
             e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
-        }
+       */ }
 
 		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
@@ -2993,15 +2995,15 @@ namespace OpenDental
 		}
 		private void butClose_Click(object sender, EventArgs e)
         {
-            Regex regex = new Regex("\\d?\\d'(\\d|1[01])?$");
+            /*Regex regex = new Regex("\\d?\\d'(\\d|1[01])?$");
             if (!regex.IsMatch(textPatHgt.Text) && textPatHgt.Text != "")
             {
-                MessageBox.Show("The Height Field Should Be Upto Four Digits Integer");
+                MessageBox.Show("The height field should be a two digit integer");
                 textPatHgt.Focus();
             }
             else
-            {
-                if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0 && comboASA.SelectedIndex != -1 && comboO2LMin.SelectedIndex != -1 && comboN2OLMin.SelectedIndex != -1 && comboIVGauge.SelectedIndex != -1 && comboIVAtt.SelectedIndex != -1 && comboIVF.SelectedIndex != -1 && (textIVFVol.Text != null && textIVFVol.Text != "") && (textPatWgt.Text != null && textPatWgt.Text != "") && (textPatHgt.Text != null && textPatHgt.Text != "") && comboNPOTime.SelectedIndex != -1 && (textEscortName.Text != null && textEscortName.Text != "") && (textEscortRel.Text != null && textEscortRel.Text != ""))
+            {*/
+             /*   if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0 && comboASA.SelectedIndex != -1 && comboO2LMin.SelectedIndex != -1 && comboN2OLMin.SelectedIndex != -1 && comboIVGauge.SelectedIndex != -1 && comboIVAtt.SelectedIndex != -1 && comboIVF.SelectedIndex != -1 && (textIVFVol.Text != null && textIVFVol.Text != "") && (textPatWgt.Text != null && textPatWgt.Text != "") && (textPatHgt.Text != null && textPatHgt.Text != "") && comboNPOTime.SelectedIndex != -1 && (textEscortName.Text != null && textEscortName.Text != "") && (textEscortRel.Text != null && textEscortRel.Text != ""))
                 {
                     int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButfly = 0, IVSiteR = 0, IVSiteL = 0, wghtLbs = 0, wghtKgs = 0;
 
@@ -3041,8 +3043,8 @@ namespace OpenDental
                 }
                 else
                 {
-                    MessageBox.Show("Please Enter The Value.");
-                }
+                    MessageBox.Show("Please Enter The Value");
+                }*/
                 Userod curUser = Security.CurUser;
 
                 if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
@@ -3059,7 +3061,7 @@ namespace OpenDental
                 {
                     sigBoxTopaz.Dispose();
                 }
-            }
+           // }
         }
 
 		private void labelInvalidSig_Click(object sender, EventArgs e)
@@ -3083,6 +3085,16 @@ namespace OpenDental
         }
 
         private void radButPatWgtLbs_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radButHgtCm_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textPatHgt_TextChanged(object sender, EventArgs e)
         {
 
         }			

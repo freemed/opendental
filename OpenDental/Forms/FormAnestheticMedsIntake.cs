@@ -86,8 +86,8 @@ namespace OpenDental{
 
         }
 
-        private void butClose_Click(object sender, EventArgs e)
-        {
+        private void butClose_Click(object sender, EventArgs e){
+        /*
             if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
             {
                 MessageBox.Show("All fields are mandatory.");
@@ -119,7 +119,7 @@ namespace OpenDental{
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }

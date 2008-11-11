@@ -14,7 +14,7 @@ namespace OpenDentBusiness
   public static class AMedication
     {
       /// <summary>Gets the data from anestheticdata table</summary>
-      public static DataTable GetAMDataTable() 
+      /*public static DataTable GetAMDataTable() 
       {
           string command = "SELECT AnesthMedName as 'Anesthetic Medication',AnesthDose as 'Dose',DoseTimeStamp as 'Time Stamp' FROM anestheticdata";
           DataTable table = General.GetTable(command);
@@ -266,6 +266,6 @@ namespace OpenDentBusiness
           }
               string command = "update anesthmedsinventoryadj set Notes='" + notes2 + "' where AnestheticMedNum=" + DataConnection.getMedNum(aMed2, howsupplied2, qtyOnHand);
               General.NonQ(command);
-      }
+      }*/
     }
 }

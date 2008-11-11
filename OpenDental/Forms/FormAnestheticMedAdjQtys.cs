@@ -51,8 +51,8 @@ namespace OpenDental {
         
         private void FillGrid(){
 
-            PtDataTable = AMedication.GetdataForGridADJ();
-            gridAnesthMedsAdjQtys.DataSource = PtDataTable;
+           //tDataTable = AMedication.GetdataForGridADJ();
+           //gridAnesthMedsAdjQtys.DataSource = PtDataTable;
 
             /*listAnestheticMeds = AnestheticMeds.CreateObjects();
             gridAnesthMedsAdjQty.BeginUpdate();
@@ -91,7 +91,7 @@ namespace OpenDental {
 
 		private void butClose_Click(object sender, EventArgs e)
 		{
-            {
+            /*{
                 i = gridAnesthMedsAdjQtys.CurrentRow.Index;
                 anesthmedname = gridAnesthMedsAdjQtys.Rows[i].Cells[0].Value.ToString();
                 //aMed = gridAnesthMedsAdjQtys.Rows[i].Cells[0].Value.ToString();
@@ -171,7 +171,7 @@ namespace OpenDental {
                 {
                     MessageBox.Show("You cannot adjust the quantity as Quantity on hand is empty.");
                 }
-            }
+            }*/
 		}
 
 		private void button_Click(object sender, EventArgs e)

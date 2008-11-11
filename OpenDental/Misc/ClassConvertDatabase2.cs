@@ -482,16 +482,19 @@ namespace OpenDental {
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(30) NOT NULL"
 						,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
-                        ,"ALTER table anesthmedsinventory ADD DEASchedule char(3)"
-                        ,"ALTER table anesthmedsintake DROP DEASchedule"
-                        ,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32) NOT NULL"
-                        ,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32) NOT NULL"
-                        ,"ALTER table anestheticdata CHANGE Anesthetist Anesthetist char(32)"
+						,"ALTER table anesthmedsinventory ADD DEASchedule char(3)"
+						,"ALTER table anesthmedsintake DROP DEASchedule"
+						,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32) NOT NULL"
+						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32) NOT NULL"
+						,"ALTER table anestheticdata CHANGE Anesthetist Anesthetist char(32)"
 						,"ALTER table anestheticdata CHANGE Surgeon Surgeon char(32)"						
 						,"ALTER TABLE anestheticdata CHANGE Asst Asst char(32)"
 						,"ALTER TABLE anestheticdata CHANGE Circulator Circulator char(32)"
-                        ,"ALTER table anestheticdata CHANGE IVFVol IVFVol float (5) NOT NULL"
-
+						,"ALTER table anestheticdata CHANGE IVFVol IVFVol float (5) NOT NULL"
+						,"ALTER table anestheticdata CHANGE PatHgt PatHgt smallint (3) NOT NULL"
+						,"ALTER table anestheticdata ADD PatHgtIn tinyint (1) NOT NULL"
+						,"ALTER table anestheticdata ADD PatHgtCm tinyint (1) NOT NULL"
+						
 					};
 					General.NonQ(commands);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
