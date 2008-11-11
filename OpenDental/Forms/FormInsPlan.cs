@@ -3549,7 +3549,7 @@ namespace OpenDental{
 			XmlNode SubscriberGender = doc.CreateNode(XmlNodeType.Element,"Gender","");
 			// Read Subscriber FName,LName,DOB, and Gender from Patient Table
 			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				        FROM PATIENT WHERE PatNum In (SELECT Guarantor FROM 
+				        FROM patient WHERE PatNum In (SELECT Guarantor FROM 
                             PATIENT WHERE patnum = " + PatPlanCur.PatNum + ")";
 			table = General.GetTable(command);
 			if(table.Rows.Count != 0) {
