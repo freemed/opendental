@@ -222,9 +222,11 @@ namespace OpenDental
 		{
 		}
 		// calls this function from TxPlanAnalyzer to create array of patients to display in grid  MSN 05/22/2006
-		public void CreateTxPlanList(string procDate,int[] billingTypes,double UnusedPri,double UnusedSec) 
+		public void CreateTxPlanList(string procDate,int[] billingTypes,double UnusedPri,double UnusedSec,
+            ArrayList procedureList, CheckBox checkAllProv, ListBox listProv) 
 		{
             string command;
+            string whereProc;
             command = "SELECT distinct patient.PatNum," +
                       "patient.LName,patient.FName,patient.MiddleI," +
                       "patient.Address,patient.Address2,patient.City," +
@@ -246,7 +248,34 @@ namespace OpenDental
                     command += ",";
                 else
                     command += ") ORDER BY patient.LName,patient.FName";
+                    // SPK: ORDER BY has to move at last
             }
+
+            // Build Where Clause for Procedure Codes 
+            // And pass on to GetPatientTreatments
+            whereProc = buildSQLForProcedures(procedureList);
+            
+            // Build Where clause for Providers
+            string whereProv;
+            if (checkAllProv.Checked)
+            {
+                whereProv = "";
+            }
+            else
+            {
+                whereProv = "AND (";
+                for (int i = 0; i < listProv.SelectedIndices.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        whereProv += "OR ";
+                    }
+                    whereProv += "procedurelog.ProvNum = '"
+                    + POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum) + "' ";
+                }
+                whereProv += ")";
+            }
+
             AddrTable = General.GetTable(command);
             int PatNum;
             // Variables for Primary Insurance
@@ -303,7 +332,7 @@ namespace OpenDental
                     ref SecMax, ref SecPend, ref SecUsed, ref SecDed, ref SecDedRemain, 
                     ref SecRemain);
                 if (PriRemain > UnusedPri && SecRemain > UnusedSec) {
-                    GetPatientTreatments(PatNum,procDate,PriRemain.ToString(),SecRemain.ToString());
+                    GetPatientTreatments(PatNum, procDate, PriRemain.ToString(), SecRemain.ToString(), whereProc, whereProv);
                 }
                 //row.Tag = table.Rows[i];
             }
@@ -314,7 +343,7 @@ namespace OpenDental
         /// <summary>
         /// 
         /// </summary>
-        private void GetPatientTreatments(int PatNum,string procDate,string PriRemain, string SecRemain)
+        private void GetPatientTreatments(int PatNum,string procDate,string PriRemain, string SecRemain, string whereProc, string whereProv)
         {
             string command;
             DataTable PatientTreatmentTable;
@@ -332,7 +361,9 @@ namespace OpenDental
                       "AND procedurelog.CodeNum = procedurecode.CodeNum " +
                       "AND procedurelog.ProcStatus = 1 " +
                       "AND procedurelog.ProcFee > 0 " +
-                      "AND procedurelog.DateTP >= '" + procDate + "'";
+                      "AND procedurelog.DateTP >= '" + procDate + "' " + whereProc + whereProv;
+                      
+
             // "AND procedurelog.PatNum = claimproc.PatNum " + Removed SPK     
             PatientTreatmentTable = General.GetTable(command);
             for (int i = 0; i <= PatientTreatmentTable.Rows.Count - 1; i++)
@@ -562,6 +593,16 @@ namespace OpenDental
             Queries.CurReport.ColCaption = new string[Queries.TableQ.Columns.Count];
             Queries.CurReport.ColAlign = new HorizontalAlignment[Queries.TableQ.Columns.Count];
             // Add all Rows
+            // 11/1/08 HINA/SPK Add Logic to Print Patient Total
+            string currentPatient = System.Text.RegularExpressions.Regex.Replace(gridTxPlanList.Rows[0].Cells[1].Text, " \r\n", " ");
+            int patRecordCount = 0;
+            double patFee = 0;
+            double patPays = 0;
+            double patInsPays = 0;
+            double payUnusesPrimary = 0;
+            double payUnusesSecondary = 0;
+            // 11/1/08 HINA/SPK Add Logic to Print Patient Total
+
             foreach (OpenDental.UI.ODGridRow gridRow in gridTxPlanList.Rows)
             {
                 DataRow row = Queries.TableQ.NewRow();//add first row by hand to get value for temp
@@ -577,13 +618,72 @@ namespace OpenDental
                 row[9] = gridRow.Cells[9].Text.PadLeft(6); // Insurance Pays
                 row[10] = gridRow.Cells[10].Text.PadLeft(7); // Unused Primary
                 row[11] = gridRow.Cells[11].Text.PadLeft(7); // Unused Secondary
-                Queries.CurReport.ColTotal[7] += PIn.PDouble(gridRow.Cells[7].ToString());
-                Queries.CurReport.ColTotal[8] += PIn.PDouble(gridRow.Cells[8].ToString());
-                Queries.CurReport.ColTotal[9] += PIn.PDouble(gridRow.Cells[9].ToString());
-                Queries.CurReport.ColTotal[10] += PIn.PDouble(gridRow.Cells[10].ToString());
-                Queries.CurReport.ColTotal[11] += PIn.PDouble(gridRow.Cells[11].ToString());
+                Queries.CurReport.ColTotal[7] += PIn.PDouble(row[7].ToString());
+                Queries.CurReport.ColTotal[8] += PIn.PDouble(row[8].ToString());
+                Queries.CurReport.ColTotal[9] += PIn.PDouble(row[9].ToString()); //gridRow.Cells[9].ToString()
+                Queries.CurReport.ColTotal[10] += PIn.PDouble(row[10].ToString());
+                Queries.CurReport.ColTotal[11] += PIn.PDouble(row[11].ToString());
+                // 11/1/08 HINA/SPK Add Logic to Print Patient Total
+                if (row[1].ToString() == "")
+                {
+                    patRecordCount += 1;
+                    patFee += PIn.PDouble(row[7].ToString());
+                    patPays += PIn.PDouble(row[8].ToString());
+                    patInsPays += PIn.PDouble(row[9].ToString());
+                    payUnusesPrimary += PIn.PDouble(row[10].ToString());
+                    payUnusesSecondary += PIn.PDouble(row[11].ToString());
+                }
+                else
+                {
+                    if (row[1].ToString() != currentPatient)
+                    {
+                        // Add Row for Patient Total
+                        DataRow blanktoprow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+                        blanktoprow[6] = "___________________";
+                        blanktoprow[7] = "___________________";  // Fee
+                        blanktoprow[8] = "___________________"; // Patient Pays
+                        blanktoprow[9] = "___________________"; // Insurance Pays
+                        blanktoprow[10] = "______________"; // Unused Primary
+                        blanktoprow[11] = "___________________"; // Unused Secondary
+                        Queries.TableQ.Rows.Add(blanktoprow);
+
+                        DataRow patrow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+                        patrow[6] = "Total:"; // Patient Name
+                        patrow[7] = patFee; // Fee
+                        patrow[8] = patPays; // Patient Pays
+                        patrow[9] = patInsPays; // Insurance Pays
+                        patrow[10] = payUnusesPrimary; // Unused Primary
+                        patrow[11] = payUnusesSecondary; // Unused Secondary
+                        Queries.TableQ.Rows.Add(patrow);
+
+                        DataRow blankbottomrow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+                        blankbottomrow[6] = "___________________";
+                        blankbottomrow[7] = "___________________";  // Fee
+                        blankbottomrow[8] = "___________________"; // Patient Pays
+                        blankbottomrow[9] = "___________________"; // Insurance Pays
+                        blankbottomrow[10] = "______________"; // Unused Primary
+                        blankbottomrow[11] = "___________________"; // Unused Secondary
+                        Queries.TableQ.Rows.Add(blankbottomrow);
+
+                        // Reset All total
+                        patFee = 0;
+                        patPays = 0;
+                        patInsPays = 0;
+                        payUnusesPrimary = 0;
+                        payUnusesSecondary = 0;
+                        // Reset current Patient
+                        currentPatient = row[1].ToString();
+
+                    }
+                    patRecordCount = 1;
+                    patFee += PIn.PDouble(row[7].ToString());
+                    patPays += PIn.PDouble(row[8].ToString());
+                    patInsPays += PIn.PDouble(row[9].ToString());
+                    payUnusesPrimary += PIn.PDouble(row[10].ToString());
+                    payUnusesSecondary += PIn.PDouble(row[11].ToString());
+                }
                 Queries.TableQ.Rows.Add(row);
-          };
+            };
 
             FormQuery2.ResetGrid();//this is a method in FormQuery2;
             Queries.CurReport.Summary = new string[0];
@@ -746,6 +846,25 @@ namespace OpenDental
                     (int)Math.Ceiling((double)gridTxPlanList.Rows.Count / (double)PrefC.GetInt("RecallPostcardsPerSheet")));
                 printPreview.ShowDialog();
             }
+        }
+
+        private string buildSQLForProcedures(ArrayList procedureList)
+        {
+            string ProcCodeWhere = "";
+            if (procedureList.Count > 0)
+            {
+                ProcCodeWhere = " AND (";
+                for (int i = 0; i < procedureList.Count; i++)
+                {
+                    ProcCodeWhere += " (procedurecode.proccode between " + procedureList[i] + ")";
+                    if (i != procedureList.Count - 1)
+                        ProcCodeWhere += " OR ";
+                    if (i == procedureList.Count - 1)
+                        ProcCodeWhere += ")";
+
+                }
+            }
+            return ProcCodeWhere;
         }
 	}
 }
