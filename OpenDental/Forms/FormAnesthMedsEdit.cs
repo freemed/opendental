@@ -11,18 +11,16 @@ namespace OpenDental {
 	public partial class FormAnesthMedsEdit:Form {
 		public AnesthMedsInventory Med;
         
-
 		public FormAnesthMedsEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormAnesthMedsEdit_Load(object sender,EventArgs e) {
-
-           
-			textAnesthMedName.Text= Med.AnesthMedName;
+			
+			textAnesthMedName.Text = Med.AnesthMedName;
 			textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
-            
+			comboDEASchedule.Text = Med.DEASchedule;
 
 		}
 
@@ -33,16 +31,8 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
-            AnestheticMeds.DeleteObject(Med);
-
-            try{
-            AnestheticMeds.DeleteObject(Med);
-            }
-            catch(ApplicationException ex){
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            DialogResult =DialogResult.OK;
+			AnestheticMeds.DeleteObject(Med);
+			DialogResult =DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -52,15 +42,19 @@ namespace OpenDental {
 				return;
 			}
 
-            Med.AnesthMedName=textAnesthMedName.Text;
-		    Med.AnesthHowSupplied=textAnesthHowSupplied.Text;
-            
-          
-            if (Med.QtyOnHand == null)
-            {
-                Med.QtyOnHand = "0";
-            }
+			Med.AnesthMedName=textAnesthMedName.Text;
+			Med.AnesthHowSupplied=textAnesthHowSupplied.Text;
+			Med.DEASchedule = comboDEASchedule.Text;
 
+			if (Med.QtyOnHand == null){
+
+				Med.QtyOnHand = "0";
+			}
+
+			if (Med.DEASchedule == null){
+
+				Med.DEASchedule = "";
+			}
 			AnestheticMeds.WriteObject(Med);
 			DialogResult=DialogResult.OK;
 		}
@@ -69,16 +63,17 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-        private void textAnesthMedName_TextChanged(object sender, EventArgs e)
-        {
+		private void textAnesthMedName_TextChanged(object sender, EventArgs e){
 
-        }
+		}
 
-        private void textQtyOnHand_TextChanged(object sender, EventArgs e)
-        {
+		private void textQtyOnHand_TextChanged(object sender, EventArgs e){
 
-        }
+		}
 
+		private void groupAnesthMedsEdit_Enter(object sender, EventArgs e){
+
+		}
 
 	}
 }

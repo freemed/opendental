@@ -23,188 +23,189 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-            this.textAnesthMedName = new System.Windows.Forms.TextBox();
-            this.textAnesthHowSupplied = new System.Windows.Forms.TextBox();
-            this.groupAnesthMedsEdit = new System.Windows.Forms.GroupBox();
-            this.labelHowSupplied = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.labelHowSuppl = new System.Windows.Forms.Label();
-            this.labelUnitDose = new System.Windows.Forms.Label();
-            this.labelChanges = new System.Windows.Forms.Label();
-            this.butDelete = new OpenDental.UI.Button();
-            this.butOK = new OpenDental.UI.Button();
-            this.butCancel = new OpenDental.UI.Button();
-            this.labelDEASched = new System.Windows.Forms.Label();
-            this.comboDEASchedule = new System.Windows.Forms.ComboBox();
-            this.groupAnesthMedsEdit.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // textAnesthMedName
-            // 
-            this.textAnesthMedName.Location = new System.Drawing.Point(36, 48);
-            this.textAnesthMedName.Name = "textAnesthMedName";
-            this.textAnesthMedName.Size = new System.Drawing.Size(213, 20);
-            this.textAnesthMedName.TabIndex = 1;
-            this.textAnesthMedName.TextChanged += new System.EventHandler(this.textAnesthMedName_TextChanged);
-            // 
-            // textAnesthHowSupplied
-            // 
-            this.textAnesthHowSupplied.Location = new System.Drawing.Point(36, 129);
-            this.textAnesthHowSupplied.Name = "textAnesthHowSupplied";
-            this.textAnesthHowSupplied.Size = new System.Drawing.Size(213, 20);
-            this.textAnesthHowSupplied.TabIndex = 5;
-            // 
-            // groupAnesthMedsEdit
-            // 
-            this.groupAnesthMedsEdit.Controls.Add(this.labelDEASched);
-            this.groupAnesthMedsEdit.Controls.Add(this.comboDEASchedule);
-            this.groupAnesthMedsEdit.Controls.Add(this.textAnesthMedName);
-            this.groupAnesthMedsEdit.Controls.Add(this.labelHowSupplied);
-            this.groupAnesthMedsEdit.Controls.Add(this.textAnesthHowSupplied);
-            this.groupAnesthMedsEdit.Controls.Add(this.label1);
-            this.groupAnesthMedsEdit.Controls.Add(this.labelHowSuppl);
-            this.groupAnesthMedsEdit.Controls.Add(this.labelUnitDose);
-            this.groupAnesthMedsEdit.Controls.Add(this.labelChanges);
-            this.groupAnesthMedsEdit.Location = new System.Drawing.Point(27, 23);
-            this.groupAnesthMedsEdit.Name = "groupAnesthMedsEdit";
-            this.groupAnesthMedsEdit.Size = new System.Drawing.Size(538, 213);
-            this.groupAnesthMedsEdit.TabIndex = 11;
-            this.groupAnesthMedsEdit.TabStop = false;
-            this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
-            // 
-            // labelHowSupplied
-            // 
-            this.labelHowSupplied.AutoSize = true;
-            this.labelHowSupplied.Location = new System.Drawing.Point(33, 112);
-            this.labelHowSupplied.Name = "labelHowSupplied";
-            this.labelHowSupplied.Size = new System.Drawing.Size(71, 13);
-            this.labelHowSupplied.TabIndex = 4;
-            this.labelHowSupplied.Text = "How supplied";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(178, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Anesthetic medication and unit dose";
-            // 
-            // labelHowSuppl
-            // 
-            this.labelHowSuppl.AutoSize = true;
-            this.labelHowSuppl.Location = new System.Drawing.Point(279, 132);
-            this.labelHowSuppl.Name = "labelHowSuppl";
-            this.labelHowSuppl.Size = new System.Drawing.Size(240, 13);
-            this.labelHowSuppl.TabIndex = 6;
-            this.labelHowSuppl.Text = "(e.g. 2 mL ampules, 10 mL Multi Dose Vial (MDV))";
-            // 
-            // labelUnitDose
-            // 
-            this.labelUnitDose.AutoSize = true;
-            this.labelUnitDose.Location = new System.Drawing.Point(279, 51);
-            this.labelUnitDose.Name = "labelUnitDose";
-            this.labelUnitDose.Size = new System.Drawing.Size(215, 13);
-            this.labelUnitDose.TabIndex = 3;
-            this.labelUnitDose.Text = "(e.g. Fentanyl 50 mcg/mL, Versed 5 mg/mL)";
-            // 
-            // labelChanges
-            // 
-            this.labelChanges.Location = new System.Drawing.Point(14, 165);
-            this.labelChanges.Name = "labelChanges";
-            this.labelChanges.Size = new System.Drawing.Size(508, 33);
-            this.labelChanges.TabIndex = 7;
-            this.labelChanges.Text = "NOTE: Once a medication has been added, spelling changes can be made here, but th" +
-                "e name and type of medication should not be changed or the inventory system will" +
-                " be adversely affected...";
-            // 
-            // butDelete
-            // 
-            this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.butDelete.Autosize = true;
-            this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butDelete.CornerRadius = 4F;
-            this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-            this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butDelete.Location = new System.Drawing.Point(27, 265);
-            this.butDelete.Name = "butDelete";
-            this.butDelete.Size = new System.Drawing.Size(81, 26);
-            this.butDelete.TabIndex = 10;
-            this.butDelete.Text = "Delete";
-            this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-            // 
-            // butOK
-            // 
-            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butOK.Autosize = true;
-            this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butOK.CornerRadius = 4F;
-            this.butOK.Location = new System.Drawing.Point(473, 265);
-            this.butOK.Name = "butOK";
-            this.butOK.Size = new System.Drawing.Size(92, 26);
-            this.butOK.TabIndex = 9;
-            this.butOK.Text = "Save and  Close";
-            this.butOK.Click += new System.EventHandler(this.butOK_Click);
-            // 
-            // butCancel
-            // 
-            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butCancel.Autosize = true;
-            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butCancel.CornerRadius = 4F;
-            this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-            this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butCancel.Location = new System.Drawing.Point(383, 265);
-            this.butCancel.Name = "butCancel";
-            this.butCancel.Size = new System.Drawing.Size(83, 26);
-            this.butCancel.TabIndex = 8;
-            this.butCancel.Text = "&Cancel";
-            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-            // 
-            // labelDEASched
-            // 
-            this.labelDEASched.AutoSize = true;
-            this.labelDEASched.Location = new System.Drawing.Point(33, 82);
-            this.labelDEASched.Name = "labelDEASched";
-            this.labelDEASched.Size = new System.Drawing.Size(77, 13);
-            this.labelDEASched.TabIndex = 9;
-            this.labelDEASched.Text = "DEA Schedule";
-            // 
-            // comboDEASchedule
-            // 
-            this.comboDEASchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboDEASchedule.FormattingEnabled = true;
-            this.comboDEASchedule.Items.AddRange(new object[] {
+			this.textAnesthMedName = new System.Windows.Forms.TextBox();
+			this.textAnesthHowSupplied = new System.Windows.Forms.TextBox();
+			this.groupAnesthMedsEdit = new System.Windows.Forms.GroupBox();
+			this.labelDEASched = new System.Windows.Forms.Label();
+			this.comboDEASchedule = new System.Windows.Forms.ComboBox();
+			this.labelHowSupplied = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.labelHowSuppl = new System.Windows.Forms.Label();
+			this.labelUnitDose = new System.Windows.Forms.Label();
+			this.labelChanges = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.groupAnesthMedsEdit.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// textAnesthMedName
+			// 
+			this.textAnesthMedName.Location = new System.Drawing.Point(36, 48);
+			this.textAnesthMedName.Name = "textAnesthMedName";
+			this.textAnesthMedName.Size = new System.Drawing.Size(213, 20);
+			this.textAnesthMedName.TabIndex = 1;
+			this.textAnesthMedName.TextChanged += new System.EventHandler(this.textAnesthMedName_TextChanged);
+			// 
+			// textAnesthHowSupplied
+			// 
+			this.textAnesthHowSupplied.Location = new System.Drawing.Point(36, 92);
+			this.textAnesthHowSupplied.Name = "textAnesthHowSupplied";
+			this.textAnesthHowSupplied.Size = new System.Drawing.Size(213, 20);
+			this.textAnesthHowSupplied.TabIndex = 5;
+			// 
+			// groupAnesthMedsEdit
+			// 
+			this.groupAnesthMedsEdit.Controls.Add(this.labelDEASched);
+			this.groupAnesthMedsEdit.Controls.Add(this.comboDEASchedule);
+			this.groupAnesthMedsEdit.Controls.Add(this.textAnesthMedName);
+			this.groupAnesthMedsEdit.Controls.Add(this.labelHowSupplied);
+			this.groupAnesthMedsEdit.Controls.Add(this.textAnesthHowSupplied);
+			this.groupAnesthMedsEdit.Controls.Add(this.label1);
+			this.groupAnesthMedsEdit.Controls.Add(this.labelHowSuppl);
+			this.groupAnesthMedsEdit.Controls.Add(this.labelUnitDose);
+			this.groupAnesthMedsEdit.Controls.Add(this.labelChanges);
+			this.groupAnesthMedsEdit.Location = new System.Drawing.Point(27, 23);
+			this.groupAnesthMedsEdit.Name = "groupAnesthMedsEdit";
+			this.groupAnesthMedsEdit.Size = new System.Drawing.Size(522, 213);
+			this.groupAnesthMedsEdit.TabIndex = 11;
+			this.groupAnesthMedsEdit.TabStop = false;
+			this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
+			this.groupAnesthMedsEdit.Enter += new System.EventHandler(this.groupAnesthMedsEdit_Enter);
+			// 
+			// labelDEASched
+			// 
+			this.labelDEASched.AutoSize = true;
+			this.labelDEASched.Location = new System.Drawing.Point(35, 124);
+			this.labelDEASched.Name = "labelDEASched";
+			this.labelDEASched.Size = new System.Drawing.Size(77, 13);
+			this.labelDEASched.TabIndex = 9;
+			this.labelDEASched.Text = "DEA Schedule";
+			// 
+			// comboDEASchedule
+			// 
+			this.comboDEASchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDEASchedule.FormattingEnabled = true;
+			this.comboDEASchedule.Items.AddRange(new object[] {
             "II",
             "III",
             "IV",
             "V"});
-            this.comboDEASchedule.Location = new System.Drawing.Point(116, 82);
-            this.comboDEASchedule.Name = "comboDEASchedule";
-            this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
-            this.comboDEASchedule.TabIndex = 8;
-            // 
-            // FormAnesthMedsEdit
-            // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(590, 304);
-            this.Controls.Add(this.butDelete);
-            this.Controls.Add(this.butOK);
-            this.Controls.Add(this.butCancel);
-            this.Controls.Add(this.groupAnesthMedsEdit);
-            this.Name = "FormAnesthMedsEdit";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Add/Edit Anesthetic Med(s)";
-            this.Load += new System.EventHandler(this.FormAnesthMedsEdit_Load);
-            this.groupAnesthMedsEdit.ResumeLayout(false);
-            this.groupAnesthMedsEdit.PerformLayout();
-            this.ResumeLayout(false);
+			this.comboDEASchedule.Location = new System.Drawing.Point(118, 121);
+			this.comboDEASchedule.Name = "comboDEASchedule";
+			this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
+			this.comboDEASchedule.TabIndex = 8;
+			// 
+			// labelHowSupplied
+			// 
+			this.labelHowSupplied.AutoSize = true;
+			this.labelHowSupplied.Location = new System.Drawing.Point(33, 75);
+			this.labelHowSupplied.Name = "labelHowSupplied";
+			this.labelHowSupplied.Size = new System.Drawing.Size(71, 13);
+			this.labelHowSupplied.TabIndex = 4;
+			this.labelHowSupplied.Text = "How supplied";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(33, 29);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(178, 13);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Anesthetic medication and unit dose";
+			// 
+			// labelHowSuppl
+			// 
+			this.labelHowSuppl.AutoSize = true;
+			this.labelHowSuppl.Location = new System.Drawing.Point(263, 95);
+			this.labelHowSuppl.Name = "labelHowSuppl";
+			this.labelHowSuppl.Size = new System.Drawing.Size(240, 13);
+			this.labelHowSuppl.TabIndex = 6;
+			this.labelHowSuppl.Text = "(e.g. 2 mL ampules, 10 mL Multi Dose Vial (MDV))";
+			// 
+			// labelUnitDose
+			// 
+			this.labelUnitDose.AutoSize = true;
+			this.labelUnitDose.Location = new System.Drawing.Point(263, 51);
+			this.labelUnitDose.Name = "labelUnitDose";
+			this.labelUnitDose.Size = new System.Drawing.Size(215, 13);
+			this.labelUnitDose.TabIndex = 3;
+			this.labelUnitDose.Text = "(e.g. Fentanyl 50 mcg/mL, Versed 5 mg/mL)";
+			// 
+			// labelChanges
+			// 
+			this.labelChanges.Location = new System.Drawing.Point(14, 165);
+			this.labelChanges.Name = "labelChanges";
+			this.labelChanges.Size = new System.Drawing.Size(508, 33);
+			this.labelChanges.TabIndex = 7;
+			this.labelChanges.Text = "NOTE: Once a medication has been added, spelling changes can be made here, but th" +
+				"e name and type of medication should not be changed or the inventory system will" +
+				" be adversely affected...";
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(30, 265);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(81, 26);
+			this.butDelete.TabIndex = 10;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(460, 265);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(92, 26);
+			this.butOK.TabIndex = 9;
+			this.butOK.Text = "Save and  Close";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(370, 265);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(83, 26);
+			this.butCancel.TabIndex = 8;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// FormAnesthMedsEdit
+			// 
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.ClientSize = new System.Drawing.Size(575, 304);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.groupAnesthMedsEdit);
+			this.Name = "FormAnesthMedsEdit";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Add/Edit Anesthetic Med(s)";
+			this.Load += new System.EventHandler(this.FormAnesthMedsEdit_Load);
+			this.groupAnesthMedsEdit.ResumeLayout(false);
+			this.groupAnesthMedsEdit.PerformLayout();
+			this.ResumeLayout(false);
 
 		}
 

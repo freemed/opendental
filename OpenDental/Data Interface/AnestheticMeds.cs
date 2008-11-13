@@ -7,10 +7,15 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
 using OpenDental.DataAccess;
+using MySql.Data.MySqlClient;
 
 namespace OpenDental{
 	///<summary></summary>
 	public class AnestheticMeds {
+
+		public MySqlCommand cmd;
+		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
+		private static MySqlConnection con;
 
 		///<summary>Gets all Anesthetic Medications from the database</summary>
 		public static List<AnesthMedsInventory> CreateObjects() {
@@ -18,13 +23,14 @@ namespace OpenDental{
 			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
 		}
 
-		///<summary></summary>
 		public static void WriteObject(AnesthMedsInventory med){
+
 			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
 		}
 
 		///<summary>Surround with try-catch.</summary>
 		public static void DeleteObject(AnesthMedsInventory med){
+
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
 			int count=PIn.PInt(General.GetCount(command));
@@ -42,26 +48,25 @@ namespace OpenDental{
 		}
 
 		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory,int anestheticMedNum){
-            for (int i = 0; i < listAnesthMedInventory.Count; i++)
-            {
-                if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum)
-                {
-                    return listAnesthMedInventory[i].AnesthMedName;
-                }
-            }
+			for (int i = 0; i < listAnesthMedInventory.Count; i++){
+
+				if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum){
+
+					return listAnesthMedInventory[i].AnesthMedName;
+				}
+			}
 			return "";
 		}
 
-
+		
 	}
-
-	
-
-
-	
 
 
 }
+
+	
+
+
 
 
 
