@@ -18,7 +18,7 @@ namespace OpenDental{
 		public AnesthMedsInventory Med;
 
 		public FormAnestheticMedsIntake()
-		{/*
+		{
 			
 			InitializeComponent();
 			//Binds date to the textDate textbox.
@@ -73,39 +73,39 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, EventArgs e){
-		
-			if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
-			{
-				MessageBox.Show("All fields are mandatory.");
-			}
-			else
-			{
-				Regex regex = new Regex("^\\d{1,3}?$");
-				if (!(regex.IsMatch(textQty.Text)) && textQty.Text != "")
+			/*
+				if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
 				{
-					MessageBox.Show("The Quantity field should be a 1-3 digit integer.");
-					textQty.Focus();
+					MessageBox.Show("All fields are mandatory.");
 				}
 				else
 				{
-					if (comboAnesthMedName.SelectedIndex != 0 && comboSupplierName.SelectedIndex != 0)
+					Regex regex = new Regex("^\\d{1,3}?$");
+					if (!(regex.IsMatch(textQty.Text)) && textQty.Text != "")
 					{
-						if (textInvoiceNum.Text.Trim() == "")
+						MessageBox.Show("The Quantity field should be a 1-3 digit integer.");
+						textQty.Focus();
+					}
+					else
+					{
+						if (comboAnesthMedName.SelectedIndex != 0 && comboSupplierName.SelectedIndex != 0)
 						{
-							MessageBox.Show("Invoice # does not accept spaces");
-							textInvoiceNum.Focus();
-						}
-						else
-						{
-							int supplierID = DataConnection.getSupplierID(comboSupplierName.SelectedItem.ToString());
-							AMedication.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierID.ToString(), textInvoiceNum.Text);
-							this.Hide();
-							FormAnestheticMedsInventory FAMI = new FormAnestheticMedsInventory();
-							FAMI.ShowDialog();
+							if (textInvoiceNum.Text.Trim() == "")
+							{
+								MessageBox.Show("Invoice # does not accept spaces");
+								textInvoiceNum.Focus();
+							}
+							else
+							{
+								int supplierID = DataConnection.getSupplierID(comboSupplierName.SelectedItem.ToString());
+								AMedication.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierID.ToString(), textInvoiceNum.Text);
+								this.Hide();
+								FormAnestheticMedsInventory FAMI = new FormAnestheticMedsInventory();
+								FAMI.ShowDialog();
+							}
 						}
 					}
-				}
-			}*/
+				}*/
 		}
 	}
 }
