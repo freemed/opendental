@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using OpenDental.DataAccess;
 
+
 namespace OpenDentBusiness{
 	///<summary>A list of Anesthetic Medication Suppliers (Vendors) </summary>
 	public class AnesthMedSuppliers{
@@ -48,7 +49,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}
 
-		public static List<AnesthMedSupplier> GetAnesthMedsSuppliers(int[] SupplierIDNums){
+		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] SupplierIDNums){
 			Collection<AnesthMedSupplier> collectState=DataObjectFactory<AnesthMedSupplier>.CreateObjects(SupplierIDNums);
 			return new List<AnesthMedSupplier>(collectState);		
 		}
@@ -80,17 +81,23 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
 		//}
 
-		/*public static string GetDescription(int AnesthMedSupplierNum){
+		public static string GetSupplierName(int AnesthMedSupplierNum){
 			if(AnesthMedSupplierNum==0){
 				return "";
 			}
 			for(int i=0;i<AnesthMedSupplierC.Listt.Count;i++){
-				if(AnesthMedSupplierC.Listt[i].AnesthMedSupplierNum==AnesthMedSupplierNum){
+				if(AnesthMedSupplierC.Listt[i].SupplierIDNum==AnesthMedSupplierNum){
 					return AnesthMedSupplierC.Listt[i].SupplierName;
 				}
 			}
 			return "";
-		}*/
+		}
+		public static int GetSupplierIDNum (int AnesthMedSupplierNum){
+			int SupplierIDNum = AnesthMedSupplierNum;
+			return SupplierIDNum;
+		}
 
-	}
+		}
 }
+
+

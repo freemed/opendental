@@ -18,7 +18,7 @@ namespace OpenDentBusiness
        /// </summary>
         public static DataSet bindAMedName()  
         {
-            cmd = "SELECT AnesthMedName FROM anesthmedsinventory";
+            cmd = "SELECT AnesthMedName FROM anesthmedsinventory ORDER BY AnesthMedName";
             ds=General.GetDataSet(cmd);
             if (ds != null)
             {
@@ -50,7 +50,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static DataSet bindSuppliers()
         {
-            cmd = "SELECT SupplierName FROM anesthmedsuppliers";
+            cmd = "SELECT SupplierName FROM anesthmedsuppliers ORDER BY SupplierName";
             ds = General.GetDataSet(cmd);
             if (ds != null)
             {

@@ -181,12 +181,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*if(IsSelectionMode){
-				SelectedSupplierIDNum=AnesthMedSupplierC.Listt[e.Row].SupplierIDNum;
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			else{*/
+
 				FormAnesthMedSuppliersEdit FormME=new FormAnesthMedSuppliersEdit();
 				FormME.SupplCur=AnesthMedSupplierC.Listt[e.Row];
 				FormME.ShowDialog();
@@ -197,13 +192,12 @@ namespace OpenDental{
 		
 
 		private void butClose_Click(object sender, System.EventArgs e) {
+			DialogResult = DialogResult.OK;
 			Close();
 		}
 
 		private void FormAnesthMedSuppliers_FormClosing(object sender,FormClosingEventArgs e) {
-			if(changed){
-				//DataValid.SetInvalid(InvalidType.AnesthMedSuppliers);
-			}
+
 		}
 
 	
