@@ -26,6 +26,8 @@ namespace OpenDental{
 			this.textAnesthMedName = new System.Windows.Forms.TextBox();
 			this.textAnesthHowSupplied = new System.Windows.Forms.TextBox();
 			this.groupAnesthMedsEdit = new System.Windows.Forms.GroupBox();
+			this.labelQtyOnHand = new System.Windows.Forms.Label();
+			this.textQtyOnHand = new System.Windows.Forms.TextBox();
 			this.labelDEASched = new System.Windows.Forms.Label();
 			this.comboDEASchedule = new System.Windows.Forms.ComboBox();
 			this.labelHowSupplied = new System.Windows.Forms.Label();
@@ -56,6 +58,8 @@ namespace OpenDental{
 			// 
 			// groupAnesthMedsEdit
 			// 
+			this.groupAnesthMedsEdit.Controls.Add(this.labelQtyOnHand);
+			this.groupAnesthMedsEdit.Controls.Add(this.textQtyOnHand);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelDEASched);
 			this.groupAnesthMedsEdit.Controls.Add(this.comboDEASchedule);
 			this.groupAnesthMedsEdit.Controls.Add(this.textAnesthMedName);
@@ -73,10 +77,27 @@ namespace OpenDental{
 			this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
 			this.groupAnesthMedsEdit.Enter += new System.EventHandler(this.groupAnesthMedsEdit_Enter);
 			// 
+			// labelQtyOnHand
+			// 
+			this.labelQtyOnHand.AutoSize = true;
+			this.labelQtyOnHand.Location = new System.Drawing.Point(243, 128);
+			this.labelQtyOnHand.Name = "labelQtyOnHand";
+			this.labelQtyOnHand.Size = new System.Drawing.Size(67, 13);
+			this.labelQtyOnHand.TabIndex = 11;
+			this.labelQtyOnHand.Text = "Qty on Hand";
+			// 
+			// textQtyOnHand
+			// 
+			this.textQtyOnHand.Location = new System.Drawing.Point(316, 125);
+			this.textQtyOnHand.Name = "textQtyOnHand";
+			this.textQtyOnHand.Size = new System.Drawing.Size(100, 20);
+			this.textQtyOnHand.TabIndex = 10;
+			this.textQtyOnHand.TextChanged += new System.EventHandler(this.textQtyOnHand_TextChanged);
+			// 
 			// labelDEASched
 			// 
 			this.labelDEASched.AutoSize = true;
-			this.labelDEASched.Location = new System.Drawing.Point(35, 124);
+			this.labelDEASched.Location = new System.Drawing.Point(35, 128);
 			this.labelDEASched.Name = "labelDEASched";
 			this.labelDEASched.Size = new System.Drawing.Size(77, 13);
 			this.labelDEASched.TabIndex = 9;
@@ -91,7 +112,7 @@ namespace OpenDental{
             "III",
             "IV",
             "V"});
-			this.comboDEASchedule.Location = new System.Drawing.Point(118, 121);
+			this.comboDEASchedule.Location = new System.Drawing.Point(118, 125);
 			this.comboDEASchedule.Name = "comboDEASchedule";
 			this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
 			this.comboDEASchedule.TabIndex = 8;
@@ -223,5 +244,7 @@ namespace OpenDental{
         private System.Windows.Forms.Label labelChanges;
         private System.Windows.Forms.Label labelDEASched;
         private System.Windows.Forms.ComboBox comboDEASchedule;
+		private System.Windows.Forms.Label labelQtyOnHand;
+		private System.Windows.Forms.TextBox textQtyOnHand;
 	}
 }

@@ -21,6 +21,7 @@ namespace OpenDental {
 			textAnesthMedName.Text = Med.AnesthMedName;
 			textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
 			comboDEASchedule.Text = Med.DEASchedule;
+			textQtyOnHand.Text = Med.QtyOnHand;
 
 		}
 
@@ -45,6 +46,7 @@ namespace OpenDental {
 			Med.AnesthMedName=textAnesthMedName.Text;
 			Med.AnesthHowSupplied=textAnesthHowSupplied.Text;
 			Med.DEASchedule = comboDEASchedule.Text;
+			Med.QtyOnHand = textQtyOnHand.Text;
 
 			if (Med.QtyOnHand == null){
 
@@ -68,7 +70,7 @@ namespace OpenDental {
 		}
 
 		private void textQtyOnHand_TextChanged(object sender, EventArgs e){
-
+			
 		}
 
 		private void groupAnesthMedsEdit_Enter(object sender, EventArgs e){
