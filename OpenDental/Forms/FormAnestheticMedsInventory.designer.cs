@@ -25,7 +25,6 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsInventory));
 			this.groupAnestheticMeds = new System.Windows.Forms.GroupBox();
-			this.butAdjustQtys = new OpenDental.UI.Button();
 			this.labelIntakeNewMeds = new System.Windows.Forms.Label();
 			this.butAnesthMedIntake = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
@@ -37,7 +36,6 @@ namespace OpenDental{
 			// 
 			// groupAnestheticMeds
 			// 
-			this.groupAnestheticMeds.Controls.Add(this.butAdjustQtys);
 			this.groupAnestheticMeds.Controls.Add(this.labelIntakeNewMeds);
 			this.groupAnestheticMeds.Controls.Add(this.butAnesthMedIntake);
 			this.groupAnestheticMeds.Controls.Add(this.butClose);
@@ -46,27 +44,10 @@ namespace OpenDental{
 			this.groupAnestheticMeds.Controls.Add(this.gridAnesthMedsInventory);
 			this.groupAnestheticMeds.Location = new System.Drawing.Point(20, 20);
 			this.groupAnestheticMeds.Name = "groupAnestheticMeds";
-			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 439);
+			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 415);
 			this.groupAnestheticMeds.TabIndex = 5;
 			this.groupAnestheticMeds.TabStop = false;
 			this.groupAnestheticMeds.Text = "Anesthetic Medications";
-			// 
-			// butAdjustQtys
-			// 
-			this.butAdjustQtys.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdjustQtys.Autosize = true;
-			this.butAdjustQtys.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdjustQtys.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdjustQtys.CornerRadius = 4F;
-			this.butAdjustQtys.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdjustQtys.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdjustQtys.Location = new System.Drawing.Point(104, 392);
-			this.butAdjustQtys.Name = "butAdjustQtys";
-			this.butAdjustQtys.Size = new System.Drawing.Size(136, 26);
-			this.butAdjustQtys.TabIndex = 148;
-			this.butAdjustQtys.Text = "Adjust Qty on hand";
-			this.butAdjustQtys.UseVisualStyleBackColor = true;
-			this.butAdjustQtys.Click += new System.EventHandler(this.butAdjustQtys_Click);
 			// 
 			// labelIntakeNewMeds
 			// 
@@ -75,7 +56,7 @@ namespace OpenDental{
 			this.labelIntakeNewMeds.Size = new System.Drawing.Size(272, 26);
 			this.labelIntakeNewMeds.TabIndex = 147;
 			this.labelIntakeNewMeds.Text = "This button should only be used after anesthetic  medications are added to the li" +
-                "st above";
+				"st above";
 			// 
 			// butAnesthMedIntake
 			// 
@@ -130,6 +111,7 @@ namespace OpenDental{
 			// butAddAnesthMeds
 			// 
 			this.butAddAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddAnesthMeds.Autosize = true;
 			this.butAddAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddAnesthMeds.CornerRadius = 4F;
@@ -158,7 +140,7 @@ namespace OpenDental{
 			// FormAnestheticMedsInventory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(754, 489);
+			this.ClientSize = new System.Drawing.Size(754, 459);
 			this.Controls.Add(this.groupAnestheticMeds);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsInventory";
@@ -175,7 +157,6 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridAnesthMedsInventory;
 		private System.Windows.Forms.GroupBox groupAnestheticMeds;
 		private OpenDental.UI.Button butAddAnesthMeds;
-		private OpenDental.UI.Button butAdjustQtys;
 		private System.Windows.Forms.Label labelIntakeNewMeds;
 		private OpenDental.UI.Button butAnesthMedIntake;
 		private OpenDental.UI.Button butClose;

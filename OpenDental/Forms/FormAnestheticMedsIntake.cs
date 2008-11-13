@@ -25,7 +25,7 @@ namespace OpenDental{
 			textDate.Text = MiscData.GetNowDateTime().ToString("yyyy-MM-dd");
 			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMedName.Items.Clear();
-			this.comboAnesthMedName.Items.Insert(0, "--Select--");
+			this.comboAnesthMedName.Items.Insert(0, "");
 			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
 			for (int i = 0; i <= noOfRows - 1; i++)
 			{
@@ -34,7 +34,7 @@ namespace OpenDental{
 			}
 			//Binds the combobox comboBoxSupplier with Medication names from the database.
 			this.comboSupplierName.Items.Clear();
-			this.comboSupplierName.Items.Insert(0, "--Select--");
+			this.comboSupplierName.Items.Insert(0, "");
 			int noOfRows2 = bindComboQueries.bindSuppliers().Tables[0].Rows.Count;
 			for (int i = 0; i <= noOfRows2 - 1; i++)
 			{
@@ -45,7 +45,11 @@ namespace OpenDental{
 		}
 
 		private void FormAnestheticMedsIntake_Load(object sender, EventArgs e){
-
+			if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+			{
+				DialogResult = DialogResult.Cancel;
+				return;
+				}
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e){
@@ -57,7 +61,6 @@ namespace OpenDental{
 		}
 
 		private void butCancel_Click(object sender, EventArgs e){
-
 			DialogResult = DialogResult.Cancel;
 		}
 
@@ -73,7 +76,7 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, EventArgs e){
-			/*
+			
 				if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
 				{
 					MessageBox.Show("All fields are mandatory.");
@@ -96,16 +99,16 @@ namespace OpenDental{
 								textInvoiceNum.Focus();
 							}
 							else
-							{
-								int supplierID = DataConnection.getSupplierID(comboSupplierName.SelectedItem.ToString());
-								AMedication.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierID.ToString(), textInvoiceNum.Text);
-								this.Hide();
-								FormAnestheticMedsInventory FAMI = new FormAnestheticMedsInventory();
-								FAMI.ShowDialog();
+							{	
+								int supplierIDNum = AnesthMedSuppliers.GetSupplierIDNum(comboSupplierName.SelectedIndex);
+								AMedication.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
+								DialogResult = DialogResult.OK;
+								Close();
+
 							}
 						}
 					}
-				}*/
+				}
 		}
 	}
 }

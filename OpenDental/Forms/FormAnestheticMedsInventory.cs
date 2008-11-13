@@ -64,6 +64,23 @@ namespace OpenDental {
 		}
 		
 		private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e){
+			Userod curUser = Security.CurUser;
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+				FormAnesthMedsEdit FormME = new FormAnesthMedsEdit();
+				FormME.Med = listAnestheticMeds[e.Row];
+				FormME.ShowDialog();
+				if (FormME.DialogResult == DialogResult.OK)
+				{
+					FillGrid();
+				}
+				return;
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator with rights to control anesthetic medication inventory levels to unlock this action");
+				return;
+			} 
 
 			FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
 			FormM.Med = listAnestheticMeds[e.Row];
@@ -85,11 +102,16 @@ namespace OpenDental {
 			{
 				FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
 				FormI.ShowDialog();
+				if (FormI.DialogResult == DialogResult.OK)
+				{
+				FillGrid();
+				}
+				
+			}
 
-			} 
 		}
 
-		private void butAdjustQtys_Click(object sender, EventArgs e){
+		/*private void butAdjustQtys_Click(object sender, EventArgs e){
 
 			Userod curUser = Security.CurUser;
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds)){
@@ -101,7 +123,7 @@ namespace OpenDental {
 				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
 			} 
-        }
+        }*/
 
 		private void butClose_Click(object sender, EventArgs e){
 			Close();
