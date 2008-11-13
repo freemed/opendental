@@ -12,132 +12,107 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 
-        private List<AnesthMedsInventory> listAnestheticMeds;
-        public List<AnesthMedInvC> ListAnestheticMeds;
-
+		private List<AnesthMedsInventory> listAnestheticMeds;
+		public List<AnesthMedInvC> ListAnestheticMeds;
+		
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
-			Lan.F(this);
-            
+			Lan.F(this);    
 		}
 
+		private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e){
 
-        private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e)
-        {
-            FillGrid();
-        }
+			FillGrid();
+		}
 
-        private void FillGrid()
-        {
+		private void FillGrid()
+		{
 
-            listAnestheticMeds = AnestheticMeds.CreateObjects();
-            gridAnesthMedsInventory.BeginUpdate();
-            gridAnesthMedsInventory.Columns.Clear();
-            ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
-            gridAnesthMedsInventory.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this, "How Supplied"), 200);
-            gridAnesthMedsInventory.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"), 180);
-            gridAnesthMedsInventory.Columns.Add(col);
-            gridAnesthMedsInventory.Rows.Clear();
-            ODGridRow row;
-            for (int i = 0; i < listAnestheticMeds.Count; i++)
-            {
-                row = new ODGridRow();
-                row.Cells.Add(listAnestheticMeds[i].AnesthMedName);
-                row.Cells.Add(listAnestheticMeds[i].AnesthHowSupplied);
-                row.Cells.Add(listAnestheticMeds[i].QtyOnHand);
-                gridAnesthMedsInventory.Rows.Add(row);
-            }
-            gridAnesthMedsInventory.EndUpdate();
+			listAnestheticMeds = AnestheticMeds.CreateObjects();
+			gridAnesthMedsInventory.BeginUpdate();
+			gridAnesthMedsInventory.Columns.Clear();
+			ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
+			gridAnesthMedsInventory.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "How Supplied"), 200);
+			gridAnesthMedsInventory.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"), 180);
+			gridAnesthMedsInventory.Columns.Add(col);
+			gridAnesthMedsInventory.Rows.Clear();
+			ODGridRow row;
+			for (int i = 0; i < listAnestheticMeds.Count; i++)
+			{
+				row = new ODGridRow();
+				row.Cells.Add(listAnestheticMeds[i].AnesthMedName);
+				row.Cells.Add(listAnestheticMeds[i].AnesthHowSupplied);
+				row.Cells.Add(listAnestheticMeds[i].QtyOnHand);
+				gridAnesthMedsInventory.Rows.Add(row);
+			}
+			gridAnesthMedsInventory.EndUpdate();
+		}
 
-        }
+		private void butAddAnesthMeds_Click(object sender, EventArgs e){
 
-        private void butAddAnesthMeds_Click(object sender, EventArgs e)
-        {
-            AnesthMedsInventory med = new AnesthMedsInventory();
-            med.IsNew = true;
-            FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
-            FormM.Med = med;
-            FormM.ShowDialog();
-            if (FormM.DialogResult == DialogResult.OK)
-            {
-                FillGrid();
-            }
-        }
+			AnesthMedsInventory med = new AnesthMedsInventory();
+			med.IsNew = true;
+			FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
+			FormM.Med = med;
+			FormM.ShowDialog();
+			if (FormM.DialogResult == DialogResult.OK)
+			{
+				FillGrid();
+			}
+		}
 		
+		private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e){
 
-        private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e)
-        {
-            FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
-            FormM.Med = listAnestheticMeds[e.Row];
-            FormM.ShowDialog();
-            if (FormM.DialogResult == DialogResult.OK)
-            {
-                FillGrid();
-                
+			FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
+			FormM.Med = listAnestheticMeds[e.Row];
+			FormM.ShowDialog();
+			if (FormM.DialogResult == DialogResult.OK)
+			{
+				FillGrid();
             }
+		}
+
+		private void butAnesthMedIntake_Click(object sender, EventArgs e){
+
+			if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
+			{
+				butAnesthMedIntake.Enabled = false;
+				return;
+			} 
+			else
+			{
+				FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
+				FormI.ShowDialog();
+
+			} 
+		}
+
+		private void butAdjustQtys_Click(object sender, EventArgs e){
+
+			Userod curUser = Security.CurUser;
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds)){
+				FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
+				FormA.ShowDialog();
+				return;
+			}
+			else {
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			} 
         }
 
-        
-        private void butAnesthMedIntake_Click(object sender, EventArgs e)
-        {
+		private void butClose_Click(object sender, EventArgs e){
+			Close();
+		}
 
-            if (!Security.IsAuthorized(Permissions.AnesthesiaIntakeMeds))
-            {
+		private void butOK_Click(object sender, EventArgs e){
 
-                butAnesthMedIntake.Enabled = false;
-                return;
-            }
+		}
 
-            else
-            {
-
-                //AnesthMedsInventory med = new AnesthMedsInventory();
-                //med.AnestheticMedNum = AnesthMedInvC.List.Count;
-                FormAnestheticMedsIntake FormI = new FormAnestheticMedsIntake();
-                FormI.ShowDialog();
-
-
-
-            } 
-        }
-
-        private void butAdjustQtys_Click(object sender, EventArgs e)
-        {
-
-            Userod curUser = Security.CurUser;
-
-            if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-            {
-
-                FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
-                FormA.ShowDialog();
-                return;
-            }
-
-            else
-            {
-
-                MessageBox.Show(this, "You must be an administrator to unlock this action");
-                return;
-
-            } 
-
-        }
-        private void butClose_Click(object sender, EventArgs e)
-        {
-            Close();
-            //DialogResult = DialogResult.OK;
-        }
-        private void butOK_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void butCancel_Click(object sender, EventArgs e)
-        {
+		private void butCancel_Click(object sender, EventArgs e){
             DialogResult = DialogResult.Cancel;
-        }
+		}
 	}
 }
