@@ -448,6 +448,7 @@ namespace OpenDental{
 			this.butComplete.Name = "butComplete";
 			this.butComplete.Size = new System.Drawing.Size(28,28);
 			this.butComplete.TabIndex = 69;
+			this.butComplete.TabStop = false;
 			this.butComplete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butComplete.UseVisualStyleBackColor = false;
 			this.butComplete.Click += new System.EventHandler(this.butComplete_Click);
@@ -461,6 +462,7 @@ namespace OpenDental{
 			this.butUnsched.Name = "butUnsched";
 			this.butUnsched.Size = new System.Drawing.Size(28,28);
 			this.butUnsched.TabIndex = 68;
+			this.butUnsched.TabStop = false;
 			this.butUnsched.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butUnsched.UseVisualStyleBackColor = false;
 			this.butUnsched.Click += new System.EventHandler(this.butUnsched_Click);
@@ -474,6 +476,7 @@ namespace OpenDental{
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(28,28);
 			this.butDelete.TabIndex = 66;
+			this.butDelete.TabStop = false;
 			this.butDelete.UseVisualStyleBackColor = false;
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -486,6 +489,7 @@ namespace OpenDental{
 			this.butBreak.Name = "butBreak";
 			this.butBreak.Size = new System.Drawing.Size(28,28);
 			this.butBreak.TabIndex = 65;
+			this.butBreak.TabStop = false;
 			this.butBreak.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butBreak.UseVisualStyleBackColor = false;
 			this.butBreak.Click += new System.EventHandler(this.butBreak_Click);
@@ -909,6 +913,7 @@ namespace OpenDental{
 			this.butOther.Name = "butOther";
 			this.butOther.Size = new System.Drawing.Size(92,24);
 			this.butOther.TabIndex = 76;
+			this.butOther.TabStop = false;
 			this.butOther.Text = "Make/Find Appt";
 			this.butOther.Click += new System.EventHandler(this.butOther_Click);
 			// 
