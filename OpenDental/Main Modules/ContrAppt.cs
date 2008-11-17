@@ -2179,6 +2179,9 @@ namespace OpenDental{
 						ResizingAppt=true;
 						ResizingOrigH=TempApptSingle.Height;
 					}
+					else{
+						ResizingAppt=false;
+					}
 				}
 			}
 			//not clicked on appt---------------------------------------------------------------------------------------------------
