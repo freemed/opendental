@@ -1332,14 +1332,14 @@ namespace OpenDentBusiness{
 
 		///<summary>The supplied DataRows must include the following columns: attached,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
 		public static int CompareRows(DataRow x,DataRow y) {
-			if(x["attached"].ToString()!=y["attached"].ToString()){//if one is attached and the other is not
+			/*if(x["attached"].ToString()!=y["attached"].ToString()){//if one is attached and the other is not
 				if(x["attached"].ToString()=="1"){
 					return -1;
 				}
 				else{
 					return 1;
 				}
-			}
+			}*/
 			return ProcedureLogic.CompareProcedures(x,y);//sort by priority, toothnum, procCode
 		}
 
