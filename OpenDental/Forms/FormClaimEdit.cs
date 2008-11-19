@@ -1888,7 +1888,7 @@ namespace OpenDental{
 			// 
 			this.textNote.AcceptsReturn = true;
 			this.textNote.Location = new System.Drawing.Point(629,22);
-			this.textNote.MaxLength = 80;
+			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Claim;
