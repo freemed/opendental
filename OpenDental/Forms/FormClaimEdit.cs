@@ -2728,6 +2728,9 @@ namespace OpenDental{
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			PlanList=InsPlans.Refresh(FamCur);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			if(InsPlans.GetPlan(ClaimCur.PlanNum,PlanList).PlanType=="p"){//ppo
+				butPayTotal.Enabled=false;	
+			}
 			//this section used to be "supplemental"---------------------------------------------------------------------------------
 			textRefNum.Text=ClaimCur.RefNumString;
 			string[] enumPlaceOfService=Enum.GetNames(typeof(PlaceOfService));
