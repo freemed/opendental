@@ -14,7 +14,6 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private Label label1;
 		private CheckBox checkIncludeNoIns;
-		private CheckBox checkActiveOnly;
 		private FormQuery FormQuery2;
 
 		///<summary></summary>
@@ -41,7 +40,6 @@ namespace OpenDental{
 			this.checkIncludeNoIns = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkActiveOnly = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -92,22 +90,10 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkActiveOnly
-			// 
-			this.checkActiveOnly.Checked = true;
-			this.checkActiveOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkActiveOnly.Location = new System.Drawing.Point(34,119);
-			this.checkActiveOnly.Name = "checkActiveOnly";
-			this.checkActiveOnly.Size = new System.Drawing.Size(323,18);
-			this.checkActiveOnly.TabIndex = 31;
-			this.checkActiveOnly.Text = "Only include active status patients";
-			this.checkActiveOnly.UseVisualStyleBackColor = true;
-			// 
 			// FormRpTreatmentFinder
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(616,254);
-			this.Controls.Add(this.checkActiveOnly);
 			this.Controls.Add(this.checkIncludeNoIns);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCancel);
@@ -198,10 +184,8 @@ WHERE tempplanned.AmtPlanned>0 ";
 			if(!checkIncludeNoIns.Checked){//if we don't want patients without insurance
 				Queries.CurReport.Query+="AND AnnualMax > 0 ";
 			}
-			if(checkActiveOnly.Checked) {//if only want pt's with active patient status
-				Queries.CurReport.Query+="AND patient.PatStatus =0 ";
-			}
 			Queries.CurReport.Query+=@"
+AND patient.PatStatus =0
 ORDER BY tempplanned.AmtPlanned DESC;
 DROP TABLE tempused;
 DROP TABLE tempplanned;
