@@ -541,8 +541,9 @@ namespace OpenDental{
 				rowsAffected++;
 			}
 			if(radioFinanceCharge.Checked) {
-				if(Prefs.UpdateString("FinanceChargeAPR",textAPR.Text)
-                  | Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(date,false))) {
+				if(Prefs.UpdateString("FinanceChargeAPR",textAPR.Text) 
+					| Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(date,false)))
+				{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				if(Prefs.UpdateString("BillingChargeOrFinanceIsDefault","Finance")) {
@@ -556,13 +557,13 @@ namespace OpenDental{
 			}
 			else if(radioBillingCharge.Checked) {
 				if(Prefs.UpdateString("BillingChargeAmount",textBillingCharge.Text)
-                  | Prefs.UpdateString("BillingChargeLastRun",POut.PDate(date,false))) {
+					| Prefs.UpdateString("BillingChargeLastRun",POut.PDate(date,false)))
+				{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				if(Prefs.UpdateString("BillingChargeOrFinanceIsDefault","Billing")) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
-
 				MessageBox.Show(Lan.g(this,"Billing Charges Added: ") + rowsAffected.ToString());
 				FormAging FormA = new FormAging();
 				FormA.SupressSameDateWarning = true;
@@ -578,7 +579,7 @@ namespace OpenDental{
 			AdjustmentCur.AdjDate = date;
 			AdjustmentCur.ProcDate = date;
 			AdjustmentCur.AdjType = PrefC.GetInt("FinanceChargeAdjustmentType");
-			AdjustmentCur.AdjNote = "Finance Charge";
+			AdjustmentCur.AdjNote = "";//"Finance Charge";
 			AdjustmentCur.AdjAmt = Math.Round(((PIn.PDouble(APR) * .01d / 12d) * OverallBalance),2);
 			AdjustmentCur.ProvNum = PriProv;
 			Adjustments.InsertOrUpdate(AdjustmentCur,true);
@@ -591,7 +592,7 @@ namespace OpenDental{
 			AdjustmentCur.AdjDate = date;
 			AdjustmentCur.ProcDate = date;
 			AdjustmentCur.AdjType = PrefC.GetInt("BillingChargeAdjustmentType");
-			AdjustmentCur.AdjNote = "Billing Charge";
+			AdjustmentCur.AdjNote = "";//"Billing Charge";
 			AdjustmentCur.AdjAmt = PIn.PDouble(BillingChargeAmount);
 			AdjustmentCur.ProvNum = PriProv;
 			Adjustments.InsertOrUpdate(AdjustmentCur,true);
