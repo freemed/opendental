@@ -576,8 +576,13 @@ namespace OpenDental{
 		public void SubmitQuery(){
 			Patients.GetHList();
       //hListPlans=InsPlans.GetHListAll();
-			
-			Queries.SubmitCur();
+			try{
+				Queries.SubmitCur();
+			}
+			catch{
+				MsgBox.Show(this,"Invalid query.");
+				return;
+			}
 			/* (for later if more complex queries with loops:)
 			//SubmitQueryThread();
 			//Thread Thread2 = new Thread(new ThreadStart(SubmitQueryThread));
