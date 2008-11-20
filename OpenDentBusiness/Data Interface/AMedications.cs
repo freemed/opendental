@@ -454,24 +454,12 @@ namespace OpenDentBusiness
 		}
 
 		public static double GetQtyOnHand(string aMed)
-		{
-
-			/*string command = "SELECT * FROM anesthmedinventory WHERE AnesthMedName ='" + aMed + "'";
-
-			for (int i = 0; i < anesthMedsList.Length; i++)
-			{
-				if (anesthMedsList[i].AnesthMedName == aMed)
-				{
-					return anesthMedsList[i].QtyOnHand;
-				}
-			}
-			return 0;
-		}*/
-
-			
+		{		
 		 
 			MySqlCommand cmd = new MySqlCommand();
-			con = new MySqlConnection("server=localhost;database=opendental_test;uid=root;pwd=;pooling=false;");
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
 			con.Open();
 			//if (con.State == ConnectionState.Open) MessageBox.Show("Connection to MySQL opened through OLE DB Provider"); 
@@ -481,7 +469,6 @@ namespace OpenDentBusiness
 			con.Close();
 			return qtyOnHand;
 			
-
 		}
 
 		/// <summary>Gets the anestheticmednum from the anesthmedsinventoryadj table./// </summary>
