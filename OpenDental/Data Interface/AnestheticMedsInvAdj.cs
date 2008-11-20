@@ -9,46 +9,45 @@ using OpenDental;
 using OpenDental.DataAccess;
 using MySql.Data.MySqlClient;
 
-
 namespace OpenDental{
 	///<summary></summary>
-	public class AnestheticMeds {
+	public class AnestheticMedsInvAdj {
 
 		public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
 
 		///<summary>Gets all Anesthetic Medications from the database</summary>
-		public static List<AnesthMedsInventory> CreateObjects() {
-			string command="SELECT * FROM anesthmedsinventory ORDER BY AnesthMedName";
-			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
+		public static List<AnesthMedsInventoryAdjT> CreateObjects() {
+			string command="SELECT * FROM anesthmedsinventoryadj ORDER BY TimeStamp DESC";
+			return new List<AnesthMedsInventoryAdjT>(DataObjectFactory<AnesthMedsInventoryAdjT>.CreateObjects(command));
 		}
 
-		public static void WriteObject(AnesthMedsInventory med){
+		public static void WriteObject(AnesthMedsInventoryAdjT adj){
 
-			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
+			DataObjectFactory<AnesthMedsInventoryAdjT>.WriteObject(adj);
 		}
 
 		///<summary>Surround with try-catch.</summary>
-		public static void DeleteObject(AnesthMedsInventory med){
+		public static void DeleteObject(AnesthMedsInventoryAdjT adj){
 
 			//validate that not already in use.
-			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
+			string command="SELECT COUNT(*) FROM anesthmedsinventoryadj WHERE AnestheticMedNum="+POut.PInt(adj.AnestheticMedNum);
 			int count=PIn.PInt(General.GetCount(command));
             //disabled during development, will probably need to enable for release
 			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}*/
-			command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
+			command="SELECT COUNT(*) FROM anesthmedsinventoryadj WHERE AnestheticMedNum="+POut.PInt(adj.AnestheticMedNum);
 			count=PIn.PInt(General.GetCount(command));
             //disabled for now...
 			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}*/
-            DataObjectFactory<AnesthMedsInventory>.DeleteObject(med);
+            DataObjectFactory<AnesthMedsInventoryAdjT>.DeleteObject(adj);
 		}
 
-		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory, int anestheticMedNum)
+		/*public static string GetName(List<AnesthMedsInventoryAdj> listAnesthMedInventory, int anestheticMedNum)
 		{
 			for (int i = 0; i < listAnesthMedInventory.Count; i++)
 			{
@@ -60,17 +59,17 @@ namespace OpenDental{
 				}
 			}
 			return "";
-		}
+		}*/
 
-		public static string GetQtyOnHand(List<AnesthMedsInventory> listAnesthMedInventory,int anestheticMedNum){
-			for (int i = 0; i < listAnesthMedInventory.Count; i++){
+		public static int GetQtyAdj(List<AnesthMedsInventoryAdjT> listAnesthMedInventoryAdj,int anestheticMedNum){
+			for (int i = 0; i < listAnesthMedInventoryAdj.Count; i++){
 
-				if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum){
+				if (listAnesthMedInventoryAdj[i].AnestheticMedNum == anestheticMedNum){
 
-					return listAnesthMedInventory[i].QtyOnHand;
+					return listAnesthMedInventoryAdj[i].QtyAdj;
 				}
 			}
-			return "";
+			return 0;
 		}
 
 		/// <summary>
@@ -86,7 +85,6 @@ namespace OpenDental{
 			return supplierID;
 			con.Close();
 		}
-
 
 	}
 
