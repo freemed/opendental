@@ -52,6 +52,7 @@
 			this.textQty.Name = "textQty";
 			this.textQty.Size = new System.Drawing.Size(116, 20);
 			this.textQty.TabIndex = 2;
+			this.textQty.TextChanged += new System.EventHandler(this.textQty_TextChanged);
 			// 
 			// labelQty
 			// 

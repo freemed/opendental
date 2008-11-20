@@ -16,7 +16,7 @@ namespace OpenDental{
 
 		public bool IsNew;
 		public AnesthMedsInventory Med;
-
+		public double qtyOnHand;
 		public FormAnestheticMedsIntake()
 		{
 			
@@ -49,7 +49,8 @@ namespace OpenDental{
 			{
 				DialogResult = DialogResult.Cancel;
 				return;
-				}
+			}
+
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e){
@@ -69,13 +70,32 @@ namespace OpenDental{
 			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
 			FormMS.ShowDialog();
 
+		    //re-binds the Supplier name list to the Combo box in case a supplier is added while adding a new med
+			if (FormMS.DialogResult == DialogResult.OK)
+			{
+				this.comboSupplierName.Items.Clear();
+				this.comboSupplierName.Items.Insert(0, "");
+				int noOfRows2 = bindComboQueries.bindSuppliers().Tables[0].Rows.Count;
+				for (int i = 0; i <= noOfRows2 - 1; i++)
+				{
+					this.comboSupplierName.Items.Add(bindComboQueries.bindSuppliers().Tables[0].Rows[i][0].ToString());
+					this.comboSupplierName.SelectedIndex = 0;
+				}
+				Lan.F(this);
+			}
+
 		}
 
 		private void comboAnesthMed_SelectedIndexChanged(object sender, EventArgs e){
 
-		}
+
+			}
 
 		private void butClose_Click(object sender, EventArgs e){
+
+			//the current QtyOnHand of a scheduled anesthetic medication
+			double qtyOnHand = Convert.ToDouble(AMedications.GetQtyOnHand(comboAnesthMedName.SelectedItem.ToString()));
+			
 			
 				if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
 				{
@@ -83,32 +103,44 @@ namespace OpenDental{
 				}
 				else
 				{
-					Regex regex = new Regex("^\\d{1,3}?$");
+					Regex regex = new Regex("^\\d{1,6}?$");
 					if (!(regex.IsMatch(textQty.Text)) && textQty.Text != "")
 					{
-						MessageBox.Show("The Quantity field should be a 1-3 digit integer.");
+						MessageBox.Show("The Quantity field should be a 1-6 digit integer.");
 						textQty.Focus();
 					}
 					else
 					{
 						if (comboAnesthMedName.SelectedIndex != 0 && comboSupplierName.SelectedIndex != 0)
 						{
+
+
+
 							if (textInvoiceNum.Text.Trim() == "")
 							{
 								MessageBox.Show("Invoice # does not accept spaces");
 								textInvoiceNum.Focus();
 							}
-							else
-							{	
-								int supplierIDNum = AnesthMedSuppliers.GetSupplierIDNum(comboSupplierName.SelectedIndex);
-								AMedication.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
-								DialogResult = DialogResult.OK;
-								Close();
 
-							}
 						}
+
+					}
+					//records transaction into tableanesthmedsintake which tracks intake of scheduled anesthetic medications into inventory
+					int supplierIDNum = AnesthMedSuppliers.GetSupplierIDNum(comboSupplierName.SelectedIndex);
+					AMedications.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
+					
+					//updates QtyOnHand in tableanesthmedsinventory when a new order of scheduled anesthetic medications is received into inventory
+					AMedications.updateMed_adj(comboAnesthMedName.SelectedItem.ToString(), Convert.ToDouble(textQty.Text), qtyOnHand);
+							
+					DialogResult = DialogResult.OK;
+					Close();
 					}
 				}
+		
+
+		private void textQty_TextChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

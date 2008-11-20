@@ -26,6 +26,10 @@ namespace OpenDental{
 			this.textAnesthMedName = new System.Windows.Forms.TextBox();
 			this.textAnesthHowSupplied = new System.Windows.Forms.TextBox();
 			this.groupAnesthMedsEdit = new System.Windows.Forms.GroupBox();
+			this.labelNotes = new System.Windows.Forms.Label();
+			this.textNotes = new System.Windows.Forms.TextBox();
+			this.labelQtyAdj = new System.Windows.Forms.Label();
+			this.textQtyAdj = new System.Windows.Forms.TextBox();
 			this.labelQtyOnHand = new System.Windows.Forms.Label();
 			this.textQtyOnHand = new System.Windows.Forms.TextBox();
 			this.labelDEASched = new System.Windows.Forms.Label();
@@ -58,6 +62,10 @@ namespace OpenDental{
 			// 
 			// groupAnesthMedsEdit
 			// 
+			this.groupAnesthMedsEdit.Controls.Add(this.labelNotes);
+			this.groupAnesthMedsEdit.Controls.Add(this.textNotes);
+			this.groupAnesthMedsEdit.Controls.Add(this.labelQtyAdj);
+			this.groupAnesthMedsEdit.Controls.Add(this.textQtyAdj);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelQtyOnHand);
 			this.groupAnesthMedsEdit.Controls.Add(this.textQtyOnHand);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelDEASched);
@@ -68,7 +76,6 @@ namespace OpenDental{
 			this.groupAnesthMedsEdit.Controls.Add(this.label1);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelHowSuppl);
 			this.groupAnesthMedsEdit.Controls.Add(this.labelUnitDose);
-			this.groupAnesthMedsEdit.Controls.Add(this.labelChanges);
 			this.groupAnesthMedsEdit.Location = new System.Drawing.Point(27, 23);
 			this.groupAnesthMedsEdit.Name = "groupAnesthMedsEdit";
 			this.groupAnesthMedsEdit.Size = new System.Drawing.Size(522, 213);
@@ -77,10 +84,44 @@ namespace OpenDental{
 			this.groupAnesthMedsEdit.Text = "Add or Edit Anesthetic Medication(s)";
 			this.groupAnesthMedsEdit.Enter += new System.EventHandler(this.groupAnesthMedsEdit_Enter);
 			// 
+			// labelNotes
+			// 
+			this.labelNotes.AutoSize = true;
+			this.labelNotes.Location = new System.Drawing.Point(257, 137);
+			this.labelNotes.Name = "labelNotes";
+			this.labelNotes.Size = new System.Drawing.Size(35, 13);
+			this.labelNotes.TabIndex = 15;
+			this.labelNotes.Text = "Notes";
+			// 
+			// textNotes
+			// 
+			this.textNotes.Location = new System.Drawing.Point(257, 156);
+			this.textNotes.Multiline = true;
+			this.textNotes.Name = "textNotes";
+			this.textNotes.Size = new System.Drawing.Size(246, 42);
+			this.textNotes.TabIndex = 14;
+			// 
+			// labelQtyAdj
+			// 
+			this.labelQtyAdj.AutoSize = true;
+			this.labelQtyAdj.Location = new System.Drawing.Point(17, 181);
+			this.labelQtyAdj.Name = "labelQtyAdj";
+			this.labelQtyAdj.Size = new System.Drawing.Size(95, 13);
+			this.labelQtyAdj.TabIndex = 13;
+			this.labelQtyAdj.Text = "Qty Adjustment +/-";
+			// 
+			// textQtyAdj
+			// 
+			this.textQtyAdj.Location = new System.Drawing.Point(118, 178);
+			this.textQtyAdj.Name = "textQtyAdj";
+			this.textQtyAdj.Size = new System.Drawing.Size(100, 20);
+			this.textQtyAdj.TabIndex = 12;
+			this.textQtyAdj.TextChanged += new System.EventHandler(this.textQtyAdj_TextChanged);
+			// 
 			// labelQtyOnHand
 			// 
 			this.labelQtyOnHand.AutoSize = true;
-			this.labelQtyOnHand.Location = new System.Drawing.Point(243, 128);
+			this.labelQtyOnHand.Location = new System.Drawing.Point(45, 154);
 			this.labelQtyOnHand.Name = "labelQtyOnHand";
 			this.labelQtyOnHand.Size = new System.Drawing.Size(67, 13);
 			this.labelQtyOnHand.TabIndex = 11;
@@ -88,7 +129,7 @@ namespace OpenDental{
 			// 
 			// textQtyOnHand
 			// 
-			this.textQtyOnHand.Location = new System.Drawing.Point(316, 125);
+			this.textQtyOnHand.Location = new System.Drawing.Point(118, 151);
 			this.textQtyOnHand.Name = "textQtyOnHand";
 			this.textQtyOnHand.Size = new System.Drawing.Size(100, 20);
 			this.textQtyOnHand.TabIndex = 10;
@@ -97,7 +138,7 @@ namespace OpenDental{
 			// labelDEASched
 			// 
 			this.labelDEASched.AutoSize = true;
-			this.labelDEASched.Location = new System.Drawing.Point(35, 128);
+			this.labelDEASched.Location = new System.Drawing.Point(35, 125);
 			this.labelDEASched.Name = "labelDEASched";
 			this.labelDEASched.Size = new System.Drawing.Size(77, 13);
 			this.labelDEASched.TabIndex = 9;
@@ -112,7 +153,7 @@ namespace OpenDental{
             "III",
             "IV",
             "V"});
-			this.comboDEASchedule.Location = new System.Drawing.Point(118, 125);
+			this.comboDEASchedule.Location = new System.Drawing.Point(118, 122);
 			this.comboDEASchedule.Name = "comboDEASchedule";
 			this.comboDEASchedule.Size = new System.Drawing.Size(43, 21);
 			this.comboDEASchedule.TabIndex = 8;
@@ -155,7 +196,7 @@ namespace OpenDental{
 			// 
 			// labelChanges
 			// 
-			this.labelChanges.Location = new System.Drawing.Point(14, 165);
+			this.labelChanges.Location = new System.Drawing.Point(41, 252);
 			this.labelChanges.Name = "labelChanges";
 			this.labelChanges.Size = new System.Drawing.Size(508, 33);
 			this.labelChanges.TabIndex = 7;
@@ -173,7 +214,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(30, 265);
+			this.butDelete.Location = new System.Drawing.Point(30, 300);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81, 26);
 			this.butDelete.TabIndex = 10;
@@ -188,7 +229,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(460, 265);
+			this.butOK.Location = new System.Drawing.Point(460, 300);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(92, 26);
 			this.butOK.TabIndex = 9;
@@ -205,7 +246,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(370, 265);
+			this.butCancel.Location = new System.Drawing.Point(370, 300);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(83, 26);
 			this.butCancel.TabIndex = 8;
@@ -215,11 +256,12 @@ namespace OpenDental{
 			// FormAnesthMedsEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(575, 304);
+			this.ClientSize = new System.Drawing.Size(575, 339);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.groupAnesthMedsEdit);
+			this.Controls.Add(this.labelChanges);
 			this.Name = "FormAnesthMedsEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Add/Edit Anesthetic Med(s)";
@@ -246,5 +288,9 @@ namespace OpenDental{
         private System.Windows.Forms.ComboBox comboDEASchedule;
 		private System.Windows.Forms.Label labelQtyOnHand;
 		private System.Windows.Forms.TextBox textQtyOnHand;
+		private System.Windows.Forms.Label labelQtyAdj;
+		private System.Windows.Forms.TextBox textQtyAdj;
+		private System.Windows.Forms.Label labelNotes;
+		private System.Windows.Forms.TextBox textNotes;
 	}
 }

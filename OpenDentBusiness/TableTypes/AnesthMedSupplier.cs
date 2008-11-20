@@ -3,6 +3,7 @@ using System.Collections;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
+
 	///<summary>An individual anesthetic medication supplier.</summary>
 	[DataObject("anesthmedsuppliers")]
 	public class AnesthMedSupplier : DataObjectBase{
