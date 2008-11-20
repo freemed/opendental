@@ -390,13 +390,13 @@ namespace OpenDental {
 					command = "DROP TABLE IF EXISTS anesthmedsinventoryadj";
 					General.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventoryadj (
-						AnestheticMedNum int(3) NOT NULL auto_increment,
-						AdjPos int(4),
-						AdjNeg int(4),
-						Provider char(4),
-						Notes text NOT NULL,
-						TimeStamp datetime,
-						PRIMARY KEY (AnestheticMedNum),
+						AdjustNum int(11) NOT NULL auto_increment,
+						AnestheticMedNum int(11) NOT NULL,
+						QtyAdj double,
+						UserNum int(11) NOT NULL,
+						Notes varchar(255),
+						TimeStamp datetime NOT NULL,
+						PRIMARY KEY (AdjustNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
@@ -480,12 +480,13 @@ namespace OpenDental {
 					string[] commands = new string[]{
 						"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
-						,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(30) NOT NULL"
-						,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand int default '0' NOT NULL"
+						,"ALTER table anesthmedsinventory CHANGE AnestheticMed AnesthMedName char(30)"
+						,"ALTER table anesthmedsinventory CHANGE QtyOnHand QtyOnHand double default '0'"
 						,"ALTER table anesthmedsinventory ADD DEASchedule char(3)"
 						,"ALTER table anesthmedsintake DROP DEASchedule"
-						,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32) NOT NULL"
-						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32) NOT NULL"
+						,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32)"
+						,"ALTER table anesthmedsgiven CHANGE QtyGiven QtyGiven float"
+						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32)"
 						,"ALTER table anestheticdata CHANGE Anesthetist Anesthetist char(32)"
 						,"ALTER table anestheticdata CHANGE Surgeon Surgeon char(32)"						
 						,"ALTER TABLE anestheticdata CHANGE Asst Asst char(32)"

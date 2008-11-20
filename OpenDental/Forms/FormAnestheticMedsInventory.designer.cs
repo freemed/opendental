@@ -44,14 +44,14 @@ namespace OpenDental{
 			this.groupAnestheticMeds.Controls.Add(this.gridAnesthMedsInventory);
 			this.groupAnestheticMeds.Location = new System.Drawing.Point(20, 20);
 			this.groupAnestheticMeds.Name = "groupAnestheticMeds";
-			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 415);
+			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 331);
 			this.groupAnestheticMeds.TabIndex = 5;
 			this.groupAnestheticMeds.TabStop = false;
 			this.groupAnestheticMeds.Text = "Anesthetic Medications";
 			// 
 			// labelIntakeNewMeds
 			// 
-			this.labelIntakeNewMeds.Location = new System.Drawing.Point(246, 360);
+			this.labelIntakeNewMeds.Location = new System.Drawing.Point(246, 276);
 			this.labelIntakeNewMeds.Name = "labelIntakeNewMeds";
 			this.labelIntakeNewMeds.Size = new System.Drawing.Size(272, 26);
 			this.labelIntakeNewMeds.TabIndex = 147;
@@ -67,7 +67,7 @@ namespace OpenDental{
 			this.butAnesthMedIntake.CornerRadius = 4F;
 			this.butAnesthMedIntake.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAnesthMedIntake.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAnesthMedIntake.Location = new System.Drawing.Point(104, 360);
+			this.butAnesthMedIntake.Location = new System.Drawing.Point(104, 276);
 			this.butAnesthMedIntake.Name = "butAnesthMedIntake";
 			this.butAnesthMedIntake.Size = new System.Drawing.Size(136, 26);
 			this.butAnesthMedIntake.TabIndex = 146;
@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(596, 360);
+			this.butClose.Location = new System.Drawing.Point(596, 276);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(90, 26);
 			this.butClose.TabIndex = 145;
@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(524, 360);
+			this.butCancel.Location = new System.Drawing.Point(524, 276);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(66, 26);
 			this.butCancel.TabIndex = 144;
@@ -131,7 +131,7 @@ namespace OpenDental{
 			this.gridAnesthMedsInventory.Location = new System.Drawing.Point(104, 33);
 			this.gridAnesthMedsInventory.Name = "gridAnesthMedsInventory";
 			this.gridAnesthMedsInventory.ScrollValue = 0;
-			this.gridAnesthMedsInventory.Size = new System.Drawing.Size(580, 300);
+			this.gridAnesthMedsInventory.Size = new System.Drawing.Size(580, 206);
 			this.gridAnesthMedsInventory.TabIndex = 4;
 			this.gridAnesthMedsInventory.Title = "Anesthetic Medication Inventory";
 			this.gridAnesthMedsInventory.TranslationName = null;
@@ -140,7 +140,7 @@ namespace OpenDental{
 			// FormAnestheticMedsInventory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(754, 459);
+			this.ClientSize = new System.Drawing.Size(754, 381);
 			this.Controls.Add(this.groupAnestheticMeds);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsInventory";

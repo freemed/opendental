@@ -79,6 +79,7 @@
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />
+    <Compile Include="Cache\AnesthMedsInventoryC.cs" />
     <Compile Include="Cache\AppointmentRuleC.cs" />
     <Compile Include="Cache\ApptViewItemC.cs" />
     <Compile Include="Cache\ApptViewC.cs" />
@@ -91,13 +92,13 @@
     <Compile Include="Cache\AnestheticDataC.cs" />
     <Compile Include="Cache\AnestheticMedsGivenC.cs" />
     <Compile Include="Cache\AnesthMedsC.cs" />
+    <Compile Include="Cache\AnesthMedInvAdjC.cs" />
     <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
     <Compile Include="Cache\RecallTypeC.cs" />
     <Compile Include="Cache\SheetFieldDefC.cs" />
     <Compile Include="Cache\SheetDefC.cs" />
-    <Compile Include="Cache\AnesthMedInvC.cs" />
     <Compile Include="Cache\SiteC.cs" />
     <Compile Include="Cache\DisplayFieldC.cs" />
     <Compile Include="Cache\ProviderC.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
-    <Compile Include="Data Interface\AMedication.cs" />
+    <Compile Include="Data Interface\AMedications.cs" />
     <Compile Include="Data Interface\AnestheticRecords.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
     <Compile Include="Data Interface\AnesthMedSuppliers.cs" />
+    <Compile Include="Data Interface\AnesthMedsGivens.cs" />
+    <Compile Include="Data Interface\AnesthMedInvAdjs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
@@ -232,6 +235,7 @@
     </Compile>
     <Compile Include="TableTypes\AnesthMedSupplier.cs" />
     <Compile Include="TableTypes\AnestheticMedsGiven.cs" />
+    <Compile Include="TableTypes\AnesthMedsInventoryAdj.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />

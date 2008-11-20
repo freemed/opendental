@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class AnesthMedInvC {
+	public class AnesthMedInvAdjC {
 		///<summary>A list of all Anesthetic Medications.</summary>
-		public static List<AnesthMedsInventory> List;
+		public static List<AnesthMedsInventoryAdj> List;
 
 	}
 }

@@ -11,10 +11,10 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
-
-		private List<AnesthMedsInventory> listAnestheticMeds;
-		public List<AnesthMedInvC> ListAnestheticMeds;
 		
+		private List<AnesthMedsInventory> listAnestheticMeds;
+
+
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
 			Lan.F(this);    
@@ -29,6 +29,8 @@ namespace OpenDental {
 		{
 
 			listAnestheticMeds = AnestheticMeds.CreateObjects();
+			
+
 			gridAnesthMedsInventory.BeginUpdate();
 			gridAnesthMedsInventory.Columns.Clear();
 			ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
@@ -48,27 +50,35 @@ namespace OpenDental {
 				gridAnesthMedsInventory.Rows.Add(row);
 			}
 			gridAnesthMedsInventory.EndUpdate();
+
 		}
 
 		private void butAddAnesthMeds_Click(object sender, EventArgs e){
 
-			AnesthMedsInventory med = new AnesthMedsInventory();
-			med.IsNew = true;
-			FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
-			FormM.Med = med;
-			FormM.ShowDialog();
+
+				AnesthMedsInventory med = new AnesthMedsInventory();
+				med.IsNew = true;
+				FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
+				FormM.Med = med;
+				FormM.ShowDialog();
+			
 			if (FormM.DialogResult == DialogResult.OK)
 			{
 				FillGrid();
-			}
+			} 
+
 		}
-		
+
+
 		private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e){
 			Userod curUser = Security.CurUser;
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
 				FormAnesthMedsEdit FormME = new FormAnesthMedsEdit();
+				
+				
 				FormME.Med = listAnestheticMeds[e.Row];
+				
 				FormME.ShowDialog();
 				if (FormME.DialogResult == DialogResult.OK)
 				{
@@ -135,6 +145,30 @@ namespace OpenDental {
 
 		private void butCancel_Click(object sender, EventArgs e){
             DialogResult = DialogResult.Cancel;
+		}
+
+		private void butAdjustQtys_Click(object sender, EventArgs e)
+		{
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+
+				FormAnesthMedsEdit FormA = new FormAnesthMedsEdit();
+				AnesthMedsInventory med = new AnesthMedsInventory();
+				med.IsNew = true;
+				FormA.ShowDialog();
+				return;
+			}
+
+			else
+			{
+
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+
+			} 
+
 		}
 	}
 }
