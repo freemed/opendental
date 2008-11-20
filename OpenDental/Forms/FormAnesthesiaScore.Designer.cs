@@ -26,12 +26,12 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnesthesiaScore));
-			this.textBoxDate = new System.Windows.Forms.TextBox();
+			this.textDate = new System.Windows.Forms.TextBox();
 			this.labelDate = new System.Windows.Forms.Label();
 			this.labelPatientName = new System.Windows.Forms.Label();
-			this.textBoxPatID = new System.Windows.Forms.TextBox();
+			this.textPatID = new System.Windows.Forms.TextBox();
 			this.labelPatID = new System.Windows.Forms.Label();
-			this.textBoxPatient = new System.Windows.Forms.TextBox();
+			this.textPatient = new System.Windows.Forms.TextBox();
 			this.groupBoxPARSS = new System.Windows.Forms.GroupBox();
 			this.groupBoxDischCond = new System.Windows.Forms.GroupBox();
 			this.radioButDischCondUnstable = new System.Windows.Forms.RadioButton();
@@ -61,6 +61,7 @@ namespace OpenDental{
 			this.labelActivityQ2 = new System.Windows.Forms.Label();
 			this.labelPARSS = new System.Windows.Forms.Label();
 			this.groupBoxDischargeMethod = new System.Windows.Forms.GroupBox();
+			this.radioButDischAmbulance = new System.Windows.Forms.RadioButton();
 			this.radioButDischWheelChr = new System.Windows.Forms.RadioButton();
 			this.radioButDischAmb = new System.Windows.Forms.RadioButton();
 			this.groupBoxColor = new System.Windows.Forms.GroupBox();
@@ -80,7 +81,6 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.radioButDischAmbulance = new System.Windows.Forms.RadioButton();
 			this.groupBoxPARSS.SuspendLayout();
 			this.groupBoxDischCond.SuspendLayout();
 			this.groupBoxCirc.SuspendLayout();
@@ -91,18 +91,18 @@ namespace OpenDental{
 			this.groupBoxConc.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// textBoxDate
+			// textDate
 			// 
-			this.textBoxDate.Location = new System.Drawing.Point(450, 14);
-			this.textBoxDate.Name = "textBoxDate";
-			this.textBoxDate.ReadOnly = true;
-			this.textBoxDate.Size = new System.Drawing.Size(100, 20);
-			this.textBoxDate.TabIndex = 148;
+			this.textDate.Location = new System.Drawing.Point(406, 14);
+			this.textDate.Name = "textDate";
+			this.textDate.ReadOnly = true;
+			this.textDate.Size = new System.Drawing.Size(144, 20);
+			this.textDate.TabIndex = 148;
 			// 
 			// labelDate
 			// 
 			this.labelDate.AutoSize = true;
-			this.labelDate.Location = new System.Drawing.Point(414, 17);
+			this.labelDate.Location = new System.Drawing.Point(370, 17);
 			this.labelDate.Name = "labelDate";
 			this.labelDate.Size = new System.Drawing.Size(30, 13);
 			this.labelDate.TabIndex = 147;
@@ -117,14 +117,14 @@ namespace OpenDental{
 			this.labelPatientName.TabIndex = 146;
 			this.labelPatientName.Text = "Patient";
 			// 
-			// textBoxPatID
+			// textPatID
 			// 
-			this.textBoxPatID.Location = new System.Drawing.Point(278, 14);
-			this.textBoxPatID.Name = "textBoxPatID";
-			this.textBoxPatID.ReadOnly = true;
-			this.textBoxPatID.Size = new System.Drawing.Size(113, 20);
-			this.textBoxPatID.TabIndex = 145;
-			this.textBoxPatID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textPatID.Location = new System.Drawing.Point(278, 14);
+			this.textPatID.Name = "textPatID";
+			this.textPatID.ReadOnly = true;
+			this.textPatID.Size = new System.Drawing.Size(69, 20);
+			this.textPatID.TabIndex = 145;
+			this.textPatID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// labelPatID
 			// 
@@ -135,14 +135,15 @@ namespace OpenDental{
 			this.labelPatID.TabIndex = 144;
 			this.labelPatID.Text = "ID No.";
 			// 
-			// textBoxPatient
+			// textPatient
 			// 
-			this.textBoxPatient.Location = new System.Drawing.Point(64, 14);
-			this.textBoxPatient.Name = "textBoxPatient";
-			this.textBoxPatient.ReadOnly = true;
-			this.textBoxPatient.Size = new System.Drawing.Size(150, 20);
-			this.textBoxPatient.TabIndex = 143;
-			this.textBoxPatient.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textPatient.Location = new System.Drawing.Point(64, 14);
+			this.textPatient.Name = "textPatient";
+			this.textPatient.ReadOnly = true;
+			this.textPatient.Size = new System.Drawing.Size(150, 20);
+			this.textPatient.TabIndex = 143;
+			this.textPatient.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textPatient.TextChanged += new System.EventHandler(this.textPatient_TextChanged);
 			// 
 			// groupBoxPARSS
 			// 
@@ -462,6 +463,17 @@ namespace OpenDental{
 			this.groupBoxDischargeMethod.TabStop = false;
 			this.groupBoxDischargeMethod.Text = "Discharge method";
 			// 
+			// radioButDischAmbulance
+			// 
+			this.radioButDischAmbulance.AutoSize = true;
+			this.radioButDischAmbulance.Location = new System.Drawing.Point(14, 35);
+			this.radioButDischAmbulance.Name = "radioButDischAmbulance";
+			this.radioButDischAmbulance.Size = new System.Drawing.Size(154, 17);
+			this.radioButDischAmbulance.TabIndex = 6;
+			this.radioButDischAmbulance.TabStop = true;
+			this.radioButDischAmbulance.Text = "Transported via ambulance";
+			this.radioButDischAmbulance.UseVisualStyleBackColor = true;
+			// 
 			// radioButDischWheelChr
 			// 
 			this.radioButDischWheelChr.AutoSize = true;
@@ -682,28 +694,17 @@ namespace OpenDental{
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// radioButDischAmbulance
-			// 
-			this.radioButDischAmbulance.AutoSize = true;
-			this.radioButDischAmbulance.Location = new System.Drawing.Point(14, 35);
-			this.radioButDischAmbulance.Name = "radioButDischAmbulance";
-			this.radioButDischAmbulance.Size = new System.Drawing.Size(154, 17);
-			this.radioButDischAmbulance.TabIndex = 6;
-			this.radioButDischAmbulance.TabStop = true;
-			this.radioButDischAmbulance.Text = "Transported via ambulance";
-			this.radioButDischAmbulance.UseVisualStyleBackColor = true;
-			// 
 			// FormAnesthesiaScore
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(584, 707);
 			this.Controls.Add(this.butPrint);
-			this.Controls.Add(this.textBoxDate);
+			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.labelDate);
 			this.Controls.Add(this.labelPatientName);
-			this.Controls.Add(this.textBoxPatID);
+			this.Controls.Add(this.textPatID);
 			this.Controls.Add(this.labelPatID);
-			this.Controls.Add(this.textBoxPatient);
+			this.Controls.Add(this.textPatient);
 			this.Controls.Add(this.groupBoxPARSS);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -738,12 +739,12 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butPrint;
-		private System.Windows.Forms.TextBox textBoxDate;
+		private System.Windows.Forms.TextBox textDate;
 		private System.Windows.Forms.Label labelDate;
 		private System.Windows.Forms.Label labelPatientName;
-		private System.Windows.Forms.TextBox textBoxPatID;
+		private System.Windows.Forms.TextBox textPatID;
 		private System.Windows.Forms.Label labelPatID;
-		private System.Windows.Forms.TextBox textBoxPatient;
+		private System.Windows.Forms.TextBox textPatient;
 		private System.Windows.Forms.GroupBox groupBoxPARSS;
 		private System.Windows.Forms.TextBox textBoxPARSSTotal;
 		private System.Windows.Forms.Label labelTotal;
