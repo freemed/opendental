@@ -3,12 +3,22 @@ using System.Collections;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace OpenDentBusiness{
+
 	///<summary></summary>
 	public class AnestheticRecords{
 		///<summary>List of all anesthetic records for the current patient.</summary>
 		public static AnestheticRecord[] List;
+
+		///<summary>This data adapter is used for all queries to the database.</summary>
+		private MySqlDataAdapter da;
+		///<summary>Stores the string of the command that will be sent to the database.</summary>
+		public MySqlCommand cmd;
+		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
+		private static MySqlConnection con;
+
 
 		///<summary>Most recent date *first*. </summary>
 		public static void Refresh(int patNum){	
@@ -69,7 +79,20 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}
 
-		
+		/// <summary>
+		/// Gets the Anesthetic Record number from the anestheticrecord table.
+		/// </summary>
+		public static int getRecordNum(int patnum)
+		{
+
+			MySqlCommand command2 = new MySqlCommand();
+			con.Open();
+			command2.CommandText = "SELECT AnestheticRecordNum from anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			command2.Connection = con;
+			int anestheticRecordNum = Convert.ToInt32(command2.ExecuteScalar());
+			return anestheticRecordNum;
+			con.Close();
+		}
 
 
 	}

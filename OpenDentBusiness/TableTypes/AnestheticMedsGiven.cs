@@ -9,33 +9,43 @@ namespace OpenDentBusiness{
 	public class AnestheticMedsGiven : DataObjectBase {
 
 		
-
-		[DataField("AnesthMedNum", PrimaryKey=true, AutoNumber=true)]
+		[DataField("AnestheticMedNum", PrimaryKey=true, AutoNumber=true)]
 		private int anestheticMedNum;
 		bool anestheticMedNumChanged;
 		/// <summary>Primary key.</summary>
-		public int AnesthMedNum {
+		public int AnestheticMedNum {
 			get { return anestheticMedNum; }
 			set { anestheticMedNum = value; MarkDirty(); anestheticMedNumChanged = true; }
 		}
-		public bool AnesthMedNumChanged {
+		public bool AnestheticMedNumChanged {
 			get { return anestheticMedNumChanged; }
 		}
 
 		//F.K. table anestheticrecord
-		private int AnestheticRecordNum;
-
-
-		[DataField("AnesthMed")]
-		private string anesthMed;
-		bool anesthMedChanged;
+		[DataField("AnestheticRecordNum")]
+		private string anestheticRecordNum;
+		bool anestheticRecordNumChanged;
 		/// <summary>Name of an anesthetic medication</summary>
-		public string AnesthMed {
-			get { return anesthMed; }
-			set { anesthMed = value; MarkDirty(); anesthMedChanged = true; }
+		public string AnestheticRecordNum
+		{
+			get { return anestheticRecordNum; }
+			set { anestheticRecordNum = value; MarkDirty(); anestheticRecordNumChanged = true; }
+		}
+		public bool AnestheticRecordNumChanged
+		{
+			get { return anestheticRecordNumChanged; }
+		}
+
+		[DataField("AnesthMedName")]
+		private string anesthMedName;
+		bool anesthMedNameChanged;
+		/// <summary>Name of an anesthetic medication</summary>
+		public string AnesthMedName {
+			get { return anesthMedName; }
+			set { anesthMedName = value; MarkDirty(); anesthMedNameChanged = true; }
 		}
 		public bool AnesthMedChanged {
-			get { return anesthMedChanged; }
+			get { return anesthMedNameChanged; }
 		}
 
 		[DataField("QtyGiven")]
