@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -427,6 +428,8 @@ namespace OpenDental.Bridges {
 				//Nothing to process.
 				return;
 			}
+			MessageBox.Show("Trojan update found.  Please print the text file when it opens, then close it.  You will be given a chance to cancel the update after that.");
+			Process.Start(file);
 			if(!MsgBox.Show("Trojan",true,"Trojan update found.  All plans will now be updated.")) {
 				return;
 			}
@@ -435,6 +438,7 @@ namespace OpenDental.Bridges {
 				allplantext=sr.ReadToEnd();
 			}
 			if(allplantext=="") {
+				MessageBox.Show("Could not read file contents: "+file);
 				return;
 			}
 			string[] trojanplans=allplantext.Split(new string[] { "TROJANID" },StringSplitOptions.RemoveEmptyEntries);
@@ -444,7 +448,12 @@ namespace OpenDental.Bridges {
 				plansAffected+=ProcessTrojanPlan(trojanplans[i]);
 			}
 			MessageBox.Show(plansAffected.ToString()+" plans updated.");
-			File.Delete(file);
+			try{
+				File.Delete(file);
+			}
+			catch{
+				MessageBox.Show(file+" could not be deleted.  Please delete manually.");
+			}
 		}
 
 		///<summary>Returns the number of plans updated.</summary>
