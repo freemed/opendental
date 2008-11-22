@@ -192,6 +192,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(612,442);
+			this.ControlBox = false;
 			this.Controls.Add(this.checkNoStrategy);
 			this.Controls.Add(this.checkC2);
 			this.Controls.Add(this.checkC1);
@@ -211,6 +212,7 @@ namespace OpenDental{
 			this.Name = "FormBackupReminder";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Backup Reminder";
+			this.TopMost = true;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackupReminder_FormClosing);
 			this.ResumeLayout(false);
 
