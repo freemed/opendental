@@ -296,8 +296,12 @@ namespace OpenDental{
 				return;
 			}
 			int selectedBut=GetButtonI(new Point(e.X,e.Y));
-			if(selectedBut==-1)
+			if(selectedBut==-1){
 				return;
+			}
+			if(!Buttons[selectedBut].Visible){
+				return;
+			}
 			int oldSelected=SelectedIndex;
 			this.previousSelected=SelectedIndex;
 			SelectedIndex=selectedBut;
