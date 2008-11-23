@@ -493,8 +493,8 @@ namespace OpenDental {
 						,"ALTER TABLE anestheticdata CHANGE Circulator Circulator char(32)"
 						,"ALTER table anestheticdata CHANGE IVFVol IVFVol float (5) NOT NULL"
 						,"ALTER table anestheticdata CHANGE PatHgt PatHgt smallint (3) NOT NULL"
-						,"ALTER table anestheticdata ADD PatHgtIn tinyint (1) NOT NULL"
-						,"ALTER table anestheticdata ADD PatHgtCm tinyint (1) NOT NULL"
+						,"ALTER table anestheticdata ADD HgtUnitsIn tinyint (1) NOT NULL"
+						,"ALTER table anestheticdata ADD HgtUnitsCm tinyint (1) NOT NULL"
 						
 					};
 					General.NonQ(commands);

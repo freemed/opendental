@@ -130,7 +130,7 @@ namespace OpenDental{
 					AMedications.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
 					
 					//updates QtyOnHand in tableanesthmedsinventory when a new order of scheduled anesthetic medications is received into inventory
-					AMedications.updateMed_adj(comboAnesthMedName.SelectedItem.ToString(), Convert.ToDouble(textQty.Text), qtyOnHand);
+					AMedications.UpdateAMedInvAdj(comboAnesthMedName.SelectedItem.ToString(), Convert.ToDouble(textQty.Text), qtyOnHand);
 							
 					DialogResult = DialogResult.OK;
 					Close();

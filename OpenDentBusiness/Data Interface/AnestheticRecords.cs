@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
+using OpenDental.DataAccess;
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -82,16 +83,20 @@ namespace OpenDentBusiness{
 		/// <summary>
 		/// Gets the Anesthetic Record number from the anestheticrecord table.
 		/// </summary>
-		public static int getRecordNum(int patnum)
+		public static int GetRecordNum(int patnum)
 		{
-
-			MySqlCommand command2 = new MySqlCommand();
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
 			con.Open();
-			command2.CommandText = "SELECT AnestheticRecordNum from anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
-			command2.Connection = con;
-			int anestheticRecordNum = Convert.ToInt32(command2.ExecuteScalar());
-			return anestheticRecordNum;
+			cmd.CommandText = "SELECT AnestheticRecordNum from anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			cmd.Connection = con;
+			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
 			con.Close();
+			return anestheticRecordNum;
+			
 		}
 
 
