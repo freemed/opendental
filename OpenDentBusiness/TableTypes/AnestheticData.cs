@@ -24,12 +24,12 @@ namespace OpenDentBusiness
 		public bool InhO2;
 		public bool InhN2O;
 		public int O2LMin;
-		public int N20LMin;
+		public int N2OLMin;
 		public bool RteNasCan;
 		public bool RteNasHood;
 		public bool RteETT;
 		public bool MedRouteIVCath;
-		public bool MedRouteIVButFly;
+		public bool MedRouteIVButtFly;
 		public bool MedRouteIM;
 		public bool MedRoutePO;
 		public bool MedRouteNasal;

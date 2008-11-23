@@ -66,7 +66,7 @@ namespace OpenDental
 		private RadioButton radRteNasHood;
 		private GroupBox groupBoxIVSite;
 		private GroupBox groupBoxMedRoute;
-		private RadioButton radMedRouteIVButFly;
+		private RadioButton radMedRouteIVButtFly;
 		private RadioButton radMedRouteIVCath;
         private PrintDialog printDialog1;
 		private OpenDental.UI.Button butClose;
@@ -230,7 +230,7 @@ namespace OpenDental
 			this.radMedRouteNasal = new System.Windows.Forms.RadioButton();
 			this.radMedRouteIM = new System.Windows.Forms.RadioButton();
 			this.radMedRoutePO = new System.Windows.Forms.RadioButton();
-			this.radMedRouteIVButFly = new System.Windows.Forms.RadioButton();
+			this.radMedRouteIVButtFly = new System.Windows.Forms.RadioButton();
 			this.radMedRouteIVCath = new System.Windows.Forms.RadioButton();
 			this.groupBoxDeliveryMethod = new System.Windows.Forms.GroupBox();
 			this.radRteETT = new System.Windows.Forms.RadioButton();
@@ -676,7 +676,7 @@ namespace OpenDental
 			this.groupBoxMedRoute.Controls.Add(this.radMedRouteNasal);
 			this.groupBoxMedRoute.Controls.Add(this.radMedRouteIM);
 			this.groupBoxMedRoute.Controls.Add(this.radMedRoutePO);
-			this.groupBoxMedRoute.Controls.Add(this.radMedRouteIVButFly);
+			this.groupBoxMedRoute.Controls.Add(this.radMedRouteIVButtFly);
 			this.groupBoxMedRoute.Controls.Add(this.radMedRouteIVCath);
 			this.groupBoxMedRoute.Location = new System.Drawing.Point(43, 203);
 			this.groupBoxMedRoute.Name = "groupBoxMedRoute";
@@ -729,16 +729,16 @@ namespace OpenDental
 			this.radMedRoutePO.Text = "PO";
 			this.radMedRoutePO.UseVisualStyleBackColor = true;
 			// 
-			// radMedRouteIVButFly
+			// radMedRouteIVButtFly
 			// 
-			this.radMedRouteIVButFly.AutoSize = true;
-			this.radMedRouteIVButFly.Location = new System.Drawing.Point(84, 17);
-			this.radMedRouteIVButFly.Name = "radMedRouteIVButFly";
-			this.radMedRouteIVButFly.Size = new System.Drawing.Size(76, 17);
-			this.radMedRouteIVButFly.TabIndex = 40;
-			this.radMedRouteIVButFly.TabStop = true;
-			this.radMedRouteIVButFly.Text = "IV Butterfly";
-			this.radMedRouteIVButFly.UseVisualStyleBackColor = true;
+			this.radMedRouteIVButtFly.AutoSize = true;
+			this.radMedRouteIVButtFly.Location = new System.Drawing.Point(84, 17);
+			this.radMedRouteIVButtFly.Name = "radMedRouteIVButtFly";
+			this.radMedRouteIVButtFly.Size = new System.Drawing.Size(76, 17);
+			this.radMedRouteIVButtFly.TabIndex = 40;
+			this.radMedRouteIVButtFly.TabStop = true;
+			this.radMedRouteIVButtFly.Text = "IV Butterfly";
+			this.radMedRouteIVButtFly.UseVisualStyleBackColor = true;
 			// 
 			// radMedRouteIVCath
 			// 
@@ -2230,54 +2230,58 @@ namespace OpenDental
 				Cur.AnestheticDataNum = PIn.PInt(table.Rows[i][0].ToString());
 				Cur.AnestheticRecordNum = PIn.PInt(table.Rows[i][1].ToString());
 				Cur.AnesthOpen = PIn.PString(table.Rows[i][2].ToString());
-				Cur.SurgOpen = PIn.PString(table.Rows[i][3].ToString());
-				Cur.SurgClose = PIn.PString(table.Rows[i][4].ToString());
-				Cur.AnesthClose = PIn.PString(table.Rows[i][5].ToString());
+				Cur.AnesthClose = PIn.PString(table.Rows[i][3].ToString());
+				Cur.SurgOpen = PIn.PString(table.Rows[i][4].ToString());
+				Cur.SurgClose = PIn.PString(table.Rows[i][5].ToString());
 				Cur.Anesthetist = PIn.PString(table.Rows[i][6].ToString());
 				Cur.Surgeon = PIn.PString(table.Rows[i][7].ToString());
 				Cur.Asst = PIn.PString(table.Rows[i][8].ToString());
-				Cur.VSMName = PIn.PString(table.Rows[i][9].ToString());
-				Cur.VSMSerNum = PIn.PString(table.Rows[i][10].ToString());
-				Cur.ASA = PIn.PString(table.Rows[i][11].ToString());
-				Cur.ASA_EModifier = PIn.PString(table.Rows[i][12].ToString());
-				Cur.InhO2 = PIn.PBool(table.Rows[i][13].ToString());
-				Cur.InhN2O = PIn.PBool(table.Rows[i][14].ToString());
-				Cur.RteNasCan = PIn.PBool(table.Rows[i][15].ToString());
-				Cur.RteNasHood = PIn.PBool(table.Rows[i][16].ToString());
-				Cur.RteETT = PIn.PBool(table.Rows[i][17].ToString());
-				Cur.MedRouteIVCath = PIn.PBool(table.Rows[i][18].ToString());
-				Cur.MedRouteIVButFly = PIn.PBool(table.Rows[i][19].ToString());
-				Cur.MedRouteIM = PIn.PBool(table.Rows[i][20].ToString());
-				Cur.MedRoutePO = PIn.PBool(table.Rows[i][21].ToString());
-				Cur.MedRouteNasal = PIn.PBool(table.Rows[i][22].ToString());
-				Cur.MedRouteRectal = PIn.PBool(table.Rows[i][23].ToString());
-				Cur.IVSite = PIn.PString(table.Rows[i][24].ToString());
-				Cur.IVGauge = PIn.PInt(table.Rows[i][25].ToString());
-				Cur.IVSite = PIn.PString(table.Rows[i][26].ToString());
-				Cur.IVSideR = PIn.PBool(table.Rows[i][27].ToString());
-				Cur.IVSideL = PIn.PBool(table.Rows[i][28].ToString());
-				Cur.IVAtt = PIn.PInt(table.Rows[i][29].ToString());
-				Cur.IVF = PIn.PString(table.Rows[i][30].ToString());
-				Cur.IVFVol = PIn.PInt(table.Rows[i][31].ToString());
-				Cur.MonBP = PIn.PBool(table.Rows[i][32].ToString());
-				Cur.MonSpO2 = PIn.PBool(table.Rows[i][33].ToString());
-				Cur.MonEtCO2 = PIn.PBool(table.Rows[i][34].ToString());
-				Cur.MonTemp = PIn.PBool(table.Rows[i][35].ToString());
-				Cur.MonPrecordial = PIn.PBool(table.Rows[i][36].ToString());
-				Cur.MonEKG = PIn.PBool(table.Rows[i][37].ToString());
-				Cur.Notes = PIn.PString(table.Rows[i][38].ToString());
-				Cur.PatWgt = PIn.PInt(table.Rows[i][39].ToString());
-				Cur.WgtUnitsLbs = PIn.PBool(table.Rows[i][40].ToString());
-				Cur.WgtUnitsKgs = PIn.PBool(table.Rows[i][41].ToString());
-				Cur.PatHgt = PIn.PInt(table.Rows[i][42].ToString());
-				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][43].ToString());
-				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][44].ToString());
-				Cur.EscortName = PIn.PString(table.Rows[i][45].ToString());
-				Cur.EscortCellNum = PIn.PString(table.Rows[i][46].ToString());
-				Cur.EscortRel = PIn.PString(table.Rows[i][47].ToString());
-				Cur.NPOTime = PIn.PString(table.Rows[i][48].ToString());
-				Cur.SigIsTopaz= PIn.PBool(table.Rows[i][49].ToString());
-				Cur.Signature = PIn.PString(table.Rows[i][50].ToString());
+				Cur.Circulator = PIn.PString(table.Rows[i][9].ToString());
+				Cur.VSMName = PIn.PString(table.Rows[i][10].ToString());
+				Cur.VSMSerNum = PIn.PString(table.Rows[i][11].ToString());
+				Cur.ASA = PIn.PString(table.Rows[i][12].ToString());
+				Cur.ASA_EModifier = PIn.PString(table.Rows[i][13].ToString());
+				Cur.InhO2 = PIn.PBool(table.Rows[i][14].ToString());
+				Cur.InhN2O = PIn.PBool(table.Rows[i][15].ToString());
+				Cur.O2LMin = PIn.PInt(table.Rows[i][16].ToString());
+				Cur.N2OLMin = PIn.PInt(table.Rows[i][17].ToString());
+				Cur.RteNasCan = PIn.PBool(table.Rows[i][18].ToString());
+				Cur.RteNasHood = PIn.PBool(table.Rows[i][19].ToString());
+				Cur.RteETT = PIn.PBool(table.Rows[i][20].ToString());
+				Cur.MedRouteIVCath = PIn.PBool(table.Rows[i][21].ToString());
+				Cur.MedRouteIVButtFly = PIn.PBool(table.Rows[i][22].ToString());
+				Cur.MedRouteIM = PIn.PBool(table.Rows[i][23].ToString());
+				Cur.MedRoutePO = PIn.PBool(table.Rows[i][24].ToString());
+				Cur.MedRouteNasal = PIn.PBool(table.Rows[i][25].ToString());
+				Cur.MedRouteRectal = PIn.PBool(table.Rows[i][26].ToString());
+				Cur.IVSite = PIn.PString(table.Rows[i][27].ToString());
+				Cur.IVGauge = PIn.PInt(table.Rows[i][28].ToString());
+				Cur.IVSite = PIn.PString(table.Rows[i][29].ToString());
+				Cur.IVSideR = PIn.PBool(table.Rows[i][30].ToString());
+				Cur.IVSideL = PIn.PBool(table.Rows[i][31].ToString());
+				Cur.IVAtt = PIn.PInt(table.Rows[i][32].ToString());
+				Cur.IVF = PIn.PString(table.Rows[i][33].ToString());
+				Cur.IVFVol = PIn.PInt(table.Rows[i][34].ToString());
+				Cur.MonBP = PIn.PBool(table.Rows[i][35].ToString());
+				Cur.MonSpO2 = PIn.PBool(table.Rows[i][36].ToString());
+				Cur.MonEtCO2 = PIn.PBool(table.Rows[i][37].ToString());
+				Cur.MonTemp = PIn.PBool(table.Rows[i][38].ToString());
+				Cur.MonPrecordial = PIn.PBool(table.Rows[i][39].ToString());
+				Cur.MonEKG = PIn.PBool(table.Rows[i][40].ToString());
+				Cur.Notes = PIn.PString(table.Rows[i][41].ToString());
+				Cur.PatWgt = PIn.PInt(table.Rows[i][42].ToString());
+				Cur.WgtUnitsLbs = PIn.PBool(table.Rows[i][43].ToString());
+				Cur.WgtUnitsKgs = PIn.PBool(table.Rows[i][44].ToString());
+				Cur.PatHgt = PIn.PInt(table.Rows[i][45].ToString());
+				Cur.EscortName = PIn.PString(table.Rows[i][46].ToString());
+				Cur.EscortCellNum = PIn.PString(table.Rows[i][47].ToString());
+				Cur.EscortRel = PIn.PString(table.Rows[i][48].ToString());
+				Cur.NPOTime = PIn.PString(table.Rows[i][49].ToString());
+				//Cur.SigIsTopaz= PIn.PBool(table.Rows[i][50].ToString());
+				//Cur.Signature = PIn.PString(table.Rows[i][51].ToString());
+				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][50].ToString());
+				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][51].ToString());
+				
 
 				//Populate controls from db
 
@@ -2334,10 +2338,10 @@ namespace OpenDental
 				{
 					radMedRouteIVCath.Checked = true;
 				}
-				//radMedRouteIVButFly
-				if (Cur.MedRouteIVButFly == true)
+				//radMedRouteIVButtFly
+				if (Cur.MedRouteIVButtFly == true)
 				{
-					radMedRouteIVButFly.Checked = true;
+					radMedRouteIVButtFly.Checked = true;
 				}
 				//radMedRouteIM
 				if (Cur.MedRouteIM == true)
@@ -3236,7 +3240,7 @@ namespace OpenDental
 			{*/
 			if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
 			{
-				int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButfly = 0, radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
+				int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0, radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
 
 				if (CheckBoxInhO2.Checked)
 						chkInhO2 = 1;
@@ -3250,8 +3254,8 @@ namespace OpenDental
 						radEtt = 1;
 					if (radMedRouteIVCath.Checked)
 						radIVCath = 1;
-					if (radMedRouteIVButFly.Checked)
-						radIVButfly = 1;
+					if (radMedRouteIVButtFly.Checked)
+						radIVButtfly = 1;
 					if (radMedRouteIM.Checked)
 						radIM = 1;
 					if (radMedRouteNasal.Checked)
@@ -3281,7 +3285,7 @@ namespace OpenDental
 					if (radWgtUnitsKgs.Checked)
 						wgtUnitsKgs = 1;
 
-					int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, radHood, radEtt, radIVCath, radIVButfly, radIM, radPO, radNasal, radRectal, Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), comboIVSite.SelectedItem.ToString(), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonEKG, MonEtCO2, MonPrecordial, MonSpO2, MonTemp, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), hgtUnitsIn, hgtUnitsCm, richTextNotes.Text, comboNPOTime.SelectedItem.ToString(), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, textVSMName.Text, textVSMSerNum.Text);
+					int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, radHood, radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), comboIVSite.SelectedItem.ToString(), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonEKG, MonEtCO2, MonPrecordial, MonSpO2, MonTemp, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), hgtUnitsIn, hgtUnitsCm, richTextNotes.Text, comboNPOTime.SelectedItem.ToString(), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, textVSMName.Text, textVSMSerNum.Text);
 
 					if (value != 0)
 					{
