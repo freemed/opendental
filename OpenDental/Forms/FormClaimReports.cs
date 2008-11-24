@@ -224,6 +224,10 @@ namespace OpenDental{
 				}
 			}
 			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.ClaimConnect){
+				if(AutomaticMode){
+					Cursor=Cursors.Default;
+					return;
+				}
 				try{
 					Process.Start(@"http://www.dentalxchange.com/newdxc");
 				}
