@@ -44,7 +44,7 @@ namespace OpenDental {
 					row.Cells.Add("X");
 				}
 				else{
-					row.Cells.Add("X");
+					row.Cells.Add("");
 				}
 				row.Cells.Add(table.Rows[i]["Explanation"].ToString());
 				gridMain.Rows.Add(row);
