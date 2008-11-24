@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		///<summary>Most recent date *first*. </summary>
 		public static void Refresh(int patNum){	
 			string command =
-				"SELECT * from anestheticrecord"
+				"SELECT * FROM anestheticrecord"
 				+ " WHERE PatNum = '"+patNum.ToString()+"'"
 				+ " ORDER BY anestheticrecord.AnestheticDate DESC";
 			DataTable table = General.GetTable(command);
@@ -76,13 +76,12 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(AnestheticRecord Cur) {
-			string command = "DELETE from anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
+			string command = "DELETE FROM anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
 			General.NonQ(command);
 		}
 
-		/// <summary>
-		/// Gets the Anesthetic Record number from the anestheticrecord table.
-		/// </summary>
+		/// <summary>/// Gets the Anesthetic Record number from the anestheticrecord table./// </summary>
+		/// 
 		public static int GetRecordNum(int patnum)
 		{
 			MySqlCommand cmd = new MySqlCommand();
@@ -91,7 +90,7 @@ namespace OpenDentBusiness{
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT AnestheticRecordNum from anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
 			cmd.Connection = con;
 			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
 			con.Close();

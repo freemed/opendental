@@ -238,10 +238,18 @@ namespace OpenDental{
     }
 
     private void tbRefSelect_CellDoubleClicked(object sender, CellEventArgs e){
-			if(IsSelectionMode){
+			/*if(IsSelectionMode){
 				SelectedReferral=(Referral)AList[tbRefSelect.SelectedRow];
 				DialogResult=DialogResult.OK;
+			}*/
+
+			if (tbRefSelect.SelectedRow == -1)
+			{
+				return;
 			}
+			FormReferralEdit FormRE = new FormReferralEdit((Referral)AList[tbRefSelect.SelectedRow]);
+			FormRE.ShowDialog();
+			FillTable();
 			//otherwise, don't do anything
     }
 
