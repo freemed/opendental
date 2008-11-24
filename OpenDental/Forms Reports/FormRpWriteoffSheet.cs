@@ -231,11 +231,11 @@ namespace OpenDental{
 			Queries.CurReport=new ReportOld();
 			Queries.CurReport.Query="SET @FromDate="+POut.PDate(date1.SelectionStart)+", @ToDate="+POut.PDate(date2.SelectionStart)+";";
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query+=@"SELECT claimproc.DateCP,
+				Queries.CurReport.Query+=@"SELECT DATE(claimproc.DateCP) date,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
 					carrier.CarrierName,
 					provider.Abbr,
-					SUM(claimproc.WriteOff),
+					SUM(claimproc.WriteOff) $amount,
 					claimproc.ClaimNum
 					FROM claimproc,insplan,patient,carrier,provider
 					WHERE provider.ProvNum = claimproc.ProvNum
@@ -246,15 +246,16 @@ namespace OpenDental{
 					+@" AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
 					AND claimproc.DateCP >= @FromDate
 					AND claimproc.DateCP <= @ToDate
+					AND claimproc.WriteOff > 0
 					GROUP BY claimproc.ClaimNum 
 					ORDER BY claimproc.DateCP";
 			}
 			else{//using procedure date
-				Queries.CurReport.Query+=@"SELECT claimproc.ProcDate,
+				Queries.CurReport.Query+=@"SELECT Date(claimproc.ProcDate) date,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
 					carrier.CarrierName,
 					provider.Abbr,
-					SUM(claimproc.WriteOff),
+					SUM(claimproc.WriteOff) $amount,
 					claimproc.ClaimNum
 					FROM claimproc,insplan,patient,carrier,provider
 					WHERE provider.ProvNum = claimproc.ProvNum
@@ -265,6 +266,7 @@ namespace OpenDental{
 					+@" AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) /*received or supplemental or notreceived*/
 					AND claimproc.ProcDate >= @FromDate
 					AND claimproc.ProcDate <= @ToDate
+					AND claimproc.WriteOff > 0
 					GROUP BY claimproc.ClaimNum 
 					ORDER BY claimproc.ProcDate";
 			}
@@ -291,6 +293,7 @@ namespace OpenDental{
 			Queries.CurReport.ColCaption[3]="Provider";
 			Queries.CurReport.ColCaption[4]="Amount";
 			Queries.CurReport.ColCaption[5]="";
+			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
 			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
 			Queries.CurReport.Summary=new string[0];
 			FormQuery2.ShowDialog();
