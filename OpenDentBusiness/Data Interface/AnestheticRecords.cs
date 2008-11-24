@@ -13,8 +13,6 @@ namespace OpenDentBusiness{
 		///<summary>List of all anesthetic records for the current patient.</summary>
 		public static AnestheticRecord[] List;
 
-		///<summary>This data adapter is used for all queries to the database.</summary>
-		private MySqlDataAdapter da;
 		///<summary>Stores the string of the command that will be sent to the database.</summary>
 		public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
@@ -48,7 +46,7 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}
 
-		///<summary></summary>
+		///<summary>Creates a new AnestheticRecord in the db</summary>
 		public static void Insert(AnestheticRecord Cur){
 			if (PrefC.RandomKeys){
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
@@ -74,8 +72,9 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static void InsertAnestheticData(AnestheticRecord Cur)
-		{
+		///<summary>Creates a corresponding AnestheticData record in the db</summary>
+		public static void InsertAnestheticData(AnestheticRecord Cur){
+
 			if (PrefC.RandomKeys)
 			{
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
@@ -102,14 +101,16 @@ namespace OpenDentBusiness{
 				Cur.AnestheticRecordNum = General.NonQ(command, true);
 			}
 		}
-		///<summary></summary>
+		///<summary>Deletes an Anesthetic Record and the corresponding Anesthetic Data</summary>
 		public static void Delete(AnestheticRecord Cur) {
 			string command = "DELETE FROM anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
 			General.NonQ(command);
+			string command2 = "DELETE FROM anestheticdata WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
+			General.NonQ(command2);
 		}
 
 		/// <summary>/// Gets the Anesthetic Record number from the anestheticrecord table./// </summary>
-		/// 
+		
 		public static int GetRecordNum(int patnum)
 		{
 			MySqlCommand cmd = new MySqlCommand();
@@ -126,9 +127,12 @@ namespace OpenDentBusiness{
 			
 		}
 
+		/// <summary>/// Returns the date shown in the listAnesthetic.SelectedItem so it can be used to pull the correct AnestheticRecordCur from the db/// </summary>
+		
 		public static int GetRecordNumByDate(string AnestheticDateCur)
 		{
 			DateTime anestheticDate = Convert.ToDateTime(AnestheticDateCur);
+			//need to format so it matches DateTime format as that's what's in the db; yyyy/MM/dd hh:mm:ss tt is what's displayed in listAnesthetic.SelectedItem
 			string newdate = anestheticDate.ToString("yyyy-MM-dd HH:mm:ss");
 			
 			MySqlCommand cmd = new MySqlCommand();

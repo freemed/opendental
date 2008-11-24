@@ -129,7 +129,6 @@ namespace OpenDentBusiness
 	/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
 	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int inhO2, int inhN2O, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm)
 	{
-		int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
 		string command = "UPDATE anestheticdata SET "
 				+	" AnesthOpen		='"	+ POut.PString(anestheticOpen) + "' "
 				+	",AnesthClose		='"	+ POut.PString(anestheticClose) + "' "

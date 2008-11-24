@@ -1090,7 +1090,7 @@ namespace OpenDental
             "11 PM"});
 			this.comboNPOTime.Location = new System.Drawing.Point(459, 36);
 			this.comboNPOTime.Name = "comboNPOTime";
-			this.comboNPOTime.Size = new System.Drawing.Size(54, 21);
+			this.comboNPOTime.Size = new System.Drawing.Size(66, 21);
 			this.comboNPOTime.TabIndex = 82;
 			// 
 			// textPatHgt
@@ -2091,7 +2091,7 @@ namespace OpenDental
 		{	
 			
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
+			listAnesthetics.SelectedIndex = 0;
 			
 			//disables these buttons until AnesthOpen button is clicked. 
 			butSurgOpen.Enabled = false;
@@ -2352,7 +2352,7 @@ namespace OpenDental
 				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][50].ToString());
 				
 				//Disable buttons to disallow editing
-				butAnesthOpen.Enabled = false;
+				/*butAnesthOpen.Enabled = false;
 				butSurgOpen.Enabled = false;
 				butSurgClose.Enabled = false;
 				butAnesthClose.Enabled = false;
@@ -2363,7 +2363,7 @@ namespace OpenDental
 				butWasteQty.Enabled = false;
 				butAnesthScore.Enabled = false;
 				butOK.Enabled = false;
-				butClose.Enabled = false;
+				butClose.Enabled = false;*/
 
 				//Populate controls from db
 
@@ -2421,9 +2421,9 @@ namespace OpenDental
 
 					}
 				//comboO2LMin
-					comboO2LMin.SelectedIndex = Convert.ToInt32(Cur.O2LMin)-1;
+					comboO2LMin.SelectedItem = Cur.O2LMin.ToString();
 				//comboN2OLMin
-					comboN2OLMin.SelectedIndex = Convert.ToInt32(Cur.N2OLMin)-1;
+					comboN2OLMin.SelectedItem = Cur.N2OLMin.ToString();
 				//radRteNasCan
 				if (Cur.RteNasCan == true)
 					{
@@ -2750,7 +2750,9 @@ namespace OpenDental
 		{
 			
 				FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				//for testing
 				int recnum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
+				int recnum2 = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
 
 		}
 
@@ -3421,18 +3423,19 @@ namespace OpenDental
 					hgtUnitsIn = 1;
 				if (radHgtUnitsCm.Checked)
 					hgtUnitsCm = 1;
-				if ("E" == comboASA_EModifier.SelectedItem.ToString())
+				if (comboASA_EModifier.SelectedItem == "E")
 				{
 					comboASA_EModifier.SelectedItem = "E";
 				}
-				else
+				else if (comboASA_EModifier.SelectedItem == null)
 				{
 					comboASA_EModifier.SelectedItem = "";
 				}
 
 				if (IsUpdate == false)
 				{
-					int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anestheticRecordCur), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
+					int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
+					int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
 				}
 				else
 				{
