@@ -74,6 +74,34 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static void InsertAnestheticData(AnestheticRecord Cur)
+		{
+			if (PrefC.RandomKeys)
+			{
+				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
+			}
+			string command = "INSERT INTO anestheticdata (";
+			if (PrefC.RandomKeys)
+			{
+				command += "AnestheticRecordNum,";
+			}
+			command += "AnestheticRecordNum"
+				+ ") VALUES(";
+			if (PrefC.RandomKeys)
+			{
+				command += "'" + POut.PInt(Cur.AnestheticRecordNum) + "', ";
+			}
+			command +=
+				"" + POut.PInt(Cur.AnestheticRecordNum) + ")";
+			if (PrefC.RandomKeys)
+			{
+				General.NonQ(command);
+			}
+			else
+			{
+				Cur.AnestheticRecordNum = General.NonQ(command, true);
+			}
+		}
 		///<summary></summary>
 		public static void Delete(AnestheticRecord Cur) {
 			string command = "DELETE FROM anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
@@ -98,6 +126,24 @@ namespace OpenDentBusiness{
 			
 		}
 
+		public static int GetRecordNumByDate(string AnestheticDateCur)
+		{
+			DateTime anestheticDate = Convert.ToDateTime(AnestheticDateCur);
+			string newdate = anestheticDate.ToString("yyyy-MM-dd HH:mm:ss");
+			
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE AnestheticDate = '" + (newdate) + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			cmd.Connection = con;
+			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
+			con.Close();
+			return anestheticRecordNum;
+
+		}
 
 	}
 

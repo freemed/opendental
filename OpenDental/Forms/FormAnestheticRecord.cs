@@ -19,6 +19,7 @@ namespace OpenDental
 	{
 		public static Userod CurUser;
         private bool IsStartingUp;
+		private bool IsUpdate;
 		private AnestheticRecord AnestheticRecordCur;
 		private AnestheticData AnestheticDataCur;
         private Patient PatCur;
@@ -600,6 +601,7 @@ namespace OpenDental
 			this.comboIVGauge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboIVGauge.FormattingEnabled = true;
 			this.comboIVGauge.Items.AddRange(new object[] {
+            "",
             "18",
             "20",
             "21",
@@ -614,6 +616,7 @@ namespace OpenDental
 			this.comboIVSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboIVSite.FormattingEnabled = true;
 			this.comboIVSite.Items.AddRange(new object[] {
+            "",
             "Antecubital fossa",
             "Forearm (dorsal)",
             "Forearm (ventral)",
@@ -624,6 +627,7 @@ namespace OpenDental
 			this.comboIVSite.Name = "comboIVSite";
 			this.comboIVSite.Size = new System.Drawing.Size(119, 21);
 			this.comboIVSite.TabIndex = 47;
+			this.comboIVSite.SelectedIndexChanged += new System.EventHandler(this.comboIVSite_SelectedIndexChanged);
 			// 
 			// radIVSiteR
 			// 
@@ -652,6 +656,7 @@ namespace OpenDental
 			this.comboIVAtt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboIVAtt.FormattingEnabled = true;
 			this.comboIVAtt.Items.AddRange(new object[] {
+            "",
             "1",
             "2",
             "3",
@@ -820,6 +825,7 @@ namespace OpenDental
 			this.comboO2LMin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboO2LMin.FormattingEnabled = true;
 			this.comboO2LMin.Items.AddRange(new object[] {
+            "",
             "1",
             "2",
             "3",
@@ -864,6 +870,7 @@ namespace OpenDental
 			this.comboIVF.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboIVF.FormattingEnabled = true;
 			this.comboIVF.Items.AddRange(new object[] {
+            "",
             "D5(1/2)NS",
             "D5NS",
             "D5LR",
@@ -889,6 +896,7 @@ namespace OpenDental
 			this.comboN2OLMin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboN2OLMin.FormattingEnabled = true;
 			this.comboN2OLMin.Items.AddRange(new object[] {
+            "",
             "1",
             "2",
             "3",
@@ -929,6 +937,7 @@ namespace OpenDental
 			this.comboASA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboASA.FormattingEnabled = true;
 			this.comboASA.Items.AddRange(new object[] {
+            "",
             "I",
             "II",
             "III",
@@ -1051,8 +1060,10 @@ namespace OpenDental
 			// 
 			// comboNPOTime
 			// 
+			this.comboNPOTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboNPOTime.FormattingEnabled = true;
 			this.comboNPOTime.Items.AddRange(new object[] {
+            "",
             "12 MN",
             "1 AM",
             "2 AM",
@@ -1518,6 +1529,7 @@ namespace OpenDental
 			this.butOK.TabIndex = 143;
 			this.butOK.Text = "&OK";
 			this.butOK.UseVisualStyleBackColor = true;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click_1);
 			// 
 			// butClose
 			// 
@@ -2100,95 +2112,101 @@ namespace OpenDental
 			//.........  Client Code......................//
 			//Fills provider and assistant comboboxes
 
-			//Anesthetist comboBox
-			
-			comboAnesthetist.Items.Add(Lan.g(this, ""));
-			for (int i = 0; i < ProviderC.List.Length; i++)
+			//Fills provider comboboxes only if this is a new form
+			if (IsUpdate == false)
+				
 			{
-				comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-
-				if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-					comboAnesthetist.SelectedIndex = i;
-			}
-
-			if (comboAnesthetist.SelectedIndex == -1)
-			{
-				int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-				if (defaultindex == -1)
-				{//default provider hidden
-					comboAnesthetist.SelectedIndex = 0;
-				}
-				else
+				//Anesthetist comboBox
+				comboAnesthetist.Items.Add(Lan.g(this, ""));
+				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					comboAnesthetist.SelectedIndex = defaultindex;
+					comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+
+					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
+						comboAnesthetist.SelectedIndex = i;
 				}
-			}
-			 //Surgeon comboBox
-			comboSurgeon.Items.Add(Lan.g(this, ""));
-			for (int i = 0; i < ProviderC.List.Length; i++)
-			{
-			    comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 
-			   if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-			        comboSurgeon.SelectedIndex = i;
-			}
-
-			if (comboSurgeon.SelectedIndex == -1)
-			{
-			    int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-			    if (defaultindex == -1)
-			    {//default provider hidden
-			        comboSurgeon.SelectedIndex = 0;
-			    }
-			    else
-			    {
-			        comboSurgeon.SelectedIndex = defaultindex;
-			    }
-			}
-			//Surgical assistant comboBox
-			comboAsst.Items.Add(Lan.g(this, ""));
-			for (int i = 0; i < ProviderC.List.Length; i++)
-			{
-			    comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-
-			   if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-			        comboAsst.SelectedIndex = i;
-			}
-
-			if (comboAsst.SelectedIndex == -1)
-			{
-			    int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-			    if (defaultindex == -1)
-			    {//default provider hidden
-			        comboAsst.SelectedIndex = 0;
-			    }
-			    else
-			    {
-			        comboAsst.SelectedIndex = defaultindex;
-			    }
-			}
-			//Circulator comboBox
-			comboCirc.Items.Add(Lan.g(this, ""));
-			for (int i = 0; i < ProviderC.List.Length; i++)
-			{
-				comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-
-				if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-					comboSurgeon.SelectedIndex = i;
-			}
-
-			if (comboCirc.SelectedIndex == -1)
-			{
-				int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-				if (defaultindex == -1)
-				{//default provider hidden
-					comboCirc.SelectedIndex = 0;
-				}
-				else
+				if (comboAnesthetist.SelectedIndex == -1)
 				{
-					comboCirc.SelectedIndex = defaultindex;
+					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
+					if (defaultindex == -1)
+					{//default provider hidden
+						comboAnesthetist.SelectedIndex = 0;
+					}
+					else
+					{
+						comboAnesthetist.SelectedIndex = defaultindex;
+					}
 				}
-			//FillControls(anestheticRecordCur);
+				//Surgeon comboBox
+				comboSurgeon.Items.Add(Lan.g(this, ""));
+				for (int i = 0; i < ProviderC.List.Length; i++)
+				{
+					comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+
+					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
+						comboSurgeon.SelectedIndex = i;
+				}
+
+				if (comboSurgeon.SelectedIndex == -1)
+				{
+					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
+					if (defaultindex == -1)
+					{//default provider hidden
+						comboSurgeon.SelectedIndex = 0;
+					}
+					else
+					{
+						comboSurgeon.SelectedIndex = defaultindex;
+					}
+				}
+				//Surgical assistant comboBox
+				comboAsst.Items.Add(Lan.g(this, ""));
+				for (int i = 0; i < ProviderC.List.Length; i++)
+				{
+					comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+
+					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
+						comboAsst.SelectedIndex = i;
+				}
+
+				if (comboAsst.SelectedIndex == -1)
+				{
+					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
+					if (defaultindex == -1)
+					{//default provider hidden
+						comboAsst.SelectedIndex = 0;
+					}
+					else
+					{
+						comboAsst.SelectedIndex = defaultindex;
+					}
+				}
+				//Circulator comboBox
+				comboCirc.Items.Add(Lan.g(this, ""));
+				for (int i = 0; i < ProviderC.List.Length; i++)
+				{
+					comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+
+					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
+						comboCirc.SelectedIndex = i;
+				}
+
+				if (comboCirc.SelectedIndex == -1)
+				{
+					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
+					if (defaultindex == -1)
+					{//default provider hidden
+						comboCirc.SelectedIndex = 0;
+					}
+					else
+					{
+						comboCirc.SelectedIndex = defaultindex;
+					}
+					
+				}
+				
+				FillControls(anestheticRecordCur);
 			}
 
 
@@ -2344,6 +2362,8 @@ namespace OpenDental
 				butDelAnesthMeds.Enabled = false;
 				butWasteQty.Enabled = false;
 				butAnesthScore.Enabled = false;
+				butOK.Enabled = false;
+				butClose.Enabled = false;
 
 				//Populate controls from db
 
@@ -2625,12 +2645,13 @@ namespace OpenDental
 
 		private void butAddAnesthetic_Click(object sender, EventArgs e)
 		{
-
+			IsUpdate = false;
 			AnestheticRecordCur = new AnestheticRecord();
 			AnestheticRecordCur.PatNum = PatCur.PatNum;
 			AnestheticRecordCur.AnestheticDate = DateTime.Now;
 			AnestheticRecordCur.ProvNum = PatCur.PriProv;
 			AnestheticRecords.Insert(AnestheticRecordCur);
+			AnestheticRecords.InsertAnestheticData(AnestheticRecordCur);
 			RefreshListAnesthetics();
 			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//Add -1 after List.Length to select in ascending order
 			//listAnesthetics.SelectedIndex = 0;
@@ -2727,7 +2748,9 @@ namespace OpenDental
 
 		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			FillControls(anestheticRecordCur);
+			
+				FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				int recnum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
 
 		}
 
@@ -3333,6 +3356,13 @@ namespace OpenDental
 		}
 		private void butClose_Click(object sender, EventArgs e)
         {
+			SaveData();
+			Close();
+		}
+
+		//Saves Data to db if either "OK" or "Save and Close" buttons are clicked
+		private void SaveData()
+		{
 			/*Regex regex = new Regex("\\d?\\d'(\\d|1[01])?$");
 			if (!regex.IsMatch(textPatHgt.Text) && textPatHgt.Text != "")
 			{
@@ -3346,80 +3376,93 @@ namespace OpenDental
 				int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0, radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
 
 				if (checkInhO2.Checked)
-						chkInhO2 = 1;
-					if (checkInhN2O.Checked)
-						chkInhN2O = 1;
-					if (radRteNasCan.Checked)
-						radCan = 1;
-					if (radRteNasHood.Checked)
-						radHood = 1;
-					if (radRteETT.Checked)
-						radEtt = 1;
-					if (radMedRouteIVCath.Checked)
-						radIVCath = 1;
-					if (radMedRouteIVButtFly.Checked)
-						radIVButtfly = 1;
-					if (radMedRouteIM.Checked)
-						radIM = 1;
-					if (radMedRouteNasal.Checked)
-						radNasal = 1;
-					if (radMedRoutePO.Checked)
-						radPO = 1;
-					if (radMedRouteRectal.Checked)
-						radRectal = 1;
-					if (radIVSideR.Checked)
-						IVSideR = 1;
-					if (radIVSideL.Checked)
-						IVSideL = 1;
-					if (checkMonBP.Checked)
-						MonBP = 1;
-					if (checkMonEKG.Checked)
-						MonEKG = 1;
-					if (checkMonEtCO2.Checked)
-						MonEtCO2 = 1;
-					if (checkMonPrecordial.Checked)
-						MonPrecordial = 1;
-					if (checkMonSpO2.Checked)
-						MonSpO2 = 1;
-					if (checkMonTemp.Checked)
-						MonTemp = 1;
-					if (radWgtUnitsLbs.Checked)
-						wgtUnitsLbs = 1;
-					if (radWgtUnitsKgs.Checked)
-						wgtUnitsKgs = 1;
-					if (radHgtUnitsIn.Checked)
-						hgtUnitsIn = 1;
-					if (radHgtUnitsCm.Checked)
-						hgtUnitsCm = 1;
-					if (comboASA_EModifier.SelectedItem == "E")
-						{
-							comboASA_EModifier.SelectedItem = "E";
-						}
-					else 
-						{
-							comboASA_EModifier.SelectedItem = "";
-						}
-
-					int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2,MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
-
-					if (value != 0)
-					{
-						Close();
-					}
-					/*else
-					{
-						MessageBox.Show("Enter Proper Value");
-					}
+					chkInhO2 = 1;
+				if (checkInhN2O.Checked)
+					chkInhN2O = 1;
+				if (radRteNasCan.Checked)
+					radCan = 1;
+				if (radRteNasHood.Checked)
+					radHood = 1;
+				if (radRteETT.Checked)
+					radEtt = 1;
+				if (radMedRouteIVCath.Checked)
+					radIVCath = 1;
+				if (radMedRouteIVButtFly.Checked)
+					radIVButtfly = 1;
+				if (radMedRouteIM.Checked)
+					radIM = 1;
+				if (radMedRouteNasal.Checked)
+					radNasal = 1;
+				if (radMedRoutePO.Checked)
+					radPO = 1;
+				if (radMedRouteRectal.Checked)
+					radRectal = 1;
+				if (radIVSideR.Checked)
+					IVSideR = 1;
+				if (radIVSideL.Checked)
+					IVSideL = 1;
+				if (checkMonBP.Checked)
+					MonBP = 1;
+				if (checkMonEKG.Checked)
+					MonEKG = 1;
+				if (checkMonEtCO2.Checked)
+					MonEtCO2 = 1;
+				if (checkMonPrecordial.Checked)
+					MonPrecordial = 1;
+				if (checkMonSpO2.Checked)
+					MonSpO2 = 1;
+				if (checkMonTemp.Checked)
+					MonTemp = 1;
+				if (radWgtUnitsLbs.Checked)
+					wgtUnitsLbs = 1;
+				if (radWgtUnitsKgs.Checked)
+					wgtUnitsKgs = 1;
+				if (radHgtUnitsIn.Checked)
+					hgtUnitsIn = 1;
+				if (radHgtUnitsCm.Checked)
+					hgtUnitsCm = 1;
+				if ("E" == comboASA_EModifier.SelectedItem.ToString())
+				{
+					comboASA_EModifier.SelectedItem = "E";
 				}
 				else
 				{
-					MessageBox.Show("Please Enter The Value");
-				}*/
+					comboASA_EModifier.SelectedItem = "";
+				}
+
+				if (IsUpdate == false)
+				{
+					int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anestheticRecordCur), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
+				}
+				else
+				{
+					int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
+					if (value != 0)
+					{
+						FillControls(anestheticRecordCur);
+						//DialogResult = DialogResult.OK;
+						//Close();
+					}
+				}
+
+
+				/*else
+				{
+					MessageBox.Show("Enter Proper Value");
+				}
+			}
+			else
+			{
+				MessageBox.Show("Please Enter The Value");
+			}*/
 				Userod curUser = Security.CurUser;
 
 				if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 				{
-					Close();
+
+					FillControls(anestheticRecordCur);
+					//DialogResult = DialogResult.OK;
+					//Close();
 
 				}
 				else
@@ -3431,7 +3474,7 @@ namespace OpenDental
 				{
 					sigBoxTopaz.Dispose();
 				}
-			 }
+			}
 		}
 
 		private void labelInvalidSig_Click(object sender, EventArgs e)
@@ -3472,6 +3515,16 @@ namespace OpenDental
 		}
 
 		private void textIVFVol_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void butOK_Click_1(object sender, EventArgs e)
+		{
+			SaveData();
+		}
+
+		private void comboIVSite_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}			

@@ -19,6 +19,7 @@ namespace OpenDentBusiness
 		///<summary>This data adapter is used for all queries to the database.</summary>
 		static MySqlConnection con;
 		public MySqlCommand cmd;
+		
 
 		public static DataTable GetAMDataTable() {
 
@@ -67,9 +68,10 @@ namespace OpenDentBusiness
       }
       /// <summary>Inserts the selected Anesthetic medication and dose values into the anesthmedsgiven table in the database</summary>
 	public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int inhO2, int inhN2O, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
-          int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
-		  string command = "INSERT INTO anestheticdata (AnestheticRecordNum,AnesthOpen,AnesthClose,SurgOpen,SurgClose,Anesthetist,Surgeon,Asst,Circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,InhO2,InhN2O,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm)" +
-			  "VALUES (" + POut.PInt(recordnum) + ",'" 
+			int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
+		
+			string command = "INSERT INTO anestheticdata (AnestheticRecordNum,AnesthOpen,AnesthClose,SurgOpen,SurgClose,Anesthetist,Surgeon,Asst,Circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,InhO2,InhN2O,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm)" +
+				"VALUES (" + POut.PInt(recordnum) + ",'" 
 				+ POut.PString(anestheticOpen) + "','"
 				+ POut.PString(anestheticClose) + "','" 
 				+ POut.PString(surgOpen) + "','" 
@@ -121,8 +123,67 @@ namespace OpenDentBusiness
 				+ POut.PInt(HgtUnitsCm) + ")" ;
 				int val =  General.NonQ(command);
 				return val;
+
 		}
 
+	/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
+	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int inhO2, int inhN2O, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm)
+	{
+		int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
+		string command = "UPDATE anestheticdata SET "
+				+	" AnesthOpen		='"	+ POut.PString(anestheticOpen) + "' "
+				+	",AnesthClose		='"	+ POut.PString(anestheticClose) + "' "
+				+	",SurgOpen			='"	+ POut.PString(surgOpen) + "' "
+				+	",SurgClose			='"	+ POut.PString(surgClose) + "'"
+				+	",Anesthetist		='"	+ POut.PString(anesthetist) + "' "
+				+	",Surgeon			='"	+ POut.PString(surgeon) + "' "
+				+	",Asst				='"	+ POut.PString(asst) + "' "
+				+	",Circulator		='"	+ POut.PString(circulator) + "' "
+				+	",VSMName			='"	+ POut.PString(VSMName) + "' "
+				+	",VSMSerNum			='"	+ POut.PString(VSMSerNum) + "' "
+				+	",ASA				='"	+ POut.PString(ASA) + "' "
+				+	",ASA_EModifier		='"	+ POut.PString(ASA_EModifier) + "' "
+				+	",InhO2				="	+ POut.PInt(inhO2) + " "
+				+	",InhN2O			="	+ POut.PInt(inhN2O) + " "
+				+	",O2LMin			="	+ POut.PInt(O2LMin) + " "
+				+	",N2OLMin			="	+ POut.PInt(N2OLMin) + " "
+				+	",RteNasCan			="	+ POut.PInt(RteNasCan) + " "
+				+	",RteNasHood		="	+ POut.PInt(RteNasHood) + " "
+				+	",RteETT			="	+ POut.PInt(RteETT) + " "
+				+	",MedRouteIVCath	="	+ POut.PInt(MedRouteIVCath) + " "
+				+	",MedRouteIVButtFly	="	+ POut.PInt(MedRouteIVButtFly) + " "
+				+	",MedRouteIM		="	+ POut.PInt(MedRouteIM) + " "
+				+	",MedRoutePO		="	+ POut.PInt(MedRoutePO) + " "
+				+	",MedRouteNasal		="	+ POut.PInt(MedRouteNasal) + " "
+				+	",MedRouteRectal	='"	+ POut.PInt(MedRouteRectal) + " '"
+				+	",IVSite			='"	+ POut.PString(IVSite) + "' "
+				+	",IVGauge			="	+ POut.PInt(IVGauge) + " "
+				+	",IVSideR			="	+ POut.PInt(IVSideR) + " "
+				+	",IVSideL			="	+ POut.PInt(IVSideL) + " "
+				+	",IVAtt				="	+ POut.PInt(IVAtt) + " "
+				+	",IVF				='"	+ POut.PString(IVF) + "' "
+				+	",IVFVol			="	+ POut.PInt(IVFVol) + " "
+				+	",MonBP				="	+ POut.PInt(MonBP) + " "
+				+	",MonSpO2			="	+ POut.PInt(MonSpO2) + " "
+				+	",MonEtCO2			="	+ POut.PInt(MonEtCO2) + " "
+				+	",MonTemp			="	+ POut.PInt(MonTemp) + " "
+				+	",MonPrecordial		="	+ POut.PInt(MonPrecordial) + " "
+				+	",MonEKG			="	+ POut.PInt(MonEKG) + " "
+				+	",Notes				='"	+ POut.PString(Notes) + "' "
+				+	",PatWgt			="	+ POut.PInt(PatWgt) + " "
+				+	",WgtUnitsLbs		="	+ POut.PInt(WgtUnitsLbs) + " "
+				+	",WgtUnitsKgs		="	+ POut.PInt(WgtUnitsKgs) + " "
+				+	",PatHgt			="	+ POut.PInt(PatHgt) + " "
+				+	",EscortName		='"	+ POut.PString(EscortName) + "' "
+				+	",EscortCellNum		='"	+ POut.PString(EscortCellNum) + "' "
+				+	",EscortRel			='"	+ POut.PString(EscortRel) + "' "
+				+	",NPOTime			='"	+ POut.PString(NPOTime) + "' "
+				+	",HgtUnitsIn		="	+ POut.PInt(HgtUnitsIn) + " "
+				+	",HgtUnitsCm		="	+ POut.PInt(HgtUnitsCm)+ " "
+				+	"WHERE AnestheticRecordNum =" + anestheticRecordNum + "";	
+		int val = General.NonQ(command);
+		return val;
+	}
 		/// <summary>Inserts the data from anesthetic intake form into the anesthmedsintake table in the database</summary>
 		public static void InsertMed_Intake(string AMedName,int qty,string supplier,string invoice){
 
