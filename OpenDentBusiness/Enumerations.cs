@@ -405,7 +405,7 @@ namespace OpenDentBusiness{
 		OutpatHospital,
 		///<summary>4. CPT code 31</summary>
 		SkilledNursFac,
-		///<summary>5. CPT code 33</summary>
+		///<summary>5. Not defined in the CPT.  In X12, this is code 35.</summary>
 		AdultLivCareFac,
 		///<summary>6. CPT code ?</summary>
 		OtherLocation,

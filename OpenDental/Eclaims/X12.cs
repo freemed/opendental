@@ -1472,7 +1472,7 @@ namespace OpenDental.Eclaims
 		private static string GetPlaceService(PlaceOfService place){
 			switch(place){
 				case PlaceOfService.AdultLivCareFac:
-					return "33";
+					return "35";
 				case PlaceOfService.FederalHealthCenter:
 					return "50";
 				case PlaceOfService.InpatHospital:
