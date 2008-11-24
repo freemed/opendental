@@ -261,11 +261,19 @@ namespace OpenDental{
 				return;
 			}
 			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
+			string archiveDir=ODFileUtils.CombinePaths(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath,"Archive");
+			if(!Directory.Exists(archiveDir)){
+				Directory.CreateDirectory(archiveDir);
+			}
 			for(int i=0;i<files.Length;i++) {
 				Etranss.ProcessIncomingReport(
 					File.GetCreationTime(files[i]),
 					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
 					File.ReadAllText(files[i]));
+				try{
+					File.Copy(files[i],ODFileUtils.CombinePaths(archiveDir,Path.GetFileName(files[i])));
+				}
+				catch{}
 				File.Delete(files[i]);
 			}
 		}
