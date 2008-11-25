@@ -701,7 +701,8 @@ namespace OpenDentBusiness {
 				}
 				command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
 				rawPay=dcon.GetTable(command);
-			}else{//oracle
+			}
+			else{//oracle
 				//The GROUP_CONCAT() functionality does not exist in Oracle. So, here we must mimic
 				//the functionality that is missing in Oracle using information on the MySQL website
 				//which details how the GROUP BY works internally.
@@ -1407,10 +1408,17 @@ namespace OpenDentBusiness {
 			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
 			List<DataRow> rows=new List<DataRow>();
 			double princ;
+			double bal;
 			DataTable rawAmort;
 			int payPlanNum;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
 				princ=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
+				bal=princ;
+				for(int p=0;p<rawPay.Rows.Count;p++){
+					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
+						bal-=PIn.PDouble(rawPay.Rows[p]["splitAmt_"].ToString());
+					}
+				}
 				//summary row----------------------------------------------------------------------
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -1425,7 +1433,9 @@ namespace OpenDentBusiness {
 				row["credits"]="";
 				row["DateTime"]=DateTime.MinValue;
 				row["date"]="";
-				row["description"]=Lan.g("AccountModule","Payment Plan.  Total loan amount: ")+princ.ToString("c");
+				row["description"]=Lan.g("AccountModule","Payment Plan.")+"\r\n"
+					+Lan.g("AccountModule","Total loan amount: ")+princ.ToString("c")+"\r\n"
+					+Lan.g("AccountModule","Balance: ")+bal.ToString("c");
 				if(rawPayPlan.Rows[i]["PlanNum"].ToString()!="0"){
 					//row["description"]+="\r\n"+Lan.g("AccountModule","This 'payment plan' is only used ");
 					continue;//don't show insurance payment plans on statements.
