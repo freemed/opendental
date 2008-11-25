@@ -6153,6 +6153,9 @@ namespace OpenDental{
 					MsgBox.Show(this,"Not allowed for that status.");
 					return;
 				}
+				if(!MsgBox.Show(this,true,"Set appointment complete?")){
+					return;
+				}
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
 				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,PatCur.SiteNum);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
