@@ -238,6 +238,9 @@ namespace OpenDental{
 					case "RxDate":
 						field.FieldValue=rx.RxDate.ToShortDateString();
 						break;
+					case "RxDateMonthSpelled":
+						field.FieldValue=rx.RxDate.ToString("MMM dd,yyyy");
+						break;
 					case "prov.dEANum":
 						if(rx.IsControlled){
 							field.FieldValue=prov.DEANum;

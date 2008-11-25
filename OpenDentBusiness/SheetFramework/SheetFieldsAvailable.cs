@@ -129,6 +129,7 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("prov.cityStateZip"));
 				list.Add(NewOutput("prov.phone"));
 				list.Add(NewOutput("RxDate"));
+				list.Add(NewOutput("RxDateMonthSpelled"));
 				list.Add(NewOutput("prov.dEANum"));
 				list.Add(NewOutput("pat.nameFL"));
 				list.Add(NewOutput("pat.Birthdate"));
