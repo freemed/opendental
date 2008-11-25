@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Data;
+using OpenDental.DataAccess;
 using OpenDentBusiness;
 using OpenDental.UI;
 using System.Data;
@@ -168,7 +170,7 @@ namespace OpenDental
 		private bool hasDecimal = false; //if the dose text has the decimal
 		private List<DisplayField> fields;
 		public int anestheticRecordCur;
-		//private AnestheticRecord AnestheticRecordCur;........CLIENT.......
+		private List<AnestheticMedsGiven> listAnesthMedsGiven;
 		
 		//
 		//Variables used for printing functionality..
@@ -2610,6 +2612,7 @@ namespace OpenDental
 		}
 
 		private void FillGridAnesthMeds(int anestheticRecordNum){
+			listAnesthMedsGiven = AnesthMedsGiven.CreateObjects(anestheticRecordNum);
 
 			AnesthMedsGivens.RefreshCache(anestheticRecordNum);
 			gridAnesthMeds.BeginUpdate();
@@ -2753,12 +2756,12 @@ namespace OpenDental
 				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
 			}
-			/*AnestheticMedsGiven MedCur = medCur;
-			AnesthMedsGiven.DeleteObject(MedCur);
+			//AnestheticMedsGiven MedCur = medCur;
+			//AnestheticMedsGivens.DeleteObject(MedCur);
 			//DialogResult = DialogResult.OK;
 			/*if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
 			{
-				AMedication.deleteRow(AnesthMedName.Text, QtyGiven.Text, DoseTimeStamp.Text));
+				//AMedications.DeleteRow(AnesthMedName.Text, QtyGiven.Text, DoseTimeStamp.Text));
 			}*/
 		}
 
@@ -3155,7 +3158,52 @@ namespace OpenDental
 
         private void gridAnesthMeds_CellDoubleClick(object sender, ODGridClickEventArgs e){
 
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+				/*DataRow row = (DataRow)gridAnesthMeds.Rows[e.Row].Tag;
+
+					Procedure proc = Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()), true);
+					FormProcEdit FormP = new FormProcEdit(proc, PatCur, FamCur);
+					FormP.ShowDialog();
+					if (FormP.DialogResult != DialogResult.OK)
+					{
+						return;
+					}*/
+				
+				AnestheticMedsGiven med = new AnestheticMedsGiven();
+
+				med.IsNew = false;
+				FormAnesthMedDelDose FormD = new FormAnesthMedDelDose();
+				FormD.Med = listAnesthMedsGiven[e.Row];
+				FormD.ShowDialog();
+
+				if (DialogResult == DialogResult.OK){
+
+					MessageBox.Show(this, "Deleted");
+					//AMedications.DeleteRow());
+				}
+				return;
+
+			}
+			else
+			{
+				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
+			//AnestheticMedsGiven MedCur = medCur;
+			//AnestheticMedsGivens.DeleteObject(MedCur);
+			//DialogResult = DialogResult.OK;
+			/*if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
+			{
+				//AMedications.DeleteRow(AnesthMedName.Text, QtyGiven.Text, DoseTimeStamp.Text));
+			}*/
         }
+
+		private void gridAnesthMeds_CellContentClick(object sender, ODGridClickEventArgs e){
+			
+		}
 
         private void gridVitalSigns_CellDoubleClick(object sender, ODGridClickEventArgs e){
 

@@ -217,8 +217,8 @@
     <Compile Include="Data Interface\AutoCodeL.cs" />
     <Compile Include="Data Interface\AutoCodeItemL.cs" />
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
-    <Compile Include="Data Interface\Anesthetics.cs" />
     <Compile Include="Data Interface\AnestheticMeds.cs" />
+    <Compile Include="Data Interface\AnesthMedsGiven.cs" />
     <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovSpanL.cs" />
@@ -401,6 +401,12 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnesthMedDelDose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnesthMedDelDose.Designer.cs">
+      <DependentUpon>FormAnesthMedDelDose.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAnestheticMedsInventory.cs">
       <SubType>Form</SubType>
@@ -3642,6 +3648,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnesthMedDelDose.resx">
+      <DependentUpon>FormAnesthMedDelDose.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">

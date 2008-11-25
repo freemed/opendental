@@ -310,10 +310,16 @@ namespace OpenDentBusiness
 		}
 		
 		/// <summary>Delete rows from the table anesthmedsgiven</summary>
-		public static void DeleteRow(string anesthMedName, decimal  QtyGiven, string TimeStamp){
+		/*public static void DeleteRow(string anesthMedName, decimal  QtyGiven, string TimeStamp){
 
 			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
 			General.NonQ(command);
+		}*/
+		public static void DeleteRow(int selectedRow)
+		{
+
+			//string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
+			//General.NonQ(command);
 		}
 
 		public static void Update(string aMed, string howsupplied, int qtyOnHand, string notes, int oldQty, int medNum){
