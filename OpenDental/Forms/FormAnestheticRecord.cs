@@ -2089,7 +2089,17 @@ namespace OpenDental
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
 			
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = 0;
+
+			//necessary because we want the newest record at the top of the list selected and no records throws an exception
+			
+			try 
+				{
+					listAnesthetics.SelectedIndex = 0;
+				}
+			catch 
+				{
+					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
+				}
 			
 			//disables these buttons until AnesthOpen button is clicked. 
 			butSurgOpen.Enabled = false;
@@ -2209,8 +2219,15 @@ namespace OpenDental
 				FillControls(anestheticRecordCur);
 			}
 
-			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
+			try
+			{
+				//this will be an empty string if there are no records yet, and will throw an exception
+				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			}
+			catch
+			{
+				return;
+			}
 		}
 
 		private void RefreshListAnesthetics(){
