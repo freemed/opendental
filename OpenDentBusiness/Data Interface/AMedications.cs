@@ -221,15 +221,14 @@ namespace OpenDentBusiness
 			General.NonQ(command);
 		}
 		/// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
-		public static void InsertAMedDose(string anesth_Medname, decimal dose, int patnum){
-			int anesthrecnum = AnestheticRecords.GetRecordNum(patnum);
+		public static void InsertAMedDose(string anesth_Medname, decimal dose, int anestheticRecordNum){
 			string AMName = anesth_Medname;
 			int amtwasted = 0;
 			if (anesth_Medname.Contains("'"))
 				{
 					AMName = anesth_Medname.Replace("'", "''");
 				}
-			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp) VALUE('" + anesthrecnum + "','" + AMName + "','" + dose + "', '" + amtwasted + "', '" + MiscData.GetNowDateTime().ToString("hh:mm:ss tt") + "')";
+			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp) VALUE('" + anestheticRecordNum + "','" + AMName + "','" + dose + "', '" + amtwasted + "', '" + MiscData.GetNowDateTime().ToString("hh:mm:ss tt") + "')";
 			General.NonQ(command);
 		}
 		/// <summary>Gets the data from anesthmedsgiven table</summary>

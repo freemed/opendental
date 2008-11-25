@@ -7,14 +7,15 @@ using OpenDental.DataAccess;
 
 
 namespace OpenDentBusiness{
-	///<summary>A list of Anesthetic Medication Suppliers (Vendors) </summary>
+	///<summary>A list of Anesthetic Medications</summary>
 	public class AnesthMedsGivens{
 
         public bool IsNew;
 
 		///<summary></summary> 
-		public static DataTable RefreshCache(){
-			string c="SELECT * FROM anesthmedsgiven ORDER BY DoseTimeStamp DESC"; //most recent at top of list
+		public static DataTable RefreshCache(int anestheticRecordNum){
+			int ARNum = anestheticRecordNum;
+			string c="SELECT * FROM anesthmedsgiven WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY DoseTimeStamp DESC"; //most recent at top of list
 			DataTable table=General.GetTable(c);
 			table.TableName="AnesthMedsGiven";
 			FillCache(table);
