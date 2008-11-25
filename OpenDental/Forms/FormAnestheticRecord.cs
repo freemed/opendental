@@ -2109,8 +2109,15 @@ namespace OpenDental
 			//listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//This works even if no items.......CLIENT........
 			//listAnesthetics.SelectedIndex = 0;//Selects the first item in the listAnesthetics
 
-			//.........  Client Code......................//
-			//Fills provider and assistant comboboxes
+			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
+			this.comboAnesthMed.Items.Clear();
+			this.comboAnesthMed.Items.Insert(0, "");
+			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
+			for (int i = 0; i <= noOfRows - 1; i++)
+			{
+				this.comboAnesthMed.Items.Add(bindComboQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
+				this.comboAnesthMed.SelectedIndex = 0;
+			}
 
 			//Fills provider comboboxes only if this is a new form
 			if (IsUpdate == false)

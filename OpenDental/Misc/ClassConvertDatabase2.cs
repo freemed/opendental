@@ -495,6 +495,7 @@ namespace OpenDental {
 						,"ALTER table anestheticdata CHANGE PatHgt PatHgt smallint (3) NOT NULL"
 						,"ALTER table anestheticdata ADD HgtUnitsIn tinyint (1) NOT NULL"
 						,"ALTER table anestheticdata ADD HgtUnitsCm tinyint (1) NOT NULL"
+						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
 						
 					};
 					General.NonQ(commands);
