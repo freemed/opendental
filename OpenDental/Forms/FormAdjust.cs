@@ -246,7 +246,7 @@ namespace OpenDental{
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(104,16);
 			this.label7.TabIndex = 18;
-			this.label7.Text = "Procedure Date";
+			this.label7.Text = "(procedure date)";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDateEntry
@@ -306,13 +306,13 @@ namespace OpenDental{
 
 		private void FormAdjust_Load(object sender, System.EventArgs e) {
 			if(IsNew){
-				if(!Security.IsAuthorized(Permissions.AdjustmentCreate)){
+				if(!Security.IsAuthorized(Permissions.AdjustmentCreate)){//date not checked here
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
 			}
 			else{
-				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,AdjustmentCur.DateEntry)){
+				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,AdjustmentCur.AdjDate)){
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
 				}
@@ -373,20 +373,33 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a type first.");
 				return;
 			}
+			if(IsNew){
+				//prevents backdating of initial adjustment
+				if(!Security.IsAuthorized(Permissions.AdjustmentCreate,PIn.PDate(textAdjDate.Text))){
+					return;
+				}
+			}
+			else{
+				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button
+				//This catches it if user changed the date to be older.
+				if(!Security.IsAuthorized(Permissions.AdjustmentEdit,PIn.PDate(textAdjDate.Text))){
+					return;
+				}
+			}
 			//DateEntry not allowed to change
 			AdjustmentCur.AdjDate=PIn.PDate(textAdjDate.Text);
 			AdjustmentCur.ProcDate=PIn.PDate(textProcDate.Text);
-			if(listProvider.SelectedIndex==-1)
+			if(listProvider.SelectedIndex==-1){
 				AdjustmentCur.ProvNum=PatCur.PriProv;
-			else
+			}
+			else{
 				AdjustmentCur.ProvNum=ProviderC.List[this.listProvider.SelectedIndex].ProvNum;
+			}
 			if(listTypePos.SelectedIndex!=-1){
-				AdjustmentCur.AdjType
-					=DefC.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;
+				AdjustmentCur.AdjType=DefC.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;
 			}
 			if(listTypeNeg.SelectedIndex!=-1){
-				AdjustmentCur.AdjType
-					=DefC.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
+				AdjustmentCur.AdjType=DefC.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
 			}
 			if(DefC.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
 				AdjustmentCur.AdjAmt=PIn.PDouble(textAmount.Text);

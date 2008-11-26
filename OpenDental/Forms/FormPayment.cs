@@ -622,13 +622,13 @@ namespace OpenDental{
 
 		private void FormPayment_Load(object sender, System.EventArgs e) {
 			if(IsNew){
-				if(!Security.IsAuthorized(Permissions.PaymentCreate)){
+				if(!Security.IsAuthorized(Permissions.PaymentCreate)){//date not checked here
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
 			}
 			else{
-				if(!Security.IsAuthorized(Permissions.PaymentEdit,PaymentCur.DateEntry)){
+				if(!Security.IsAuthorized(Permissions.PaymentEdit,PaymentCur.PayDate)){
 					butOK.Enabled=false;
 					butDeleteAll.Enabled=false;
 					butAdd.Enabled=false;
@@ -1245,8 +1245,8 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			if(  textDate.errorProvider1.GetError(textDate)!=""
-				|| textAmount.errorProvider1.GetError(textAmount)!=""
-				){
+				|| textAmount.errorProvider1.GetError(textAmount)!="")
+			{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
@@ -1257,6 +1257,19 @@ namespace OpenDental{
 			if(PIn.PDouble(textAmount.Text)==0) {
 				MessageBox.Show(Lan.g(this,"Amount must not be zero."));
 				return;
+			}
+			if(IsNew){
+				//prevents backdating of initial payment
+				if(!Security.IsAuthorized(Permissions.PaymentCreate,PIn.PDate(textDate.Text))){
+					return;
+				}
+			}
+			else{
+				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button
+				//This catches it if user changed the date to be older.
+				if(!Security.IsAuthorized(Permissions.PaymentEdit,PIn.PDate(textDate.Text))){
+					return;
+				}
 			}
 			bool accountingSynchRequired=false;
 			double accountingOldAmt=PaymentCur.PayAmt;

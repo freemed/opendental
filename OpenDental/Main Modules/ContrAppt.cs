@@ -2386,6 +2386,13 @@ namespace OpenDental{
 					TempApptSingle.Dispose();
 					return;
 				}
+				//cannot allow moving completed procedure because it could cause completed procs to change date.  Security must block this.
+				if(TempApptSingle.DataRoww["AptStatus"].ToString()=="2"){//complete
+					mouseIsDown=false;
+					TempApptSingle.Dispose();
+					MsgBox.Show(this,"Not allowed to move completed appointments.");
+					return;
+				}
 				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
 				List<int> list=new List<int>();
 				list.Add(ContrApptSingle.SelectedAptNum);
@@ -3382,9 +3389,6 @@ namespace OpenDental{
 		}
 
 		private void OnComplete_Click(){
-			if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
-				return;
-			}
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
@@ -3394,7 +3398,10 @@ namespace OpenDental{
 				return;
 			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			if (apt.AptStatus == ApptStatus.PtNoteCompleted) {
+			if(apt.AptStatus == ApptStatus.PtNoteCompleted) {
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.ProcComplCreate,apt.AptDateTime)){
 				return;
 			}
 			//Procedures.SetDateFirstVisit(Appointments.Cur.AptDateTime.Date);//done when making appt instead
