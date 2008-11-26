@@ -465,13 +465,13 @@ namespace OpenDental {
 						SupplierName varchar(255) NOT NULL,
 						Phone char(13),
 						PhoneExt char(6),
-                        Fax char(13),
+						Fax char(13),
 						Addr1 varchar(48),
 						Addr2 char(32),
 						City varchar(48),
 						State char(20),
 						Zip char(10),
-                        Contact char(32),
+						Contact char(32),
 						WebSite varchar(48),
 						Notes text,
 						PRIMARY KEY (SupplierIDNum)
@@ -505,8 +505,10 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (SchedDate)";
 					General.NonQ(command);
-
-
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockDate','0001-01-01','If present, global lock on procedures, payments, insurance payments, and adjustments.  Prevents editing old entries and backdating entries.')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockIncludesAdmin','0','0 or 1.  If 1, administrators are also locked out by date.')";
+					General.NonQ(command);
 
 
 

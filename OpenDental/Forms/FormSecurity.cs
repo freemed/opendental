@@ -30,6 +30,9 @@ namespace OpenDental{
 		private ComboBox comboSchoolClass;
 		private Label labelSchoolClass;
 		private CheckBox checkCannotEditOwn;
+		private Label label1;
+		private TextBox textDate;
+		private OpenDental.UI.Button butChange;
 		private DataTable table;
 
 		///<summary></summary>
@@ -74,6 +77,9 @@ namespace OpenDental{
 			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
 			this.labelSchoolClass = new System.Windows.Forms.Label();
 			this.checkCannotEditOwn = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textDate = new System.Windows.Forms.TextBox();
+			this.butChange = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSetAll = new OpenDental.UI.Button();
 			this.butAddUser = new OpenDental.UI.Button();
@@ -83,6 +89,8 @@ namespace OpenDental{
 			// 
 			// treePermissions
 			// 
+			this.treePermissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.treePermissions.HideSelection = false;
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
@@ -91,7 +99,7 @@ namespace OpenDental{
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(417,567);
+			this.treePermissions.Size = new System.Drawing.Size(417,639);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
@@ -116,14 +124,15 @@ namespace OpenDental{
 			// 
 			// checkTimecardSecurityEnabled
 			// 
-			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkTimecardSecurityEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(220,602);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,639);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
-			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(192,19);
+			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(224,16);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
 			this.checkTimecardSecurityEnabled.Text = "TimecardSecurityEnabled";
-			this.checkTimecardSecurityEnabled.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkTimecardSecurityEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTimecardSecurityEnabled.Click += new System.EventHandler(this.checkTimecardSecurityEnabled_Click);
 			// 
 			// comboUsers
@@ -157,22 +166,59 @@ namespace OpenDental{
 			// 
 			// checkCannotEditOwn
 			// 
-			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkCannotEditOwn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCannotEditOwn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCannotEditOwn.Location = new System.Drawing.Point(220,622);
+			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,657);
 			this.checkCannotEditOwn.Name = "checkCannotEditOwn";
-			this.checkCannotEditOwn.Size = new System.Drawing.Size(192,19);
+			this.checkCannotEditOwn.Size = new System.Drawing.Size(224,16);
 			this.checkCannotEditOwn.TabIndex = 92;
 			this.checkCannotEditOwn.Text = "Users cannot edit their own timecard";
-			this.checkCannotEditOwn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkCannotEditOwn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(95,675);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(123,18);
+			this.label1.TabIndex = 93;
+			this.label1.Text = "Lock Date";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDate
+			// 
+			this.textDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textDate.Location = new System.Drawing.Point(219,675);
+			this.textDate.Name = "textDate";
+			this.textDate.ReadOnly = true;
+			this.textDate.Size = new System.Drawing.Size(82,20);
+			this.textDate.TabIndex = 94;
+			// 
+			// butChange
+			// 
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butChange.Autosize = true;
+			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChange.CornerRadius = 4F;
+			this.butChange.Location = new System.Drawing.Point(304,672);
+			this.butChange.Name = "butChange";
+			this.butChange.Size = new System.Drawing.Size(70,24);
+			this.butChange.TabIndex = 95;
+			this.butChange.Text = "Change";
+			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(8,29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(456,567);
+			this.gridMain.Size = new System.Drawing.Size(456,578);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
@@ -187,9 +233,9 @@ namespace OpenDental{
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(470,610);
+			this.butSetAll.Location = new System.Drawing.Point(470,672);
 			this.butSetAll.Name = "butSetAll";
-			this.butSetAll.Size = new System.Drawing.Size(79,25);
+			this.butSetAll.Size = new System.Drawing.Size(79,24);
 			this.butSetAll.TabIndex = 58;
 			this.butSetAll.Text = "Set All";
 			this.butSetAll.Click += new System.EventHandler(this.butSetAll_Click);
@@ -204,7 +250,7 @@ namespace OpenDental{
 			this.butAddUser.CornerRadius = 4F;
 			this.butAddUser.Location = new System.Drawing.Point(118,610);
 			this.butAddUser.Name = "butAddUser";
-			this.butAddUser.Size = new System.Drawing.Size(75,25);
+			this.butAddUser.Size = new System.Drawing.Size(75,24);
 			this.butAddUser.TabIndex = 0;
 			this.butAddUser.Text = "Add User";
 			this.butAddUser.Click += new System.EventHandler(this.butAddUser_Click);
@@ -219,7 +265,7 @@ namespace OpenDental{
 			this.butAddGroup.CornerRadius = 4F;
 			this.butAddGroup.Location = new System.Drawing.Point(8,610);
 			this.butAddGroup.Name = "butAddGroup";
-			this.butAddGroup.Size = new System.Drawing.Size(75,25);
+			this.butAddGroup.Size = new System.Drawing.Size(75,24);
 			this.butAddGroup.TabIndex = 1;
 			this.butAddGroup.Text = "Edit Groups";
 			this.butAddGroup.Click += new System.EventHandler(this.butEditGroups_Click);
@@ -232,9 +278,9 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(812,610);
+			this.butClose.Location = new System.Drawing.Point(812,672);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,25);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -242,7 +288,10 @@ namespace OpenDental{
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(894,644);
+			this.ClientSize = new System.Drawing.Size(894,700);
+			this.Controls.Add(this.butChange);
+			this.Controls.Add(this.textDate);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkCannotEditOwn);
 			this.Controls.Add(this.comboSchoolClass);
 			this.Controls.Add(this.labelSchoolClass);
@@ -264,6 +313,7 @@ namespace OpenDental{
 			this.Text = "Security";
 			this.Load += new System.EventHandler(this.FormSecurity_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -291,6 +341,9 @@ namespace OpenDental{
 			checkTimecardSecurityEnabled.Checked=PrefC.GetBool("TimecardSecurityEnabled");
 			checkCannotEditOwn.Checked=PrefC.GetBool("TimecardUsersDontEditOwnCard");
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
+			if(PrefC.GetDate("SecurityLockDate").Year>1880){
+				textDate.Text=PrefC.GetDate("SecurityLockDate").ToShortDateString();
+			}
 		}
 
 		private void FillTreePermissionsInitial(){
@@ -666,20 +719,34 @@ namespace OpenDental{
 			FillTreePerm();
 		}
 
+		private void checkTimecardSecurityEnabled_Click(object sender,EventArgs e) {
+			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
+		}
+
+		private void butChange_Click(object sender,EventArgs e) {
+			FormSecurityLock FormS=new FormSecurityLock();
+			FormS.ShowDialog();//prefs are set invalid within that form if needed.
+			if(PrefC.GetDate("SecurityLockDate").Year>1880){
+				textDate.Text=PrefC.GetDate("SecurityLockDate").ToShortDateString();
+			}
+			else{
+				textDate.Text="";
+			}
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Security);
 			}
 			if(	Prefs.UpdateBool("TimecardSecurityEnabled",checkTimecardSecurityEnabled.Checked) ||
-					Prefs.UpdateBool("TimecardUsersDontEditOwnCard",checkCannotEditOwn.Checked)){
+					Prefs.UpdateBool("TimecardUsersDontEditOwnCard",checkCannotEditOwn.Checked))
+			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Close();
 		}
 
-		private void checkTimecardSecurityEnabled_Click(object sender,EventArgs e) {
-			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
-		}
+		
 
 		
 		

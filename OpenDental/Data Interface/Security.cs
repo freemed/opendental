@@ -45,6 +45,30 @@ namespace OpenDental{
 					return false;	
 				}
 			}
+			if(  perm==Permissions.AdjustmentCreate
+				|| perm==Permissions.AdjustmentEdit
+				|| perm==Permissions.PaymentCreate
+				|| perm==Permissions.PaymentEdit
+				|| perm==Permissions.ProcComplCreate
+				|| perm==Permissions.ProcComplEdit
+				|| perm==Permissions.ClaimsSentEdit
+				//|| perm==Permissions.ClaimPaymentCreate and Edit
+				)
+			{
+				//SecurityLockIncludesAdmin
+				if(date.Year>1//if a valid date was passed in
+					&& date <= PrefC.GetDate("SecurityLockDate"))//and that date is earlier than the lock
+				{
+					if(PrefC.GetBool("SecurityLockIncludesAdmin")//if admins are locked out too
+						|| !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,Permissions.SecurityAdmin))//or is not an admin
+					{
+						if(!suppressMessage) {
+							MessageBox.Show(Lan.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
+						}
+						return false;	
+					}
+				}
+			}
 			if(!GroupPermissions.PermTakesDates(perm)){
 				return true;
 			}
