@@ -14,6 +14,7 @@ namespace OpenDental
 	public partial class FormAnesthMedDelDose : Form{
 
 		public AnestheticMedsGiven Med;
+		public int anestheticRecordNum;
 
 		public FormAnesthMedDelDose(){
 			InitializeComponent();
@@ -25,6 +26,8 @@ namespace OpenDental
 			textAnesthMedName.Text = Med.AnesthMedName;
 			textDose.Text = Med.QtyGiven; 
 			textDoseTimeStamp.Text = Med.DoseTimeStamp;
+			textQtyWasted.Text = Med.QtyWasted;
+			anestheticRecordNum = Convert.ToInt32(Med.AnestheticRecordNum);
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e){
@@ -42,8 +45,10 @@ namespace OpenDental
 
 		private void butClose_Click(object sender, EventArgs e){
 
-			Close(); 
-				
+			decimal dose = Convert.ToDecimal(textDose.Text);
+			decimal amtWasted = Convert.ToDecimal(textQtyWasted.Text);
+			AMedications.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticRecordNum);
+			Close();
 		}
 
 		private void textDose_TextChanged(object sender, EventArgs e){
@@ -52,6 +57,8 @@ namespace OpenDental
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e){
 
+			AMedications.DeleteAMedDose(textAnesthMedName.Text, Convert.ToDecimal(textDose.Text), textDoseTimeStamp.Text, anestheticRecordNum);
+			
 			DialogResult = DialogResult.OK;
 		}
 

@@ -37,6 +37,8 @@
 			this.textDose = new System.Windows.Forms.TextBox();
 			this.labelDose = new System.Windows.Forms.Label();
 			this.labelDeleteInstrux = new System.Windows.Forms.Label();
+			this.textQtyWasted = new System.Windows.Forms.TextBox();
+			this.labelQtyWasted = new System.Windows.Forms.Label();
 			this.butDelAnesthMeds = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -54,6 +56,8 @@
 			// 
 			// groupBoxAnesthMedDelete
 			// 
+			this.groupBoxAnesthMedDelete.Controls.Add(this.labelQtyWasted);
+			this.groupBoxAnesthMedDelete.Controls.Add(this.textQtyWasted);
 			this.groupBoxAnesthMedDelete.Controls.Add(this.labelDoseTimeStamp);
 			this.groupBoxAnesthMedDelete.Controls.Add(this.textAnesthMedName);
 			this.groupBoxAnesthMedDelete.Controls.Add(this.textDose);
@@ -88,7 +92,6 @@
 			// 
 			this.textDose.Location = new System.Drawing.Point(203, 20);
 			this.textDose.Name = "textDose";
-			this.textDose.ReadOnly = true;
 			this.textDose.Size = new System.Drawing.Size(65, 20);
 			this.textDose.TabIndex = 2;
 			this.textDose.TextChanged += new System.EventHandler(this.textDose_TextChanged);
@@ -96,7 +99,7 @@
 			// labelDose
 			// 
 			this.labelDose.AutoSize = true;
-			this.labelDose.Location = new System.Drawing.Point(200, 0);
+			this.labelDose.Location = new System.Drawing.Point(208, 0);
 			this.labelDose.Name = "labelDose";
 			this.labelDose.Size = new System.Drawing.Size(55, 13);
 			this.labelDose.TabIndex = 4;
@@ -105,11 +108,27 @@
 			// labelDeleteInstrux
 			// 
 			this.labelDeleteInstrux.AutoSize = true;
-			this.labelDeleteInstrux.Location = new System.Drawing.Point(22, 17);
+			this.labelDeleteInstrux.Location = new System.Drawing.Point(16, 17);
 			this.labelDeleteInstrux.Name = "labelDeleteInstrux";
-			this.labelDeleteInstrux.Size = new System.Drawing.Size(239, 13);
+			this.labelDeleteInstrux.Size = new System.Drawing.Size(362, 13);
 			this.labelDeleteInstrux.TabIndex = 141;
-			this.labelDeleteInstrux.Text = "Click \'Delete\' to remove this dose or \'OK\' to return";
+			this.labelDeleteInstrux.Text = "Click \'Delete\' to delete this dose, or enter a quantity to waste and click \'OK\' ";
+			// 
+			// textQtyWasted
+			// 
+			this.textQtyWasted.Location = new System.Drawing.Point(203, 72);
+			this.textQtyWasted.Name = "textQtyWasted";
+			this.textQtyWasted.Size = new System.Drawing.Size(65, 20);
+			this.textQtyWasted.TabIndex = 142;
+			// 
+			// labelQtyWasted
+			// 
+			this.labelQtyWasted.AutoSize = true;
+			this.labelQtyWasted.Location = new System.Drawing.Point(197, 53);
+			this.labelQtyWasted.Name = "labelQtyWasted";
+			this.labelQtyWasted.Size = new System.Drawing.Size(83, 13);
+			this.labelQtyWasted.TabIndex = 143;
+			this.labelQtyWasted.Text = "Qty wasted (mL)";
 			// 
 			// butDelAnesthMeds
 			// 
@@ -173,7 +192,7 @@
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnesthMedDelDose";
-			this.Text = "Delete Anesthetic Medication Dose";
+			this.Text = "Delete/Waste Anesthetic Medication Dose";
 			this.Load += new System.EventHandler(this.FormAnesthMedDelDose_Load);
 			this.groupBoxAnesthMedDelete.ResumeLayout(false);
 			this.groupBoxAnesthMedDelete.PerformLayout();
@@ -194,6 +213,8 @@
 		private System.Windows.Forms.TextBox textAnesthMedName;
 		private OpenDental.UI.Button butDelAnesthMeds;
 		private System.Windows.Forms.Label labelDeleteInstrux;
+		private System.Windows.Forms.TextBox textQtyWasted;
+		private System.Windows.Forms.Label labelQtyWasted;
         
 	}
 }

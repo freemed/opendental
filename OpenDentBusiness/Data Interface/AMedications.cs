@@ -221,15 +221,34 @@ namespace OpenDentBusiness
 			General.NonQ(command);
 		}
 		/// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
-		public static void InsertAMedDose(string anesth_Medname, decimal dose, int anestheticRecordNum){
+		public static void InsertAMedDose(string anesth_Medname, decimal dose, decimal amtwasted, int anestheticRecordNum){
 			string AMName = anesth_Medname;
-			int amtwasted = 0;
+			
 			if (anesth_Medname.Contains("'"))
 				{
 					AMName = anesth_Medname.Replace("'", "''");
 				}
 			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp) VALUE('" + anestheticRecordNum + "','" + AMName + "','" + dose + "', '" + amtwasted + "', '" + MiscData.GetNowDateTime().ToString("hh:mm:ss tt") + "')";
 			General.NonQ(command);
+		}
+
+		public static void UpdateAMedDose(string anesth_Medname, double dose, double amtwasted, string dosetimestamp, int anestheticRecordNum)
+		{
+			string AMName = anesth_Medname;
+
+			if (anesth_Medname.Contains("'"))
+			{
+				AMName = anesth_Medname.Replace("'", "''");
+			}
+
+			string command = "UPDATE anesthmedsgiven SET "
+				+ " AnesthMedName		='" + POut.PString(AMName) + "' "
+				+ ",QtyGiven			=" + POut.PDouble((dose)) + " "
+				+ ",QtyWasted			=" + POut.PDouble((amtwasted)) + " "
+				+ ",DoseTimeStamp		='" + POut.PString(Convert.ToString(dosetimestamp)) + "'"
+				+ "WHERE DoseTimeStamp ='" + Convert.ToString(dosetimestamp) + "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
+			General.NonQ(command);
+			
 		}
 		/// <summary>Gets the data from anesthmedsgiven table</summary>
 		public static DataTable GetdataForGrid() {
@@ -310,17 +329,18 @@ namespace OpenDentBusiness
 		}
 		
 		/// <summary>Delete rows from the table anesthmedsgiven</summary>
-		/*public static void DeleteRow(string anesthMedName, decimal  QtyGiven, string TimeStamp){
+		public static void DeleteAMedDose(string anesthMedName, decimal  QtyGiven, string TimeStamp, int anestheticRecordNum){
+
+			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'" +  " and AnestheticRecordNum = " + anestheticRecordNum;
+			General.NonQ(command);
+		}
+
+		/*public static void DeleteRow(int selectedRow)
+		{
 
 			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
 			General.NonQ(command);
 		}*/
-		public static void DeleteRow(int selectedRow)
-		{
-
-			//string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'";
-			//General.NonQ(command);
-		}
 
 		public static void Update(string aMed, string howsupplied, int qtyOnHand, string notes, int oldQty, int medNum){
 
