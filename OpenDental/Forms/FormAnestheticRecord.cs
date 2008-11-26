@@ -132,9 +132,7 @@ namespace OpenDental
         private TextBox textPatient;
         private Label labelPatient;
         private Label labelPatID;
-        private TextBox textPatID;
-        private Label label2;
-        private OpenDental.UI.Button butWasteQty;
+		private TextBox textPatID;
         private GroupBox groupBoxAnesthMeds;
         private Label label1;
 		private RadioButton radWgtUnitsKgs;
@@ -182,6 +180,7 @@ namespace OpenDental
 		private GroupBox groupBoxWgt;
 		private GroupBox groupBoxHgt;
 		private int patNum;
+		private Label labelInstrux;
 		string streamType;
 		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
 		private static extern bool BitBlt(
@@ -238,7 +237,6 @@ namespace OpenDental
 			this.radRteNasHood = new System.Windows.Forms.RadioButton();
 			this.labelLperMinN2O = new System.Windows.Forms.Label();
 			this.labelLperMinO2 = new System.Windows.Forms.Label();
-			this.butAnesthScore = new OpenDental.UI.Button();
 			this.comboO2LMin = new System.Windows.Forms.ComboBox();
 			this.labelIVFVol = new System.Windows.Forms.Label();
 			this.textIVFVol = new System.Windows.Forms.TextBox();
@@ -263,31 +261,19 @@ namespace OpenDental
 			this.labelPatWgt = new System.Windows.Forms.Label();
 			this.labelPatHgt = new System.Windows.Forms.Label();
 			this.textPatWgt = new System.Windows.Forms.TextBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBoxSig = new System.Windows.Forms.GroupBox();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
-			this.sigBox = new OpenDental.UI.SignatureBox();
-			this.butSignTopaz = new OpenDental.UI.Button();
-			this.butClearSig = new OpenDental.UI.Button();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
 			this.labelEscortCellNum = new System.Windows.Forms.Label();
 			this.textEscortCellNum = new System.Windows.Forms.TextBox();
 			this.groupBoxVS = new System.Windows.Forms.GroupBox();
-			this.gridVitalSigns = new OpenDental.UI.ODGrid();
 			this.textVSMSerNum = new System.Windows.Forms.TextBox();
 			this.textVSMName = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
 			this.groupBoxTimes = new System.Windows.Forms.GroupBox();
 			this.textAnesthOpen = new System.Windows.Forms.TextBox();
-			this.butSurgClose = new OpenDental.UI.Button();
 			this.textSurgClose = new System.Windows.Forms.TextBox();
 			this.textAnesthClose = new System.Windows.Forms.TextBox();
-			this.butAnesthOpen = new OpenDental.UI.Button();
-			this.butAnesthClose = new OpenDental.UI.Button();
-			this.butSurgOpen = new OpenDental.UI.Button();
 			this.textSurgOpen = new System.Windows.Forms.TextBox();
 			this.labelIVAnesthetics = new System.Windows.Forms.Label();
 			this.labelAsst = new System.Windows.Forms.Label();
@@ -297,6 +283,34 @@ namespace OpenDental
 			this.listAnesthetics = new System.Windows.Forms.ListBox();
 			this.labelAnesthMed = new System.Windows.Forms.Label();
 			this.groupBoxDoseCalc = new System.Windows.Forms.GroupBox();
+			this.comboAnesthMed = new System.Windows.Forms.ComboBox();
+			this.comboSurgeon = new System.Windows.Forms.ComboBox();
+			this.labelSurgeon = new System.Windows.Forms.Label();
+			this.comboAnesthetist = new System.Windows.Forms.ComboBox();
+			this.textAnesthDose = new System.Windows.Forms.TextBox();
+			this.labelDose = new System.Windows.Forms.Label();
+			this.labelAnesthetist = new System.Windows.Forms.Label();
+			this.textPatient = new System.Windows.Forms.TextBox();
+			this.labelPatient = new System.Windows.Forms.Label();
+			this.labelPatID = new System.Windows.Forms.Label();
+			this.textPatID = new System.Windows.Forms.TextBox();
+			this.groupBoxAnesthMeds = new System.Windows.Forms.GroupBox();
+			this.gridVitalSigns = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
+			this.sigBox = new OpenDental.UI.SignatureBox();
+			this.butSignTopaz = new OpenDental.UI.Button();
+			this.butClearSig = new OpenDental.UI.Button();
+			this.butAnesthScore = new OpenDental.UI.Button();
+			this.gridAnesthMeds = new OpenDental.UI.ODGrid();
+			this.butAddAnesthetic = new OpenDental.UI.Button();
+			this.butDelAnesthetic = new OpenDental.UI.Button();
+			this.butSurgClose = new OpenDental.UI.Button();
+			this.butAnesthOpen = new OpenDental.UI.Button();
+			this.butAnesthClose = new OpenDental.UI.Button();
+			this.butSurgOpen = new OpenDental.UI.Button();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
 			this.butDose8 = new OpenDental.UI.Button();
@@ -313,23 +327,7 @@ namespace OpenDental
 			this.butDoseWaste = new OpenDental.UI.Button();
 			this.butDoseEnter = new OpenDental.UI.Button();
 			this.butDoseDecPoint = new OpenDental.UI.Button();
-			this.comboAnesthMed = new System.Windows.Forms.ComboBox();
-			this.comboSurgeon = new System.Windows.Forms.ComboBox();
-			this.labelSurgeon = new System.Windows.Forms.Label();
-			this.comboAnesthetist = new System.Windows.Forms.ComboBox();
-			this.textAnesthDose = new System.Windows.Forms.TextBox();
-			this.labelDose = new System.Windows.Forms.Label();
-			this.labelAnesthetist = new System.Windows.Forms.Label();
-			this.textPatient = new System.Windows.Forms.TextBox();
-			this.labelPatient = new System.Windows.Forms.Label();
-			this.labelPatID = new System.Windows.Forms.Label();
-			this.textPatID = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.groupBoxAnesthMeds = new System.Windows.Forms.GroupBox();
-			this.gridAnesthMeds = new OpenDental.UI.ODGrid();
-			this.butWasteQty = new OpenDental.UI.Button();
-			this.butAddAnesthetic = new OpenDental.UI.Button();
-			this.butDelAnesthetic = new OpenDental.UI.Button();
+			this.labelInstrux = new System.Windows.Forms.Label();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxMonitors.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
@@ -818,21 +816,6 @@ namespace OpenDental
 			this.labelLperMinO2.TabIndex = 30;
 			this.labelLperMinO2.Text = "L/min";
 			// 
-			// butAnesthScore
-			// 
-			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthScore.Autosize = true;
-			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthScore.CornerRadius = 4F;
-			this.butAnesthScore.Location = new System.Drawing.Point(71, 517);
-			this.butAnesthScore.Name = "butAnesthScore";
-			this.butAnesthScore.Size = new System.Drawing.Size(131, 26);
-			this.butAnesthScore.TabIndex = 65;
-			this.butAnesthScore.Text = "Post-anesthesia score";
-			this.butAnesthScore.UseVisualStyleBackColor = true;
-			this.butAnesthScore.Click += new System.EventHandler(this.butAnesthScore_Click);
-			// 
 			// comboO2LMin
 			// 
 			this.comboO2LMin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1141,72 +1124,6 @@ namespace OpenDental
 			this.textPatWgt.Size = new System.Drawing.Size(60, 20);
 			this.textPatWgt.TabIndex = 73;
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOK.Location = new System.Drawing.Point(684, 115);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 143;
-			this.butOK.Text = "&OK";
-			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(765, 115);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(96, 26);
-			this.butClose.TabIndex = 142;
-			this.butClose.Text = "&Save and Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(594, 115);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(66, 26);
-			this.butCancel.TabIndex = 141;
-			this.butCancel.Text = "Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(72, 116);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88, 26);
-			this.butPrint.TabIndex = 102;
-			this.butPrint.Text = "Print";
-			this.butPrint.UseVisualStyleBackColor = true;
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
 			// groupBoxSig
 			// 
 			this.groupBoxSig.Controls.Add(this.labelInvalidSig);
@@ -1231,42 +1148,6 @@ namespace OpenDental
 			this.labelInvalidSig.Text = "Invalid Signature - Anesthesia Close Time has changed since it was signed.";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.Click += new System.EventHandler(this.labelInvalidSig_Click);
-			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(12, 19);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(158, 74);
-			this.sigBox.TabIndex = 135;
-			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
-			// 
-			// butSignTopaz
-			// 
-			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSignTopaz.Autosize = true;
-			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSignTopaz.CornerRadius = 4F;
-			this.butSignTopaz.Location = new System.Drawing.Point(195, 19);
-			this.butSignTopaz.Name = "butSignTopaz";
-			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
-			this.butSignTopaz.TabIndex = 136;
-			this.butSignTopaz.Text = "Sign Topaz";
-			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
-			// 
-			// butClearSig
-			// 
-			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClearSig.Autosize = true;
-			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(195, 53);
-			this.butClearSig.Name = "butClearSig";
-			this.butClearSig.Size = new System.Drawing.Size(75, 26);
-			this.butClearSig.TabIndex = 134;
-			this.butClearSig.Text = "Clear";
-			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
 			// groupBoxHgtWgt
 			// 
@@ -1314,17 +1195,6 @@ namespace OpenDental
 			this.groupBoxVS.TabStop = false;
 			this.groupBoxVS.Text = "Vital Signs";
 			// 
-			// gridVitalSigns
-			// 
-			this.gridVitalSigns.HScrollVisible = false;
-			this.gridVitalSigns.Location = new System.Drawing.Point(23, 50);
-			this.gridVitalSigns.Name = "gridVitalSigns";
-			this.gridVitalSigns.ScrollValue = 0;
-			this.gridVitalSigns.Size = new System.Drawing.Size(547, 143);
-			this.gridVitalSigns.TabIndex = 133;
-			this.gridVitalSigns.Title = "Vital Signs";
-			this.gridVitalSigns.TranslationName = "TableAnestheticData";
-			// 
 			// textVSMSerNum
 			// 
 			this.textVSMSerNum.Location = new System.Drawing.Point(347, 19);
@@ -1367,21 +1237,6 @@ namespace OpenDental
 			this.textAnesthOpen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.textAnesthOpen.TextChanged += new System.EventHandler(this.textBoxAnesthOpen_TextChanged);
 			// 
-			// butSurgClose
-			// 
-			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgClose.Autosize = true;
-			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgClose.CornerRadius = 4F;
-			this.butSurgClose.Location = new System.Drawing.Point(211, 17);
-			this.butSurgClose.Name = "butSurgClose";
-			this.butSurgClose.Size = new System.Drawing.Size(86, 26);
-			this.butSurgClose.TabIndex = 11;
-			this.butSurgClose.Text = "Surgery Close";
-			this.butSurgClose.UseVisualStyleBackColor = true;
-			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
-			// 
 			// textSurgClose
 			// 
 			this.textSurgClose.Location = new System.Drawing.Point(212, 49);
@@ -1400,51 +1255,6 @@ namespace OpenDental
 			this.textAnesthClose.TabIndex = 14;
 			this.textAnesthClose.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.textAnesthClose.TextChanged += new System.EventHandler(this.textBoxAnesthClose_TextChanged);
-			// 
-			// butAnesthOpen
-			// 
-			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthOpen.Autosize = true;
-			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthOpen.CornerRadius = 4F;
-			this.butAnesthOpen.Location = new System.Drawing.Point(14, 17);
-			this.butAnesthOpen.Name = "butAnesthOpen";
-			this.butAnesthOpen.Size = new System.Drawing.Size(100, 26);
-			this.butAnesthOpen.TabIndex = 7;
-			this.butAnesthOpen.Text = "Anesthesia Open";
-			this.butAnesthOpen.UseVisualStyleBackColor = true;
-			this.butAnesthOpen.Click += new System.EventHandler(this.butAnesthOpen_Click);
-			// 
-			// butAnesthClose
-			// 
-			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthClose.Autosize = true;
-			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthClose.CornerRadius = 4F;
-			this.butAnesthClose.Location = new System.Drawing.Point(303, 17);
-			this.butAnesthClose.Name = "butAnesthClose";
-			this.butAnesthClose.Size = new System.Drawing.Size(100, 26);
-			this.butAnesthClose.TabIndex = 13;
-			this.butAnesthClose.Text = "Anesthesia Close";
-			this.butAnesthClose.UseVisualStyleBackColor = true;
-			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
-			// 
-			// butSurgOpen
-			// 
-			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgOpen.Autosize = true;
-			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgOpen.CornerRadius = 4F;
-			this.butSurgOpen.Location = new System.Drawing.Point(120, 17);
-			this.butSurgOpen.Name = "butSurgOpen";
-			this.butSurgOpen.Size = new System.Drawing.Size(86, 26);
-			this.butSurgOpen.TabIndex = 9;
-			this.butSurgOpen.Text = "Surgery Open";
-			this.butSurgOpen.UseVisualStyleBackColor = true;
-			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
 			// 
 			// textSurgOpen
 			// 
@@ -1519,6 +1329,7 @@ namespace OpenDental
 			// 
 			// groupBoxDoseCalc
 			// 
+			this.groupBoxDoseCalc.Controls.Add(this.labelInstrux);
 			this.groupBoxDoseCalc.Controls.Add(this.butDose10);
 			this.groupBoxDoseCalc.Controls.Add(this.butDose7);
 			this.groupBoxDoseCalc.Controls.Add(this.butDose8);
@@ -1535,251 +1346,13 @@ namespace OpenDental
 			this.groupBoxDoseCalc.Controls.Add(this.butDoseWaste);
 			this.groupBoxDoseCalc.Controls.Add(this.butDoseEnter);
 			this.groupBoxDoseCalc.Controls.Add(this.butDoseDecPoint);
-			this.groupBoxDoseCalc.Location = new System.Drawing.Point(379, 141);
+			this.groupBoxDoseCalc.Location = new System.Drawing.Point(379, 140);
 			this.groupBoxDoseCalc.Name = "groupBoxDoseCalc";
-			this.groupBoxDoseCalc.Size = new System.Drawing.Size(200, 177);
+			this.groupBoxDoseCalc.Size = new System.Drawing.Size(200, 197);
 			this.groupBoxDoseCalc.TabIndex = 54;
 			this.groupBoxDoseCalc.TabStop = false;
-			this.groupBoxDoseCalc.Text = "Click to add dose ";
+			this.groupBoxDoseCalc.Text = "Click to add dose";
 			this.groupBoxDoseCalc.Enter += new System.EventHandler(this.groupBox5_Enter);
-			// 
-			// butDose10
-			// 
-			this.butDose10.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose10.Autosize = true;
-			this.butDose10.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose10.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose10.CornerRadius = 4F;
-			this.butDose10.Location = new System.Drawing.Point(47, 136);
-			this.butDose10.Name = "butDose10";
-			this.butDose10.Size = new System.Drawing.Size(32, 32);
-			this.butDose10.TabIndex = 67;
-			this.butDose10.Text = "10";
-			this.butDose10.UseVisualStyleBackColor = true;
-			// 
-			// butDose7
-			// 
-			this.butDose7.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose7.Autosize = true;
-			this.butDose7.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose7.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose7.CornerRadius = 4F;
-			this.butDose7.Location = new System.Drawing.Point(9, 22);
-			this.butDose7.Name = "butDose7";
-			this.butDose7.Size = new System.Drawing.Size(32, 32);
-			this.butDose7.TabIndex = 57;
-			this.butDose7.Text = "7";
-			this.butDose7.UseVisualStyleBackColor = true;
-			this.butDose7.Click += new System.EventHandler(this.butDose7_Click);
-			// 
-			// butDose8
-			// 
-			this.butDose8.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose8.Autosize = true;
-			this.butDose8.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose8.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose8.CornerRadius = 4F;
-			this.butDose8.Location = new System.Drawing.Point(47, 22);
-			this.butDose8.Name = "butDose8";
-			this.butDose8.Size = new System.Drawing.Size(32, 32);
-			this.butDose8.TabIndex = 58;
-			this.butDose8.Text = "8";
-			this.butDose8.UseVisualStyleBackColor = true;
-			// 
-			// butDose9
-			// 
-			this.butDose9.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose9.Autosize = true;
-			this.butDose9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose9.CornerRadius = 4F;
-			this.butDose9.Location = new System.Drawing.Point(85, 22);
-			this.butDose9.Name = "butDose9";
-			this.butDose9.Size = new System.Drawing.Size(32, 32);
-			this.butDose9.TabIndex = 59;
-			this.butDose9.Text = "9";
-			this.butDose9.UseVisualStyleBackColor = true;
-			this.butDose9.Click += new System.EventHandler(this.butDose9_Click);
-			// 
-			// butDose6
-			// 
-			this.butDose6.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose6.Autosize = true;
-			this.butDose6.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose6.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose6.CornerRadius = 4F;
-			this.butDose6.Location = new System.Drawing.Point(9, 60);
-			this.butDose6.Name = "butDose6";
-			this.butDose6.Size = new System.Drawing.Size(32, 32);
-			this.butDose6.TabIndex = 60;
-			this.butDose6.Text = "6";
-			this.butDose6.UseVisualStyleBackColor = true;
-			this.butDose6.Click += new System.EventHandler(this.butDose6_Click);
-			// 
-			// butDose5
-			// 
-			this.butDose5.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose5.Autosize = true;
-			this.butDose5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose5.CornerRadius = 4F;
-			this.butDose5.Location = new System.Drawing.Point(47, 60);
-			this.butDose5.Name = "butDose5";
-			this.butDose5.Size = new System.Drawing.Size(32, 32);
-			this.butDose5.TabIndex = 61;
-			this.butDose5.Text = "5";
-			this.butDose5.UseVisualStyleBackColor = true;
-			this.butDose5.Click += new System.EventHandler(this.butDose5_Click);
-			// 
-			// butDose4
-			// 
-			this.butDose4.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose4.Autosize = true;
-			this.butDose4.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose4.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose4.CornerRadius = 4F;
-			this.butDose4.Location = new System.Drawing.Point(85, 60);
-			this.butDose4.Name = "butDose4";
-			this.butDose4.Size = new System.Drawing.Size(32, 32);
-			this.butDose4.TabIndex = 62;
-			this.butDose4.Text = "4";
-			this.butDose4.UseVisualStyleBackColor = true;
-			this.butDose4.Click += new System.EventHandler(this.butDose4_Click);
-			// 
-			// butDose3
-			// 
-			this.butDose3.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose3.Autosize = true;
-			this.butDose3.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose3.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose3.CornerRadius = 4F;
-			this.butDose3.Location = new System.Drawing.Point(9, 98);
-			this.butDose3.Name = "butDose3";
-			this.butDose3.Size = new System.Drawing.Size(32, 32);
-			this.butDose3.TabIndex = 63;
-			this.butDose3.Text = "3";
-			this.butDose3.UseVisualStyleBackColor = true;
-			this.butDose3.Click += new System.EventHandler(this.butDose3_Click);
-			// 
-			// butDose2
-			// 
-			this.butDose2.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose2.Autosize = true;
-			this.butDose2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose2.CornerRadius = 4F;
-			this.butDose2.Location = new System.Drawing.Point(47, 98);
-			this.butDose2.Name = "butDose2";
-			this.butDose2.Size = new System.Drawing.Size(32, 32);
-			this.butDose2.TabIndex = 64;
-			this.butDose2.Text = "2";
-			this.butDose2.UseVisualStyleBackColor = true;
-			this.butDose2.Click += new System.EventHandler(this.butDose2_Click);
-			// 
-			// butDose1
-			// 
-			this.butDose1.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose1.Autosize = true;
-			this.butDose1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose1.CornerRadius = 4F;
-			this.butDose1.Location = new System.Drawing.Point(85, 98);
-			this.butDose1.Name = "butDose1";
-			this.butDose1.Size = new System.Drawing.Size(32, 32);
-			this.butDose1.TabIndex = 65;
-			this.butDose1.Text = "1";
-			this.butDose1.UseVisualStyleBackColor = true;
-			this.butDose1.Click += new System.EventHandler(this.butDose1_Click);
-			// 
-			// butDose0
-			// 
-			this.butDose0.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose0.Autosize = true;
-			this.butDose0.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose0.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose0.CornerRadius = 4F;
-			this.butDose0.Location = new System.Drawing.Point(9, 136);
-			this.butDose0.Name = "butDose0";
-			this.butDose0.Size = new System.Drawing.Size(32, 32);
-			this.butDose0.TabIndex = 66;
-			this.butDose0.Text = "0";
-			this.butDose0.UseVisualStyleBackColor = true;
-			this.butDose0.Click += new System.EventHandler(this.butDose0_Click);
-			// 
-			// butDose25
-			// 
-			this.butDose25.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose25.Autosize = true;
-			this.butDose25.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose25.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose25.CornerRadius = 4F;
-			this.butDose25.Location = new System.Drawing.Point(123, 22);
-			this.butDose25.Name = "butDose25";
-			this.butDose25.Size = new System.Drawing.Size(70, 32);
-			this.butDose25.TabIndex = 68;
-			this.butDose25.Text = ".25";
-			this.butDose25.UseVisualStyleBackColor = true;
-			this.butDose25.Click += new System.EventHandler(this.butDose25_Click);
-			// 
-			// butDose50
-			// 
-			this.butDose50.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDose50.Autosize = true;
-			this.butDose50.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDose50.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDose50.CornerRadius = 4F;
-			this.butDose50.Location = new System.Drawing.Point(123, 60);
-			this.butDose50.Name = "butDose50";
-			this.butDose50.Size = new System.Drawing.Size(70, 32);
-			this.butDose50.TabIndex = 69;
-			this.butDose50.Text = ".50";
-			this.butDose50.UseVisualStyleBackColor = true;
-			this.butDose50.Click += new System.EventHandler(this.butDose50_Click);
-			// 
-			// butDoseWaste
-			// 
-			this.butDoseWaste.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDoseWaste.Autosize = true;
-			this.butDoseWaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDoseWaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDoseWaste.CornerRadius = 4F;
-			this.butDoseWaste.Location = new System.Drawing.Point(123, 98);
-			this.butDoseWaste.Name = "butDoseWaste";
-			this.butDoseWaste.Size = new System.Drawing.Size(70, 32);
-			this.butDoseWaste.TabIndex = 70;
-			this.butDoseWaste.Text = "Waste";
-			this.butDoseWaste.UseVisualStyleBackColor = true;
-			this.butDoseWaste.Click += new System.EventHandler(this.butDoseWaste_Click);
-			// 
-			// butDoseEnter
-			// 
-			this.butDoseEnter.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDoseEnter.Autosize = true;
-			this.butDoseEnter.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDoseEnter.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDoseEnter.CornerRadius = 4F;
-			this.butDoseEnter.Location = new System.Drawing.Point(123, 136);
-			this.butDoseEnter.Name = "butDoseEnter";
-			this.butDoseEnter.Size = new System.Drawing.Size(70, 32);
-			this.butDoseEnter.TabIndex = 71;
-			this.butDoseEnter.Text = "Enter";
-			this.butDoseEnter.UseVisualStyleBackColor = true;
-			this.butDoseEnter.Click += new System.EventHandler(this.butDoseEnter_Click);
-			// 
-			// butDoseDecPoint
-			// 
-			this.butDoseDecPoint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDoseDecPoint.Autosize = true;
-			this.butDoseDecPoint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDoseDecPoint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDoseDecPoint.CornerRadius = 4F;
-			this.butDoseDecPoint.Location = new System.Drawing.Point(85, 136);
-			this.butDoseDecPoint.Name = "butDoseDecPoint";
-			this.butDoseDecPoint.Size = new System.Drawing.Size(32, 32);
-			this.butDoseDecPoint.TabIndex = 86;
-			this.butDoseDecPoint.Text = ".";
-			this.butDoseDecPoint.UseVisualStyleBackColor = true;
-			this.butDoseDecPoint.Click += new System.EventHandler(this.butDoseDecPoint_Click);
 			// 
 			// comboAnesthMed
 			// 
@@ -1833,9 +1406,9 @@ namespace OpenDental
 			this.labelDose.AutoSize = true;
 			this.labelDose.Location = new System.Drawing.Point(319, 131);
 			this.labelDose.Name = "labelDose";
-			this.labelDose.Size = new System.Drawing.Size(55, 13);
+			this.labelDose.Size = new System.Drawing.Size(51, 13);
 			this.labelDose.TabIndex = 100;
-			this.labelDose.Text = "Dose (mL)";
+			this.labelDose.Text = "Dose (ml)";
 			// 
 			// labelAnesthetist
 			// 
@@ -1884,20 +1457,9 @@ namespace OpenDental
 			this.textPatID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.textPatID.TextChanged += new System.EventHandler(this.textBoxPatID_TextChanged);
 			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(406, 321);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(150, 13);
-			this.label2.TabIndex = 107;
-			this.label2.Text = "(Doses must be entered in mL)";
-			// 
 			// groupBoxAnesthMeds
 			// 
 			this.groupBoxAnesthMeds.Controls.Add(this.gridAnesthMeds);
-			this.groupBoxAnesthMeds.Controls.Add(this.butWasteQty);
-			this.groupBoxAnesthMeds.Controls.Add(this.label2);
 			this.groupBoxAnesthMeds.Controls.Add(this.textPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatient);
@@ -1927,33 +1489,145 @@ namespace OpenDental
 			this.groupBoxAnesthMeds.TabStop = false;
 			this.groupBoxAnesthMeds.Text = "Patient";
 			// 
+			// gridVitalSigns
+			// 
+			this.gridVitalSigns.HScrollVisible = false;
+			this.gridVitalSigns.Location = new System.Drawing.Point(23, 50);
+			this.gridVitalSigns.Name = "gridVitalSigns";
+			this.gridVitalSigns.ScrollValue = 0;
+			this.gridVitalSigns.Size = new System.Drawing.Size(547, 143);
+			this.gridVitalSigns.TabIndex = 133;
+			this.gridVitalSigns.Title = "Vital Signs";
+			this.gridVitalSigns.TranslationName = "TableAnestheticData";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butOK.Location = new System.Drawing.Point(684, 115);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 26);
+			this.butOK.TabIndex = 143;
+			this.butOK.Text = "&OK";
+			this.butOK.UseVisualStyleBackColor = true;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClose.Location = new System.Drawing.Point(765, 115);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(96, 26);
+			this.butClose.TabIndex = 142;
+			this.butClose.Text = "&Save and Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(594, 115);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 141;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(72, 116);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(88, 26);
+			this.butPrint.TabIndex = 102;
+			this.butPrint.Text = "Print";
+			this.butPrint.UseVisualStyleBackColor = true;
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(12, 19);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(158, 74);
+			this.sigBox.TabIndex = 135;
+			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
+			// 
+			// butSignTopaz
+			// 
+			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSignTopaz.Autosize = true;
+			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSignTopaz.CornerRadius = 4F;
+			this.butSignTopaz.Location = new System.Drawing.Point(195, 19);
+			this.butSignTopaz.Name = "butSignTopaz";
+			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
+			this.butSignTopaz.TabIndex = 136;
+			this.butSignTopaz.Text = "Sign Topaz";
+			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
+			// 
+			// butClearSig
+			// 
+			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClearSig.Autosize = true;
+			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearSig.CornerRadius = 4F;
+			this.butClearSig.Location = new System.Drawing.Point(195, 53);
+			this.butClearSig.Name = "butClearSig";
+			this.butClearSig.Size = new System.Drawing.Size(75, 26);
+			this.butClearSig.TabIndex = 134;
+			this.butClearSig.Text = "Clear";
+			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
+			// 
+			// butAnesthScore
+			// 
+			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthScore.Autosize = true;
+			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthScore.CornerRadius = 4F;
+			this.butAnesthScore.Location = new System.Drawing.Point(71, 517);
+			this.butAnesthScore.Name = "butAnesthScore";
+			this.butAnesthScore.Size = new System.Drawing.Size(131, 26);
+			this.butAnesthScore.TabIndex = 65;
+			this.butAnesthScore.Text = "Post-anesthesia score";
+			this.butAnesthScore.UseVisualStyleBackColor = true;
+			this.butAnesthScore.Click += new System.EventHandler(this.butAnesthScore_Click);
+			// 
 			// gridAnesthMeds
 			// 
 			this.gridAnesthMeds.HScrollVisible = false;
 			this.gridAnesthMeds.Location = new System.Drawing.Point(25, 175);
 			this.gridAnesthMeds.Name = "gridAnesthMeds";
 			this.gridAnesthMeds.ScrollValue = 0;
-			this.gridAnesthMeds.Size = new System.Drawing.Size(346, 127);
+			this.gridAnesthMeds.Size = new System.Drawing.Size(346, 159);
 			this.gridAnesthMeds.TabIndex = 11;
 			this.gridAnesthMeds.Title = "Anesthetic Medications";
 			this.gridAnesthMeds.TranslationName = "TableAnesthMedsGiven";
 			this.gridAnesthMeds.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMeds_CellDoubleClick);
-			// 
-			// butWasteQty
-			// 
-			this.butWasteQty.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butWasteQty.Autosize = true;
-			this.butWasteQty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWasteQty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butWasteQty.CornerRadius = 4F;
-			this.butWasteQty.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butWasteQty.Location = new System.Drawing.Point(245, 308);
-			this.butWasteQty.Name = "butWasteQty";
-			this.butWasteQty.Size = new System.Drawing.Size(116, 26);
-			this.butWasteQty.TabIndex = 108;
-			this.butWasteQty.Text = "Waste from inventory";
-			this.butWasteQty.UseVisualStyleBackColor = true;
-			this.butWasteQty.Click += new System.EventHandler(this.butWasteQty_Click);
 			// 
 			// butAddAnesthetic
 			// 
@@ -1988,6 +1662,316 @@ namespace OpenDental
 			this.butDelAnesthetic.Text = "Delete";
 			this.butDelAnesthetic.UseVisualStyleBackColor = true;
 			this.butDelAnesthetic.Click += new System.EventHandler(this.butDelAnesthetic_Click);
+			// 
+			// butSurgClose
+			// 
+			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgClose.Autosize = true;
+			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgClose.CornerRadius = 4F;
+			this.butSurgClose.Location = new System.Drawing.Point(211, 17);
+			this.butSurgClose.Name = "butSurgClose";
+			this.butSurgClose.Size = new System.Drawing.Size(86, 26);
+			this.butSurgClose.TabIndex = 11;
+			this.butSurgClose.Text = "Surgery Close";
+			this.butSurgClose.UseVisualStyleBackColor = true;
+			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
+			// 
+			// butAnesthOpen
+			// 
+			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthOpen.Autosize = true;
+			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthOpen.CornerRadius = 4F;
+			this.butAnesthOpen.Location = new System.Drawing.Point(14, 17);
+			this.butAnesthOpen.Name = "butAnesthOpen";
+			this.butAnesthOpen.Size = new System.Drawing.Size(100, 26);
+			this.butAnesthOpen.TabIndex = 7;
+			this.butAnesthOpen.Text = "Anesthesia Open";
+			this.butAnesthOpen.UseVisualStyleBackColor = true;
+			this.butAnesthOpen.Click += new System.EventHandler(this.butAnesthOpen_Click);
+			// 
+			// butAnesthClose
+			// 
+			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthClose.Autosize = true;
+			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthClose.CornerRadius = 4F;
+			this.butAnesthClose.Location = new System.Drawing.Point(303, 17);
+			this.butAnesthClose.Name = "butAnesthClose";
+			this.butAnesthClose.Size = new System.Drawing.Size(100, 26);
+			this.butAnesthClose.TabIndex = 13;
+			this.butAnesthClose.Text = "Anesthesia Close";
+			this.butAnesthClose.UseVisualStyleBackColor = true;
+			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
+			// 
+			// butSurgOpen
+			// 
+			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgOpen.Autosize = true;
+			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgOpen.CornerRadius = 4F;
+			this.butSurgOpen.Location = new System.Drawing.Point(120, 17);
+			this.butSurgOpen.Name = "butSurgOpen";
+			this.butSurgOpen.Size = new System.Drawing.Size(86, 26);
+			this.butSurgOpen.TabIndex = 9;
+			this.butSurgOpen.Text = "Surgery Open";
+			this.butSurgOpen.UseVisualStyleBackColor = true;
+			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
+			// 
+			// butDose10
+			// 
+			this.butDose10.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose10.Autosize = true;
+			this.butDose10.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose10.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose10.CornerRadius = 4F;
+			this.butDose10.Location = new System.Drawing.Point(47, 154);
+			this.butDose10.Name = "butDose10";
+			this.butDose10.Size = new System.Drawing.Size(32, 32);
+			this.butDose10.TabIndex = 67;
+			this.butDose10.Text = "10";
+			this.butDose10.UseVisualStyleBackColor = true;
+			// 
+			// butDose7
+			// 
+			this.butDose7.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose7.Autosize = true;
+			this.butDose7.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose7.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose7.CornerRadius = 4F;
+			this.butDose7.Location = new System.Drawing.Point(9, 40);
+			this.butDose7.Name = "butDose7";
+			this.butDose7.Size = new System.Drawing.Size(32, 32);
+			this.butDose7.TabIndex = 57;
+			this.butDose7.Text = "7";
+			this.butDose7.UseVisualStyleBackColor = true;
+			this.butDose7.Click += new System.EventHandler(this.butDose7_Click);
+			// 
+			// butDose8
+			// 
+			this.butDose8.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose8.Autosize = true;
+			this.butDose8.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose8.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose8.CornerRadius = 4F;
+			this.butDose8.Location = new System.Drawing.Point(47, 40);
+			this.butDose8.Name = "butDose8";
+			this.butDose8.Size = new System.Drawing.Size(32, 32);
+			this.butDose8.TabIndex = 58;
+			this.butDose8.Text = "8";
+			this.butDose8.UseVisualStyleBackColor = true;
+			this.butDose8.Click += new System.EventHandler(this.butDose8_Click_1);
+			// 
+			// butDose9
+			// 
+			this.butDose9.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose9.Autosize = true;
+			this.butDose9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose9.CornerRadius = 4F;
+			this.butDose9.Location = new System.Drawing.Point(85, 40);
+			this.butDose9.Name = "butDose9";
+			this.butDose9.Size = new System.Drawing.Size(32, 32);
+			this.butDose9.TabIndex = 59;
+			this.butDose9.Text = "9";
+			this.butDose9.UseVisualStyleBackColor = true;
+			this.butDose9.Click += new System.EventHandler(this.butDose9_Click);
+			// 
+			// butDose6
+			// 
+			this.butDose6.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose6.Autosize = true;
+			this.butDose6.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose6.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose6.CornerRadius = 4F;
+			this.butDose6.Location = new System.Drawing.Point(9, 78);
+			this.butDose6.Name = "butDose6";
+			this.butDose6.Size = new System.Drawing.Size(32, 32);
+			this.butDose6.TabIndex = 60;
+			this.butDose6.Text = "6";
+			this.butDose6.UseVisualStyleBackColor = true;
+			this.butDose6.Click += new System.EventHandler(this.butDose6_Click);
+			// 
+			// butDose5
+			// 
+			this.butDose5.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose5.Autosize = true;
+			this.butDose5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose5.CornerRadius = 4F;
+			this.butDose5.Location = new System.Drawing.Point(47, 78);
+			this.butDose5.Name = "butDose5";
+			this.butDose5.Size = new System.Drawing.Size(32, 32);
+			this.butDose5.TabIndex = 61;
+			this.butDose5.Text = "5";
+			this.butDose5.UseVisualStyleBackColor = true;
+			this.butDose5.Click += new System.EventHandler(this.butDose5_Click);
+			// 
+			// butDose4
+			// 
+			this.butDose4.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose4.Autosize = true;
+			this.butDose4.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose4.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose4.CornerRadius = 4F;
+			this.butDose4.Location = new System.Drawing.Point(85, 78);
+			this.butDose4.Name = "butDose4";
+			this.butDose4.Size = new System.Drawing.Size(32, 32);
+			this.butDose4.TabIndex = 62;
+			this.butDose4.Text = "4";
+			this.butDose4.UseVisualStyleBackColor = true;
+			this.butDose4.Click += new System.EventHandler(this.butDose4_Click);
+			// 
+			// butDose3
+			// 
+			this.butDose3.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose3.Autosize = true;
+			this.butDose3.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose3.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose3.CornerRadius = 4F;
+			this.butDose3.Location = new System.Drawing.Point(9, 116);
+			this.butDose3.Name = "butDose3";
+			this.butDose3.Size = new System.Drawing.Size(32, 32);
+			this.butDose3.TabIndex = 63;
+			this.butDose3.Text = "3";
+			this.butDose3.UseVisualStyleBackColor = true;
+			this.butDose3.Click += new System.EventHandler(this.butDose3_Click);
+			// 
+			// butDose2
+			// 
+			this.butDose2.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose2.Autosize = true;
+			this.butDose2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose2.CornerRadius = 4F;
+			this.butDose2.Location = new System.Drawing.Point(47, 116);
+			this.butDose2.Name = "butDose2";
+			this.butDose2.Size = new System.Drawing.Size(32, 32);
+			this.butDose2.TabIndex = 64;
+			this.butDose2.Text = "2";
+			this.butDose2.UseVisualStyleBackColor = true;
+			this.butDose2.Click += new System.EventHandler(this.butDose2_Click);
+			// 
+			// butDose1
+			// 
+			this.butDose1.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose1.Autosize = true;
+			this.butDose1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose1.CornerRadius = 4F;
+			this.butDose1.Location = new System.Drawing.Point(85, 116);
+			this.butDose1.Name = "butDose1";
+			this.butDose1.Size = new System.Drawing.Size(32, 32);
+			this.butDose1.TabIndex = 65;
+			this.butDose1.Text = "1";
+			this.butDose1.UseVisualStyleBackColor = true;
+			this.butDose1.Click += new System.EventHandler(this.butDose1_Click);
+			// 
+			// butDose0
+			// 
+			this.butDose0.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose0.Autosize = true;
+			this.butDose0.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose0.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose0.CornerRadius = 4F;
+			this.butDose0.Location = new System.Drawing.Point(9, 154);
+			this.butDose0.Name = "butDose0";
+			this.butDose0.Size = new System.Drawing.Size(32, 32);
+			this.butDose0.TabIndex = 66;
+			this.butDose0.Text = "0";
+			this.butDose0.UseVisualStyleBackColor = true;
+			this.butDose0.Click += new System.EventHandler(this.butDose0_Click);
+			// 
+			// butDose25
+			// 
+			this.butDose25.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose25.Autosize = true;
+			this.butDose25.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose25.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose25.CornerRadius = 4F;
+			this.butDose25.Location = new System.Drawing.Point(123, 40);
+			this.butDose25.Name = "butDose25";
+			this.butDose25.Size = new System.Drawing.Size(70, 32);
+			this.butDose25.TabIndex = 68;
+			this.butDose25.Text = ".25";
+			this.butDose25.UseVisualStyleBackColor = true;
+			this.butDose25.Click += new System.EventHandler(this.butDose25_Click);
+			// 
+			// butDose50
+			// 
+			this.butDose50.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDose50.Autosize = true;
+			this.butDose50.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDose50.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDose50.CornerRadius = 4F;
+			this.butDose50.Location = new System.Drawing.Point(123, 78);
+			this.butDose50.Name = "butDose50";
+			this.butDose50.Size = new System.Drawing.Size(70, 32);
+			this.butDose50.TabIndex = 69;
+			this.butDose50.Text = ".50";
+			this.butDose50.UseVisualStyleBackColor = true;
+			this.butDose50.Click += new System.EventHandler(this.butDose50_Click);
+			// 
+			// butDoseWaste
+			// 
+			this.butDoseWaste.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDoseWaste.Autosize = true;
+			this.butDoseWaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDoseWaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDoseWaste.CornerRadius = 4F;
+			this.butDoseWaste.Location = new System.Drawing.Point(123, 116);
+			this.butDoseWaste.Name = "butDoseWaste";
+			this.butDoseWaste.Size = new System.Drawing.Size(70, 32);
+			this.butDoseWaste.TabIndex = 70;
+			this.butDoseWaste.Text = "Waste";
+			this.butDoseWaste.UseVisualStyleBackColor = true;
+			this.butDoseWaste.Click += new System.EventHandler(this.butDoseWaste_Click);
+			// 
+			// butDoseEnter
+			// 
+			this.butDoseEnter.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDoseEnter.Autosize = true;
+			this.butDoseEnter.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDoseEnter.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDoseEnter.CornerRadius = 4F;
+			this.butDoseEnter.Location = new System.Drawing.Point(123, 154);
+			this.butDoseEnter.Name = "butDoseEnter";
+			this.butDoseEnter.Size = new System.Drawing.Size(70, 32);
+			this.butDoseEnter.TabIndex = 71;
+			this.butDoseEnter.Text = "Enter";
+			this.butDoseEnter.UseVisualStyleBackColor = true;
+			this.butDoseEnter.Click += new System.EventHandler(this.butDoseEnter_Click);
+			// 
+			// butDoseDecPoint
+			// 
+			this.butDoseDecPoint.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDoseDecPoint.Autosize = true;
+			this.butDoseDecPoint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDoseDecPoint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDoseDecPoint.CornerRadius = 4F;
+			this.butDoseDecPoint.Location = new System.Drawing.Point(85, 154);
+			this.butDoseDecPoint.Name = "butDoseDecPoint";
+			this.butDoseDecPoint.Size = new System.Drawing.Size(32, 32);
+			this.butDoseDecPoint.TabIndex = 86;
+			this.butDoseDecPoint.Text = ".";
+			this.butDoseDecPoint.UseVisualStyleBackColor = true;
+			this.butDoseDecPoint.Click += new System.EventHandler(this.butDoseDecPoint_Click);
+			// 
+			// labelInstrux
+			// 
+			this.labelInstrux.AutoSize = true;
+			this.labelInstrux.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelInstrux.ForeColor = System.Drawing.SystemColors.WindowFrame;
+			this.labelInstrux.Location = new System.Drawing.Point(7, 20);
+			this.labelInstrux.Name = "labelInstrux";
+			this.labelInstrux.Size = new System.Drawing.Size(137, 13);
+			this.labelInstrux.TabIndex = 87;
+			this.labelInstrux.Text = "NOTE: Doses must be in ml";
 			// 
 			// FormAnestheticRecord
 			// 
@@ -2026,6 +2010,7 @@ namespace OpenDental
 			this.groupBoxTimes.ResumeLayout(false);
 			this.groupBoxTimes.PerformLayout();
 			this.groupBoxDoseCalc.ResumeLayout(false);
+			this.groupBoxDoseCalc.PerformLayout();
 			this.groupBoxAnesthMeds.ResumeLayout(false);
 			this.groupBoxAnesthMeds.PerformLayout();
 			this.ResumeLayout(false);
@@ -3099,27 +3084,7 @@ namespace OpenDental
 
 		private void butWasteQty_Click(object sender, EventArgs e){
 
-                /*FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();*/
-			
-				Userod curUser = Security.CurUser;
-				
-				if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-				{
-					
-					FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
-					FormW.ShowDialog();
-		
-					return;
-					
-				}
-				else
-				{
-					FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-					FormES.ShowDialog();
-					//MessageBox.Show(this, "You must be an administrator to unlock this action");
-					return;
-				}
+                
 		}
 
 
@@ -3188,7 +3153,27 @@ namespace OpenDental
 
 		private void butDoseWaste_Click(object sender, EventArgs e){
 
-			
+			/*FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+                FormES.ShowDialog();*/
+
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
+
+				FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
+				FormW.ShowDialog();
+
+				return;
+
+			}
+			else
+			{
+				FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
+				FormES.ShowDialog();
+				//MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
 		}
 
 		private void checkBP_CheckedChanged(object sender, EventArgs e){
@@ -3411,6 +3396,11 @@ namespace OpenDental
 		}
 
 		private void comboIVSite_SelectedIndexChanged(object sender, EventArgs e){
+
+		}
+
+		private void butDose8_Click_1(object sender, EventArgs e)
+		{
 
 		}			
 
