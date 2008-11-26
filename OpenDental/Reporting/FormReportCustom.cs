@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.viewer.Location = new System.Drawing.Point(45,56);
 			this.viewer.Name = "viewer";
 			this.viewer.PageCurrent = 1;
-			this.viewer.Parameters = null;
+			this.viewer.Parameters = "XPat="+FormOpenDental.CurPatNum.ToString();
 			this.viewer.ReportName = null;
 			this.viewer.ScrollMode = fyiReporting.RdlViewer.ScrollModeEnum.Continuous;
 			this.viewer.ShowParameterPanel = true;
