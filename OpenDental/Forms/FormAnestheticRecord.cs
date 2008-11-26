@@ -2524,7 +2524,7 @@ namespace OpenDental
 		}
 			private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 
-			FillControls(anestheticRecordCur);
+			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		
 		}
@@ -3369,7 +3369,7 @@ namespace OpenDental
 					int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
 					if (value != 0)
 					{
-						FillControls(anestheticRecordCur);
+						FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 						//DialogResult = DialogResult.OK;
 						//Close();
 					}
@@ -3390,7 +3390,7 @@ namespace OpenDental
 				if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 				{
 
-					FillControls(anestheticRecordCur);
+					FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 					//DialogResult = DialogResult.OK;
 					//Close();
 
@@ -3446,7 +3446,7 @@ namespace OpenDental
 			{
 
 			SaveData();
-			FillControls(anestheticRecordCur);
+			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 
 			}
 			else
