@@ -1530,7 +1530,7 @@ namespace OpenDental
 			this.butOK.TabIndex = 143;
 			this.butOK.Text = "&OK";
 			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click_1);
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butClose
 			// 
@@ -2087,14 +2087,12 @@ namespace OpenDental
 		}
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
-			
 			RefreshListAnesthetics();
-
 			//necessary because we want the newest record at the top of the list selected and no records throws an exception
 			
 			try 
 				{
-					listAnesthetics.SelectedIndex = 0;
+					 listAnesthetics.SelectedIndex = 0;
 				}
 			catch 
 				{
@@ -2123,9 +2121,9 @@ namespace OpenDental
 			}
 
 			//Fills provider comboboxes only if this is a new form
-			if (IsUpdate == false)
-				
-			{
+			//if (IsUpdate == true)
+
+			//{
 				//Anesthetist comboBox
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
@@ -2213,12 +2211,11 @@ namespace OpenDental
 					{
 						comboCirc.SelectedIndex = defaultindex;
 					}
-					
-				}
-				
-				FillControls(anestheticRecordCur);
-			}
 
+				} 
+				
+			//}
+				
 			try
 			{
 				//this will be an empty string if there are no records yet, and will throw an exception
@@ -2228,6 +2225,10 @@ namespace OpenDental
 			{
 				return;
 			}
+
+
+			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			
 		}
 
 		private void RefreshListAnesthetics(){
@@ -2241,16 +2242,16 @@ namespace OpenDental
 
 				listAnesthetics.Items.Add(AnestheticRecords.List[i].AnestheticDate);
 				anestheticRecordCur = AnestheticRecords.List[i].AnestheticRecordNum;
+
 			}
 		}
 
 		//Load saved data into form for selected Anesthetic Record
 		private void FillControls(int anestheticRecordCur){
 
-			string command =
-	"SELECT * "                   
-	+ " FROM anestheticdata"					
-	+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
+			string command ="SELECT * "                   
+			+ " FROM anestheticdata"					
+			+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
 	
 			DataTable table = General.GetTable(command);
 			AnestheticData Cur;
@@ -2583,11 +2584,13 @@ namespace OpenDental
 			AnestheticRecordCur.PatNum = PatCur.PatNum;
 			AnestheticRecordCur.AnestheticDate = DateTime.Now;
 			AnestheticRecordCur.ProvNum = PatCur.PriProv;
+			//create new Anesthetic Record
 			AnestheticRecords.Insert(AnestheticRecordCur);
+			//save data from form in db
 			AnestheticRecords.InsertAnestheticData(AnestheticRecordCur);
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//Add -1 after List.Length to select in ascending order
-			//listAnesthetics.SelectedIndex = 0;
+			listAnesthetics.SelectedIndex = 0; // AnestheticRecords.List.Length = 1;//Add -1 after List.Length to select in ascending order
+			
 		}
 
 		//deletes an Anesthetic from the list of saved Anesthetics
@@ -2611,6 +2614,16 @@ namespace OpenDental
         
 				AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
 				RefreshListAnesthetics();
+				try
+				{
+					listAnesthetics.SelectedIndex = 0;
+				}
+				catch
+				{
+					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
+				}
+			
+				FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				return;
 			}
 
@@ -3129,26 +3142,6 @@ namespace OpenDental
 				}
 		}
 
-		private void butOK_Click(object sender, EventArgs e){
-
-			Userod curUser = Security.CurUser;
-
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
-
-				DialogResult=DialogResult.OK;
-				return;
-
-			}
-			else
-			{
-				//FormAnesthElevateSecurityPriv ES = new FormAnesthElevateSecurityPriv();
-				//ShowDialog = FormES
-				//MessageBox.Show(this, "You must be an administrator to unlock this action");
-				return;
-			}
-
-		}
 
 		private void button1_Click(object sender, EventArgs e){
 
@@ -3306,6 +3299,7 @@ namespace OpenDental
 			}
 			else
 			{*/
+			
 			if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
 			{
 				int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0, radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
@@ -3445,9 +3439,24 @@ namespace OpenDental
 
 		}
 
-		private void butOK_Click_1(object sender, EventArgs e){
+		private void butOK_Click(object sender, EventArgs e){
+			Userod curUser = Security.CurUser;
+
+			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
+			{
 
 			SaveData();
+			FillControls(anestheticRecordCur);
+
+			}
+			else
+			{
+				//FormAnesthElevateSecurityPriv ES = new FormAnesthElevateSecurityPriv();
+				//ShowDialog = FormES
+				//MessageBox.Show(this, "You must be an administrator to unlock this action");
+				return;
+			}
+			
 		}
 
 		private void comboIVSite_SelectedIndexChanged(object sender, EventArgs e){

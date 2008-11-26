@@ -33,7 +33,8 @@ namespace OpenDentBusiness{
 				List[i].PatNum = PIn.PInt(table.Rows[i][1].ToString());
 				List[i].AnestheticDate = PIn.PDateT(table.Rows[i][2].ToString());
 				List[i].ProvNum = PIn.PInt(table.Rows[i][3].ToString());
-			}
+			} 
+			
 		}
 
 		///<summary></summary>
