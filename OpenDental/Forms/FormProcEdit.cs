@@ -2902,23 +2902,25 @@ namespace OpenDental{
 					return false;
 				}
 			}*/
-			//These three may be overkill, but it never hurts to check twice:
-			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
-				//if status was changed to complete
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
+			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){//use the new date
 					return false;
 				}
 			}
-			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){
-				//if new procedure is complete
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
+			else if(IsNew && ProcCur.ProcStatus==ProcStat.C){//if new procedure is complete
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
 					return false;
 				}
 			}
-			else if(!IsNew){
-				if(ProcOld.ProcStatus==ProcStat.C){
-					if(!Security.IsAuthorized(Permissions.ProcComplEdit,ProcCur.DateEntryC)){
+			else if(!IsNew){//an old procedure
+				if(ProcOld.ProcStatus==ProcStat.C){//that was already complete
+					if(!Security.IsAuthorized(Permissions.ProcComplEdit,ProcOld.ProcDate)){//block old date
 						return false;
+					}
+					if(ProcCur.ProcStatus==ProcStat.C){//if it's still complete
+						if(!Security.IsAuthorized(Permissions.ProcComplEdit,PIn.PDate(textDate.Text))){//block new date, too
+							return false;
+						}
 					}
 				}
 			}

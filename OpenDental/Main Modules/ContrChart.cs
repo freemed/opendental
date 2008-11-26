@@ -4624,7 +4624,7 @@ namespace OpenDental{
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
 			if(newStatus==ProcStat.C){
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
 					return;
 				}
 			}
@@ -4832,6 +4832,11 @@ namespace OpenDental{
 
 		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
 		private void ProcButtonClicked(int procButtonNum,string quickcode) {
+			if(newStatus==ProcStat.C){
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
+					return;
+				}
+			}
 			#if TRIALONLY
 				if(procButtonNum==0){
 					MsgBox.Show(this,"Quick buttons do not work in the trial version because dummy codes are being used instead of real codes.  Just to the left, change to a different category to see other procedure buttons available which do work.");
@@ -5062,7 +5067,7 @@ namespace OpenDental{
 
 		private void EnterTypedCode() {
 			if(newStatus==ProcStat.C) {
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))) {
 					return;
 				}
 			}
@@ -6120,9 +6125,10 @@ namespace OpenDental{
 		}
 
 		private void menuItemSetComplete_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
-				return;
-			}
+			//moved down so we can have the date first
+			//if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
+			//	return;
+			//}
 			if(gridProg.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
@@ -6151,6 +6157,9 @@ namespace OpenDental{
 					|| apt.AptStatus == ApptStatus.UnschedList)
 				{
 					MsgBox.Show(this,"Not allowed for that status.");
+					return;
+				}
+				if(!Security.IsAuthorized(Permissions.ProcComplCreate,apt.AptDateTime)) {
 					return;
 				}
 				if(!MsgBox.Show(this,true,"Set appointment complete?")){
@@ -6184,6 +6193,25 @@ namespace OpenDental{
 			Procedure procOld;
 			ProcedureCode procCode;
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			//this loop is just for security:
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				procCur=Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),true);
+				if(procCur.ProcStatus==ProcStat.C){
+					continue;//because it will be skipped below anyway
+				}
+				if(procCur.AptNum!=0) {//if attached to an appointment
+					apt=Appointments.GetOneApt(procCur.AptNum);
+					if(!Security.IsAuthorized(Permissions.ProcComplCreate,apt.AptDateTime)) {
+						return;
+					}
+				}
+				else{
+					if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))) {
+						return;
+					}
+				}
+			}
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				apt=null;
@@ -6196,8 +6224,8 @@ namespace OpenDental{
 				//to appointments, because otherwise, the date always follows that of the appointment.
 				//Behavior #2 was used for quite a while, but we got too many complaints about the security of such a strategy.
 				//Starting with version 5.4, we had to switch to behavior #1.  This will generate complaints from people who were using
-				//this button to update the date.  Hopefully, we will have a new feature to allow editing the date of multiple procs
-				//at once, and it will be in place before they complain too loudly.
+				//this button to update the date.  But we now have a new feature in place to allow editing the date of multiple procs
+				//at once that can be used instead.
 				if(procCur.ProcStatus==ProcStat.C){
 					continue;//don't allow setting a procedure complete again.
 				}
