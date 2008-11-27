@@ -48,6 +48,8 @@ namespace OpenDentBusiness{
 			get { return anesthMedNameChanged; }
 		}
 
+
+
 		[DataField("QtyGiven")]
 		private string qtyGiven;
 		bool qtyGivenChanged;
@@ -77,14 +79,32 @@ namespace OpenDentBusiness{
 		private string doseTimeStamp;
 		bool doseTimeStampChanged;
 		/// <summary>TimeStamp that a dose of Anesthetic Medication is delivered to a patient</summary>
-		public string DoseTimeStamp {
+		public string DoseTimeStamp
+		{
 			get { return doseTimeStamp; }
 			set { doseTimeStamp = value; MarkDirty(); doseTimeStampChanged = true; }
 		}
-		public bool DoseTimeStampChanged {
+		public bool DoseTimeStampChanged
+		{
 			get { return doseTimeStampChanged; }
 		}
 			
+		[DataField("QtyOnHandOld")]
+		private string qtyOnHandOld;
+		bool qtyOnHandOldChanged;
+		/// <summary>Quantity of an Anesthetic Medication that has been delivered to a patient</summary>
+
+		public string QtyOnHandOld
+		{
+			get { return qtyOnHandOld; }
+			set { qtyOnHandOld = value; MarkDirty(); qtyOnHandOldChanged = true; }
+		}
+		public bool QtyOnHandOldChanged
+		{
+			get { return qtyOnHandOldChanged; }
+		}
+
+
 	}
 
 	

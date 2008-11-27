@@ -19,6 +19,7 @@ namespace OpenDentBusiness
 		///<summary>This data adapter is used for all queries to the database.</summary>
 		static MySqlConnection con;
 		public MySqlCommand cmd;
+		//public double QtyOnHandOld;
 		
 
 		public static DataTable GetAMDataTable() {
@@ -221,15 +222,31 @@ namespace OpenDentBusiness
 			General.NonQ(command);
 		}
 		/// <summary>Inserts the newly added anesthetic medication and How supplied into the anesthmedsgiven table in the database</summary>
-		public static void InsertAMedDose(string anesth_Medname, decimal dose, decimal amtwasted, int anestheticRecordNum){
+		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew,  int anestheticRecordNum){
 			string AMName = anesth_Medname;
 			
 			if (anesth_Medname.Contains("'"))
 				{
 					AMName = anesth_Medname.Replace("'", "''");
 				}
-			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp) VALUE('" + anestheticRecordNum + "','" + AMName + "','" + dose + "', '" + amtwasted + "', '" + MiscData.GetNowDateTime().ToString("hh:mm:ss tt") + "')";
+			
+			string doseTimeStamp = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
+			//update anesthmedsgiven
+			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp,QtyOnHandOld) VALUES('" + anestheticRecordNum + "','" + AMName + "','" + dose + "','" + amtwasted + "','" + doseTimeStamp + "','" + qtyonhandold + "'" + ")";
 			General.NonQ(command);
+
+			string command2 = "UPDATE anesthmedsgiven SET "
+					+ "QtyOnHandOld = " + GetQtyOnHand(AMName) + " "
+					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" + "AND DoseTimeStamp= '" + doseTimeStamp + "'";
+			General.NonQ(command2);
+
+			//update anesthmedsinventory
+			double AdjQty = qtyonhandold - dose;
+			string command3 = "UPDATE anesthmedsinventory SET "
+					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
+			General.NonQ(command3);
+
 		}
 
 		public static void UpdateAMedDose(string anesth_Medname, double dose, double amtwasted, string dosetimestamp, int anestheticRecordNum)
@@ -241,6 +258,7 @@ namespace OpenDentBusiness
 				AMName = anesth_Medname.Replace("'", "''");
 			}
 
+			//update anesthmedsgiven
 			string command = "UPDATE anesthmedsgiven SET "
 				+ " AnesthMedName		='" + POut.PString(AMName) + "' "
 				+ ",QtyGiven			=" + POut.PDouble((dose)) + " "
@@ -248,6 +266,15 @@ namespace OpenDentBusiness
 				+ ",DoseTimeStamp		='" + POut.PString(Convert.ToString(dosetimestamp)) + "'"
 				+ "WHERE DoseTimeStamp ='" + Convert.ToString(dosetimestamp) + "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
 			General.NonQ(command);
+
+			//update anesthmedsinventory
+			double QtyOnHandOld = GetQtyOnHandOld(AMName,dosetimestamp);
+
+			double AdjQty = QtyOnHandOld - (dose)-(amtwasted);
+			string command2 = "UPDATE anesthmedsinventory SET "
+					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" ;
+			General.NonQ(command2);
 			
 		}
 		/// <summary>Gets the data from anesthmedsgiven table</summary>
@@ -329,10 +356,37 @@ namespace OpenDentBusiness
 		}
 		
 		/// <summary>Delete rows from the table anesthmedsgiven</summary>
-		public static void DeleteAMedDose(string anesthMedName, decimal  QtyGiven, string TimeStamp, int anestheticRecordNum){
+		public static void DeleteAMedDose(string anesthMedName, double  QtyGiven, double QtyWasted, string TimeStamp, int anestheticRecordNum){
+			
+			//get QtyOnHandOld
+			double qtyOnHandOld = GetQtyOnHandOld(anesthMedName, TimeStamp);
 
-			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'" +  " and AnestheticRecordNum = " + anestheticRecordNum;
+			//Update anesthmedsgiven
+			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'" + " and AnestheticRecordNum = " + anestheticRecordNum;
 			General.NonQ(command);
+			
+			
+			//Update QtyOnHandOld for remaining meds of this name
+			
+
+			if (GetQtyOnHandOld(anesthMedName, TimeStamp) != 0.0)
+			{
+			double qtyOnHandOld2 = GetQtyOnHandOld(anesthMedName, TimeStamp);
+
+				string command2 = "UPDATE anesthmedsgiven SET "
+				+ " QtyOnHandOld		=	" + POut.PDouble(qtyOnHandOld2) + " "
+				+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
+				General.NonQ(command2);
+
+			//Update anesthmedsinventory
+			double AdjQty = Convert.ToDouble(qtyOnHandOld2) + QtyGiven + QtyWasted;
+			string command3 = "UPDATE anesthmedsinventory SET "
+					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+					+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
+			General.NonQ(command3);
+
+
+			}
 		}
 
 		/*public static void DeleteRow(int selectedRow)
@@ -439,7 +493,8 @@ namespace OpenDentBusiness
 
 		/// <summary>Returns QtyOnHand for anesthetic medication inventory adjustment calculations/// </summary>
 
-		public static double GetQtyOnHand(string aMed){
+		public static double GetQtyOnHand(string aMed)
+		{
 
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
@@ -451,9 +506,37 @@ namespace OpenDentBusiness
 			//if (con.State == ConnectionState.Open) MessageBox.Show("Connection to MySQL opened through OLE DB Provider"); //for testing mySQL connection
 			cmd.CommandText = "SELECT QtyOnHand FROM anesthmedsinventory WHERE AnesthMedName='" + aMed + "'";
 			string QtyOnHand = Convert.ToString(cmd.ExecuteScalar());
-			int qtyOnHand = Convert.ToInt32(QtyOnHand);
+			double qtyOnHand = Convert.ToDouble(QtyOnHand);
 			con.Close();
 			return qtyOnHand;
+		}
+
+			public static double GetQtyOnHandOld(string aMed, string doseTimeStamp){
+
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+
+			//if (con.State == ConnectionState.Open) MessageBox.Show("Connection to MySQL opened through OLE DB Provider"); //for testing mySQL connection
+			cmd.CommandText = "SELECT QtyOnHandOld FROM anesthmedsgiven WHERE AnesthMedName='" + aMed + "'";  // +"AND DoseTimeStamp='" + doseTimeStamp + "'";
+			string QtyOnHandOld = Convert.ToString(cmd.ExecuteScalar());
+
+			if (QtyOnHandOld == "")
+			{
+				return 0.0;
+			}
+
+			else
+			{	double qtyOnHandOld = Convert.ToDouble(QtyOnHandOld);
+				con.Close();
+				return qtyOnHandOld;
+			}
+
+
+			
 
 		}
 

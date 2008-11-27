@@ -84,7 +84,8 @@ namespace OpenDental {
 			AdjustNumCur.AnestheticMedNum = Convert.ToInt32(Med.AnestheticMedNum);
 			if (textQtyAdj.Text != "")
 			{
-				AdjustNumCur.QtyAdj = Convert.ToInt32(textQtyAdj.Text);
+				
+				AdjustNumCur.QtyAdj = Convert.ToDouble(textQtyAdj.Text);
 			}
 			AdjustNumCur.UserNum = Convert.ToInt32(curUser.UserNum);
 			if (textNotes.Text != "")
@@ -96,7 +97,7 @@ namespace OpenDental {
 			AnesthMedInvAdjs.Insert(AdjustNumCur);
 
 			//write inventory adjustment back to table anesthmedsinventory
-			int newQty = Convert.ToInt32(Med.QtyOnHand) + Convert.ToInt32(AdjustNumCur.QtyAdj);
+			double newQty = Convert.ToDouble(Med.QtyOnHand) + Convert.ToDouble(AdjustNumCur.QtyAdj);
 			Med.QtyOnHand = newQty.ToString();
 
 			AnestheticMeds.WriteObject(Med);

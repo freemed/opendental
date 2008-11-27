@@ -487,10 +487,12 @@ namespace OpenDental {
 						,"ALTER table anesthmedsinventory ADD DEASchedule char(3)"
 						,"ALTER table anesthmedsintake DROP DEASchedule"
 						,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32)"
-						,"ALTER table anesthmedsgiven CHANGE QtyGiven QtyGiven float"
-						,"ALTER table anesthmedsgiven CHANGE QtyWasted QtyWasted float"
+						,"ALTER table anesthmedsgiven CHANGE QtyGiven QtyGiven double"
+						,"ALTER table anesthmedsgiven CHANGE QtyWasted QtyWasted double"
+						,"ALTER table anesthmedsgiven ADD QtyOnHandOld double"
 						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32)"
-						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"	
+						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
+	
 					};
 					General.NonQ(commands);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
@@ -503,9 +505,6 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockIncludesAdmin','0','0 or 1.  If 1, administrators are also locked out by date.')";
 					General.NonQ(command);
-
-
-
 
 				}
 				else {//oracle

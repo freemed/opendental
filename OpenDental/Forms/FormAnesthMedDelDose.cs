@@ -45,8 +45,8 @@ namespace OpenDental
 
 		private void butClose_Click(object sender, EventArgs e){
 
-			decimal dose = Convert.ToDecimal(textDose.Text);
-			decimal amtWasted = Convert.ToDecimal(textQtyWasted.Text);
+			double dose = Convert.ToDouble(textDose.Text);
+			double amtWasted = Convert.ToDouble(textQtyWasted.Text);
 			AMedications.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticRecordNum);
 			Close();
 		}
@@ -57,7 +57,7 @@ namespace OpenDental
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e){
 
-			AMedications.DeleteAMedDose(textAnesthMedName.Text, Convert.ToDecimal(textDose.Text), textDoseTimeStamp.Text, anestheticRecordNum);
+			AMedications.DeleteAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(textQtyWasted.Text), textDoseTimeStamp.Text, anestheticRecordNum);
 			
 			DialogResult = DialogResult.OK;
 		}

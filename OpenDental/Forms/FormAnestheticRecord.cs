@@ -2990,10 +2990,8 @@ namespace OpenDental
 		}
 
 		//Append '25' to textAnesthDose
-		private void butDose25_Click(object sender, EventArgs e)
-		{
+		private void butDose25_Click(object sender, EventArgs e){
 
-			
 			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")))
 				textAnesthDose.Text += butDose25.Text;
 		}
@@ -3010,8 +3008,8 @@ namespace OpenDental
 			patNum = PatCur.PatNum;
 			 if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
 			{
-				decimal amtWasted = 0;
-				AMedications.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), Convert.ToDecimal(textAnesthDose.Text), Convert.ToDecimal(amtWasted), AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				double amtWasted = 0;
+				AMedications.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AMedications.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()),Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted),0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			}
 			else
 			{

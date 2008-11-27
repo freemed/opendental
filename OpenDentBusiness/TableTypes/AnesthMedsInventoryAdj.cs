@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		public int AdjustNum;
 		///<summary>FK to anesthmedsinventory.AnestheticMedNum.</summary>
 		public int AnestheticMedNum;
-		public int QtyAdj;
+		public double QtyAdj;
 		///<summary>FK to provider.ProvNum.</summary>
 		public int UserNum;
 		public string Notes;

@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 		public static void Update(AnesthMedsInventoryAdj Cur){
 			string command = "UPDATE anesthmedsinventoryadj SET "
 				+ "AnestheticMedNum = '" + POut.PInt(Cur.AnestheticMedNum) + "' "
-				+ ",QtyAdj = " + POut.PInt(Cur.QtyAdj) + "' "
+				+ ",QtyAdj = " + POut.PDouble(Cur.QtyAdj) + "' "
 				+ ",UserNum = '" + POut.PInt(Cur.UserNum) + "' "
 				+ ",Notes = '" + POut.PString(Cur.Notes) + "' "
 				+ ",TimeStamp = " + POut.PDateT(Cur.TimeStamp) + "' "
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 			}
 			command +=
 				"'"+POut.PInt(Cur.AnestheticMedNum)+"', "
-				+"'"+POut.PInt(Cur.QtyAdj)+"', "
+				+"'"+POut.PDouble(Cur.QtyAdj)+"', "
 				+"'"+POut.PInt(Cur.UserNum)+"', "
 				+"'"+POut.PString(Cur.Notes)+"', "
 				+POut.PDateT(Cur.TimeStamp)+")"; 
