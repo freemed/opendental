@@ -241,7 +241,7 @@ namespace OpenDentBusiness
 			General.NonQ(command2);
 
 			//update anesthmedsinventory
-			double AdjQty = qtyonhandold - dose;
+			double AdjQty = GetQtyOnHand(AMName) - dose;
 			string command3 = "UPDATE anesthmedsinventory SET "
 					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
@@ -249,34 +249,100 @@ namespace OpenDentBusiness
 
 		}
 
-		public static void UpdateAMedDose(string anesth_Medname, double dose, double amtwasted, string dosetimestamp, int anestheticRecordNum)
+		public static void UpdateAMedDose(string anesthMedName, double dose, double amtwasted, string dosetimestamp, int anestheticRecordNum)
 		{
-			string AMName = anesth_Medname;
+			string AMName = anesthMedName;
 
-			if (anesth_Medname.Contains("'"))
+			if (anesthMedName.Contains("'"))
 			{
-				AMName = anesth_Medname.Replace("'", "''");
+				AMName = anesthMedName.Replace("'", "''");
 			}
 
+
+			//update anesthmedsinventory
+
+			if (Convert.ToDouble(GetQtyGiven(anesthMedName, dosetimestamp)) != dose) //no adjustment made if textQtyGiven textbox is filled with same amt
+			{
+				//put old qty back in inventory first
+					double newQty = GetQtyOnHand(anesthMedName) + GetQtyGiven(anesthMedName, dosetimestamp);
+					string command = "UPDATE anesthmedsinventory SET "
+							+ " QtyOnHand		=	" + POut.PDouble(newQty) + " "
+							+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
+					General.NonQ(command);
+
+				//the new qty to be deducted from inventory
+					double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) - (dose) - (amtwasted);
+					string command2 = "UPDATE anesthmedsinventory SET "
+						+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
+					General.NonQ(command2);
+			}
+
+			else if (Convert.ToDouble(GetQtyWasted(anesthMedName, dosetimestamp)) != amtwasted) //no adjustment made if textQtyWasted textbox is filled with same amt
+
+			{
+				//put old wasted qty back into inventory first
+					double newWaste = GetQtyOnHand(anesthMedName) + GetQtyWasted(anesthMedName, dosetimestamp);
+					string command = "UPDATE anesthmedsinventory SET "
+						+ " QtyOnHand		=	" + POut.PDouble(newWaste) + " "
+						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
+					General.NonQ(command);
+
+				//now, deduct the new wasted qty
+					double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) - (amtwasted);
+					string command2 = "UPDATE anesthmedsinventory SET "
+						+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
+					General.NonQ(command2);
+			}
+		
+
 			//update anesthmedsgiven
-			string command = "UPDATE anesthmedsgiven SET "
+			string command3 = "UPDATE anesthmedsgiven SET "
 				+ " AnesthMedName		='" + POut.PString(AMName) + "' "
 				+ ",QtyGiven			=" + POut.PDouble((dose)) + " "
 				+ ",QtyWasted			=" + POut.PDouble((amtwasted)) + " "
 				+ ",DoseTimeStamp		='" + POut.PString(Convert.ToString(dosetimestamp)) + "'"
 				+ "WHERE DoseTimeStamp ='" + Convert.ToString(dosetimestamp) + "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
-			General.NonQ(command);
+			General.NonQ(command3);
 
-			//update anesthmedsinventory
-			double QtyOnHandOld = GetQtyOnHandOld(AMName,dosetimestamp);
 
-			double AdjQty = QtyOnHandOld - (dose)-(amtwasted);
-			string command2 = "UPDATE anesthmedsinventory SET "
-					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
-					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" ;
-			General.NonQ(command2);
 			
 		}
+
+		public static double GetQtyGiven(string anesthMedName, string doseTimeStamp){
+
+			MySqlCommand command = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			command.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			command.CommandText = "SELECT QtyGiven FROM anesthmedsgiven WHERE AnesthMedName ='" + anesthMedName + "'" + " AND DoseTimeStamp='" + doseTimeStamp + "'";
+			command.Connection = con;
+			string qtyGiven = Convert.ToString(command.ExecuteScalar());
+			double doseGiven = 0;
+			return doseGiven = Convert.ToDouble(qtyGiven);
+		
+		}
+
+		public static double GetQtyWasted(string anesthMedName, string doseTimeStamp)
+		{
+
+			MySqlCommand command = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			command.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			command.CommandText = "SELECT QtyWasted FROM anesthmedsgiven WHERE AnesthMedName ='" + anesthMedName + "'" + " AND DoseTimeStamp='" + doseTimeStamp + "'";
+			command.Connection = con;
+			string qtyWasted = Convert.ToString(command.ExecuteScalar());
+			double doseWasted = 0;
+			return doseWasted = Convert.ToDouble(qtyWasted);
+
+		}
+
 		/// <summary>Gets the data from anesthmedsgiven table</summary>
 		public static DataTable GetdataForGrid() {
 			string command = "SELECT AnesthMedName as 'Anesthetic Medication', QtyGiven as 'Dose', QtyWasted as 'Dose Wasted',DoseTimeStamp as 'Time Stamp' FROM anesthmedsgiven order by AnestheticMedNum  desc";

@@ -489,7 +489,6 @@ namespace OpenDental {
 						,"ALTER table anesthmedsintake CHANGE AnestheticMed AnesthMedName char(32)"
 						,"ALTER table anesthmedsgiven CHANGE QtyGiven QtyGiven double"
 						,"ALTER table anesthmedsgiven CHANGE QtyWasted QtyWasted double"
-						,"ALTER table anesthmedsgiven ADD QtyOnHandOld double"
 						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32)"
 						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
 	
