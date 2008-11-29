@@ -236,6 +236,7 @@
     <Compile Include="TableTypes\AnesthMedSupplier.cs" />
     <Compile Include="TableTypes\AnestheticMedsGiven.cs" />
     <Compile Include="TableTypes\AnesthMedsInventoryAdj.cs" />
+    <Compile Include="TableTypes\AnesthScore.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />

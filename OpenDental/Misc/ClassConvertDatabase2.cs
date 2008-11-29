@@ -491,9 +491,32 @@ namespace OpenDental {
 						,"ALTER table anesthmedsgiven CHANGE QtyWasted QtyWasted double"
 						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32)"
 						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
+						,"ALTER table anesthmedsgiven ADD QtyOnHandOld double"
 	
 					};
 					General.NonQ(commands);
+
+					command = "DROP TABLE IF EXISTS anesthscore";
+					General.NonQ(command);
+					command = @"CREATE TABLE anesthscore (
+						AnesthScoreNum int(11) NOT NULL auto_increment,
+						AnestheticRecordNum int(11),
+						QActivity smallint(1),
+						QResp smallint(1),
+						QCirc smallint(1),
+						QConc smallint(1),
+						QColor smallint(1),
+						AnesthesiaScore smallint(2),
+						DischAmb tinyint(1),
+						DischWheelChr tinyint(1),
+						DischAmbulance tinyint(1),
+						DischCondStable tinyint(1),
+						DischCondUnStable tinyint(1),
+						PRIMARY KEY (AnesthScoreNum),
+						INDEX (AnestheticRecordNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
 					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (ProvNum)";
