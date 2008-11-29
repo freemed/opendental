@@ -2614,8 +2614,16 @@ namespace OpenDental
 				{
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
 				}
-			
-				FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+
+				try
+				{	
+					//will be null if the Anesthetic Record has just been deleted, and it's the only one on the list
+					FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				}
+				catch
+				{
+					return;
+				}
 				return;
 			}
 
@@ -3271,7 +3279,7 @@ namespace OpenDental
 			
 			if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
 			{
-				int chkInhO2 = 0, chkInhN2O = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0, 
+				int chkInhO2 = 0, chkInhN2O = 0, comO2LMin = 0, comN2OLMin = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0, 
 					radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
 
 				if (checkInhO2.Checked)
@@ -3333,13 +3341,15 @@ namespace OpenDental
 				//Shouldn't always have a value, as it may not be used
 				if (comboN2OLMin.SelectedIndex == 0)
 				{
-					comboN2OLMin.SelectedItem = 0;
+					comN2OLMin = 0;
 				}
+
+				else comN2OLMin = Convert.ToInt32(comboN2OLMin.SelectedItem);
 
 				if (IsUpdate == false)
 				{
 					int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-					int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), Convert.ToInt32(comboN2OLMin.SelectedItem.ToString()), radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
+					int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comboASA.SelectedItem.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, Convert.ToInt32(comboO2LMin.SelectedItem.ToString()), comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comboIVSite.SelectedItem.ToString(), Convert.ToInt32(comboIVGauge.SelectedItem.ToString()), IVSideR, IVSideL, Convert.ToInt32(comboIVAtt.SelectedItem.ToString()), comboIVF.SelectedItem.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comboNPOTime.SelectedItem.ToString(), hgtUnitsIn, hgtUnitsCm);
 				}
 				else
 				{
@@ -3422,8 +3432,18 @@ namespace OpenDental
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
 
+			
 			SaveData();
-			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			try
+				{	//will be null if user hits 'OK' button with no Anesthetic Record saved
+					FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				}
+			catch
+				{
+					MessageBox.Show(this, "You need to create an Anesthetic Record first");
+
+					return;
+				}
 
 			}
 			else
