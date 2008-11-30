@@ -2055,6 +2055,10 @@ namespace OpenDental
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
 				}
 
+			
+			if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
+				{	
+				}
 			//disables AnesthOpen button if AnesthOpen time has already been saved to db
 			if (textAnesthOpen.Text == "")
 				butAnesthOpen.Enabled = true;
@@ -2179,12 +2183,15 @@ namespace OpenDental
 
 				if (listAnesthetics.SelectedIndex == -1)
 				{
-					//prevents exception if user tries to save to db with no items in list
+					//prevents user from throwing exception when no record exists yet
+					butDoseEnter.Enabled = false;
+					//prevents exception if user tries to save to db when no record exists yet
 					butOK.Enabled = false;
 					butClose.Enabled = false;
 				}
 				else
 				{
+					butDoseEnter.Enabled = true;
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
@@ -2223,15 +2230,19 @@ namespace OpenDental
 		//Load saved data into form for selected Anesthetic Record
 		private void FillControls(int anestheticRecordCur){
 
-			//prevents exception if user tries to save to db with no items in list
+			
 			if (listAnesthetics.SelectedIndex == -1)
-			{
+			{	
 				
+				//prevents user from throwing exception when no record exists yet
+				butDoseEnter.Enabled = false;
+				//prevents exception if user tries to save to db with no items in list
 				butOK.Enabled = false;
 				butClose.Enabled = false;
 			}
 			else
 			{
+				butDoseEnter.Enabled = true;
 				butOK.Enabled = true;
 				butClose.Enabled = true;
 			}
@@ -2610,16 +2621,18 @@ namespace OpenDental
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
 				}
 
-				//prevents exception if user tries to save to db with no items in list
 				if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
 				{
-
+					//prevents user from throwing exception when no record exists yet
+					butDoseEnter.Enabled = false;
+					//prevents exception if user tries to save to db with no items in list
 					butOK.Enabled = false;
 					butClose.Enabled = false;
 
 				}
 				else
 				{
+					butDoseEnter.Enabled = true;
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
