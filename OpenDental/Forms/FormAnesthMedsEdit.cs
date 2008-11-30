@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormAnesthMedsEdit:Form {
@@ -15,6 +16,8 @@ namespace OpenDental {
 		public List<AnesthMedInvAdjC> ListAnesthMedsInvAdj;
 		public AnesthMedsInventoryAdj Adj;
 		private AnesthMedsInventoryAdj AdjustNumCur;
+		
+		
         
 		public FormAnesthMedsEdit() {
 			InitializeComponent();
@@ -22,7 +25,21 @@ namespace OpenDental {
 		}
 
 		private void FormAnesthMedsEdit_Load(object sender,EventArgs e) {
-			
+
+			//prevents user from changing med names when adjusting quantities
+			if (Med.IsNew == false)
+			{
+				textAnesthMedName.Enabled = false;
+				textAnesthHowSupplied.Enabled = false;
+
+			}
+
+			else
+			{
+				textAnesthMedName.Enabled = true;
+				textAnesthHowSupplied.Enabled = true;
+			}
+
 			textAnesthMedName.Text = Med.AnesthMedName;
 			textAnesthHowSupplied.Text = Med.AnesthHowSupplied;
 			comboDEASchedule.Text = Med.DEASchedule;
@@ -84,9 +101,16 @@ namespace OpenDental {
 			AdjustNumCur.AnestheticMedNum = Convert.ToInt32(Med.AnestheticMedNum);
 			if (textQtyAdj.Text != "")
 			{
-				
-				AdjustNumCur.QtyAdj = Convert.ToDouble(textQtyAdj.Text);
+				Regex regex = new Regex("^-\\d{1,6}?$|^\\d{1,6}?$");
+				if (!(regex.IsMatch(textQtyAdj.Text)) && textQtyAdj.Text != "")
+				{
+					MessageBox.Show("The Quantity field should be a 1-6 digit integer.");
+					textQtyAdj.Focus();
+					return;
+				}
+				else AdjustNumCur.QtyAdj = Convert.ToDouble(textQtyAdj.Text);
 			}
+
 			AdjustNumCur.UserNum = Convert.ToInt32(curUser.UserNum);
 			if (textNotes.Text != "")
 			{
@@ -122,8 +146,7 @@ namespace OpenDental {
 
 		}
 
-		private void textQtyAdj_TextChanged(object sender, EventArgs e)
-		{
+		private void textQtyAdj_TextChanged(object sender, EventArgs e){
 
 		}
 

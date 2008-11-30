@@ -39,8 +39,6 @@ namespace OpenDental
 		private Label labelLperMinO2;
 		private ComboBox comboO2LMin;
 		private ComboBox comboN2OLMin;
-		private CheckBox checkInhN2O;
-		private CheckBox checkInhO2;
 		private Label labelIVF;
 		private ComboBox comboIVF;
 		private Label labelIVFVol;
@@ -247,8 +245,6 @@ namespace OpenDental
 			this.comboIVF = new System.Windows.Forms.ComboBox();
 			this.labelInh = new System.Windows.Forms.Label();
 			this.comboN2OLMin = new System.Windows.Forms.ComboBox();
-			this.checkInhN2O = new System.Windows.Forms.CheckBox();
-			this.checkInhO2 = new System.Windows.Forms.CheckBox();
 			this.comboASA = new System.Windows.Forms.ComboBox();
 			this.labelASA = new System.Windows.Forms.Label();
 			this.groupBoxNotes = new System.Windows.Forms.GroupBox();
@@ -426,8 +422,6 @@ namespace OpenDental
 			this.groupBoxSidebarRt.Controls.Add(this.comboIVF);
 			this.groupBoxSidebarRt.Controls.Add(this.labelInh);
 			this.groupBoxSidebarRt.Controls.Add(this.comboN2OLMin);
-			this.groupBoxSidebarRt.Controls.Add(this.checkInhN2O);
-			this.groupBoxSidebarRt.Controls.Add(this.checkInhO2);
 			this.groupBoxSidebarRt.Controls.Add(this.comboASA);
 			this.groupBoxSidebarRt.Controls.Add(this.labelASA);
 			this.groupBoxSidebarRt.Location = new System.Drawing.Point(612, -10);
@@ -817,33 +811,32 @@ namespace OpenDental
 			// labelLperMinN2O
 			// 
 			this.labelLperMinN2O.AutoSize = true;
-			this.labelLperMinN2O.Location = new System.Drawing.Point(135, 100);
+			this.labelLperMinN2O.Location = new System.Drawing.Point(97, 101);
 			this.labelLperMinN2O.Name = "labelLperMinN2O";
-			this.labelLperMinN2O.Size = new System.Drawing.Size(34, 13);
+			this.labelLperMinN2O.Size = new System.Drawing.Size(59, 13);
 			this.labelLperMinN2O.TabIndex = 33;
-			this.labelLperMinN2O.Text = "L/min";
+			this.labelLperMinN2O.Text = "N2O L/min";
 			// 
 			// labelLperMinO2
 			// 
 			this.labelLperMinO2.AutoSize = true;
-			this.labelLperMinO2.Location = new System.Drawing.Point(134, 78);
+			this.labelLperMinO2.Location = new System.Drawing.Point(96, 79);
 			this.labelLperMinO2.Name = "labelLperMinO2";
-			this.labelLperMinO2.Size = new System.Drawing.Size(34, 13);
+			this.labelLperMinO2.Size = new System.Drawing.Size(51, 13);
 			this.labelLperMinO2.TabIndex = 30;
-			this.labelLperMinO2.Text = "L/min";
+			this.labelLperMinO2.Text = "O2 L/min";
 			// 
 			// comboO2LMin
 			// 
 			this.comboO2LMin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboO2LMin.FormattingEnabled = true;
 			this.comboO2LMin.Items.AddRange(new object[] {
-            "",
             "1",
             "2",
             "3",
             "4",
             "5"});
-			this.comboO2LMin.Location = new System.Drawing.Point(89, 75);
+			this.comboO2LMin.Location = new System.Drawing.Point(47, 75);
 			this.comboO2LMin.Name = "comboO2LMin";
 			this.comboO2LMin.Size = new System.Drawing.Size(40, 21);
 			this.comboO2LMin.TabIndex = 29;
@@ -897,7 +890,7 @@ namespace OpenDental
 			// labelInh
 			// 
 			this.labelInh.AutoSize = true;
-			this.labelInh.Location = new System.Drawing.Point(38, 59);
+			this.labelInh.Location = new System.Drawing.Point(45, 59);
 			this.labelInh.Name = "labelInh";
 			this.labelInh.Size = new System.Drawing.Size(96, 13);
 			this.labelInh.TabIndex = 27;
@@ -914,32 +907,10 @@ namespace OpenDental
             "3",
             "4",
             "5"});
-			this.comboN2OLMin.Location = new System.Drawing.Point(89, 97);
+			this.comboN2OLMin.Location = new System.Drawing.Point(47, 97);
 			this.comboN2OLMin.Name = "comboN2OLMin";
 			this.comboN2OLMin.Size = new System.Drawing.Size(40, 21);
 			this.comboN2OLMin.TabIndex = 32;
-			// 
-			// checkInhN2O
-			// 
-			this.checkInhN2O.AutoSize = true;
-			this.checkInhN2O.Location = new System.Drawing.Point(42, 101);
-			this.checkInhN2O.Name = "checkInhN2O";
-			this.checkInhN2O.Size = new System.Drawing.Size(46, 17);
-			this.checkInhN2O.TabIndex = 31;
-			this.checkInhN2O.Text = "N20";
-			this.checkInhN2O.UseVisualStyleBackColor = true;
-			// 
-			// checkInhO2
-			// 
-			this.checkInhO2.AutoSize = true;
-			this.checkInhO2.Checked = true;
-			this.checkInhO2.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkInhO2.Location = new System.Drawing.Point(42, 77);
-			this.checkInhO2.Name = "checkInhO2";
-			this.checkInhO2.Size = new System.Drawing.Size(40, 17);
-			this.checkInhO2.TabIndex = 28;
-			this.checkInhO2.Text = "O2";
-			this.checkInhO2.UseVisualStyleBackColor = true;
 			// 
 			// comboASA
 			// 
@@ -2278,45 +2249,43 @@ namespace OpenDental
 				Cur.VSMSerNum = PIn.PString(table.Rows[i][11].ToString());
 				Cur.ASA = PIn.PString(table.Rows[i][12].ToString());
 				Cur.ASA_EModifier = PIn.PString(table.Rows[i][13].ToString());
-				Cur.InhO2 = PIn.PBool(table.Rows[i][14].ToString());
-				Cur.InhN2O = PIn.PBool(table.Rows[i][15].ToString());
-				Cur.O2LMin = PIn.PInt(table.Rows[i][16].ToString());
-				Cur.N2OLMin = PIn.PInt(table.Rows[i][17].ToString());
-				Cur.RteNasCan = PIn.PBool(table.Rows[i][18].ToString());
-				Cur.RteNasHood = PIn.PBool(table.Rows[i][19].ToString());
-				Cur.RteETT = PIn.PBool(table.Rows[i][20].ToString());
-				Cur.MedRouteIVCath = PIn.PBool(table.Rows[i][21].ToString());
-				Cur.MedRouteIVButtFly = PIn.PBool(table.Rows[i][22].ToString());
-				Cur.MedRouteIM = PIn.PBool(table.Rows[i][23].ToString());
-				Cur.MedRoutePO = PIn.PBool(table.Rows[i][24].ToString());
-				Cur.MedRouteNasal = PIn.PBool(table.Rows[i][25].ToString());
-				Cur.MedRouteRectal = PIn.PBool(table.Rows[i][26].ToString());
-				Cur.IVSite = PIn.PString(table.Rows[i][27].ToString());
-				Cur.IVGauge = PIn.PInt(table.Rows[i][28].ToString());
-				Cur.IVSideR = PIn.PBool(table.Rows[i][29].ToString());
-				Cur.IVSideL = PIn.PBool(table.Rows[i][30].ToString());
-				Cur.IVAtt = PIn.PInt(table.Rows[i][31].ToString());
-				Cur.IVF = PIn.PString(table.Rows[i][32].ToString());
-				Cur.IVFVol = PIn.PInt(table.Rows[i][33].ToString());
-				Cur.MonBP = PIn.PBool(table.Rows[i][34].ToString());
-				Cur.MonSpO2 = PIn.PBool(table.Rows[i][35].ToString());
-				Cur.MonEtCO2 = PIn.PBool(table.Rows[i][36].ToString());
-				Cur.MonTemp = PIn.PBool(table.Rows[i][37].ToString());
-				Cur.MonPrecordial = PIn.PBool(table.Rows[i][38].ToString());
-				Cur.MonEKG = PIn.PBool(table.Rows[i][39].ToString());
-				Cur.Notes = PIn.PString(table.Rows[i][40].ToString());
-				Cur.PatWgt = PIn.PInt(table.Rows[i][41].ToString());
-				Cur.WgtUnitsLbs = PIn.PBool(table.Rows[i][42].ToString());
-				Cur.WgtUnitsKgs = PIn.PBool(table.Rows[i][43].ToString());
-				Cur.PatHgt = PIn.PInt(table.Rows[i][44].ToString());
-				Cur.EscortName = PIn.PString(table.Rows[i][45].ToString());
-				Cur.EscortCellNum = PIn.PString(table.Rows[i][46].ToString());
-				Cur.EscortRel = PIn.PString(table.Rows[i][47].ToString());
-				Cur.NPOTime = PIn.PString(table.Rows[i][48].ToString());
+				Cur.O2LMin = PIn.PInt(table.Rows[i][14].ToString());
+				Cur.N2OLMin = PIn.PInt(table.Rows[i][15].ToString());
+				Cur.RteNasCan = PIn.PBool(table.Rows[i][16].ToString());
+				Cur.RteNasHood = PIn.PBool(table.Rows[i][17].ToString());
+				Cur.RteETT = PIn.PBool(table.Rows[i][18].ToString());
+				Cur.MedRouteIVCath = PIn.PBool(table.Rows[i][19].ToString());
+				Cur.MedRouteIVButtFly = PIn.PBool(table.Rows[i][20].ToString());
+				Cur.MedRouteIM = PIn.PBool(table.Rows[i][21].ToString());
+				Cur.MedRoutePO = PIn.PBool(table.Rows[i][22].ToString());
+				Cur.MedRouteNasal = PIn.PBool(table.Rows[i][23].ToString());
+				Cur.MedRouteRectal = PIn.PBool(table.Rows[i][24].ToString());
+				Cur.IVSite = PIn.PString(table.Rows[i][25].ToString());
+				Cur.IVGauge = PIn.PInt(table.Rows[i][26].ToString());
+				Cur.IVSideR = PIn.PBool(table.Rows[i][27].ToString());
+				Cur.IVSideL = PIn.PBool(table.Rows[i][28].ToString());
+				Cur.IVAtt = PIn.PInt(table.Rows[i][29].ToString());
+				Cur.IVF = PIn.PString(table.Rows[i][30].ToString());
+				Cur.IVFVol = PIn.PInt(table.Rows[i][31].ToString());
+				Cur.MonBP = PIn.PBool(table.Rows[i][32].ToString());
+				Cur.MonSpO2 = PIn.PBool(table.Rows[i][33].ToString());
+				Cur.MonEtCO2 = PIn.PBool(table.Rows[i][34].ToString());
+				Cur.MonTemp = PIn.PBool(table.Rows[i][35].ToString());
+				Cur.MonPrecordial = PIn.PBool(table.Rows[i][36].ToString());
+				Cur.MonEKG = PIn.PBool(table.Rows[i][37].ToString());
+				Cur.Notes = PIn.PString(table.Rows[i][38].ToString());
+				Cur.PatWgt = PIn.PInt(table.Rows[i][39].ToString());
+				Cur.WgtUnitsLbs = PIn.PBool(table.Rows[i][40].ToString());
+				Cur.WgtUnitsKgs = PIn.PBool(table.Rows[i][41].ToString());
+				Cur.PatHgt = PIn.PInt(table.Rows[i][42].ToString());
+				Cur.EscortName = PIn.PString(table.Rows[i][43].ToString());
+				Cur.EscortCellNum = PIn.PString(table.Rows[i][44].ToString());
+				Cur.EscortRel = PIn.PString(table.Rows[i][45].ToString());
+				Cur.NPOTime = PIn.PString(table.Rows[i][46].ToString());
 				//Cur.SigIsTopaz= PIn.PBool(table.Rows[i][50].ToString());
 				//Cur.Signature = PIn.PString(table.Rows[i][51].ToString());
-				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][49].ToString());
-				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][50].ToString());
+				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][47].ToString());
+				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][48].ToString());
 				
 				//Disable buttons to disallow editing
 				/*butAnesthOpen.Enabled = false;
@@ -2373,19 +2342,6 @@ namespace OpenDental
 					if (Cur.ASA_EModifier == "E")
 					{
 						comboASA_EModifier.SelectedIndex = 1;
-					}
-				//load checkInhO2
-					if (Cur.InhO2 == true)
-					{
-						checkInhO2.Checked = true;
-
-					}
-					
-				//load checkInhN2O
-					if (Cur.InhN2O == true)
-					{
-						checkInhN2O.Checked = true;
-
 					}
 
 				//comboO2LMin
@@ -3326,13 +3282,10 @@ namespace OpenDental
 
 					if (textPatID.Text != null && comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
 					{
-						int chkInhO2 = 0, chkInhN2O = 0, comO2LMin = 0, comN2OLMin = 0, comIVAtt = 0, comIVGauge = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0,
+						int comO2LMin = 0, comN2OLMin = 0, comIVAtt = 0, comIVGauge = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0,
 							radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
 						string comASA = "", comIVSite = "", comIVF = "", comNPOTime = "";
-						if (checkInhO2.Checked)
-							chkInhO2 = 1;
-						if (checkInhN2O.Checked)
-							chkInhN2O = 1;
+						
 						if (radRteNasCan.Checked)
 							radCan = 1;
 						if (radRteNasHood.Checked)
@@ -3375,6 +3328,7 @@ namespace OpenDental
 							hgtUnitsIn = 1;
 						if (radHgtUnitsCm.Checked)
 							hgtUnitsCm = 1;
+
 						//Shouldn't always have a value since it denotes emergencies
 						if (comboASA_EModifier.SelectedIndex == 1)
 						{
@@ -3385,11 +3339,27 @@ namespace OpenDental
 							comboASA_EModifier.SelectedItem = "";
 						}
 
+						//Should always *have* a value
+						if (comboO2LMin.SelectedIndex == -1)
+						{
+							MessageBox.Show(this, "Please select a value for O2 L/min");
+							comboO2LMin.Focus();
+							return;
+						}
+
+						else comO2LMin = Convert.ToInt32(comboO2LMin.SelectedItem);
+
 						//Shouldn't always have a value, as it may not be used during a case
 						if (comboN2OLMin.SelectedIndex == -1)
-						{
-							comN2OLMin = 0;
-						}
+							{
+								comN2OLMin = 0;
+							}
+
+						else if (comboN2OLMin.SelectedIndex == 0)
+							{
+								comN2OLMin = 0;
+							}
+
 						else comN2OLMin = Convert.ToInt32(comboN2OLMin.SelectedItem);
 
 						//ASA should be selected
@@ -3460,11 +3430,11 @@ namespace OpenDental
 						if (IsUpdate == false)
 						{
 							int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-							int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm);
+							int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm);
 						}
 						else
 						{
-							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), chkInhO2, chkInhN2O, comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm);
+							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm);
 							if (value != 0)
 							{
 								FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));

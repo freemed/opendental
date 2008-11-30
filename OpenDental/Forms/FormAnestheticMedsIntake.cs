@@ -93,13 +93,10 @@ namespace OpenDental{
 
 		private void butClose_Click(object sender, EventArgs e){
 
-			//the current QtyOnHand of a scheduled anesthetic medication
-			double qtyOnHand = Convert.ToDouble(AMedications.GetQtyOnHand(comboAnesthMedName.SelectedItem.ToString()));
-			
-			
-				if (comboAnesthMedName.SelectedIndex == 0 || textQty.Text == "" || comboSupplierName.SelectedIndex == 0 || textInvoiceNum.Text == "" )
+				if (comboAnesthMedName.SelectedIndex == -1 || textQty.Text == "" || comboSupplierName.SelectedIndex == -1 || textInvoiceNum.Text == "" )
 				{
 					MessageBox.Show("All fields are mandatory.");
+					return;
 				}
 				else
 				{
@@ -108,14 +105,12 @@ namespace OpenDental{
 					{
 						MessageBox.Show("The Quantity field should be a 1-6 digit integer.");
 						textQty.Focus();
+						return;
 					}
 					else
 					{
 						if (comboAnesthMedName.SelectedIndex != 0 && comboSupplierName.SelectedIndex != 0)
 						{
-
-
-
 							if (textInvoiceNum.Text.Trim() == "")
 							{
 								MessageBox.Show("Invoice # does not accept spaces");
@@ -125,6 +120,10 @@ namespace OpenDental{
 						}
 
 					}
+
+					//the current QtyOnHand of a scheduled anesthetic medication
+					double qtyOnHand = Convert.ToDouble(AMedications.GetQtyOnHand(comboAnesthMedName.SelectedItem.ToString()));
+
 					//records transaction into tableanesthmedsintake which tracks intake of scheduled anesthetic medications into inventory
 					int supplierIDNum = AnesthMedSuppliers.GetSupplierIDNum(comboSupplierName.SelectedIndex);
 					AMedications.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);

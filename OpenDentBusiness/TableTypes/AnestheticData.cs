@@ -21,8 +21,6 @@ namespace OpenDentBusiness
 		public string VSMSerNum; 
 		public string ASA;
 		public string ASA_EModifier;
-		public bool InhO2;
-		public bool InhN2O;
 		public int O2LMin;
 		public int N2OLMin;
 		public bool RteNasCan;

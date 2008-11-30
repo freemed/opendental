@@ -131,6 +131,7 @@ namespace OpenDental{
 			// 
 			this.textQtyOnHand.Location = new System.Drawing.Point(118, 151);
 			this.textQtyOnHand.Name = "textQtyOnHand";
+			this.textQtyOnHand.ReadOnly = true;
 			this.textQtyOnHand.Size = new System.Drawing.Size(100, 20);
 			this.textQtyOnHand.TabIndex = 10;
 			this.textQtyOnHand.TextChanged += new System.EventHandler(this.textQtyOnHand_TextChanged);

@@ -22,7 +22,7 @@ namespace OpenDentBusiness
 				
 
     ///<summary>Inserts the selected Anesthetic medication and dose values into the anesthmedsgiven table in the database</summary>
-	public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int inhO2, int inhN2O, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
+	public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
 				
 			int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
 		
@@ -40,8 +40,6 @@ namespace OpenDentBusiness
 				+ POut.PString(VSMSerNum) + "', '"
 				+ POut.PString(ASA) + "', '"
 				+ POut.PString(ASA_EModifier) + "',"
-				+ POut.PInt(inhO2) + ","
-				+ POut.PInt(inhN2O) + ","
 				+ POut.PInt(O2LMin) + ","
 				+ POut.PInt(N2OLMin) + ","
 				+ POut.PInt(RteNasCan) + ","
@@ -83,7 +81,7 @@ namespace OpenDentBusiness
 		}
 
 	/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
-	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int inhO2, int inhN2O, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
+	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
 
 		string command = "UPDATE anestheticdata SET "
 				+	" AnesthOpen		='"	+ POut.PString(anestheticOpen) + "' "
@@ -98,8 +96,6 @@ namespace OpenDentBusiness
 				+	",VSMSerNum			='"	+ POut.PString(VSMSerNum) + "' "
 				+	",ASA				='"	+ POut.PString(ASA) + "' "
 				+	",ASA_EModifier		='"	+ POut.PString(ASA_EModifier) + "' "
-				+	",InhO2				="	+ POut.PInt(inhO2) + " "
-				+	",InhN2O			="	+ POut.PInt(inhN2O) + " "
 				+	",O2LMin			="	+ POut.PInt(O2LMin) + " "
 				+	",N2OLMin			="	+ POut.PInt(N2OLMin) + " "
 				+	",RteNasCan			="	+ POut.PInt(RteNasCan) + " "

@@ -31,11 +31,13 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butAddAnesthMeds = new OpenDental.UI.Button();
 			this.gridAnesthMedsInventory = new OpenDental.UI.ODGrid();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupAnestheticMeds.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupAnestheticMeds
 			// 
+			this.groupAnestheticMeds.Controls.Add(this.label1);
 			this.groupAnestheticMeds.Controls.Add(this.labelIntakeNewMeds);
 			this.groupAnestheticMeds.Controls.Add(this.butAnesthMedIntake);
 			this.groupAnestheticMeds.Controls.Add(this.butClose);
@@ -137,6 +139,15 @@ namespace OpenDental{
 			this.gridAnesthMedsInventory.TranslationName = null;
 			this.gridAnesthMedsInventory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAnesthMedsInventory_CellDoubleClick);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(277, 14);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(203, 13);
+			this.label1.TabIndex = 148;
+			this.label1.Text = "Double-click to adjust inventory quantities";
+			// 
 			// FormAnestheticMedsInventory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -148,6 +159,7 @@ namespace OpenDental{
 			this.Text = "Anesthetic Medication Inventory";
 			this.Load += new System.EventHandler(this.FormAnestheticMedsInventory_Load);
 			this.groupAnestheticMeds.ResumeLayout(false);
+			this.groupAnestheticMeds.PerformLayout();
 			this.ResumeLayout(false);
 
 	}
@@ -161,6 +173,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAnesthMedIntake;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butCancel;
+		private System.Windows.Forms.Label label1;
 
 	}
 }

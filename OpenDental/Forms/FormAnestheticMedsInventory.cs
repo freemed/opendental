@@ -13,7 +13,7 @@ namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 		
 		private List<AnesthMedsInventory> listAnestheticMeds;
-
+		
 
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
@@ -58,6 +58,7 @@ namespace OpenDental {
 
 				AnesthMedsInventory med = new AnesthMedsInventory();
 				med.IsNew = true;
+
 				FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
 				FormM.Med = med;
 				FormM.ShowDialog();
@@ -74,8 +75,9 @@ namespace OpenDental {
 			Userod curUser = Security.CurUser;
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
+
+
 				FormAnesthMedsEdit FormME = new FormAnesthMedsEdit();
-				
 				
 				FormME.Med = listAnestheticMeds[e.Row];
 				
@@ -84,6 +86,7 @@ namespace OpenDental {
 				{
 					FillGrid();
 				}
+
 				return;
 			}
 			else
