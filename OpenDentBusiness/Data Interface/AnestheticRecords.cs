@@ -5,6 +5,7 @@ using OpenDental.DataAccess;
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using OpenDental;
 
 namespace OpenDentBusiness{
 
@@ -39,8 +40,12 @@ namespace OpenDentBusiness{
 			}
 
 		}
-
+		public AnestheticRecords Copy()
+		{
+			return (AnestheticRecords)this.MemberwiseClone();
+		}
 		///<summary></summary>
+		///
 		public static void Update(AnestheticRecord Cur)
 		{
 			string command = "UPDATE anestheticrecord SET "
@@ -162,7 +167,18 @@ namespace OpenDentBusiness{
 			return anestheticRecordNum;
 
 		}
-
+		public AnestheticRecord GetAnestheticData(int anestheticRecordNum)
+		{
+			AnestheticRecord retVal = null;
+			for (int i = 0; i < List.Length; i++)
+			{
+				if (List[i].AnestheticRecordNum == anestheticRecordNum)
+				{
+					retVal = List[i].Copy();
+				}
+			}
+			return retVal;
+		}
 		///<summary>Creates an Anesthesia Score record in the db</summary>
 		public static void InsertAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable){
 

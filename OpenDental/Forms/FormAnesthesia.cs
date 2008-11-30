@@ -14,7 +14,7 @@ namespace OpenDental {
 		private Patient PatCur;
 		
 		
-
+		
 		public FormAnesthesia(Patient patCur)
 		{
 			InitializeComponent();

@@ -2013,13 +2013,17 @@ namespace OpenDental
 			//
 			InitializeComponent();
 			Lan.F(this);
-			PatCur = patCur;
+			PatCur = patCur;	
+			
+			AnestheticData anestheticDataCur = new AnestheticData();
+			AnestheticDataCur = anestheticDataCur;
+
 			Lan.F(this);
 			allowTopaz = (Environment.OSVersion.Platform != PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			sigBox.SetTabletState(1);
 			if (!allowTopaz)
 			{
-				//butTopazSign.Visible = false; //this throws an exception on x86
+				butSignTopaz.Visible = false;
 				sigBox.Visible = true;
 			}
 			else
@@ -2028,9 +2032,9 @@ namespace OpenDental
 				sigBoxTopaz = CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location = sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name = "sigBoxTopaz";
-				sigBoxTopaz.Size = new System.Drawing.Size(158, 74);
-				sigBoxTopaz.TabIndex = 135;
-				sigBoxTopaz.Text = "sigPlusNET";
+				sigBoxTopaz.Size = new System.Drawing.Size(158,74);
+				sigBoxTopaz.TabIndex = 92;
+				sigBoxTopaz.Text = "sigPlusNET1";
 				sigBoxTopaz.Visible = false;
 				Controls.Add(sigBoxTopaz);
 				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
@@ -2050,7 +2054,6 @@ namespace OpenDental
 				{
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
 				}
-
 
 			//disables AnesthOpen button if AnesthOpen time has already been saved to db
 			if (textAnesthOpen.Text == "")
@@ -2289,10 +2292,10 @@ namespace OpenDental
 				Cur.EscortCellNum = PIn.PString(table.Rows[i][44].ToString());
 				Cur.EscortRel = PIn.PString(table.Rows[i][45].ToString());
 				Cur.NPOTime = PIn.PString(table.Rows[i][46].ToString());
-				//Cur.SigIsTopaz= PIn.PBool(table.Rows[i][50].ToString());
-				//Cur.Signature = PIn.PString(table.Rows[i][51].ToString());
 				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][47].ToString());
 				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][48].ToString());
+				Cur.SigIsTopaz = PIn.PBool(table.Rows[i][49].ToString());
+				Cur.Signature = PIn.PString(table.Rows[i][50].ToString());
 				
 				//Disable buttons to disallow editing
 				/*butAnesthOpen.Enabled = false;
@@ -2501,17 +2504,11 @@ namespace OpenDental
 
 				this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 			}
-		}
-			private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-
-			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-		
-		}
 
 			//this really needs to be in the FillControl() method when we get it added
-			/*labelInvalidSig.Visible=false;
-			sigBox.Visible=true;
+			labelInvalidSig.Visible = false;
+			sigBox.Visible = true;
+			
 			if (AnestheticDataCur.SigIsTopaz)
 			{
 				if (AnestheticDataCur.Signature != "")
@@ -2528,7 +2525,7 @@ namespace OpenDental
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);//high encryption
 						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);//high compression
 						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnestheticDataCur.Signature);
-						/* if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
+						if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
 						{
 							labelInvalidSig.Visible = true;
 						}
@@ -2549,13 +2546,22 @@ namespace OpenDental
 					//sigBox.SetEncryptionMode(2);//high encryption
 					//sigBox.SetSigCompressionMode(2);//high compression
 					sigBox.SetSigString(AnestheticDataCur.Signature);
-					/* if (sigBox.NumberOfTabletPoints() == 0)
+					if (sigBox.NumberOfTabletPoints() == 0)
 					{
 						labelInvalidSig.Visible = true;
 					}
 					sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
 				}
-			}*/
+			}
+
+		}
+			private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+
+			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+		
+		}
+
 
 		private void butAddAnesthetic_Click(object sender, EventArgs e){
 
@@ -2711,7 +2717,7 @@ namespace OpenDental
 		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e){
 
 			//CheckForCompleteNote();
-			/*if (!IsStartingUp//so this happens only if user changes the note
+			if (!IsStartingUp//so this happens only if user changes the note
 				&& !SigChanged)//and the original signature is still showing.
 				{
 					sigBox.ClearTablet();
@@ -2724,7 +2730,7 @@ namespace OpenDental
 				SigChanged = true;
 				// AnestheticDataCur.UserNum = Security.CurUser.UserNum;
 				// textUser.Text = Userods.GetName(ProcCur.UserNum);
-				}*/
+				}
 		}
 
 		private void textBoxSurgClose_TextChanged(object sender, EventArgs e){
@@ -3100,11 +3106,11 @@ namespace OpenDental
 		 }
 
 		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e){
-
-			if (listAnesthetics.SelectedIndex != -1)
+			if (allowTopaz)
 			{
-				//GridPSaveCurAnesthetic(AnestheticRecordCur.AnestheticRecordNum);
+				sigBoxTopaz.Dispose();
 			}
+
 		}
 
 		private void textBoxAnesthOpen_TextChanged(object sender, EventArgs e){

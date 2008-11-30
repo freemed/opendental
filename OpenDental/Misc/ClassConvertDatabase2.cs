@@ -452,7 +452,7 @@ namespace OpenDental {
 						NPOTime char(5),
 						HgtUnitsIn tinyint (1),
 						HgtUnitsCm tinyint (1),
-						SigIsTopaz tinyint(3),
+						SigIsTopaz tinyint unsigned default(0),
 						Signature text,
 						PRIMARY KEY (AnestheticDataNum),
 						INDEX (AnestheticRecordNum)

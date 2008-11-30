@@ -12,7 +12,14 @@ namespace OpenDentBusiness{
 		public DateTime AnestheticDate;
 		///<summary>FK to provider.ProvNum.</summary>
 		public int ProvNum;
+
+		public AnestheticRecord Copy()
+		{
+			return (AnestheticRecord)this.MemberwiseClone();
 		}
+	}
+
+
 
 
 
