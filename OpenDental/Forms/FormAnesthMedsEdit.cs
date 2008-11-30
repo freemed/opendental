@@ -147,6 +147,14 @@ namespace OpenDental {
 		}
 
 		private void textQtyAdj_TextChanged(object sender, EventArgs e){
+			
+			//prevents user from using this form to enter initial quantities. This should be done on FormAnestheticMedsIntake
+			if (AMedications.GetQtyOnHand(textAnesthMedName.Text) == 0)
+			{
+				MessageBox.Show(this, "Please use the Intake Meds button on the previous form\rto add initial inventory quantities");
+				butOK.Enabled = false;
+			}
+
 
 		}
 
