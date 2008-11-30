@@ -3238,7 +3238,7 @@ namespace OpenDental
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
 					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
 					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
-					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnestheticDataCur.AnesthClose + AnestheticDataCur.AnestheticRecordNum.ToString());
+					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, /*AnestheticDataCur.AnesthClose +*/ AnestheticDataCur.AnestheticRecordNum.ToString());
 					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);
 					AnestheticDataCur.Signature = CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
@@ -3254,7 +3254,7 @@ namespace OpenDental
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
 					sigBox.SetKeyString("0000000000000000");
-					sigBox.SetAutoKeyData(AnestheticDataCur.Notes + AnestheticDataCur.AnestheticRecordNum.ToString());
+					sigBox.SetAutoKeyData(/*AnestheticDataCur.Notes + */AnestheticDataCur.AnestheticRecordNum.ToString());
 					//sigBox.SetEncryptionMode(2);
 					//sigBox.SetSigCompressionMode(2);
 					AnestheticDataCur.Signature = sigBox.GetSigString();
