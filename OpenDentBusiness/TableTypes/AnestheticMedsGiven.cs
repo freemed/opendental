@@ -48,8 +48,6 @@ namespace OpenDentBusiness{
 			get { return anesthMedNameChanged; }
 		}
 
-
-
 		[DataField("QtyGiven")]
 		private string qtyGiven;
 		bool qtyGivenChanged;

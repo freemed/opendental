@@ -22,12 +22,12 @@ namespace OpenDentBusiness
 				
 
     ///<summary>Inserts the selected Anesthetic medication and dose values into the anesthmedsgiven table in the database</summary>
-	public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
+	public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm, string Signature, bool SigIsTopaz){
 				
 			int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
 		
-			string command = "INSERT INTO anestheticdata (AnestheticRecordNum,AnesthOpen,AnesthClose,SurgOpen,SurgClose,Anesthetist,Surgeon,Asst,Circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,InhO2,InhN2O,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm)" +
-				"VALUES (" + POut.PInt(recordnum) + ",'" 
+			string command = "INSERT INTO anestheticdata (AnestheticRecordNum,AnesthOpen,AnesthClose,SurgOpen,SurgClose,Anesthetist,Surgeon,Asst,Circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm,Signature,SigIsTopaz)" +
+				"VALUES(" + POut.PInt(recordnum) + ",'" 
 				+ POut.PString(anestheticOpen) + "','"
 				+ POut.PString(anestheticClose) + "','" 
 				+ POut.PString(surgOpen) + "','" 
@@ -74,14 +74,16 @@ namespace OpenDentBusiness
 				+ POut.PString(EscortRel) + "','" 
 				+ POut.PString(NPOTime) + "',"
 				+ POut.PInt(HgtUnitsIn) + ","
-				+ POut.PInt(HgtUnitsCm) + ")" ;
+				+ POut.PInt(HgtUnitsCm) + ",'"
+				+ POut.PString(Signature) + "',"
+				+ POut.PBool(SigIsTopaz) + ")";
 				int val =  General.NonQ(command);
 				return val;
 
 		}
 
 	/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
-	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm){
+	public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm, string Signature, bool SigIsTopaz){
 
 		string command = "UPDATE anestheticdata SET "
 				+	" AnesthOpen		='"	+ POut.PString(anestheticOpen) + "' "
@@ -131,6 +133,8 @@ namespace OpenDentBusiness
 				+	",NPOTime			='"	+ POut.PString(NPOTime) + "' "
 				+	",HgtUnitsIn		="	+ POut.PInt(HgtUnitsIn) + " "
 				+	",HgtUnitsCm		="	+ POut.PInt(HgtUnitsCm)+ " "
+				+	",Signature			='"	+ POut.PString(Signature)+ "' "
+				+	",SigIsTopaz		="	+ POut.PBool(SigIsTopaz)+ " "
 				+	"WHERE AnestheticRecordNum =" + anestheticRecordNum + "";	
 		int val = General.NonQ(command);
 		return val;

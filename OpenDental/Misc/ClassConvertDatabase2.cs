@@ -452,8 +452,8 @@ namespace OpenDental {
 						NPOTime char(5),
 						HgtUnitsIn tinyint (1),
 						HgtUnitsCm tinyint (1),
-						SigIsTopaz tinyint unsigned default '0',
 						Signature text,
+						SigIsTopaz tinyint unsigned default '0',
 						PRIMARY KEY (AnestheticDataNum),
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";

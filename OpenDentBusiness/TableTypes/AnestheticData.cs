@@ -56,8 +56,9 @@ namespace OpenDentBusiness
 		public string EscortCellNum;
 		public string EscortRel;
 		public string NPOTime;
-		public bool SigIsTopaz;
 		public string Signature;
+		public bool SigIsTopaz;
+		
 
 		
 	}
