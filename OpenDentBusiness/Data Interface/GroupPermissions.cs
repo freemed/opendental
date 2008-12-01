@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class GroupPermissions {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			string command="SELECT * from grouppermission";
+			string command="SELECT * FROM grouppermission";
 			DataTable table=General.GetTable(command);
 			FillCache(table);
 			return table;
@@ -135,14 +135,18 @@ namespace OpenDentBusiness{
 					return Lan.g("enumPermissions","Chart Module");
 				case Permissions.ChooseDatabase:
 					return Lan.g("enumPermissions","Choose Database");
-				case Permissions.ClaimsSentEdit:
-					return Lan.g("enumPermissions","Claims Sent Edit");
+				case Permissions.ClaimSentEdit:
+					return Lan.g("enumPermissions","Claim Sent Edit");
 				case Permissions.DepositSlips:
 					return Lan.g("enumPermissions","Deposit Slips");
 				case Permissions.FamilyModule:
 					return Lan.g("enumPermissions","Family Module");
 				case Permissions.ImagesModule:
 					return Lan.g("enumPermissions","Images Module");
+				case Permissions.InsPayCreate:
+					return Lan.g("enumPermissions","Insurance Payment Create");
+				case Permissions.InsPayEdit:
+					return Lan.g("enumPermissions","Insurance Payment Edit");
 				case Permissions.ManageModule:
 					return Lan.g("enumPermissions","Manage Module");
 				case Permissions.None:
@@ -181,9 +185,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool PermTakesDates(Permissions permType){
-			if(permType==Permissions.AdjustmentEdit
+			if(  permType==Permissions.AdjustmentEdit
 				|| permType==Permissions.PaymentEdit
 				|| permType==Permissions.ProcComplEdit
+				|| permType==Permissions.InsPayEdit
 				|| permType==Permissions.AccountingEdit
 				|| permType==Permissions.AccountingCreate//prevents backdating
 				|| permType==Permissions.DepositSlips//prevents backdating

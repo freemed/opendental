@@ -94,6 +94,7 @@ namespace OpenDental{
 			this.treePermissions.HideSelection = false;
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
+			this.treePermissions.ItemHeight = 15;
 			this.treePermissions.Location = new System.Drawing.Point(470,29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
@@ -377,7 +378,13 @@ namespace OpenDental{
 			node=SetNode(Permissions.FamilyModule);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.AccountModule);
-				node2=SetNode(Permissions.ClaimsSentEdit);
+				node2=SetNode(Permissions.ClaimSentEdit);
+					node.Nodes.Add(node2);
+				node2=SetNode("Insurance Payment");
+					node3=SetNode(Permissions.InsPayCreate);
+						node2.Nodes.Add(node3);
+					node3=SetNode(Permissions.InsPayEdit);
+						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
 				node2=SetNode("Payment");
 					node3=SetNode(Permissions.PaymentCreate);

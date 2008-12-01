@@ -51,8 +51,9 @@ namespace OpenDental{
 				|| perm==Permissions.PaymentEdit
 				|| perm==Permissions.ProcComplCreate
 				|| perm==Permissions.ProcComplEdit
-				|| perm==Permissions.ClaimsSentEdit
-				//|| perm==Permissions.ClaimPaymentCreate and Edit
+				//|| perm==Permissions.ClaimsSentEdit
+				|| perm==Permissions.InsPayCreate
+				|| perm==Permissions.InsPayEdit
 				)
 			{
 				//SecurityLockIncludesAdmin

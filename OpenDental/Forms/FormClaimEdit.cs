@@ -841,9 +841,9 @@ namespace OpenDental{
 			this.butOtherNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOtherNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOtherNone.CornerRadius = 4F;
-			this.butOtherNone.Location = new System.Drawing.Point(183,10);
+			this.butOtherNone.Location = new System.Drawing.Point(183,9);
 			this.butOtherNone.Name = "butOtherNone";
-			this.butOtherNone.Size = new System.Drawing.Size(78,23);
+			this.butOtherNone.Size = new System.Drawing.Size(78,24);
 			this.butOtherNone.TabIndex = 5;
 			this.butOtherNone.Text = "None";
 			this.butOtherNone.Click += new System.EventHandler(this.butOtherNone_Click);
@@ -855,9 +855,9 @@ namespace OpenDental{
 			this.butOtherCovChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOtherCovChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOtherCovChange.CornerRadius = 4F;
-			this.butOtherCovChange.Location = new System.Drawing.Point(101,10);
+			this.butOtherCovChange.Location = new System.Drawing.Point(101,9);
 			this.butOtherCovChange.Name = "butOtherCovChange";
-			this.butOtherCovChange.Size = new System.Drawing.Size(78,23);
+			this.butOtherCovChange.Size = new System.Drawing.Size(78,24);
 			this.butOtherCovChange.TabIndex = 4;
 			this.butOtherCovChange.Text = "Change";
 			this.butOtherCovChange.Click += new System.EventHandler(this.butOtherCovChange_Click);
@@ -1670,9 +1670,9 @@ namespace OpenDental{
 			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butExport.CornerRadius = 4F;
 			this.butExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butExport.Location = new System.Drawing.Point(252,43);
+			this.butExport.Location = new System.Drawing.Point(252,42);
 			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(62,22);
+			this.butExport.Size = new System.Drawing.Size(62,24);
 			this.butExport.TabIndex = 150;
 			this.butExport.Text = "Export";
 			this.butExport.Click += new System.EventHandler(this.butExport_Click);
@@ -1686,9 +1686,9 @@ namespace OpenDental{
 			this.butAttachAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachAdd.CornerRadius = 4F;
 			this.butAttachAdd.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachAdd.Location = new System.Drawing.Point(122,43);
+			this.butAttachAdd.Location = new System.Drawing.Point(122,42);
 			this.butAttachAdd.Name = "butAttachAdd";
-			this.butAttachAdd.Size = new System.Drawing.Size(62,22);
+			this.butAttachAdd.Size = new System.Drawing.Size(62,24);
 			this.butAttachAdd.TabIndex = 147;
 			this.butAttachAdd.Text = "Add";
 			this.butAttachAdd.Click += new System.EventHandler(this.butAttachAdd_Click);
@@ -1702,9 +1702,9 @@ namespace OpenDental{
 			this.butAttachPerio.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachPerio.CornerRadius = 4F;
 			this.butAttachPerio.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachPerio.Location = new System.Drawing.Point(187,43);
+			this.butAttachPerio.Location = new System.Drawing.Point(187,42);
 			this.butAttachPerio.Name = "butAttachPerio";
-			this.butAttachPerio.Size = new System.Drawing.Size(62,22);
+			this.butAttachPerio.Size = new System.Drawing.Size(62,24);
 			this.butAttachPerio.TabIndex = 146;
 			this.butAttachPerio.Text = "Perio";
 			this.butAttachPerio.Click += new System.EventHandler(this.butAttachPerio_Click);
@@ -2216,7 +2216,7 @@ namespace OpenDental{
 			this.butPaySupp.CornerRadius = 4F;
 			this.butPaySupp.Location = new System.Drawing.Point(17,78);
 			this.butPaySupp.Name = "butPaySupp";
-			this.butPaySupp.Size = new System.Drawing.Size(99,23);
+			this.butPaySupp.Size = new System.Drawing.Size(99,24);
 			this.butPaySupp.TabIndex = 102;
 			this.butPaySupp.Text = "S&upplemental";
 			this.butPaySupp.Click += new System.EventHandler(this.butPaySupp_Click);
@@ -2230,7 +2230,7 @@ namespace OpenDental{
 			this.butPayTotal.CornerRadius = 4F;
 			this.butPayTotal.Location = new System.Drawing.Point(17,16);
 			this.butPayTotal.Name = "butPayTotal";
-			this.butPayTotal.Size = new System.Drawing.Size(99,23);
+			this.butPayTotal.Size = new System.Drawing.Size(99,24);
 			this.butPayTotal.TabIndex = 100;
 			this.butPayTotal.Text = "&Total";
 			this.butPayTotal.Click += new System.EventHandler(this.butPayTotal_Click);
@@ -2242,9 +2242,9 @@ namespace OpenDental{
 			this.butPayProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPayProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPayProc.CornerRadius = 4F;
-			this.butPayProc.Location = new System.Drawing.Point(17,41);
+			this.butPayProc.Location = new System.Drawing.Point(17,42);
 			this.butPayProc.Name = "butPayProc";
-			this.butPayProc.Size = new System.Drawing.Size(99,23);
+			this.butPayProc.Size = new System.Drawing.Size(99,24);
 			this.butPayProc.TabIndex = 101;
 			this.butPayProc.Text = "&By Procedure";
 			this.butPayProc.Click += new System.EventHandler(this.butPayProc_Click);
@@ -2317,7 +2317,7 @@ namespace OpenDental{
 			this.butCheckAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butCheckAdd.Location = new System.Drawing.Point(557,389);
 			this.butCheckAdd.Name = "butCheckAdd";
-			this.butCheckAdd.Size = new System.Drawing.Size(114,26);
+			this.butCheckAdd.Size = new System.Drawing.Size(114,24);
 			this.butCheckAdd.TabIndex = 134;
 			this.butCheckAdd.Text = "Create C&heck";
 			this.butCheckAdd.Click += new System.EventHandler(this.butCheckAdd_Click);
@@ -2332,9 +2332,9 @@ namespace OpenDental{
 			this.butSend.CornerRadius = 4F;
 			this.butSend.Image = ((System.Drawing.Image)(resources.GetObject("butSend.Image")));
 			this.butSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSend.Location = new System.Drawing.Point(601,923);
+			this.butSend.Location = new System.Drawing.Point(601,925);
 			this.butSend.Name = "butSend";
-			this.butSend.Size = new System.Drawing.Size(86,26);
+			this.butSend.Size = new System.Drawing.Size(86,24);
 			this.butSend.TabIndex = 130;
 			this.butSend.Text = "Send";
 			this.butSend.Click += new System.EventHandler(this.butSend_Click);
@@ -2362,7 +2362,7 @@ namespace OpenDental{
 			this.butSplit.CornerRadius = 4F;
 			this.butSplit.Location = new System.Drawing.Point(818,134);
 			this.butSplit.Name = "butSplit";
-			this.butSplit.Size = new System.Drawing.Size(99,23);
+			this.butSplit.Size = new System.Drawing.Size(99,24);
 			this.butSplit.TabIndex = 127;
 			this.butSplit.Text = "Split Claim";
 			this.butSplit.Click += new System.EventHandler(this.butSplit_Click);
@@ -2377,9 +2377,9 @@ namespace OpenDental{
 			this.butLabel.CornerRadius = 4F;
 			this.butLabel.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location = new System.Drawing.Point(326,923);
+			this.butLabel.Location = new System.Drawing.Point(326,925);
 			this.butLabel.Name = "butLabel";
-			this.butLabel.Size = new System.Drawing.Size(81,26);
+			this.butLabel.Size = new System.Drawing.Size(81,24);
 			this.butLabel.TabIndex = 126;
 			this.butLabel.Text = "Label";
 			this.butLabel.Click += new System.EventHandler(this.butLabel_Click);
@@ -2442,9 +2442,9 @@ namespace OpenDental{
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPreview.Location = new System.Drawing.Point(413,923);
+			this.butPreview.Location = new System.Drawing.Point(413,925);
 			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(92,26);
+			this.butPreview.Size = new System.Drawing.Size(92,24);
 			this.butPreview.TabIndex = 115;
 			this.butPreview.Text = "P&review";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
@@ -2459,9 +2459,9 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(510,923);
+			this.butPrint.Location = new System.Drawing.Point(510,925);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(86,26);
+			this.butPrint.Size = new System.Drawing.Size(86,24);
 			this.butPrint.TabIndex = 114;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.ButPrint_Click);
@@ -2475,7 +2475,7 @@ namespace OpenDental{
 			this.butRecalc.CornerRadius = 4F;
 			this.butRecalc.Location = new System.Drawing.Point(762,361);
 			this.butRecalc.Name = "butRecalc";
-			this.butRecalc.Size = new System.Drawing.Size(148,25);
+			this.butRecalc.Size = new System.Drawing.Size(148,24);
 			this.butRecalc.TabIndex = 112;
 			this.butRecalc.Text = "Recalculate &Estimates";
 			this.butRecalc.Click += new System.EventHandler(this.butRecalc_Click);
@@ -2490,9 +2490,9 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(5,923);
+			this.butDelete.Location = new System.Drawing.Point(5,925);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(91,26);
+			this.butDelete.Size = new System.Drawing.Size(91,24);
 			this.butDelete.TabIndex = 106;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -2505,9 +2505,9 @@ namespace OpenDental{
 			this.butSupp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSupp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSupp.CornerRadius = 4F;
-			this.butSupp.Location = new System.Drawing.Point(138,923);
+			this.butSupp.Location = new System.Drawing.Point(138,925);
 			this.butSupp.Name = "butSupp";
-			this.butSupp.Size = new System.Drawing.Size(113,26);
+			this.butSupp.Size = new System.Drawing.Size(113,24);
 			this.butSupp.TabIndex = 95;
 			this.butSupp.Text = "Supplemental Info";
 			this.butSupp.Visible = false;
@@ -2522,9 +2522,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(865,923);
+			this.butCancel.Location = new System.Drawing.Point(865,925);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 15;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -2537,9 +2537,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(778,923);
+			this.butOK.Location = new System.Drawing.Point(778,925);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 14;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -2680,7 +2680,7 @@ namespace OpenDental{
 				//butPayWizard.Enabled=false;
 			}
 			else if(ClaimCur.ClaimStatus=="S" || ClaimCur.ClaimStatus=="R"){//sent or received
-				if(!Security.IsAuthorized(Permissions.ClaimsSentEdit)){
+				if(!Security.IsAuthorized(Permissions.ClaimSentEdit,ClaimCur.DateSent)){
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
 					//butPrint.Enabled=false;
@@ -3735,8 +3735,9 @@ namespace OpenDental{
 		}
 
 		private void ButPrint_Click(object sender,System.EventArgs e) {
-			if(!ClaimIsValid())
+			if(!ClaimIsValid()){
 				return;
+			}
 			UpdateClaim();
 			PrintDocument pd=new PrintDocument();
 			if(!Printers.SetPrinter(pd,PrintSituation.Claim)) {
@@ -3845,15 +3846,16 @@ namespace OpenDental{
 				}
 			}
       Claims.Delete(ClaimCur);
-	  SecurityLogs.MakeLogEntry(Permissions.ClaimsSentEdit,ClaimCur.PatNum,
-		Lan.g(this,"Delete Ins Claim") + " - " + PatCur.GetNameLF());
-
+			SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
+				Lan.g(this,"Delete Claim")+", "+PatCur.GetNameLF()
+				+Lan.g(this,"Date of service: ")+ClaimCur.DateService.ToShortDateString());
       DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(!ClaimIsValid())
+			if(!ClaimIsValid()){
 				return;
+			}
 			//if status is received, all claimprocs must also be received.
 			if(listClaimStatus.SelectedIndex==5){
 				bool allReceived=true;
@@ -3962,8 +3964,9 @@ namespace OpenDental{
 			}
 			//patnum
 			ClaimCur.DateService=PIn.PDate(textDateService.Text);
-			if(textDateSent.Text=="")
+			if(textDateSent.Text==""){
 				ClaimCur.DateSent=DateTime.MinValue;
+			}
 			else ClaimCur.DateSent=PIn.PDate(textDateSent.Text);
 			switch(listClaimStatus.SelectedIndex){
 				case 0:

@@ -122,8 +122,8 @@
 
 Procedures
 Patient Payments
+Insurance Payments
 Adjustments
-(not yet locking Insurance Payments)
 
 It is global and overrides any group-specific settings.  It prevents editing of old items as well as entry of new backdated items.</value>
   </data>

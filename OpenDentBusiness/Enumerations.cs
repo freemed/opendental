@@ -939,7 +939,7 @@ namespace OpenDentBusiness{
 		///<summary>13</summary>
 		Blockouts,
 		///<summary>14</summary>
-		ClaimsSentEdit,
+		ClaimSentEdit,
 		///<summary>15</summary>
 		PaymentCreate,
 		///<summary>16</summary>
@@ -981,8 +981,11 @@ namespace OpenDentBusiness{
 		///<summary>34</summary>
 		AnesthesiaIntakeMeds,
 		///<summary>35</summary>
-		AnesthesiaControlMeds
-
+		AnesthesiaControlMeds,
+		///<summary>36</summary>
+		InsPayCreate,
+		///<summary>37</summary>
+		InsPayEdit
 	}
 
 	///<summary>The type of signal being sent.</summary>
