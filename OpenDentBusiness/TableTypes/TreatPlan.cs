@@ -18,6 +18,8 @@ namespace OpenDentBusiness{
 		public string Signature;
 		///<summary>True if the signature is in Topaz format rather than OD format.</summary>
 		public bool SigIsTopaz;
+		///<summary>FK to patient.PatNum. Can be 0.  The patient responsible for approving the treatment.  Public health field not visible to everyone else.</summary>
+		public int ResponsParty;
 		
 		///<summary></summary>
 		public TreatPlan Copy(){

@@ -142,6 +142,10 @@ namespace OpenDental{
 		private TextBox textTitle;
 		private Label label26;
 		private OpenDental.UI.Button butPickSite;
+		private OpenDental.UI.Button butPickResponsParty;
+		private TextBox textResponsParty;
+		private Label label34;
+		private OpenDental.UI.Button butClearResponsParty;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
 
@@ -278,6 +282,7 @@ namespace OpenDental{
 			this.textEmployer = new System.Windows.Forms.TextBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.groupPH = new System.Windows.Forms.GroupBox();
+			this.butPickSite = new OpenDental.UI.Button();
 			this.comboUrgency = new System.Windows.Forms.ComboBox();
 			this.comboGradeLevel = new System.Windows.Forms.ComboBox();
 			this.textSite = new System.Windows.Forms.TextBox();
@@ -309,7 +314,10 @@ namespace OpenDental{
 			this.labelAdmitDate = new System.Windows.Forms.Label();
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.butPickSite = new OpenDental.UI.Button();
+			this.butPickResponsParty = new OpenDental.UI.Button();
+			this.textResponsParty = new System.Windows.Forms.TextBox();
+			this.label34 = new System.Windows.Forms.Label();
+			this.butClearResponsParty = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -1065,6 +1073,10 @@ namespace OpenDental{
 			// 
 			// groupPH
 			// 
+			this.groupPH.Controls.Add(this.butClearResponsParty);
+			this.groupPH.Controls.Add(this.butPickResponsParty);
+			this.groupPH.Controls.Add(this.textResponsParty);
+			this.groupPH.Controls.Add(this.label34);
 			this.groupPH.Controls.Add(this.butPickSite);
 			this.groupPH.Controls.Add(this.comboUrgency);
 			this.groupPH.Controls.Add(this.comboGradeLevel);
@@ -1077,12 +1089,27 @@ namespace OpenDental{
 			this.groupPH.Controls.Add(this.label13);
 			this.groupPH.Controls.Add(this.label10);
 			this.groupPH.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupPH.Location = new System.Drawing.Point(440,536);
+			this.groupPH.Location = new System.Drawing.Point(440,508);
 			this.groupPH.Name = "groupPH";
-			this.groupPH.Size = new System.Drawing.Size(424,123);
+			this.groupPH.Size = new System.Drawing.Size(424,151);
 			this.groupPH.TabIndex = 23;
 			this.groupPH.TabStop = false;
 			this.groupPH.Text = "Public Health";
+			// 
+			// butPickSite
+			// 
+			this.butPickSite.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickSite.Autosize = true;
+			this.butPickSite.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickSite.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickSite.CornerRadius = 4F;
+			this.butPickSite.Location = new System.Drawing.Point(349,54);
+			this.butPickSite.Name = "butPickSite";
+			this.butPickSite.Size = new System.Drawing.Size(58,23);
+			this.butPickSite.TabIndex = 63;
+			this.butPickSite.TabStop = false;
+			this.butPickSite.Text = "Pick";
+			this.butPickSite.Click += new System.EventHandler(this.butPickSite_Click);
 			// 
 			// comboUrgency
 			// 
@@ -1362,20 +1389,53 @@ namespace OpenDental{
 			this.label26.Text = "Title (Mr., Ms.)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// butPickSite
+			// butPickResponsParty
 			// 
-			this.butPickSite.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPickSite.Autosize = true;
-			this.butPickSite.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickSite.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPickSite.CornerRadius = 4F;
-			this.butPickSite.Location = new System.Drawing.Point(349,54);
-			this.butPickSite.Name = "butPickSite";
-			this.butPickSite.Size = new System.Drawing.Size(58,23);
-			this.butPickSite.TabIndex = 63;
-			this.butPickSite.TabStop = false;
-			this.butPickSite.Text = "Pick";
-			this.butPickSite.Click += new System.EventHandler(this.butPickSite_Click);
+			this.butPickResponsParty.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickResponsParty.Autosize = true;
+			this.butPickResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickResponsParty.CornerRadius = 4F;
+			this.butPickResponsParty.Location = new System.Drawing.Point(349,116);
+			this.butPickResponsParty.Name = "butPickResponsParty";
+			this.butPickResponsParty.Size = new System.Drawing.Size(48,23);
+			this.butPickResponsParty.TabIndex = 66;
+			this.butPickResponsParty.TabStop = false;
+			this.butPickResponsParty.Text = "Pick";
+			this.butPickResponsParty.Click += new System.EventHandler(this.butPickResponsParty_Click);
+			// 
+			// textResponsParty
+			// 
+			this.textResponsParty.AcceptsReturn = true;
+			this.textResponsParty.Location = new System.Drawing.Point(149,118);
+			this.textResponsParty.Name = "textResponsParty";
+			this.textResponsParty.ReadOnly = true;
+			this.textResponsParty.Size = new System.Drawing.Size(198,20);
+			this.textResponsParty.TabIndex = 65;
+			// 
+			// label34
+			// 
+			this.label34.Location = new System.Drawing.Point(1,118);
+			this.label34.Name = "label34";
+			this.label34.Size = new System.Drawing.Size(146,17);
+			this.label34.TabIndex = 64;
+			this.label34.Text = "Responsible Party";
+			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butClearResponsParty
+			// 
+			this.butClearResponsParty.AdjustImageLocation = new System.Drawing.Point(1,1);
+			this.butClearResponsParty.Autosize = true;
+			this.butClearResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearResponsParty.CornerRadius = 4F;
+			this.butClearResponsParty.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butClearResponsParty.Location = new System.Drawing.Point(397,116);
+			this.butClearResponsParty.Name = "butClearResponsParty";
+			this.butClearResponsParty.Size = new System.Drawing.Size(25,23);
+			this.butClearResponsParty.TabIndex = 67;
+			this.butClearResponsParty.TabStop = false;
+			this.butClearResponsParty.Click += new System.EventHandler(this.butClearResponsParty_Click);
 			// 
 			// FormPatientEdit
 			// 
@@ -1544,8 +1604,9 @@ namespace OpenDental{
 				textSSN.Text=PatCur.SSN.Substring(0,3)+"-"
 					+PatCur.SSN.Substring(3,2)+"-"+PatCur.SSN.Substring(5,4);
 			}
-			else
+			else{
 				textSSN.Text=PatCur.SSN;
+			}
 			textMedicaidID.Text=PatCur.MedicaidID;
 			textAddress.Text=PatCur.Address;
 			textAddress2.Text=PatCur.Address2;
@@ -1557,10 +1618,12 @@ namespace OpenDental{
 			textWirelessPhone.Text=PatCur.WirelessPhone;
 			textEmail.Text=PatCur.Email;
 			textCreditType.Text=PatCur.CreditType;
-			if(PatCur.DateFirstVisit.Year < 1880)
+			if(PatCur.DateFirstVisit.Year < 1880){
 				textDateFirstVisit.Text="";
-			else
+			}
+			else{
 				textDateFirstVisit.Text=PatCur.DateFirstVisit.ToShortDateString();
+			}
 			textChartNumber.Text=PatCur.ChartNumber;
 			textEmployer.Text=Employers.GetName(PatCur.EmployerNum);
 			//textEmploymentNote.Text=PatCur.EmploymentNote;
@@ -1676,6 +1739,9 @@ namespace OpenDental{
 				comboUrgency.Items.Add(Lan.g("enumUrg",enumUrg[i]));
 			}
 			comboUrgency.SelectedIndex=(int)PatCur.Urgency;
+			if(PatCur.ResponsParty!=0){
+				textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
+			}
 			if(Programs.IsEnabled("TrophyEnhanced")){
 				textTrophyFolder.Text=PatCur.TrophyFolder;
 			}
@@ -2226,6 +2292,22 @@ namespace OpenDental{
 			PatCur.SiteNum=FormS.SelectedSiteNum;
 			textSite.Text=Sites.GetDescription(PatCur.SiteNum);
 		}
+
+		private void butPickResponsParty_Click(object sender,EventArgs e) {
+			FormPatientSelect FormPS=new FormPatientSelect();
+			FormPS.SelectionModeOnly=true;
+			FormPS.ShowDialog();
+			if(FormPS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			PatCur.ResponsParty=FormPS.SelectedPatNum;
+			textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
+		}
+
+		private void butClearResponsParty_Click(object sender,EventArgs e) {
+			PatCur.ResponsParty=0;
+			textResponsParty.Text="";
+		}
 		
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(  textBirthdate.errorProvider1.GetError(textBirthdate)!=""
@@ -2320,18 +2402,21 @@ namespace OpenDental{
 			else{
 				PatCur.PriProv=ProviderC.List[comboPriProv.SelectedIndex].ProvNum;
 			}
-			if(comboSecProv.SelectedIndex==0)
+			if(comboSecProv.SelectedIndex==0){
 				PatCur.SecProv=0;
-			else
+			}
+			else{
 				PatCur.SecProv=ProviderC.List[comboSecProv.SelectedIndex-1].ProvNum;
+			}
 			if(comboFeeSched.SelectedIndex==0){
 				PatCur.FeeSched=0;
 			}
 			else{
 				PatCur.FeeSched=FeeSchedC.ListShort[comboFeeSched.SelectedIndex-1].FeeSchedNum;
 			}
-			if(comboBillType.SelectedIndex!=-1)
+			if(comboBillType.SelectedIndex!=-1){
 				PatCur.BillingType=DefC.Short[(int)DefCat.BillingTypes][comboBillType.SelectedIndex].DefNum;
+			}
 			if(comboClinic.SelectedIndex==0){
 				PatCur.ClinicNum=0;
 			}
@@ -2343,6 +2428,7 @@ namespace OpenDental{
 			//site set when user picks from list.
 			PatCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
 			PatCur.Urgency=(TreatmentUrgency)comboUrgency.SelectedIndex;
+			//ResponsParty handled when buttons are pushed.
 			if(Programs.IsEnabled("TrophyEnhanced")) {
 				PatCur.TrophyFolder=textTrophyFolder.Text;
 			}
@@ -2414,6 +2500,8 @@ namespace OpenDental{
 				Patients.Delete(PatCur);
 			}
 		}
+
+		
 
 		
 

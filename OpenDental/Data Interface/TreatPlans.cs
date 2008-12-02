@@ -20,13 +20,14 @@ namespace OpenDental{
 			TreatPlan[] List=new TreatPlan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TreatPlan();
-				List[i].TreatPlanNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum      = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].DateTP      = PIn.PDate(table.Rows[i][2].ToString());
+				List[i].TreatPlanNum= PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].PatNum      = PIn.PInt   (table.Rows[i][1].ToString());
+				List[i].DateTP      = PIn.PDate  (table.Rows[i][2].ToString());
 				List[i].Heading     = PIn.PString(table.Rows[i][3].ToString());
 				List[i].Note        = PIn.PString(table.Rows[i][4].ToString());
 				List[i].Signature   = PIn.PString(table.Rows[i][5].ToString());
 				List[i].SigIsTopaz  = PIn.PBool  (table.Rows[i][6].ToString());
+				List[i].ResponsParty= PIn.PInt   (table.Rows[i][7].ToString());
 			}
 			return List;
 		}
@@ -40,6 +41,7 @@ namespace OpenDental{
 				+",Note = '"      +POut.PString(tp.Note)+"'"
 				+",Signature = '" +POut.PString(tp.Signature)+"'"
 				+",SigIsTopaz = '"+POut.PBool  (tp.SigIsTopaz)+"'"
+				+",ResponsParty='"+POut.PInt   (tp.ResponsParty)+"'"
 				+" WHERE TreatPlanNum = '"+POut.PInt(tp.TreatPlanNum)+"'";
  			General.NonQ(command);
 		}
@@ -53,7 +55,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys){
 				command+="TreatPlanNum,";
 			}
-			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz) VALUES(";
+			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz,ResponsParty) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(tp.TreatPlanNum)+"', ";
 			}
@@ -63,7 +65,8 @@ namespace OpenDental{
 				+"'"+POut.PString(tp.Heading)+"', "
 				+"'"+POut.PString(tp.Note)+"', "
 				+"'"+POut.PString(tp.Signature)+"', "
-				+"'"+POut.PBool  (tp.SigIsTopaz)+"')";
+				+"'"+POut.PBool  (tp.SigIsTopaz)+"', "
+				+"'"+POut.PInt   (tp.ResponsParty)+"')";
  			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}

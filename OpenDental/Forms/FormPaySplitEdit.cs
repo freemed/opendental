@@ -713,7 +713,7 @@ namespace OpenDental
 			//this happens after the check change has been registered
 			if(checkPatOtherFam.Checked){
 				FormPatientSelect FormPS=new FormPatientSelect();
-				FormPS.SelectionModeOnly=true;//this will cause a change in the patNum only
+				FormPS.SelectionModeOnly=true;
 				FormPS.ShowDialog();
 				if(FormPS.DialogResult!=DialogResult.OK){
 					checkPatOtherFam.Checked=false;

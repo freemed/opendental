@@ -814,10 +814,13 @@ namespace OpenDentBusiness{
 			get { return siteNumChanged; }
 		}
 
+		//[DataField("DateTStamp")]
+		//This won't be seen in the code.
+
 		[DataField("ResponsParty")]
 		private int responsParty;
 		bool responsPartyChanged;
-		///<summary>FK to patient.PatNum. Can be zero.</summary>
+		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>
 		public int ResponsParty {
 			get { return responsParty; }
 			set { if(responsParty!=value){responsParty = value; MarkDirty(); responsPartyChanged = true; }}
@@ -825,10 +828,6 @@ namespace OpenDentBusiness{
 		public bool ResponsPartyChanged {
 			get { return responsPartyChanged; }
 		}
-
-		//[DataField("DateTStamp")]
-		//This won't be seen in the code.
-
 
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>
 		//public DateTime DateScheduled;

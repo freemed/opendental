@@ -527,7 +527,8 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="ALTER TABLE patient ADD INDEX (ResponsParty)";
 					General.NonQ(command);
-
+					command="ALTER TABLE treatplan ADD ResponsParty int NOT NULL";
+					General.NonQ(command);
 
 
 

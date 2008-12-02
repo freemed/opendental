@@ -47,8 +47,8 @@ namespace OpenDentBusiness{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 68,Birthdate";//just asking for bugs. Must be one more than the count of fields,
-				//which is two more than the last number in the [] of GetPatient
+					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be one more than the count of fields,
+				//which is two more than the last number in the [] of TableToList()
 			}
 			return command;
 		}
@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
 				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum"//DateTStamp
-				+") VALUES (";
+				+",ResponsParty) VALUES (";
 			if(includePatNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
@@ -169,8 +169,9 @@ namespace OpenDentBusiness{
 				+POut.PDate(pat.AdmitDate)+", "
 				+"'"+POut.PString(pat.Title)+"', "
 				+"'"+POut.PDouble(pat.PayPlanDue)+"', "
-				+"'"+POut.PInt(pat.SiteNum)+"')";
+				+"'"+POut.PInt(pat.SiteNum)+"', "
 				//DateTStamp won't show here.
+				+"'"+POut.PInt(pat.ResponsParty)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -572,6 +573,12 @@ namespace OpenDentBusiness{
 				comma=true;
 			}
 			//DateTStamp
+			if(pat.ResponsParty!=CurOld.ResponsParty) {
+				if(comma)
+					c+=",";
+				c+="ResponsParty = '"    +POut.PInt(pat.ResponsParty)+"'";
+				comma=true;
+			}
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
@@ -734,7 +741,7 @@ namespace OpenDentBusiness{
 					}
 					strPatNums+="PatNum='"+patNums[i].ToString()+"' ";
 				}
-				string command="SELECT * from patient WHERE "+strPatNums;
+				string command="SELECT * FROM patient WHERE "+strPatNums;
 				//MessageBox.Show(string command);
  				table=General.GetTable(command);
 			}
@@ -817,7 +824,8 @@ namespace OpenDentBusiness{
 				pat.Title        = PIn.PString(table.Rows[i][63].ToString());
 				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][64].ToString());
 				pat.SiteNum      = PIn.PInt   (table.Rows[i][65].ToString());
-				//DateTStamp
+				//DateTStamp 66
+				pat.ResponsParty = PIn.PInt   (table.Rows[i][67].ToString());
 				patList.Add(pat);
 			}
 			return patList;

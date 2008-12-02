@@ -632,6 +632,14 @@ namespace OpenDental{
 					case "Clinic":
 						row.Cells.Add(Clinics.GetDesc(PatCur.ClinicNum));
 						break;
+					case "ResponsParty":
+						if(PatCur.ResponsParty==0){
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add(Patients.GetLim(PatCur.ResponsParty).GetNameFL());
+						}
+						break;
 					case "Referrals":
 						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
 						if(RefList.Length==0){
