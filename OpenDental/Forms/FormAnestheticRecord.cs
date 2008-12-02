@@ -1216,7 +1216,7 @@ namespace OpenDental
 			this.labelInvalidSig.TabIndex = 83;
 			this.labelInvalidSig.Text = "Invalid Signature - Anesthesia Close Time has changed since it was signed.";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.labelInvalidSig.Click += new System.EventHandler(this.labelInvalidSig_Click);
+			//this.labelInvalidSig.Click += new System.EventHandler(this.labelInvalidSig_Click);
 			// 
 			// sigBox
 			// 
@@ -1224,7 +1224,9 @@ namespace OpenDental
 			this.sigBox.Name = "sigBox";
 			this.sigBox.Size = new System.Drawing.Size(158, 74);
 			this.sigBox.TabIndex = 135;
-			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
+			//this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
+			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
+
 			// 
 			// butSignTopaz
 			// 
@@ -1238,6 +1240,7 @@ namespace OpenDental
 			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
 			this.butSignTopaz.TabIndex = 136;
 			this.butSignTopaz.Text = "Sign Topaz";
+			this.butSignTopaz.UseVisualStyleBackColor = true;
 			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
 			// 
 			// butClearSig
@@ -1991,7 +1994,8 @@ namespace OpenDental
 			this.groupBoxWgt.PerformLayout();
 			this.groupBoxHgt.ResumeLayout(false);
 			this.groupBoxHgt.PerformLayout();
-			this.groupBoxSig.ResumeLayout(false);
+			//this.groupBoxSig.ResumeLayout(false);
+			this.groupBoxSig.SuspendLayout();
 			this.groupBoxHgtWgt.ResumeLayout(false);
 			this.groupBoxHgtWgt.PerformLayout();
 			this.groupBoxVS.ResumeLayout(false);
@@ -2853,18 +2857,19 @@ namespace OpenDental
         }
 
 		public void StartPrint(Stream streamToPrint, string streamType){
+			PrintDocument printDocument1 = new PrintDocument(); 
 
-			this.printDocument2.PrintPage += new PrintPageEventHandler(printDocument2_PrintPage);
+			this.printDocument1.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
 			this.streamToPrint = streamToPrint;
 			this.streamType = streamType;
 			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
 			PrintDialog1.AllowSomePages = true;
 			PrintDialog1.ShowHelp = true;
-			PrintDialog1.Document = printDocument2;
+			PrintDialog1.Document = printDocument1;
 			DialogResult result = PrintDialog1.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				printDocument2.Print();
+				printDocument1.Print();
 			}
         }
 
@@ -3113,7 +3118,7 @@ namespace OpenDental
 			comboAnesthMed.SelectedIndex = 0;
 		}
 
-		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
+		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e){
 
 			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
 			int x = e.MarginBounds.X;
