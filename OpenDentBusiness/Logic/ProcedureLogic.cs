@@ -6,18 +6,20 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ProcedureLogic{
 
-		///<summary>The supplied DataRows must include the following columns: Priority,ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+		///<summary>The supplied DataRows must include the following columns: Priority(optional),ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 		public static int CompareProcedures(DataRow x,DataRow y) {
 			//first, by priority
-			if(x["Priority"].ToString()!=y["Priority"].ToString()) {//if priorities are different
-				if(x["Priority"].ToString()=="0") {
-					return 1;//x is greater than y. Priorities always come first.
+			if(x.Table.Columns.Contains("Priority") && y.Table.Columns.Contains("Priority")){
+				if(x["Priority"].ToString()!=y["Priority"].ToString()) {//if priorities are different
+					if(x["Priority"].ToString()=="0") {
+						return 1;//x is greater than y. Priorities always come first.
+					}
+					if(y["Priority"].ToString()=="0") {
+						return -1;//x is less than y. Priorities always come first.
+					}
+					return DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(x["Priority"].ToString())).CompareTo
+						(DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(y["Priority"].ToString())));
 				}
-				if(y["Priority"].ToString()=="0") {
-					return -1;//x is less than y. Priorities always come first.
-				}
-				return DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(x["Priority"].ToString())).CompareTo
-					(DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(y["Priority"].ToString())));
 			}
 			//priorities are the same, so sort by toothrange
 			if(x["ToothRange"].ToString()!=y["ToothRange"].ToString()) {

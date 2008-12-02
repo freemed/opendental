@@ -427,6 +427,8 @@ namespace OpenDentBusiness {
 			table.Columns.Add("procsOnObj");//for a claim or payment, the ProcNums, comma delimited.
 			table.Columns.Add("prov");
 			table.Columns.Add("StatementNum");
+			table.Columns.Add("ToothNum");
+			table.Columns.Add("ToothRange");
 			table.Columns.Add("tth");
 		}
 		
@@ -509,6 +511,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["provNum_"].ToString()));
 				row["StatementNum"]="0";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -629,6 +633,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
+				row["ToothNum"]=rawProc.Rows[i]["ToothNum"].ToString();
+				row["ToothRange"]=rawProc.Rows[i]["ToothRange"].ToString();
 				row["tth"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
 				rows.Add(row);
 			}
@@ -680,6 +686,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawAdj.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -801,6 +809,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]=PIn.PByteArray(rawPay.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -1009,6 +1019,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]=PIn.PByteArray(rawClaim.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaim.Rows[i]["ProvTreat"].ToString()));
 				row["StatementNum"]="0";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -1066,6 +1078,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]=rawState.Rows[i]["StatementNum"].ToString();
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -1136,6 +1150,8 @@ namespace OpenDentBusiness {
 				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]="0";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -1647,28 +1663,26 @@ namespace OpenDentBusiness {
 
 	}
 
-	///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
+	///<summary>The supplied DataRows must include the following columns: ProcNum,DateTime,(Priority not needed),ToothRange,ToothNum,ProcCode. This sorts all objects in Account module based on their types, dates, toothrange, toothnum, and proccode.  Times are always ignored if present.</summary>
 	class AccountLineComparer : IComparer<DataRow>	{
-		///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
-		public int Compare (DataRow rowA,DataRow rowB){
+		///<summary></summary>
+		public int Compare (DataRow x,DataRow y){
+			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
+				if(((DateTime)x["DateTime"]).Date==((DateTime)y["DateTime"]).Date) {//and the dates are the same
+					return ProcedureLogic.CompareProcedures(x,y);
+				}
+			}
 			//if dates are different, then sort by date
-			if((DateTime)rowA["DateTime"]!=(DateTime)rowB["DateTime"]){
-				return ((DateTime)rowA["DateTime"]).CompareTo((DateTime)rowB["DateTime"]);
+			if(((DateTime)x["DateTime"]).Date!=((DateTime)y["DateTime"]).Date){
+				return (((DateTime)x["DateTime"]).Date).CompareTo(((DateTime)y["DateTime"]).Date);
 			}
 			//Procedures come before other types
-			if(rowA["ProcNum"].ToString()!="0" && rowB["ProcNum"].ToString()=="0"){
+			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()=="0"){
 				return -1;
 			}
-			if(rowA["ProcNum"].ToString()=="0" && rowB["ProcNum"].ToString()!="0"){
+			if(x["ProcNum"].ToString()=="0" && y["ProcNum"].ToString()!="0"){
 				return 1;
 			}
-			//PayPlanCharges come before other types on same date, but rare to be on same date anyway.
-			//if(rowA["PayPlanChargeNum"].ToString()!="0" && rowB["PayNum"].ToString()=="0"){
-			//	return -1;
-			//}
-			//if(rowA["PayNum"].ToString()=="0" && rowB["PayPlanChargeNum"].ToString()!="0"){
-			//	return 1;
-			//}
 			return 0;
 		}
 	}
