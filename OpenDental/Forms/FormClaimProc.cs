@@ -117,8 +117,8 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelCarrierAllowed;
 		private System.Windows.Forms.TextBox textCarrierAllowed;
 		private OpenDental.UI.Button butUpdateAllowed;
-		///<summary>Set this to true if user does not have permission.</summary>
-		public bool NoPermission;
+		///<summary>Set this to true if user does not have permission to edit procedure.</summary>
+		public bool NoPermissionProc;
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label labelDateEntry;
 		private Label labelInsCarrierAllowed;
@@ -1347,18 +1347,28 @@ namespace OpenDental
 		#endregion
 
 		private void FormClaimProcEdit_Load(object sender, System.EventArgs e) {
-			if(NoPermission){
+			if(NoPermissionProc){//blocks users with no permission to edit procedure
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
+			//All claimprocs are created before editing
 			//if(ClaimProcCur.PlanNum>0){
 			//	InsPlans.GetCur(ClaimProcCur.PlanNum,PlanList);
 			//}
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
-				textDateCP.ReadOnly=true;//DateCP always the same as the payment date.
-			}//otherwise, we do need to allow editing so that Writeoff dates can be changed.
+				textDateCP.ReadOnly=true;//DateCP always the same as the payment date and can't be changed here
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP)){
+					butOK.Enabled=false;
+				}
+				textInsPayAmt.ReadOnly=true;
+				//listStatus.Enabled=false;//this is handled in the mousedown event
+				butDelete.Enabled=false;
+			}
+			else{//otherwise, we do need to allow editing DateCP so that Writeoff dates can be changed.
+				labelAttachedToCheck.Visible=false;
+			}
 			if(ClaimProcCur.ProcNum==0){//total payment for a claim
 				IsProc=false;
 				textDescription.Text="Total Payment";
@@ -1380,7 +1390,10 @@ namespace OpenDental
 			if(ClaimProcCur.ClaimNum>0){//attached to claim
 				radioClaim.Checked=true;
 				checkNoBillIns.Enabled=false;
-				if(!IsInClaim){//accessing it from the Procedure window
+				if(IsInClaim){//(not from the procedure window)
+					labelNotInClaim.Visible=false;
+				}
+				else{//must be accessing it from the Procedure window
 					textCodeSent.ReadOnly=true;
 					textFeeBilled.ReadOnly=true;
 					labelNotInClaim.Visible=true;
@@ -1392,9 +1405,6 @@ namespace OpenDental
 					textInsPayAmt.ReadOnly=true;
 					textWriteOff.ReadOnly=true;
 					//butRecalc.Enabled=false;
-				}
-				else{//not from the procedure window
-					labelNotInClaim.Visible=false;
 				}
 				groupClaimInfo.Visible=true;
 				if(ClaimProcCur.ProcNum==0){//if a total entry rather than by proc
@@ -1519,19 +1529,10 @@ namespace OpenDental
 			textCodeSent.Text=ClaimProcCur.CodeSent;
 			textFeeBilled.Text=ClaimProcCur.FeeBilled.ToString("n");
 			textRemarks.Text=ClaimProcCur.Remarks;
-			if(ClaimProcCur.ClaimPaymentNum>0){
-				textInsPayAmt.ReadOnly=true;
-				//listStatus.Enabled=false;//this is handled in the mousedown event
-				butDelete.Enabled=false;
-			}
-			else{
-				labelAttachedToCheck.Visible=false;
-			}
 			FillInitialAmounts();
 			ComputeAmounts();
 			//MessageBox.Show(panelEstimateInfo.Visible.ToString());
 		}
-
 
 		private void SetListStatus(ClaimProcStatus status){
 			switch(status){
@@ -2097,7 +2098,7 @@ namespace OpenDental
 			ComputeAmounts();
 		}
 
-		///<summary>Remember that this will never even happen unless this is just an estimate because the button is not visible.</summary>
+		///<summary>Remember that this will never even happen unless this is just an estimate because the delete button will not be enabled.</summary>
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(MessageBox.Show(Lan.g(this,"Delete this estimate?"),""
 				,MessageBoxButtons.OKCancel)!=DialogResult.OK){
@@ -2127,14 +2128,15 @@ namespace OpenDental
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			//no security check here because if attached to a payment, nobody is allowed to change the date or amount anyway.
 			if(!AllAreValid()){
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
 			//status already handled
 			if(listProv.SelectedIndex!=-1){//if no prov selected, then that prov must simply be hidden,
-													//because all claimprocs are initially created with a prov(except preauth).
-													//So, in this case, don't change.
+				//because all claimprocs are initially created with a prov(except preauth).
+				//So, in this case, don't change.
 				ClaimProcCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			}
 			ClaimProcCur.ProcDate=PIn.PDate(textProcDate.Text);
@@ -2206,6 +2208,12 @@ namespace OpenDental
 			//}
 			//there is no functionality here for insert cur, because all claimprocs are
 			//created before editing.
+			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
+				//note: the amount and the date will not have been changed.
+				SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,ClaimProcCur.PatNum,
+					Patients.GetLim(ClaimProcCur.PatNum).GetNameLF()+", "
+					+Lan.g(this,"Date and amount not changed."));//I'm really not sure what they would have changed.
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -2683,7 +2683,7 @@ namespace OpenDental{
 				if(!Security.IsAuthorized(Permissions.ClaimSentEdit,ClaimCur.DateSent)){
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
-					//butPrint.Enabled=false;
+					//butPrint.Enabled=false;//allowed to print, but just won't save changes.
 					notAuthorized=true;
 					groupEnterPayment.Enabled=false;
 					gridPay.Enabled=false;
@@ -3192,15 +3192,12 @@ namespace OpenDental{
 
 		private void gridPay_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			int tempClaimNum=ClaimCur.ClaimNum;
-			//remember that the claimpayment.List is not entirely accurate
 			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.PInt(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPaymentCur);
+			//Security handled in that form.  Anyone can view.
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.ShowDialog();
 			ClaimList=Claims.Refresh(PatCur.PatNum);
-			//this line was causing bugs.  And I don't know why it's necessary.
-			//ClaimCur=Claims.GetClaim(
-			//	((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}
@@ -3232,6 +3229,9 @@ namespace OpenDental{
 		}
 
 		private void butPayTotal_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here, but it will be checked when actually creating the check
+				return;
+			}
 			//preauths are only allowed "payment" entry by procedure since a total would be meaningless
 			if(ClaimCur.ClaimType=="PreAuth"){
 				MessageBox.Show(Lan.g(this,"PreAuthorizations can only be entered by procedure."));
@@ -3301,6 +3301,9 @@ namespace OpenDental{
 		}
 
 		private void butPayProc_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here, but it will be checked when actually creating the check
+				return;
+			}
 			//this will work for regular claims and for preauths.
 			//it will enter edit mode if it can only find received procs not attached to payments yet.
 			if(gridProc.SelectedIndices.Length==0){
@@ -3371,6 +3374,9 @@ namespace OpenDental{
 		}
 
 		private void butPaySupp_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here, but it will be checked when actually creating the check
+				return;
+			}
 			if(gridProc.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"This is only for additional payments on procedures already marked received.  Please highlight procedures first."));
 				return;
@@ -3403,8 +3409,9 @@ namespace OpenDental{
 		}
 
 		private void butSplit_Click(object sender, System.EventArgs e) {
-			if(!ClaimIsValid())
+			if(!ClaimIsValid()){
 				return;
+			}
 			UpdateClaim();
 			if(gridProc.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please highlight procedures first."));
@@ -3433,12 +3440,11 @@ namespace OpenDental{
 			FillGrids();
 		}
 
-		//private void butCheckDelete_Click(object sender, System.EventArgs e) {
-		
-		//}
-
 		///<summary>Creates insurance check</summary>
 		private void butCheckAdd_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here, but it will be checked when saving the check to prevent backdating
+				return;
+			}
 			bool existsReceived=false;
 			for(int i=0;i<ClaimProcsForClaim.Length;i++){
 				if((ClaimProcsForClaim[i].Status==ClaimProcStatus.Received
@@ -3462,9 +3468,8 @@ namespace OpenDental{
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();
+			//ClaimPaymentCur gets deleted within that form if user clicks cancel.
 			ClaimList=Claims.Refresh(PatCur.PatNum);
-			//why:?
-			//ClaimCur=((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}
@@ -3847,7 +3852,7 @@ namespace OpenDental{
 			}
       Claims.Delete(ClaimCur);
 			SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
-				Lan.g(this,"Delete Claim")+", "+PatCur.GetNameLF()
+				Lan.g(this,"Delete Claim")+", "+PatCur.GetNameLF()+""
 				+Lan.g(this,"Date of service: ")+ClaimCur.DateService.ToShortDateString());
       DialogResult=DialogResult.OK;
 		}
@@ -3967,7 +3972,10 @@ namespace OpenDental{
 			if(textDateSent.Text==""){
 				ClaimCur.DateSent=DateTime.MinValue;
 			}
-			else ClaimCur.DateSent=PIn.PDate(textDateSent.Text);
+			else{
+				ClaimCur.DateSent=PIn.PDate(textDateSent.Text);
+			}
+			bool wasSentOrReceived=false;
 			switch(listClaimStatus.SelectedIndex){
 				case 0:
 					ClaimCur.ClaimStatus="U";
@@ -3983,35 +3991,42 @@ namespace OpenDental{
 					break;
 				case 4:
 					ClaimCur.ClaimStatus="S";
+					wasSentOrReceived=true;
 					break;
 				case 5:
 					ClaimCur.ClaimStatus="R";
+					wasSentOrReceived=true;
 					break;
 			}
-			if(textDateRec.Text=="")
+			if(textDateRec.Text==""){
 				ClaimCur.DateReceived=DateTime.MinValue;
-			else ClaimCur.DateReceived=PIn.PDate(textDateRec.Text);
+			}
+			else{
+				ClaimCur.DateReceived=PIn.PDate(textDateRec.Text);
+			}
 			//planNum
 			//patRelats will always be selected
 			ClaimCur.PatRelat=(Relat)comboPatRelat.SelectedIndex;
 			ClaimCur.PatRelat2=(Relat)comboPatRelat2.SelectedIndex;
-			if(comboProvTreat.SelectedIndex!=-1)
+			if(comboProvTreat.SelectedIndex!=-1){
 				ClaimCur.ProvTreat=ProviderC.List[comboProvTreat.SelectedIndex].ProvNum;
+			}
 			ClaimCur.PreAuthString=textPreAuth.Text;
 			//isprosthesis handled earlier
 			ClaimCur.PriorDate=PIn.PDate(textPriorDate.Text);
 			ClaimCur.ReasonUnderPaid=textReasonUnder.Text;
 			ClaimCur.ClaimNote=textNote.Text;
 			//ispreauth
-			if(comboProvBill.SelectedIndex!=-1)
+			if(comboProvBill.SelectedIndex!=-1){
 				ClaimCur.ProvBill=ProviderC.List[comboProvBill.SelectedIndex].ProvNum;
+			}
 			ClaimCur.IsOrtho=checkIsOrtho.Checked;
 			ClaimCur.OrthoRemainM=PIn.PInt(textOrthoRemainM.Text);
 			ClaimCur.OrthoDate=PIn.PDate(textOrthoDate.Text);
 			ClaimCur.RefNumString=textRefNum.Text;
 			ClaimCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
 			ClaimCur.EmployRelated=(YN)comboEmployRelated.SelectedIndex;
-			switch(comboAccident.SelectedIndex) {
+			switch(comboAccident.SelectedIndex){
 				case 0:
 					ClaimCur.AccidentRelated="";
 					break;
@@ -4093,9 +4108,11 @@ namespace OpenDental{
 				}
 				ClaimValCodeLog.Update(ClaimValCodes);
 			}
-			//if(ClaimCur.ClaimStatus=="S"){
-				//SecurityLogs.MakeLogEntry("Claims Sent Edit",Claims.cmd.CommandText,user);
-			//}
+			if(wasSentOrReceived){
+				SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
+					PatCur.GetNameLF()+", "
+					+Lan.g(this,"Date of service: ")+ClaimCur.DateService.ToShortDateString());
+			}
 		}
 
 		//cancel does not cancel in some circumstances because cur gets updated in some areas.

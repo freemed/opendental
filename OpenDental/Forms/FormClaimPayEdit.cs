@@ -1,9 +1,11 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -21,7 +23,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.Label label1;
-		private OpenDental.TableClaimPaySplits tb2;
 		private System.ComponentModel.Container components = null;
 		//private bool ControlDown;
 		///<summary></summary>
@@ -30,12 +31,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private double splitTot;
 		///<summary>The list of splits to display in the grid.</summary>
-		private ClaimPaySplit[] splits;
+		private List<ClaimPaySplit> splits;
 		private System.Windows.Forms.ComboBox comboClinic;
 		private System.Windows.Forms.Label labelClinic;
 		private System.Windows.Forms.TextBox textCarrierName;
 		private System.Windows.Forms.Label label7;
 		private ClaimPayment ClaimPaymentCur;
+		private OpenDental.UI.ODGrid gridMain;
 		///<summary>Set this externally.</summary>
 		public int OriginatingClaimNum;
 
@@ -43,8 +45,7 @@ namespace OpenDental{
 		public FormClaimPayEdit(ClaimPayment claimPaymentCur){
 			InitializeComponent();// Required for Windows Form Designer support
 			ClaimPaymentCur=claimPaymentCur;
-			tb2.CellClicked += new OpenDental.ContrTable.CellEventHandler(tb2_CellClicked);
-			tb2.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tb2_CellDoubleClicked);
+			splits=new List<ClaimPaySplit>();
 			Lan.F(this);
 		}
 
@@ -74,7 +75,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.tb2 = new OpenDental.TableClaimPaySplits();
 			this.checkShowUn = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
@@ -82,6 +82,7 @@ namespace OpenDental{
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.textCarrierName = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// textAmount
@@ -181,7 +182,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(803,631);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 7;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -195,21 +196,10 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(803,593);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 6;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// tb2
-			// 
-			this.tb2.BackColor = System.Drawing.SystemColors.Window;
-			this.tb2.Location = new System.Drawing.Point(8,20);
-			this.tb2.Name = "tb2";
-			this.tb2.ScrollValue = 1;
-			this.tb2.SelectedIndices = new int[0];
-			this.tb2.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.tb2.Size = new System.Drawing.Size(539,634);
-			this.tb2.TabIndex = 49;
 			// 
 			// checkShowUn
 			// 
@@ -240,7 +230,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(565,597);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(92,26);
+			this.butDelete.Size = new System.Drawing.Size(92,24);
 			this.butDelete.TabIndex = 52;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -280,12 +270,28 @@ namespace OpenDental{
 			this.label7.Text = "Carrier Name";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(8,14);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(539,641);
+			this.gridMain.TabIndex = 95;
+			this.gridMain.Title = "Claim Payment Splits";
+			this.gridMain.TranslationName = "TableClaimPaySplits";
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
 			// FormClaimPayEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(902,676);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textCarrierName);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.comboClinic);
@@ -293,7 +299,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkShowUn);
-			this.Controls.Add(this.tb2);
 			this.Controls.Add(this.textAmount);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.textBankBranch);
@@ -313,8 +318,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Insurance Claim Check";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimPayEdit_Closing);
 			this.Load += new System.EventHandler(this.FormClaimPayEdit_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClaimPayEdit_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -322,9 +327,20 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimPayEdit_Load(object sender, System.EventArgs e) {
+			//ClaimPayment created before opening this form
 			if(IsNew){
-				//ClaimPaymentCur=new ClaimPayment();
-				//ClaimPayments.InsertCur();//assigns a ClaimPaymentNum for use below
+				if(!Security.IsAuthorized(Permissions.InsPayCreate)){//date not checked here
+					DialogResult=DialogResult.Cancel;//causes claimPayment to be deleted.
+					return;
+				}
+			}
+			else{
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimPaymentCur.CheckDate)){
+					butOK.Enabled=false;
+					butDelete.Enabled=false;
+				}
+			}
+			if(IsNew){
 				checkShowUn.Checked=true;
 			}
 			if(PrefC.GetBool("EasyNoClinics")){
@@ -340,76 +356,81 @@ namespace OpenDental{
 					comboClinic.SelectedIndex=i+1;
 				}
 			}
-			//if(ClaimPaymentCur.CheckDate.Year < 1880){
-			//	textDate.Text=DateTime.Today.ToShortDateString();
-			//}
-			//else
 			textDate.Text=ClaimPaymentCur.CheckDate.ToShortDateString();
-			//textAmount is handled in FillTable
 			textCheckNum.Text=ClaimPaymentCur.CheckNum;
 			textBankBranch.Text=ClaimPaymentCur.BankBranch;
 			textCarrierName.Text=ClaimPaymentCur.CarrierName;
 			textNote.Text=ClaimPaymentCur.Note;
-			FillTable();
+			FillGrid();
 			if(IsNew){
-				tb2.SetSelected(true);
+				gridMain.SetSelected(true);
 				splitTot=0;
-				for(int i=0;i<tb2.SelectedIndices.Length;i++){
-					splitTot+=splits[tb2.SelectedIndices[i]].InsPayAmt;//Claims.ListQueue
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+					splitTot+=splits[gridMain.SelectedIndices[i]].InsPayAmt;
 				}
 				textAmount.Text=splitTot.ToString("F");
 			}
 		}
 
-		private void FillTable(){
+		private void FillGrid(){
 			splits=Claims.RefreshByCheck(ClaimPaymentCur.ClaimPaymentNum,checkShowUn.Checked);
-			tb2.ResetRows(splits.Length);
-			tb2.SetGridColor(Color.LightGray);
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimPaySplits","Date"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Prov"),40);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Patient"),140);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Carrier"),140);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Fee"),65,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimPaySplits","Payment"),65,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);			 
+			gridMain.Rows.Clear();
+			ODGridRow row;
 			splitTot=0;
-			for (int i=0;i<splits.Length;i++){
-				tb2.Cell[0,i]=splits[i].DateClaim.ToShortDateString();
-				tb2.Cell[1,i]=splits[i].ProvAbbr;
-				tb2.Cell[2,i]=splits[i].PatName;
-				tb2.Cell[3,i]=splits[i].Carrier;
-				tb2.Cell[4,i]=splits[i].FeeBilled.ToString("F");
-				tb2.Cell[5,i]=splits[i].InsPayAmt.ToString("F");
+			for(int i=0;i<splits.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(splits[i].DateClaim.ToShortDateString());
+				row.Cells.Add(splits[i].ProvAbbr);
+				row.Cells.Add(splits[i].PatName);
+				row.Cells.Add(splits[i].Carrier);
+				row.Cells.Add(splits[i].FeeBilled.ToString("F"));
+				row.Cells.Add(splits[i].InsPayAmt.ToString("F"));
 				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
-					tb2.SetSelected(i,true);
+					gridMain.SetSelected(i,true);
 					splitTot+=splits[i].InsPayAmt;
 				}
 				if(splits[i].ClaimNum==OriginatingClaimNum){
-					for(int j=0;j<tb2.MaxCols;j++){
-						tb2.FontBold[j,i]=true;
-					}
-				}
+					row.Bold=true;
+				}  
+				gridMain.Rows.Add(row);
 			}
-			tb2.LayoutTables();
+			gridMain.EndUpdate();
 			textAmount.Text=splitTot.ToString("F");
 		}
 
-		private void tb2_CellClicked(object sender, CellEventArgs e){
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			splitTot=0;
-			for (int i=0;i<tb2.SelectedIndices.Length;i++){
-				splitTot+=splits[tb2.SelectedIndices[i]].InsPayAmt;
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				splitTot+=splits[gridMain.SelectedIndices[i]].InsPayAmt;
 			}
 			textAmount.Text=splitTot.ToString("F");
-		}
-
-		private void tb2_CellDoubleClicked(object sender, CellEventArgs e){
-
 		}
 
 		private void checkShowUn_Click(object sender, System.EventArgs e) {
-			FillTable();
+			FillGrid();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
+			//this button is disabled if user does not have permision to edit.
 			if(IsNew){
-				DialogResult=DialogResult.Cancel;
+				DialogResult=DialogResult.Cancel;//causes claimPayment to be deleted.
 				return;
 			}
-			if(MessageBox.Show(Lan.g(this,"Delete this insurance check?"),"",MessageBoxButtons.OKCancel)
-				!=DialogResult.OK){
+			if(!MsgBox.Show(this,true,"Delete this insurance check?")){
 				return;
 			}
 			try{
@@ -419,6 +440,15 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			for(int i=0;i<splits.Count;i++){
+				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
+					SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
+						"Delete for patient: "
+						+Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
+						+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
+						+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -427,14 +457,27 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textDate.errorProvider1.GetError(textDate)!=""
-				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+			if(textDate.errorProvider1.GetError(textDate)!="")
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(tb2.SelectedIndices.Length==0){
+			if(gridMain.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"At least one item must be selected, or use the delete button."));	
 				return;
+			}
+			if(IsNew){
+				//prevents backdating of initial check
+				if(!Security.IsAuthorized(Permissions.InsPayCreate,PIn.PDate(textDate.Text))){
+					return;
+				}
+			}
+			else{
+				//Editing an old entry will already be blocked if the date was too old, and user will not be able to click OK button.
+				//This catches it if user changed the date to be older.
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,PIn.PDate(textDate.Text))){
+					return;
+				}
 			}
 			if(comboClinic.SelectedIndex==0){
 				ClaimPaymentCur.ClinicNum=0;
@@ -456,33 +499,49 @@ namespace OpenDental{
 				return;
 			}
 			//this could be optimized to only save changes.
-			//Would require a starting AL to compare to.
+			//Would require a starting list to compare to.
 			//But this isn't bad, since changes all saved at the very end
-			ArrayList ALselected=new ArrayList();
-			for(int i=0;i<tb2.SelectedIndices.Length;i++){
-				ALselected.Add(tb2.SelectedIndices[i]);
+			List<int> selectedRows=new List<int>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				selectedRows.Add(gridMain.SelectedIndices[i]);
 			}
-			for(int i=0;i<splits.Length;i++){
-				if(ALselected.Contains(i)){//row is selected
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,
-						ClaimPaymentCur.CheckDate,true);
+			for(int i=0;i<splits.Count;i++){
+				if(selectedRows.Contains(i)){//row is selected
+					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,true);
+					//Audit trail isn't perfect, since it doesn't make an entry if you remove a claim from a payment.
+					//And it always makes more audit trail entries when you click OK, even if you didn't actually attach new claims.
+					//But since this will cover the vast majority if situations.
+					if(IsNew){
+						SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,splits[i].PatNum,
+							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
+							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
+							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
+					}
+					else{
+						SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
+							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
+							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
+							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
+					}
 				}
 				else{//row not selected
-					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,
-						ClaimPaymentCur.CheckDate,false);
+					ClaimProcs.SetForClaim(splits[i].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,false);
 				}
 			}
 			DialogResult=DialogResult.OK;
 		}
 
-		private void FormClaimPayEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+		private void FormClaimPayEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			if(DialogResult==DialogResult.OK){
 				return;
+			}
 			if(IsNew){//cancel
 				//ClaimProcs never saved in the first place
 				ClaimPayments.Delete(ClaimPaymentCur);
 			}
 		}
+
+		
 
 
 

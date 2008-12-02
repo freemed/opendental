@@ -2273,7 +2273,7 @@ namespace OpenDental{
 		private void tbIns_CellDoubleClicked(object sender, OpenDental.CellEventArgs e) {
 			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList);
 			if(!butOK.Enabled){
-				FormC.NoPermission=true;
+				FormC.NoPermissionProc=true;
 			}
 			FormC.ShowDialog();
 			FillIns();

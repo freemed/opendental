@@ -9,22 +9,20 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Claims{
-		//<summary></summary>
-		//public static Claim[] List;
 		///<summary></summary>
 		public static Hashtable HList;
 		
 		///<summary></summary>
-		public static ClaimPaySplit[] RefreshByCheck(int claimPaymentNum, bool showUnattached){
+		public static List<ClaimPaySplit> RefreshByCheck(int claimPaymentNum, bool showUnattached){
 			string command=
-				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) AS PatName"
-				+",carrier.CarrierName,SUM(claimproc.FeeBilled),SUM(claimproc.InsPayAmt),claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum"
-				+" FROM claim,patient,insplan,carrier,claimproc" // added carrier, SPK 8/04
+				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) _patName"
+				+",carrier.CarrierName,SUM(claimproc.FeeBilled) _feeBilled,SUM(claimproc.InsPayAmt) _insPayAmt,claim.ClaimNum"
+				+",claimproc.ClaimPaymentNum,claim.PatNum"
+				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
 				+" AND insplan.PlanNum = claim.PlanNum"
-				+" AND insplan.CarrierNum = carrier.CarrierNum"	// added SPK
+				+" AND insplan.CarrierNum = carrier.CarrierNum"
 				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
  				+" AND (claimproc.ClaimPaymentNum = '"+POut.PInt(claimPaymentNum)+"'";
 			if(showUnattached){
@@ -35,20 +33,22 @@ namespace OpenDental{
 				command+=")"
 					+" GROUP BY claimproc.ClaimNum";
 			}
-			command+=" ORDER BY PatName";
-			//MessageBox.Show(
+			command+=" ORDER BY _patName";
 			DataTable table=General.GetTable(command);
-			ClaimPaySplit[] splits=new ClaimPaySplit[table.Rows.Count];
+			List<ClaimPaySplit> splits=new List<ClaimPaySplit>();
+			ClaimPaySplit split;
 			for(int i=0;i<table.Rows.Count;i++){
-				splits[i]=new ClaimPaySplit();
-				splits[i].DateClaim      =PIn.PDate  (table.Rows[i][0].ToString());
-				splits[i].ProvAbbr       =Providers.GetAbbr(PIn.PInt(table.Rows[i][1].ToString()));
-				splits[i].PatName        =PIn.PString(table.Rows[i][2].ToString());
-				splits[i].Carrier        =PIn.PString(table.Rows[i][3].ToString());
-				splits[i].FeeBilled      =PIn.PDouble(table.Rows[i][4].ToString());
-				splits[i].InsPayAmt      =PIn.PDouble(table.Rows[i][5].ToString());
-				splits[i].ClaimNum       =PIn.PInt   (table.Rows[i][6].ToString());
-				splits[i].ClaimPaymentNum=PIn.PInt   (table.Rows[i][7].ToString());
+				split=new ClaimPaySplit();
+				split.DateClaim      =PIn.PDate  (table.Rows[i]["DateService"].ToString());
+				split.ProvAbbr       =Providers.GetAbbr(PIn.PInt(table.Rows[i]["ProvTreat"].ToString()));
+				split.PatName        =PIn.PString(table.Rows[i]["_patName"].ToString());
+				split.Carrier        =PIn.PString(table.Rows[i]["CarrierName"].ToString());
+				split.FeeBilled      =PIn.PDouble(table.Rows[i]["_feeBilled"].ToString());
+				split.InsPayAmt      =PIn.PDouble(table.Rows[i]["_insPayAmt"].ToString());
+				split.ClaimNum       =PIn.PInt   (table.Rows[i]["ClaimNum"].ToString());
+				split.ClaimPaymentNum=PIn.PInt   (table.Rows[i]["ClaimPaymentNum"].ToString());
+				split.PatNum         =PIn.PInt   (table.Rows[i]["PatNum"].ToString());
+				splits.Add(split);
 			}
 			return splits;
 		}
@@ -562,6 +562,8 @@ namespace OpenDental{
 		public int ClaimNum;
 		///<summary></summary>
 		public string PatName;
+		///<summary></summary>
+		public int PatNum;
 		///<summary></summary>
 		public string Carrier;
 		///<summary></summary>

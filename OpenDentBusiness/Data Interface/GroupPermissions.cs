@@ -189,6 +189,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.PaymentEdit
 				|| permType==Permissions.ProcComplEdit
 				|| permType==Permissions.InsPayEdit
+				|| permType==Permissions.ClaimSentEdit
 				|| permType==Permissions.AccountingEdit
 				|| permType==Permissions.AccountingCreate//prevents backdating
 				|| permType==Permissions.DepositSlips//prevents backdating

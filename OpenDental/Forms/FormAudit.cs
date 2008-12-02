@@ -36,6 +36,8 @@ namespace OpenDental{
 		private PrintDocument pd;
 		private int linesPrinted;
 		private OpenDental.UI.PrintPreview printPreview;
+		///<summary>This alphabetizes the permissions, except for "none", which is always first.  If using a foreign language, the order will be according to the English version, not the foreign translated text.</summary>
+		private List<string> permissionsAlphabetic;
 
 		///<summary></summary>
 		public FormAudit()
@@ -45,6 +47,13 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			Lan.F(this);
+			string[] enumArray=Enum.GetNames(typeof(Permissions));
+			permissionsAlphabetic=new List<string>();
+			for(int i=1;i<enumArray.Length;i++){
+				permissionsAlphabetic.Add(enumArray[i]);
+			}
+			permissionsAlphabetic.Sort();
+			permissionsAlphabetic.Insert(0,Permissions.None.ToString());
 		}
 
 		#region Windows Form Designer generated code
@@ -200,9 +209,9 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(814,0);
+			this.butRefresh.Location = new System.Drawing.Point(814,1);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(82,26);
+			this.butRefresh.Size = new System.Drawing.Size(82,24);
 			this.butRefresh.TabIndex = 49;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -243,9 +252,9 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(814,26);
+			this.butPrint.Location = new System.Drawing.Point(814,27);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(82,26);
+			this.butPrint.Size = new System.Drawing.Size(82,24);
 			this.butPrint.TabIndex = 60;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -288,12 +297,12 @@ namespace OpenDental{
 		private void FormAudit_Load(object sender, System.EventArgs e) {
 			textDateFrom.Text=DateTime.Today.AddDays(-10).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
-			for(int i=0;i<Enum.GetNames(typeof(Permissions)).Length;i++){
+			for(int i=0;i<permissionsAlphabetic.Count;i++){
 				if(i==0){
-					comboPermission.Items.Add(Lan.g(this,"All"));
+					comboPermission.Items.Add(Lan.g(this,"All"));//None
 				}
 				else{
-					comboPermission.Items.Add(Enum.GetNames(typeof(Permissions))[i]);
+					comboPermission.Items.Add(Lan.g("enumPermissions",permissionsAlphabetic[i]));
 				}
 			}
 			comboPermission.SelectedIndex=0;
@@ -347,8 +356,15 @@ namespace OpenDental{
 			if(comboUser.SelectedIndex>0){
 				userNum=UserodC.Listt[comboUser.SelectedIndex-1].UserNum;
 			}
-			SecurityLog[] logList=SecurityLogs.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),
-				(Permissions)comboPermission.SelectedIndex,PatNum,userNum);
+			SecurityLog[] logList=null;
+			if(comboPermission.SelectedIndex==0){
+				logList=SecurityLogs.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),
+					Permissions.None,PatNum,userNum);
+			}
+			else{
+				logList=SecurityLogs.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),
+					(Permissions)Enum.Parse(typeof(Permissions),comboPermission.SelectedItem.ToString()),PatNum,userNum);
+			}
 			grid.BeginUpdate();
 			grid.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAudit","Date Time"),120);

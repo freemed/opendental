@@ -187,7 +187,7 @@ namespace OpenDental{
 		private MenuItem menuItemCustomerManage;
 		private System.Windows.Forms.Timer timerDisabledKey;
 		private MenuItem menuItem_ProviderAllocatorSetup;
-        private MenuItem menuItemAnesthesia;
+		private MenuItem menuItemAnesthesia;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 		private MenuItem menuItemPharmacies;
@@ -196,8 +196,8 @@ namespace OpenDental{
 		private MenuItem menuItemModules;
 		private MenuItem menuItemRecallTypes;
 		private MenuItem menuItemFeeScheds;
-        private MenuItem menuItemAnesthMeds;
-        private MenuItem menuItemAnesthSuppliers;
+		private MenuItem menuItemAnesthMeds;
+		private MenuItem menuItemAnesthSuppliers;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
