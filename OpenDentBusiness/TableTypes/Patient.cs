@@ -814,6 +814,18 @@ namespace OpenDentBusiness{
 			get { return siteNumChanged; }
 		}
 
+		[DataField("ResponsParty")]
+		private int responsParty;
+		bool responsPartyChanged;
+		///<summary>FK to patient.PatNum. Can be zero.</summary>
+		public int ResponsParty {
+			get { return responsParty; }
+			set { if(responsParty!=value){responsParty = value; MarkDirty(); responsPartyChanged = true; }}
+		}
+		public bool ResponsPartyChanged {
+			get { return responsPartyChanged; }
+		}
+
 		//[DataField("DateTStamp")]
 		//This won't be seen in the code.
 

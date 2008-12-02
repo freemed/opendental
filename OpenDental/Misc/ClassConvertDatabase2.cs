@@ -490,10 +490,8 @@ namespace OpenDental {
 						,"ALTER table anesthmedsgiven CHANGE AnesthMed AnesthMedName char(32)"
 						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
 						,"ALTER table anesthmedsgiven ADD QtyOnHandOld double"
-	
 					};
 					General.NonQ(commands);
-
 					command = "DROP TABLE IF EXISTS anesthscore";
 					General.NonQ(command);
 					command = @"CREATE TABLE anesthscore (
@@ -525,6 +523,20 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockIncludesAdmin','0','0 or 1.  If 1, administrators are also locked out by date.')";
 					General.NonQ(command);
+					command="ALTER TABLE patient ADD ResponsParty int NOT NULL";
+					General.NonQ(command);
+					command="ALTER TABLE patient ADD INDEX (ResponsParty)";
+					General.NonQ(command);
+
+
+
+
+
+
+
+
+
+
 
 				}
 				else {//oracle
