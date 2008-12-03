@@ -120,7 +120,7 @@ namespace OpenDental {
 				if(siteId=="null"){
 					siteId="";
 				}
-				if(!Regex.IsMatch(siteId,".*_[0-9]{5}")){
+				if(!Regex.IsMatch(siteId,"^.*_[0-9]{5}$")){
 					rowErrors+="ERROR: The clinic description for the clinic associated with the last completed appointment "+
 						"for the patient with a patnum of "+patNum+" must be the clinic name, follwed by a '_', followed by the 5-digit Site ID Number "+
 						"for the clinic. i.e. ClinicName_12345. The current clinic description is '"+siteId+"'."+Environment.NewLine;

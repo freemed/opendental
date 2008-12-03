@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using OpenDentBusiness;
 using CodeBase;
+using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormRpArizonaPrimaryCareEncounter:Form {
@@ -49,6 +50,7 @@ namespace OpenDental {
 					return;
 				}
 			}
+			string command="";
 			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
 			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
 			DataTable payDefNumTab=General.GetTable(command);
@@ -60,7 +62,6 @@ namespace OpenDental {
 			int payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
-			string command="";
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
@@ -199,7 +200,7 @@ namespace OpenDental {
 					}
 					outputRow+=householdZip.PadRight(5,' ');
 					//Patient's relationship to insured.
-					string insuranceRelationship=POut.PString(PIn.PString(primaryCareReportRow[0]["InsRelat"].ToString()));
+					string insuranceRelationship=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["InsRelat"].ToString()));
 					if(insuranceRelationship!="1"){//Not self?
 						rowWarnings+="WARNING: The patient insurance relationship is not 'self' for the patient with a patnum of "+patNum;
 					}
@@ -293,10 +294,20 @@ namespace OpenDental {
 					//Balance due
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["BalanceDue"].ToString())).ToString().PadLeft(7,'0');
 					//Facility site number
-					string opName=PIn.PString(primaryCareReportRow.Rows[0]["ClinicDescription"].ToString());
-
-
-				
+					string siteId=PIn.PString(primaryCareReportRow.Rows[0]["ClinicDescription"].ToString());
+					if(siteId=="null"){
+						siteId="";
+					}
+					if(!Regex.IsMatch(siteId,"^.*_[0-9]{5}$")){
+						rowErrors+="ERROR: The clinic description for the clinic associated with the last completed appointment "+
+							"for the patient with a patnum of "+patNum+" must be the clinic name, follwed by a '_', followed by the 5-digit Site ID Number "+
+							"for the clinic. i.e. ClinicName_12345. The current clinic description is '"+siteId+"'."+Environment.NewLine;
+					}else{
+						siteId=siteId.Substring(siteId.Length-5);
+					}
+					outputRow+=siteId;
+					//string physicianId=PIn.PString(primaryCareReportRow[0]["PhysicianID"].ToString());
+					//if(physicianId.Length>
 				}
 			}
 			File.WriteAllText(outFile,outputText);
