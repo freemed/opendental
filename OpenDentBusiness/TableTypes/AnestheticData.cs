@@ -4,10 +4,11 @@ namespace OpenDentBusiness
 {
 
 	///<summary>Anesthetic data from a single Anesthetic Record.</summary>
-		public class AnestheticData{
+	public class AnestheticData
+	{
 		///<summary>Primary key.</summary>
-        public int AnestheticDataNum;
-        ///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
+		public int AnestheticDataNum;
+		///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
 		public int AnestheticRecordNum;
 		public string AnesthOpen;
 		public string AnesthClose;
@@ -18,7 +19,7 @@ namespace OpenDentBusiness
 		public string Asst; //data from OD provider list
 		public string Circulator; //data from OD provider list
 		public string VSMName;
-		public string VSMSerNum; 
+		public string VSMSerNum;
 		public string ASA;
 		public string ASA_EModifier;
 		public int O2LMin;
@@ -58,14 +59,17 @@ namespace OpenDentBusiness
 		public string NPOTime;
 		public string Signature;
 		public bool SigIsTopaz;
-		
 
-		
+		///<summary>Returns a copy of the Anesthetic Data.</summary>
+		public AnestheticData Copy()
+		{
+			return (AnestheticData)this.MemberwiseClone();
+
+		}
+
+
+
 	}
-
-
-
-
 
 }
 

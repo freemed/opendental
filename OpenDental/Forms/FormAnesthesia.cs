@@ -12,10 +12,11 @@ namespace OpenDental {
 	public partial class FormAnesthesia : Form
 	{
 		private Patient PatCur;
+		private AnestheticData AnestheticDataCur;
 		
 		
 		
-		public FormAnesthesia(Patient patCur)
+		public FormAnesthesia(Patient patCur,AnestheticData AnestheticDataCur)
 		{
 			InitializeComponent();
 			PatCur = patCur;
@@ -33,7 +34,9 @@ namespace OpenDental {
 
 		private void butAnestheticRecord_Click(object sender, EventArgs e)
 		{
-				FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur);
+			AnestheticData AnestheticDataCur;
+			AnestheticDataCur = new AnestheticData();
+				FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur,AnestheticDataCur);
 				FormAR.ShowDialog();
 			
 		}

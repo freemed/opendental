@@ -3182,7 +3182,9 @@ namespace OpenDental{
 		}
 
 		private void OnAnesthesia_Click(){
-			FormAnesthesia FormA = new FormAnesthesia(PatCur);
+			AnestheticData AnestheticDataCur = new AnestheticData();
+			
+			FormAnesthesia FormA = new FormAnesthesia(PatCur, AnestheticDataCur);
 			FormA.ShowDialog();
 		}
 
@@ -4636,6 +4638,7 @@ namespace OpenDental{
 			if(FormP.DialogResult!=DialogResult.OK) return;
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			Procedure ProcCur;
+			
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
 				isValid=true;
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld

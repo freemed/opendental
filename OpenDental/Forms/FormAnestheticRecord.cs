@@ -1,18 +1,21 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using System.Data;
 using OpenDental.DataAccess;
 using OpenDentBusiness;
 using OpenDental.UI;
-using System.Data;
-using System.Drawing.Imaging;
+using CodeBase;
 using System.IO;
 
 namespace OpenDental
@@ -24,6 +27,7 @@ namespace OpenDental
 		private bool IsUpdate;
 		private AnestheticRecord AnestheticRecordCur;
 		private AnestheticData AnestheticDataCur;
+		public AnestheticData AnesthDataCur;
         private Patient PatCur;
         public bool IsNew;
         private GroupBox groupBoxVS;
@@ -156,10 +160,10 @@ namespace OpenDental
 		private CheckBox checkMonTemp;
 		private Label labelInvalidSig;
 		private Userod userNum;
+		private IContainer components;
 		private bool SigChanged;
 		private Control sigBoxTopaz;
 		private bool allowTopaz;
-		private OpenDental.UI.Button butTopazSign;
 		private bool inputStatus = true; //if the decimal button is clicked
 		private bool hasDecimal = false; //if the dose text has the decimal
 		private List<DisplayField> fields;
@@ -368,6 +372,7 @@ namespace OpenDental
 			this.richTextNotes.Size = new System.Drawing.Size(180, 80);
 			this.richTextNotes.TabIndex = 67;
 			this.richTextNotes.Text = "";
+			this.richTextNotes.TextChanged += new System.EventHandler(this.richTextNotes_TextChanged);
 			// 
 			// textEscortName
 			// 
@@ -1216,7 +1221,6 @@ namespace OpenDental
 			this.labelInvalidSig.TabIndex = 83;
 			this.labelInvalidSig.Text = "Invalid Signature - Anesthesia Close Time has changed since it was signed.";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			//this.labelInvalidSig.Click += new System.EventHandler(this.labelInvalidSig_Click);
 			// 
 			// sigBox
 			// 
@@ -1224,9 +1228,7 @@ namespace OpenDental
 			this.sigBox.Name = "sigBox";
 			this.sigBox.Size = new System.Drawing.Size(158, 74);
 			this.sigBox.TabIndex = 135;
-			//this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
 			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
-
 			// 
 			// butSignTopaz
 			// 
@@ -1994,8 +1996,7 @@ namespace OpenDental
 			this.groupBoxWgt.PerformLayout();
 			this.groupBoxHgt.ResumeLayout(false);
 			this.groupBoxHgt.PerformLayout();
-			//this.groupBoxSig.ResumeLayout(false);
-			this.groupBoxSig.SuspendLayout();
+			this.groupBoxSig.ResumeLayout(false);
 			this.groupBoxHgtWgt.ResumeLayout(false);
 			this.groupBoxHgtWgt.PerformLayout();
 			this.groupBoxVS.ResumeLayout(false);
@@ -2011,17 +2012,19 @@ namespace OpenDental
 		}
 		public AnesthMedsGivens medCur;
 
-		public FormAnestheticRecord(Patient patCur){
-
+		public FormAnestheticRecord(Patient patCur, AnestheticData AnestheticDataCur){
+			
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 			Lan.F(this);
-			PatCur = patCur;	
+			PatCur = patCur;
 			
-			AnestheticData anestheticDataCur = new AnestheticData();
-			AnestheticDataCur = anestheticDataCur;
+			
+		
+			AnestheticRecord anestheticRecordCur = new AnestheticRecord();
+			AnestheticRecordCur = anestheticRecordCur;
 
 			Lan.F(this);
 			allowTopaz = (Environment.OSVersion.Platform != PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
@@ -2049,6 +2052,7 @@ namespace OpenDental
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
 			RefreshListAnesthetics();
+			
 			//necessary because we want the newest record at the top of the list selected and no records throws an exception
 			
 			try 
@@ -2213,7 +2217,61 @@ namespace OpenDental
 			}
 
 			this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
+
+			IsStartingUp = true;
 			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+
+
+			labelInvalidSig.Visible = false;
+			sigBox.Visible = true;
+
+			if (AnesthDataCur.SigIsTopaz)
+			{
+				if (AnesthDataCur.Signature != "")
+				{
+					if (allowTopaz)
+					{
+						sigBox.Visible = false;
+						sigBoxTopaz.Visible = true;
+						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
+						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
+						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);//high encryption
+						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);//high compression
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnesthDataCur.Signature);
+						if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
+						{
+							labelInvalidSig.Visible = true;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (AnesthDataCur.Signature != null && AnesthDataCur.Signature != "")
+				{
+					sigBox.Visible = true;
+					sigBoxTopaz.Visible = false;
+					sigBox.ClearTablet();
+					//sigBox.SetSigCompressionMode(0);
+					//sigBox.SetEncryptionMode(0);
+					sigBox.SetKeyString("0000000000000000");
+					sigBox.SetAutoKeyData(AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
+					//sigBox.SetEncryptionMode(2);//high encryption
+					//sigBox.SetSigCompressionMode(2);//high compression
+					sigBox.SetSigString(AnesthDataCur.Signature);
+					if (sigBox.NumberOfTabletPoints() == 0)
+					{
+						labelInvalidSig.Visible = true;
+					}
+					sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
+				}
+			}
+
+
+			IsStartingUp = false;
 			
 		}
 
@@ -2258,9 +2316,12 @@ namespace OpenDental
 	
 			DataTable table = General.GetTable(command);
 			AnestheticData Cur;
+		
 			for (int i = 0; i < table.Rows.Count; i++)
 			{
 				Cur = new AnestheticData();
+				AnesthDataCur = Cur;
+				
 				Cur.AnestheticDataNum = PIn.PInt(table.Rows[i][0].ToString());
 				Cur.AnestheticRecordNum = PIn.PInt(table.Rows[i][1].ToString());
 				Cur.AnesthOpen = PIn.PString(table.Rows[i][2].ToString());
@@ -2310,8 +2371,9 @@ namespace OpenDental
 				Cur.NPOTime = PIn.PString(table.Rows[i][46].ToString());
 				Cur.HgtUnitsIn = PIn.PBool(table.Rows[i][47].ToString());
 				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][48].ToString());
-				Cur.SigIsTopaz = PIn.PBool(table.Rows[i][49].ToString());
-				Cur.Signature = PIn.PString(table.Rows[i][50].ToString());
+				Cur.Signature = PIn.PString(table.Rows[i][49].ToString());
+				Cur.SigIsTopaz = PIn.PBool(table.Rows[i][50].ToString());
+
 				
 				//Disable buttons to disallow editing
 				/*butAnesthOpen.Enabled = false;
@@ -2522,12 +2584,35 @@ namespace OpenDental
 			}
 
 			//this really needs to be in the FillControl() method when we get it added
+			allowTopaz = (Environment.OSVersion.Platform != PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			sigBox.SetTabletState(1);
+			if (!allowTopaz)
+			{
+				butSignTopaz.Visible = false;
+				sigBox.Visible = true;
+			}
+			else
+			{
+				//Add signature box for Topaz signatures.
+				sigBoxTopaz = CodeBase.TopazWrapper.GetTopaz();
+				sigBoxTopaz.Location = sigBox.Location;//this puts both boxes in the same spot.
+				sigBoxTopaz.Name = "sigBoxTopaz";
+				sigBoxTopaz.Size = new System.Drawing.Size(158, 74);
+				sigBoxTopaz.TabIndex = 92;
+				sigBoxTopaz.Text = "sigPlusNET1";
+				sigBoxTopaz.Visible = false;
+				Controls.Add(sigBoxTopaz);
+				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz, 1);
+			}
+
+
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
-			
-			if (AnestheticDataCur.SigIsTopaz)
+
+			if (AnesthDataCur.SigIsTopaz)
 			{
-				if (AnestheticDataCur.Signature != "")
+				if (AnesthDataCur.Signature != "")
 				{
 					if (allowTopaz)
 					{
@@ -2537,10 +2622,10 @@ namespace OpenDental
 						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
 						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
-						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnestheticDataCur.AnesthClose + AnestheticDataCur.AnestheticRecordNum.ToString());
+						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);//high encryption
 						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);//high compression
-						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnestheticDataCur.Signature);
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnesthDataCur.Signature);
 						if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
 						{
 							labelInvalidSig.Visible = true;
@@ -2550,7 +2635,7 @@ namespace OpenDental
 			}
 			else
 			{
-				if (AnestheticDataCur.Signature != null && AnestheticDataCur.Signature != "")
+				if (AnesthDataCur.Signature != null && AnesthDataCur.Signature != "")
 				{
 					sigBox.Visible = true;
 					sigBoxTopaz.Visible = false;
@@ -2558,10 +2643,10 @@ namespace OpenDental
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
 					sigBox.SetKeyString("0000000000000000");
-					sigBox.SetAutoKeyData(AnestheticDataCur.AnesthClose + AnestheticDataCur.AnestheticRecordNum.ToString());
+					sigBox.SetAutoKeyData(AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
 					//sigBox.SetEncryptionMode(2);//high encryption
 					//sigBox.SetSigCompressionMode(2);//high compression
-					sigBox.SetSigString(AnestheticDataCur.Signature);
+					sigBox.SetSigString(AnesthDataCur.Signature);
 					if (sigBox.NumberOfTabletPoints() == 0)
 					{
 						labelInvalidSig.Visible = true;
@@ -2761,7 +2846,7 @@ namespace OpenDental
 				}
 				sigBox.SetTabletState(1);//on-screen box is now accepting input.
 				SigChanged = true;
-				// AnestheticDataCur.UserNum = Security.CurUser.UserNum;
+				AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
 				// textUser.Text = Userods.GetName(ProcCur.UserNum);
 				}
 		}
@@ -2915,16 +3000,18 @@ namespace OpenDental
 		}
 
 		private void butSignTopaz_Click(object sender, EventArgs e){
-
 			sigBox.Visible = false;
 			sigBoxTopaz.Visible = true;
+			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			
+			
 			if (allowTopaz)
 			{
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz, 1);
 			}
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
-			//AnestheticDataCur.UserNum = Security.CurUser.UserNum;
+			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
 			//textUser.Text = Userods.GetName(AnestheticDataCur.UserNum);
 		}
 
@@ -2952,7 +3039,7 @@ namespace OpenDental
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
-			//AnestheticDataCur.UserNum = Security.CurUser.UserNum;
+			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
 			//textUser.Text = Userods.GetName(AnestheticDataCur.UserNum);
 		}
 
@@ -3256,42 +3343,45 @@ namespace OpenDental
 
 		}
 
-		private void SaveSignature(){
+		private void SaveSignature(AnestheticData AnesthDataCur){
+
 
 			if (SigChanged)
 			{
+
 				//Topaz boxes are written in Windows native code.
 				if (allowTopaz && sigBoxTopaz.Visible)
 				{
-					AnestheticDataCur.SigIsTopaz = true;
+					
+					AnesthDataCur.SigIsTopaz = true;
 					if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
 					{
-						AnestheticDataCur.Signature = "";
+						AnesthDataCur.Signature = "";
 						return;
 					}
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
 					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
 					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
-					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, /*AnestheticDataCur.AnesthClose +*/ AnestheticDataCur.AnestheticRecordNum.ToString());
+					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
 					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);
-					AnestheticDataCur.Signature = CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
+					AnesthDataCur.Signature = CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
 				}
 				else
 				{
-					AnestheticDataCur.SigIsTopaz = false;
+					AnesthDataCur.SigIsTopaz = false;
 					if (sigBox.NumberOfTabletPoints() == 0)
 					{
-						AnestheticDataCur.Signature = "";
+						AnesthDataCur.Signature = "";
 						return;
 					}
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
 					sigBox.SetKeyString("0000000000000000");
-					sigBox.SetAutoKeyData(/*AnestheticDataCur.Notes + */AnestheticDataCur.AnestheticRecordNum.ToString());
+					sigBox.SetAutoKeyData(AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
 					//sigBox.SetEncryptionMode(2);
 					//sigBox.SetSigCompressionMode(2);
-					AnestheticDataCur.Signature = sigBox.GetSigString();
+					AnesthDataCur.Signature = sigBox.GetSigString();
 				}
 			}
 		}
@@ -3331,8 +3421,8 @@ namespace OpenDental
 					{
 						int comO2LMin = 0, comN2OLMin = 0, comIVAtt = 0, comIVGauge = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0,
 							radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
-						string comASA = "", comIVSite = "", comIVF = "", comNPOTime = "",signature = "";
-						bool sigIsTopaz = false;
+						string comASA = "", comIVSite = "", comIVF = "", comNPOTime = "", sig = AnesthDataCur.Signature;
+						bool sigistopaz =AnesthDataCur.SigIsTopaz;
 						if (radRteNasCan.Checked)
 							radCan = 1;
 						if (radRteNasHood.Checked)
@@ -3480,11 +3570,11 @@ namespace OpenDental
 						if (IsUpdate == false)
 						{
 							int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-							int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, signature, sigIsTopaz);
+							int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
 						}
 						else
 						{
-							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, signature, sigIsTopaz);
+							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
 							if (value != 0)
 							{
 								FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
@@ -3507,6 +3597,8 @@ namespace OpenDental
 							MessageBox.Show(this, "You must be an administrator to unlock this action");
 							return;
 						}
+
+						SaveSignature(AnesthDataCur);
 						if (allowTopaz)
 						{
 							sigBoxTopaz.Dispose();
@@ -3589,6 +3681,25 @@ namespace OpenDental
 		private void labelAnesthScore_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void richTextNotes_TextChanged(object sender, EventArgs e)
+		{
+			//CheckForCompleteNote();
+			if (!IsStartingUp//so this happens only if user changes the note
+				&& !SigChanged)//and the original signature is still showing.
+			{
+				sigBox.ClearTablet();
+				if (allowTopaz)
+				{
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					sigBoxTopaz.Visible = false;//until user explicitly starts it.
+				}
+				sigBox.SetTabletState(1);//on-screen box is now accepting input.
+				SigChanged = true;
+				AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
+				//textUser.Text = Userods.GetName(ProcCur.UserNum);
+			}
 		}
 
 	}
