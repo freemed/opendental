@@ -61,7 +61,7 @@ namespace OpenDental {
 			DataTable copayDefNumTab=General.GetTable(command);
 			if(copayDefNumTab.Rows.Count!=1){
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
-					"This payment type must be used on copayments made by Arizona Primary Care patients.");
+					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
 			int copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
@@ -111,9 +111,9 @@ namespace OpenDental {
 				string rowErrors="";
 				string rowWarnings="";
 				string pcin=PIn.PString(primaryCareReportRow.Rows[0]["PCIN"].ToString());
-				if(pcin.Length!=9) {
+				if(pcin.Length<9) {
 					rowErrors+="ERROR: Incorrectly formatted patient data for patient with patnum "+patNum+
-						". Patient ID Number '"+pcin+"' is not 9 characters long."+Environment.NewLine;
+						". Patient ID Number '"+pcin+"' is not at least 9 characters long."+Environment.NewLine;
 				}
 				outputRow+=pcin.PadLeft(15,'0');//Patient's ID Number
 				string siteId=primaryCareReportRow.Rows[0]["SiteIDNumber"].ToString();

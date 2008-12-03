@@ -49,6 +49,15 @@ namespace OpenDental {
 					return;
 				}
 			}
+			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
+			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			DataTable payDefNumTab=General.GetTable(command);
+			if(payDefNumTab.Rows.Count!=1) {
+				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
+					"This payment type must be used on payments made by Arizona Primary Care patients.");
+				return;
+			}
+			int payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
 			string command="";
@@ -72,61 +81,222 @@ namespace OpenDental {
 						"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 							"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
 						"p.BirthDate,"+//birthdate
+						"(CASE p.Gender WHEN 0 THEN 'M' WHEN 1 THEN 'F' ELSE '' END) Gender,"+//Gender
 						"CONCAT(CONCAT(p.Address,' '),p.Address2) Address,"+//address
 						"p.City,"+//city
 						"p.State,"+//state
 						"p.ZipCode,"+//zipcode
-						"(SELECT pp.Relationship FROM patplan pp,insplan i,carrier c WHERE "+
-							"pp.PatNum=p.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah'),"+//Relationship to subscriber
-						"p.Position,"+//Marital status
-						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADD_DATE(p.BirthDate,18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END),"+//Employment Status
-						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END),"+//student status
-						"'ADHS PCP',"+//insurance plan name
-						"'',"+//Name of referring physician
-						"'',"+//ID # of referring physician
-						"722,"+//Diagnosis Code 1. Always set to V72.2 for simplicity and workability
-						"'',"+//Diagnosis code 2
-						"'',"+//Diagnosis code 3
-						"'',"+//Diagnosis code 4
-						"(SELECT AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+"),"+//Date of encounter
+						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
+							"pp.PatNum=p.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah') InsRelat,"+
+						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
+						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADD_DATE(p.BirthDate,18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
+						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END) StudentStatus,"+//student status
+						"'ADHS PCP' InsurancePlanName,"+//insurance plan name
+						"'' ReferringPhysicianName,"+//Name of referring physician
+						"'' ReferringPhysicianID,"+//ID # of referring physician
+						"722 DiagnosisCode1,"+//Diagnosis Code 1. Always set to V72.2 for simplicity and workability
+						"'' DiagnosisCode2,"+//Diagnosis code 2
+						"'' DiagnosisCode3,"+//Diagnosis code 3
+						"'' DiagnosisCode4,"+//Diagnosis code 4
+						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+") DateOfEncounter,"+//Date of encounter
 						"(SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum LIMIT 1),"+//Procedure (TODO: Any procedure OK?)
-						"'',"+//Procedure modifier 1
-						"'',"+//Procedure modifier 2
-						"'',"+//Diagnosis code
-						"(SELECT pc.ProcFee FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum LIMIT 1),"+//Charges
-						"'',"+//2nd procedure cpt/hcpcs
-						"'',"+//2nd procedure modifier 1
-						"'',"+//2nd procedure modifier 2
-						"'',"+//Diagnosis code
-						"'',"+//charges
-						"'',"+//3rd procedure cpt/hcpcs
-						"'',"+//3rd procedure modifier 1
-						"'',"+//3rd procedure modifier 2
-						"'',"+//Diagnosis code
-						"'',"+//Charges
-						"'',"+//4th procedure cpt/hcpcs
-						"'',"+//4th procedure modifier 1
-						"'',"+//4th procedure modifier 2
-						"'',"+//Diagnosis code
-						"'',"+//Charges
-						"'',"+//5th procedure cpt/hcpcs
-						"'',"+//5th procedure modifier 1
-						"'',"+//5th procedure modifier 2
-						"'',"+//diagnosis code
-						"'',"+//Charges
-						"'',"+//6th procedure cpt/hcpcs
-						"'',"+//6th procedure modifier 1
-						"'',"+//6th procedure modifier 2
-						"'',"+//Diagnosis code
-						"'',"+//Charges
-						"(SELECT pc.ProcFee FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum LIMIT 1),"+//Total charges
-						"'',"+//Amount paid
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
+						"'' Procedure1Modifier1,"+//Procedure modifier 1
+						"'' Procedure1Modifier2,"+//Procedure modifier 2
+						"'' Procedure1DiagnosisCode,"+//Diagnosis code
+						"(SELECT pl.ProcFee FROM procedurelog pl WHERE pl.AptNum="+aptNum+" ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
+						"'' Procedure2,"+//2nd procedure cpt/hcpcs
+						"'' Procedure2Modifier1,"+//2nd procedure modifier 1
+						"'' Procedure2Modifier2,"+//2nd procedure modifier 2
+						"'' Procedure2DiagnosisCode,"+//Diagnosis code
+						"0 Procedure2Charges,"+//charges
+						"'' Procedure3,"+//3rd procedure cpt/hcpcs
+						"'' Procedure3Modifier1,"+//3rd procedure modifier 1
+						"'' Procedure3Modifier2,"+//3rd procedure modifier 2
+						"'' Procedure3DiagnosisCode,"+//Diagnosis code
+						"0 Procedure3Charges,"+//Charges
+						"'' Procedure4,"+//4th procedure cpt/hcpcs
+						"'' Procedure4Modifier1,"+//4th procedure modifier 1
+						"'' Procedure4Modifier2,"+//4th procedure modifier 2
+						"'' Procedure4DiagnosisCode,"+//Diagnosis code
+						"0 Procedure4Charges,"+//Charges
+						"'' Procedure5,"+//5th procedure cpt/hcpcs
+						"'' Procedure5Modifier1,"+//5th procedure modifier 1
+						"'' Procedure5Modifier2,"+//5th procedure modifier 2
+						"'' Procedure5DiagnosisCode,"+//diagnosis code
+						"0 Procedure5Charges,"+//Charges
+						"'' Procedure6,"+//6th procedure cpt/hcpcs
+						"'' Procedure6Modifier1,"+//6th procedure modifier 1
+						"'' Procedure6Modifier2,"+//6th procedure modifier 2
+						"'' Procedure6DiagnosisCode,"+//Diagnosis code
+						"0 Procedure6Charges,"+//Charges
+						"(SELECT SUM(pl.ProcFee) FROM procedurelog pl WHERE pl.AptNum="+aptNum+") TotalCharges,"+//Total charges
+						"(SELECT SUM(a.AdjAmt) FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
+							payDefNum+" AmountPaid,"+//Amount paid
+						"0,"+//Balance due
+						"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.AptNum="+aptNum+" AND "+
+							"ap.ClinicNum=cl.ClinicNum LIMIT 1)) ClinicDescription,"+
+						"(SELECT pr.StateLicense FROM provider pr,appointment ap WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianID"+
+						"(SELECT CONCAT(pr.FirstName,' ',pr.MiddleI) FROM provider pr,appointment ap "+
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianFAndMNames"+//Physician's first name and middle initial
+						"(SELECT pr.LastName FROM provider pr,appointment ap "+
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianLName"+//Physician's last name
 						"FROM patient p WHERE "+
 						"p.PatNum="+patNum;
 					DataTable primaryCareReportRow=General.GetTable(command);
+					string outputRow="";
+					string rowErrors="";
+					string rowWarnings="";
+					//Patient's ID Number
+					string pcin=primaryCareReportRow.Rows[0]["PCIN"].ToString();
+					if(pcin.Length<9) {
+						rowErrors+="ERROR: Incorrectly formatted patient data for patient with patnum "+patNum+
+							". Patient ID Number '"+pcin+"' is not at least 9 characters long."+Environment.NewLine;
+					}
+					outputRow+=pcin.PadLeft(15,'0');
+					//Patient's date of birth
+					outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");
+					//Patient's gender
+					outputRow+=PIn.PString(primaryCareReportRow.Rows[0]["Gender"].ToString());
+					//Patient's address
+					string householdAddress=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Address"].ToString()));
+					if(householdAddress.Length>29) {
+						string newHouseholdAddress=householdAddress.Substring(0,29);
+						rowWarnings+="WARNING: Address for patient with patnum of "+patNum+" was longer than 29 characters and "+
+							"was truncated in the report ouput. Address was changed from '"+
+							householdAddress+"' to '"+newHouseholdAddress+"'"+Environment.NewLine;
+						householdAddress=newHouseholdAddress;
+					}
+					outputRow+=householdAddress.PadRight(29,' ');
+					//Patient's city
+					string householdCity=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["City"].ToString()));
+					if(householdCity.Length>15) {
+						string newHouseholdCity=householdCity.Substring(0,15);
+						rowWarnings+="WARNING: City name for patient with patnum of "+patNum+" was longer than 15 characters and "+
+							"was truncated in the report ouput. City name was changed from '"+
+							householdCity+"' to '"+newHouseholdCity+"'"+Environment.NewLine;
+						householdCity=newHouseholdCity;
+					}
+					outputRow+=householdCity.PadRight(15,' ');
+					//Patient's State
+					string householdState=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["State"].ToString()));
+					if(householdState.Length>2) {
+						string newHouseholdState=householdState.Substring(0,2);
+						rowWarnings+="WARNING: State abbreviation for patient with patnum of "+patNum+" was longer than 2 characters and "+
+							"was truncated in the report ouput. State abbreviation was changed from '"+
+							householdState+"' to '"+newHouseholdState+"'"+Environment.NewLine;
+						householdState=newHouseholdState;
+					}
+					outputRow+=householdState.PadRight(2,' ');
+					//Patient's zip code
+					string householdZip=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Zip"].ToString()));
+					if(householdZip.Length>5) {
+						string newHouseholdZip=householdZip.Substring(0,5);
+						rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 5 characters and "+
+							"was truncated in the report ouput. The zipcode was changed from '"+
+							householdZip+"' to '"+newHouseholdZip+"'"+Environment.NewLine;
+						householdZip=newHouseholdZip;
+					}
+					outputRow+=householdZip.PadRight(5,' ');
+					//Patient's relationship to insured.
+					string insuranceRelationship=POut.PString(PIn.PString(primaryCareReportRow[0]["InsRelat"].ToString()));
+					if(insuranceRelationship!="1"){//Not self?
+						rowWarnings+="WARNING: The patient insurance relationship is not 'self' for the patient with a patnum of "+patNum;
+					}
+					outputRow+=insuranceRelationship;
+					//Patient's marital status
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
+					//Patient's employment status
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["EmploymentStatus"].ToString()));
+					//Patient's student status
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["StudentStatus"].ToString()));
+					//Insurance plan name
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["InsurancePlanName"].ToString())).PadRight(25,' ');
+					//Name of referring physician.
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["ReferringPhysicianName"].ToString())).PadRight(26,' ');
+					//ID# of referring physician
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["ReferringPhysicianID"].ToString())).PadLeft(6,' ');
+					//Diagnosis code 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode1"].ToString())).PadRight(6,' ');
+					//Diagnosis code 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode2"].ToString())).PadRight(6,' ');
+					//Diagnosis code 3
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode3"].ToString())).PadRight(6,' ');
+					//Diagnosis code 4
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode4"].ToString())).PadRight(6,' ');
+					//Date of encounter
+					outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["DateOfEncounter"].ToString()).ToString("MMddyyyy");
+					//Procedure 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1"].ToString())).PadRight(5,' ');
+					//Procedure 1 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 1 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 1 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 1 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure1Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Procedure 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2"].ToString())).PadRight(5,' ');
+					//Procedure 2 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 2 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 2 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 2 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure2Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Procedure 3
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3"].ToString())).PadRight(5,' ');
+					//Procedure 3 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 3 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 3 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 3 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure3Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Procedure 4
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4"].ToString())).PadRight(5,' ');
+					//Procedure 4 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 4 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 4 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 4 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure4Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Procedure 5
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5"].ToString())).PadRight(5,' ');
+					//Procedure 5 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 5 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 5 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 5 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure5Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Procedure 6
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6"].ToString())).PadRight(5,' ');
+					//Procedure 6 modifier 1
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier1"].ToString())).PadRight(2,' ');
+					//Procedure 6 modifier 2
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier2"].ToString())).PadRight(2,' ');
+					//Procedure 6 diagnosis code
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6DiagnosisCode"].ToString())).PadRight(4,' ');
+					//Procedure 6 charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure6Charges"].ToString())).ToString().PadLeft(6,'0');
+					//Total charges
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["TotalCharges"].ToString())).ToString().PadLeft(7,'0');
+					//Amount paid
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["AmountPaid"].ToString())).ToString().PadLeft(7,'0');
+					//Balance due
+					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["BalanceDue"].ToString())).ToString().PadLeft(7,'0');
+					//Facility site number
+					string opName=PIn.PString(primaryCareReportRow.Rows[0]["ClinicDescription"].ToString());
+
+
+				
 				}
 			}
 			File.WriteAllText(outFile,outputText);
