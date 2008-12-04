@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -8,7 +9,7 @@ namespace OpenDental{
 	///<summary></summary>
 	public class LetterMerges {
 		///<summary>List of all lettermerges.</summary>
-		public static LetterMerge[] List;
+		public static LetterMerge[] Listt;
 
 #if !DISABLE_MICROSOFT_OFFICE
 		private static Word.Application wordApp;
@@ -38,15 +39,15 @@ namespace OpenDental{
 			string command=
 				"SELECT * FROM lettermerge ORDER BY Description";
 			DataTable table=General.GetTable(command);
-			List=new LetterMerge[table.Rows.Count];
+			Listt=new LetterMerge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new LetterMerge();
-				List[i].LetterMergeNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description   = PIn.PString(table.Rows[i][1].ToString());
-				List[i].TemplateName  = PIn.PString(table.Rows[i][2].ToString());
-				List[i].DataFileName  = PIn.PString(table.Rows[i][3].ToString());
-				List[i].Category      = PIn.PInt(table.Rows[i][4].ToString());
-				List[i].Fields=LetterMergeFields.GetForLetter(List[i].LetterMergeNum);
+				Listt[i]=new LetterMerge();
+				Listt[i].LetterMergeNum= PIn.PInt(table.Rows[i][0].ToString());
+				Listt[i].Description   = PIn.PString(table.Rows[i][1].ToString());
+				Listt[i].TemplateName  = PIn.PString(table.Rows[i][2].ToString());
+				Listt[i].DataFileName  = PIn.PString(table.Rows[i][3].ToString());
+				Listt[i].Category      = PIn.PInt(table.Rows[i][4].ToString());
+				Listt[i].Fields=LetterMergeFields.GetForLetter(Listt[i].LetterMergeNum);
 			}
 		}
 
@@ -97,16 +98,12 @@ namespace OpenDental{
 		}
 
 		///<summary>Supply the index of the cat within DefC.Short.</summary>
-		public static LetterMerge[] GetListForCat(int catIndex){
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].Category==DefC.Short[(int)DefCat.LetterMergeCats][catIndex].DefNum){
-					AL.Add(List[i]);
+		public static List<LetterMerge> GetListForCat(int catIndex){
+			List<LetterMerge> retVal=new List<LetterMerge>();
+			for(int i=0;i<Listt.Length;i++){
+				if(Listt[i].Category==DefC.Short[(int)DefCat.LetterMergeCats][catIndex].DefNum){
+					retVal.Add(Listt[i]);
 				}
-			}
-			LetterMerge[] retVal=new LetterMerge[AL.Count];
-			for(int i=0;i<AL.Count;i++){
-				retVal[i]=(LetterMerge)AL[i];
 			}
 			return retVal;
 		}

@@ -41,6 +41,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelReferredFrom;
 		private System.Windows.Forms.ListBox listReferral;
 		private OpenDental.UI.Button butNew;
+		private Label label6;
+		private ListBox listOther;
 		private System.Windows.Forms.TextBox textBox1;
 		//private ArrayList ALpatSelect;
 
@@ -100,6 +102,8 @@ namespace OpenDental{
 			this.labelReferredFrom = new System.Windows.Forms.Label();
 			this.listReferral = new System.Windows.Forms.ListBox();
 			this.butNew = new OpenDental.UI.Button();
+			this.label6 = new System.Windows.Forms.Label();
+			this.listOther = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -324,10 +328,29 @@ namespace OpenDental{
 			this.butNew.Text = "New";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(400,161);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(170,14);
+			this.label6.TabIndex = 35;
+			this.label6.Text = "Other";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listOther
+			// 
+			this.listOther.Location = new System.Drawing.Point(400,178);
+			this.listOther.Name = "listOther";
+			this.listOther.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listOther.Size = new System.Drawing.Size(170,433);
+			this.listOther.TabIndex = 34;
+			// 
 			// FormLetterMergeEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,672);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.listOther);
 			this.Controls.Add(this.butNew);
 			this.Controls.Add(this.labelReferredFrom);
 			this.Controls.Add(this.listReferral);
@@ -377,6 +400,7 @@ namespace OpenDental{
 			}
 			FillPatSelect();
 			FillListReferral();
+			FillListOther();
 		}
 
 		private void FillPatSelect(){
@@ -440,8 +464,6 @@ namespace OpenDental{
 			listPatSelect.Items.Add("GradeLevel");
 			listPatSelect.Items.Add("Urgency");
 			listPatSelect.Items.Add("DateFirstVisit");
-			//listPatSelect.Items.Add("PriPending");
-			//listPatSelect.Items.Add("SecPending");
 			for(int i=0;i<LetterMergeCur.Fields.Count;i++){
 				for(int j=0;j<listPatSelect.Items.Count;j++){
 					if(listPatSelect.Items[j].ToString()==(string)LetterMergeCur.Fields[i]){
@@ -481,6 +503,27 @@ namespace OpenDental{
 			}
     }
 
+		private void FillListOther(){
+      listOther.Items.Add("ResponsPartyNameFL");
+      listOther.Items.Add("ResponsPartyAddress");
+      listOther.Items.Add("ResponsPartyCityStZip");
+			listOther.Items.Add("SiteDescription");
+			listOther.Items.Add("DateOfLastSavedTP");
+			listOther.Items.Add("DateRecallDue");
+			listOther.Items.Add("CarrierName");
+			listOther.Items.Add("CarrierAddress");
+			listOther.Items.Add("CarrierCityStZip");
+			listOther.Items.Add("SubscriberNameFL");
+			listOther.Items.Add("SubscriberID");
+			listOther.Items.Add("NextSchedAppt");
+			for(int i=0;i<LetterMergeCur.Fields.Count;i++){
+				for(int j=0;j<listOther.Items.Count;j++){
+					if(listOther.Items[j].ToString()==(string)LetterMergeCur.Fields[i]){
+						listOther.SetSelected(j,true);
+					}
+				}
+			}
+    }
 
 		private void butEditPaths_Click(object sender, System.EventArgs e) {
 			FormPath FormP=new FormPath();
@@ -599,6 +642,12 @@ namespace OpenDental{
 				field=new LetterMergeField();
 				field.LetterMergeNum=LetterMergeCur.LetterMergeNum;
 				field.FieldName="referral."+(string)listReferral.SelectedItems[i];
+				LetterMergeFields.Insert(field);
+			}
+			for(int i=0;i<listOther.SelectedItems.Count;i++){
+				field=new LetterMergeField();
+				field.LetterMergeNum=LetterMergeCur.LetterMergeNum;
+				field.FieldName=(string)listOther.SelectedItems[i];
 				LetterMergeFields.Insert(field);
 			}
 			Cursor.Current=Cursors.Default;

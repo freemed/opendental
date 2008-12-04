@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Drawing.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -34,7 +35,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listLetters;
 		private OpenDental.UI.Button butEditCats;
 		private Patient PatCur;
-		private LetterMerge[] ListForCat;
+		private List<LetterMerge> ListForCat;
 		private bool changed;
 		private string mergePath;
 #if !DISABLE_MICROSOFT_OFFICE
@@ -47,6 +48,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCreateData;
 		private OpenDental.UI.Button butEditTemplate;
 		private System.Windows.Forms.GroupBox groupBox1;
+		private OpenDental.UI.Button butViewData;
 		private OpenDental.UI.Button butPreview;
 
 
@@ -93,6 +95,7 @@ namespace OpenDental{
 			this.butEditTemplate = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butPreview = new OpenDental.UI.Button();
+			this.butViewData = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -107,7 +110,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(462,405);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(79,26);
+			this.butCancel.Size = new System.Drawing.Size(79,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -140,7 +143,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(206,408);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79,26);
+			this.butAdd.Size = new System.Drawing.Size(79,24);
 			this.butAdd.TabIndex = 7;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -153,9 +156,9 @@ namespace OpenDental{
 			this.butMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMerge.CornerRadius = 4F;
 			this.butMerge.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butMerge.Location = new System.Drawing.Point(22,56);
+			this.butMerge.Location = new System.Drawing.Point(21,84);
 			this.butMerge.Name = "butMerge";
-			this.butMerge.Size = new System.Drawing.Size(79,26);
+			this.butMerge.Size = new System.Drawing.Size(79,24);
 			this.butMerge.TabIndex = 17;
 			this.butMerge.Text = "Print";
 			this.butMerge.Click += new System.EventHandler(this.butPrint_Click);
@@ -187,7 +190,7 @@ namespace OpenDental{
 			this.butEditCats.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butEditCats.Location = new System.Drawing.Point(14,408);
 			this.butEditCats.Name = "butEditCats";
-			this.butEditCats.Size = new System.Drawing.Size(98,26);
+			this.butEditCats.Size = new System.Drawing.Size(98,24);
 			this.butEditCats.TabIndex = 20;
 			this.butEditCats.Text = "Edit Categories";
 			this.butEditCats.Click += new System.EventHandler(this.butEditCats_Click);
@@ -200,9 +203,9 @@ namespace OpenDental{
 			this.butCreateData.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCreateData.CornerRadius = 4F;
 			this.butCreateData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCreateData.Location = new System.Drawing.Point(22,22);
+			this.butCreateData.Location = new System.Drawing.Point(21,22);
 			this.butCreateData.Name = "butCreateData";
-			this.butCreateData.Size = new System.Drawing.Size(79,26);
+			this.butCreateData.Size = new System.Drawing.Size(79,24);
 			this.butCreateData.TabIndex = 21;
 			this.butCreateData.Text = "Data File";
 			this.butCreateData.Click += new System.EventHandler(this.butCreateData_Click);
@@ -218,20 +221,21 @@ namespace OpenDental{
 			this.butEditTemplate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butEditTemplate.Location = new System.Drawing.Point(449,348);
 			this.butEditTemplate.Name = "butEditTemplate";
-			this.butEditTemplate.Size = new System.Drawing.Size(92,26);
+			this.butEditTemplate.Size = new System.Drawing.Size(92,24);
 			this.butEditTemplate.TabIndex = 22;
 			this.butEditTemplate.Text = "Edit Template";
 			this.butEditTemplate.Click += new System.EventHandler(this.butEditTemplate_Click);
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butViewData);
 			this.groupBox1.Controls.Add(this.butPreview);
 			this.groupBox1.Controls.Add(this.butMerge);
 			this.groupBox1.Controls.Add(this.butCreateData);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(441,193);
+			this.groupBox1.Location = new System.Drawing.Point(441,178);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(126,128);
+			this.groupBox1.Size = new System.Drawing.Size(126,152);
 			this.groupBox1.TabIndex = 23;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Create";
@@ -244,12 +248,27 @@ namespace OpenDental{
 			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPreview.Location = new System.Drawing.Point(22,90);
+			this.butPreview.Location = new System.Drawing.Point(21,115);
 			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(79,26);
+			this.butPreview.Size = new System.Drawing.Size(79,24);
 			this.butPreview.TabIndex = 22;
 			this.butPreview.Text = "Preview";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
+			// 
+			// butViewData
+			// 
+			this.butViewData.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butViewData.Autosize = true;
+			this.butViewData.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butViewData.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewData.CornerRadius = 4F;
+			this.butViewData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butViewData.Location = new System.Drawing.Point(21,53);
+			this.butViewData.Name = "butViewData";
+			this.butViewData.Size = new System.Drawing.Size(79,24);
+			this.butViewData.TabIndex = 23;
+			this.butViewData.Text = "View Data";
+			this.butViewData.Click += new System.EventHandler(this.butViewData_Click);
 			// 
 			// FormLetterMerges
 			// 
@@ -271,8 +290,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Letter Merge";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormLetterMerges_Closing);
 			this.Load += new System.EventHandler(this.FormLetterMerges_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormLetterMerges_Closing);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -302,13 +321,13 @@ namespace OpenDental{
 		private void FillLetters(){
 			listLetters.Items.Clear();
 			if(listCategories.SelectedIndex==-1){
-				ListForCat=new LetterMerge[0];
+				ListForCat=new List<LetterMerge>();
 				return;
 			}
 			LetterMergeFields.Refresh();
 			LetterMerges.Refresh();
 			ListForCat=LetterMerges.GetListForCat(listCategories.SelectedIndex);
-			for(int i=0;i<ListForCat.Length;i++){
+			for(int i=0;i<ListForCat.Count;i++){
 				listLetters.Items.Add(ListForCat[i].Description);
 			}
 		}
@@ -352,7 +371,7 @@ namespace OpenDental{
 			}
 			LetterMerge letter=new LetterMerge();
 			letter.Category=DefC.Short[(int)DefCat.LetterMergeCats][listCategories.SelectedIndex].DefNum;
-			letter.Fields=new ArrayList();
+			letter.Fields=new List<string>();
 			FormLetterMergeEdit FormL=new FormLetterMergeEdit(letter);
 			FormL.IsNew=true;
 			FormL.ShowDialog();
@@ -366,20 +385,70 @@ namespace OpenDental{
 				if(i>0){
 					command+=",";
 				}
-				if((string)letter.Fields[i]=="NextAptNum"){
+				if(letter.Fields[i]=="NextAptNum"){
 					command+="plannedappt.AptNum NextAptNum";
 				}
-				else if(((string)letter.Fields[i]).Length>9 && ((string)letter.Fields[i]).Substring(0,9)=="referral."){
-					command+="referral."+((string)letter.Fields[i]).Substring(9);
+				//other:
+				else if(letter.Fields[i]=="ResponsPartyNameFL"){
+					command+="CONCAT(patResp.FName,' ',patResp.LName) ResponsPartyNameFL";
+				}
+				else if(letter.Fields[i]=="ResponsPartyAddress"){
+					command+="patResp.Address ResponsPartyAddress";
+				}
+				else if(letter.Fields[i]=="ResponsPartyCityStZip"){
+					command+="CONCAT(patResp.City,', ',patResp.State,' ',patResp.Zip) ResponsPartyCityStZip";
+				}
+				else if(letter.Fields[i]=="SiteDescription"){
+					command+="site.Description SiteDescription";
+				}
+				else if(letter.Fields[i]=="DateOfLastSavedTP"){
+					command+="DATE(MAX(treatplan.DateTP)) DateOfLastSavedTP";
+				}
+				else if(letter.Fields[i]=="DateRecallDue"){
+					command+="recall.DateDue  DateRecallDue";
+				}
+				else if(letter.Fields[i]=="CarrierName"){
+					command+="CarrierName";
+				}
+				else if(letter.Fields[i]=="CarrierAddress"){
+					command+="carrier.Address CarrierAddress";
+				}
+				else if(letter.Fields[i]=="CarrierCityStZip"){
+					command+="CONCAT(carrier.City,', ',carrier.State,' ',carrier.Zip) CarrierCityStZip";
+				}
+				else if(letter.Fields[i]=="SubscriberNameFL"){
+					command+="CONCAT(patSubsc.FName,' ',patSubsc.LName) SubscriberNameFL";
+				}
+				else if(letter.Fields[i]=="SubscriberID"){
+					command+="insplan.SubscriberID";
+				}
+				else if(letter.Fields[i]=="NextSchedAppt"){
+					command+="MIN(appointment.AptDateTime) NextSchedAppt";
+				}
+				else if(letter.Fields[i].StartsWith("referral.")){
+					command+="referral."+letter.Fields[i].Substring(9);
 				}
 				else{
-					command+="patient."+(string)letter.Fields[i];
+					command+="patient."+letter.Fields[i];
 				}
 			}
 			command+=" FROM patient "
 				+"LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1 "
 				+"LEFT JOIN referral ON refattach.ReferralNum=referral.ReferralNum "
 				+"LEFT JOIN plannedappt ON plannedappt.PatNum=patient.PatNum AND plannedappt.ItemOrder=1 "
+				+"LEFT JOIN patient patResp ON patient.ResponsParty=patResp.PatNum "
+				+"LEFT JOIN site ON patient.SiteNum=site.SiteNum "
+				+"LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum "
+				+"LEFT JOIN recall ON recall.PatNum=patient.PatNum "
+					+"AND (recall.RecallTypeNum="+POut.PInt(PrefC.GetInt("RecallTypeSpecialProphy"))
+					+" OR recall.RecallTypeNum="+POut.PInt(PrefC.GetInt("RecallTypeSpecialPerio"))+") "
+				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
+				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
+				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+				+"LEFT JOIN patient patSubsc ON patSubsc.PatNum=insplan.Subscriber "
+				+"LEFT JOIN appointment ON appointment.PatNum=patient.PatNum "
+					+"AND AptStatus="+POut.PInt((int)ApptStatus.Scheduled)+" "
+					+"AND AptDateTime > NOW() "
 				+"WHERE patient.PatNum="+POut.PInt(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "
 				+"ORDER BY refattach.ItemOrder";
@@ -389,13 +458,11 @@ namespace OpenDental{
 			  using(StreamWriter sw=new StreamWriter(fileName,false)){
 					string line="";  
 					for(int i=0;i<letter.Fields.Count;i++){
-						if(((string)letter.Fields[i]).Length>9
-							&& ((string)letter.Fields[i]).Substring(0,9)=="referral.")
-						{
-							line+="Ref"+((string)letter.Fields[i]).Substring(9);
+						if(letter.Fields[i].StartsWith("referral.")){
+							line+="Ref"+letter.Fields[i].Substring(9);
 						}
 						else{
-							line+=(string)letter.Fields[i];
+							line+=letter.Fields[i];
 						}
 						if(i<letter.Fields.Count-1){
 							line+="\t";
@@ -428,23 +495,39 @@ namespace OpenDental{
 		}
 
 		private void butCreateData_Click(object sender, System.EventArgs e) {
+			if(!CreateData()){
+				return;
+			}
+			MsgBox.Show(this,"done");
+		}
+
+		private void butViewData_Click(object sender,EventArgs e) {
+			if(!CreateData()){
+				return;
+			}
+			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
+			string dataFile=PrefC.GetString("LetterMergePath")+letterCur.DataFileName;
+			Process.Start(dataFile);
+		}
+
+		private bool CreateData(){
 			if(listLetters.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a letter first.");
-				return;
+				return false;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
 			string dataFile=PrefC.GetString("LetterMergePath")+letterCur.DataFileName;
 			if(!Directory.Exists(PrefC.GetString("LetterMergePath"))){
 				MsgBox.Show(this,"Letter merge path not valid.");
-				return;
+				return false;
 			}
 			Cursor=Cursors.WaitCursor;
 			if(!CreateDataFile(dataFile,letterCur)){
 				Cursor=Cursors.Default;
-				return;
+				return false;
 			}
 			Cursor=Cursors.Default;
-			MsgBox.Show(this,"done");
+			return true;
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
@@ -470,7 +553,6 @@ namespace OpenDental{
 			if(!CreateDataFile(dataFile,letterCur)){
 				return;
 			}
-			
 			Word.MailMerge wrdMailMerge;
 			//Create an instance of Word.
 			Word.Application WrdApp=LetterMerges.WordApp;
@@ -622,6 +704,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.LetterMerge);
 			}
 		}
+
+		
 
 		
 

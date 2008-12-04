@@ -700,13 +700,18 @@ namespace OpenDental{
 			}
 			DataRow thisRow;
 			//copy data from tableInput to tableOutput while converting to strings
+			string str;
+			//Type t;
 			for(int i=0;i<tableIn.Rows.Count;i++){
 				thisRow=tableOut.NewRow();//new row with new schema
 				for(int j=0;j<tableIn.Columns.Count;j++){
-					thisRow[j]=tableIn.Rows[i][j].ToString();
+					str=tableIn.Rows[i][j].ToString();
+					//t=tableIn.Rows[i][j].GetType();
+					thisRow[j]=str;
 				}
 				tableOut.Rows.Add(thisRow);
 			}
+			DateTime date;
 			for(int j=0;j<tableOut.Columns.Count;j++){
 				for(int i=0;i<tableOut.Rows.Count;i++){
 					try{
@@ -714,6 +719,15 @@ namespace OpenDental{
 						tableOut.Rows[i][j]=PIn.PDouble(tableOut.Rows[i][j].ToString()).ToString("F");
 						Queries.CurReport.ColAlign[j]=HorizontalAlignment.Right;
 						Queries.CurReport.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+					}
+					else if(tableOut.Columns[j].Caption.ToLower().StartsWith("date")){
+						date=PIn.PDate(tableOut.Rows[i][j].ToString());
+						if(date.Year<1880){
+							tableOut.Rows[i][j]="";
+						}
+						else{
+							tableOut.Rows[i][j]=date.ToString("d");
+						}
 					}
 					else switch(tableOut.Columns[j].Caption.ToLower())
 					{
@@ -746,7 +760,7 @@ namespace OpenDental{
             case "isfrom":
 							tableOut.Rows[i][j]=PIn.PBool(tableOut.Rows[i][j].ToString()).ToString();
 							break;
-						//date
+						//date. Some of these are actually handled further up.
 						case "adjdate":
 						case "baldate":
 						case "dateservice":
@@ -823,10 +837,6 @@ namespace OpenDental{
 							tableOut.Rows[i][j]
 								=DefC.GetValue(DefCat.ApptConfirmed,PIn.PInt(tableOut.Rows[i][j].ToString()));
 							break;
-						//case "claimformat":
-						//	tableOut.Rows[i][j]
-						//		=DefB.GetName(DefCat.ClaimFormats,PIn.PInt(tableOut.Rows[i][j].ToString()));
-						//	break;
 						case "dx":
 							tableOut.Rows[i][j]
 								=DefC.GetName(DefCat.Diagnosis,PIn.PInt(tableOut.Rows[i][j].ToString()));

@@ -3688,6 +3688,17 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)) {
 				return;
 			}
+			//cannot allow moving completed procedure because it could cause completed procs to change date.  Security must block this.
+			//ContrApptSingle3[thisIndex].DataRoww;
+			Appointment appt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			if(appt==null){
+				MsgBox.Show(this,"Appointment not found.");
+				return;
+			}
+			if(appt.AptStatus==ApptStatus.Complete){
+				MsgBox.Show(this,"Not allowed to move completed appointments.");
+				return;
+			}
 			int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
 			SendToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 			if(prevSel!=-1) {

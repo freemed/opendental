@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenDentBusiness{
 	
@@ -16,7 +17,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum.</summary>
 		public int Category;
 		///<summary>Not a database column.  Filled using fk from the lettermergefields table.  The arrayList is a collection of strings representing field names.</summary>
-		public ArrayList Fields;
+		public List<string> Fields;
 
 		/*//<summary>Returns a copy of the clearinghouse.</summary>
     public ClaimForm Copy(){

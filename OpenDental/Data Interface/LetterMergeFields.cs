@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -8,7 +9,7 @@ namespace OpenDental{
 	///<summary></summary>
 	public class LetterMergeFields {
 		///<summary>List of all lettermergeFields.</summary>
-		private static LetterMergeField[] List;
+		private static LetterMergeField[] Listt;
 
 		///<summary></summary>
 		public static void Refresh() {
@@ -16,15 +17,14 @@ namespace OpenDental{
 				"SELECT * FROM lettermergefield "
 				+"ORDER BY FieldName";
 			DataTable table=General.GetTable(command);
-			List=new LetterMergeField[table.Rows.Count];
+			Listt=new LetterMergeField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new LetterMergeField();
-				List[i].FieldNum      = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].LetterMergeNum= PIn.PInt(table.Rows[i][1].ToString());
-				List[i].FieldName     = PIn.PString(table.Rows[i][2].ToString());
+				Listt[i]=new LetterMergeField();
+				Listt[i].FieldNum      = PIn.PInt(table.Rows[i][0].ToString());
+				Listt[i].LetterMergeNum= PIn.PInt(table.Rows[i][1].ToString());
+				Listt[i].FieldName     = PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
-	
 
 		///<summary>Inserts this lettermergefield into database.</summary>
 		public static void Insert(LetterMergeField lmf){
@@ -72,12 +72,12 @@ namespace OpenDental{
 			General.NonQ(command);
 		}*/
 
-		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The arrayList is a collection of strings representing field names.</summary>
-		public static ArrayList GetForLetter(int letterMergeNum){
-			ArrayList retVal=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].LetterMergeNum==letterMergeNum){
-					retVal.Add(List[i].FieldName);
+		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The result is a collection of strings representing field names.</summary>
+		public static List<string> GetForLetter(int letterMergeNum){
+			List<string> retVal=new List<string>();
+			for(int i=0;i<Listt.Length;i++){
+				if(Listt[i].LetterMergeNum==letterMergeNum){
+					retVal.Add(Listt[i].FieldName);
 				}
 			}
 			return retVal;

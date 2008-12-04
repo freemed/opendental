@@ -850,10 +850,15 @@ namespace OpenDental{
 			row.Cells.Add("");//date empty
 			row.Cells.Add(Lan.g(this,"Default"));
 			gridPlans.Rows.Add(row);
+			string str;
 			for(int i=0;i<PlanList.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(PlanList[i].DateTP.ToShortDateString());
-				row.Cells.Add(PlanList[i].Heading);
+				str=PlanList[i].Heading;
+				if(PlanList[i].ResponsParty!=0){
+					str+="\r\n"+Lan.g(this,"Responsible Party: ")+Patients.GetLim(PlanList[i].ResponsParty).GetNameLF();
+				}
+				row.Cells.Add(str);
 				if(PlanList[i].Signature==""){
 					row.Cells.Add("");
 				}
@@ -1909,6 +1914,14 @@ namespace OpenDental{
 			text=PatCur.GetNameFL();
 			par.AddText(text);
 			par.AddLineBreak();
+			if(gridPlans.SelectedIndices[0]>0){//not the default plan
+				if(PlanList[gridPlans.SelectedIndices[0]-1].ResponsParty!=0){
+					text=Lan.g(this,"Responsible Party: ")
+						+Patients.GetLim(PlanList[gridPlans.SelectedIndices[0]-1].ResponsParty).GetNameFL();
+					par.AddText(text);
+					par.AddLineBreak();
+				}
+			}
 			if(gridPlans.SelectedIndices[0]==0) {//default TP
 				text=DateTime.Today.ToShortDateString();
 			}
@@ -2336,6 +2349,7 @@ namespace OpenDental{
 			tp.DateTP=DateTime.Today;
 			tp.PatNum=PatCur.PatNum;
 			tp.Note=PrefC.GetString("TreatmentPlanNote");
+			tp.ResponsParty=PatCur.ResponsParty;
 			TreatPlans.Insert(tp);
 			ProcTP procTP;
 			Procedure proc;

@@ -637,7 +637,7 @@ namespace OpenDental{
 							row.Cells.Add("");
 						}
 						else{
-							row.Cells.Add(Patients.GetLim(PatCur.ResponsParty).GetNameFL());
+							row.Cells.Add(Patients.GetLim(PatCur.ResponsParty).GetNameLF());
 						}
 						break;
 					case "Referrals":
