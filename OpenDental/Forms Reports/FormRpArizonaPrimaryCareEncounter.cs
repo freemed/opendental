@@ -65,16 +65,15 @@ namespace OpenDental {
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
-				"AND LOWER(TRIM(c.CarrierName))='noah' AND "+
-				"(SELECT MAX(a.AptDateTime) FROM appointment a WHERE a.PatNum=p.PatNum AND a.AptStatus="+((int)ApptStatus.Complete)+") BETWEEN "+
-					POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
+				"AND LOWER(TRIM(c.CarrierName))='noah'";
 			DataTable primaryCarePatients=General.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
 				//that the patient has attented (completed) in the date range specified. If there are, then those appointments
 				//will be placed into the flat file.
-				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum;
+				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+
+					" AND a.AptDateTime BETWEEN "+POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
 				DataTable appointmentList=General.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.PInt(PIn.PInt(appointmentList.Rows[j][0].ToString()));
@@ -86,7 +85,7 @@ namespace OpenDental {
 						"CONCAT(CONCAT(p.Address,' '),p.Address2) Address,"+//address
 						"p.City,"+//city
 						"p.State,"+//state
-						"p.ZipCode,"+//zipcode
+						"p.Zip,"+//zipcode
 						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
 							"pp.PatNum=p.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah') InsRelat,"+
 						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
@@ -133,15 +132,15 @@ namespace OpenDental {
 						"0 Procedure6Charges,"+//Charges
 						"(SELECT SUM(pl.ProcFee) FROM procedurelog pl WHERE pl.AptNum="+aptNum+") TotalCharges,"+//Total charges
 						"(SELECT SUM(a.AdjAmt) FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
-							payDefNum+" AmountPaid,"+//Amount paid
+							payDefNum+") AmountPaid,"+//Amount paid
 						"0,"+//Balance due
 						"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.AptNum="+aptNum+" AND "+
 							"ap.ClinicNum=cl.ClinicNum LIMIT 1)) ClinicDescription,"+
-						"(SELECT pr.StateLicense FROM provider pr,appointment ap WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianID"+
-						"(SELECT CONCAT(pr.FirstName,' ',pr.MiddleI) FROM provider pr,appointment ap "+
-							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianFAndMNames"+//Physician's first name and middle initial
+						"(SELECT pr.StateLicense FROM provider pr,appointment ap WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianID,"+
+						"(SELECT CONCAT(CONCAT(pr.FirstName,' '),pr.MiddleI) FROM provider pr,appointment ap "+
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianFAndMNames,"+//Physician's first name and middle initial
 						"(SELECT pr.LastName FROM provider pr,appointment ap "+
-							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianLName"+//Physician's last name
+							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianLName "+//Physician's last name
 						"FROM patient p WHERE "+
 						"p.PatNum="+patNum;
 					DataTable primaryCareReportRow=General.GetTable(command);
@@ -306,8 +305,39 @@ namespace OpenDental {
 						siteId=siteId.Substring(siteId.Length-5);
 					}
 					outputRow+=siteId;
-					//string physicianId=PIn.PString(primaryCareReportRow[0]["PhysicianID"].ToString());
-					//if(physicianId.Length>
+					//Physician ID
+					string physicianId=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianID"].ToString());
+					if(physicianId.Length>12){
+						string newPhysicianId=physicianId.Substring(0,12);
+						rowWarnings+="WARNING: The physician ID '"+physicianId+"' of the provider associated to the patient with a patnum of '"+patNum+
+							"' is longer than 12 digits. The physician id has been truncated from '"+physicianId+"' to '"+newPhysicianId+"'."+Environment.NewLine;
+						physicianId=newPhysicianId;
+					}
+					outputRow+=physicianId.PadLeft(12,'0');
+					//Pysician's First Name and Middle Initial
+					string physicianFirstAndMiddle=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianFAndMNames"].ToString());
+					if(physicianFirstAndMiddle.Length>12){
+						string newPhysicianFirstAndMiddle=physicianFirstAndMiddle.Substring(0,12);
+						rowWarnings+="WARNING: The physician first name and middle initial of the provider associated to the patient with "+
+							"a patnum of '"+patNum+"' was truncated from '"+physicianFirstAndMiddle+"' to '"+newPhysicianFirstAndMiddle+"'."+Environment.NewLine;
+						physicianFirstAndMiddle=newPhysicianFirstAndMiddle;
+					}
+					outputRow+=physicianFirstAndMiddle.PadRight(12,' ');
+					//Physician's last name.
+					string physicianLastName=PIn.PString(primaryCareReportRow.Rows[0]["PhysicianLName"].ToString());
+					if(physicianLastName.Length>20){
+						string newPhysicianLastName=physicianLastName.Substring(0,20);
+						rowWarnings+="WARNING: The physician last name of the provider associated to the patient with a patnum of '"+patNum+"' "+
+							"was truncated from '"+physicianLastName+"' to '"+newPhysicianLastName+"'.";
+						physicianLastName=newPhysicianLastName;
+					}
+					outputRow+=physicianLastName.PadRight(20,' ');
+					//Finish adding the row to the output file and log warnings and errors.
+					textLog.Text+=rowErrors+rowWarnings;
+					if(rowErrors.Length>0) {
+						continue;
+					}
+					outputText+=outputRow+Environment.NewLine;//Only add the row to the output file if it is properly formatted.
 				}
 			}
 			File.WriteAllText(outFile,outputText);
