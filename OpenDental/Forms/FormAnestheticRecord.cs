@@ -2876,11 +2876,11 @@ namespace OpenDental
         private void butPrint_Click(object sender, EventArgs e){
 
 			Graphics g1 = this.CreateGraphics();
-			Image MyImage = new Bitmap(778, 741, g1);
+			Image MyImage = new Bitmap(892, 766, g1);
 			Graphics g2 = Graphics.FromImage(MyImage);
 			IntPtr dc1 = g1.GetHdc();
 			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 778, 741, dc1, 0, 0, 13369376);
+			BitBlt(dc2, 0, 0, 892,766, dc1, 0, 0, 13369376);
 			g1.ReleaseHdc(dc1);
 			g2.ReleaseHdc(dc2);
 			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
@@ -2893,23 +2893,44 @@ namespace OpenDental
 			}
         }
 
-		public void StartPrint(Stream streamToPrint, string streamType){
-			PrintDocument printDocument1 = new PrintDocument(); 
+		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
 
-			this.printDocument1.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
+			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
+			int x = e.MarginBounds.X;
+			int y = e.MarginBounds.Y;
+			int width = image.Width;
+			int height = image.Height;
+			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
+			{
+				width = e.MarginBounds.Width;
+				height = image.Height * e.MarginBounds.Width / image.Width;
+			}
+			else
+			{
+				height = e.MarginBounds.Height;
+				width = image.Width * e.MarginBounds.Height / image.Height;
+			}
+			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
+			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
+		}
+
+		public void StartPrint(Stream streamToPrint, string streamType){
+
+			this.printDocument2.PrintPage += new PrintPageEventHandler(printDocument2_PrintPage);
 			this.streamToPrint = streamToPrint;
 			this.streamType = streamType;
 			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
 			PrintDialog1.AllowSomePages = true;
 			PrintDialog1.ShowHelp = true;
-			PrintDialog1.Document = printDocument1;
+			PrintDialog1.Document = printDocument2;
 			DialogResult result = PrintDialog1.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				printDocument1.Print();
+				printDocument2.Print();
 			}
         }
 
+		
 		private void label3_Click(object sender, EventArgs e){
 
 		}
@@ -2953,12 +2974,14 @@ namespace OpenDental
 
 		private void butSignTopaz_Click(object sender, EventArgs e){
 			sigBox.Visible = false;
+			sigBoxTopaz.Refresh(); 
 			sigBoxTopaz.Visible = true;
-			
+			sigBoxTopaz.Refresh(); 
 			if (allowTopaz)
 			{
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz, 1);
 			}
+			sigBoxTopaz.Refresh(); 
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
 			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;

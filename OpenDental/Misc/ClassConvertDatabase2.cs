@@ -513,6 +513,26 @@ namespace OpenDental {
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 
+
+					//keeps data auto-imported from networkable vital sign monitors
+					command = "DROP TABLE IF EXISTS anesthvsdata";
+					General.NonQ(command);
+					command = @"CREATE TABLE anesthvsdata (
+						AnestheticRecordNum int(11) NOT NULL auto_increment,
+						VSMName char(20),
+						VSMSerNum char(32),
+						BPSys smallint(3),
+						BPDias smallint(3),
+						BPMAP smallint(3),
+						HR smallint(3),
+						SpO2 smallint(3),
+						EtCo2 smallint(3),
+						Temp smallint(3),
+						VSTimeStamp char(32),
+						PRIMARY KEY (AnestheticRecordNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
 					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (ProvNum)";
