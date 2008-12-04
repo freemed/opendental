@@ -199,6 +199,7 @@ namespace OpenDental
 			System.Int32 dwRop); // raster operation code
 
 		private void InitializeComponent(){
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.labelVSM = new System.Windows.Forms.Label();
 			this.labelVSMSerNum = new System.Windows.Forms.Label();
@@ -1226,7 +1227,7 @@ namespace OpenDental
 			// 
 			this.sigBox.Location = new System.Drawing.Point(12, 19);
 			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(158, 74);
+			this.sigBox.Size = new System.Drawing.Size(148, 40);   //Y SHOULD BE 74
 			this.sigBox.TabIndex = 135;
 			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
 			// 
@@ -2038,9 +2039,9 @@ namespace OpenDental
 			{
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz = CodeBase.TopazWrapper.GetTopaz();
-				sigBoxTopaz.Location = sigBox.Location;//this puts both boxes in the same spot.
+				sigBoxTopaz.Location = new System.Drawing.Point(12,35);//sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name = "sigBoxTopaz";
-				sigBoxTopaz.Size = new System.Drawing.Size(158,74);
+				sigBoxTopaz.Size = new System.Drawing.Size(158,30);
 				sigBoxTopaz.TabIndex = 92;
 				sigBoxTopaz.Text = "sigPlusNET1";
 				sigBoxTopaz.Visible = false;
@@ -2595,9 +2596,9 @@ namespace OpenDental
 			{
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz = CodeBase.TopazWrapper.GetTopaz();
-				sigBoxTopaz.Location = sigBox.Location;//this puts both boxes in the same spot.
+				sigBoxTopaz.Location = new System.Drawing.Point(12, 35);//sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name = "sigBoxTopaz";
-				sigBoxTopaz.Size = new System.Drawing.Size(158, 74);
+				sigBoxTopaz.Size = new System.Drawing.Size(158, 30);
 				sigBoxTopaz.TabIndex = 92;
 				sigBoxTopaz.Text = "sigPlusNET1";
 				sigBoxTopaz.Visible = false;
@@ -3356,7 +3357,7 @@ namespace OpenDental
 					AnesthDataCur.SigIsTopaz = true;
 					if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
 					{
-						AnesthDataCur.Signature = "";
+						//AnesthDataCur.Signature = "";
 						return;
 					}
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
@@ -3387,8 +3388,10 @@ namespace OpenDental
 		}
 
 		private void butClose_Click(object sender, EventArgs e){
-
+			AnesthDataCur.Notes = this.richTextNotes.Text;
+			SaveSignature(AnesthDataCur);
 			SaveData();
+			
 			Close();
 		}
 
@@ -3598,7 +3601,7 @@ namespace OpenDental
 							return;
 						}
 
-						SaveSignature(AnesthDataCur);
+						//SaveSignature(AnesthDataCur);
 						if (allowTopaz)
 						{
 							sigBoxTopaz.Dispose();
@@ -3685,6 +3688,7 @@ namespace OpenDental
 
 		private void richTextNotes_TextChanged(object sender, EventArgs e)
 		{
+			SigChanged = false;
 			//CheckForCompleteNote();
 			if (!IsStartingUp//so this happens only if user changes the note
 				&& !SigChanged)//and the original signature is still showing.
