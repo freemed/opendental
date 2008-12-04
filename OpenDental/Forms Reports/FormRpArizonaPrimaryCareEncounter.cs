@@ -87,9 +87,9 @@ namespace OpenDental {
 						"p.State,"+//state
 						"p.Zip,"+//zipcode
 						"(SELECT CASE pp.Relationship WHEN 0 THEN 1 ELSE 0 END FROM patplan pp,insplan i,carrier c WHERE "+//Relationship to subscriber
-							"pp.PatNum=p.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah') InsRelat,"+
+							"pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum AND LOWER(TRIM(c.CarrierName))='noah' LIMIT 1) InsRelat,"+
 						"(CASE p.Position WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END) MaritalStatus,"+//Marital status
-						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADD_DATE(p.BirthDate,18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
+						"(CASE WHEN p.EmployerNum=0 THEN (CASE WHEN (ADDDATE(p.BirthDate,INTERVAL 18 YEAR)>CURDATE()) THEN 3 ELSE 2 END) ELSE 1 END) EmploymentStatus,"+
 						"(CASE p.StudentStatus WHEN 'f' THEN 1 WHEN 'p' THEN 2 ELSE 3 END) StudentStatus,"+//student status
 						"'ADHS PCP' InsurancePlanName,"+//insurance plan name
 						"'' ReferringPhysicianName,"+//Name of referring physician
@@ -98,7 +98,7 @@ namespace OpenDental {
 						"'' DiagnosisCode2,"+//Diagnosis code 2
 						"'' DiagnosisCode3,"+//Diagnosis code 3
 						"'' DiagnosisCode4,"+//Diagnosis code 4
-						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+") DateOfEncounter,"+//Date of encounter
+						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" LIMIT 1) DateOfEncounter,"+//Date of encounter
 						"(SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
 							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
 						"'' Procedure1Modifier1,"+//Procedure modifier 1
@@ -133,13 +133,13 @@ namespace OpenDental {
 						"(SELECT SUM(pl.ProcFee) FROM procedurelog pl WHERE pl.AptNum="+aptNum+") TotalCharges,"+//Total charges
 						"(SELECT SUM(a.AdjAmt) FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 							payDefNum+") AmountPaid,"+//Amount paid
-						"0,"+//Balance due
+						"0 BalanceDue,"+//Balance due
 						"TRIM((SELECT cl.Description FROM appointment ap,clinic cl WHERE ap.AptNum="+aptNum+" AND "+
 							"ap.ClinicNum=cl.ClinicNum LIMIT 1)) ClinicDescription,"+
 						"(SELECT pr.StateLicense FROM provider pr,appointment ap WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianID,"+
-						"(SELECT CONCAT(CONCAT(pr.FirstName,' '),pr.MiddleI) FROM provider pr,appointment ap "+
+						"(SELECT CONCAT(CONCAT(pr.FName,' '),pr.MI) FROM provider pr,appointment ap "+
 							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianFAndMNames,"+//Physician's first name and middle initial
-						"(SELECT pr.LastName FROM provider pr,appointment ap "+
+						"(SELECT pr.LName FROM provider pr,appointment ap "+
 							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum LIMIT 1) PhysicianLName "+//Physician's last name
 						"FROM patient p WHERE "+
 						"p.PatNum="+patNum;
@@ -201,7 +201,7 @@ namespace OpenDental {
 					//Patient's relationship to insured.
 					string insuranceRelationship=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["InsRelat"].ToString()));
 					if(insuranceRelationship!="1"){//Not self?
-						rowWarnings+="WARNING: The patient insurance relationship is not 'self' for the patient with a patnum of "+patNum;
+						rowWarnings+="WARNING: The patient insurance relationship is not 'self' for the patient with a patnum of "+patNum+Environment.NewLine;
 					}
 					outputRow+=insuranceRelationship;
 					//Patient's marital status
@@ -328,7 +328,7 @@ namespace OpenDental {
 					if(physicianLastName.Length>20){
 						string newPhysicianLastName=physicianLastName.Substring(0,20);
 						rowWarnings+="WARNING: The physician last name of the provider associated to the patient with a patnum of '"+patNum+"' "+
-							"was truncated from '"+physicianLastName+"' to '"+newPhysicianLastName+"'.";
+							"was truncated from '"+physicianLastName+"' to '"+newPhysicianLastName+"'."+Environment.NewLine;
 						physicianLastName=newPhysicianLastName;
 					}
 					outputRow+=physicianLastName.PadRight(20,' ');
