@@ -3182,10 +3182,11 @@ namespace OpenDental{
 		}
 
 		private void OnAnesthesia_Click(){
-			AnestheticData AnestheticDataCur = new AnestheticData();
-			
-			FormAnesthesia FormA = new FormAnesthesia(PatCur, AnestheticDataCur);
-			FormA.ShowDialog();
+
+			AnestheticData AnestheticDataCur;
+			AnestheticDataCur = new AnestheticData();
+			FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur, AnestheticDataCur);
+			FormAR.ShowDialog();
 		}
 
 		private void FillPtInfo(){

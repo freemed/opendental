@@ -59,7 +59,6 @@ namespace OpenDental
 		private TextBox textEscortRel;
 		private Label labelEscortRel;
 		private GroupBox groupBoxHgtWgt;
-		private OpenDental.UI.Button butPrint;
 		private GroupBox groupBoxDeliveryMethod;
 		private RadioButton radRteETT;
 		private RadioButton radRteNasCan;
@@ -183,6 +182,26 @@ namespace OpenDental
 		private OpenDental.UI.Button butSignTopaz;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butClearSig;
+		private MenuStrip menuStrip1;
+		private ToolStripMenuItem filesToolStripMenuItem;
+		private ToolStripMenuItem saveToolStripMenuItem;
+		private ToolStripMenuItem saveCloseToolStripMenuItem;
+		private ToolStripMenuItem exitToolStripMenuItem;
+		private ToolStripMenuItem reportsToolStripMenuItem;
+		private ToolStripMenuItem checkInventoryLevelsToolStripMenuItem;
+		private ToolStripMenuItem suppliersToolStripMenuItem;
+		private ToolStripMenuItem fileToolStripMenuItem;
+		private ToolStripMenuItem saveToolStripMenuItem2;
+		private ToolStripMenuItem saveAndCloseToolStripMenuItem1;
+		private ToolStripMenuItem printToolStripMenuItem1;
+		private ToolStripMenuItem exitToolStripMenuItem2;
+		private ToolStripMenuItem addEditSuppliersToolStripMenuItem1;
+		private ToolStripMenuItem checkInventoryToolStripMenuItem1;
+		private ToolStripSeparator toolStripSeparator1;
+		private ToolStripSeparator toolStripSeparator2;
+		private ToolStripMenuItem selectPatientToolStripMenuItem;
+		private ToolStripSeparator toolStripSeparator3;
+
 		string streamType;
 		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
 		private static extern bool BitBlt(
@@ -311,7 +330,6 @@ namespace OpenDental
 			this.labelPatWgt = new System.Windows.Forms.Label();
 			this.labelPatHgt = new System.Windows.Forms.Label();
 			this.textPatWgt = new System.Windows.Forms.TextBox();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
 			this.labelEscortCellNum = new System.Windows.Forms.Label();
 			this.textEscortCellNum = new System.Windows.Forms.TextBox();
@@ -370,12 +388,31 @@ namespace OpenDental
 			this.butAddAnesthetic = new OpenDental.UI.Button();
 			this.butDelAnesthetic = new OpenDental.UI.Button();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveAndCloseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.printToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.exitToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addEditSuppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.checkInventoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveCloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.checkInventoryLevelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.suppliersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butClearSig = new OpenDental.UI.Button();
+			this.selectPatientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxMonitors.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
@@ -389,6 +426,7 @@ namespace OpenDental
 			this.groupBoxTimes.SuspendLayout();
 			this.groupBoxDoseCalc.SuspendLayout();
 			this.groupBoxAnesthMeds.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelVSM
@@ -413,7 +451,7 @@ namespace OpenDental
 			// 
 			this.richTextNotes.Location = new System.Drawing.Point(23, 19);
 			this.richTextNotes.Name = "richTextNotes";
-			this.richTextNotes.Size = new System.Drawing.Size(180, 80);
+			this.richTextNotes.Size = new System.Drawing.Size(180, 136);
 			this.richTextNotes.TabIndex = 67;
 			this.richTextNotes.Text = "";
 			this.richTextNotes.TextChanged += new System.EventHandler(this.richTextNotes_TextChanged);
@@ -473,7 +511,7 @@ namespace OpenDental
 			this.groupBoxSidebarRt.Controls.Add(this.comboN2OLMin);
 			this.groupBoxSidebarRt.Controls.Add(this.comboASA);
 			this.groupBoxSidebarRt.Controls.Add(this.labelASA);
-			this.groupBoxSidebarRt.Location = new System.Drawing.Point(612, 5);
+			this.groupBoxSidebarRt.Location = new System.Drawing.Point(612, 35);
 			this.groupBoxSidebarRt.Name = "groupBoxSidebarRt";
 			this.groupBoxSidebarRt.Size = new System.Drawing.Size(260, 554);
 			this.groupBoxSidebarRt.TabIndex = 136;
@@ -1016,9 +1054,8 @@ namespace OpenDental
 			this.groupBoxNotes.Controls.Add(this.labelPatHgt);
 			this.groupBoxNotes.Controls.Add(this.textPatWgt);
 			this.groupBoxNotes.Controls.Add(this.richTextNotes);
-			this.groupBoxNotes.Controls.Add(this.butPrint);
 			this.groupBoxNotes.Controls.Add(this.groupBoxHgtWgt);
-			this.groupBoxNotes.Location = new System.Drawing.Point(13, 564);
+			this.groupBoxNotes.Location = new System.Drawing.Point(13, 594);
 			this.groupBoxNotes.Name = "groupBoxNotes";
 			this.groupBoxNotes.Size = new System.Drawing.Size(570, 168);
 			this.groupBoxNotes.TabIndex = 66;
@@ -1132,7 +1169,7 @@ namespace OpenDental
             "9 PM",
             "10 PM",
             "11 PM"});
-			this.comboNPOTime.Location = new System.Drawing.Point(459, 36);
+			this.comboNPOTime.Location = new System.Drawing.Point(458, 36);
 			this.comboNPOTime.Name = "comboNPOTime";
 			this.comboNPOTime.Size = new System.Drawing.Size(66, 21);
 			this.comboNPOTime.TabIndex = 82;
@@ -1172,23 +1209,6 @@ namespace OpenDental
 			this.textPatWgt.Size = new System.Drawing.Size(60, 20);
 			this.textPatWgt.TabIndex = 73;
 			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(72, 123);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88, 26);
-			this.butPrint.TabIndex = 102;
-			this.butPrint.Text = "Print";
-			this.butPrint.UseVisualStyleBackColor = true;
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
 			// groupBoxHgtWgt
 			// 
 			this.groupBoxHgtWgt.Controls.Add(this.labelEscortCellNum);
@@ -1199,7 +1219,7 @@ namespace OpenDental
 			this.groupBoxHgtWgt.Controls.Add(this.textEscortRel);
 			this.groupBoxHgtWgt.Location = new System.Drawing.Point(215, 64);
 			this.groupBoxHgtWgt.Name = "groupBoxHgtWgt";
-			this.groupBoxHgtWgt.Size = new System.Drawing.Size(276, 91);
+			this.groupBoxHgtWgt.Size = new System.Drawing.Size(310, 91);
 			this.groupBoxHgtWgt.TabIndex = 76;
 			this.groupBoxHgtWgt.TabStop = false;
 			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
@@ -1228,7 +1248,7 @@ namespace OpenDental
 			this.groupBoxVS.Controls.Add(this.textVSMName);
 			this.groupBoxVS.Controls.Add(this.labelVSM);
 			this.groupBoxVS.Controls.Add(this.labelVSMSerNum);
-			this.groupBoxVS.Location = new System.Drawing.Point(12, 352);
+			this.groupBoxVS.Location = new System.Drawing.Point(12, 382);
 			this.groupBoxVS.Name = "groupBoxVS";
 			this.groupBoxVS.Size = new System.Drawing.Size(592, 207);
 			this.groupBoxVS.TabIndex = 139;
@@ -1844,7 +1864,7 @@ namespace OpenDental
 			this.groupBoxAnesthMeds.Controls.Add(this.labelIVAnesthetics);
 			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxTimes);
 			this.groupBoxAnesthMeds.Controls.Add(this.groupBoxDoseCalc);
-			this.groupBoxAnesthMeds.Location = new System.Drawing.Point(12, 6);
+			this.groupBoxAnesthMeds.Location = new System.Drawing.Point(12, 36);
 			this.groupBoxAnesthMeds.Name = "groupBoxAnesthMeds";
 			this.groupBoxAnesthMeds.Size = new System.Drawing.Size(592, 342);
 			this.groupBoxAnesthMeds.TabIndex = 1;
@@ -1901,12 +1921,129 @@ namespace OpenDental
 			// 
 			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
 			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(631, 600);
+			this.labelInvalidSig.Location = new System.Drawing.Point(631, 630);
 			this.labelInvalidSig.Name = "labelInvalidSig";
 			this.labelInvalidSig.Size = new System.Drawing.Size(133, 39);
 			this.labelInvalidSig.TabIndex = 144;
 			this.labelInvalidSig.Text = "Invalid Signature - Notes have changed since it was signed.";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filesToolStripMenuItem,
+            this.reportsToolStripMenuItem,
+            this.fileToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(884, 24);
+			this.menuStrip1.TabIndex = 151;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// filesToolStripMenuItem
+			// 
+			this.filesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectPatientToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.saveToolStripMenuItem2,
+            this.saveAndCloseToolStripMenuItem1,
+            this.toolStripSeparator1,
+            this.printToolStripMenuItem1,
+            this.toolStripSeparator2,
+            this.exitToolStripMenuItem2});
+			this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
+			this.filesToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+			this.filesToolStripMenuItem.Text = "File";
+			// 
+			// saveToolStripMenuItem2
+			// 
+			this.saveToolStripMenuItem2.Name = "saveToolStripMenuItem2";
+			this.saveToolStripMenuItem2.Size = new System.Drawing.Size(159, 22);
+			this.saveToolStripMenuItem2.Text = "Save";
+			// 
+			// saveAndCloseToolStripMenuItem1
+			// 
+			this.saveAndCloseToolStripMenuItem1.Name = "saveAndCloseToolStripMenuItem1";
+			this.saveAndCloseToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+			this.saveAndCloseToolStripMenuItem1.Text = "Save and Close";
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
+			// 
+			// printToolStripMenuItem1
+			// 
+			this.printToolStripMenuItem1.Name = "printToolStripMenuItem1";
+			this.printToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+			this.printToolStripMenuItem1.Text = "Print";
+			this.printToolStripMenuItem1.Click += new System.EventHandler(this.printToolStripMenuItem1_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+			// 
+			// exitToolStripMenuItem2
+			// 
+			this.exitToolStripMenuItem2.Name = "exitToolStripMenuItem2";
+			this.exitToolStripMenuItem2.Size = new System.Drawing.Size(159, 22);
+			this.exitToolStripMenuItem2.Text = "Exit";
+			this.exitToolStripMenuItem2.Click += new System.EventHandler(this.exitToolStripMenuItem2_Click);
+			// 
+			// reportsToolStripMenuItem
+			// 
+			this.reportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addEditSuppliersToolStripMenuItem1,
+            this.checkInventoryToolStripMenuItem1});
+			this.reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
+			this.reportsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+			this.reportsToolStripMenuItem.Text = "Inventory";
+			// 
+			// addEditSuppliersToolStripMenuItem1
+			// 
+			this.addEditSuppliersToolStripMenuItem1.Name = "addEditSuppliersToolStripMenuItem1";
+			this.addEditSuppliersToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
+			this.addEditSuppliersToolStripMenuItem1.Text = "Add/Edit Suppliers";
+			this.addEditSuppliersToolStripMenuItem1.Click += new System.EventHandler(this.addEditSuppliersToolStripMenuItem_Click);
+			// 
+			// checkInventoryToolStripMenuItem1
+			// 
+			this.checkInventoryToolStripMenuItem1.Name = "checkInventoryToolStripMenuItem1";
+			this.checkInventoryToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
+			this.checkInventoryToolStripMenuItem1.Text = "Check Inventory";
+			this.checkInventoryToolStripMenuItem1.Click += new System.EventHandler(this.checkInventoryToolStripMenuItem_Click);
+			// 
+			// fileToolStripMenuItem
+			// 
+			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+			this.fileToolStripMenuItem.Text = "Reports";
+			// 
+			// saveToolStripMenuItem
+			// 
+			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+			// 
+			// saveCloseToolStripMenuItem
+			// 
+			this.saveCloseToolStripMenuItem.Name = "saveCloseToolStripMenuItem";
+			this.saveCloseToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+			// 
+			// exitToolStripMenuItem
+			// 
+			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+			// 
+			// checkInventoryLevelsToolStripMenuItem
+			// 
+			this.checkInventoryLevelsToolStripMenuItem.Name = "checkInventoryLevelsToolStripMenuItem";
+			this.checkInventoryLevelsToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+			// 
+			// suppliersToolStripMenuItem
+			// 
+			this.suppliersToolStripMenuItem.Name = "suppliersToolStripMenuItem";
+			this.suppliersToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
 			// 
 			// butOK
 			// 
@@ -1916,7 +2053,7 @@ namespace OpenDental
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOK.Location = new System.Drawing.Point(698, 688);
+			this.butOK.Location = new System.Drawing.Point(698, 718);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 150;
@@ -1933,7 +2070,7 @@ namespace OpenDental
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(607, 688);
+			this.butCancel.Location = new System.Drawing.Point(607, 718);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(71, 26);
 			this.butCancel.TabIndex = 148;
@@ -1943,7 +2080,7 @@ namespace OpenDental
 			// 
 			// sigBox
 			// 
-			this.sigBox.Location = new System.Drawing.Point(612, 577);
+			this.sigBox.Location = new System.Drawing.Point(612, 607);
 			this.sigBox.Name = "sigBox";
 			this.sigBox.Size = new System.Drawing.Size(168, 85);
 			this.sigBox.TabIndex = 146;
@@ -1955,7 +2092,7 @@ namespace OpenDental
 			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSignTopaz.CornerRadius = 4F;
-			this.butSignTopaz.Location = new System.Drawing.Point(792, 587);
+			this.butSignTopaz.Location = new System.Drawing.Point(792, 617);
 			this.butSignTopaz.Name = "butSignTopaz";
 			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
 			this.butSignTopaz.TabIndex = 147;
@@ -1971,7 +2108,7 @@ namespace OpenDental
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(779, 688);
+			this.butClose.Location = new System.Drawing.Point(779, 718);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(96, 26);
 			this.butClose.TabIndex = 149;
@@ -1986,17 +2123,29 @@ namespace OpenDental
 			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(792, 621);
+			this.butClearSig.Location = new System.Drawing.Point(792, 651);
 			this.butClearSig.Name = "butClearSig";
 			this.butClearSig.Size = new System.Drawing.Size(75, 26);
 			this.butClearSig.TabIndex = 145;
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
+			// selectPatientToolStripMenuItem
+			// 
+			this.selectPatientToolStripMenuItem.Name = "selectPatientToolStripMenuItem";
+			this.selectPatientToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.selectPatientToolStripMenuItem.Text = "Select Patient";
+			this.selectPatientToolStripMenuItem.Click += new System.EventHandler(this.selectPatientToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(156, 6);
+			// 
 			// FormAnestheticRecord
 			// 
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(884, 760);
+			this.ClientSize = new System.Drawing.Size(884, 782);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
 			this.Controls.Add(this.butCancel);
@@ -2008,7 +2157,9 @@ namespace OpenDental
 			this.Controls.Add(this.groupBoxNotes);
 			this.Controls.Add(this.groupBoxSidebarRt);
 			this.Controls.Add(this.groupBoxAnesthMeds);
+			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "FormAnestheticRecord";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Anesthetic Record";
@@ -2039,7 +2190,10 @@ namespace OpenDental
 			this.groupBoxDoseCalc.PerformLayout();
 			this.groupBoxAnesthMeds.ResumeLayout(false);
 			this.groupBoxAnesthMeds.PerformLayout();
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		public AnesthMedsGivens medCur;
@@ -2860,22 +3014,6 @@ namespace OpenDental
         //Print Button Functionality.
         private void butPrint_Click(object sender, EventArgs e){
 			
-			Graphics g1 = this.CreateGraphics(); 
-			Image MyImage = new Bitmap(882, 732, g1);
-			Graphics g2 = Graphics.FromImage(MyImage);
-			IntPtr dc1 = g1.GetHdc();
-			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 882,732, dc1, 0, 0, 8388608);
-			g1.ReleaseHdc(dc1);
-			g2.ReleaseHdc(dc2);
-			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
-			StartPrint(fileStream, "Image");
-			fileStream.Close();
-			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
-			{
-				System.IO.File.Delete(@"c:\PrintPage.jpg");
-			}
         }
 
 		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
@@ -3670,23 +3808,46 @@ namespace OpenDental
 			}
 		}
 
-		private void butOK_Click_1(object sender, EventArgs e)
-		{
 
+		private void addEditSuppliersToolStripMenuItem_Click(object sender, EventArgs e){
+			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
+			FormMS.ShowDialog();
 		}
 
-		private void butCancel_Click_1(object sender, EventArgs e)
-		{
+		private void checkInventoryToolStripMenuItem_Click(object sender, EventArgs e){
 
+			FormAnestheticMedsInventory FormMI = new FormAnestheticMedsInventory();
+			FormMI.ShowDialog();
 		}
 
-		private void butSignTopaz_Click_1(object sender, EventArgs e)
+		private void exitToolStripMenuItem2_Click(object sender, EventArgs e)
 		{
-
+			Close();
 		}
 
-		private void butClearSig_Click_1(object sender, EventArgs e)
+		private void printToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
+			Graphics g1 = this.CreateGraphics();
+			Image MyImage = new Bitmap(882, 732, g1);
+			Graphics g2 = Graphics.FromImage(MyImage);
+			IntPtr dc1 = g1.GetHdc();
+			IntPtr dc2 = g2.GetHdc();
+			BitBlt(dc2, 0, 0, 882, 732, dc1, 0, 0, 8388608);
+			g1.ReleaseHdc(dc1);
+			g2.ReleaseHdc(dc2);
+			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
+			StartPrint(fileStream, "Image");
+			fileStream.Close();
+			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
+			{
+				System.IO.File.Delete(@"c:\PrintPage.jpg");
+			}
+		}
+
+		private void selectPatientToolStripMenuItem_Click(object sender, EventArgs e){
+			FormPatientSelect FormPS = new FormPatientSelect();
+			FormPS.ShowDialog();
 
 		}
 
