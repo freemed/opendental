@@ -380,7 +380,20 @@ namespace OpenDental{
 		}
 
 		private bool CreateDataFile(string fileName,LetterMerge letter){
-			string command="SELECT ";
+			string command;
+			//We need a very small table that tells us which tp is the most recent.
+			//command="DROP TABLE IF EXISTS temptp;";
+			//General.NonQ(command);
+			//command=@"CREATE TABLE temptp(
+			//	DateTP date NOT NULL default '0001-01-01')";
+			//General.NonQ(command);
+			//command+=@"CREATE TABLE temptp
+			//	SELECT MAX(treatplan.DateTP) DateTP
+			//	FROM treatplan
+			//	WHERE PatNum="+POut.PInt(PatCur.PatNum)+";";
+			//General.NonQ(command);
+			command="SET @maxTpDate=(SELECT MAX(treatplan.DateTP) FROM treatplan WHERE PatNum="+POut.PInt(PatCur.PatNum)+");";
+			command+="SELECT ";
 			for(int i=0;i<letter.Fields.Count;i++){
 				if(i>0){
 					command+=",";
@@ -389,20 +402,20 @@ namespace OpenDental{
 					command+="plannedappt.AptNum NextAptNum";
 				}
 				//other:
-				else if(letter.Fields[i]=="ResponsPartyNameFL"){
-					command+="CONCAT(patResp.FName,' ',patResp.LName) ResponsPartyNameFL";
+				else if(letter.Fields[i]=="TPResponsPartyNameFL"){
+					command+="CONCAT(patResp.FName,' ',patResp.LName) TPResponsPartyNameFL";
 				}
-				else if(letter.Fields[i]=="ResponsPartyAddress"){
-					command+="patResp.Address ResponsPartyAddress";
+				else if(letter.Fields[i]=="TPResponsPartyAddress"){
+					command+="patResp.Address TPResponsPartyAddress";
 				}
-				else if(letter.Fields[i]=="ResponsPartyCityStZip"){
-					command+="CONCAT(patResp.City,', ',patResp.State,' ',patResp.Zip) ResponsPartyCityStZip";
+				else if(letter.Fields[i]=="TPResponsPartyCityStZip"){
+					command+="CONCAT(patResp.City,', ',patResp.State,' ',patResp.Zip) TPResponsPartyCityStZip";
 				}
 				else if(letter.Fields[i]=="SiteDescription"){
 					command+="site.Description SiteDescription";
 				}
 				else if(letter.Fields[i]=="DateOfLastSavedTP"){
-					command+="DATE(MAX(treatplan.DateTP)) DateOfLastSavedTP";
+					command+="DATE(treatplan.DateTP) DateOfLastSavedTP";
 				}
 				else if(letter.Fields[i]=="DateRecallDue"){
 					command+="recall.DateDue  DateRecallDue";
@@ -436,9 +449,9 @@ namespace OpenDental{
 				+"LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1 "
 				+"LEFT JOIN referral ON refattach.ReferralNum=referral.ReferralNum "
 				+"LEFT JOIN plannedappt ON plannedappt.PatNum=patient.PatNum AND plannedappt.ItemOrder=1 "
-				+"LEFT JOIN patient patResp ON patient.ResponsParty=patResp.PatNum "
 				+"LEFT JOIN site ON patient.SiteNum=site.SiteNum "
-				+"LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum "
+				+"LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum AND DateTP=@maxTpDate "
+				+"LEFT JOIN patient patResp ON treatplan.ResponsParty=patResp.PatNum "
 				+"LEFT JOIN recall ON recall.PatNum=patient.PatNum "
 					+"AND (recall.RecallTypeNum="+POut.PInt(PrefC.GetInt("RecallTypeSpecialProphy"))
 					+" OR recall.RecallTypeNum="+POut.PInt(PrefC.GetInt("RecallTypeSpecialPerio"))+") "

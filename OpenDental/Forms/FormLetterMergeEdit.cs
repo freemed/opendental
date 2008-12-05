@@ -504,9 +504,9 @@ namespace OpenDental{
     }
 
 		private void FillListOther(){
-      listOther.Items.Add("ResponsPartyNameFL");
-      listOther.Items.Add("ResponsPartyAddress");
-      listOther.Items.Add("ResponsPartyCityStZip");
+      listOther.Items.Add("TPResponsPartyNameFL");
+      listOther.Items.Add("TPResponsPartyAddress");
+      listOther.Items.Add("TPResponsPartyCityStZip");
 			listOther.Items.Add("SiteDescription");
 			listOther.Items.Add("DateOfLastSavedTP");
 			listOther.Items.Add("DateRecallDue");
