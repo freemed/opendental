@@ -58,11 +58,7 @@ namespace OpenDental
 		private TextBox textEscortName;
 		private TextBox textEscortRel;
 		private Label labelEscortRel;
-        private GroupBox groupBoxHgtWgt;
-		private GroupBox groupBoxSig;
-		private OpenDental.UI.SignatureBox sigBox;
-		private OpenDental.UI.Button butSignTopaz;
-		private OpenDental.UI.Button butClearSig;
+		private GroupBox groupBoxHgtWgt;
 		private OpenDental.UI.Button butPrint;
 		private GroupBox groupBoxDeliveryMethod;
 		private RadioButton radRteETT;
@@ -72,14 +68,11 @@ namespace OpenDental
 		private GroupBox groupBoxMedRoute;
 		private RadioButton radMedRouteIVButtFly;
 		private RadioButton radMedRouteIVCath;
-        private PrintDialog printDialog1;
-		private OpenDental.UI.Button butClose;
-        private OpenDental.UI.Button butCancel;
+		private PrintDialog printDialog1;
 		private PrintDialog printDialog;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private System.Windows.Forms.PrintDialog printDialog2;
-        private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
-		private OpenDental.UI.Button butOK;
+		private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
 		private Label labelEMod;
 		private ComboBox comboASA_EModifier;
 		private Label labelEscortCellNum;
@@ -157,7 +150,6 @@ namespace OpenDental
 		private RadioButton radIVSideR;
 		private CheckBox checkMonEKG;
 		private CheckBox checkMonTemp;
-		private Label labelInvalidSig;
 		private Userod userNum;
 		private IContainer components;
 		private bool SigChanged;
@@ -184,6 +176,13 @@ namespace OpenDental
 		private int patNum;
 		private Label labelInstrux;
 		private Label labelAnesthScore;
+		private OpenDental.UI.Button butOK;
+		private Label labelInvalidSig;
+		private OpenDental.UI.Button butCancel;
+		private SignatureBox sigBox;
+		private OpenDental.UI.Button butSignTopaz;
+		private OpenDental.UI.Button butClose;
+		private OpenDental.UI.Button butClearSig;
 		string streamType;
 		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
 		private static extern bool BitBlt(
@@ -312,15 +311,7 @@ namespace OpenDental
 			this.labelPatWgt = new System.Windows.Forms.Label();
 			this.labelPatHgt = new System.Windows.Forms.Label();
 			this.textPatWgt = new System.Windows.Forms.TextBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.groupBoxSig = new System.Windows.Forms.GroupBox();
-			this.labelInvalidSig = new System.Windows.Forms.Label();
-			this.sigBox = new OpenDental.UI.SignatureBox();
-			this.butSignTopaz = new OpenDental.UI.Button();
-			this.butClearSig = new OpenDental.UI.Button();
 			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
 			this.labelEscortCellNum = new System.Windows.Forms.Label();
 			this.textEscortCellNum = new System.Windows.Forms.TextBox();
@@ -378,6 +369,13 @@ namespace OpenDental
 			this.gridAnesthMeds = new OpenDental.UI.ODGrid();
 			this.butAddAnesthetic = new OpenDental.UI.Button();
 			this.butDelAnesthetic = new OpenDental.UI.Button();
+			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.sigBox = new OpenDental.UI.SignatureBox();
+			this.butSignTopaz = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butClearSig = new OpenDental.UI.Button();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxMonitors.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
@@ -386,7 +384,6 @@ namespace OpenDental
 			this.groupBoxNotes.SuspendLayout();
 			this.groupBoxWgt.SuspendLayout();
 			this.groupBoxHgt.SuspendLayout();
-			this.groupBoxSig.SuspendLayout();
 			this.groupBoxHgtWgt.SuspendLayout();
 			this.groupBoxVS.SuspendLayout();
 			this.groupBoxTimes.SuspendLayout();
@@ -1018,16 +1015,12 @@ namespace OpenDental
 			this.groupBoxNotes.Controls.Add(this.labelPatWgt);
 			this.groupBoxNotes.Controls.Add(this.labelPatHgt);
 			this.groupBoxNotes.Controls.Add(this.textPatWgt);
-			this.groupBoxNotes.Controls.Add(this.butOK);
-			this.groupBoxNotes.Controls.Add(this.butClose);
-			this.groupBoxNotes.Controls.Add(this.butCancel);
 			this.groupBoxNotes.Controls.Add(this.richTextNotes);
 			this.groupBoxNotes.Controls.Add(this.butPrint);
-			this.groupBoxNotes.Controls.Add(this.groupBoxSig);
 			this.groupBoxNotes.Controls.Add(this.groupBoxHgtWgt);
 			this.groupBoxNotes.Location = new System.Drawing.Point(14, 565);
 			this.groupBoxNotes.Name = "groupBoxNotes";
-			this.groupBoxNotes.Size = new System.Drawing.Size(858, 160);
+			this.groupBoxNotes.Size = new System.Drawing.Size(592, 160);
 			this.groupBoxNotes.TabIndex = 66;
 			this.groupBoxNotes.TabStop = false;
 			this.groupBoxNotes.Text = "Notes (record additional meds/routes/times here)";
@@ -1179,55 +1172,6 @@ namespace OpenDental
 			this.textPatWgt.Size = new System.Drawing.Size(60, 20);
 			this.textPatWgt.TabIndex = 73;
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOK.Location = new System.Drawing.Point(676, 115);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 143;
-			this.butOK.Text = "&Save";
-			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(757, 115);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(96, 26);
-			this.butClose.TabIndex = 142;
-			this.butClose.Text = "Save and &Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(591, 115);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(66, 26);
-			this.butCancel.TabIndex = 141;
-			this.butCancel.Text = "Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
 			// butPrint
 			// 
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1244,67 +1188,6 @@ namespace OpenDental
 			this.butPrint.Text = "Print";
 			this.butPrint.UseVisualStyleBackColor = true;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
-			// groupBoxSig
-			// 
-			this.groupBoxSig.Controls.Add(this.labelInvalidSig);
-			this.groupBoxSig.Controls.Add(this.sigBox);
-			this.groupBoxSig.Controls.Add(this.butSignTopaz);
-			this.groupBoxSig.Controls.Add(this.butClearSig);
-			this.groupBoxSig.Location = new System.Drawing.Point(588, 0);
-			this.groupBoxSig.Name = "groupBoxSig";
-			this.groupBoxSig.Size = new System.Drawing.Size(270, 110);
-			this.groupBoxSig.TabIndex = 139;
-			this.groupBoxSig.TabStop = false;
-			this.groupBoxSig.Text = "Signature/Initials";
-			// 
-			// labelInvalidSig
-			// 
-			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
-			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(23, 27);
-			this.labelInvalidSig.Name = "labelInvalidSig";
-			this.labelInvalidSig.Size = new System.Drawing.Size(133, 59);
-			this.labelInvalidSig.TabIndex = 83;
-			this.labelInvalidSig.Text = "Invalid Signature - Notes have changed since it was signed.";
-			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(12, 19);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(158, 74);
-			this.sigBox.TabIndex = 135;
-			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
-			// 
-			// butSignTopaz
-			// 
-			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSignTopaz.Autosize = true;
-			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSignTopaz.CornerRadius = 4F;
-			this.butSignTopaz.Location = new System.Drawing.Point(182, 26);
-			this.butSignTopaz.Name = "butSignTopaz";
-			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
-			this.butSignTopaz.TabIndex = 136;
-			this.butSignTopaz.Text = "Sign Topaz";
-			this.butSignTopaz.UseVisualStyleBackColor = true;
-			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
-			// 
-			// butClearSig
-			// 
-			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClearSig.Autosize = true;
-			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(182, 60);
-			this.butClearSig.Name = "butClearSig";
-			this.butClearSig.Size = new System.Drawing.Size(75, 26);
-			this.butClearSig.TabIndex = 134;
-			this.butClearSig.Text = "Clear";
-			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
 			// groupBoxHgtWgt
 			// 
@@ -2014,10 +1897,113 @@ namespace OpenDental
 			this.butDelAnesthetic.UseVisualStyleBackColor = true;
 			this.butDelAnesthetic.Click += new System.EventHandler(this.butDelAnesthetic_Click);
 			// 
+			// labelInvalidSig
+			// 
+			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
+			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelInvalidSig.Location = new System.Drawing.Point(639, 606);
+			this.labelInvalidSig.Name = "labelInvalidSig";
+			this.labelInvalidSig.Size = new System.Drawing.Size(133, 39);
+			this.labelInvalidSig.TabIndex = 144;
+			this.labelInvalidSig.Text = "Invalid Signature - Notes have changed since it was signed.";
+			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butOK.Location = new System.Drawing.Point(695, 695);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 26);
+			this.butOK.TabIndex = 150;
+			this.butOK.Text = "&Save";
+			this.butOK.UseVisualStyleBackColor = true;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCancel.Location = new System.Drawing.Point(615, 695);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(66, 26);
+			this.butCancel.TabIndex = 148;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(627, 587);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(158, 73);
+			this.sigBox.TabIndex = 146;
+			// 
+			// butSignTopaz
+			// 
+			this.butSignTopaz.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSignTopaz.Autosize = true;
+			this.butSignTopaz.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSignTopaz.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSignTopaz.CornerRadius = 4F;
+			this.butSignTopaz.Location = new System.Drawing.Point(797, 595);
+			this.butSignTopaz.Name = "butSignTopaz";
+			this.butSignTopaz.Size = new System.Drawing.Size(75, 26);
+			this.butSignTopaz.TabIndex = 147;
+			this.butSignTopaz.Text = "Sign Topaz";
+			this.butSignTopaz.UseVisualStyleBackColor = true;
+			this.butSignTopaz.Click += new System.EventHandler(this.butSignTopaz_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClose.Location = new System.Drawing.Point(776, 695);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(96, 26);
+			this.butClose.TabIndex = 149;
+			this.butClose.Text = "Save and &Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butClearSig
+			// 
+			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClearSig.Autosize = true;
+			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearSig.CornerRadius = 4F;
+			this.butClearSig.Location = new System.Drawing.Point(797, 629);
+			this.butClearSig.Name = "butClearSig";
+			this.butClearSig.Size = new System.Drawing.Size(75, 26);
+			this.butClearSig.TabIndex = 145;
+			this.butClearSig.Text = "Clear";
+			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
+			// 
 			// FormAnestheticRecord
 			// 
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(884, 732);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.labelInvalidSig);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.sigBox);
+			this.Controls.Add(this.butSignTopaz);
+			this.Controls.Add(this.butClose);
+			this.Controls.Add(this.butClearSig);
 			this.Controls.Add(this.groupBoxVS);
 			this.Controls.Add(this.groupBoxNotes);
 			this.Controls.Add(this.groupBoxSidebarRt);
@@ -2043,7 +2029,6 @@ namespace OpenDental
 			this.groupBoxWgt.PerformLayout();
 			this.groupBoxHgt.ResumeLayout(false);
 			this.groupBoxHgt.PerformLayout();
-			this.groupBoxSig.ResumeLayout(false);
 			this.groupBoxHgtWgt.ResumeLayout(false);
 			this.groupBoxHgtWgt.PerformLayout();
 			this.groupBoxVS.ResumeLayout(false);
@@ -3679,5 +3664,6 @@ namespace OpenDental
 			}
 		}
 
+	
 	}
 }
