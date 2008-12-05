@@ -70,10 +70,12 @@ namespace OpenDental {
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
-				//that the patient has attented (completed) in the date range specified. If there are, then those appointments
-				//will be placed into the flat file.
-				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+
-					" AND a.AptDateTime BETWEEN "+POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
+				//that the patient has attented (completed) in the date range specified where there is at least one ADA coded procedure
+				//associated with that appointment. If there are, then those appointments will be placed into the flat file.
+				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+" AND "+
+					"a.AptDateTime BETWEEN "+POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value)+" AND "+
+					"(SELECT COUNT(*) FROM procedurelog pl,procedurecode pc WHERE pl.AptNum=a.AptNum AND pc.CodeNum=pl.CodeNum AND "+
+					"pc.ProcCode REGEXP '^D[0-9]{4}$' LIMIT 1)>0";
 				DataTable appointmentList=General.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.PInt(PIn.PInt(appointmentList.Rows[j][0].ToString()));
@@ -100,11 +102,12 @@ namespace OpenDental {
 						"'' DiagnosisCode4,"+//Diagnosis code 4
 						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" LIMIT 1) DateOfEncounter,"+//Date of encounter
 						"(SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode REGEXP '^D[0-9]{4}$' ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
 						"'' Procedure1Modifier1,"+//Procedure modifier 1
 						"'' Procedure1Modifier2,"+//Procedure modifier 2
 						"'' Procedure1DiagnosisCode,"+//Diagnosis code
-						"(SELECT pl.ProcFee FROM procedurelog pl WHERE pl.AptNum="+aptNum+" ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
+						"(SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode REGEXP '^D[0-9]{4}$' ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
 						"'' Procedure2,"+//2nd procedure cpt/hcpcs
 						"'' Procedure2Modifier1,"+//2nd procedure modifier 1
 						"'' Procedure2Modifier2,"+//2nd procedure modifier 2
@@ -180,22 +183,24 @@ namespace OpenDental {
 					outputRow+=householdCity.PadRight(15,' ');
 					//Patient's State
 					string householdState=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["State"].ToString()));
-					if(householdState.Length>2) {
-						string newHouseholdState=householdState.Substring(0,2);
-						rowWarnings+="WARNING: State abbreviation for patient with patnum of "+patNum+" was longer than 2 characters and "+
-							"was truncated in the report ouput. State abbreviation was changed from '"+
-							householdState+"' to '"+newHouseholdState+"'"+Environment.NewLine;
-						householdState=newHouseholdState;
+					if(householdState.ToUpper()!="AZ") {
+						rowErrors+="ERROR: State abbreviation for patient with patnum of "+patNum+" must be set to AZ."+Environment.NewLine;
+						householdState="AZ";
 					}
-					outputRow+=householdState.PadRight(2,' ');
+					outputRow+=householdState;
 					//Patient's zip code
 					string householdZip=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Zip"].ToString()));
 					if(householdZip.Length>5) {
 						string newHouseholdZip=householdZip.Substring(0,5);
-						rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 5 characters and "+
+						rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was longer than 5 characters in length and "+
 							"was truncated in the report ouput. The zipcode was changed from '"+
 							householdZip+"' to '"+newHouseholdZip+"'"+Environment.NewLine;
 						householdZip=newHouseholdZip;
+					}
+					if(householdZip.Length<5){
+						rowWarnings+="WARNING: The zipcode for patient with patnum of "+patNum+" was shorter than 5 characters in length "+
+							"(current zipcode is '"+householdZip+"')"+Environment.NewLine;
+						householdZip=householdZip.PadLeft(5,'0');
 					}
 					outputRow+=householdZip.PadRight(5,' ');
 					//Patient's relationship to insured.
@@ -217,73 +222,73 @@ namespace OpenDental {
 					//ID# of referring physician
 					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["ReferringPhysicianID"].ToString())).PadLeft(6,' ');
 					//Diagnosis code 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode1"].ToString())).PadRight(6,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode1"].ToString())).PadRight(6,'0');
 					//Diagnosis code 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode2"].ToString())).PadRight(6,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode2"].ToString())).PadRight(6,'0');
 					//Diagnosis code 3
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode3"].ToString())).PadRight(6,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode3"].ToString())).PadRight(6,'0');
 					//Diagnosis code 4
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode4"].ToString())).PadRight(6,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["DiagnosisCode4"].ToString())).PadRight(6,'0');
 					//Date of encounter
 					outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["DateOfEncounter"].ToString()).ToString("MMddyyyy");
 					//Procedure 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1"].ToString())).PadRight(5,'0');
 					//Procedure 1 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 1 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 1 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure1DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 1 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure1Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2"].ToString())).PadRight(5,'0');
 					//Procedure 2 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 2 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 2 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure2DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 2 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure2Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 3
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3"].ToString())).PadRight(5,'0');
 					//Procedure 3 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 3 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 3 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure3DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 3 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure3Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 4
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4"].ToString())).PadRight(5,'0');
 					//Procedure 4 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 4 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 4 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure4DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 4 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure4Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 5
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5"].ToString())).PadRight(5,'0');
 					//Procedure 5 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 5 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 5 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure5DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 5 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure5Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Procedure 6
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6"].ToString())).PadRight(5,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6"].ToString())).PadRight(5,'0');
 					//Procedure 6 modifier 1
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier1"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier1"].ToString())).PadRight(2,'0');
 					//Procedure 6 modifier 2
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier2"].ToString())).PadRight(2,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6Modifier2"].ToString())).PadRight(2,'0');
 					//Procedure 6 diagnosis code
-					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6DiagnosisCode"].ToString())).PadRight(4,' ');
+					outputRow+=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["Procedure6DiagnosisCode"].ToString())).PadRight(4,'0');
 					//Procedure 6 charges
 					outputRow+=Math.Round(PIn.PDouble(primaryCareReportRow.Rows[0]["Procedure6Charges"].ToString())).ToString().PadLeft(6,'0');
 					//Total charges
@@ -342,6 +347,14 @@ namespace OpenDental {
 			}
 			File.WriteAllText(outFile,outputText);
 			MessageBox.Show("Done.");
+		}
+
+		private void butFinished_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click_1(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 	}

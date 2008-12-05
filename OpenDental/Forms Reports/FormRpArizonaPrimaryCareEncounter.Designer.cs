@@ -156,6 +156,7 @@ namespace OpenDental{
 			this.butFinished.Size=new System.Drawing.Size(75,24);
 			this.butFinished.TabIndex=17;
 			this.butFinished.Text="&Finished";
+			this.butFinished.Click+=new System.EventHandler(this.butFinished_Click);
 			// 
 			// butCancel
 			// 
@@ -170,6 +171,7 @@ namespace OpenDental{
 			this.butCancel.Size=new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex=16;
 			this.butCancel.Text="&Cancel";
+			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click_1);
 			// 
 			// groupBox1
 			// 
