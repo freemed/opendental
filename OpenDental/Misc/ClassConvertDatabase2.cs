@@ -519,6 +519,7 @@ namespace OpenDental {
 					General.NonQ(command);
 					command = @"CREATE TABLE anesthvsdata (
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
+						PatNum int(11),
 						VSMName char(20),
 						VSMSerNum char(32),
 						BPSys smallint(3),
