@@ -491,7 +491,11 @@ namespace OpenDental{
 			parformat.Alignment=ParagraphAlignment.Center;
 			par.Format=parformat;
 			font=MigraDocHelper.CreateFont(14,true);
-			text=Lan.g(this,"STATEMENT");
+			if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
+				text=Lan.g(this,"STATEMENT / TAX INVOICE");
+			}else{//Assume English (United States) for everyone else.
+				text=Lan.g(this,"STATEMENT");
+			}
 			par.AddFormattedText(text,font);
 			text=DateTime.Today.ToShortDateString();
 			font=MigraDocHelper.CreateFont(10);
@@ -553,6 +557,11 @@ namespace OpenDental{
 					par.Format.Font=font;
 					par.AddText(PrefC.GetString("PracticeTitle"));
 					par.AddLineBreak();
+					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
+						Provider defaultProv=Providers.GetProv(PrefC.GetInt("PracticeDefaultProv"));
+						par.AddText("ABN: "+defaultProv.NationalProvID);
+						par.AddLineBreak();
+					}
 					par.AddText(PrefC.GetString("PracticeAddress"));
 					par.AddLineBreak();
 					if(PrefC.GetString("PracticeAddress2")!="") {
@@ -723,10 +732,36 @@ namespace OpenDental{
 				par.AddText(text);
 			}
 			#endregion
+			//Australian Provider Legend
+			#region Australian Provider Legend
+			int legendOffset=0;
+			if(CultureInfo.CurrentCulture.Name=="en-AU") {//English (Australia)
+				Providers.RefreshCache();
+				legendOffset=25+15*(1+ProviderC.List.Length);
+				MigraDocHelper.InsertSpacer(section,legendOffset);
+				frame=MigraDocHelper.CreateContainer(section,45,390,250,legendOffset);
+				par=frame.AddParagraph();
+				par.Format.Font=MigraDocHelper.CreateFont(8,true);
+				par.AddLineBreak();
+				par.AddText("PROVIDERS:");
+				par=frame.AddParagraph();
+				par.Format.Font=MigraDocHelper.CreateFont(8,false);
+				for(int i=0;i<ProviderC.List.Length;i++) {//All non-hidden providers are added to the legend.
+					Provider prov=ProviderC.List[i];
+					string suffix="";
+					if(prov.Suffix.Trim()!=""){
+						suffix=", "+prov.Suffix.Trim();
+					}
+					par.AddText(prov.Abbr+" - "+prov.FName+" "+prov.LName+suffix+" - "+prov.MedicaidID);
+					par.AddLineBreak();
+				}
+				par.AddLineBreak();
+			}
+			#endregion
 			//Aging-----------------------------------------------------------------------------------
 			#region Aging
 			MigraDocHelper.InsertSpacer(section,275);
-			frame = MigraDocHelper.CreateContainer(section, 55, 390, 250, 29);
+			frame=MigraDocHelper.CreateContainer(section,55,390+legendOffset,250,29);
 			if (!Stmt.HidePayment)
 			{
 				table = MigraDocHelper.DrawTable(frame, 0, 0, 29);
@@ -1005,7 +1040,7 @@ namespace OpenDental{
 			MigraDocHelper.InsertSpacer(section, 80);//spacer to put main grid in the right location
 			*/
 			#endregion coding in progress
-			frame=MigraDocHelper.CreateContainer(section,460,380,250,200);
+			frame=MigraDocHelper.CreateContainer(section,460,380+legendOffset,250,200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
@@ -1048,7 +1083,7 @@ namespace OpenDental{
 					par.AddLineBreak();
 				}
 			}
-			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
+			frame=MigraDocHelper.CreateContainer(section,730,380+legendOffset,100,200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
@@ -1240,7 +1275,15 @@ namespace OpenDental{
 					grow.Cells.Add(tableAccount.Rows[p]["patient"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
-					grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
+						if(tableAccount.Rows[p]["prov"].ToString().Trim()!=""){
+							grow.Cells.Add(tableAccount.Rows[p]["prov"].ToString()+" - "+tableAccount.Rows[p]["description"].ToString());
+						}else{//No provider on this account row item, so don't put the extra leading characters.
+							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+						}
+					}else{//Assume English (United States)
+						grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+					}
 					grow.Cells.Add(tableAccount.Rows[p]["charges"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["credits"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["balance"].ToString());
