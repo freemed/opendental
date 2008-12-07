@@ -271,15 +271,13 @@ namespace OpenDental{
 		}
 
 		private void menuItemGL_Click(object sender,EventArgs e) {
-			FormReport FormR=new FormReport();
-			FormR.SourceRdlString=Properties.Resources.ReportAccountingGenLedger;
-			FormR.ShowDialog();
+			FormRpAccountingGenLedg FormA=new FormRpAccountingGenLedg();
+			FormA.ShowDialog();
 		}
 
 		private void menuItemBalSheet_Click(object sender,EventArgs e) {
-			FormReport FormR=new FormReport();
-			FormR.SourceRdlString=Properties.Resources.ReportAccountingBalanceSheet;
-			FormR.ShowDialog();
+			FormRpAccountingBalanceSheet FormA=new FormRpAccountingBalanceSheet();
+			FormA.ShowDialog();
 		}
 		
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
