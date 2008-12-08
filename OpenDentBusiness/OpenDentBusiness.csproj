@@ -93,6 +93,7 @@
     <Compile Include="Cache\AnestheticMedsGivenC.cs" />
     <Compile Include="Cache\AnesthMedsC.cs" />
     <Compile Include="Cache\AnesthMedInvAdjC.cs" />
+    <Compile Include="Cache\AnesthVSDataC.cs" />
     <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Data Interface\AnesthMedSuppliers.cs" />
     <Compile Include="Data Interface\AnesthMedsGivens.cs" />
     <Compile Include="Data Interface\AnesthMedInvAdjs.cs" />
+    <Compile Include="Data Interface\AnesthVSDatas.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
@@ -237,6 +239,7 @@
     <Compile Include="TableTypes\AnestheticMedsGiven.cs" />
     <Compile Include="TableTypes\AnesthMedsInventoryAdj.cs" />
     <Compile Include="TableTypes\AnesthScore.cs" />
+    <Compile Include="TableTypes\AnestheticVSData.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />

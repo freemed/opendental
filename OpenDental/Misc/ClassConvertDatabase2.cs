@@ -518,7 +518,8 @@ namespace OpenDental {
 					command = "DROP TABLE IF EXISTS anesthvsdata";
 					General.NonQ(command);
 					command = @"CREATE TABLE anesthvsdata (
-						AnestheticRecordNum int(11) NOT NULL auto_increment,
+						AnesthVSDataNum int(11) NOT NULL auto_increment,
+						AnestheticRecordNum int(11) NOT NULL,
 						PatNum int(11),
 						VSMName char(20),
 						VSMSerNum char(32),

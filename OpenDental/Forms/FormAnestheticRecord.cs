@@ -27,7 +27,7 @@ namespace OpenDental
 		private AnestheticRecord AnestheticRecordCur;
 		private AnestheticData AnestheticDataCur;
 		public AnestheticData AnesthDataCur;
-        private Patient PatCur;
+        public Patient PatCur;
         public bool IsNew;
         private GroupBox groupBoxVS;
 		private Label labelVSM;
@@ -135,7 +135,7 @@ namespace OpenDental
         private Label labelPatWgt;
         private Label labelPatHgt;
         private TextBox textPatWgt;
-        private ODGrid gridVitalSigns;
+        private ODGrid gridVSData;
 		private RadioButton radMedRouteNasal;
 		private GroupBox groupBoxMonitors;
 		private CheckBox checkMonPrecordial;
@@ -159,8 +159,10 @@ namespace OpenDental
 		private List<DisplayField> fields;
 		public int anestheticRecordCur;
 		private List<AnestheticMedsGiven> listAnesthMedsGiven;
+		private List<AnestheticVSData> listAnesthVSData;
 		public string AnesthScore;
 		public int anesthScore;
+		public int CurPatNum;
 		
 		//
 		//Variables used for printing functionality..
@@ -201,6 +203,7 @@ namespace OpenDental
 		private ToolStripSeparator toolStripSeparator2;
 		private ToolStripMenuItem selectPatientToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator3;
+
 
 		string streamType;
 		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
@@ -334,7 +337,7 @@ namespace OpenDental
 			this.labelEscortCellNum = new System.Windows.Forms.Label();
 			this.textEscortCellNum = new System.Windows.Forms.TextBox();
 			this.groupBoxVS = new System.Windows.Forms.GroupBox();
-			this.gridVitalSigns = new OpenDental.UI.ODGrid();
+			this.gridVSData = new OpenDental.UI.ODGrid();
 			this.textVSMSerNum = new System.Windows.Forms.TextBox();
 			this.textVSMName = new System.Windows.Forms.TextBox();
 			this.printDialog = new System.Windows.Forms.PrintDialog();
@@ -390,6 +393,8 @@ namespace OpenDental
 			this.labelInvalidSig = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.selectPatientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveAndCloseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -411,8 +416,6 @@ namespace OpenDental
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butClearSig = new OpenDental.UI.Button();
-			this.selectPatientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxMonitors.SuspendLayout();
 			this.groupBoxIVSite.SuspendLayout();
@@ -1243,7 +1246,7 @@ namespace OpenDental
 			// 
 			// groupBoxVS
 			// 
-			this.groupBoxVS.Controls.Add(this.gridVitalSigns);
+			this.groupBoxVS.Controls.Add(this.gridVSData);
 			this.groupBoxVS.Controls.Add(this.textVSMSerNum);
 			this.groupBoxVS.Controls.Add(this.textVSMName);
 			this.groupBoxVS.Controls.Add(this.labelVSM);
@@ -1255,16 +1258,16 @@ namespace OpenDental
 			this.groupBoxVS.TabStop = false;
 			this.groupBoxVS.Text = "Vital Signs";
 			// 
-			// gridVitalSigns
+			// gridVSData
 			// 
-			this.gridVitalSigns.HScrollVisible = false;
-			this.gridVitalSigns.Location = new System.Drawing.Point(23, 50);
-			this.gridVitalSigns.Name = "gridVitalSigns";
-			this.gridVitalSigns.ScrollValue = 0;
-			this.gridVitalSigns.Size = new System.Drawing.Size(547, 143);
-			this.gridVitalSigns.TabIndex = 133;
-			this.gridVitalSigns.Title = "Vital Signs";
-			this.gridVitalSigns.TranslationName = "TableAnestheticData";
+			this.gridVSData.HScrollVisible = false;
+			this.gridVSData.Location = new System.Drawing.Point(23, 50);
+			this.gridVSData.Name = "gridVSData";
+			this.gridVSData.ScrollValue = 0;
+			this.gridVSData.Size = new System.Drawing.Size(547, 143);
+			this.gridVSData.TabIndex = 133;
+			this.gridVSData.Title = "Vital Signs";
+			this.gridVSData.TranslationName = "TableVSData";
 			// 
 			// textVSMSerNum
 			// 
@@ -1930,6 +1933,7 @@ namespace OpenDental
 			// 
 			// menuStrip1
 			// 
+			this.menuStrip1.BackColor = System.Drawing.SystemColors.Menu;
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filesToolStripMenuItem,
             this.reportsToolStripMenuItem,
@@ -1952,42 +1956,54 @@ namespace OpenDental
             this.toolStripSeparator2,
             this.exitToolStripMenuItem2});
 			this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
-			this.filesToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+			this.filesToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.filesToolStripMenuItem.Text = "File";
+			// 
+			// selectPatientToolStripMenuItem
+			// 
+			this.selectPatientToolStripMenuItem.Name = "selectPatientToolStripMenuItem";
+			this.selectPatientToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+			this.selectPatientToolStripMenuItem.Text = "Select Patient";
+			this.selectPatientToolStripMenuItem.Click += new System.EventHandler(this.selectPatientToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(150, 6);
 			// 
 			// saveToolStripMenuItem2
 			// 
 			this.saveToolStripMenuItem2.Name = "saveToolStripMenuItem2";
-			this.saveToolStripMenuItem2.Size = new System.Drawing.Size(159, 22);
+			this.saveToolStripMenuItem2.Size = new System.Drawing.Size(153, 22);
 			this.saveToolStripMenuItem2.Text = "Save";
 			// 
 			// saveAndCloseToolStripMenuItem1
 			// 
 			this.saveAndCloseToolStripMenuItem1.Name = "saveAndCloseToolStripMenuItem1";
-			this.saveAndCloseToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+			this.saveAndCloseToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
 			this.saveAndCloseToolStripMenuItem1.Text = "Save and Close";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(150, 6);
 			// 
 			// printToolStripMenuItem1
 			// 
 			this.printToolStripMenuItem1.Name = "printToolStripMenuItem1";
-			this.printToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+			this.printToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
 			this.printToolStripMenuItem1.Text = "Print";
 			this.printToolStripMenuItem1.Click += new System.EventHandler(this.printToolStripMenuItem1_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(150, 6);
 			// 
 			// exitToolStripMenuItem2
 			// 
 			this.exitToolStripMenuItem2.Name = "exitToolStripMenuItem2";
-			this.exitToolStripMenuItem2.Size = new System.Drawing.Size(159, 22);
+			this.exitToolStripMenuItem2.Size = new System.Drawing.Size(153, 22);
 			this.exitToolStripMenuItem2.Text = "Exit";
 			this.exitToolStripMenuItem2.Click += new System.EventHandler(this.exitToolStripMenuItem2_Click);
 			// 
@@ -1997,7 +2013,7 @@ namespace OpenDental
             this.addEditSuppliersToolStripMenuItem1,
             this.checkInventoryToolStripMenuItem1});
 			this.reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
-			this.reportsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+			this.reportsToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
 			this.reportsToolStripMenuItem.Text = "Inventory";
 			// 
 			// addEditSuppliersToolStripMenuItem1
@@ -2017,7 +2033,7 @@ namespace OpenDental
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
 			this.fileToolStripMenuItem.Text = "Reports";
 			// 
 			// saveToolStripMenuItem
@@ -2130,22 +2146,10 @@ namespace OpenDental
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
 			// 
-			// selectPatientToolStripMenuItem
-			// 
-			this.selectPatientToolStripMenuItem.Name = "selectPatientToolStripMenuItem";
-			this.selectPatientToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-			this.selectPatientToolStripMenuItem.Text = "Select Patient";
-			this.selectPatientToolStripMenuItem.Click += new System.EventHandler(this.selectPatientToolStripMenuItem_Click);
-			// 
-			// toolStripSeparator3
-			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(156, 6);
-			// 
 			// FormAnestheticRecord
 			// 
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(884, 782);
+			this.ClientSize = new System.Drawing.Size(884, 764);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
 			this.Controls.Add(this.butCancel);
@@ -2359,11 +2363,14 @@ namespace OpenDental
 			{
 				//this will be an empty string if there are no records yet, and will throw an exception
 				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				
 			}
 			catch
 			{
 				return;
 			}
+
+			FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 
 			this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 
@@ -2372,7 +2379,7 @@ namespace OpenDental
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
 
-			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 
 			IsStartingUp = false;
 			
@@ -2394,7 +2401,7 @@ namespace OpenDental
 		}
 
 		//Load saved data into form for selected Anesthetic Record
-		private void FillControls(int anestheticRecordCur){
+		private void FillControls(int PatNum, int anestheticRecordCur){
 
 			
 			if (listAnesthetics.SelectedIndex == -1)
@@ -2749,7 +2756,7 @@ namespace OpenDental
 		}
 			private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 
-			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		
 		}
@@ -2834,7 +2841,7 @@ namespace OpenDental
 				try
 				{
 					//will be null if the Anesthetic Record has just been deleted, and it's the only one on the list
-					FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
 				catch
 				{
@@ -2887,6 +2894,43 @@ namespace OpenDental
 			gridAnesthMeds.EndUpdate();
 		}
 
+		//Fills the Anesth Vital Signs table
+		private void FillGridVSData(int anestheticRecordNum)
+		{
+			listAnesthVSData = AnesthVSData.CreateObjects(anestheticRecordNum);
+
+			AnesthVSDatas.RefreshCache(anestheticRecordNum);
+			gridVSData.BeginUpdate();
+			gridVSData.Columns.Clear();
+			ODGridColumn col = new ODGridColumn(Lan.g(this, "Time Stamp"), 130);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "BP"), 60);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "HR"), 60);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "SpO2"), 60);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "EtCO2"), 60);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "Temp"), 50);
+			gridVSData.Columns.Add(col);
+			gridVSData.Rows.Clear();
+			ODGridRow row;
+			for (int i = 0; i < AnesthVSDataC.Listt.Count; i++)
+			{
+				row = new ODGridRow();
+				row.Cells.Add(AnesthVSDataC.Listt[i].VSTimeStamp);
+				row.Cells.Add(AnesthVSDataC.Listt[i].BPSys + "/" + AnesthVSDataC.Listt[i].BPDias);
+				row.Cells.Add(AnesthVSDataC.Listt[i].HR);
+				row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
+				row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
+				row.Cells.Add(AnesthVSDataC.Listt[i].Temp);
+
+				gridVSData.Rows.Add(row);
+			}
+			gridVSData.EndUpdate();
+		}
+
 		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
 
 		}
@@ -2905,8 +2949,9 @@ namespace OpenDental
 
 		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e){
 			
-				FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 
 		}
 
@@ -3039,7 +3084,7 @@ namespace OpenDental
 
 		public void StartPrint(Stream streamToPrint, string streamType){
 			PrintDocument printDocument2 = new PrintDocument();
-			printDocument2 = this.printDocument2;
+			
 			PrintDialog PrintDialog1 = new PrintDialog();
 			this.streamToPrint = streamToPrint;
 			this.streamType = streamType;
@@ -3350,7 +3395,7 @@ namespace OpenDental
 			FormAnesthesiaScore FormAS = new FormAnesthesiaScore(PatCur, anestheticRecordNum);
 			FormAS.ShowDialog();
 
-			FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			
 		}
 
@@ -3492,11 +3537,10 @@ namespace OpenDental
 			AnesthDataCur.Notes = this.richTextNotes.Text;
 			SaveSignature(AnesthDataCur);
 			SaveData();
-			
-			Close();
+			DialogResult = DialogResult.OK;
 		}
 
-		//Saves Data to db if either "OK" or "Save and Close" buttons are clicked
+		//Saves Data to db if either "Save" or "Save and Close" buttons are clicked
 		private void SaveData()
 		{
 
@@ -3681,7 +3725,7 @@ namespace OpenDental
 							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
 							if (value != 0)
 							{
-								FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+								FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 							
 							}
 						}
@@ -3691,7 +3735,7 @@ namespace OpenDental
 						if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 						{
 
-							FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+							FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 							//DialogResult = DialogResult.OK;
 							//Close();
 
@@ -3756,7 +3800,7 @@ namespace OpenDental
 				
 			try
 				{	//will be null if user hits 'OK' button with no Anesthetic Record saved
-					FillControls(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
 			catch
 				{
@@ -3845,11 +3889,29 @@ namespace OpenDental
 			}
 		}
 
-		private void selectPatientToolStripMenuItem_Click(object sender, EventArgs e){
+		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
+		public void selectPatientToolStripMenuItem_Click(object sender, EventArgs e){
 			FormPatientSelect FormPS = new FormPatientSelect();
 			FormPS.ShowDialog();
+			if (FormPS.DialogResult == DialogResult.OK)
+				
+			{
+				this.Hide();
+				CurPatNum = FormPS.SelectedPatNum;
+				Patient pat = Patients.GetPat(CurPatNum);
+				AnestheticData AnestheticDataCur;
+				AnestheticDataCur = new AnestheticData();
+				FormAnestheticRecord FormAR = new FormAnestheticRecord(pat, AnestheticDataCur);
+				FormAR.ShowDialog();
+				FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				PatCur = pat;
+				FormAR.DialogResult = DialogResult.OK;
+		
+				return;
+			}
 
 		}
+
 
 	
 	}

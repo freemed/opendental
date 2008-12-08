@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -219,6 +219,7 @@
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
     <Compile Include="Data Interface\AnestheticMeds.cs" />
     <Compile Include="Data Interface\AnesthMedsGiven.cs" />
+    <Compile Include="Data Interface\AnesthVSData.cs" />
     <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovSpanL.cs" />
