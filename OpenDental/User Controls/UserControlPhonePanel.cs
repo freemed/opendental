@@ -19,6 +19,7 @@ namespace OpenDental {
 		private void UserControlPhonePanel_Load(object sender,EventArgs e) {
 			timer1.Enabled=true;
 			FillEmps();
+			//FillMetrics();
 		}
 
 		private void FillEmps(){
@@ -31,7 +32,11 @@ namespace OpenDental {
 			gridEmp.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableEmpClock","Status"),50);
 			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Phone"),70);
+			col=new ODGridColumn(Lan.g("TableEmpClock","Phone"),50);
+			gridEmp.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableEmpClock","InOut"),35);
+			gridEmp.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableEmpClock","Customer"),80);
 			gridEmp.Columns.Add(col);
 			gridEmp.Rows.Clear();
 			UI.ODGridRow row;
@@ -42,91 +47,43 @@ namespace OpenDental {
 				row.Cells.Add(tablePhone.Rows[i]["EmployeeName"].ToString());
 				row.Cells.Add(tablePhone.Rows[i]["ClockStatus"].ToString());
 				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["InOrOut"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["CustomerNumber"].ToString());
 				row.ColorBackG=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorBar"].ToString()));
 				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
-				/*
-					EmployeeListSorted[i].PhoneExt.ToString());
-				row.Cells.Add(EmployeeListSorted[i].FName);
-				isOff=IsOff(EmployeeListSorted[i].EmployeeNum);
-				isBusy=IsBusy(EmployeeListSorted[i].PhoneExt);
-				if(isOff){
-					row.Cells.Add("off");
-					row.ColorText=Color.Gray;
-				}
-				else{
-					row.Cells.Add(EmployeeListSorted[i].ClockStatus);
-				}
-				row.Cells.Add(GetPhoneDescription(EmployeeListSorted[i].PhoneExt));
-				if(isBusy){
-					row.ColorBackG=Color.Salmon;
-				}
-				else if(EmployeeListSorted[i].ClockStatus=="Working"){
-					row.ColorBackG=Color.FromArgb(153,220,153);
-				}*/
 				gridEmp.Rows.Add(row);
 			}
 			gridEmp.EndUpdate();
-			/*listStatus.Items.Clear();
-			for(int i=0;i<Enum.GetNames(typeof(TimeClockStatus)).Length;i++){
-				listStatus.Items.Add(Lan.g("enumTimeClockStatus",Enum.GetNames(typeof(TimeClockStatus))[i]));
-			}
-			for(int i=0;i<Employees.ListShort.Length;i++){
-				if(Employees.ListShort[i].EmployeeNum==Security.CurUser.EmployeeNum){
-					SelectEmpI(i);
-					return;
-				}
-			}*/
 			gridEmp.SetSelected(false);
 		}
 
-		/*private bool IsBusy(int phoneExt){
+		/*private void FillMetrics(){
+			gridMetrics.BeginUpdate();
+			gridMetrics.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g("TablePhoneMetrics","Description"),40);
+			gridMetrics.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePhoneMetrics","#"),60);
+			gridMetrics.Columns.Add(col);
+			gridMetrics.Rows.Clear();
+			UI.ODGridRow row;
+			tablePhone=Employees.GetPhoneMetricTable();
 			for(int i=0;i<tablePhone.Rows.Count;i++){
-				if(tablePhone.Rows[i]["Extension"].ToString()==phoneExt.ToString()){
-					if(tablePhone.Rows[i]["ExtStatus"].ToString()=="1"){
-						return true;
-					}
-					else{
-						return false;
-					}
-				}
+				row=new OpenDental.UI.ODGridRow();
+				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["MetricVal"].ToString());
+				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
+				gridMetrics.Rows.Add(row);
 			}
-			return false;
-		}
-
-		private string GetPhoneDescription(int phoneExt){
-			for(int i=0;i<tablePhone.Rows.Count;i++){
-				if(tablePhone.Rows[i]["Extension"].ToString()==phoneExt.ToString()){
-					return tablePhone.Rows[i]["Description"].ToString();
-				}
-			}
-			return "";
-		}
-
-		private bool IsOff(int employeeNum){
-			if(schedList==null){
-				return false;
-			}
-			for(int i=0;i<schedList.Count;i++){
-				if(schedList[i].EmployeeNum!=employeeNum){
-					continue;
-				}
-				//if(schedList[i].
-				//entry found
-				return false;
-			}
-			return true;
-		}
-
-		private void butRefresh_Click(object sender,EventArgs e) {
-			schedList=Schedules.GetDayList(DateTime.Today);
-			Employees.Refresh();
-			FillEmps();
+			gridMetrics.EndUpdate();
+			gridMetrics.SetSelected(false);
 		}*/
 
 		private void timer1_Tick(object sender,EventArgs e) {
-			//For now, happens once per second regardless of phone activity.
+			//For now, happens once per 1.6 seconds regardless of phone activity.
 			//This might need improvement.
 			FillEmps();
+			//FillMetrics();
 		}
 
 		private void butOverride_Click(object sender,EventArgs e) {

@@ -188,6 +188,11 @@ namespace OpenDental{
 			}
 		}
 
+		public static DataTable GetPhoneMetricTable(){
+			string command="SELECT * FROM phonemetric";
+			return General.GetTable(command);
+		}
+
 
 
 	}

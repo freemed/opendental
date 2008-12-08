@@ -24,26 +24,14 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			this.gridEmp = new OpenDental.UI.ODGrid();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.butOverride = new OpenDental.UI.Button();
+			this.gridEmp = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
-			// 
-			// gridEmp
-			// 
-			this.gridEmp.AllowSelection = false;
-			this.gridEmp.HScrollVisible = false;
-			this.gridEmp.Location = new System.Drawing.Point(0,24);
-			this.gridEmp.Name = "gridEmp";
-			this.gridEmp.ScrollValue = 0;
-			this.gridEmp.Size = new System.Drawing.Size(240,295);
-			this.gridEmp.TabIndex = 22;
-			this.gridEmp.Title = "Employee";
-			this.gridEmp.TranslationName = "TableEmpClock";
 			// 
 			// timer1
 			// 
-			this.timer1.Interval = 1000;
+			this.timer1.Interval = 1600;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// butOverride
@@ -60,6 +48,18 @@
 			this.butOverride.Text = "Override";
 			this.butOverride.Click += new System.EventHandler(this.butOverride_Click);
 			// 
+			// gridEmp
+			// 
+			this.gridEmp.AllowSelection = false;
+			this.gridEmp.HScrollVisible = false;
+			this.gridEmp.Location = new System.Drawing.Point(0,24);
+			this.gridEmp.Name = "gridEmp";
+			this.gridEmp.ScrollValue = 0;
+			this.gridEmp.Size = new System.Drawing.Size(330,295);
+			this.gridEmp.TabIndex = 22;
+			this.gridEmp.Title = "Employee";
+			this.gridEmp.TranslationName = "TableEmpClock";
+			// 
 			// UserControlPhonePanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -67,7 +67,7 @@
 			this.Controls.Add(this.butOverride);
 			this.Controls.Add(this.gridEmp);
 			this.Name = "UserControlPhonePanel";
-			this.Size = new System.Drawing.Size(240,323);
+			this.Size = new System.Drawing.Size(330,323);
 			this.Load += new System.EventHandler(this.UserControlPhonePanel_Load);
 			this.ResumeLayout(false);
 
