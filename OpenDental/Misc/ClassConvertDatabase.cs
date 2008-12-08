@@ -61,7 +61,8 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.8.0.0"
 				|| FromVersion.ToString()=="5.9.0.0"
 				|| FromVersion.ToString()=="6.0.0.0"
-				|| FromVersion.ToString()=="6.1.0.0")
+				|| FromVersion.ToString()=="6.1.0.0"
+				|| FromVersion.ToString()=="6.2.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;

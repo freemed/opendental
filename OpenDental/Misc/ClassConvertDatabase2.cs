@@ -23,7 +23,7 @@ namespace OpenDental {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ClassConvertDatabase {
-		private System.Version LatestVersion=new Version("6.2.0.0");//This value must be changed when a new conversion is to be triggered.
+		private System.Version LatestVersion=new Version("6.3.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private void To6_0_2() {
 			if(FromVersion<new Version("6.0.2.0")) {
@@ -367,11 +367,11 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.1.8.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To6_2_0();
+			To6_2_1();
 		}
 
-		private void To6_2_0() {
-			if(FromVersion<new Version("6.2.0.0")) {
+		private void To6_2_1() {
+			if(FromVersion<new Version("6.2.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command = "DROP TABLE IF EXISTS anesthmedsintake";
@@ -529,7 +529,7 @@ namespace OpenDental {
 						EtCo2 smallint(3),
 						Temp smallint(3),
 						VSTimeStamp char(32),
-						PRIMARY KEY (AnestheticRecordNum)
+						PRIMARY KEY (AnesthVSDataNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
@@ -548,12 +548,20 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="ALTER TABLE treatplan ADD ResponsParty int NOT NULL";
 					General.NonQ(command);
-					command="ALTER TABLE phone ADD CustomerNumber varchar(255)";
-					General.NonQ(command);
-					command="ALTER TABLE phone ADD InOrOut varchar(255)";
-					General.NonQ(command);
-					command="ALTER TABLE phone ADD PatNum int NOT NULL";
-					General.NonQ(command);
+				}
+				else {//oracle
+
+				}
+				command="UPDATE preference SET ValueString = '6.2.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To6_3_0();
+		}
+
+		private void To6_3_0() {
+			if(FromVersion<new Version("6.3.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 
 
 
@@ -566,14 +574,11 @@ namespace OpenDental {
 				else {//oracle
 
 				}
-				command="UPDATE preference SET ValueString = '6.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '6.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			//To6_2_?();
+			//To6_?_0();
 		}
-
-		
-
 
 
 
