@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		[DataField("PhoneNumberVal")]
 		private string phoneNumberVal;
 		private bool phoneNumberValChanged;
-		///<summary>The actual phone number for the patient.</summary>
+		///<summary>The actual phone number for the patient.  Includes any punctuation.  No leading 1 or plus, so almost always 10 digits.</summary>
 		public string PhoneNumberVal{
 			get{return phoneNumberVal;}
 			set{if(phoneNumberVal!=value){phoneNumberVal=value;MarkDirty();phoneNumberValChanged=true;}}

@@ -61,7 +61,7 @@
 			this.gridEmp.ScrollValue = 0;
 			this.gridEmp.Size = new System.Drawing.Size(398,295);
 			this.gridEmp.TabIndex = 22;
-			this.gridEmp.Title = "Employee";
+			this.gridEmp.Title = "Phones";
 			this.gridEmp.TranslationName = "TableEmpClock";
 			this.gridEmp.WrapText = false;
 			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
@@ -73,20 +73,20 @@
             this.menuItemManage,
             this.menuItemAdd});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(280,48);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(270,70);
 			// 
 			// menuItemManage
 			// 
 			this.menuItemManage.Name = "menuItemManage";
-			this.menuItemManage.Size = new System.Drawing.Size(279,22);
+			this.menuItemManage.Size = new System.Drawing.Size(268,22);
 			this.menuItemManage.Text = "Manage Phone Numbers";
 			this.menuItemManage.Click += new System.EventHandler(this.menuItemManage_Click);
 			// 
 			// menuItemAdd
 			// 
 			this.menuItemAdd.Name = "menuItemAdd";
-			this.menuItemAdd.Size = new System.Drawing.Size(279,22);
-			this.menuItemAdd.Text = "Add Phone Number to Current Customer";
+			this.menuItemAdd.Size = new System.Drawing.Size(269,22);
+			this.menuItemAdd.Text = "Attach Phone Number to Current Patient";
 			this.menuItemAdd.Click += new System.EventHandler(this.menuItemAdd_Click);
 			// 
 			// UserControlPhonePanel

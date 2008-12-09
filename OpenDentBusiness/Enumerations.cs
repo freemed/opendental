@@ -279,7 +279,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		RecallTypes,
 		///<summary></summary>
-		FeeScheds
+		FeeScheds,
+		///<summary>34. This is used internally by OD, Inc with the phonenumber table and the phone server.</summary>
+		PhoneNumbers
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

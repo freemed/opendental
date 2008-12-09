@@ -17,6 +17,8 @@ namespace OpenDental {
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
 		private int rowI;
+		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
+		private TimeSpan timeDelta;
 
 		public UserControlPhonePanel() {
 			InitializeComponent();
@@ -24,6 +26,7 @@ namespace OpenDental {
 
 		private void UserControlPhonePanel_Load(object sender,EventArgs e) {
 			timer1.Enabled=true;
+			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			FillEmps();
 		}
 
@@ -67,9 +70,19 @@ namespace OpenDental {
 				row.Cells.Add(tablePhone.Rows[i]["CustomerNumber"].ToString());
 				dateTimeStart=PIn.PDateT(tablePhone.Rows[i]["DateTimeStart"].ToString());
 				if(dateTimeStart.Date==DateTime.Today){
-					span=DateTime.Now-dateTimeStart;
+					span=DateTime.Now-dateTimeStart+timeDelta;
 					timeOfDay=DateTime.Today+span;
-					row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
+					if(tablePhone.Rows[i]["Description"].ToString()=="Idle"){
+						if(span<TimeSpan.FromMinutes(1)){//if the phone has been idle for less than a minute
+							row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
+						}
+						else{
+							row.Cells.Add("");
+						}
+					}
+					else{
+						row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
+					}
 				}
 				else{
 					row.Cells.Add("");
@@ -125,27 +138,36 @@ namespace OpenDental {
 		}
 
 		private void menuItemManage_Click(object sender,EventArgs e) {
-			/*
 			int patNum=PIn.PInt(tablePhone.Rows[rowI]["PatNum"].ToString());
 			if(patNum==0){
-
+				MsgBox.Show(this,"Please attach this number to a patient first.");
+				return;
 			}
 			FormPhoneNumbersManage FormM=new FormPhoneNumbersManage();
 			FormM.PatNum=patNum;
-			FormM.ShowDialog();*/
+			FormM.ShowDialog();
 		}
 
 		private void menuItemAdd_Click(object sender,EventArgs e) {
-			/*
-			int patNum=
-				//PIn.PInt(tablePhone.Rows[rowI]["PatNum"].ToString());
+			//if the current row already shows a name and has a patnum, then block user
+			if(tablePhone.Rows[rowI]["PatNum"].ToString()!="0"){
+				MsgBox.Show(this,"The current number is already attached to a patient.");
+				return;
+			}
+			if(FormOpenDental.CurPatNum==0){
+				MsgBox.Show(this,"Please select a patient in the main window first.");
+				return;
+			}
+			string patName=Patients.GetLim(FormOpenDental.CurPatNum).GetNameLF();
+			if(MessageBox.Show("Attach this phone number to "+patName+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK){
+				return;
+			}
 			PhoneNumber ph=new PhoneNumber();
-			ph.PatNum=patNum;
-			ph.PhoneNumberVal=tablePhone.Rows[rowI]["PatNum"].ToString();
+			ph.PatNum=FormOpenDental.CurPatNum;
+			ph.PhoneNumberVal=tablePhone.Rows[rowI]["CustomerNumber"].ToString();
 			PhoneNumbers.WriteObject(ph);
-			FormPhoneNumbersManage FormM=new FormPhoneNumbersManage();
-			FormM.PatNum=patNum;
-			FormM.ShowDialog();*/
+			//tell the phone server to refresh this row with the patient name and patnum
+			DataValid.SetInvalid(InvalidType.PhoneNumbers);
 		}
 
 		private void gridEmp_MouseUp(object sender,MouseEventArgs e) {

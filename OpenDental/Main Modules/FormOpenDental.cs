@@ -110,7 +110,7 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemEmail;
 		private System.Windows.Forms.MenuItem menuItemHelpContents;
 		private System.Windows.Forms.MenuItem menuItemHelp;
-		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.</summary>
+		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.  I also used it in UserControlPhonePanel for simplicity</summary>
 		public static int CurPatNum;
 		private System.Windows.Forms.MenuItem menuItemClearinghouses;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
@@ -2777,20 +2777,27 @@ namespace OpenDental{
 
 		///<Summary>This also passes CurPatNum down to the currently selected module (except the Manage module).</Summary>
 		private void RefreshCurrentModule(){
-			if(ContrAppt2.Visible)
+			if(ContrAppt2.Visible){
 				ContrAppt2.ModuleSelected(CurPatNum);
-			if(ContrFamily2.Visible)
+			}
+			if(ContrFamily2.Visible){
 				ContrFamily2.ModuleSelected(CurPatNum);
-			if(ContrAccount2.Visible)
+			}
+			if(ContrAccount2.Visible){
 				ContrAccount2.ModuleSelected(CurPatNum);
-			if(ContrTreat2.Visible)
+			}
+			if(ContrTreat2.Visible){
 				ContrTreat2.ModuleSelected(CurPatNum);
-			if(ContrChart2.Visible)
+			}
+			if(ContrChart2.Visible){
 				ContrChart2.ModuleSelected(CurPatNum);
-			if(ContrDocs2.Visible)
+			}
+			if(ContrDocs2.Visible){
 				ContrDocs2.ModuleSelected(CurPatNum);
-			if(ContrManage2.Visible)
+			}
+			if(ContrManage2.Visible){
 				ContrManage2.ModuleSelected(CurPatNum);
+			}
 		}
 
 		/// <summary>sends function key presses to the appointment module</summary>
@@ -3811,17 +3818,15 @@ namespace OpenDental{
 			}
 		}
 
-        private void menuItemAnesthSuppliers_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormAnesthMedSuppliers FormAS = new FormAnesthMedSuppliers();
-            FormAS.ShowDialog();
-            RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
-        }
+		private void menuItemAnesthSuppliers_Click(object sender, EventArgs e){
+			if (!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
+			FormAnesthMedSuppliers FormAS = new FormAnesthMedSuppliers();
+			FormAS.ShowDialog();
+			RefreshCurrentModule();
+			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
+		}
 
 	
 
