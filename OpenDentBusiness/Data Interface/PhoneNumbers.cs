@@ -63,9 +63,9 @@ namespace OpenDentBusiness{
 			DataObjectFactory<phoneNumber>.DeleteObject(phoneNumberNum);
 		}*/
 
-		//public static void DeleteObject(int phoneNumberNum){
-		//	DataObjectFactory<phoneNumber>.DeleteObject(phoneNumberNum);
-		//}
+		public static void DeleteObject(int phoneNumberNum){
+			DataObjectFactory<PhoneNumber>.DeleteObject(phoneNumberNum);
+		}
 
 		/*public static string GetDescription(int phoneNumberNum){
 			if(phoneNumberNum==0){
