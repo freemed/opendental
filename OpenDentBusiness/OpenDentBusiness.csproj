@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -140,6 +140,7 @@
     <Compile Include="Data Interface\AnesthMedInvAdjs.cs" />
     <Compile Include="Data Interface\AnesthVSDatas.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
+    <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="TableTypes\AnesthScore.cs" />
     <Compile Include="TableTypes\AnestheticVSData.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
+    <Compile Include="TableTypes\PhoneNumber.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />
     <Compile Include="TableTypes\RecallTrigger.cs" />

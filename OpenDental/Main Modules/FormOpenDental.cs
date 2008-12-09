@@ -219,6 +219,7 @@ namespace OpenDental{
 			phonePanel=new UserControlPhonePanel();
 			phonePanel.Visible=false;
 			this.Controls.Add(phonePanel);
+			phonePanel.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
 			menuItem_ProviderAllocatorSetup.Visible=false;
 		}
@@ -2228,7 +2229,7 @@ namespace OpenDental{
 					if(PrefC.GetBool("DockPhonePanelShow")){
 						phonePanel.Visible=true;
 						phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
-						phonePanel.Width=330;
+						phonePanel.Width=398;
 						phonePanel.Height=this.ClientSize.Height-userControlTasks1.Top;
 						userControlTasks1.Location=new Point(position.X+phonePanel.Width,panelSplitter.Bottom);
 						userControlTasks1.Width=width-phonePanel.Width;
@@ -2902,6 +2903,15 @@ namespace OpenDental{
 					CurPatNum=apt.PatNum;//OnPatientSelected(apt.PatNum);
 					GotoModule.GotoAppointment(dateSelected,apt.AptNum);
 				}
+			}
+		}
+
+		private void phonePanel_GoToChanged(object sender,EventArgs e) {
+			if(phonePanel.GotoPatNum!=0) {
+				CurPatNum=phonePanel.GotoPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				RefreshCurrentModule();
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 			}
 		}
 

@@ -27,6 +27,10 @@
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.butOverride = new OpenDental.UI.Button();
 			this.gridEmp = new OpenDental.UI.ODGrid();
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.menuItemManage = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemAdd = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// timer1
@@ -55,10 +59,35 @@
 			this.gridEmp.Location = new System.Drawing.Point(0,24);
 			this.gridEmp.Name = "gridEmp";
 			this.gridEmp.ScrollValue = 0;
-			this.gridEmp.Size = new System.Drawing.Size(330,295);
+			this.gridEmp.Size = new System.Drawing.Size(398,295);
 			this.gridEmp.TabIndex = 22;
 			this.gridEmp.Title = "Employee";
 			this.gridEmp.TranslationName = "TableEmpClock";
+			this.gridEmp.WrapText = false;
+			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
+			this.gridEmp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridEmp_MouseUp);
+			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemManage,
+            this.menuItemAdd});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(280,48);
+			// 
+			// menuItemManage
+			// 
+			this.menuItemManage.Name = "menuItemManage";
+			this.menuItemManage.Size = new System.Drawing.Size(279,22);
+			this.menuItemManage.Text = "Manage Phone Numbers";
+			this.menuItemManage.Click += new System.EventHandler(this.menuItemManage_Click);
+			// 
+			// menuItemAdd
+			// 
+			this.menuItemAdd.Name = "menuItemAdd";
+			this.menuItemAdd.Size = new System.Drawing.Size(279,22);
+			this.menuItemAdd.Text = "Add Phone Number to Current Customer";
+			this.menuItemAdd.Click += new System.EventHandler(this.menuItemAdd_Click);
 			// 
 			// UserControlPhonePanel
 			// 
@@ -67,8 +96,9 @@
 			this.Controls.Add(this.butOverride);
 			this.Controls.Add(this.gridEmp);
 			this.Name = "UserControlPhonePanel";
-			this.Size = new System.Drawing.Size(330,323);
+			this.Size = new System.Drawing.Size(398,323);
 			this.Load += new System.EventHandler(this.UserControlPhonePanel_Load);
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -78,5 +108,8 @@
 		private OpenDental.UI.ODGrid gridEmp;
 		private System.Windows.Forms.Timer timer1;
 		private OpenDental.UI.Button butOverride;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem menuItemManage;
+		private System.Windows.Forms.ToolStripMenuItem menuItemAdd;
 	}
 }

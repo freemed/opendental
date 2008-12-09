@@ -555,6 +555,31 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.2.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To6_2_2();
+		}
+
+		private void To6_2_2() {
+			if(FromVersion<new Version("6.2.2.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS phonenumber";
+					General.NonQ(command);
+					command=@"CREATE TABLE phonenumber (
+						PhoneNumberNum int NOT NULL auto_increment,
+						PatNum int NOT NULL,
+						PhoneNumberVal varchar(255),
+						PRIMARY KEY (PhoneNumberNum),
+						INDEX (PatNum),
+						INDEX (PhoneNumberVal)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+				}
+				else{
+
+				}
+				command="UPDATE preference SET ValueString = '6.2.2.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To6_3_0();
 		}
 
