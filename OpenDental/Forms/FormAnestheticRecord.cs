@@ -163,12 +163,13 @@ namespace OpenDental
 		public string AnesthScore;
 		public int anesthScore;
 		public int CurPatNum;
+	
 		
 		//
 		//Variables used for printing functionality..
 		//
 		private System.IO.Stream streamToPrint;
-		private PrintDocument printDocument1;
+		//private PrintDocument printDocument1;
 		private PrintDocument printDocument2;
 		private RadioButton radHgtUnitsCm;
 		private RadioButton radHgtUnitsIn;
@@ -195,7 +196,7 @@ namespace OpenDental
 		private ToolStripMenuItem fileToolStripMenuItem;
 		private ToolStripMenuItem saveToolStripMenuItem2;
 		private ToolStripMenuItem saveAndCloseToolStripMenuItem1;
-		private ToolStripMenuItem printToolStripMenuItem1;
+		private ToolStripMenuItem printToolStripMenuItem;
 		private ToolStripMenuItem exitToolStripMenuItem2;
 		private ToolStripMenuItem addEditSuppliersToolStripMenuItem1;
 		private ToolStripMenuItem checkInventoryToolStripMenuItem1;
@@ -203,6 +204,9 @@ namespace OpenDental
 		private ToolStripSeparator toolStripSeparator2;
 		private ToolStripMenuItem selectPatientToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator3;
+		public Patient pat;
+		public int PatNum;
+		private PrintDocument printDocument3;
 
 
 		string streamType;
@@ -398,13 +402,14 @@ namespace OpenDental
 			this.saveToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveAndCloseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.printToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addEditSuppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkInventoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.printDocument3 = new System.Drawing.Printing.PrintDocument();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveCloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -628,7 +633,7 @@ namespace OpenDental
 			this.comboASA_EModifier.Items.AddRange(new object[] {
             "",
             "E"});
-			this.comboASA_EModifier.Location = new System.Drawing.Point(93, 33);
+			this.comboASA_EModifier.Location = new System.Drawing.Point(93, 32);
 			this.comboASA_EModifier.Name = "comboASA_EModifier";
 			this.comboASA_EModifier.Size = new System.Drawing.Size(50, 21);
 			this.comboASA_EModifier.TabIndex = 25;
@@ -1032,7 +1037,7 @@ namespace OpenDental
             "III",
             "IV",
             "V"});
-			this.comboASA.Location = new System.Drawing.Point(30, 32);
+			this.comboASA.Location = new System.Drawing.Point(30, 33);
 			this.comboASA.Name = "comboASA";
 			this.comboASA.Size = new System.Drawing.Size(50, 21);
 			this.comboASA.TabIndex = 24;
@@ -1952,7 +1957,7 @@ namespace OpenDental
             this.saveToolStripMenuItem2,
             this.saveAndCloseToolStripMenuItem1,
             this.toolStripSeparator1,
-            this.printToolStripMenuItem1,
+            this.printToolStripMenuItem,
             this.toolStripSeparator2,
             this.exitToolStripMenuItem2});
 			this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
@@ -1988,12 +1993,12 @@ namespace OpenDental
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(150, 6);
 			// 
-			// printToolStripMenuItem1
+			// printToolStripMenuItem
 			// 
-			this.printToolStripMenuItem1.Name = "printToolStripMenuItem1";
-			this.printToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
-			this.printToolStripMenuItem1.Text = "Print";
-			this.printToolStripMenuItem1.Click += new System.EventHandler(this.printToolStripMenuItem1_Click);
+			this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+			this.printToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+			this.printToolStripMenuItem.Text = "Print";
+			this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
@@ -3062,6 +3067,7 @@ namespace OpenDental
         }
 
 		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
+
 			System.IO.StreamReader streamReader = new StreamReader(this.streamToPrint);
 			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
 			int x = e.MarginBounds.X;
@@ -3083,27 +3089,43 @@ namespace OpenDental
 		}
 
 		public void StartPrint(Stream streamToPrint, string streamType){
-			PrintDocument printDocument2 = new PrintDocument();
-			
-			PrintDialog PrintDialog1 = new PrintDialog();
+			this.printDocument3.PrintPage += new PrintPageEventHandler(printDocument3_PrintPage);
+
 			this.streamToPrint = streamToPrint;
 			this.streamType = streamType;
-			PrintDialog1.Document = printDocument2;
+			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
 			PrintDialog1.AllowSomePages = true;
 			PrintDialog1.ShowHelp = true;
-			this.printDocument2.PrintPage += new PrintPageEventHandler(printDocument2_PrintPage);
-			
+			PrintDialog1.Document = printDocument3;
 			DialogResult result = PrintDialog1.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				printDocument2.Print();
-			}
-
-			
+			//if (result == DialogResult.OK)
+			//{
+				this.printDocument3.Print();
+			//}
 
         }
 
-		
+		private void printDocument3_PrintPage(object sender, PrintPageEventArgs e)
+		{
+
+			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
+			int x = e.MarginBounds.X;
+			int y = e.MarginBounds.Y;
+			int width = image.Width;
+			int height = image.Height;
+			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
+			{
+				width = e.MarginBounds.Width;
+				height = image.Height * e.MarginBounds.Width / image.Width;
+			}
+			else
+			{
+				height = e.MarginBounds.Height;
+				width = image.Width * e.MarginBounds.Height / image.Height;
+			}
+			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
+			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
+		}
 		private void label3_Click(object sender, EventArgs e){
 
 		}
@@ -3869,20 +3891,21 @@ namespace OpenDental
 			Close();
 		}
 
-		private void printToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
+		private void printToolStripMenuItem_Click(object sender, EventArgs e){
+
 			Graphics g1 = this.CreateGraphics();
-			Image MyImage = new Bitmap(882, 732, g1);
+			Image MyImage = new Bitmap(878, 710, g1);
 			Graphics g2 = Graphics.FromImage(MyImage);
 			IntPtr dc1 = g1.GetHdc();
 			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 882, 732, dc1, 0, 0, 8388608);
+			BitBlt(dc2, 0, 0, 878, 710, dc1, 0, 0, 13369376);
 			g1.ReleaseHdc(dc1);
 			g2.ReleaseHdc(dc2);
 			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
 			StartPrint(fileStream, "Image");
 			fileStream.Close();
+
 			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
 			{
 				System.IO.File.Delete(@"c:\PrintPage.jpg");
@@ -3891,6 +3914,7 @@ namespace OpenDental
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
 		public void selectPatientToolStripMenuItem_Click(object sender, EventArgs e){
+			
 			FormPatientSelect FormPS = new FormPatientSelect();
 			FormPS.ShowDialog();
 			if (FormPS.DialogResult == DialogResult.OK)
@@ -3898,15 +3922,16 @@ namespace OpenDental
 			{
 				this.Hide();
 				CurPatNum = FormPS.SelectedPatNum;
-				Patient pat = Patients.GetPat(CurPatNum);
+				pat = Patients.GetPat(CurPatNum);
+				Patient PatNum = Patients.GetPat(CurPatNum);
 				AnestheticData AnestheticDataCur;
 				AnestheticDataCur = new AnestheticData();
 				FormAnestheticRecord FormAR = new FormAnestheticRecord(pat, AnestheticDataCur);
 				FormAR.ShowDialog();
 				FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				PatCur = pat;
+				
 				FormAR.DialogResult = DialogResult.OK;
-		
+				PatNum = Patients.GetPat(CurPatNum);
 				return;
 			}
 
