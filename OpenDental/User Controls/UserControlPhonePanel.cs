@@ -17,6 +17,7 @@ namespace OpenDental {
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
 		private int rowI;
+		private int colI;
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
 
@@ -44,7 +45,7 @@ namespace OpenDental {
 			gridEmp.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableEmpClock","Employee"),60);
 			gridEmp.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableEmpClock","Status"),50);
+			col=new ODGridColumn(Lan.g("TableEmpClock","Status"),80);
 			gridEmp.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableEmpClock","Phone"),50);
 			gridEmp.Columns.Add(col);
@@ -72,8 +73,8 @@ namespace OpenDental {
 				if(dateTimeStart.Date==DateTime.Today){
 					span=DateTime.Now-dateTimeStart+timeDelta;
 					timeOfDay=DateTime.Today+span;
-					if(tablePhone.Rows[i]["Description"].ToString()=="Idle"){
-						if(span<TimeSpan.FromMinutes(1)){//if the phone has been idle for less than a minute
+					if(tablePhone.Rows[i]["Description"].ToString()==""){//Idle
+						if(span<TimeSpan.FromSeconds(30)){//if the phone has been idle for less than 30 seconds
 							row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
 						}
 						else{
@@ -171,11 +172,232 @@ namespace OpenDental {
 		}
 
 		private void gridEmp_MouseUp(object sender,MouseEventArgs e) {
-			rowI=gridEmp.PointToRow(e.Y);
-			if(e.Button==MouseButtons.Right) {
-				contextMenuStrip1.Show(gridEmp,e.Location);
+			if(e.Button!=MouseButtons.Right) {
+				return;
 			}
+			rowI=gridEmp.PointToRow(e.Y);
+			colI=gridEmp.PointToCol(e.X);
+			if(rowI==-1){
+				return;
+			}
+			if(colI==5){
+				menuNumbers.Show(gridEmp,e.Location);
+			}
+			if(colI==2){
+				menuStatus.Show(gridEmp,e.Location);
+			}		
 		}
+
+		private void menuItemAvailable_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("Available",extension);//green
+			FillEmps();
+		}
+
+		private void menuItemTraining_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("Training",extension);
+			FillEmps();
+		}
+
+		private void menuItemTeamAssist_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("TeamAssist",extension);
+			FillEmps();
+		}
+
+		private void menuItemWrapUp_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("WrapUp",extension);
+			//this is usually an automatic status
+			FillEmps();
+		}
+
+		private void menuItemOfflineAssist_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			Employees.SetPhoneStatus("OfflineAssist",extension);
+			FillEmps();
+		}
+
+		private void menuItemUnavailable_Click(object sender,EventArgs e) {
+			if(!ClockIn()){
+				return;
+			}
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			//Employees.SetUnavailable(extension,employeeNum);
+			//Get an override if it exists
+			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
+			if(phoneOR==null){
+				phoneOR=new PhoneOverride();
+				phoneOR.EmpCurrent=employeeNum;
+				phoneOR.Extension=extension;
+				phoneOR.IsAvailable=false;
+				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
+				FormO.phoneCur=phoneOR;
+				FormO.IsNew=true;
+				FormO.ForceUnAndExplanation=true;
+				FormO.ShowDialog();
+				if(FormO.DialogResult!=DialogResult.OK){
+					return;
+				}
+			}
+			else{
+				phoneOR.IsAvailable=false;
+				FormPhoneOverrideEdit FormO=new FormPhoneOverrideEdit();
+				FormO.phoneCur=phoneOR;
+				FormO.ForceUnAndExplanation=true;
+				FormO.ShowDialog();
+				if(FormO.DialogResult!=DialogResult.OK){
+					return;
+				}
+			}
+			//this is now handled within PhoneOverrides.Insert or PhoneOverrides.Update
+			//Employees.SetPhoneStatus("Unavailable",extension);
+			FillEmps();
+		}
+
+		private void menuItemLunch_Click(object sender,EventArgs e) {
+			//verify that employee is logged in as user
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			if(PrefC.GetBool("TimecardSecurityEnabled")){
+				if(Security.CurUser.EmployeeNum!=employeeNum){
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+						MsgBox.Show(this,"Not authorized.");
+						return;
+					}
+				}
+			}
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			//clock employee out
+			ClockEvent ce=new ClockEvent();
+			ce.EmployeeNum=employeeNum;
+			//ce.TimeEntered=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			ce.ClockIn=false;
+			ce.ClockStatus=TimeClockStatus.Lunch;
+			ClockEvents.Insert(ce);
+			Employee EmpCur=Employees.GetEmp(employeeNum);
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			Employees.Update(EmpCur);
+			//ModuleSelected(PatCurNum);
+			Employees.SetPhoneStatus("Lunch",extension);
+			FillEmps();
+		}
+
+		private void menuItemHome_Click(object sender,EventArgs e) {
+			//verify that employee is logged in as user
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			if(PrefC.GetBool("TimecardSecurityEnabled")){
+				if(Security.CurUser.EmployeeNum!=employeeNum){
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+						MsgBox.Show(this,"Not authorized.");
+						return;
+					}
+				}
+			}
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			//clock employee out
+			ClockEvent ce=new ClockEvent();
+			ce.EmployeeNum=employeeNum;
+			//ce.TimeEntered=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			ce.ClockIn=false;
+			ce.ClockStatus=TimeClockStatus.Home;
+			ClockEvents.Insert(ce);
+			Employee EmpCur=Employees.GetEmp(employeeNum);
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			Employees.Update(EmpCur);
+			//ModuleSelected(PatCurNum);
+			Employees.SetPhoneStatus("Home",extension);
+			FillEmps();
+		}
+
+		private void menuItemBreak_Click(object sender,EventArgs e) {
+			//verify that employee is logged in as user
+			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			if(PrefC.GetBool("TimecardSecurityEnabled")){
+				if(Security.CurUser.EmployeeNum!=employeeNum){
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+						MsgBox.Show(this,"Not authorized.");
+						return;
+					}
+				}
+			}
+			PhoneOverrides.SetAvailable(extension,employeeNum);
+			//clock employee out
+			ClockEvent ce=new ClockEvent();
+			ce.EmployeeNum=employeeNum;
+			//ce.TimeEntered=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			ce.ClockIn=false;
+			ce.ClockStatus=TimeClockStatus.Break;
+			ClockEvents.Insert(ce);
+			Employee EmpCur=Employees.GetEmp(employeeNum);
+			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
+			Employees.Update(EmpCur);
+			//ModuleSelected(PatCurNum);
+			Employees.SetPhoneStatus("Break",extension);
+			FillEmps();
+		}
+
+		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
+		private bool ClockIn(){
+			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			if(ClockEvents.IsClockedIn(employeeNum)){
+				return true;//if employee is already clocked in, then return
+			}
+			if(PrefC.GetBool("TimecardSecurityEnabled")){
+				if(Security.CurUser.EmployeeNum!=employeeNum){
+					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
+						MsgBox.Show(this,"Not authorized.");
+						return false;
+					}
+				}
+			}
+			//clock employee in
+			ClockEvent ce=new ClockEvent();
+			ce.EmployeeNum=employeeNum;
+			//ce.TimeEntered=DateTime.Now+TimeDelta;
+			//ce.TimeDisplayed=DateTime.Now+TimeDelta;
+			ce.ClockIn=true;
+			ce.ClockStatus=ClockEvents.GetLastStatus(employeeNum);
+			ClockEvents.Insert(ce);
+			Employee EmpCur=Employees.GetEmp(employeeNum);
+			EmpCur.ClockStatus=Lan.g(this,"Working");;
+			Employees.Update(EmpCur);
+			return true;
+		}
+
+		
 
 	}
 }

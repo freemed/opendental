@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -188,10 +189,97 @@ namespace OpenDental{
 			}
 		}
 
-		public static DataTable GetPhoneMetricTable(){
-			string command="SELECT * FROM phonemetric";
-			return General.GetTable(command);
+		public static void SetPhoneStatus(string clockStatus,int extens){
+			//this code is similar to code in the phone tracking server.
+			//But here, it ONLY changes clockStatus and ColorBar.
+			string command=@"SELECT EmployeeNum,Description,
+				IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
+				FROM phone
+				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
+				WHERE phone.Extension="+POut.PInt(extens)
+				+" GROUP BY phone.Extension";
+			DataTable tablePhone=General.GetTable(command);
+			if(tablePhone.Rows.Count==0){
+				return;
+			}
+			int empNum=PIn.PInt(tablePhone.Rows[0]["EmployeeNum"].ToString());
+			bool isAvailable=PIn.PBool(tablePhone.Rows[0]["isAvail"].ToString());
+			bool overridden=PIn.PBool(tablePhone.Rows[0]["overridden"].ToString());
+			bool isInUse=false;
+			if(tablePhone.Rows[0]["Description"].ToString()=="In use"){
+				isInUse=true;
+			}
+			Color colorBar=GetColorBar(clockStatus,overridden,isAvailable,empNum,isInUse);
+			command="UPDATE phone SET ClockStatus='"+POut.PString(clockStatus)+"', "
+				+"ColorBar="+colorBar.ToArgb().ToString()+" "
+				+"WHERE Extension="+extens;
+			General.NonQ(command);
 		}
+
+		///<summary>Used when clocking in and out, but not through the phone grid.  Keeps the phone grid current. Handles situations where employee is listed on two different extensions.</summary>
+		public static void SetPhoneClockStatus(int employeeNum,string clockStatus){
+			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.PInt(employeeNum);
+			DataTable table=General.GetTable(command);
+			int extension;
+			string curClockStatus;
+			for(int i=0;i<table.Rows.Count;i++){
+				extension=PIn.PInt(table.Rows[i]["Extension"].ToString());
+				curClockStatus=table.Rows[i]["ClockStatus"].ToString();
+				if(curClockStatus=="Unavailable"){
+					continue;//don't change "Unavailable" to anything else.
+				}
+				SetPhoneStatus(clockStatus,extension);
+			}
+		}
+
+		private static Color GetColorBar(string clockStatus,bool overridden,bool isAvailable,int empNum,bool isInUse){
+			//there is an exact duplicate of this function in the phone server.
+			Color colorBar=Color.White;
+			if(overridden && !isAvailable){
+				//no colors
+			}
+			else if(!overridden
+				&& (empNum==4//amber
+				|| empNum==21//natalie
+				|| empNum==20//britt
+				|| empNum==22))//jordan
+			{
+				//no colors
+			}
+			else if(!overridden
+				&& (empNum==15//derek
+				|| empNum==18))//james
+			{
+				//this prevents green bar from showing.
+				if(isInUse){
+					colorBar=Color.Salmon;
+				}
+			}
+			else if(isInUse){
+				colorBar=Color.Salmon;
+			}
+			//the rest are for idle:
+			else if(clockStatus=="Available"){
+				colorBar=Color.FromArgb(153,220,153);//green
+			}
+			//"Unavailable" already handled above
+			else if(clockStatus=="off"){
+				//colorText=Color.Gray;
+				//no colorBar
+			}
+			else if(clockStatus=="Break"){
+				//no color
+			}
+			else if(clockStatus=="Training"
+				|| clockStatus=="TeamAssist"
+				|| clockStatus=="WrapUp"
+				|| clockStatus=="OfflineAssist")
+			{
+				colorBar=Color.Yellow;
+			}
+			return colorBar;
+		}
+
 
 
 

@@ -243,6 +243,7 @@
     <Compile Include="TableTypes\AnestheticVSData.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\PhoneNumber.cs" />
+    <Compile Include="TableTypes\PhoneOverride.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
     <Compile Include="TableTypes\PlannedAppt.cs" />
     <Compile Include="TableTypes\RecallTrigger.cs" />

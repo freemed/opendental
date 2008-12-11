@@ -913,6 +913,9 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
+			if(PrefC.GetBool("DockPhonePanelShow")){
+				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,"Available");
+			}
 		}
 
 		private void butClockOut_Click(object sender, System.EventArgs e) {
@@ -930,6 +933,9 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
+			if(PrefC.GetBool("DockPhonePanelShow")){
+				Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,ce.ClockStatus.ToString());
+			}
 		}
 
 		private void timer1_Tick(object sender, System.EventArgs e) {

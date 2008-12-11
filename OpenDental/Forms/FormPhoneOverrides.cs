@@ -62,12 +62,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormPhoneOverrideEdit FormP=new FormPhoneOverrideEdit();
-			FormP.phoneCur=new PhoneOverride();
-			FormP.phoneCur.PhoneOverrideNum=PIn.PInt(table.Rows[e.Row]["PhoneOverrideNum"].ToString());
-			FormP.phoneCur.Extension       =PIn.PInt(table.Rows[e.Row]["Extension"].ToString());
-			FormP.phoneCur.EmpCurrent      =PIn.PInt(table.Rows[e.Row]["EmpCurrent"].ToString());
-			FormP.phoneCur.IsAvailable     =PIn.PBool(table.Rows[e.Row]["IsAvailable"].ToString());
-			FormP.phoneCur.Explanation     =PIn.PString(table.Rows[e.Row]["Explanation"].ToString());
+			FormP.phoneCur=PhoneOverrides.GetPhoneOverride(PIn.PInt(table.Rows[e.Row]["PhoneOverrideNum"].ToString()));
 			FormP.ShowDialog();
 			FillGrid();
 		}
@@ -83,16 +78,5 @@ namespace OpenDental {
 		
 	}
 
-	public class PhoneOverride{
-		///<summary></summary>
-		public int PhoneOverrideNum;
-		///<summary></summary>
-		public int Extension;
-		///<summary>EmployeeNum</summary>
-		public int EmpCurrent;
-		///<summary></summary>
-		public bool IsAvailable;
-		///<summary></summary>
-		public string Explanation;
-	}
+	
 }

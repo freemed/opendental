@@ -12,6 +12,7 @@ namespace OpenDental {
 	public partial class FormPhoneOverrideEdit:Form {
 		public bool IsNew;
 		public PhoneOverride phoneCur;
+		public bool ForceUnAndExplanation;
 
 		public FormPhoneOverrideEdit() {
 			InitializeComponent();
@@ -30,6 +31,10 @@ namespace OpenDental {
 			}
 			checkIsAvailable.Checked=phoneCur.IsAvailable;
 			textExplanation.Text=phoneCur.Explanation;
+			if(ForceUnAndExplanation){
+				//don't even give them a chance to check the box
+				checkIsAvailable.Visible=false;
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -37,8 +42,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+phoneCur.PhoneOverrideNum.ToString();
-			General.NonQ(command);
+			PhoneOverrides.Delete(phoneCur);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -55,27 +59,20 @@ namespace OpenDental {
 				MessageBox.Show("Please select an employee first.");
 				return;
 			}
+			if(ForceUnAndExplanation){
+				if(textExplanation.Text==""){
+					MessageBox.Show("An explanation must be provided.");
+					return;
+				}
+			}
 			phoneCur.EmpCurrent=Employees.ListShort[comboEmp.SelectedIndex].EmployeeNum;
 			phoneCur.IsAvailable=checkIsAvailable.Checked;
 			phoneCur.Explanation=textExplanation.Text;
-			string command;
 			if(IsNew){
-				command="INSERT INTO phoneoverride(Extension,EmpCurrent,IsAvailable,Explanation) "
-					+"VALUES("
-					+phoneCur.Extension.ToString()+","
-					+phoneCur.EmpCurrent.ToString()+","
-					+POut.PBool(phoneCur.IsAvailable)+","
-					+"'"+POut.PString(phoneCur.Explanation)+"')";
-				phoneCur.PhoneOverrideNum=General.NonQ(command,true);
+				PhoneOverrides.Insert(phoneCur);
 			}
 			else{
-				command="UPDATE phoneoverride SET "
-					+"Extension="+phoneCur.Extension.ToString()+","
-					+"EmpCurrent="+phoneCur.EmpCurrent.ToString()+","
-					+"IsAvailable="+POut.PBool(phoneCur.IsAvailable)+","
-					+"Explanation='"+POut.PString(phoneCur.Explanation)+"' "
-					+"WHERE PhoneOverrideNum="+phoneCur.PhoneOverrideNum.ToString();
-				General.NonQ(command);
+				PhoneOverrides.Update(phoneCur);
 			}
 			DialogResult=DialogResult.OK;
 		}
