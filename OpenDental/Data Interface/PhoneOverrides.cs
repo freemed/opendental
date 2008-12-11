@@ -110,16 +110,29 @@ namespace OpenDental{
 		}
 
 		///<summary>If an existing override changes the extension of an employee, then this just changes IsAvailable to true.  But if the existing override has no effect on the extension, then it just gets deleted.</summary>
-		public static void SetAvailable(int extension,int employeeNum){
-			PhoneOverride phoneOR=GetByExtAndEmp(extension,employeeNum);
+		public static void SetAvailable(int extension,int empNum){
+			PhoneOverride phoneOR=GetByExtAndEmp(extension,empNum);
 			if(phoneOR==null){
 				return;//no override exists.
 			}
-			Employee emp=Employees.GetEmp(employeeNum);
+			Employee emp=Employees.GetEmp(empNum);
+			if(empNum==4//amber
+				|| empNum==21//natalie
+				|| empNum==20//britt
+				|| empNum==22//jordan
+				|| empNum==15//derek
+				|| empNum==18)//james
+			{
+				phoneOR.IsAvailable=true;
+				phoneOR.Explanation="";
+				Update(phoneOR);
+				return;
+			}
 			if(emp.PhoneExt==extension){
 				Delete(phoneOR);
 				return;
 			}
+			//phone extension doesn't match:
 			phoneOR.IsAvailable=true;
 			phoneOR.Explanation="";
 			Update(phoneOR);

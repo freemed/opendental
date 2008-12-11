@@ -242,19 +242,22 @@ namespace OpenDental{
 				&& (empNum==4//amber
 				|| empNum==21//natalie
 				|| empNum==20//britt
-				|| empNum==22))//jordan
+				|| empNum==22//jordan
+				|| empNum==15//derek
+				|| empNum==18//james
+				))
 			{
 				//no colors
 			}
-			else if(!overridden
-				&& (empNum==15//derek
-				|| empNum==18))//james
-			{
+			//else if(!overridden
+			//	&& (empNum==15//derek
+			//	|| empNum==18))//james
+			//{
 				//this prevents green bar from showing.
-				if(isInUse){
-					colorBar=Color.Salmon;
-				}
-			}
+			//	if(isInUse){
+			//		colorBar=Color.Salmon;
+			//	}
+			//}
 			else if(isInUse){
 				colorBar=Color.Salmon;
 			}
@@ -275,7 +278,7 @@ namespace OpenDental{
 				|| clockStatus=="WrapUp"
 				|| clockStatus=="OfflineAssist")
 			{
-				colorBar=Color.Yellow;
+				colorBar=Color.FromArgb(255,255,145);//yellow
 			}
 			return colorBar;
 		}

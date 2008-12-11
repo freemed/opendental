@@ -73,7 +73,7 @@ namespace OpenDental {
 				if(dateTimeStart.Date==DateTime.Today){
 					span=DateTime.Now-dateTimeStart+timeDelta;
 					timeOfDay=DateTime.Today+span;
-					if(tablePhone.Rows[i]["Description"].ToString()==""){//Idle
+					/*if(tablePhone.Rows[i]["Description"].ToString()==""){//Idle
 						if(span<TimeSpan.FromSeconds(30)){//if the phone has been idle for less than 30 seconds
 							row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
 						}
@@ -81,9 +81,9 @@ namespace OpenDental {
 							row.Cells.Add("");
 						}
 					}
-					else{
+					else{*/
 						row.Cells.Add(timeOfDay.ToString("H:mm:ss"));
-					}
+					//}
 				}
 				else{
 					row.Cells.Add("");
