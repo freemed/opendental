@@ -89,7 +89,7 @@ namespace OpenDental {
 		private MenuItem menuItemProvIncTrans;
 		private MenuItem menuItemStatementEmail;
 		private Label labelBalanceAmt;
-		private TabControl tabControl1;
+		private TabControl tabControlShow;
 		private TabPage tabMain;
 		private TabPage tabShow;
 		private ODGrid gridPayPlan;
@@ -223,6 +223,9 @@ namespace OpenDental {
 			this.checkShowTP = new System.Windows.Forms.CheckBox();
 			this.gridProg = new OpenDental.UI.ODGrid();
 			this.panelAging = new System.Windows.Forms.Panel();
+			this.panelTotalOwes = new System.Windows.Forms.Panel();
+			this.label21 = new System.Windows.Forms.Label();
+			this.labelTotalPtOwes = new System.Windows.Forms.Label();
 			this.labelPatEstBalAmt = new System.Windows.Forms.Label();
 			this.labelPatEstBal = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
@@ -252,7 +255,7 @@ namespace OpenDental {
 			this.labelCC = new System.Windows.Forms.Label();
 			this.contextMenuPayment = new System.Windows.Forms.ContextMenu();
 			this.menuItemProvIncTrans = new System.Windows.Forms.MenuItem();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.tabControlShow = new System.Windows.Forms.TabControl();
 			this.tabMain = new System.Windows.Forms.TabPage();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
@@ -298,20 +301,17 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.panelTotalOwes = new System.Windows.Forms.Panel();
-			this.label21 = new System.Windows.Forms.Label();
-			this.labelTotalPtOwes = new System.Windows.Forms.Label();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.panelAging.SuspendLayout();
+			this.panelTotalOwes.SuspendLayout();
 			this.panelCC.SuspendLayout();
-			this.tabControl1.SuspendLayout();
+			this.tabControlShow.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabShow.SuspendLayout();
 			this.panelInsInfoDetail.SuspendLayout();
-			this.panelTotalOwes.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelFamFinancial
@@ -729,6 +729,36 @@ namespace OpenDental {
 			this.panelAging.Size = new System.Drawing.Size(749,37);
 			this.panelAging.TabIndex = 213;
 			// 
+			// panelTotalOwes
+			// 
+			this.panelTotalOwes.Controls.Add(this.label21);
+			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
+			this.panelTotalOwes.Location = new System.Drawing.Point(560,-38);
+			this.panelTotalOwes.Name = "panelTotalOwes";
+			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
+			this.panelTotalOwes.TabIndex = 226;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(3,0);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(123,12);
+			this.label21.TabIndex = 223;
+			this.label21.Text = "TOTAL  Owed w/ Plan:";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
+			// 
+			// labelTotalPtOwes
+			// 
+			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
+			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
+			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
+			this.labelTotalPtOwes.TabIndex = 222;
+			this.labelTotalPtOwes.Text = "2500.00";
+			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// labelPatEstBalAmt
 			// 
 			this.labelPatEstBalAmt.Location = new System.Drawing.Point(589,17);
@@ -994,15 +1024,15 @@ namespace OpenDental {
 			this.menuItemProvIncTrans.Text = "Provider Income Transfer";
 			this.menuItemProvIncTrans.Click += new System.EventHandler(this.menuItemProvIncTrans_Click);
 			// 
-			// tabControl1
+			// tabControlShow
 			// 
-			this.tabControl1.Controls.Add(this.tabMain);
-			this.tabControl1.Controls.Add(this.tabShow);
-			this.tabControl1.Location = new System.Drawing.Point(749,27);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(186,397);
-			this.tabControl1.TabIndex = 216;
+			this.tabControlShow.Controls.Add(this.tabMain);
+			this.tabControlShow.Controls.Add(this.tabShow);
+			this.tabControlShow.Location = new System.Drawing.Point(749,27);
+			this.tabControlShow.Name = "tabControlShow";
+			this.tabControlShow.SelectedIndex = 0;
+			this.tabControlShow.Size = new System.Drawing.Size(186,397);
+			this.tabControlShow.TabIndex = 216;
 			// 
 			// tabMain
 			// 
@@ -1514,41 +1544,11 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// panelTotalOwes
-			// 
-			this.panelTotalOwes.Controls.Add(this.label21);
-			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
-			this.panelTotalOwes.Location = new System.Drawing.Point(560,-38);
-			this.panelTotalOwes.Name = "panelTotalOwes";
-			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
-			this.panelTotalOwes.TabIndex = 226;
-			// 
-			// label21
-			// 
-			this.label21.Location = new System.Drawing.Point(3,0);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(123,12);
-			this.label21.TabIndex = 223;
-			this.label21.Text = "TOTAL  Owed w/ Plan:";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
-			// 
-			// labelTotalPtOwes
-			// 
-			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
-			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
-			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
-			this.labelTotalPtOwes.TabIndex = 222;
-			this.labelTotalPtOwes.Text = "2500.00";
-			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelInsInfoDetail);
 			this.Controls.Add(this.gridPayPlan);
-			this.Controls.Add(this.tabControl1);
+			this.Controls.Add(this.tabControlShow);
 			this.Controls.Add(this.panelAging);
 			this.Controls.Add(this.panelProgNotes);
 			this.Controls.Add(this.gridRepeat);
@@ -1568,16 +1568,16 @@ namespace OpenDental {
 			this.groupBox6.ResumeLayout(false);
 			this.panelAging.ResumeLayout(false);
 			this.panelAging.PerformLayout();
+			this.panelTotalOwes.ResumeLayout(false);
 			this.panelCC.ResumeLayout(false);
 			this.panelCC.PerformLayout();
-			this.tabControl1.ResumeLayout(false);
+			this.tabControlShow.ResumeLayout(false);
 			this.tabMain.ResumeLayout(false);
 			this.tabMain.PerformLayout();
 			this.tabShow.ResumeLayout(false);
 			this.tabShow.PerformLayout();
 			this.panelInsInfoDetail.ResumeLayout(false);
 			this.panelInsInfoDetail.PerformLayout();
-			this.panelTotalOwes.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1693,7 +1693,7 @@ namespace OpenDental {
 			}
 			labelFamFinancial.Location=new Point(left,gridAcctPat.Bottom);
 			textFinNotes.Location=new Point(left,labelFamFinancial.Bottom);
-			tabControl1.Height=panelCommButs.Top-tabControl1.Top;
+			tabControlShow.Height=panelCommButs.Top-tabControlShow.Top;
 			textFinNotes.Height=tabMain.Height-textFinNotes.Top;
 		}
 
@@ -1794,6 +1794,7 @@ namespace OpenDental {
 				textUrgFinNote.Enabled=false;
 				textFinNotes.Enabled=false;
 				butComm.Enabled=false;
+				tabControlShow.Enabled=false;
 			}
 			else{
 				gridAccount.Enabled=true;
@@ -1806,6 +1807,7 @@ namespace OpenDental {
 				textUrgFinNote.Enabled=true;
 				textFinNotes.Enabled=true;
 				butComm.Enabled=true;
+				tabControlShow.Enabled=true;
 			}
 			FillPats(isSelectingFamily);
 			FillMisc();
