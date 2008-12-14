@@ -98,16 +98,16 @@ namespace OpenDental{
 			// 
 			this.label5.Location = new System.Drawing.Point(4,5);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(76,18);
+			this.label5.Size = new System.Drawing.Size(90,18);
 			this.label5.TabIndex = 56;
-			this.label5.Text = "Search";
+			this.label5.Text = "Search terms";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSearch
 			// 
-			this.textSearch.Location = new System.Drawing.Point(81,5);
+			this.textSearch.Location = new System.Drawing.Point(93,5);
 			this.textSearch.Name = "textSearch";
-			this.textSearch.Size = new System.Drawing.Size(179,20);
+			this.textSearch.Size = new System.Drawing.Size(167,20);
 			this.textSearch.TabIndex = 57;
 			// 
 			// label4
