@@ -36,9 +36,12 @@ namespace OpenDental{
 				}
 				//Hard coded elements showing
 				ALelements.Add(new ApptViewItem("PatientName",0,Color.Black));
-				ALelements.Add(new ApptViewItem("Lab",1,Color.DarkRed));
-				ALelements.Add(new ApptViewItem("Procs",2,Color.Black));
-				ALelements.Add(new ApptViewItem("Note",3,Color.Black));
+				ALelements.Add(new ApptViewItem("ASAP",1,Color.DarkRed));
+				ALelements.Add(new ApptViewItem("MedUrgNote",2,Color.DarkRed));
+				ALelements.Add(new ApptViewItem("PremedFlag",3,Color.DarkRed));
+				ALelements.Add(new ApptViewItem("Lab",4,Color.DarkRed));
+				ALelements.Add(new ApptViewItem("Procs",5,Color.Black));
+				ALelements.Add(new ApptViewItem("Note",6,Color.Black));
 				ContrApptSheet.RowsPerIncr=1;
 			}
 			else{

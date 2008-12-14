@@ -23,6 +23,8 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private OpenDental.UI.Button butASAP;
+		private Label label4;
 		///<summary>After this window closes, if dialog result is OK, this will contain which list was selected.</summary>
 		public ApptListSelection SelectionResult;
 
@@ -59,32 +61,19 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptLists));
-			this.butCancel = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
-			this.butRecall = new OpenDental.UI.Button();
-			this.butConfirm = new OpenDental.UI.Button();
-			this.butPlanned = new OpenDental.UI.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butASAP = new OpenDental.UI.Button();
 			this.butUnsched = new OpenDental.UI.Button();
+			this.butPlanned = new OpenDental.UI.Button();
+			this.butConfirm = new OpenDental.UI.Button();
+			this.butRecall = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(561,364);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// label1
 			// 
@@ -134,47 +123,29 @@ namespace OpenDental{
     " etc..  Make sure to make good Comm Log entries for everything.";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butRecall
+			// label4
 			// 
-			this.butRecall.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRecall.Autosize = true;
-			this.butRecall.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRecall.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRecall.CornerRadius = 4F;
-			this.butRecall.Location = new System.Drawing.Point(28,78);
-			this.butRecall.Name = "butRecall";
-			this.butRecall.Size = new System.Drawing.Size(100,26);
-			this.butRecall.TabIndex = 8;
-			this.butRecall.Text = "Recall";
-			this.butRecall.Click += new System.EventHandler(this.butRecall_Click);
+			this.label4.Location = new System.Drawing.Point(130,328);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(458,47);
+			this.label4.TabIndex = 12;
+			this.label4.Text = "The short call list.  A list of appointments where the patient is available on sh" +
+    "ort notice.  To show on this list, the status of the appointment needs to be ASA" +
+    "P instead of Scheduled.";
 			// 
-			// butConfirm
+			// butASAP
 			// 
-			this.butConfirm.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butConfirm.Autosize = true;
-			this.butConfirm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butConfirm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butConfirm.CornerRadius = 4F;
-			this.butConfirm.Location = new System.Drawing.Point(28,140);
-			this.butConfirm.Name = "butConfirm";
-			this.butConfirm.Size = new System.Drawing.Size(100,26);
-			this.butConfirm.TabIndex = 9;
-			this.butConfirm.Text = "Confirmations";
-			this.butConfirm.Click += new System.EventHandler(this.butConfirm_Click);
-			// 
-			// butPlanned
-			// 
-			this.butPlanned.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPlanned.Autosize = true;
-			this.butPlanned.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPlanned.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPlanned.CornerRadius = 4F;
-			this.butPlanned.Location = new System.Drawing.Point(28,202);
-			this.butPlanned.Name = "butPlanned";
-			this.butPlanned.Size = new System.Drawing.Size(100,26);
-			this.butPlanned.TabIndex = 10;
-			this.butPlanned.Text = "Planned Tracker";
-			this.butPlanned.Click += new System.EventHandler(this.butPlanned_Click);
+			this.butASAP.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butASAP.Autosize = true;
+			this.butASAP.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butASAP.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butASAP.CornerRadius = 4F;
+			this.butASAP.Location = new System.Drawing.Point(28,326);
+			this.butASAP.Name = "butASAP";
+			this.butASAP.Size = new System.Drawing.Size(100,26);
+			this.butASAP.TabIndex = 13;
+			this.butASAP.Text = "ASAP";
+			this.butASAP.Click += new System.EventHandler(this.butASAP_Click);
 			// 
 			// butUnsched
 			// 
@@ -190,10 +161,69 @@ namespace OpenDental{
 			this.butUnsched.Text = "Unscheduled";
 			this.butUnsched.Click += new System.EventHandler(this.butUnsched_Click);
 			// 
+			// butPlanned
+			// 
+			this.butPlanned.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPlanned.Autosize = true;
+			this.butPlanned.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPlanned.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPlanned.CornerRadius = 4F;
+			this.butPlanned.Location = new System.Drawing.Point(28,202);
+			this.butPlanned.Name = "butPlanned";
+			this.butPlanned.Size = new System.Drawing.Size(100,26);
+			this.butPlanned.TabIndex = 10;
+			this.butPlanned.Text = "Planned Tracker";
+			this.butPlanned.Click += new System.EventHandler(this.butPlanned_Click);
+			// 
+			// butConfirm
+			// 
+			this.butConfirm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butConfirm.Autosize = true;
+			this.butConfirm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butConfirm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butConfirm.CornerRadius = 4F;
+			this.butConfirm.Location = new System.Drawing.Point(28,140);
+			this.butConfirm.Name = "butConfirm";
+			this.butConfirm.Size = new System.Drawing.Size(100,26);
+			this.butConfirm.TabIndex = 9;
+			this.butConfirm.Text = "Confirmations";
+			this.butConfirm.Click += new System.EventHandler(this.butConfirm_Click);
+			// 
+			// butRecall
+			// 
+			this.butRecall.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecall.Autosize = true;
+			this.butRecall.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRecall.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRecall.CornerRadius = 4F;
+			this.butRecall.Location = new System.Drawing.Point(28,78);
+			this.butRecall.Name = "butRecall";
+			this.butRecall.Size = new System.Drawing.Size(100,26);
+			this.butRecall.TabIndex = 8;
+			this.butRecall.Text = "Recall";
+			this.butRecall.Click += new System.EventHandler(this.butRecall_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(561,404);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormApptLists
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(666,415);
+			this.ClientSize = new System.Drawing.Size(666,455);
+			this.Controls.Add(this.butASAP);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butUnsched);
 			this.Controls.Add(this.butPlanned);
 			this.Controls.Add(this.butConfirm);
@@ -241,9 +271,16 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butASAP_Click(object sender,EventArgs e) {
+			SelectionResult=ApptListSelection.ASAP;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
@@ -261,7 +298,9 @@ namespace OpenDental{
 		///<summary></summary>
 		Planned,
 		///<summary></summary>
-		Unsched
+		Unsched,
+		///<summary></summary>
+		ASAP
 	}
 
 }

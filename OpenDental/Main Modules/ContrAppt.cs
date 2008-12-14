@@ -2642,6 +2642,10 @@ namespace OpenDental{
 				y+=rowH;
 				y=120;
 				x=2;
+				if(row["AptStatus"].ToString()==((int)ApptStatus.ASAP).ToString()){
+					g.DrawString(Lan.g("enumApptStatus","ASAP"),font,Brushes.Red,x,y);
+					y+=rowH;
+				}
 				if(row["preMedFlag"].ToString()!=""){
 					g.DrawString(row["preMedFlag"].ToString(),font,Brushes.Red,x,y);
 					y+=rowH;
@@ -2924,6 +2928,19 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
+		private void OnASAPList_Click() {
+			Cursor=Cursors.WaitCursor;
+			FormASAP FormA=new FormASAP();
+			FormA.ShowDialog();
+			if(FormA.PinClicked){
+				SendToPinBoard(FormA.AptSelected);
+			}
+			if(FormA.SelectedPatNum!=0){
+				RefreshModulePatient(FormA.SelectedPatNum);
+			}
+			Cursor=Cursors.Default;
+		}
+
 		private void OnRecall_Click() {
 			Cursor=Cursors.WaitCursor;
 			FormRecallList FormRL=new FormRecallList();
@@ -2981,6 +2998,9 @@ namespace OpenDental{
 					break;
 				case ApptListSelection.Unsched:
 					OnUnschedList_Click();
+					break;
+				case ApptListSelection.ASAP:
+					OnASAPList_Click();
 					break;
 			}
 		}

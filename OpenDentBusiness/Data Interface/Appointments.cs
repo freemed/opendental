@@ -45,6 +45,32 @@ namespace OpenDentBusiness{
 			return FillList(command).ToArray();
 		}
 
+		///<summary>Gets list of asap appointments.</summary>
+		public static List<Appointment> RefreshASAP(int provNum,int siteNum) {
+			string command="SELECT * FROM appointment ";
+			//if(orderby=="alph" || siteNum>0) {
+			//command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
+			//}
+			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.ASAP)+" ";
+			if(provNum>0) {
+				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			if(siteNum>0) {
+				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
+			}
+			/*if(orderby=="status") {
+				command+="ORDER BY UnschedStatus,AptDateTime";
+			}
+			else if(orderby=="alph") {
+				command+="ORDER BY LName,FName";
+			}
+			else { //if(orderby=="date"){
+				command+="ORDER BY AptDateTime";
+			}*/
+			command+="ORDER BY AptDateTime";
+			return FillList(command);
+		}
+
 		///<summary>Allowed orderby: status, alph, date</summary>
 		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum,int siteNum){
 			string command="SELECT tplanned.*,tregular.aptnum "

@@ -330,7 +330,7 @@ namespace OpenDentBusiness{
 		Complete,
 		///<summary>3- Only shows on unscheduled list.</summary>
 		UnschedList,
-		///<summary>4- Functions the same as Scheduled for now.</summary>
+		///<summary>4- Functions almost the same as Scheduled, but also causes the appointment to show on the ASAP list.</summary>
 		ASAP,
 		///<summary>5- Shows with a big X on it.</summary>
 		Broken,

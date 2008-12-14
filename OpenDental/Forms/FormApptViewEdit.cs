@@ -395,6 +395,7 @@ namespace OpenDental{
 			allElements=new ArrayList();
 			allElements.Add("AddrNote");
 			allElements.Add("Age");
+			allElements.Add("ASAP");
 			allElements.Add("ChartNumAndName");
 			allElements.Add("ChartNumber");
 			allElements.Add("HmPhone");
