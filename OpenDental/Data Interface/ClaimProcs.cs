@@ -453,6 +453,22 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		///<summary>Used in PaySplitEdit. The insurance writeoff based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
+		public static double ProcWriteoff(ClaimProc[] List,int procNum){
+			double retVal=0;
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ProcNum==procNum
+					//&& List[i].InsPayAmt > 0//ins paid
+					&& List[i].Status!=ClaimProcStatus.Preauth
+					&& List[i].Status!=ClaimProcStatus.CapEstimate
+					&& List[i].Status!=ClaimProcStatus.CapComplete
+					&& List[i].Status!=ClaimProcStatus.Estimate){
+					retVal+=List[i].WriteOff;
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcInsPayPri(ClaimProc[] List,int procNum,int planNum){
 			double retVal=0;

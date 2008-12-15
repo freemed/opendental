@@ -68,12 +68,15 @@ namespace OpenDental
 		//<summary>Used if changing the Patient from another family.</summary>
 		//private int OriginalPatNum;
 		private double ProcFee;
+		private double ProcWriteoff;
 		private double ProcInsPaid;
 		private double ProcInsEst;
 		private double ProcAdj;
 		private double ProcPrevPaid;
 		private System.Windows.Forms.Label label15;
 		private OpenDental.ValidDate textDateEntry;
+		private TextBox textProcWriteoff;
+		private Label label16;
 		private double ProcPaidHere;
 
 
@@ -143,6 +146,8 @@ namespace OpenDental
 			this.butAttach = new OpenDental.UI.Button();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.label15 = new System.Windows.Forms.Label();
+			this.textProcWriteoff = new System.Windows.Forms.TextBox();
+			this.label16 = new System.Windows.Forms.Label();
 			this.groupPatient.SuspendLayout();
 			this.groupProcedure.SuspendLayout();
 			this.SuspendLayout();
@@ -335,6 +340,8 @@ namespace OpenDental
 			// 
 			// groupProcedure
 			// 
+			this.groupProcedure.Controls.Add(this.textProcWriteoff);
+			this.groupProcedure.Controls.Add(this.label16);
 			this.groupProcedure.Controls.Add(this.textProcTooth);
 			this.groupProcedure.Controls.Add(this.label14);
 			this.groupProcedure.Controls.Add(this.textProcProv);
@@ -415,7 +422,7 @@ namespace OpenDental
 			this.labelProcRemain.Name = "labelProcRemain";
 			this.labelProcRemain.Size = new System.Drawing.Size(73,18);
 			this.labelProcRemain.TabIndex = 41;
-			this.labelProcRemain.Text = "$90.00";
+			this.labelProcRemain.Text = "$85.00";
 			this.labelProcRemain.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textProcPaidHere
@@ -470,7 +477,7 @@ namespace OpenDental
 			// 
 			// textProcFee
 			// 
-			this.textProcFee.Location = new System.Drawing.Point(461,48);
+			this.textProcFee.Location = new System.Drawing.Point(461,28);
 			this.textProcFee.Name = "textProcFee";
 			this.textProcFee.ReadOnly = true;
 			this.textProcFee.Size = new System.Drawing.Size(76,20);
@@ -534,7 +541,7 @@ namespace OpenDental
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(353,50);
+			this.label6.Location = new System.Drawing.Point(353,30);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(104,16);
 			this.label6.TabIndex = 28;
@@ -612,6 +619,25 @@ namespace OpenDental
 			this.label15.TabIndex = 115;
 			this.label15.Text = "Entry Date";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textProcWriteoff
+			// 
+			this.textProcWriteoff.Location = new System.Drawing.Point(461,48);
+			this.textProcWriteoff.Name = "textProcWriteoff";
+			this.textProcWriteoff.ReadOnly = true;
+			this.textProcWriteoff.Size = new System.Drawing.Size(76,20);
+			this.textProcWriteoff.TabIndex = 50;
+			this.textProcWriteoff.Text = "5.00";
+			this.textProcWriteoff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(353,50);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(104,16);
+			this.label16.TabIndex = 49;
+			this.label16.Text = "- Writeoff";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormPaySplitEdit
 			// 
@@ -742,6 +768,8 @@ namespace OpenDental
 				textProcDescription.Text="";
 				ProcFee=0;
 				textProcFee.Text="";
+				ProcWriteoff=0;
+				textProcWriteoff.Text="";
 				ProcInsPaid=0;
 				textProcInsPaid.Text="";
 				ProcInsEst=0;
@@ -768,12 +796,19 @@ namespace OpenDental
 			textProcTooth.Text=Tooth.ToInternat(ProcCur.ToothNum);
 			textProcDescription.Text=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
 			ProcFee=ProcCur.ProcFee;
+			ProcWriteoff=-ClaimProcs.ProcWriteoff(ClaimProcList,ProcCur.ProcNum);
 			ProcInsPaid=-ClaimProcs.ProcInsPay(ClaimProcList,ProcCur.ProcNum);
 			ProcInsEst=-ClaimProcs.ProcEstNotReceived(ClaimProcList,ProcCur.ProcNum);
 			ProcAdj=Adjustments.GetTotForProc(ProcCur.ProcNum,AdjustmentList);
 			//next line will still work even if IsNew
 			ProcPrevPaid=-PaySplits.GetTotForProc(ProcCur.ProcNum,PaySplitList,PaySplitCur.SplitNum);
 			textProcFee.Text=ProcFee.ToString("F");
+			if(ProcWriteoff==0){
+				textProcWriteoff.Text="";
+			}
+			else{
+				textProcWriteoff.Text=ProcWriteoff.ToString("F");
+			}
 			if(ProcInsPaid==0){
 				textProcInsPaid.Text="";
 			}
@@ -818,6 +853,7 @@ namespace OpenDental
 			//most of these are negative values, so add
 			double remain=
 				ProcFee
+				+ProcWriteoff
 				+ProcInsPaid
 				+ProcInsEst
 				+ProcAdj
