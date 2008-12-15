@@ -172,6 +172,9 @@ namespace OpenDental {
 		private void FillGrid(){
 			int parent;
 			DateTime date;
+			if(TreeHistory==null){
+				return;
+			}
 			if(TreeHistory.Count>0) {//not on main trunk
 				parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
 				date=DateTime.MinValue;
