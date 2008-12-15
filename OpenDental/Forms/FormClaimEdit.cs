@@ -3870,9 +3870,9 @@ namespace OpenDental{
 					}
 				}
 				if(!allReceived){
-					if(MessageBox.Show(Lan.g(this,"All items will be marked received.  Continue?")
-						,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-					return;
+					if(!MsgBox.Show(this,true,"All items will be marked received.  Continue?")){
+						return;
+					}
 					for(int i=0;i<ClaimProcsForClaim.Length;i++){
 						if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
 							//ClaimProcs.Cur=(ClaimProc)ClaimProcs.ForClaim[i];
@@ -3880,6 +3880,22 @@ namespace OpenDental{
 							ClaimProcsForClaim[i].DateEntry=DateTime.Now;//date it was set rec'd
 							ClaimProcs.Update(ClaimProcsForClaim[i]);
 						}
+					}
+				}
+			}
+			else{//claim is any status except received
+				bool anyReceived=false;
+				for(int i=0;i<ClaimProcsForClaim.Length;i++){
+					if(((ClaimProc)ClaimProcsForClaim[i]).Status==ClaimProcStatus.Received){
+						anyReceived=true;
+					}
+				}
+				if(anyReceived){
+					//Too dangerous to automatically set items not received because I would have to check for attachments to checks, etc.
+					//Also too annoying to block user.
+					//So just warn user.
+					if(!MsgBox.Show(this,true,"Some of the items are marked received.  This is not a good idea since it will cause them to show in the Account as a 'payment'.  Continue anyway?")){
+						return;
 					}
 				}
 			}
