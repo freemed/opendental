@@ -75,12 +75,11 @@ namespace OpenDentBusiness{
 		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum,int siteNum){
 			string command="SELECT tplanned.*,tregular.aptnum "
 				+"FROM appointment tplanned "
-				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum ";
-			if(orderby=="alph" || siteNum>0){
-				command+="LEFT JOIN patient ON patient.PatNum=tplanned.PatNum ";
-			}
-			command+="WHERE tplanned.aptstatus = "+POut.PInt((int)ApptStatus.Planned)
-				+" AND tregular.aptnum IS NULL ";
+				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum "
+				+"LEFT JOIN patient ON patient.PatNum=tplanned.PatNum "
+				+"WHERE tplanned.aptstatus = "+POut.PInt((int)ApptStatus.Planned)+" "
+				+"AND tregular.aptnum IS NULL "
+				+"AND patient.PatStatus="+POut.PInt((int)PatientStatus.Patient)+" ";
 			if(provNum>0) {
 				command+="AND (tplanned.ProvNum="+POut.PInt(provNum)+" OR tplanned.ProvHyg="+POut.PInt(provNum)+") ";
 			}
