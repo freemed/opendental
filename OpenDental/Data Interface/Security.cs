@@ -77,6 +77,14 @@ namespace OpenDental{
 			if(date>dateLimit){//authorized
 				return true;
 			}
+			//there might be other similar situations, but we have to handle them individually to avoid introduction of bugs.
+			//no date sent was entered before setting claim received
+			if(perm==Permissions.ClaimSentEdit
+				&& date.Year<1880
+				&& dateLimit.Year<1880)
+			{
+				return true;
+			}
 			if(!suppressMessage){
 				MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"
 					+GroupPermissions.GetDesc(perm)+"\r\n"+Lan.g("Security","Date limitation"));

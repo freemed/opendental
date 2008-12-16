@@ -3959,6 +3959,13 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a date of service");
 				return false;
 			}
+			if((listClaimStatus.SelectedIndex==5//received
+				|| listClaimStatus.SelectedIndex==4)//sent
+				&& textDateSent.Text=="")
+			{
+				MsgBox.Show(this,"Please enter date sent.");
+				return false;
+			}
 			if(ClaimCur.ClaimType=="PreAuth"){
 				bool preauthChanged=false;
 				for(int i=0;i<ClaimProcsForClaim.Length;i++){
