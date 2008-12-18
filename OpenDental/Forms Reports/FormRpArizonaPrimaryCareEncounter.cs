@@ -62,6 +62,13 @@ namespace OpenDental {
 			int payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
+			//Only certain procedures can be billed to the Arizona Primary Care program.
+			//Since the code list doesn't change often, it is simply hard coded here.
+			string billableProcedures="'D0120','D0140','D0150','D0160','D1110','D1120','D1201','D1203','D1204','D1205',"+
+				"'D1351','D1510','D1515','D1520','D1525','D1550','D4341','D4355','D4910','D2140','D2150','D2160','D2161',"+
+				"'D2330','D2331','D2332','D2335','D2390','D2391','D2392','D2393','D2394','D2910','D2920','D2930','D2931',"+
+				"'D2932','D2940','D2950','D2970','D3110','D3120','D3220','D3221','D3230','D3240','D7140','D7210','D7220',"+
+				"'D7270','D7285','D7286','D7510','D9110','D9310','D9610'";
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
@@ -75,7 +82,7 @@ namespace OpenDental {
 				command="SELECT a.AptNum FROM appointment a WHERE a.PatNum="+patNum+" AND a.AptStatus="+((int)ApptStatus.Complete)+" AND "+
 					"a.AptDateTime BETWEEN "+POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value)+" AND "+
 					"(SELECT COUNT(*) FROM procedurelog pl,procedurecode pc WHERE pl.AptNum=a.AptNum AND pc.CodeNum=pl.CodeNum AND "+
-					"pc.ProcCode REGEXP '^D[0-9]{4}$' LIMIT 1)>0";
+					"pc.ProcCode IN ("+billableProcedures+") LIMIT 1)>0";
 				DataTable appointmentList=General.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.PInt(PIn.PInt(appointmentList.Rows[j][0].ToString()));
@@ -102,12 +109,12 @@ namespace OpenDental {
 						"'' DiagnosisCode4,"+//Diagnosis code 4
 						"(SELECT a.AptDateTime FROM appointment a WHERE a.AptNum="+aptNum+" LIMIT 1) DateOfEncounter,"+//Date of encounter
 						"(SELECT pc.ProcCode FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode REGEXP '^D[0-9]{4}$' ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum LIMIT 1) Procedure1,"+
 						"'' Procedure1Modifier1,"+//Procedure modifier 1
 						"'' Procedure1Modifier2,"+//Procedure modifier 2
 						"'' Procedure1DiagnosisCode,"+//Diagnosis code
 						"(SELECT pl.ProcFee FROM procedurecode pc,procedurelog pl "+
-							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode REGEXP '^D[0-9]{4}$' ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
+							"WHERE pl.AptNum="+aptNum+" AND pl.CodeNum=pc.CodeNum AND pc.ProcCode IN ("+billableProcedures+") ORDER BY pl.ProcNum LIMIT 1) Procedure1Charges,"+
 						"'' Procedure2,"+//2nd procedure cpt/hcpcs
 						"'' Procedure2Modifier1,"+//2nd procedure modifier 1
 						"'' Procedure2Modifier2,"+//2nd procedure modifier 2
