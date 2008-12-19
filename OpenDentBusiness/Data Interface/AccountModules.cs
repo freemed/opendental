@@ -534,8 +534,8 @@ namespace OpenDentBusiness {
 				+"ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
-				+"(SELECT MIN(ClaimNum) FROM claimproc cp3 WHERE procedurelog.ProcNum=cp3.ProcNum "
-				+"AND cp3.Status!=7) unsent_,"
+				+"(SELECT MIN(ClaimNum) FROM claimproc cp3,insplan WHERE procedurelog.ProcNum=cp3.ProcNum "
+				+"AND insplan.PlanNum=cp3.PlanNum AND insplan.IsMedical=0 AND cp3.Status!=7) unsent_,"
 				+"(SELECT SUM(WriteOff) FROM claimproc cp2 WHERE procedurelog.ProcNum=cp2.ProcNum "
 				+"AND cp2.Status=7) writeOffCap_ "//CapComplete (CapClaim handled on claimproc row)
 				+"FROM procedurelog "
