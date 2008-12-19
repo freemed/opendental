@@ -796,7 +796,7 @@ namespace OpenDental{
 						displayStrings[i]=PatCur.SchoolName;
 						break;
 					case "PatientLastFirst":
-						displayStrings[i]=PatCur.LName+", "+PatCur.FName+", "+PatCur.MiddleI;
+						displayStrings[i]=PatCur.LName+", "+PatCur.FName+" "+PatCur.MiddleI;
 						break;
 					case "PatientFirstName":
 						displayStrings[i] = PatCur.FName;
