@@ -40,7 +40,12 @@ namespace OpenDentBusiness{
 
 		///<summary>Computes aging for entire family.  Gets all info from database.</summary>
 		public static void ComputeAging(int guarantor,DateTime asOfDate){
-			AsOfDate=asOfDate;
+			if(asOfDate.Year<1880){
+				AsOfDate=DateTime.Today;
+			}
+			else{
+				AsOfDate=asOfDate;
+			}
 			Bal=new double[4];
 			Bal[0]=0;//0_30
 			Bal[1]=0;//31_60
