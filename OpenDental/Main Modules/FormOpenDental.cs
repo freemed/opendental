@@ -198,6 +198,7 @@ namespace OpenDental{
 		private MenuItem menuItemFeeScheds;
 		private MenuItem menuItemAnesthMeds;
 		private MenuItem menuItemAnesthSuppliers;
+		private MenuItem menuItemMobileSync;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
@@ -331,6 +332,7 @@ namespace OpenDental{
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemMergeDatabases = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomerManage = new System.Windows.Forms.MenuItem();
+			this.menuItemMobileSync = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemRemote = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
@@ -880,7 +882,8 @@ namespace OpenDental{
             this.menuItemTerminalManager,
             this.menuItemReqStudents,
             this.menuItemMergeDatabases,
-            this.menuItemCustomerManage});
+            this.menuItemCustomerManage,
+            this.menuItemMobileSync});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
 			// 
@@ -1007,6 +1010,12 @@ namespace OpenDental{
 			this.menuItemCustomerManage.Index = 15;
 			this.menuItemCustomerManage.Text = "Customer Management";
 			this.menuItemCustomerManage.Click += new System.EventHandler(this.menuItemCustomerManage_Click);
+			// 
+			// menuItemMobileSync
+			// 
+			this.menuItemMobileSync.Index = 16;
+			this.menuItemMobileSync.Text = "Mobile Sync";
+			this.menuItemMobileSync.Click += new System.EventHandler(this.menuItemMobileSync_Click);
 			// 
 			// menuItemHelp
 			// 
@@ -3724,6 +3733,15 @@ namespace OpenDental{
 			}
 		}
 
+		private void menuItemMobileSync_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
+			FormMobile FormM=new FormMobile();
+			FormM.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
+		}
+
 		//Help
 		private void menuItemRemote_Click(object sender,System.EventArgs e) {
 			try {
@@ -3827,6 +3845,8 @@ namespace OpenDental{
 			RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
 		}
+
+		
 
 	
 

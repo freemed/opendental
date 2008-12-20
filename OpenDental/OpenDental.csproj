@@ -19,6 +19,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>http://localhost/OpenDental/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -33,7 +34,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -409,6 +409,12 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldSigBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldSigBox.designer.cs">
+      <DependentUpon>FormSheetFieldSigBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormMobile.cs">
       <SubType>Form</SubType>
@@ -3552,6 +3558,12 @@
     <Compile Include="UI\SignatureBox.Designer.cs">
       <DependentUpon>SignatureBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\SignatureBoxWrapper.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\SignatureBoxWrapper.Designer.cs">
+      <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
+    </Compile>
     <Compile Include="User Controls\ContrAnesthesia.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -3669,6 +3681,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFieldSigBox.resx">
+      <DependentUpon>FormSheetFieldSigBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMobile.resx">
@@ -3882,6 +3898,10 @@
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight6.gif" />
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight7.gif" />
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight8.gif" />
+    <EmbeddedResource Include="UI\SignatureBoxWrapper.resx">
+      <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ContrAnesthesiaData.resx">
       <DependentUpon>ContrAnesthesiaData.cs</DependentUpon>
       <LastGenOutput>ContrAnesthesia.Designer.cs</LastGenOutput>

@@ -54,7 +54,9 @@ namespace OpenDentBusiness {
 		///<Summary>A simple rectangle outline.</Summary>
 		Rectangle,
 		///<summary>A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.</summary>
-		CheckBox
+		CheckBox,
+		///<summary>A signature box, either Topaz pad or directly on the screen with stylus/mouse.  The signature is encrypted based an a hash of other data (yet to be determined).</summary>
+		SigBox
 		//<summary></summary>
 		//RadioButton
 		

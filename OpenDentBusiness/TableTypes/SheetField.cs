@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldType")]
 		private SheetFieldType fieldType;
 		private bool fieldTypeChanged;
-		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing.</summary>
+		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox.</summary>
 		public SheetFieldType FieldType{
 			get{return fieldType;}
 			set{if(fieldType!=value){fieldType=value;MarkDirty();fieldTypeChanged=true;}}

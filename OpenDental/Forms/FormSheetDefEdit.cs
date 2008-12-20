@@ -104,6 +104,9 @@ namespace OpenDental {
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
+					listFields.Items.Add(Lan.g(this,"Signature Box"));
+				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
 					listFields.Items.Add(Lan.g(this,"Check:")+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
@@ -195,6 +198,17 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].XPos,
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
+					if(listFields.SelectedIndices.Contains(i)){
+						pen=penRed;
+					}
+					else{
+						pen=penBlue;
+					}
+					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -373,6 +387,22 @@ namespace OpenDental {
 			panelMain.Invalidate();
 		}
 
+		private void butAddSigBox_Click(object sender,EventArgs e) {
+			FormSheetFieldSigBox FormS=new FormSheetFieldSigBox();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewSigBox(0,0,0,0);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
 		private void listFields_Click(object sender,EventArgs e) {
 			//if(listFields.SelectedIndices.Count==0){
 			//	return;
@@ -499,6 +529,21 @@ namespace OpenDental {
 						return;
 					}
 					if(FormSB.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
+				case SheetFieldType.SigBox:
+					FormSheetFieldSigBox FormSBx=new FormSheetFieldSigBox();
+					FormSBx.SheetDefCur=SheetDefCur;
+					FormSBx.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSBx.IsReadOnly=true;
+					}
+					FormSBx.ShowDialog();
+					if(FormSBx.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSBx.SheetFieldDefCur==null){
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
@@ -664,6 +709,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

@@ -1966,9 +1966,9 @@ namespace OpenDental{
 					if(allowTopaz){
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
-                        CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-                        CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-                        CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+						CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
 						CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
 						CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
 						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
@@ -2653,7 +2653,7 @@ namespace OpenDental{
 			{
 				sigBox.ClearTablet();
 				if(allowTopaz){
-                    CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 					sigBoxTopaz.Visible=false;//until user explicitly starts it.
 				}
 				sigBox.SetTabletState(1);//on-screen box is now accepting input.
@@ -2677,7 +2677,7 @@ namespace OpenDental{
 			sigBox.ClearTablet();
 			sigBox.Visible=true;
 			if(allowTopaz) {
-                CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				sigBoxTopaz.Visible=false;//until user explicitly starts it.
 			}
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
@@ -2690,9 +2690,9 @@ namespace OpenDental{
 		private void butTopazSign_Click(object sender,EventArgs e) {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
-            if(allowTopaz){
-                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-            }
+			if(allowTopaz){
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
+			}
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 			ProcCur.UserNum=Security.CurUser.UserNum;

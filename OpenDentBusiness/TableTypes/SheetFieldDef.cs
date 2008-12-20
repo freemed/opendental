@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldType")]
 		private SheetFieldType fieldType;
 		private bool fieldTypeChanged;
-		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image.</summary>
+		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox.</summary>
 		public SheetFieldType FieldType{
 			get{return fieldType;}
 			set{if(fieldType!=value){fieldType=value;MarkDirty();fieldTypeChanged=true;}}
@@ -247,6 +247,11 @@ namespace OpenDentBusiness{
 
 		public static SheetFieldDef NewCheckBox(string fieldName,int xPos,int yPos,int width,int height){
 			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+		}
+
+		public static SheetFieldDef NewSigBox(int xPos,int yPos,int width,int height){
+			return new SheetFieldDef(SheetFieldType.SigBox,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 

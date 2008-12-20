@@ -41,6 +41,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butAddSigBox = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupAddNew.SuspendLayout();
 			this.SuspendLayout();
@@ -116,6 +117,7 @@ namespace OpenDental{
 			// groupAddNew
 			// 
 			this.groupAddNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupAddNew.Controls.Add(this.butAddSigBox);
 			this.groupAddNew.Controls.Add(this.butAddCheckBox);
 			this.groupAddNew.Controls.Add(this.butAddRect);
 			this.groupAddNew.Controls.Add(this.butAddLine);
@@ -308,6 +310,22 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butAddSigBox
+			// 
+			this.butAddSigBox.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddSigBox.Autosize = true;
+			this.butAddSigBox.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddSigBox.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddSigBox.CornerRadius = 4F;
+			this.butAddSigBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddSigBox.Location = new System.Drawing.Point(70,75);
+			this.butAddSigBox.Name = "butAddSigBox";
+			this.butAddSigBox.Size = new System.Drawing.Size(67,20);
+			this.butAddSigBox.TabIndex = 92;
+			this.butAddSigBox.TabStop = false;
+			this.butAddSigBox.Text = "Signature";
+			this.butAddSigBox.Click += new System.EventHandler(this.butAddSigBox_Click);
+			// 
 			// FormSheetDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -357,5 +375,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddRect;
 		private OpenDental.UI.Button butAddLine;
 		private OpenDental.UI.Button butAddCheckBox;
+		private OpenDental.UI.Button butAddSigBox;
 	}
 }
