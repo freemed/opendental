@@ -173,93 +173,25 @@ namespace OpenDental {
 				if(field.FieldType!=SheetFieldType.SigBox){
 					continue;
 				}
-				OpenDental.UI.SignatureBox sigBox=new OpenDental.UI.SignatureBox();
-				// 
-				// sigBox
-				// 
-				/*
-				this.sigBox.Location = new System.Drawing.Point(505,347);
-				this.sigBox.Name = "sigBox";
-				this.sigBox.Size = new System.Drawing.Size(362,79);
-				this.sigBox.TabIndex = 86;
-				this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
-				this.Controls.Add(this.sigBox);
-				Control sigBoxTopaz;
-				bool allowTopaz;
-				allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
-				sigBox.SetTabletState(1);
-				if(!allowTopaz) {
-					butTopazSign.Visible=false;
-					sigBox.Visible=true;
-				}
-				else{
-					//Add signature box for Topaz signatures.
-					sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
-					sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
-					sigBoxTopaz.Name="sigBoxTopaz";
-					sigBoxTopaz.Size=new System.Drawing.Size(362,79);
-					sigBoxTopaz.TabIndex=92;
-					sigBoxTopaz.Text="sigPlusNET1";
-					sigBoxTopaz.Visible=false;
-					Controls.Add(sigBoxTopaz);
-					//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
-					CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
-				}
-				sigBox.Visible=true;
-				if(ProcCur.SigIsTopaz){
-					if(ProcCur.Signature!=""){
-						if(allowTopaz){
-							sigBox.Visible=false;
-							sigBoxTopaz.Visible=true;
-							CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
-							CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
-							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
-							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
-							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
-							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,ProcCur.Signature);
-							if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
-								labelInvalidSig.Visible=true;
-							}
-						}
+				OpenDental.UI.SignatureBoxWrapper sigBox=new OpenDental.UI.SignatureBoxWrapper();
+				sigBox.Location=new Point(field.XPos,field.YPos);
+				sigBox.Width=field.Width;
+				sigBox.Height=field.Height;
+				if(field.FieldValue.Length>0){//a signature is present
+					bool sigIsTopaz=false;
+					if(field.FieldValue[0]=='1'){
+						sigIsTopaz=true;
 					}
-				}
-				else{
-					if(ProcCur.Signature!=null && ProcCur.Signature!="") {
-						sigBox.Visible=true;
-						sigBoxTopaz.Visible=false;
-						sigBox.ClearTablet();
-						//sigBox.SetSigCompressionMode(0);
-						//sigBox.SetEncryptionMode(0);
-						sigBox.SetKeyString("0000000000000000");
-						sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-						//sigBox.SetEncryptionMode(2);//high encryption
-						//sigBox.SetSigCompressionMode(2);//high compression
-						sigBox.SetSigString(ProcCur.Signature);
-						if(sigBox.NumberOfTabletPoints()==0) {
-							labelInvalidSig.Visible=true;
-						}
-						sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
+					string signature="";
+					if(field.FieldValue.Length>1){
+						signature=field.FieldValue.Substring(1);
 					}
-				}*/
-
-
-
-
-
-
-
-				checkbox=new SheetCheckBox();
-				if(field.FieldValue=="X"){
-					checkbox.IsChecked=true;
+					string keyData=Sheets.GetSignatureKey(SheetCur);
+					sigBox.FillSignature(sigIsTopaz,keyData,signature);
 				}
-				checkbox.Location=new Point(field.XPos,field.YPos);
-				checkbox.Width=field.Width;
-				checkbox.Height=field.Height;
-				checkbox.Tag=field;
-				panelMain.Controls.Add(checkbox);
-				checkbox.BringToFront();
+				sigBox.Tag=field;
+				panelMain.Controls.Add(sigBox);
+				sigBox.BringToFront();
 			}
 		}
 
@@ -598,6 +530,37 @@ namespace OpenDental {
 			}
 			if(isNew){
 				Sheets.SaveParameters(SheetCur);
+			}
+			//SigBoxes---------------------------------------------------
+			//SigBoxes must come after ALL other types in order for the keyData to be in the right order.
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(OpenDental.UI.SignatureBoxWrapper)){
+					continue;
+				}
+				if(control.Tag==null){
+					continue;
+				}
+				field=(SheetField)control.Tag;
+				OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
+				if(sigBox.GetSigChanged()){
+					//refresh the fields so they are in the correct order
+					SheetFields.GetFieldsAndParameters(SheetCur);
+					bool sigIsTopaz=sigBox.GetSigIsTopaz();
+					string keyData=Sheets.GetSignatureKey(SheetCur);
+					string signature=sigBox.GetSignature(keyData);
+					field.FieldValue="";
+					if(signature!=""){
+						if(sigIsTopaz){
+							field.FieldValue+="1";
+						}
+						else{
+							field.FieldValue+="0";
+						}
+						field.FieldValue+=signature;
+					}
+				}
+				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
+				SheetFields.WriteObject(field);
 			}
 			return true;
 		}

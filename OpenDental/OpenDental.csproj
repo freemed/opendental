@@ -3912,6 +3912,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Resources\Anesth.gif" />
+    <None Include="Resources\topazPen10.gif" />
+    <None Include="Resources\deleteX10.gif" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Resources\Med History.gif" />
     <None Include="Resources\Patient Info.gif" />

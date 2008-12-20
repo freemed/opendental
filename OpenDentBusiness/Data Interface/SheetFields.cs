@@ -16,7 +16,8 @@ namespace OpenDentBusiness{
 
 		///<summary>When we need to use a sheet, we must run this method to pull all the associated fields and parameters from the database.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(Sheet sheet){
-			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheet.SheetNum);
+			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheet.SheetNum)
+				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
 			sheet.SheetFields=new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
 			//so parameters will also be in the field list, but they will just be ignored from here on out.
 			//because we will have an explicit parameter list instead.

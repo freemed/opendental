@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Text;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
@@ -124,6 +125,21 @@ namespace OpenDentBusiness{
 				field.GrowthBehavior=GrowthBehaviorEnum.None;
 				SheetFields.WriteObject(field);
 			}
+		}
+
+		///<summary>Loops through all the fields in the sheet and appends together all the FieldValues.  It obviously excludes all SigBox fieldtypes.  It does include Drawing fieldtypes, so any change at all to any drawing will invalidate the signature.  It does include Image fieldtypes, although that's just a filename and does not really have any meaningful data about the image itself.  The order is absolutely critical.</summary>
+		public static string GetSignatureKey(Sheet sheet){
+			StringBuilder strBuild=new StringBuilder();
+			for(int i=0;i<sheet.SheetFields.Count;i++){
+				if(sheet.SheetFields[i].FieldValue==""){
+					continue;
+				}
+				if(sheet.SheetFields[i].FieldType==SheetFieldType.SigBox){
+					continue;
+				}
+				strBuild.Append(sheet.SheetFields[i].FieldValue);
+			}
+			return strBuild.ToString();
 		}
 
 		

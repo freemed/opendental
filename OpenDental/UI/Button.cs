@@ -258,7 +258,9 @@ namespace OpenDental.UI
 					DrawBackground(g,recOutline,radius,colorHoverDark,colorMain,colorHoverLight);
 					break;
 				case ControlState.Pressed:
-					radius=cornerRadius-3;
+					if(radius>3){
+						radius=cornerRadius-3;
+					}
 					DrawBackground(g,recOutline,radius,colorDarkest,colorMain,colorLightest);
 					break;
 			}

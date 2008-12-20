@@ -390,7 +390,7 @@ namespace OpenDental {
 		private void butAddSigBox_Click(object sender,EventArgs e) {
 			FormSheetFieldSigBox FormS=new FormSheetFieldSigBox();
 			FormS.SheetDefCur=SheetDefCur;
-			FormS.SheetFieldDefCur=SheetFieldDef.NewSigBox(0,0,0,0);
+			FormS.SheetFieldDefCur=SheetFieldDef.NewSigBox(0,0,364,81);
 			if(this.IsInternal){
 				FormS.IsReadOnly=true;
 			}
