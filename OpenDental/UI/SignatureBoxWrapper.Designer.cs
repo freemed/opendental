@@ -25,25 +25,11 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.labelInvalidSig = new System.Windows.Forms.Label();
 			this.butTopazSign = new OpenDental.UI.Button();
 			this.butClearSig = new OpenDental.UI.Button();
+			this.labelInvalidSig = new System.Windows.Forms.Label();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.SuspendLayout();
-			// 
-			// labelInvalidSig
-			// 
-			this.labelInvalidSig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
-			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(84,11);
-			this.labelInvalidSig.Name = "labelInvalidSig";
-			this.labelInvalidSig.Size = new System.Drawing.Size(196,59);
-			this.labelInvalidSig.TabIndex = 110;
-			this.labelInvalidSig.Text = "Invalid Signature";
-			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// butTopazSign
 			// 
@@ -58,7 +44,7 @@
 			this.butTopazSign.Name = "butTopazSign";
 			this.butTopazSign.Size = new System.Drawing.Size(14,14);
 			this.butTopazSign.TabIndex = 82;
-			this.toolTip1.SetToolTip(this.butTopazSign,"Clear Signature");
+			this.toolTip1.SetToolTip(this.butTopazSign,"Sign Topaz");
 			this.butTopazSign.Click += new System.EventHandler(this.butTopazSign_Click);
 			// 
 			// butClearSig
@@ -76,6 +62,20 @@
 			this.butClearSig.TabIndex = 81;
 			this.toolTip1.SetToolTip(this.butClearSig,"Clear Signature");
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
+			// 
+			// labelInvalidSig
+			// 
+			this.labelInvalidSig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
+			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInvalidSig.Location = new System.Drawing.Point(84,11);
+			this.labelInvalidSig.Name = "labelInvalidSig";
+			this.labelInvalidSig.Size = new System.Drawing.Size(196,59);
+			this.labelInvalidSig.TabIndex = 110;
+			this.labelInvalidSig.Text = "Invalid Signature";
+			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// sigBox
 			// 

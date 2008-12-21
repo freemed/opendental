@@ -219,7 +219,7 @@ namespace OpenDental {
 					g.DrawLine(pen3,field.XPos+field.Width,field.YPos,field.XPos,field.YPos+field.Height);
 				}
 			}
-			//then signature boxes
+			//then signature boxes----------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.SigBox){
 					continue;
@@ -347,6 +347,29 @@ namespace OpenDental {
 					g.DrawLine(pen3,p(field.XPos),p(field.YPos),p(field.XPos+field.Width),p(field.YPos+field.Height));
 					g.DrawLine(pen3,p(field.XPos+field.Width),p(field.YPos),p(field.XPos),p(field.YPos+field.Height));
 				}
+			}
+			//then signature boxes----------------------------------------------------------------------
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.SigBox){
+					continue;
+				}
+				SignatureBoxWrapper wrapper=new SignatureBoxWrapper();
+				wrapper.Width=field.Width;
+				wrapper.Height=field.Height;
+				if(field.FieldValue.Length>0){//a signature is present
+					bool sigIsTopaz=false;
+					if(field.FieldValue[0]=='1'){
+						sigIsTopaz=true;
+					}
+					string signature="";
+					if(field.FieldValue.Length>1){
+						signature=field.FieldValue.Substring(1);
+					}
+					string keyData=Sheets.GetSignatureKey(sheet);
+					wrapper.FillSignature(sigIsTopaz,keyData,signature);
+				}
+				XImage sigBitmap=XImage.FromGdiPlusImage(wrapper.GetSigImage());
+				g.DrawImage(sigBitmap,p(field.XPos),p(field.YPos),p(field.Width-2),p(field.Height-2));
 			}
 			document.Save(fullFileName);
 		}
