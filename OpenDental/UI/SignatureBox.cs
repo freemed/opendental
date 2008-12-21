@@ -153,7 +153,7 @@ namespace OpenDental.UI {
 		}
 
 		///<Summary>Also includes a surrounding box.</Summary>
-		public Image GetSigImage(){
+		public Image GetSigImage(bool includeBorder){
 			Image img=new Bitmap(Width,Height);
 			Graphics g=Graphics.FromImage(img);
 			g.FillRectangle(Brushes.White,0,0,this.Width,this.Height);
@@ -168,7 +168,9 @@ namespace OpenDental.UI {
 				}
 				g.DrawLine(pen,pointList[i-1],pointList[i]);
 			}
-			g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);			
+			if(includeBorder){
+				g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);
+			}
 			g.Dispose();
 			return img;
 		}

@@ -39,7 +39,6 @@ namespace OpenDental.UI {
 				butTopazSign.BringToFront();
 				butClearSig.BringToFront();
 			}
-
 		}
 
 		///<summary>Usually "Invalid Signature", but this can be changed for different situations.</summary>
@@ -180,5 +179,27 @@ namespace OpenDental.UI {
 				//textUser.Text=Userods.GetName(ProcCur.UserNum);
 			}
 		}
+
+		///<summary>Must set width and height of control and run FillSignature first.</summary>
+		public Bitmap GetSigImage(){
+			Bitmap sigBitmap=new Bitmap(Width-2,Height-2);
+			//no outline
+			if(allowTopaz && sigBoxTopaz.Visible){
+				sigBoxTopaz.DrawToBitmap(sigBitmap,new Rectangle(0,0,Width-2,Height-2));//GetBitmap would probably work.
+			}
+			else{
+				sigBitmap=(Bitmap)sigBox.GetSigImage(false);
+			}
+			return sigBitmap;
+		}
+
+
+
+
+
+
+
+
+
 	}
 }

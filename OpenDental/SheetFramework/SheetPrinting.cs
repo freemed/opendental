@@ -12,6 +12,7 @@ using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public class SheetPrinting {
@@ -217,6 +218,29 @@ namespace OpenDental {
 					g.DrawLine(pen3,field.XPos,field.YPos,field.XPos+field.Width,field.YPos+field.Height);
 					g.DrawLine(pen3,field.XPos+field.Width,field.YPos,field.XPos,field.YPos+field.Height);
 				}
+			}
+			//then signature boxes
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.SigBox){
+					continue;
+				}
+				SignatureBoxWrapper wrapper=new SignatureBoxWrapper();
+				wrapper.Width=field.Width;
+				wrapper.Height=field.Height;
+				if(field.FieldValue.Length>0){//a signature is present
+					bool sigIsTopaz=false;
+					if(field.FieldValue[0]=='1'){
+						sigIsTopaz=true;
+					}
+					string signature="";
+					if(field.FieldValue.Length>1){
+						signature=field.FieldValue.Substring(1);
+					}
+					string keyData=Sheets.GetSignatureKey(sheet);
+					wrapper.FillSignature(sigIsTopaz,keyData,signature);
+				}
+				Bitmap sigBitmap=wrapper.GetSigImage();
+				g.DrawImage(sigBitmap,field.XPos,field.YPos,field.Width-2,field.Height-2);
 			}
 			g.Dispose();
 			//no logic yet for multiple pages on one sheet.

@@ -2057,15 +2057,15 @@ namespace OpenDental{
 				System.Drawing.Bitmap sigBitmap=null;
 				List<ProcTP> proctpList=ProcTPs.RefreshForTP(PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum);
 				if(PlanList[gridPlans.SelectedIndices[0]-1].SigIsTopaz){
-                    Control sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
+					Control sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 					sigBoxTopaz.Size=new System.Drawing.Size(362,79);
 					Controls.Add(sigBoxTopaz);
-                    CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-                    CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);					
+					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);					
 					string keystring=TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList);
-                    CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
-                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
 					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
 					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,PlanList[gridPlans.SelectedIndices[0]-1].Signature);
 					sigBoxTopaz.Refresh();
@@ -2090,7 +2090,7 @@ namespace OpenDental{
 					//	labelInvalidSig.Visible=true;
 					//}
 					//sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
-					sigBitmap=(Bitmap)sigBox.GetSigImage();
+					sigBitmap=(Bitmap)sigBox.GetSigImage(true);
 				}
 				if(sigBitmap!=null){
 					frame=MigraDocHelper.CreateContainer(section);
