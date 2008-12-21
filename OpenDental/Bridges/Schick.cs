@@ -29,7 +29,7 @@ namespace OpenDental.Bridges{
 				patID=pat.ChartNumber;
 			}
 			try {
-				VBbridges.Schick.Launch(patID,pat.LName,pat.FName);
+				VBbridges.Schick2.Launch(patID,pat.LName,pat.FName);
 			}
 			catch {
 				MessageBox.Show("Error launching Schick CDR Dicom.");
