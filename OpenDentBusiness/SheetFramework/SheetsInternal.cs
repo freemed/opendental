@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 					return LabelAppointment();
 				case SheetInternalType.Rx:
 					return Rx();
+				case SheetInternalType.Consent:
+					return Consent();
 				//case SheetInternalType.PatientRegistration:
 				//	return PatientRegistration();
 				default:
@@ -316,6 +318,35 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(295,y,230,0));
 			y+=4;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature of Prescriber",sheet.FontSize,sheet.FontName,false,340,y,150,rowH));
+			return sheet;
+		}
+
+		private static SheetDef Consent(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.Consent);
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=9f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=14;
+			int x=220;
+			int y=40;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Consent Form",10,sheet.FontName,true,x,y,100,19));
+			y+=35;
+			x=50;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("dateTime.Today",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Tooth number: ",sheet.FontSize,sheet.FontName,false,x,y,90,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+90,y,100,rowH));
+			y+=rowH;
+			y+=20;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I give permission for my tooth to be extracted. Etc.",sheet.FontSize,sheet.FontName,false,x,y,450,100));
+			y+=100;
+			y+=20;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
+			y+=82;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature",sheet.FontSize,sheet.FontName,false,x,y,60,rowH));
 			return sheet;
 		}
 

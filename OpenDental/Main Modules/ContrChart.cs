@@ -2929,10 +2929,7 @@ namespace OpenDental{
 			if(PrefC.GetBoolSilent("EnableAnesthMod",true)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
 			}
-			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
-			//button.Style=ODToolBarButtonStyle.DropDownButton;
-			//button.DropDownMenu=menuEmail;
-			//ToolBarMain.Buttons.Add(button);
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -3133,9 +3130,9 @@ namespace OpenDental{
 					case "Anesthesia":
 						OnAnesthesia_Click();
 						break;
-					//case "Commlog":
-					//	OnCommlog_Click();
-					//	break;
+					case "Consent":
+						OnConsent_Click();
+						break;
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
@@ -3171,8 +3168,9 @@ namespace OpenDental{
 			FormL.CaseCur=lab;
 			FormL.IsNew=true;
 			FormL.ShowDialog();
-			if(FormL.DialogResult!=DialogResult.OK)
+			if(FormL.DialogResult!=DialogResult.OK){
 				return;
+			}
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3182,16 +3180,46 @@ namespace OpenDental{
 		}
 
 		private void OnAnesthesia_Click(){
-
 			AnestheticData AnestheticDataCur;
 			AnestheticDataCur = new AnestheticData();
 			FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur, AnestheticDataCur);
 			FormAR.ShowDialog();
-
 			PatCur = Patients.GetPat(8);
 			OnPatientSelected(8, Convert.ToString(PatCur), true, "8");
-		
-		
+		}
+
+		private void OnConsent_Click() {
+			//Referral referral=Referrals.GetReferral(RefAttachList[idx].ReferralNum);
+			/*SheetDef sheetDef;
+			if(referral.Slip==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
+			}
+			else{
+				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
+			}
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",PatNum);
+			SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+			FormS.ShowDialog();
+
+
+
+
+
+			LabCase lab=new LabCase();
+			lab.PatNum=PatCur.PatNum;
+			lab.ProvNum=Patients.GetProvNum(PatCur);
+			lab.DateTimeCreated=MiscData.GetNowDateTime();
+			FormLabCaseEdit FormL=new FormLabCaseEdit();
+			FormL.CaseCur=lab;
+			FormL.IsNew=true;
+			FormL.ShowDialog();
+			if(FormL.DialogResult!=DialogResult.OK)
+				return;
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void FillPtInfo(){

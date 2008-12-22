@@ -16,7 +16,9 @@ namespace OpenDentBusiness {
 		///<Summary>4-Requires SheetParameter for AptNum. Does not get saved to db.</Summary>
 		LabelAppointment,
 		///<Summary>5-Requires SheetParameter for RxNum.</Summary>
-		Rx
+		Rx,
+		///<summary>6-Requires SheetParameter for PatNum.</summary>
+		Consent
 		//<Summary>6-Requires SheetParameter for PatNum.</Summary>
 		//PatientRegistration
 		/*StatementHeader,
@@ -75,6 +77,7 @@ namespace OpenDentBusiness {
 		ReferralSlip,
 		LabelAppointment,
 		Rx,
+		Consent
 		//PatientRegistration
 	}
 
