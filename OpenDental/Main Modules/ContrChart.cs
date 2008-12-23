@@ -3184,8 +3184,11 @@ namespace OpenDental{
 			AnestheticDataCur = new AnestheticData();
 			FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur, AnestheticDataCur);
 			FormAR.ShowDialog();
-			PatCur = Patients.GetPat(8);
-			OnPatientSelected(8, Convert.ToString(PatCur), true, "8");
+
+			PatCur = Patients.GetPat(Convert.ToInt32(PatCur.PatNum));
+			OnPatientSelected(Convert.ToInt32(PatCur.PatNum), Convert.ToString(PatCur), true, Convert.ToString(PatCur));
+			FillPtInfo();
+			return;
 		}
 
 		private void OnConsent_Click() {

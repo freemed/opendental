@@ -163,6 +163,7 @@ namespace OpenDental
 		public string AnesthScore;
 		public int anesthScore;
 		public int CurPatNum;
+		
 	
 		
 		//
@@ -2232,12 +2233,12 @@ namespace OpenDental
 			else butAnesthOpen.Enabled = false;
 
 			//disables these buttons until AnesthOpen button is clicked.
-			butSurgOpen.Enabled = false;
+			/*butSurgOpen.Enabled = false;
 			butSurgClose.Enabled = false;
 			butAnesthClose.Enabled = false;
 			if (textAnesthClose.Text == "")
 				butAnesthScore.Enabled = false;
-			else butAnesthScore.Enabled = true;
+			else butAnesthScore.Enabled = true;*/  // This is too annoying right now
 			IsStartingUp = true;
 			//display Patient name
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
@@ -2997,45 +2998,26 @@ namespace OpenDental
 		}
 
 		private void butAnesthOpen_Click(object sender, EventArgs e){
-
-			butAnesthOpen.Enabled = false;
+			
 			textAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows "AM/PM", change to "HH:mm:ss" for military time
 			
-			//Enables Surgery Open Button
-			butSurgOpen.Enabled = true;
-			textSurgOpen.Enabled = true;
         }
 
 		private void butSurgOpen_Click(object sender, EventArgs e){
 
-			butSurgOpen.Enabled = false;
 			textSurgOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
-			
-			//Enables Surgery Close Button 
-			butSurgClose.Enabled = true;
-			textSurgClose.Enabled = true;
-			butAnesthOpen.Enabled = false;
+
 		}
 
 		private void butSurgClose_Click(object sender, EventArgs e){	
 
-			butSurgOpen.Enabled = false;
 			textSurgClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
-
-			//Enables Anesthesia Close Button 
-			butAnesthClose.Enabled = true;
-			textAnesthClose.Enabled = true;
-			butSurgClose.Enabled = false;
 			
 		}
 
 		private void butAnesthClose_Click(object sender, EventArgs e){	
-			
-			butSurgClose.Enabled = false;
+		
 			textAnesthClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
-			//To enable Anesthetic Score Button 
-			butAnesthScore.Enabled = true;
-			butAnesthClose.Enabled = false;
 			butAnesthScore.Focus();
 		}
 
@@ -3560,6 +3542,7 @@ namespace OpenDental
 			SaveSignature(AnesthDataCur);
 			SaveData();
 			DialogResult = DialogResult.OK;
+			
 		}
 
 		//Saves Data to db if either "Save" or "Save and Close" buttons are clicked
@@ -3932,7 +3915,7 @@ namespace OpenDental
 				
 				FormAR.DialogResult = DialogResult.OK;
 				PatNum = Patients.GetPat(CurPatNum);
-				return;
+				
 			}
 
 		}
