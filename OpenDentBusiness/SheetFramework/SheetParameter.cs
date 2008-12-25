@@ -45,6 +45,9 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.Rx) {
 				list.Add(new SheetParameter(true,"RxNum"));
 			}
+			if(sheetType==SheetTypeEnum.Consent) {
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
 			return list;
 		}
 

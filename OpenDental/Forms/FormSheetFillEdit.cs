@@ -149,6 +149,7 @@ namespace OpenDental {
 				textbox.Height=field.Height;
 				//textbox.ScrollBars=RichTextBoxScrollBars.None;
 				textbox.Tag=field;
+				textbox.TextChanged+=new EventHandler(text_TextChanged);
 				panelMain.Controls.Add(textbox);
 				textbox.BringToFront();
 			}
@@ -165,6 +166,7 @@ namespace OpenDental {
 				checkbox.Width=field.Width;
 				checkbox.Height=field.Height;
 				checkbox.Tag=field;
+				checkbox.Click+=new EventHandler(text_TextChanged);
 				panelMain.Controls.Add(checkbox);
 				checkbox.BringToFront();
 			}
@@ -192,6 +194,21 @@ namespace OpenDental {
 				sigBox.Tag=field;
 				panelMain.Controls.Add(sigBox);
 				sigBox.BringToFront();
+			}
+		}
+
+		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.</summary>
+		private void text_TextChanged(object sender,EventArgs e) {
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(OpenDental.UI.SignatureBoxWrapper)){
+					continue;
+				}
+				if(control.Tag==null){
+					continue;
+				}
+				SheetField field=(SheetField)control.Tag;
+				OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
+				sigBox.SetInvalid();
 			}
 		}
 
@@ -575,6 +592,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 

@@ -107,6 +107,30 @@ namespace OpenDental.UI {
 			return false;
 		}
 
+		/*
+		///<summary></summary>
+		public bool GetSigIsValid(){
+			if(labelInvalidSig.Visible){
+				return false;
+			}
+			return true;
+		}*/
+
+		///<summary>This should happen a lot before the box is signed.  Once it's signed, if this happens, then the signature will be invalidated.  The user would have to clear the invalidation manually.  This "invalidation" is just a visual cue; nothing actually happens to the data.</summary>
+		public void SetInvalid(){
+			if(allowTopaz && sigBoxTopaz.Visible){
+				if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0){
+					return;//no need to do anything because no signature
+				}
+			}
+			else{
+				if(sigBox.NumberOfTabletPoints()==0) {
+					return;//no need to do anything because no signature
+				}
+			}
+			labelInvalidSig.Visible=true;	
+		}
+
 		///<summary>This should NOT be used unless GetSigChanged returns true.</summary>
 		public string GetSignature(string keyData){
 			//Topaz boxes are written in Windows native code.

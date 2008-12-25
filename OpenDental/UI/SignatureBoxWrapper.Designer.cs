@@ -76,6 +76,7 @@
 			this.labelInvalidSig.TabIndex = 110;
 			this.labelInvalidSig.Text = "Invalid Signature";
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.labelInvalidSig.Visible = false;
 			// 
 			// sigBox
 			// 

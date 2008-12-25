@@ -139,9 +139,9 @@ namespace OpenDental {
 			Pen penRedThick=new Pen(Color.Red,1.6f);
 			Pen penBlack=new Pen(Color.Black);
 			Pen pen;
+			Brush brush;
 			SolidBrush brushBlue=new SolidBrush(Color.Blue);
 			SolidBrush brushRed=new SolidBrush(Color.Red);
-			SolidBrush brush=null;
 			Font font;
 			FontStyle fontstyle;
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
@@ -200,22 +200,25 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
 					continue;
 				}
-				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
-					if(listFields.SelectedIndices.Contains(i)){
-						pen=penRed;
-					}
-					else{
-						pen=penBlue;
-					}
-					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
-						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
-					continue;
-				}
 				fontstyle=FontStyle.Regular;
 				if(SheetDefCur.SheetFieldDefs[i].FontIsBold){
 					fontstyle=FontStyle.Bold;
 				}
 				font=new Font(SheetDefCur.SheetFieldDefs[i].FontName,SheetDefCur.SheetFieldDefs[i].FontSize,fontstyle);
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
+					if(listFields.SelectedIndices.Contains(i)){
+						pen=penRed;
+						brush=brushRed;
+					}
+					else{
+						pen=penBlue;
+						brush=brushRed;
+					}
+					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
+					g.DrawString("(signature box)",font,brush,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos);
+					continue;
+				}
 				if(listFields.SelectedIndices.Contains(i)){
 					g.DrawRectangle(penRed,SheetDefCur.SheetFieldDefs[i].Bounds);
 					brush=brushRed;

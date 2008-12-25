@@ -254,6 +254,14 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonADO;
 		private Label label24;
 		private ODGrid gridPlanned;
+		private ContextMenu menuConsent;
+		private MenuItem menuItem1;
+		private MenuItem menuItem2;
+		private MenuItem menuItem3;
+		private MenuItem menuItem4;
+		private MenuItem menuItem5;
+		private MenuItem menuItem6;
+		private MenuItem menuItem7;
 		private int Chartscrollval;
 	
 		///<summary></summary>
@@ -468,6 +476,14 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.menuConsent = new System.Windows.Forms.ContextMenu();
+			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuItem2 = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.menuItem5 = new System.Windows.Forms.MenuItem();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -802,9 +818,8 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
 			this.imageListMain.Images.SetKeyName(1,"Rx.gif");
 			this.imageListMain.Images.SetKeyName(2,"Probe.gif");
-			this.imageListMain.Images.SetKeyName(3, "Anesth.gif"); 
-			this.imageListMain.Images.SetKeyName(4, "commlog.gif");
-
+			this.imageListMain.Images.SetKeyName(3,"Anesth.gif");
+			this.imageListMain.Images.SetKeyName(4,"commlog.gif");
 			// 
 			// label4
 			// 
@@ -2748,6 +2763,53 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
+			// menuConsent
+			// 
+			this.menuConsent.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem1,
+            this.menuItem2,
+            this.menuItem3,
+            this.menuItem4,
+            this.menuItem5,
+            this.menuItem6,
+            this.menuItem7});
+			this.menuConsent.Popup += new System.EventHandler(this.menuConsent_Popup);
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 0;
+			this.menuItem1.Text = "Delete";
+			// 
+			// menuItem2
+			// 
+			this.menuItem2.Index = 1;
+			this.menuItem2.Text = "Set Complete";
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 2;
+			this.menuItem3.Text = "Edit All";
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 3;
+			this.menuItem4.Text = "Print Progress Notes ...";
+			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 4;
+			this.menuItem5.Text = "Print Day for Hospital";
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 5;
+			this.menuItem6.Text = "Detach Lab Fee";
+			// 
+			// menuItem7
+			// 
+			this.menuItem7.Index = 6;
+			this.menuItem7.Text = "Attach Lab Fee";
+			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.butForeignKey);
@@ -2919,7 +2981,7 @@ namespace OpenDental{
 		///<summary>Causes the toolbars to be laid out again.</summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
-			//ODToolBarButton button;
+			ODToolBarButton button;
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
@@ -2929,7 +2991,12 @@ namespace OpenDental{
 			if(PrefC.GetBoolSilent("EnableAnesthMod",true)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
 			}
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent"));
+			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
+			if(SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count>0){
+				button.Style=ODToolBarButtonStyle.DropDownButton;
+				button.DropDownMenu=menuConsent;
+			}
+			ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -3192,37 +3259,46 @@ namespace OpenDental{
 		}
 
 		private void OnConsent_Click() {
-			//Referral referral=Referrals.GetReferral(RefAttachList[idx].ReferralNum);
-			/*SheetDef sheetDef;
-			if(referral.Slip==0){
-				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
+			List<SheetDef> listSheets=SheetDefs.GetCustomForType(SheetTypeEnum.Consent);
+			if(listSheets.Count>0){
+				MsgBox.Show(this,"Please use dropdown list.");
+				return;
 			}
-			else{
-				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
-			}
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
-			SheetParameter.SetParameter(sheet,"PatNum",PatNum);
-			SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.Consent);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",PatCur.PatNum);
 			SheetFiller.FillFields(sheet);
-			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			Graphics g=this.CreateGraphics();
+			SheetUtil.CalculateHeights(sheet,g);
+			g.Dispose();
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
+			ModuleSelected(PatCur.PatNum);
+		}
 
+		private void menuConsent_Popup(object sender,EventArgs e) {
+			menuConsent.MenuItems.Clear();
+			List<SheetDef> listSheets=SheetDefs.GetCustomForType(SheetTypeEnum.Consent);
+			MenuItem menuItem;
+			for(int i=0;i<listSheets.Count;i++){
+				menuItem=new MenuItem(listSheets[i].Description);
+				menuItem.Tag=listSheets[i];
+				menuItem.Click+=new EventHandler(menuConsent_Click);
+				menuConsent.MenuItems.Add(menuItem);
+			}
+		}
 
-
-
-
-			LabCase lab=new LabCase();
-			lab.PatNum=PatCur.PatNum;
-			lab.ProvNum=Patients.GetProvNum(PatCur);
-			lab.DateTimeCreated=MiscData.GetNowDateTime();
-			FormLabCaseEdit FormL=new FormLabCaseEdit();
-			FormL.CaseCur=lab;
-			FormL.IsNew=true;
-			FormL.ShowDialog();
-			if(FormL.DialogResult!=DialogResult.OK)
-				return;
-			ModuleSelected(PatCur.PatNum);*/
+		private void menuConsent_Click(object sender,EventArgs e) {
+			SheetDef sheetDef=(SheetDef)(((MenuItem)sender).Tag);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",PatCur.PatNum);
+			SheetFiller.FillFields(sheet);
+			Graphics g=this.CreateGraphics();
+			SheetUtil.CalculateHeights(sheet,g);
+			g.Dispose();
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+			FormS.ShowDialog();
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void FillPtInfo(){
@@ -6823,6 +6899,8 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+		
 
 		
 
