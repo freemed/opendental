@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentMobile", "OpenDentMobile.csproj", "{3E6DADA0-98D5-4576-B5A5-F9FB19374682}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E6DADA0-98D5-4576-B5A5-F9FB19374682}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
