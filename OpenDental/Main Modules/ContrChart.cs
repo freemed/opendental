@@ -2992,10 +2992,10 @@ namespace OpenDental{
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
 			}
 			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
-			if(SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count>0){
+			//if(SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count>0){
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuConsent;
-			}
+			//}
 			ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -3290,6 +3290,7 @@ namespace OpenDental{
 
 		private void menuConsent_Click(object sender,EventArgs e) {
 			SheetDef sheetDef=(SheetDef)(((MenuItem)sender).Tag);
+			SheetDefs.GetFieldsAndParameters(sheetDef);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
 			SheetParameter.SetParameter(sheet,"PatNum",PatCur.PatNum);
 			SheetFiller.FillFields(sheet);
