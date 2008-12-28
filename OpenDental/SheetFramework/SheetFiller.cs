@@ -34,6 +34,9 @@ namespace OpenDental{
 				case SheetTypeEnum.Rx:
 					FillFieldsForRx(sheet);
 					break;
+				case SheetTypeEnum.Consent:
+					FillFieldsForConsent(sheet);
+					break;
 			}
 		}
 
@@ -288,6 +291,25 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		private static void FillFieldsForConsent(Sheet sheet) {
+			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "patient.nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "dateTime.Today":
+						field.FieldValue=DateTime.Today.ToShortDateString();
+						break;
+				}
+			}
+		}
+
+
+
+
+
 
 
 

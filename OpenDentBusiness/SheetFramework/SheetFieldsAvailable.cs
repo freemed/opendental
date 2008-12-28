@@ -31,6 +31,8 @@ namespace OpenDentBusiness{
 					return GetLabelAppointment(outInCheck);
 				case SheetTypeEnum.Rx:
 					return GetRx(outInCheck);
+				case SheetTypeEnum.Consent:
+					return GetConsent(outInCheck);
 				//case SheetTypeEnum.PatientRegistration:
 				//	return GetPatientRegistration(outInCheck);
 			}
@@ -143,6 +145,18 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("notes"));
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetConsent(OutInCheck outInCheck){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out){
+				list.Add(NewOutput("dateTime.Today"));
+				list.Add(NewOutput("patient.nameFL"));
+			}
+			else if(outInCheck==OutInCheck.In){
+				list.Add(NewInput("toothNum"));
 			}
 			return list;
 		}
