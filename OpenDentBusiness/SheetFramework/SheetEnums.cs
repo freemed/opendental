@@ -5,32 +5,35 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<Summary>Different types of sheets that can be used.</Summary>
 	public enum SheetTypeEnum{
-		///<Summary>0-Requires SheetParameter for PatNum.</Summary>
+		///<Summary>0-Requires SheetParameter for PatNum. Does not get saved to db.</Summary>
 		LabelPatient,
-		///<Summary>1-Requires SheetParameter for CarrierNum.</Summary>
+		///<Summary>1-Requires SheetParameter for CarrierNum. Does not get saved to db.</Summary>
 		LabelCarrier,
-		///<Summary>2-Requires SheetParameter for ReferralNum.</Summary>
+		///<Summary>2-Requires SheetParameter for ReferralNum. Does not get saved to db.</Summary>
 		LabelReferral,
-		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
+		///<Summary>3-Requires SheetParameters for PatNum,ReferralNum.</Summary>
 		ReferralSlip,
 		///<Summary>4-Requires SheetParameter for AptNum. Does not get saved to db.</Summary>
 		LabelAppointment,
 		///<Summary>5-Requires SheetParameter for RxNum.</Summary>
 		Rx,
 		///<summary>6-Requires SheetParameter for PatNum.</summary>
-		Consent
-		//<Summary>6-Requires SheetParameter for PatNum.</Summary>
+		Consent,
+		///<summary>7-Requires SheetParameter for PatNum.</summary>
+		PatientLetter,
+		///<summary>8-Requires SheetParameters for PatNum,ReferralNum.</summary>
+		ReferralLetter
+		//<Summary>-Requires SheetParameter for PatNum.</Summary>
 		//PatientRegistration
 		/*StatementHeader,
 		TxPlanHeader,
 		LabSlip,
-		Postcard,
-		ConsentForm*/
+		Postcard*/
 	}
 
 	///<summary>For sheetFields</summary>
 	public enum GrowthBehaviorEnum {
-		///<Summary>Not allowed to grow.  Max size would be Height(generated automatically for now) and Width.</Summary>
+		///<Summary>Not allowed to grow.  Max size would be Height and Width.</Summary>
 		None,
 		///<Summary>Can grow down if needed, and will push nearby objects out of the way so that there is no overlap.</Summary>
 		DownLocal,
@@ -77,7 +80,9 @@ namespace OpenDentBusiness {
 		ReferralSlip,
 		LabelAppointment,
 		Rx,
-		Consent
+		Consent,
+		PatientLetter,
+		ReferralLetter
 		//PatientRegistration
 	}
 

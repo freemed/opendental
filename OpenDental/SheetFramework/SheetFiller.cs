@@ -306,6 +306,76 @@ namespace OpenDental{
 			}
 		}
 
+		private static void FillFieldsForPatientLetter(Sheet sheet) {
+			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					/*case "patient.nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "dateTime.Today":
+						field.FieldValue=DateTime.Today.ToShortDateString();
+						break;*/
+				}
+			}
+		}
+
+		private static void FillFieldsForReferralLetter(Sheet sheet) {
+			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+			Referral refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "referral.nameFL":
+						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
+						break;
+					case "referral.address":
+						field.FieldValue=refer.Address;
+						if(refer.Address2!="") {
+							field.FieldValue+="\r\n"+refer.Address2;
+						}
+						break;
+					case "referral.cityStateZip":
+						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
+						break;
+					case "referral.phone":
+						field.FieldValue="";
+						if(refer.Telephone.Length==10){
+							field.FieldValue="("+refer.Telephone.Substring(0,3)+")"
+								+refer.Telephone.Substring(3,3)+"-"
+								+refer.Telephone.Substring(6);
+						}
+						break;
+					case "patient.nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "dateTime.Today":
+						field.FieldValue=DateTime.Today.ToShortDateString();
+						break;
+					case "patient.WkPhone":
+						field.FieldValue=pat.WkPhone;
+						break;
+					case "patient.HmPhone":
+						field.FieldValue=pat.HmPhone;
+						break;
+					case "patient.WirelessPhone":
+						field.FieldValue=pat.WirelessPhone;
+						break;
+					case "patient.address":
+						field.FieldValue=pat.Address;
+						if(pat.Address2!="") {
+							field.FieldValue+="\r\n"+pat.Address2;
+						}
+						break;
+					case "patient.cityStateZip":
+						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
+						break;
+					case "patient.provider":
+						field.FieldValue=Providers.GetProv(Patients.GetProvNum(pat)).GetFormalName();
+						break;
+					//case "notes"://an input field
+				}
+			}
+		}
 
 
 

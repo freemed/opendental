@@ -23,40 +23,25 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butClose = new OpenDental.UI.Button();
 			this.textPath = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butSync = new OpenDental.UI.Button();
 			this.labelValid = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textDateStart = new OpenDental.ValidDate();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDateEnd = new OpenDental.ValidDate();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.butSync = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(492,196);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 2;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// textPath
 			// 
 			this.textPath.Location = new System.Drawing.Point(156,37);
 			this.textPath.Name = "textPath";
-			this.textPath.Size = new System.Drawing.Size(258,20);
+			this.textPath.Size = new System.Drawing.Size(566,20);
 			this.textPath.TabIndex = 3;
 			this.textPath.TextChanged += new System.EventHandler(this.textPath_TextChanged);
 			// 
@@ -69,26 +54,11 @@ namespace OpenDental{
 			this.label1.Text = "Path";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butSync
-			// 
-			this.butSync.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSync.Autosize = true;
-			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSync.CornerRadius = 4F;
-			this.butSync.Enabled = false;
-			this.butSync.Location = new System.Drawing.Point(334,196);
-			this.butSync.Name = "butSync";
-			this.butSync.Size = new System.Drawing.Size(68,24);
-			this.butSync.TabIndex = 5;
-			this.butSync.Text = "Sync";
-			this.butSync.Click += new System.EventHandler(this.butSync_Click);
-			// 
 			// labelValid
 			// 
 			this.labelValid.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelValid.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelValid.Location = new System.Drawing.Point(420,37);
+			this.labelValid.Location = new System.Drawing.Point(154,16);
 			this.labelValid.Name = "labelValid";
 			this.labelValid.Size = new System.Drawing.Size(157,18);
 			this.labelValid.TabIndex = 6;
@@ -131,13 +101,6 @@ namespace OpenDental{
 			this.label4.Text = "Date Range";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(364,101);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(82,20);
-			this.textDateStart.TabIndex = 11;
-			// 
 			// label5
 			// 
 			this.label5.Location = new System.Drawing.Point(446,102);
@@ -154,10 +117,48 @@ namespace OpenDental{
 			this.textDateEnd.Size = new System.Drawing.Size(82,20);
 			this.textDateEnd.TabIndex = 13;
 			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(364,101);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(82,20);
+			this.textDateStart.TabIndex = 11;
+			// 
+			// butSync
+			// 
+			this.butSync.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSync.Autosize = true;
+			this.butSync.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSync.CornerRadius = 4F;
+			this.butSync.Enabled = false;
+			this.butSync.Location = new System.Drawing.Point(491,201);
+			this.butSync.Name = "butSync";
+			this.butSync.Size = new System.Drawing.Size(68,24);
+			this.butSync.TabIndex = 5;
+			this.butSync.Text = "Sync";
+			this.butSync.Click += new System.EventHandler(this.butSync_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(649,201);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 2;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(592,247);
+			this.ClientSize = new System.Drawing.Size(749,252);
 			this.Controls.Add(this.textDateEnd);
 			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.label4);

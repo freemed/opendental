@@ -48,6 +48,13 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.Consent) {
 				list.Add(new SheetParameter(true,"PatNum"));
 			}
+			if(sheetType==SheetTypeEnum.PatientLetter) {
+				list.Add(new SheetParameter(true,"PatNum"));
+			}
+			if(sheetType==SheetTypeEnum.ReferralLetter) {
+				list.Add(new SheetParameter(true,"PatNum"));
+				list.Add(new SheetParameter(true,"ReferralNum"));
+			}
 			return list;
 		}
 

@@ -33,6 +33,10 @@ namespace OpenDentBusiness{
 					return GetRx(outInCheck);
 				case SheetTypeEnum.Consent:
 					return GetConsent(outInCheck);
+				case SheetTypeEnum.PatientLetter:
+					return GetPatientLetter(outInCheck);
+				case SheetTypeEnum.ReferralLetter:
+					return GetReferralLetter(outInCheck);
 				//case SheetTypeEnum.PatientRegistration:
 				//	return GetPatientRegistration(outInCheck);
 			}
@@ -157,6 +161,45 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("toothNum"));
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetPatientLetter(OutInCheck outInCheck){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out){
+				list.Add(NewOutput("PracticeTitle"));
+				list.Add(NewOutput("PracticeAddress"));
+				list.Add(NewOutput("practiceCityStateZip"));
+				list.Add(NewOutput("patient.nameFL"));
+				list.Add(NewOutput("patient.address"));
+				list.Add(NewOutput("patient.cityStateZip"));
+				list.Add(NewOutput("today.DayDate"));
+				list.Add(NewOutput("patient.salutation"));
+				list.Add(NewOutput("patient.priProvNameFL"));
+			}
+			else if(outInCheck==OutInCheck.In){
+				//none
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetReferralLetter(OutInCheck outInCheck){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out){
+				list.Add(NewOutput("PracticeTitle"));
+				list.Add(NewOutput("PracticeAddress"));
+				list.Add(NewOutput("practiceCityStateZip"));
+				list.Add(NewOutput("referral.nameFL"));
+				list.Add(NewOutput("referral.address"));
+				list.Add(NewOutput("referral.cityStateZip"));
+				list.Add(NewOutput("today.DayDate"));
+				list.Add(NewOutput("patient.nameFL"));
+				list.Add(NewOutput("referral.salutation"));
+				list.Add(NewOutput("patient.priProvNameFL"));
+			}
+			else if(outInCheck==OutInCheck.In){
+				//none
 			}
 			return list;
 		}

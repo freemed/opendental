@@ -30,6 +30,10 @@ namespace OpenDentBusiness{
 					return Rx();
 				case SheetInternalType.Consent:
 					return Consent();
+				case SheetInternalType.PatientLetter:
+					return PatientLetter();
+				case SheetInternalType.ReferralLetter:
+					return ReferralLetter();
 				//case SheetInternalType.PatientRegistration:
 				//	return PatientRegistration();
 				default:
@@ -47,12 +51,12 @@ namespace OpenDentBusiness{
 		
 		private static SheetDef LabelPatientMail(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelPatientMail";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			//Font font=new Font(sheet.FontName,sheet.FontSize);
 			int rowH=19;
 			int yPos=10;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameFL",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
@@ -65,6 +69,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFAddress() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelPatientLFAddress";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -82,6 +87,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFChartNumber(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelPatientLFChartNumber";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -89,7 +95,6 @@ namespace OpenDentBusiness{
 			sheet.IsLandscape=true;
 			int rowH=19;
 			int yPos=30;
-			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("ChartNumber",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
@@ -98,6 +103,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientLFPatNum() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelPatientLFPatNum";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -105,7 +111,6 @@ namespace OpenDentBusiness{
 			sheet.IsLandscape=true;
 			int rowH=19;
 			int yPos=30;
-			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PatNum",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
@@ -114,6 +119,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelPatientRadiograph(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelPatientRadiograph";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -121,7 +127,6 @@ namespace OpenDentBusiness{
 			sheet.IsLandscape=true;
 			int rowH=19;
 			int yPos=30;
-			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput( "nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,150,rowH,GrowthBehaviorEnum.None));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput( "dateTime.Today",sheet.FontSize,sheet.FontName,false,180,yPos,100,rowH,GrowthBehaviorEnum.None));
 			yPos += rowH;
@@ -133,6 +138,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelCarrier(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelCarrier);
+			sheet.Description="LabelCarrier";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -150,6 +156,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelReferral(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelReferral);
+			sheet.Description="LabelReferral";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=12f;
 			sheet.Width=108;
@@ -167,6 +174,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef ReferralSlip(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.ReferralSlip);
+			sheet.Description="ReferralSlip";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=9f;
 			sheet.Width=450;
@@ -216,6 +224,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef LabelAppointment() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelAppointment);
+			sheet.Description="LabelAppointment";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=108;
@@ -238,6 +247,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef Rx() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.Rx);
+			sheet.Description="Rx";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=8f;
 			sheet.Width=425;
@@ -323,6 +333,7 @@ namespace OpenDentBusiness{
 
 		private static SheetDef Consent(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.Consent);
+			sheet.Description="Consent";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=9f;
 			sheet.Width=850;
@@ -349,6 +360,104 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature",sheet.FontSize,sheet.FontName,false,x,y,60,rowH));
 			return sheet;
 		}
+
+		private static SheetDef PatientLetter(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientLetter);
+			sheet.Description="PatientLetter";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=9f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=14;
+			int x=100;
+			int y=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,150,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100));
+			y+=100;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			return sheet;
+		}
+
+		private static SheetDef ReferralLetter(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.ReferralLetter);
+			sheet.Description="ReferralLetter";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=9f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=14;
+			int x=100;
+			int y=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.nameFL",sheet.FontSize,sheet.FontName,false,x,y,150,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("RE patient:",sheet.FontSize,sheet.FontName,false,x,y,70,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x+70,y,150,rowH));
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100));
+			y+=100;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			return sheet;
+		}
+
 
 		/*private static SheetDef PatientRegistration(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientRegistration);
