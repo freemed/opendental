@@ -50,6 +50,10 @@ namespace OpenDentBusiness{
 				+"ValueString = '"+POut.PInt(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
 			General.NonQ(command);
+			Pref pref=new Pref();
+			pref.PrefName=prefName;
+			pref.ValueString=newValue.ToString();
+			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
 			return true;
 		}
 

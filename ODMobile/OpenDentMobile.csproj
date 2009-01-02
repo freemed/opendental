@@ -48,22 +48,48 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3be235df1c8d2ad3, processorArchitecture=MSIL" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataGrid" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="ClassConvertDatabase.cs" />
+    <Compile Include="Data Interface\General.cs" />
+    <Compile Include="Data Interface\Patients.cs" />
+    <Compile Include="Data Interface\PIn.cs" />
+    <Compile Include="Data Interface\POut.cs" />
+    <Compile Include="Data Interface\Prefs.cs" />
+    <Compile Include="Dcon.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="FormChooseDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="FormChooseDatabase.Designer.cs">
+      <DependentUpon>FormChooseDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPatientSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPatientSelect.Designer.cs">
+      <DependentUpon>FormPatientSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormOpenDental.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormOpenDental.Designer.cs">
+      <DependentUpon>FormOpenDental.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="FormPatientSelect.resx">
+      <DependentUpon>FormPatientSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormOpenDental.resx">
+      <DependentUpon>FormOpenDental.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -76,6 +102,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Table Types\Patient.cs" />
+    <Compile Include="XML\XMLParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

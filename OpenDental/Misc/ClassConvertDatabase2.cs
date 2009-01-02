@@ -599,7 +599,8 @@ namespace OpenDental {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncPath','','')";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncLastFileNumber','0','')";
+					General.NonQ(command);
 
 
 

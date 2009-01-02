@@ -604,7 +604,6 @@ namespace OpenDental{
 			}
 			XmlDocument document=new XmlDocument();
 			try{
-				
 				document.Load("FreeDentalConfig.xml");
 				XPathNavigator Navigator=document.CreateNavigator();
 				XPathNavigator nav;
@@ -675,7 +674,8 @@ namespace OpenDental{
 				if(textConnectionString.Text.Length>0){
 					DataSettings.ConnectionString = textConnectionString.Text; 
 					dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
-				}else{
+				}
+				else{
 					DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
 					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 				}

@@ -480,6 +480,32 @@ namespace OpenDentBusiness{
 			return carrier;
 		}
 
+		///<summary>Gets a dictionary of carrier names for the supplied patient list.</summary>
+		public static Dictionary<int,string> GetCarrierNames(List<Patient> patients){
+			if(patients.Count==0){
+				return new Dictionary<int,string>();
+			}
+			string command="SELECT patient.PatNum,carrier.CarrierName "
+				+"FROM patient "
+				+"LEFT JOIN patplan ON patient.PatNum=patplan.PatNum "
+				+"LEFT JOIN insplan ON patplan.PlanNum=insplan.PlanNum "
+				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+				+"WHERE";
+			for(int i=0;i<patients.Count;i++){
+				if(i>0){
+					command+=" OR";
+				}
+				command+=" patient.PatNum="+POut.PInt(patients[i].PatNum);
+			}
+			command+=" GROUP BY patient.PatNum";
+			DataTable table=General.GetTable(command);
+			Dictionary<int,string> retVal=new Dictionary<int,string>();
+			for(int i=0;i<table.Rows.Count;i++){
+				retVal.Add(PIn.PInt(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());
+			}
+			return retVal;
+		}
+
 
 
 	}

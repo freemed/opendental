@@ -31,8 +31,8 @@ namespace OpenDentBusiness{
 		private MySqlDataAdapter da;
 		///<summary>Data adapter when 'isOracle' is set to true.</summary>
 		private OracleDataAdapter daOr;
-        ///<summary>This is the connection that is used by the data adapter for all queries.</summary>
-        private static MySqlConnection con;
+		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
+		private static MySqlConnection con;
 		///<summary>Connection that is being used when 'isOracle' is set to true.</summary>
 		private OracleConnection conOr;
 		///<summary>Used to get very small bits of data from the db when the data adapter would be overkill.  For instance retrieving the response after a command is sent.</summary>
@@ -84,7 +84,8 @@ namespace OpenDentBusiness{
 				+ "(ADDRESS=(PROTOCOL=TCP)(HOST="+pServer+")(PORT="+pPort+")))"
 				+ "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME="+pDatabase+")));"
 				+ "User Id="+pUserID+";Password="+pPassword+";";
-			}else if(DBtype==DatabaseType.MySql){
+			}
+			else if(DBtype==DatabaseType.MySql){
 				connectStr=
 					"Server="+pServer
 					+";Database="+pDatabase
@@ -160,7 +161,8 @@ namespace OpenDentBusiness{
 					daOr.Fill(table);
 					conOr.Close();
 				}
-			}else if(DBtype==DatabaseType.MySql){
+			}
+			else if(DBtype==DatabaseType.MySql){
 				con=new MySqlConnection(connectStr);
 				cmd = new MySqlCommand();
 				//cmd.CommandTimeout=30;
@@ -181,7 +183,6 @@ namespace OpenDentBusiness{
 					con.Close();
 				}
 			}
-			
 		}
 
 		//<summary>Constructor sets the connection values.</summary>
@@ -217,7 +218,8 @@ namespace OpenDentBusiness{
 				cmdOr=new OracleCommand();
 				cmdOr.Connection=conOr;
 				//table=new DataTable();
-			}else if(DBtype==DatabaseType.MySql){
+			}
+			else if(DBtype==DatabaseType.MySql){
 				con=new MySqlConnection(connectStr);
 				//dr = null;
 				cmd = new MySqlCommand();
@@ -287,7 +289,8 @@ namespace OpenDentBusiness{
 					throw e;//continue to pass the exception one level up.
 				}
 				conOr.Close();
-			}else if(DBtype==DatabaseType.MySql){
+			}
+			else if(DBtype==DatabaseType.MySql){
 				cmd.CommandText=command;
  				da=new MySqlDataAdapter(cmd);
  				da.Fill(table);

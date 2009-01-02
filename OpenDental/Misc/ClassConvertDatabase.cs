@@ -26,7 +26,7 @@ namespace OpenDental{
 		private System.Version FromVersion;
 		private System.Version ToVersion;
 
-		///<summary>Return false to indicate exit app.  Only called when program first starts up at the beginning of FormOpenDental.RefreshLocalData.</summary>
+		///<summary>Return false to indicate exit app.  Only called when program first starts up at the beginning of FormOpenDental.PrefsStartup.</summary>
 		public bool Convert(string fromVersion){
 			FromVersion=new Version(fromVersion);
 			ToVersion=new Version(Application.ProductVersion);
