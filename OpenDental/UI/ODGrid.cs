@@ -470,7 +470,9 @@ namespace OpenDental.UI{
 		
 		///<summary>Runs any time the control is invalidated.</summary>
 		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e){
-			if(IsUpdating) return;
+			if(IsUpdating){
+				return;
+			}
 			if(Width<1 || Height<1) {
 				return;
 			}

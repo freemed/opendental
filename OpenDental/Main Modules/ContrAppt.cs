@@ -1133,6 +1133,7 @@ namespace OpenDental{
 				this.listConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
 			}
 			//This is redundant and inefficient, but won't cause an actual bug.
+			//HOWEVER, this might be where the title bar flicker comes from sometimes, due to refreshing multiple times.
 			//In all other modules, it only does this (triggers the OnPatientSelected) if the patient actually changes)
 			RefreshModulePatient(patNum);
 			RefreshPeriod();
@@ -1208,6 +1209,9 @@ namespace OpenDental{
 			else {
 				listConfirmed.SelectedIndex=-1;
 			}
+//THIS SHOULD BE MOVED TO BE CALLED EXPLICITLY FROM WITHIN VARIOUS PLACES IN THIS MODULE
+//JUST LIKE IN THE OTHER MODULES.  WHEN IT'S HERE, IT IS ALSO GETTING CALLED EVERY TIME MODULESELECTED
+//GETS TRIGGERED FROM PARENT FORM.
 			OnPatientSelected(PatCurNum,PatCurName,hasEmail,chartNumber);
 		}
 

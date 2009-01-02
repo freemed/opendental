@@ -64,8 +64,8 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Patient> GetUAppoint(DateTime changedSince){
-			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.PDateT(changedSince);
-				//+" LIMIT 100";
+			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.PDateT(changedSince)
+				+" LIMIT 1000";
 			DataTable table=General.GetTable(command);
 			return TableToList(table);
 			//List<Patient> retVal=new List<Patient>(DataObjectFactory<Patient>.CreateObjects(command));

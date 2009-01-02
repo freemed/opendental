@@ -3528,7 +3528,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\ODGridCell.cs" />
-    <Compile Include="UI\ODGridCellCollection.cs" />
     <Compile Include="UI\ODGridColumn.cs" />
     <Compile Include="UI\ODGridColumnCollection.cs" />
     <Compile Include="UI\ODGridRow.cs" />

@@ -64,31 +64,51 @@
     <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Dcon.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="FormChooseDatabase.cs">
+    <Compile Include="Forms\FormChooseDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormChooseDatabase.Designer.cs">
+    <Compile Include="Forms\FormChooseDatabase.Designer.cs">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPatientSelect.cs">
+    <Compile Include="Forms\FormPatientSelect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPatientSelect.Designer.cs">
+    <Compile Include="Forms\FormPatientSelect.Designer.cs">
       <DependentUpon>FormPatientSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormOpenDental.cs">
+    <Compile Include="Main Modules\ContrAppt.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main Modules\ContrAppt.Designer.cs">
+      <DependentUpon>ContrAppt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main Modules\ContrFamily.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main Modules\ContrFamily.Designer.cs">
+      <DependentUpon>ContrFamily.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main Modules\FormOpenDental.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormOpenDental.Designer.cs">
+    <Compile Include="Main Modules\FormOpenDental.Designer.cs">
       <DependentUpon>FormOpenDental.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormPatientSelect.resx">
+    <EmbeddedResource Include="Forms\FormPatientSelect.resx">
       <DependentUpon>FormPatientSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormOpenDental.resx">
+    <EmbeddedResource Include="Main Modules\ContrAppt.resx">
+      <DependentUpon>ContrAppt.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main Modules\ContrFamily.resx">
+      <DependentUpon>ContrFamily.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main Modules\FormOpenDental.resx">
       <DependentUpon>FormOpenDental.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -103,6 +123,19 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Table Types\Patient.cs" />
+    <Compile Include="UI\ODGridClickEventArgs.cs" />
+    <Compile Include="UI\ODGridColumnList.cs" />
+    <Compile Include="UI\ODGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ODGrid.Designer.cs">
+      <DependentUpon>ODGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ODGridCell.cs" />
+    <Compile Include="UI\ODGridCellList.cs" />
+    <Compile Include="UI\ODGridColumn.cs" />
+    <Compile Include="UI\ODGridRow.cs" />
+    <Compile Include="UI\ODGridRowList.cs" />
     <Compile Include="XML\XMLParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />

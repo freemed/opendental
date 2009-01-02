@@ -2770,18 +2770,24 @@ namespace OpenDental{
 		}
 
 		private void UnselectActive(){
-			if(ContrAppt2.Visible)
+			if(ContrAppt2.Visible){
 				ContrAppt2.ModuleUnselected();
-			if(ContrFamily2.Visible)
+			}
+			if(ContrFamily2.Visible){
 				ContrFamily2.ModuleUnselected();
-			if(ContrAccount2.Visible)
+			}
+			if(ContrAccount2.Visible){
 				ContrAccount2.ModuleUnselected();
-			if(ContrTreat2.Visible)
+			}
+			if(ContrTreat2.Visible){
 				ContrTreat2.ModuleUnselected();
-			if(ContrChart2.Visible)
+			}
+			if(ContrChart2.Visible){
 				ContrChart2.ModuleUnselected();
-			if(ContrDocs2.Visible)
+			}
+			if(ContrDocs2.Visible){
 				ContrDocs2.ModuleUnselected();
+			}
 		}
 
 		///<Summary>This also passes CurPatNum down to the currently selected module (except the Manage module).</Summary>
