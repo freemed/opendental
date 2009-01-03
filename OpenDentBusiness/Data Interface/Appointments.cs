@@ -153,8 +153,9 @@ namespace OpenDentBusiness{
 			return FillList(command).ToArray();
 		}
 
-		public static List<Appointment> GetUAppoint(DateTime changedSince){
-			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.PDateT(changedSince);
+		public static List<Appointment> GetUAppoint(DateTime changedSince,DateTime excludeOlderThan){
+			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.PDateT(changedSince)
+				+" AND AptDateTime > "+POut.PDateT(excludeOlderThan);
 			return FillList(command);
 		}
 

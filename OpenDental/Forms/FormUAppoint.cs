@@ -581,7 +581,7 @@ namespace OpenDental{
 					//get various objects from the database.
 					patientsToSynch=Patients.GetUAppoint(dateTimeLastUploaded);//datetime will be handled better soon with delta
 					provsToSynch=Providers.GetUAppoint(dateTimeLastUploaded);
-					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded);
+					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded,DateTime.MinValue);
 					apptProcsToSynch=Appointments.GetUAppointProcs(apptsToSynch);
 					delObjToSynch=DeletedObjects.GetUAppoint(dateTimeLastUploaded);
 					schedsToSynch=Schedules.GetUAppoint(dateTimeLastUploaded);

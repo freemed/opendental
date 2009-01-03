@@ -13,7 +13,6 @@ namespace OpenDentMobile{
 			System.Xml.XmlDocument doc=new XmlDocument();
 			doc.Load(fileName);
 			DateTime loadedTime=DateTime.Now;
-			//	.LoadXml(xmlData);
 			//node 0 is the xml declaration
 			XmlNode mainNode=doc.ChildNodes[1];
 			if(mainNode.Name!="InToMobile"){
@@ -41,6 +40,7 @@ namespace OpenDentMobile{
 			}
 			if(fullSync=="true"){
 				Patients.DeleteAll();
+				Appointments.DeleteAll();
 			}
 			XmlNodeList mainNodeList=mainNode.ChildNodes;
 			//MessageBox.Show(nodeList.Count.ToString()+" nodes");
@@ -50,6 +50,9 @@ namespace OpenDentMobile{
 				objectNode=mainNodeList[i];
 				if(objectNode.Name=="patient"){
 					Patients.Sync(objectNode);
+				}
+				if(objectNode.Name=="appointment"){
+					Appointments.Sync(objectNode);
 				}
 			}
 			//MessageBox.Show("Time to load XML: "+(loadedTime-startTime).ToString()+"\r\n"

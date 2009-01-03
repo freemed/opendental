@@ -20,6 +20,9 @@ namespace OpenDental {
 			textPath.Text=PrefC.GetString("MobileSyncPath");
 			//textDateStart.Text=DateTime.Today.AddDays(-14).ToShortDateString();
 			//textDateEnd.Text=DateTime.Today.AddDays(14).ToShortDateString();
+			#if DEBUG
+			textDateBefore.Text=DateTime.Today.AddDays(-14).ToShortDateString();
+			#endif
 		}
 
 		private void textPath_TextChanged(object sender,EventArgs e) {
@@ -36,126 +39,21 @@ namespace OpenDental {
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
-			//obsolete
-
-
-			//no need to see if directory is valid because button will be disabled if not.
-			//if( textDateStart.errorProvider1.GetError(textDateStart)!=""
-			//	|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
-			//	){
-			//	MsgBox.Show(this,"Please fix data entry errors first.");
-			//	return;
-			//}
-			Cursor=Cursors.WaitCursor;
-			string path=textPath.Text;
-			#if DEBUG
-				path=@"E:\My Documents\HTC emulator My Documents\Business\Open Dental";
-			#endif
-			//patients-------------------------------------------------------------------------------------
-			string command=
-				@"SELECT patient.LName,patient.FName,patient.Preferred,patient.Birthdate,patient.PatNum,
-				patient.PatStatus,patient.Gender,patient.Position,patient.Address,patient.City,patient.State,
-				patient.HmPhone,patient.WkPhone,patient.WirelessPhone,patient.Guarantor,
-				patguar.LName guarLName,patguar.FName guarFName,patient.CreditType,
-				carrier.CarrierName primaryInsurance,patguar.FamFinUrgNote,patient.MedUrgNote
-				FROM patient
-				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
-				LEFT JOIN patplan ON patient.PatNum=patplan.PatNum
-				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
-				LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum
-				WHERE patient.PatStatus=0/*patient*/
-				OR patient.PatStatus=2/*inactive*/
-				OR patient.PatStatus=1/*nonpatient*/
-				ORDER BY patient.LName,patient.FName";
-			DataTable table=General.GetTable(command);
-			string data=TableToXML(table);
-			string fileName=Path.Combine(path,"patient.txt");
-			try{
-				File.WriteAllText(fileName,data);
-      }
-      catch(Exception ex){
-				Cursor=Cursors.Default;
-        MessageBox.Show(fileName+"\r\n"+ex.Message);
-				return;
-			}
-			//appointments----------------------------------------------------------------------------------
-			//DateTime dateStart=PIn.PDate(textDateStart.Text);
-			//DateTime dateEnd=PIn.PDate(textDateEnd.Text).AddDays(1);//midnight following specified day
-			/*command="SET @dateStart="+POut.PDate(dateStart)+";"
-				+"SET @dateEnd="+POut.PDate(dateEnd)+";"
-				+@"SELECT AptDateTime,LName,FName,ProcDescript,appointment.PatNum
-				FROM appointment,patient
-				WHERE patient.PatNum=appointment.PatNum
-				AND AptDateTime > @dateStart
-				AND AptDateTime < @dateEnd
-				ORDER BY AptDateTime";*/
-			table=General.GetTable(command);
-			data=TableToXML(table);
-			fileName=Path.Combine(path,"appointment.txt");
-			try{
-				File.WriteAllText(fileName,data);
-      }
-      catch(Exception ex){
-				Cursor=Cursors.Default;
-        MessageBox.Show(fileName+"\r\n"+ex.Message);
-				return;
-			}
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Done");
-		}
-
-		private string TableToXML(DataTable table){
-			//table=FormQuery.MakeReadable(table);//takes a long long time
-			StringBuilder strBuild=new StringBuilder();
-			for(int i=0;i<table.Columns.Count;i++){
-				if(i>0){
-					strBuild.Append("\t");
-				}
-				//strBuild.Append("\"");
-				strBuild.Append(table.Columns[i].ColumnName);
-				//strBuild.Append("\"");
-			}
-			strBuild.Append("\r\n");
-			string cell;
-			DateTime dt;
-			for(int i=0;i<table.Rows.Count;i++){
-				for(int j=0;j<table.Columns.Count;j++){
-					if(j>0){
-						strBuild.Append("\t");
-					}
-					if(table.Columns[j].ColumnName=="Birthdate"){
-						dt=(DateTime)table.Rows[i][j];
-						if(dt.Year<1880){
-							cell="";
-						}
-						else{
-							cell=dt.ToShortDateString();
-						}
-					}
-					else{
-						cell=table.Rows[i][j].ToString();
-					}
-					cell=cell.Replace("\r","");
-					cell=cell.Replace("\n","");
-					cell=cell.Replace("\t","");
-					cell=cell.Replace("\"","");
-					//strBuild.Append("\"");
-					strBuild.Append(cell);
-					//strBuild.Append("\"");
-				}
-				strBuild.Append("\r\n");
-			}
-			return strBuild.ToString();
+			Sync(false);
 		}
 
 		private void butFullSync_Click(object sender,EventArgs e) {
+			Sync(true);
+		}
+		
+		private void Sync(bool isFull){
 			//no need to see if directory is valid because button will be disabled if not.
-			//if( textDateStart.errorProvider1.GetError(textDateStart)!=""
+			if( textDateBefore.errorProvider1.GetError(textDateBefore)!="")
 			//	|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
-			//	){
-			//	MsgBox.Show(this,"Please fix data entry errors first.");
-			//	return;
-			//}
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			string path=textPath.Text;
 			#if DEBUG
@@ -173,9 +71,12 @@ namespace OpenDental {
 			writer.WriteStartElement("InToMobile");
 			writer.WriteAttributeString("MainVersion",Application.ProductVersion);
 			writer.WriteAttributeString("MinimumMobileVersion","6.3.0.0");
-			writer.WriteAttributeString("FullSync","true");
+			if(isFull){
+				writer.WriteAttributeString("FullSync","true");
+			}
 			#region patients
-			List<Patient> patientsToSynch=Patients.GetUAppoint(DateTime.MinValue);//dateTimeLastUploaded);
+			List<Patient> patientsToSynch=new List<Patient>();
+				//Patients.GetUAppoint(DateTime.MinValue);//dateTimeLastUploaded);
 			Dictionary<int,string> carrierNames=Carriers.GetCarrierNames(patientsToSynch);
 			Patient pat;
 			for(int i=0;i<patientsToSynch.Count;i++){
@@ -211,6 +112,30 @@ namespace OpenDental {
 				writer.WriteEndElement();//patient
 			}
 			#endregion patients
+			#region appointments
+			DateTime dateBefore=PIn.PDate(textDateBefore.Text);
+			List<Appointment> apptsToSynch=Appointments.GetUAppoint(DateTime.MinValue,dateBefore);
+			Appointment apt;
+			for(int i=0;i<apptsToSynch.Count;i++){
+				apt=apptsToSynch[i];
+				writer.WriteStartElement("appointment");
+				writer.WriteAttributeString("action","write");
+				writer.WriteElementString("AptNum",apt.AptNum.ToString());
+				writer.WriteElementString("PatNum",apt.PatNum.ToString());
+				writer.WriteElementString("AptStatus",((int)apt.AptStatus).ToString());
+				writer.WriteElementString("Pattern",apt.Pattern);
+				writer.WriteElementString("Confirmed",apt.Confirmed.ToString());
+				writer.WriteElementString("Op",apt.Op.ToString());
+				writer.WriteElementString("Note",apt.Note);
+				writer.WriteElementString("ProvNum",apt.ProvNum.ToString());
+				writer.WriteElementString("ProvHyg",apt.ProvHyg.ToString());
+				writer.WriteElementString("AptDateTime",POut.PDateT(apt.AptDateTime,false));
+				writer.WriteElementString("ProcDescript",apt.ProcDescript);
+				writer.WriteElementString("IsHygiene",POut.PBool(apt.IsHygiene));
+				writer.WriteEndElement();//appointment
+			}
+			#endregion appointments
+
 			writer.WriteEndElement();//InToMobile
 			writer.WriteEndDocument();
 			writer.Close();

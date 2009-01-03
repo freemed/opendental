@@ -29,11 +29,13 @@ namespace OpenDental{
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butFullSync = new OpenDental.UI.Button();
+			this.textDateBefore = new OpenDental.ValidDate();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textPath
 			// 
-			this.textPath.Location = new System.Drawing.Point(66,31);
+			this.textPath.Location = new System.Drawing.Point(176,31);
 			this.textPath.Name = "textPath";
 			this.textPath.Size = new System.Drawing.Size(566,20);
 			this.textPath.TabIndex = 3;
@@ -41,7 +43,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(6,31);
+			this.label1.Location = new System.Drawing.Point(116,31);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(58,18);
 			this.label1.TabIndex = 4;
@@ -52,7 +54,7 @@ namespace OpenDental{
 			// 
 			this.labelValid.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelValid.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelValid.Location = new System.Drawing.Point(64,10);
+			this.labelValid.Location = new System.Drawing.Point(174,10);
 			this.labelValid.Name = "labelValid";
 			this.labelValid.Size = new System.Drawing.Size(157,18);
 			this.labelValid.TabIndex = 6;
@@ -68,7 +70,7 @@ namespace OpenDental{
 			this.butSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSync.CornerRadius = 4F;
 			this.butSync.Enabled = false;
-			this.butSync.Location = new System.Drawing.Point(399,106);
+			this.butSync.Location = new System.Drawing.Point(536,185);
 			this.butSync.Name = "butSync";
 			this.butSync.Size = new System.Drawing.Size(68,24);
 			this.butSync.TabIndex = 5;
@@ -83,7 +85,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(557,106);
+			this.butClose.Location = new System.Drawing.Point(694,185);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -99,17 +101,35 @@ namespace OpenDental{
 			this.butFullSync.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFullSync.CornerRadius = 4F;
 			this.butFullSync.Enabled = false;
-			this.butFullSync.Location = new System.Drawing.Point(272,106);
+			this.butFullSync.Location = new System.Drawing.Point(409,185);
 			this.butFullSync.Name = "butFullSync";
 			this.butFullSync.Size = new System.Drawing.Size(68,24);
 			this.butFullSync.TabIndex = 14;
 			this.butFullSync.Text = "Full Sync";
 			this.butFullSync.Click += new System.EventHandler(this.butFullSync_Click);
 			// 
+			// textDateBefore
+			// 
+			this.textDateBefore.Location = new System.Drawing.Point(176,72);
+			this.textDateBefore.Name = "textDateBefore";
+			this.textDateBefore.Size = new System.Drawing.Size(100,20);
+			this.textDateBefore.TabIndex = 15;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(4,73);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(170,18);
+			this.label2.TabIndex = 16;
+			this.label2.Text = "Exclude appointments before";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(657,150);
+			this.ClientSize = new System.Drawing.Size(794,229);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.textDateBefore);
 			this.Controls.Add(this.butFullSync);
 			this.Controls.Add(this.labelValid);
 			this.Controls.Add(this.butSync);
@@ -134,5 +154,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSync;
 		private System.Windows.Forms.Label labelValid;
 		private OpenDental.UI.Button butFullSync;
+		private ValidDate textDateBefore;
+		private System.Windows.Forms.Label label2;
 	}
 }

@@ -84,6 +84,7 @@ namespace OpenDentMobile {
 			if(!LoadAllNewFiles()){
 				Application.Exit();
 			}
+			ContrAppt2.ModuleSelected(0);
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>

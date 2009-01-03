@@ -318,7 +318,7 @@ namespace OpenDentMobile.UI {
 			IsUpdating=true;
 		}
 
-		///<summary>Must be called after adding rows.  This computes the columns, computes the rows, lays out the scrollbars, clears SelectedIndices, and invalidates.  Does not zero out scrollVal.  Sometimes, it seems like scrollVal needs to be reset somehow because it's an inappropriate number, and when you first grab the scrollbar, it jumps.  No time to investigate.</summary>
+		///<summary>Must be called after adding rows.  This computes the columns, computes the rows, resets the size to match the data (unique to mobile version), and invalidates.</summary>
 		public void EndUpdate(){
 			ComputeColumns();
 			ComputeRows();

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="ClassConvertDatabase.cs" />
+    <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Data Interface\General.cs" />
     <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\PIn.cs" />
@@ -122,6 +123,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Table Types\Appointment.cs" />
     <Compile Include="Table Types\Patient.cs" />
     <Compile Include="UI\ODGridClickEventArgs.cs" />
     <Compile Include="UI\ODGridColumnList.cs" />

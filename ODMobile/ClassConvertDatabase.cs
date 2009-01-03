@@ -32,7 +32,7 @@ namespace OpenDentMobile {
 				throw new ApplicationException("Could not connect to database.");
 			}
 			string command=@"CREATE TABLE preference (                     
-				PrefName nvarchar(255) NOT NULL,  
+				PrefName nvarchar(255) NOT NULL,
 				ValueString ntext NOT NULL,                  
 				Comments ntext NOT NULL,                              
 				PRIMARY KEY  (PrefName)                     
@@ -50,7 +50,7 @@ namespace OpenDentMobile {
 				PatStatus int NOT NULL DEFAULT 0,
 				Gender int NOT NULL DEFAULT 0,
 				Position int NOT NULL DEFAULT 0,
-				Birthdate nchar(10) DEFAULT '0001-01-01',
+				Birthdate nchar(10) NOT NULL DEFAULT '0001-01-01',
 				Address nvarchar(255) NOT NULL DEFAULT '',
 				Address2 nvarchar(255) NOT NULL DEFAULT '',
 				City nvarchar(255) NOT NULL DEFAULT '',
@@ -60,15 +60,31 @@ namespace OpenDentMobile {
 				WirelessPhone nvarchar(255) NOT NULL DEFAULT '',
 				Guarantor int NOT NULL DEFAULT 0,
 				CreditType nvarchar(255) NOT NULL DEFAULT '',
-				FamFinUrgNote ntext NOT NULL DEFAULT '',
-				MedUrgNote ntext NOT NULL DEFAULT '',
-				PrimaryInsurance nvarchar(255) NOT NULL DEFAULT ''
+				FamFinUrgNote nvarchar(4000) NOT NULL DEFAULT '',
+				MedUrgNote nvarchar(4000) NOT NULL DEFAULT '',
+				PrimaryInsurance nvarchar(4000) NOT NULL DEFAULT ''
 				);
 				CREATE INDEX IdxGuarantor ON patient (Guarantor);
 				CREATE INDEX IdxLName ON patient (LName)";
 			Dcon.NonQs(command);
-			
-
+			command=@"CREATE TABLE appointment (
+				AptNum int NOT NULL PRIMARY KEY,
+				PatNum int NOT NULL DEFAULT 0,
+				AptStatus int NOT NULL DEFAULT 0,
+				Pattern nvarchar(255) NOT NULL,
+				Confirmed int NOT NULL DEFAULT 0,
+				Op int NOT NULL DEFAULT 0,
+				Note nvarchar(4000) NOT NULL DEFAULT '',
+				ProvNum int NOT NULL DEFAULT 0,
+				ProvHyg int NOT NULL DEFAULT 0,
+				AptDateTime datetime NOT NULL DEFAULT '1850-01-01',
+				ProcDescript nvarchar(255) NOT NULL DEFAULT '',
+				IsHygiene bit NOT NULL DEFAULT 0
+				);
+				CREATE INDEX IdxPatNum ON appointment (PatNum);
+				CREATE INDEX IdxAptDateTime ON appointment (AptDateTime)
+				";
+			Dcon.NonQs(command);
 
 
 		}
