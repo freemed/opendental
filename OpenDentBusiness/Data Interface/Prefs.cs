@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
-			pref.ValueString=POut.PDateT(newValue);
+			pref.ValueString=POut.PDateT(newValue,false);
 			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
 			return true;
 		}

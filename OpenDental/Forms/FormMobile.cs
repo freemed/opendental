@@ -158,16 +158,23 @@ namespace OpenDental {
 			writer.WriteEndElement();//InToMobile
 			writer.WriteEndDocument();
 			writer.Close();
-			int fileNumber=PrefC.GetInt("MobileSyncLastFileNumber")+1;
-			string filePath=Path.Combine(path,"in"+fileNumber+".xml");
-			File.WriteAllText(filePath,strBuild.ToString(),Encoding.UTF8);
-			Prefs.UpdateInt("MobileSyncLastFileNumber",fileNumber);
+			if(objCount>0){
+				int fileNumber=PrefC.GetInt("MobileSyncLastFileNumber")+1;
+				string filePath=Path.Combine(path,"in"+fileNumber+".xml");
+				File.WriteAllText(filePath,strBuild.ToString(),Encoding.UTF8);
+				Prefs.UpdateInt("MobileSyncLastFileNumber",fileNumber);
+			}
 			DateTime now=MiscData.GetNowDateTime();//server time
 			Prefs.UpdateDateT("MobileSyncDateTimeLastRun",now);
 			textDateTimeLastRun.Text=now.ToShortDateString()+" "+now.ToShortTimeString();
 			//we will not trigger a refresh on other computers because this is the only one doing the sync.
 			Cursor=Cursors.Default;
-			MessageBox.Show(Lan.g(this,"Done.  Objects exported: ")+objCount.ToString());
+			if(objCount==0){
+				MsgBox.Show(this,"Done. No sync necessary.");
+			}
+			else{
+				MessageBox.Show(Lan.g(this,"Done.  Objects exported: ")+objCount.ToString());
+			}
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
