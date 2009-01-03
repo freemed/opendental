@@ -200,7 +200,7 @@ namespace OpenDentMobile {
 		///<summary>Only used for the Select Patient dialog.</summary>
 		public static DataTable GetPtDataTable(string lname){
 			string command= 
-				"SELECT PatNum,LName,FName,HmPhone FROM patient "
+				"SELECT PatNum,LName,FName,HmPhone,WirelessPhone FROM patient "
 				+"WHERE LName LIKE '"+POut.PString(lname)+"%' "
 				+"ORDER BY LName,FName ";
  			DataTable table=General.GetTable(command);

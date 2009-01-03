@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using OpenDentMobile.UI;
 
 namespace OpenDentMobile {
 	public partial class FormPatientSelect:Form {
@@ -41,6 +42,21 @@ namespace OpenDentMobile {
 		private void Form1_Load(object sender,EventArgs e) {
 			//LoadIni();
 			//LoadPatients();
+			FillColumns();
+		}
+
+		private void FillColumns(){
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("LName",70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("FName",70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("HmPhone",80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Wireless",80);
+			gridMain.Columns.Add(col);
+			gridMain.EndUpdate();
 		}
 
 		private void LoadPatients(){
@@ -48,18 +64,21 @@ namespace OpenDentMobile {
 				MessageBox.Show("Please enter at least two letters of the last name.");
 				return;
 			}
-			listView.Items.Clear();
 			PtDataTable=Patients.GetPtDataTable(textLName.Text);
+			gridMain.BeginUpdate();
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<PtDataTable.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(PtDataTable.Rows[i]["LName"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["FName"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["HmPhone"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["WirelessPhone"].ToString());
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
 			if(PtDataTable.Rows.Count==0){
 				MessageBox.Show("No results");
-			}
-			ListViewItem row;
-			for(int i=0;i<PtDataTable.Rows.Count;i++){
-				row=new ListViewItem();
-				row.Text=PtDataTable.Rows[i]["LName"].ToString();
-				row.SubItems.Add(PtDataTable.Rows[i]["FName"].ToString());
-				row.SubItems.Add(PtDataTable.Rows[i]["HmPhone"].ToString());
-				listView.Items.Add(row);
 			}
 		}
 
@@ -67,9 +86,8 @@ namespace OpenDentMobile {
 			LoadPatients();
 		}
 
-		private void listView_ItemActivate(object sender,EventArgs e) {
-			//MessageBox.Show(listView.SelectedIndices[0].ToString());
-			SelectedPatNum=PIn.PInt(PtDataTable.Rows[listView.SelectedIndices[0]]["PatNum"].ToString());
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			SelectedPatNum=PIn.PInt(PtDataTable.Rows[e.Row]["PatNum"].ToString());
 			DialogResult=DialogResult.OK;
 		}
 

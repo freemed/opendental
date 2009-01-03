@@ -601,7 +601,8 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncLastFileNumber','0','')";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncDateTimeLastRun','0001-01-01','')";
+					General.NonQ(command);
 
 
 

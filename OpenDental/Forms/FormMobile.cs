@@ -23,6 +23,10 @@ namespace OpenDental {
 			#if DEBUG
 			textDateBefore.Text=DateTime.Today.AddDays(-14).ToShortDateString();
 			#endif
+			DateTime dt=PrefC.GetDateT("MobileSyncDateTimeLastRun");
+			if(dt.Year>1880){
+				textDateTimeLastRun.Text=dt.ToShortDateString()+" "+dt.ToShortTimeString();
+			}
 		}
 
 		private void textPath_TextChanged(object sender,EventArgs e) {
@@ -39,10 +43,17 @@ namespace OpenDental {
 		}
 
 		private void butSync_Click(object sender,EventArgs e) {
+			if(PrefC.GetDateT("MobileSyncDateTimeLastRun").Year<1880){
+				MsgBox.Show(this,"Sync has never been run.  You must do a full sync first.");
+				return;
+			}
 			Sync(false);
 		}
 
 		private void butFullSync_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"This will be time consuming when the mobile device imports.  Continue anyway?")){
+				return;
+			}
 			Sync(true);
 		}
 		
@@ -75,8 +86,15 @@ namespace OpenDental {
 				writer.WriteAttributeString("FullSync","true");
 			}
 			#region patients
-			List<Patient> patientsToSynch=new List<Patient>();
-				//Patients.GetUAppoint(DateTime.MinValue);//dateTimeLastUploaded);
+			DateTime dateTimeLastSync;
+			if(isFull){
+				dateTimeLastSync=DateTime.MinValue;
+			}
+			else{
+				dateTimeLastSync=PrefC.GetDateT("MobileSyncDateTimeLastRun");
+			}
+			List<Patient> patientsToSynch=Patients.GetUAppoint(dateTimeLastSync);
+			int objCount=patientsToSynch.Count;
 			Dictionary<int,string> carrierNames=Carriers.GetCarrierNames(patientsToSynch);
 			Patient pat;
 			for(int i=0;i<patientsToSynch.Count;i++){
@@ -114,7 +132,8 @@ namespace OpenDental {
 			#endregion patients
 			#region appointments
 			DateTime dateBefore=PIn.PDate(textDateBefore.Text);
-			List<Appointment> apptsToSynch=Appointments.GetUAppoint(DateTime.MinValue,dateBefore);
+			List<Appointment> apptsToSynch=Appointments.GetUAppoint(dateTimeLastSync,dateBefore);
+			objCount+=apptsToSynch.Count;
 			Appointment apt;
 			for(int i=0;i<apptsToSynch.Count;i++){
 				apt=apptsToSynch[i];
@@ -143,9 +162,12 @@ namespace OpenDental {
 			string filePath=Path.Combine(path,"in"+fileNumber+".xml");
 			File.WriteAllText(filePath,strBuild.ToString(),Encoding.UTF8);
 			Prefs.UpdateInt("MobileSyncLastFileNumber",fileNumber);
+			DateTime now=MiscData.GetNowDateTime();//server time
+			Prefs.UpdateDateT("MobileSyncDateTimeLastRun",now);
+			textDateTimeLastRun.Text=now.ToShortDateString()+" "+now.ToShortTimeString();
 			//we will not trigger a refresh on other computers because this is the only one doing the sync.
 			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Done");
+			MessageBox.Show(Lan.g(this,"Done.  Objects exported: ")+objCount.ToString());
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

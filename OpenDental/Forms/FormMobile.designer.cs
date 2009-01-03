@@ -31,6 +31,8 @@ namespace OpenDental{
 			this.butFullSync = new OpenDental.UI.Button();
 			this.textDateBefore = new OpenDental.ValidDate();
 			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textDateTimeLastRun = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// textPath
@@ -110,24 +112,43 @@ namespace OpenDental{
 			// 
 			// textDateBefore
 			// 
-			this.textDateBefore.Location = new System.Drawing.Point(176,72);
+			this.textDateBefore.Location = new System.Drawing.Point(176,92);
 			this.textDateBefore.Name = "textDateBefore";
 			this.textDateBefore.Size = new System.Drawing.Size(100,20);
 			this.textDateBefore.TabIndex = 15;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(4,73);
+			this.label2.Location = new System.Drawing.Point(4,93);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(170,18);
 			this.label2.TabIndex = 16;
 			this.label2.Text = "Exclude appointments before";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(7,62);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(167,18);
+			this.label3.TabIndex = 18;
+			this.label3.Text = "Date/time of last sync";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDateTimeLastRun
+			// 
+			this.textDateTimeLastRun.Location = new System.Drawing.Point(176,62);
+			this.textDateTimeLastRun.Name = "textDateTimeLastRun";
+			this.textDateTimeLastRun.ReadOnly = true;
+			this.textDateTimeLastRun.Size = new System.Drawing.Size(188,20);
+			this.textDateTimeLastRun.TabIndex = 17;
+			// 
 			// FormMobile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(794,229);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textDateTimeLastRun);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDateBefore);
 			this.Controls.Add(this.butFullSync);
@@ -156,5 +177,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butFullSync;
 		private ValidDate textDateBefore;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textDateTimeLastRun;
 	}
 }

@@ -25,47 +25,13 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.listView = new System.Windows.Forms.ListView();
-			this.colLName = new System.Windows.Forms.ColumnHeader();
-			this.colFName = new System.Windows.Forms.ColumnHeader();
-			this.colPhone = new System.Windows.Forms.ColumnHeader();
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSearch = new System.Windows.Forms.Button();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.gridMain = new OpenDentMobile.UI.ODGrid();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// listView
-			// 
-			this.listView.Activation = System.Windows.Forms.ItemActivation.OneClick;
-			this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.listView.Columns.Add(this.colLName);
-			this.listView.Columns.Add(this.colFName);
-			this.listView.Columns.Add(this.colPhone);
-			this.listView.Font = new System.Drawing.Font("Tahoma",8F,System.Drawing.FontStyle.Regular);
-			this.listView.FullRowSelect = true;
-			this.listView.Location = new System.Drawing.Point(0,23);
-			this.listView.Name = "listView";
-			this.listView.Size = new System.Drawing.Size(240,245);
-			this.listView.TabIndex = 0;
-			this.listView.View = System.Windows.Forms.View.Details;
-			this.listView.ItemActivate += new System.EventHandler(this.listView_ItemActivate);
-			// 
-			// colLName
-			// 
-			this.colLName.Text = "LName";
-			this.colLName.Width = 70;
-			// 
-			// colFName
-			// 
-			this.colFName.Text = "FName";
-			this.colFName.Width = 70;
-			// 
-			// colPhone
-			// 
-			this.colPhone.Text = "Phone";
-			this.colPhone.Width = 85;
 			// 
 			// textLName
 			// 
@@ -91,16 +57,37 @@
 			this.butSearch.Text = "Search";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.AutoScroll = true;
+			this.panel1.Controls.Add(this.gridMain);
+			this.panel1.Location = new System.Drawing.Point(0,23);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(240,245);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Location = new System.Drawing.Point(0,0);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.Size = new System.Drawing.Size(218,210);
+			this.gridMain.TabIndex = 0;
+			this.gridMain.Text = "odGrid1";
+			this.gridMain.WrapText = true;
+			this.gridMain.CellClick += new OpenDentMobile.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
 			// FormPatientSelect
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F,96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(240,268);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textLName);
-			this.Controls.Add(this.listView);
 			this.Font = new System.Drawing.Font("Tahoma",8F,System.Drawing.FontStyle.Regular);
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu1;
@@ -108,19 +95,18 @@
 			this.Text = "Select Patient";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.ListView listView;
-		private System.Windows.Forms.ColumnHeader colLName;
-		private System.Windows.Forms.ColumnHeader colPhone;
-		private System.Windows.Forms.ColumnHeader colFName;
 		private System.Windows.Forms.TextBox textLName;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button butSearch;
+		private System.Windows.Forms.Panel panel1;
+		private OpenDentMobile.UI.ODGrid gridMain;
 	}
 }
 
