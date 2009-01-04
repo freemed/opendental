@@ -30,6 +30,7 @@
 			this.menuItemFamily = new System.Windows.Forms.MenuItem();
 			this.menuItemMenu = new System.Windows.Forms.MenuItem();
 			this.menuItemSelectPat = new System.Windows.Forms.MenuItem();
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -56,6 +57,7 @@
 			// 
 			// menuItemMenu
 			// 
+			this.menuItemMenu.MenuItems.Add(this.menuItemSetup);
 			this.menuItemMenu.MenuItems.Add(this.menuItemSelectPat);
 			this.menuItemMenu.Text = "Menu";
 			// 
@@ -63,6 +65,11 @@
 			// 
 			this.menuItemSelectPat.Text = "Select Patient";
 			this.menuItemSelectPat.Click += new System.EventHandler(this.menuItemSelectPat_Click);
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -88,6 +95,7 @@
 		private System.Windows.Forms.MenuItem menuItemFamily;
 		private System.Windows.Forms.MenuItem menuItemMenu;
 		private System.Windows.Forms.MenuItem menuItemSelectPat;
+		private System.Windows.Forms.MenuItem menuItemSetup;
 
 	}
 }

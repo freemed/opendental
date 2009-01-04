@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlServerCe;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -22,6 +23,7 @@ namespace OpenDentMobile {
 			ContrAppt2.Dock=DockStyle.Fill;
 			ContrAppt2.Size=this.ClientRectangle.Size;
 			ContrAppt2.Visible=false;
+			ContrAppt2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			this.Controls.Add(ContrAppt2);
 			ContrFamily2=new ContrFamily();
 			ContrFamily2.Location=new Point(0,0);
@@ -52,23 +54,28 @@ namespace OpenDentMobile {
 
 		private void Form1_Load(object sender,EventArgs e) {
 			allNeutral();
-			//FormChooseDatabase formChooseDb=new FormChooseDatabase();
-			//never show the choose db dialog for now
-			if(!FormChooseDatabase.TryToConnect()){
-				if(MessageBox.Show("Database does not exist and will now be created.","",MessageBoxButtons.OKCancel,MessageBoxIcon.None,MessageBoxDefaultButton.Button1)
-					!=DialogResult.OK)
-				{
+			string strAppDir=Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+			if(File.Exists(Path.Combine(strAppDir,"OpenDentalConfig.xml"))){
+				FormChooseDatabase formChooseDb=new FormChooseDatabase();
+				formChooseDb.ShowDialog();
+				if(formChooseDb.CloseApplication){
+					Application.Exit();
+					return;
+				}
+			}
+			else if(!FormChooseDatabase.TryToConnect("OpenDental")){
+				if(!MsgBox.Show("Database does not exist and will now be created.",true)){
 					MessageBox.Show("Application will now exit.");
 					Application.Exit();
 				}
 				try{
-					ClassConvertDatabase.CreateNewDatabase();
+					ClassConvertDatabase.CreateNewDatabase("OpenDental");
 				}
 				catch(Exception ex){
 					MessageBox.Show(ex.Message+".  Application will now exit.");
 					Application.Exit();
 				}
-				if(!FormChooseDatabase.TryToConnect()){
+				if(!FormChooseDatabase.TryToConnect("OpenDental")){
 					MessageBox.Show("Could not connect to database.  Application will now exit.");
 					Application.Exit();
 				}
@@ -98,15 +105,20 @@ namespace OpenDentMobile {
 		}
 
 		private bool LoadAllNewFiles(){
-			string dataPath="";
-			#if DEBUG
-				dataPath=@"\Storage Card\Business\Open Dental";
-			#else
-				dataPath=@"\My Documents\Business\Open Dental";
-			#endif
+			string dataPath=PrefC.GetString("ImportPath");
+			//#if DEBUG
+			//	dataPath=@"\Storage Card\Business\Open Dental";
+			//#else
+			//	dataPath=@"\My Documents\Business\Open Dental";
+			//#endif
 			if(!Directory.Exists(dataPath)){
-				MessageBox.Show("Could not find "+dataPath);
-				return false;
+				MessageBox.Show("Please enter a valid path.");
+				FormSetup FormS=new FormSetup();
+				FormS.ShowDialog();
+				dataPath=PrefC.GetString("ImportPath");//if user changed path, it's guaranteed to be valid
+				if(!Directory.Exists(dataPath)){//user explicity wants to close program
+					return false;
+				}
 			}
 			string[] fileArray=Directory.GetFiles(dataPath);
 			List<string> fileList=new List<string>();
@@ -172,6 +184,12 @@ namespace OpenDentMobile {
 			return int1.CompareTo(int2);
 		}
 
+		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
+		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
+			CurPatNum=e.PatNum;
+			FillPatientButton(e.PatName);
+		}
+
 		///<Summary>Sets main form text.</Summary>
 		private void FillPatientButton(string patName) {
 			Text=patName;
@@ -190,7 +208,6 @@ namespace OpenDentMobile {
 					menuItemModule.Text="Family";
 					ContrFamily2.ModuleSelected(CurPatNum);
 					break;
-				
 			}
 		}
 
@@ -232,6 +249,11 @@ namespace OpenDentMobile {
 			FillPatientButton(pat.GetNameLF());
 		}
 
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+			FormSetup FormS=new FormSetup();
+			FormS.ShowDialog();
+		}
+
 		private void menuItemModule_Popup(object sender,EventArgs e) {
 			menuItemAppt.Checked=false;
 			menuItemFamily.Checked=false;
@@ -242,6 +264,8 @@ namespace OpenDentMobile {
 				menuItemFamily.Checked=true;
 			}
 		}
+
+		
 
 		
 

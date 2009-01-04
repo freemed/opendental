@@ -28,6 +28,12 @@ namespace OpenDentMobile.UI {
 		private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
 		private Font cellFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
 		private bool IsUpdating;
+		private int MouseDownRow;
+		private int MouseDownCol;
+		private List<int> selectedIndices;
+		private GridSelectionMode selectionMode;
+		private bool MouseIsDown;
+		private Color selectedRowColor;
 		///<summary></summary>
 		public event ODGridClickEventHandler CellClick=null;
 
@@ -36,6 +42,9 @@ namespace OpenDentMobile.UI {
 			columns=new ODGridColumnList();
 			rows=new ODGridRowList();
 			wrapText=true;
+			selectedIndices=new List<int>();
+			selectionMode=GridSelectionMode.One;
+			selectedRowColor=Color.Silver;
 		}
 
 		#region Properties
@@ -50,6 +59,30 @@ namespace OpenDentMobile.UI {
 		public ODGridRowList Rows{
 			get{
 				return rows;
+			}
+		}
+
+		///<summary>Holds the int values of the indices of the selected rows.  To set selected indices, use SetSelected().</summary>
+		public int[] SelectedIndices{
+			get{
+				int[] retVal=new int[selectedIndices.Count];
+				selectedIndices.CopyTo(retVal);
+				Array.Sort(retVal);//they must be in numerical order
+				return retVal; 
+			}
+		}
+
+		///<summary></summary>
+		public GridSelectionMode SelectionMode{
+			get{ 
+				return selectionMode; 
+			}
+			set{
+				//if((GridSelectionMode)value==SelectionMode.MultiSimple){
+				//	MessageBox.Show("MultiSimple not supported.");
+				//	return;
+				//}
+				selectionMode=value;
 			}
 		}
 
@@ -157,13 +190,6 @@ namespace OpenDentMobile.UI {
 			//base.OnPaintBackground (pea);
 			//don't paint background.  This reduces flickering.
 		}
-
-		//protected override void OnPaint(PaintEventArgs pe) {
-			// TODO: Add custom paint code here
-
-			// Calling the base class OnPaint
-		//	base.OnPaint(pe);
-		//}
 		
 		///<summary>Runs any time the control is invalidated.</summary>
 		protected override void OnPaint(PaintEventArgs e){
@@ -215,13 +241,22 @@ namespace OpenDentMobile.UI {
 				lowerPen=new Pen(Color.FromArgb(120,120,120));
 			}
 			SolidBrush textBrush=new SolidBrush(Color.Black);
+			//selected row color
+			if(selectedIndices.Contains(rowI)){
+				g.FillRectangle(new SolidBrush(selectedRowColor),
+					1,
+					1+headerHeight+RowLocs[rowI]+1,
+					GridW,
+					RowHeights[rowI]-1);
+			}
 			//normal row color
-			//need to draw over the gray background
-			g.FillRectangle(new SolidBrush(Color.White),
-				1,
-				1+headerHeight+RowLocs[rowI]+1,
-				GridW,//this is a really simple width value that always works well
-				RowHeights[rowI]-1);
+			else{//need to draw over the gray background
+				g.FillRectangle(new SolidBrush(Color.White),
+					1,
+					1+headerHeight+RowLocs[rowI]+1,
+					GridW,//this is a really simple width value that always works well
+					RowHeights[rowI]-1);
+			}
 			for(int i=0;i<columns.Count;i++){
 				//right vertical gridline
 				if(rowI==0){
@@ -309,7 +344,25 @@ namespace OpenDentMobile.UI {
 		#endregion Painting
 
 		#region Clicking
+		///<summary></summary>
+		protected void OnCellClick(int col,int row){
+			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row);
+			if(CellClick!=null){
+				CellClick(this,gArgs);
+			}
+		}
 
+		///<summary></summary>
+		protected override void OnClick(EventArgs e){
+			base.OnClick (e);
+			if(MouseDownRow==-1){
+				return;//click was in the title or header section
+			}
+			if(MouseDownCol==-1){
+				return;//click was to the right of the columns
+			}
+			OnCellClick(MouseDownCol,MouseDownRow);
+		}
 		#endregion Clicking
 
 		#region BeginEndUpdate
@@ -330,6 +383,139 @@ namespace OpenDentMobile.UI {
 		}
 		#endregion BeginEndUpdate
 
+		#region Selections
+		///<summary>Use to set a row selected or not.  Can handle values outside the acceptable range.</summary>
+		public void SetSelected(int index,bool setValue){
+			if(setValue){//select specified index
+				if(selectionMode==GridSelectionMode.None){
+					throw new Exception("Selection mode is none.");
+				}
+				if(index<0 || index>rows.Count-1){//check to see if index is within the valid range of values
+					return;//if not, then ignore.
+				}
+				//if(selectionMode==GridSelectionMode.One){
+				//	selectedIndices.Clear();//clear existing selection before assigning the new one.
+				//}
+				if(!selectedIndices.Contains(index)){
+					selectedIndices.Add(index);
+				}
+			}
+			else{//unselect specified index
+				if(selectedIndices.Contains(index)){
+					selectedIndices.Remove(index);
+				}
+			}
+      Invalidate();
+		}
+
+		///<summary>Allows setting multiple values all at once</summary>
+		public void SetSelected(int[] iArray,bool setValue){
+			if(selectionMode==GridSelectionMode.None){
+				throw new Exception("Selection mode is none.");
+			}
+			if(selectionMode==GridSelectionMode.One){
+				throw new Exception("Selection mode is one.");
+			}
+			for(int i=0;i<iArray.Length;i++){
+				if(setValue){//select specified index
+					if(iArray[i]<0 || iArray[i]>rows.Count-1) {//check to see if index is within the valid range of values
+						return;//if not, then ignore.
+					}
+					if(!selectedIndices.Contains(iArray[i])){
+						selectedIndices.Add(iArray[i]);
+					}
+				}
+				else{//unselect specified index
+					if(selectedIndices.Contains(iArray[i])){
+						selectedIndices.Remove(iArray[i]);
+					}
+				}
+			}
+			Invalidate();
+		}
+
+		///<summary>Sets all rows to specified value.</summary>
+		public void SetSelected(bool setValue){
+			if(selectionMode==GridSelectionMode.None){
+				throw new Exception("Selection mode is none.");
+			}
+			if(selectionMode==GridSelectionMode.One && setValue==true){
+				throw new Exception("Selection mode is one.");
+			}
+			if(selectionMode==GridSelectionMode.OneCell){
+				throw new Exception("Selection mode is OneCell.");
+			}
+			selectedIndices.Clear();
+			if(setValue){//select all
+				for(int i=0;i<rows.Count;i++){
+					selectedIndices.Add(i);
+				}
+			}
+			Invalidate();
+		}
+
+		///<summary>If one row is selected, it returns the index to that row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
+		public int GetSelectedIndex(){
+			if(selectedIndices.Count>0){
+				return (int)selectedIndices[0];
+			}
+			return -1;
+		}
+		#endregion Selections
+
+		#region MouseEvents
+		///<summary></summary>
+		protected override void OnMouseDown(MouseEventArgs e) {
+			base.OnMouseDown(e);
+			MouseIsDown=true;
+			MouseDownRow=PointToRow(e.Y);
+			MouseDownCol=PointToCol(e.X);
+			if(MouseDownRow==-1){//mouse down was in the title or header section
+				return;
+			}
+			if(MouseDownCol==-1){//mouse down was to the right of columns
+				return;
+			}
+			switch(selectionMode){
+				case GridSelectionMode.None:
+					return;
+				case GridSelectionMode.One:
+					selectedIndices.Clear();
+					selectedIndices.Add(MouseDownRow);
+					break;
+				//GridSelectionMode.OneCell
+				case GridSelectionMode.MultiExtended:
+					if(selectedIndices.Contains(MouseDownRow)){
+						selectedIndices.Remove(MouseDownRow);
+					}
+          else{
+						selectedIndices.Add(MouseDownRow);
+          }
+					break;
+			}
+			Invalidate();
+		}
+
+		///<summary></summary>
+		protected override void OnMouseUp(MouseEventArgs e){
+			base.OnMouseUp(e);
+			MouseIsDown=false;
+		}
+
+		#endregion MouseEvents
+
 		
+	}
+
+	///<summary>Specifies the selection behavior of an ODGrid.</summary>   
+	public enum GridSelectionMode {
+		///<summary>0-No items can be selected.</summary>  
+		None=0,
+		///<summary>1-Only one row can be selected.</summary>  
+		One=1,
+		///<summary>2-Not implemented.</summary>
+		OneCell=2,
+		///<summary>3-Multiple items can be selected.</summary>   
+		MultiExtended=3,
 	}
 }

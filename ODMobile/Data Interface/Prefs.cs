@@ -21,7 +21,21 @@ namespace OpenDentMobile {
 			}
 		}
 
-		
+		///<summary>Returns true if a change was required, or false if no change needed.</summary>
+		public static bool UpdateString(string prefName,string newValue) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
+				throw new ApplicationException(prefName+" is an invalid pref name.");
+			}
+			if(PrefC.GetString(prefName)==newValue) {
+				return false;//no change needed
+			}
+			string command = "UPDATE preference SET "
+				+"ValueString = '"+POut.PString(newValue)+"' "
+				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+			General.NonQ(command);
+			PrefC.HList[prefName]=newValue;
+			return true;
+		}
 
 
 	}

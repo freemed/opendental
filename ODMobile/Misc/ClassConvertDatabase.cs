@@ -25,10 +25,10 @@ namespace OpenDentMobile {
 		}
 
 		///<summary>This only gets run if the entire database is missing.</summary>
-		public static void CreateNewDatabase(){
+		public static void CreateNewDatabase(string dbName){
 			SqlCeEngine engine=new SqlCeEngine(Dcon.ConnectionString);
 			engine.CreateDatabase();
-			if(!FormChooseDatabase.TryToConnect()){
+			if(!FormChooseDatabase.TryToConnect(dbName)){
 				throw new ApplicationException("Could not connect to database.");
 			}
 			string command=@"CREATE TABLE preference (                     
@@ -41,6 +41,8 @@ namespace OpenDentMobile {
 			command="INSERT INTO preference VALUES('MobileDataBaseVersion','6.3.0.0','')";
 			Dcon.NonQ(command);
 			command="INSERT INTO preference VALUES('CorruptedDatabase','0','')";
+			Dcon.NonQ(command);
+			command=@"INSERT INTO preference VALUES('ImportPath','\My Documents\Business\Open Dental','')";
 			Dcon.NonQ(command);
 			command=@"CREATE TABLE patient (  
 				PatNum int NOT NULL PRIMARY KEY,
@@ -85,7 +87,7 @@ namespace OpenDentMobile {
 				CREATE INDEX IdxAptDateTime ON appointment (AptDateTime)
 				";
 			Dcon.NonQs(command);
-
+			
 
 		}
 

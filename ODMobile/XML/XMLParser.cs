@@ -13,8 +13,7 @@ namespace OpenDentMobile{
 			System.Xml.XmlDocument doc=new XmlDocument();
 			doc.Load(fileName);
 			DateTime loadedTime=DateTime.Now;
-			//node 0 is the xml declaration
-			XmlNode mainNode=doc.ChildNodes[1];
+			XmlNode mainNode=doc.ChildNodes[1];//node 0 is the xml declaration
 			if(mainNode.Name!="InToMobile"){
 				throw new ApplicationException("Main node must be 'InToMobile'");
 			}

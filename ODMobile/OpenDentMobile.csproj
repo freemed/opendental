@@ -56,10 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\PrefC.cs" />
-    <Compile Include="ClassConvertDatabase.cs" />
+    <Compile Include="Misc\ClassConvertDatabase.cs" />
     <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Data Interface\General.cs" />
     <Compile Include="Data Interface\Patients.cs" />
+    <Compile Include="Data Interface\PatientSelectedEventArgs.cs" />
     <Compile Include="Data Interface\PIn.cs" />
     <Compile Include="Data Interface\POut.cs" />
     <Compile Include="Data Interface\Prefs.cs" />
@@ -76,6 +77,12 @@
     </Compile>
     <Compile Include="Forms\FormPatientSelect.Designer.cs">
       <DependentUpon>FormPatientSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSetup.Designer.cs">
+      <DependentUpon>FormSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Main Modules\ContrAppt.cs">
       <SubType>UserControl</SubType>
@@ -97,8 +104,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\FormChooseDatabase.resx">
+      <DependentUpon>FormChooseDatabase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientSelect.resx">
       <DependentUpon>FormPatientSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSetup.resx">
+      <DependentUpon>FormSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\ContrAppt.resx">
@@ -125,6 +140,8 @@
     </Compile>
     <Compile Include="Table Types\Appointment.cs" />
     <Compile Include="Table Types\Patient.cs" />
+    <Compile Include="Table Types\Pref.cs" />
+    <Compile Include="UI\MsgBox.cs" />
     <Compile Include="UI\ODGridClickEventArgs.cs" />
     <Compile Include="UI\ODGridColumnList.cs" />
     <Compile Include="UI\ODGrid.cs">

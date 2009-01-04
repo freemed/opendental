@@ -23,19 +23,10 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.gridPat = new OpenDentMobile.UI.ODGrid();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.gridPat = new OpenDentMobile.UI.ODGrid();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// gridPat
-			// 
-			this.gridPat.Location = new System.Drawing.Point(0,0);
-			this.gridPat.Name = "gridPat";
-			this.gridPat.Size = new System.Drawing.Size(237,265);
-			this.gridPat.TabIndex = 0;
-			this.gridPat.Text = "odGrid1";
-			this.gridPat.WrapText = true;
 			// 
 			// panel1
 			// 
@@ -45,6 +36,16 @@
 			this.panel1.Location = new System.Drawing.Point(0,0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(240,268);
+			// 
+			// gridPat
+			// 
+			this.gridPat.Location = new System.Drawing.Point(0,0);
+			this.gridPat.Name = "gridPat";
+			this.gridPat.SelectionMode = OpenDentMobile.UI.GridSelectionMode.None;
+			this.gridPat.Size = new System.Drawing.Size(237,265);
+			this.gridPat.TabIndex = 0;
+			this.gridPat.Text = "odGrid1";
+			this.gridPat.WrapText = true;
 			// 
 			// ContrFamily
 			// 

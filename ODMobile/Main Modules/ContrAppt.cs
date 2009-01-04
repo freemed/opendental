@@ -11,6 +11,8 @@ namespace OpenDentMobile {
 	public partial class ContrAppt:UserControl {
 		private int PatCurNum;
 		private DataTable tableApt;
+		///<summary>Occurs when user changes current patient, usually by clicking on the Select Patient button.</summary>
+		public event PatientSelectedEventHandler PatientSelected=null;
 
 		public ContrAppt() {
 			InitializeComponent();
@@ -24,6 +26,14 @@ namespace OpenDentMobile {
 		///<summary></summary>
 		private void RefreshModulePatient(int patNum){
 			PatCurNum=patNum;//might be zero
+		}
+
+		///<summary>Sends the PatientSelected event on up to the main form.</summary>
+		private void OnPatientSelected(int patNum,string patName) {
+			PatientSelectedEventArgs eArgs=new PatientSelectedEventArgs(patNum,patName);
+			if(PatientSelected!=null){
+				PatientSelected(this,eArgs);
+			}
 		}
 
 		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
@@ -66,6 +76,12 @@ namespace OpenDentMobile {
 
 		private void dateTPicker_ValueChanged(object sender,EventArgs e) {
 			RefreshPeriod();
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			int patNum=PIn.PInt(tableApt.Rows[e.Row]["PatNum"].ToString());
+			string patName=tableApt.Rows[e.Row]["patient"].ToString();
+			OnPatientSelected(patNum,patName);
 		}
 
 
