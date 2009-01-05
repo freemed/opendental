@@ -760,8 +760,9 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		protected void OnCellClick(int col,int row,MouseButtons button){
 			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row,button);
-			if(CellClick!=null)
+			if(CellClick!=null){
 				CellClick(this,gArgs);
+			}
 		}
 
 		///<summary></summary>
@@ -1427,7 +1428,7 @@ namespace OpenDental.UI{
 			ScrollValue-=e.Delta/3;
 		}
 		
-		#endregion
+		#endregion MouseEvents
 
 		#region KeyEvents
 		///<summary></summary>

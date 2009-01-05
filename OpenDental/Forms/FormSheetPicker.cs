@@ -11,6 +11,8 @@ namespace OpenDental {
 	public partial class FormSheetPicker:Form {
 		public SheetTypeEnum SheetType;
 		private List<SheetDef> listSheets;
+		///<summary>Only if OK.</summary>
+		public SheetDef SelectedSheetDef;
 
 		public FormSheetPicker() {
 			InitializeComponent();
@@ -25,13 +27,30 @@ namespace OpenDental {
 			}
 		}
 
+		private void listMain_DoubleClick(object sender,EventArgs e) {
+			if(listMain.SelectedIndex==-1){
+				return;
+			}
+			SelectedSheetDef=listSheets[listMain.SelectedIndex];
+			SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			if(listMain.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select an item first.");
+				return;
+			}
+			SelectedSheetDef=listSheets[listMain.SelectedIndex];
+			SheetDefs.GetFieldsAndParameters(SelectedSheetDef);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

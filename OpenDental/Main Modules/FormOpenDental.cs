@@ -2020,9 +2020,26 @@ namespace OpenDental{
 		}
 
 		private void OnLetter_Click() {
-			Patient pat=Patients.GetPat(CurPatNum);
-			FormLetters FormL=new FormLetters(pat);
-			FormL.ShowDialog();
+			FormSheetPicker FormS=new FormSheetPicker();
+			FormS.SheetType=SheetTypeEnum.PatientLetter;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDef sheetDef=FormS.SelectedSheetDef;
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,CurPatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",CurPatNum);
+			//SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
+			if(FormSF.DialogResult==DialogResult.OK) {
+				RefreshCurrentModule();
+			}
+			//Patient pat=Patients.GetPat(CurPatNum);
+			//FormLetters FormL=new FormLetters(pat);
+			//FormL.ShowDialog();
 		}
 
 		private void menuLetter_Popup(object sender,EventArgs e) {
@@ -2031,9 +2048,9 @@ namespace OpenDental{
 			menuItem=new MenuItem(Lan.g(this,"Merge"),menuLetter_Click);
 			menuItem.Tag="Merge";
 			menuLetter.MenuItems.Add(menuItem);
-			menuItem=new MenuItem(Lan.g(this,"Stationery"),menuLetter_Click);
-			menuItem.Tag="Stationery";
-			menuLetter.MenuItems.Add(menuItem);
+			//menuItem=new MenuItem(Lan.g(this,"Stationery"),menuLetter_Click);
+			//menuItem.Tag="Stationery";
+			//menuLetter.MenuItems.Add(menuItem);
 			menuLetter.MenuItems.Add("-");
 			//Referrals---------------------------------------------------------------------------------------
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
@@ -2067,15 +2084,32 @@ namespace OpenDental{
 					FormLetterMerges FormL=new FormLetterMerges(pat);
 					FormL.ShowDialog();
 				}
-				if(((MenuItem)sender).Tag.ToString()=="Stationery") {
-					FormCommunications.PrintStationery(pat);
-				}
+				//if(((MenuItem)sender).Tag.ToString()=="Stationery") {
+				//	FormCommunications.PrintStationery(pat);
+				//}
 			}
 			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
 				Referral refer=(Referral)((MenuItem)sender).Tag;
-				FormLetters FormL=new FormLetters(pat);
-				FormL.ReferralCur=refer;
-				FormL.ShowDialog();
+				FormSheetPicker FormS=new FormSheetPicker();
+				FormS.SheetType=SheetTypeEnum.ReferralLetter;
+				FormS.ShowDialog();
+				if(FormS.DialogResult!=DialogResult.OK){
+					return;
+				}
+				SheetDef sheetDef=FormS.SelectedSheetDef;
+				Sheet sheet=SheetUtil.CreateSheet(sheetDef,CurPatNum);
+				SheetParameter.SetParameter(sheet,"PatNum",CurPatNum);
+				SheetParameter.SetParameter(sheet,"ReferralNum",refer.ReferralNum);
+				SheetFiller.FillFields(sheet);
+				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+				FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+				FormSF.ShowDialog();
+				if(FormSF.DialogResult==DialogResult.OK) {
+					RefreshCurrentModule();
+				}
+				//FormLetters FormL=new FormLetters(pat);
+				//FormL.ReferralCur=refer;
+				//FormL.ShowDialog();
 			}
 		}
 

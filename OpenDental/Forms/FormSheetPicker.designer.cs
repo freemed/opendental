@@ -83,6 +83,7 @@ namespace OpenDental{
 			this.listMain.Name = "listMain";
 			this.listMain.Size = new System.Drawing.Size(164,316);
 			this.listMain.TabIndex = 13;
+			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// FormSheetPicker
 			// 

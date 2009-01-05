@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<SheetField>.DeleteObject(sheetFieldNum);
 		}
 
-		///<summary>Deletes all existing drawing fields for a sheet and then adds back the list supplied.</summary>
+		///<summary>Deletes all existing drawing fields for a sheet from the database and then adds back the list supplied.</summary>
 		public static void SetDrawings(List<SheetField> drawingList,int sheetNum){
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum)
 				+" AND FieldType="+POut.PInt((int)SheetFieldType.Drawing);

@@ -184,6 +184,21 @@ namespace OpenDentBusiness{
 			return retStr;
 		}
 
+		///<summary>First Last, Suffix</summary>
+		public static string GetFormalName(int provNum){
+			string retStr="";
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					retStr=ProviderC.ListLong[i].FName+" "
+						+ProviderC.ListLong[i].LName;
+					if(ProviderC.ListLong[i].Suffix != ""){
+						retStr+=", "+ProviderC.ListLong[i].Suffix;
+					}
+				}
+			}
+			return retStr;
+		}
+
 		///<summary>Abbr - LName, FName (hidden).</summary>
 		public static string GetLongDesc(int provNum) {
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {

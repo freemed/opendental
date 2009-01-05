@@ -202,7 +202,6 @@ namespace OpenDentBusiness{
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height)
 		{
-			//int _height=font.Height+1;//Height is automatic in this early implementation.
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
@@ -210,7 +209,6 @@ namespace OpenDentBusiness{
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
 		{
-			//int _height=font.Height+1;//Height is automatic in this early implementation.
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,growthBehavior);
 		}
@@ -218,9 +216,15 @@ namespace OpenDentBusiness{
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
 			int xPos,int yPos,int width,int height)
 		{
-			//int _height=font.Height+1;//Height is automatic in this early implementation.
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+		}
+
+		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
+		{
+			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
+				xPos,yPos,width,height,growthBehavior);
 		}
 
 		public static SheetFieldDef NewInput(string fieldName,float fontSize,string fontName,bool fontIsBold,

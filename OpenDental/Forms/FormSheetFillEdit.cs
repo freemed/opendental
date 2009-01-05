@@ -55,11 +55,22 @@ namespace OpenDental {
 			}
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
 			textNote.Text=SheetCur.InternalNote;
+			LayoutFields();
+		}
+
+		private void LayoutFields(){
+			panelMain.Controls.Clear();
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
 			SheetCheckBox checkbox;
 			//first, draw images---------------------------------------------------------------------------------------
-			pictDraw=null;
+			//might change this to only happen once when first loading form:
+			if(pictDraw!=null){
+				if(panelMain.Controls.Contains(pictDraw)){
+					Controls.Remove(pictDraw);
+				}
+				pictDraw=null;
+			}
 			imgDraw=null;
 			foreach(SheetField field in SheetCur.SheetFields){
 				if(field.FieldType!=SheetFieldType.Image){
@@ -109,6 +120,7 @@ namespace OpenDental {
 			pictDraw.MouseDown+=new MouseEventHandler(pictDraw_MouseDown);
 			pictDraw.MouseMove+=new MouseEventHandler(pictDraw_MouseMove);
 			pictDraw.MouseUp+=new MouseEventHandler(pictDraw_MouseUp);
+			//draw drawings, rectangles, and lines-----------------------------------------------------------------------
 			RefreshPanel();
 			//draw textboxes----------------------------------------------------------------------------------------------
 			foreach(SheetField field in SheetCur.SheetFields){
@@ -132,6 +144,7 @@ namespace OpenDental {
 				}
 				textbox.Location=new Point(field.XPos,field.YPos);
 				textbox.Width=field.Width;
+				textbox.ScrollBars=RichTextBoxScrollBars.None;
 				textbox.Text=field.FieldValue;
 				style=FontStyle.Regular;
 				if(field.FontIsBold){
@@ -197,7 +210,7 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.</summary>
+		///<summary>Triggered when any field value changes.  This immediately invalidates signatures.  It also causes fields to grow as needed.</summary>
 		private void text_TextChanged(object sender,EventArgs e) {
 			foreach(Control control in panelMain.Controls){
 				if(control.GetType()!=typeof(OpenDental.UI.SignatureBoxWrapper)){
@@ -209,6 +222,48 @@ namespace OpenDental {
 				SheetField field=(SheetField)control.Tag;
 				OpenDental.UI.SignatureBoxWrapper sigBox=(OpenDental.UI.SignatureBoxWrapper)control;
 				sigBox.SetInvalid();
+			}
+			if(sender.GetType() != typeof(RichTextBox)){
+				//since CheckBoxes also trigger this event for sig invalid.
+				return;
+			}
+			RichTextBox textBox=(RichTextBox)sender;
+			//remember where we were
+			int cursorPos=textBox.SelectionStart;
+			//int boxX=textBox.Location.X;
+			//int boxY=textBox.Location.Y;
+			//string originalFieldValue=((SheetField)((RichTextBox)control).Tag).FieldValue;
+			SheetField fld=(SheetField)textBox.Tag;
+			if(fld.GrowthBehavior==GrowthBehaviorEnum.None){
+				return;
+			}
+			fld.FieldValue=textBox.Text;
+			Graphics g=this.CreateGraphics();
+			FontStyle fontstyle=FontStyle.Regular;
+			if(fld.FontIsBold){
+				fontstyle=FontStyle.Bold;
+			}
+			Font font=new Font(fld.FontName,fld.FontSize,fontstyle);
+			int calcH=(int)(g.MeasureString(fld.FieldValue,font).Height * 1.133f);//Seems to need 2 pixels per line of text to prevent hidden text due to scroll.
+			g.Dispose();
+			if(calcH<=fld.Height){//no growth needed
+				return;
+			}
+			//the field height needs to change, so:
+			int amountOfGrowth=calcH-fld.Height;
+			fld.Height=calcH;
+			//FillFieldsFromControls();//We already changed the value of this field manually, and the other field values don't matter.
+			SheetUtil.MoveAllDownBelowThis(SheetCur,fld,amountOfGrowth);
+			LayoutFields();
+			//find the original textbox, and put the cursor back where it belongs
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType() == typeof(RichTextBox)){
+					if((SheetField)(control.Tag)==fld){
+						((RichTextBox)control).Select(cursorPos,0);
+						((RichTextBox)control).Focus();
+						//((RichTextBox)control).SelectionStart=cursorPos;
+					}
+				}
 			}
 		}
 
@@ -377,7 +432,7 @@ namespace OpenDental {
 				FormS.PaperCopies=2;
 			}
 			else{
-				FormS.PaperCopies=1;//although not used yet.
+				FormS.PaperCopies=1;
 			}
 			Patient pat=Patients.GetPat(SheetCur.PatNum);
 			if(pat.Email!=""){
@@ -479,77 +534,37 @@ namespace OpenDental {
 			}
 			SheetCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
 			SheetCur.InternalNote=textNote.Text;
+			FillFieldsFromControls();//But SheetNums will still be 0 for a new sheet.
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
-			SheetField field;
-			//Images------------------------------------------------------
+			List<SheetField> drawingList=new List<SheetField>();
 			foreach(SheetField fld in SheetCur.SheetFields){
-				if(!fld.IsNew){
-					continue;//so it only saves them when the sheet is first created because user can't edit.
+				if(fld.FieldType==SheetFieldType.SigBox){
+					continue;//done in a separate step
 				}
-				if(fld.FieldType==SheetFieldType.Image){
-					fld.SheetNum=SheetCur.SheetNum;
-					SheetFields.WriteObject(fld);
-				}
-			}
-			//RichTextBoxes-----------------------------------------------
-			foreach(Control control in panelMain.Controls){
-				if(control.GetType()!=typeof(RichTextBox)){
-					continue;
-				}
-				if(control.Tag==null){
-					continue;
-				}
-				field=(SheetField)control.Tag;
-				field.FieldValue=control.Text;
-				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
-				SheetFields.WriteObject(field);
-			}
-			//CheckBoxes-----------------------------------------------
-			foreach(Control control in panelMain.Controls){
-				if(control.GetType()!=typeof(SheetCheckBox)){
-					continue;
-				}
-				if(control.Tag==null){
-					continue;
-				}
-				field=(SheetField)control.Tag;
-				if(((SheetCheckBox)control).IsChecked){
-					field.FieldValue="X";
-				}
-				else{
-					field.FieldValue="";
-				}
-				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
-				SheetFields.WriteObject(field);
-			}
-			//Rectangles and lines
-			foreach(SheetField fld in SheetCur.SheetFields){
-				if(!fld.IsNew){
-					continue;//so it only saves them when the sheet is first created because user can't edit.
-				}
-				if(fld.FieldType==SheetFieldType.Rectangle || fld.FieldType==SheetFieldType.Line){
-					fld.SheetNum=SheetCur.SheetNum;
-					SheetFields.WriteObject(fld);
-				}
-			}
-			//Drawings----------------------------------------------------
-			if(drawingsAltered){
-				List<SheetField> drawingList=new List<SheetField>();
-				foreach(SheetField sf in SheetCur.SheetFields){
-					if(sf.FieldType==SheetFieldType.Drawing){
-						sf.SheetNum=SheetCur.SheetNum;
-						sf.IsNew=true;
-						drawingList.Add(sf);
+				if(fld.FieldType==SheetFieldType.Image
+					|| fld.FieldType==SheetFieldType.Rectangle
+					|| fld.FieldType==SheetFieldType.Line)
+				{
+					if(!fld.IsNew){
+						continue;//it only saves them when the sheet is first created because user can't edit anyway.
 					}
 				}
+				fld.SheetNum=SheetCur.SheetNum;//whether or not isnew
+				if(fld.FieldType==SheetFieldType.Drawing){
+					fld.IsNew=true;
+					drawingList.Add(fld);
+				}
+				else{
+					SheetFields.WriteObject(fld);
+				}
+			}
+			if(drawingsAltered){
+				//drawings get saved as a group rather than with the other fields.
 				SheetFields.SetDrawings(drawingList,SheetCur.SheetNum);
 			}
-			if(isNew){
-				Sheets.SaveParameters(SheetCur);
-			}
-			//SigBoxes---------------------------------------------------
 			//SigBoxes must come after ALL other types in order for the keyData to be in the right order.
+			SheetField field;
 			foreach(Control control in panelMain.Controls){
 				if(control.GetType()!=typeof(OpenDental.UI.SignatureBoxWrapper)){
 					continue;
@@ -580,6 +595,47 @@ namespace OpenDental {
 				SheetFields.WriteObject(field);
 			}
 			return true;
+		}
+
+		///<summary>This is always done before the save process.  But it's also done before bumping down fields due to growth behavior.</summary>
+		private void FillFieldsFromControls(){			
+			//SheetField field;
+			//Images------------------------------------------------------
+				//Images can't be changed in this UI
+			//RichTextBoxes-----------------------------------------------
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(RichTextBox)){
+					continue;
+				}
+				if(control.Tag==null){
+					continue;
+				}
+				//field=(SheetField)control.Tag;
+				((SheetField)control.Tag).FieldValue=control.Text;
+			}
+			//CheckBoxes-----------------------------------------------
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(SheetCheckBox)){
+					continue;
+				}
+				if(control.Tag==null){
+					continue;
+				}
+				//field=(SheetField)control.Tag;
+				if(((SheetCheckBox)control).IsChecked){
+					((SheetField)control.Tag).FieldValue="X";
+				}
+				else{
+					((SheetField)control.Tag).FieldValue="";
+				}
+			}
+			//Rectangles and lines-----------------------------------------
+				//Rectangles and lines can't be changed in this UI
+			//Drawings----------------------------------------------------
+				//Drawings data is already saved to fields
+			//SigBoxes---------------------------------------------------
+				//SigBoxes won't be strictly checked for validity
+				//or data saved to the field until it's time to actually save to the database.
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

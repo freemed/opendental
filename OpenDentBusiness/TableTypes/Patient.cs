@@ -269,7 +269,7 @@ namespace OpenDentBusiness{
 		[DataField("Salutation")]
 		private string salutation;
 		bool salutationChanged;
-		/// <summary>For example: Dear Mr. Smith.  Not used by the program in any way.</summary>
+		/// <summary>Dear __.  This fields should not include the "Dear" or a trailing comma.  If this field is blank, then the typical salutation is FName.  Or, if a Preferred name is present, that is used instead of FName.</summary>
 		public string Salutation {
 			get { return salutation; }
 			set { if(salutation!=value){salutation = value; MarkDirty(); salutationChanged = true; }}
@@ -921,6 +921,17 @@ namespace OpenDentBusiness{
 				retVal+=" '"+Preferred+"'";
 			}
 			return retVal;
+		}
+
+		///<summary>Dear __.  Does not include the "Dear" or the comma.</summary>
+		public string GetSalutation(){
+			if(Salutation!=""){
+				return Salutation;
+			}
+			if(Preferred!=""){
+				return Preferred;
+			}
+			return FName;
 		}
 	}
 

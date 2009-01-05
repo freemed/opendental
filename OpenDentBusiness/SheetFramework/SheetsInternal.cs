@@ -368,7 +368,7 @@ namespace OpenDentBusiness{
 			sheet.FontSize=9f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=14;
+			int rowH=15;
 			int x=100;
 			int y=100;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
@@ -390,13 +390,14 @@ namespace OpenDentBusiness{
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100,
+				GrowthBehaviorEnum.DownGlobal));
 			y+=100;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
@@ -415,7 +416,7 @@ namespace OpenDentBusiness{
 			sheet.FontSize=9f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=14;
+			int rowH=15;
 			int x=100;
 			int y=100;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
@@ -437,16 +438,17 @@ namespace OpenDentBusiness{
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("RE patient:",sheet.FontSize,sheet.FontName,false,x,y,70,rowH));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x+70,y,150,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100,
+				GrowthBehaviorEnum.DownGlobal));
 			y+=100;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));

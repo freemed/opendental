@@ -603,7 +603,9 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncDateTimeLastRun','0001-01-01','')";
 					General.NonQ(command);
-
+					command="DELETE FROM preference WHERE PrefName ='LettersIncludeReturnAddress'";
+					General.NonQ(command);
+					
 
 
 

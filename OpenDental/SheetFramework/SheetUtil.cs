@@ -33,7 +33,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Just before printing or displaying the final sheet output, the heights and y positions of various fields are adjusted according to their growth behavior.</summary>
+		///<summary>Just before printing or displaying the final sheet output, the heights and y positions of various fields are adjusted according to their growth behavior.  This also now gets run every time a user changes the value of a textbox while filling out a sheet.</summary>
 		public static void CalculateHeights(Sheet sheet,Graphics g){
 			//Sheet sheetCopy=sheet.Copy();
 			int calcH;
@@ -58,15 +58,20 @@ namespace OpenDental{
 					MoveAllDownWhichIntersect(sheet,field);
 				}
 				else if(field.GrowthBehavior==GrowthBehaviorEnum.DownGlobal){
-					foreach(SheetField field2 in sheet.SheetFields) {
-						if(field2.YPos>field.YPos) {//for all fields that are below this one
-							field2.YPos+=amountOfGrowth;//bump down by amount that this one grew
-						}
-					}
+					MoveAllDownBelowThis(sheet,field,amountOfGrowth);
+					
 				}
 			}
 			//g.Dispose();
 			//return sheetCopy;
+		}
+
+		public static void MoveAllDownBelowThis(Sheet sheet,SheetField field,int amountOfGrowth){
+			foreach(SheetField field2 in sheet.SheetFields) {
+				if(field2.YPos>field.YPos) {//for all fields that are below this one
+					field2.YPos+=amountOfGrowth;//bump down by amount that this one grew
+				}
+			}
 		}
 
 		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one is moved down, this method is called recursively.  The end result should be no intersections among fields near to the original field that grew.</Summary>
@@ -80,6 +85,10 @@ namespace OpenDental{
 				}
 				if(field2.YPos<field.YPos){//only fields which are below this one
 					continue;
+				}
+				if(field2.FieldType==SheetFieldType.Drawing){
+					continue;
+					//drawings do not get moved down.
 				}
 				if(field.Bounds.IntersectsWith(field2.Bounds)) {
 					//Debug.WriteLine(field.FieldValue+" -forces-> "+field2.FieldValue+" -to-> "+field.Bounds.Bottom.ToString());

@@ -37,6 +37,12 @@ namespace OpenDental{
 				case SheetTypeEnum.Consent:
 					FillFieldsForConsent(sheet);
 					break;
+				case SheetTypeEnum.PatientLetter:
+					FillFieldsForPatientLetter(sheet);
+					break;
+				case SheetTypeEnum.ReferralLetter:
+					FillFieldsForReferralLetter(sheet);
+					break;
 			}
 		}
 
@@ -310,12 +316,41 @@ namespace OpenDental{
 			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
-					/*case "patient.nameFL":
+					case "PracticeTitle":
+						field.FieldValue=PrefC.GetString("PracticeTitle");
+						break;
+					case "PracticeAddress":
+						field.FieldValue=PrefC.GetString("PracticeAddress");
+						if(PrefC.GetString("PracticeAddress2") != ""){
+							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						}
+						break;
+					case "practiceCityStateZip":
+						field.FieldValue=PrefC.GetString("PracticeCity")+", "
+							+PrefC.GetString("PracticeST")+"  "
+							+PrefC.GetString("PracticeZip");
+						break;
+					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
 						break;
-					case "dateTime.Today":
-						field.FieldValue=DateTime.Today.ToShortDateString();
-						break;*/
+					case "patient.address":
+						field.FieldValue=pat.Address;
+						if(pat.Address2!="") {
+							field.FieldValue+="\r\n"+pat.Address2;
+						}
+						break;
+					case "patient.cityStateZip":
+						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
+						break;
+					case "today.DayDate":
+						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
+						break;
+					case "patient.salutation":
+						field.FieldValue="Dear "+pat.GetSalutation()+":";
+						break;
+					case "patient.priProvNameFL":
+						field.FieldValue=Providers.GetFormalName(pat.PriProv);
+						break;
 				}
 			}
 		}
@@ -325,6 +360,20 @@ namespace OpenDental{
 			Referral refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
+					case "PracticeTitle":
+						field.FieldValue=PrefC.GetString("PracticeTitle");
+						break;
+					case "PracticeAddress":
+						field.FieldValue=PrefC.GetString("PracticeAddress");
+						if(PrefC.GetString("PracticeAddress2") != ""){
+							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						}
+						break;
+					case "practiceCityStateZip":
+						field.FieldValue=PrefC.GetString("PracticeCity")+", "
+							+PrefC.GetString("PracticeST")+"  "
+							+PrefC.GetString("PracticeZip");
+						break;
 					case "referral.nameFL":
 						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
 						break;
@@ -337,42 +386,18 @@ namespace OpenDental{
 					case "referral.cityStateZip":
 						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
-					case "referral.phone":
-						field.FieldValue="";
-						if(refer.Telephone.Length==10){
-							field.FieldValue="("+refer.Telephone.Substring(0,3)+")"
-								+refer.Telephone.Substring(3,3)+"-"
-								+refer.Telephone.Substring(6);
-						}
+					case "today.DayDate":
+						field.FieldValue=DateTime.Today.ToString("dddd, MM/dd/yyyy");
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();
 						break;
-					case "dateTime.Today":
-						field.FieldValue=DateTime.Today.ToShortDateString();
+					case "referral.salutation":
+						field.FieldValue="Dear "+refer.FName+":";
 						break;
-					case "patient.WkPhone":
-						field.FieldValue=pat.WkPhone;
+					case "patient.priProvNameFL":
+						field.FieldValue=Providers.GetFormalName(pat.PriProv);
 						break;
-					case "patient.HmPhone":
-						field.FieldValue=pat.HmPhone;
-						break;
-					case "patient.WirelessPhone":
-						field.FieldValue=pat.WirelessPhone;
-						break;
-					case "patient.address":
-						field.FieldValue=pat.Address;
-						if(pat.Address2!="") {
-							field.FieldValue+="\r\n"+pat.Address2;
-						}
-						break;
-					case "patient.cityStateZip":
-						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
-						break;
-					case "patient.provider":
-						field.FieldValue=Providers.GetProv(Patients.GetProvNum(pat)).GetFormalName();
-						break;
-					//case "notes"://an input field
 				}
 			}
 		}
