@@ -238,7 +238,7 @@ namespace OpenDental{
 			internalList=SheetsInternal.GetAllInternal();
 			for(int i=0;i<internalList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Enum.GetNames(typeof(SheetInternalType))[i]);
+				row.Cells.Add(internalList[i].Description);//Enum.GetNames(typeof(SheetInternalType))[i]);
 				row.Cells.Add(internalList[i].SheetType.ToString());
 				grid1.Rows.Add(row);
 			}

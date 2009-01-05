@@ -333,27 +333,35 @@ namespace OpenDentBusiness{
 
 		private static SheetDef Consent(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.Consent);
-			sheet.Description="Consent";
+			sheet.Description="ExtractionConsent";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=9f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=14;
+			int rowH=15;
 			int x=220;
 			int y=40;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Consent Form",10,sheet.FontName,true,x,y,100,19));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Extraction Consent",10,sheet.FontName,true,x,y,140,19));
 			y+=35;
 			x=50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("dateTime.Today",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Tooth number: ",sheet.FontSize,sheet.FontName,false,x,y,90,rowH));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+90,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Tooth number(s): ",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+100,y,100,rowH));
 			y+=rowH;
 			y+=20;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("I give permission for my tooth to be extracted. Etc.",sheet.FontSize,sheet.FontName,false,x,y,450,100));
-			y+=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"Extraction(s) are to be peformed on the tooth/teeth listed above.  While we expect no complications, there are some risks involved with this procedure.  The more common complications are:
+
+Pain, infection, swelling, bruising, and discoloration.  Adjacent teeth may be chipped or damaged during the extraction.
+
+Nerves that run near the area of extraction may be bruised or damaged.  You may experience some temporary numbness and tingling of the lip and chin, or in rare cases, the tongue.  In some extremely rare instances, the lack of sensation could be permanent.
+
+In the upper arch, sinus complications can occur because the roots of some upper teeth extend near or into the sinuses.  After extraction, a hole may be present between the sinus and the mouth.  If this happens, you will be informed and the area repaired.
+
+By signing below you acknowledge that you understand the information presented, have had all your questions answered satisfactorily, and give consent to perform this procedure.",sheet.FontSize,sheet.FontName,false,x,y,480,285));
+			y+=285;
 			y+=20;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
 			y+=82;
@@ -396,9 +404,9 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,rowH,
 				GrowthBehaviorEnum.DownGlobal));
-			y+=100;
+			y+=rowH;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
 			y+=rowH;
@@ -447,9 +455,9 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,100,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,rowH,
 				GrowthBehaviorEnum.DownGlobal));
-			y+=100;
+			y+=rowH;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sincerely,",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
 			y+=rowH;
