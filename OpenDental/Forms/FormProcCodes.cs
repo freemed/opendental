@@ -811,8 +811,11 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Imported Procedure Codes");
 		}
 
-		///<summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns number of codes inserted.  Supply path to file to import or a list of procedure codes, or an xml string.  Make sure to set the other two values blank or empty(not null).</summary>
+		///<summary>Can be called externally.  Surround with try catch.  Returns number of codes inserted.  Supply path to file to import or a list of procedure codes, or an xml string.  Make sure to set the other two values blank or null.</summary>
 		public static int ImportProcCodes(string path,List<ProcedureCode> listCodes,string xmlData) {
+			if(listCodes==null){
+				listCodes=new List<ProcedureCode>();
+			}
 			//xmlData should already be tested ahead of time to make sure it's not blank.
 			XmlSerializer serializer=new XmlSerializer(typeof(List<ProcedureCode>));
 			if(path!="") {

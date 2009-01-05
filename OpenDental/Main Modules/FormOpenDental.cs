@@ -1404,6 +1404,7 @@ namespace OpenDental{
 			#endif
 			if(!PrefC.GetBool("ADAdescriptionsReset")) {
 				ProcedureCodes.ResetADAdescriptions();
+				Prefs.UpdateBool("ADAdescriptionsReset",true);
 			}
 			Splash.Dispose();
 			Userod adminUser=Userods.GetAdminUser();

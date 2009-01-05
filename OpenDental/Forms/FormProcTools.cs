@@ -108,8 +108,8 @@ namespace OpenDental{
 			this.checkDcodes.Name = "checkDcodes";
 			this.checkDcodes.Size = new System.Drawing.Size(646,36);
 			this.checkDcodes.TabIndex = 45;
-			this.checkDcodes.Text = "D codes - Add any missing ADA codes.  This option does not work in the trial vers" +
-    "ion or compiled version.";
+			this.checkDcodes.Text = "D codes - Add any missing 2009 ADA codes.  This option does not work in the trial" +
+    " version or compiled version.";
 			this.checkDcodes.UseVisualStyleBackColor = true;
 			// 
 			// checkNcodes
@@ -272,7 +272,7 @@ namespace OpenDental{
 			}
 			if(checkNcodes.Checked) {
 				try {
-					rowsInserted+=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),Properties.Resources.NoFeeProcCodes);
+					rowsInserted+=FormProcCodes.ImportProcCodes("",null,Properties.Resources.NoFeeProcCodes);
 				}
 				catch(ApplicationException ex) {
 					MessageBox.Show(ex.Message);
