@@ -605,6 +605,10 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName ='LettersIncludeReturnAddress'";
 					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName ='StationaryImage'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName ='StationaryDocument'";
+					General.NonQ(command);
 					
 
 

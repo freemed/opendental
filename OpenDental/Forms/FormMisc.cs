@@ -19,16 +19,7 @@ namespace OpenDental{
 		private OpenDental.ValidNumber textSigInterval;
 		private OpenDental.UI.Button butLanguages;
 		private Label label4;
-		private GroupBox groupBox7;
-		private Label label5;
-		private TextBox textBoxStationary;
-		private TextBox textBoxLogo;
-		private Label label6;
-		private Label label8;
-		private TextBox textBoxDocPath;
 		private ToolTip toolTip1;
-		private PictureBox pictureBox1;
-		private Label label9;
 		private ComboBox comboShowID;
 		private CheckBox checkTaskListAlwaysShow;
 		private CheckBox checkTasksCheckOnStartup;
@@ -74,14 +65,6 @@ namespace OpenDental{
 			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.textBoxDocPath = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.textBoxStationary = new System.Windows.Forms.TextBox();
-			this.textBoxLogo = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.radioBottom = new System.Windows.Forms.RadioButton();
 			this.radioRight = new System.Windows.Forms.RadioButton();
@@ -92,7 +75,6 @@ namespace OpenDental{
 			this.validNumX = new OpenDental.ValidNumber();
 			this.labelX = new System.Windows.Forms.Label();
 			this.labelY = new System.Windows.Forms.Label();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.comboShowID = new System.Windows.Forms.ComboBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBoxTaskDefaults = new System.Windows.Forms.GroupBox();
@@ -105,8 +87,6 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.groupBox7.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -149,88 +129,6 @@ namespace OpenDental{
 			this.label4.TabIndex = 64;
 			this.label4.Text = "Languages used by patients.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox7
-			// 
-			this.groupBox7.Controls.Add(this.label9);
-			this.groupBox7.Controls.Add(this.textBoxDocPath);
-			this.groupBox7.Controls.Add(this.label8);
-			this.groupBox7.Controls.Add(this.textBoxStationary);
-			this.groupBox7.Controls.Add(this.textBoxLogo);
-			this.groupBox7.Controls.Add(this.label6);
-			this.groupBox7.Controls.Add(this.label5);
-			this.groupBox7.Location = new System.Drawing.Point(12,427);
-			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(346,124);
-			this.groupBox7.TabIndex = 69;
-			this.groupBox7.TabStop = false;
-			this.groupBox7.Text = "Communications Files (located in document path A-Z folder)";
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(321,49);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(22,18);
-			this.label9.TabIndex = 63;
-			this.label9.Text = "-->";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBoxDocPath
-			// 
-			this.textBoxDocPath.Location = new System.Drawing.Point(82,21);
-			this.textBoxDocPath.Name = "textBoxDocPath";
-			this.textBoxDocPath.ReadOnly = true;
-			this.textBoxDocPath.Size = new System.Drawing.Size(236,20);
-			this.textBoxDocPath.TabIndex = 62;
-			this.toolTip1.SetToolTip(this.textBoxDocPath,"This shows you where you have your document path setup and where you should place" +
-        " your files specified below.");
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(6,22);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(70,20);
-			this.label8.TabIndex = 61;
-			this.label8.Text = "A-Z path";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.label8,"This shows you where you have your document path setup and where you should place" +
-        " your files specified below.");
-			// 
-			// textBoxStationary
-			// 
-			this.textBoxStationary.Location = new System.Drawing.Point(172,73);
-			this.textBoxStationary.Name = "textBoxStationary";
-			this.textBoxStationary.Size = new System.Drawing.Size(146,20);
-			this.textBoxStationary.TabIndex = 60;
-			this.toolTip1.SetToolTip(this.textBoxStationary,resources.GetString("textBoxStationary.ToolTip"));
-			// 
-			// textBoxLogo
-			// 
-			this.textBoxLogo.Location = new System.Drawing.Point(172,47);
-			this.textBoxLogo.Name = "textBoxLogo";
-			this.textBoxLogo.Size = new System.Drawing.Size(146,20);
-			this.textBoxLogo.TabIndex = 59;
-			this.toolTip1.SetToolTip(this.textBoxLogo,resources.GetString("textBoxLogo.ToolTip"));
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(10,69);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(156,17);
-			this.label6.TabIndex = 58;
-			this.label6.Text = "Stationery Document (*.doc)";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.label6,resources.GetString("label6.ToolTip"));
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(10,49);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(156,18);
-			this.label5.TabIndex = 57;
-			this.label5.Text = "Letter Background (*.jpg)";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.label5,resources.GetString("label5.ToolTip"));
 			// 
 			// toolTip1
 			// 
@@ -354,16 +252,6 @@ namespace OpenDental{
 			this.labelY.Text = "Y Default";
 			this.labelY.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.BackgroundImage = global::OpenDental.Properties.Resources.stationary_sample1;
-			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.pictureBox1.Location = new System.Drawing.Point(364,427);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(101,124);
-			this.pictureBox1.TabIndex = 71;
-			this.pictureBox1.TabStop = false;
-			// 
 			// comboShowID
 			// 
 			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -486,7 +374,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(513,553);
+			this.butCancel.Location = new System.Drawing.Point(480,385);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -501,7 +389,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(513,515);
+			this.butOK.Location = new System.Drawing.Point(480,347);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -511,12 +399,10 @@ namespace OpenDental{
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(635,603);
+			this.ClientSize = new System.Drawing.Size(602,435);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butLanguages);
 			this.Controls.Add(this.textSigInterval);
@@ -532,9 +418,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Miscellaneous Setup";
 			this.Load += new System.EventHandler(this.FormMisc_Load);
-			this.groupBox7.ResumeLayout(false);
-			this.groupBox7.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBoxTaskDefaults.ResumeLayout(false);
 			this.groupBoxTaskDefaults.PerformLayout();
@@ -563,12 +446,6 @@ namespace OpenDental{
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
 			comboShowID.SelectedIndex=PrefC.GetInt("ShowIDinTitleBar");
-			string AZpath=FormPath.GetPreferredImagePath();
-			if(AZpath!=null){
-				textBoxDocPath.Text =AZpath;
-			}
-			textBoxLogo.Text = PrefC.GetString("StationaryImage");
-			textBoxStationary.Text = PrefC.GetString("StationaryDocument");
 			checkTasksCheckOnStartup.Checked=PrefC.GetBool("TasksCheckOnStartup");
 			checkTaskListAlwaysShow.Checked=PrefC.GetBool("TaskListAlwaysShowsAtBottom");
 			if(checkTaskListAlwaysShow.Checked) {
@@ -651,8 +528,6 @@ namespace OpenDental{
 			bool changed=false;
 			if( Prefs.UpdateBool("RandomPrimaryKeys",checkRandomPrimaryKeys.Checked)
 				| Prefs.UpdateString("MainWindowTitle",textMainWindowTitle.Text)
-				| Prefs.UpdateString("StationaryImage", textBoxLogo.Text)
-				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
 				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex)
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)

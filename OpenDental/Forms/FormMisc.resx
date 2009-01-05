@@ -120,42 +120,6 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="textBoxStationary.ToolTip" xml:space="preserve">
-    <value>This is the document you want to use for the Stationary button in communications with patients or doctors.
-It should be placed in the folder specified above with the rest of your A-Z images.
-
-Example: "stationary.doc" (without the quotes)
-</value>
-  </data>
-  <data name="textBoxLogo.ToolTip" xml:space="preserve">
-    <value>This should be just the filename of the image to use on your letter backgrounds.
-It should be placed in the folder specified above with the rest of your A-Z images.
-
-Example: "stationary.jpg" (without the quotes)
-
-Specifications:
-13.5x17.47@75dpi  
-2" margin on top to place letterhead
-2.25" margin on left side for practice info</value>
-  </data>
-  <data name="label6.ToolTip" xml:space="preserve">
-    <value>This is the document you want to use for the Stationary button in communications with patients or doctors.
-It should be placed in the folder specified above with the rest of your A-Z images.
-
-Example: "stationary.doc" (without the quotes)
-</value>
-  </data>
-  <data name="label5.ToolTip" xml:space="preserve">
-    <value>This should be just the filename of the image to use on your letter backgrounds.
-It should be placed in the folder specified above with the rest of your A-Z images.
-
-Example: "stationary.jpg" (without the quotes)
-
-Specifications:
-13.5x17.47@75dpi  
-2" margin on top to place letterhead
-2.25" margin on left side for practice info</value>
-  </data>
   <data name="checkTaskListAlwaysShow.ToolTip" xml:space="preserve">
     <value>This will show the task list on either the bottom or right hand side of the main screen to keep you up to date with tasks.
 This is very useful if you have large enough screen with a high resolution set. If you have some smaller screens in your office, use
