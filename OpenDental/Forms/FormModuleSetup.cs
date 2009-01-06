@@ -72,6 +72,7 @@ namespace OpenDental{
 		private CheckBox checkAllowedFeeSchedsAutomate;
 		private CheckBox checkEnableAnesthMod;
 		private CheckBox checkIntermingleDefault;
+		private CheckBox checkCoPayFeeScheduleBlankLikeZero;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -102,10 +103,12 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkIntermingleDefault = new System.Windows.Forms.CheckBox();
 			this.comboBillingChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textClaimAttachPath = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
@@ -120,6 +123,7 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
@@ -150,11 +154,9 @@ namespace OpenDental{
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
-			this.checkIntermingleDefault = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.checkCoPayFeeScheduleBlankLikeZero = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -260,6 +262,17 @@ namespace OpenDental{
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
 			// 
+			// checkIntermingleDefault
+			// 
+			this.checkIntermingleDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIntermingleDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIntermingleDefault.Location = new System.Drawing.Point(6,359);
+			this.checkIntermingleDefault.Name = "checkIntermingleDefault";
+			this.checkIntermingleDefault.Size = new System.Drawing.Size(410,16);
+			this.checkIntermingleDefault.TabIndex = 200;
+			this.checkIntermingleDefault.Text = "Default to all types of statements printing in intermingled mode";
+			this.checkIntermingleDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// comboBillingChargeAdjType
 			// 
 			this.comboBillingChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -300,6 +313,16 @@ namespace OpenDental{
 			this.checkStatementSummaryShowInsInfo.TabIndex = 195;
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label18
 			// 
@@ -446,6 +469,16 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -770,6 +803,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkCoPayFeeScheduleBlankLikeZero);
 			this.groupBox2.Controls.Add(this.checkAllowedFeeSchedsAutomate);
 			this.groupBox2.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.groupBox2.Controls.Add(this.checkPPOpercentage);
@@ -794,17 +828,6 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAllowedFeeSchedsAutomate.Click += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_Click);
 			this.checkAllowedFeeSchedsAutomate.CheckedChanged += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_CheckedChanged);
-			// 
-			// checkIntermingleDefault
-			// 
-			this.checkIntermingleDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIntermingleDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIntermingleDefault.Location = new System.Drawing.Point(6,359);
-			this.checkIntermingleDefault.Name = "checkIntermingleDefault";
-			this.checkIntermingleDefault.Size = new System.Drawing.Size(410,16);
-			this.checkIntermingleDefault.TabIndex = 200;
-			this.checkIntermingleDefault.Text = "Default to all types of statements printing in intermingled mode";
-			this.checkIntermingleDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butCancel
 			// 
@@ -837,25 +860,16 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textPayPlansBillInAdvanceDays
+			// checkCoPayFeeScheduleBlankLikeZero
 			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,116);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,84);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.checkCoPayFeeScheduleBlankLikeZero.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkCoPayFeeScheduleBlankLikeZero.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkCoPayFeeScheduleBlankLikeZero.Location = new System.Drawing.Point(3,121);
+			this.checkCoPayFeeScheduleBlankLikeZero.Name = "checkCoPayFeeScheduleBlankLikeZero";
+			this.checkCoPayFeeScheduleBlankLikeZero.Size = new System.Drawing.Size(413,17);
+			this.checkCoPayFeeScheduleBlankLikeZero.TabIndex = 195;
+			this.checkCoPayFeeScheduleBlankLikeZero.Text = "Co-pay fee schedules treat blank entries as zero.";
+			this.checkCoPayFeeScheduleBlankLikeZero.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -941,6 +955,7 @@ namespace OpenDental{
 			checkInsurancePlansShared.Checked=PrefC.GetBool("InsurancePlansShared");
 			checkPPOpercentage.Checked=PrefC.GetBool("InsDefaultPPOpercent");
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool("AllowedFeeSchedsAutomate");
+			checkCoPayFeeScheduleBlankLikeZero.Checked=PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero");
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool("StatementShowReturnAddress");
 			checkShowCC.Checked=PrefC.GetBool("StatementShowCreditCard");
@@ -1068,6 +1083,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("AllowedFeeSchedsAutomate",checkAllowedFeeSchedsAutomate.Checked)
 				| Prefs.UpdateBool("EnableAnesthMod", checkEnableAnesthMod.Checked)
 				| Prefs.UpdateBool("IntermingleFamilyDefault",checkIntermingleDefault.Checked)
+				| Prefs.UpdateBool("CoPay_FeeSchedule_BlankLikeZero",checkCoPayFeeScheduleBlankLikeZero.Checked)
 				)
 			{
 				changed=true;

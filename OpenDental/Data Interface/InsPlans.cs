@@ -470,7 +470,7 @@ namespace OpenDental {
 			return dedTot-dedUsed;
 		}
 
-		///<summary>Returns -1 if no copay feeschedule. Used to return -1 if fee unknown for this code, but now returns the amount for the regular fee schedule.  In other words, the patient is responsible for procs that are not specified in a managed care fee schedule.  Otherwise, returns 0 or more for a patient copay. Can handle a planNum of 0.</summary>
+		///<summary>Returns -1 if no copay feeschedule.  Can return -1 if copay amount is blank.</summary>
 		public static double GetCopay(string myCode,InsPlan plan){
 			if(plan==null){
 				return -1;
@@ -479,8 +479,15 @@ namespace OpenDental {
 				return -1;
 			}
 			double retVal=Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.CopayFeeSched);
-			if(retVal==-1){
-				return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
+			if(retVal==-1){//blank co-pay
+				if(PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero")){
+					return -1;//will act like zero.  No patient co-pay.
+				}
+				else{
+					//The amount from the regular fee schedule
+					//In other words, the patient is responsible for procs that are not specified in a managed care fee schedule.
+					return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
+				}
 			}
 			return retVal;
 		}

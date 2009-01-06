@@ -617,6 +617,16 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To6_3_3();
+		}
+
+		private void To6_3_3() {
+			if(FromVersion<new Version("6.3.3.0")) {
+				string command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('CoPay_FeeSchedule_BlankLikeZero','1','1 to treat blank entries like zero copay.  0 to make patient responsible on blank entries.')";
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.3.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To6_4_0();
 		}
 
