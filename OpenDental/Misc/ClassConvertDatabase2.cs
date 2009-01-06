@@ -603,11 +603,12 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncDateTimeLastRun','0001-01-01','')";
 					General.NonQ(command);
-					command="DELETE FROM preference WHERE PrefName ='LettersIncludeReturnAddress'";
+					//I had originally deleted these.  But decided instead to just comment them as obsolete because I think it caused a bug in our upgrade.
+					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName = 'LettersIncludeReturnAddress'";
 					General.NonQ(command);
-					command="DELETE FROM preference WHERE PrefName ='StationaryImage'";
+					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName ='StationaryImage'";
 					General.NonQ(command);
-					command="DELETE FROM preference WHERE PrefName ='StationaryDocument'";
+					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName ='StationaryDocument'";
 					General.NonQ(command);
 				}
 				else {//oracle
