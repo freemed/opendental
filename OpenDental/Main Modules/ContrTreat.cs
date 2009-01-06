@@ -2533,8 +2533,12 @@ namespace OpenDental{
 				ClaimProcCur.Status=ClaimProcStatus.Preauth;
 				ClaimProcCur.FeeBilled=ProcCur.ProcFee;
 				ClaimProcCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
-				if(FormIPS.SelectedPlan.UseAltCode)
+				if(FormIPS.SelectedPlan.UseAltCode && (ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1!="")){
 					ClaimProcCur.CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1;
+				}
+				else if(FormIPS.SelectedPlan.IsMedical && ProcCur.MedicalCode!=""){
+					ClaimProcCur.CodeSent=ProcCur.MedicalCode;
+				}
 				else{
 					ClaimProcCur.CodeSent=ProcedureCodes.GetStringProcCode(ProcCur.CodeNum);
 					if(ClaimProcCur.CodeSent.Length>5 && ClaimProcCur.CodeSent.Substring(0,1)=="D"){
