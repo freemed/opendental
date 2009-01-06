@@ -132,9 +132,9 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butCancel.Location = new System.Drawing.Point(834,618);
+			this.butCancel.Location = new System.Drawing.Point(834,620);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -170,9 +170,9 @@ namespace OpenDental{
 			this.butGoTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGoTo.CornerRadius = 4F;
 			this.butGoTo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butGoTo.Location = new System.Drawing.Point(50,618);
+			this.butGoTo.Location = new System.Drawing.Point(50,620);
 			this.butGoTo.Name = "butGoTo";
-			this.butGoTo.Size = new System.Drawing.Size(106,26);
+			this.butGoTo.Size = new System.Drawing.Size(106,24);
 			this.butGoTo.TabIndex = 46;
 			this.butGoTo.Text = "&Go To Appt";
 			this.butGoTo.Click += new System.EventHandler(this.butGoTo_Click);
@@ -186,9 +186,9 @@ namespace OpenDental{
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = global::OpenDental.Properties.Resources.butPin;
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(165,618);
+			this.butPin.Location = new System.Drawing.Point(165,620);
 			this.butPin.Name = "butPin";
-			this.butPin.Size = new System.Drawing.Size(134,26);
+			this.butPin.Size = new System.Drawing.Size(134,24);
 			this.butPin.TabIndex = 47;
 			this.butPin.Text = "Copy To &Pinboard";
 			this.butPin.Click += new System.EventHandler(this.butPin_Click);
@@ -202,9 +202,9 @@ namespace OpenDental{
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(576,618);
+			this.butNew.Location = new System.Drawing.Point(576,620);
 			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(118,26);
+			this.butNew.Size = new System.Drawing.Size(118,24);
 			this.butNew.TabIndex = 48;
 			this.butNew.Text = "Create &New Apt";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
@@ -272,9 +272,9 @@ namespace OpenDental{
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butOK.Location = new System.Drawing.Point(748,618);
+			this.butOK.Location = new System.Drawing.Point(748,620);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 59;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -288,9 +288,9 @@ namespace OpenDental{
 			this.butRecall.CornerRadius = 4F;
 			this.butRecall.Image = global::OpenDental.Properties.Resources.butRecall;
 			this.butRecall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRecall.Location = new System.Drawing.Point(308,618);
+			this.butRecall.Location = new System.Drawing.Point(308,620);
 			this.butRecall.Name = "butRecall";
-			this.butRecall.Size = new System.Drawing.Size(125,26);
+			this.butRecall.Size = new System.Drawing.Size(125,24);
 			this.butRecall.TabIndex = 60;
 			this.butRecall.Text = "Schedule Recall";
 			this.butRecall.Click += new System.EventHandler(this.butRecall_Click);
@@ -327,9 +327,9 @@ namespace OpenDental{
 			this.butNote.CornerRadius = 4F;
 			this.butNote.Image = ((System.Drawing.Image)(resources.GetObject("butNote.Image")));
 			this.butNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNote.Location = new System.Drawing.Point(442,618);
+			this.butNote.Location = new System.Drawing.Point(442,620);
 			this.butNote.Name = "butNote";
-			this.butNote.Size = new System.Drawing.Size(125,26);
+			this.butNote.Size = new System.Drawing.Size(125,24);
 			this.butNote.TabIndex = 65;
 			this.butNote.Text = "NO&TE for Patient";
 			this.butNote.Click += new System.EventHandler(this.butNote_Click);
@@ -343,9 +343,9 @@ namespace OpenDental{
 			this.butRecallFamily.CornerRadius = 4F;
 			this.butRecallFamily.Image = global::OpenDental.Properties.Resources.butRecall;
 			this.butRecallFamily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRecallFamily.Location = new System.Drawing.Point(308,586);
+			this.butRecallFamily.Location = new System.Drawing.Point(308,588);
 			this.butRecallFamily.Name = "butRecallFamily";
-			this.butRecallFamily.Size = new System.Drawing.Size(125,26);
+			this.butRecallFamily.Size = new System.Drawing.Size(125,24);
 			this.butRecallFamily.TabIndex = 66;
 			this.butRecallFamily.Text = "Entire Family";
 			this.butRecallFamily.Click += new System.EventHandler(this.butRecallFamily_Click);
@@ -378,8 +378,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Other Appointments";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormApptsOther_Closing);
 			this.Load += new System.EventHandler(this.FormApptsOther_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormApptsOther_Closing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -525,7 +525,7 @@ namespace OpenDental{
 				tbApts.Cell[4,i]=ListOth[i].ProcDescript;
 				tbApts.Cell[5,i]=ListOth[i].Note;
 			}
-			textFinUrg.Text=PatCur.FamFinUrgNote;
+			textFinUrg.Text=FamCur.List[0].FamFinUrgNote;
 			tbApts.LayoutTables();
 		}
 
