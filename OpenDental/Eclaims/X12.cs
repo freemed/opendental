@@ -174,7 +174,7 @@ namespace OpenDental.Eclaims
 			Procedure proc;
 			ProcedureCode procCode;
 			Provider provTreat;//might be different for each proc
-			Clinic clinic;
+			Clinic clinic=null;
 			int seg=0;//segments for a particular ST-SE transaction
 			for(int i=0;i<claimAr.GetLength(1);i++){
 				#region Transaction Set Header
@@ -245,7 +245,14 @@ namespace OpenDental.Eclaims
 					|| newTrans //or new Transaction set
 					|| claimAr[1,i].ToString() != claimAr[1,i-1].ToString())//or prov has changed
 				{
-					clinic=Clinics.GetClinic((int)claimAr[4,i]);
+					//this is a workaround for finding clinic address.  In OD, address is not a provider level field.  All we have access to is the claim.
+					//So providers shouldn't move between clinics.  We will use the clinic of the first claim, which is arbitrary.
+					//An improvement would be to generate another loop if provider changes address for different claims.  Complicated.
+					if(!PrefC.GetBool("EasyNoClinics")){//if using clinics
+						Claim clm=Claims.GetClaim((int)claimAr[4,i]);
+						int clinicNum=clm.ClinicNum;
+						clinic=Clinics.GetClinic(clinicNum);
+					}
 					//2000A HL: Billing/Pay-to provider HL loop
 					seg++;
 					sw.WriteLine("HL*"+HLcount.ToString()+"*"//HL01: Heirarchical ID
@@ -387,8 +394,8 @@ namespace OpenDental.Eclaims
 					parentProv=HLcount;
 					HLcount++;
 				}
-				#endregion
-				claim=Claims.GetClaim((int)claimAr[4,i]);
+				#endregion Billing Provider
+				claim=Claims.GetClaim((int)claimAr[4,i]);				
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
 				//insPlan could be null if db corruption. No error checking for that
 				if(claim.PlanNum2>0){
