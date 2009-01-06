@@ -533,6 +533,10 @@ namespace OpenDental{
 			if(listFamily.SelectedIndices.Count==0){
 				return;
 			}
+			FormRecallsPat FormR=new FormRecallsPat();
+			FormR.PatNum=PatCur.PatNum;
+			FormR.ShowDialog();
+			/*
 			int originalPatNum=PatCur.PatNum;
 			Recall recallCur=null;
 			for(int i=0;i<RecallList.Count;i++){
@@ -556,7 +560,7 @@ namespace OpenDental{
 				FamCur=Patients.GetFamily(originalPatNum);
 				PatCur=FamCur.GetPatient(originalPatNum);
 				Filltb();
-			}
+			}*/
 		}
 
 		private void butRecall_Click(object sender, System.EventArgs e) {
