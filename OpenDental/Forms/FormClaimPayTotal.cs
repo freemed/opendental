@@ -281,7 +281,13 @@ namespace OpenDental
 		}
 
 		private void FormClaimPayTotal_Shown(object sender,EventArgs e) {
-			gridMain.SetSelected(new Point(7,0));
+			InsPlan plan=InsPlans.GetPlan(ClaimProcsToEdit[0].PlanNum,PlanList);
+			if(plan.PlanType=="p" || plan.AllowedFeeSched!=0){//ppo, or has allowed fee sched
+				gridMain.SetSelected(new Point(7,0));//Allowed, first row.
+			}
+			else{
+				gridMain.SetSelected(new Point(8,0));//InsPay, first row.
+			}
 		}
 
 		private void FillGrid(){
