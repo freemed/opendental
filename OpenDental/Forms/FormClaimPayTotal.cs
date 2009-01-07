@@ -282,7 +282,7 @@ namespace OpenDental
 
 		private void FormClaimPayTotal_Shown(object sender,EventArgs e) {
 			InsPlan plan=InsPlans.GetPlan(ClaimProcsToEdit[0].PlanNum,PlanList);
-			if(plan.PlanType=="p" || plan.AllowedFeeSched!=0){//ppo, or has allowed fee sched
+			if(plan.AllowedFeeSched!=0){//allowed fee sched
 				gridMain.SetSelected(new Point(7,0));//Allowed, first row.
 			}
 			else{
@@ -567,7 +567,8 @@ namespace OpenDental
 			}
 			//if no allowed fee schedule, then nothing to do
 			InsPlan plan=InsPlans.GetPlan(ClaimProcsToEdit[0].PlanNum,PlanList);
-			if(plan.PlanType!="p" && plan.AllowedFeeSched==0){//not ppo, and no allowed fee sched
+			if(plan.AllowedFeeSched==0){//no allowed fee sched
+				//plan.PlanType!="p" && //not ppo, and 
 				return;
 			}
 			//ask user if they want to save the fees
@@ -576,12 +577,12 @@ namespace OpenDental
 			}
 			//select the feeSchedule
 			int feeSched=-1;
-			if(plan.PlanType=="p"){//ppo
-				feeSched=plan.FeeSched;
-			}
-			else if(plan.AllowedFeeSched!=0){//an allowed fee schedule exists
-				feeSched=plan.AllowedFeeSched;
-			}
+			//if(plan.PlanType=="p"){//ppo
+			//	feeSched=plan.FeeSched;
+			//}
+			//else if(plan.AllowedFeeSched!=0){//an allowed fee schedule exists
+			feeSched=plan.AllowedFeeSched;
+			//}
 			if(FeeScheds.GetIsHidden(feeSched)){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
