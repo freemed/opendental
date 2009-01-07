@@ -627,6 +627,16 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.3.3.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To6_3_4();
+		}
+
+		private void To6_3_4() {
+			if(FromVersion<new Version("6.3.4.0")) {
+				string command="ALTER TABLE sheetfielddef CHANGE FieldValue FieldValue text NOT NULL";
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.3.4.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To6_4_0();
 		}
 
