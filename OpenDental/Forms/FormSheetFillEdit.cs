@@ -428,7 +428,9 @@ namespace OpenDental {
 			//it will have the extra parameter we are looking for.
 			//A new sheet will also have a PatNum parameter which we will ignore.
 			FormSheetOutputFormat FormS=new FormSheetOutputFormat();
-			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip){
+			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip
+				|| SheetCur.SheetType==SheetTypeEnum.ReferralLetter)
+			{
 				FormS.PaperCopies=2;
 			}
 			else{
@@ -441,7 +443,9 @@ namespace OpenDental {
 				FormS.PaperCopies--;
 			}
 			Referral referral=null;
-			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip){
+			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip
+				|| SheetCur.SheetType==SheetTypeEnum.ReferralLetter)
+			{
 				FormS.Email2Visible=true;
 				int referralNum=PIn.PInt(SheetParameter.GetParamByName(SheetCur.Parameters,"ReferralNum").ParamValue.ToString());
 				referral=Referrals.GetReferral(referralNum);
@@ -484,7 +488,10 @@ namespace OpenDental {
 				FormE.IsNew=true;
 				FormE.ShowDialog();
 			}
-			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip && FormS.Email2){
+			if((SheetCur.SheetType==SheetTypeEnum.ReferralSlip
+				|| SheetCur.SheetType==SheetTypeEnum.ReferralLetter)
+				&& FormS.Email2)
+			{
 				//email referral
 				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
