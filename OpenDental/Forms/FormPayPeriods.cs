@@ -169,7 +169,7 @@ namespace OpenDental{
 			else{
 				payPeriodCur.DateStart=PayPeriods.List[PayPeriods.List.Length-1].DateStop.AddDays(1);
 			}
-			payPeriodCur.DateStop=payPeriodCur.DateStart.AddDays(15);
+			payPeriodCur.DateStop=payPeriodCur.DateStart.AddDays(14);
 			payPeriodCur.DatePaycheck=payPeriodCur.DateStop.AddDays(4);
 			FormPayPeriodEdit FormP=new FormPayPeriodEdit(payPeriodCur);
 			FormP.IsNew=true;
