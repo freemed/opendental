@@ -599,7 +599,7 @@ namespace OpenDental{
 						break;
 					case "OtherInsSubscrLastFirst":
 						if(otherPlan.PlanNum!=0)
-							displayStrings[i]=otherSubsc.LName+", "+otherSubsc.FName+", "+otherSubsc.MiddleI;
+							displayStrings[i]=otherSubsc.LName+", "+otherSubsc.FName+" "+otherSubsc.MiddleI;
 						break;
 					case "OtherInsSubscrDOB":
 						if(otherPlan.PlanNum!=0)
@@ -675,7 +675,7 @@ namespace OpenDental{
 							displayStrings[i]=otherCarrier.Zip;
 						break;
 					case "SubscrLastFirst":
-						displayStrings[i]=subsc.LName+", "+subsc.FName+", "+subsc.MiddleI;
+						displayStrings[i]=subsc.LName+", "+subsc.FName+" "+subsc.MiddleI;
 						break;
 					case "SubscrAddress":
 						displayStrings[i]=subsc.Address;
