@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		///<summary>Includes all attached fields.  It simply deletes all the old fields and inserts new ones.</summary>
 		public static void WriteObject(SheetDef sheetDef){
 			string command;
-			if(sheetDef.SheetDefNum!=0){
+			if(!sheetDef.IsNew){
 				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDef.SheetDefNum);
 				General.NonQ(command);
 			}
