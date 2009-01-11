@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 			return bitVector.Data;
 		}
 
-		///<summary></summary>
+		///<summary>Example: 1y3m1w1d</summary>
 		public override string ToString() {
 			string retVal="";
 			if(Years>0) {

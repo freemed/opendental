@@ -380,6 +380,9 @@ namespace OpenDental{
 		}
 
 		private bool CreateDataFile(string fileName,LetterMerge letter){
+			//jsparks- This is messy and prone to bugs.  It needs to be reworked to work just like
+			//in SheetFiller.FillFieldsInStaticText.  Just grab a bunch of separate objects
+			//instead of one result row.
 			string command;
 			//We need a very small table that tells us which tp is the most recent.
 			//command="DROP TABLE IF EXISTS temptp;";

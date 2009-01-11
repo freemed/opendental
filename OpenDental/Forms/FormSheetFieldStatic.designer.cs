@@ -35,15 +35,16 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.comboGrowthBehavior = new System.Windows.Forms.ComboBox();
 			this.label9 = new System.Windows.Forms.Label();
+			this.textFieldValue = new System.Windows.Forms.TextBox();
+			this.listFields = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
 			this.textHeight = new OpenDental.ValidNum();
 			this.textWidth = new OpenDental.ValidNum();
 			this.textYPos = new OpenDental.ValidNum();
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
-			this.textFieldValue = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,7 +55,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.comboFontName);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(61,341);
+			this.groupBox1.Location = new System.Drawing.Point(39,360);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(283,95);
 			this.groupBox1.TabIndex = 88;
@@ -107,7 +108,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(70,482);
+			this.label5.Location = new System.Drawing.Point(48,501);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(71,16);
 			this.label5.TabIndex = 90;
@@ -116,7 +117,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(70,508);
+			this.label6.Location = new System.Drawing.Point(48,527);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(71,16);
 			this.label6.TabIndex = 92;
@@ -125,7 +126,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(70,534);
+			this.label7.Location = new System.Drawing.Point(48,553);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(71,16);
 			this.label7.TabIndex = 94;
@@ -134,7 +135,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(70,560);
+			this.label8.Location = new System.Drawing.Point(48,579);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(71,16);
 			this.label8.TabIndex = 96;
@@ -145,23 +146,73 @@ namespace OpenDental{
 			// 
 			this.comboGrowthBehavior.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboGrowthBehavior.FormattingEnabled = true;
-			this.comboGrowthBehavior.Location = new System.Drawing.Point(141,453);
+			this.comboGrowthBehavior.Location = new System.Drawing.Point(119,472);
 			this.comboGrowthBehavior.Name = "comboGrowthBehavior";
 			this.comboGrowthBehavior.Size = new System.Drawing.Size(197,21);
 			this.comboGrowthBehavior.TabIndex = 99;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(34,454);
+			this.label9.Location = new System.Drawing.Point(12,473);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(107,16);
 			this.label9.TabIndex = 98;
 			this.label9.Text = "Growth Behavior";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textFieldValue
+			// 
+			this.textFieldValue.AcceptsReturn = true;
+			this.textFieldValue.AcceptsTab = true;
+			this.textFieldValue.Location = new System.Drawing.Point(18,17);
+			this.textFieldValue.Multiline = true;
+			this.textFieldValue.Name = "textFieldValue";
+			this.textFieldValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textFieldValue.Size = new System.Drawing.Size(812,335);
+			this.textFieldValue.TabIndex = 102;
+			this.textFieldValue.Leave += new System.EventHandler(this.textFieldValue_Leave);
+			// 
+			// listFields
+			// 
+			this.listFields.FormattingEnabled = true;
+			this.listFields.Location = new System.Drawing.Point(338,374);
+			this.listFields.MultiColumn = true;
+			this.listFields.Name = "listFields";
+			this.listFields.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.listFields.Size = new System.Drawing.Size(416,277);
+			this.listFields.TabIndex = 0;
+			this.listFields.TabStop = false;
+			this.listFields.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listFields_MouseClick);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(336,355);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(107,16);
+			this.label1.TabIndex = 103;
+			this.label1.Text = "Click to insert Field";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(15,626);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(77,24);
+			this.butDelete.TabIndex = 100;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// textHeight
 			// 
-			this.textHeight.Location = new System.Drawing.Point(141,559);
+			this.textHeight.Location = new System.Drawing.Point(119,578);
 			this.textHeight.MaxVal = 2000;
 			this.textHeight.MinVal = -100;
 			this.textHeight.Name = "textHeight";
@@ -170,7 +221,7 @@ namespace OpenDental{
 			// 
 			// textWidth
 			// 
-			this.textWidth.Location = new System.Drawing.Point(141,533);
+			this.textWidth.Location = new System.Drawing.Point(119,552);
 			this.textWidth.MaxVal = 2000;
 			this.textWidth.MinVal = -100;
 			this.textWidth.Name = "textWidth";
@@ -179,7 +230,7 @@ namespace OpenDental{
 			// 
 			// textYPos
 			// 
-			this.textYPos.Location = new System.Drawing.Point(141,507);
+			this.textYPos.Location = new System.Drawing.Point(119,526);
 			this.textYPos.MaxVal = 2000;
 			this.textYPos.MinVal = -100;
 			this.textYPos.Name = "textYPos";
@@ -188,7 +239,7 @@ namespace OpenDental{
 			// 
 			// textXPos
 			// 
-			this.textXPos.Location = new System.Drawing.Point(141,481);
+			this.textXPos.Location = new System.Drawing.Point(119,500);
 			this.textXPos.MaxVal = 2000;
 			this.textXPos.MinVal = -100;
 			this.textXPos.Name = "textXPos";
@@ -203,7 +254,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(688,560);
+			this.butOK.Location = new System.Drawing.Point(765,593);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -218,54 +269,20 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(688,590);
+			this.butCancel.Location = new System.Drawing.Point(765,626);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,590);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(77,24);
-			this.butDelete.TabIndex = 100;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// textFieldValue
-			// 
-			this.textFieldValue.AcceptsReturn = true;
-			this.textFieldValue.Location = new System.Drawing.Point(141,17);
-			this.textFieldValue.Multiline = true;
-			this.textFieldValue.Name = "textFieldValue";
-			this.textFieldValue.Size = new System.Drawing.Size(587,318);
-			this.textFieldValue.TabIndex = 102;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,18);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(113,16);
-			this.label1.TabIndex = 101;
-			this.label1.Text = "Field Value";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormSheetFieldStatic
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(775,626);
-			this.Controls.Add(this.textFieldValue);
+			this.ClientSize = new System.Drawing.Size(852,662);
 			this.Controls.Add(this.label1);
+			this.Controls.Add(this.listFields);
+			this.Controls.Add(this.textFieldValue);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.comboGrowthBehavior);
 			this.Controls.Add(this.label9);
@@ -313,6 +330,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label9;
 		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.TextBox textFieldValue;
+		private System.Windows.Forms.ListBox listFields;
 		private System.Windows.Forms.Label label1;
 	}
 }

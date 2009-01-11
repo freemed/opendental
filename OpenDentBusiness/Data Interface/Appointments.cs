@@ -121,17 +121,30 @@ namespace OpenDentBusiness{
 			return list[0];
 		}
 
-		public static Appointment GetScheduledPlannedApt(int aptNum) {
-			if(aptNum==0) {
+		///<summary></summary>
+		public static Appointment GetScheduledPlannedApt(int nextAptNum) {
+			if(nextAptNum==0) {
 				return null;
 			}
 			string command="SELECT * FROM appointment "
-				+"WHERE NextAptNum = '"+POut.PInt(aptNum)+"'";
+				+"WHERE NextAptNum = '"+POut.PInt(nextAptNum)+"'";
 			List<Appointment> list=FillList(command);
 			if(list.Count==0) {
 				return null;
 			}
 			return list[0];
+		}
+
+		///<summary>Gets a list of all future appointments which are either sched or ASAP.  Ordered by dateTime</summary>
+		public static List<Appointment> GetFutureSchedApts(int patNum) {
+			string command="SELECT * FROM appointment "
+				+"WHERE PatNum = "+POut.PInt(patNum)+" "
+				+"AND AptDateTime > NOW() "
+				+"AND (aptstatus = "+(int)ApptStatus.Scheduled+" "
+				+"OR aptstatus = "+(int)ApptStatus.ASAP+") "
+				+"ORDER BY AptDateTime";
+			List<Appointment> list=FillList(command);
+			return list;
 		}
 
 		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>

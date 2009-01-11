@@ -15,6 +15,7 @@ namespace OpenDental {
 		///<summary>We need access to a few other fields of the sheetDef.</summary>
 		public SheetDef SheetDefCur;
 		public bool IsReadOnly;
+		private int textSelectionStart;
 
 		public FormSheetFieldStatic() {
 			InitializeComponent();
@@ -43,6 +44,72 @@ namespace OpenDental {
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
+			FillFields();
+		}
+
+		private void FillFields(){
+			string[] fieldArray=new string[] {
+				"address",
+				"Birthdate",
+				"carrierName",
+				"ChartNumber",
+				"carrierAddress",
+				"carrierCityStZip",
+				"cityStateZip",
+				"dateOfLastSavedTP",
+				"dateRecallDue",
+				"Email",
+				"HmPhone",
+				"nameFL",
+				"nextSchedApptDateT",
+				"PatNum",
+				"priProvNameFormal",
+				"recallInterval",
+				"salutation",
+				"siteDescription",
+				"subscriberID",
+				"subscriberNameFL",
+				"tpResponsPartyAddress",
+				"tpResponsPartyCityStZip",
+				"tpResponsPartyNameFL",
+				"WirelessPhone",
+				"WkPhone"
+			};
+			listFields.Items.Clear();
+			for(int i=0;i<fieldArray.Length;i++){
+				listFields.Items.Add(fieldArray[i]);
+			}
+		}
+
+		private void listFields_MouseClick(object sender,MouseEventArgs e) {
+			string fieldStr="";
+			for(int i=0;i<listFields.Items.Count;i++) {
+				if(listFields.GetItemRectangle(i).Contains(e.Location)) {
+					fieldStr=listFields.Items[i].ToString();
+				}
+			}
+			if(fieldStr=="") {
+				return;
+			}
+			if(textSelectionStart < textFieldValue.Text.Length-1) {
+				textFieldValue.Text=textFieldValue.Text.Substring(0,textSelectionStart)
+					+"["+fieldStr+"]"
+					+textFieldValue.Text.Substring(textSelectionStart);
+			}
+			else{//otherwise, just tack it on the end
+				textFieldValue.Text+="["+fieldStr+"]";
+			}
+			textFieldValue.Select(textSelectionStart+fieldStr.Length+2,0);
+			textFieldValue.Focus();
+			//if(!textFieldValue.Focused){
+			//	textFieldValue.Text+="["+fieldStr+"]";
+			//	return;
+			//}
+			//MessageBox.Show(textFieldValue.SelectionStart.ToString());
+		}
+
+		private void textFieldValue_Leave(object sender,EventArgs e) {
+			textSelectionStart=textFieldValue.SelectionStart;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -96,6 +163,12 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+	
+
+		
 
 		
 

@@ -12,9 +12,11 @@ namespace OpenDental{
 					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
 				}
 			}
+			Patient pat=null;
+			Referral refer=null;
 			switch(sheet.SheetType) {
 				case SheetTypeEnum.LabelPatient:
-					Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
 					FillFieldsForLabelPatient(sheet,pat);
 					break;
 				case SheetTypeEnum.LabelCarrier:
@@ -22,28 +24,40 @@ namespace OpenDental{
 					FillFieldsForLabelCarrier(sheet,carrier);
 					break;
 				case SheetTypeEnum.LabelReferral:
-					Referral refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForLabelReferral(sheet,refer);
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					FillFieldsForReferralSlip(sheet);
+					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					FillFieldsForReferralSlip(sheet,pat,refer);
 					break;
 				case SheetTypeEnum.LabelAppointment:
-					FillFieldsForLabelAppointment(sheet);
+					Appointment appt=Appointments.GetOneApt((int)GetParamByName(sheet,"AptNum").ParamValue);
+					pat=Patients.GetPat(appt.PatNum);
+					FillFieldsForLabelAppointment(sheet,appt,pat);
 					break;
 				case SheetTypeEnum.Rx:
-					FillFieldsForRx(sheet);
+					RxPat rx=RxPats.GetRx((int)GetParamByName(sheet,"RxNum").ParamValue);
+					pat=Patients.GetPat(rx.PatNum);
+					Provider prov=Providers.GetProv(rx.ProvNum);
+					FillFieldsForRx(sheet,rx,pat,prov);
 					break;
 				case SheetTypeEnum.Consent:
-					FillFieldsForConsent(sheet);
+					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					FillFieldsForConsent(sheet,pat);
 					break;
 				case SheetTypeEnum.PatientLetter:
-					FillFieldsForPatientLetter(sheet);
+					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					FillFieldsForPatientLetter(sheet,pat);
 					break;
 				case SheetTypeEnum.ReferralLetter:
-					FillFieldsForReferralLetter(sheet);
+					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					FillFieldsForReferralLetter(sheet,pat,refer);
 					break;
 			}
+			FillFieldsInStaticText(sheet,pat);
 		}
 
 		private static SheetParameter GetParamByName(Sheet sheet,string paramName){
@@ -53,6 +67,115 @@ namespace OpenDental{
 				}
 			}
 			return null;
+		}
+
+		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
+			if(pat==null){
+				return;
+			}
+			string fldval;
+			string address=pat.Address;
+			if(pat.Address2!=""){
+				address+=", "+pat.Address2;
+			}
+			string birthdate=pat.Birthdate.ToShortDateString();
+			if(pat.Birthdate.Year<1880){
+				birthdate="";
+			}
+			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
+			int planNum=PatPlans.GetPlanNum(patPlanList,1);
+			InsPlan plan=InsPlans.GetPlan(planNum,new InsPlan[0]);
+			Carrier carrier=null;
+			string carrierName="";
+			string carrierAddress="";
+			string carrierCityStZip="";
+			string subscriberId="";
+			string subscriberNameFL="";
+			if(plan!=null){
+				carrier=Carriers.GetCarrier(plan.CarrierNum);
+				carrierName=carrier.CarrierName;
+				carrierAddress=carrier.Address;
+				if(carrier.Address2!=""){
+					carrierAddress+=", "+carrier.Address2;
+				}
+				carrierCityStZip=carrier.City+", "+carrier.State+"  "+carrier.Zip;
+				subscriberId=plan.SubscriberID;
+				subscriberNameFL=Patients.GetLim(plan.Subscriber).GetNameFL();
+			}
+			TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
+			TreatPlan treatPlan=null;
+			string dateOfLastSavedTP="";
+			string tpResponsPartyAddress="";
+			string tpResponsPartyCityStZip="";
+			string tpResponsPartyNameFL="";
+			if(treatPlanList.Length>0){
+				treatPlan=treatPlanList[treatPlanList.Length-1].Copy();
+				dateOfLastSavedTP=treatPlan.DateTP.ToShortDateString();
+				Patient patRespParty=Patients.GetPat(treatPlan.ResponsParty);
+				if(patRespParty!=null){
+					tpResponsPartyAddress=patRespParty.Address;
+					if(patRespParty.Address2!=""){
+						tpResponsPartyAddress+=", "+patRespParty.Address2;
+					}
+					tpResponsPartyCityStZip=patRespParty.City+", "+patRespParty.State+"  "+patRespParty.Zip;
+					tpResponsPartyNameFL=patRespParty.GetNameFL();
+				}
+			}
+			Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
+			string dateRecallDue="";
+			string recallInterval="";
+			if(recall!=null){
+				if(recall.DateDue.Year>1880){
+					dateRecallDue=recall.DateDue.ToShortDateString();
+				}
+				recallInterval=recall.RecallInterval.ToString();
+			}
+			List<Appointment> apptList=Appointments.GetFutureSchedApts(pat.PatNum);
+			string nextSchedApptDateT="";
+			if(apptList.Count>0){
+				nextSchedApptDateT=apptList[0].AptDateTime.ToShortDateString()+"  "+apptList[0].AptDateTime.ToShortTimeString();
+			}
+			Provider priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+			foreach(SheetField field in sheet.SheetFields) {
+				if(field.FieldType!=SheetFieldType.StaticText) {
+					continue;
+				}
+				fldval=field.FieldValue;
+				fldval=fldval.Replace("[address]",address);
+				fldval=fldval.Replace("[Birthdate]",birthdate);
+				fldval=fldval.Replace("[carrierName]",carrierName);
+				fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
+				fldval=fldval.Replace("[carrierAddress]",carrierAddress);
+				fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
+				fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
+				fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
+				fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
+				fldval=fldval.Replace("[Email]",pat.Email);
+				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
+				fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
+				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
+				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
+				fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
+				fldval=fldval.Replace("[recallInterval]",recallInterval);
+				fldval=fldval.Replace("[salutation]",pat.GetSalutation());
+				fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
+				fldval=fldval.Replace("[subscriberID]",subscriberId);
+				fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
+				fldval=fldval.Replace("[tpResponsPartyAddress]",tpResponsPartyAddress);
+				fldval=fldval.Replace("[tpResponsPartyCityStZip]",tpResponsPartyCityStZip);
+				fldval=fldval.Replace("[tpResponsPartyNameFL]",tpResponsPartyNameFL);
+				fldval=fldval.Replace("[WirelessPhone]",StripPhoneBeyondSpace(pat.WirelessPhone));
+				fldval=fldval.Replace("[WkPhone]",StripPhoneBeyondSpace(pat.WkPhone));
+				field.FieldValue=fldval;
+			}
+		}
+
+		private static string StripPhoneBeyondSpace(string phone) {
+			if(!phone.Contains(" ")) {
+				return phone;
+			}
+			int idx=phone.IndexOf(" ");
+			return phone.Substring(0,idx);
 		}
 
 		private static void FillFieldsForLabelPatient(Sheet sheet,Patient pat){
@@ -131,9 +254,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForReferralSlip(Sheet sheet) {
-			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
-			Referral refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+		private static void FillFieldsForReferralSlip(Sheet sheet,Patient pat,Referral refer) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "referral.nameFL":
@@ -188,9 +309,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForLabelAppointment(Sheet sheet) {
-			Appointment appt=Appointments.GetOneApt((int)GetParamByName(sheet,"AptNum").ParamValue);
-			Patient pat=Patients.GetPat(appt.PatNum);
+		private static void FillFieldsForLabelAppointment(Sheet sheet,Appointment appt,Patient pat) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "nameFL":
@@ -218,10 +337,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForRx(Sheet sheet) {
-			RxPat rx=RxPats.GetRx((int)GetParamByName(sheet,"RxNum").ParamValue);
-			Patient pat=Patients.GetPat(rx.PatNum);
-			Provider prov=Providers.GetProv(rx.ProvNum);
+		private static void FillFieldsForRx(Sheet sheet,RxPat rx,Patient pat,Provider prov) {
 			string text;
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
@@ -298,8 +414,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForConsent(Sheet sheet) {
-			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+		private static void FillFieldsForConsent(Sheet sheet,Patient pat) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "patient.nameFL":
@@ -312,8 +427,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForPatientLetter(Sheet sheet) {
-			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+		private static void FillFieldsForPatientLetter(Sheet sheet,Patient pat) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":
@@ -355,9 +469,7 @@ namespace OpenDental{
 			}
 		}
 
-		private static void FillFieldsForReferralLetter(Sheet sheet) {
-			Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
-			Referral refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+		private static void FillFieldsForReferralLetter(Sheet sheet,Patient pat,Referral refer) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":

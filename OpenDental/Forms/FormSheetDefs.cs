@@ -64,94 +64,22 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSheetDefs));
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboLabel = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.butCopy2 = new OpenDental.UI.Button();
 			this.butCopy = new OpenDental.UI.Button();
 			this.grid1 = new OpenDental.UI.ODGrid();
 			this.grid2 = new OpenDental.UI.ODGrid();
 			this.butNew = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.comboLabel = new System.Windows.Forms.ComboBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butCopy2 = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butCopy
-			// 
-			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCopy.Autosize = true;
-			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopy.CornerRadius = 4F;
-			this.butCopy.Image = global::OpenDental.Properties.Resources.down;
-			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(196, 278);
-			this.butCopy.Name = "butCopy";
-			this.butCopy.Size = new System.Drawing.Size(75, 24);
-			this.butCopy.TabIndex = 15;
-			this.butCopy.Text = "Copy";
-			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
-			// 
-			// grid1
-			// 
-			this.grid1.HScrollVisible = false;
-			this.grid1.Location = new System.Drawing.Point(12, 12);
-			this.grid1.Name = "grid1";
-			this.grid1.ScrollValue = 0;
-			this.grid1.Size = new System.Drawing.Size(437, 260);
-			this.grid1.TabIndex = 14;
-			this.grid1.Title = "Internal";
-			this.grid1.TranslationName = null;
-			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
-			// 
-			// grid2
-			// 
-			this.grid2.HScrollVisible = false;
-			this.grid2.Location = new System.Drawing.Point(12, 308);
-			this.grid2.Name = "grid2";
-			this.grid2.ScrollValue = 0;
-			this.grid2.Size = new System.Drawing.Size(437, 245);
-			this.grid2.TabIndex = 12;
-			this.grid2.Title = "Custom";
-			this.grid2.TranslationName = null;
-			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
-			// 
-			// butNew
-			// 
-			this.butNew.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butNew.Autosize = true;
-			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNew.CornerRadius = 4F;
-			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
-			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(12, 576);
-			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(80, 24);
-			this.butNew.TabIndex = 10;
-			this.butNew.Text = "New";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(608, 576);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(478, 10);
+			this.label1.Location = new System.Drawing.Point(478,10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(205, 15);
+			this.label1.Size = new System.Drawing.Size(205,15);
 			this.label1.TabIndex = 16;
 			this.label1.Text = "Label assigned to patient button";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -160,26 +88,26 @@ namespace OpenDental{
 			// 
 			this.comboLabel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboLabel.FormattingEnabled = true;
-			this.comboLabel.Location = new System.Drawing.Point(480, 27);
+			this.comboLabel.Location = new System.Drawing.Point(480,27);
 			this.comboLabel.MaxDropDownItems = 20;
 			this.comboLabel.Name = "comboLabel";
-			this.comboLabel.Size = new System.Drawing.Size(185, 21);
+			this.comboLabel.Size = new System.Drawing.Size(185,21);
 			this.comboLabel.TabIndex = 17;
 			this.comboLabel.SelectionChangeCommitted += new System.EventHandler(this.comboLabel_SelectionChangeCommitted);
 			this.comboLabel.DropDown += new System.EventHandler(this.comboLabel_DropDown);
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(478, 60);
+			this.label2.Location = new System.Drawing.Point(478,60);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(205, 82);
+			this.label2.Size = new System.Drawing.Size(205,82);
 			this.label2.TabIndex = 18;
 			this.label2.Text = "Most other sheet types are assigned simply by creating custom sheets of the same " +
     "type.  Referral slips are set in the referral edit window of each referral.";
 			// 
 			// butCopy2
 			// 
-			this.butCopy2.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCopy2.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCopy2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butCopy2.Autosize = true;
 			this.butCopy2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -187,17 +115,89 @@ namespace OpenDental{
 			this.butCopy2.CornerRadius = 4F;
 			this.butCopy2.Image = global::OpenDental.Properties.Resources.Add;
 			this.butCopy2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy2.Location = new System.Drawing.Point(98, 576);
+			this.butCopy2.Location = new System.Drawing.Point(98,576);
 			this.butCopy2.Name = "butCopy2";
-			this.butCopy2.Size = new System.Drawing.Size(80, 24);
+			this.butCopy2.Size = new System.Drawing.Size(80,24);
 			this.butCopy2.TabIndex = 19;
 			this.butCopy2.Text = "Copy";
 			this.butCopy2.Click += new System.EventHandler(this.butCopy2_Click);
 			// 
+			// butCopy
+			// 
+			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopy.Autosize = true;
+			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopy.CornerRadius = 4F;
+			this.butCopy.Image = global::OpenDental.Properties.Resources.down;
+			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCopy.Location = new System.Drawing.Point(196,278);
+			this.butCopy.Name = "butCopy";
+			this.butCopy.Size = new System.Drawing.Size(75,24);
+			this.butCopy.TabIndex = 15;
+			this.butCopy.Text = "Copy";
+			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
+			// 
+			// grid1
+			// 
+			this.grid1.HScrollVisible = false;
+			this.grid1.Location = new System.Drawing.Point(12,12);
+			this.grid1.Name = "grid1";
+			this.grid1.ScrollValue = 0;
+			this.grid1.Size = new System.Drawing.Size(437,260);
+			this.grid1.TabIndex = 14;
+			this.grid1.Title = "Internal";
+			this.grid1.TranslationName = null;
+			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
+			// 
+			// grid2
+			// 
+			this.grid2.HScrollVisible = false;
+			this.grid2.Location = new System.Drawing.Point(12,308);
+			this.grid2.Name = "grid2";
+			this.grid2.ScrollValue = 0;
+			this.grid2.Size = new System.Drawing.Size(437,245);
+			this.grid2.TabIndex = 12;
+			this.grid2.Title = "Custom";
+			this.grid2.TranslationName = null;
+			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
+			// 
+			// butNew
+			// 
+			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butNew.Autosize = true;
+			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNew.CornerRadius = 4F;
+			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
+			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butNew.Location = new System.Drawing.Point(12,576);
+			this.butNew.Name = "butNew";
+			this.butNew.Size = new System.Drawing.Size(80,24);
+			this.butNew.TabIndex = 10;
+			this.butNew.Text = "New";
+			this.butNew.Click += new System.EventHandler(this.butNew_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(608,576);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormSheetDefs
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(695, 612);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(695,612);
 			this.Controls.Add(this.butCopy2);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboLabel);

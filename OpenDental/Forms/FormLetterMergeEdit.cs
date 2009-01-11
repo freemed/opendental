@@ -440,12 +440,6 @@ namespace OpenDental{
       listPatSelect.Items.Add("ImageFolder");
       listPatSelect.Items.Add("MedUrgNote"); 
       listPatSelect.Items.Add("NextAptNum"); 
-      //listPatSelect.Items.Add("PriPlanNum");//Primary Carrier?
-      //listPatSelect.Items.Add("PriRelationship");// ?
-			//listPatSelect.Items.Add("SecPlanNum");//Secondary Carrier? 
-      //listPatSelect.Items.Add("SecRelationship");// ?
-			//listPatSelect.Items.Add("RecallInterval")); 
-      //listPatSelect.Items.Add("RecallStatus");  
       listPatSelect.Items.Add("SchoolName"); 
       listPatSelect.Items.Add("StudentStatus");
 			listPatSelect.Items.Add("MedicaidID");
@@ -457,7 +451,6 @@ namespace OpenDental{
 			listPatSelect.Items.Add("PrimaryTeeth");
 			listPatSelect.Items.Add("BalTotal");
 			listPatSelect.Items.Add("EmployerNum");
-			//EmploymentNote
 			listPatSelect.Items.Add("Race");
 			listPatSelect.Items.Add("County");
 			listPatSelect.Items.Add("GradeSchool");
