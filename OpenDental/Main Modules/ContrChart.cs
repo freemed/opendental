@@ -5813,7 +5813,7 @@ namespace OpenDental{
 			Patient oldPat=PatCur.Copy();
 			if(checkDone.Checked){
 				if(DataSetMain.Tables["Planned"].Rows.Count>0){
-					if(!MsgBox.Show(this,true,"Existing planned appointment(s) will be deleted. Continue?")){
+					if(!MsgBox.Show(this,true,"ALL planned appointment(s) will be deleted. Continue?")){
 						checkDone.Checked=false;
 						return; 
 					}
