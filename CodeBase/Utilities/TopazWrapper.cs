@@ -8,14 +8,7 @@ namespace CodeBase {
 	public class TopazWrapper {
 
 		public static Control GetTopaz() {
-			Control retVal=new Control();
-			//try {
-				retVal=new Topaz.SigPlusNET();
-			//}
-			//catch(Exception ex) {
-			//	
-			//}
-			return retVal;
+			return new Topaz.SigPlusNET();
 		}
 
 		public static void ClearTopaz(Control topaz) {
