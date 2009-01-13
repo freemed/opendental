@@ -407,6 +407,27 @@ namespace OpenDental {
 			panelMain.Invalidate();
 		}
 
+		private void butAddPatImage_Click(object sender,EventArgs e) {
+			if(!PrefC.UsingAtoZfolder) {
+				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
+				return;
+			}
+			//Font font=new Font(SheetDefCur.FontName,SheetDefCur.FontSize);
+			FormSheetFieldImage FormS=new FormSheetFieldImage();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewImage("",0,0,100,100);
+			if(this.IsInternal) {
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
 		private void listFields_Click(object sender,EventArgs e) {
 			//if(listFields.SelectedIndices.Count==0){
 			//	return;
@@ -713,6 +734,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

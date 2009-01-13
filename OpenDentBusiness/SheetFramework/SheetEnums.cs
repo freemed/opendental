@@ -61,7 +61,9 @@ namespace OpenDentBusiness {
 		///<summary>A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.</summary>
 		CheckBox,
 		///<summary>A signature box, either Topaz pad or directly on the screen with stylus/mouse.  The signature is encrypted based an a hash of all other field values in the entire sheet, excluding other SigBoxes.  The order is critical.</summary>
-		SigBox
+		SigBox,
+		///<Summary>An image specific to one patient.</Summary>
+		PatImage
 		//<summary></summary>
 		//RadioButton
 		

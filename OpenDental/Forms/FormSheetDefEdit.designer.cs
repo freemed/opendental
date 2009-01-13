@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.listFields = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupAddNew = new System.Windows.Forms.GroupBox();
+			this.butAddSigBox = new OpenDental.UI.Button();
 			this.butAddCheckBox = new OpenDental.UI.Button();
 			this.butAddRect = new OpenDental.UI.Button();
 			this.butAddLine = new OpenDental.UI.Button();
@@ -41,7 +42,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butAddSigBox = new OpenDental.UI.Button();
+			this.butAddPatImage = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupAddNew.SuspendLayout();
 			this.SuspendLayout();
@@ -96,10 +97,10 @@ namespace OpenDental{
 			this.listFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listFields.FormattingEnabled = true;
-			this.listFields.Location = new System.Drawing.Point(640,165);
+			this.listFields.Location = new System.Drawing.Point(640,186);
 			this.listFields.Name = "listFields";
 			this.listFields.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listFields.Size = new System.Drawing.Size(142,329);
+			this.listFields.Size = new System.Drawing.Size(142,316);
 			this.listFields.TabIndex = 83;
 			this.listFields.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listFields_MouseDoubleClick);
 			this.listFields.Click += new System.EventHandler(this.listFields_Click);
@@ -107,7 +108,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(637,148);
+			this.label2.Location = new System.Drawing.Point(638,169);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(108,16);
 			this.label2.TabIndex = 84;
@@ -117,6 +118,7 @@ namespace OpenDental{
 			// groupAddNew
 			// 
 			this.groupAddNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupAddNew.Controls.Add(this.butAddPatImage);
 			this.groupAddNew.Controls.Add(this.butAddSigBox);
 			this.groupAddNew.Controls.Add(this.butAddCheckBox);
 			this.groupAddNew.Controls.Add(this.butAddRect);
@@ -127,10 +129,26 @@ namespace OpenDental{
 			this.groupAddNew.Controls.Add(this.butAddOutputText);
 			this.groupAddNew.Location = new System.Drawing.Point(638,48);
 			this.groupAddNew.Name = "groupAddNew";
-			this.groupAddNew.Size = new System.Drawing.Size(144,97);
+			this.groupAddNew.Size = new System.Drawing.Size(144,119);
 			this.groupAddNew.TabIndex = 86;
 			this.groupAddNew.TabStop = false;
 			this.groupAddNew.Text = "Add new";
+			// 
+			// butAddSigBox
+			// 
+			this.butAddSigBox.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddSigBox.Autosize = true;
+			this.butAddSigBox.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddSigBox.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddSigBox.CornerRadius = 4F;
+			this.butAddSigBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddSigBox.Location = new System.Drawing.Point(72,75);
+			this.butAddSigBox.Name = "butAddSigBox";
+			this.butAddSigBox.Size = new System.Drawing.Size(69,20);
+			this.butAddSigBox.TabIndex = 92;
+			this.butAddSigBox.TabStop = false;
+			this.butAddSigBox.Text = "Signature";
+			this.butAddSigBox.Click += new System.EventHandler(this.butAddSigBox_Click);
 			// 
 			// butAddCheckBox
 			// 
@@ -140,9 +158,9 @@ namespace OpenDental{
 			this.butAddCheckBox.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddCheckBox.CornerRadius = 4F;
 			this.butAddCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddCheckBox.Location = new System.Drawing.Point(3,75);
+			this.butAddCheckBox.Location = new System.Drawing.Point(3,55);
 			this.butAddCheckBox.Name = "butAddCheckBox";
-			this.butAddCheckBox.Size = new System.Drawing.Size(67,20);
+			this.butAddCheckBox.Size = new System.Drawing.Size(69,20);
 			this.butAddCheckBox.TabIndex = 91;
 			this.butAddCheckBox.TabStop = false;
 			this.butAddCheckBox.Text = "CheckBox";
@@ -156,9 +174,9 @@ namespace OpenDental{
 			this.butAddRect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddRect.CornerRadius = 4F;
 			this.butAddRect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddRect.Location = new System.Drawing.Point(70,55);
+			this.butAddRect.Location = new System.Drawing.Point(72,55);
 			this.butAddRect.Name = "butAddRect";
-			this.butAddRect.Size = new System.Drawing.Size(67,20);
+			this.butAddRect.Size = new System.Drawing.Size(69,20);
 			this.butAddRect.TabIndex = 90;
 			this.butAddRect.TabStop = false;
 			this.butAddRect.Text = "Rectangle";
@@ -172,9 +190,9 @@ namespace OpenDental{
 			this.butAddLine.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddLine.CornerRadius = 4F;
 			this.butAddLine.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddLine.Location = new System.Drawing.Point(3,55);
+			this.butAddLine.Location = new System.Drawing.Point(72,35);
 			this.butAddLine.Name = "butAddLine";
-			this.butAddLine.Size = new System.Drawing.Size(67,20);
+			this.butAddLine.Size = new System.Drawing.Size(69,20);
 			this.butAddLine.TabIndex = 89;
 			this.butAddLine.TabStop = false;
 			this.butAddLine.Text = "Line";
@@ -188,12 +206,12 @@ namespace OpenDental{
 			this.butAddImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddImage.CornerRadius = 4F;
 			this.butAddImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddImage.Location = new System.Drawing.Point(70,35);
+			this.butAddImage.Location = new System.Drawing.Point(3,75);
 			this.butAddImage.Name = "butAddImage";
-			this.butAddImage.Size = new System.Drawing.Size(67,20);
+			this.butAddImage.Size = new System.Drawing.Size(69,20);
 			this.butAddImage.TabIndex = 88;
 			this.butAddImage.TabStop = false;
-			this.butAddImage.Text = "Image";
+			this.butAddImage.Text = "StaticImage";
 			this.butAddImage.Click += new System.EventHandler(this.butAddImage_Click);
 			// 
 			// butAddStaticText
@@ -204,9 +222,9 @@ namespace OpenDental{
 			this.butAddStaticText.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddStaticText.CornerRadius = 4F;
 			this.butAddStaticText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddStaticText.Location = new System.Drawing.Point(70,15);
+			this.butAddStaticText.Location = new System.Drawing.Point(72,15);
 			this.butAddStaticText.Name = "butAddStaticText";
-			this.butAddStaticText.Size = new System.Drawing.Size(67,20);
+			this.butAddStaticText.Size = new System.Drawing.Size(69,20);
 			this.butAddStaticText.TabIndex = 87;
 			this.butAddStaticText.TabStop = false;
 			this.butAddStaticText.Text = "StaticText";
@@ -222,7 +240,7 @@ namespace OpenDental{
 			this.butAddInputField.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddInputField.Location = new System.Drawing.Point(3,35);
 			this.butAddInputField.Name = "butAddInputField";
-			this.butAddInputField.Size = new System.Drawing.Size(67,20);
+			this.butAddInputField.Size = new System.Drawing.Size(69,20);
 			this.butAddInputField.TabIndex = 86;
 			this.butAddInputField.TabStop = false;
 			this.butAddInputField.Text = "InputField";
@@ -238,7 +256,7 @@ namespace OpenDental{
 			this.butAddOutputText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddOutputText.Location = new System.Drawing.Point(3,15);
 			this.butAddOutputText.Name = "butAddOutputText";
-			this.butAddOutputText.Size = new System.Drawing.Size(67,20);
+			this.butAddOutputText.Size = new System.Drawing.Size(69,20);
 			this.butAddOutputText.TabIndex = 85;
 			this.butAddOutputText.TabStop = false;
 			this.butAddOutputText.Text = "OutputText";
@@ -270,7 +288,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(705,503);
+			this.butDelete.Location = new System.Drawing.Point(705,506);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 80;
@@ -310,21 +328,21 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butAddSigBox
+			// butAddPatImage
 			// 
-			this.butAddSigBox.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddSigBox.Autosize = true;
-			this.butAddSigBox.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddSigBox.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddSigBox.CornerRadius = 4F;
-			this.butAddSigBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddSigBox.Location = new System.Drawing.Point(70,75);
-			this.butAddSigBox.Name = "butAddSigBox";
-			this.butAddSigBox.Size = new System.Drawing.Size(67,20);
-			this.butAddSigBox.TabIndex = 92;
-			this.butAddSigBox.TabStop = false;
-			this.butAddSigBox.Text = "Signature";
-			this.butAddSigBox.Click += new System.EventHandler(this.butAddSigBox_Click);
+			this.butAddPatImage.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddPatImage.Autosize = true;
+			this.butAddPatImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddPatImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddPatImage.CornerRadius = 4F;
+			this.butAddPatImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddPatImage.Location = new System.Drawing.Point(3,95);
+			this.butAddPatImage.Name = "butAddPatImage";
+			this.butAddPatImage.Size = new System.Drawing.Size(69,20);
+			this.butAddPatImage.TabIndex = 93;
+			this.butAddPatImage.TabStop = false;
+			this.butAddPatImage.Text = "Pat Image";
+			this.butAddPatImage.Click += new System.EventHandler(this.butAddPatImage_Click);
 			// 
 			// FormSheetDefEdit
 			// 
@@ -376,5 +394,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddLine;
 		private OpenDental.UI.Button butAddCheckBox;
 		private OpenDental.UI.Button butAddSigBox;
+		private OpenDental.UI.Button butAddPatImage;
 	}
 }

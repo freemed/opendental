@@ -410,6 +410,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSheetFieldPatImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldPatImage.designer.cs">
+      <DependentUpon>FormSheetFieldPatImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSheetPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3688,6 +3694,10 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFieldPatImage.resx">
+      <DependentUpon>FormSheetFieldPatImage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetPicker.resx">
       <DependentUpon>FormSheetPicker.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -4049,6 +4059,7 @@
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
+      <Aliases>global</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>

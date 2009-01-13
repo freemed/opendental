@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using OpenDentBusiness;
 
@@ -58,6 +59,7 @@ namespace OpenDental{
 					break;
 			}
 			FillFieldsInStaticText(sheet,pat);
+			FillPatientImages(sheet,pat);
 		}
 
 		private static SheetParameter GetParamByName(Sheet sheet,string paramName){
@@ -176,6 +178,44 @@ namespace OpenDental{
 			}
 			int idx=phone.IndexOf(" ");
 			return phone.Substring(0,idx);
+		}
+
+		private static void FillPatientImages(Sheet sheet,Patient pat){
+			if(pat==null){
+				return;
+			}
+			Document[] docList=Documents.GetAllWithPat(pat.PatNum);
+			int category;
+			string fieldVal;//zoom and pan
+			int x;
+			int y;
+			int w;
+			int h;
+			float ratioObject;
+			float ratioImage;
+			Image img;
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.PatImage){
+					continue;
+				}
+				category=PIn.PInt(field.FieldName);
+				field.FieldName="0";//in case we can't find an image, this will be 0.
+				field.FieldValue="";
+				//go backwards to find the latest date
+				for(int i=docList.Length-1;i>=0;i--){
+					if(docList[i].DocCategory!=category){
+						continue;
+					}
+					field.FieldName=docList[i].DocNum.ToString();
+					ratioObject=(float)field.Width/(float)field.Height;
+					img=Image.FromFile(  docList[i].FileName);
+					//ratioImage=(float)docList[i].wid  field.Width/(float)field.Height;
+
+
+					field.FieldValue="";
+					break;
+				}
+			}
 		}
 
 		private static void FillFieldsForLabelPatient(Sheet sheet,Patient pat){

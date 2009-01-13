@@ -165,20 +165,25 @@ namespace OpenDental{
 			//the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
 			//the native code does not exist or get called anywhere in the program unless we are running on a 
 			//32-bit version of Windows.
-      allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
-			if(!allowTopaz){
+			bool is64=CodeBase.ODEnvironment.Is64BitOperatingSystem();
+			bool platformUnix=Environment.OSVersion.Platform==PlatformID.Unix;
+      allowTopaz=(!platformUnix && !is64);
+			if(platformUnix) {
 				TreeDocuments.ContextMenu=null;
 			}
-			else{//Windows OS
-				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
-				panelNote.Controls.Add(sigBoxTopaz);
-				sigBoxTopaz.Location=sigBox.Location;//new System.Drawing.Point(437,15);
-				sigBoxTopaz.Name="sigBoxTopaz";
-				sigBoxTopaz.Size=new System.Drawing.Size(362,79);
-				sigBoxTopaz.TabIndex=93;
-				sigBoxTopaz.Text="sigPlusNET1";
-				sigBoxTopaz.DoubleClick+=new System.EventHandler(this.sigBoxTopaz_DoubleClick);
-        CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
+			if(allowTopaz){//Windows OS
+				try {
+					sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
+					panelNote.Controls.Add(sigBoxTopaz);
+					sigBoxTopaz.Location=sigBox.Location;//new System.Drawing.Point(437,15);
+					sigBoxTopaz.Name="sigBoxTopaz";
+					sigBoxTopaz.Size=new System.Drawing.Size(362,79);
+					sigBoxTopaz.TabIndex=93;
+					sigBoxTopaz.Text="sigPlusNET1";
+					sigBoxTopaz.DoubleClick+=new System.EventHandler(this.sigBoxTopaz_DoubleClick);
+					CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
+				}
+				catch { }
 			}
 			//We always capture with a Suni device for now.
 			//TODO: In the future use a device locator in the xImagingDeviceManager
