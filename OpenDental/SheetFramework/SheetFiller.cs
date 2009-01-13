@@ -210,7 +210,7 @@ namespace OpenDental{
 					ratioObject=(float)field.Width/(float)field.Height;
 					img=Image.FromFile(  docList[i].FileName);
 					//ratioImage=(float)docList[i].wid  field.Width/(float)field.Height;
-
+//incomplete
 
 					field.FieldValue="";
 					break;

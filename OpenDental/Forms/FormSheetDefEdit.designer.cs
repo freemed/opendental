@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.listFields = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupAddNew = new System.Windows.Forms.GroupBox();
+			this.butAddPatImage = new OpenDental.UI.Button();
 			this.butAddSigBox = new OpenDental.UI.Button();
 			this.butAddCheckBox = new OpenDental.UI.Button();
 			this.butAddRect = new OpenDental.UI.Button();
@@ -42,7 +43,6 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butAddPatImage = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupAddNew.SuspendLayout();
 			this.SuspendLayout();
@@ -133,6 +133,23 @@ namespace OpenDental{
 			this.groupAddNew.TabIndex = 86;
 			this.groupAddNew.TabStop = false;
 			this.groupAddNew.Text = "Add new";
+			// 
+			// butAddPatImage
+			// 
+			this.butAddPatImage.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddPatImage.Autosize = true;
+			this.butAddPatImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddPatImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddPatImage.CornerRadius = 4F;
+			this.butAddPatImage.Enabled = false;
+			this.butAddPatImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddPatImage.Location = new System.Drawing.Point(3,95);
+			this.butAddPatImage.Name = "butAddPatImage";
+			this.butAddPatImage.Size = new System.Drawing.Size(69,20);
+			this.butAddPatImage.TabIndex = 93;
+			this.butAddPatImage.TabStop = false;
+			this.butAddPatImage.Text = "Pat Image";
+			this.butAddPatImage.Click += new System.EventHandler(this.butAddPatImage_Click);
 			// 
 			// butAddSigBox
 			// 
@@ -327,22 +344,6 @@ namespace OpenDental{
 			this.butCancel.TabStop = false;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butAddPatImage
-			// 
-			this.butAddPatImage.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddPatImage.Autosize = true;
-			this.butAddPatImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddPatImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddPatImage.CornerRadius = 4F;
-			this.butAddPatImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddPatImage.Location = new System.Drawing.Point(3,95);
-			this.butAddPatImage.Name = "butAddPatImage";
-			this.butAddPatImage.Size = new System.Drawing.Size(69,20);
-			this.butAddPatImage.TabIndex = 93;
-			this.butAddPatImage.TabStop = false;
-			this.butAddPatImage.Text = "Pat Image";
-			this.butAddPatImage.Click += new System.EventHandler(this.butAddPatImage_Click);
 			// 
 			// FormSheetDefEdit
 			// 
