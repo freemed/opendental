@@ -61,6 +61,7 @@ namespace OpenDental{
 		private ComboBox comboSite;
 		private Label labelSite;
 		private OpenDental.UI.Button butEmail;
+		private Label labelPatientCount;
 		///<summary>Only used if PinClicked=true</summary>
 		public List<int> AptNumsSelected;
 
@@ -117,6 +118,7 @@ namespace OpenDental{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.butSchedFam = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
+			this.labelPatientCount = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -375,7 +377,7 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(9,14);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -462,11 +464,21 @@ namespace OpenDental{
 			this.butEmail.Text = "E-Mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
+			// labelPatientCount
+			// 
+			this.labelPatientCount.Location = new System.Drawing.Point(609,674);
+			this.labelPatientCount.Name = "labelPatientCount";
+			this.labelPatientCount.Size = new System.Drawing.Size(158,14);
+			this.labelPatientCount.TabIndex = 61;
+			this.labelPatientCount.Text = "Patient Count:";
+			this.labelPatientCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,691);
+			this.Controls.Add(this.labelPatientCount);
 			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butPostcards);
@@ -599,6 +611,10 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Interval"),50);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallList","#Remind"),55);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallList","LastRemind"),75);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Contact"),120);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallList","Status"),130);
@@ -614,6 +630,8 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["age"].ToString());
 				row.Cells.Add(table.Rows[i]["recallType"].ToString());
 				row.Cells.Add(table.Rows[i]["recallInterval"].ToString());
+				row.Cells.Add(table.Rows[i]["numberOfReminders"].ToString());
+				row.Cells.Add(table.Rows[i]["dateLastReminder"].ToString());
 				row.Cells.Add(table.Rows[i]["contactMethod"].ToString());
 				row.Cells.Add(table.Rows[i]["status"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
@@ -627,6 +645,7 @@ namespace OpenDental{
 					gridMain.SetSelected(i,true);
 				}
 			}
+			labelPatientCount.Text=Lan.g(this,"Patient Count:")+" "+table.Rows.Count.ToString();
 		}
 
 		private void gridMain_CellClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
@@ -926,9 +945,9 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices.Length==0){
 				ContactMethod cmeth;
 				for(int i=0;i<table.Rows.Count;i++){
-					if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
-						continue;
-					}
+					//if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
+					//	continue;
+					//}
 					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
 					if(cmeth!=ContactMethod.Email){
 						continue;

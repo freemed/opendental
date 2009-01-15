@@ -266,7 +266,9 @@ namespace OpenDental{
 		private void FormRecallTypes_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
 				DataValid.SetInvalid(InvalidType.RecallTypes);
-				if(MsgBox.Show(this,true,"Recalls for all patients should be synchronized.  Synchronize now?")){
+				if(MessageBox.Show(Lan.g(this,"Recalls for all patients should be synchronized.  Synchronize now?"),"",MessageBoxButtons.YesNo)
+					==DialogResult.Yes)
+				{
 					Cursor=Cursors.WaitCursor;
 					Recalls.SynchAllPatients();
 					Cursor=Cursors.Default;

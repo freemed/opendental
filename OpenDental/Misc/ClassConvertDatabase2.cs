@@ -644,6 +644,21 @@ namespace OpenDental {
 			if(FromVersion<new Version("6.4.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="UPDATE preference SET Comments = '-1 indicates min for all dates',ValueString='-1' WHERE PrefName = 'RecallDaysPast'";
+					General.NonQ(command);
+					command="UPDATE preference SET Comments = '-1 indicates max for all dates' WHERE PrefName = 'RecallDaysFuture'";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysFirstReminder','120','-1 indicates do not show')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysSecondReminder','180','-1 indicates do not show')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysThirdReminder','365','-1 indicates do not show')";
+					General.NonQ(command);
+
+
+
+
+
 					
 				}
 				else {//oracle

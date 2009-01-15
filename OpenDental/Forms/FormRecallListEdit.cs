@@ -58,6 +58,7 @@ namespace OpenDental{
 		private Label label25;
 		private TextBox textEmail;
 		private Label label6;
+		private OpenDental.UI.Button butCommlog;
 		private InsPlan[] PlanList;
 
 		///<summary></summary>
@@ -128,6 +129,7 @@ namespace OpenDental{
 			this.textNote = new OpenDental.ODtextBox();
 			this.butEditRecall = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
+			this.butCommlog = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -141,9 +143,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(852,644);
+			this.butCancel.Location = new System.Drawing.Point(852,647);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 6;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -156,9 +158,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(768,644);
+			this.butOK.Location = new System.Drawing.Point(768,647);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 5;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -438,9 +440,9 @@ namespace OpenDental{
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = global::OpenDental.Properties.Resources.butPin;
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(574,644);
+			this.butPin.Location = new System.Drawing.Point(574,647);
 			this.butPin.Name = "butPin";
-			this.butPin.Size = new System.Drawing.Size(98,26);
+			this.butPin.Size = new System.Drawing.Size(98,24);
 			this.butPin.TabIndex = 57;
 			this.butPin.Text = "&Pinboard";
 			this.butPin.Click += new System.EventHandler(this.butPin_Click);
@@ -503,10 +505,27 @@ namespace OpenDental{
 			this.label3.Text = "Note";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// butCommlog
+			// 
+			this.butCommlog.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCommlog.Autosize = true;
+			this.butCommlog.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCommlog.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCommlog.CornerRadius = 4F;
+			this.butCommlog.Image = global::OpenDental.Properties.Resources.commlog;
+			this.butCommlog.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCommlog.Location = new System.Drawing.Point(395,647);
+			this.butCommlog.Name = "butCommlog";
+			this.butCommlog.Size = new System.Drawing.Size(88,24);
+			this.butCommlog.TabIndex = 60;
+			this.butCommlog.Text = "Comm";
+			this.butCommlog.Click += new System.EventHandler(this.butCommlog_Click);
+			// 
 			// FormRecallListEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(937,677);
+			this.Controls.Add(this.butCommlog);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butPin);
@@ -724,6 +743,22 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butCommlog_Click(object sender,EventArgs e) {
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.PatNum=this.PatCur.PatNum;
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+			FormCI.IsNew=true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult==DialogResult.OK) {
+				contrAccount3.ModuleSelected(RecallCur.PatNum);
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e){
 			SaveRecall();
 			//?Patients.PatIsLoaded=false;
@@ -733,6 +768,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e){
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 	
 

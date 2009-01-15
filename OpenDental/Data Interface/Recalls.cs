@@ -104,10 +104,12 @@ namespace OpenDental{
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("age");
 			table.Columns.Add("contactMethod");
+			table.Columns.Add("dateLastReminder");
 			table.Columns.Add("dueDate");
 			table.Columns.Add("Email");
 			table.Columns.Add("Guarantor");
 			table.Columns.Add("Note");
+			table.Columns.Add("numberOfReminders");
 			table.Columns.Add("patientName");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("PreferRecallMethod");
@@ -117,14 +119,21 @@ namespace OpenDental{
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command=
-				"SELECT recall.RecallNum,recall.PatNum,recall.DateDue,"
-				+"recall.RecallInterval,recall.RecallStatus,recall.Note,"
-				+"patient.LName,patient.FName,patient.Preferred,patient.Birthdate, "
-				+"patient.HmPhone,patient.WkPhone,patient.WirelessPhone,patient.Email, "
-				+"patient.Guarantor, patient.PreferRecallMethod,recalltype.Description _recalltype "
-				+"FROM recall,patient,recalltype "
-				+"WHERE recall.PatNum=patient.PatNum "
-				+"AND recall.RecallTypeNum=recalltype.RecallTypeNum ";
+				@"SELECT patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
+				patient.Email,patient.FName,
+				patient.Guarantor,patient.HmPhone,patient.LName,recall.Note,
+				COUNT(commlog.CommlogNum) _numberOfReminders,
+				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
+				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
+				recalltype.Description _recalltype,patient.WirelessPhone,patient.WkPhone
+				FROM recall
+				LEFT JOIN patient ON recall.PatNum=patient.PatNum
+				LEFT JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum
+				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
+				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
+				+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
+				+"AND CommDateTime > recall.DatePrevious "
+				+"WHERE patient.patstatus=0 ";
 			if(provNum>0){
 				command+="AND (patient.PriProv="+POut.PInt(provNum)+" "
 					+"OR patient.SecProv="+POut.PInt(provNum)+") ";
@@ -146,7 +155,7 @@ namespace OpenDental{
 				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
 				+"AND recall.DateDue >= "+POut.PDate(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
-				+"AND patient.patstatus=0 ";
+				+"AND recall.IsDisabled = 0 ";
 			List<int> recalltypes=new List<int>();
 			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
 			if(typearray.Length>0){
@@ -166,21 +175,64 @@ namespace OpenDental{
 				//+"AND (recall.RecallTypeNum="+RecallTypes.ProphyType+" "
 				//+"OR recall.RecallTypeNum="+RecallTypes.PerioType+") "
 			}
-			command+="ORDER BY ";// ";
+			
+			command+="GROUP BY recall.PatNum "
+				+"ORDER BY ";
 			if(groupByFamilies){
 				command+="patient.Guarantor,";
 			}
 			command+="recall.RecallTypeNum,recall.DateDue";
  			DataTable rawtable=General.GetTable(command);
-			DateTime date;
+			DateTime dateDue;
+			DateTime dateRemind;
 			Interval interv;
 			Patient pat;
 			ContactMethod contmeth;
+			string numberOfReminders;
 			for(int i=0;i<rawtable.Rows.Count;i++){
+				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
+				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
+				numberOfReminders=rawtable.Rows[i]["_numberOfReminders"].ToString();
+				if(numberOfReminders=="0"){
+					//always show
+				}
+				else if(numberOfReminders=="1") {
+					if(PrefC.GetInt("RecallShowIfDaysFirstReminder")==-1) {
+						continue;
+					}
+					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysFirstReminder")) > DateTime.Today) {
+						continue;
+					}
+				}
+				else if(numberOfReminders=="2") {
+					if(PrefC.GetInt("RecallShowIfDaysSecondReminder")==-1) {
+						continue;
+					}
+					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysSecondReminder")) > DateTime.Today) {
+						continue;
+					}
+				}
+				else{//3 or more reminders
+					//For example, office could set this to 365 days, and once a year, the patient will show up again on recall until they get disabled.
+					if(PrefC.GetInt("RecallShowIfDaysThirdReminder")==-1) {
+						continue;
+					}
+					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysThirdReminder")) > DateTime.Today) {
+						continue;
+					}
+				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferRecallMethod"].ToString());
-				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone){
+				if(contmeth==ContactMethod.None){
+					if(rawtable.Rows[i]["Email"].ToString() != "") {
+						row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+					}
+					else{
+						row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+					}
+				}
+				if(contmeth==ContactMethod.HmPhone){
 					row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.WkPhone) {
@@ -198,18 +250,39 @@ namespace OpenDental{
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
 					row["contactMethod"]=Lan.g("enumContactMethod",contmeth.ToString());
 				}
-				date=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
-				row["dueDate"]=date.ToShortDateString();
+				if(dateRemind.Year<1880) {
+					row["dateLastReminder"]="";
+				}
+				else {
+					row["dateLastReminder"]=dateRemind.ToShortDateString();
+				}
+				if(dateDue.Year<1880) {
+					row["dueDate"]="";
+				}
+				else {
+					row["dueDate"]=dateDue.ToShortDateString();
+				}
 				row["Email"]=rawtable.Rows[i]["Email"].ToString();
 				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
+				if(numberOfReminders=="0") {
+					row["numberOfReminders"]="";
+				}
+				else {
+					row["numberOfReminders"]=numberOfReminders;
+				}
 				pat=new Patient();
 				pat.LName=rawtable.Rows[i]["LName"].ToString();
 				pat.FName=rawtable.Rows[i]["FName"].ToString();
 				pat.Preferred=rawtable.Rows[i]["Preferred"].ToString();
 				row["patientName"]=pat.GetNameLF();
 				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
-				row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
+				if(contmeth==ContactMethod.None && rawtable.Rows[i]["Email"].ToString() != "") {//has email, but didn't set preferred recall method
+					row["PreferRecallMethod"]=((int)ContactMethod.Email).ToString();
+				}
+				else{
+					row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
+				}
 				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
