@@ -99,6 +99,10 @@ namespace OpenDentBusiness{
 				+"ValueString = '"+POut.PString(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
 			General.NonQ(command);
+			Pref pref=new Pref();
+			pref.PrefName=prefName;
+			pref.ValueString=newValue;
+			PrefC.HList[prefName]=pref;
 			return true;
 		}
 

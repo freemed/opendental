@@ -654,10 +654,46 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysThirdReminder','365','-1 indicates do not show')";
 					General.NonQ(command);
-
-
-
-
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage','You are due for your regular dental check-up on ?DueDate  Please call our office today to schedule an appointment.','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg','You are due for your regular dental check-up.  [FamilyList]  Please call our office today to schedule an appointment.','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject2','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage2','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage2','','')";
+					General.NonQ(command);
+					string prefVal;
+					DataTable table;
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardMessage'";
+					table=General.GetTable(command);
+					prefVal=table.Rows[0][0].ToString().Replace("?DueDate","[DueDate]");
+					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardMessage'";
+					General.NonQ(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardFamMsg'";
+					table=General.GetTable(command);
+					prefVal=table.Rows[0][0].ToString().Replace("?FamilyList","[FamilyList]");
+					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardFamMsg'";
+					General.NonQ(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='ConfirmPostcardMessage'";
+					table=General.GetTable(command);
+					prefVal=table.Rows[0][0].ToString().Replace("?date","[date]");
+					prefVal=prefVal.Replace("?time","[time]");
+					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='ConfirmPostcardMessage'";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject3','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage3','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage3','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject4','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage4','','')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage4','','')";
+					General.NonQ(command);
 
 					
 				}
