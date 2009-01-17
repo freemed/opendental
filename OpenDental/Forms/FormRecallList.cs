@@ -922,7 +922,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"No patients of mail type.");
 					return;
 				}
-				if(!MsgBox.Show(this,true,"Preview postcards for all of the selected patients?")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Preview postcards for all of the selected patients?")) {
 					return;
 				}
 			}
@@ -955,7 +955,7 @@ namespace OpenDental{
 			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet"));
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,totalPages);
 			printPreview.ShowDialog();
-			if(MsgBox.Show(this,true,"Change statuses and make commlog entries for all of the selected patients?")) {
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change statuses and make commlog entries for all of the selected patients?")) {
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
 					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail);
@@ -1011,7 +1011,7 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"Selected patients skipped due to missing email addresses: ")+skipped.ToString());
 				}
 			}
-			if(!MsgBox.Show(this,true,"Send email to all of the selected patients?")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send email to all of the selected patients?")) {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;

@@ -113,6 +113,7 @@ namespace OpenDental{
 			table.Columns.Add("guarFName");
 			table.Columns.Add("guarLName");
 			table.Columns.Add("LName");
+			table.Columns.Add("maxDateDue",typeof(DateTime));
 			table.Columns.Add("Note");
 			table.Columns.Add("numberOfReminders");
 			table.Columns.Add("patientName");
@@ -123,7 +124,29 @@ namespace OpenDental{
 			table.Columns.Add("recallType");
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
-			string command=
+			//get maxDateDue for each family.
+			string command=@"SELECT MAX(recall.DateDue) maxDateDue,patient.Guarantor 
+				FROM patient
+				LEFT JOIN recall ON patient.PatNum=recall.PatNum
+				AND recall.DateDue >= "+POut.PDate(fromDate)+" "
+				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
+				+"AND recall.IsDisabled = 0 "
+				+"AND NOT EXISTS("//test for scheduled appt.
+				+"SELECT * FROM appointment,procedurelog,recalltrigger "
+				+"WHERE appointment.AptNum=procedurelog.AptNum "
+				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
+				+"AND recall.PatNum=procedurelog.PatNum "
+				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
+				+"AND (appointment.AptStatus=1 "//Scheduled
+				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
+				+"GROUP BY patient.Guarantor";
+			DataTable maxTable=General.GetTable(command);
+			//key=guarantor, value=maxDateDue
+			Dictionary<int,DateTime> dictMaxDateDue=new Dictionary<int,DateTime>();
+			for(int i=0;i<maxTable.Rows.Count;i++) {
+				dictMaxDateDue.Add(PIn.PInt(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
+			}
+			command=
 				@"SELECT patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
 				patient.Email,patguar.Email _guarEmail,patguar.FName _guarFName,
 				patguar.LName _guarLName,patient.FName,
@@ -296,6 +319,7 @@ namespace OpenDental{
 				row["guarFName"]=rawtable.Rows[i]["_guarFName"].ToString();
 				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
+				row["maxDateDue"]=dictMaxDateDue[PIn.PInt(rawtable.Rows[i]["Guarantor"].ToString())];
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				if(numberOfReminders=="0") {
 					row["numberOfReminders"]="";
@@ -560,49 +584,54 @@ namespace OpenDental{
 
 		/// <summary></summary>
 		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily,bool sortAlph){
-			string command=@"SELECT patient.Address,patguar.Address guarAddress,
+			//get maxDateDue for each family.
+			string command=@"DROP TABLE IF EXISTS temprecallmaxdate;
+				CREATE table temprecallmaxdate(
+					Guarantor int NOT NULL,
+					MaxDateDue date NOT NULL,
+					PRIMARY KEY (Guarantor)
+				);
+				INSERT INTO temprecallmaxdate 
+				SELECT patient.Guarantor,MAX(recall.DateDue) maxDateDue
+				FROM patient
+				LEFT JOIN recall ON patient.PatNum=recall.PatNum
+				AND (";
+			for(int i=0;i<recallNums.Count;i++){
+				if(i>0){
+					command+=" OR ";
+				}
+				command+="recall.RecallNum="+POut.PInt(recallNums[i]);
+			}
+			command+=") GROUP BY patient.Guarantor";
+			General.NonQ(command);
+			command=@"SELECT patient.Address,patguar.Address guarAddress,
 				patient.Address2,patguar.Address2 guarAddress2,
 				patient.City,patguar.City guarCity,recall.DateDue,patient.Email,patguar.Email guarEmail,
 				patient.FName,patguar.FName guarFName,patient.Guarantor,
-				patient.LName,patguar.LName guarLName,patient.MiddleI,
+				patient.LName,patguar.LName guarLName,temprecallmaxdate.MaxDateDue maxDateDue,
+				patient.MiddleI,
 				COUNT(commlog.CommlogNum) numberOfReminders,
 				patient.PatNum,patient.Preferred,
 				patient.State,patguar.State guarState,patient.Zip,patguar.Zip guarZip
 				FROM recall 
-				LEFT JOIN guarantor patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN patient ON patient.PatNum=recall.PatNum 
-				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum 
+				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
+				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
+				LEFT JOIN temprecallmaxdate ON temprecallmaxdate.Guarantor=patient.Guarantor
 				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
 				+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				+"WHERE ";
-				//+"'' famList, "//placeholder column: 12 for patient names and dates. If empty, then only single patient will print
-				//+"";
-			//if(DataConnection.DBtype==DatabaseType.Oracle){
-			//	command+=",CASE WHEN patient.PatNum=patient.Guarantor THEN 1 ELSE 0 END AS isguarantor ";
-			//}
-			//command+="
       for(int i=0;i<recallNums.Count;i++){
         if(i>0){
 					command+=" OR ";
 				}
         command+="recall.RecallNum="+POut.PInt(recallNums[i]);
       }
-			command+=" ";
-			/*if(groupByFamily){
-				command+="ORDER BY patient.Guarantor,";
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+="14";//isguarantor column. Is this number even correct???
-				}
-				else{
-					command+="patient.PatNum = patient.Guarantor";//guarantor needs to be last
-				}
-			}
-			else{
-				command+="ORDER BY patient.LName,patient.FName";
-			}*/
-
+			command+=" GROUP BY recall.PatNum";
 			DataTable rawTable=General.GetTable(command);
+			command="DROP TABLE IF EXISTS temprecallmaxdate";
+			General.NonQ(command);
 			List<DataRow> rawRows=new List<DataRow>();
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				rawRows.Add(rawTable.Rows[i]);
@@ -611,9 +640,6 @@ namespace OpenDental{
 			comparer.GroupByFamilies=groupByFamily;
 			comparer.SortAlph=sortAlph;
 			rawRows.Sort(comparer);
-			//if(!groupByFamily){
-			//	return table;
-			//}
 			DataTable table=new DataTable();
 			table.Columns.Add("address");//includes address2. Can be guar.
 			table.Columns.Add("cityStZip");//Can be guar.
@@ -736,7 +762,7 @@ namespace OpenDental{
 
 	}
 
-	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue.</summary>
+	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue, maxDateDue.  maxDateDue is the most recent DateDue for all family members in the list and needs to be the same for all family members.  This date will be used for better grouping.</summary>
 	class RecallComparer:IComparer<DataRow> {
 		public bool GroupByFamilies;
 		///<summary>rather than by the ordinary DueDate.</summary>
@@ -755,21 +781,21 @@ namespace OpenDental{
 						return x["guarFName"].ToString().CompareTo(y["guarFName"].ToString());
 					}
 					return 0;//order within family does not matter
-					/*
-					//if in the same family, put the guarantor last
-					if(x["Guarantor"].ToString() == x["PatNum"].ToString()) {//if x is the guarantor
-						return 1;
-					}
-					else if(y["Guarantor"].ToString() == y["PatNum"].ToString()) {//if y is the guarantor
-						return -1;
-					}
-					else {
-						return 0;//neither is guarantor
-					}*/
 				}
-				else {//sort by DueDate
-
-
+				else {//sort by maxDateDue
+					DateTime xD=PIn.PDate(x["maxDateDue"].ToString());
+					DateTime yD=PIn.PDate(y["maxDateDue"].ToString());
+					if(xD != yD) {
+						return (xD.CompareTo(yD));
+					}
+					//if dates are same, sort by guarantor
+					if(x["Guarantor"].ToString() != y["Guarantor"].ToString()) {
+						return (x["Guarantor"].ToString().CompareTo(y["Guarantor"].ToString()));
+					}
+					//within the same family, sort by actual DueDate
+					xD=PIn.PDate(x["DateDue"].ToString());
+					yD=PIn.PDate(y["DateDue"].ToString());
+					return (xD.CompareTo(yD));
 				}
 			}
 			else {//individual patients
@@ -780,10 +806,14 @@ namespace OpenDental{
 					return x["FName"].ToString().CompareTo(y["FName"].ToString());
 				}
 				else {//sort by DueDate
-
+					if((DateTime)x["DateDue"] != (DateTime)y["DateDue"]) {
+						return ((DateTime)x["DateDue"]).CompareTo(((DateTime)y["DateDue"]));
+					}
+					//if duedates are the same, sort by LName
+					return x["LName"].ToString().CompareTo(y["LName"].ToString());
 				}
 			}
-			return 0;
+			//return 0;
 		}
 	}
 
