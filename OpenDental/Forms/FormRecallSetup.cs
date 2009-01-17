@@ -34,8 +34,6 @@ namespace OpenDental{
 		private ValidNumber textDaysPast;
 		private ValidNumber textDaysFuture;
 		private GroupBox groupBox1;
-		private ValidNumber textDaysThirdReminder;
-		private Label label4;
 		private ValidNumber textDaysSecondReminder;
 		private ValidNumber textDaysFirstReminder;
 		private Label label2;
@@ -77,16 +75,12 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.checkReturnAdd = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textDown = new OpenDental.ValidDouble();
 			this.label12 = new System.Windows.Forms.Label();
-			this.textRight = new OpenDental.ValidDouble();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkGroupFamilies = new System.Windows.Forms.CheckBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.textDaysFuture = new OpenDental.ValidNumber();
-			this.textDaysPast = new OpenDental.ValidNumber();
 			this.label25 = new System.Windows.Forms.Label();
 			this.comboStatusMailedRecall = new System.Windows.Forms.ComboBox();
 			this.comboStatusEmailedRecall = new System.Windows.Forms.ComboBox();
@@ -95,15 +89,17 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textDaysThirdReminder = new OpenDental.ValidNumber();
-			this.label4 = new System.Windows.Forms.Label();
-			this.textDaysSecondReminder = new OpenDental.ValidNumber();
-			this.textDaysFirstReminder = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textDaysSecondReminder = new OpenDental.ValidNumber();
+			this.textDaysFirstReminder = new OpenDental.ValidNumber();
+			this.textDaysFuture = new OpenDental.ValidNumber();
+			this.textDaysPast = new OpenDental.ValidNumber();
+			this.textDown = new OpenDental.ValidDouble();
+			this.textRight = new OpenDental.ValidDouble();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -149,13 +145,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Adjust Postcard Position in Inches";
 			// 
-			// textDown
-			// 
-			this.textDown.Location = new System.Drawing.Point(119,46);
-			this.textDown.Name = "textDown";
-			this.textDown.Size = new System.Drawing.Size(73,20);
-			this.textDown.TabIndex = 6;
-			// 
 			// label12
 			// 
 			this.label12.Location = new System.Drawing.Point(57,45);
@@ -164,13 +153,6 @@ namespace OpenDental{
 			this.label12.TabIndex = 5;
 			this.label12.Text = "Down";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textRight
-			// 
-			this.textRight.Location = new System.Drawing.Point(119,21);
-			this.textRight.Name = "textRight";
-			this.textRight.Size = new System.Drawing.Size(73,20);
-			this.textRight.TabIndex = 4;
 			// 
 			// label13
 			// 
@@ -184,7 +166,7 @@ namespace OpenDental{
 			// checkGroupFamilies
 			// 
 			this.checkGroupFamilies.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkGroupFamilies.Location = new System.Drawing.Point(32,15);
+			this.checkGroupFamilies.Location = new System.Drawing.Point(44,15);
 			this.checkGroupFamilies.Name = "checkGroupFamilies";
 			this.checkGroupFamilies.Size = new System.Drawing.Size(121,18);
 			this.checkGroupFamilies.TabIndex = 49;
@@ -194,7 +176,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(4,32);
+			this.label14.Location = new System.Drawing.Point(16,32);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(133,20);
 			this.label14.TabIndex = 50;
@@ -203,7 +185,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(39,53);
+			this.label15.Location = new System.Drawing.Point(51,53);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(98,20);
 			this.label15.TabIndex = 52;
@@ -219,28 +201,10 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.label15);
 			this.groupBox3.Location = new System.Drawing.Point(415,442);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(205,78);
+			this.groupBox3.Size = new System.Drawing.Size(213,78);
 			this.groupBox3.TabIndex = 54;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Recall List Default View";
-			// 
-			// textDaysFuture
-			// 
-			this.textDaysFuture.Location = new System.Drawing.Point(139,54);
-			this.textDaysFuture.MaxVal = 10000;
-			this.textDaysFuture.MinVal = 0;
-			this.textDaysFuture.Name = "textDaysFuture";
-			this.textDaysFuture.Size = new System.Drawing.Size(53,20);
-			this.textDaysFuture.TabIndex = 66;
-			// 
-			// textDaysPast
-			// 
-			this.textDaysPast.Location = new System.Drawing.Point(139,32);
-			this.textDaysPast.MaxVal = 10000;
-			this.textDaysPast.MinVal = 0;
-			this.textDaysPast.Name = "textDaysPast";
-			this.textDaysPast.Size = new System.Drawing.Size(53,20);
-			this.textDaysPast.TabIndex = 65;
 			// 
 			// label25
 			// 
@@ -302,67 +266,29 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.textDaysThirdReminder);
-			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textDaysSecondReminder);
 			this.groupBox1.Controls.Add(this.textDaysFirstReminder);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(415,527);
+			this.groupBox1.Location = new System.Drawing.Point(415,543);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(205,107);
+			this.groupBox1.Size = new System.Drawing.Size(213,91);
 			this.groupBox1.TabIndex = 65;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Also show in list if # of days since";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(3,85);
+			this.label5.Location = new System.Drawing.Point(7,67);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(201,17);
 			this.label5.TabIndex = 69;
 			this.label5.Text = "(a very large number is recommended)";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// textDaysThirdReminder
-			// 
-			this.textDaysThirdReminder.Location = new System.Drawing.Point(139,64);
-			this.textDaysThirdReminder.MaxVal = 10000;
-			this.textDaysThirdReminder.MinVal = 0;
-			this.textDaysThirdReminder.Name = "textDaysThirdReminder";
-			this.textDaysThirdReminder.Size = new System.Drawing.Size(53,20);
-			this.textDaysThirdReminder.TabIndex = 68;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(3,63);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(134,20);
-			this.label4.TabIndex = 67;
-			this.label4.Text = "Third (or more) Reminder";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDaysSecondReminder
-			// 
-			this.textDaysSecondReminder.Location = new System.Drawing.Point(139,42);
-			this.textDaysSecondReminder.MaxVal = 10000;
-			this.textDaysSecondReminder.MinVal = 0;
-			this.textDaysSecondReminder.Name = "textDaysSecondReminder";
-			this.textDaysSecondReminder.Size = new System.Drawing.Size(53,20);
-			this.textDaysSecondReminder.TabIndex = 66;
-			// 
-			// textDaysFirstReminder
-			// 
-			this.textDaysFirstReminder.Location = new System.Drawing.Point(139,20);
-			this.textDaysFirstReminder.MaxVal = 10000;
-			this.textDaysFirstReminder.MinVal = 0;
-			this.textDaysFirstReminder.Name = "textDaysFirstReminder";
-			this.textDaysFirstReminder.Size = new System.Drawing.Size(53,20);
-			this.textDaysFirstReminder.TabIndex = 65;
-			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(36,19);
+			this.label2.Location = new System.Drawing.Point(48,19);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(101,20);
 			this.label2.TabIndex = 50;
@@ -371,12 +297,76 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(39,41);
+			this.label3.Location = new System.Drawing.Point(3,41);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(98,20);
+			this.label3.Size = new System.Drawing.Size(146,20);
 			this.label3.TabIndex = 52;
-			this.label3.Text = "Second Reminder";
+			this.label3.Text = "Second (or more) Reminder";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(9,8);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(869,411);
+			this.gridMain.TabIndex = 67;
+			this.gridMain.Title = "Messages";
+			this.gridMain.TranslationName = "TableRecallMsgs";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// textDaysSecondReminder
+			// 
+			this.textDaysSecondReminder.Location = new System.Drawing.Point(151,42);
+			this.textDaysSecondReminder.MaxVal = 10000;
+			this.textDaysSecondReminder.MinVal = 0;
+			this.textDaysSecondReminder.Name = "textDaysSecondReminder";
+			this.textDaysSecondReminder.Size = new System.Drawing.Size(53,20);
+			this.textDaysSecondReminder.TabIndex = 66;
+			// 
+			// textDaysFirstReminder
+			// 
+			this.textDaysFirstReminder.Location = new System.Drawing.Point(151,20);
+			this.textDaysFirstReminder.MaxVal = 10000;
+			this.textDaysFirstReminder.MinVal = 0;
+			this.textDaysFirstReminder.Name = "textDaysFirstReminder";
+			this.textDaysFirstReminder.Size = new System.Drawing.Size(53,20);
+			this.textDaysFirstReminder.TabIndex = 65;
+			// 
+			// textDaysFuture
+			// 
+			this.textDaysFuture.Location = new System.Drawing.Point(151,54);
+			this.textDaysFuture.MaxVal = 10000;
+			this.textDaysFuture.MinVal = 0;
+			this.textDaysFuture.Name = "textDaysFuture";
+			this.textDaysFuture.Size = new System.Drawing.Size(53,20);
+			this.textDaysFuture.TabIndex = 66;
+			// 
+			// textDaysPast
+			// 
+			this.textDaysPast.Location = new System.Drawing.Point(151,32);
+			this.textDaysPast.MaxVal = 10000;
+			this.textDaysPast.MinVal = 0;
+			this.textDaysPast.Name = "textDaysPast";
+			this.textDaysPast.Size = new System.Drawing.Size(53,20);
+			this.textDaysPast.TabIndex = 65;
+			// 
+			// textDown
+			// 
+			this.textDown.Location = new System.Drawing.Point(119,46);
+			this.textDown.Name = "textDown";
+			this.textDown.Size = new System.Drawing.Size(73,20);
+			this.textDown.TabIndex = 6;
+			// 
+			// textRight
+			// 
+			this.textRight.Location = new System.Drawing.Point(119,21);
+			this.textRight.Name = "textRight";
+			this.textRight.Size = new System.Drawing.Size(73,20);
+			this.textRight.TabIndex = 4;
 			// 
 			// butOK
 			// 
@@ -408,20 +398,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(9,8);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(869,411);
-			this.gridMain.TabIndex = 67;
-			this.gridMain.Title = "Messages";
-			this.gridMain.TranslationName = "TableRecallMsgs";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// FormRecallSetup
 			// 
@@ -518,12 +494,6 @@ namespace OpenDental{
 			else {
 				textDaysSecondReminder.Text=PrefC.GetInt("RecallShowIfDaysSecondReminder").ToString();
 			}
-			if(PrefC.GetInt("RecallShowIfDaysThirdReminder")==-1) {
-				textDaysThirdReminder.Text="";
-			}
-			else {
-				textDaysThirdReminder.Text=PrefC.GetInt("RecallShowIfDaysThirdReminder").ToString();
-			}
 			FillGrid();
 		}
 
@@ -601,10 +571,26 @@ namespace OpenDental{
 			//
 			row=new ODGridRow();
 			row.Cells.Add("2");
+			row.Cells.Add(Lan.g(this,"E-mail"));
+			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
+			row.Cells.Add(PrefC.GetString("RecallEmailFamMsg2"));
+			row.Tag="RecallEmailFamMsg2";
+			gridMain.Rows.Add(row);
+			//
+			row=new ODGridRow();
+			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
 			row.Cells.Add(PrefC.GetString("RecallPostcardMessage2"));
 			row.Tag="RecallPostcardMessage2";
+			gridMain.Rows.Add(row);
+			//
+			row=new ODGridRow();
+			row.Cells.Add("2");
+			row.Cells.Add(Lan.g(this,"Postcard"));
+			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
+			row.Cells.Add(PrefC.GetString("RecallPostcardFamMsg2"));
+			row.Tag="RecallPostcardFamMsg2";
 			gridMain.Rows.Add(row);
 			//3---------------------------------------------------------------------------------------------
 			//
@@ -626,35 +612,26 @@ namespace OpenDental{
 			//
 			row=new ODGridRow();
 			row.Cells.Add("3");
+			row.Cells.Add(Lan.g(this,"E-mail"));
+			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
+			row.Cells.Add(PrefC.GetString("RecallEmailFamMsg3"));
+			row.Tag="RecallEmailFamMsg3";
+			gridMain.Rows.Add(row);
+			//
+			row=new ODGridRow();
+			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
 			row.Cells.Add(PrefC.GetString("RecallPostcardMessage3"));
 			row.Tag="RecallPostcardMessage3";
 			gridMain.Rows.Add(row);
-			//4---------------------------------------------------------------------------------------------
 			//
 			row=new ODGridRow();
-			row.Cells.Add("4+");
-			row.Cells.Add(Lan.g(this,"E-mail"));
-			row.Cells.Add(Lan.g(this,"Subject line"));
-			row.Cells.Add(PrefC.GetString("RecallEmailSubject4"));
-			row.Tag="RecallEmailSubject4";
-			gridMain.Rows.Add(row);
-			//
-			row=new ODGridRow();
-			row.Cells.Add("4+");
-			row.Cells.Add(Lan.g(this,"E-mail"));
-			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
-			row.Cells.Add(PrefC.GetString("RecallEmailMessage4"));
-			row.Tag="RecallEmailMessage4";
-			gridMain.Rows.Add(row);
-			//
-			row=new ODGridRow();
-			row.Cells.Add("4+");
+			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"Postcard"));
-			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
-			row.Cells.Add(PrefC.GetString("RecallPostcardMessage4"));
-			row.Tag="RecallPostcardMessage4";
+			row.Cells.Add(Lan.g(this,"For multiple patients in one family.  Use [FamilyList]."));
+			row.Cells.Add(PrefC.GetString("RecallPostcardFamMsg3"));
+			row.Tag="RecallPostcardFamMsg3";
 			gridMain.Rows.Add(row);
 			//Confirmation---------------------------------------------------------------------------------------------
 			row=new ODGridRow();
@@ -687,8 +664,7 @@ namespace OpenDental{
 				|| textDaysPast.errorProvider1.GetError(textDaysPast)!=""
 				|| textDaysFuture.errorProvider1.GetError(textDaysFuture)!=""
 				|| textDaysFirstReminder.errorProvider1.GetError(textDaysFirstReminder)!=""
-				|| textDaysSecondReminder.errorProvider1.GetError(textDaysSecondReminder)!=""
-				|| textDaysThirdReminder.errorProvider1.GetError(textDaysThirdReminder)!="") 
+				|| textDaysSecondReminder.errorProvider1.GetError(textDaysSecondReminder)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -755,12 +731,6 @@ namespace OpenDental{
 			}
 			else {
 				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",PIn.PInt(textDaysSecondReminder.Text));
-			}
-			if(textDaysThirdReminder.Text=="") {
-				Prefs.UpdateInt("RecallShowIfDaysThirdReminder",-1);
-			}
-			else {
-				Prefs.UpdateInt("RecallShowIfDaysThirdReminder",PIn.PInt(textDaysThirdReminder.Text));
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

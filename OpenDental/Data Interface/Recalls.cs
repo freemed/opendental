@@ -95,9 +95,9 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min(-1 day) and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.</summary>
+		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.  If sortAlph is false, it will sort by dueDate.</summary>
 		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum,int clinicNum,
-			int siteNum)
+			int siteNum,bool sortAlph)
 		{
 			DataTable table=new DataTable();
 			DataRow row;
@@ -105,9 +105,14 @@ namespace OpenDental{
 			table.Columns.Add("age");
 			table.Columns.Add("contactMethod");
 			table.Columns.Add("dateLastReminder");
-			table.Columns.Add("dueDate");
+			table.Columns.Add("DateDue",typeof(DateTime));
+			table.Columns.Add("dueDate");//blank if minVal
 			table.Columns.Add("Email");
+			table.Columns.Add("FName");
 			table.Columns.Add("Guarantor");
+			table.Columns.Add("guarFName");
+			table.Columns.Add("guarLName");
+			table.Columns.Add("LName");
 			table.Columns.Add("Note");
 			table.Columns.Add("numberOfReminders");
 			table.Columns.Add("patientName");
@@ -120,7 +125,8 @@ namespace OpenDental{
 			List<DataRow> rows=new List<DataRow>();
 			string command=
 				@"SELECT patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
-				patient.Email,patient.FName,
+				patient.Email,patguar.Email _guarEmail,patguar.FName _guarFName,
+				patguar.LName _guarLName,patient.FName,
 				patient.Guarantor,patient.HmPhone,patient.LName,recall.Note,
 				COUNT(commlog.CommlogNum) _numberOfReminders,
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
@@ -128,6 +134,7 @@ namespace OpenDental{
 				recalltype.Description _recalltype,patient.WirelessPhone,patient.WkPhone
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
+				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
 				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
@@ -175,13 +182,12 @@ namespace OpenDental{
 				//+"AND (recall.RecallTypeNum="+RecallTypes.ProphyType+" "
 				//+"OR recall.RecallTypeNum="+RecallTypes.PerioType+") "
 			}
-			
-			command+="GROUP BY recall.PatNum "
-				+"ORDER BY ";
-			if(groupByFamilies){
-				command+="patient.Guarantor,";
-			}
-			command+="recall.RecallTypeNum,recall.DateDue";
+			command+="GROUP BY recall.PatNum ";
+			//	+"ORDER BY ";
+			//if(groupByFamilies){
+			//	command+="patient.Guarantor,";
+			//}
+			//command+="recall.RecallTypeNum,recall.DateDue";
  			DataTable rawtable=General.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
@@ -193,7 +199,7 @@ namespace OpenDental{
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
 				numberOfReminders=rawtable.Rows[i]["_numberOfReminders"].ToString();
-				if(numberOfReminders=="0"){
+				if(numberOfReminders=="0" || numberOfReminders=="") {
 					//always show
 				}
 				else if(numberOfReminders=="1") {
@@ -204,7 +210,7 @@ namespace OpenDental{
 						continue;
 					}
 				}
-				else if(numberOfReminders=="2") {
+				else{//2 or more reminders
 					if(PrefC.GetInt("RecallShowIfDaysSecondReminder")==-1) {
 						continue;
 					}
@@ -212,24 +218,25 @@ namespace OpenDental{
 						continue;
 					}
 				}
-				else{//3 or more reminders
-					//For example, office could set this to 365 days, and once a year, the patient will show up again on recall until they get disabled.
-					if(PrefC.GetInt("RecallShowIfDaysThirdReminder")==-1) {
-						continue;
-					}
-					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysThirdReminder")) > DateTime.Today) {
-						continue;
-					}
-				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
-					if(rawtable.Rows[i]["Email"].ToString() != "") {
-						row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+					if(groupByFamilies){
+						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
+							row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
+						}
+						else{
+							row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+						}
 					}
 					else{
-						row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+						if(rawtable.Rows[i]["Email"].ToString() != "") {//since there is an email,
+							row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+						}
+						else{
+							row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+						}
 					}
 				}
 				if(contmeth==ContactMethod.HmPhone){
@@ -242,7 +249,17 @@ namespace OpenDental{
 					row["contactMethod"]=Lan.g("FormRecallList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.Email) {
-					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+					if(groupByFamilies) {
+						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is a guarantor email, use it
+							row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
+						}
+						else {
+							row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();//use pat email.  If none, it will be caught in UI.
+						}
+					}
+					else {
+						row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
+					}
 				}
 				if(contmeth==ContactMethod.Mail) {
 					row["contactMethod"]=Lan.g("FormRecallList","Mail");
@@ -256,14 +273,29 @@ namespace OpenDental{
 				else {
 					row["dateLastReminder"]=dateRemind.ToShortDateString();
 				}
+				row["DateDue"]=dateDue;
 				if(dateDue.Year<1880) {
 					row["dueDate"]="";
 				}
 				else {
 					row["dueDate"]=dateDue.ToShortDateString();
 				}
-				row["Email"]=rawtable.Rows[i]["Email"].ToString();
+				if(groupByFamilies) {
+					if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is a guarantor email, use it
+						row["Email"]=rawtable.Rows[i]["_guarEmail"].ToString();
+					}
+					else {
+						row["Email"]=rawtable.Rows[i]["Email"].ToString();//use pat email.  If none, it will be caught in UI.
+					}
+				}
+				else {
+					row["Email"]=rawtable.Rows[i]["Email"].ToString();
+				}
+				row["FName"]=rawtable.Rows[i]["FName"].ToString();
 				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
+				row["guarFName"]=rawtable.Rows[i]["_guarFName"].ToString();
+				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
+				row["LName"]=rawtable.Rows[i]["LName"].ToString();
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				if(numberOfReminders=="0") {
 					row["numberOfReminders"]="";
@@ -290,8 +322,10 @@ namespace OpenDental{
 				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
 			}
-			//Array.Sort(orderDate,RecallList);
-			//return RecallList;
+			RecallComparer comparer=new RecallComparer();
+			comparer.GroupByFamilies=groupByFamilies;
+			comparer.SortAlph=sortAlph;
+			rows.Sort(comparer);
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
@@ -525,94 +559,171 @@ namespace OpenDental{
 		}
 
 		/// <summary></summary>
-		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily){
-			string command="SELECT patient.LName,patient.FName,patient.MiddleI,patient.Preferred,"//0-3
-				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,recall.DateDue, "//4-9
-				+"patient.Guarantor,"//10
-				+"'' FamList ";//placeholder column: 11 for patient names and dates. If empty, then only single patient will print
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=",CASE WHEN patient.PatNum=patient.Guarantor THEN 1 ELSE 0 END AS isguarantor ";
-			}
-			command+="FROM patient,recall "
-				+"WHERE patient.PatNum=recall.PatNum "
-				+"AND (";
+		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily,bool sortAlph){
+			string command=@"SELECT patient.Address,patguar.Address guarAddress,
+				patient.Address2,patguar.Address2 guarAddress2,
+				patient.City,patguar.City guarCity,recall.DateDue,patient.Email,patguar.Email guarEmail,
+				patient.FName,patguar.FName guarFName,patient.Guarantor,
+				patient.LName,patguar.LName guarLName,patient.MiddleI,
+				COUNT(commlog.CommlogNum) numberOfReminders,
+				patient.PatNum,patient.Preferred,
+				patient.State,patguar.State guarState,patient.Zip,patguar.Zip guarZip
+				FROM recall 
+				LEFT JOIN guarantor patguar ON patient.Guarantor=patguar.PatNum
+				LEFT JOIN patient ON patient.PatNum=recall.PatNum 
+				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum 
+				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
+				+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
+				+"AND CommDateTime > recall.DatePrevious "
+				+"WHERE ";
+				//+"'' famList, "//placeholder column: 12 for patient names and dates. If empty, then only single patient will print
+				//+"";
+			//if(DataConnection.DBtype==DatabaseType.Oracle){
+			//	command+=",CASE WHEN patient.PatNum=patient.Guarantor THEN 1 ELSE 0 END AS isguarantor ";
+			//}
+			//command+="
       for(int i=0;i<recallNums.Count;i++){
         if(i>0){
 					command+=" OR ";
 				}
         command+="recall.RecallNum="+POut.PInt(recallNums[i]);
       }
-			command+=") ";
-			if(groupByFamily){
+			command+=" ";
+			/*if(groupByFamily){
 				command+="ORDER BY patient.Guarantor,";
 				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+="13";//isguarantor column
+					command+="14";//isguarantor column. Is this number even correct???
 				}
 				else{
-					command+="patient.PatNum = patient.Guarantor";//guarantor needs to be last //FIXME:ORDER-BY. probably fixed??
+					command+="patient.PatNum = patient.Guarantor";//guarantor needs to be last
 				}
 			}
 			else{
 				command+="ORDER BY patient.LName,patient.FName";
+			}*/
+
+			DataTable rawTable=General.GetTable(command);
+			List<DataRow> rawRows=new List<DataRow>();
+			for(int i=0;i<rawTable.Rows.Count;i++){
+				rawRows.Add(rawTable.Rows[i]);
 			}
-			DataTable table=General.GetTable(command);
-			if(!groupByFamily){
-				return table;
-			}
-			DataTable newTable=table.Clone();
+			RecallComparer comparer=new RecallComparer();
+			comparer.GroupByFamilies=groupByFamily;
+			comparer.SortAlph=sortAlph;
+			rawRows.Sort(comparer);
+			//if(!groupByFamily){
+			//	return table;
+			//}
+			DataTable table=new DataTable();
+			table.Columns.Add("address");//includes address2. Can be guar.
+			table.Columns.Add("cityStZip");//Can be guar.
+			table.Columns.Add("dateDue");
+			table.Columns.Add("email");//Can be guar.
+			table.Columns.Add("famList");
+			table.Columns.Add("guarLName");
+			table.Columns.Add("numberOfReminders");
+			table.Columns.Add("patientNameFL");
 			string familyAptList="";
 			DataRow row;
-			for(int i=0;i<table.Rows.Count;i++){
+			List<DataRow> rows=new List<DataRow>();
+			int maxNumReminders=0;
+			int maxRemindersThisPat;
+			for(int i=0;i<rawRows.Count;i++) {
+				if(!groupByFamily) {
+					row=table.NewRow();
+					row["address"]=rawRows[i]["Address"].ToString();
+					if(rawRows[i]["Address2"].ToString()!="") {
+						row["address"]+="\r\n"+rawRows[i]["Address2"].ToString();
+					}
+					row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
+						+rawRows[i]["State"].ToString()+"  "
+						+rawRows[i]["Zip"].ToString();
+					row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
+					row["email"]=rawRows[i]["Email"].ToString();
+					row["famList"]="";
+					row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
+					row["numberOfReminders"]=PIn.PInt(rawRows[i]["numberOfReminders"].ToString()).ToString();
+					row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
+						+rawRows[i]["MiddleI"].ToString()+" "
+						+rawRows[i]["LName"].ToString();
+					rows.Add(row);
+					continue;
+				}
+				//groupByFamily----------------------------------------------------------------------
 				if(familyAptList==""){//if this is the first patient in the family
-					if(i==table.Rows.Count-1//if this is the last row
-						|| table.Rows[i][10].ToString()!=table.Rows[i+1][10].ToString())//or if the guarantor on next line is different
+					maxNumReminders=0;
+					//loop through the whole family, and determine the maximum number of reminders
+					for(int f=i;f<rawRows.Count;f++) {
+						if(f==rawRows.Count-1//if this is the last row
+							|| rawRows[i]["Guarantor"].ToString()!=rawRows[f+1]["Guarantor"].ToString())//or if the guarantor on next line is different
+						{
+							break;
+						}
+						maxRemindersThisPat=PIn.PInt(rawRows[f]["numberOfReminders"].ToString());
+						if(maxRemindersThisPat>maxNumReminders) {
+							maxNumReminders=maxRemindersThisPat;
+						}
+					}
+					//now we know the max number of reminders for the family
+					if(i==rawRows.Count-1//if this is the last row
+						|| rawRows[i]["Guarantor"].ToString()!=rawRows[i+1]["Guarantor"].ToString())//or if the guarantor on next line is different
 					{
 						//then this is a single patient, and there are no other family members in the list.
-						row=newTable.NewRow();
-						row[0]=table.Rows[i][0].ToString();//LName
-						row[1]=table.Rows[i][1].ToString();//FName
-						row[2]=table.Rows[i][2].ToString();//MiddleI
-						row[3]=table.Rows[i][3].ToString();//Preferred
-						row[4]=table.Rows[i][4].ToString();//Address
-						row[5]=table.Rows[i][5].ToString();//Address2
-						row[6]=table.Rows[i][6].ToString();//City
-						row[7]=table.Rows[i][7].ToString();//State
-						row[8]=table.Rows[i][8].ToString();//Zip
-						row[9]=table.Rows[i][9].ToString();//DateDue
-						//we don't care about the guarantor for printing
-						//row[]=table.Rows[i][].ToString();//
-						newTable.Rows.Add(row);
+						row=table.NewRow();
+						row["address"]=rawRows[i]["Address"].ToString();
+						if(rawRows[i]["Address2"].ToString()!="") {
+							row["address"]+="\r\n"+rawRows[i]["Address2"].ToString();
+						}
+						row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
+							+rawRows[i]["State"].ToString()+"  "
+							+rawRows[i]["Zip"].ToString();
+						row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
+						row["email"]=rawRows[i]["Email"].ToString();
+						row["famList"]="";
+						row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
+						row["numberOfReminders"]=maxNumReminders.ToString();
+						row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
+							+rawRows[i]["MiddleI"].ToString()+" "
+							+rawRows[i]["LName"].ToString();						
+						rows.Add(row);
 						continue;
 					}
 					else{//this is the first patient of a family with multiple family members
-						familyAptList=table.Rows[i][1].ToString()+":  "//FName
-							+PIn.PDate(table.Rows[i][9].ToString()).ToShortDateString();//due date
+						familyAptList=rawRows[i]["FName"].ToString()+":  "
+							+PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 						continue;
 					}
 				}
 				else{//not the first patient
-					familyAptList+="\r\n"+table.Rows[i][1].ToString()+":  "//FName
-						+PIn.PDate(table.Rows[i][9].ToString()).ToShortDateString();//due date
+					familyAptList+="\r\n"+rawRows[i]["FName"].ToString()+":  "
+						+PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 				}
-				if(i==table.Rows.Count-1//if this is the last row
-					|| table.Rows[i][10].ToString()!=table.Rows[i+1][10].ToString())//or if the guarantor on next line is different
+				if(i==rawRows.Count-1//if this is the last row
+					|| rawRows[i]["Guarantor"].ToString()!=rawRows[i+1]["Guarantor"].ToString())//or if the guarantor on next line is different
 				{
-					row=newTable.NewRow();
-					//so for the query above, the guarantor should be last to show here.
-					row[0]=table.Rows[i][0].ToString();//LName
-					row[4]=table.Rows[i][4].ToString();//Address
-					row[5]=table.Rows[i][5].ToString();//Address2
-					row[6]=table.Rows[i][6].ToString();//City
-					row[7]=table.Rows[i][7].ToString();//State
-					row[8]=table.Rows[i][8].ToString();//Zip
-					row[11]=familyAptList;
-					//we don't really care about the other fields for printing
-					//row[]=table.Rows[i][].ToString();//
-					newTable.Rows.Add(row);
+					//This part only happens for the last family member of a grouped family
+					row=table.NewRow();
+					row["address"]=rawRows[i]["guarAddress"].ToString();
+					if(rawRows[i]["guarAddress2"].ToString()!="") {
+						row["address"]+="\r\n"+rawRows[i]["guarAddress2"].ToString();
+					}
+					row["cityStZip"]=rawRows[i]["guarCity"].ToString()+",  "
+							+rawRows[i]["guarState"].ToString()+"  "
+							+rawRows[i]["guarZip"].ToString();
+					row["dateDue"]=PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
+					row["email"]=rawRows[i]["guarEmail"].ToString();
+					row["famList"]=familyAptList;
+					row["guarLName"]=rawRows[i]["guarLName"].ToString();
+					row["numberOfReminders"]=maxNumReminders.ToString();
+					row["patientNameFL"]="";//we won't use this
+					rows.Add(row);
 					familyAptList="";
 				}	
 			}
-			return newTable;
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			return table;
 		}
 
 		/// <summary></summary>
@@ -623,6 +734,57 @@ namespace OpenDental{
 		}
 
 
+	}
+
+	///<summary>The supplied DataRows must include the following columns: Guarantor, PatNum, guarLName, guarFName, LName, FName, DateDue.</summary>
+	class RecallComparer:IComparer<DataRow> {
+		public bool GroupByFamilies;
+		///<summary>rather than by the ordinary DueDate.</summary>
+		public bool SortAlph;
+
+		///<summary></summary>
+		public int Compare(DataRow x,DataRow y) {
+			//NOTE: Even if grouping by families, each family is not necessarily going to have a guarantor.
+			if(GroupByFamilies) {
+				if(SortAlph) {
+					//if guarantors are different, sort by guarantor name
+					if(x["Guarantor"].ToString() != y["Guarantor"].ToString()) {
+						if(x["guarLName"].ToString() != y["guarLName"].ToString()) {
+							return x["guarLName"].ToString().CompareTo(y["guarLName"].ToString());
+						}
+						return x["guarFName"].ToString().CompareTo(y["guarFName"].ToString());
+					}
+					return 0;//order within family does not matter
+					/*
+					//if in the same family, put the guarantor last
+					if(x["Guarantor"].ToString() == x["PatNum"].ToString()) {//if x is the guarantor
+						return 1;
+					}
+					else if(y["Guarantor"].ToString() == y["PatNum"].ToString()) {//if y is the guarantor
+						return -1;
+					}
+					else {
+						return 0;//neither is guarantor
+					}*/
+				}
+				else {//sort by DueDate
+
+
+				}
+			}
+			else {//individual patients
+				if(SortAlph) {
+					if(x["LName"].ToString() != y["LName"].ToString()) {
+						return x["LName"].ToString().CompareTo(y["LName"].ToString());
+					}
+					return x["FName"].ToString().CompareTo(y["FName"].ToString());
+				}
+				else {//sort by DueDate
+
+				}
+			}
+			return 0;
+		}
 	}
 
 	

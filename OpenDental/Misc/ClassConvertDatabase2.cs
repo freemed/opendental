@@ -652,8 +652,6 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysSecondReminder','180','-1 indicates do not show')";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysThirdReminder','365','-1 indicates do not show')";
-					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage','You are due for your regular dental check-up on ?DueDate  Please call our office today to schedule an appointment.','')";
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg','You are due for your regular dental check-up.  [FamilyList]  Please call our office today to schedule an appointment.','')";
@@ -688,12 +686,18 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage3','','')";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject4','','')";
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg2','','')";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage4','','')";
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg3','','')";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage4','','')";
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardFamMsg2','','')";
 					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardFamMsg3','','')";
+					General.NonQ(command);
+
+					
+
+					
 
 					
 				}
