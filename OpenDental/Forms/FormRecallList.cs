@@ -96,6 +96,8 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboSort = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.comboSite = new System.Windows.Forms.ComboBox();
 			this.labelSite = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
@@ -121,8 +123,6 @@ namespace OpenDental{
 			this.butSchedFam = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
 			this.labelPatientCount = new System.Windows.Forms.Label();
-			this.comboSort = new System.Windows.Forms.ComboBox();
-			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -193,6 +193,24 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
+			// 
+			// comboSort
+			// 
+			this.comboSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSort.Location = new System.Drawing.Point(59,36);
+			this.comboSort.MaxDropDownItems = 40;
+			this.comboSort.Name = "comboSort";
+			this.comboSort.Size = new System.Drawing.Size(118,21);
+			this.comboSort.TabIndex = 37;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(3,39);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(55,14);
+			this.label5.TabIndex = 36;
+			this.label5.Text = "Sort";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboSite
 			// 
@@ -478,24 +496,6 @@ namespace OpenDental{
 			this.labelPatientCount.TabIndex = 61;
 			this.labelPatientCount.Text = "Patient Count:";
 			this.labelPatientCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboSort
-			// 
-			this.comboSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSort.Location = new System.Drawing.Point(59,36);
-			this.comboSort.MaxDropDownItems = 40;
-			this.comboSort.Name = "comboSort";
-			this.comboSort.Size = new System.Drawing.Size(118,21);
-			this.comboSort.TabIndex = 37;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(3,39);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(57,14);
-			this.label5.TabIndex = 36;
-			this.label5.Text = "Sort";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormRecallList
 			// 

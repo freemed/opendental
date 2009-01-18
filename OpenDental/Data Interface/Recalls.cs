@@ -430,7 +430,8 @@ namespace OpenDental{
 
 		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted except when all triggers are removed.  Otherwise, the dateDueCalc just gets cleared.</summary>
 		public static void Synch(int patNum){
-			List<RecallType> typeList=RecallTypes.GetActive();
+			List<RecallType> typeListActive=RecallTypes.GetActive();
+			List<RecallType> typeList=new List<RecallType>(typeListActive);
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
 			List<Recall> recallList=RefreshAndFill(command);
 			//determine if this patient is a perio patient.
@@ -462,19 +463,20 @@ namespace OpenDental{
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND (";
-			if(typeList.Count>0) {
-				for(int i=0;i<typeList.Count;i++) {
+			if(typeListActive.Count>0) {
+				for(int i=0;i<typeListActive.Count;i++) {
 					if(i>0) {
 						command+=" OR";
 					}
-					command+=" RecallTypeNum="+POut.PInt(typeList[i].RecallTypeNum);
+					command+=" RecallTypeNum="+POut.PInt(typeListActive[i].RecallTypeNum);
 				}
-			} else {
+			} 
+			else {
 				command+=" RecallTypeNum=0";//Effectively forces an empty result set, without changing the returned table structure.
 			}
-			command+=") AND (ProcStatus = 2 "
-				+"OR ProcStatus = 3 "
-				+"OR ProcStatus = 4) "
+			command+=") AND (ProcStatus = "+POut.PInt((int)ProcStat.C)+" "
+				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EC)+" "
+				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EO)+") "
 				+"GROUP BY RecallTypeNum";
 			DataTable tableDates=General.GetTable(command);
 			//Go through the type list and either update recalls, or create new recalls.
@@ -483,29 +485,58 @@ namespace OpenDental{
 			DateTime prevDate;
 			Recall matchingRecall;
 			Recall recallNew;
-			for(int i=0;i<typeList.Count;i++){
-				prevDate=DateTime.MinValue;
-				for(int d=0;d<tableDates.Rows.Count;d++){
-					if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeList[i].RecallTypeNum.ToString()){
-						prevDate=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
+			DateTime prevDateProphy=DateTime.MinValue;
+			for(int i=0;i<typeListActive.Count;i++) {
+				if(PrefC.GetInt("RecallTypeSpecialProphy")!=typeListActive[i].RecallTypeNum
+					&& PrefC.GetInt("RecallTypeSpecialPerio")!=typeListActive[i].RecallTypeNum) 
+				{
+					continue;
+				}
+				for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
+					if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeListActive[i].RecallTypeNum.ToString()) {
+						prevDateProphy=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
 						break;
 					}
 				}
+			}
+			for(int i=0;i<typeList.Count;i++){
+				if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
+					|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum) 
+				{
+					prevDate=prevDateProphy;
+				}
+				else {
+					prevDate=DateTime.MinValue;
+					for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
+						if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeList[i].RecallTypeNum.ToString()) {
+							prevDate=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
+							break;
+						}
+					}
+				}
 				matchingRecall=null;
-				for(int r=0;r<recallList.Count;r++){
+				for(int r=0;r<recallList.Count;r++){//recalls for patient
 					if(recallList[r].RecallTypeNum==typeList[i].RecallTypeNum){
 						matchingRecall=recallList[r];
 					}
 				}
 				if(matchingRecall==null){//if there is no existing recall,
-					if(prevDate.Year>1880){//if date is not minVal, then add a recall
+					if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
+						|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum
+						|| prevDate.Year>1880)//for other types, if date is not minVal, then add a recall
+					{
 						//add a recall
 						recallNew=new Recall();
 						recallNew.RecallTypeNum=typeList[i].RecallTypeNum;
 						recallNew.PatNum=patNum;
-						recallNew.DatePrevious=prevDate;
+						recallNew.DatePrevious=prevDate;//will be min val for prophy/perio with no previous procs
 						recallNew.RecallInterval=typeList[i].DefaultInterval;
-						recallNew.DateDueCalc=prevDate+recallNew.RecallInterval;
+						if(prevDate.Year<1880) {
+							recallNew.DateDueCalc=DateTime.MinValue;
+						}
+						else {
+							recallNew.DateDueCalc=prevDate+recallNew.RecallInterval;
+						}
 						recallNew.DateDue=recallNew.DateDueCalc;
 						Recalls.Insert(recallNew);
 					}
