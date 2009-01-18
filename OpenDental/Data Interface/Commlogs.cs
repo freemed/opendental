@@ -99,7 +99,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
-		public static void InsertForRecall(int patNum,CommItemMode _mode){
+		public static void InsertForRecall(int patNum,CommItemMode _mode,int numberOfReminders){
 			int recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			string command;
 			if(recallType!=0){
@@ -123,7 +123,19 @@ namespace OpenDental{
 			com.CommType=recallType;
 			com.Mode_=_mode;
 			com.SentOrReceived=CommSentOrReceived.Sent;
-			com.Note=Lan.g("FormRecallList","Sent recall notice.");
+			com.Note="";
+			if(numberOfReminders==0){
+				com.Note=Lan.g("FormRecallList","Sent recall notice.");
+			}
+			else if(numberOfReminders==1) {
+				com.Note=Lan.g("FormRecallList","Sent second recall notice.");
+			}
+			else if(numberOfReminders==2) {
+				com.Note=Lan.g("FormRecallList","Sent third recall notice.");
+			}
+			else {
+				com.Note=Lan.g("FormRecallList","Sent recall notice:")+" "+(numberOfReminders+1).ToString();
+			}
 			com.UserNum=Security.CurUser.UserNum;
 			Insert(com);
 		}
