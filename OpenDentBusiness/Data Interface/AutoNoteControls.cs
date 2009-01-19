@@ -59,20 +59,15 @@ namespace OpenDentBusiness {
 			General.NonQ(command);
 		}
 
-		/*
-		public static List<AutoNoteControl> GetForKeys(List<int> keys) {
-			List<AutoNoteControl> retVal=new List<AutoNoteControl>();
-			for(int k=0;k<keys.Count;k++) {
-				for(int i=0;i<Listt.Count;i++) {
-					if(Listt[i].AutoNoteControlNum==keys[k]) {
-						retVal.Add(Listt[i]);
-						break;
-					}
-					//if it can't find the controlNum, it fails silently.
+		///<summary>Will return null if can't match.</summary>
+		public static AutoNoteControl GetByDescript(string descript) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].Descript==descript) {
+					return Listt[i];
 				}
 			}
-			return retVal;
-		}*/
+			return null;
+		}
 
 		/*
 		/// <summary>Returns all the control info about the selected control</summary>

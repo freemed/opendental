@@ -2712,13 +2712,11 @@ namespace OpenDental{
 		}
 
 		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
-			MessageBox.Show("Under construction.");
-			//FormAutoNoteBuild formA=new FormAutoNoteBuild();
-			//formA.ShowDialog();
-			//if(formA.DialogResult==DialogResult.OK) {
-			//	textNotes.AppendText(formA.AutoNoteCur.AutoNoteOutput);
-				//form.Close();
-			//}
+			FormAutoNoteCompose FormA=new FormAutoNoteCompose();
+			FormA.ShowDialog();
+			if(FormA.DialogResult==DialogResult.OK) {
+				textNotes.AppendText(FormA.CompletedNote);
+			}
 		}
 
 		private void textStart_TextChanged(object sender, EventArgs e){
