@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 namespace OpenDentBusiness {
 
+	///<summary>In the program, this is now called an autonote prompt.</summary>
 	public class AutoNoteControl {
 		///<summary>Primary key</summary>
 		public int AutoNoteControlNum;
-		///<summary>'Descript' is the name of the custom control</summary>
+		///<summary>The description of the prompt as it will be referred to from other windows.</summary>
 		public string Descript;
-		///<summary>The type of control such as 'TextBox' or 'ComboBox'</summary>
+		///<summary>'Text' or 'OneResponse'.  More types to be added later.</summary>
 		public string ControlType;
-		///<summary>Is the text for the label the user wants</summary>
+		///<summary>The prompt text.</summary>
 		public string ControlLabel;
-		///<summary>The preface text</summary>
-		public string PrefaceText;
-		///<summary>If the control is a multi line text box then store the text here</summary>
-		public string MultiLineText;
-		///<summary>If the control is a combo box then the user puts the the selection options for the combo box here</summary>
+		///<summary>For TextBox, this is the default text.  For a ComboBox, this is the list of possible responses, one per line.</summary>
 		public string ControlOptions;
 		
 

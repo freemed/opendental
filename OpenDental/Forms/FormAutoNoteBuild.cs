@@ -31,6 +31,7 @@ namespace OpenDental {
 		}
 
 		private void DrawControls() {
+			/*
 			int TextBoxCount=0;
 			int ComboBoxCount=0;
 			for (int i=0; i<listBoxControls.Items.Count; i++) {
@@ -106,10 +107,11 @@ namespace OpenDental {
 			}
 			butOK.Visible=true;
 			butOK.Location=new Point(330,spacing);
-			
+			*/
 		}
 
 		private void listBoxAutoNotes_SelectedIndexChanged(object sender, EventArgs e) {
+			/*
 			for (int x = 0; x <= this.Controls.Count - 1; x++) {
 
 				if (this.Controls[x].Name.ToString() != "listBoxAutoNotes" &&
@@ -131,31 +133,32 @@ namespace OpenDental {
 					listBoxControls.Items.Add(lines[i].ToString());
 				}
 			}
-			DrawControls();
+			DrawControls();*/
 		}
 
 		private void butOK_Click(object sender, EventArgs e) {
+			/*
 			string AutoNoteOutput="";
 			int currentControl=0;
 			for (int x=0; x<this.Controls.Count; x++) {
 				if (this.Controls[x].Name.ToString() != "listBoxAutoNotes" &&
-						this.Controls[x].Name.ToString() != "butOK" &&
-						this.Controls[x].Name.ToString() != "listBoxControls") {					
-						string Text="";
-						string prefaceText="";
-						if (currentControl<listBoxControls.Items.Count) {
-							if (this.Controls[x].Text!="") {
-								AutoNoteControls.RefreshControl(listBoxControls.Items[currentControl].ToString());
-								ControlCur=AutoNoteControls.Listt[0];
-								prefaceText=ControlCur.PrefaceText;
-								Text=this.Controls[x].Text;
-								AutoNoteOutput=AutoNoteOutput+" "+prefaceText+" "+Text;
-							}
-							currentControl++;
+					this.Controls[x].Name.ToString() != "butOK" &&
+					this.Controls[x].Name.ToString() != "listBoxControls") {					
+					string Text="";
+					string prefaceText="";
+					if (currentControl<listBoxControls.Items.Count) {
+						if (this.Controls[x].Text!="") {
+							AutoNoteControls.RefreshControl(listBoxControls.Items[currentControl].ToString());
+							ControlCur=AutoNoteControls.Listt[0];
+							prefaceText=ControlCur.PrefaceText;
+							Text=this.Controls[x].Text;
+							AutoNoteOutput=AutoNoteOutput+" "+prefaceText+" "+Text;
 						}
+						currentControl++;
+					}
 				}
 			}
-			AutoNoteCur.AutoNoteOutput=AutoNoteOutput;
+			AutoNoteCur.AutoNoteOutput=AutoNoteOutput;*/
 			this.DialogResult=DialogResult.OK;
 		}
 	}

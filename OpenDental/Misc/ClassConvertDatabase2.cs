@@ -644,13 +644,13 @@ namespace OpenDental {
 			if(FromVersion<new Version("6.4.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="UPDATE preference SET Comments = '-1 indicates min for all dates',ValueString='-1' WHERE PrefName = 'RecallDaysPast'";
+					command="UPDATE preference SET Comments = '-1 indicates min for all dates' WHERE PrefName = 'RecallDaysPast'";
 					General.NonQ(command);
 					command="UPDATE preference SET Comments = '-1 indicates max for all dates' WHERE PrefName = 'RecallDaysFuture'";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysFirstReminder','120','-1 indicates do not show')";
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysFirstReminder','-1','-1 indicates do not show')";
 					General.NonQ(command);
-					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysSecondReminder','180','-1 indicates do not show')";
+					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysSecondReminder','-1','-1 indicates do not show')";
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage','You are due for your regular dental check-up on ?DueDate  Please call our office today to schedule an appointment.','')";
 					General.NonQ(command);
@@ -694,10 +694,22 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardFamMsg3','','')";
 					General.NonQ(command);
+					command="ALTER TABLE autonote CHANGE ControlsToInc MainText text";
+					General.NonQ(command);
+					command="UPDATE autonotecontrol SET ControlType='Text' WHERE ControlType='MultiLineTextBox'";
+					General.NonQ(command);
+					command="UPDATE autonotecontrol SET ControlType='OneResponse' WHERE ControlType='ComboBox'";
+					General.NonQ(command);
+					command="UPDATE autonotecontrol SET ControlType='Text' WHERE ControlType='TextBox'";
+					General.NonQ(command);
+					command="UPDATE autonotecontrol SET ControlOptions=MultiLineText WHERE MultiLineText != ''";
+					General.NonQ(command);
+					command="ALTER TABLE autonotecontrol DROP PrefaceText";
+					General.NonQ(command);
+					command="ALTER TABLE autonotecontrol DROP MultiLineText";
+					General.NonQ(command);
 
-					
 
-					
 
 					
 				}
