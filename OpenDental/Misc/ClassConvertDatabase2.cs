@@ -696,6 +696,8 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="ALTER TABLE autonote CHANGE ControlsToInc MainText text";
 					General.NonQ(command);
+					command="UPDATE autonote SET MainText = ''";
+					General.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlType='Text' WHERE ControlType='MultiLineTextBox'";
 					General.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlType='OneResponse' WHERE ControlType='ComboBox'";
