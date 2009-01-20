@@ -103,7 +103,7 @@ namespace OpenDental {
 						"'ADHS PCP' InsurancePlanName,"+//insurance plan name
 						"'' ReferringPhysicianName,"+//Name of referring physician
 						"'' ReferringPhysicianID,"+//ID # of referring physician
-						"722 DiagnosisCode1,"+//Diagnosis Code 1. Always set to V72.2 for simplicity and workability
+						"V722 DiagnosisCode1,"+//Diagnosis Code 1. Always set to V72.2 for simplicity and workability
 						"'' DiagnosisCode2,"+//Diagnosis code 2
 						"'' DiagnosisCode3,"+//Diagnosis code 3
 						"'' DiagnosisCode4,"+//Diagnosis code 4

@@ -95,7 +95,7 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+householdPercentOfPovertyStr+"') LIMIT 1)) HPP, "+//Household % of poverty
 					"(SELECT a.AdjAmt FROM adjustment a WHERE a.PatNum="+patNum+" AND a.AdjType="+
 						copayDefNum+" ORDER BY AdjDate DESC LIMIT 1) HSFS,"+//Household sliding fee scale
-					"(SELECT i.DateTerm FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1) DES,"+//Date of eligibility status
+					"(SELECT i.DateEffective FROM insplan i,patplan pp WHERE pp.PatNum="+patNum+" AND pp.PlanNum=i.PlanNum LIMIT 1) DES,"+//Date of eligibility status
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1)) CareStatus "+//Status
 					"FROM patient p WHERE "+
