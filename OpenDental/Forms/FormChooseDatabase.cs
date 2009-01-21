@@ -588,7 +588,15 @@ namespace OpenDental{
 			//2. /etc/opendental/config.xml (or corresponding machine path in Windows) (should be default for new installs) 
 			//3. Application Directory/FreeDentalConfig.xml (read-only if user is not admin)
 			if(!File.Exists("FreeDentalConfig.xml")){
-				FileStream fs=File.Create("FreeDentalConfig.xml");
+				FileStream fs;
+				try {
+					fs=File.Create("FreeDentalConfig.xml");
+				}
+				catch {
+					MessageBox.Show("The very first time that the program is run, it must be run as an Admin.  If using Vista, right click, run as Admin.");
+					Application.Exit();
+					return;
+				}
 				fs.Close();
 				comboComputerName.Text="localhost";
 				#if(TRIALONLY)
