@@ -74,10 +74,15 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateBool(string prefName,bool newValue) {
+			return UpdateBool(prefName,newValue,false);
+		}
+
+		///<summary>Returns true if a change was required, or false if no change needed.</summary>
+		public static bool UpdateBool(string prefName,bool newValue,bool isForced) {
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
-			if(PrefC.GetBool(prefName)==newValue) {
+			if(!isForced && PrefC.GetBool(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "

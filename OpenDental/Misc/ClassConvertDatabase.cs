@@ -109,8 +109,8 @@ namespace OpenDental{
 				To2_8_2();//begins going through the chain of conversion steps
 				MsgBox.Show(this,"Conversion successful");
 				if(FromVersion>=new Version("3.4.0")){
-					CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
-					Prefs.UpdateBool("CorruptedDatabase",false);
+					//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
+					Prefs.UpdateBool("CorruptedDatabase",false,true);//more forceful refresh in order to properly change flag
 				}
 				CacheL.Refresh(InvalidType.Prefs);
 				return true;
