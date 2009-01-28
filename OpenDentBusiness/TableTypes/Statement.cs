@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 		[DataField("Mode_")]
 		private StatementMode mode_;
 		bool mode_Changed;
-		/// <summary>Enum:StatementMode Mail, InPerson, Email.</summary>
+		/// <summary>Enum:StatementMode Mail, InPerson, Email, Electronic.</summary>
 		public StatementMode Mode_ {
 			get { return mode_; }
 			set { if(mode_!=value){mode_ = value; MarkDirty(); mode_Changed = true; }}

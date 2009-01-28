@@ -108,6 +108,8 @@ namespace OpenDental{
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.checkSinglePatient = new System.Windows.Forms.CheckBox();
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
+			this.textDateEnd = new System.Windows.Forms.TextBox();
+			this.textDateStart = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkIsSent = new System.Windows.Forms.CheckBox();
 			this.butDelete = new OpenDental.UI.Button();
@@ -115,8 +117,6 @@ namespace OpenDental{
 			this.butEmail = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
 			this.textDate = new System.Windows.Forms.TextBox();
-			this.textDateStart = new System.Windows.Forms.TextBox();
-			this.textDateEnd = new System.Windows.Forms.TextBox();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -339,7 +339,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(64,69);
+			this.label2.Location = new System.Drawing.Point(64,62);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(81,14);
 			this.label2.TabIndex = 232;
@@ -349,9 +349,9 @@ namespace OpenDental{
 			// listMode
 			// 
 			this.listMode.FormattingEnabled = true;
-			this.listMode.Location = new System.Drawing.Point(146,69);
+			this.listMode.Location = new System.Drawing.Point(146,60);
 			this.listMode.Name = "listMode";
-			this.listMode.Size = new System.Drawing.Size(113,43);
+			this.listMode.Size = new System.Drawing.Size(113,56);
 			this.listMode.TabIndex = 233;
 			// 
 			// checkIntermingled
@@ -393,9 +393,23 @@ namespace OpenDental{
 			this.groupDateRange.TabStop = false;
 			this.groupDateRange.Text = "Date Range";
 			// 
+			// textDateEnd
+			// 
+			this.textDateEnd.Location = new System.Drawing.Point(75,41);
+			this.textDateEnd.Name = "textDateEnd";
+			this.textDateEnd.Size = new System.Drawing.Size(77,20);
+			this.textDateEnd.TabIndex = 246;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(75,18);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 245;
+			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(67,22);
+			this.label4.Location = new System.Drawing.Point(67,17);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(77,14);
 			this.label4.TabIndex = 237;
@@ -406,9 +420,9 @@ namespace OpenDental{
 			// 
 			this.checkIsSent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsSent.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsSent.Location = new System.Drawing.Point(1,44);
+			this.checkIsSent.Location = new System.Drawing.Point(1,39);
 			this.checkIsSent.Name = "checkIsSent";
-			this.checkIsSent.Size = new System.Drawing.Size(159,20);
+			this.checkIsSent.Size = new System.Drawing.Size(159,18);
 			this.checkIsSent.TabIndex = 239;
 			this.checkIsSent.Text = "Sent";
 			this.checkIsSent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -484,24 +498,10 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(146,20);
+			this.textDate.Location = new System.Drawing.Point(146,15);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(77,20);
 			this.textDate.TabIndex = 244;
-			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(75,18);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(77,20);
-			this.textDateStart.TabIndex = 245;
-			// 
-			// textDateEnd
-			// 
-			this.textDateEnd.Location = new System.Drawing.Point(75,41);
-			this.textDateEnd.Name = "textDateEnd";
-			this.textDateEnd.Size = new System.Drawing.Size(77,20);
-			this.textDateEnd.TabIndex = 246;
 			// 
 			// FormStatementOptions
 			// 

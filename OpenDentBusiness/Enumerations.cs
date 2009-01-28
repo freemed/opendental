@@ -1328,7 +1328,9 @@ namespace OpenDentBusiness{
 		///<summary>1</summary>
 		InPerson,
 		///<summary>2</summary>
-		Email
+		Email,
+		///<summary>3</summary>
+		Electronic
 	}
 
 	/*
