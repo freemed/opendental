@@ -66,12 +66,13 @@
 			this.panel1.Controls.Add(this.gridMain);
 			this.panel1.Location = new System.Drawing.Point(0,23);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(240,245);
+			this.panel1.Size = new System.Drawing.Size(240,232);
 			// 
 			// gridMain
 			// 
 			this.gridMain.Location = new System.Drawing.Point(0,0);
 			this.gridMain.Name = "gridMain";
+			this.gridMain.SelectionMode = OpenDentMobile.UI.GridSelectionMode.One;
 			this.gridMain.Size = new System.Drawing.Size(218,210);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Text = "odGrid1";

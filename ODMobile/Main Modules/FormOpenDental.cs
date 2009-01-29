@@ -71,16 +71,19 @@ namespace OpenDentMobile {
 				try{
 					ClassConvertDatabase.CreateNewDatabase("OpenDental");
 				}
-				catch(Exception ex){
-					MessageBox.Show(ex.Message+".  Application will now exit.");
+				catch{
+					MessageBox.Show("Please install SQL Server Compact 3.5 first.");
 					Application.Exit();
+					return;
 				}
 				if(!FormChooseDatabase.TryToConnect("OpenDental")){
 					MessageBox.Show("Could not connect to database.  Application will now exit.");
 					Application.Exit();
+					return;
 				}
 				MessageBox.Show("Database has been created.  Please do a full sync from the workstation, then reopen the program.");
 				Application.Exit();
+				return;
 			}
 			if(!PrefsStartup()){
 				Application.Exit();

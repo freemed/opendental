@@ -16,11 +16,12 @@ namespace OpenDentMobile {
 		}
 
 		private void FormSetup_Load(object sender,EventArgs e) {
-			textPath.Text=PrefC.GetString("ImportPath");
+			textPath.Text=PrefC.GetString("ImportPath").Replace(@"\","/");
 		}
 
 		private void FormSetup_Closing(object sender,CancelEventArgs e) {
-			if(!Directory.Exists(textPath.Text)){
+			string newPath=textPath.Text.Replace("/",@"\");
+			if(!Directory.Exists(newPath)) {
 				//MessageBox.Show(MessageBoxButtons.
 				if(!MsgBox.Show("Please enter a valid path.  Click Cancel to exit program.",true)){
 					Application.Exit();
@@ -28,7 +29,7 @@ namespace OpenDentMobile {
 				e.Cancel=true;
 				return;
 			}
-			Prefs.UpdateString("ImportPath",textPath.Text);
+			Prefs.UpdateString("ImportPath",newPath);
 
 			
 		}

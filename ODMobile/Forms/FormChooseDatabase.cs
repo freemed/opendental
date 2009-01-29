@@ -50,24 +50,32 @@ namespace OpenDentMobile {
 				if(!MsgBox.Show("Database does not exist and will now be created.",true)){
 					Cursor.Current=Cursors.Default;
 					MsgBox.Show("Application will now exit.");
-					Application.Exit();
+					CloseApplication=true;
+					DialogResult=DialogResult.Cancel;
+					return;
 				}
 				try{
 					ClassConvertDatabase.CreateNewDatabase(listDb.SelectedItem.ToString());
 				}
-				catch(Exception ex){
+				catch{
 					Cursor.Current=Cursors.Default;
-					MessageBox.Show(ex.Message+".  Application will now exit.");
-					Application.Exit();
+					MessageBox.Show("Please install SQL Server Compact 3.5 first.");
+					CloseApplication=true;
+					DialogResult=DialogResult.Cancel;
+					return;
 				}
 				if(!FormChooseDatabase.TryToConnect(listDb.SelectedItem.ToString())){
 					Cursor.Current=Cursors.Default;
 					MessageBox.Show("Could not connect to database.  Application will now exit.");
-					Application.Exit();
+					CloseApplication=true;
+					DialogResult=DialogResult.Cancel;
+					return;
 				}
 				Cursor.Current=Cursors.Default;
 				MessageBox.Show("Database has been created.  Please do a full sync from the workstation, then reopen the program.");
-				Application.Exit();
+				CloseApplication=true;
+				DialogResult=DialogResult.Cancel;
+				return;
 			}
 			Cursor.Current=Cursors.Default;
 			DialogResult=DialogResult.OK;

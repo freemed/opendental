@@ -91,6 +91,10 @@ namespace OpenDentMobile {
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butDebug_Click(object sender,EventArgs e) {
+			MessageBox.Show(gridMain.DebugString);
+		}
+
 		
 
 

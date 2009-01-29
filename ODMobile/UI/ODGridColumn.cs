@@ -40,7 +40,7 @@ namespace OpenDentMobile.UI {
 			}
 		}
 
-		///<summary></summary>
+		///<summary>NOT corrected for resolution.</summary>
 		public int ColWidth{
 			get{
 				return colWidth;

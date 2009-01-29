@@ -11,21 +11,28 @@ namespace OpenDentMobile.UI {
 		private ODGridColumnList columns;
 		private ODGridRowList rows;
 		private bool wrapText;
-		///<summary>The total height of the grid.</summary>
+		///<summary>The total height of the grid.  Already corrected for resolution.</summary>
 		private int GridH;
-		///<summary>The total width of the grid.</summary>
+		///<summary>The total width of the grid.  Already corrected for resolution.</summary>
 		private int GridW;
-		///<summary>This array has one element for each row.  For each row, it keeps track of the vertical height of the row in pixels, not counting the note portion of the row.</summary>
+		///<summary>This array has one element for each row.  For each row, it keeps track of the vertical height of the row in pixels, not counting the note portion of the row.  Already corrected for resolution.</summary>
 		private int[] RowHeights;
-		///<summary>This array has one element for each row.  For each row, it keeps track of the vertical location at which to start drawing this row in pixels.  This makes it much easier to paint rows.</summary>
+		///<summary>This array has one element for each row.  For each row, it keeps track of the vertical location at which to start drawing this row in pixels.  This makes it much easier to paint rows.  Already corrected for resolution.</summary>
 		private int[] RowLocs;
-		///<summary>Set at the very beginning of OnPaint.  Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns Pos for that column.</summary>
+		///<summary>Set at the very beginning of OnPaint.  Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns Pos for that column.  Already corrected for resolution.</summary>
 		private List<int> ColPos;
+		///<summary>Not corrected for resolution.  That needs to be done wherever this variable is used.</summary>
 		private int headerHeight=15;
+		///<summary>If resolution is 96, this will be 1.  If resolution is 192, this will be 2.</summary>
+		private int pixelCorrection;
+		///<summary>If resolution is 96, this will be 1f.  If resolution is 192, this will be 2f.</summary>
+		private float pixelCorrectionF;
 		private Color cGridLine=Color.FromArgb(180,180,180);
 		private Color cTitleBackG=Color.FromArgb(210,210,210);
 		private Color cBlueOutline=Color.FromArgb(119,119,146);
+		///<summary>Seems to already be corrected for resolution.</summary>
 		private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
+		///<summary>Seems to already be corrected for resolution.</summary>
 		private Font cellFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
 		private bool IsUpdating;
 		private int MouseDownRow;
@@ -34,6 +41,7 @@ namespace OpenDentMobile.UI {
 		private GridSelectionMode selectionMode;
 		private bool MouseIsDown;
 		private Color selectedRowColor;
+		public string DebugString;
 		///<summary></summary>
 		public event ODGridClickEventHandler CellClick=null;
 
@@ -101,17 +109,27 @@ namespace OpenDentMobile.UI {
 		#region Computations
 		///<summary>Computes the position of each column and the overall width.  Called from endUpdate and also from OnPaint.</summary>
 		private void ComputeColumns(){
+			Graphics g=this.CreateGraphics();
+			//dpi could be 96 or 192.  If 192, we have to double our pixel calculations
+			if(g.DpiX==192f) {
+				pixelCorrection=2;
+				pixelCorrectionF=2f;
+			}
+			else {
+				pixelCorrection=1;
+				pixelCorrectionF=1f;
+			}
 			ColPos=new List<int>();
 			for(int i=0;i<columns.Count;i++){
 				if(i==0){
 					ColPos.Add(0);
 				}
 				else{
-					ColPos.Add(ColPos[i-1]+columns[i-1].ColWidth);
+					ColPos.Add(ColPos[i-1]+columns[i-1].ColWidth*pixelCorrection);
 				}
 			}
 			if(columns.Count>0){
-				GridW=ColPos[ColPos.Count-1]+columns[columns.Count-1].ColWidth;
+				GridW=ColPos[ColPos.Count-1]+columns[columns.Count-1].ColWidth*pixelCorrection;
 			}
 		}
 
@@ -130,16 +148,23 @@ namespace OpenDentMobile.UI {
 				if(wrapText){
 					//find the tallest col
 					for(int j=0;j<rows[i].Cells.Count;j++) {
-						textWidth=g.MeasureString(rows[i].Cells[j].Text,this.cellFont).Width+5;//the 5 is a buffer.
-						rowCount=(int)Math.Ceiling((double)(textWidth/(float)columns[j].ColWidth));//approximation.
+						textWidth=g.MeasureString(rows[i].Cells[j].Text,this.cellFont).Width+5f*pixelCorrectionF;//the 5 is a buffer.
+						rowCount=(int)Math.Ceiling((double)(textWidth/((float)columns[j].ColWidth*pixelCorrectionF)));//approximation.
 						cellH=(int)(rowCount*textHeight)+1;
 						if(cellH>RowHeights[i]) {
 							RowHeights[i]=cellH;
 						}
+						if(i==0 && j==0){
+							this.DebugString="text='"+rows[i].Cells[j].Text+"'"
+								+",textWidth="+textWidth.ToString()
+								+",colWidth="+(columns[j].ColWidth*pixelCorrectionF).ToString()
+								+",rowCount="+rowCount.ToString()
+								+",cellH="+cellH.ToString();
+						}
 					}
 				}
 				else{
-					RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+					RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1*pixelCorrection;
 				}
 				if(i==0){
 					RowLocs[i]=0;
@@ -154,12 +179,12 @@ namespace OpenDentMobile.UI {
 
 		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
 		public int PointToRow(int y){
-			if(y<1+headerHeight){
+			if(y<(1+headerHeight)*pixelCorrection) {
 				return-1;
 			}
 			for(int i=0;i<rows.Count;i++){
 				//if(y>-vScroll.Value+1+titleHeight+headerHeight+RowLocs[i]+RowHeights[i]+NoteHeights[i]){
-				if(y>1+headerHeight+RowLocs[i]+RowHeights[i]){
+				if(y>(1+headerHeight)*pixelCorrection+RowLocs[i]+RowHeights[i]) {
 					continue;//clicked below this row.
 				}
 				return i;
@@ -173,7 +198,7 @@ namespace OpenDentMobile.UI {
 			for(int i=0;i<columns.Count;i++){
 				colRight=0;
 				for(int c=0;c<i+1;c++){
-					colRight+=columns[c].ColWidth;
+					colRight+=columns[c].ColWidth*pixelCorrection;
 				}
 				if(x>colRight){
 					continue;//clicked to the right of this col
@@ -200,13 +225,14 @@ namespace OpenDentMobile.UI {
 				return;
 			}
 			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
-			Bitmap doubleBuffer=new Bitmap(Width,Height);//,e.Graphics);//e.Graphics would have specified the resolution of the bitmap.
-			Graphics g=Graphics.FromImage(doubleBuffer);
+			//Bitmap doubleBuffer=new Bitmap(Width,Height);//,e.Graphics);//e.Graphics would have specified the resolution of the bitmap.
+			Graphics g=e.Graphics;
+				//Graphics.FromImage(doubleBuffer);
 			DrawBackG(g);
 			DrawRows(g);
 			DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
 			DrawOutline(g);
-			e.Graphics.DrawImage(doubleBuffer,0,0);
+			//e.Graphics.DrawImage(doubleBuffer,0,0);
 			g.Dispose();
 			base.OnPaint(e);
 		}
@@ -214,8 +240,8 @@ namespace OpenDentMobile.UI {
 		///<summary>Draws a solid gray background.</summary>
 		private void DrawBackG(Graphics g){
 			g.FillRectangle(new SolidBrush(Color.FromArgb(224,223,227)),
-				0,headerHeight+1,
-				Width,this.Height-headerHeight-1);
+				0,(headerHeight+1)*pixelCorrection,
+				Width,this.Height-(headerHeight-1)*pixelCorrection);
 		}
 
 		///<summary>Draws the background, lines, and text for all rows that are visible.</summary>
@@ -244,49 +270,49 @@ namespace OpenDentMobile.UI {
 			//selected row color
 			if(selectedIndices.Contains(rowI)){
 				g.FillRectangle(new SolidBrush(selectedRowColor),
-					1,
-					1+headerHeight+RowLocs[rowI]+1,
+					1*pixelCorrection,
+					(2+headerHeight)*pixelCorrection+RowLocs[rowI],
 					GridW,
-					RowHeights[rowI]-1);
+					RowHeights[rowI]-1*pixelCorrection);
 			}
 			//normal row color
 			else{//need to draw over the gray background
 				g.FillRectangle(new SolidBrush(Color.White),
-					1,
-					1+headerHeight+RowLocs[rowI]+1,
+					1*pixelCorrection,
+					(2+headerHeight)*pixelCorrection+RowLocs[rowI],
 					GridW,//this is a really simple width value that always works well
-					RowHeights[rowI]-1);
+					RowHeights[rowI]-1*pixelCorrection);
 			}
 			for(int i=0;i<columns.Count;i++){
 				//right vertical gridline
 				if(rowI==0){
 					g.DrawLine(gridPen,
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI],
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI],
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI]);
 				}
 				else{
 					g.DrawLine(gridPen,
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI]+1,
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(2+headerHeight)*pixelCorrection+RowLocs[rowI],
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI]);
 				}
 				//lower horizontal gridline
 				if(i==0){
 					g.DrawLine(lowerPen,
-						1+ColPos[i],
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI],
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
+						1*pixelCorrection+ColPos[i],
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI],
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI]);
 				}
 				else{
 					g.DrawLine(lowerPen,
-						1+ColPos[i]+1,
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI],
-						1+ColPos[i]+columns[i].ColWidth,
-						1+headerHeight+RowLocs[rowI]+RowHeights[rowI]);
+						2*pixelCorrection+ColPos[i],
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI],
+						1*pixelCorrection+ColPos[i]+columns[i].ColWidth*pixelCorrection,
+						(1+headerHeight)*pixelCorrection+RowLocs[rowI]+RowHeights[rowI]);
 				}
 				//text
 				if(rows[rowI].Cells.Count-1<i){
@@ -303,13 +329,13 @@ namespace OpenDentMobile.UI {
 						format.Alignment=StringAlignment.Far;
 						break;
 				}
-				int vertical=1+headerHeight+RowLocs[rowI]+1;
-				int horizontal=1+ColPos[i]+2;
-				int cellW=columns[i].ColWidth-2;
+				int vertical=(1+headerHeight)*pixelCorrection+RowLocs[rowI]+1;
+				int horizontal=3*pixelCorrection+ColPos[i];
+				int cellW=(columns[i].ColWidth-2)*pixelCorrection;
 				int cellH=RowHeights[rowI];
 				if(columns[i].TextAlign==HorizontalAlignment.Right){
-					horizontal-=2;
-					cellW+=2;
+					horizontal-=2*pixelCorrection;
+					cellW+=2*pixelCorrection;
 				}
 				textRect=new RectangleF(horizontal,vertical,cellW,cellH);
 				g.DrawString(rows[rowI].Cells[i].Text,cellFont,textBrush,textRect,format);
@@ -319,27 +345,27 @@ namespace OpenDentMobile.UI {
 		///<summary>There isn't actually a title in this compact version.</summary>
 		private void DrawTitleAndHeaders(Graphics g){
 			//Column Headers-----------------------------------------------------------------------------------------
-			g.FillRectangle(new SolidBrush(this.cTitleBackG),0,0,Width,headerHeight);//background
+			g.FillRectangle(new SolidBrush(this.cTitleBackG),0,0,Width,headerHeight*pixelCorrection);//background
 			g.DrawLine(new Pen(Color.FromArgb(102,102,122)),0,0,Width,0);//line between title and headers
 			for(int i=0;i<columns.Count;i++){
 				if(i!=0){
 					//vertical lines separating column headers
-					g.DrawLine(new Pen(Color.FromArgb(120,120,120)),1+ColPos[i],3,
-						1+ColPos[i],headerHeight-2);
-					g.DrawLine(new Pen(Color.White),1+ColPos[i]+1,3,
-						1+ColPos[i]+1,headerHeight-2);
+					g.DrawLine(new Pen(Color.FromArgb(120,120,120)),1*pixelCorrection+ColPos[i],3*pixelCorrection,
+						1*pixelCorrection+ColPos[i],(headerHeight-2)*pixelCorrection);
+					g.DrawLine(new Pen(Color.White),2*pixelCorrection+ColPos[i],3*pixelCorrection,
+						2*pixelCorrection+ColPos[i],(headerHeight-2)*pixelCorrection);
 				}
 				g.DrawString(columns[i].Heading,headerFont,new SolidBrush(Color.Black),
-					ColPos[i]+columns[i].ColWidth/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
-					2);
+					ColPos[i]+columns[i].ColWidth*pixelCorrection/2-g.MeasureString(columns[i].Heading,headerFont).Width/2,
+					2*pixelCorrection);
 			}
 			//line below headers
-			g.DrawLine(new Pen(Color.FromArgb(120,120,120)),0,headerHeight,Width,headerHeight);
+			g.DrawLine(new Pen(Color.FromArgb(120,120,120)),0,headerHeight*pixelCorrection,Width,headerHeight*pixelCorrection);
 		}
 
 		///<summary>Draws outline around entire control.</summary>
 		private void DrawOutline(Graphics g){
-			g.DrawRectangle(new Pen(this.cBlueOutline),0,0,Width-1,Height-1);
+			g.DrawRectangle(new Pen(this.cBlueOutline,pixelCorrectionF),0,0,Width-1*pixelCorrection,Height-1*pixelCorrection);
 		}
 		#endregion Painting
 
@@ -377,7 +403,7 @@ namespace OpenDentMobile.UI {
 			ComputeRows();
 			//unique to mobile version, we always make the grid the same size as the data:
 			this.Width=GridW;
-			this.Height=headerHeight+GridH+1;
+			this.Height=headerHeight*pixelCorrection+GridH+1;
 			IsUpdating=false;
 			Invalidate();
 		}
