@@ -31,6 +31,9 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textDays = new OpenDental.ValidNum();
 			this.label1 = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkUseElectronic = new System.Windows.Forms.CheckBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -41,7 +44,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(552,207);
+			this.butOK.Location = new System.Drawing.Point(472,334);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -56,7 +59,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(552,248);
+			this.butCancel.Location = new System.Drawing.Point(553,334);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -119,10 +122,30 @@ namespace OpenDental{
 			this.label1.Text = "Days";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkUseElectronic);
+			this.groupBox1.Location = new System.Drawing.Point(13,194);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(418,147);
+			this.groupBox1.TabIndex = 246;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Electronic Billing";
+			// 
+			// checkUseElectronic
+			// 
+			this.checkUseElectronic.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkUseElectronic.Location = new System.Drawing.Point(12,20);
+			this.checkUseElectronic.Name = "checkUseElectronic";
+			this.checkUseElectronic.Size = new System.Drawing.Size(230,20);
+			this.checkUseElectronic.TabIndex = 244;
+			this.checkUseElectronic.Text = "Use electronic billing";
+			// 
 			// FormBillingDefaults
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(652,299);
+			this.ClientSize = new System.Drawing.Size(652,370);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDays);
 			this.Controls.Add(this.checkIntermingled);
@@ -135,6 +158,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Billing Defaults";
 			this.Load += new System.EventHandler(this.FormBillingDefaults_Load);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -150,5 +174,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		private ValidNum textDays;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox checkUseElectronic;
 	}
 }

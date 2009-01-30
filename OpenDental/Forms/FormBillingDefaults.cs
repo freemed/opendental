@@ -18,6 +18,7 @@ namespace OpenDental {
 			textDays.Text=PrefC.GetInt("BillingDefaultsLastDays").ToString();
 			checkIntermingled.Checked=PrefC.GetBool("BillingDefaultsIntermingle");
 			textNote.Text=PrefC.GetString("BillingDefaultsNote");
+			checkUseElectronic.Checked=PrefC.GetBool("BillingUseElectronic");
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -27,7 +28,8 @@ namespace OpenDental {
 			}
 			if(Prefs.UpdateInt("BillingDefaultsLastDays",PIn.PInt(textDays.Text))
 				| Prefs.UpdateBool("BillingDefaultsIntermingle",checkIntermingled.Checked)
-				| Prefs.UpdateString("BillingDefaultsNote",textNote.Text))
+				| Prefs.UpdateString("BillingDefaultsNote",textNote.Text)
+				| Prefs.UpdateBool("BillingUseElectronic",checkUseElectronic.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

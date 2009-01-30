@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Statement>.DeleteObject(statementNum);
 		}
 
+		///<summary>Queries the database to determine if there are any unsent statements.</summary>
 		public static bool UnsentStatementsExist(){
 			string command="SELECT COUNT(*) FROM statement WHERE IsSent=0";
 			if(General.GetCount(command)=="0"){

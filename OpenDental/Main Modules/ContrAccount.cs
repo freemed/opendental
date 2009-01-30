@@ -3306,7 +3306,8 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			Statements.WriteObject(stmt);
 			FormRpStatement FormST=new FormRpStatement();
-			FormST.CreateStatementPdf(stmt);
+			DataSet dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
+			FormST.CreateStatementPdf(stmt,PatCur,FamCur,dataSet);
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}

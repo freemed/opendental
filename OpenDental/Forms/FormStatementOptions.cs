@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
@@ -816,12 +817,15 @@ namespace OpenDental{
 					return;
 				}
 				FormRpStatement FormST=new FormRpStatement();
-				FormST.CreateStatementPdf(StmtCur);
+				Family fam=Patients.GetFamily(StmtCur.PatNum);
+				Patient pat=fam.GetPatient(StmtCur.PatNum);
+				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				FormST.CreateStatementPdf(StmtCur,pat,fam,dataSet);
 				#if DEBUG
-					FormST.PrintStatement(StmtCur,true);
+					FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
 					FormST.ShowDialog();
 				#else
-					FormST.PrintStatement(StmtCur,false);
+					FormST.PrintStatement(StmtCur,false,dataSet,fam,pat);
 				#endif
 				Cursor=Cursors.Default;
 			}
@@ -846,7 +850,10 @@ namespace OpenDental{
 					return;
 				}
 				FormRpStatement FormST=new FormRpStatement();
-				FormST.CreateStatementPdf(StmtCur);
+				Family fam=Patients.GetFamily(StmtCur.PatNum);
+				Patient pat=fam.GetPatient(StmtCur.PatNum);
+				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				FormST.CreateStatementPdf(StmtCur,pat,fam,dataSet);
 				if(!CreateEmailMessage()){
 					Cursor=Cursors.Default;
 					return;
@@ -913,7 +920,10 @@ namespace OpenDental{
 					return;
 				}
 				FormRpStatement FormST=new FormRpStatement();
-				FormST.PrintStatement(StmtCur,true);
+				Family fam=Patients.GetFamily(StmtCur.PatNum);
+				Patient pat=fam.GetPatient(StmtCur.PatNum);
+				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
 				FormST.ShowDialog();
 				Cursor=Cursors.Default;
 			}

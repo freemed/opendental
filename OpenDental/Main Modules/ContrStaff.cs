@@ -714,9 +714,6 @@ namespace OpenDental{
 		}
 
 		private void butBilling_Click(object sender,System.EventArgs e) {
-			//if(!Security.IsAuthorized(Permissions.Setup)) {
-			//	return;
-			//}
 			bool unsentStatementsExist=Statements.UnsentStatementsExist();
 			if(unsentStatementsExist){
 				bool isFirstShow=false;

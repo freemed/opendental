@@ -38,7 +38,7 @@ namespace OpenDental{
 		private System.Drawing.Printing.PrintDocument pd2;
 		private int totalPages;
 		///<summary>Holds the data for one statement.</summary>
-		private DataSet dataSet;
+		private DataSet dataSett;
 		private Statement Stmt;
 		private IImageStore imageStore;
 
@@ -249,72 +249,16 @@ namespace OpenDental{
 			}
 		}
 
-		/*
-		///<summary>Used from FormBilling to print all statements for all the supplied patNums.</summary>
-		public void LoadAndPrint(int[] guarNums,string generalNote){
-			int[][] patNums=new int[guarNums.Length][];
-			Family famCur;
-			ArrayList numsFam;
-			string[] notes=new string[guarNums.Length];
-			Dunning[] dunList=Dunnings.Refresh();
-			int ageAccount=0;
-			YN insIsPending=YN.Unknown;
-			Dunning dunning;
-			for(int i=0;i<guarNums.Length;i++){//loop through each family
-				famCur=Patients.GetFamily(guarNums[i]);
-				numsFam=new ArrayList();
-				for(int j=0;j<famCur.List.Length;j++){
-					if(j==0//because a non-patient might be the guarantor
-						|| famCur.List[j].PatStatus==PatientStatus.Patient)
-					{
-						numsFam.Add(famCur.List[j].PatNum);
-					}
-				}
-				patNums[i]=new int[numsFam.Count];
-				for(int j=0;j<numsFam.Count;j++){
-					patNums[i][j]=(int)numsFam[j]; 
-				}
-				if(famCur.List[0].BalOver90>0){
-					ageAccount=90;
-				}
-				else if(famCur.List[0].Bal_61_90>0){
-					ageAccount=60;
-				}
-				else if(famCur.List[0].Bal_31_60>0){
-					ageAccount=30;
-				}
-				else{
-					ageAccount=0;
-				}
-				if(famCur.List[0].InsEst>0){
-					insIsPending=YN.Yes;
-				}
-				else{
-					insIsPending=YN.No;
-				}
-				dunning=Dunnings.GetDunning(dunList,famCur.List[0].BillingType,ageAccount,insIsPending);
-				if(dunning!=null){
-					notes[i]+=dunning.DunMessage;
-					//also messageBold needs to be addressed.
-				}
-				if(notes[i]!="" && generalNote!=""){
-					notes[i]+="\r\n\r\n";//Space two lines apart
-				}
-				notes[i]+=generalNote;
-			}
-			//PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true,"");
-			//PrintStatements();
-		}*/
-
 		///<summary>Creates a new pdf, attaches it to a new doc, and attaches that to the statement.  If it cannot create a pdf, for example if no AtoZ folders, then it will simply result in a docnum of zero, so no attached doc.</summary>
-		public void CreateStatementPdf(Statement stmt){
+		public void CreateStatementPdf(Statement stmt,Patient pat,Family fam,DataSet dataSet){
 			Stmt=stmt;
-			dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
-				stmt.Intermingled);
+			dataSett=dataSet;
+			//dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
+			//	stmt.Intermingled);
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}
-			Patient pat=Patients.GetPat(stmt.PatNum);
+			//Patient pat=Patients.GetPat(stmt.PatNum);
 			imageStore = ImageStore.GetImageStore(pat);
 			//Save to a temp pdf--------------------------------------------------------------------------
 			string tempPath=CodeBase.ODFileUtils.CombinePaths(Path.GetTempPath(),pat.PatNum.ToString()+".pdf");
@@ -331,7 +275,7 @@ namespace OpenDental{
 			{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
+			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd,fam,pat,dataSet);
 			MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 			pdfRenderer.Document=doc;
 			pdfRenderer.RenderDocument();
@@ -366,24 +310,24 @@ namespace OpenDental{
 		}
 
 		///<summary>Prints one statement to a specified printer which is passed in as a PrintDocument field.  Used when printer selection happens before a batch</summary>
-		public void PrintStatement(Statement stmt,PrintDocument pd){
-			PrintStatement(stmt,false,pd);
+		public void PrintStatement(Statement stmt,PrintDocument pd,DataSet dataSet,Family fam,Patient pat) {
+			PrintStatement(stmt,false,pd,dataSet,fam,pat);
 		}
 
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
-		public void PrintStatement(Statement stmt,bool previewOnly){
+		public void PrintStatement(Statement stmt,bool previewOnly,DataSet dataSet,Family fam,Patient pat) {
 			PrintDocument pd=new PrintDocument();
 			if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
 				return;
 			}
-			PrintStatement(stmt,previewOnly,pd);
+			PrintStatement(stmt,previewOnly,pd,dataSet,fam,pat);
 		}
 
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
-		public void PrintStatement(Statement stmt,bool previewOnly,PrintDocument pd){
+		public void PrintStatement(Statement stmt,bool previewOnly,PrintDocument pd,DataSet dataSet,Family fam,Patient pat) {
 			Stmt=stmt;
-			dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
-				stmt.Intermingled);
+			//dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
+			//	stmt.Intermingled);
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				//leave a big margin on the bottom for the routing slip
@@ -393,7 +337,7 @@ namespace OpenDental{
 			if(pd.DefaultPageSettings.PaperSize.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
+			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd,fam,pat,dataSet);
 			MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
 			MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
 			renderer.PrepareDocument();
@@ -401,74 +345,21 @@ namespace OpenDental{
 			labelTotPages.Text="1 / "+totalPages.ToString();
 			printdoc.Renderer=renderer;
 			printdoc.PrinterSettings=pd.PrinterSettings;
-			if(previewOnly){
+			if(previewOnly) {
 				printPreviewControl2.Document=printdoc;
 			}
-			else{
-				try{
+			else {
+				try {
 					printdoc.Print();
 				}
-				catch{
+				catch {
 					MessageBox.Show(Lan.g(this,"Printer not available"));
 				}
 			}
 		}
 
-		/*
-		/// <summary>Gets one FamilyStatementData for a single family.</summary>
-		private FamilyStatementData AssembleStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims,bool nextAppt){
-			FamilyStatementData retVal=new FamilyStatementData();
-			retVal.GuarNum=famPatNums[0];
-			PatStatementAbout patAbout;
-			PatStatementData patData;
-			for(int i=0;i<famPatNums.Length;i++){
-				patAbout=new PatStatementAbout();
-				patAbout.PatNum=famPatNums[i];
-			//contrAccount.RefreshModuleData(famPatNums[i]);
-				patAbout.PatName=contrAccount.PatCur.GetNameLF();
-				patAbout.ApptDescript="";
-				if(nextAppt){
-					Appointment[] allAppts=Appointments.GetForPat(contrAccount.PatCur.PatNum);
-					for(int a=0;a<allAppts.Length;a++){
-						if(allAppts[a].AptDateTime.Date <= DateTime.Today 
-							|| allAppts[a].AptStatus == ApptStatus.PtNote 
-							|| allAppts[a].AptStatus == ApptStatus.PtNoteCompleted) 
-						{
-							continue;//ignore old appts.
-						}
-						patAbout.ApptDescript+=":  "+Lan.g(this,"Your next appointment is on")+" "+allAppts[a].AptDateTime.ToString();
-						break;//so that only one appointment will be displayed
-					}
-				}
-				if(SubtotalsOnly) {
-					patAbout.Balance=contrAccount.SubTotal;
-				}
-				else {
-					patAbout.Balance=contrAccount.PatCur.EstBalance;
-				}
-				retVal.PatAboutList.Add(patAbout);
-				patData=new PatStatementData();
-				patData.PatNum=famPatNums[i];
-			//	contrAccount.FillAcctLineList(fromDate,toDate,includeClaims,SubtotalsOnly);
-			//	patData.PatData=contrAccount.AcctLineList;
-				retVal.PatDataList.Add(patData);
-			}
-			return retVal;
-		}*/
-
-		/*
-		private void GetPatGuar(int patNum){
-			if(PatGuar!=null
-				&& patNum==PatGuar.PatNum){//if PatGuar is already set
-				return;
-			}
-			//but if the guarantor is not on the list of patients in the fam to print, it will also refresh
-      Family FamCur=Patients.GetFamily(patNum);
-			PatGuar=FamCur.List[0].Copy();
-		}*/
-
 		///<summary>Supply pd so that we know the paper size and margins.</summary>
-		private MigraDoc.DocumentObjectModel.Document CreateDocument(PrintDocument pd){
+		private MigraDoc.DocumentObjectModel.Document CreateDocument(PrintDocument pd,Family fam,Patient pat,DataSet dataSet){
 			MigraDoc.DocumentObjectModel.Document doc= new MigraDoc.DocumentObjectModel.Document();
 			doc.DefaultPageSetup.PageWidth=Unit.FromInch((double)pd.DefaultPageSettings.PaperSize.Width/100);
 			doc.DefaultPageSetup.PageHeight=Unit.FromInch((double)pd.DefaultPageSettings.PaperSize.Height/100);
@@ -480,9 +371,9 @@ namespace OpenDental{
 			string text;
 			MigraDoc.DocumentObjectModel.Font font;
 			//GetPatGuar(PatNums[famIndex][0]);
-			Family fam=Patients.GetFamily(Stmt.PatNum);
+			//Family fam=Patients.GetFamily(Stmt.PatNum);
 			Patient PatGuar=fam.List[0];//.Copy();
-			Patient pat=fam.GetPatient(Stmt.PatNum);
+			//Patient pat=fam.GetPatient(Stmt.PatNum);
 			DataTable tableMisc=dataSet.Tables["misc"];
 			//HEADING------------------------------------------------------------------------------
 			#region Heading

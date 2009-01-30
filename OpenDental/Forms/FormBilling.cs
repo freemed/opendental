@@ -7,7 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -52,6 +54,8 @@ namespace OpenDental{
 		///<summary>Used in the Activated event.</summary>
 		private bool isPrinting=false;
 		private DataTable table;
+		private Label labelSentElect;
+		private OpenDental.UI.Button butSendEbill;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event PatientSelectedEventHandler GoToChanged=null;
@@ -98,6 +102,7 @@ namespace OpenDental{
 			this.radioUnsent = new System.Windows.Forms.RadioButton();
 			this.radioSent = new System.Windows.Forms.RadioButton();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.labelSentElect = new System.Windows.Forms.Label();
 			this.labelEmailed = new System.Windows.Forms.Label();
 			this.labelPrinted = new System.Windows.Forms.Label();
 			this.labelSelected = new System.Windows.Forms.Label();
@@ -111,6 +116,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.butPrintList = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
+			this.butSendEbill = new OpenDental.UI.Button();
 			this.contextMenu.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -199,12 +205,12 @@ namespace OpenDental{
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemGoTo});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(114,26);
+			this.contextMenu.Size = new System.Drawing.Size(107,26);
 			// 
 			// menuItemGoTo
 			// 
 			this.menuItemGoTo.Name = "menuItemGoTo";
-			this.menuItemGoTo.Size = new System.Drawing.Size(113,22);
+			this.menuItemGoTo.Size = new System.Drawing.Size(106,22);
 			this.menuItemGoTo.Text = "Go To";
 			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
 			// 
@@ -212,7 +218,7 @@ namespace OpenDental{
 			// 
 			this.labelTotal.Location = new System.Drawing.Point(4,19);
 			this.labelTotal.Name = "labelTotal";
-			this.labelTotal.Size = new System.Drawing.Size(83,16);
+			this.labelTotal.Size = new System.Drawing.Size(89,16);
 			this.labelTotal.TabIndex = 29;
 			this.labelTotal.Text = "Total=20";
 			this.labelTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -252,22 +258,32 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.labelSentElect);
 			this.groupBox1.Controls.Add(this.labelEmailed);
 			this.groupBox1.Controls.Add(this.labelPrinted);
 			this.groupBox1.Controls.Add(this.labelSelected);
 			this.groupBox1.Controls.Add(this.labelTotal);
-			this.groupBox1.Location = new System.Drawing.Point(791,233);
+			this.groupBox1.Location = new System.Drawing.Point(788,233);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(90,100);
+			this.groupBox1.Size = new System.Drawing.Size(96,119);
 			this.groupBox1.TabIndex = 33;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Counts";
+			// 
+			// labelSentElect
+			// 
+			this.labelSentElect.Location = new System.Drawing.Point(4,95);
+			this.labelSentElect.Name = "labelSentElect";
+			this.labelSentElect.Size = new System.Drawing.Size(89,16);
+			this.labelSentElect.TabIndex = 33;
+			this.labelSentElect.Text = "SentElect=20";
+			this.labelSentElect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelEmailed
 			// 
 			this.labelEmailed.Location = new System.Drawing.Point(4,76);
 			this.labelEmailed.Name = "labelEmailed";
-			this.labelEmailed.Size = new System.Drawing.Size(83,16);
+			this.labelEmailed.Size = new System.Drawing.Size(89,16);
 			this.labelEmailed.TabIndex = 32;
 			this.labelEmailed.Text = "Emailed=20";
 			this.labelEmailed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -276,7 +292,7 @@ namespace OpenDental{
 			// 
 			this.labelPrinted.Location = new System.Drawing.Point(4,57);
 			this.labelPrinted.Name = "labelPrinted";
-			this.labelPrinted.Size = new System.Drawing.Size(83,16);
+			this.labelPrinted.Size = new System.Drawing.Size(89,16);
 			this.labelPrinted.TabIndex = 31;
 			this.labelPrinted.Text = "Printed=20";
 			this.labelPrinted.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -285,7 +301,7 @@ namespace OpenDental{
 			// 
 			this.labelSelected.Location = new System.Drawing.Point(4,38);
 			this.labelSelected.Name = "labelSelected";
-			this.labelSelected.Size = new System.Drawing.Size(83,16);
+			this.labelSelected.Size = new System.Drawing.Size(89,16);
 			this.labelSelected.TabIndex = 30;
 			this.labelSelected.Text = "Selected=20";
 			this.labelSelected.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -398,12 +414,29 @@ namespace OpenDental{
 			this.label5.Text = "Does not print individual bills.  Just prints the list of bills.";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// butSendEbill
+			// 
+			this.butSendEbill.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSendEbill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSendEbill.Autosize = true;
+			this.butSendEbill.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSendEbill.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSendEbill.CornerRadius = 4F;
+			this.butSendEbill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSendEbill.Location = new System.Drawing.Point(643,656);
+			this.butSendEbill.Name = "butSendEbill";
+			this.butSendEbill.Size = new System.Drawing.Size(67,24);
+			this.butSendEbill.TabIndex = 44;
+			this.butSendEbill.Text = "E-Bills";
+			this.butSendEbill.Click += new System.EventHandler(this.butSendEbill_Click);
+			// 
 			// FormBilling
 			// 
 			this.AcceptButton = this.butSend;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(888,688);
+			this.Controls.Add(this.butSendEbill);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label4);
@@ -443,6 +476,7 @@ namespace OpenDental{
 		private void FormBilling_Load(object sender, System.EventArgs e) {
 			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
+			labelSentElect.Text=Lan.g(this,"SentElect=")+"0";
 			comboOrder.Items.Add(Lan.g(this,"BillingType"));
 			comboOrder.Items.Add(Lan.g(this,"PatientName"));
 			comboOrder.SelectedIndex=0;
@@ -682,6 +716,7 @@ namespace OpenDental{
 			}
 			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
+			labelSentElect.Text=Lan.g(this,"SentElect=")+"0";
 			if(!MsgBox.Show(this,true,"Please be prepared to wait up to ten minutes while all the bills get processed.\r\nOnce complete, the pdf print preview will be launched in Adobe Reader.  You will print from that program.  Continue?")){
 				return;
 			}
@@ -695,10 +730,12 @@ namespace OpenDental{
 			string attachPath;
 			EmailMessage message;
 			EmailAttach attach;
+			Family fam;
 			Patient pat;
 			int skipped=0;
 			int emailed=0;
 			int printed=0;
+			int sentelect=0;
 			//FormEmailMessageEdit FormEME=new FormEmailMessageEdit();
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
@@ -712,9 +749,20 @@ namespace OpenDental{
 			PdfPage page;
 			string savedPdfPath;
 			PrintDocument pd=null;
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="   ";
+			StringBuilder strBuildElect=new StringBuilder();
+			XmlWriter writerElect=XmlWriter.Create(strBuildElect,xmlSettings);
+			OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
+			DataSet dataSet;
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
-				pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
+				fam=Patients.GetFamily(stmt.PatNum);
+				pat=fam.GetPatient(stmt.PatNum);
+				dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 				if(stmt.Mode_==StatementMode.Email){
 					if(PrefC.GetString("EmailSMTPserver")==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
@@ -731,7 +779,7 @@ namespace OpenDental{
 				stmt.IsSent=true;
 				stmt.DateSent=DateTime.Today;
 				Statements.WriteObject(stmt);
-				FormST.CreateStatementPdf(stmt);
+				FormST.CreateStatementPdf(stmt,pat,fam,dataSet);
 				if(stmt.DocNum==0){
 					MsgBox.Show(this,"Failed to save PDF.  In Setup, DataPaths, please make sure the top radio button is checked.");
 					Cursor=Cursors.Default;
@@ -743,12 +791,6 @@ namespace OpenDental{
 				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail){
 					if(pd==null){
 						pd=new PrintDocument();
-						//if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
-						//	Cursor=Cursors.Default;
-							//FillGrid();//automatic
-						//	isPrinting=false;
-						//	return;
-						//}
 					}
 					inputDocument=PdfReader.Open(savedPdfPath,PdfDocumentOpenMode.Import);
 					for(int idx=0;idx<inputDocument.PageCount;idx++){
@@ -773,9 +815,6 @@ namespace OpenDental{
 					attach.DisplayedFileName="Statement.pdf";
 					attach.ActualFileName=fileName;
 					message.Attachments.Add(attach);
-					//FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-					//FormE.IsNew=true;
-					//FormE.ShowDialog();
 					try{
 						FormEmailMessageEdit.SendEmail(message);
 						emailed++;
@@ -790,17 +829,13 @@ namespace OpenDental{
 						return;
 					}
 				}
-				else{
-				//	#if DEBUG
-						//if(ImageStore.UpdatePatient == null){
-						//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-						//}
-						//OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
-						//don't bother to check valid path because it's just debug.
-						//Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
-				//	#else
-				//		FormST.PrintStatement(stmt,false,pd);	
-				//	#endif
+				if(stmt.Mode_==StatementMode.Electronic) {
+					OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+					sentelect++;
+					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
+					Application.DoEvents();
+				}
+				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail) {
 					printed++;
 					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
 					Application.DoEvents();
@@ -810,23 +845,6 @@ namespace OpenDental{
 			if(pd!=null){
 				string tempFileOutputDocument=Path.GetTempFileName()+".pdf";
 				outputDocument.Save(tempFileOutputDocument);
-				/*string adobeInstallPath="C:\\Program Files\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe";
-				if(!File.Exists(adobeInstallPath) && Environment.OSVersion.Platform!=PlatformID.Unix){
-					//Can't find Acrobat in typical location, so look in the registry
-					string regKeyName="HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Acrobat Reader\\7.0\\InstallPath";
-					adobeInstallPath=(string)Microsoft.Win32.Registry.GetValue(regKeyName,"","");
-				}
-				if(File.Exists(adobeInstallPath)){
-					PdfFilePrinter.AdobeReaderPath=adobeInstallPath;
-					PdfFilePrinter printer=new PdfFilePrinter(tempFileOutputDocument,pd.PrinterSettings.PrinterName);
-					try{
-						printer.Print();
-					}
-					catch (Exception ex){
-						MessageBox.Show("Error: "+ex.Message);//shouldn't happen
-					}
-				}
-				else{*/
 				try{
 					Process.Start(tempFileOutputDocument);
 				}
@@ -835,23 +853,26 @@ namespace OpenDental{
 				}
 				//}
 			}
+			//finish up elect and send if needed------------------------------------------------------------
+			if(sentelect>0) {
+				OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
+				writerElect.Close();
+				OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
+			}
+			else {
+				writerElect.Close();
+			}
 			string msg="";
 			if(skipped>0){
 				msg+=Lan.g(this,"Skipped due to missing email address: ")+skipped.ToString()+"\r\n";
 			}
 			msg+=Lan.g(this,"Printed: ")+printed.ToString()+"\r\n"
-				+Lan.g(this,"E-mailed: ")+emailed.ToString();
+				+Lan.g(this,"E-mailed: ")+emailed.ToString()+"\r\n"
+				+Lan.g(this,"SentElect: ")+sentelect.ToString();
 			MessageBox.Show(msg);
-			//labelPrinted.Text=Lan.g(this,"Printed=")+"0";
-			//labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			Cursor=Cursors.Default;
 			isPrinting=false;
 			FillGrid();//not automatic
-			//if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){
-			//	MessageBox.Show("Not functional yet.");
-			//}
-			//DialogResult=DialogResult.OK;
-			//Close();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
@@ -878,6 +899,24 @@ namespace OpenDental{
 			}
 			DialogResult=DialogResult.Cancel;
 			Close();
+		}
+
+	
+		/// <summary></summary>
+		private void butSendEbill_Click(object sender,EventArgs e) {
+			if (gridBill.SelectedIndices.Length == 0){
+				MessageBox.Show(Lan.g(this, "Please select items first."));
+				return;
+			}
+			Cursor.Current = Cursors.WaitCursor;
+			// Populate Array And Open eBill Form
+			ArrayList PatientList = new ArrayList();
+			for (int i = 0; i < gridBill.SelectedIndices.Length; i++)
+					PatientList.Add(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
+			// Open eBill form
+			FormPatienteBill FormPatienteBill = new FormPatienteBill(PatientList); 
+			FormPatienteBill.ShowDialog();
+			Cursor.Current = Cursors.Default;
 		}
 
 		

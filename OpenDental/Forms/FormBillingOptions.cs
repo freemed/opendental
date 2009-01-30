@@ -520,7 +520,7 @@ namespace OpenDental{
 			this.butUndo.CornerRadius = 4F;
 			this.butUndo.Location = new System.Drawing.Point(7,631);
 			this.butUndo.Name = "butUndo";
-			this.butUndo.Size = new System.Drawing.Size(88,25);
+			this.butUndo.Size = new System.Drawing.Size(88,24);
 			this.butUndo.TabIndex = 243;
 			this.butUndo.Text = "Undo Billing";
 			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
@@ -834,7 +834,12 @@ namespace OpenDental{
 				stmt.HidePayment=false;
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
-				stmt.Mode_=StatementMode.Mail;
+				if(PrefC.GetBool("BillingUseElectronic")) {
+					stmt.Mode_=StatementMode.Electronic;
+				}
+				else {
+					stmt.Mode_=StatementMode.Mail;
+				}
 				if(DefC.GetDef(DefCat.BillingTypes,agingList[i].BillingType).ItemValue=="E"){
 					stmt.Mode_=StatementMode.Email;
 				}
