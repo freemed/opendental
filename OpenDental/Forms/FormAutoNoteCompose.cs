@@ -31,17 +31,24 @@ namespace OpenDental {
 				return;
 			}
 			string note=AutoNotes.Listt[listMain.SelectedIndex].MainText;
-			textMain.Text=note;
+			if(textMain.Text!="") {
+				textMain.Text+="\r\n";
+			}
+			textMain.Text+=note;
 			List<AutoNoteControl> prompts=new List<AutoNoteControl>();
 			MatchCollection matches=Regex.Matches(note,@"\[Prompt:""[a-zA-Z_0-9 ]+""\]");
 			string autoNoteDescript;
 			AutoNoteControl control;
 			string promptResponse;
+			int matchloc;
 			for(int i=0;i<matches.Count;i++) {
-				//MessageBox.Show(matches[i].Value);
-				//matches[i].Index
+				//highlight the current match in red
+				matchloc=textMain.Text.IndexOf(matches[i].Value);
+				textMain.Select(matchloc,matches[i].Value.Length);
+				textMain.SelectionBackColor=Color.Yellow;
+				textMain.SelectionLength=0;
+				Application.DoEvents();//refresh the textbox
 				autoNoteDescript=matches[i].Value.Substring(9,matches[i].Value.Length-11);
-				//MessageBox.Show(autoCodeName);
 				control=AutoNoteControls.GetByDescript(autoNoteDescript);
 				if(control==null) {
 					continue;//couldn't find a prompt with that name, so just ignore it.
@@ -56,6 +63,9 @@ namespace OpenDental {
 						promptResponse=FormT.ResultText;
 					}
 					else {
+						textMain.SelectAll();
+						textMain.SelectionBackColor=Color.White;
+						textMain.Select(textMain.Text.Length,0);
 						return;
 					}
 				}
@@ -68,6 +78,24 @@ namespace OpenDental {
 						promptResponse=FormOR.ResultText;
 					}
 					else {
+						textMain.SelectAll();
+						textMain.SelectionBackColor=Color.White;
+						textMain.Select(textMain.Text.Length,0);
+						return;
+					}
+				}
+				else if(control.ControlType=="MultiResponse") {
+					FormAutoNotePromptMultiResp FormMR=new FormAutoNotePromptMultiResp();
+					FormMR.PromptText=control.ControlLabel;
+					FormMR.PromptOptions=control.ControlOptions;
+					FormMR.ShowDialog();
+					if(FormMR.DialogResult==DialogResult.OK) {
+						promptResponse=FormMR.ResultText;
+					}
+					else {
+						textMain.SelectAll();
+						textMain.SelectionBackColor=Color.White;
+						textMain.Select(textMain.Text.Length,0);
 						return;
 					}
 				}
@@ -77,7 +105,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			CompletedNote=textMain.Text;
+			CompletedNote=textMain.Text.Replace("\n","\r\n");
 			DialogResult=DialogResult.OK;
 		}
 

@@ -167,6 +167,7 @@ namespace OpenDental {
 			this.comboType.Name = "comboType";
 			this.comboType.Size = new System.Drawing.Size(177,21);
 			this.comboType.TabIndex = 0;
+			this.comboType.SelectedIndexChanged += new System.EventHandler(this.comboType_SelectedIndexChanged);
 			// 
 			// textBoxControlLabel
 			// 

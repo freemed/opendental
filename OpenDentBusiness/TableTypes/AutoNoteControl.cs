@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		public int AutoNoteControlNum;
 		///<summary>The description of the prompt as it will be referred to from other windows.</summary>
 		public string Descript;
-		///<summary>'Text' or 'OneResponse'.  More types to be added later.</summary>
+		///<summary>'Text', 'OneResponse', or 'MultiResponse'.  More types to be added later.</summary>
 		public string ControlType;
 		///<summary>The prompt text.</summary>
 		public string ControlLabel;

@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormAutoNotePromptOneResp {
+	partial class FormAutoNotePromptMultiResp {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -51,6 +51,7 @@ namespace OpenDental{
 			this.listMain.Location = new System.Drawing.Point(15,62);
 			this.listMain.MultiColumn = true;
 			this.listMain.Name = "listMain";
+			this.listMain.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listMain.Size = new System.Drawing.Size(382,212);
 			this.listMain.TabIndex = 115;
 			// 
@@ -110,11 +111,11 @@ namespace OpenDental{
 			this.butPreview.Location = new System.Drawing.Point(241,292);
 			this.butPreview.Name = "butPreview";
 			this.butPreview.Size = new System.Drawing.Size(75,24);
-			this.butPreview.TabIndex = 118;
+			this.butPreview.TabIndex = 117;
 			this.butPreview.Text = "Preview";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
-			// FormAutoNotePromptOneResp
+			// FormAutoNotePromptMultiResp
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(409,328);
@@ -124,10 +125,10 @@ namespace OpenDental{
 			this.Controls.Add(this.labelPrompt);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormAutoNotePromptOneResp";
+			this.Name = "FormAutoNotePromptMultiResp";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Prompt One Response";
-			this.Load += new System.EventHandler(this.FormAutoNotePromptOneResp_Load);
+			this.Text = "Prompt Multi Response";
+			this.Load += new System.EventHandler(this.FormAutoNotePromptMultiResp_Load);
 			this.ResumeLayout(false);
 
 		}

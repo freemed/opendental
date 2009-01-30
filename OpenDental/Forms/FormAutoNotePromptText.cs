@@ -19,6 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNotePromptText_Load(object sender,EventArgs e) {
+			Location=new Point(Left,Top+150);
 			labelPrompt.Text=PromptText;
 			textMain.Text=ResultText;
 		}
@@ -28,12 +29,32 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butSkip_Click(object sender,EventArgs e) {
+			ResultText="";
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butPreview_Click(object sender,EventArgs e) {
+			ResultText=textMain.Text;
+			FormAutoNotePromptPreview FormP=new FormAutoNotePromptPreview();
+			FormP.ResultText=ResultText;
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK) {
+				ResultText=FormP.ResultText;
+				DialogResult=DialogResult.OK;
+			}
+		}
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Abort autonote entry?")) {
 				return;
 			}
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 	}

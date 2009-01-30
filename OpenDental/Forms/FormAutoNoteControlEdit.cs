@@ -24,16 +24,20 @@ namespace OpenDental {
 			comboType.Items.Clear();
 			comboType.Items.Add("Text");
 			comboType.Items.Add("OneResponse");
+			comboType.Items.Add("MultiResponse");
 			comboType.SelectedItem=ControlCur.ControlType;
 			textOptions.Text=ControlCur.ControlOptions;
 		}
 
-		private void comboBoxControlType_SelectedIndexChanged(object sender,EventArgs e) {
+		private void comboType_SelectedIndexChanged(object sender,EventArgs e) {
 			switch(comboType.SelectedItem.ToString()) {
 				case "Text":
 					labelResponses.Text=Lan.g(this,"Default text");
 					break;
 				case "OneResponse":
+					labelResponses.Text=Lan.g(this,"Possible responses (one line per item)");
+					break;
+				case "MultiResponse":
 					labelResponses.Text=Lan.g(this,"Possible responses (one line per item)");
 					break;
 				
@@ -56,7 +60,7 @@ namespace OpenDental {
 			if(textBoxControlDescript.Text.ToString()=="" 
 				|| comboType.SelectedIndex==-1) 
 			{
-				MessageBox.Show(Lan.g(this,"Please make sure that the Description and Type are not blank"));
+				MsgBox.Show(this,"Please make sure that the Description and Type are not blank");
 				return;
 			}
 			ControlCur.Descript=textBoxControlDescript.Text.ToString();

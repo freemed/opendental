@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental {
-	public partial class FormAutoNotePromptOneResp:Form {
+	public partial class FormAutoNotePromptMultiResp:Form {
 		///<summary>Set this value externally.</summary>
 		public string PromptText;
 		///<summary>What the user picked.</summary>
@@ -15,12 +15,12 @@ namespace OpenDental {
 		///<summary>The string value representing the list to pick from.  One item per line.</summary>
 		public string PromptOptions;
 
-		public FormAutoNotePromptOneResp() {
+		public FormAutoNotePromptMultiResp() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormAutoNotePromptOneResp_Load(object sender,EventArgs e) {
+		private void FormAutoNotePromptMultiResp_Load(object sender,EventArgs e) {
 			Location=new Point(Left,Top+150);
 			labelPrompt.Text=PromptText;
 			string[] lines=PromptOptions.Split(new string[] {"\r\n"},StringSplitOptions.RemoveEmptyEntries);
@@ -30,11 +30,13 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(listMain.SelectedIndex==-1) {
-				MsgBox.Show(this,"One response must be selected");
-				return;
+			ResultText="";
+			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
+				if(i>0) {
+					ResultText+=", ";
+				}
+				ResultText+=listMain.SelectedItems[i].ToString();
 			}
-			ResultText=listMain.SelectedItem.ToString();
 			DialogResult=DialogResult.OK;
 		}
 
@@ -44,11 +46,13 @@ namespace OpenDental {
 		}
 
 		private void butPreview_Click(object sender,EventArgs e) {
-			if(listMain.SelectedIndex==-1) {
-				MsgBox.Show(this,"One response must be selected");
-				return;
+			ResultText="";
+			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
+				if(i>0) {
+					ResultText+=", ";
+				}
+				ResultText+=listMain.SelectedItems[i].ToString();
 			}
-			ResultText=listMain.SelectedItem.ToString();
 			FormAutoNotePromptPreview FormP=new FormAutoNotePromptPreview();
 			FormP.ResultText=ResultText;
 			FormP.ShowDialog();
@@ -66,7 +70,6 @@ namespace OpenDental {
 		}
 
 		
-
 		
 
 		
