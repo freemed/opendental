@@ -159,6 +159,27 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.4.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To6_4_4();
+		}
+
+		private void To6_4_4() {
+			if(FromVersion<new Version("6.4.4.0")) {
+				string command;
+				//Convert comma-delimited autonote controls to carriage-return delimited.
+				command="SELECT AutoNoteControlNum,ControlOptions FROM autonotecontrol";
+				DataTable table=General.GetTable(command);
+				string newVal;
+				for(int i=0;i<table.Rows.Count;i++) {
+					newVal=table.Rows[i]["ControlOptions"].ToString();
+					newVal=newVal.TrimEnd(',');
+					newVal=newVal.Replace(",","\r\n");
+					command="UPDATE autonotecontrol SET ControlOptions='"+POut.PString(newVal)
+						+"' WHERE AutoNoteControlNum="+table.Rows[i]["AutoNoteControlNum"].ToString();
+					General.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '6.4.4.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To6_5_0();
 		}
 
