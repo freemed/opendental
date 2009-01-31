@@ -668,8 +668,8 @@ namespace OpenDental{
 				//Body text-------------------------------------------------------------------------------
 				str=PrefC.GetString("ConfirmPostcardMessage");
 					//textPostcardMessage.Text;
-				str=str.Replace("?date",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
-				str=str.Replace("?time",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
+				str=str.Replace("[date]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
+				str=str.Replace("[time]",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,10),Brushes.Black,new RectangleF(xPos+45,yPos+180,250,190));
 				//Patient's Address-----------------------------------------------------------------------
 				str=AddrTable.Rows[patientsPrinted]["FName"].ToString()+" "
