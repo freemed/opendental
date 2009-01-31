@@ -1890,16 +1890,37 @@ namespace OpenDental{
 			}
 			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
 			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
-			//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
-			if((assignedDent!=0&&aptCur.ProvNum!=assignedDent)||(assignedHyg!=0&&aptCur.ProvHyg!=assignedHyg)) {
-				if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
-					if(assignedDent!=0){
-						aptCur.ProvNum=assignedDent;
+			if(aptCur.AptStatus!=ApptStatus.PtNote && aptCur.AptStatus!=ApptStatus.PtNoteCompleted) {
+				//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
+				if((assignedDent!=0 && assignedDent!=aptCur.ProvNum) || (assignedHyg!=0 && assignedHyg!=aptCur.ProvHyg)) {
+					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+						if(assignedDent!=0) {
+							aptCur.ProvNum=assignedDent;
+						}
+						if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
+							aptCur.ProvHyg=assignedHyg;
+						}
+						if(curOp.IsHygiene) {
+							aptCur.IsHygiene=true;
+						}
+						else {//op not marked as hygiene op
+							if(assignedDent==0) {//no dentist assigned
+								if(assignedHyg!=0) {//hyg is assigned (we don't really have to test for this)
+									aptCur.IsHygiene=true;
+								}
+							}
+							else {//dentist is assigned
+								if(assignedHyg==0) {//hyg is not assigned
+									aptCur.IsHygiene=false;
+								}
+								//if both dentist and hyg are assigned, it's tricky
+								//only explicitly set it if user has a dentist assigned to the op
+								if(curOp.ProvDentist!=0) {
+									aptCur.IsHygiene=false;
+								}
+							}
+						}
 					}
-					if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
-						aptCur.ProvHyg=assignedHyg;
-					}
-					aptCur.IsHygiene=curOp.IsHygiene;//this is assigned by op regardless of shedule assignments
 				}
 			}
 			aptCur.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
@@ -2506,9 +2527,9 @@ namespace OpenDental{
 			}
 			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
 			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
-			if(apt.AptStatus!=ApptStatus.PtNote&&apt.AptStatus!=ApptStatus.PtNoteCompleted) {
+			if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
-				if((assignedDent!=0&&assignedDent!=apt.ProvNum)||(assignedHyg!=0&&assignedHyg!=apt.ProvHyg)) {
+				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
 					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
 						if(assignedDent!=0) {//the dentist will only be changed if the spot has a dentist.
 							apt.ProvNum=assignedDent;
@@ -2516,7 +2537,26 @@ namespace OpenDental{
 						if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
 							apt.ProvHyg=assignedHyg;
 						}
-						apt.IsHygiene=curOp.IsHygiene;//this is assigned by op regardless of shedule assignments
+						if(curOp.IsHygiene) {
+							apt.IsHygiene=true;
+						}
+						else {//op not marked as hygiene op
+							if(assignedDent==0) {//no dentist assigned
+								if(assignedHyg!=0) {//hyg is assigned (we don't really have to test for this)
+									apt.IsHygiene=true;
+								}
+							}
+							else {//dentist is assigned
+								if(assignedHyg==0) {//hyg is not assigned
+									apt.IsHygiene=false;
+								}
+								//if both dentist and hyg are assigned, it's tricky
+								//only explicitly set it if user has a dentist assigned to the op
+								if(curOp.ProvDentist!=0) {
+									apt.IsHygiene=false;
+								}
+							}
+						}
 					}
 				}
 			}
