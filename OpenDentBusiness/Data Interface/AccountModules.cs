@@ -1478,12 +1478,19 @@ namespace OpenDentBusiness {
 				//detail rows-------------------------------------------------------------------------------
 				payPlanNum=PIn.PInt(rawPayPlan.Rows[i]["PayPlanNum"].ToString());
 				rawAmort=GetPayPlanAmortTable(payPlanNum);
-				//remove rows out of date range, going backwards
-				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
-					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays"))){
+				//remove future entries, going backwards
+				for(int d=rawAmort.Rows.Count-1;d>=0;d--) {
+					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays"))) {
 						rawAmort.Rows.RemoveAt(d);
 					}
-					else if((DateTime)rawAmort.Rows[d]["DateTime"]<fromDate){
+				}
+				//grab the payPlanDue amount from the last row
+				if(rawAmort.Rows.Count>0) {
+					payPlanDue+=(double)rawAmort.Rows[rawAmort.Rows.Count-1]["balanceDouble"];
+				}
+				//remove old entries, going backwards
+				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
+					if((DateTime)rawAmort.Rows[d]["DateTime"]<fromDate){
 						rawAmort.Rows.RemoveAt(d);
 					}
 				}
@@ -1515,9 +1522,6 @@ namespace OpenDentBusiness {
 					row["StatementNum"]="0";
 					row["tth"]="";
 					rows.Add(row);
-					if(d==rawAmort.Rows.Count-1){//last row
-						payPlanDue+=(double)rawAmort.Rows[d]["balanceDouble"];
-					}
 				}
 			}
 			for(int i=0;i<rows.Count;i++) {
