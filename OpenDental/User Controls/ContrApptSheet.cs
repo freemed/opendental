@@ -315,8 +315,16 @@ namespace OpenDental{
 					if(isHoliday){
 						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,Height);
 					}
+					//this is a workaround because we start on Monday:
+					DayOfWeek dayofweek;
+					if(d==6) {
+						dayofweek=(DayOfWeek)(0);
+					}
+					else {
+						dayofweek=(DayOfWeek)(d+1);
+					}
 					for(int j=0;j<ColCount;j++) {
-						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,(DayOfWeek)(d+1),OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
+						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
 						for(int i=0;i<schedsForOp.Count;i++) {
 							g.FillRectangle(openBrush
 								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
@@ -401,8 +409,13 @@ namespace OpenDental{
 						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
 						}
+						//this is a workaround because we start on Monday:
+						int dayofweek=(int)schedForType[i].SchedDate.DayOfWeek-1;
+						if(dayofweek==-1) {
+							dayofweek=6;
+						}
 						rect=new RectangleF(
-							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
+							TimeWidth+1+(dayofweek)*ColDayWidth
 							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
