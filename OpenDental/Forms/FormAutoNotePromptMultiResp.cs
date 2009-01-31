@@ -31,11 +31,11 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			ResultText="";
-			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
+			for(int i=0;i<listMain.CheckedIndices.Count;i++) {
 				if(i>0) {
 					ResultText+=", ";
 				}
-				ResultText+=listMain.SelectedItems[i].ToString();
+				ResultText+=listMain.CheckedItems[i].ToString();
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -47,11 +47,11 @@ namespace OpenDental {
 
 		private void butPreview_Click(object sender,EventArgs e) {
 			ResultText="";
-			for(int i=0;i<listMain.SelectedIndices.Count;i++) {
+			for(int i=0;i<listMain.CheckedIndices.Count;i++) {
 				if(i>0) {
 					ResultText+=", ";
 				}
-				ResultText+=listMain.SelectedItems[i].ToString();
+				ResultText+=listMain.CheckedItems[i].ToString();
 			}
 			FormAutoNotePromptPreview FormP=new FormAutoNotePromptPreview();
 			FormP.ResultText=ResultText;

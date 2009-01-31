@@ -24,11 +24,11 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.labelPrompt = new System.Windows.Forms.Label();
-			this.listMain = new System.Windows.Forms.ListBox();
+			this.listMain = new System.Windows.Forms.CheckedListBox();
+			this.butPreview = new OpenDental.UI.Button();
+			this.butSkip = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butSkip = new OpenDental.UI.Button();
-			this.butPreview = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// labelPrompt
@@ -44,16 +44,43 @@ namespace OpenDental{
 			// 
 			// listMain
 			// 
-			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.listMain.CheckOnClick = true;
 			this.listMain.FormattingEnabled = true;
 			this.listMain.Location = new System.Drawing.Point(15,62);
 			this.listMain.MultiColumn = true;
 			this.listMain.Name = "listMain";
-			this.listMain.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listMain.Size = new System.Drawing.Size(382,212);
-			this.listMain.TabIndex = 115;
+			this.listMain.Size = new System.Drawing.Size(382,214);
+			this.listMain.TabIndex = 118;
+			// 
+			// butPreview
+			// 
+			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPreview.Autosize = true;
+			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreview.CornerRadius = 4F;
+			this.butPreview.Location = new System.Drawing.Point(241,292);
+			this.butPreview.Name = "butPreview";
+			this.butPreview.Size = new System.Drawing.Size(75,24);
+			this.butPreview.TabIndex = 117;
+			this.butPreview.Text = "Preview";
+			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
+			// 
+			// butSkip
+			// 
+			this.butSkip.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSkip.Autosize = true;
+			this.butSkip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSkip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSkip.CornerRadius = 4F;
+			this.butSkip.Location = new System.Drawing.Point(160,292);
+			this.butSkip.Name = "butSkip";
+			this.butSkip.Size = new System.Drawing.Size(75,24);
+			this.butSkip.TabIndex = 116;
+			this.butSkip.Text = "Skip";
+			this.butSkip.Click += new System.EventHandler(this.butSkip_Click);
 			// 
 			// butOK
 			// 
@@ -85,43 +112,13 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butSkip
-			// 
-			this.butSkip.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSkip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSkip.Autosize = true;
-			this.butSkip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSkip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSkip.CornerRadius = 4F;
-			this.butSkip.Location = new System.Drawing.Point(160,292);
-			this.butSkip.Name = "butSkip";
-			this.butSkip.Size = new System.Drawing.Size(75,24);
-			this.butSkip.TabIndex = 116;
-			this.butSkip.Text = "Skip";
-			this.butSkip.Click += new System.EventHandler(this.butSkip_Click);
-			// 
-			// butPreview
-			// 
-			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPreview.Autosize = true;
-			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPreview.CornerRadius = 4F;
-			this.butPreview.Location = new System.Drawing.Point(241,292);
-			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(75,24);
-			this.butPreview.TabIndex = 117;
-			this.butPreview.Text = "Preview";
-			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
-			// 
 			// FormAutoNotePromptMultiResp
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(409,328);
+			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.butSkip);
-			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.labelPrompt);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -138,8 +135,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label labelPrompt;
-		private System.Windows.Forms.ListBox listMain;
 		private OpenDental.UI.Button butSkip;
 		private OpenDental.UI.Button butPreview;
+		private System.Windows.Forms.CheckedListBox listMain;
 	}
 }
