@@ -1035,6 +1035,7 @@ namespace OpenDental{
 			EmailMessage message;
 			string str="";
 			string[] recallNumArray;
+			string[] patNumArray;
 			for(int i=0;i<AddrTable.Rows.Count;i++){
 				message=new EmailMessage();
 				message.PatNum=PIn.PInt(AddrTable.Rows[i]["emailPatNum"].ToString());
@@ -1085,8 +1086,9 @@ namespace OpenDental{
 					break;
 				}
 				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
+				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
 				for(int r=0;r<recallNumArray.Length;r++){
-					Commlogs.InsertForRecall(message.PatNum,CommItemMode.Email,PIn.PInt(recallNumArray[r]));
+					Commlogs.InsertForRecall(PIn.PInt(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
 					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
 				}
 			}			

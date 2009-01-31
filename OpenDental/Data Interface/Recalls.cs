@@ -678,12 +678,13 @@ namespace OpenDental{
 			table.Columns.Add("emailPatNum");//Will be guar if grouped by family
 			table.Columns.Add("famList");
 			table.Columns.Add("guarLName");
-			table.Columns.Add("numberOfReminders");
+			table.Columns.Add("numberOfReminders");//for a family, this will be the max for the family
 			table.Columns.Add("patientNameFL");
-			table.Columns.Add("PatNum");//used in email
-			table.Columns.Add("recallNums");//comma delimited.  Used during e-mail
+			table.Columns.Add("patNums");//Comma delimited.  Used in email.
+			table.Columns.Add("recallNums");//Comma delimited.  Used during e-mail
 			string familyAptList="";
 			string recallNumStr="";
+			string patNumStr="";
 			DataRow row;
 			List<DataRow> rows=new List<DataRow>();
 			int maxNumReminders=0;
@@ -708,6 +709,7 @@ namespace OpenDental{
 					row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
 						+rawRows[i]["MiddleI"].ToString()+" "
 						+rawRows[i]["LName"].ToString();
+					row["patNums"]=rawRows[i]["PatNum"].ToString();
 					row["recallNums"]=rawRows[i]["RecallNum"].ToString();
 					rows.Add(row);
 					continue;
@@ -750,6 +752,7 @@ namespace OpenDental{
 						row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
 							+rawRows[i]["MiddleI"].ToString()+" "
 							+rawRows[i]["LName"].ToString();
+						row["patNums"]=rawRows[i]["PatNum"].ToString();
 						row["recallNums"]=rawRows[i]["RecallNum"].ToString();
 						rows.Add(row);
 						continue;
@@ -757,6 +760,7 @@ namespace OpenDental{
 					else{//this is the first patient of a family with multiple family members
 						familyAptList=rawRows[i]["FName"].ToString()+":  "
 							+PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
+						patNumStr=rawRows[i]["PatNum"].ToString();
 						recallNumStr=rawRows[i]["RecallNum"].ToString();
 						continue;
 					}
@@ -764,6 +768,7 @@ namespace OpenDental{
 				else{//not the first patient
 					familyAptList+="\r\n"+rawRows[i]["FName"].ToString()+":  "
 						+PIn.PDate(rawRows[i]["DateDue"].ToString()).ToShortDateString();
+					patNumStr+=","+rawRows[i]["PatNum"].ToString();
 					recallNumStr+=","+rawRows[i]["RecallNum"].ToString();
 				}
 				if(i==rawRows.Count-1//if this is the last row
@@ -785,6 +790,7 @@ namespace OpenDental{
 					row["guarLName"]=rawRows[i]["guarLName"].ToString();
 					row["numberOfReminders"]=maxNumReminders.ToString();
 					row["patientNameFL"]="";//we won't use this
+					row["patNums"]=patNumStr;
 					row["recallNums"]=recallNumStr;
 					rows.Add(row);
 					familyAptList="";
