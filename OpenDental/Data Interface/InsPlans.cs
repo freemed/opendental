@@ -931,6 +931,20 @@ namespace OpenDental {
 			return retVal;
 		}
 
+		public static int UnusedGetCount() {
+			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
+				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
+			int count=PIn.PInt(General.GetCount(command));
+			return count;
+		}
+
+		public static void UnusedHideAll() {
+			string command="UPDATE insplan SET IsHidden=1 "
+				+"WHERE IsHidden=0 "
+				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
+			General.NonQ(command);
+		}
+
 		//public static int GenerateOneAllowedFeeSchedule(){
 
 		//}

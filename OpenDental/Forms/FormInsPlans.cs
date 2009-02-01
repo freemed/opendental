@@ -48,6 +48,7 @@ namespace OpenDental{
 		private Label labelTrojanID;
 		private DataTable table;
 		private CheckBox checkShowHidden;
+		private OpenDental.UI.Button butHide;
 		private bool trojan;
 
 		///<summary></summary>
@@ -89,6 +90,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butBlank = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butHide = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -237,9 +239,9 @@ namespace OpenDental{
 			this.butMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMerge.CornerRadius = 4F;
 			this.butMerge.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butMerge.Location = new System.Drawing.Point(11,636);
+			this.butMerge.Location = new System.Drawing.Point(11,637);
 			this.butMerge.Name = "butMerge";
-			this.butMerge.Size = new System.Drawing.Size(74,26);
+			this.butMerge.Size = new System.Drawing.Size(74,24);
 			this.butMerge.TabIndex = 24;
 			this.butMerge.Text = "Combine";
 			this.butMerge.Click += new System.EventHandler(this.butMerge_Click);
@@ -268,9 +270,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(776,636);
+			this.butOK.Location = new System.Drawing.Point(774,637);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(78,26);
+			this.butOK.Size = new System.Drawing.Size(78,24);
 			this.butOK.TabIndex = 4;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -284,9 +286,9 @@ namespace OpenDental{
 			this.butBlank.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBlank.CornerRadius = 4F;
 			this.butBlank.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butBlank.Location = new System.Drawing.Point(427,636);
+			this.butBlank.Location = new System.Drawing.Point(427,637);
 			this.butBlank.Name = "butBlank";
-			this.butBlank.Size = new System.Drawing.Size(87,26);
+			this.butBlank.Size = new System.Drawing.Size(87,24);
 			this.butBlank.TabIndex = 3;
 			this.butBlank.Text = "Blank Plan";
 			this.butBlank.Visible = false;
@@ -301,17 +303,34 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(871,636);
+			this.butCancel.Location = new System.Drawing.Point(869,637);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(77,26);
+			this.butCancel.Size = new System.Drawing.Size(78,24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butHide
+			// 
+			this.butHide.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butHide.Autosize = true;
+			this.butHide.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHide.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHide.CornerRadius = 4F;
+			this.butHide.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butHide.Location = new System.Drawing.Point(104,637);
+			this.butHide.Name = "butHide";
+			this.butHide.Size = new System.Drawing.Size(84,24);
+			this.butHide.TabIndex = 28;
+			this.butHide.Text = "Hide Unused";
+			this.butHide.Click += new System.EventHandler(this.butHide_Click);
 			// 
 			// FormInsPlans
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,669);
+			this.Controls.Add(this.butHide);
 			this.Controls.Add(this.checkShowHidden);
 			this.Controls.Add(this.textTrojanID);
 			this.Controls.Add(this.labelTrojanID);
@@ -537,6 +556,17 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butHide_Click(object sender,EventArgs e) {
+			int unusedCount=InsPlans.UnusedGetCount();
+			string msgText=unusedCount.ToString()+" "+Lan.g(this,"plans found that are not in use by any patients.  Hide all of them?");
+			if(MessageBox.Show(msgText,"",MessageBoxButtons.YesNo)!=DialogResult.Yes){
+				return;
+			}
+			InsPlans.UnusedHideAll();
+			FillGrid();
+			MsgBox.Show(this,"Done.");
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//only visible if IsSelectMode
 			//if(IsSelectMode){
@@ -559,6 +589,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 
