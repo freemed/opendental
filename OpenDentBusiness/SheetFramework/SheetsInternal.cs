@@ -335,21 +335,21 @@ namespace OpenDentBusiness{
 			SheetDef sheet=new SheetDef(SheetTypeEnum.Consent);
 			sheet.Description="ExtractionConsent";
 			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=9f;
+			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=15;
-			int x=220;
+			int rowH=19;
+			int x=200;
 			int y=40;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Extraction Consent",10,sheet.FontName,true,x,y,140,19));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Extraction Consent",12,sheet.FontName,true,x,y,170,20));
 			y+=35;
 			x=50;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("dateTime.Today",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("dateTime.Today",sheet.FontSize,sheet.FontName,false,x,y,120,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,220,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Tooth number(s): ",sheet.FontSize,sheet.FontName,false,x,y,100,rowH));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+100,y,100,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Tooth number(s): ",sheet.FontSize,sheet.FontName,false,x,y,120,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+120,y,100,rowH));
 			y+=rowH;
 			y+=20;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"Extraction(s) are to be peformed on the tooth/teeth listed above.  While we expect no complications, there are some risks involved with this procedure.  The more common complications are:
@@ -360,12 +360,12 @@ Nerves that run near the area of extraction may be bruised or damaged.  You may 
 
 In the upper arch, sinus complications can occur because the roots of some upper teeth extend near or into the sinuses.  After extraction, a hole may be present between the sinus and the mouth.  If this happens, you will be informed and the area repaired.
 
-By signing below you acknowledge that you understand the information presented, have had all your questions answered satisfactorily, and give consent to perform this procedure.",sheet.FontSize,sheet.FontName,false,x,y,480,285));
-			y+=285;
+By signing below you acknowledge that you understand the information presented, have had all your questions answered satisfactorily, and give consent to perform this procedure.",sheet.FontSize,sheet.FontName,false,x,y,500,340));
+			y+=340;
 			y+=20;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
 			y+=82;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature",sheet.FontSize,sheet.FontName,false,x,y,60,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature",sheet.FontSize,sheet.FontName,false,x,y,90,rowH));
 			return sheet;
 		}
 
@@ -373,27 +373,27 @@ By signing below you acknowledge that you understand the information presented, 
 			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientLetter);
 			sheet.Description="PatientLetter";
 			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=9f;
+			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=15;
+			int rowH=19;
 			int x=100;
 			int y=100;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
 				GrowthBehaviorEnum.DownLocal));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.address",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
 				GrowthBehaviorEnum.DownLocal));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
@@ -401,7 +401,7 @@ By signing below you acknowledge that you understand the information presented, 
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.salutation",sheet.FontSize,sheet.FontName,false,x,y,280,rowH));
 			y+=rowH;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,rowH,
@@ -413,7 +413,7 @@ By signing below you acknowledge that you understand the information presented, 
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,240,rowH));
 			return sheet;
 		}
 
@@ -421,38 +421,38 @@ By signing below you acknowledge that you understand the information presented, 
 			SheetDef sheet=new SheetDef(SheetTypeEnum.ReferralLetter);
 			sheet.Description="ReferralLetter";
 			sheet.FontName="Microsoft Sans Serif";
-			sheet.FontSize=9f;
+			sheet.FontSize=11f;
 			sheet.Width=850;
 			sheet.Height=1100;
-			int rowH=15;
+			int rowH=19;
 			int x=100;
 			int y=100;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeTitle",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("PracticeAddress",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
 				GrowthBehaviorEnum.DownLocal));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("practiceCityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.nameFL",sheet.FontSize,sheet.FontName,false,x,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.nameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.address",sheet.FontSize,sheet.FontName,false,x,y,200,rowH,
 				GrowthBehaviorEnum.DownLocal));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("today.DayDate",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("RE patient:",sheet.FontSize,sheet.FontName,false,x,y,70,rowH));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x+70,y,150,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("RE patient:",sheet.FontSize,sheet.FontName,false,x,y,90,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.nameFL",sheet.FontSize,sheet.FontName,false,x+90,y,200,rowH));
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.salutation",sheet.FontSize,sheet.FontName,false,x,y,280,rowH));
 			y+=rowH;
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("letter text",sheet.FontSize,sheet.FontName,false,x,y,650,rowH,
@@ -464,7 +464,7 @@ By signing below you acknowledge that you understand the information presented, 
 			y+=rowH;
 			y+=rowH;
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("patient.priProvNameFL",sheet.FontSize,sheet.FontName,false,x,y,250,rowH));
 			return sheet;
 		}
 
