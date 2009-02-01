@@ -4598,12 +4598,22 @@ namespace OpenDental{
 			else
 				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
+			int provPri=PatCur.PriProv;
+			int provSec=PatCur.SecProv;
+			for(int i=0;i<ApptList.Length;i++) {
+				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
+					provPri=ApptList[i].ProvNum;
+					provSec=ApptList[i].ProvHyg;
+					break;
+				}
+			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
-				&& PatCur.SecProv != 0){
-				ProcCur.ProvNum=PatCur.SecProv;
+				&& provSec != 0)
+			{
+				ProcCur.ProvNum=provSec;
 			}
 			else{
-				ProcCur.ProvNum=PatCur.PriProv;
+				ProcCur.ProvNum=provPri;
 			}
 			if(newStatus==ProcStat.C) {
 				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);
@@ -4693,12 +4703,21 @@ namespace OpenDental{
 			else
 				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
-			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
-				&& PatCur.SecProv != 0){
-				ProcCur.ProvNum=PatCur.SecProv;
+			int provPri=PatCur.PriProv;
+			int provSec=PatCur.SecProv;
+			for(int i=0;i<ApptList.Length;i++) {
+				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
+					provPri=ApptList[i].ProvNum;
+					provSec=ApptList[i].ProvHyg;
+					break;
+				}
 			}
-			else{
-				ProcCur.ProvNum=PatCur.PriProv;
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
+				&& provSec != 0) {
+				ProcCur.ProvNum=provSec;
+			}
+			else {
+				ProcCur.ProvNum=provPri;
 			}
 			if(newStatus==ProcStat.C) {
 				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);

@@ -1275,12 +1275,21 @@ namespace OpenDental{
 			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			ProcCur.Priority=0;
 			ProcCur.ProcStatus=ProcStat.TP;
+			int aptProvNum=ProviderC.List[0].ProvNum;
+			if(comboProvNum.SelectedIndex!=-1) {
+				aptProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			}
+			int aptProvHyg=0;
+			if(comboProvHyg.SelectedIndex>0) {
+				aptProvHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
+			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
-				&& pat.SecProv != 0){
-				ProcCur.ProvNum=pat.SecProv;
+				&& aptProvHyg != 0)
+			{
+				ProcCur.ProvNum=aptProvHyg;
 			}
 			else{
-				ProcCur.ProvNum=pat.PriProv;
+				ProcCur.ProvNum=aptProvNum;
 			}
 			ProcCur.Note="";
 			ProcCur.ClinicNum=pat.ClinicNum;
