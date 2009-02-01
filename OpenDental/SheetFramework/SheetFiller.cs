@@ -485,7 +485,7 @@ namespace OpenDental{
 							+PrefC.GetString("PracticeZip");
 						break;
 					case "patient.nameFL":
-						field.FieldValue=pat.GetNameFL();
+						field.FieldValue=pat.GetNameFLFormal();
 						break;
 					case "patient.address":
 						field.FieldValue=pat.Address;
