@@ -25,6 +25,7 @@ namespace OpenDental{
 		private CheckBox checkShowAll;
 		private ContextMenu contextMenu1;
 		private MenuItem menuItemGoTo;
+		private CheckBox checkShowUnattached;
 		//<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
 		//public DateTime DateViewing;
 		///<summary>If this is zero, then it's an ordinary close.</summary>
@@ -66,13 +67,14 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkShowAll = new System.Windows.Forms.CheckBox();
+			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+			this.menuItemGoTo = new System.Windows.Forms.MenuItem();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
-			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
-			this.menuItemGoTo = new System.Windows.Forms.MenuItem();
+			this.checkShowUnattached = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -102,6 +104,17 @@ namespace OpenDental{
 			this.checkShowAll.Text = "Show Completed";
 			this.checkShowAll.UseVisualStyleBackColor = true;
 			// 
+			// contextMenu1
+			// 
+			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemGoTo});
+			// 
+			// menuItemGoTo
+			// 
+			this.menuItemGoTo.Index = 0;
+			this.menuItemGoTo.Text = "Go To Appointment";
+			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
+			// 
 			// butRefresh
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -109,9 +122,9 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(226,31);
+			this.butRefresh.Location = new System.Drawing.Point(226,32);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,26);
+			this.butRefresh.Size = new System.Drawing.Size(75,24);
 			this.butRefresh.TabIndex = 6;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -136,7 +149,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(17,67);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(771,375);
+			this.gridMain.Size = new System.Drawing.Size(783,404);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Lab Cases";
 			this.gridMain.TranslationName = "TableLabCases";
@@ -150,28 +163,27 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(713,462);
+			this.butClose.Location = new System.Drawing.Point(725,481);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// contextMenu1
+			// checkShowUnattached
 			// 
-			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemGoTo});
-			// 
-			// menuItemGoTo
-			// 
-			this.menuItemGoTo.Index = 0;
-			this.menuItemGoTo.Text = "Go To Appointment";
-			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
+			this.checkShowUnattached.Location = new System.Drawing.Point(361,14);
+			this.checkShowUnattached.Name = "checkShowUnattached";
+			this.checkShowUnattached.Size = new System.Drawing.Size(131,18);
+			this.checkShowUnattached.TabIndex = 8;
+			this.checkShowUnattached.Text = "Show Unattached";
+			this.checkShowUnattached.UseVisualStyleBackColor = true;
 			// 
 			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(812,517);
+			this.Controls.Add(this.checkShowUnattached);
 			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textDateTo);
@@ -213,7 +225,7 @@ namespace OpenDental{
 			if(textDateTo.Text!=""){
 				dateMax=PIn.PDate(textDateTo.Text);
 			}
-			table=LabCases.Refresh(PIn.PDate(textDateFrom.Text),dateMax,checkShowAll.Checked);
+			table=LabCases.Refresh(PIn.PDate(textDateFrom.Text),dateMax,checkShowAll.Checked,checkShowUnattached.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
@@ -226,7 +238,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Lab"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabCases","Phone"),100);
+			col=new ODGridColumn(Lan.g("TableLabCases","Lab Phone"),100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

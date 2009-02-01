@@ -10,10 +10,11 @@ namespace OpenDental{
 	public class LabCases {
 
 		///<summary>Gets a filtered list of all labcases.</summary>
-		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate,bool showAll) {
+		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate,bool showCompleted,bool ShowUnattached) {
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("AptDateTime",typeof(DateTime));
 			table.Columns.Add("aptDateTime");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("lab");
@@ -22,28 +23,30 @@ namespace OpenDental{
 			table.Columns.Add("phone");
 			table.Columns.Add("ProcDescript");
 			table.Columns.Add("status");
+			List<DataRow> rows=new List<DataRow>();
+			//the first query only gets labcases that are attached to scheduled appointments
 			string command="SELECT AptDateTime,appointment.AptNum,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,ProcDescript "
-				+"FROM labcase,appointment,patient,laboratory "
-				+"WHERE labcase.AptNum=appointment.AptNum "
-				+"AND labcase.PatNum=patient.PatNum "
-				+"AND labcase.LaboratoryNum=laboratory.LaboratoryNum "
-				+"AND AptDateTime > "+POut.PDate(aptStartDate)+" "
+				+"FROM labcase "
+				+"LEFT JOIN appointment ON labcase.AptNum=appointment.AptNum "
+				+"LEFT JOIN patient ON labcase.PatNum=patient.PatNum "
+				+"LEFT JOIN laboratory ON labcase.LaboratoryNum=laboratory.LaboratoryNum "
+				+"WHERE AptDateTime > "+POut.PDate(aptStartDate)+" "
 				+"AND AptDateTime < "+POut.PDate(aptEndDate.AddDays(1))+" ";
-			if(!showAll){
+			if(!showCompleted){
 				command+="AND (AptStatus="+POut.PInt((int)ApptStatus.ASAP)
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.Broken)
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.None)
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.UnschedList)+") ";
 			}
-			command+="ORDER BY AptDateTime";
 			DataTable raw=General.GetTable(command);
 			DateTime AptDateTime;
 			DateTime date;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 		    AptDateTime=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
+				row["AptDateTime"]=AptDateTime;
 				row["aptDateTime"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString();
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["lab"]=raw.Rows[i]["Description"].ToString();
@@ -71,7 +74,55 @@ namespace OpenDental{
 						}
 					}
 				}
-				table.Rows.Add(row);
+				rows.Add(row);
+			}
+			if(ShowUnattached) {
+				//Then, this second query gets labcases not attached to appointments.  No date filter.  No date displayed.
+				command="SELECT DateTimeChecked,DateTimeRecd,DateTimeSent,"
+					+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone "
+					+"FROM labcase "
+					+"LEFT JOIN patient ON labcase.PatNum=patient.PatNum "
+					+"LEFT JOIN laboratory ON labcase.LaboratoryNum=laboratory.LaboratoryNum "
+					+"WHERE AptNum=0";
+				raw=General.GetTable(command);
+				for(int i=0;i<raw.Rows.Count;i++) {
+					row=table.NewRow();
+					row["AptDateTime"]=DateTime.MinValue;
+					row["aptDateTime"]="";
+					row["AptNum"]=0;
+					row["lab"]=raw.Rows[i]["Description"].ToString();
+					row["LabCaseNum"]=raw.Rows[i]["LabCaseNum"].ToString();
+					row["patient"]=PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+						raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
+					row["phone"]=raw.Rows[i]["Phone"].ToString();
+					row["ProcDescript"]="";
+					row["status"]="";
+					date=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
+					if(date.Year>1880) {
+						row["status"]=Lan.g("FormLabCases","Quality Checked");
+					}
+					else {
+						date=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
+						if(date.Year>1880) {
+							row["status"]=Lan.g("FormLabCases","Received");
+						}
+						else {
+							date=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
+							if(date.Year>1880) {
+								row["status"]=Lan.g("FormLabCases","Sent");//sent but not received
+							}
+							else {
+								row["status"]=Lan.g("FormLabCases","Not Sent");
+							}
+						}
+					}
+					rows.Add(row);
+				}
+			}
+			LabCaseComparer comparer=new LabCaseComparer();
+			rows.Sort(comparer);
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
 			}
 			return table;
 		}
@@ -234,6 +285,22 @@ namespace OpenDental{
 			return null;
 		}
 
+	}
+
+
+
+	///<summary>The supplied DataRows must include the following columns: AptDateTime,patient</summary>
+	class LabCaseComparer:IComparer<DataRow> {
+
+		///<summary></summary>
+		public int Compare(DataRow x,DataRow y) {
+			DateTime dtx=(DateTime)x["AptDateTime"];
+			DateTime dty=(DateTime)y["AptDateTime"];
+			if(dty != dtx) {
+				return dtx.CompareTo(dty);
+			}
+			return x["patient"].ToString().CompareTo(y["patient"].ToString());
+		}
 	}
 	
 
