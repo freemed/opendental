@@ -110,6 +110,7 @@ namespace OpenDental
 					this.butDelete.Size = new System.Drawing.Size(79,24);
 					this.butDelete.TabIndex = 107;
 					this.butDelete.Text = "Delete";
+					this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 					// 
 					// gridMain
 					// 

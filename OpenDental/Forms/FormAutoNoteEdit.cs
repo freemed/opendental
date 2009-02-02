@@ -92,6 +92,18 @@ namespace OpenDental {
 			textSelectionStart=textMain.SelectionStart;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this autonote?")){
+				return;
+			}
+			if(IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			AutoNotes.Delete(AutoNoteCur.AutoNoteNum);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			AutoNoteCur.AutoNoteName=textBoxAutoNoteName.Text;
 			AutoNoteCur.MainText=textMain.Text;
@@ -108,6 +120,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

@@ -44,6 +44,13 @@ namespace OpenDentBusiness {
 			General.NonQ(command);
 		}
 
+		///<summary></summary>
+		public static void Delete(int autoNoteNum) {
+			string command="DELETE FROM autonote "
+				+"WHERE AutoNoteNum = "+POut.PInt(autoNoteNum);
+			General.NonQ(command);
+		}
+
 		/*
 		public static bool AutoNoteNameUsed(string AutoNoteName, string OriginalAutoNoteName) {
 			string command="SELECT AutoNoteName FROM autonote WHERE "
