@@ -49,6 +49,8 @@ namespace OpenDental {
 			this.butOK = new OpenDental.UI.Button();
 			this.butAddOptionControl = new OpenDental.UI.Button();
 			this.butCreate = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// labelOptions
@@ -213,6 +215,7 @@ namespace OpenDental {
 			// textOptions
 			// 
 			this.textOptions.AcceptsReturn = true;
+			this.textOptions.HideSelection = false;
 			this.textOptions.Location = new System.Drawing.Point(186,95);
 			this.textOptions.Multiline = true;
 			this.textOptions.Name = "textOptions";
@@ -303,9 +306,39 @@ namespace OpenDental {
 			this.butCreate.TabIndex = 101;
 			this.butCreate.Text = "Create";
 			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(1,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.Location = new System.Drawing.Point(582,95);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(25,24);
+			this.butDown.TabIndex = 126;
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(1,0);
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.Location = new System.Drawing.Point(556,95);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(25,24);
+			this.butUp.TabIndex = 125;
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
 			// FormAutoNoteControlEdit
 			// 
 			this.ClientSize = new System.Drawing.Size(674,458);
+			this.Controls.Add(this.butDown);
+			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.labelResponses);
 			this.Controls.Add(this.textOptions);
@@ -356,5 +389,7 @@ namespace OpenDental {
 		private System.Windows.Forms.TextBox textOptions;
 		private System.Windows.Forms.Label labelResponses;
 		private OpenDental.UI.Button butDelete;
+		private OpenDental.UI.Button butDown;
+		private OpenDental.UI.Button butUp;
 	}
 }

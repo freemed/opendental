@@ -44,6 +44,120 @@ namespace OpenDental {
 			}
 		}
 
+		private void butUp_Click(object sender,EventArgs e) {
+			if(textOptions.Text==""){
+				return;
+			}
+			int selStart=textOptions.SelectionStart;
+			//calculate which row to highlight, based on selection start.
+			int selectedRow=0;
+			int sumPreviousLines=0;
+			string[] linesOrig=new string[textOptions.Lines.Length];
+			textOptions.Lines.CopyTo(linesOrig,0);
+			for(int l=0;l<textOptions.Lines.Length;l++) {
+				if(l>0) {
+					sumPreviousLines+=textOptions.Lines[l-1].Length+2;//the 2 is for \r\n
+				}
+				if(selStart < sumPreviousLines+textOptions.Lines[l].Length) {
+					selectedRow=l;
+					break;
+				}
+			}
+			//swap rows
+			int newSelectedRow;
+			if(selectedRow==0) {
+				newSelectedRow=0;//and no swap
+			}
+			else {
+				//doesn't allow me to directly set lines, so:
+				string newtext="";
+				for(int l=0;l<textOptions.Lines.Length;l++) {
+					if(l>0) {
+						newtext+="\r\n";
+					}
+					if(l==selectedRow) {
+						newtext+=linesOrig[selectedRow-1];
+					}
+					else if(l==selectedRow-1) {
+						newtext+=linesOrig[selectedRow];
+					}
+					else {
+						newtext+=linesOrig[l];
+					}
+				}
+				textOptions.Text=newtext;
+				newSelectedRow=selectedRow-1;
+			}
+			//highlight the newSelectedRow
+			sumPreviousLines=0;
+			for(int l=0;l<textOptions.Lines.Length;l++) {
+				if(l>0) {
+					sumPreviousLines+=textOptions.Lines[l-1].Length+2;//the 2 is for \r\n
+				}
+				if(newSelectedRow==l) {
+					textOptions.Select(sumPreviousLines,textOptions.Lines[l].Length);
+					break;
+				}
+			}
+		}
+
+		private void butDown_Click(object sender,EventArgs e) {
+			if(textOptions.Text=="") {
+				return;
+			}
+			int selStart=textOptions.SelectionStart;
+			//calculate which row to highlight, based on selection start.
+			int selectedRow=0;
+			int sumPreviousLines=0;
+			string[] linesOrig=new string[textOptions.Lines.Length];
+			textOptions.Lines.CopyTo(linesOrig,0);
+			for(int l=0;l<textOptions.Lines.Length;l++) {
+				if(l>0) {
+					sumPreviousLines+=textOptions.Lines[l-1].Length+2;//the 2 is for \r\n
+				}
+				if(selStart < sumPreviousLines+textOptions.Lines[l].Length) {
+					selectedRow=l;
+					break;
+				}
+			}
+			//swap rows
+			int newSelectedRow;
+			if(selectedRow==textOptions.Lines.Length-1) {
+				newSelectedRow=textOptions.Lines.Length-1;//and no swap
+			}
+			else {
+				//doesn't allow me to directly set lines, so:
+				string newtext="";
+				for(int l=0;l<textOptions.Lines.Length;l++) {
+					if(l>0) {
+						newtext+="\r\n";
+					}
+					if(l==selectedRow) {
+						newtext+=linesOrig[selectedRow+1];
+					}
+					else if(l==selectedRow+1) {
+						newtext+=linesOrig[selectedRow];
+					}
+					else {
+						newtext+=linesOrig[l];
+					}
+				}
+				textOptions.Text=newtext;
+				newSelectedRow=selectedRow+1;
+			}
+			//highlight the newSelectedRow
+			sumPreviousLines=0;
+			for(int l=0;l<textOptions.Lines.Length;l++) {
+				if(l>0) {
+					sumPreviousLines+=textOptions.Lines[l-1].Length+2;//the 2 is for \r\n
+				}
+				if(newSelectedRow==l) {
+					textOptions.Select(sumPreviousLines,textOptions.Lines[l].Length);
+					break;
+				}
+			}
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
