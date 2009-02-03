@@ -298,6 +298,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ProcedurelogAttachedToWrongAppts();
 			Application.DoEvents();
+			ProcedurelogBaseUnitsZero();
+			Application.DoEvents();
 			ProcedurelogCodeNumZero();
 			Application.DoEvents();
 			ProcedurelogProvNumMissing();
@@ -1294,6 +1296,26 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ProcedurelogBaseUnitsZero() {
+			//procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
+			//For speed, we will use two different strategies
+			command="SELECT COUNT(*) FROM procedurecode WHERE BaseUnits != 0";
+			if(General.GetCount(command)=="0") {
+				command="UPDATE procedurelog SET BaseUnits=0 WHERE BaseUnits!=0";
+			}
+			else {
+				command=@"UPDATE procedurelog
+					SET baseunits =  (SELECT procedurecode.BaseUnits FROM procedurecode
+					WHERE procedurecode.CodeNum=procedurelog.CodeNum)
+					WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode
+					WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
+			}
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Procedure BaseUnits set to match procedurecode BaseUnits: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 

@@ -445,9 +445,9 @@ namespace OpenDental{
 			// 
 			this.label17.Location = new System.Drawing.Point(215,162);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(202,19);
+			this.label17.Size = new System.Drawing.Size(251,19);
 			this.label17.TabIndex = 55;
-			this.label17.Text = "(For some medical claims)";
+			this.label17.Text = "(zero unless for some medical claims)";
 			// 
 			// label18
 			// 
@@ -907,7 +907,7 @@ namespace OpenDental{
 			ProcCode.DefaultNote=textNote.Text;
 			ProcCode.PaintType=(ToothPaintingType)listPaintType.SelectedIndex;
 			ProcCode.TreatArea=(TreatmentArea)listTreatArea.SelectedIndex+1;
-			ProcCode.BaseUnits=Int16.Parse(textBaseUnits.Text.ToString());
+			ProcCode.BaseUnits=PIn.PInt(textBaseUnits.Text.ToString());
 			if(listCategory.SelectedIndex!=-1)
 				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.

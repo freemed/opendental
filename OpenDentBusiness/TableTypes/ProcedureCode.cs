@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		///<summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
 		[XmlIgnore]
 		public bool PreExisting;
-		///<summary>Support for Base Units for a Code (like anesthesia)</summary>
+		///<summary>Support for Base Units for a Code (like anesthesia).  Should normally be zero.</summary>
 		[XmlIgnore]
 		public int BaseUnits;
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>

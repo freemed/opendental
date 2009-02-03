@@ -265,6 +265,9 @@ namespace OpenDental{
 			this.listBoxTeeth2 = new System.Windows.Forms.ListBox();
 			this.butChange = new OpenDental.UI.Button();
 			this.groupMedical = new System.Windows.Forms.GroupBox();
+			this.butShowMedical = new OpenDental.UI.Button();
+			this.label18 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
 			this.textTotal = new System.Windows.Forms.TextBox();
 			this.label25 = new System.Windows.Forms.Label();
 			this.label24 = new System.Windows.Forms.Label();
@@ -335,9 +338,6 @@ namespace OpenDental{
 			this.butPickSite = new OpenDental.UI.Button();
 			this.textSite = new System.Windows.Forms.TextBox();
 			this.labelSite = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label18 = new System.Windows.Forms.Label();
-			this.butShowMedical = new OpenDental.UI.Button();
 			this.groupQuadrant.SuspendLayout();
 			this.panelSurfaces.SuspendLayout();
 			this.groupArch.SuspendLayout();
@@ -954,10 +954,44 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(400,1);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(321,97);
+			this.groupMedical.Size = new System.Drawing.Size(321,239);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical";
+			// 
+			// butShowMedical
+			// 
+			this.butShowMedical.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowMedical.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butShowMedical.Autosize = true;
+			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowMedical.CornerRadius = 4F;
+			this.butShowMedical.Location = new System.Drawing.Point(263,217);
+			this.butShowMedical.Name = "butShowMedical";
+			this.butShowMedical.Size = new System.Drawing.Size(58,21);
+			this.butShowMedical.TabIndex = 121;
+			this.butShowMedical.TabStop = false;
+			this.butShowMedical.Text = "Show";
+			this.butShowMedical.Click += new System.EventHandler(this.butShowMedical_Click);
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(146,182);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(152,16);
+			this.label18.TabIndex = 120;
+			this.label18.Text = "Examples: 910,1430";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(146,164);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(152,16);
+			this.label17.TabIndex = 119;
+			this.label17.Text = "All time in military format";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textTotal
 			// 
@@ -1064,7 +1098,7 @@ namespace OpenDental{
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(73,17);
 			this.label20.TabIndex = 107;
-			this.label20.Text = "Base Units";
+			this.label20.Text = "Unit Code";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textCodeMod4
@@ -1672,40 +1706,6 @@ namespace OpenDental{
 			this.labelSite.TabIndex = 110;
 			this.labelSite.Text = "Site";
 			this.labelSite.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(146,164);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(152,16);
-			this.label17.TabIndex = 119;
-			this.label17.Text = "All time in military format";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label18
-			// 
-			this.label18.Location = new System.Drawing.Point(146,182);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(152,16);
-			this.label18.TabIndex = 120;
-			this.label18.Text = "Examples: 910,1430";
-			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butShowMedical
-			// 
-			this.butShowMedical.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowMedical.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butShowMedical.Autosize = true;
-			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(263,75);
-			this.butShowMedical.Name = "butShowMedical";
-			this.butShowMedical.Size = new System.Drawing.Size(58,21);
-			this.butShowMedical.TabIndex = 121;
-			this.butShowMedical.TabStop = false;
-			this.butShowMedical.Text = "Show";
-			this.butShowMedical.Click += new System.EventHandler(this.butShowMedical_Click);
 			// 
 			// FormProcEdit
 			// 
