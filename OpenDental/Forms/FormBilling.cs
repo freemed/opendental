@@ -841,12 +841,19 @@ namespace OpenDental{
 			if(sentelect>0) {
 				OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
 				writerElect.Close();
-				OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
-				CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
-				msgbox.ShowDialog();
-				//loop through all statements and mark sent
-				for(int i=0;i<stateNumsElect.Count;i++) {
-					Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+				try {
+					OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
+					//CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
+					//msgbox.ShowDialog();
+					//loop through all statements and mark sent
+					for(int i=0;i<stateNumsElect.Count;i++) {
+						Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+					}
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+					sentelect=0;
+					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
 				}
 			}
 			else {
