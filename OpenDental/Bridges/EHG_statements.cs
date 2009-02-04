@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -264,6 +265,7 @@ namespace OpenDental.Bridges {
 			readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 			str=readStream.ReadToEnd();
 			readStream.Close();
+			//Debug.WriteLine(str);
 			//MessageBox.Show(str);
 			responseParams=str.Split('&');
 			for(int i=0;i<responseParams.Length;i++) {
@@ -335,7 +337,7 @@ namespace OpenDental.Bridges {
 				+data+"\r\n"
 				+"--"+boundary+"--";
 			//}
-			//Debug.Write(postData);
+			//Debug.WriteLine(postData);
 			//MessageBox.Show(postData);
 			webReq=(HttpWebRequest)WebRequest.Create(serverName);
 			webReq.KeepAlive=false;
@@ -366,6 +368,7 @@ namespace OpenDental.Bridges {
 						status=GetParamValue(responseParams[i]);
 						break;
 					case "Error Message":
+					case "ErrorMessage":
 						errormsg=GetParamValue(responseParams[i]);
 						break;
 					case "Filename":
