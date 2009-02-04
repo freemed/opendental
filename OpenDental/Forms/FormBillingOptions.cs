@@ -836,6 +836,7 @@ namespace OpenDental{
 				stmt.IsSent=false;
 				if(PrefC.GetBool("BillingUseElectronic")) {
 					stmt.Mode_=StatementMode.Electronic;
+					stmt.Intermingled=true;
 				}
 				else {
 					stmt.Mode_=StatementMode.Mail;
