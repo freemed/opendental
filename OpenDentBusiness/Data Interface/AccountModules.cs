@@ -13,6 +13,8 @@ namespace OpenDentBusiness {
 		private static Patient pat;
 		///<summary>Gets filled in GetPayPlansForStatement, then gets added to the misc table.</summary>
 		private static double payPlanDue;
+		///<summary>Value will be set toward the bottom of GetAccount.  It will then go into the misc table.</summary>
+		private static double balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
@@ -58,6 +60,7 @@ namespace OpenDentBusiness {
 			//	GetCommLog(patNum);
 			//}
 			payPlanDue=0;
+			balanceForward=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
@@ -1234,10 +1237,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			//Remove rows outside of daterange-------------------------------------------------------------------
-			double balanceForward=0;
 			bool foundBalForward;
 			if(rowsByPat==null){
-				balanceForward=0;
 				foundBalForward=false;
 				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
 					if(((DateTime)rows[i]["DateTime"])>toDate){
@@ -1645,6 +1646,11 @@ namespace OpenDentBusiness {
 			row=table.NewRow();
 			row["descript"]="payPlanDue";
 			row["value"]=POut.PDouble(payPlanDue);
+			rows.Add(row);
+			//balanceForward-----------------------
+			row=table.NewRow();
+			row["descript"]="balanceForward";
+			row["value"]=POut.PDouble(balanceForward);
 			rows.Add(row);
 			//patInsEst
 			command="SELECT SUM(inspayest+writeoff) FROM claimproc "

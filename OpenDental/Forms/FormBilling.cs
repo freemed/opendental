@@ -55,7 +55,6 @@ namespace OpenDental{
 		private bool isPrinting=false;
 		private DataTable table;
 		private Label labelSentElect;
-		private OpenDental.UI.Button butSendEbill;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event PatientSelectedEventHandler GoToChanged=null;
@@ -116,7 +115,6 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.butPrintList = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
-			this.butSendEbill = new OpenDental.UI.Button();
 			this.contextMenu.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -414,29 +412,12 @@ namespace OpenDental{
 			this.label5.Text = "Does not print individual bills.  Just prints the list of bills.";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butSendEbill
-			// 
-			this.butSendEbill.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSendEbill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butSendEbill.Autosize = true;
-			this.butSendEbill.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSendEbill.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSendEbill.CornerRadius = 4F;
-			this.butSendEbill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSendEbill.Location = new System.Drawing.Point(643,656);
-			this.butSendEbill.Name = "butSendEbill";
-			this.butSendEbill.Size = new System.Drawing.Size(67,24);
-			this.butSendEbill.TabIndex = 44;
-			this.butSendEbill.Text = "E-Bills";
-			this.butSendEbill.Click += new System.EventHandler(this.butSendEbill_Click);
-			// 
 			// FormBilling
 			// 
 			this.AcceptButton = this.butSend;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(888,688);
-			this.Controls.Add(this.butSendEbill);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label4);
@@ -758,6 +739,7 @@ namespace OpenDental{
 			XmlWriter writerElect=XmlWriter.Create(strBuildElect,xmlSettings);
 			OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
 			DataSet dataSet;
+			List<int> stateNumsElect=new List<int>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				fam=Patients.GetFamily(stmt.PatNum);
@@ -778,7 +760,6 @@ namespace OpenDental{
 				}
 				stmt.IsSent=true;
 				stmt.DateSent=DateTime.Today;
-				Statements.WriteObject(stmt);
 				FormST.CreateStatementPdf(stmt,pat,fam,dataSet);
 				if(stmt.DocNum==0){
 					MsgBox.Show(this,"Failed to save PDF.  In Setup, DataPaths, please make sure the top radio button is checked.");
@@ -797,6 +778,10 @@ namespace OpenDental{
 						page=inputDocument.Pages[idx];
 						outputDocument.AddPage(page);
 					}
+					printed++;
+					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
+					Application.DoEvents();
+					Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
 				if(stmt.Mode_==StatementMode.Email){
 					attachPath=FormEmailMessageEdit.GetAttachPath();
@@ -822,23 +807,22 @@ namespace OpenDental{
 						Application.DoEvents();
 					}
 					catch(Exception ex){
-						stmt.IsSent=false;
-						Statements.WriteObject(stmt);
+						//stmt.IsSent=false;
+						//Statements.WriteObject(stmt);
 						Cursor=Cursors.Default;
 						MessageBox.Show(ex.Message);
 						return;
 					}
+					Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
 				if(stmt.Mode_==StatementMode.Electronic) {
+					stateNumsElect.Add(stmt.StatementNum);
 					OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
 					sentelect++;
 					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
 					Application.DoEvents();
-				}
-				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail) {
-					printed++;
-					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
-					Application.DoEvents();
+					//do this later:
+					//Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
 			}
 			//now print-------------------------------------------------------------------------------------
@@ -858,6 +842,12 @@ namespace OpenDental{
 				OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
 				writerElect.Close();
 				OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
+				CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
+				msgbox.ShowDialog();
+				//loop through all statements and mark sent
+				for(int i=0;i<stateNumsElect.Count;i++) {
+					Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+				}
 			}
 			else {
 				writerElect.Close();

@@ -52,6 +52,18 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static void MarkSent(int statementNum,DateTime dateSent) {
+			string command="UPDATE statement SET DateSent="+POut.PDate(dateSent)+", "
+				+"IsSent=1 WHERE StatementNum="+POut.PInt(statementNum);
+			General.NonQ(command);
+		}
+
+		public static void AttachDoc(int statementNum,int docNum) {
+			string command="UPDATE statement SET DocNum="+POut.PInt(docNum)
+				+" WHERE StatementNum="+POut.PInt(statementNum);
+			General.NonQ(command);
+		}
+
 		///<summary>For orderBy, use 0 for BillingType and 1 for PatientName.</summary>
 		public static DataTable GetBilling(bool isSent,int orderBy,DateTime dateFrom,DateTime dateTo){
 			DataTable table=new DataTable();
