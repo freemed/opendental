@@ -14,25 +14,25 @@ using OpenDentBusiness;
 namespace OpenDental.Bridges {
 	public class EHG_statements {
 		//these are temporary:
-		private static string vendorID="18";
-		private static string vendorPMScode="OD";
-		private static string clientAccountNumber="8011";//the dental office number set by EHG
-		private static string creditCardChoices="MC,D,V,A";//MasterCard,Discover,Visa,AmericanExpress
-		private static string userName="";
-		private static string password="";
+		//private static string vendorID="68";
+		//private static string vendorPMScode="144";
+		//private static string clientAccountNumber="8011";//the dental office number set by EHG
+		//private static string creditCardChoices="MC,D,V,A";//MasterCard,Discover,Visa,AmericanExpress
+		//private static string userName="";
+		//private static string password="";
 
 		///<summary>Generates all the xml up to the point where the first statement would go.</summary>
 		public static void GeneratePracticeInfo(XmlWriter writer) {
 			writer.WriteProcessingInstruction("xml","version = \"1.0\" standalone=\"yes\"");
 			writer.WriteStartElement("EISStatementFile");
-			writer.WriteAttributeString("VendorID",vendorID);
+			writer.WriteAttributeString("VendorID",PrefC.GetString("BillingElectVendorId"));
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
 			writer.WriteAttributeString("Version","2");
 			writer.WriteElementString("SubmitDate",DateTime.Today.ToString("yyyy-MM-dd"));
-			writer.WriteElementString("PrimarySubmitter",vendorPMScode);
+			writer.WriteElementString("PrimarySubmitter",PrefC.GetString("BillingElectVendorPMSCode"));
 			writer.WriteElementString("Transmitter","EHG");
 			writer.WriteStartElement("Practice");
-			writer.WriteAttributeString("AccountNumber",clientAccountNumber);
+			writer.WriteAttributeString("AccountNumber",PrefC.GetString("BillingElectClientAcctNumber"));
 			//sender address----------------------------------------------------------
 			writer.WriteStartElement("SenderAddress");
 			writer.WriteElementString("Name",PrefC.GetString("PracticeTitle"));
@@ -75,7 +75,7 @@ namespace OpenDental.Bridges {
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
 			writer.WriteStartElement("EisStatement");
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
-			writer.WriteAttributeString("CreditCardChoice",creditCardChoices);
+			writer.WriteAttributeString("CreditCardChoice",PrefC.GetString("BillingElectCreditCardChoices"));
 			writer.WriteStartElement("Patient");
 			Patient guar=fam.List[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
@@ -224,7 +224,7 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//EISStatementFile
 		}
 
-		///<summary>Surround with try catch.</summary>
+		///<summary>Surround with try catch.  The "data" is the previously constructed xml.</summary>
 		public static void Send(string data) {
 			//Step 1: Post authentication request:
 			Version myVersion=new Version(Application.ProductVersion);
@@ -248,8 +248,8 @@ namespace OpenDental.Bridges {
 				+"&Source=STM"//CONSTANT; file format
 				+"&UploaderName=OpenDental"//CONSTANT
 				+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString()//eg 3.4
-				+"&Username="+userName
-				+"&Password="+password;
+				+"&Username="+PrefC.GetString("BillingElectUserName")
+				+"&Password="+PrefC.GetString("BillingElectPassword");
 			webReq.KeepAlive=false;
 			webReq.Method="POST";
 			webReq.ContentType="application/x-www-form-urlencoded";
@@ -365,7 +365,7 @@ namespace OpenDental.Bridges {
 					case "Status":
 						status=GetParamValue(responseParams[i]);
 						break;
-					case "ErrorMessage":
+					case "Error Message":
 						errormsg=GetParamValue(responseParams[i]);
 						break;
 					case "Filename":
@@ -374,7 +374,7 @@ namespace OpenDental.Bridges {
 					case ""://errorMessage blank
 						break;
 					default:
-						throw new Exception("Unexpected parameter: "+curParam+"*");
+						throw new Exception(str);//"Unexpected parameter: "+str);//curParam+"*");
 				}
 			}
 			switch(status){

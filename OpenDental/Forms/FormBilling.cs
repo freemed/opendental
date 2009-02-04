@@ -851,7 +851,9 @@ namespace OpenDental{
 					}
 				}
 				catch(Exception ex) {
-					MessageBox.Show(ex.Message);
+					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ex.Message);
+					msgbox.ShowDialog();
+					//MessageBox.Show();
 					sentelect=0;
 					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
 				}
