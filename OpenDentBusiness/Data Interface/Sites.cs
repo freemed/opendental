@@ -78,5 +78,32 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		public static List<Site> GetListFiltered(string snippet) {
+			List<Site> retVal=new List<Site>();
+			if(snippet=="") {
+				return retVal;
+			}
+			for(int i=0;i<SiteC.List.Length;i++) {
+				if(SiteC.List[i].Description.ToLower().Contains(snippet.ToLower())) {
+					retVal.Add(SiteC.List[i]);
+				}
+			}
+			return retVal;
+		}
+
+		///<summary>Will return -1 if no match.</summary>
+		public static int FindMatchSiteNum(string description) {
+			if(description=="") {
+				return 0;
+			}
+			for(int i=0;i<SiteC.List.Length;i++) {
+				if(SiteC.List[i].Description.ToLower()==description.ToLower()) {
+					return SiteC.List[i].SiteNum;
+				}
+			}
+			return -1;
+		}
+
+
 	}
 }

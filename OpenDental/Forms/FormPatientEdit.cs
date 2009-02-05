@@ -98,9 +98,10 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboUrgency;
 		///<summary>Set true if this is a new patient. Patient must have been already inserted. If users clicks cancel, this patient will be deleted.</summary>
 		public bool IsNew;
-		private System.Windows.Forms.ListBox listSchools;//displays dropdown for GradeSchools
-		private string schoolOriginal;
-		private bool mouseIsInListSchools;
+		private System.Windows.Forms.ListBox listSites;//displays dropdown for Sites
+		private string SiteOriginal;
+		private bool mouseIsInListSites;
+		private List<Site> listSitesFiltered;
 		private System.Windows.Forms.ListBox listCounties;//displays dropdown for GradeSchools
 		private string countyOriginal;
 		private OpenDental.ValidDate textDateFirstVisit;
@@ -176,6 +177,15 @@ namespace OpenDental{
 			listCounties.MouseLeave += new System.EventHandler(listCounties_MouseLeave);
 			Controls.Add(listCounties);
 			listCounties.BringToFront();
+			listSites=new ListBox();
+			listSites.Location=new Point(groupPH.Left+textSite.Left,groupPH.Top+textSite.Bottom);
+			listSites.Size=new Size(textSite.Width,100);
+			listSites.Visible=false;
+			listSites.Click += new System.EventHandler(listSites_Click);
+			listSites.MouseEnter += new System.EventHandler(listSites_MouseEnter);
+			listSites.MouseLeave += new System.EventHandler(listSites_MouseLeave);
+			Controls.Add(listSites);
+			listSites.BringToFront();
 			Lan.F(this);
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				labelSSN.Text="SIN";
@@ -282,6 +292,10 @@ namespace OpenDental{
 			this.textEmployer = new System.Windows.Forms.TextBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.groupPH = new System.Windows.Forms.GroupBox();
+			this.butClearResponsParty = new OpenDental.UI.Button();
+			this.butPickResponsParty = new OpenDental.UI.Button();
+			this.textResponsParty = new System.Windows.Forms.TextBox();
+			this.label34 = new System.Windows.Forms.Label();
 			this.butPickSite = new OpenDental.UI.Button();
 			this.comboUrgency = new System.Windows.Forms.ComboBox();
 			this.comboGradeLevel = new System.Windows.Forms.ComboBox();
@@ -314,10 +328,6 @@ namespace OpenDental{
 			this.labelAdmitDate = new System.Windows.Forms.Label();
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.butPickResponsParty = new OpenDental.UI.Button();
-			this.textResponsParty = new System.Windows.Forms.TextBox();
-			this.label34 = new System.Windows.Forms.Label();
-			this.butClearResponsParty = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -1096,6 +1106,54 @@ namespace OpenDental{
 			this.groupPH.TabStop = false;
 			this.groupPH.Text = "Public Health";
 			// 
+			// butClearResponsParty
+			// 
+			this.butClearResponsParty.AdjustImageLocation = new System.Drawing.Point(1,1);
+			this.butClearResponsParty.Autosize = true;
+			this.butClearResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearResponsParty.CornerRadius = 4F;
+			this.butClearResponsParty.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butClearResponsParty.Location = new System.Drawing.Point(397,116);
+			this.butClearResponsParty.Name = "butClearResponsParty";
+			this.butClearResponsParty.Size = new System.Drawing.Size(25,23);
+			this.butClearResponsParty.TabIndex = 67;
+			this.butClearResponsParty.TabStop = false;
+			this.butClearResponsParty.Click += new System.EventHandler(this.butClearResponsParty_Click);
+			// 
+			// butPickResponsParty
+			// 
+			this.butPickResponsParty.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPickResponsParty.Autosize = true;
+			this.butPickResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickResponsParty.CornerRadius = 4F;
+			this.butPickResponsParty.Location = new System.Drawing.Point(349,116);
+			this.butPickResponsParty.Name = "butPickResponsParty";
+			this.butPickResponsParty.Size = new System.Drawing.Size(48,23);
+			this.butPickResponsParty.TabIndex = 66;
+			this.butPickResponsParty.TabStop = false;
+			this.butPickResponsParty.Text = "Pick";
+			this.butPickResponsParty.Click += new System.EventHandler(this.butPickResponsParty_Click);
+			// 
+			// textResponsParty
+			// 
+			this.textResponsParty.AcceptsReturn = true;
+			this.textResponsParty.Location = new System.Drawing.Point(149,118);
+			this.textResponsParty.Name = "textResponsParty";
+			this.textResponsParty.ReadOnly = true;
+			this.textResponsParty.Size = new System.Drawing.Size(198,20);
+			this.textResponsParty.TabIndex = 65;
+			// 
+			// label34
+			// 
+			this.label34.Location = new System.Drawing.Point(1,118);
+			this.label34.Name = "label34";
+			this.label34.Size = new System.Drawing.Size(146,17);
+			this.label34.TabIndex = 64;
+			this.label34.Text = "Responsible Party";
+			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// butPickSite
 			// 
 			this.butPickSite.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1135,9 +1193,10 @@ namespace OpenDental{
 			this.textSite.AcceptsReturn = true;
 			this.textSite.Location = new System.Drawing.Point(149,56);
 			this.textSite.Name = "textSite";
-			this.textSite.ReadOnly = true;
 			this.textSite.Size = new System.Drawing.Size(198,20);
 			this.textSite.TabIndex = 2;
+			this.textSite.Leave += new System.EventHandler(this.textSite_Leave);
+			this.textSite.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textSite_KeyUp);
 			// 
 			// label35
 			// 
@@ -1388,54 +1447,6 @@ namespace OpenDental{
 			this.label26.TabIndex = 104;
 			this.label26.Text = "Title (Mr., Ms.)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butPickResponsParty
-			// 
-			this.butPickResponsParty.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPickResponsParty.Autosize = true;
-			this.butPickResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPickResponsParty.CornerRadius = 4F;
-			this.butPickResponsParty.Location = new System.Drawing.Point(349,116);
-			this.butPickResponsParty.Name = "butPickResponsParty";
-			this.butPickResponsParty.Size = new System.Drawing.Size(48,23);
-			this.butPickResponsParty.TabIndex = 66;
-			this.butPickResponsParty.TabStop = false;
-			this.butPickResponsParty.Text = "Pick";
-			this.butPickResponsParty.Click += new System.EventHandler(this.butPickResponsParty_Click);
-			// 
-			// textResponsParty
-			// 
-			this.textResponsParty.AcceptsReturn = true;
-			this.textResponsParty.Location = new System.Drawing.Point(149,118);
-			this.textResponsParty.Name = "textResponsParty";
-			this.textResponsParty.ReadOnly = true;
-			this.textResponsParty.Size = new System.Drawing.Size(198,20);
-			this.textResponsParty.TabIndex = 65;
-			// 
-			// label34
-			// 
-			this.label34.Location = new System.Drawing.Point(1,118);
-			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(146,17);
-			this.label34.TabIndex = 64;
-			this.label34.Text = "Responsible Party";
-			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butClearResponsParty
-			// 
-			this.butClearResponsParty.AdjustImageLocation = new System.Drawing.Point(1,1);
-			this.butClearResponsParty.Autosize = true;
-			this.butClearResponsParty.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearResponsParty.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearResponsParty.CornerRadius = 4F;
-			this.butClearResponsParty.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butClearResponsParty.Location = new System.Drawing.Point(397,116);
-			this.butClearResponsParty.Name = "butClearResponsParty";
-			this.butClearResponsParty.Size = new System.Drawing.Size(25,23);
-			this.butClearResponsParty.TabIndex = 67;
-			this.butClearResponsParty.TabStop = false;
-			this.butClearResponsParty.Click += new System.EventHandler(this.butClearResponsParty_Click);
 			// 
 			// FormPatientEdit
 			// 
@@ -2149,6 +2160,130 @@ namespace OpenDental{
 		private void listCounties_MouseLeave(object sender, System.EventArgs e){
 			mouseIsInListCounties=false;
 		}
+
+		private void textSite_KeyUp(object sender,System.Windows.Forms.KeyEventArgs e) {
+			if(e.KeyCode==Keys.Return) {
+				listSites.Visible=false;
+				comboGradeLevel.Focus();
+				return;
+			}
+			if(textSite.Text=="") {
+				listSites.Visible=false;
+				return;
+			}
+			if(e.KeyCode==Keys.Down) {
+				if(listSites.Items.Count==0) {
+					return;
+				}
+				if(listSites.SelectedIndex==-1) {
+					listSites.SelectedIndex=0;
+					textSite.Text=listSites.SelectedItem.ToString();
+				}
+				else if(listSites.SelectedIndex==listSites.Items.Count-1) {
+					listSites.SelectedIndex=-1;
+					textSite.Text=SiteOriginal;
+				}
+				else {
+					listSites.SelectedIndex++;
+					textSite.Text=listSites.SelectedItem.ToString();
+				}
+				textSite.SelectionStart=textSite.Text.Length;
+				return;
+			}
+			if(e.KeyCode==Keys.Up) {
+				if(listSites.Items.Count==0) {
+					return;
+				}
+				if(listSites.SelectedIndex==-1) {
+					listSites.SelectedIndex=listSites.Items.Count-1;
+					textSite.Text=listSites.SelectedItem.ToString();
+				}
+				else if(listSites.SelectedIndex==0) {
+					listSites.SelectedIndex=-1;
+					textSite.Text=SiteOriginal;
+				}
+				else {
+					listSites.SelectedIndex--;
+					textSite.Text=listSites.SelectedItem.ToString();
+				}
+				textSite.SelectionStart=textSite.Text.Length;
+				return;
+			}
+			if(textSite.Text.Length==1) {
+				textSite.Text=textSite.Text.ToUpper();
+				textSite.SelectionStart=1;
+			}
+			SiteOriginal=textSite.Text;//the original text is preserved when using up and down arrows
+			listSites.Items.Clear();
+			listSitesFiltered=Sites.GetListFiltered(textSite.Text);
+			//similarSchools=
+			//Carriers.GetSimilarNames(textSite.Text);
+			for(int i=0;i<listSitesFiltered.Count;i++) {
+				listSites.Items.Add(listSitesFiltered[i].Description);
+			}
+			int h=13*listSitesFiltered.Count+5;
+			if(h > ClientSize.Height-listSites.Top) {
+				h=ClientSize.Height-listSites.Top;
+			}
+			listSites.Size=new Size(textSite.Width,h);
+			listSites.Visible=true;
+		}
+
+		private void textSite_Leave(object sender,System.EventArgs e) {
+			if(mouseIsInListSites) {
+				return;
+			}
+			//or if user clicked on a different text box.
+			if(listSites.SelectedIndex!=-1) {
+				textSite.Text=listSitesFiltered[listSites.SelectedIndex].Description;
+				PatCur.SiteNum=listSitesFiltered[listSites.SelectedIndex].SiteNum;
+			}
+			listSites.Visible=false;
+		}
+
+		private void listSites_Click(object sender,System.EventArgs e) {
+			textSite.Text=listSitesFiltered[listSites.SelectedIndex].Description;
+			PatCur.SiteNum=listSitesFiltered[listSites.SelectedIndex].SiteNum;
+			textSite.Focus();
+			textSite.SelectionStart=textSite.Text.Length;
+			listSites.Visible=false;
+		}
+
+		private void listSites_MouseEnter(object sender,System.EventArgs e) {
+			mouseIsInListSites=true;
+		}
+
+		private void listSites_MouseLeave(object sender,System.EventArgs e) {
+			mouseIsInListSites=false;
+		}
+
+		private void butPickSite_Click(object sender,EventArgs e) {
+			FormSites FormS=new FormSites();
+			FormS.IsSelectionMode=true;
+			FormS.SelectedSiteNum=PatCur.SiteNum;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			PatCur.SiteNum=FormS.SelectedSiteNum;
+			textSite.Text=Sites.GetDescription(PatCur.SiteNum);
+		}
+
+		private void butPickResponsParty_Click(object sender,EventArgs e) {
+			FormPatientSelect FormPS=new FormPatientSelect();
+			FormPS.SelectionModeOnly=true;
+			FormPS.ShowDialog();
+			if(FormPS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			PatCur.ResponsParty=FormPS.SelectedPatNum;
+			textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
+		}
+
+		private void butClearResponsParty_Click(object sender,EventArgs e) {
+			PatCur.ResponsParty=0;
+			textResponsParty.Text="";
+		}
 		#endregion
 
 		/*private void butChangeEmp_Click(object sender, System.EventArgs e) {
@@ -2280,34 +2415,6 @@ namespace OpenDental{
 				}
 			}
 		}
-
-		private void butPickSite_Click(object sender,EventArgs e) {
-			FormSites FormS=new FormSites();
-			FormS.IsSelectionMode=true;
-			FormS.SelectedSiteNum=PatCur.SiteNum;
-			FormS.ShowDialog();
-			if(FormS.DialogResult!=DialogResult.OK){
-				return;
-			}
-			PatCur.SiteNum=FormS.SelectedSiteNum;
-			textSite.Text=Sites.GetDescription(PatCur.SiteNum);
-		}
-
-		private void butPickResponsParty_Click(object sender,EventArgs e) {
-			FormPatientSelect FormPS=new FormPatientSelect();
-			FormPS.SelectionModeOnly=true;
-			FormPS.ShowDialog();
-			if(FormPS.DialogResult!=DialogResult.OK){
-				return;
-			}
-			PatCur.ResponsParty=FormPS.SelectedPatNum;
-			textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
-		}
-
-		private void butClearResponsParty_Click(object sender,EventArgs e) {
-			PatCur.ResponsParty=0;
-			textResponsParty.Text="";
-		}
 		
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(  textBirthdate.errorProvider1.GetError(textBirthdate)!=""
@@ -2333,6 +2440,19 @@ namespace OpenDental{
 			if(textCounty.Text != "" && !Counties.DoesExist(textCounty.Text)){
 				MessageBox.Show(Lan.g(this,"County name invalid."));
 				return;
+			}
+			if(textSite.Text=="") {
+				PatCur.SiteNum=0;
+			}
+			if(textSite.Text != "" && textSite.Text != Sites.GetDescription(PatCur.SiteNum)) {
+				int matchingSite=Sites.FindMatchSiteNum(textSite.Text);
+				if(matchingSite==-1) {
+					MessageBox.Show(Lan.g(this,"Invalid Site description."));
+					return;
+				}
+				else {
+					PatCur.SiteNum=matchingSite;
+				}
 			}
 			PatCur.LName=textLName.Text;
 			PatCur.FName=textFName.Text;
