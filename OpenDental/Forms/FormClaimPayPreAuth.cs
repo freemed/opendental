@@ -72,7 +72,7 @@ namespace OpenDental
 			// label1
 			// 
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(304,278);
+			this.label1.Location = new System.Drawing.Point(184,278);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(84,16);
 			this.label1.TabIndex = 117;
@@ -95,7 +95,7 @@ namespace OpenDental
 			// 
 			// textTotal
 			// 
-			this.textTotal.Location = new System.Drawing.Point(394,275);
+			this.textTotal.Location = new System.Drawing.Point(274,275);
 			this.textTotal.Name = "textTotal";
 			this.textTotal.ReadOnly = true;
 			this.textTotal.Size = new System.Drawing.Size(55,20);
