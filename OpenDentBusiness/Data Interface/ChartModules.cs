@@ -110,6 +110,9 @@ namespace OpenDentBusiness {
 					case ProcStat.D:
 						row["colorText"]=Color.Black.ToArgb().ToString();
 						break;
+					case ProcStat.Cn:
+						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][22].ItemColor.ToArgb().ToString();
+						break;
 				}
 				row["CommlogNum"]=0;
 				if(rawProcs.Rows[i]["LaymanTerm"].ToString()=="") {

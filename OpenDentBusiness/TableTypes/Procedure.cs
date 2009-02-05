@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 		public string ToothRange;
 		///<summary>FK to definition.DefNum, which contains the text of the priority.</summary>
 		public int Priority;
-		///<summary>Enum:ProcStat TP=1,Complete=2,Existing Cur Prov=3,Existing Other Prov=4,Referred=5,Deleted=6.</summary>
+		///<summary>Enum:ProcStat TP=1,Complete=2,Existing Cur Prov=3,Existing Other Prov=4,Referred=5,Deleted=6,Condition=7.</summary>
 		public ProcStat ProcStatus;
 		///<summary>FK to provider.ProvNum.</summary>
 		public int ProvNum;

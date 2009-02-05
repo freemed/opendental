@@ -127,7 +127,9 @@ namespace OpenDentBusiness{
 		///<summary>5- Referred Out.</summary>
 		R,
 		///<summary>6- Deleted.</summary>
-		D
+		D,
+		///<summary>7- Condition.</summary>
+		Cn
 	}
 		//?new?
 	///<summary>Definition Category. Go to the definition setup window in the program to see how each of these categories is used.</summary>

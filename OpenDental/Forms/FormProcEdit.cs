@@ -954,7 +954,7 @@ namespace OpenDental{
 			this.groupMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupMedical.Location = new System.Drawing.Point(400,1);
 			this.groupMedical.Name = "groupMedical";
-			this.groupMedical.Size = new System.Drawing.Size(321,239);
+			this.groupMedical.Size = new System.Drawing.Size(321,98);
 			this.groupMedical.TabIndex = 97;
 			this.groupMedical.TabStop = false;
 			this.groupMedical.Text = "Medical";
@@ -967,7 +967,7 @@ namespace OpenDental{
 			this.butShowMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowMedical.CornerRadius = 4F;
-			this.butShowMedical.Location = new System.Drawing.Point(263,217);
+			this.butShowMedical.Location = new System.Drawing.Point(263,76);
 			this.butShowMedical.Name = "butShowMedical";
 			this.butShowMedical.Size = new System.Drawing.Size(58,21);
 			this.butShowMedical.TabIndex = 121;
@@ -1337,7 +1337,7 @@ namespace OpenDental{
 			this.listProcStatus.FormattingEnabled = true;
 			this.listProcStatus.Location = new System.Drawing.Point(730,20);
 			this.listProcStatus.Name = "listProcStatus";
-			this.listProcStatus.Size = new System.Drawing.Size(120,82);
+			this.listProcStatus.Size = new System.Drawing.Size(120,95);
 			this.listProcStatus.TabIndex = 76;
 			this.listProcStatus.Click += new System.EventHandler(this.listProcStatus_Click);
 			// 
@@ -1894,6 +1894,7 @@ namespace OpenDental{
 				listProcStatus.Items.Add(Lan.g(this,"Referred Out"));
 			}
 			listProcStatus.Items.Add(Lan.g(this,"Deleted"));
+			listProcStatus.Items.Add(Lan.g(this,"Condition"));
 			if(ProcCur.ProcStatus==ProcStat.TP){
 				listProcStatus.SelectedIndex=0;
 			}
@@ -1917,6 +1918,9 @@ namespace OpenDental{
 				}
 				if(ProcCur.ProcStatus==ProcStat.D) {
 					listProcStatus.SelectedIndex=5;
+				}
+				if(ProcCur.ProcStatus==ProcStat.Cn) {
+					listProcStatus.SelectedIndex=6;
 				}
 			}
 			if(ProcCur.ProcStatus==ProcStat.D){
@@ -2567,6 +2571,9 @@ namespace OpenDental{
 						if(ProcCur.ProcStatus==ProcStat.D) {
 							listProcStatus.SelectedIndex=5;
 						}
+						if(ProcCur.ProcStatus==ProcStat.Cn) {
+							listProcStatus.SelectedIndex=6;
+						}
 					}
 					return;
 				}
@@ -2589,6 +2596,9 @@ namespace OpenDental{
 			}
 			if(listProcStatus.SelectedIndex==5) {
 				ProcCur.ProcStatus=ProcStat.D;
+			}
+			if(listProcStatus.SelectedIndex==6) {
+				ProcCur.ProcStatus=ProcStat.Cn;
 			}
 		}
 
