@@ -31,10 +31,19 @@ namespace OpenDental {
 				return;
 			}
 			string note=AutoNotes.Listt[listMain.SelectedIndex].MainText;
-			if(textMain.Text!="") {
-				textMain.Text+="\r\n";
+			int selectionStart=textMain.SelectionStart;
+			if(selectionStart==0) {
+				textMain.Text=note+textMain.Text;
 			}
-			textMain.Text+=note;
+			else if(selectionStart==textMain.Text.Length-1) {
+				textMain.Text=textMain.Text+note;
+			}
+			else if(selectionStart==-1) {//?is this even possible?
+				textMain.Text=textMain.Text+note;
+			}
+			else {
+				textMain.Text=textMain.Text.Substring(0,selectionStart)+note+textMain.Text.Substring(selectionStart);
+			}
 			List<AutoNoteControl> prompts=new List<AutoNoteControl>();
 			MatchCollection matches=Regex.Matches(note,@"\[Prompt:""[a-zA-Z_0-9 ]+""\]");
 			string autoNoteDescript;
@@ -102,6 +111,9 @@ namespace OpenDental {
 				textMain.Text=textMain.Text.Replace(matches[i].Value,promptResponse);
 				Application.DoEvents();//refresh the textbox
 			}
+			textMain.SelectAll();
+			textMain.SelectionBackColor=Color.White;
+			textMain.Select(textMain.Text.Length,0);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

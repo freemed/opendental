@@ -2700,7 +2700,8 @@ namespace OpenDental{
 				label20.Visible=false;//warning when delete
 				textReasonUnder.Visible=false;
 				label4.Visible=false;//reason under
-				butPayTotal.Visible=false;	
+				butPayTotal.Visible=false;
+				butPaySupp.Visible=false;
 				butSplit.Visible=false;
       }
 			if(PrefC.GetBool("EasyNoClinics")){
@@ -3338,32 +3339,38 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList);
-			FormCPT.ClaimProcsToEdit=new ClaimProc[gridProc.SelectedIndices.Length];
-			for(int i=0;i<gridProc.SelectedIndices.Length;i++){
+			List<ClaimProc> cpList=new List<ClaimProc>();
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				//copy selected claimprocs to temporary array for editing.
 				//no changes to the database will be made within that form.
-				FormCPT.ClaimProcsToEdit[i]=ClaimProcsForClaim[gridProc.SelectedIndices[i]];
+				cpList.Add(ClaimProcsForClaim[gridProc.SelectedIndices[i]].Copy());
 				if(ClaimCur.ClaimType=="PreAuth"){
-					FormCPT.ClaimProcsToEdit[i].Status=ClaimProcStatus.Preauth;
+					cpList[i].Status=ClaimProcStatus.Preauth;
 				}
 				else if(ClaimCur.ClaimType=="Cap"){
 					;//do nothing.  The claimprocstatus will remain Capitation.
 				}
 				else{
-					FormCPT.ClaimProcsToEdit[i].Status=ClaimProcStatus.Received;
-					FormCPT.ClaimProcsToEdit[i].DateEntry=DateTime.Now;//date is was set rec'd
+					cpList[i].Status=ClaimProcStatus.Received;
+					cpList[i].DateEntry=DateTime.Now;//date is was set rec'd
 				}
-				FormCPT.ClaimProcsToEdit[i].InsPayAmt=FormCPT.ClaimProcsToEdit[i].InsPayEst;
-				FormCPT.ClaimProcsToEdit[i].DateCP=DateTime.Today;
+				cpList[i].InsPayAmt=cpList[i].InsPayEst;
+				cpList[i].DateCP=DateTime.Today;
 			}
-			FormCPT.ShowDialog();
-			if(FormCPT.DialogResult!=DialogResult.OK){
-				return;
+			if(ClaimCur.ClaimType=="PreAuth") {
+				
 			}
-			//save changes now
-			for(int i=0;i<FormCPT.ClaimProcsToEdit.Length;i++){
-				ClaimProcs.Update(FormCPT.ClaimProcsToEdit[i]);
+			else {
+				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList);
+				FormCPT.ClaimProcsToEdit=cpList.ToArray();
+				FormCPT.ShowDialog();
+				if(FormCPT.DialogResult!=DialogResult.OK){
+					return;
+				}
+				//save changes now
+				for(int i=0;i<FormCPT.ClaimProcsToEdit.Length;i++){
+					ClaimProcs.Update(FormCPT.ClaimProcsToEdit[i]);
+				}
 			}
 			listClaimStatus.SelectedIndex=5;//Received
 			if(textDateRec.Text==""){
