@@ -559,6 +559,23 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		///<summary>After entering estimates from a preauth, this routine is called for each proc to override the ins est.</summary>
+		public static void OverrideInsEst(int procNum,int planNum,double insPayEst,ClaimProc[] claimProcList){
+			for(int i=0;i<claimProcList.Length;i++) {
+				if(procNum!=claimProcList[i].ProcNum) {
+					continue;
+				}
+				if(planNum!=claimProcList[i].PlanNum) {
+					continue;
+				}
+				if(claimProcList[i].Status!=ClaimProcStatus.Estimate) {
+					continue;
+				}
+				claimProcList[i].OverrideInsEst=insPayEst;
+				Update(claimProcList[i]);
+			}
+		}
+
 
 	}
 

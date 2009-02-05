@@ -260,129 +260,8 @@ namespace OpenDental
 			}
 			for(int i=0;i<ClaimProcsToEdit.Count;i++){
 				ClaimProcsToEdit[i].InsPayEst=PIn.PDouble(gridMain.Rows[i].Cells[4].Text);
+				ClaimProcsToEdit[i].Remarks=gridMain.Rows[i].Cells[5].Text;
 			}
-		}
-
-		private void butDeductible_Click(object sender, System.EventArgs e) {
-			if(gridMain.SelectedCell.X==-1){
-				MessageBox.Show(Lan.g(this,"Please select one procedure.  Then click this button to assign the deductible to that procedure."));
-				return;
-			}
-			try {
-				SaveGridChanges();
-			}
-			catch(ApplicationException ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Double dedAmt=0;
-			//remove the existing deductible from each procedure and move it to dedAmt.
-			for(int i=0;i<ClaimProcsToEdit.Count;i++){
-				if(ClaimProcsToEdit[i].DedApplied > 0){
-					dedAmt+=ClaimProcsToEdit[i].DedApplied;
-					ClaimProcsToEdit[i].InsPayEst+=ClaimProcsToEdit[i].DedApplied;//dedAmt might be more
-					ClaimProcsToEdit[i].InsPayAmt+=ClaimProcsToEdit[i].DedApplied;
-					ClaimProcsToEdit[i].DedApplied=0;
-				}
-			}
-			if(dedAmt==0){
-				MessageBox.Show(Lan.g(this,"There does not seem to be a deductible to apply.  You can still apply a deductible manually by double clicking on a procedure."));
-				return;
-			}
-			//then move dedAmt to the selected proc
-			ClaimProcsToEdit[gridMain.SelectedCell.Y].DedApplied=dedAmt;
-			ClaimProcsToEdit[gridMain.SelectedCell.Y].InsPayEst-=dedAmt;
-			ClaimProcsToEdit[gridMain.SelectedCell.Y].InsPayAmt-=dedAmt;
-			FillGrid();
-		}
-
-		private void butWriteOff_Click(object sender, System.EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Write off unpaid amount on each procedure?"),""
-				,MessageBoxButtons.OKCancel)!=DialogResult.OK){
-				return;
-			}
-			try {
-				SaveGridChanges();
-			}
-			catch(ApplicationException ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			//fix later: does not take into account other payments.
-			double unpaidAmt=0;
-			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
-			for(int i=0;i<ClaimProcsToEdit.Count;i++){
-				unpaidAmt=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum).ProcFee
-					//((Procedure)Procedures.HList[ClaimProcsToEdit[i].ProcNum]).ProcFee
-					-ClaimProcsToEdit[i].DedApplied
-					-ClaimProcsToEdit[i].InsPayAmt;
-				if(unpaidAmt > 0){
-					ClaimProcsToEdit[i].WriteOff=unpaidAmt;
-				}
-			}
-			FillGrid();
-		}
-
-		private void SaveAllowedFees(){
-			//if no allowed fees entered, then nothing to do 
-			bool allowedFeesEntered=false;
-			for(int i=0;i<gridMain.Rows.Count;i++){
-				if(gridMain.Rows[i].Cells[7].Text!=""){
-					allowedFeesEntered=true;
-					break;
-				}
-			}
-			if(!allowedFeesEntered){
-				return;
-			}
-			//if no allowed fee schedule, then nothing to do
-			InsPlan plan=InsPlans.GetPlan(ClaimProcsToEdit[0].PlanNum,PlanList);
-			if(plan.AllowedFeeSched==0){//no allowed fee sched
-				//plan.PlanType!="p" && //not ppo, and 
-				return;
-			}
-			//ask user if they want to save the fees
-			if(!MsgBox.Show(this,true,"Save the allowed amounts to the allowed fee schedule?")){
-				return;
-			}
-			//select the feeSchedule
-			int feeSched=-1;
-			//if(plan.PlanType=="p"){//ppo
-			//	feeSched=plan.FeeSched;
-			//}
-			//else if(plan.AllowedFeeSched!=0){//an allowed fee schedule exists
-			feeSched=plan.AllowedFeeSched;
-			//}
-			if(FeeScheds.GetIsHidden(feeSched)){
-				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
-				return;
-			}
-			Fee FeeCur=null;
-			int codeNum;
-			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
-			Procedure proc;
-			for(int i=0;i<ClaimProcsToEdit.Count;i++){
-				//this gives error message if proc not found:
-				proc=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum);
-				codeNum=proc.CodeNum;
-				if(codeNum==0){
-					continue;
-				}
-				FeeCur=Fees.GetFee(codeNum,feeSched);
-				if(FeeCur==null){
-					FeeCur=new Fee();
-					FeeCur.FeeSched=feeSched;
-					FeeCur.CodeNum=codeNum;
-					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
-					Fees.Insert(FeeCur);
-				}
-				else{
-					FeeCur.Amount=PIn.PDouble(gridMain.Rows[i].Cells[7].Text);
-					Fees.Update(FeeCur);
-				}
-			}
-			//Fees.Refresh();//redundant?
-			DataValid.SetInvalid(InvalidType.Fees);
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
@@ -393,7 +272,6 @@ namespace OpenDental
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			SaveAllowedFees();
 			DialogResult=DialogResult.OK;
 		}
 

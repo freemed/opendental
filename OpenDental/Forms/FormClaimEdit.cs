@@ -3353,12 +3353,23 @@ namespace OpenDental{
 				else{
 					cpList[i].Status=ClaimProcStatus.Received;
 					cpList[i].DateEntry=DateTime.Now;//date is was set rec'd
+					cpList[i].InsPayAmt=cpList[i].InsPayEst;
 				}
-				cpList[i].InsPayAmt=cpList[i].InsPayEst;
 				cpList[i].DateCP=DateTime.Today;
 			}
 			if(ClaimCur.ClaimType=="PreAuth") {
-				
+				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList);
+				FormCPP.ClaimProcsToEdit=cpList;
+				FormCPP.ShowDialog();
+				if(FormCPP.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				//save changes now
+				for(int i=0;i<FormCPP.ClaimProcsToEdit.Count;i++) {
+					ClaimProcs.Update(FormCPP.ClaimProcsToEdit[i]);
+					ClaimProcs.OverrideInsEst(FormCPP.ClaimProcsToEdit[i].ProcNum,FormCPP.ClaimProcsToEdit[i].PlanNum,
+						FormCPP.ClaimProcsToEdit[i].InsPayEst,ClaimProcList);
+				}
 			}
 			else {
 				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList);

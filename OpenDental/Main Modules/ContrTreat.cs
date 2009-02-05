@@ -2520,6 +2520,7 @@ namespace OpenDental{
 			Claims.Insert(ClaimCur);
 			Procedure ProcCur;
 			ClaimProc ClaimProcCur;
+			ClaimProc cpExisting;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null) {
 					continue;//skip any highlighted subtotal lines
@@ -2533,6 +2534,10 @@ namespace OpenDental{
 				ClaimProcCur.Status=ClaimProcStatus.Preauth;
 				ClaimProcCur.FeeBilled=ProcCur.ProcFee;
 				ClaimProcCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
+				cpExisting=ClaimProcs.GetEstimate(ClaimProcList,ProcCur.ProcNum,FormIPS.SelectedPlan.PlanNum);
+				if(cpExisting!=null){
+					ClaimProcCur.InsPayEst=cpExisting.InsPayEst;
+				}
 				if(FormIPS.SelectedPlan.UseAltCode && (ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1!="")){
 					ClaimProcCur.CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1;
 				}
