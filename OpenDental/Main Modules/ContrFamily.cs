@@ -639,6 +639,7 @@ namespace OpenDental{
 						else{
 							row.Cells.Add(Patients.GetLim(PatCur.ResponsParty).GetNameLF());
 						}
+						row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 						break;
 					case "Referrals":
 						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);

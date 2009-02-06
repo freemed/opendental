@@ -418,6 +418,9 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFamilyMemberSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormClaimPayPreAuth.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3749,6 +3752,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFamilyMemberSelect.resx">
+      <DependentUpon>FormFamilyMemberSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClaimPayPreAuth.resx">

@@ -2270,13 +2270,12 @@ namespace OpenDental{
 		}
 
 		private void butPickResponsParty_Click(object sender,EventArgs e) {
-			FormPatientSelect FormPS=new FormPatientSelect();
-			FormPS.SelectionModeOnly=true;
-			FormPS.ShowDialog();
-			if(FormPS.DialogResult!=DialogResult.OK) {
+			FormFamilyMemberSelect FormF=new FormFamilyMemberSelect(FamCur);
+			FormF.ShowDialog();
+			if(FormF.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			PatCur.ResponsParty=FormPS.SelectedPatNum;
+			PatCur.ResponsParty=FormF.SelectedPatNum;
 			textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
 		}
 
