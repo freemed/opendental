@@ -1155,18 +1155,20 @@ namespace OpenDentBusiness{
 					AND claimproc.InsPayAmt>0
 					GROUP BY patient.Guarantor;";					
 			}
-			/*command+=@"DROP TABLE IF EXISTS temppayplans;
-				CREATE TABLE temppayplans(
-				Guarantor int unsigned NOT NULL,
-				PendingClaimCount int NOT NULL,
-				PRIMARY KEY (Guarantor));
-				INSERT INTO tempclaimspending
-				SELECT patient.Guarantor,COUNT(*)
-				FROM claim,patient
-				WHERE claim.PatNum=patient.PatNum
-				AND (ClaimStatus='U' OR ClaimStatus='H' OR ClaimStatus='W' OR ClaimStatus='S')
-				AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
-				GROUP BY patient.Guarantor;";*/
+			if(excludeInsPending) {
+				command+=@"DROP TABLE IF EXISTS tempclaimspending;
+					CREATE TABLE tempclaimspending(
+					Guarantor int unsigned NOT NULL,
+					PendingClaimCount int NOT NULL,
+					PRIMARY KEY (Guarantor));
+					INSERT INTO tempclaimspending
+					SELECT patient.Guarantor,COUNT(*)
+					FROM claim,patient
+					WHERE claim.PatNum=patient.PatNum
+					AND (ClaimStatus='U' OR ClaimStatus='H' OR ClaimStatus='W' OR ClaimStatus='S')
+					AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
+					GROUP BY patient.Guarantor;";
+			}
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
 				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred, "
 				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
@@ -1174,9 +1176,9 @@ namespace OpenDentBusiness{
 				command+=",IFNULL(templastproc.LastProc,'0001-01-01') AS LastChange,"
 					+"IFNULL(templastpay.LastPay,'0001-01-01') AS LastPayment ";
 			}
-			//if(excludeInsPending){
-			//	command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
-			//}
+			if(excludeInsPending){
+				command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
+			}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
 				+"LEFT JOIN statement ON patient.PatNum=statement.PatNum ";
@@ -1184,9 +1186,9 @@ namespace OpenDentBusiness{
 				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
 					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";
 			}
-			//if(excludeInsPending){
-			//	command+="LEFT JOIN tempclaimspending ON patient.PatNum=tempclaimspending.Guarantor ";
-			//}
+			if(excludeInsPending){
+				command+="LEFT JOIN tempclaimspending ON patient.PatNum=tempclaimspending.Guarantor ";
+			}
 			command+="WHERE ";
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
@@ -1239,9 +1241,9 @@ namespace OpenDentBusiness{
 			else{
 				command+=") ";
 			}
-			//if(excludeInsPending){
-			//	command+="AND ClaimCount=0 ";
-			//}
+			if(excludeInsPending){
+				command+="AND ClaimCount=0 ";
+			}
 			command+="ORDER BY LName,FName";
 			//Debug.WriteLine(command);
 			DataTable table=General.GetTable(command);
@@ -1267,12 +1269,12 @@ namespace OpenDentBusiness{
 				patage.DateLastStatement=PIn.PDate(table.Rows[i]["LastStatement"].ToString());
 				patage.BillingType=PIn.PInt(table.Rows[i]["BillingType"].ToString());
 				patage.PayPlanDue =PIn.PDouble(table.Rows[i]["PayPlanDue"].ToString());
-				if(excludeInsPending && patage.InsEst>0){
+				//if(excludeInsPending && patage.InsEst>0){
 					//don't add
-				}
-				else{
-					agingList.Add(patage);
-				}
+				//}
+				//else{
+				agingList.Add(patage);
+				//}
 			}
 			//PatAging[] retVal=new PatAging[agingList.Count];
 			//for(int i=0;i<retVal.Length;i++){
