@@ -1426,6 +1426,11 @@ namespace OpenDental
 				curCellHasText=false;
 				AdvanceCell(true);//so backup
 				cur=DataArray[CurCell.X,CurCell.Y];
+				if(cur.Text==null || cur.Text=="") {//the previous cell is also empty
+					curCellHasText=true;//treat it like a cell with text
+					AdvanceCell();//go forward again
+					cur=DataArray[CurCell.X,CurCell.Y];
+				}
 				//enter value, then advance.
 			}
 			if(keyValue=="b"){
