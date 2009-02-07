@@ -3163,7 +3163,9 @@ namespace OpenDental{
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
 				if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
-					radioEntryTP.Select();
+					if(PrefC.GetBool("AutoResetTPEntryStatus")) {
+						radioEntryTP.Select();
+					}
 					PrevPtNum = PatCur.PatNum;
 				}
 			}
