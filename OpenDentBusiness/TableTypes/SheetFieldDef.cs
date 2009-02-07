@@ -190,6 +190,10 @@ namespace OpenDentBusiness{
 			return (SheetFieldDef)this.MemberwiseClone();
 		}
 
+		public override string ToString() {
+			return fieldName+" "+fieldValue;
+		}
+
 		///<Summary></Summary>
 		public Font GetFont(){
 			FontStyle style=FontStyle.Regular;

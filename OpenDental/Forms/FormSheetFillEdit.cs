@@ -601,6 +601,9 @@ namespace OpenDental {
 				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
 				SheetFields.WriteObject(field);
 			}
+			if(isNew) {
+				Sheets.SaveParameters(SheetCur);
+			}
 			return true;
 		}
 

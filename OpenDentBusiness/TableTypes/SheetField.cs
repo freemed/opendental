@@ -165,7 +165,11 @@ namespace OpenDentBusiness{
 				
 		public SheetField Copy(){
 			return (SheetField)Clone();
-		}	
+		}
+
+		public override string ToString() {
+			return fieldName+" "+fieldValue;
+		}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public Rectangle Bounds {
@@ -180,6 +184,8 @@ namespace OpenDentBusiness{
 				return new RectangleF(XPos,YPos,Width,Height);
 			}
 		}
+
+		
 
 
 
