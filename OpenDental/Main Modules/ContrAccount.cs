@@ -3340,7 +3340,7 @@ namespace OpenDental {
 					string imgPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
 					Process.Start(imgPath);
 				#else
-					FormST.PrintStatement(stmt,false);
+					FormST.PrintStatement(stmt,false,dataSet,FamCur,PatCur);
 				#endif
 			}
 			Cursor=Cursors.Default;

@@ -1097,7 +1097,7 @@ namespace OpenDental{
 		public void PrintReport(bool justPreview){
 			pd2=new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.DefaultPageSettings.Margins=new Margins(10,50,50,60);
+			pd2.DefaultPageSettings.Margins=new Margins(25,50,50,60);
 			if(pd2.DefaultPageSettings.PaperSize.Height==0){
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
