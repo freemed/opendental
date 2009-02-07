@@ -424,6 +424,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
+			SheetCur=Sheets.GetSheet(SheetCur.SheetNum);
 			//whether this is a new sheet, or one pulled from the database,
 			//it will have the extra parameter we are looking for.
 			//A new sheet will also have a PatNum parameter which we will ignore.
@@ -517,6 +518,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
+			SheetCur=Sheets.GetSheet(SheetCur.SheetNum);
 			string filePathAndName=Path.ChangeExtension(Path.GetTempFileName(),".pdf");
 			SheetPrinting.CreatePdf(SheetCur,filePathAndName);
 			Process.Start(filePathAndName);
