@@ -28,12 +28,12 @@ namespace OpenDental {
 			Lan.F(this);
 			SheetCur=sheet;
 			if(sheet.IsLandscape){
-				Width=sheet.Height+185;
-				Height=sheet.Width+60;
+				Width=sheet.Height+190;
+				Height=sheet.Width+65;
 			}
 			else{
-				Width=sheet.Width+185;
-				Height=sheet.Height+60;
+				Width=sheet.Width+190;
+				Height=sheet.Height+65;
 			}
 			if(Width>SystemInformation.WorkingArea.Width){
 				Width=SystemInformation.WorkingArea.Width;
@@ -244,7 +244,7 @@ namespace OpenDental {
 				fontstyle=FontStyle.Bold;
 			}
 			Font font=new Font(fld.FontName,fld.FontSize,fontstyle);
-			int calcH=(int)(g.MeasureString(fld.FieldValue,font).Height * 1.133f);//Seems to need 2 pixels per line of text to prevent hidden text due to scroll.
+			int calcH=(int)(g.MeasureString(fld.FieldValue,font,fld.Width).Height * 1.133f);//Seems to need 2 pixels per line of text to prevent hidden text due to scroll.
 			g.Dispose();
 			if(calcH<=fld.Height){//no growth needed
 				return;
