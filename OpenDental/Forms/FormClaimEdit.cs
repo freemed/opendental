@@ -3339,6 +3339,12 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				if(ClaimProcsForClaim[gridProc.SelectedIndices[i]].ClaimPaymentNum!=0) {//if attached to a check
+					MessageBox.Show(Lan.g(this,"Procedures that are attached to checks cannot be included."));
+					return;
+				}
+			}
 			List<ClaimProc> cpList=new List<ClaimProc>();
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				//copy selected claimprocs to temporary array for editing.
