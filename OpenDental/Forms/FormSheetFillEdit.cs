@@ -244,7 +244,9 @@ namespace OpenDental {
 				fontstyle=FontStyle.Bold;
 			}
 			Font font=new Font(fld.FontName,fld.FontSize,fontstyle);
-			int calcH=(int)(g.MeasureString(fld.FieldValue,font,fld.Width).Height * 1.133f);//Seems to need 2 pixels per line of text to prevent hidden text due to scroll.
+			int calcH=GraphicsHelper.MeasureStringH(g,fld.FieldValue,font,fld.Width);
+				//(int)(g.MeasureString(fld.FieldValue,font,fld.Width).Height * 1.133f);//Seems to need 2 pixels per line of text to prevent hidden text due to scroll.
+			calcH+=font.Height+2;//add one line just in case.
 			g.Dispose();
 			if(calcH<=fld.Height){//no growth needed
 				return;
@@ -471,6 +473,7 @@ namespace OpenDental {
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			string fileName;
 			string filePathAndName;
+			//Graphics g=this.CreateGraphics();
 			if(FormS.EmailPat){
 				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
@@ -511,6 +514,7 @@ namespace OpenDental {
 				FormE.IsNew=true;
 				FormE.ShowDialog();
 			}
+			//g.Dispose();
 			DialogResult=DialogResult.OK;
 		}
 
@@ -520,7 +524,9 @@ namespace OpenDental {
 			}
 			SheetCur=Sheets.GetSheet(SheetCur.SheetNum);
 			string filePathAndName=Path.ChangeExtension(Path.GetTempFileName(),".pdf");
+			//Graphics g=this.CreateGraphics();
 			SheetPrinting.CreatePdf(SheetCur,filePathAndName);
+			//g.Dispose();
 			Process.Start(filePathAndName);
 			DialogResult=DialogResult.OK;
 		}

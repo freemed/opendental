@@ -239,39 +239,7 @@ namespace OpenDental {
 					//g.DrawString(SheetDefCur.SheetFieldDefs[i].FieldName,font,
 					//	brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 				}
-				DrawString(g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds,1.05f);
-			}
-		}
-
-		///<summary>Since Graphics doesn't have a line height property.</summary>
-		private void DrawString(Graphics g,string str,Font font,Brush brush,Rectangle bounds,float lineSpacing) {
-			int topPad=2;
-			SizeF fit=new SizeF((float)bounds.Width*.983f,font.Height);//*.96f
-			StringFormat format=StringFormat.GenericTypographic;
-			float pixelsPerLine=lineSpacing * (float)font.Height;
-			float lineIdx=0;
-			int chars;
-			int lines;
-			RectangleF layoutRectangle;
-			float layoutH;
-			for(int ix=0;ix<str.Length;ix+=chars) {
-				if(bounds.Y+topPad+pixelsPerLine*lineIdx>bounds.Bottom) {
-					break;
-				}
-				g.MeasureString(str.Substring(ix),font,fit,format,out chars,out lines);
-				if(bounds.Y+topPad+pixelsPerLine*lineIdx+font.Height > bounds.Bottom) {
-					layoutH=bounds.Bottom-(bounds.Y+topPad+pixelsPerLine*lineIdx);
-				}
-				else{
-					layoutH=font.Height+2;
-				}
-				layoutRectangle=new RectangleF(
-					bounds.X,
-					(float)(bounds.Y+topPad+pixelsPerLine*lineIdx),
-					bounds.Width+10,//any amount of extra padding here will not cause malfunction
-					layoutH);
-				g.DrawString(str.Substring(ix,chars),font,brush,layoutRectangle);
-				lineIdx+=1;
+				GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 			}
 		}
 

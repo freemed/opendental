@@ -194,6 +194,8 @@ namespace OpenDental {
 				}
 			}
 			//then, draw text-----------------------------------------------------------------------------------------------
+			Bitmap doubleBuffer=new Bitmap(sheet.Width,sheet.Height);
+			Graphics gfx=Graphics.FromImage(doubleBuffer);
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
@@ -206,8 +208,10 @@ namespace OpenDental {
 					fontstyle=FontStyle.Bold;
 				}
 				font=new Font(field.FontName,field.FontSize,fontstyle);
-				g.DrawString(field.FieldValue,font,Brushes.Black,field.BoundsF);
+				GraphicsHelper.DrawString(g,gfx,field.FieldValue,font,Brushes.Black,field.Bounds);
+				//g.DrawString(field.FieldValue,font,Brushes.Black,field.BoundsF);
 			}
+			gfx.Dispose();
 			//then, checkboxes----------------------------------------------------------------------------------
 			Pen pen3=new Pen(Brushes.Black,1.6f);
 			foreach(SheetField field in sheet.SheetFields){
@@ -255,7 +259,7 @@ namespace OpenDental {
 			}	
 		}
 
-		public static void CreatePdf(Sheet sheet,string fullFileName){
+		public static void CreatePdf(Sheet sheet,string fullFileName) {
 			PdfDocument document=new PdfDocument();
 			PdfPage page=document.AddPage();
 			page.Width=p(sheet.Width);//XUnit.FromInch((double)sheet.Width/100);  //new XUnit((double)sheet.Width/100,XGraphicsUnit.Inch);
@@ -266,12 +270,12 @@ namespace OpenDental {
 			XGraphics g=XGraphics.FromPdfPage(page);
 			g.SmoothingMode=XSmoothingMode.HighQuality;
 			//g.PageUnit=XGraphicsUnit. //wish they had pixel
-			XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
+			//XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
 			//tf.Alignment=XParagraphAlignment.Left;
 			//pd.DefaultPageSettings.Landscape=
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
-			XFont font;
-			XFontStyle fontstyle;
+			XFont xfont;
+			XFontStyle xfontstyle;
 			//first, draw images--------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.Image){
@@ -320,6 +324,8 @@ namespace OpenDental {
 				}
 			}
 			//then, draw text--------------------------------------------------------------------------------------------
+			Bitmap doubleBuffer=new Bitmap(sheet.Width,sheet.Height);
+			Graphics gfx=Graphics.FromImage(doubleBuffer);
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
@@ -327,16 +333,19 @@ namespace OpenDental {
 				{
 					continue;
 				}
-				fontstyle=XFontStyle.Regular;
+				xfontstyle=XFontStyle.Regular;
 				if(field.FontIsBold){
-					fontstyle=XFontStyle.Bold;
+					xfontstyle=XFontStyle.Bold;
 				}
-				//Font font2=new Font(field.FontName,8,GraphicsUnit.
-				font=new XFont(field.FontName,field.FontSize,fontstyle);
+				xfont=new XFont(field.FontName,field.FontSize,xfontstyle);
+				//xfont=new XFont(field.FontName,field.FontSize,xfontstyle);
+				//Rectangle rect=new Rectangle((int)p(field.XPos),(int)p(field.YPos),(int)p(field.Width),(int)p(field.Height));
 				XRect xrect=new XRect(p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
 				//XStringFormat format=new XStringFormat();
-				tf.DrawString(field.FieldValue,font,XBrushes.Black,xrect,XStringFormats.TopLeft);
+				//tf.DrawString(field.FieldValue,font,XBrushes.Black,xrect,XStringFormats.TopLeft);
+				GraphicsHelper.DrawStringX(g,gfx,1d/p(1),field.FieldValue,xfont,XBrushes.Black,xrect);
 			}
+			gfx.Dispose();
 			//then, checkboxes----------------------------------------------------------------------------------
 			XPen pen3=new XPen(XColors.Black,p(1.6f));
 			foreach(SheetField field in sheet.SheetFields){
