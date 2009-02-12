@@ -18,23 +18,24 @@ namespace OpenDental.Bridges{
 		///<summary>Sends data for Patient.Cur to the InfoFile and launches the program.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "InfoFile path");
+			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"InfoFile path");
 			string infoFile=PPCur.PropertyValue;
-			if(pat!=null){
-				try{
-					using(StreamWriter sw=new StreamWriter(infoFile,false)){
+			if(pat!=null) {
+				try {
+					//patientID can be any string format, max 8 char.
+					//There is no validation to ensure that length is 8 char or less.
+					PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
+					string id="";
+					if(PPCur.PropertyValue=="0") {
+						id=pat.PatNum.ToString();
+					} else {
+						id=pat.ChartNumber;
+					}
+					using(StreamWriter sw=new StreamWriter(infoFile,false)) {
 						sw.WriteLine(pat.LName+", "+pat.FName
 							+"  "+pat.Birthdate.ToShortDateString()
-							+"  ("+pat.PatNum.ToString()+")");
-						//patientID can be any string format, max 8 char.
-						//There is no validation to ensure that length is 8 char or less.
-						PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
-						if(PPCur.PropertyValue=="0"){
-							sw.WriteLine("PN="+pat.PatNum.ToString());
-						}
-						else{
-							sw.WriteLine("PN="+pat.ChartNumber);
-						}
+							+"  ("+id+")");
+						sw.WriteLine("PN="+id);
 						//sw.WriteLine("PN="+pat.PatNum.ToString());
 						sw.WriteLine("LN="+pat.LName);
 						sw.WriteLine("FN="+pat.FName);
@@ -45,16 +46,14 @@ namespace OpenDental.Bridges{
 							sw.WriteLine("SX=M");
 					}
 					Process.Start(ProgramCur.Path,"@"+infoFile);
-				}
-				catch{
+				} catch {
 					MessageBox.Show(ProgramCur.Path+" is not available.");
 				}
 			}//if patient is loaded
-			else{
-				try{
+			else {
+				try {
 					Process.Start(ProgramCur.Path);//should start Dexis without bringing up a pt.
-				}
-				catch{
+				} catch {
 					MessageBox.Show(ProgramCur.Path+" is not available.");
 				}
 			}
