@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental{
 	/// <summary> </summary>
@@ -19,9 +20,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textProgDesc;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.ListBox listProperties;
 		private System.Windows.Forms.TextBox textPath;
 		private System.Windows.Forms.TextBox textCommandLine;
 		private System.Windows.Forms.ListBox listToolBars;
@@ -33,6 +32,7 @@ namespace OpenDental{
 		/// <summary>This Program link is new.</summary>
 		public bool IsNew;
 		public Program ProgramCur;
+		private OpenDental.UI.ODGrid gridMain;
 		private ArrayList ProgramPropertiesForProgram;
 
 		///<summary></summary>
@@ -80,14 +80,13 @@ namespace OpenDental{
 			this.textCommandLine = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.listToolBars = new System.Windows.Forms.ListBox();
-			this.listProperties = new System.Windows.Forms.ListBox();
-			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textButtonText = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -99,7 +98,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(662,410);
+			this.butCancel.Location = new System.Drawing.Point(702,409);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -114,7 +113,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(662,369);
+			this.butOK.Location = new System.Drawing.Point(702,368);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -135,13 +134,14 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31,410);
+			this.butDelete.Location = new System.Drawing.Point(17,409);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,26);
 			this.butDelete.TabIndex = 43;
@@ -221,23 +221,6 @@ namespace OpenDental{
 			this.listToolBars.Size = new System.Drawing.Size(147,108);
 			this.listToolBars.TabIndex = 53;
 			// 
-			// listProperties
-			// 
-			this.listProperties.Location = new System.Drawing.Point(246,231);
-			this.listProperties.Name = "listProperties";
-			this.listProperties.Size = new System.Drawing.Size(323,95);
-			this.listProperties.TabIndex = 54;
-			this.listProperties.DoubleClick += new System.EventHandler(this.listProperties_DoubleClick);
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(246,210);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(331,17);
-			this.label5.TabIndex = 55;
-			this.label5.Text = "Additional Properties (double click row to edit)";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// label6
 			// 
 			this.label6.Location = new System.Drawing.Point(14,197);
@@ -290,11 +273,24 @@ namespace OpenDental{
 			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [PatNum] or [Ch" +
     "artNumber] in either of the two boxes above.";
 			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(246,197);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(410,133);
+			this.gridMain.TabIndex = 62;
+			this.gridMain.Title = "Additional Properties";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// FormProgramLinkEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(757,456);
+			this.ClientSize = new System.Drawing.Size(797,455);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textNote);
@@ -305,8 +301,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textProgName);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label6);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.listProperties);
 			this.Controls.Add(this.listToolBars);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
@@ -323,8 +317,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Program Link";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinkEdit_Closing);
 			this.Load += new System.EventHandler(this.FormProgramLinkEdit_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinkEdit_Closing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -361,30 +355,39 @@ namespace OpenDental{
 			if(ToolButItems.ForProgram.Count>0){//the text on all buttons will be the same for now
 				textButtonText.Text=((ToolButItem)ToolButItems.ForProgram[0]).ButtonText;
 			}
-			ProgramPropertiesForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			listProperties.Items.Clear();
-			for(int i=0;i<ProgramPropertiesForProgram.Count;i++){
-				listProperties.Items.Add(((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyDesc
-					+": "+((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyValue);
-			}
+			FillGrid();
 		}
 
-		private void listProperties_DoubleClick(object sender, System.EventArgs e) {
-			if(listProperties.SelectedIndex==-1)
-				return;
-			//ProgramProperty ProgramPropertyCur=
+		private void FillGrid(){
+			ProgramPropertiesForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Property"),260);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Value"),130);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ProgramPropertiesForProgram.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyDesc);
+				row.Cells.Add(((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyValue);
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+		}
+
+
+		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormProgramProperty FormPP=new FormProgramProperty();
-			FormPP.ProgramPropertyCur=(ProgramProperty)ProgramPropertiesForProgram[listProperties.SelectedIndex];
+			FormPP.ProgramPropertyCur=(ProgramProperty)ProgramPropertiesForProgram[e.Row];
 			FormPP.ShowDialog();
-			if(FormPP.DialogResult!=DialogResult.OK)
+			if(FormPP.DialogResult!=DialogResult.OK) {
 				return;
+			}
 			ProgramProperties.Refresh();
 			ProgramPropertiesForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			listProperties.Items.Clear();
-			for(int i=0;i<ProgramPropertiesForProgram.Count;i++){
-				listProperties.Items.Add(((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyDesc
-					+": "+((ProgramProperty)ProgramPropertiesForProgram[i]).PropertyValue);
-			}
+			FillGrid();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -439,6 +442,8 @@ namespace OpenDental{
 				Programs.Delete(ProgramCur);
 			}
 		}
+
+		
 
 		
 
