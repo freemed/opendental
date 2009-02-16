@@ -209,7 +209,8 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES(22,17,'Condition (light)','',-1678747,0)";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingIgnoreInPerson','0','Set to 1 to ignore walkout statements.')";
+					General.NonQ(command);
 					
 
 

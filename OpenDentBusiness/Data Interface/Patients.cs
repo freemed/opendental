@@ -1126,7 +1126,7 @@ namespace OpenDentBusiness{
 
 		///<summary>This is only used in the Billing dialog</summary>
 		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr
-			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending)
+			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,bool ignoreInPerson)
 		{
 			string command="";
 			if(includeChanged){
@@ -1182,6 +1182,9 @@ namespace OpenDentBusiness{
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
 				+"LEFT JOIN statement ON patient.PatNum=statement.PatNum ";
+			if(ignoreInPerson) {
+				command+="AND statement.Mode_ != 1 ";
+			}
 			if(includeChanged){
 				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
 					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";

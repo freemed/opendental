@@ -48,6 +48,7 @@ namespace OpenDental{
 		private ListBox listBillType;
 		private Label label2;
 		private OpenDental.UI.Button butUndo;
+		private CheckBox checkIgnoreInPerson;
 		private Dunning[] dunningList;
 
 		///<summary></summary>
@@ -105,6 +106,7 @@ namespace OpenDental{
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.butDefaults = new OpenDental.UI.Button();
 			this.butUndo = new OpenDental.UI.Button();
+			this.checkIgnoreInPerson = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -186,6 +188,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkIgnoreInPerson);
 			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.label7);
 			this.groupBox2.Controls.Add(this.label6);
@@ -222,7 +225,7 @@ namespace OpenDental{
 			// label7
 			// 
 			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.Location = new System.Drawing.Point(5,215);
+			this.label7.Location = new System.Drawing.Point(5,239);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(111,16);
 			this.label7.TabIndex = 245;
@@ -316,7 +319,7 @@ namespace OpenDental{
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(118,215);
+			this.listBillType.Location = new System.Drawing.Point(118,239);
 			this.listBillType.Name = "listBillType";
 			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillType.Size = new System.Drawing.Size(158,225);
@@ -525,6 +528,18 @@ namespace OpenDental{
 			this.butUndo.Text = "Undo Billing";
 			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
 			// 
+			// checkIgnoreInPerson
+			// 
+			this.checkIgnoreInPerson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkIgnoreInPerson.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIgnoreInPerson.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIgnoreInPerson.Location = new System.Drawing.Point(2,214);
+			this.checkIgnoreInPerson.Name = "checkIgnoreInPerson";
+			this.checkIgnoreInPerson.Size = new System.Drawing.Size(274,18);
+			this.checkIgnoreInPerson.TabIndex = 247;
+			this.checkIgnoreInPerson.Text = "Ignore walkout (InPerson) statements";
+			this.checkIgnoreInPerson.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormBillingOptions
 			// 
 			this.AcceptButton = this.butCreate;
@@ -593,6 +608,7 @@ namespace OpenDental{
 			checkExcludeNegative.Checked=PrefC.GetBool("BillingExcludeNegative");
 			checkExcludeInsPending.Checked=PrefC.GetBool("BillingExcludeInsPending");
 			textExcludeLessThan.Text=PrefC.GetString("BillingExcludeLessThan");
+			checkIgnoreInPerson.Checked=PrefC.GetBool("BillingIgnoreInPerson");
 			listBillType.Items.Add(Lan.g(this,"(all)"));
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
@@ -665,7 +681,8 @@ namespace OpenDental{
 				| Prefs.UpdateBool("BillingExcludeInactive",checkExcludeInactive.Checked)
 				| Prefs.UpdateBool("BillingExcludeNegative",checkExcludeNegative.Checked)
 				| Prefs.UpdateBool("BillingExcludeInsPending",checkExcludeInsPending.Checked)
-				| Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text))
+				| Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text)
+				| Prefs.UpdateBool("BillingIgnoreInPerson",checkIgnoreInPerson.Checked))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
@@ -803,9 +820,10 @@ namespace OpenDental{
 				billingNums.Add(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum);
 			}
 			Cursor=Cursors.WaitCursor;
-			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked
-				,checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text)
-				,checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked);
+			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked,
+				checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text),
+				checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked,
+				checkIgnoreInPerson.Checked);
 			DateTime dateRangeFrom=DateTime.MinValue;
 			DateTime dateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
