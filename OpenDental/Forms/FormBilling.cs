@@ -737,6 +737,7 @@ namespace OpenDental{
 			xmlSettings.IndentChars="   ";
 			StringBuilder strBuildElect=new StringBuilder();
 			XmlWriter writerElect=XmlWriter.Create(strBuildElect,xmlSettings);
+			//OpenDental.Bridges.Tesia_statements.GeneratePracticeInfo(writerElect);
 			OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
 			DataSet dataSet;
 			List<int> stateNumsElect=new List<int>();
@@ -817,6 +818,7 @@ namespace OpenDental{
 				}
 				if(stmt.Mode_==StatementMode.Electronic) {
 					stateNumsElect.Add(stmt.StatementNum);
+					//OpenDental.Bridges.Tesia_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
 					OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
 					sentelect++;
 					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
@@ -839,9 +841,11 @@ namespace OpenDental{
 			}
 			//finish up elect and send if needed------------------------------------------------------------
 			if(sentelect>0) {
+				//OpenDental.Bridges.Tesia_statements.GenerateWrapUp(writerElect);
 				OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
 				writerElect.Close();
 				try {
+					//OpenDental.Bridges.Tesia_statements.Send(strBuildElect.ToString());
 					//OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
 					CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
 					msgbox.ShowDialog();

@@ -123,10 +123,29 @@ namespace OpenDental.Bridges {
 				credits+=PIn.PDouble(tableAccount.Rows[i]["creditsDouble"].ToString());
 			}
 			writer.WriteElementString("Credits",credits.ToString("F2"));
-			writer.WriteElementString("EstInsPayments",guar.InsEst.ToString("F2"));//optional
-			double patientPortion=guar.BalTotal-guar.InsEst;
-			writer.WriteElementString("PatientShare",patientPortion.ToString("F2"));
-			writer.WriteElementString("CurrentBalance",guar.Bal_0_30.ToString("F2"));
+			//on a regular printed statement, the amount due at the top might be different from the balance at the middle right.
+			//This is because of payment plan balances.
+			//But in e-bills, there is only one amount due.
+			//Insurance estimate is already subtracted, and payment plan balance is already added.
+			double amountDue=guar.BalTotal;
+			//add payplan due amt:
+			for(int m=0;m<dataSet.Tables["misc"].Rows.Count;m++) {
+				if(dataSet.Tables["misc"].Rows[m]["descript"].ToString()=="payPlanDue") {
+					amountDue+=PIn.PDouble(dataSet.Tables["misc"].Rows[m]["value"].ToString());
+				}
+			}
+			if(PrefC.GetBool("BalancesDontSubtractIns")) {
+				writer.WriteElementString("EstInsPayments","");//optional.
+				writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
+				//this is ambiguous.  It seems to be AmountDue, but it could possibly be 0-30 days aging
+				writer.WriteElementString("CurrentBalance",amountDue.ToString("F2"));
+			}
+			else {//this is typical
+				writer.WriteElementString("EstInsPayments",guar.InsEst.ToString("F2"));//optional.
+				amountDue-=guar.InsEst;
+				writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
+				writer.WriteElementString("CurrentBalance",amountDue.ToString("F2"));
+			}
 			writer.WriteElementString("PastDue30",guar.Bal_31_60.ToString("F2"));//optional
 			writer.WriteElementString("PastDue60",guar.Bal_61_90.ToString("F2"));//optional
 			writer.WriteElementString("PastDue90",guar.BalOver90.ToString("F2"));//optional
@@ -138,7 +157,7 @@ namespace OpenDental.Bridges {
 				writer.WriteStartElement("Note");
 				writer.WriteAttributeString("FgColor",ColorToHexString(Color.DarkRed));
 				writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
-				writer.WriteString(stmt.NoteBold);
+				writer.WriteCData(stmt.NoteBold);
 				writer.WriteEndElement();//Note
 			}
 			if(stmt.Note!="") {
@@ -151,26 +170,59 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//Notes
 			//Detail items------------------------------------------------------------------------------
 			writer.WriteStartElement("DetailItems");
-			string note;
+			//string note;
 			string descript;
 			string fulldesc;
 			string procCode;
 			string tth;
-			string linedesc;
-			string[] lines;
+			//string linedesc;
+			string[] lineArray;
+			List<string> lines;
 			DateTime date;
+			int seq=0;
 			for(int i=0;i<tableAccount.Rows.Count;i++) {
-				writer.WriteStartElement("DetailItem");//has a child item and a child note
-				writer.WriteAttributeString("sequence",i.ToString());
-				writer.WriteStartElement("Item");
-				date=(DateTime)tableAccount.Rows[i]["DateTime"];
-				writer.WriteElementString("Date",date.ToString("MM/dd/yyyy"));
-				writer.WriteElementString("PatientName",tableAccount.Rows[i]["patient"].ToString());
 				procCode=tableAccount.Rows[i]["ProcCode"].ToString();
 				tth=tableAccount.Rows[i]["tth"].ToString();
 				descript=tableAccount.Rows[i]["description"].ToString();
 				fulldesc=procCode+" "+tth+" "+descript;
-				lines=fulldesc.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+				lineArray=fulldesc.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+				lines=new List<string>(lineArray);
+				//The specs say that the line limit is 30 char.  But in testing, it will take 50 char.
+				//We will use 40 char to be safe.
+				if(lines[0].Length>40) {
+					string newline=lines[0].Substring(40);
+					lines[0]=lines[0].Substring(0,40);//first half
+					lines.Insert(1,newline);//second half
+				}
+				for(int li=0;li<lines.Count;li++) {
+					writer.WriteStartElement("DetailItem");//has a child item. We won't add optional child note
+					writer.WriteAttributeString("sequence",seq.ToString());
+					writer.WriteStartElement("Item");
+					if(li==0) {
+						date=(DateTime)tableAccount.Rows[i]["DateTime"];
+						writer.WriteElementString("Date",date.ToString("MM/dd/yyyy"));
+						writer.WriteElementString("PatientName",tableAccount.Rows[i]["patient"].ToString());
+					}
+					else {
+						writer.WriteElementString("Date","");
+						writer.WriteElementString("PatientName","");
+					}
+					writer.WriteElementString("Description",lines[li]);
+					if(li==0) {
+						writer.WriteElementString("Charges",tableAccount.Rows[i]["charges"].ToString());
+						writer.WriteElementString("Credits",tableAccount.Rows[i]["credits"].ToString());
+						writer.WriteElementString("Balance",tableAccount.Rows[i]["balance"].ToString());
+					}
+					else {
+						writer.WriteElementString("Charges","");
+						writer.WriteElementString("Credits","");
+						writer.WriteElementString("Balance","");
+					}
+					writer.WriteEndElement();//Item
+					writer.WriteEndElement();//DetailItem
+					seq++;
+				}
+				/*The code below just didn't work because notes don't get displayed on the statement.
 				linedesc=lines[0];
 				note="";
 				if(linedesc.Length>30) {
@@ -183,18 +235,13 @@ namespace OpenDental.Bridges {
 					}
 					note+=lines[l];
 				}
-				writer.WriteElementString("Description",linedesc);
-				writer.WriteElementString("Charges",tableAccount.Rows[i]["charges"].ToString());
-				writer.WriteElementString("Credits",tableAccount.Rows[i]["credits"].ToString());
-				writer.WriteElementString("Balance",tableAccount.Rows[i]["balance"].ToString());
-				writer.WriteEndElement();//Item
+				
 				if(note!="") {
 					writer.WriteStartElement("Note");
 					//we're not going to specify colors here since they're optional
 					writer.WriteCData(note);
 					writer.WriteEndElement();//Note
-				}
-				writer.WriteEndElement();//DetailItem
+				}*/
 			}
 			writer.WriteEndElement();//DetailItems
 			writer.WriteEndElement();//Patient
