@@ -23,8 +23,8 @@ namespace OpenDentBusiness{
 		public bool IsHidden;
 		///<summary>FK to tasklist.TaskListNum.  0 if no inbox setup yet.  It is assumed that the TaskList is in the main trunk, but this is not strictly enforced.  User can't delete an attached TaskList, but they could move it.</summary>
 		public int TaskListInBox;
-        /// <summary> Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord/// </summary>
-        public int AnesthProvType;
+		/// <summary> Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord/// </summary>
+		public int AnesthProvType;
 
 
 		public Userod(){
@@ -41,8 +41,7 @@ namespace OpenDentBusiness{
 			ClinicNum=clinicNum;
 			ProvNum=provNum;
 			IsHidden=isHidden;
-            AnesthProvType=anesthProvType;
-			
+			AnesthProvType=anesthProvType;
 		}
 		
 		///<summary></summary>

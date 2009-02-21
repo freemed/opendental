@@ -211,7 +211,29 @@ namespace OpenDental {
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingIgnoreInPerson','0','Set to 1 to ignore walkout statements.')";
 					General.NonQ(command);
-					
+					//eClinicalWorks Bridge---------------------------------------------------------------------------
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'eClinicalWorks', "
+						+"'eClinicalWorks from www.eclinicalworks.com', "
+						+"'0', "
+						+"'', "
+						+"'', "
+						+"'')";
+					int programNum=General.NonQ(command,true);
+					/*
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'Username', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'Password', "
+						+"'')";
+					General.NonQ(command);*/
 
 
 

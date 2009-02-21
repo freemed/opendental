@@ -172,6 +172,16 @@ namespace OpenDental{
 				}
 				return;
 			}
+			if(program.ProgName=="eClinicalWorks") {
+				FormEClinicalWorks FormECW=new FormEClinicalWorks();
+				FormECW.ProgramCur=program;
+				FormECW.ShowDialog();
+				if(FormECW.DialogResult==DialogResult.OK) {
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
 			FormPE.ProgramCur=program;
 			FormPE.ShowDialog();

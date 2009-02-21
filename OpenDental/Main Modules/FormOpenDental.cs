@@ -3916,14 +3916,15 @@ namespace OpenDental{
 			if(args.Length==0){
 				return;
 			}
-			string descript="";
+			/*string descript="";
 			for(int i=0;i<args.Length;i++) {
 				if(i>0) {
 					descript+="\r\n";
 				}
 				descript+=args[i];
 			}
-			MessageBox.Show(descript);
+			MessageBox.Show(descript);*/
+
 		}
 
 		/*
