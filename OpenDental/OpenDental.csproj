@@ -12,7 +12,8 @@
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
     <ApplicationIcon>Misc\App.ico</ApplicationIcon>
-    <StartupObject>OpenDental.FormOpenDental</StartupObject>
+    <StartupObject>
+    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -1725,9 +1726,16 @@
     <Compile Include="Main Modules\ContrTreat.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Main Modules\FormCommandLinePassOff.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main Modules\FormCommandLinePassOff.Designer.cs">
+      <DependentUpon>FormCommandLinePassOff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\FormOpenDental.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Main Modules\ProgramEntry.cs" />
     <Compile Include="Misc\ClassConvertDatabase.cs" />
     <Compile Include="Misc\ClassesShared.cs" />
     <Compile Include="Misc\ClassConvertDatabase2.cs" />
@@ -3998,6 +4006,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientAddAll.resx">
       <DependentUpon>FormPatientAddAll.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main Modules\FormCommandLinePassOff.resx">
+      <DependentUpon>FormCommandLinePassOff.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.resx">

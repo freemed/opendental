@@ -43,6 +43,7 @@ using CodeBase;
 using System.Security.AccessControl;
 using System.Xml;
 using System.Xml.XPath;
+using System.Xml.Serialization;
 using SparksToothChart;
 using OpenDental.SmartCards;
 using OpenDental.UI;
@@ -201,6 +202,13 @@ namespace OpenDental{
 		private MenuItem menuItemMobileSync;
 		private MenuItem menuItemLetters;
 		private UserControlPhonePanel phonePanel;
+		///<summary>Command line args passed in when program starts.</summary>
+		public string[] CommandLineArgs;
+		private Thread ThreadCommandLine;
+		///<summary>Listens for commands coming from other instances of Open Dental on this computer.</summary>
+		private TcpListener TcpListenerCommandLine;
+		///<summary>True if there is already a different instance of OD running.  This prevents attempting to start the listener.</summary>
+		public bool IsSecondInstance;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -1283,38 +1291,6 @@ namespace OpenDental{
 		}
 		#endregion
 	
-		[STAThread]
-		static void Main() {
-			//Register an EventHandler which handles unhandeled exceptions.
-			//AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);
-			Application.EnableVisualStyles();//changes appearance to XP
-			Application.DoEvents();//workaround for a known MS bug in the line above
-			Application.Run(new FormOpenDental());
-		}
-
-		/*
-		///<summary>Overrides the default Windows unhandled exception functionality.</summary>
-		static void OnUnhandeledExceptionPolicy(Object Sender,UnhandledExceptionEventArgs e) {
-			Exception ex=e.ExceptionObject as Exception;
-			string message="Unhandled Exception: ";
-			if(ex!=null) {//The unhandeled Exception is CLS compliant.
-				message+=ex.ToString();
-			}else{//The unhandeled Exception is not CLS compliant.				
-				//You can only handle this Exception as Object
-				message+="Object Type: "+e.ExceptionObject.GetType()+", Object String: "+e.ExceptionObject.ToString();
-			}
-			if(!e.IsTerminating){
-				//Exception occurred in a thread pool or finalizer thread. Debugger launches only explicitly.
-				Logger.openlog.LogMB(message,Logger.Severity.ERROR);
-#if(DEBUG)
-				Debugger.Launch();
-#endif
-			}else{
-				//Exception occurred in managed thread. Debugger will automatically launch in visual studio.
-				Logger.openlog.LogMB(message,Logger.Severity.FATAL_ERROR);
-			}
-		}*/
-
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
 			allNeutral();
@@ -1446,6 +1422,13 @@ namespace OpenDental{
 					}
 				}
 			#endif
+			ThreadCommandLine=new Thread(new ThreadStart(Listen));
+			if(!IsSecondInstance) {//can't use a port that's already in use.
+				ThreadCommandLine.Start();
+			}
+			if(CommandLineArgs.Length>0) {
+				ProcessCommandLine(CommandLineArgs);
+			}
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
@@ -3872,6 +3855,9 @@ namespace OpenDental{
 
 		private void FormOpenDental_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
 			FormUAppoint.AbortThread();
+			if(ThreadCommandLine!=null) {
+				ThreadCommandLine.Abort();
+			}
 		}
 
 		private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
@@ -3902,38 +3888,89 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
 		}
 
-		
+		///<summary>separate thread</summary>
+		public void Listen() {
+			IPAddress ipAddress = Dns.GetHostAddresses("localhost")[0];
+			TcpListenerCommandLine=new TcpListener(ipAddress,2123);
+			TcpListenerCommandLine.Start();
+			while(true) {
+				if(!TcpListenerCommandLine.Pending()) {
+					//Thread.Sleep(1000);//for 1 second
+					continue;
+				}
+				TcpClient TcpClientRec = TcpListenerCommandLine.AcceptTcpClient();
+				NetworkStream ns = TcpClientRec.GetStream();
+				XmlSerializer serializer=new XmlSerializer(typeof(string[]));
+				string[] args=(string[])serializer.Deserialize(ns);
+				Invoke(new ProcessCommandLineDelegate(ProcessCommandLine),new object[] { args });
+				ns.Close();
+				TcpClientRec.Close();
+			}
+		}
 
-		
+		///<summary></summary>
+		protected delegate void ProcessCommandLineDelegate(string[] args);
 
-	
+		///<summary></summary>
+		public void ProcessCommandLine(string[] args) {
+			if(args.Length==0){
+				return;
+			}
+			string descript="";
+			for(int i=0;i<args.Length;i++) {
+				if(i>0) {
+					descript+="\r\n";
+				}
+				descript+=args[i];
+			}
+			MessageBox.Show(descript);
+		}
 
-		
+		/*
+		///<summary>Needs to be rewritten. Use the Application.ApplicationExit event instead.</summary>
+		private void ExitApplicationNow_WantsToExit(System.EventArgs e) {
+			if(Thread2!=null) {
+				Thread2.Abort();
+				this.TcpListenerCommandLine.Stop();
+			}
+			Application.Exit();
+		}*/
 
-		
-
-		
-
-		
-
-		
-
-		
+		/*
+			
+			Thread2=new Thread(new ThreadStart(Listen));
+			if(!IsSecondInstance){
+				if(!Prefs.GetBool("AutoRefreshIsDisabled"))
+					Thread2.Start();
+			}*/
 
 
-		
 
-		
 
-	
 
-		
 
-		
 
-		
 
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 
 	class PopupEvent:IComparable{
