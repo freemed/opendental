@@ -39,7 +39,7 @@ namespace OpenDentBusiness {
 				user.ProvNum       = PIn.PInt   (table.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (table.Rows[i][7].ToString());
 				user.TaskListInBox = PIn.PInt   (table.Rows[i][8].ToString());
-                user.AnesthProvType = PIn.PInt  (table.Rows[i][9].ToString());
+				user.AnesthProvType = PIn.PInt  (table.Rows[i][9].ToString());
 				UserodC.Listt.Add(user);
 			}
 		}			
@@ -51,6 +51,19 @@ namespace OpenDentBusiness {
 			}
 			for(int i=0;i<UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].UserNum==userNum){
+					return UserodC.Listt[i];
+				}
+			}
+			return null;
+		}
+
+		///<summary>Returns null if not found.</summary>
+		public static Userod GetUserByName(string userName) {
+			if(UserodC.Listt==null) {
+				RefreshCache();
+			}
+			for(int i=0;i<UserodC.Listt.Count;i++) {
+				if(UserodC.Listt[i].UserName==userName) {
 					return UserodC.Listt[i];
 				}
 			}
@@ -73,8 +86,8 @@ namespace OpenDentBusiness {
 				user.ClinicNum     = PIn.PInt(RawData.Rows[i][5].ToString());
 				user.ProvNum       = PIn.PInt(RawData.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (RawData.Rows[i][7].ToString());
-                user.TaskListInBox = PIn.PInt   (RawData.Rows[i][8].ToString());
-                user.AnesthProvType = PIn.PInt   (RawData.Rows[i][9].ToString());
+				user.TaskListInBox = PIn.PInt   (RawData.Rows[i][8].ToString());
+				user.AnesthProvType = PIn.PInt   (RawData.Rows[i][9].ToString());
 			}
 			return user;
 		}		*/

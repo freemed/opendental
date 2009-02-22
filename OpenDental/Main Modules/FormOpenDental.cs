@@ -3924,36 +3924,145 @@ namespace OpenDental{
 				descript+=args[i];
 			}
 			MessageBox.Show(descript);*/
+			/*
+			PatNum (the integer primary key)
+			ChartNumber (alphanumeric)
+			SSN (exactly nine digits. If required, we can gracefully handle dashes, but that is not yet implemented)
+			UserName
+			Password*/
+			int patNum=0;
+			string chartNumber="";
+			string ssn="";
+			string userName="";
+			string password="";
+			for(int i=0;i<args.Length;i++) {
+				if(args[i].StartsWith("PatNum=")) {
+					try {
+						patNum=System.Convert.ToInt32(args[i].Substring(7));
+					}
+					catch { }
+				}
+				if(args[i].StartsWith("ChartNumber=") && args[i].Length>12) {
+					chartNumber=args[i].Substring(12);
+				}
+				if(args[i].StartsWith("SSN=") && args[i].Length>4) {
+					ssn=args[i].Substring(4);
+				}
+				if(args[i].StartsWith("UserName=") && args[i].Length>9) {
+					userName=args[i].Substring(9);
+				}
+				if(args[i].StartsWith("Password=") && args[i].Length>9) {
+					password=args[i].Substring(9);
+				}
+			}
+			//Username and password-----------------------------------------------------
+			if(userName!=""//if a username was passed in
+				&& Security.CurUser.UserName != userName)//and it's different from the current user
+			{
+				//log out------------------------------------
+				LastModule=myOutlookBar.SelectedIndex;
+				myOutlookBar.SelectedIndex=-1;
+				myOutlookBar.Invalidate();
+				UnselectActive();
+				allNeutral();
+				Userod user=Userods.GetUserByName(userName);
+				if(user==null) {
+					if(Programs.IsEnabled("eClinicalWorks")) {
+//todo: add user
+						//temporary stable solution:
+						FormLogOn FormL=new FormLogOn();
+						FormL.ShowDialog();
+						if(FormL.DialogResult==DialogResult.Cancel) {
+							Application.Exit();
+							return;
+						}
+						user=Security.CurUser.Copy();
+					}
+					else {//not using eCW
+						//So present logon screen
+						FormLogOn FormL=new FormLogOn();
+						FormL.ShowDialog();
+						if(FormL.DialogResult==DialogResult.Cancel) {
+							Application.Exit();
+							return;
+						}
+						user=Security.CurUser.Copy();
+					}
+				}
+				if(Userods.CheckPassword(password,user.Password)) {//password accepted
+					//this part usually happens in the logon window
+					Security.CurUser = user.Copy();
+					//let's skip tasks for now
+					//if(PrefC.GetBool("TasksCheckOnStartup")){
+					//	int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
+					//	if(taskcount>0){
+					//		MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unfinished tasks on your tasklists."));
+					//	}
+					//}
+				}
+				else{//password not accepted
+					//So present logon screen
+					FormLogOn FormL=new FormLogOn();
+					FormL.ShowDialog();
+					if(FormL.DialogResult==DialogResult.Cancel) {
+						Application.Exit();
+						return;
+					}
+				}
+				myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
+				myOutlookBar.Invalidate();
+				SetModuleSelected();
+				if(CurPatNum==0) {
+					Text=Patients2.GetMainTitle("",0,"",0);
+				}
+				else {
+					Patient pat=Patients.GetPat(CurPatNum);
+					Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+				}
+				if(userControlTasks1.Visible) {
+					userControlTasks1.InitializeOnStartup();
+				}
+				if(myOutlookBar.SelectedIndex==-1) {
+					MsgBox.Show(this,"You do not have permission to use any modules.");
+				}
+			}
+			//patient id----------------------------------------------------------------
+			if(patNum!=0) {
+				Patient pat=Patients.GetPat(patNum);
+				if(pat==null) {
+					//todo: decide action
+				}
+				else {
+					CurPatNum=patNum;
+					RefreshCurrentModule();
+					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+				}
+			}
+			else if(chartNumber!="") {
+				Patient pat=Patients.GetPatByChartNumber(chartNumber);
+				if(pat==null) {
+					//todo: decide action
+				}
+				else {
+					CurPatNum=pat.PatNum;
+					RefreshCurrentModule();
+					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+				}
+			}
+			else if(ssn!="") {
+				Patient pat=Patients.GetPatBySSN(ssn);
+				if(pat==null) {
+					//todo: decide action
+				}
+				else {
+					CurPatNum=pat.PatNum;
+					RefreshCurrentModule();
+					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+				}
+			}
+			
 
 		}
-
-		/*
-		///<summary>Needs to be rewritten. Use the Application.ApplicationExit event instead.</summary>
-		private void ExitApplicationNow_WantsToExit(System.EventArgs e) {
-			if(Thread2!=null) {
-				Thread2.Abort();
-				this.TcpListenerCommandLine.Stop();
-			}
-			Application.Exit();
-		}*/
-
-		/*
-			
-			Thread2=new Thread(new ThreadStart(Listen));
-			if(!IsSecondInstance){
-				if(!Prefs.GetBool("AutoRefreshIsDisabled"))
-					Thread2.Start();
-			}*/
-
-
-
-
-
-
-
-
-
-
 
 
 

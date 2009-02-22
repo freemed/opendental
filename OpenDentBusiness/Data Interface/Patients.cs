@@ -53,13 +53,42 @@ namespace OpenDentBusiness{
 			return command;
 		}
 
-		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.</summary>
+		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found.</summary>
 		public static Patient GetPat(int patNum){
 			if(patNum==0) {
 				return null;
 			}
 			string command="SELECT * FROM patient WHERE PatNum="+POut.PInt(patNum);
 			Patient[] patarray=SubmitAndFill(command);
+			if(patarray.Length==0) {
+				return null;//used in eCW bridge
+			}
+			return patarray[0];
+		}
+
+		///<summary>Will return null if not found.</summary>
+		public static Patient GetPatByChartNumber(string chartNumber) {
+			if(chartNumber=="") {
+				return null;
+			}
+			string command="SELECT * FROM patient WHERE ChartNumber="+POut.PString(chartNumber);
+			Patient[] patarray=SubmitAndFill(command);
+			if(patarray.Length==0) {
+				return null;
+			}
+			return patarray[0];
+		}
+
+		///<summary>Will return null if not found.</summary>
+		public static Patient GetPatBySSN(string ssn) {
+			if(ssn=="") {
+				return null;
+			}
+			string command="SELECT * FROM patient WHERE SSN="+POut.PString(ssn);
+			Patient[] patarray=SubmitAndFill(command);
+			if(patarray.Length==0) {
+				return null;
+			}
 			return patarray[0];
 		}
 
