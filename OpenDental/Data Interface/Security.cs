@@ -77,11 +77,16 @@ namespace OpenDental{
 			if(date>dateLimit){//authorized
 				return true;
 			}
-			//there might be other similar situations, but we have to handle them individually to avoid introduction of bugs.
-			//no date sent was entered before setting claim received
-			if(perm==Permissions.ClaimSentEdit
+			//2 situations.  There might be others, but we have to handle them individually to avoid introduction of bugs.
+			if(perm==Permissions.ClaimSentEdit//no date sent was entered before setting claim received
 				&& date.Year<1880
 				&& dateLimit.Year<1880)
+			{
+				return true;
+			}
+			if(perm==Permissions.ProcComplEdit//a completed procedure with a min date.
+				&& date.Year<1880
+				&& dateLimit.Year<1880) 
 			{
 				return true;
 			}

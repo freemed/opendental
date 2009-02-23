@@ -1300,7 +1300,7 @@ namespace OpenDental{
 			this.labelClaimNote.Name = "labelClaimNote";
 			this.labelClaimNote.Size = new System.Drawing.Size(104,41);
 			this.labelClaimNote.TabIndex = 65;
-			this.labelClaimNote.Text = "Claim Note (keep it very short)";
+			this.labelClaimNote.Text = "E-claim Note (keep it very short)";
 			this.labelClaimNote.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelIncomplete
