@@ -95,10 +95,10 @@ namespace OpenDental{
 			//In this case, the ops column is filled with a comma separated list of
 			//operatories for the corresponding schedule record.
 			command="SELECT s.*,"+
-				"(SELECT GROUP_CONCAT(so.OperatoryNum) "+
+				"IFNULL((SELECT GROUP_CONCAT(so.OperatoryNum) "+
 					"FROM scheduleop so "+
 					"WHERE so.ScheduleNum=s.ScheduleNum "+
-					"GROUP BY so.ScheduleNum) ops "+
+					"GROUP BY so.ScheduleNum),'') ops "+
 				"FROM ("+command+") s";
 			DataTable table=General.GetTable(command);
 			return ConvertTableToList(table);
