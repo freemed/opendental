@@ -15,6 +15,7 @@
     <ReferencePath>E:\My Documents\OPEN DENTAL SUBVERSION\head\</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>PatNum=123 UserName="Jordan" Password="gavno"</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>
