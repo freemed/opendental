@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xDatabaseIntegrityCheck", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentServer", "OpenDentServer\OpenDentServer.csproj", "{F25AC0EE-B218-4A50-B659-5936E3E50545}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentHL7", "OpenDentHL7\OpenDentHL7.csproj", "{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager", "ServiceManager\ServiceManager.csproj", "{791A5D15-7B14-4A12-BA78-34604CC10D7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,18 @@ Global
 		{F25AC0EE-B218-4A50-B659-5936E3E50545}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
 		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F9E047-0E19-4E3E-A7DF-40257CFBD8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
