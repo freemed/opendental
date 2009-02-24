@@ -91,29 +91,17 @@ namespace OpenDental{
 		}
 
 		private static List<Schedule> RefreshAndFill(string command) {
+			//The GROUP_CONCAT() function returns a comma separated list of items.
+			//In this case, the ops column is filled with a comma separated list of
+			//operatories for the corresponding schedule record.
+			command="SELECT s.*,"+
+				"(SELECT GROUP_CONCAT(so.OperatoryNum) "+
+					"FROM scheduleop so "+
+					"WHERE so.ScheduleNum=s.ScheduleNum "+
+					"GROUP BY so.ScheduleNum) ops "+
+				"FROM ("+command+") s";
 			DataTable table=General.GetTable(command);
-			List<Schedule> retVal=ConvertTableToList(table);
-			//now, get all the ops----------------------------------------------------------
-			if(retVal.Count==0){
-				return retVal;
-			}
-			command="SELECT * FROM scheduleop WHERE (";
-			for(int i=0;i<retVal.Count;i++){
-				if(i>0){
-					command+=" OR ";
-				}
-				command+="ScheduleNum="+POut.PInt(retVal[i].ScheduleNum);
-			}
-			command+=")";
-			table=General.GetTable(command);
-			for(int i=0;i<retVal.Count;i++){
-				for(int p=0;p<table.Rows.Count;p++){
-					if(table.Rows[p]["ScheduleNum"].ToString()==retVal[i].ScheduleNum.ToString()){
-						retVal[i].Ops.Add(PIn.PInt(table.Rows[p]["OperatoryNum"].ToString()));
-					}
-				}
-			}
-			return retVal;
+			return ConvertTableToList(table);
 		}
 
 		public static List<Schedule> ConvertTableToList(DataTable table){
