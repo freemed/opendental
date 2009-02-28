@@ -179,7 +179,7 @@ namespace OpenDentBusiness{
 			sheet.FontSize=9f;
 			sheet.Width=450;
 			sheet.Height=650;
-			int rowH=14;
+			int rowH=17;
 			int yPos=50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Referral to",10,sheet.FontName,true,170,yPos,200,19));
 			yPos+=rowH+5;
@@ -218,7 +218,7 @@ namespace OpenDentBusiness{
 			//Notes--------------------------------------------------------------------------------------------
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Notes",9,sheet.FontName,true,25,yPos,300,rowH));
 			yPos+=rowH+5;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("notes",sheet.FontSize,sheet.FontName,false,25,yPos,400,275));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("notes",sheet.FontSize,sheet.FontName,false,25,yPos,400,240));
 			return sheet;
 		}
 
@@ -259,7 +259,7 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,424,550,0));//bottom
 			int x;
 			int y;
-			int rowH=13;//for font of 8.
+			int rowH=14;//for font of 8.
 			//Dr--------------------------------------------------------------------------------------------------
 			//Left Side
 			x=50;
@@ -297,7 +297,7 @@ namespace OpenDentBusiness{
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
 			//RX-----------------------------------------------------------------------------------------------------
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Rx",24,"Times New Roman",true,35,190,55,30));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Rx",24,"Times New Roman",true,35,190,55,33));
 			y=205;
 			x=90;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("Drug",sheet.FontSize,sheet.FontName,true,x,y,300,rowH));
@@ -360,8 +360,8 @@ Nerves that run near the area of extraction may be bruised or damaged.  You may 
 
 In the upper arch, sinus complications can occur because the roots of some upper teeth extend near or into the sinuses.  After extraction, a hole may be present between the sinus and the mouth.  If this happens, you will be informed and the area repaired.
 
-By signing below you acknowledge that you understand the information presented, have had all your questions answered satisfactorily, and give consent to perform this procedure.",sheet.FontSize,sheet.FontName,false,x,y,500,340));
-			y+=340;
+By signing below you acknowledge that you understand the information presented, have had all your questions answered satisfactorily, and give consent to perform this procedure.",sheet.FontSize,sheet.FontName,false,x,y,500,360));
+			y+=360;
 			y+=20;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewSigBox(x,y,364,81));
 			y+=82;
