@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="OpenDentalDocumentation.xsl"?>
-<database version="5.5.0">
+<database version="6.4.0">
     <table name="account">
         <summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
         <column order="0" name="AccountNum" type="int(11)">
-            <summary>Primary key.</summary>
+            <summary>Primary key..</summary>
         </column>
         <column order="1" name="Description" type="varchar(255)">
             <summary>.</summary>
@@ -75,6 +75,387 @@
             <summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
         </column>
     </table>
+    <table name="anestheticdata">
+        <summary></summary>
+        <column order="0" name="AnestheticDataNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnestheticRecordNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="AnesthOpen" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="3" name="AnesthClose" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="4" name="SurgOpen" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="5" name="SurgClose" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="6" name="Anesthetist" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="7" name="Surgeon" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="8" name="Asst" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="9" name="Circulator" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="10" name="VSMName" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="11" name="VSMSerNum" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="12" name="ASA" type="char(3)">
+            <summary></summary>
+        </column>
+        <column order="13" name="ASA_EModifier" type="char(1)">
+            <summary></summary>
+        </column>
+        <column order="14" name="O2LMin" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="15" name="N2OLMin" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="16" name="RteNasCan" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="17" name="RteNasHood" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="18" name="RteETT" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="19" name="MedRouteIVCath" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="20" name="MedRouteIVButtFly" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="21" name="MedRouteIM" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="22" name="MedRoutePO" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="23" name="MedRouteNasal" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="24" name="MedRouteRectal" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="25" name="IVSite" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="26" name="IVGauge" type="smallint(2)">
+            <summary></summary>
+        </column>
+        <column order="27" name="IVSideR" type="smallint(2)">
+            <summary></summary>
+        </column>
+        <column order="28" name="IVSideL" type="smallint(2)">
+            <summary></summary>
+        </column>
+        <column order="29" name="IVAtt" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="30" name="IVF" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="31" name="IVFVol" type="float">
+            <summary></summary>
+        </column>
+        <column order="32" name="MonBP" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="33" name="MonSpO2" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="34" name="MonEtCO2" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="35" name="MonTemp" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="36" name="MonPrecordial" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="37" name="MonEKG" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="38" name="Notes" type="text">
+            <summary></summary>
+        </column>
+        <column order="39" name="PatWgt" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="40" name="WgtUnitsLbs" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="41" name="WgtUnitsKgs" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="42" name="PatHgt" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="43" name="EscortName" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="44" name="EscortCellNum" type="char(13)">
+            <summary></summary>
+        </column>
+        <column order="45" name="EscortRel" type="char(16)">
+            <summary></summary>
+        </column>
+        <column order="46" name="NPOTime" type="char(5)">
+            <summary></summary>
+        </column>
+        <column order="47" name="HgtUnitsIn" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="48" name="HgtUnitsCm" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="49" name="Signature" type="text">
+            <summary></summary>
+        </column>
+        <column order="50" name="SigIsTopaz" type="tinyint">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anestheticrecord">
+        <summary></summary>
+        <column order="0" name="AnestheticRecordNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="PatNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="AnestheticDate" type="datetime">
+            <summary></summary>
+        </column>
+        <column order="3" name="ProvNum" type="smallint(5)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthmedsgiven">
+        <summary></summary>
+        <column order="0" name="AnestheticMedNum" type="int(3)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnestheticRecordNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="AnesthMedName" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="3" name="QtyGiven" type="double">
+            <summary></summary>
+        </column>
+        <column order="4" name="QtyWasted" type="double">
+            <summary></summary>
+        </column>
+        <column order="5" name="DoseTimeStamp" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="6" name="QtyOnHandOld" type="double">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthmedsintake">
+        <summary></summary>
+        <column order="0" name="AnestheticMedNum" type="int(3)">
+            <summary></summary>
+        </column>
+        <column order="1" name="IntakeDate" type="datetime">
+            <summary></summary>
+        </column>
+        <column order="2" name="AnesthMedName" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="3" name="Qty" type="int(6)">
+            <summary></summary>
+        </column>
+        <column order="4" name="SupplierIDNum" type="char(11)">
+            <summary></summary>
+        </column>
+        <column order="5" name="InvoiceNum" type="char(20)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthmedsinventory">
+        <summary></summary>
+        <column order="0" name="AnestheticMedNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnesthMedName" type="char(30)">
+            <summary></summary>
+        </column>
+        <column order="2" name="AnesthHowSupplied" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="3" name="QtyOnHand" type="double">
+            <summary></summary>
+        </column>
+        <column order="4" name="DEASchedule" type="char(3)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthmedsinventoryadj">
+        <summary></summary>
+        <column order="0" name="AdjustNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnestheticMedNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="QtyAdj" type="double">
+            <summary></summary>
+        </column>
+        <column order="3" name="UserNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="4" name="Notes" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="5" name="TimeStamp" type="datetime">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthmedsuppliers">
+        <summary></summary>
+        <column order="0" name="SupplierIDNum" type="int(3)">
+            <summary></summary>
+        </column>
+        <column order="1" name="SupplierName" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="2" name="Phone" type="char(13)">
+            <summary></summary>
+        </column>
+        <column order="3" name="PhoneExt" type="char(6)">
+            <summary></summary>
+        </column>
+        <column order="4" name="Fax" type="char(13)">
+            <summary></summary>
+        </column>
+        <column order="5" name="Addr1" type="varchar(48)">
+            <summary></summary>
+        </column>
+        <column order="6" name="Addr2" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="7" name="City" type="varchar(48)">
+            <summary></summary>
+        </column>
+        <column order="8" name="State" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="9" name="Zip" type="char(10)">
+            <summary></summary>
+        </column>
+        <column order="10" name="Contact" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="11" name="WebSite" type="varchar(48)">
+            <summary></summary>
+        </column>
+        <column order="12" name="Notes" type="text">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthscore">
+        <summary></summary>
+        <column order="0" name="AnesthScoreNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnestheticRecordNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="QActivity" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="3" name="QResp" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="4" name="QCirc" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="5" name="QConc" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="6" name="QColor" type="smallint(1)">
+            <summary></summary>
+        </column>
+        <column order="7" name="AnesthesiaScore" type="smallint(2)">
+            <summary></summary>
+        </column>
+        <column order="8" name="DischAmb" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="9" name="DischWheelChr" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="10" name="DischAmbulance" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="11" name="DischCondStable" type="tinyint(1)">
+            <summary></summary>
+        </column>
+        <column order="12" name="DischCondUnStable" type="tinyint(1)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="anesthvsdata">
+        <summary></summary>
+        <column order="0" name="AnesthVSDataNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="AnestheticRecordNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="PatNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="3" name="VSMName" type="char(20)">
+            <summary></summary>
+        </column>
+        <column order="4" name="VSMSerNum" type="char(32)">
+            <summary></summary>
+        </column>
+        <column order="5" name="BPSys" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="6" name="BPDias" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="7" name="BPMAP" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="8" name="HR" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="9" name="SpO2" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="10" name="EtCo2" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="11" name="Temp" type="smallint(3)">
+            <summary></summary>
+        </column>
+        <column order="12" name="VSTimeStamp" type="char(32)">
+            <summary></summary>
+        </column>
+    </table>
     <table name="appointment">
         <summary>Appointments can show in the Appointments module, or they can be on the unscheduled list.  An appointment object is also used to store the Planned appointment.  The planned appointment never gets scheduled, but instead gets copied.</summary>
         <column order="0" name="AptNum" type="int(11)">
@@ -91,7 +472,7 @@
                 <EnumValue name="Scheduled">1- Shows as a regularly scheduled appointment.</EnumValue>
                 <EnumValue name="Complete">2- Shows greyed out.</EnumValue>
                 <EnumValue name="UnschedList">3- Only shows on unscheduled list.</EnumValue>
-                <EnumValue name="ASAP">4- Functions the same as Scheduled for now.</EnumValue>
+                <EnumValue name="ASAP">4- Functions almost the same as Scheduled, but also causes the appointment to show on the ASAP list.</EnumValue>
                 <EnumValue name="Broken">5- Shows with a big X on it.</EnumValue>
                 <EnumValue name="Planned">6- Planned appointment.  Only shows in Chart module. User not allowed to change this status, and it does not display as one of the options.</EnumValue>
                 <EnumValue name="PtNote">7- Patient "post-it" note on the schedule. Shows light yellow. Shows on day scheduled just like appt, as well as in prog notes, etc.</EnumValue>
@@ -104,8 +485,8 @@
         <column order="4" name="Confirmed" type="smallint" fk="definition">
             <summary>FK to definition.DefNum.  This field can also be used to show patient arrived, in chair, etc.  The Category column in the definition table is DefCat.ApptConfirmed.</summary>
         </column>
-        <column order="5" name="AddTime" type="tinyint(3)">
-            <summary>Amount of time to add to appointment.  Example: 2 would represent add 20 minutes.</summary>
+        <column order="5" name="TimeLocked" type="tinyint(1)">
+            <summary>If true, then the program will not attempt to reset the user's time pattern and length when adding or removing procedures.</summary>
         </column>
         <column order="6" name="Op" type="smallint" fk="operatory">
             <summary>FK to operatory.OperatoryNum.</summary>
@@ -157,6 +538,18 @@
         </column>
         <column order="22" name="IsHygiene" type="tinyint">
             <summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>
+        </column>
+        <column order="23" name="DateTStamp" type="timestamp">
+            <summary></summary>
+        </column>
+        <column order="24" name="DateTimeArrived" type="datetime">
+            <summary>The date and time that the patient checked in.  Date is largely ignored since it should be the same as the appt.</summary>
+        </column>
+        <column order="25" name="DateTimeSeated" type="datetime">
+            <summary>The date and time that the patient was seated in the chair in the operatory.</summary>
+        </column>
+        <column order="26" name="DateTimeDismissed" type="datetime">
+            <summary>The date and time that the patient got up out of the chair</summary>
         </column>
     </table>
     <table name="appointmentrule">
@@ -287,32 +680,26 @@
         <column order="1" name="AutoNoteName" type="varchar(50)">
             <summary>Name of AutoNote</summary>
         </column>
-        <column order="2" name="ControlsToInc" type="text">
-            <summary>A list of all the controles to use.  Sequence of numbers separated by commas.  Numbers are foreign keys.</summary>
+        <column order="2" name="MainText" type="text">
+            <summary>Was 'ControlsToInc' in previous versions.</summary>
         </column>
     </table>
     <table name="autonotecontrol">
-        <summary></summary>
+        <summary>In the program, this is now called an autonote prompt.</summary>
         <column order="0" name="AutoNoteControlNum" type="int(10)">
             <summary>Primary key</summary>
         </column>
         <column order="1" name="Descript" type="varchar(50)">
-            <summary>'Descript' is the name of the custom control</summary>
+            <summary>The description of the prompt as it will be referred to from other windows.</summary>
         </column>
         <column order="2" name="ControlType" type="varchar(50)">
-            <summary>The type of control such as 'TextBox' or 'ComboBox'</summary>
+            <summary>'Text', 'OneResponse', or 'MultiResponse'.  More types to be added later.</summary>
         </column>
         <column order="3" name="ControlLabel" type="varchar(50)">
-            <summary>Is the text for the label the user wants</summary>
+            <summary>The prompt text.</summary>
         </column>
-        <column order="4" name="PrefaceText" type="text">
-            <summary>The preface text</summary>
-        </column>
-        <column order="5" name="MultiLineText" type="text">
-            <summary>If the control is a multi line text box then store the text here</summary>
-        </column>
-        <column order="6" name="ControlOptions" type="text">
-            <summary>If the control is a combo box then the user puts the the selection options for the combo box here</summary>
+        <column order="4" name="ControlOptions" type="text">
+            <summary>For TextBox, this is the default text.  For a ComboBox, this is the list of possible responses, one per line.</summary>
         </column>
     </table>
     <table name="benefit">
@@ -511,6 +898,9 @@
         <column order="13" name="CanadianNetworkNum" type="int(11)" fk="canadiannetwork">
             <summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.</summary>
         </column>
+        <column order="14" name="IsHidden" type="tinyint(4)">
+            <summary></summary>
+        </column>
     </table>
     <table name="claim">
         <summary>The claim table holds information about individual claims.  Each row represents one claim.</summary>
@@ -586,7 +976,7 @@
                 <EnumValue name="InpatHospital">2. CPT code 21</EnumValue>
                 <EnumValue name="OutpatHospital">3. CPT code 22</EnumValue>
                 <EnumValue name="SkilledNursFac">4. CPT code 31</EnumValue>
-                <EnumValue name="AdultLivCareFac">5. CPT code 33</EnumValue>
+                <EnumValue name="AdultLivCareFac">5. Not defined in the CPT.  In X12, this is code 35.</EnumValue>
                 <EnumValue name="OtherLocation">6. CPT code ?</EnumValue>
                 <EnumValue name="MobileUnit">7. CPT code 15</EnumValue>
                 <EnumValue name="School">8. CPT code 03</EnumValue>
@@ -698,20 +1088,32 @@
                 <EnumValue name="TextReport">23 Text report from clearinghouse in human readable format.</EnumValue>
             </Enumeration>
         </column>
+        <column order="37" name="AttachedImages" type="int(11)">
+            <summary>The number of intraoral images attached.  Not the number of files attached.  This is the value that goes on the 2006 claimform.</summary>
+        </column>
+        <column order="38" name="AttachedModels" type="int(11)">
+            <summary>The number of models attached.</summary>
+        </column>
+        <column order="39" name="AttachedFlags" type="varchar(255)">
+            <summary>A comma-delimited set of flag keywords.  Can have one or more of the following: EoB,Note,Perio,Misc.  Must also contain one of these: Mail or Elect.</summary>
+        </column>
+        <column order="40" name="AttachmentID" type="varchar(255)">
+            <summary>Example: NEA#1234567.  If present, and if the claim note does not already start with this Id, then it will be prepended to the claim note for both e-claims and mail.  If using e-claims, this same ID will be used for all PWK segements.</summary>
+        </column>
     </table>
     <table name="claimattach">
-        <summary></summary>
+        <summary>Keeps track of one image file attached to a claim.  Multiple files can be attached to a claim using this method.</summary>
         <column order="0" name="ClaimAttachNum" type="int(11)">
-            <summary></summary>
+            <summary>Primary key.</summary>
         </column>
-        <column order="1" name="ClaimNum" type="int(11)">
-            <summary></summary>
+        <column order="1" name="ClaimNum" type="int(11)" fk="claim">
+            <summary>FK to claim.ClaimNum</summary>
         </column>
         <column order="2" name="DisplayedFileName" type="varchar(255)">
-            <summary></summary>
+            <summary>The name of the file that shows on the claim.  For example: tooth2.jpg.</summary>
         </column>
         <column order="3" name="ActualFileName" type="varchar(255)">
-            <summary></summary>
+            <summary>The actual file is stored in the A-Z folder in EmailAttachments.  (yes, even though it's not actually an email attachment)  The files are named automatically based on Date/time along with a random number.  This ensures that they will be sequential as well as unique.</summary>
         </column>
     </table>
     <table name="claimcondcodelog">
@@ -909,7 +1311,7 @@
             <summary>The procedure code that was sent to insurance. This is not necessarily the usual procedure code.  It will already have been trimmed to 5 char if it started with "D", or it could be the alternate code.  Not allowed to be blank if it is procedure.</summary>
         </column>
         <column order="16" name="AllowedOverride" type="double">
-            <summary>-1 if blank which indicates allowed is same as fee. This is the amount that the percentage is based on. Usually the same as the fee, unless this ins plan has lower UCR. Could also be different for ins substitutions, like posterior composites. It is never changed automatically except to sometimes set it to -1.  During Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst, an allowed amount is calculated on the fly, but is no longer saved here.</summary>
+            <summary>The allowed fee (not the override) is a complex calculation which is performed on the fly in Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  It is the amount that the percentage is based on.  If this carrier has a lower UCR than the office, then the allowed fee is where that is handled.  It can be pulled from an allowed fee schedule.  It is also where substitutions for posterior composites are handled.  The AllowedOverride allows the user to override the calculation.  -1 indicates blank.  A new use of this field is for when entering insurance payments.  On the eob, it will tell you what the allowed/UCR fee is.  The user will now be able to enter this information into the AllowedOverride field.  They will simultaneously pass the info to the allowed fee schedule.  AllowedOverride is never changed automatically by the program except to sometimes set it to -1 if NoBillIns.</summary>
         </column>
         <column order="17" name="Percentage" type="tinyint(4)">
             <summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
@@ -1097,7 +1499,7 @@
                 <EnumValue name="InpatHospital">2. CPT code 21</EnumValue>
                 <EnumValue name="OutpatHospital">3. CPT code 22</EnumValue>
                 <EnumValue name="SkilledNursFac">4. CPT code 31</EnumValue>
-                <EnumValue name="AdultLivCareFac">5. CPT code 33</EnumValue>
+                <EnumValue name="AdultLivCareFac">5. Not defined in the CPT.  In X12, this is code 35.</EnumValue>
                 <EnumValue name="OtherLocation">6. CPT code ?</EnumValue>
                 <EnumValue name="MobileUnit">7. CPT code 15</EnumValue>
                 <EnumValue name="School">8. CPT code 03</EnumValue>
@@ -1106,6 +1508,9 @@
                 <EnumValue name="PublicHealthClinic">11. CPT code 71</EnumValue>
                 <EnumValue name="RuralHealthClinic">12. CPT code 72</EnumValue>
             </Enumeration>
+        </column>
+        <column order="10" name="InsBillingProv" type="int(11)" fk="provider">
+            <summary>FK to provider.ProvNum.  0=Default practice provider, -1=Treating provider.</summary>
         </column>
     </table>
     <table name="clockevent">
@@ -1230,6 +1635,18 @@
         <column order="10" name="AtoZpath" type="varchar(255)">
             <summary>The path of the A-Z folder for the specified computer.  Overrides the officewide default.  Used when multiple locations are on a single virtual database and they each want to look to the local data folder for images.</summary>
         </column>
+        <column order="11" name="TaskKeepListHidden" type="tinyint(1)">
+            <summary>If the global setting for showing the Task List is on, this controls if it should be hidden on this specified computer</summary>
+        </column>
+        <column order="12" name="TaskDock" type="int(11)">
+            <summary>Dock task bar on bottom (0) or right (1).</summary>
+        </column>
+        <column order="13" name="TaskX" type="int(11)">
+            <summary>X pos for right docked task list.</summary>
+        </column>
+        <column order="14" name="TaskY" type="int(11)">
+            <summary>Y pos for bottom docked task list.</summary>
+        </column>
     </table>
     <table name="contact">
         <summary>Like a rolodex for businesses that the office interacts with.  Used to store pharmacies, etc.</summary>
@@ -1332,7 +1749,7 @@
                 <EnumValue name="BillingTypes">4- Billing types.</EnumValue>
                 <EnumValue name="ClaimFormats">5- Not used.</EnumValue>
                 <EnumValue name="DunningMessages">6- Not used.</EnumValue>
-                <EnumValue name="FeeSchedNames">7- Fee schedule names.</EnumValue>
+                <EnumValue name="FeeSchedNamesOld">7- Not used.</EnumValue>
                 <EnumValue name="MedicalNotes">8- Medical notes for quick paste.</EnumValue>
                 <EnumValue name="OperatoriesOld">9- No longer used</EnumValue>
                 <EnumValue name="PaymentTypes">10- Payment types.</EnumValue>
@@ -1370,6 +1787,21 @@
         </column>
         <column order="6" name="IsHidden" type="tinyint">
             <summary>If hidden, the item will not show on any list, but can still be referenced.</summary>
+        </column>
+    </table>
+    <table name="deletedobject">
+        <summary></summary>
+        <column order="0" name="DeletedObjectNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="1" name="ObjectNum" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="2" name="ObjectType" type="int(11)">
+            <summary></summary>
+        </column>
+        <column order="3" name="DateTStamp" type="timestamp">
+            <summary></summary>
         </column>
     </table>
     <table name="deposit">
@@ -1434,21 +1866,12 @@
         <column order="4" name="ColumnWidth" type="int(11)">
             <summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
         </column>
-    </table>
-    <table name="docattach">
-        <summary>Links documents (images) to patients.  This will allow one document to be shared between multiple patients in a future version.</summary>
-        <column order="0" name="DocAttachNum" type="int(11)">
-            <summary>Primary key.</summary>
-        </column>
-        <column order="1" name="PatNum" type="int(11)" fk="patient">
-            <summary>FK to patient.PatNum.</summary>
-        </column>
-        <column order="2" name="DocNum" type="int(11)" fk="document">
-            <summary>FK to document.DocNum.</summary>
+        <column order="5" name="Category" type="int(11)">
+            <summary>Enum:DisplayFieldCategory</summary>
         </column>
     </table>
     <table name="document">
-        <summary>It should be called image, but the name is for historical reasons.  Represents a single document in the images module.  This table indicates in which patient's folder the image can be found, but the actual attaching of the image to the patient is done by the docattach table.</summary>
+        <summary>It should be called image, but the name is for historical reasons.  Represents a single document in the images module.</summary>
         <column order="0" name="DocNum" type="int(11)">
             <summary>Primary key.</summary>
         </column>
@@ -1540,6 +1963,9 @@
                 <EnumValue name="Yes">1</EnumValue>
                 <EnumValue name="No">2</EnumValue>
             </Enumeration>
+        </column>
+        <column order="5" name="MessageBold" type="text">
+            <summary>A message that will be copied to the NoteBold field of the Statement.</summary>
         </column>
     </table>
     <table name="electid">
@@ -1636,6 +2062,9 @@
         </column>
         <column order="5" name="ClockStatus" type="varchar(255)">
             <summary>This is just text used to quickly display the clockstatus.  eg Working,Break,Lunch,Home, etc.</summary>
+        </column>
+        <column order="6" name="PhoneExt" type="int(11)">
+            <summary>The phone extension for the employee.  e.g. 101,102,etc.  This field is only visible for user editing if the pref DockPhonePanelShow is true (1).</summary>
         </column>
     </table>
     <table name="employer">
@@ -1754,8 +2183,8 @@
         <column order="2" name="OldCode" type="varchar(15)">
             <summary>Do not use.</summary>
         </column>
-        <column order="3" name="FeeSched" type="smallint" fk="definition">
-            <summary>FK to definition.DefNum.</summary>
+        <column order="3" name="FeeSched" type="int(11)" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum.</summary>
         </column>
         <column order="4" name="UseDefaultFee" type="tinyint">
             <summary>Not used.</summary>
@@ -1765,6 +2194,24 @@
         </column>
         <column order="6" name="CodeNum" type="int(11)" fk="procedurecode">
             <summary>FK to procedurecode.CodeNum.</summary>
+        </column>
+    </table>
+    <table name="feesched">
+        <summary>Fee schedule names used to be in the definition table, but now they have their own table.  We are about to have many many more fee schedules as we start automating allowed fees.</summary>
+        <column order="0" name="FeeSchedNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="Description" type="varchar(255)">
+            <summary>The name of the fee schedule.</summary>
+        </column>
+        <column order="2" name="FeeSchedType" type="int(11)">
+            <summary>Enum:FeeScheduleType</summary>
+        </column>
+        <column order="3" name="ItemOrder" type="int(11)">
+            <summary>Unlike with the old definition table, this ItemOrder is not as critical in the caching of data.  The item order is only for fee schedules of the same type.</summary>
+        </column>
+        <column order="4" name="IsHidden" type="tinyint(1)">
+            <summary>True if the fee schedule is hidden.  Can't delete fee schedules or change their type once created.</summary>
         </column>
     </table>
     <table name="files">
@@ -1910,7 +2357,7 @@
                 <EnumValue name="ChooseDatabase">11</EnumValue>
                 <EnumValue name="Schedules">12</EnumValue>
                 <EnumValue name="Blockouts">13</EnumValue>
-                <EnumValue name="ClaimsSentEdit">14</EnumValue>
+                <EnumValue name="ClaimSentEdit">14</EnumValue>
                 <EnumValue name="PaymentCreate">15</EnumValue>
                 <EnumValue name="PaymentEdit">16</EnumValue>
                 <EnumValue name="AdjustmentCreate">17</EnumValue>
@@ -1930,6 +2377,10 @@
                 <EnumValue name="AccountingEdit">31</EnumValue>
                 <EnumValue name="AccountingCreate">32</EnumValue>
                 <EnumValue name="Accounting">33</EnumValue>
+                <EnumValue name="AnesthesiaIntakeMeds">34</EnumValue>
+                <EnumValue name="AnesthesiaControlMeds">35</EnumValue>
+                <EnumValue name="InsPayCreate">36</EnumValue>
+                <EnumValue name="InsPayEdit">37</EnumValue>
             </Enumeration>
         </column>
     </table>
@@ -1956,8 +2407,8 @@
         <column order="6" name="PlanNote" type="text">
             <summary>Note for all plans identical to this one.  Always stays in synch with other identical plans regardless of user actions.  If they change it on one, it gets changed on all.</summary>
         </column>
-        <column order="7" name="FeeSched" type="smallint" fk="definition">
-            <summary>FK to definition.DefNum.  Name of fee schedule is stored in definition.ItemName.</summary>
+        <column order="7" name="FeeSched" type="smallint" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum.</summary>
         </column>
         <column order="8" name="ReleaseInfo" type="tinyint">
             <summary>Release of information signature is on file.</summary>
@@ -1977,8 +2428,8 @@
         <column order="13" name="ClaimsUseUCR" type="tinyint">
             <summary>Fee billed on claim should be the UCR fee for the patient's provider.</summary>
         </column>
-        <column order="14" name="CopayFeeSched" type="smallint" fk="definition">
-            <summary>FK to definition.DefNum. Not usually used. This fee schedule holds only co-pays(patient portions).  Only used for Capitation or for fixed copay plans.</summary>
+        <column order="14" name="CopayFeeSched" type="smallint" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum. Not usually used. This fee schedule holds only co-pays(patient portions).  Only used for Capitation or for fixed copay plans.</summary>
         </column>
         <column order="15" name="SubscriberID" type="varchar(40)">
             <summary>Usually SSN, but can also be changed by user.  No dashes. Not allowed to be blank.</summary>
@@ -1989,8 +2440,8 @@
         <column order="17" name="CarrierNum" type="int(11)" fk="carrier">
             <summary>FK to carrier.CarrierNum.</summary>
         </column>
-        <column order="18" name="AllowedFeeSched" type="smallint" fk="Definition">
-            <summary>FK to Definition.DefNum. Not usually used.  This fee schedule holds amounts allowed by carriers.</summary>
+        <column order="18" name="AllowedFeeSched" type="smallint" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum. Not usually used.  This fee schedule holds amounts allowed by carriers.</summary>
         </column>
         <column order="19" name="TrojanID" type="varchar(100)">
             <summary>.</summary>
@@ -2044,6 +2495,12 @@
         </column>
         <column order="27" name="DedBeforePerc" type="tinyint(1)">
             <summary>Apply deductible before percentage when calculating estimates.</summary>
+        </column>
+        <column order="28" name="CodeSubstNone" type="tinyint(1)">
+            <summary>Set to true to not allow procedure code downgrade substitution on this insurance plan.</summary>
+        </column>
+        <column order="29" name="IsHidden" type="tinyint(4)">
+            <summary>Set to true to hide it from the pick list and from the main list.</summary>
         </column>
     </table>
     <table name="instructor">
@@ -2407,6 +2864,9 @@
         <column order="8" name="ClinicNum" type="smallint" fk="clinic">
             <summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
         </column>
+        <column order="9" name="DateTStamp" type="timestamp">
+            <summary></summary>
+        </column>
     </table>
     <table name="patfield">
         <summary>These are custom fields added and managed by the user.</summary>
@@ -2491,7 +2951,7 @@
             <summary>.</summary>
         </column>
         <column order="11" name="Address2" type="varchar(100)">
-            <summary>.</summary>
+            <summary>Optional second address line.</summary>
         </column>
         <column order="12" name="City" type="varchar(100)">
             <summary>.</summary>
@@ -2515,87 +2975,81 @@
             <summary>FK to patient.PatNum.  Head of household.</summary>
         </column>
         <column order="19" name="CreditType" type="char(1)">
-            <summary>Single char. Shows at upper left corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose.</summary>
+            <summary>Single char. Shows at upper right corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose.</summary>
         </column>
         <column order="20" name="Email" type="varchar(100)">
             <summary>.</summary>
         </column>
         <column order="21" name="Salutation" type="varchar(100)">
-            <summary>For example: Dear Mr. Smith.  Not used by the program in any way.</summary>
+            <summary>Dear __.  This fields should not include the "Dear" or a trailing comma.  If this field is blank, then the typical salutation is FName.  Or, if a Preferred name is present, that is used instead of FName.</summary>
         </column>
         <column order="22" name="EstBalance" type="double">
-            <summary>Current patient balance.(not family). If user has checked BalancesDontSubtractIns in setup, then this will not take into account insurance.  Otherwise, the insurance estimate pending will have already been subtracted.</summary>
+            <summary>Current patient balance.(not family). Never subtracts insurance estimates.</summary>
         </column>
-        <column order="23" name="NextAptNum" type="int(11)">
-            <summary>May be 0. Also see the PlannedIsDone field. Otherwise it is the foreign key to appointment.AptNum.  This is the appointment that will show in the Chart module and in the Planned appointment tracker.  It will never show in the Appointments module. In other words, it is the suggested next appoinment rather than an appointment that has already been scheduled.</summary>
-        </column>
-        <column order="24" name="PriProv" type="int(11)" fk="provider">
+        <column order="23" name="PriProv" type="int(11)" fk="provider">
             <summary>FK to provider.ProvNum.  The patient's primary provider.  Required.  The database maintenance tool ensures that every patient always has this number set, so the program no longer has to handle 0.</summary>
         </column>
-        <column order="25" name="SecProv" type="int(11)" fk="provider">
+        <column order="24" name="SecProv" type="int(11)" fk="provider">
             <summary>FK to provider.ProvNum.  Secondary provider (hygienist). Optional.</summary>
         </column>
-        <column order="26" name="FeeSched" type="int(11)" fk="definition">
-            <summary>FK to definition.DefNum.  Fee schedule for this patient.  Usually not used.  If missing, the practice default fee schedule is used. If patient has insurance, then the fee schedule for the insplan is used.</summary>
+        <column order="25" name="FeeSched" type="int(11)" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum.  Fee schedule for this patient.  Usually not used.  If missing, the practice default fee schedule is used. If patient has insurance, then the fee schedule for the insplan is used.</summary>
         </column>
-        <column order="27" name="BillingType" type="int(11)" fk="definition">
+        <column order="26" name="BillingType" type="int(11)" fk="definition">
             <summary>FK to definition.DefNum.  Must have a value, or the patient will not show on some reports.</summary>
         </column>
-        <column order="28" name="ImageFolder" type="varchar(100)">
+        <column order="27" name="ImageFolder" type="varchar(100)">
             <summary>Name of folder where images will be stored. Not editable for now.</summary>
         </column>
-        <column order="29" name="AddrNote" type="text">
+        <column order="28" name="AddrNote" type="text">
             <summary>Address or phone note.  Unlimited length in order to handle data from other programs during a conversion.</summary>
         </column>
-        <column order="30" name="FamFinUrgNote" type="text">
+        <column order="29" name="FamFinUrgNote" type="text">
             <summary>Family financial urgent note.  Only stored with guarantor, and shared for family.</summary>
         </column>
-        <column order="31" name="MedUrgNote" type="varchar(255)">
+        <column order="30" name="MedUrgNote" type="varchar(255)">
             <summary>Individual patient note for Urgent medical.</summary>
         </column>
-        <column order="32" name="ApptModNote" type="varchar(255)">
+        <column order="31" name="ApptModNote" type="varchar(255)">
             <summary>Individual patient note for Appointment module note.</summary>
         </column>
-        <column order="33" name="StudentStatus" type="char(1)">
+        <column order="32" name="StudentStatus" type="char(1)">
             <summary>Single char for Nonstudent, Parttime, or Fulltime.  Blank=Nonstudent</summary>
         </column>
-        <column order="34" name="SchoolName" type="varchar(30)">
+        <column order="33" name="SchoolName" type="varchar(30)">
             <summary>College name.</summary>
         </column>
-        <column order="35" name="ChartNumber" type="varchar(20)">
+        <column order="34" name="ChartNumber" type="varchar(20)">
             <summary>Max 15 char.  Used for reference to previous programs.</summary>
         </column>
-        <column order="36" name="MedicaidID" type="varchar(20)">
+        <column order="35" name="MedicaidID" type="varchar(20)">
             <summary>Optional. The Medicaid ID for this patient.</summary>
         </column>
-        <column order="37" name="Bal_0_30" type="double">
+        <column order="36" name="Bal_0_30" type="double">
             <summary>Aged balance from 0 to 30 days old. Aging numbers are for entire family.  Only stored with guarantor.</summary>
         </column>
-        <column order="38" name="Bal_31_60" type="double">
+        <column order="37" name="Bal_31_60" type="double">
             <summary>Aged balance from 31 to 60 days old. Aging numbers are for entire family.  Only stored with guarantor.</summary>
         </column>
-        <column order="39" name="Bal_61_90" type="double">
+        <column order="38" name="Bal_61_90" type="double">
             <summary>Aged balance from 61 to 90 days old. Aging numbers are for entire family.  Only stored with guarantor.</summary>
         </column>
-        <column order="40" name="BalOver90" type="double">
+        <column order="39" name="BalOver90" type="double">
             <summary>Aged balance over 90 days old. Aging numbers are for entire family.  Only stored with guarantor.</summary>
         </column>
-        <column order="41" name="InsEst" type="double">
+        <column order="40" name="InsEst" type="double">
             <summary>Insurance Estimate for entire family.</summary>
         </column>
-        <column order="42" name="PrimaryTeeth" type="varchar(255)">
-            <summary>Obsolete.  See the toothinitial table.</summary>
-        </column>
-        <column order="43" name="BalTotal" type="double">
+        <column order="41" name="BalTotal" type="double">
             <summary>Total balance for entire family before insurance estimate.  Not the same as the sum of the 4 aging balances because this can be negative.  Only stored with guarantor.</summary>
         </column>
-        <column order="44" name="EmployerNum" type="int(11)" fk="employer">
+        <column order="42" name="EmployerNum" type="int(11)" fk="employer">
             <summary>FK to employer.EmployerNum.</summary>
         </column>
-        <column order="45" name="EmploymentNote" type="varchar(255)">
+        <column order="43" name="EmploymentNote" type="varchar(255)">
             <summary>Not used since version 2.8.</summary>
         </column>
-        <column order="46" name="Race" type="tinyint(4)">
+        <column order="44" name="Race" type="tinyint(4)">
             <summary>Enum:PatientRace Race and ethnicity.</summary>
             <Enumeration name="PatientRace">
                 <summary>Race and ethnicity for patient. Used by public health.</summary>
@@ -2611,13 +3065,10 @@
                 <EnumValue name="Aboriginal">9</EnumValue>
             </Enumeration>
         </column>
-        <column order="47" name="County" type="varchar(255)" fk="county">
+        <column order="45" name="County" type="varchar(255)" fk="county">
             <summary>FK to county.CountyName, although it will not crash if key absent.</summary>
         </column>
-        <column order="48" name="GradeSchool" type="varchar(255)" fk="school">
-            <summary>FK to school.SchoolName, although it will not crash if key absent.  Name of gradeschool or highschool.</summary>
-        </column>
-        <column order="49" name="GradeLevel" type="tinyint(4)">
+        <column order="46" name="GradeLevel" type="tinyint(4)">
             <summary>Enum:PatientGrade Gradelevel.</summary>
             <Enumeration name="PatientGrade">
                 <summary>Grade level used in public health.</summary>
@@ -2640,7 +3091,7 @@
                 <EnumValue name="Other">16</EnumValue>
             </Enumeration>
         </column>
-        <column order="50" name="Urgency" type="tinyint(4)">
+        <column order="47" name="Urgency" type="tinyint(4)">
             <summary>Enum:TreatmentUrgency Used in public health screenings.</summary>
             <Enumeration name="TreatmentUrgency">
                 <summary>For public health.  Unknown, NoProblems, NeedsCarE, or Urgent.</summary>
@@ -2650,28 +3101,28 @@
                 <EnumValue name="Urgent"></EnumValue>
             </Enumeration>
         </column>
-        <column order="51" name="DateFirstVisit" type="date">
+        <column order="48" name="DateFirstVisit" type="date">
             <summary>The date that the patient first visited the office.  Automated.</summary>
         </column>
-        <column order="52" name="ClinicNum" type="int(11)" fk="clinic">
+        <column order="49" name="ClinicNum" type="int(11)" fk="clinic">
             <summary>FK to clinic.ClinicNum. Can be zero if not attached to a clinic or no clinics set up.</summary>
         </column>
-        <column order="53" name="HasIns" type="varchar(255)">
+        <column order="50" name="HasIns" type="varchar(255)">
             <summary>For now, an 'I' indicates that the patient has insurance.  This is only used when displaying appointments.  It will later be expanded.  User can't edit.</summary>
         </column>
-        <column order="54" name="TrophyFolder" type="varchar(255)">
+        <column order="51" name="TrophyFolder" type="varchar(255)">
             <summary>The Trophy bridge is inadequate.  This is an attempt to make it usable for offices that have already invested in Trophy hardware.</summary>
         </column>
-        <column order="55" name="PlannedIsDone" type="tinyint">
+        <column order="52" name="PlannedIsDone" type="tinyint">
             <summary>This simply indicates whether the 'done' box is checked in the chart module.  Used to be handled as a -1 in the NextAptNum field, but now that field is unsigned.</summary>
         </column>
-        <column order="56" name="Premed" type="tinyint">
+        <column order="53" name="Premed" type="tinyint">
             <summary>Set to true if patient needs to be premedicated for appointments, includes PAC, halcion, etc.</summary>
         </column>
-        <column order="57" name="Ward" type="varchar(255)">
+        <column order="54" name="Ward" type="varchar(255)">
             <summary>Only used in hospitals.</summary>
         </column>
-        <column order="58" name="PreferConfirmMethod" type="tinyint">
+        <column order="55" name="PreferConfirmMethod" type="tinyint">
             <summary>Enum:ContactMethod</summary>
             <Enumeration name="ContactMethod">
                 <summary />
@@ -2685,7 +3136,7 @@
                 <EnumValue name="Mail">7</EnumValue>
             </Enumeration>
         </column>
-        <column order="59" name="PreferContactMethod" type="tinyint">
+        <column order="56" name="PreferContactMethod" type="tinyint">
             <summary>Enum:ContactMethod</summary>
             <Enumeration name="ContactMethod">
                 <summary />
@@ -2699,7 +3150,7 @@
                 <EnumValue name="Mail">7</EnumValue>
             </Enumeration>
         </column>
-        <column order="60" name="PreferRecallMethod" type="tinyint">
+        <column order="57" name="PreferRecallMethod" type="tinyint">
             <summary>Enum:ContactMethod</summary>
             <Enumeration name="ContactMethod">
                 <summary />
@@ -2713,23 +3164,35 @@
                 <EnumValue name="Mail">7</EnumValue>
             </Enumeration>
         </column>
-        <column order="61" name="SchedBeforeTime" type="time">
+        <column order="58" name="SchedBeforeTime" type="time">
             <summary>Only the time portion of the TimeSpan is used.</summary>
         </column>
-        <column order="62" name="SchedAfterTime" type="time">
+        <column order="59" name="SchedAfterTime" type="time">
             <summary></summary>
         </column>
-        <column order="63" name="SchedDayOfWeek" type="tinyint">
+        <column order="60" name="SchedDayOfWeek" type="tinyint">
             <summary>We do not use this, but some users do, so here it is. 0=none. Otherwise, 1-7 for day.</summary>
         </column>
-        <column order="64" name="Language" type="varchar(100)">
+        <column order="61" name="Language" type="varchar(100)">
             <summary>The primary language of the patient.  Typically en, fr, es, or similar.  We might later also allow cultures and user-defined languages.</summary>
         </column>
-        <column order="65" name="AdmitDate" type="date">
+        <column order="62" name="AdmitDate" type="date">
             <summary>Used in hospitals.  It can be before the first visit date.  It typically gets set automatically by the hospital system.</summary>
         </column>
-        <column order="66" name="Title" type="varchar(15)">
+        <column order="63" name="Title" type="varchar(15)">
             <summary>Includes any punctuation.  For example, Mr., Mrs., Miss, Dr., etc.  There is no selection mechanism yet for user; they must simply type it in.</summary>
+        </column>
+        <column order="64" name="PayPlanDue" type="double">
+            <summary></summary>
+        </column>
+        <column order="65" name="SiteNum" type="int(11)" fk="site">
+            <summary>FK to site.SiteNum. Can be zero. Replaces the old GradeSchool field with a proper foreign key.</summary>
+        </column>
+        <column order="66" name="DateTStamp" type="timestamp">
+            <summary></summary>
+        </column>
+        <column order="67" name="ResponsParty" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>
         </column>
     </table>
     <table name="patientnote">
@@ -2875,6 +3338,9 @@
         <column order="6" name="PlanNum" type="int(11)">
             <summary>Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to insplan.PlanNum and Guarantor will be 0.</summary>
         </column>
+        <column order="7" name="CompletedAmt" type="double">
+            <summary>The amount of the treatment that has already been completed.  This should match the sum of the principal amounts for most situations.  But if the procedures have not yet been completed, and the payment plan is to make any sense, then this number must be changed.</summary>
+        </column>
     </table>
     <table name="payplancharge">
         <summary>One of the dated charges attached to a payment plan.  This has nothing to do with payments, but rather just causes the amount due to increase on the date of the charge.  The amount of the charge is the sum of the principal and the interest.</summary>
@@ -3007,6 +3473,69 @@
             <summary>.</summary>
         </column>
     </table>
+    <table name="pharmacy">
+        <summary>An individual pharmacy store.</summary>
+        <column order="0" name="PharmacyNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PharmID" type="varchar(255)">
+            <summary>NCPDPID assigned by NCPDP.  Not used yet.</summary>
+        </column>
+        <column order="2" name="StoreName" type="varchar(255)">
+            <summary>For now, it can just be a common description.  Later, it might have to be an official designation.</summary>
+        </column>
+        <column order="3" name="Phone" type="varchar(255)">
+            <summary>Includes all punctuation.</summary>
+        </column>
+        <column order="4" name="Fax" type="varchar(255)">
+            <summary>Includes all punctuation.</summary>
+        </column>
+        <column order="5" name="Address" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="6" name="Address2" type="varchar(255)">
+            <summary>Optional.</summary>
+        </column>
+        <column order="7" name="City" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="8" name="State" type="varchar(255)">
+            <summary>Two char, uppercase.</summary>
+        </column>
+        <column order="9" name="Zip" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="10" name="Note" type="text">
+            <summary>A freeform note for any info that is needed about the pharmacy, such as hours.</summary>
+        </column>
+    </table>
+    <table name="phonenumber">
+        <summary>Only used internally by OpenDental, Inc.  Not used by anyone else.</summary>
+        <column order="0" name="PhoneNumberNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PatNum" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum.</summary>
+        </column>
+        <column order="2" name="PhoneNumberVal" type="varchar(255)">
+            <summary>The actual phone number for the patient.  Includes any punctuation.  No leading 1 or plus, so almost always 10 digits.</summary>
+        </column>
+    </table>
+    <table name="plannedappt">
+        <summary>Links one planned appointment to one patient.  Allows multiple planned appointments per patient.  Also see the PlannedIsDone field. A planned appointment is an appointment that will show in the Chart module and in the Planned appointment tracker. It will never show in the Appointments module. In other words, it is the suggested next appoinment rather than an appointment that has already been scheduled.</summary>
+        <column order="0" name="PlannedApptNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PatNum" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum.</summary>
+        </column>
+        <column order="2" name="AptNum" type="int(11)" fk="appointment">
+            <summary>FK to appointment.AptNum.</summary>
+        </column>
+        <column order="3" name="ItemOrder" type="int(11)">
+            <summary>One-indexed order of item in group of planned appts.</summary>
+        </column>
+    </table>
     <table name="popup">
         <summary></summary>
         <column order="0" name="PopupNum" type="int(11)">
@@ -3030,6 +3559,9 @@
         <column order="1" name="ValueString" type="text">
             <summary>The stored value.</summary>
         </column>
+        <column order="2" name="Comments" type="text">
+            <summary>Documentation on usage and values of each pref.</summary>
+        </column>
     </table>
     <table name="printer">
         <summary>One printer selection for one situation for one computer.</summary>
@@ -3052,6 +3584,7 @@
                 <EnumValue name="LabelSheet"></EnumValue>
                 <EnumValue name="Postcard"></EnumValue>
                 <EnumValue name="Appointments"></EnumValue>
+                <EnumValue name="RxControlled"></EnumValue>
             </Enumeration>
         </column>
         <column order="3" name="PrinterName" type="varchar(255)">
@@ -3149,37 +3682,31 @@
                 <EnumValue name="ToothRange">7</EnumValue>
             </Enumeration>
         </column>
-        <column order="7" name="RemoveTooth" type="tinyint">
-            <summary>No longer used. Extraction paint type is used instead to show missing teeth.</summary>
-        </column>
-        <column order="8" name="SetRecall" type="tinyint">
-            <summary>Triggers recall in 6 months or as defined.</summary>
-        </column>
-        <column order="9" name="NoBillIns" type="tinyint">
+        <column order="7" name="NoBillIns" type="tinyint">
             <summary>If true, do not usually bill this procedure to insurance.</summary>
         </column>
-        <column order="10" name="IsProsth" type="tinyint">
+        <column order="8" name="IsProsth" type="tinyint">
             <summary>True if Crown,Bridge,Denture, or RPD. Forces user to enter Initial or Replacement and Date.</summary>
         </column>
-        <column order="11" name="DefaultNote" type="text">
+        <column order="9" name="DefaultNote" type="text">
             <summary>The default procedure note to copy when marking complete.</summary>
         </column>
-        <column order="12" name="IsHygiene" type="tinyint">
+        <column order="10" name="IsHygiene" type="tinyint">
             <summary>Identifies hygiene procedures so that the correct provider can be selected.</summary>
         </column>
-        <column order="13" name="GTypeNum" type="smallint">
+        <column order="11" name="GTypeNum" type="smallint">
             <summary>No longer used.</summary>
         </column>
-        <column order="14" name="AlternateCode1" type="varchar(15)">
+        <column order="12" name="AlternateCode1" type="varchar(15)">
             <summary>For Medicaid.  There may be more later.</summary>
         </column>
-        <column order="15" name="MedicalCode" type="varchar(15)" fk="procedurecode">
+        <column order="13" name="MedicalCode" type="varchar(15)" fk="procedurecode">
             <summary>FK to procedurecode.ProcCode.  The actual medical code that is being referenced must be setup first.  Anytime a procedure it added, this medical code will also be added to that procedure.  The user can change it in procedurelog.</summary>
         </column>
-        <column order="16" name="IsTaxed" type="tinyint">
+        <column order="14" name="IsTaxed" type="tinyint">
             <summary>Used by some offices even though no user interface built yet.  SalesTaxPercentage has been added to the preference table to store the amount of sales tax to apply as an adjustment attached to a procedurelog entry.</summary>
         </column>
-        <column order="17" name="PaintType" type="tinyint(4)">
+        <column order="15" name="PaintType" type="tinyint(4)">
             <summary>Enum:ToothPaintingType</summary>
             <Enumeration name="ToothPaintingType">
                 <summary>Replaces the graphic type table in the database for the new 3D tooth chart.  We cannot yet do veneers.</summary>
@@ -3199,25 +3726,25 @@
                 <EnumValue name="Sealant">13</EnumValue>
             </Enumeration>
         </column>
-        <column order="18" name="GraphicColor" type="int(11)">
+        <column order="16" name="GraphicColor" type="int(11)">
             <summary>If set to anything but 0, then this will override the graphic color for all procedures of this code, regardless of the status.</summary>
         </column>
-        <column order="19" name="LaymanTerm" type="varchar(255)">
+        <column order="17" name="LaymanTerm" type="varchar(255)">
             <summary>When creating treatment plans, this description will be used instead of the technical description.</summary>
         </column>
-        <column order="20" name="IsCanadianLab" type="tinyint">
+        <column order="18" name="IsCanadianLab" type="tinyint">
             <summary>Only used in Canada.  Set to true if this procedure code is only used as an adjunct to track the lab fee.</summary>
         </column>
-        <column order="21" name="PreExisting" type="tinyint(1)">
+        <column order="19" name="PreExisting" type="tinyint(1)">
             <summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
         </column>
-        <column order="22" name="BaseUnits" type="int(11)">
+        <column order="20" name="BaseUnits" type="int(11)">
             <summary>Support for Base Units for a Code (like anesthesia)</summary>
         </column>
-        <column order="23" name="SubstitutionCode" type="varchar(25)" fk="procedurecode">
+        <column order="21" name="SubstitutionCode" type="varchar(25)" fk="procedurecode">
             <summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
         </column>
-        <column order="24" name="SubstOnlyIf" type="int(11)">
+        <column order="22" name="SubstOnlyIf" type="int(11)">
             <summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</summary>
             <Enumeration name="SubstitutionCondition">
                 <summary>Used for insurance substitutions conditions of procedurecodes.  Mostly for posterior composites.</summary>
@@ -3225,6 +3752,9 @@
                 <EnumValue name="Molar">1</EnumValue>
                 <EnumValue name="SecondMolar">2</EnumValue>
             </Enumeration>
+        </column>
+        <column order="23" name="DateTStamp" type="timestamp">
+            <summary></summary>
         </column>
     </table>
     <table name="procedurelog">
@@ -3289,7 +3819,7 @@
                 <EnumValue name="InpatHospital">2. CPT code 21</EnumValue>
                 <EnumValue name="OutpatHospital">3. CPT code 22</EnumValue>
                 <EnumValue name="SkilledNursFac">4. CPT code 31</EnumValue>
-                <EnumValue name="AdultLivCareFac">5. CPT code 33</EnumValue>
+                <EnumValue name="AdultLivCareFac">5. Not defined in the CPT.  In X12, this is code 35.</EnumValue>
                 <EnumValue name="OtherLocation">6. CPT code ?</EnumValue>
                 <EnumValue name="MobileUnit">7. CPT code 15</EnumValue>
                 <EnumValue name="School">8. CPT code 03</EnumValue>
@@ -3354,10 +3884,10 @@
             <summary>Unit support for things like anesthesia billing and such.-dt</summary>
         </column>
         <column order="33" name="UnitQty" type="int(11)">
-            <summary>For certain CPT codes.</summary>
+            <summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
         </column>
         <column order="34" name="BaseUnits" type="int(11)">
-            <summary>Base units used for some billing codes.</summary>
+            <summary>Base units used for some billing codes.  Default is 0.</summary>
         </column>
         <column order="35" name="StartTime" type="int(11)">
             <summary>Start time in military</summary>
@@ -3367,6 +3897,9 @@
         </column>
         <column order="37" name="DateTP" type="date">
             <summary>The date that the procedure was originally treatment planned.  Does not change when marked complete.</summary>
+        </column>
+        <column order="38" name="SiteNum" type="int(11)" fk="site">
+            <summary>FK to site.SiteNum.</summary>
         </column>
     </table>
     <table name="proclicense">
@@ -3518,8 +4051,8 @@
         <column order="6" name="Suffix" type="varchar(100)">
             <summary>eg. DMD or DDS. Was 'title' in previous versions.</summary>
         </column>
-        <column order="7" name="FeeSched" type="smallint" fk="Definition">
-            <summary>FK to Definition.DefNum.</summary>
+        <column order="7" name="FeeSched" type="smallint" fk="feesched">
+            <summary>FK to feesched.FeeSchedNum.</summary>
         </column>
         <column order="8" name="Specialty" type="tinyint">
             <summary>Enum:DentalSpecialty</summary>
@@ -3582,6 +4115,9 @@
         </column>
         <column order="22" name="CanadianOfficeNum" type="varchar(100)">
             <summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
+        </column>
+        <column order="23" name="DateTStamp" type="timestamp">
+            <summary></summary>
         </column>
     </table>
     <table name="providerident">
@@ -3733,14 +4269,50 @@
         <column order="5" name="RecallInterval" type="int(11)">
             <summary>The interval between recalls.  The Interval struct combines years, months, weeks, and days into a single integer value.</summary>
         </column>
-        <column order="6" name="RecallStatus" type="smallint" fk="Definition">
-            <summary>FK to Definition.DefNum, or 0 for none.</summary>
+        <column order="6" name="RecallStatus" type="smallint" fk="definition">
+            <summary>FK to definition.DefNum, or 0 for none.</summary>
         </column>
         <column order="7" name="Note" type="text">
             <summary>An administrative note for staff use.</summary>
         </column>
         <column order="8" name="IsDisabled" type="tinyint">
             <summary>If true, this recall type will be disabled (there's only one type right now). This is usually used rather than deleting the recall type from the patient because the program must enforce the trigger conditions for all patients.</summary>
+        </column>
+        <column order="9" name="DateTStamp" type="timestamp">
+            <summary></summary>
+        </column>
+        <column order="10" name="RecallTypeNum" type="int(11)" fk="recalltype">
+            <summary>FK to recalltype.RecallTypeNum.</summary>
+        </column>
+    </table>
+    <table name="recalltrigger">
+        <summary>Links one procedurecode to one recalltype.  The presence of this trigger is used when determining DatePrevious in the recall table.</summary>
+        <column order="0" name="RecallTriggerNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="RecallTypeNum" type="int(11)" fk="recalltype">
+            <summary>FK to recalltype.RecallTypeNum</summary>
+        </column>
+        <column order="2" name="CodeNum" type="int(11)" fk="procedurecode">
+            <summary>FK to procedurecode.CodeNum</summary>
+        </column>
+    </table>
+    <table name="recalltype">
+        <summary>All recalls are based on these recall types.  Recall triggers are in their own table.</summary>
+        <column order="0" name="RecallTypeNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="Description" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="2" name="DefaultInterval" type="int(11)">
+            <summary>The interval between recalls.  The Interval struct combines years, months, weeks, and days into a single integer value.</summary>
+        </column>
+        <column order="3" name="TimePattern" type="varchar(255)">
+            <summary>For scheduling the appointment.</summary>
+        </column>
+        <column order="4" name="Procedures" type="varchar(255)">
+            <summary>What procedures to put on the recall appointment.  Comma delimited set of ProcCodes.  (We may change this to CodeNums).</summary>
         </column>
     </table>
     <table name="reconcile">
@@ -3882,6 +4454,9 @@
         <column order="20" name="NationalProvID" type="varchar(255)">
             <summary>NPI for the referral</summary>
         </column>
+        <column order="21" name="Slip" type="int(11)" fk="sheetdef">
+            <summary>FK to sheetdef.SheetDefNum.  Referral slips can be set for individual referral sources.  If zero, then the default internal referral slip will be used instead of a custom referral slip.</summary>
+        </column>
     </table>
     <table name="registrationkey">
         <summary>Keeps track of which product keys have been assigned to which customers. This datatype is only used if the program is being run from a distributor installation. A single customer is allowed to have more than one key, to accommodate for various circumstances, including having multiple physical business locations.</summary>
@@ -4011,6 +4586,9 @@
         <column order="5" name="Notes" type="varchar(255)">
             <summary>Notes about this drug. Will not be copied to the rxpat.</summary>
         </column>
+        <column order="6" name="IsControlled" type="tinyint(4)">
+            <summary>Is a controlled substance.  This will affect the way it prints.</summary>
+        </column>
     </table>
     <table name="rxpat">
         <summary>One Rx for one patient. Copied from rxdef rather than linked to it.</summary>
@@ -4039,7 +4617,13 @@
             <summary>FK to provider.ProvNum.</summary>
         </column>
         <column order="8" name="Notes" type="varchar(255)">
-            <summary>Notes specific to this Rx.</summary>
+            <summary>Notes specific to this Rx.  Will not show on the printout.  For staff use only.</summary>
+        </column>
+        <column order="9" name="PharmacyNum" type="int(11)" fk="pharmacy">
+            <summary>FK to pharmacy.PharmacyNum.</summary>
+        </column>
+        <column order="10" name="IsControlled" type="tinyint(4)">
+            <summary>Is a controlled substance.  This will affect the way it prints.</summary>
         </column>
     </table>
     <table name="scheddefault">
@@ -4070,7 +4654,7 @@
         </column>
     </table>
     <table name="schedule">
-        <summary>One block of time that overrides the default sched.  Either for practice, provider, or blockout.</summary>
+        <summary>One block of time.  Either for practice, provider, or blockout.</summary>
         <column order="0" name="ScheduleNum" type="int(11)">
             <summary>Primary key.</summary>
         </column>
@@ -4111,15 +4695,27 @@
                 <EnumValue name="Holiday">2</EnumValue>
             </Enumeration>
         </column>
-        <column order="9" name="Op" type="smallint" fk="operatory">
-            <summary>FK to operatory.OperatoryNum.  Only used right now for Blockouts.  If 0, then it applies to all ops.</summary>
-        </column>
-        <column order="10" name="EmployeeNum" type="int(11)" fk="employee">
+        <column order="9" name="EmployeeNum" type="int(11)" fk="employee">
             <summary>FK to employee.EmployeeNum.</summary>
+        </column>
+        <column order="10" name="DateTStamp" type="timestamp">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="scheduleop">
+        <summary>Links one schedule block to one operatory.  So for a schedule block to show, it must be linked to one or more operatories.</summary>
+        <column order="0" name="ScheduleOpNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="ScheduleNum" type="int(11)" fk="schedule">
+            <summary>FK to schedule.ScheduleNum.</summary>
+        </column>
+        <column order="2" name="OperatoryNum" type="int(11)" fk="operatory">
+            <summary>FK to operatory.OperatoryNum.</summary>
         </column>
     </table>
     <table name="school">
-        <summary>Used in public health.</summary>
+        <summary>Gradeschool.  Deprecated and replaced by the site table.  Still used in the screen table which is essentially outside of the main program.</summary>
         <column order="0" name="SchoolName" type="varchar(255)">
             <summary>Primary key, but allowed to change.  Change is programmatically synchronized so that keys stay intact.</summary>
         </column>
@@ -4174,7 +4770,7 @@
                 <EnumValue name="InpatHospital">2. CPT code 21</EnumValue>
                 <EnumValue name="OutpatHospital">3. CPT code 22</EnumValue>
                 <EnumValue name="SkilledNursFac">4. CPT code 31</EnumValue>
-                <EnumValue name="AdultLivCareFac">5. CPT code 33</EnumValue>
+                <EnumValue name="AdultLivCareFac">5. Not defined in the CPT.  In X12, this is code 35.</EnumValue>
                 <EnumValue name="OtherLocation">6. CPT code ?</EnumValue>
                 <EnumValue name="MobileUnit">7. CPT code 15</EnumValue>
                 <EnumValue name="School">8. CPT code 03</EnumValue>
@@ -4353,7 +4949,7 @@
                 <EnumValue name="ChooseDatabase">11</EnumValue>
                 <EnumValue name="Schedules">12</EnumValue>
                 <EnumValue name="Blockouts">13</EnumValue>
-                <EnumValue name="ClaimsSentEdit">14</EnumValue>
+                <EnumValue name="ClaimSentEdit">14</EnumValue>
                 <EnumValue name="PaymentCreate">15</EnumValue>
                 <EnumValue name="PaymentEdit">16</EnumValue>
                 <EnumValue name="AdjustmentCreate">17</EnumValue>
@@ -4373,6 +4969,10 @@
                 <EnumValue name="AccountingEdit">31</EnumValue>
                 <EnumValue name="AccountingCreate">32</EnumValue>
                 <EnumValue name="Accounting">33</EnumValue>
+                <EnumValue name="AnesthesiaIntakeMeds">34</EnumValue>
+                <EnumValue name="AnesthesiaControlMeds">35</EnumValue>
+                <EnumValue name="InsPayCreate">36</EnumValue>
+                <EnumValue name="InsPayEdit">37</EnumValue>
             </Enumeration>
         </column>
         <column order="2" name="UserNum" type="int(11)" fk="user">
@@ -4386,6 +4986,186 @@
         </column>
         <column order="5" name="PatNum" type="int(11)" fk="patient">
             <summary>FK to patient.PatNum.  Can be 0 if not applicable.</summary>
+        </column>
+    </table>
+    <table name="sheet">
+        <summary>One sheet for one patient.</summary>
+        <column order="0" name="SheetNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="SheetType" type="int(11)">
+            <summary>Enum:SheetTypeEnum</summary>
+            <Enumeration name="SheetTypeEnum">
+                <summary>Different types of sheets that can be used.</summary>
+                <EnumValue name="LabelPatient">0-Requires SheetParameter for PatNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="LabelCarrier">1-Requires SheetParameter for CarrierNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="LabelReferral">2-Requires SheetParameter for ReferralNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="ReferralSlip">3-Requires SheetParameters for PatNum,ReferralNum.</EnumValue>
+                <EnumValue name="LabelAppointment">4-Requires SheetParameter for AptNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="Rx">5-Requires SheetParameter for RxNum.</EnumValue>
+                <EnumValue name="Consent">6-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="PatientLetter">7-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="ReferralLetter">8-Requires SheetParameters for PatNum,ReferralNum.</EnumValue>
+            </Enumeration>
+        </column>
+        <column order="2" name="PatNum" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum.  A saved sheet is always attached to a patient.  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
+        </column>
+        <column order="3" name="DateTimeSheet" type="datetime">
+            <summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
+        </column>
+        <column order="4" name="FontSize" type="float">
+            <summary>The default fontSize for the sheet.  The actual font must still be saved with each sheetField.</summary>
+        </column>
+        <column order="5" name="FontName" type="varchar(255)">
+            <summary>The default fontName for the sheet.  The actual font must still be saved with each sheetField.</summary>
+        </column>
+        <column order="6" name="Width" type="int(11)">
+            <summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
+        </column>
+        <column order="7" name="Height" type="int(11)">
+            <summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
+        </column>
+        <column order="8" name="IsLandscape" type="tinyint(4)">
+            <summary></summary>
+        </column>
+        <column order="9" name="InternalNote" type="text">
+            <summary>An internal note for the use of the office staff regarding the sheet.  Not to be printed on the sheet in any way.</summary>
+        </column>
+    </table>
+    <table name="sheetdef">
+        <summary>A definition (template) for a sheet.  Can be pulled from the database, or it can be internally defined.</summary>
+        <column order="0" name="SheetDefNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="Description" type="varchar(255)">
+            <summary>The description of this sheetdef.</summary>
+        </column>
+        <column order="2" name="SheetType" type="int(11)">
+            <summary>Enum:SheetTypeEnum</summary>
+            <Enumeration name="SheetTypeEnum">
+                <summary>Different types of sheets that can be used.</summary>
+                <EnumValue name="LabelPatient">0-Requires SheetParameter for PatNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="LabelCarrier">1-Requires SheetParameter for CarrierNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="LabelReferral">2-Requires SheetParameter for ReferralNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="ReferralSlip">3-Requires SheetParameters for PatNum,ReferralNum.</EnumValue>
+                <EnumValue name="LabelAppointment">4-Requires SheetParameter for AptNum. Does not get saved to db.</EnumValue>
+                <EnumValue name="Rx">5-Requires SheetParameter for RxNum.</EnumValue>
+                <EnumValue name="Consent">6-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="PatientLetter">7-Requires SheetParameter for PatNum.</EnumValue>
+                <EnumValue name="ReferralLetter">8-Requires SheetParameters for PatNum,ReferralNum.</EnumValue>
+            </Enumeration>
+        </column>
+        <column order="3" name="FontSize" type="float">
+            <summary>The default fontSize for the sheet.  The actual font must still be saved with each sheetField.</summary>
+        </column>
+        <column order="4" name="FontName" type="varchar(255)">
+            <summary>The default fontName for the sheet.  The actual font must still be saved with each sheetField.</summary>
+        </column>
+        <column order="5" name="Width" type="int(11)">
+            <summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
+        </column>
+        <column order="6" name="Height" type="int(11)">
+            <summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
+        </column>
+        <column order="7" name="IsLandscape" type="tinyint(4)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="sheetfield">
+        <summary>One field on a sheet.</summary>
+        <column order="0" name="SheetFieldNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="SheetNum" type="int(11)" fk="sheet">
+            <summary>FK to sheet.SheetNum.</summary>
+        </column>
+        <column order="2" name="FieldType" type="int(11)">
+            <summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox,PatImage.</summary>
+        </column>
+        <column order="3" name="FieldName" type="varchar(255)">
+            <summary>Mostly for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For a PatImage, this now contains the int FK to the document.  A join must be done to that table to find the filename.   When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
+        </column>
+        <column order="4" name="FieldValue" type="text">
+            <summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is copied from the sheetFieldDef, but in-line fields like [this] will have been filled.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again automatically.  For a parameter fieldtype, this will store the value of the parameter. For a Drawing fieldtype, this will be the point data for the lines.  The format would look similar to this: 45,68;48,70;49,72;0,0;55,88;etc.  It's simply a sequence of points, separated by semicolons.  For CheckBox, it will either be an X or empty.  For SigBox, the first char will be 0 or 1 to indicate SigIsTopaz, and all subsequent chars will be the Signature itself.   For Pat Image, this contains image size and image position info.  Like this: "X=0,Y=20,W=100,H=60".  This is initially generated automatically to fit the object.  It can later be changed by the user to "zoom and pan" within the confines of the object.</summary>
+        </column>
+        <column order="5" name="FontSize" type="float">
+            <summary>The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
+        </column>
+        <column order="6" name="FontName" type="varchar(255)">
+            <summary>The fontName for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
+        </column>
+        <column order="7" name="FontIsBold" type="tinyint(4)">
+            <summary></summary>
+        </column>
+        <column order="8" name="XPos" type="int(11)">
+            <summary>In pixels.</summary>
+        </column>
+        <column order="9" name="YPos" type="int(11)">
+            <summary>In pixels.</summary>
+        </column>
+        <column order="10" name="Width" type="int(11)">
+            <summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
+        </column>
+        <column order="11" name="Height" type="int(11)">
+            <summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
+        </column>
+        <column order="12" name="GrowthBehavior" type="int(11)">
+            <summary>Enum:GrowthBehaviorEnum</summary>
+            <Enumeration name="GrowthBehaviorEnum">
+                <summary>For sheetFields</summary>
+                <EnumValue name="None">Not allowed to grow.  Max size would be Height and Width.</EnumValue>
+                <EnumValue name="DownLocal">Can grow down if needed, and will push nearby objects out of the way so that there is no overlap.</EnumValue>
+                <EnumValue name="DownGlobal">Can grow down, and will push down all objects on the sheet that are below it.  Mostly used when drawing grids.</EnumValue>
+            </Enumeration>
+        </column>
+    </table>
+    <table name="sheetfielddef">
+        <summary>One field on a sheetDef.</summary>
+        <column order="0" name="SheetFieldDefNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="SheetDefNum" type="int(11)" fk="sheetdef">
+            <summary>FK to sheetdef.SheetDefNum.</summary>
+        </column>
+        <column order="2" name="FieldType" type="int(11)">
+            <summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox,PatImage.</summary>
+        </column>
+        <column order="3" name="FieldName" type="varchar(255)">
+            <summary>Mostly for OutputText, InputField, and CheckBox types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For Pat Images, this is an int FK/DefNum to the default folder for the image.  The filename of a PatImage will later be stored in FieldValue.</summary>
+        </column>
+        <column order="4" name="FieldValue" type="text">
+            <summary>For StaticText, this text can include bracketed fields, like [nameLF].  For OutputText and InputField, this will be blank.</summary>
+        </column>
+        <column order="5" name="FontSize" type="float">
+            <summary>The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
+        </column>
+        <column order="6" name="FontName" type="varchar(255)">
+            <summary>The fontName for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
+        </column>
+        <column order="7" name="FontIsBold" type="tinyint(4)">
+            <summary></summary>
+        </column>
+        <column order="8" name="XPos" type="int(11)">
+            <summary>In pixels.</summary>
+        </column>
+        <column order="9" name="YPos" type="int(11)">
+            <summary>In pixels.</summary>
+        </column>
+        <column order="10" name="Width" type="int(11)">
+            <summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
+        </column>
+        <column order="11" name="Height" type="int(11)">
+            <summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
+        </column>
+        <column order="12" name="GrowthBehavior" type="int(11)">
+            <summary>Enum:GrowthBehaviorEnum</summary>
+            <Enumeration name="GrowthBehaviorEnum">
+                <summary>For sheetFields</summary>
+                <EnumValue name="None">Not allowed to grow.  Max size would be Height and Width.</EnumValue>
+                <EnumValue name="DownLocal">Can grow down if needed, and will push nearby objects out of the way so that there is no overlap.</EnumValue>
+                <EnumValue name="DownGlobal">Can grow down, and will push down all objects on the sheet that are below it.  Mostly used when drawing grids.</EnumValue>
+            </Enumeration>
         </column>
     </table>
     <table name="sigbutdef">
@@ -4468,39 +5248,45 @@
         <column order="1" name="FromUser" type="varchar(255)">
             <summary>Text version of 'user' this message was sent from, which can actually be any description of a group or individual.</summary>
         </column>
-        <column order="2" name="ITypes" type="int(10)">
-            <summary>Enum:InvalidTypes  None, Date, or combined flags for any LocalData</summary>
-            <Enumeration name="InvalidTypes">
-                <summary>When the autorefresh message is sent to the other computers, this is the type.  Keep in mind that this is a default Int32 type,so the max is 2,147,483,647 unless we change the type.</summary>
+        <column order="2" name="ITypes" type="text">
+            <summary>Enum:InvalidType List of InvalidType int values separated by commas.  Can be empty.  When Date or Tasks are used, they are used all alone with no other flags present.</summary>
+            <Enumeration name="InvalidType">
+                <summary>When the autorefresh message is sent to the other computers, this is the type.</summary>
                 <EnumValue name="None">0</EnumValue>
-                <EnumValue name="Date">1- Not used with any other flags</EnumValue>
-                <EnumValue name="ProcCodes">2</EnumValue>
-                <EnumValue name="Prefs">4</EnumValue>
-                <EnumValue name="Views">8- Also includes appt rules</EnumValue>
-                <EnumValue name="AutoCodes">16</EnumValue>
-                <EnumValue name="ProcButtons">32</EnumValue>
-                <EnumValue name="Carriers">64</EnumValue>
-                <EnumValue name="ClearHouses">128- Also includes Signal/message defs.</EnumValue>
-                <EnumValue name="Computers">256</EnumValue>
-                <EnumValue name="InsCats">512- Also includes DisplayFields</EnumValue>
-                <EnumValue name="Employees">1024. Also includes payperiods.</EnumValue>
-                <EnumValue name="Startup">2048</EnumValue>
-                <EnumValue name="Defs">4096</EnumValue>
-                <EnumValue name="Email">8192. Also includes diseases.</EnumValue>
-                <EnumValue name="Fees">16384</EnumValue>
-                <EnumValue name="Letters">32768</EnumValue>
-                <EnumValue name="QuickPaste">65536</EnumValue>
-                <EnumValue name="Security">131072</EnumValue>
-                <EnumValue name="Programs">262144</EnumValue>
-                <EnumValue name="ToolBut">524288  Also includes Image Mounts</EnumValue>
-                <EnumValue name="Providers">1048576  Also includes clinics.</EnumValue>
-                <EnumValue name="SchedOld">2097152. No longer used.</EnumValue>
-                <EnumValue name="ClaimForms">4194304</EnumValue>
-                <EnumValue name="ZipCodes">8388608  Also includes patientfields</EnumValue>
-                <EnumValue name="LetterMerge">16777216</EnumValue>
-                <EnumValue name="DentalSchools">33554432</EnumValue>
-                <EnumValue name="Operatories">67108864. Includes AccountingAutoPay.</EnumValue>
-                <EnumValue name="AllLocal">All flags combined except Date.</EnumValue>
+                <EnumValue name="Date">1 Not used with any other flags</EnumValue>
+                <EnumValue name="AllLocal">2 All flags combined except Date and Tasks.</EnumValue>
+                <EnumValue name="Task">3 Not used with any other flags.  Used to just indicate added tasks, but now it indicates any change at all except those where a popup is needed.  If we also want a popup, then use TaskPopup.</EnumValue>
+                <EnumValue name="ProcCodes">4</EnumValue>
+                <EnumValue name="Prefs">5</EnumValue>
+                <EnumValue name="Views">6 Also includes appt rules</EnumValue>
+                <EnumValue name="AutoCodesProcButtons"></EnumValue>
+                <EnumValue name="Carriers"></EnumValue>
+                <EnumValue name="ClearHouses">Also includes Signal/message defs.</EnumValue>
+                <EnumValue name="Computers"></EnumValue>
+                <EnumValue name="InsCats">Also includes DisplayFields</EnumValue>
+                <EnumValue name="Employees">Also includes payperiods.</EnumValue>
+                <EnumValue name="Startup"></EnumValue>
+                <EnumValue name="Defs"></EnumValue>
+                <EnumValue name="Email"> Also includes diseases.</EnumValue>
+                <EnumValue name="Fees"></EnumValue>
+                <EnumValue name="Letters"></EnumValue>
+                <EnumValue name="QuickPaste"></EnumValue>
+                <EnumValue name="Security">Userod</EnumValue>
+                <EnumValue name="Programs"></EnumValue>
+                <EnumValue name="ToolBut">Also includes Image Mounts</EnumValue>
+                <EnumValue name="Providers">Also includes clinics.</EnumValue>
+                <EnumValue name="ClaimForms"></EnumValue>
+                <EnumValue name="ZipCodes">Also includes patientfields</EnumValue>
+                <EnumValue name="LetterMerge"></EnumValue>
+                <EnumValue name="DentalSchools"></EnumValue>
+                <EnumValue name="Operatories">Includes AccountingAutoPay.</EnumValue>
+                <EnumValue name="TaskPopup"></EnumValue>
+                <EnumValue name="Sites"></EnumValue>
+                <EnumValue name="Pharmacies"></EnumValue>
+                <EnumValue name="Sheets"></EnumValue>
+                <EnumValue name="RecallTypes"></EnumValue>
+                <EnumValue name="FeeScheds"></EnumValue>
+                <EnumValue name="PhoneNumbers">34. This is used internally by OD, Inc with the phonenumber table and the phone server.</EnumValue>
             </Enumeration>
         </column>
         <column order="3" name="DateViewing" type="date">
@@ -4526,6 +5312,69 @@
         <column order="8" name="AckTime" type="datetime">
             <summary>If this signal has been acknowledged, then this will contain the date and time.  This is how lights get turned off also.</summary>
         </column>
+        <column order="9" name="TaskNum" type="int(11)">
+            <summary>If IType=Tasks, then this is the taskNum that was added.</summary>
+        </column>
+    </table>
+    <table name="site">
+        <summary>Generally used by mobile clinics to track the temporary locations where treatment is performed, such as schools, nursing homes, and community centers.  Replaces the old school table.</summary>
+        <column order="0" name="SiteNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="Description" type="varchar(255)">
+            <summary></summary>
+        </column>
+        <column order="2" name="Note" type="text">
+            <summary>Notes could include phone, address, contacts, etc.</summary>
+        </column>
+    </table>
+    <table name="statement">
+        <summary>Represents one statement for one family.  Usually already sent, but could still be waiting to send.</summary>
+        <column order="0" name="StatementNum" type="int(11)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PatNum" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum. Typically the guarantor.  Can also be the patient for walkout statements.</summary>
+        </column>
+        <column order="2" name="DateSent" type="date">
+            <summary>This will always be a valid and reasonable date regardless of whether it's actually been sent yet.</summary>
+        </column>
+        <column order="3" name="DateRangeFrom" type="date">
+            <summary>Typically 45 days before dateSent</summary>
+        </column>
+        <column order="4" name="DateRangeTo" type="date">
+            <summary>Any date &gt;= year 2200 is considered max val.  We generally try to automate this value to be the same date as the statement rather than the max val.  This is so that when payment plans are displayed, we can add approximately 10 days to effectively show the charge that will soon be due.  Adding the 10 days is not done until display time.</summary>
+        </column>
+        <column order="5" name="Note" type="text">
+            <summary>Can include line breaks.  This ordinary note will be in the standard font.</summary>
+        </column>
+        <column order="6" name="NoteBold" type="text">
+            <summary>More important notes may go here.  Font will be bold.  Color and size of text will be customizable in setup.</summary>
+        </column>
+        <column order="7" name="Mode_" type="tinyint">
+            <summary>Enum:StatementMode Mail, InPerson, Email.</summary>
+            <Enumeration name="StatementMode">
+                <summary />
+                <EnumValue name="Mail">0</EnumValue>
+                <EnumValue name="InPerson">1</EnumValue>
+                <EnumValue name="Email">2</EnumValue>
+            </Enumeration>
+        </column>
+        <column order="8" name="HidePayment" type="tinyint(1)">
+            <summary>Set true to hide the credit card section, and the please pay box.</summary>
+        </column>
+        <column order="9" name="SinglePatient" type="tinyint(1)">
+            <summary>One patient on statement instead of entire family.</summary>
+        </column>
+        <column order="10" name="Intermingled" type="tinyint(1)">
+            <summary>If entire family, then this determines whether they are all intermingled into one big grid, or whether they are all listed in separate grids.</summary>
+        </column>
+        <column order="11" name="IsSent" type="tinyint(1)">
+            <summary>True</summary>
+        </column>
+        <column order="12" name="DocNum" type="int(11)" fk="document">
+            <summary>FK to document.DocNum when a pdf has been archived.</summary>
+        </column>
     </table>
     <table name="supplier">
         <summary>A company that provides supplies for the office, typically dental supplies.</summary>
@@ -4533,10 +5382,10 @@
             <summary>Primary key.</summary>
         </column>
         <column order="1" name="Name" type="varchar(255)">
-            <summary></summary>
+            <summary>.</summary>
         </column>
         <column order="2" name="Phone" type="varchar(255)">
-            <summary></summary>
+            <summary>.</summary>
         </column>
         <column order="3" name="CustomerId" type="varchar(255)">
             <summary>The customer ID that this office uses for transactions with the supplier</summary>
@@ -4590,10 +5439,10 @@
             <summary>Primary key.</summary>
         </column>
         <column order="1" name="Description" type="text">
-            <summary></summary>
+            <summary>.</summary>
         </column>
         <column order="2" name="DateAdded" type="date">
-            <summary></summary>
+            <summary>.</summary>
         </column>
     </table>
     <table name="supplyorder">
@@ -4608,7 +5457,7 @@
             <summary>A date greater than 2200 (eg 2500), is considered a max date.  A max date is used for an order that was started but has not yet been placed.  This puts it at the end of the list where it belongs, but it will display as blank.  Only one unplaced order is allowed per supplier.</summary>
         </column>
         <column order="3" name="Note" type="text">
-            <summary></summary>
+            <summary>.</summary>
         </column>
         <column order="4" name="AmountTotal" type="double">
             <summary>The sum of all the amounts of each item on the order.  If any of the item prices are zero, then it won't auto calculate this total.  This will allow the user to manually put in the total without having it get deleted.</summary>
@@ -4650,7 +5499,7 @@
             <summary>The description of this task.  Might be very long.</summary>
         </column>
         <column order="5" name="TaskStatus" type="tinyint">
-            <summary>True if the task has been completed. This could later be turned into an enumeration if more statuses are needed.</summary>
+            <summary>Enum:TaskStatusEnum New,Viewed,Done.</summary>
         </column>
         <column order="6" name="IsRepeating" type="tinyint">
             <summary>True if it is to show in the repeating section.  There should be no date.  All children and parents should also be set to IsRepeating=true.</summary>
@@ -4680,6 +5529,12 @@
         <column order="10" name="DateTimeEntry" type="datetime">
             <summary>The date and time that this task was added.  Used to sort the list by the order entered.</summary>
         </column>
+        <column order="11" name="UserNum" type="int(11)" fk="user">
+            <summary>FK to user.UserNum.  The person who created the task or who made the most recent edit to the task.</summary>
+        </column>
+        <column order="12" name="DateTimeFinished" type="datetime">
+            <summary>The date and time that this task was marked "done".</summary>
+        </column>
     </table>
     <table name="taskancestor">
         <summary>Represents one ancestor of one task.  Each task will have at least one ancestor unless it is directly on a main trunk.  An ancestor is defined as a tasklist that is higher in the heirarchy for the task, regardless of how many levels up it is.  This allows us to mark task lists as having "new" tasks, and it allows us to quickly check for new tasks for a user on startup.</summary>
@@ -4701,8 +5556,8 @@
         <column order="1" name="Descript" type="varchar(255)">
             <summary>The description of this tasklist.  Might be very long, but not usually.</summary>
         </column>
-        <column order="2" name="Parent" type="int(11)">
-            <summary>FK tasklist.TaskListNum  The parent task list to which this task list is assigned.  If zero, then this task list is on the main trunk of one of the sections.</summary>
+        <column order="2" name="Parent" type="int(11)" fk="tasklist">
+            <summary>FK to tasklist.TaskListNum  The parent task list to which this task list is assigned.  If zero, then this task list is on the main trunk of one of the sections.</summary>
         </column>
         <column order="3" name="DateTL" type="date">
             <summary>Optional. Set to 0001-01-01 for no date.  If a date is assigned, then this list will also be available from the date section.</summary>
@@ -4818,7 +5673,7 @@
         </column>
     </table>
     <table name="toothinitial">
-        <summary>Used to track missing teeth, primary teeth, and movements</summary>
+        <summary>Used to track missing teeth, primary teeth, movements, and drawings.</summary>
         <column order="0" name="ToothInitialNum" type="int(11)">
             <summary>Primary key.</summary>
         </column>
@@ -4841,10 +5696,17 @@
                 <EnumValue name="Rotate">6</EnumValue>
                 <EnumValue name="TipM">7</EnumValue>
                 <EnumValue name="TipB">8</EnumValue>
+                <EnumValue name="Drawing">9 One segment of a drawing.</EnumValue>
             </Enumeration>
         </column>
         <column order="4" name="Movement" type="float">
             <summary>Shift in mm, or rotation / tipping in degrees.</summary>
+        </column>
+        <column order="5" name="DrawingSegment" type="text">
+            <summary>Point data for a drawing segment.  The format would look similar to this: 45,68;48,70;49,72;0,0;55,88;etc.  It's simply a sequence of points, separated by semicolons.  Both positive and negative numbers are used.  0,0 is the center of the tooth chart.  Stored in pixels as originally drawn.  If we ever change the tooth chart, we will have to also keep an old version as an alternate to display old drawings.</summary>
+        </column>
+        <column order="6" name="ColorDraw" type="int(11)">
+            <summary></summary>
         </column>
     </table>
     <table name="transaction">
@@ -4888,6 +5750,9 @@
         <column order="6" name="SigIsTopaz" type="tinyint(1)">
             <summary>True if the signature is in Topaz format rather than OD format.</summary>
         </column>
+        <column order="7" name="ResponsParty" type="int(11)" fk="patient">
+            <summary>FK to patient.PatNum. Can be 0.  The patient responsible for approving the treatment.  Public health field not visible to everyone else.</summary>
+        </column>
     </table>
     <table name="usergroup">
         <summary>A group of users.  Security permissions are determined by the usergroup of a user.</summary>
@@ -4899,7 +5764,7 @@
         </column>
     </table>
     <table name="userod">
-        <summary>(User OD since user is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
+        <summary>(User OD since "user" is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
         <column order="0" name="UserNum" type="int(11)">
             <summary>Primary key.</summary>
         </column>
@@ -4923,6 +5788,12 @@
         </column>
         <column order="7" name="IsHidden" type="tinyint(1)">
             <summary>Set true to hide user from login list.</summary>
+        </column>
+        <column order="8" name="TaskListInBox" type="int(11)" fk="tasklist">
+            <summary>FK to tasklist.TaskListNum.  0 if no inbox setup yet.  It is assumed that the TaskList is in the main trunk, but this is not strictly enforced.  User can't delete an attached TaskList, but they could move it.</summary>
+        </column>
+        <column order="9" name="AnesthProvType" type="int(2)">
+            <summary> Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord/// </summary>
         </column>
     </table>
     <table name="userquery">

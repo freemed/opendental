@@ -79,6 +79,9 @@ namespace DocumentationBuilder {
 		}
 
 		private void WriteTable(XmlWriter writer,string tableName){
+			//if(tableName=="") {
+			//	return;
+			//}
 			writer.WriteStartElement("table");
 			writer.WriteAttributeString("name",tableName);
 			//table summary
@@ -220,6 +223,7 @@ namespace DocumentationBuilder {
 				case "emailattach": return "EmailAttach";
 				case "emailmessage": return "EmailMessage";
 				case "emailtemplate": return "EmailTemplate";
+				case "feesched": return "FeeSched";
 				case "formpat": return "FormPat";
 				case "graphicassembly": return "GraphicAssembly Not Used";
 				case "graphicelement": return "graphicelement Not Used";
@@ -248,6 +252,8 @@ namespace DocumentationBuilder {
 				case "paysplit": return "PaySplit";
 				case "perioexam": return "PerioExam";
 				case "periomeasure": return "PerioMeasure";
+				case "phonenumber": return "PhoneNumber";
+				case "plannedappt": return "PlannedAppt";
 				case "preference": return "Pref";
 				case "procbutton": return "ProcButton";
 				case "procbuttonitem": return "ProcButtonItem";
@@ -264,6 +270,8 @@ namespace DocumentationBuilder {
 				case "quickpastenote": return "QuickPasteNote";
 				case "refattach": return "RefAttach";
 				case "registrationkey": return "RegistrationKey";
+				case "recalltrigger": return "RecallTrigger";
+				case "recalltype": return "RecallType";
 				case "repeatcharge": return "RepeatCharge";
 				case "reqneeded": return "ReqNeeded";
 				case "reqstudent": return "ReqStudent";
@@ -271,10 +279,14 @@ namespace DocumentationBuilder {
 				case "rxdef": return "RxDef";
 				case "rxpat": return "RxPat";
 				case "scheddefault": return "SchedDefault";
+				case "scheduleop": return "ScheduleOp";
 				case "schoolclass": return "SchoolClass";
 				case "schoolcourse": return "SchoolCourse";
 				case "screengroup": return "ScreenGroup";
 				case "securitylog": return "SecurityLog";
+				case "sheetdef": return "SheetDef";
+				case "sheetfield": return "SheetField";
+				case "sheetfielddef": return "SheetFieldDef";
 				case "sigbutdef": return "SigButDef";
 				case "sigbutdefelement": return "SigButDefElement";
 				case "sigelement": return "SigElement";
