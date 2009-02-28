@@ -450,12 +450,18 @@ namespace OpenDental {
 				|| SheetCur.SheetType==SheetTypeEnum.ReferralLetter)
 			{
 				FormS.Email2Visible=true;
-				int referralNum=PIn.PInt(SheetParameter.GetParamByName(SheetCur.Parameters,"ReferralNum").ParamValue.ToString());
-				referral=Referrals.GetReferral(referralNum);
-				if(referral.EMail!=""){
-					FormS.Email2Address=referral.EMail;
-					FormS.Email2=true;
-					FormS.PaperCopies--;
+				SheetParameter parameter=SheetParameter.GetParamByName(SheetCur.Parameters,"ReferralNum");
+				if(parameter==null){//it can be null sometimes because of old bug in db.
+					FormS.Email2Visible=false;//prevents trying to attach email to nonexistent referral.
+				}
+				else{
+					int referralNum=PIn.PInt(parameter.ParamValue.ToString());
+					referral=Referrals.GetReferral(referralNum);
+					if(referral.EMail!=""){
+						FormS.Email2Address=referral.EMail;
+						FormS.Email2=true;
+						FormS.PaperCopies--;
+					}
 				}
 			}
 			else{
