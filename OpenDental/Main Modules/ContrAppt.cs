@@ -2082,6 +2082,15 @@ namespace OpenDental{
 				return 0;
 			}
 			int day=ContrApptSheet.XPosToDay(point.X);
+			if(ContrApptSheet.IsWeeklyView) {
+				//this is a workaround because we start on Monday:
+				if(day==6) {
+					day=0;
+				}
+				else {
+					day=day+1;
+				}
+			}
 			//if operatories were just hidden and VisOps is mismatched with ListShort
 			int xOp=ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)];
 			if(xOp>OperatoryC.ListShort.Count-1){
@@ -2098,7 +2107,7 @@ namespace OpenDental{
 					continue;
 				}
 				aptDayOfWeek=(int)PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).DayOfWeek;
-				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek-1!=day){
+				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek!=day){
 					continue;
 				}
 				aptTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).TimeOfDay;
