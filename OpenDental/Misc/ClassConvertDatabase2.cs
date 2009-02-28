@@ -221,19 +221,15 @@ namespace OpenDental {
 						+"'', "
 						+"'')";
 					int programNum=General.NonQ(command,true);
-					/*
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
-						+"'Username', "
+						+"'HL7Folder', "
 						+"'')";
 					General.NonQ(command);
-					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
-						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
-						+"'Password', "
-						+"'')";
-					General.NonQ(command);*/
+			
+
+
 
 
 

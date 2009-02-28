@@ -247,6 +247,9 @@ namespace OpenDentBusiness{
 			if(provNum==0){
 				return null;
 			}
+			if(ProviderC.ListLong==null) {
+				RefreshCache();
+			}
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {
 				if(ProviderC.ListLong[i].ProvNum==provNum) {
 					return ProviderC.ListLong[i].Copy();
@@ -254,6 +257,23 @@ namespace OpenDentBusiness{
 			}
 			return null;
 		}
+
+		///<summary>Gets a provider from the List.  If abbr is not found, then it returns null.</summary>
+		public static Provider GetProvByAbbr(string abbr) {
+			if(abbr=="") {
+				return null;
+			}
+			if(ProviderC.ListLong==null) {
+				RefreshCache();
+			}
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].Abbr==abbr) {
+					return ProviderC.ListLong[i].Copy();
+				}
+			}
+			return null;
+		}
+
 
 		///<summary></summary>
 		public static int GetIndexLong(int provNum){

@@ -31,11 +31,13 @@
 			this.butUninstall = new System.Windows.Forms.Button();
 			this.butStart = new System.Windows.Forms.Button();
 			this.butStop = new System.Windows.Forms.Button();
+			this.butRefresh = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butRefresh);
 			this.groupBox1.Controls.Add(this.butStop);
 			this.groupBox1.Controls.Add(this.butStart);
 			this.groupBox1.Controls.Add(this.butUninstall);
@@ -115,6 +117,16 @@
 			this.butStop.UseVisualStyleBackColor = true;
 			this.butStop.Click += new System.EventHandler(this.butStop_Click);
 			// 
+			// butRefresh
+			// 
+			this.butRefresh.Location = new System.Drawing.Point(279,19);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(75,23);
+			this.butRefresh.TabIndex = 4;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.UseVisualStyleBackColor = true;
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
 			// FormMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -142,6 +154,7 @@
 		private System.Windows.Forms.Button butUninstall;
 		private System.Windows.Forms.Button butInstall;
 		private System.Windows.Forms.TextBox textStatus;
+		private System.Windows.Forms.Button butRefresh;
 	}
 }
 

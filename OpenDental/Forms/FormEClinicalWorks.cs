@@ -28,7 +28,8 @@ namespace OpenDental{
 		public Program ProgramCur;
 		private List<ProgramProperty> PropertyList;
 		private static Thread thread;
-		private static string logfile="UAppointLog.txt";
+		private TextBox textHL7Folder;
+		private Label label3;
 
 		///<summary></summary>
 		public FormEClinicalWorks() {
@@ -69,6 +70,8 @@ namespace OpenDental{
 			this.textProgName = new System.Windows.Forms.TextBox();
 			this.textProgDesc = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.textHL7Folder = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -146,11 +149,29 @@ namespace OpenDental{
 			this.label2.Text = "Description";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textHL7Folder
+			// 
+			this.textHL7Folder.Location = new System.Drawing.Point(246,84);
+			this.textHL7Folder.Name = "textHL7Folder";
+			this.textHL7Folder.Size = new System.Drawing.Size(275,20);
+			this.textHL7Folder.TabIndex = 49;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(12,85);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(232,18);
+			this.label3.TabIndex = 48;
+			this.label3.Text = "HL7 Folder (relative to the HL7 server)";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(664,455);
+			this.Controls.Add(this.textHL7Folder);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textProgDesc);
 			this.Controls.Add(this.textProgName);
 			this.Controls.Add(this.label2);
@@ -179,10 +200,11 @@ namespace OpenDental{
 
 		private void FillForm(){
 			ProgramProperties.Refresh();
+			PropertyList=ProgramProperties.GetListForProgram(ProgramCur.ProgramNum);
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
-			
+			textHL7Folder.Text=GetProp("HL7Folder");
 		}
 
 		private string GetProp(string desc){
@@ -194,11 +216,6 @@ namespace OpenDental{
 			throw new ApplicationException("Property not found: "+desc);
 		}
 
-		
-
-
-		
-
 		private bool SaveToDb(){
 			if(textProgDesc.Text==""){
 				MessageBox.Show("Description may not be blank.");
@@ -207,7 +224,7 @@ namespace OpenDental{
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
-			//ProgramProperties.SetProperty(ProgramCur.ProgramNum,"Username",textUsername.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7Folder",textHL7Folder.Text);
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
 		}
