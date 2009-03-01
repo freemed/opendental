@@ -960,7 +960,7 @@ namespace OpenDental{
 			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet"));
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,totalPages);
 			printPreview.ShowDialog();
-			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change statuses and make commlog entries for all of the selected patients?")) {
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the postcards finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if postcards printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
