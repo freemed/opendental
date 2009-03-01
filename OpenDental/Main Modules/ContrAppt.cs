@@ -1171,6 +1171,9 @@ namespace OpenDental{
 
 		///<summary>Was RefreshModuleData and FillPatientButton.  Gets the data for the specified patient. Does not refresh any appointment data.  This function should always be called when the patient changes since that's all this function is responsible for.</summary>
 		private void RefreshModulePatient(int patNum){//
+			if(PatCurNum==patNum) {//if patient has not changed
+				return;//don't do anything
+			}
 			PatCurNum=patNum;//might be zero
 			bool hasEmail;
 			string chartNumber;
@@ -1209,7 +1212,7 @@ namespace OpenDental{
 			else {
 				listConfirmed.SelectedIndex=-1;
 			}
-//THIS SHOULD BE MOVED TO BE CALLED EXPLICITLY FROM WITHIN VARIOUS PLACES IN THIS MODULE
+//JSPARKS - THIS SHOULD BE MOVED TO BE CALLED EXPLICITLY FROM WITHIN VARIOUS PLACES IN THIS MODULE
 //JUST LIKE IN THE OTHER MODULES.  WHEN IT'S HERE, IT IS ALSO GETTING CALLED EVERY TIME MODULESELECTED
 //GETS TRIGGERED FROM PARENT FORM.
 			OnPatientSelected(PatCurNum,PatCurName,hasEmail,chartNumber);
