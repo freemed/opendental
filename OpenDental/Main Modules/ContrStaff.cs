@@ -1227,6 +1227,7 @@ namespace OpenDental{
 			else{
 				labelDays.Visible=false;
 				textDays.Visible=false;
+				SignalList=Signals.RefreshFullText(DateTime.Today);//since midnight this morning.
 			}
 			FillMessages();
 		}
@@ -1239,6 +1240,7 @@ namespace OpenDental{
 			try{
 				int days=int.Parse(textDays.Text);
 				errorProvider1.SetError(textDays,"");
+				SignalList=Signals.RefreshFullText(DateTime.Today.AddDays(-days));
 				FillMessages();
 			}
 			catch{
