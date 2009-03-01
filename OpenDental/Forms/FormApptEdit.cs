@@ -1032,7 +1032,7 @@ namespace OpenDental{
 		private void CalcPatientFeeThisAppt() {
 			double feeThisAppt=0;
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-				feeThisAppt+=PIn.PDouble(gridProc.Rows[gridProc.SelectedIndices[i]].Cells[5].Text);
+				feeThisAppt+=PIn.PDouble(gridProc.Rows[gridProc.SelectedIndices[i]].Cells[6].Text);
 			}
 			gridPatient.Rows[gridPatient.Rows.Count-1].Cells[1].Text=POut.PDouble(feeThisAppt);
 			gridPatient.Invalidate();
