@@ -1066,7 +1066,7 @@ namespace OpenDental{
 				}
 			}
 			catch(System.Exception ex){
-				MessageBox.Show(Lan.g(this,"An error occurred while printing"), ex.ToString());
+				MessageBox.Show(Lan.g(this,"An error occurred while printing")+"\r\n"+ex.ToString());
 			}
 		}
 
