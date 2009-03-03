@@ -51,7 +51,6 @@
 			// 
 			this.textDoseTimeStamp.Location = new System.Drawing.Point(15, 72);
 			this.textDoseTimeStamp.Name = "textDoseTimeStamp";
-			this.textDoseTimeStamp.ReadOnly = true;
 			this.textDoseTimeStamp.Size = new System.Drawing.Size(137, 20);
 			this.textDoseTimeStamp.TabIndex = 9;
 			this.textDoseTimeStamp.TextChanged += new System.EventHandler(this.textDate_TextChanged);

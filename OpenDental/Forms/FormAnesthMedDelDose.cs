@@ -16,6 +16,7 @@ namespace OpenDental
 
 		public AnestheticMedsGiven Med;
 		public int anestheticRecordNum;
+		public int anestheticMedNum;
 
 		public FormAnesthMedDelDose(){
 			InitializeComponent();
@@ -28,7 +29,9 @@ namespace OpenDental
 			textDose.Text = Med.QtyGiven; 
 			textDoseTimeStamp.Text = Med.DoseTimeStamp;
 			textQtyWasted.Text = Med.QtyWasted;
+			anestheticMedNum = Convert.ToInt32(Med.AnestheticMedNum);
 			anestheticRecordNum = Convert.ToInt32(Med.AnestheticRecordNum);
+			
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e){
@@ -63,7 +66,7 @@ namespace OpenDental
 			{
 				double dose = Convert.ToDouble(textDose.Text);
 				double amtWasted = Convert.ToDouble(textQtyWasted.Text);
-				AMedications.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticRecordNum);
+				AMedications.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticMedNum, anestheticRecordNum);
 				Close();
 			}
 
