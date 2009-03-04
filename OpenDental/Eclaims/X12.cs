@@ -66,6 +66,7 @@ namespace OpenDental.Eclaims
 				}
 			}
 			if(functionalGroupMedical.Count>0 && functionalGroupDental.Count>0) {
+				MessageBox.Show(Lan.g("X12","You must send dental and medical claims in separate batches."));
 				return "";//not allowed
 			}
 			string saveFile=GetFileName(clearhouse,batchNum);
