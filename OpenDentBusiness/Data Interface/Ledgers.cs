@@ -4,369 +4,270 @@ using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Collections.ObjectModel;
 
 namespace OpenDentBusiness{
 
 	///<summary>This does not correspond to any table in the database.  It works with a variety of tables to calculate aging.</summary>
 	public class Ledgers{
-		///<summary>30-60-90 for one guarantor</summary>
-		public static double[] Bal;
-		///<summary>for one guarantor</summary>
-		public static double InsEst;
-		///<summary>for one guarantor</summary>
-		public static double BalTotal;
-		///<summary></summary>
-		private static DateTime AsOfDate;
-		///<summary>for one guar</summary>
-		public static double PayPlanDue;
-		///<summary></summary>
-		public struct DateValuePair{
-			///<summary></summary>
-			public DateTime Date;
-			///<summary></summary>
-			public double Value;
-		}
 
-		///<summary></summary>
-		public static int[] GetAllGuarantors(){
-			string command="SELECT DISTINCT guarantor FROM patient";
-			DataTable table=General.GetTable(command);
-			int[] AllGuarantors=new int[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				AllGuarantors[i]=PIn.PInt(table.Rows[i][0].ToString());
-			}
-			return AllGuarantors;
-		}
-
-		///<summary>Computes aging for entire family.  Gets all info from database.</summary>
-		public static void ComputeAging(int guarantor,DateTime asOfDate){
-			if(asOfDate.Year<1880){
+		///<summary>Computes aging the family specified. Specify guarantor=0 in order to calculate aging for all familes.  Gets all info from database.</summary>
+		public static void ComputeAging(int guarantor,DateTime AsOfDate){
+			if(AsOfDate.Year<1880){
 				AsOfDate=DateTime.Today;
 			}
-			else{
-				AsOfDate=asOfDate;
-			}
-			Bal=new double[4];
-			Bal[0]=0;//0_30
-			Bal[1]=0;//31_60
-			Bal[2]=0;//61_90
-			Bal[3]=0;//90plus
-			BalTotal=0;
-			InsEst=0;
-			PayPlanDue=0;
-			DateValuePair[] pairs;
-			ArrayList ALpatNums=new ArrayList();//used for payplans
-			string command="SELECT PatNum FROM patient WHERE guarantor = "+POut.PInt(guarantor);
-			//MessageBox.Show(command);
-			DataTable table=General.GetTable(command);
-			string wherePats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				ALpatNums.Add(PIn.PInt(table.Rows[i][0].ToString()));
-				if(i>0){
-					wherePats+=" OR";
-				}
-				wherePats+=" PatNum = '"+table.Rows[i][0].ToString()+"'";
-			}
-			//REGULAR PROCEDURES:
-			command="SELECT ProcDate,procfee,unitqty,baseunits FROM procedurelog"
-				+" WHERE procstatus = '2'"//complete
-				+" AND ("+wherePats+") ORDER BY ProcDate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			double val;
-			double qty;
-			double baseunits;
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				val=PIn.PDouble(table.Rows[i][1].ToString());
-				qty=PIn.PDouble(table.Rows[i][2].ToString())
-					+PIn.PDouble(table.Rows[i][3].ToString());
-				val *= qty;
-				pairs[i].Value=val;
-				Debug.WriteLine("Proc: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
-			}
-			double SumDebugProcs=0;
-			for(int i=0;i<pairs.Length;i++){
-				SumDebugProcs+=pairs[i].Value;
-				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
-			}
-			Debug.WriteLine("Sum procs: "+SumDebugProcs.ToString("n"));
-			//NEGATIVE PAYSPLITS(refunds):
-			command="SELECT ProcDate,SplitAmt FROM paysplit "
-				+"WHERE ("+wherePats+") "
-				+"AND PayPlanNum=0 "//only splits not attached to payment plans.
-				+"AND SplitAmt<0 "
-				+"ORDER BY procdate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				pairs[i].Value= -PIn.PDouble(table.Rows[i][1].ToString());
-			}
-			for(int i=0;i<pairs.Length;i++){
-				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
-			}
-			//POSITIVE ADJUSTMENTS:
-			command="SELECT AdjDate,adjamt FROM adjustment"
-				+" WHERE adjamt > 0"
-				+" AND ("+wherePats+") ORDER BY AdjDate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			double SumDebugAdj=0;
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
-				Debug.WriteLine("Adj: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
-			}
-			for(int i=0;i<pairs.Length;i++){
-				SumDebugAdj+=pairs[i].Value;
-				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
-			}
-			//NEGATIVE ADJUSTMENTS:
-			command="SELECT adjdate,adjamt FROM adjustment"
-				+" WHERE adjamt < 0"
-				+" AND ("+wherePats+")"
-				+" ORDER BY adjdate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				pairs[i].Value= -PIn.PDouble(table.Rows[i][1].ToString());
-				Debug.WriteLine("Adj: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
-				SumDebugAdj-=pairs[i].Value;
-			}
-			Debug.WriteLine("Sum adj: "+SumDebugAdj.ToString("n"));
-			ComputePayments(pairs);
-			//CLAIM PAYMENTS AND CAPITATION WRITEOFFS:
-			//Always use DateCP rather than ProcDate to calculate the date of a claim payment
-			command="SELECT datecp,inspayamt,writeoff FROM claimproc"
-				+" WHERE (status = '1' "//received
-				+"OR status = '4'"//or supplemental
-				+"OR status = '7'"//or CapComplete
-				+"OR status = '5'"//or CapClaim
-				+")"
-				//pending insurance is handled further down
-				//ins adjustments do not affect patient balance, but only insurance benefits
-				+" AND ("+wherePats+")"
-				+" ORDER BY datecp";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			double SumDebugInsPay=0;
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString())
-					+PIn.PDouble(table.Rows[i][2].ToString());
-				SumDebugInsPay+=pairs[i].Value;
-				Debug.WriteLine("InsPay+CapWriteoff: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
-			}
-			Debug.WriteLine("Sum InsPayments+CapWriteoffs: "+SumDebugInsPay.ToString("c"));
-			ComputePayments(pairs);
-			//POSITIVE PAYSPLITS:
-			command="SELECT ProcDate,SplitAmt FROM paysplit "
-				+"WHERE ("+wherePats+") "
-				+"AND PayPlanNum=0 "//only splits not attached to payment plans.
-				+"AND SplitAmt>0 "
-				+"ORDER BY procdate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[table.Rows.Count];
-			double SumDebugPaysplit=0;
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
-				SumDebugPaysplit+=pairs[i].Value;
-				Debug.WriteLine("Paysplit: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
-			}
-			Debug.WriteLine("Sum Paysplits: "+SumDebugPaysplit.ToString("c"));
-			ComputePayments(pairs);
-			//PAYMENT PLAN princ:
-			command="SELECT CompletedAmt FROM payplan"//PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
-				+" WHERE"
-				+wherePats
-				+" ORDER BY PayPlanDate";//ChargeDate";
-			table=General.GetTable(command);
-			pairs=new DateValuePair[1];//always just one single combined entry
-			pairs[0].Date=DateTime.Today;
-			for(int i=0;i<table.Rows.Count;i++){
-				pairs[0].Value-=PIn.PDouble(table.Rows[i][0].ToString());//just always subtract princ from patient aging.
-				Debug.WriteLine("PayPlan: "+pairs[0].Date.ToShortDateString()+" "+pairs[0].Value.ToString("c"));
-			}
-			if(pairs[0].Value>0){
-				Bal[GetAgingType(pairs[0].Date)]+=pairs[0].Value;
-			}
-			else if(pairs[0].Value<0){
-				pairs[0].Value=-pairs[0].Value;
-				ComputePayments(pairs);
-			}
-			//PAYMENT PLAN GUAR AMT DUE
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="SELECT (SELECT IFNULL(SUM(Principal+Interest),0) FROM payplancharge WHERE (";
-				for(int i=0;i<ALpatNums.Count;i++) {
+			//We use temporary tables using the "CREATE TEMPORARY TABLE" syntax here so that any temporary
+			//tables created are specific to the current MySQL connection and no actual files are created
+			//in the database. This will prevent rogue files from collecting in the live database, and will
+			//prevent aging calculations on one computer from affecting the aging calculations on another computer.
+			//Unfortunately, this has one side effect, which is that our MySQL connector reopens the MySQL
+			//connection every time a command is run, so the temporary tables only last for a single MySQL
+			//command. To get around this issue, we run the aging script as a single command/script.
+			string command="";
+			string asOfDate=POut.PDate(AsOfDate);
+			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")));
+			string thirtyDaysAgo=POut.PDate(AsOfDate.AddDays(-30));
+			string sixtyDaysAgo=POut.PDate(AsOfDate.AddDays(-60));
+			string ninetyDaysAgo=POut.PDate(AsOfDate.AddDays(-90));
+			string familyPatNums="";
+			Collection <string> familyPatNumList=new Collection<string> ();
+			if(guarantor!=0) {
+				familyPatNums="(";
+				command="SELECT p.PatNum FROM patient p WHERE p.Guarantor="+guarantor+";";
+				DataTable tFamilyPatNums=General.GetTable(command);
+				for(int i=0;i<tFamilyPatNums.Rows.Count;i++) {
 					if(i>0) {
-						command+=" OR";
+						familyPatNums+=",";
 					}
-					command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+					string patNum=tFamilyPatNums.Rows[i][0].ToString();
+					familyPatNums+=patNum;
+					familyPatNumList.Add(patNum);
 				}
-				command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+"))"
-					+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
+				familyPatNums+=")";
 			}
-			else {//oracle
-				command="SELECT (SELECT CASE SUM(Principal+Interest) WHEN NULL THEN 0 ELSE SUM(Principal+Interest) END "+
-				"FROM payplancharge WHERE (";
-				for(int i=0;i<ALpatNums.Count;i++) {
-					if(i>0) {
-						command+=" OR";
+			//Create a temporary table to calculate aging into temporarily, so that the patient table is 
+			//not being changed by multiple threads if more than one user is calculating aging.
+			//Since we are recreating a temporary table with the same name as last time aging was run,
+			//the old temporary table gets wiped out.
+			command="CREATE TEMPORARY TABLE tempaging ("+
+				"PatNum INT DEFAULT 0,"+
+				"Guarantor INT DEFAULT 0,"+
+				"Charges_0_30 DOUBLE DEFAULT 0,"+
+				"Charges_31_60 DOUBLE DEFAULT 0,"+
+				"Charges_61_90 DOUBLE DEFAULT 0,"+
+				"ChargesOver90 DOUBLE DEFAULT 0,"+
+				"TotalCredits DOUBLE DEFAULT 0,"+
+				"InsEst DOUBLE DEFAULT 0,"+
+				"PayPlanDue DOUBLE DEFAULT 0"+
+			");";
+			if(guarantor==0) {
+				//We insert all of the patient numbers and guarantor numbers only when we are running aging for everyone,
+				//since we do not want MySQL to examine every patient record when running aging for a single family.
+				command+="INSERT INTO tempaging (PatNum,Guarantor) "+
+				"SELECT p.PatNum,p.Guarantor "+
+					"FROM patient p;";
+				//When there is only one patient that aging is being calculated for, then the indexes actually
+				//slow the calculation down, but they significantly improve the speed when aging is being 
+				//calculated for all familes.
+				command+="ALTER TABLE tempaging ADD INDEX IDX_TEMPAGING_PATNUM (PatNum);";
+				command+="ALTER TABLE tempaging ADD INDEX IDX_TEMPAGING_Guarantor (Guarantor);";
+			}else{
+				//Manually create insert statements to avoid having MySQL visit every patient record again.
+				//In my testing, this saves about 0.25 seconds on an individual family aging calculation on my machine.
+				command+="INSERT INTO tempaging (PatNum,Guarantor) VALUES ";
+				for(int i=0;i<familyPatNumList.Count;i++){
+					if(i>0){
+						command+=",";
 					}
-					command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+					command+="("+familyPatNumList[i]+","+guarantor+")";
 				}
-				command+=") AND ChargeDate <= "+POut.PDate(DateTime.Now.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")))+"))"
-					+"-(SELECT CASE SUM(SplitAmt) WHEN NULL THEN 0 ELSE SUM(SplitAmt) END FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 ) "
-					+"FROM dual";
+				command+=";";
 			}
-			table=General.GetTable(command);
-			PayPlanDue=PIn.PDouble(table.Rows[0][0].ToString());
-			//CLAIM ESTIMATES
-			command="SELECT inspayest,writeoff FROM claimproc"
-				+" WHERE status = '0'"//not received
-				+" AND ("+wherePats+")";
-			table=General.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++){
-				InsEst+=PIn.PDouble(table.Rows[i][0].ToString())+PIn.PDouble(table.Rows[i][1].ToString());
-			}
-			Debug.WriteLine("Procs+Adj-InsPay-PaySplit: "+(SumDebugProcs+SumDebugAdj-SumDebugInsPay-SumDebugPaysplit).ToString("c"));
-			//balance is sum of 4 aging periods
-			BalTotal=Bal[0]+Bal[1]+Bal[2]+Bal[3];
-			//after this, balance will NOT necessarily be the same as the sum of the 4.
-			//clean up negative numbers:
-			if(Bal[3] < 0){
-				Bal[2]+=Bal[3];
-				Bal[3]=0;
-			}
-			if(Bal[2] < 0){
-				Bal[1]+=Bal[2];
-				Bal[2]=0;
-			}
-			if(Bal[1] < 0){
-				Bal[0]+=Bal[1];
-				Bal[1]=0;
-			}
-			if(Bal[0] < 0){
-				Bal[0]=0;
-			}
-			//must complete by updating patient table. Done from wherever this was called.
+			//Create another temporary table which holds a very concise summary of the entire office transaction history, 
+			//so that all transactions can be treated as either a general credit or a general charge in the aging calculation.
+			//Since we are recreating a temporary table with the same name as last time aging was run,
+			//the old temporary table gets wiped out.
+			command+="CREATE TEMPORARY TABLE tempodagingtrans ("+
+					"PatNum INT DEFAULT 0,"+
+					"TranDate DATE DEFAULT '0001-01-01',"+
+					"TranAmount DOUBLE DEFAULT 0"+
+				");";
+			//Get the completed procedure dates and charges for the entire office history on or before the given date.
+			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+				"SELECT pl.PatNum PatNum,"+
+						"pl.ProcDate TranDate,"+
+						"pl.ProcFee*(pl.UnitQty+pl.BaseUnits) TranAmount "+
+					"FROM procedurelog pl "+
+					"WHERE pl.ProcStatus=2 AND "+
+						(guarantor==0?"":("pl.PatNum IN "+familyPatNums+" AND "))+
+						"pl.ProcDate<=DATE("+asOfDate+");";//Limit the history to everything on or before the specified date.
+			//Paysplits for the entire office history on or before the given date.
+			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+				"SELECT ps.PatNum PatNum,"+
+						"ps.ProcDate TranDate,"+
+						"-ps.SplitAmt TranAmount "+
+					"FROM paysplit ps "+
+					"WHERE ps.PayPlanNum=0 AND "+//Only splits not attached to payment plans.
+						(guarantor==0?"":("ps.PatNum IN "+familyPatNums+" AND "))+
+						"ps.ProcDate<=DATE("+asOfDate+");";//Limit the history to everything on or before the specified date.
+			//Get the adjustment dates and amounts for the entire office history on or before the given date.
+			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+				"SELECT a.PatNum PatNum,"+
+						"a.AdjDate TranDate,"+
+						"a.AdjAmt TranAmount "+
+					"FROM adjustment a "+
+					"WHERE "+(guarantor==0?"":("a.PatNum IN "+familyPatNums+" AND "))+
+						"a.AdjDate<=DATE("+asOfDate+");";//Limit the history to everything on or before the specified date.
+			//Claim payments and capitation writeoffs for the entire office history on or before the given date.
+			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+				"SELECT cp.PatNum PatNum,"+
+						"cp.DateCp TranDate,"+//Always use DateCP rather than ProcDate to calculate the date of a claim payment.
+						"-cp.InsPayAmt-cp.Writeoff TranAmount "+
+					"FROM claimproc cp "+
+					"WHERE cp.status IN (1,4,5,7) AND "+//received, supplemental, CapClaim or CapComplete.
+						(guarantor==0?"":("cp.PatNum IN "+familyPatNums+" AND "))+
+						"cp.DateCp<=DATE("+asOfDate+");";//Limit the history to everything on or before the specified date.
+			//Payment plan principal for the entire office history on or before the given date.
+			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+				"SELECT pp.PatNum PatNum,"+
+						"pp.PayPlanDate TranDate,"+
+						"-pp.CompletedAmt TranAmount "+
+					"FROM payplan pp "+
+					"WHERE "+(guarantor==0?"":("pp.PatNum IN "+familyPatNums+" AND "))+
+						"pp.PayPlanDate<=DATE("+asOfDate+");";//Limit the history to everything on or before the specified date.
+			//Now that we have all of the pertinent transaction history, we will calculate all of the charges for
+			//the associated patients.
+			//Calculate over 90 day charges for all specified families.
+			command+="UPDATE tempaging a,"+
+				//Calculate the total charges for each patient during this time period and 
+				//place the results into memory table 'chargesOver90'.
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+ninetyDaysAgo+") GROUP BY t.PatNum) chargesOver90 "+
+				//Update the tempaging table with the caculated charges for the time period.
+				"SET a.ChargesOver90=chargesOver90.TotalCharges "+
+				"WHERE a.PatNum=chargesOver90.PatNum;";
+			//Calculate 61 to 90 day charges for all specified families.
+			command+="UPDATE tempaging a,"+
+				//Calculate the total charges for each patient during this time period and 
+				//place the results into memory table 'charges_61_90'.
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+sixtyDaysAgo+") AND "+
+					"t.TranDate>=DATE("+ninetyDaysAgo+") GROUP BY t.PatNum) charges_61_90 "+
+				//Update the tempaging table with the caculated charges for the time period.
+				"SET a.Charges_61_90=charges_61_90.TotalCharges "+
+				"WHERE a.PatNum=charges_61_90.PatNum;";
+			//Calculate 31 to 60 day charges for all specified families.
+			command+="UPDATE tempaging a,"+
+				//Calculate the total charges for each patient during this time period and 
+				//place the results into memory table 'charges_31_60'.
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+thirtyDaysAgo+") AND "+
+					"t.TranDate>=DATE("+sixtyDaysAgo+") GROUP BY t.PatNum) charges_31_60 "+
+				//Update the tempaging table with the caculated charges for the time period.
+				"SET a.Charges_31_60=charges_31_60.TotalCharges "+
+				"WHERE a.PatNum=charges_31_60.PatNum;";
+			//Calculate 0 to 30 day charges for all specified families.
+			command+="UPDATE tempaging a,"+
+				//Calculate the total charges for each patient during this time period and 
+				//place the results into memory table 'charges_0_30'.
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+					"WHERE t.TranAmount>0 AND t.TranDate>=DATE("+thirtyDaysAgo+") GROUP BY t.PatNum) charges_0_30 "+
+				//Update the tempaging table with the caculated charges for the time period.
+				"SET a.Charges_0_30=charges_0_30.TotalCharges "+
+				"WHERE a.PatNum=charges_0_30.PatNum;";
+			//Calculate the total credits each patient has ever received so we can apply the credits to the aged charges below.
+			command+="UPDATE tempaging a,"+
+				//Calculate the total credits for each patient and store the results in memory table 'credits'.
+				"(SELECT t.PatNum,-SUM(t.TranAmount) TotalCredits FROM tempodagingtrans t "+
+					"WHERE t.TranAmount<0 GROUP BY t.PatNum) credits "+
+				//Update the total credit for each patient into the tempaging table.
+				"SET a.TotalCredits=credits.TotalCredits "+
+				"WHERE a.PatNum=credits.PatNum;";
+			//Calculate claim estimates for each patient individually on or before the specified date.
+			command+="UPDATE tempaging a,"+
+				//Calculate the insurance estimates for each patient and store the results into
+				//memory table 't'.
+				"(SELECT cp.PatNum,SUM(cp.InsPayEst+cp.Writeoff) InsEst "+
+						"FROM claimproc cp "+
+						"WHERE cp.Status=0 AND "+
+							(guarantor==0?"":("cp.PatNum IN "+familyPatNums+" AND "))+
+							"cp.ProcDate<=DATE("+asOfDate+") "+
+						"GROUP BY cp.PatNum) t "+//not received claims.
+				//Update the tempaging table with the insurance estimates for each patient.
+				"SET a.InsEst=t.InsEst "+
+				"WHERE a.PatNum=t.PatNum;";
+			//Calculate the payment plan amount remaining to be paid for each patient 
+			//as the amount owed due to payment plans, minus the payments made to payment plans.
+			command+="UPDATE tempaging a,"+
+				//Get payment plan patient amount due for the entire office history 
+				//on or before the specified date (also considering the PayPlansBillInAdvanceDays setting)
+				//and place the results in memory table 'c'.
+				"(SELECT ppc.PatNum PatNum,"+
+					"IFNULL(SUM(ppc.Principal+ppc.Interest),0) PayPlanCharges "+
+					"FROM payplancharge ppc "+
+					"WHERE "+(guarantor==0?"":("ppc.PatNum IN "+familyPatNums+" AND "))+
+						"ppc.ChargeDate<=DATE("+billInAdvanceDate+") "+
+					"GROUP BY ppc.PatNum) c,"+
+				//Get the payments made to payment plans for each patient
+				//on or before the specified date and store the results in memory table 'p'.
+				"(SELECT ps.PatNum PatNum,"+
+					"IFNULL(SUM(ps.SplitAmt),0) PayPlanPayments "+
+					"FROM paysplit ps "+
+					"WHERE ps.PayPlanNum<>0 AND "+//only payments attached to payment plans.
+						(guarantor==0?"":("ps.PatNum IN "+familyPatNums+" AND "))+
+						"ps.ProcDate<=DATE("+asOfDate+") "+
+					"GROUP BY ps.PatNum) p "+
+				//Now using the tables tempaging, c and p, update the payment plan remaining
+				//amount to be paid within the tempaging table for each patient.
+				"SET a.PayPlanDue=IFNULL(c.PayPlanCharges-p.PayPlanPayments,0) "+
+						"WHERE c.PatNum=a.PatNum AND p.PatNum=a.PatNum;";
+			//Update the family aged balances onto the guarantor rows of the patient table 
+			//by placing credits on oldest charges first, then on younger charges.
+			command+="UPDATE patient p,"+
+					//Sum each colum within each family group inside of the tempaging table so that we are now
+					//using family amounts instead of individual patient amounts, and store the result into
+					//memory table 'f'.
+					"(SELECT a.Guarantor,SUM(a.Charges_0_30) Charges_0_30,SUM(a.Charges_31_60) Charges_31_60,"+
+						"SUM(a.Charges_61_90) Charges_61_90,SUM(a.ChargesOver90) ChargesOver90,"+
+						"SUM(TotalCredits) TotalCredits,SUM(InsEst) InsEst,SUM(PayPlanDue) PayPlanDue "+
+						"FROM tempaging a "+
+						"GROUP BY a.Guarantor) f "+
+					//Perform the update of the patient table based on the family amounts summed into table 'f', and
+					//distribute the payments into the oldest balances first.
+					"SET "+
+					"p.BalOver90=CASE "+
+						//over 90 balance paid in full.
+						"WHEN f.TotalCredits>=f.ChargesOver90 THEN 0 "+
+						//over 90 balance partially paid or unpaid.
+						"ELSE f.ChargesOver90-f.TotalCredits END,"+			
+					"p.Bal_61_90=CASE "+
+						//61 to 90 day balance unpaid.
+						"WHEN f.TotalCredits<=f.ChargesOver90 THEN f.Charges_61_90 "+
+						//61 to 90 day balance paid in full.
+						"WHEN f.ChargesOver90+f.Charges_61_90<=f.TotalCredits THEN 0 "+
+						//61 to 90 day balance partially paid.
+						"ELSE f.ChargesOver90+f.Charges_61_90-f.TotalCredits END,"+
+					"p.Bal_31_60=CASE "+
+						//31 to 60 day balance unpaid.
+						"WHEN f.TotalCredits<f.ChargesOver90+f.Charges_61_90 THEN f.Charges_31_60 "+
+						//31 to 60 day balance paid in full.
+						"WHEN f.ChargesOver90+f.Charges_61_90+f.Charges_31_60<=f.TotalCredits THEN 0 "+
+						//31 to 60 day balance partially paid.
+						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60-f.TotalCredits END,"+
+					"p.Bal_0_30=CASE "+
+						//0 to 30 day balance unpaid.
+						"WHEN f.TotalCredits<f.ChargesOver90+f.Charges_61_90+f.Charges_31_60 THEN f.Charges_0_30 "+
+						//0 to 30 day balance paid in full.
+						"WHEN f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30<=f.TotalCredits THEN 0 "+
+						//0 to 30 day balance partially paid.
+						"ELSE f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30-f.TotalCredits END,"+
+					//(Total Balance)=(Total Charges)-(Total Credits)
+					"p.BalTotal=f.ChargesOver90+f.Charges_61_90+f.Charges_31_60+f.Charges_0_30-f.TotalCredits,"+
+					"p.InsEst=f.InsEst,"+
+					"p.PayPlanDue=f.PayPlanDue "+
+				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
+			General.NonQ(command);
 		}
-
-		///<summary>Called 4 times from the above function.  Not needed for charges, but only for payments, which are much more complex to place in the correct aging slot.  Hopefully, the complexity will be reduced when we have line item accounting, and every payment will have a proc date as well as a payment date.  Payment date will be used for all reports that show payments.  ProcDate will be used for aging.  This is already mostly in place for claimproc.ProcDate and claimproc.DateCP.</summary>
-		private static void ComputePayments(DateValuePair[] pairs){
-			//
-			for(int i=0;i<pairs.Length;i++){
-				switch(GetAgingType(pairs[i].Date)){
-					case 3://over 90
-						Bal[3]-=pairs[i].Value;//can go negative if patient balance was negative at some point
-						break;
-					case 2://60 90
-						if(Bal[3]>0){//apply to older balance first
-							if(Bal[3]>pairs[i].Value){
-								Bal[3]-=pairs[i].Value;//apply all to over 90 bal
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[3];//deduct amount applied
-								Bal[3]=0;//apply only part to over 90
-							}
-						}
-						Bal[2]-=pairs[i].Value;//apply whatever is left over to 60 90
-						break;
-					case 1://30 60
-						if(Bal[3]>0){//apply to older balance first
-							if(Bal[3]>pairs[i].Value){
-								Bal[3]-=pairs[i].Value;
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[3];
-								Bal[3]=0;
-							}
-						}
-						if(Bal[2]>0){
-							if(Bal[2]>pairs[i].Value){
-								Bal[2]-=pairs[i].Value;
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[2];
-								Bal[2]=0;
-							}
-						}
-						Bal[1]-=pairs[i].Value;//apply whatever is left over to 30 60
-						break;
-					case 0://0 30
-						if(Bal[3]>0){
-							if(Bal[3]>pairs[i].Value){
-								Bal[3]-=pairs[i].Value;
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[3];
-								Bal[3]=0;
-							}
-						}
-						if(Bal[2]>0){
-							if(Bal[2]>pairs[i].Value){
-								Bal[2]-=pairs[i].Value;
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[2];
-								Bal[2]=0;
-							}
-						}
-						if(Bal[1]>0){
-							if(Bal[1]>pairs[i].Value){
-								Bal[1]-=pairs[i].Value;
-								pairs[i].Value=0;
-							}
-							else{
-								pairs[i].Value-=Bal[1];
-								Bal[1]=0;
-							}
-						}
-						Bal[0]-=pairs[i].Value;//apply whatever is left over to 0 30
-						break;
-				}//switch
-				//MessageBox.Show(pairs[i].Date.ToShortDateString()+","+pairs[i].Value.ToString()+","+Bal[3].ToString());
-			}//for
-		}
-
-		private static int GetAgingType(DateTime date){
-			//MessageBox.Show(AsOfDate.ToShortDateString()+","+date.ToShortDateString());
-			int retVal;
-			if(date < AsOfDate.AddMonths(-3))
-				retVal= 3;
-			else if(date < AsOfDate.AddMonths(-2))
-				retVal= 2;
-			else if(date < AsOfDate.AddMonths(-1))
-				retVal= 1;
-			else 
-				retVal= 0;
-			//MessageBox.Show(retVal.ToString());
-			return retVal;
-		}
-
-	
 	}
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1358,49 +1358,6 @@ namespace OpenDentBusiness{
 			return AgingList;
 		}
 
-		///<summary>For entire database.  Need to zero everything out first because the update aging only inserts non-zero values.</summary>
-		public static void ResetAging(){
-			string command="UPDATE patient SET "
-				+"Bal_0_30   = '0'"
-				+",Bal_31_60 = '0'"
-				+",Bal_61_90 = '0'"
-				+",BalOver90 = '0'"
-				+",InsEst    = '0'"
-				+",BalTotal  = '0'"
-				+",PayPlanDue= '0'";
-			General.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void ResetAging(int guarantor){
-			string command="Update patient SET "
-				+"Bal_0_30   = '0'"
-				+",Bal_31_60 = '0'"
-				+",Bal_61_90 = '0'"
-				+",BalOver90 = '0'"
-				+",InsEst    = '0'"
-				+",BalTotal  = '0'"
-				+",PayPlanDue= '0'"
-			  +" WHERE guarantor = '"+POut.PInt(guarantor)+"'";
-			General.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void UpdateAging(int patnum,double Bal0,double Bal31
-			,double Bal61,double Bal91,double InsEst,double BalTotal,double PayPlanDue){
-			string command="Update patient SET "
-				+"Bal_0_30        = '" +POut.PDouble(Bal0)+"'"
-				+",Bal_31_60      = '" +POut.PDouble(Bal31)+"'"
-				+",Bal_61_90      = '" +POut.PDouble(Bal61)+"'"
-				+",BalOver90      = '" +POut.PDouble(Bal91)+"'"
-				+",InsEst         = '" +POut.PDouble(InsEst)+"'"
-				+",BalTotal       = '" +POut.PDouble(BalTotal)+"'"
-				+",PayPlanDue     = '" +POut.PDouble(PayPlanDue)+"'"
-				+" WHERE patnum   = '" +POut.PInt   (patnum)+"'";
-			//MessageBox.Show(string command);
-			General.NonQ(command);
-		}
-
 		///<summary>Gets the next available integer chart number.  Will later add a where clause based on preferred format.</summary>
 		public static string GetNextChartNum(){
 			string command="SELECT ChartNumber from patient WHERE"
