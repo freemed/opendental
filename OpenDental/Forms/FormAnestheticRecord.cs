@@ -67,11 +67,7 @@ namespace OpenDental
 		private GroupBox groupBoxMedRoute;
 		private RadioButton radMedRouteIVButtFly;
 		private RadioButton radMedRouteIVCath;
-		private PrintDialog printDialog1;
 		private PrintDialog printDialog;
-		private System.Drawing.Printing.PrintDocument pd2;
-		private System.Windows.Forms.PrintDialog printDialog2;
-		private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
 		private Label labelEMod;
 		private ComboBox comboASA_EModifier;
 		private Label labelEscortCellNum;
@@ -156,22 +152,29 @@ namespace OpenDental
 		private bool allowTopaz;
 		private bool inputStatus = true; //if the decimal button is clicked
 		private bool hasDecimal = false; //if the dose text has the decimal
-		private List<DisplayField> fields;
 		public int anestheticRecordCur;
 		private List<AnestheticMedsGiven> listAnesthMedsGiven;
 		private List<AnestheticVSData> listAnesthVSData;
 		public string AnesthScore;
 		public int anesthScore;
 		public int CurPatNum;
-		
-	
-		
 		//
 		//Variables used for printing functionality..
 		//
 		private System.IO.Stream streamToPrint;
-		//private PrintDocument printDocument1;
-		private PrintDocument printDocument2;
+		private PrintDocument printDocument3;
+		string streamType;
+		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
+		private static extern bool BitBlt(
+			IntPtr hdcDest, // handle to destination DC
+			int nXDest, // x-coord of destination upper-left corner
+			int nYDest, // y-coord of destination upper-left corner
+			int nWidth, // width of destination rectangle
+			int nHeight, // height of destination rectangle
+			IntPtr hdcSrc, // handle to source DC
+			int nXSrc, // x-coordinate of source upper-left corner
+			int nYSrc, // y-coordinate of source upper-left corner
+			System.Int32 dwRop); // raster operation code
 		private RadioButton radHgtUnitsCm;
 		private RadioButton radHgtUnitsIn;
 		private GroupBox groupBoxWgt;
@@ -207,21 +210,6 @@ namespace OpenDental
 		private ToolStripSeparator toolStripSeparator3;
 		public Patient pat;
 		public int PatNum;
-		private PrintDocument printDocument3;
-
-
-		string streamType;
-		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
-		private static extern bool BitBlt(
-			IntPtr hdcDest, // handle to destination DC
-			int nXDest, // x-coord of destination upper-left corner
-			int nYDest, // y-coord of destination upper-left corner
-			int nWidth, // width of destination rectangle
-			int nHeight, // height of destination rectangle
-			IntPtr hdcSrc, // handle to source DC
-			int nXSrc, // x-coordinate of source upper-left corner
-			int nYSrc, // y-coordinate of source upper-left corner
-			System.Int32 dwRop); // raster operation code
 
 		public FormAnestheticRecord(Patient patCur, AnestheticData AnestheticDataCur)
 		{
@@ -2858,12 +2846,9 @@ namespace OpenDental
 
 			else
 			{
-
 				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
-
 			}
-
 
 		}
 
@@ -3043,11 +3028,6 @@ namespace OpenDental
 
 		}
 
-        //Print Button Functionality.
-        private void butPrint_Click(object sender, EventArgs e){
-			
-        }
-
 		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
 
 			System.IO.StreamReader streamReader = new StreamReader(this.streamToPrint);
@@ -3079,11 +3059,11 @@ namespace OpenDental
 			PrintDialog1.AllowSomePages = true;
 			PrintDialog1.ShowHelp = true;
 			PrintDialog1.Document = printDocument3;
-			DialogResult result = PrintDialog1.ShowDialog();
-			//if (result == DialogResult.OK)
-			//{
-				this.printDocument3.Print();
-			//}
+            PrintDialog1.UseEXDialog = true; //needed because PrintDialog was not showing on 64 bit Vista systems
+            if (PrintDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.printDocument3.Print();
+            }
 
         }
 
@@ -3847,11 +3827,11 @@ namespace OpenDental
 		private void printToolStripMenuItem_Click(object sender, EventArgs e){
 
 			Graphics g1 = this.CreateGraphics();
-			Image MyImage = new Bitmap(878, 710, g1);
+			Image MyImage = new Bitmap(890, 770, g1);
 			Graphics g2 = Graphics.FromImage(MyImage);
 			IntPtr dc1 = g1.GetHdc();
 			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 878, 710, dc1, 0, 0, 13369376);
+			BitBlt(dc2, 0, 0, 890, 770, dc1, 0, 0, 13369376);
 			g1.ReleaseHdc(dc1);
 			g2.ReleaseHdc(dc2);
 			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
