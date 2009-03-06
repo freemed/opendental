@@ -3735,6 +3735,7 @@ namespace OpenDental
 							}
 						}
 
+                        /*Probably not needed
 						Userod curUser = Security.CurUser;
 
 						if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
@@ -3750,6 +3751,7 @@ namespace OpenDental
 							MessageBox.Show(this, "You must be an administrator to unlock this action");
 							return;
 						}
+                        */
 
 						//SaveSignature(AnesthDataCur);
 						if (allowTopaz)
@@ -3815,14 +3817,7 @@ namespace OpenDental
 				}
 
 			}
-			else
-			{
-				//FormAnesthElevateSecurityPriv ES = new FormAnesthElevateSecurityPriv();
-				//ShowDialog = FormES
-				//MessageBox.Show(this, "You must be an administrator to unlock this action");
-				
-				return;
-			}
+
 			MessageBox.Show(this,"Data has been saved to the database");
 		}
 
