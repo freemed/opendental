@@ -2846,7 +2846,7 @@ namespace OpenDental
 				}
 				try
 				{
-					//will be null if the Anesthetic Record has just been deleted, and it's the only one on the list
+					//will be null and generate an exception if the Anesthetic Record has just been deleted, and it's the only one on the list
 					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
 				catch
@@ -3465,31 +3465,6 @@ namespace OpenDental
         }
 
 
-		private void butDoseWaste_Click(object sender, EventArgs e){
-
-			/*FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-                FormES.ShowDialog();*/
-
-			Userod curUser = Security.CurUser;
-
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
-
-				FormAnestheticMedsWasteQty FormW = new FormAnestheticMedsWasteQty();
-				FormW.ShowDialog();
-
-				return;
-
-			}
-			else
-			{
-				FormAnesthElevateSecurityPriv FormES = new FormAnesthElevateSecurityPriv();
-				FormES.ShowDialog();
-				//MessageBox.Show(this, "You must be an administrator to unlock this action");
-				return;
-			}
-		}
-
 		private void checkBP_CheckedChanged(object sender, EventArgs e){
 
 		}
@@ -3806,7 +3781,7 @@ namespace OpenDental
 				SaveData();
 				
 			try
-				{	//will be null if user hits 'OK' button with no Anesthetic Record saved
+				{	//will be null and generate an exception if user hits 'OK' button with no Anesthetic Record saved
 					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
 			catch
@@ -3816,7 +3791,7 @@ namespace OpenDental
 					return;
 				}
 
-			}
+			} //this is done only to give the user some visual feedback that the data has in fact been saved to the db
 
 			MessageBox.Show(this,"Data has been saved to the database");
 		}
