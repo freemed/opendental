@@ -2228,9 +2228,9 @@ namespace OpenDental
 				{	
 				}
 			//disables AnesthOpen button if AnesthOpen time has already been saved to db
-			if (textAnesthOpen.Text == "")
+			/*if (textAnesthOpen.Text == "")
 				butAnesthOpen.Enabled = true;
-			else butAnesthOpen.Enabled = false;
+			else butAnesthOpen.Enabled = false;*/
 
 			//disables these buttons until AnesthOpen button is clicked.
 			/*butSurgOpen.Enabled = false;
