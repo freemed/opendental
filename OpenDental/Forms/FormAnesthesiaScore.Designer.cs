@@ -98,6 +98,7 @@ namespace OpenDental{
 			this.textDate.ReadOnly = true;
 			this.textDate.Size = new System.Drawing.Size(144, 20);
 			this.textDate.TabIndex = 148;
+			this.textDate.TextChanged += new System.EventHandler(this.textDate_TextChanged);
 			// 
 			// labelDate
 			// 

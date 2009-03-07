@@ -160,7 +160,7 @@ namespace OpenDentBusiness{
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE AnestheticDate = '" + (newdate) + "'"; 
+			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE AnestheticDate = '" + (newdate) + "'";
 			cmd.Connection = con;
 			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
 			con.Close();
@@ -180,14 +180,16 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 		///<summary>Creates an Anesthesia Score record in the db</summary>
-		public static void InsertAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable){
+		public static void InsertAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable)
+		{
 
 			string command = "INSERT INTO anesthscore(AnestheticRecordNum,QActivity,QResp,QCirc,QConc,QColor,AnesthesiaScore,DischAmb,DischWheelChr,DischAmbulance,DischCondStable,DischCondUnstable) VALUES('" + AnestheticRecordNum + "','" + QActivity + "','" + QResp + "','" + QCirc + "','" + QConc + "','" + QColor + "','" + AnesthesiaScore + "','" + DischAmb + "','" + DischWheelChr + "','" + DischAmbulance + "','" + DischCondStable + "','" + DischCondUnstable + "'" + ")";
 			General.NonQ(command);
 
 		}
 
-		public static void UpdateAnesthScore(int AnestheticRecordNum,int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable){
+		public static void UpdateAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable)
+		{
 
 			string command = "UPDATE anesthscore SET "
 				+ "QActivity = '" + POut.PInt(QActivity) + "'"
@@ -205,7 +207,8 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}
 
-		public static int GetAnesthScore(int AnestheticRecordNum){
+		public static int GetAnesthScore(int AnestheticRecordNum)
+		{
 
 
 			MySqlCommand cmd = new MySqlCommand();
@@ -230,16 +233,32 @@ namespace OpenDentBusiness{
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT AnestheticRecordNum FROM anesthscore WHERE AnestheticRecordNum = '" + AnestheticRecordNum + "'";  
+			cmd.CommandText = "SELECT AnestheticRecordNum FROM anesthscore WHERE AnestheticRecordNum = '" + AnestheticRecordNum + "'";
 			cmd.Connection = con;
 			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
 			con.Close();
 			if (anestheticRecordNum == 0)
-			{ 
-				return 0; 
+			{
+				return 0;
 			}
 			else return anestheticRecordNum;
 
+		}
+
+		public static string GetAnesthCloseTime(int AnestheticRecordNum)
+		{
+
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			cmd.CommandText = "SELECT AnesthClose FROM anestheticdata WHERE AnestheticRecordNum = '" + AnestheticRecordNum + "'";
+			cmd.Connection = con;
+			string anesthClose = Convert.ToString(cmd.ExecuteScalar());
+			con.Close();
+			return anesthClose;
 		}
 
 	}

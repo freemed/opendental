@@ -42,6 +42,7 @@ namespace OpenDental {
 		public int DischCondStable;
 		public int DischCondUnstable;
 		public int AnestheticRecordNum;
+		public string AnesthClose;
 		
 
 		public FormAnesthesiaScore(Patient patCur, int anestheticRecordNum) {
@@ -60,7 +61,8 @@ namespace OpenDental {
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
-			textDate.Text = DateTime.Now.ToString();
+			//AnesthClose time is used as time for this form since the Anesthesia Score should be done right around discharge time
+			textDate.Text = AnestheticRecords.GetAnesthCloseTime(AnestheticRecordNum);
 			FillControls();
 
 		}
@@ -304,6 +306,16 @@ namespace OpenDental {
 
 			}
 		}
+
+		private string GetAnesthClose(){
+			string command = "SELECT AnesthClose"
+			+ " FROM anestheticdata"
+			+ " WHERE AnestheticRecordNum = " + AnestheticRecordNum;
+			
+			return AnesthClose;
+				
+		}
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
@@ -392,6 +404,11 @@ namespace OpenDental {
 		private void radColorQ0_CheckedChanged(object sender, EventArgs e)
 		{
 			RefreshScore();
+		}
+
+		private void textDate_TextChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
