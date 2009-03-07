@@ -62,7 +62,8 @@ namespace OpenDental {
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
 			//AnesthClose time is used as time for this form since the Anesthesia Score should be done right around discharge time
-			textDate.Text = AnestheticRecords.GetAnesthCloseTime(AnestheticRecordNum);
+			string curDateTime = AnestheticRecords.GetAnesthDate(AnestheticRecordNum) + " " +  AnestheticRecords.GetAnesthCloseTime(AnestheticRecordNum);
+			textDate.Text = curDateTime;
 			FillControls();
 
 		}
@@ -307,14 +308,6 @@ namespace OpenDental {
 			}
 		}
 
-		private string GetAnesthClose(){
-			string command = "SELECT AnesthClose"
-			+ " FROM anestheticdata"
-			+ " WHERE AnestheticRecordNum = " + AnestheticRecordNum;
-			
-			return AnesthClose;
-				
-		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;

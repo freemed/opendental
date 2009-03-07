@@ -259,6 +259,24 @@ namespace OpenDentBusiness{
 			string anesthClose = Convert.ToString(cmd.ExecuteScalar());
 			con.Close();
 			return anesthClose;
+
+		}
+
+		public static string GetAnesthDate(int AnestheticRecordNum){
+
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			cmd.CommandText = "SELECT AnestheticDate FROM anestheticrecord WHERE AnestheticRecordNum = '" + AnestheticRecordNum + "'";
+			cmd.Connection = con;
+			string anestheticDate = Convert.ToString(cmd.ExecuteScalar());
+			DateTime anesthDate = Convert.ToDateTime(anestheticDate);
+			string anestheticdate = anesthDate.ToString("MM/dd/yyyy");
+			con.Close();
+			return anestheticdate;
 		}
 
 	}
