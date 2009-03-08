@@ -2204,18 +2204,7 @@ namespace OpenDental
 			if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
 				{	
 				}
-			//disables AnesthOpen button if AnesthOpen time has already been saved to db
-			/*if (textAnesthOpen.Text == "")
-				butAnesthOpen.Enabled = true;
-			else butAnesthOpen.Enabled = false;*/
 
-			//disables these buttons until AnesthOpen button is clicked.
-			/*butSurgOpen.Enabled = false;
-			butSurgClose.Enabled = false;
-			butAnesthClose.Enabled = false;
-			if (textAnesthClose.Text == "")
-				butAnesthScore.Enabled = false;
-			else butAnesthScore.Enabled = true;*/  // This is too annoying right now
 			IsStartingUp = true;
 			//display Patient name
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
@@ -2232,10 +2221,6 @@ namespace OpenDental
 				this.comboAnesthMed.SelectedIndex = 0;
 			}
 
-			//Fills provider comboboxes only if this is a new form
-			//if (IsUpdate == true)
-
-			//{
 				//Anesthetist comboBox
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
@@ -2340,7 +2325,6 @@ namespace OpenDental
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
-				
 				
 			try
 			{
@@ -2470,22 +2454,6 @@ namespace OpenDental
 				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][48].ToString());
 				Cur.Signature = PIn.PString(table.Rows[i][49].ToString());
 				Cur.SigIsTopaz = PIn.PBool(table.Rows[i][50].ToString());
-
-				
-				//Disable buttons to disallow editing when no Records exist yet
-				/*
-					butAnesthOpen.Enabled = false;
-					butSurgOpen.Enabled = false;
-					butSurgClose.Enabled = false;
-					butAnesthClose.Enabled = false;
-					butAnesthScore.Enabled = false;
-					butDoseEnter.Enabled = false;
-					butAnesthScore.Enabled = false;
-					butOK.Enabled = false;
-					butClose.Enabled = false;
-					butSignTopaz.Enabled = false;
-					butClearSig.Enabled = false;
-				}*/
 
 				//Populate controls from db
 
@@ -2737,13 +2705,12 @@ namespace OpenDental
 			}
 			
 		}
-			private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+		private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 
 			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		
 		}
-
 
 		private void butAddAnesthetic_Click(object sender, EventArgs e){
 
@@ -2762,13 +2729,11 @@ namespace OpenDental
 		}
 
 		//deletes an Anesthetic from the list of saved Anesthetics
-		private void butDelAnesthetic_Click(object sender, System.EventArgs e)
-		{
+		private void butDelAnesthetic_Click(object sender, System.EventArgs e){
 
 			//used at bottom of method but must be set here before it gets deleted
 			string anestheticRecordNum = "";
 			anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
 
 			if (listAnesthetics.SelectedIndex == -1)
 			{
@@ -2822,14 +2787,14 @@ namespace OpenDental
 					butClose.Enabled = true;
 				}
 				try
-				{
+					{
 					//will be null and generate an exception if the Anesthetic Record has just been deleted, and it's the only one on the list
 					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				}
+					}
 				catch
-				{
+					{
 					return;
-				}
+					}
 				return;
 			}
 
@@ -2875,8 +2840,8 @@ namespace OpenDental
 		}
 
 		//Fills the Anesth Vital Signs table
-		private void FillGridVSData(int anestheticRecordNum)
-		{
+		private void FillGridVSData(int anestheticRecordNum){
+
 			listAnesthVSData = AnesthVSData.CreateObjects(anestheticRecordNum);
 
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
@@ -2950,21 +2915,6 @@ namespace OpenDental
 
 		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e){
 
-			//CheckForCompleteNote();
-			/*if (!IsStartingUp//so this happens only if user changes the note
-				&& !SigChanged)//and the original signature is still showing.
-				{
-					sigBox.ClearTablet();
-					if (allowTopaz)
-						{
-							CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-							sigBoxTopaz.Visible = false;//until user explicitly starts it.
-				}
-				sigBox.SetTabletState(1);//on-screen box is now accepting input.
-				SigChanged = true;
-				AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
-				// textUser.Text = Userods.GetName(ProcCur.UserNum);
-				}*/
 		}
 
 		private void textBoxSurgClose_TextChanged(object sender, EventArgs e){
@@ -3040,6 +2990,7 @@ namespace OpenDental
 		}
 
 		public void StartPrint(Stream streamToPrint, string streamType){
+
 			this.printDocument3.PrintPage += new PrintPageEventHandler(printDocument3_PrintPage);
 
 			this.streamToPrint = streamToPrint;
@@ -3056,8 +3007,7 @@ namespace OpenDental
 
         }
 
-		private void printDocument3_PrintPage(object sender, PrintPageEventArgs e)
-		{
+		private void printDocument3_PrintPage(object sender, PrintPageEventArgs e){
 
 			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
 			int x = e.MarginBounds.X;
@@ -3077,6 +3027,7 @@ namespace OpenDental
 			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
 			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
 		}
+
 		private void label3_Click(object sender, EventArgs e){
 
 		}
@@ -3276,20 +3227,30 @@ namespace OpenDental
 				textAnesthDose.Text += butDose20.Text;
 		}
 
-
-
 		//Append '.25' to textAnesthDose
 		private void butDose25_Click(object sender, EventArgs e){
 
-			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")))
+			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals(""))/*determines if this dose is less than 1*/)
+				{
 				textAnesthDose.Text += butDose25.Text;
+				}
+			else if (textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
+				{
+					textAnesthDose.Text += 0.25;
+				}
 		}
 
 		//Append '.50' to textAnesthDose
 		private void butDose50_Click(object sender, EventArgs e){
-			
-			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")))
-				textAnesthDose.Text += butDose50.Text;
+
+			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals("")) /*determines if this dose is less than 1*/ )
+				{
+					textAnesthDose.Text += butDose50.Text;
+				}
+			else if (textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
+			{
+				textAnesthDose.Text += 0.50;
+			}
 		}
 
 		private void butDoseEnter_Click(object sender, EventArgs e){
@@ -3373,8 +3334,7 @@ namespace OpenDental
 		}
 
 		private void butWasteQty_Click(object sender, EventArgs e){
-
-                
+		
 		}
 
 		private void comboBoxO2LMin_SelectedIndexChanged(object sender, EventArgs e){
@@ -3396,8 +3356,7 @@ namespace OpenDental
 
 		}
 
-		private void gridAnesthMeds_CellDoubleClick(object sender, ODGridClickEventArgs e)
-		{
+		private void gridAnesthMeds_CellDoubleClick(object sender, ODGridClickEventArgs e){
 
 			Userod curUser = Security.CurUser;
 
@@ -3439,7 +3398,6 @@ namespace OpenDental
 		}
 
 		private void SaveSignature(AnestheticData AnesthDataCur){
-
 
 			if (SigChanged)
 			{
@@ -3490,8 +3448,7 @@ namespace OpenDental
 		}
 
 		//Saves Data to db if either "Save" or "Save and Close" buttons are clicked
-		private void SaveData()
-		{
+		private void SaveData(){
 
 			Regex regexHgt = new Regex("^^\\d{1,2}?$");
 			if (!regexHgt.IsMatch(textPatHgt.Text) && textPatHgt.Text != "")
@@ -3499,7 +3456,6 @@ namespace OpenDental
 				MessageBox.Show("The height field should be a two digit integer");
 				textPatHgt.Focus();
 			}
-
 
 			else
 			{
@@ -3509,7 +3465,6 @@ namespace OpenDental
 					MessageBox.Show("The weight field should be a 2-3 digit integer");
 					textPatWgt.Focus();
 				}
-
 
 				else
 				{
@@ -3679,24 +3634,6 @@ namespace OpenDental
 							}
 						}
 
-                        /*Probably not needed
-						Userod curUser = Security.CurUser;
-
-						if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-						{
-
-							FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-							//DialogResult = DialogResult.OK;
-							//Close();
-
-						}
-						else
-						{
-							MessageBox.Show(this, "You must be an administrator to unlock this action");
-							return;
-						}
-                        */
-
 						//SaveSignature(AnesthDataCur);
 						if (allowTopaz)
 						{
@@ -3769,15 +3706,12 @@ namespace OpenDental
 
 		}
 
-
-
-		private void labelAnesthScore_Click(object sender, EventArgs e)
-		{
+		private void labelAnesthScore_Click(object sender, EventArgs e){
 
 		}
 
-		private void richTextNotes_TextChanged(object sender, EventArgs e)
-		{
+		private void richTextNotes_TextChanged(object sender, EventArgs e){
+
 			SigChanged = false;
 			//CheckForCompleteNote();
 			if (!IsStartingUp//so this happens only if user changes the note
@@ -3798,6 +3732,7 @@ namespace OpenDental
 
 
 		private void addEditSuppliersToolStripMenuItem_Click(object sender, EventArgs e){
+
 			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
 			FormMS.ShowDialog();
 		}
@@ -3868,15 +3803,12 @@ namespace OpenDental
 
 		}
 
-		private void filesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+		private void filesToolStripMenuItem_Click(object sender, EventArgs e){
 
 		}
 
-		
+		private void saveToolStripMenuItem2_Click(object sender, EventArgs e){
 
-		private void saveToolStripMenuItem2_Click(object sender, EventArgs e)
-		{
 			{
 			Userod curUser = Security.CurUser;
 
