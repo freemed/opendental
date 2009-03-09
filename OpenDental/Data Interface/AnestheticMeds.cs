@@ -20,6 +20,7 @@ namespace OpenDental{
 
 		///<summary>Gets all Anesthetic Medications from the database</summary>
 		public static List<AnesthMedsInventory> CreateObjects() {
+
 			string command="SELECT * FROM anesthmedsinventory ORDER BY AnesthMedName";
 			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
 		}
@@ -29,20 +30,17 @@ namespace OpenDental{
 			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
 		}
 
-		///<summary>Surround with try-catch.</summary>
+		///<summary>Deletes and Anesthetic Medication from inventory if it has never been given to a patient</summary>
 		public static void DeleteObject(AnesthMedsInventory med){
 
-			//validate that not already in use.
-			//string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
+			//validate that anesthetic med is not already in use.
 			string command = "SELECT COUNT(*) FROM anesthmedsgiven WHERE AnesthMedNum=" + POut.PInt(med.AnestheticMedNum);
 			
 			int count=PIn.PInt(General.GetCount(command));
             
 			if (count > 0)
 			{
-				//throw new ApplicationException(Lan.g("AnestheticMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
 				MessageBox.Show(Lan.g("AnestheticMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
-				
 			}
 
 			else
@@ -51,8 +49,8 @@ namespace OpenDental{
 			}
 		}
 
-		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory, int anestheticMedNum)
-		{
+		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory, int anestheticMedNum){
+
 			for (int i = 0; i < listAnesthMedInventory.Count; i++)
 			{
 
@@ -66,6 +64,7 @@ namespace OpenDental{
 		}
 
 		public static string GetQtyOnHand(List<AnesthMedsInventory> listAnesthMedInventory,int anestheticMedNum){
+			
 			for (int i = 0; i < listAnesthMedInventory.Count; i++){
 
 				if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum){
@@ -79,8 +78,8 @@ namespace OpenDental{
 		/// <summary>
 		/// Gets the Anesthetic Record number from the anestheticrecord table.
 		/// </summary>
-		public static int getRecordNum(int patnum)
-		{
+		public static int getRecordNum(int patnum){
+
 			MySqlCommand command2 = new MySqlCommand();
 			con.Open();
 			command2.CommandText = "SELECT Max(AnestheticRecordNum)  FROM opendental_test.anestheticrecord a,opendental_test.Patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
