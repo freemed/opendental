@@ -211,8 +211,8 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			HashAlgorithm algorithm=HashAlgorithm.Create("MD5");
-			//I should have used UTF-8 here, but we can't change it now.
 			byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
+			//if(
 			byte[] hashbytes=algorithm.ComputeHash(unicodeBytes);
 			return Convert.ToBase64String(hashbytes);
 		}
@@ -399,18 +399,15 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-        //Return 3, which is non-admin provider type
-        public static int GetAnesthProvType(int anesthProvType)
-        {
-            for (int i = 0; i < UserodC.Listt.Count; i++)
-            {
-                if (UserodC.Listt[i].AnesthProvType == anesthProvType)
-                {
-                    return UserodC.Listt[i].AnesthProvType;
-                }
-            }
-            return 3;
-        }
+		//Return 3, which is non-admin provider type
+		public static int GetAnesthProvType(int anesthProvType) {
+			for(int i = 0;i < UserodC.Listt.Count;i++) {
+				if(UserodC.Listt[i].AnesthProvType == anesthProvType) {
+					return UserodC.Listt[i].AnesthProvType;
+				}
+			}
+			return 3;
+		}
 
 
 	}

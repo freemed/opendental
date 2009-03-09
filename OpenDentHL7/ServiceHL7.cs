@@ -15,6 +15,8 @@ using OpenDental.DataAccess;//this namespace is in the OpenDentBusiness project.
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
+		//private string 
+
 		public ServiceHL7() {
 			InitializeComponent();
 		}
@@ -60,15 +62,15 @@ namespace OpenDentHL7 {
 			string command=@"SELECT PropertyValue FROM programproperty,program
 				WHERE programproperty.ProgramNum=program.ProgramNum
 				AND program.ProgName='eClinicalWorks'
-				AND programproperty.PropertyDesc='HL7Folder'";
+				AND programproperty.PropertyDesc='HL7FolderOut'";
 			DataTable table=General.GetTable(command);
-			string hl7folder=table.Rows[0][0].ToString();
-			FileSystemWatcher watcher=new FileSystemWatcher(hl7folder,"out*");//'out' from eCW
+			string hl7folderOut=table.Rows[0][0].ToString();
+			FileSystemWatcher watcher=new FileSystemWatcher(hl7folderOut);//'out' from eCW
 			watcher.Created += new FileSystemEventHandler(OnCreated);
 			watcher.Renamed += new RenamedEventHandler(OnRenamed);
 			watcher.EnableRaisingEvents=true;
 			//process all waiting messages
-			string[] existingFiles=Directory.GetFiles(hl7folder,"out*");
+			string[] existingFiles=Directory.GetFiles(hl7folderOut);
 			for(int i=0;i<existingFiles.Length;i++) {
 				ProcessMessage(File.ReadAllText(existingFiles[i]));
 			}
@@ -90,9 +92,10 @@ namespace OpenDentHL7 {
 			else if(msg.MsgType==MessageType.SIU) {
 				SIU.ProcessMessage(msg);
 			}
-			else if(msg.MsgType==MessageType.DFT) {
+			//we won't be processing DFT messages.
+			//else if(msg.MsgType==MessageType.DFT) {
 				//ADT.ProcessMessage(msg);
-			}
+			//}
 		}
 
 		protected override void OnStop() {

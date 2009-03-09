@@ -28,7 +28,13 @@ namespace OpenDental{
 		public Program ProgramCur;
 		private List<ProgramProperty> PropertyList;
 		private static Thread thread;
-		private TextBox textHL7Folder;
+		private TextBox textHL7FolderIn;
+		private TextBox textHL7FolderOut;
+		private Label label4;
+		private GroupBox groupBox1;
+		private Label label5;
+		private Label label6;
+		private ComboBox comboDefaultUserGroup;
 		private Label label3;
 
 		///<summary></summary>
@@ -70,8 +76,15 @@ namespace OpenDental{
 			this.textProgName = new System.Windows.Forms.TextBox();
 			this.textProgDesc = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textHL7Folder = new System.Windows.Forms.TextBox();
+			this.textHL7FolderIn = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.textHL7FolderOut = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.comboDefaultUserGroup = new System.Windows.Forms.ComboBox();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -83,7 +96,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(577,419);
+			this.butCancel.Location = new System.Drawing.Point(524,271);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -98,7 +111,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(577,385);
+			this.butOK.Location = new System.Drawing.Point(443,271);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -149,29 +162,86 @@ namespace OpenDental{
 			this.label2.Text = "Description";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textHL7Folder
+			// textHL7FolderIn
 			// 
-			this.textHL7Folder.Location = new System.Drawing.Point(246,84);
-			this.textHL7Folder.Name = "textHL7Folder";
-			this.textHL7Folder.Size = new System.Drawing.Size(275,20);
-			this.textHL7Folder.TabIndex = 49;
+			this.textHL7FolderIn.Location = new System.Drawing.Point(234,43);
+			this.textHL7FolderIn.Name = "textHL7FolderIn";
+			this.textHL7FolderIn.Size = new System.Drawing.Size(275,20);
+			this.textHL7FolderIn.TabIndex = 49;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(12,85);
+			this.label3.Location = new System.Drawing.Point(3,44);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(232,18);
+			this.label3.Size = new System.Drawing.Size(229,18);
 			this.label3.TabIndex = 48;
-			this.label3.Text = "HL7 Folder (relative to the HL7 server)";
+			this.label3.Text = "In to eClinicalWorks";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textHL7FolderOut
+			// 
+			this.textHL7FolderOut.Location = new System.Drawing.Point(234,69);
+			this.textHL7FolderOut.Name = "textHL7FolderOut";
+			this.textHL7FolderOut.Size = new System.Drawing.Size(275,20);
+			this.textHL7FolderOut.TabIndex = 51;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(6,70);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(226,18);
+			this.label4.TabIndex = 50;
+			this.label4.Text = "Out from eClinicalWorks";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.textHL7FolderOut);
+			this.groupBox1.Controls.Add(this.textHL7FolderIn);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Location = new System.Drawing.Point(12,86);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(538,101);
+			this.groupBox1.TabIndex = 52;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "HL7 Synch Folders";
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6,19);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(478,18);
+			this.label5.TabIndex = 45;
+			this.label5.Text = "Folder locations must be valid on the computer where the HL7 process is running";
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(12,202);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(232,18);
+			this.label6.TabIndex = 53;
+			this.label6.Text = "Default User Group for new users";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboDefaultUserGroup
+			// 
+			this.comboDefaultUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDefaultUserGroup.FormattingEnabled = true;
+			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246,202);
+			this.comboDefaultUserGroup.Name = "comboDefaultUserGroup";
+			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215,21);
+			this.comboDefaultUserGroup.TabIndex = 54;
 			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(664,455);
-			this.Controls.Add(this.textHL7Folder);
-			this.Controls.Add(this.label3);
+			this.ClientSize = new System.Drawing.Size(611,307);
+			this.Controls.Add(this.comboDefaultUserGroup);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textProgDesc);
 			this.Controls.Add(this.textProgName);
 			this.Controls.Add(this.label2);
@@ -188,6 +258,8 @@ namespace OpenDental{
 			this.Text = "eClinicalWorks Setup";
 			this.Load += new System.EventHandler(this.FormEClinicalWorks_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinkEdit_Closing);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -204,7 +276,15 @@ namespace OpenDental{
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
-			textHL7Folder.Text=GetProp("HL7Folder");
+			textHL7FolderIn.Text=GetProp("HL7FolderIn");
+			textHL7FolderOut.Text=GetProp("HL7FolderOut");
+			comboDefaultUserGroup.Items.Clear();
+			for(int i=0;i<UserGroups.List.Length;i++) {
+				comboDefaultUserGroup.Items.Add(UserGroups.List[i].Description);
+				if(GetProp("DefaultUserGroup")==UserGroups.List[i].UserGroupNum.ToString()) {
+					comboDefaultUserGroup.SelectedIndex=i;
+				}
+			}
 		}
 
 		private string GetProp(string desc){
@@ -221,10 +301,17 @@ namespace OpenDental{
 				MessageBox.Show("Description may not be blank.");
 				return false;
 			}
+			if(comboDefaultUserGroup.SelectedIndex==-1) {
+				MessageBox.Show("Please select a default user group first.");
+				return false;
+			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
-			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7Folder",textHL7Folder.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn",textHL7FolderIn.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderOut",textHL7FolderOut.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
+				UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
 		}

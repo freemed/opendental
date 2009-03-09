@@ -109,6 +109,20 @@ namespace OpenDental{
 			throw new ApplicationException("Property not found: "+desc);
 		}
 
+		public static string GetPropVal(string progName,string propertyDesc) {
+			int programNum=Programs.GetProgramNum(progName);
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ProgramNum!=programNum) {
+					continue;
+				}
+				if(List[i].PropertyDesc!=propertyDesc) {
+					continue;
+				}
+				return List[i].PropertyValue;
+			}
+			throw new ApplicationException("Property not found: "+propertyDesc);
+		}
+
 		///<summary>Used in FormUAppoint to get frequent and current data.</summary>
 		public static string GetValFromDb(int programNum,string desc){
 			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)

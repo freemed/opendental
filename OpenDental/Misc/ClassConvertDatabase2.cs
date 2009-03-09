@@ -224,15 +224,34 @@ namespace OpenDental {
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
-						+"'HL7Folder', "
+						+"'HL7FolderIn', "
 						+"'')";
 					General.NonQ(command);
-
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'HL7FolderOut', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'DefaultUserGroup', "
+						+"'')";
+					General.NonQ(command);
 					command = "ALTER TABLE anesthmedsgiven ADD AnesthMedNum int NOT NULL";
 					General.NonQ(command);
-
 					command = "ALTER TABLE provider ADD AnesthProvType int";
 					General.NonQ(command);
+
+
+
+
+
+
+
+
+
 
 				}
 				else {//oracle

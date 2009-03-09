@@ -3934,7 +3934,7 @@ namespace OpenDental{
 			string chartNumber="";
 			string ssn="";
 			string userName="";
-			string password="";
+			string passHash="";
 			for(int i=0;i<args.Length;i++) {
 				if(args[i].StartsWith("PatNum=")) {
 					try {
@@ -3951,8 +3951,8 @@ namespace OpenDental{
 				if(args[i].StartsWith("UserName=") && args[i].Length>9) {
 					userName=args[i].Substring(9);
 				}
-				if(args[i].StartsWith("Password=") && args[i].Length>9) {
-					password=args[i].Substring(9);
+				if(args[i].StartsWith("PassHash=") && args[i].Length>9) {
+					passHash=args[i].Substring(9);
 				}
 			}
 			//Username and password-----------------------------------------------------
@@ -3968,15 +3968,17 @@ namespace OpenDental{
 				Userod user=Userods.GetUserByName(userName);
 				if(user==null) {
 					if(Programs.IsEnabled("eClinicalWorks")) {
-//todo: add user
-						//temporary stable solution:
-						FormLogOn FormL=new FormLogOn();
-						FormL.ShowDialog();
-						if(FormL.DialogResult==DialogResult.Cancel) {
-							Application.Exit();
-							return;
+						user=new Userod();
+						user.UserName=userName;
+						user.UserGroupNum=PIn.PInt(ProgramProperties.GetPropVal("eClinicalWorks","DefaultUserGroup"));
+						if(passHash=="") {
+							user.Password="";
 						}
-						user=Security.CurUser.Copy();
+						else {
+							user.Password=passHash;
+						}
+						Userods.InsertOrUpdate(true,user);//probably no need to try/catch
+						DataValid.SetInvalid(InvalidType.Security);
 					}
 					else {//not using eCW
 						//So present logon screen
@@ -3989,7 +3991,8 @@ namespace OpenDental{
 						user=Security.CurUser.Copy();
 					}
 				}
-				if(Userods.CheckPassword(password,user.Password)) {//password accepted
+				//Can't use Userods.CheckPassword, because we only have the hashed password.
+				if(passHash==user.Password) {//password accepted
 					//this part usually happens in the logon window
 					Security.CurUser = user.Copy();
 					//let's skip tasks for now
@@ -4030,7 +4033,9 @@ namespace OpenDental{
 			if(patNum!=0) {
 				Patient pat=Patients.GetPat(patNum);
 				if(pat==null) {
-					//todo: decide action
+					CurPatNum=0;
+					RefreshCurrentModule();
+					FillPatientButton(0,"",false,"",0);
 				}
 				else {
 					CurPatNum=patNum;

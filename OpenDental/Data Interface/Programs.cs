@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -14,29 +15,29 @@ namespace OpenDental{
 		///<summary></summary>
 		public static Hashtable HList;
 		///<summary></summary>
-		public static Program[] List;
+		public static List<Program> Listt;
 
 		///<summary></summary>
 		public static void Refresh(){
 			//MessageBox.Show("refreshing");
 			HList=new Hashtable();
-			Program tempProgram = new Program();
+			Program prog = new Program();
 			string command = 
 				"SELECT * from program ORDER BY ProgDesc";
 			DataTable table=General.GetTable(command);
-			List=new Program[table.Rows.Count];
+			Listt=new List<Program>();
 			for (int i=0;i<table.Rows.Count;i++){
-				tempProgram=new Program();
-				tempProgram.ProgramNum =PIn.PInt   (table.Rows[i][0].ToString());
-				tempProgram.ProgName   =PIn.PString(table.Rows[i][1].ToString());
-				tempProgram.ProgDesc   =PIn.PString(table.Rows[i][2].ToString());
-				tempProgram.Enabled    =PIn.PBool  (table.Rows[i][3].ToString());
-				tempProgram.Path       =PIn.PString(table.Rows[i][4].ToString());
-				tempProgram.CommandLine=PIn.PString(table.Rows[i][5].ToString());
-				tempProgram.Note       =PIn.PString(table.Rows[i][6].ToString());
-				List[i]=tempProgram;
-				if(!HList.ContainsKey(tempProgram.ProgName)){
-					HList.Add(tempProgram.ProgName,tempProgram);
+				prog=new Program();
+				prog.ProgramNum =PIn.PInt(table.Rows[i][0].ToString());
+				prog.ProgName   =PIn.PString(table.Rows[i][1].ToString());
+				prog.ProgDesc   =PIn.PString(table.Rows[i][2].ToString());
+				prog.Enabled    =PIn.PBool(table.Rows[i][3].ToString());
+				prog.Path       =PIn.PString(table.Rows[i][4].ToString());
+				prog.CommandLine=PIn.PString(table.Rows[i][5].ToString());
+				prog.Note       =PIn.PString(table.Rows[i][6].ToString());
+				Listt.Add(prog);
+				if(!HList.ContainsKey(prog.ProgName)) {
+					HList.Add(prog.ProgName,prog);
 				}
 			}
 			//MessageBox.Show(HList.Count.ToString());
@@ -87,8 +88,8 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static bool IsEnabled(int programNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum==programNum && List[i].Enabled){
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].ProgramNum==programNum && Listt[i].Enabled){
 					return true;
 				}
 			}
@@ -97,159 +98,169 @@ namespace OpenDental{
 
 		///<summary>Supply a valid program Name, and this will set Cur to be the corresponding Program object.</summary>
 		public static Program GetCur(string progName){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgName==progName){
-					return List[i];
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].ProgName==progName){
+					return Listt[i];
 				}
 			}
 			return null;//to signify that the program could not be located. (user deleted it in an older version)
 		}
 
-		///<summary>Typically used when user clicks a button to a Program link.  This method attempts to identify and execute the program based on the given programNum.</summary>
-		public static void Execute(int programNum,Patient pat){
-			Program Cur=null;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum==programNum){
-					Cur=List[i];
+		///<summary>Supply a valid program Name.  Will return 0 if not found.</summary>
+		public static int GetProgramNum(string progName) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ProgName==progName) {
+					return Listt[i].ProgramNum;
 				}
 			}
-			if(Cur==null){//no match was found
+			return 0;
+		}
+
+		///<summary>Typically used when user clicks a button to a Program link.  This method attempts to identify and execute the program based on the given programNum.</summary>
+		public static void Execute(int programNum,Patient pat){
+			Program prog=null;
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].ProgramNum==programNum){
+					prog=Listt[i];
+				}
+			}
+			if(prog==null) {//no match was found
 				MessageBox.Show("Error, program entry not found in database.");
 				return;
 			}
-			if(Cur.ProgName=="Apteryx") {
-				Apteryx.SendData(Cur,pat);
+			if(prog.ProgName=="Apteryx") {
+				Apteryx.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="DBSWin") {
-				DBSWin.SendData(Cur,pat);
+			else if(prog.ProgName=="DBSWin") {
+				DBSWin.SendData(prog,pat);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
-			else if(Cur.ProgName=="DentalEye") {
-				DentalEye.SendData(Cur,pat);
+			else if(prog.ProgName=="DentalEye") {
+				DentalEye.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="DentX") {
-				DentX.SendData(Cur,pat);
+			else if(prog.ProgName=="DentX") {
+				DentX.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="DrCeph") {
-				DrCeph.SendData(Cur,pat);
+			else if(prog.ProgName=="DrCeph") {
+				DrCeph.SendData(prog,pat);
 				return;
 			}
 #endif
-			else if(Cur.ProgName=="DentForms") {
-				DentForms.SendData(Cur,pat);
+			else if(prog.ProgName=="DentForms") {
+				DentForms.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Dexis") {
-				Dexis.SendData(Cur,pat);
+			else if(prog.ProgName=="Dexis") {
+				Dexis.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Digora") {
-				Digora.SendData(Cur,pat);
+			else if(prog.ProgName=="Digora") {
+				Digora.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Dolphin") {
-				Dolphin.SendData(Cur,pat);
+			else if(prog.ProgName=="Dolphin") {
+				Dolphin.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Dxis") {
-				Dxis.SendData(Cur,pat);
+			else if(prog.ProgName=="Dxis") {
+				Dxis.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="FloridaProbe") {
-				FloridaProbe.SendData(Cur,pat);
+			else if(prog.ProgName=="FloridaProbe") {
+				FloridaProbe.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="HouseCalls") {
+			else if(prog.ProgName=="HouseCalls") {
 				FormHouseCalls FormHC=new FormHouseCalls();
-				FormHC.ProgramCur=Cur;
+				FormHC.ProgramCur=prog;
 				FormHC.ShowDialog();
 				return;
 			}
-			else if(Cur.ProgName=="ImageFX") {
-				ImageFX.SendData(Cur,pat);
+			else if(prog.ProgName=="ImageFX") {
+				ImageFX.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Lightyear") {
-				Lightyear.SendData(Cur,pat);
+			else if(prog.ProgName=="Lightyear") {
+				Lightyear.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="MediaDent") {
-				MediaDent.SendData(Cur,pat);
+			else if(prog.ProgName=="MediaDent") {
+				MediaDent.SendData(prog,pat);
 				return;
 			}
-			//else if(Cur.ProgName=="NewPatientForm.com") {
+			//else if(prog.ProgName=="NewPatientForm.com") {
 			//	NewPatientForm npf=new NewPatientForm();
-			//	npf.ShowDownload(Cur.Path);//NewPatientForm.com
+			//	npf.ShowDownload(prog.Path);//NewPatientForm.com
 			//	return;
 			//}
-			else if(Cur.ProgName=="Owandy") {
-				Owandy.SendData(Cur,pat);
+			else if(prog.ProgName=="Owandy") {
+				Owandy.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="PerioPal") {
-				PerioPal.SendData(Cur,pat);
+			else if(prog.ProgName=="PerioPal") {
+				PerioPal.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="Planmeca") {
-				Planmeca.SendData(Cur,pat);
+			else if(prog.ProgName=="Planmeca") {
+				Planmeca.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="PT") {
-				PaperlessTechnology.SendData(Cur,pat,false);
+			else if(prog.ProgName=="PT") {
+				PaperlessTechnology.SendData(prog,pat,false);
 				return;
 			}
-			else if(Cur.ProgName=="PTupdate") {
-				PaperlessTechnology.SendData(Cur,pat,true);
-				return;
-			}
-#if !DISABLE_WINDOWS_BRIDGES
-			else if(Cur.ProgName=="Schick") {
-				Schick.SendData(Cur,pat);
-				return;
-			}
-#endif
-			else if(Cur.ProgName=="Sirona") {
-				Sirona.SendData(Cur,pat);
-				return;
-			}
-			else if(Cur.ProgName=="TigerView"){
-				TigerView.SendData(Cur,pat);
-				return;
-			}
-			else if(Cur.ProgName=="Trophy") {
-				Trophy.SendData(Cur,pat);
-				return;
-			}
-			else if(Cur.ProgName=="TrophyEnhanced") {
-				TrophyEnhanced.SendData(Cur,pat);
+			else if(prog.ProgName=="PTupdate") {
+				PaperlessTechnology.SendData(prog,pat,true);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
-			else if(Cur.ProgName=="Vipersoft") {
-				Vipersoft.SendData(Cur,pat);
+			else if(prog.ProgName=="Schick") {
+				Schick.SendData(prog,pat);
 				return;
 			}
 #endif
-			else if(Cur.ProgName=="VixWin") {
-				VixWin.SendData(Cur,pat);
+			else if(prog.ProgName=="Sirona") {
+				Sirona.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="VixWinOld") {
-				VixWinOld.SendData(Cur,pat);
+			else if(prog.ProgName=="TigerView"){
+				TigerView.SendData(prog,pat);
 				return;
 			}
-			else if(Cur.ProgName=="XDR") {
-				Dexis.SendData(Cur,pat);//XDR uses the Dexis protocol
+			else if(prog.ProgName=="Trophy") {
+				Trophy.SendData(prog,pat);
+				return;
+			}
+			else if(prog.ProgName=="TrophyEnhanced") {
+				TrophyEnhanced.SendData(prog,pat);
+				return;
+			}
+#if !DISABLE_WINDOWS_BRIDGES
+			else if(prog.ProgName=="Vipersoft") {
+				Vipersoft.SendData(prog,pat);
+				return;
+			}
+#endif
+			else if(prog.ProgName=="VixWin") {
+				VixWin.SendData(prog,pat);
+				return;
+			}
+			else if(prog.ProgName=="VixWinOld") {
+				VixWinOld.SendData(prog,pat);
+				return;
+			}
+			else if(prog.ProgName=="XDR") {
+				Dexis.SendData(prog,pat);//XDR uses the Dexis protocol
 				return;
 			}
 			//all remaining programs:
 			try{
-				string cmdline=Cur.CommandLine;
-				string path=Cur.Path;
+				string cmdline=prog.CommandLine;
+				string path=prog.Path;
 				if(pat!=null) {
 					cmdline=cmdline.Replace("[PatNum]",pat.PatNum.ToString());
 					cmdline=cmdline.Replace("[ChartNumber]",pat.ChartNumber);
@@ -259,7 +270,7 @@ namespace OpenDental{
 				Process.Start(path,cmdline);
 			}
 			catch{
-				MessageBox.Show(Cur.ProgDesc+" is not available.");
+				MessageBox.Show(prog.ProgDesc+" is not available.");
 				return;
 			}
 		}
