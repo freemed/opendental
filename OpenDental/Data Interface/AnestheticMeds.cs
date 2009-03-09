@@ -33,19 +33,22 @@ namespace OpenDental{
 		public static void DeleteObject(AnesthMedsInventory med){
 
 			//validate that not already in use.
-			string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
+			//string command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
+			string command = "SELECT COUNT(*) FROM anesthmedsgiven WHERE AnesthMedNum=" + POut.PInt(med.AnestheticMedNum);
+			
 			int count=PIn.PInt(General.GetCount(command));
-            //disabled during development, will probably need to enable for release
-			/*if(count>0) {
-				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
-			}*/
-			command="SELECT COUNT(*) FROM anesthmedsinventory WHERE AnestheticMedNum="+POut.PInt(med.AnestheticMedNum);
-			count=PIn.PInt(General.GetCount(command));
-            //disabled for now...
-			/*if(count>0) {
-				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
-			}*/
-            DataObjectFactory<AnesthMedsInventory>.DeleteObject(med);
+            
+			if (count > 0)
+			{
+				//throw new ApplicationException(Lan.g("AnestheticMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
+				MessageBox.Show(Lan.g("AnestheticMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
+				
+			}
+
+			else
+			{
+				DataObjectFactory<AnesthMedsInventory>.DeleteObject(med);
+			}
 		}
 
 		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory, int anestheticMedNum)
