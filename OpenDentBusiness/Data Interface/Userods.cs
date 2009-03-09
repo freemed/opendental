@@ -211,10 +211,57 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			HashAlgorithm algorithm=HashAlgorithm.Create("MD5");
-			byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
-			//if(
-			byte[] hashbytes=algorithm.ComputeHash(unicodeBytes);
-			return Convert.ToBase64String(hashbytes);
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				byte[] asciiBytes=Encoding.ASCII.GetBytes(inputPass);
+				byte[] hashbytes=algorithm.ComputeHash(asciiBytes);//length=16
+				byte digit1;
+				byte digit2;
+				string char1;
+				string char2;
+				StringBuilder strbuild=new StringBuilder();
+				for(int i=0;i<hashbytes.Length;i++) {
+					if(hashbytes[i]==0) {
+						digit1=0;
+						digit2=0;
+					}
+					else {
+						digit1=(byte)Math.Floor((double)hashbytes[i]/16d);
+						//double remainder=Math.IEEERemainder((double)hashbytes[i],16d);
+						digit2=(byte)(hashbytes[i]-(byte)(16*digit1));
+					}
+					char1=ByteToStr(digit1);
+					char2=ByteToStr(digit2);
+					strbuild.Append(char1);
+					strbuild.Append(char2);
+				}
+				return strbuild.ToString();
+			}
+			else {//typical
+				byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
+				byte[] hashbytes2=algorithm.ComputeHash(unicodeBytes);
+				return Convert.ToBase64String(hashbytes2);
+			}
+		}
+
+
+		///<summary>The only valid input is a value between 0 and 15.  Text returned will be 1-9 or a-f.</summary>
+		private static string ByteToStr(Byte byteVal) {
+			switch(byteVal) {
+				case 10:
+					return "a";
+				case 11:
+					return "b";
+				case 12:
+					return "c";
+				case 13:
+					return "d";
+				case 14:
+					return "e";
+				case 15:
+					return "f";
+				default:
+					return byteVal.ToString();
+			}
 		}
 
 		///<summary></summary>
