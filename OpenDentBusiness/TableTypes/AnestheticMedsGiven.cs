@@ -102,6 +102,21 @@ namespace OpenDentBusiness{
 			get { return qtyOnHandOldChanged; }
 		}
 
+		[DataField("AnesthMedNum")]
+		private string anesthMedNum;
+		bool anesthMedNumChanged;
+		/// <summary>A unique anesthetic med num from anesthmedsinventory</summary>
+
+		public string AnesthMedNum
+		{
+			get { return anesthMedNum; }
+			set { anesthMedNum = value; MarkDirty(); anesthMedNumChanged = true; }
+		}
+		public bool AnesthMedNumChanged
+		{
+			get { return anesthMedNumChanged; }
+		}
+
 
 	}
 

@@ -164,8 +164,8 @@ namespace OpenDentBusiness
 		}
 
 		/// <summary>Inserts the newly added anesthetic medication and how supplied into the anesthmedsgiven table in the database</summary>
-		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew, int anestheticRecordNum, int anesthmednum)
-		{
+		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew, int anestheticRecordNum, int anesthmednum){
+			
 			string AMName = anesth_Medname;
 			
 			if (anesth_Medname.Contains("'"))
@@ -326,7 +326,6 @@ namespace OpenDentBusiness
 					+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
 			General.NonQ(command3);
 
-
 			//Update anesthmedsgiven
 			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'" + " and AnestheticRecordNum = " + anestheticRecordNum;
 			General.NonQ(command);
@@ -350,9 +349,10 @@ namespace OpenDentBusiness
 			con.Close();
 			return qtyOnHand;
 		}
+		/// <summary>Returns AnesthMedNum. Used to check a unique med num in table anesthmedsgiven vs. those in anesthmedsinventory. 
+		/// Prevents deletion of a med from anesthmedsinventory if it has already been given to a patient/// </summary>
 
-		public static int GetAnesthMedNum(string aMed)
-		{
+		public static int GetAnesthMedNum(string aMed){
 
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
