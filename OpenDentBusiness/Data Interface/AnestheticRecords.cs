@@ -279,5 +279,22 @@ namespace OpenDentBusiness{
 			return anestheticdate;
 		}
 
+		public static int GetAnesthProvType(int ProvNum)
+		{
+
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			cmd.CommandText = "SELECT AnesthProvType FROM provider WHERE ProvNum = '" + ProvNum + "'";
+			cmd.Connection = con;
+			string provType = Convert.ToString(cmd.ExecuteScalar());
+			int anesthProvType = Convert.ToInt32(provType);
+			con.Close();
+			return anesthProvType;
+		}
+
 	}
 }

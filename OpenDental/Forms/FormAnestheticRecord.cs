@@ -2225,7 +2225,11 @@ namespace OpenDental
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 2)|| (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 12))
+
+					{
+						comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					}
 
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboAnesthetist.SelectedIndex = i;
@@ -2247,7 +2251,10 @@ namespace OpenDental
 				comboSurgeon.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 1) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 12))
+					{
+						comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					}
 
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboSurgeon.SelectedIndex = i;
@@ -2269,8 +2276,10 @@ namespace OpenDental
 				comboAsst.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-
+					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 3) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 4) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 34))
+					{
+						comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					}
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboAsst.SelectedIndex = i;
 				}
@@ -2291,8 +2300,10 @@ namespace OpenDental
 				comboCirc.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-
+					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 3) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 4) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 34))
+					{
+						comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+					}
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboCirc.SelectedIndex = i;
 				}

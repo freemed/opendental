@@ -989,7 +989,7 @@ namespace OpenDental{
 			else{
 				Providers.Update(ProvCur);
 			}
-			if (validAnesthProvs == true)//we want to remain in this screen until the Anesthesia providers are properly selected
+			if (validAnesthProvs == true)//we want to remain in this screen until the Anesthesia providers are properly selected. Will always be true unless the Anesth Provider checkboxes have been incorrectly checked.
 			{
 				DialogResult = DialogResult.OK;
 			}
