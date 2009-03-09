@@ -940,11 +940,11 @@ namespace OpenDental{
 			}
 			ProvCur.Specialty=(DentalSpecialty)listSpecialty.SelectedIndex;
 
-			bool valid = true;
+			bool validAnesthProvs = true;
 			if ((checkAnesthetist.Checked == true || checkSurgeon.Checked == true) && (checkAsst.Checked == true || checkCirc.Checked == true))
 			{
 				MessageBox.Show(this, "Provider must be either Anesthetist/Surgeon OR Assistant/Circulator");
-				valid = false;
+				validAnesthProvs = false;
 			}
 			 else 
 				{
@@ -989,7 +989,7 @@ namespace OpenDental{
 			else{
 				Providers.Update(ProvCur);
 			}
-			if (valid == true)
+			if (validAnesthProvs == true)//we want to remain in this screen until the Anesthesia providers are properly selected
 			{
 				DialogResult = DialogResult.OK;
 			}
