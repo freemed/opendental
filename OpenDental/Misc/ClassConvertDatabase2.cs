@@ -231,9 +231,8 @@ namespace OpenDental {
 					command = "ALTER TABLE anesthmedsgiven ADD AnesthMedNum int NOT NULL";
 					General.NonQ(command);
 
-
-
-
+					command = "ALTER TABLE provider ADD AnesthProvType int";
+					General.NonQ(command);
 
 				}
 				else {//oracle

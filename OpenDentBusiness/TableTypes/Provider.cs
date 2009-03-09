@@ -54,6 +54,9 @@ namespace OpenDentBusiness{
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
 		//DateTStamp
+		/// <summary>
+		/// <summary>Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord</summary>
+		public int AnesthProvType;
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){
@@ -67,7 +70,7 @@ namespace OpenDentBusiness{
 		public Provider(int provNum,string abbr,int itemOrder,string lName,string fName,string mI,string suffix,int feeSched,
 			DentalSpecialty specialty,string sSN,string stateLicense,string dEANum,bool isSecondary,Color provColor,bool isHidden,
 			bool usingTIN,string blueCrossID,bool sigOnFile,string medicaidID,Color outlineColor,int schoolClassNum,
-			string nationalProvID,string canadianOfficeNum)
+			string nationalProvID,string canadianOfficeNum,int anesthProvType)
 		{
 			ProvNum=provNum;
 			Abbr=abbr;
@@ -93,6 +96,7 @@ namespace OpenDentBusiness{
 			NationalProvID=nationalProvID;
 			CanadianOfficeNum=canadianOfficeNum;
 			//DateTStamp
+			AnesthProvType = anesthProvType;
 		}
 
 

@@ -62,6 +62,7 @@ namespace OpenDentBusiness{
 				prov.NationalProvID= PIn.PString(table.Rows[i][21].ToString());
 				prov.CanadianOfficeNum= PIn.PString(table.Rows[i][22].ToString());
 				//DateTStamp
+				prov.AnesthProvType = PIn.PInt(table.Rows[i][24].ToString());
 				retVal.Add(prov);
 			}
 			return retVal;
@@ -93,6 +94,7 @@ namespace OpenDentBusiness{
 				+",NationalProvID = '"+POut.PString(prov.NationalProvID)+"'"
 				+",CanadianOfficeNum = '"+POut.PString(prov.CanadianOfficeNum)+"'"
 				//DateTStamp
+				+ ",AnesthProvType = '"+POut.PInt(prov.AnesthProvType)+ "'"
 				+" WHERE provnum = '" +POut.PInt(prov.ProvNum)+"'";
  			General.NonQ(command);
 		}
@@ -102,7 +104,7 @@ namespace OpenDentBusiness{
 			string command= "INSERT INTO provider (Abbr,ItemOrder,LName,FName,MI,Suffix,"
 				+"FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,"
 				+"UsingTIN,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,"
-				+"NationalProvID,CanadianOfficeNum"//DateTStamp
+				+"NationalProvID,CanadianOfficeNum,AnesthProvType"//DateTStamp
 				+") VALUES("
 				+"'"+POut.PString(prov.Abbr)+"', "
 				+"'"+POut.PInt   (prov.ItemOrder)+"', "
@@ -125,8 +127,9 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (prov.OutlineColor.ToArgb())+"', "
 				+"'"+POut.PInt   (prov.SchoolClassNum)+"', "
 				+"'"+POut.PString(prov.NationalProvID)+"', "
-				+"'"+POut.PString(prov.CanadianOfficeNum)+"')";
+				+"'"+POut.PString(prov.CanadianOfficeNum)+"', "
 				//DateTStamp
+				+ "'"+POut.PInt(prov.AnesthProvType)+"')";
 			//MessageBox.Show(string command);
  			prov.ProvNum=General.NonQ(command,true);
 		}
