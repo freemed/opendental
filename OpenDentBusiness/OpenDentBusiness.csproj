@@ -94,6 +94,8 @@
     <Compile Include="Cache\AnesthMedsC.cs" />
     <Compile Include="Cache\AnesthMedInvAdjC.cs" />
     <Compile Include="Cache\AnesthVSDataC.cs" />
+    <Compile Include="Cache\ProgramPropertyC.cs" />
+    <Compile Include="Cache\ProgramC.cs" />
     <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\FeeSchedC.cs" />
     <Compile Include="Cache\RecallTriggerC.cs" />
@@ -142,6 +144,8 @@
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
+    <Compile Include="Data Interface\ProgramProperties.cs" />
+    <Compile Include="Data Interface\Programs.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />

@@ -435,7 +435,7 @@ namespace OpenDental{
 		}
 
 		private void FillForm(){
-			ProgramProperties.Refresh();
+			ProgramProperties.RefreshCache();
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;

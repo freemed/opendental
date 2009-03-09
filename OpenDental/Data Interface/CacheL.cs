@@ -95,7 +95,8 @@ namespace OpenDental{
 				//ProcCodeNotes.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll){
-				//Programs.Refresh();
+				Programs.FillCache(ds.Tables["Program"]);
+
 				//ProgramProperties.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll){

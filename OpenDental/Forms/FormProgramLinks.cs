@@ -137,12 +137,12 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Programs.Refresh();
+			Programs.RefreshCache();
 			listProgram.Items.Clear();
 			string itemName="";
-			for(int i=0;i<Programs.Listt.Count;i++){
-				itemName=Programs.Listt[i].ProgDesc;
-				if(Programs.Listt[i].Enabled)
+			for(int i=0;i<ProgramC.Listt.Count;i++){
+				itemName=ProgramC.Listt[i].ProgDesc;
+				if(ProgramC.Listt[i].Enabled)
 					itemName+="(enabled)";
 				listProgram.Items.Add(itemName);
 			}
@@ -161,7 +161,7 @@ namespace OpenDental{
 			if(listProgram.SelectedIndex==-1){
 				return;
 			}
-			Program program=Programs.Listt[listProgram.SelectedIndex].Copy();
+			Program program=ProgramC.Listt[listProgram.SelectedIndex].Copy();
 			if(program.ProgName=="UAppoint"){
 				FormUAppoint FormU=new FormUAppoint();
 				FormU.ProgramCur=program;

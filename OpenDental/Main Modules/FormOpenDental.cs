@@ -1682,8 +1682,6 @@ namespace OpenDental{
 				ProcCodeNotes.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll){
-				Programs.Refresh();
-				ProgramProperties.Refresh();
 				if(Programs.GetCur("PT").Enabled){
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
 				}
@@ -1823,7 +1821,7 @@ namespace OpenDental{
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)) {
-				Programs.Execute((int)e.Button.Tag,Patients.GetPat(CurPatNum));
+				ProgramL.Execute((int)e.Button.Tag,Patients.GetPat(CurPatNum));
 			}
 		}
 

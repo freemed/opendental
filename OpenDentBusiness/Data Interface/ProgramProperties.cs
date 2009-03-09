@@ -2,27 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness {
 
 	///<summary></summary>
 	public class ProgramProperties{
 		///<summary></summary>
-		public static ProgramProperty[] List;
-
-		///<summary></summary>
-		public static void Refresh(){
-			string command = 
-				"SELECT * from programproperty";
+		public static DataTable RefreshCache() {
+			string command="SELECT * FROM programproperty";
 			DataTable table=General.GetTable(command);
-			List=new ProgramProperty[table.Rows.Count];
+			table.TableName="ProgramProperty";
+			FillCache(table);
+			return table;
+		}
+	
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			ProgramPropertyC.Listt=new List<ProgramProperty>();
+			ProgramProperty progprop;
 			for (int i=0;i<table.Rows.Count;i++){
-				List[i]=new ProgramProperty();
-				List[i].ProgramPropertyNum =PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].ProgramNum         =PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].PropertyDesc       =PIn.PString(table.Rows[i][2].ToString());
-				List[i].PropertyValue      =PIn.PString(table.Rows[i][3].ToString());
+				progprop=new ProgramProperty();
+				progprop.ProgramPropertyNum =PIn.PInt(table.Rows[i][0].ToString());
+				progprop.ProgramNum         =PIn.PInt(table.Rows[i][1].ToString());
+				progprop.PropertyDesc       =PIn.PString(table.Rows[i][2].ToString());
+				progprop.PropertyValue      =PIn.PString(table.Rows[i][3].ToString());
+				ProgramPropertyC.Listt.Add(progprop);
 				//List[i].ValueType          =(FieldValueType)PIn.PInt(table.Rows[i][4].ToString());
 			}
 			//MessageBox.Show();
@@ -60,9 +64,9 @@ namespace OpenDental{
 		///<summary>Returns a List of programproperties attached to the specified programNum</summary>
 		public static List<ProgramProperty> GetListForProgram(int programNum){
 			List<ProgramProperty> ForProgram=new List<ProgramProperty>();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum==programNum){
-					ForProgram.Add(List[i]);
+			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
+				if(ProgramPropertyC.Listt[i].ProgramNum==programNum) {
+					ForProgram.Add(ProgramPropertyC.Listt[i]);
 				}
 			}
 			return ForProgram;
@@ -71,9 +75,9 @@ namespace OpenDental{
 		///<summary>Returns an ArrayList of programproperties attached to the specified programNum</summary>
 		public static ArrayList GetForProgram(int programNum){
 			ArrayList ForProgram=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum==programNum){
-					ForProgram.Add(List[i]);
+			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
+				if(ProgramPropertyC.Listt[i].ProgramNum==programNum) {
+					ForProgram.Add(ProgramPropertyC.Listt[i]);
 				}
 			}
 			return ForProgram;
@@ -97,28 +101,28 @@ namespace OpenDental{
 		}
 
 		public static string GetPropVal(int programNum,string desc){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum!=programNum){
+			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
+				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
 					continue;
 				}
-				if(List[i].PropertyDesc!=desc){
+				if(ProgramPropertyC.Listt[i].PropertyDesc!=desc) {
 					continue;
 				}
-				return List[i].PropertyValue;
+				return ProgramPropertyC.Listt[i].PropertyValue;
 			}
 			throw new ApplicationException("Property not found: "+desc);
 		}
 
 		public static string GetPropVal(string progName,string propertyDesc) {
 			int programNum=Programs.GetProgramNum(progName);
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].ProgramNum!=programNum) {
+			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
+				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
 					continue;
 				}
-				if(List[i].PropertyDesc!=propertyDesc) {
+				if(ProgramPropertyC.Listt[i].PropertyDesc!=propertyDesc) {
 					continue;
 				}
-				return List[i].PropertyValue;
+				return ProgramPropertyC.Listt[i].PropertyValue;
 			}
 			throw new ApplicationException("Property not found: "+propertyDesc);
 		}

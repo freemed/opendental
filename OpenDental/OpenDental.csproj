@@ -298,8 +298,7 @@
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
-    <Compile Include="Data Interface\ProgramProperties.cs" />
-    <Compile Include="Data Interface\Programs.cs" />
+    <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\ProviderIdents.cs" />
     <Compile Include="Data Interface\QuestionDefs.cs" />
     <Compile Include="Data Interface\Questions.cs" />

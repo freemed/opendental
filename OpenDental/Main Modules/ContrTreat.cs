@@ -815,7 +815,7 @@ namespace OpenDental{
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
-				Programs.Execute((int)e.Button.Tag,PatCur);
+				ProgramL.Execute((int)e.Button.Tag,PatCur);
 			}
 		}
 

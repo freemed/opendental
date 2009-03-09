@@ -337,7 +337,7 @@ namespace OpenDental{
 			//this is not refined enough to be called more than once on the form because it will not
 			//remember the toolbars that were selected.
 			ToolButItems.Refresh();
-			ProgramProperties.Refresh();
+			ProgramProperties.RefreshCache();
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
@@ -385,7 +385,7 @@ namespace OpenDental{
 			if(FormPP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			ProgramProperties.Refresh();
+			ProgramProperties.RefreshCache();
 			ProgramPropertiesForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			FillGrid();
 		}
