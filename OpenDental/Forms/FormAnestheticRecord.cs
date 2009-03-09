@@ -2225,7 +2225,7 @@ namespace OpenDental
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 2)|| (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 12))
+					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1)
 
 					{
 						comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
@@ -2251,7 +2251,7 @@ namespace OpenDental
 				comboSurgeon.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 1) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 12))
+					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 1)
 					{
 						comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
@@ -2276,7 +2276,7 @@ namespace OpenDental
 				comboAsst.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 3) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 4) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 34))
+					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2)
 					{
 						comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
@@ -2300,7 +2300,7 @@ namespace OpenDental
 				comboCirc.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
-					if ((AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 3) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 4) || (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 34))
+					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2)
 					{
 						comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}

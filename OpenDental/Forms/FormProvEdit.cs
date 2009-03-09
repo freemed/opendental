@@ -60,11 +60,10 @@ namespace OpenDental{
 		private TextBox textCanadianOfficeNum;
 		private Label labelCanadianOfficeNum;
 		private GroupBox groupAnesthProvType;
-		private CheckBox checkAnesthetist;
 		private Label labelAnesthProvs;
-		private CheckBox checkCirc;
-		private CheckBox checkAsst;
-		private CheckBox checkSurgeon;
+		private RadioButton radAsstCirc;
+		private RadioButton radAnesthSurg;
+		private RadioButton radNone;
 		public Provider ProvCur;
 
 		///<summary></summary>
@@ -141,11 +140,10 @@ namespace OpenDental{
 			this.textCanadianOfficeNum = new System.Windows.Forms.TextBox();
 			this.labelCanadianOfficeNum = new System.Windows.Forms.Label();
 			this.groupAnesthProvType = new System.Windows.Forms.GroupBox();
+			this.radAsstCirc = new System.Windows.Forms.RadioButton();
+			this.radAnesthSurg = new System.Windows.Forms.RadioButton();
+			this.radNone = new System.Windows.Forms.RadioButton();
 			this.labelAnesthProvs = new System.Windows.Forms.Label();
-			this.checkCirc = new System.Windows.Forms.CheckBox();
-			this.checkAsst = new System.Windows.Forms.CheckBox();
-			this.checkSurgeon = new System.Windows.Forms.CheckBox();
-			this.checkAnesthetist = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAnesthProvType.SuspendLayout();
@@ -596,68 +594,57 @@ namespace OpenDental{
 			// 
 			// groupAnesthProvType
 			// 
+			this.groupAnesthProvType.Controls.Add(this.radAsstCirc);
+			this.groupAnesthProvType.Controls.Add(this.radAnesthSurg);
+			this.groupAnesthProvType.Controls.Add(this.radNone);
 			this.groupAnesthProvType.Controls.Add(this.labelAnesthProvs);
-			this.groupAnesthProvType.Controls.Add(this.checkCirc);
-			this.groupAnesthProvType.Controls.Add(this.checkAsst);
-			this.groupAnesthProvType.Controls.Add(this.checkSurgeon);
-			this.groupAnesthProvType.Controls.Add(this.checkAnesthetist);
-			this.groupAnesthProvType.Location = new System.Drawing.Point(316, 235);
+			this.groupAnesthProvType.Location = new System.Drawing.Point(333, 235);
 			this.groupAnesthProvType.Name = "groupAnesthProvType";
-			this.groupAnesthProvType.Size = new System.Drawing.Size(492, 69);
+			this.groupAnesthProvType.Size = new System.Drawing.Size(347, 83);
 			this.groupAnesthProvType.TabIndex = 95;
 			this.groupAnesthProvType.TabStop = false;
 			this.groupAnesthProvType.Text = "Anesthesia Provider Groups (optional)";
 			// 
+			// radAsstCirc
+			// 
+			this.radAsstCirc.AutoSize = true;
+			this.radAsstCirc.Location = new System.Drawing.Point(12, 57);
+			this.radAsstCirc.Name = "radAsstCirc";
+			this.radAsstCirc.Size = new System.Drawing.Size(116, 17);
+			this.radAsstCirc.TabIndex = 9;
+			this.radAsstCirc.Text = "Assistant/Circulator";
+			this.radAsstCirc.UseVisualStyleBackColor = true;
+			// 
+			// radAnesthSurg
+			// 
+			this.radAnesthSurg.AutoSize = true;
+			this.radAnesthSurg.Location = new System.Drawing.Point(12, 37);
+			this.radAnesthSurg.Name = "radAnesthSurg";
+			this.radAnesthSurg.Size = new System.Drawing.Size(122, 17);
+			this.radAnesthSurg.TabIndex = 8;
+			this.radAnesthSurg.Text = "Anesthetist/Surgeon";
+			this.radAnesthSurg.UseVisualStyleBackColor = true;
+			// 
+			// radNone
+			// 
+			this.radNone.AutoSize = true;
+			this.radNone.Checked = true;
+			this.radNone.Location = new System.Drawing.Point(12, 18);
+			this.radNone.Name = "radNone";
+			this.radNone.Size = new System.Drawing.Size(51, 17);
+			this.radNone.TabIndex = 7;
+			this.radNone.TabStop = true;
+			this.radNone.Text = "None";
+			this.radNone.UseVisualStyleBackColor = true;
+			// 
 			// labelAnesthProvs
 			// 
-			this.labelAnesthProvs.Location = new System.Drawing.Point(173, 16);
+			this.labelAnesthProvs.Location = new System.Drawing.Point(153, 22);
 			this.labelAnesthProvs.Name = "labelAnesthProvs";
-			this.labelAnesthProvs.Size = new System.Drawing.Size(313, 45);
+			this.labelAnesthProvs.Size = new System.Drawing.Size(188, 52);
 			this.labelAnesthProvs.TabIndex = 4;
-			this.labelAnesthProvs.Text = "Assign this user to a group or groups. These will populate the corresponding drop" +
-				"downs on the Anesthetic Record, so you may assign this user to as many groups as" +
-				" you want";
-			// 
-			// checkCirc
-			// 
-			this.checkCirc.AutoSize = true;
-			this.checkCirc.Location = new System.Drawing.Point(92, 39);
-			this.checkCirc.Name = "checkCirc";
-			this.checkCirc.Size = new System.Drawing.Size(70, 17);
-			this.checkCirc.TabIndex = 3;
-			this.checkCirc.Text = "Circulator";
-			this.checkCirc.UseVisualStyleBackColor = true;
-			// 
-			// checkAsst
-			// 
-			this.checkAsst.AutoSize = true;
-			this.checkAsst.Location = new System.Drawing.Point(92, 18);
-			this.checkAsst.Name = "checkAsst";
-			this.checkAsst.Size = new System.Drawing.Size(68, 17);
-			this.checkAsst.TabIndex = 2;
-			this.checkAsst.Text = "Assistant";
-			this.checkAsst.UseVisualStyleBackColor = true;
-			// 
-			// checkSurgeon
-			// 
-			this.checkSurgeon.AutoSize = true;
-			this.checkSurgeon.Location = new System.Drawing.Point(7, 39);
-			this.checkSurgeon.Name = "checkSurgeon";
-			this.checkSurgeon.Size = new System.Drawing.Size(66, 17);
-			this.checkSurgeon.TabIndex = 1;
-			this.checkSurgeon.Text = "Surgeon";
-			this.checkSurgeon.UseVisualStyleBackColor = true;
-			// 
-			// checkAnesthetist
-			// 
-			this.checkAnesthetist.AutoSize = true;
-			this.checkAnesthetist.Location = new System.Drawing.Point(7, 18);
-			this.checkAnesthetist.Name = "checkAnesthetist";
-			this.checkAnesthetist.Size = new System.Drawing.Size(78, 17);
-			this.checkAnesthetist.TabIndex = 0;
-			this.checkAnesthetist.Text = "Anesthetist";
-			this.checkAnesthetist.UseVisualStyleBackColor = true;
-			this.checkAnesthetist.CheckedChanged += new System.EventHandler(this.checkAnesthetist_CheckedChanged);
+			this.labelAnesthProvs.Text = "Assign this user to a group. This will populate the corresponding dropdowns on th" +
+				"e Anesthetic Record.";
 			// 
 			// FormProvEdit
 			// 
@@ -786,36 +773,22 @@ namespace OpenDental{
 			listSpecialty.SelectedIndex=(int)ProvCur.Specialty;
 			
 			FillProvIdent();
-			//These checkboxes are used to properly filter the provider dropdowns on FormAnetheticRecord
+			//These radio buttons are used to properly filter the provider dropdowns on FormAnetheticRecord
+			if (ProvCur.AnesthProvType == 0)
+				{
+					radNone.Checked = true;
+				}
+			
 			if (ProvCur.AnesthProvType == 1)
 				{
-					checkAnesthetist.Checked = true;
-				}
-			else if (ProvCur.AnesthProvType == 12)
-				{
-					checkAnesthetist.Checked = true;
-					checkSurgeon.Checked = true;
-				}
-			else if (ProvCur.AnesthProvType == 2)
-				{
-					checkSurgeon.Checked = true;
+					radAnesthSurg.Checked = true;
 				}
 
-			if (ProvCur.AnesthProvType == 3)
+			if (ProvCur.AnesthProvType == 2)
 			{
-				checkAsst.Checked = true;
+				radAsstCirc.Checked = true;
 			}
-			else if (ProvCur.AnesthProvType == 34)
-			{
-				checkAsst.Checked = true;
-				checkCirc.Checked = true;
-			}
-			else if (ProvCur.AnesthProvType == 4)
-			{
-				checkCirc.Checked = true;
-			}
-
-
+			
 		}
 
 		private void textCanadianOfficeNum_Validating(object sender,CancelEventArgs e) {
@@ -940,48 +913,17 @@ namespace OpenDental{
 			}
 			ProvCur.Specialty=(DentalSpecialty)listSpecialty.SelectedIndex;
 
-			bool validAnesthProvs = true;
-			if ((checkAnesthetist.Checked == true || checkSurgeon.Checked == true) && (checkAsst.Checked == true || checkCirc.Checked == true))
+
+			if (radAnesthSurg.Checked == true)
 			{
-				MessageBox.Show(this, "Provider must be either Anesthetist/Surgeon OR Assistant/Circulator");
-				validAnesthProvs = false;
+				ProvCur.AnesthProvType = 1;
 			}
-			 else 
-				{
-				
-					if (checkAnesthetist.Checked == true)
-					{
-						ProvCur.AnesthProvType = 1;
-					}
 
-					if (checkSurgeon.Checked == true)
-					{
-						ProvCur.AnesthProvType = 2;
-					}
-					if (checkAnesthetist.Checked == true && checkSurgeon.Checked == true)
-					{
-						ProvCur.AnesthProvType = 12;
-					}
-
-					if (checkAsst.Checked == true)
-					{
-						ProvCur.AnesthProvType = 3;
-					}
-
-					if (checkCirc.Checked == true)
-					{
-						ProvCur.AnesthProvType = 4;
-					}
-					if (checkAsst.Checked == true && checkCirc.Checked == true)
-					{
-						ProvCur.AnesthProvType = 34;
-					}
-					if (!checkAnesthetist.Checked == true && !checkSurgeon.Checked == true && !checkAsst.Checked == true && !checkCirc.Checked == true)
-					{
-						ProvCur.AnesthProvType = 0;
-					}
-			
-				}
+			else if (radAsstCirc.Checked == true)
+			{
+				ProvCur.AnesthProvType = 2;
+			}
+			else ProvCur.AnesthProvType = 0;
 
 			if(IsNew){
 				Providers.Insert(ProvCur);
@@ -989,10 +931,8 @@ namespace OpenDental{
 			else{
 				Providers.Update(ProvCur);
 			}
-			if (validAnesthProvs == true)//we want to remain in this screen until the Anesthesia providers are properly selected. Will always be true unless the Anesth Provider checkboxes have been incorrectly checked.
-			{
-				DialogResult = DialogResult.OK;
-			}
+	
+			DialogResult = DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
