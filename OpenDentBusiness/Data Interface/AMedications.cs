@@ -164,7 +164,8 @@ namespace OpenDentBusiness
 		}
 
 		/// <summary>Inserts the newly added anesthetic medication and how supplied into the anesthmedsgiven table in the database</summary>
-		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew,  int anestheticRecordNum){
+		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew, int anestheticRecordNum, int anesthmednum)
+		{
 			string AMName = anesth_Medname;
 			
 			if (anesth_Medname.Contains("'"))
@@ -174,7 +175,7 @@ namespace OpenDentBusiness
 			
 			string doseTimeStamp = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 			//update anesthmedsgiven
-			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp,QtyOnHandOld) VALUES('" + anestheticRecordNum + "','" + AMName + "','" + dose + "','" + amtwasted + "','" + doseTimeStamp + "','" + qtyonhandold + "'" + ")";
+			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp,QtyOnHandOld,AnesthMedNum) VALUES('" + anestheticRecordNum + "','" + AMName + "','" + dose + "','" + amtwasted + "','" + doseTimeStamp + "','" + qtyonhandold + "','" + anesthmednum + "'" + ")";
 			General.NonQ(command);
 
 			string command2 = "UPDATE anesthmedsgiven SET "
@@ -348,6 +349,23 @@ namespace OpenDentBusiness
 			double qtyOnHand = Convert.ToDouble(QtyOnHand);
 			con.Close();
 			return qtyOnHand;
+		}
+
+		public static int GetAnesthMedNum(string aMed)
+		{
+
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				con.Close();
+			con.Open();
+			//if (con.State == ConnectionState.Open) MessageBox.Show("Connection to MySQL opened through OLE DB Provider"); //for testing mySQL connection
+			cmd.CommandText = "SELECT AnestheticMedNum FROM anesthmedsinventory WHERE AnesthMedName='" + aMed + "'";
+			string anesthmednum = Convert.ToString(cmd.ExecuteScalar());
+			int anesthMedNum = Convert.ToInt32(anesthmednum);
+			con.Close();
+			return anesthMedNum;
 		}
 
 

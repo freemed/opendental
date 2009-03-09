@@ -3259,7 +3259,7 @@ namespace OpenDental
 			 if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
 			{
 				double amtWasted = 0;
-				AMedications.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AMedications.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()),Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted),0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				AMedications.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AMedications.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()), Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted), 0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()), AMedications.GetAnesthMedNum(comboAnesthMed.SelectedItem.ToString()));
 			}
 			else
 			{

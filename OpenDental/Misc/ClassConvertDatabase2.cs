@@ -227,8 +227,9 @@ namespace OpenDental {
 						+"'HL7Folder', "
 						+"'')";
 					General.NonQ(command);
-			
 
+					command = "ALTER TABLE anesthmedsgiven ADD AnesthMedNum int NOT NULL";
+					General.NonQ(command);
 
 
 
