@@ -34,6 +34,7 @@ namespace OpenDentBusiness{
                 medCur.QtyGiven       = PIn.PString(table.Rows[i][3].ToString());
 				medCur.QtyWasted           = PIn.PString(table.Rows[i][4].ToString());
 				medCur.DoseTimeStamp = PIn.PString(table.Rows[i][5].ToString());
+				medCur.AnesthMedNum = PIn.PString(table.Rows[i][6].ToString());
 				AnestheticMedsGivenC.Listt.Add(medCur);
 			}
 		}
