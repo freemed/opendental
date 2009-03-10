@@ -53,13 +53,13 @@ namespace OpenDental
 			Regex regexQtyWasted = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
 			if (!(regexDose.IsMatch(textDose.Text)) && textDose.Text != "")
 			{
-				MessageBox.Show("Dose should be xxxx.xx format");
+				MessageBox.Show("Dose should be xxx.xx format");
 				textQtyWasted.Focus();
 			}
 			
 			else if (!(regexQtyWasted.IsMatch(textQtyWasted.Text)) && textQtyWasted.Text != "")
 			{
-				MessageBox.Show("Amount wasted should be xxxx.xx format");
+				MessageBox.Show("Amount wasted should be xxx.xx format");
 				textQtyWasted.Focus();
 			}
 			else
@@ -82,13 +82,13 @@ namespace OpenDental
 			Regex regexQtyWasted = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
 			if (!(regexDose.IsMatch(textDose.Text)) && textDose.Text != "")
 			{
-				MessageBox.Show("Dose should be xxxx.xx format");
+				MessageBox.Show("Dose should be xxx.xx format");
 				textQtyWasted.Focus();
 			}
 
 			else if (!(regexQtyWasted.IsMatch(textQtyWasted.Text)) && textQtyWasted.Text != "")
 			{
-				MessageBox.Show("Amount wasted should be xxxx.xx format");
+				MessageBox.Show("Amount wasted should be xxx.xx format");
 				textQtyWasted.Focus();
 			}
 			else

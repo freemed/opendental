@@ -3472,7 +3472,7 @@ namespace OpenDental
 				Regex regexWgt = new Regex("^^\\d{1,3}?$");
 				if (!regexWgt.IsMatch(textPatWgt.Text) && textPatWgt.Text != "")
 				{
-					MessageBox.Show("The weight field should be a 2-3 digit integer");
+					MessageBox.Show("The weight field should be a 1-3 digit integer");
 					textPatWgt.Focus();
 				}
 
