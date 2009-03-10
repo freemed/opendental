@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one set of vital signs from the database.</Summary>
-		public static AnestheticVSData CreateObject(int AnestheticRecordNum){
+		public static AnestheticVSData CreateObjects(int AnestheticRecordNum){
 			return DataObjectFactory<AnestheticVSData>.CreateObject(AnestheticRecordNum);
 		}
 
