@@ -3780,6 +3780,7 @@ namespace OpenDental
 
 			FormAnestheticMedsInventory FormMI = new FormAnestheticMedsInventory();
 			FormMI.ShowDialog();
+			RefreshComboBoxes();
 		}
 
 		private void exitToolStripMenuItem2_Click(object sender, EventArgs e){
