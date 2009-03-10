@@ -3141,6 +3141,7 @@ namespace OpenDental{
 				if(PrefC.GetBoolSilent("EnableAnesthMod", false)){
 					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				}
+				ToolBarMain.Buttons["Consent"].Enabled = false;
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
