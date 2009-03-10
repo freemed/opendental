@@ -241,7 +241,7 @@ namespace OpenDental {
 					General.NonQ(command);
 					command = "ALTER TABLE anesthmedsgiven ADD AnesthMedNum int NOT NULL";
 					General.NonQ(command);
-					command = "ALTER TABLE provider ADD AnesthProvType int";
+					command = "ALTER TABLE provider ADD AnesthProvType int NOT NULL";
 					General.NonQ(command);
 
 

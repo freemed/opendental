@@ -2347,7 +2347,7 @@ namespace OpenDental
 				return;
 			}
 
-			FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			//FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 
 			this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 
