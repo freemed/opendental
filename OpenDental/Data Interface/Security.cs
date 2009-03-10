@@ -77,18 +77,14 @@ namespace OpenDental{
 			if(date>dateLimit){//authorized
 				return true;
 			}
-			//2 situations.  There might be others, but we have to handle them individually to avoid introduction of bugs.
+			//3 situations.  There might be others, but we have to handle them individually to avoid introduction of bugs.
 			if(perm==Permissions.ClaimSentEdit//no date sent was entered before setting claim received
-				&& date.Year<1880
-				&& dateLimit.Year<1880)
+				|| perm==Permissions.ProcComplEdit//a completed procedure with a min date.
+				|| perm==Permissions.InsPayEdit)//a claim payment with no date.
 			{
-				return true;
-			}
-			if(perm==Permissions.ProcComplEdit//a completed procedure with a min date.
-				&& date.Year<1880
-				&& dateLimit.Year<1880) 
-			{
-				return true;
+				if(date.Year<1880	&& dateLimit.Year<1880) {
+					return true;
+				}
 			}
 			if(!suppressMessage){
 				MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"
