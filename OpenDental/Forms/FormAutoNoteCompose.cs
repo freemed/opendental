@@ -108,7 +108,11 @@ namespace OpenDental {
 						return;
 					}
 				}
-				textMain.Text=textMain.Text.Replace(matches[i].Value,promptResponse);
+				string resultstr=textMain.Text.Substring(0,matchloc)+promptResponse;
+				if(textMain.Text.Length > matchloc+matches[i].Value.Length) {
+					resultstr+=textMain.Text.Substring(matchloc+matches[i].Value.Length);
+				}
+				textMain.Text=resultstr;
 				Application.DoEvents();//refresh the textbox
 			}
 			textMain.SelectAll();
