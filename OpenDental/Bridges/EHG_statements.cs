@@ -288,8 +288,8 @@ namespace OpenDental.Bridges {
 			string errormsg="";
 			string alertmsg="";
 			string curParam="";
-			string serverName="https://prelive.dentalxchange.com/dci/upload.svl";
-				//"https://claimconnect.dentalxchange.com/dci/upload.svl";
+			string serverName=//"https://prelive.dentalxchange.com/dci/upload.svl";
+				"https://claimconnect.dentalxchange.com/dci/upload.svl";
 			webReq=(HttpWebRequest)WebRequest.Create(serverName);
 			string postData=
 				"Function=Auth"//CONSTANT; signifies that this is an authentication request
