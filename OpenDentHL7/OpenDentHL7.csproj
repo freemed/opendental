@@ -40,21 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADT.cs" />
-    <Compile Include="ComponentHL7.cs" />
-    <Compile Include="SIU.cs" />
-    <Compile Include="FieldHL7.cs" />
     <Compile Include="FormDebug.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormDebug.Designer.cs">
       <DependentUpon>FormDebug.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageHL7.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SegmentHL7.cs" />
     <Compile Include="ServiceHL7.cs">
       <SubType>Component</SubType>
     </Compile>

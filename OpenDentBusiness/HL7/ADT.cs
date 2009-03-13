@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness;
 
-namespace OpenDentHL7 {
+namespace OpenDentBusiness.HL7 {
 	public class ADT {
 		public static void ProcessMessage(MessageHL7 message){
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);

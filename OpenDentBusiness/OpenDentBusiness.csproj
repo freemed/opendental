@@ -180,6 +180,12 @@
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HL7\ADT.cs" />
+    <Compile Include="HL7\ComponentHL7.cs" />
+    <Compile Include="HL7\FieldHL7.cs" />
+    <Compile Include="HL7\MessageHL7.cs" />
+    <Compile Include="HL7\SegmentHL7.cs" />
+    <Compile Include="HL7\SIU.cs" />
     <Compile Include="Imaging\ApplySettings.cs" />
     <Compile Include="Imaging\FileStore.cs" />
     <Compile Include="Imaging\FileStoreSettings.cs" />

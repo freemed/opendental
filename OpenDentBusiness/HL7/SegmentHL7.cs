@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDentHL7 {
+namespace OpenDentBusiness.HL7 {
 	///<summary>A 'row' in the message.  Composed of fields</summary>
 	public class SegmentHL7 {
 		public List<FieldHL7> Fields;

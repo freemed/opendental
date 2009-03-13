@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDentHL7 {
+namespace OpenDentBusiness.HL7 {
 	public class MessageHL7 {
 		public List<SegmentHL7> Segments;
 		public string FullMessage;
