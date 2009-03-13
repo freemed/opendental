@@ -5,11 +5,16 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	public class MessageHL7 {
 		public List<SegmentHL7> Segments;
-		public string FullMessage;
+		private string originalMsgText;
 		public MessageType MsgType;
 
+		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
+		internal MessageHL7(MessageType msgType) {
+			Segments=new List<SegmentHL7>();
+		}
+
 		public MessageHL7(string msgtext) {
-			FullMessage=msgtext;
+			originalMsgText=msgtext;
 			Segments=new List<SegmentHL7>();
 			string[] rows=msgtext.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
 			SegmentHL7 segment;
@@ -32,7 +37,11 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		public override string ToString() {
-			return FullMessage;
+			if(MsgType==MessageType.DFT) {
+				//we don't have an originalMsgText
+				return "DFT message";
+			}
+			return originalMsgText;
 		}
 
 		///<summary>If an optional segment is not present, it will return null.</summary>
@@ -58,6 +67,10 @@ namespace OpenDentBusiness.HL7 {
 				retVal.Add(Segments[i]);
 			}
 			return retVal;
+		}
+
+		public string GenerateMessage() {
+			return "";
 		}
 	}
 

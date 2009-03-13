@@ -8,6 +8,15 @@ namespace OpenDentBusiness.HL7 {
 		public string FullText;
 		public List<ComponentHL7> Components;
 
+		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
+		internal FieldHL7(){
+			Components=new List<ComponentHL7>();
+			ComponentHL7 component;
+			component=new ComponentHL7("");
+			Components.Add(component);
+			//add more components later.
+		}
+
 		public FieldHL7(string fieldText) {
 			FullText=fieldText;
 			Components=new List<ComponentHL7>();
@@ -30,5 +39,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			return Components[indexPos].ComponentVal;
 		}
+
+		 
 	}
 }

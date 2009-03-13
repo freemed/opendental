@@ -11,6 +11,40 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>The original full text of the </summary>
 		public string FullText;
 
+		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
+		internal SegmentHL7(SegmentName name) {
+			Name=name;
+			Fields=new List<FieldHL7>();
+			//remember that the "field quantity" is one more than the last index, because 0-based.
+			//All fields are initially added with just one component
+			if(name==SegmentName.MSH) {
+				AddFields(12);
+			}
+			if(name==SegmentName.EVN) {
+				AddFields(4);
+			}
+			if(name==SegmentName.PID) {
+				AddFields(20);
+			}
+			if(name==SegmentName.PV1) {
+				AddFields(51);
+			}
+			if(name==SegmentName.FT1) {
+				AddFields(27);
+			}
+			if(name==SegmentName.DG1) {
+				AddFields(5);
+			}
+		}
+
+		private void AddFields(int quantity) {
+			FieldHL7 field;
+			for(int i=0;i<quantity;i++) {
+				field=new FieldHL7();
+				Fields.Add(field);
+			}
+		}
+
 		public SegmentHL7(string rowtext) {
 			FullText=rowtext;
 			Fields=new List<FieldHL7>();
@@ -105,6 +139,10 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Location Resource Appointment Information</summary>
 		AIL,
 		///<summary>Personnel Resource Appointment Information</summary>
-		AIP
+		AIP,
+		///<summary>Financial Transaction Information</summary>
+		FT1,
+		///<summary>Diagnosis Information</summary>
+		DG1
 	}
 }

@@ -1823,7 +1823,12 @@ namespace OpenDental{
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send completed procedures to eClinicalWorks and exit?")) {
 					return;
 				}
-
+				OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(AptCur);
+				HL7Msg msg=new HL7Msg();
+				msg.AptNum=AptCur.AptNum;
+				msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+				msg.MsgText=dft.GenerateMessage();
+				HL7Msgs.WriteObject(msg);
 			}
 			if(butComplete.Text=="Revise") {
 

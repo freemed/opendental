@@ -182,6 +182,7 @@
     </Compile>
     <Compile Include="HL7\ADT.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
+    <Compile Include="HL7\DFT.cs" />
     <Compile Include="HL7\FieldHL7.cs" />
     <Compile Include="HL7\MessageHL7.cs" />
     <Compile Include="HL7\SegmentHL7.cs" />
