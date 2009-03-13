@@ -846,13 +846,13 @@ namespace OpenDental{
 				writerElect.Close();
 				try {
 					//OpenDental.Bridges.Tesia_statements.Send(strBuildElect.ToString());
-					//OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
-					CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
-					msgbox.ShowDialog();
+					OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
+					//CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
+					//msgbox.ShowDialog();
 					//loop through all statements and mark sent
-					//for(int i=0;i<stateNumsElect.Count;i++) {
-					//	Statements.MarkSent(stateNumsElect[i],DateTime.Today);
-					//}
+					for(int i=0;i<stateNumsElect.Count;i++) {
+						Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+					}
 				}
 				catch(Exception ex) {
 					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ex.Message);
