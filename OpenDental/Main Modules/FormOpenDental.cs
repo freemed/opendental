@@ -1429,6 +1429,7 @@ namespace OpenDental{
 			if(CommandLineArgs.Length>0) {
 				ProcessCommandLine(CommandLineArgs);
 			}
+			FillPatientButton(0,"",false,"",0);
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
