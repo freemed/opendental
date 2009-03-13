@@ -243,7 +243,17 @@ namespace OpenDental {
 					General.NonQ(command);
 					command = "ALTER TABLE provider ADD AnesthProvType int NOT NULL";
 					General.NonQ(command);
-
+					command="DROP TABLE IF EXISTS hl7msg";
+					General.NonQ(command);
+					command=@"CREATE TABLE hl7msg (
+						HL7MsgNum int NOT NULL auto_increment,
+						HL7Status int NOT NULL,
+						MsgText text,
+						AptNum int NOT NULL,
+						PRIMARY KEY (HL7MsgNum),
+						INDEX (AptNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
 

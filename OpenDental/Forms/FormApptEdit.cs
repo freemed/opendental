@@ -85,6 +85,7 @@ namespace OpenDental{
 		private Label labelQuickAdd;
 		private OpenDental.UI.Button butAdd;
 		private OpenDental.UI.Button butDeleteProc;
+		private OpenDental.UI.Button butComplete;
 		private CheckBox checkTimeLocked;
 
 		///<summary></summary>
@@ -180,6 +181,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butComplete = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -782,10 +784,27 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butComplete
+			// 
+			this.butComplete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butComplete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butComplete.Autosize = true;
+			this.butComplete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butComplete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butComplete.CornerRadius = 4F;
+			this.butComplete.Location = new System.Drawing.Point(871,492);
+			this.butComplete.Name = "butComplete";
+			this.butComplete.Size = new System.Drawing.Size(92,24);
+			this.butComplete.TabIndex = 155;
+			this.butComplete.Text = "Complete";
+			this.butComplete.Visible = false;
+			this.butComplete.Click += new System.EventHandler(this.butComplete_Click);
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(975,704);
+			this.Controls.Add(this.butComplete);
 			this.Controls.Add(this.butDeleteProc);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.listQuickAdd);
@@ -990,6 +1009,23 @@ namespace OpenDental{
 				tbTime.TopBorder[0,28]=Color.Black;
 				tbTime.TopBorder[0,32]=Color.Black;
 				tbTime.TopBorder[0,36]=Color.Black;
+			}
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				butComplete.Visible=true;
+//We need to use different criteria here.  We should see if the HL7 message was actually sent.
+				/*
+				if(AptCur.AptStatus==ApptStatus.Complete) {
+					butComplete.Text="Revise";
+					if(!Security.IsAuthorized(Permissions.Setup,true)) {
+						butComplete.Enabled=false;
+					}
+				}
+				else {
+					butComplete.Text="Complete";
+				}*/
+			}
+			else {
+				butComplete.Visible=false;
 			}
 			FillProcedures();
 			FillPatient();//Must be after FillProcedures(), so that the initial amount for the appointment can be calculated.
@@ -1781,6 +1817,19 @@ namespace OpenDental{
 			return true;
 		}
 
+		private void butComplete_Click(object sender,EventArgs e) {
+			//This is only used with eCW.
+			if(butComplete.Text=="Complete") {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send completed procedures to eClinicalWorks and exit?")) {
+					return;
+				}
+
+			}
+			if(butComplete.Text=="Revise") {
+
+			}
+		}
+
 		private void butAudit_Click(object sender,EventArgs e) {
 			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,
 				new Permissions[] { Permissions.AppointmentCreate,Permissions.AppointmentEdit,Permissions.AppointmentMove },
@@ -1874,6 +1923,8 @@ namespace OpenDental{
 				AppointmentL.Delete(AptCur.AptNum);
 			}
 		}
+
+		
 
 		
 

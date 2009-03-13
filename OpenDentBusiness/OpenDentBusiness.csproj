@@ -141,6 +141,7 @@
     <Compile Include="Data Interface\AnesthMedsGivens.cs" />
     <Compile Include="Data Interface\AnesthMedInvAdjs.cs" />
     <Compile Include="Data Interface\AnesthVSDatas.cs" />
+    <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="TableTypes\AnesthScore.cs" />
     <Compile Include="TableTypes\AnestheticVSData.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
+    <Compile Include="TableTypes\HL7Msg.cs" />
     <Compile Include="TableTypes\PhoneNumber.cs" />
     <Compile Include="TableTypes\PhoneOverride.cs" />
     <Compile Include="TableTypes\ScheduleOp.cs" />
