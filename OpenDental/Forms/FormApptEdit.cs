@@ -1337,7 +1337,7 @@ namespace OpenDental{
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			Benefit[] benefitList=Benefits.Refresh(patPlanList);
-			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,PlanList,patPlanList,benefitList);
+			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,PlanList,patPlanList,benefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -1599,7 +1599,7 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
-				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList);
+				ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList);
 			}
 			listQuickAdd.SelectedIndex=-1;
 			string[] selectedProcs=new string[gridProc.SelectedIndices.Length];
@@ -1806,24 +1806,26 @@ namespace OpenDental{
 						return false;
 					}
 					PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
+					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}
 			}
 			else{
-				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
+				ProcedureL.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
 			return true;
 		}
 
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
+//only allow user to get this far if aptNum matches visit num previously passed in by eCW.
 			if(butComplete.Text=="Complete") {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send completed procedures to eClinicalWorks and exit?")) {
 					return;
 				}
-				OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(AptCur);
+//need to save the appointment first.
+				OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(AptCur,pat);
 				HL7Msg msg=new HL7Msg();
 				msg.AptNum=AptCur.AptNum;
 				msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.

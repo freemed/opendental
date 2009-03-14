@@ -1979,7 +1979,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			Procedures.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
+			ProcedureL.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
 			TempApptSingle.Dispose();
 			pinBoard.ClearSelected();
 			//PinApptSingle.Visible=false;
@@ -2580,7 +2580,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 			if(apt.AptStatus!=ApptStatus.Complete){
-				Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+				ProcedureL.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
 			}
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
 				PatCurName+", "
@@ -3495,7 +3495,7 @@ namespace OpenDental{
 			}
 			else {
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
-				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "

@@ -5,7 +5,7 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	public class MessageHL7 {
 		public List<SegmentHL7> Segments;
-		private string originalMsgText;
+		private string originalMsgText;//We'll store this for now, but I don't think we'll use it.
 		public MessageType MsgType;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
@@ -36,12 +36,16 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
+		///<summary>This will always be generated on the fly, based on the FullText of all the segments combined.  FullText for any other object is cached rather than being generated on the fly.</summary>
 		public override string ToString() {
-			if(MsgType==MessageType.DFT) {
-				//we don't have an originalMsgText
-				return "DFT message";
+			string retVal="";
+			for(int i=0;i<Segments.Count;i++) {
+				if(i>0) {
+					retVal+="\r\n";
+				}
+				retVal+=Segments[i].FullText;
 			}
-			return originalMsgText;
+			return retVal;
 		}
 
 		///<summary>If an optional segment is not present, it will return null.</summary>

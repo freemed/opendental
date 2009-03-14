@@ -2443,7 +2443,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcCur.ProcFee=procFee;
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -2521,7 +2521,7 @@ namespace OpenDental{
 					radioU.Checked=true;
 					break;
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
       SetControls();
 		}
@@ -2704,7 +2704,7 @@ namespace OpenDental{
 			}
 			//next line is needed to recalc BaseEst, etc, for claimprocs that are no longer NoBillIns
 			//also, if they are NoBillIns, then it clears out the other values.
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -3303,7 +3303,7 @@ namespace OpenDental{
 				{
 					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
 				}
-				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 				return;
 			}
 			if(IsNew){//if cancelling on a new procedure

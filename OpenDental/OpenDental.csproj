@@ -298,7 +298,7 @@
     <Compile Include="Data Interface\ProcButtonItems.cs" />
     <Compile Include="Data Interface\ProcButtons.cs" />
     <Compile Include="Data Interface\ProcedureCodes.cs" />
-    <Compile Include="Data Interface\Procedures.cs" />
+    <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\ProviderIdents.cs" />

@@ -8,11 +8,12 @@ namespace OpenDentBusiness.HL7 {
 		public List<FieldHL7> Fields;
 		///<summary>The name</summary>
 		public SegmentName Name;
-		///<summary>The original full text of the </summary>
-		public string FullText;
+		///<summary>The original full text of the segment.</summary>
+		private string fullText;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
 		internal SegmentHL7(SegmentName name) {
+			fullText="";
 			Name=name;
 			Fields=new List<FieldHL7>();
 			//remember that the "field quantity" is one more than the last index, because 0-based.
@@ -45,45 +46,75 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
+		///<summary>Use this constructor when we have a message to parse.</summary>
 		public SegmentHL7(string rowtext) {
 			FullText=rowtext;
-			Fields=new List<FieldHL7>();
-			string[] fields=rowtext.Split(new string[] { "|" },StringSplitOptions.None);
-			FieldHL7 field;
-			for(int i=0;i<fields.Length;i++) {
-				field=new FieldHL7(fields[i]);
-				Fields.Add(field);
-			}
-			switch(Fields[0].FullText) {
-				default:
-					Name=SegmentName.Unknown;
-					break;
-				case "MSH":
-					Name=SegmentName.MSH;
-					break;
-				case "EVN":
-					Name=SegmentName.EVN;
-					break;
-				case "PID":
-					Name=SegmentName.PID;
-					break;
-				case "PV1":
-					Name=SegmentName.PV1;
-					break;
-				case "PD1":
-					Name=SegmentName.PD1;
-					break;
-				case "GT1":
-					Name=SegmentName.GT1;
-					break;
-				case "IN1":
-					Name=SegmentName.IN1;
-					break;
-			}
+			
 		}
 
 		public override string ToString() {
-			return FullText;
+			return fullText;
+		}
+
+		///<summary>Setting the FullText resets all the child fields.</summary>
+		public string FullText {
+			get {
+				return fullText;
+			}
+			set {
+				fullText=value;
+				Fields=new List<FieldHL7>();
+				string[] fields=fullText.Split(new string[] { "|" },StringSplitOptions.None);
+				FieldHL7 field;
+				for(int i=0;i<fields.Length;i++) {
+					field=new FieldHL7(fields[i]);
+					Fields.Add(field);
+				}
+				switch(Fields[0].FullText) {
+					default:
+						Name=SegmentName.Unknown;
+						break;
+					case "MSH":
+						Name=SegmentName.MSH;
+						break;
+					case "EVN":
+						Name=SegmentName.EVN;
+						break;
+					case "PID":
+						Name=SegmentName.PID;
+						break;
+					case "PV1":
+						Name=SegmentName.PV1;
+						break;
+					case "PD1":
+						Name=SegmentName.PD1;
+						break;
+					case "GT1":
+						Name=SegmentName.GT1;
+						break;
+					case "IN1":
+						Name=SegmentName.IN1;
+						break;
+					case "SCH":
+						Name=SegmentName.SCH;
+						break;
+					case "AIG":
+						Name=SegmentName.AIG;
+						break;
+					case "AIL":
+						Name=SegmentName.AIL;
+						break;
+					case "AIP":
+						Name=SegmentName.AIP;
+						break;
+					case "FT1":
+						Name=SegmentName.FT1;
+						break;
+					case "DG1":
+						Name=SegmentName.DG1;
+						break;		
+				}
+			}
 		}
 
 		///<summary></summary>
@@ -113,6 +144,20 @@ namespace OpenDentBusiness.HL7 {
 			}
 			return Fields[indexPos];
 		}
+
+		///<summary>Pass in one val to set the whole field.  Pass in multiple vals to set multiple components.  It also sets the fullText of the segment.</summary>
+		public void SetField(int fieldIndex,params string[] vals) {
+			Fields[fieldIndex].SetVals(vals);
+			//kind of repetitive to recalc the whole segment again here, but it goes very fast.
+			fullText="";
+			for(int i=0;i<Fields.Count;i++) {
+				if(i>0) {
+					fullText+="|";
+				}
+				fullText+=Fields[i].FullText;
+			}
+		}
+
 	}
 
 	public enum SegmentName {

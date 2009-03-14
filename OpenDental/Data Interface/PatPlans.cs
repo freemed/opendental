@@ -141,7 +141,7 @@ namespace OpenDental{
 			patPlans=PatPlans.Refresh(patNum);
 			InsPlan[] planList=InsPlans.Refresh(fam);
 			Benefit[] benList=Benefits.Refresh(patPlans);
-			Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList);
+			ProcedureL.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList);
 			Patients.SetHasIns(patNum);
 		}
 

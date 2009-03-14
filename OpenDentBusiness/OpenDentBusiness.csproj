@@ -145,6 +145,7 @@
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
+    <Compile Include="Data Interface\Procedures.cs" />
     <Compile Include="Data Interface\ProgramProperties.cs" />
     <Compile Include="Data Interface\Programs.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />

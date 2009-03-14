@@ -1,19 +1,13 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.Runtime.Serialization;
+using System.Text;
 
-using System.Windows.Forms;
-using OpenDentBusiness;
-
-namespace OpenDental{
-	///<summary></summary>
-	public class Procedures{
-	
+namespace OpenDentBusiness {
+	public class Procedures {
 		///<summary></summary>
-		public static void Insert(Procedure proc){
+		public static void Insert(Procedure proc) {
 			if(PrefC.RandomKeys) {
 				proc.ProcNum=MiscData.GetKey("procedurelog","ProcNum");
 			}
@@ -31,37 +25,38 @@ namespace OpenDental{
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (proc.PatNum)+"', "
-				+"'"+POut.PInt   (proc.AptNum)+"', "
+				 "'"+POut.PInt(proc.PatNum)+"', "
+				+"'"+POut.PInt(proc.AptNum)+"', "
 				+"'"+POut.PString(proc.OldCode)+"', "
-				+POut.PDate  (proc.ProcDate)+", "
+				+POut.PDate(proc.ProcDate)+", "
 				+"'"+POut.PDouble(proc.ProcFee)+"', "
 				+"'"+POut.PString(proc.Surf)+"', "
 				+"'"+POut.PString(proc.ToothNum)+"', "
 				+"'"+POut.PString(proc.ToothRange)+"', "
-				+"'"+POut.PInt   (proc.Priority)+"', "
-				+"'"+POut.PInt   ((int)proc.ProcStatus)+"', "
-				+"'"+POut.PInt   (proc.ProvNum)+"', "
-				+"'"+POut.PInt   (proc.Dx)+"', "
-				+"'"+POut.PInt   (proc.PlannedAptNum)+"', "
-				+"'"+POut.PInt   ((int)proc.PlaceService)+"', "
+				+"'"+POut.PInt(proc.Priority)+"', "
+				+"'"+POut.PInt((int)proc.ProcStatus)+"', "
+				+"'"+POut.PInt(proc.ProvNum)+"', "
+				+"'"+POut.PInt(proc.Dx)+"', "
+				+"'"+POut.PInt(proc.PlannedAptNum)+"', "
+				+"'"+POut.PInt((int)proc.PlaceService)+"', "
 				+"'"+POut.PString(proc.Prosthesis)+"', "
-				+POut.PDate  (proc.DateOriginalProsth)+", "
+				+POut.PDate(proc.DateOriginalProsth)+", "
 				+"'"+POut.PString(proc.ClaimNote)+"', ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
+			}
+			else {//Assume MySQL
 				command+="NOW()";
 			}
 			command+=", "//DateEntryC
-				+"'"+POut.PInt   (proc.ClinicNum)+"', "
+				+"'"+POut.PInt(proc.ClinicNum)+"', "
 				+"'"+POut.PString(proc.MedicalCode)+"', "
 				+"'"+POut.PString(proc.DiagnosticCode)+"', "
-				+"'"+POut.PBool  (proc.IsPrincDiag)+"', "
-				+"'"+POut.PInt   (proc.ProcNumLab)+"', "
-				+"'"+POut.PInt   (proc.BillingTypeOne)+"', "
-				+"'"+POut.PInt   (proc.BillingTypeTwo)+"', "
-				+"'"+POut.PInt   (proc.CodeNum)+"', "
+				+"'"+POut.PBool(proc.IsPrincDiag)+"', "
+				+"'"+POut.PInt(proc.ProcNumLab)+"', "
+				+"'"+POut.PInt(proc.BillingTypeOne)+"', "
+				+"'"+POut.PInt(proc.BillingTypeTwo)+"', "
+				+"'"+POut.PInt(proc.CodeNum)+"', "
 				+"'"+POut.PString(proc.CodeMod1)+"', "
 				+"'"+POut.PString(proc.CodeMod2)+"', "
 				+"'"+POut.PString(proc.CodeMod3)+"', "
@@ -73,7 +68,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(proc.StartTime)+"', "
 				+"'"+POut.PInt(proc.StopTime)+"', "
 				+POut.PDate(proc.DateTP)+", "
-				+"'"+POut.PInt   (proc.SiteNum)+"')";
+				+"'"+POut.PInt(proc.SiteNum)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
@@ -81,7 +76,7 @@ namespace OpenDental{
 			else {
 				proc.ProcNum=General.NonQ(command,true);
 			}
-			if(proc.Note!=""){
+			if(proc.Note!="") {
 				ProcNote note=new ProcNote();
 				note.PatNum=proc.PatNum;
 				note.ProcNum=proc.ProcNum;
@@ -92,94 +87,94 @@ namespace OpenDental{
 		}
 
 		///<summary>Updates only the changed columns.</summary>
-		public static int Update(Procedure proc,Procedure oldProc){
+		public static int Update(Procedure proc,Procedure oldProc) {
 			bool comma=false;
 			string c = "UPDATE procedurelog SET ";
-			if(proc.PatNum!=oldProc.PatNum){
-				c+="PatNum = '"     +POut.PInt   (proc.PatNum)+"'";
+			if(proc.PatNum!=oldProc.PatNum) {
+				c+="PatNum = '"     +POut.PInt(proc.PatNum)+"'";
 				comma=true;
 			}
-			if(proc.AptNum!=oldProc.AptNum){
+			if(proc.AptNum!=oldProc.AptNum) {
 				if(comma) c+=",";
-				c+="AptNum = '"		+POut.PInt   (proc.AptNum)+"'";
+				c+="AptNum = '"		+POut.PInt(proc.AptNum)+"'";
 				comma=true;
 			}
-			if(proc.OldCode!=oldProc.OldCode){
+			if(proc.OldCode!=oldProc.OldCode) {
 				if(comma) c+=",";
 				c+="OldCode = '"		+POut.PString(proc.OldCode)+"'";
 				comma=true;
 			}
-			if(proc.ProcDate!=oldProc.ProcDate){
+			if(proc.ProcDate!=oldProc.ProcDate) {
 				if(comma) c+=",";
-				c+="ProcDate = "	+POut.PDate  (proc.ProcDate);
+				c+="ProcDate = "	+POut.PDate(proc.ProcDate);
 				comma=true;
 			}
-			if(proc.ProcFee!=oldProc.ProcFee){
+			if(proc.ProcFee!=oldProc.ProcFee) {
 				if(comma) c+=",";
 				c+="ProcFee = '"		+POut.PDouble(proc.ProcFee)+"'";
 				comma=true;
 			}
-			if(proc.Surf!=oldProc.Surf){
+			if(proc.Surf!=oldProc.Surf) {
 				if(comma) c+=",";
 				c+="Surf = '"			+POut.PString(proc.Surf)+"'";
 				comma=true;
 			}
-			if(proc.ToothNum!=oldProc.ToothNum){
+			if(proc.ToothNum!=oldProc.ToothNum) {
 				if(comma) c+=",";
 				c+="ToothNum = '"	+POut.PString(proc.ToothNum)+"'";
 				comma=true;
 			}
-			if(proc.ToothRange!=oldProc.ToothRange){
+			if(proc.ToothRange!=oldProc.ToothRange) {
 				if(comma) c+=",";
 				c+="ToothRange = '"+POut.PString(proc.ToothRange)+"'";
 				comma=true;
 			}
-			if(proc.Priority!=oldProc.Priority){
+			if(proc.Priority!=oldProc.Priority) {
 				if(comma) c+=",";
-				c+="Priority = '"	+POut.PInt   (proc.Priority)+"'";
+				c+="Priority = '"	+POut.PInt(proc.Priority)+"'";
 				comma=true;
 			}
-			if(proc.ProcStatus!=oldProc.ProcStatus){
+			if(proc.ProcStatus!=oldProc.ProcStatus) {
 				if(comma) c+=",";
-				c+="ProcStatus = '"+POut.PInt   ((int)proc.ProcStatus)+"'";
+				c+="ProcStatus = '"+POut.PInt((int)proc.ProcStatus)+"'";
 				comma=true;
 			}
-			if(proc.ProvNum!=oldProc.ProvNum){
+			if(proc.ProvNum!=oldProc.ProvNum) {
 				if(comma) c+=",";
-				c+="ProvNum = '"		+POut.PInt   (proc.ProvNum)+"'";
+				c+="ProvNum = '"		+POut.PInt(proc.ProvNum)+"'";
 				comma=true;
 			}
-			if(proc.Dx!=oldProc.Dx){
+			if(proc.Dx!=oldProc.Dx) {
 				if(comma) c+=",";
-				c+="Dx = '"				+POut.PInt   (proc.Dx)+"'";
+				c+="Dx = '"				+POut.PInt(proc.Dx)+"'";
 				comma=true;
 			}
-			if(proc.PlannedAptNum!=oldProc.PlannedAptNum){
+			if(proc.PlannedAptNum!=oldProc.PlannedAptNum) {
 				if(comma) c+=",";
-				c+="PlannedAptNum = '"+POut.PInt   (proc.PlannedAptNum)+"'";
+				c+="PlannedAptNum = '"+POut.PInt(proc.PlannedAptNum)+"'";
 				comma=true;
 			}
-			if(proc.PlaceService!=oldProc.PlaceService){
+			if(proc.PlaceService!=oldProc.PlaceService) {
 				if(comma) c+=",";
-				c+="PlaceService = '"	+POut.PInt   ((int)proc.PlaceService)+"'";
+				c+="PlaceService = '"	+POut.PInt((int)proc.PlaceService)+"'";
 				comma=true;
 			}
-			if(proc.Prosthesis!=oldProc.Prosthesis){
+			if(proc.Prosthesis!=oldProc.Prosthesis) {
 				if(comma) c+=",";
 				c+="Prosthesis = '"+POut.PString(proc.Prosthesis)+"'";
 				comma=true;
 			}
-			if(proc.DateOriginalProsth!=oldProc.DateOriginalProsth){
+			if(proc.DateOriginalProsth!=oldProc.DateOriginalProsth) {
 				if(comma) c+=",";
-				c+="DateOriginalProsth = "+POut.PDate  (proc.DateOriginalProsth);
+				c+="DateOriginalProsth = "+POut.PDate(proc.DateOriginalProsth);
 				comma=true;
 			}
-			if(proc.ClaimNote!=oldProc.ClaimNote){
+			if(proc.ClaimNote!=oldProc.ClaimNote) {
 				if(comma) c+=",";
-				c+="ClaimNote = '"+POut.PString (proc.ClaimNote)+"'";
+				c+="ClaimNote = '"+POut.PString(proc.ClaimNote)+"'";
 				comma=true;
 			}
-			if(proc.DateEntryC!=oldProc.DateEntryC){
+			if(proc.DateEntryC!=oldProc.DateEntryC) {
 				if(comma) c+=",";
 				c+="DateEntryC = ";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -190,22 +185,22 @@ namespace OpenDental{
 				}
 				comma=true;
 			}
-			if(proc.ClinicNum!=oldProc.ClinicNum){
+			if(proc.ClinicNum!=oldProc.ClinicNum) {
 				if(comma) c+=",";
-				c+="ClinicNum = '"+POut.PInt   (proc.ClinicNum)+"'";
+				c+="ClinicNum = '"+POut.PInt(proc.ClinicNum)+"'";
 				comma=true;
 			}
-			if(proc.MedicalCode!=oldProc.MedicalCode){
+			if(proc.MedicalCode!=oldProc.MedicalCode) {
 				if(comma) c+=",";
 				c+="MedicalCode = '"+POut.PString(proc.MedicalCode)+"'";
 				comma=true;
 			}
-			if(proc.DiagnosticCode!=oldProc.DiagnosticCode){
+			if(proc.DiagnosticCode!=oldProc.DiagnosticCode) {
 				if(comma) c+=",";
 				c+="DiagnosticCode = '"+POut.PString(proc.DiagnosticCode)+"'";
 				comma=true;
 			}
-			if(proc.IsPrincDiag!=oldProc.IsPrincDiag){
+			if(proc.IsPrincDiag!=oldProc.IsPrincDiag) {
 				if(comma) c+=",";
 				c+="IsPrincDiag = '"+POut.PBool(proc.IsPrincDiag)+"'";
 				comma=true;
@@ -233,53 +228,53 @@ namespace OpenDental{
 				c+="CodeNum = '"+POut.PInt(proc.CodeNum)+"'";
 				comma=true;
 			}
-			if(proc.CodeMod1!=oldProc.CodeMod1){
+			if(proc.CodeMod1!=oldProc.CodeMod1) {
 				if(comma) c+= ",";
 				c+="CodeMod1 = '"+POut.PString(proc.CodeMod1)+"'";
 				comma=true;
 			}
-			if(proc.CodeMod2!=oldProc.CodeMod2){
+			if(proc.CodeMod2!=oldProc.CodeMod2) {
 				if(comma) c+= ",";
 				c+="CodeMod2 = '"+POut.PString(proc.CodeMod2)+"'";
 				comma=true;
 			}
-			if(proc.CodeMod3!=oldProc.CodeMod3){
+			if(proc.CodeMod3!=oldProc.CodeMod3) {
 				if(comma) c+= ",";
 				c+="CodeMod3 = '"+POut.PString(proc.CodeMod3)+"'";
 				comma=true;
 			}
-			if(proc.CodeMod4!=oldProc.CodeMod4){
+			if(proc.CodeMod4!=oldProc.CodeMod4) {
 				if(comma) c+= ",";
 				c+="CodeMod4 = '"+POut.PString(proc.CodeMod4)+"'";
 				comma=true;
 			}
-			if(proc.RevCode!=oldProc.RevCode){
+			if(proc.RevCode!=oldProc.RevCode) {
 				if(comma) c+=",";
 				c+="RevCode = '"+POut.PString(proc.RevCode)+"'";
 				comma=true;
 			}
-			if(proc.UnitCode!=oldProc.UnitCode){
+			if(proc.UnitCode!=oldProc.UnitCode) {
 				if(comma) c+=",";
 				c+="UnitCode = '"+POut.PString(proc.UnitCode)+"'";
 				comma=true;
 			}
-			if(proc.UnitQty!=oldProc.UnitQty){
+			if(proc.UnitQty!=oldProc.UnitQty) {
 				if(comma) c+=",";
 				c+="UnitQty = '"+POut.PInt(proc.UnitQty)+"'";
 				comma=true;
 			}
-			if(proc.BaseUnits!=oldProc.BaseUnits){
+			if(proc.BaseUnits!=oldProc.BaseUnits) {
 				if(comma) c+=",";
 				c+="BaseUnits = '"+POut.PInt(proc.BaseUnits)+"'";
 				comma=true;
 			}
-			if (proc.StartTime != oldProc.StartTime){
-				if (comma) c += ",";
+			if(proc.StartTime != oldProc.StartTime) {
+				if(comma) c += ",";
 				c += "StartTime = '" + POut.PInt(proc.StartTime) + "'";
 				comma = true;
 			}
-			if (proc.StopTime != oldProc.StopTime){
-				if (comma) c += ",";
+			if(proc.StopTime != oldProc.StopTime) {
+				if(comma) c += ",";
 				c += "StopTime = '" + POut.PInt(proc.StopTime) + "'";
 				comma = true;
 			}
@@ -294,19 +289,18 @@ namespace OpenDental{
 				comma = true;
 			}
 			int rowsChanged=0;
-			if(comma){
+			if(comma) {
 				c+=" WHERE ProcNum = '"+POut.PInt(proc.ProcNum)+"'";
 				//DataConnection dcon=new DataConnection();
 				rowsChanged=General.NonQ(c);
 			}
-			else{
+			else {
 				//rowsChanged=0;//this means no change is actually required.
 			}
 			if(proc.Note!=oldProc.Note
 				|| proc.UserNum!=oldProc.UserNum
 				|| proc.SigIsTopaz!=oldProc.SigIsTopaz
-				|| proc.Signature!=oldProc.Signature)
-			{
+				|| proc.Signature!=oldProc.Signature) {
 				ProcNote note=new ProcNote();
 				note.PatNum=proc.PatNum;
 				note.ProcNum=proc.ProcNum;
@@ -339,7 +333,7 @@ namespace OpenDental{
 			//Test to see if any payment at all has been received for this proc
 			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PInt(procNum)
 				+" AND InsPayAmt > 0 AND Status != "+POut.PInt((int)ClaimProcStatus.Preauth);
-			if(General.GetCount(command)!="0"){
+			if(General.GetCount(command)!="0") {
 				throw new Exception(Lan.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
 			}
 			//delete adjustments
@@ -354,7 +348,7 @@ namespace OpenDental{
 			string aptnum=table.Rows[0][0].ToString();
 			string plannedaptnum=table.Rows[0][1].ToString();
 			string procdescript;
-			if(aptnum!="0"){
+			if(aptnum!="0") {
 				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
 					WHERE procedurecode.CodeNum=procedurelog.CodeNum
 					AND ProcNum != "+POut.PInt(procNum)
@@ -377,7 +371,7 @@ namespace OpenDental{
 				table=General.GetTable(command);
 				procdescript="";
 				for(int i=0;i<table.Rows.Count;i++) {
-					if(i>0)	procdescript+=", ";
+					if(i>0) procdescript+=", ";
 					procdescript+=table.Rows[i]["AbbrDesc"].ToString();
 				}
 				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
@@ -392,32 +386,32 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		public static void UpdateAptNum(int procNum,int newAptNum){
+		public static void UpdateAptNum(int procNum,int newAptNum) {
 			string command="UPDATE procedurelog SET AptNum = "+POut.PInt(newAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			General.NonQ(command);
 		}
 
-		public static void UpdatePlannedAptNum(int procNum,int newPlannedAptNum){
+		public static void UpdatePlannedAptNum(int procNum,int newPlannedAptNum) {
 			string command="UPDATE procedurelog SET PlannedAptNum = "+POut.PInt(newPlannedAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			General.NonQ(command);
 		}
 
-		public static void UpdatePriority(int procNum,int newPriority){
+		public static void UpdatePriority(int procNum,int newPriority) {
 			string command="UPDATE procedurelog SET Priority = "+POut.PInt(newPriority)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			General.NonQ(command);
 		}
 
-		public static void UpdateFee(int procNum,double newFee){
+		public static void UpdateFee(int procNum,double newFee) {
 			string command="UPDATE procedurelog SET ProcFee = "+POut.PDouble(newFee)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			General.NonQ(command);
 		}
 
 		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
-		public static Procedure[] Refresh(int patNum){
+		public static Procedure[] Refresh(int patNum) {
 			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PInt(patNum)
 				+" AND ProcStatus !=6"//don't include deleted
 				+" ORDER BY ProcDate";
@@ -427,32 +421,33 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets one procedure directly from the db.  Option to include the note.</summary>
-		public static Procedure GetOneProc(int procNum,bool includeNote){
+		public static Procedure GetOneProc(int procNum,bool includeNote) {
 			string command=
 				"SELECT * FROM procedurelog "
 				+"WHERE ProcNum="+procNum.ToString();
 			List<Procedure> procList=RefreshAndFill(command);
-			if(procList.Count==0){
-				MessageBox.Show(Lan.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
+			if(procList.Count==0) {
+				//MessageBox.Show(Lan.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
 				return new Procedure();
 			}
 			Procedure proc=procList[0];
-			if(!includeNote){
+			if(!includeNote) {
 				return proc;
 			}
 			command="SELECT * FROM procnote WHERE ProcNum="+POut.PInt(procNum)+" ORDER BY EntryDateTime DESC ";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}else{//Assume MySQL
+			}
+			else {//Assume MySQL
 				command+="LIMIT 1";
 			}
 			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
+			if(table.Rows.Count==0) {
 				return proc;
 			}
-			proc.UserNum   =PIn.PInt   (table.Rows[0]["UserNum"].ToString());
+			proc.UserNum   =PIn.PInt(table.Rows[0]["UserNum"].ToString());
 			proc.Note      =PIn.PString(table.Rows[0]["Note"].ToString());
-			proc.SigIsTopaz=PIn.PBool  (table.Rows[0]["SigIsTopaz"].ToString());
+			proc.SigIsTopaz=PIn.PBool(table.Rows[0]["SigIsTopaz"].ToString());
 			proc.Signature =PIn.PString(table.Rows[0]["Signature"].ToString());
 			return proc;
 		}
@@ -479,55 +474,55 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}*/
 
-		private static List<Procedure> RefreshAndFill(string command){
- 			DataTable table=General.GetTable(command);
+		private static List<Procedure> RefreshAndFill(string command) {
+			DataTable table=General.GetTable(command);
 			return ConvertToList(table);
 		}
 
-		private static List<Procedure> ConvertToList(DataTable table){
+		private static List<Procedure> ConvertToList(DataTable table) {
 			List<Procedure> retVal=new List<Procedure>();
 			Procedure proc;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				proc=new Procedure();
-				proc.ProcNum				= PIn.PInt   (table.Rows[i][0].ToString());
-				proc.PatNum					= PIn.PInt   (table.Rows[i][1].ToString());
-				proc.AptNum					= PIn.PInt   (table.Rows[i][2].ToString());
+				proc.ProcNum				= PIn.PInt(table.Rows[i][0].ToString());
+				proc.PatNum					= PIn.PInt(table.Rows[i][1].ToString());
+				proc.AptNum					= PIn.PInt(table.Rows[i][2].ToString());
 				proc.OldCode				= PIn.PString(table.Rows[i][3].ToString());
-				proc.ProcDate				= PIn.PDate  (table.Rows[i][4].ToString());
+				proc.ProcDate				= PIn.PDate(table.Rows[i][4].ToString());
 				proc.ProcFee				= PIn.PDouble(table.Rows[i][5].ToString());
 				proc.Surf						= PIn.PString(table.Rows[i][6].ToString());
 				proc.ToothNum				= PIn.PString(table.Rows[i][7].ToString());
 				proc.ToothRange			= PIn.PString(table.Rows[i][8].ToString());
-				proc.Priority				= PIn.PInt   (table.Rows[i][9].ToString());
-				proc.ProcStatus			= (ProcStat)PIn.PInt   (table.Rows[i][10].ToString());
-				proc.ProvNum				= PIn.PInt   (table.Rows[i][11].ToString());
-				proc.Dx							= PIn.PInt   (table.Rows[i][12].ToString());
-				proc.PlannedAptNum	= PIn.PInt   (table.Rows[i][13].ToString());
+				proc.Priority				= PIn.PInt(table.Rows[i][9].ToString());
+				proc.ProcStatus			= (ProcStat)PIn.PInt(table.Rows[i][10].ToString());
+				proc.ProvNum				= PIn.PInt(table.Rows[i][11].ToString());
+				proc.Dx							= PIn.PInt(table.Rows[i][12].ToString());
+				proc.PlannedAptNum	= PIn.PInt(table.Rows[i][13].ToString());
 				proc.PlaceService		= (PlaceOfService)PIn.PInt(table.Rows[i][14].ToString());
 				proc.Prosthesis		  = PIn.PString(table.Rows[i][15].ToString());
 				proc.DateOriginalProsth= PIn.PDate(table.Rows[i][16].ToString());
 				proc.ClaimNote		    = PIn.PString(table.Rows[i][17].ToString());
-				proc.DateEntryC      = PIn.PDate  (table.Rows[i][18].ToString());
-				proc.ClinicNum       = PIn.PInt   (table.Rows[i][19].ToString());
+				proc.DateEntryC      = PIn.PDate(table.Rows[i][18].ToString());
+				proc.ClinicNum       = PIn.PInt(table.Rows[i][19].ToString());
 				proc.MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
 				proc.DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
-				proc.IsPrincDiag     = PIn.PBool  (table.Rows[i][22].ToString());
-				proc.ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());	
-				proc.BillingTypeOne  = PIn.PInt   (table.Rows[i][24].ToString());
-				proc.BillingTypeTwo  = PIn.PInt   (table.Rows[i][25].ToString());
-				proc.CodeNum         = PIn.PInt   (table.Rows[i][26].ToString());
+				proc.IsPrincDiag     = PIn.PBool(table.Rows[i][22].ToString());
+				proc.ProcNumLab      = PIn.PInt(table.Rows[i][23].ToString());
+				proc.BillingTypeOne  = PIn.PInt(table.Rows[i][24].ToString());
+				proc.BillingTypeTwo  = PIn.PInt(table.Rows[i][25].ToString());
+				proc.CodeNum         = PIn.PInt(table.Rows[i][26].ToString());
 				proc.CodeMod1        = PIn.PString(table.Rows[i][27].ToString());
 				proc.CodeMod2        = PIn.PString(table.Rows[i][28].ToString());
 				proc.CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
 				proc.CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				proc.RevCode         = PIn.PString(table.Rows[i][31].ToString());
 				proc.UnitCode        = PIn.PString(table.Rows[i][32].ToString());
-				proc.UnitQty         = PIn.PInt   (table.Rows[i][33].ToString());
-				proc.BaseUnits       = PIn.PInt   (table.Rows[i][34].ToString());
-				proc.StartTime       = PIn.PInt   (table.Rows[i][35].ToString());
-				proc.StopTime        = PIn.PInt   (table.Rows[i][36].ToString());
-				proc.DateTP          = PIn.PDate  (table.Rows[i][37].ToString());
-				proc.SiteNum         = PIn.PInt   (table.Rows[i][38].ToString());
+				proc.UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
+				proc.BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
+				proc.StartTime       = PIn.PInt(table.Rows[i][35].ToString());
+				proc.StopTime        = PIn.PInt(table.Rows[i][36].ToString());
+				proc.DateTP          = PIn.PDate(table.Rows[i][37].ToString());
+				proc.SiteNum         = PIn.PInt(table.Rows[i][38].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -541,66 +536,36 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
-		public static Procedure[] GetProcsForSingle(int aptNum, bool isPlanned){
+		public static Procedure[] GetProcsForSingle(int aptNum,bool isPlanned) {
 			string command;
-			if(isPlanned){
+			if(isPlanned) {
 				command = "SELECT * from procedurelog WHERE PlannedAptNum = '"+POut.PInt(aptNum)+"'";
 			}
-			else{
+			else {
 				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PInt(aptNum)+"'";
 			}
 			return RefreshAndFill(command).ToArray();
 		}
 
-		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
-		public static string ConvertProcToString(int codeNum,string surf,string toothNum){
-			string strLine="";
-			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
-			switch (code.TreatArea){
-				case TreatmentArea.Surf :
-					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+surf+"-";//""#12-MOD-"
-					break;
-				case TreatmentArea.Tooth :
-					strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
-					break;
-				default ://area 3 or 0 (mouth)
-					break;
-				case TreatmentArea.Quad :
-					strLine+=surf+"-";//"UL-"
-					break;
-				case TreatmentArea.Sextant :
-					strLine+="S"+surf+"-";//"S2-"
-					break;
-				case TreatmentArea.Arch :
-					strLine+=surf+"-";//"U-"
-					break;
-				case TreatmentArea.ToothRange :
-					//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
-					break;
-			}//end switch
-			strLine+=code.AbbrDesc;
-			return strLine;
-		}
-
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
-		public static Procedure[] GetProcsMultApts(int[] myAptNums){
+		public static Procedure[] GetProcsMultApts(int[] myAptNums) {
 			return GetProcsMultApts(myAptNums,false);
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list or GetProductionOneApt.  This process requires only one call to the database.  "myAptNums" is the list of appointments to get procedures for.  isForNext gets procedures for a list of next appointments rather than regular appointments.</summary>
-		public static Procedure[] GetProcsMultApts(int[] myAptNums,bool isForPlanned){
-			if(myAptNums.Length==0){
+		public static Procedure[] GetProcsMultApts(int[] myAptNums,bool isForPlanned) {
+			if(myAptNums.Length==0) {
 				return new Procedure[0];
 			}
 			string strAptNums="";
-			for(int i=0;i<myAptNums.Length;i++){
-				if(i>0){
+			for(int i=0;i<myAptNums.Length;i++) {
+				if(i>0) {
 					strAptNums+=" OR";
 				}
-				if(isForPlanned){
+				if(isForPlanned) {
 					strAptNums+=" PlannedAptNum='"+POut.PInt(myAptNums[i])+"'";
 				}
-				else{
+				else {
 					strAptNums+=" AptNum='"+POut.PInt(myAptNums[i])+"'";
 				}
 			}
@@ -608,16 +573,11 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}
 
-		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
-		public static string GetDescription(Procedure proc){
-			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
-		}
-
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
-		public static Procedure[] GetProcsOneApt(int myAptNum,Procedure[] procsMultApts){
+		public static Procedure[] GetProcsOneApt(int myAptNum,Procedure[] procsMultApts) {
 			ArrayList AL=new ArrayList();
-			for(int i=0;i<procsMultApts.Length;i++){
-				if(procsMultApts[i].AptNum==myAptNum){
+			for(int i=0;i<procsMultApts.Length;i++) {
+				if(procsMultApts[i].AptNum==myAptNum) {
 					AL.Add(procsMultApts[i].Copy());
 				}
 			}
@@ -627,9 +587,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets the production for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
-		public static double GetProductionOneApt(int myAptNum,Procedure[] procsMultApts,bool isPlanned){
+		public static double GetProductionOneApt(int myAptNum,Procedure[] procsMultApts,bool isPlanned) {
 			double retVal=0;
-			for(int i=0;i<procsMultApts.Length;i++){
+			for(int i=0;i<procsMultApts.Length;i++) {
 				if(isPlanned && procsMultApts[i].PlannedAptNum==myAptNum) {
 					retVal+=procsMultApts[i].ProcFee;
 				}
@@ -641,109 +601,14 @@ namespace OpenDental{
 		}
 
 		///<summary>Used in FormClaimEdit,FormClaimPrint,FormClaimPayTotal,ContrAccount etc to get description of procedure. Procedure list needs to include the procedure we are looking for.</summary>
-		public static Procedure GetProcFromList(Procedure[] list,int procNum){
-			for(int i=0;i<list.Length;i++){
-				if(procNum==list[i].ProcNum){
+		public static Procedure GetProcFromList(Procedure[] list,int procNum) {
+			for(int i=0;i<list.Length;i++) {
+				if(procNum==list[i].ProcNum) {
 					return list[i];
 				}
 			}
-			MessageBox.Show("Error. Procedure not found");
+			//MessageBox.Show("Error. Procedure not found");
 			return new Procedure();
-		}
-
-		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
-		public static void SetCompleteInAppt(Appointment apt,InsPlan[] PlanList,PatPlan[] patPlans,int siteNum){
-			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
-			Benefit[] benefitList=Benefits.Refresh(patPlans);
-			//this query could be improved slightly to only get notes of interest.
-			string command="SELECT * FROM procnote WHERE PatNum="+POut.PInt(apt.PatNum)+" ORDER BY EntryDateTime";
-			DataTable rawNotes=General.GetTable(command);
-			//CovPats.Refresh(PlanList,patPlans);
-			//bool doResetRecallStatus=false;
-			ProcedureCode procCode;
-			Procedure oldProc;
-			//int siteNum=0;
-			//if(!PrefC.GetBool("EasyHidePublicHealth")){
-			//	siteNum=Patients.GetPat(apt.PatNum).SiteNum;
-			//}
-			for(int i=0;i<ProcList.Length;i++){
-				if(ProcList[i].AptNum!=apt.AptNum){
-					continue;
-				}
-				//attach the note, if it exists.
-				for(int n=rawNotes.Rows.Count-1;n>=0;n--) {//loop through each note, backwards.
-					if(ProcList[i].ProcNum.ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
-						continue;
-					}
-					ProcList[i].UserNum   =PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString());
-					ProcList[i].Note      =PIn.PString(rawNotes.Rows[n]["Note"].ToString());
-					ProcList[i].SigIsTopaz=PIn.PBool(rawNotes.Rows[n]["SigIsTopaz"].ToString());
-					ProcList[i].Signature =PIn.PString(rawNotes.Rows[n]["Signature"].ToString());
-					break;//out of note loop.
-				}
-				oldProc=ProcList[i].Copy();
-				procCode=ProcedureCodes.GetProcCode(ProcList[i].CodeNum);
-				if(procCode.PaintType==ToothPaintingType.Extraction){//if an extraction, then mark previous procs hidden
-					//SetHideGraphical(ProcList[i]);//might not matter anymore
-					ToothInitials.SetValue(apt.PatNum,ProcList[i].ToothNum,ToothInitialType.Missing);
-				}
-				ProcList[i].ProcStatus=ProcStat.C;
-				ProcList[i].ProcDate=apt.AptDateTime.Date;
-				if(oldProc.ProcStatus!=ProcStat.C){
-					ProcList[i].DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
-				}
-				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
-				ProcList[i].ClinicNum=apt.ClinicNum;
-				ProcList[i].SiteNum=siteNum;
-				ProcList[i].PlaceService=Clinics.GetPlaceService(apt.ClinicNum);
-				if(apt.ProvHyg!=0){//if the appointment has a hygiene provider
-					if(procCode.IsHygiene){//hyg proc
-						ProcList[i].ProvNum=apt.ProvHyg;
-					}
-					else{//regular proc
-						ProcList[i].ProvNum=apt.ProvNum;
-					}
-				}
-				else{//same provider for every procedure
-					ProcList[i].ProvNum=apt.ProvNum;
-				}
-				//if procedure was already complete, then don't add more notes.
-				if(oldProc.ProcStatus!=ProcStat.C){
-					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
-				}
-				Update(ProcList[i],oldProc);
-				ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList);
-			}
-			//if(doResetRecallStatus){
-			//	Recalls.Reset(apt.PatNum);//this also synchs recall
-			//}
-			Recalls.Synch(apt.PatNum);
-			Patient pt = Patients.GetPat(apt.PatNum);
-			Reporting.Allocators.AllocatorCollection.CallAll_Allocators(pt.Guarantor);
-		}
-
-		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
-		public static void SetProvidersInAppointment(Appointment apt,Procedure[] procList){
-			ProcedureCode procCode;
-			Procedure changedProc;
-			for(int i=0;i<procList.Length;i++){
-				changedProc=procList[i].Copy();
-				if(apt.ProvHyg!=0) {//if the appointment has a hygiene provider
-					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
-					if(procCode.IsHygiene) {//hygiene proc
-						changedProc.ProvNum=apt.ProvHyg;
-					}
-					else{//dentist proc
-						changedProc.ProvNum=apt.ProvNum;
-					}
-				}
-				else {//same provider for every procedure
-					changedProc.ProvNum=apt.ProvNum;
-				}
-				changedProc.ClinicNum=apt.ClinicNum;
-				Procedures.Update(changedProc,procList[i]);//won't go to db unless a field has changed.
-			}
 		}
 
 		/*
@@ -773,9 +638,9 @@ namespace OpenDental{
 		///  #3 was recently changed to not occur at all unless appt is of type IsNewPatient
 		///4. Changing an appt date of type IsNewPatient. If no C procs, change visit date.
 		///Old: when setting a procedure complete in the Chart module or the ProcEdit window.  Also when saving an appointment that is marked IsNewPat.</summary>
-		public static void SetDateFirstVisit(DateTime visitDate, int situation,Patient pat){
-			if(situation==1){
-				if(pat.DateFirstVisit.Year>1880){
+		public static void SetDateFirstVisit(DateTime visitDate,int situation,Patient pat) {
+			if(situation==1) {
+				if(pat.DateFirstVisit.Year>1880) {
 					return;//a date has already been set.
 				}
 			}
@@ -787,19 +652,19 @@ namespace OpenDental{
 			string command="SELECT Count(*) from procedurelog WHERE "
 				+"PatNum = '"+POut.PInt(pat.PatNum)+"' "
 				+"AND ProcStatus = '2'";
- 			DataTable table=General.GetTable(command);
-			if(PIn.PInt(table.Rows[0][0].ToString())>0){
+			DataTable table=General.GetTable(command);
+			if(PIn.PInt(table.Rows[0][0].ToString())>0) {
 				return;//there are already completed procs (for all situations)
 			}
-			if(situation==2){
+			if(situation==2) {
 				//ask user first?
 			}
-			if(situation==3){
+			if(situation==3) {
 				command="UPDATE patient SET DateFirstVisit ='0001-01-01'"
 					+" WHERE PatNum ='"
 					+POut.PInt(pat.PatNum)+"'";
 			}
-			else{
+			else {
 				command="UPDATE patient SET DateFirstVisit ="
 					+POut.PDate(visitDate)+" WHERE PatNum ='"
 					+POut.PInt(pat.PatNum)+"'";
@@ -810,27 +675,27 @@ namespace OpenDental{
 		}
 
 		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
-		public static int GetCodeNum(int procNum){
+		public static int GetCodeNum(int procNum) {
 			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
+			if(table.Rows.Count==0) {
 				return 0;
 			}
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
-		public static double GetProcFee(int procNum){
+		public static double GetProcFee(int procNum) {
 			string command="SELECT ProcFee FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
+			if(table.Rows.Count==0) {
 				return 0;
 			}
 			return PIn.PDouble(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Used twice in FormClaimProc.  Gets value directly from database.</summary>
-		public static string GetToothNum(int procNum){
+		public static string GetToothNum(int procNum) {
 			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
 			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -839,37 +704,29 @@ namespace OpenDental{
 			return PIn.PString(table.Rows[0][0].ToString());
 		}
 
-		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
-		public static void ComputeEstimatesForAll(int patNum,ClaimProc[] claimProcs,Procedure[] procs,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benefitList)
-		{
-			for(int i=0;i<procs.Length;i++){
-				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList);
-			}
-		}
-
 		///<summary>Called from FormApptsOther when creating a new appointment.  Returns true if there are any procedures marked complete for this patient.  The result is that the NewPt box on the appointment won't be checked.</summary>
-		public static bool AreAnyComplete(int patNum){
+		public static bool AreAnyComplete(int patNum) {
 			string command="SELECT COUNT(*) FROM procedurelog "
 				+"WHERE PatNum="+patNum.ToString()
 				+" AND ProcStatus=2";
 			DataTable table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()=="0"){
+			if(table.Rows[0][0].ToString()=="0") {
 				return false;
 			}
 			else return true;
 		}
 
 		///<summary>Called from AutoCodeItems.  Makes a call to the database to determine whether the specified tooth has been extracted or will be extracted. This could then trigger a pontic code.</summary>
-		public static bool WillBeMissing(string toothNum,int patNum){
+		public static bool WillBeMissing(string toothNum,int patNum) {
 			//first, check for missing teeth
 			string command="SELECT COUNT(*) FROM toothinitial "
 				+"WHERE ToothNum='"+toothNum+"' "
 				+"AND PatNum="+POut.PInt(patNum)
 				+" AND InitialType=0";//missing
 			DataTable table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()!="0"){
+			if(table.Rows[0][0].ToString()!="0") {
 				return true;
-			}			
+			}
 			//then, check for a planned extraction
 			command="SELECT COUNT(*) FROM procedurelog,procedurecode "
 				+"WHERE procedurelog.CodeNum=procedurecode.CodeNum "
@@ -877,79 +734,32 @@ namespace OpenDental{
 				+"AND procedurelog.PatNum="+patNum.ToString()
 				+" AND procedurecode.PaintType=1";//extraction
 			table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()!="0"){
+			if(table.Rows[0][0].ToString()!="0") {
 				return true;
 			}
 			return false;
 		}
 
-		///<summary>Used from TP to get a list of all TP procs, ordered by priority, toothnum.</summary>
-		public static Procedure[] GetListTP(Procedure[] procList){
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<procList.Length;i++){
-				if(procList[i].ProcStatus==ProcStat.TP){
-					AL.Add(procList[i]);
-				}
-			}
-			IComparer myComparer=new ProcedureComparer();
-			AL.Sort(myComparer);
-			Procedure[] retVal=new Procedure[AL.Count];
-			AL.CopyTo(retVal);
-			return retVal;
-		}
-
-		///<summary>Gets a list of procedures representing extracted teeth.  Status of C,EC,orEO. Includes procs with toothNum "1"-"32".  Will not include procs with unreasonable dates.  Used for Canadian e-claims instead of the usual ToothInitials.GetMissingOrHiddenTeeth, because Canada requires dates on the extracted teeth.  Supply all procedures for the patient.</summary>
-		public static List<Procedure> GetExtractedTeeth(Procedure[] procList) {
-			List<Procedure> extracted=new List<Procedure>();
-			ProcedureCode procCode;
-			for(int i=0;i<procList.Length;i++) {
-				if(procList[i].ProcStatus!=ProcStat.C && procList[i].ProcStatus!=ProcStat.EC && procList[i].ProcStatus!=ProcStat.EO){
-					continue;
-				}
-				if(!Tooth.IsValidDB(procList[i].ToothNum)){
-					continue;
-				}
-				if(Tooth.IsSuperNum(procList[i].ToothNum)){
-					continue;
-				}
-				if(Tooth.IsPrimary(procList[i].ToothNum)){
-					continue;
-				}
-				if(procList[i].ProcDate.Year<1880 || procList[i].ProcDate>DateTime.Today){
-					continue;
-				}
-				procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
-				if(procCode.TreatArea!=TreatmentArea.Tooth){
-					continue;
-				}
-				if(procCode.PaintType!=ToothPaintingType.Extraction){
-					continue;
-				}
-				extracted.Add(procList[i].Copy());
-			}
-			return extracted;
-		}
-
-		public static void AttachToApt(int procNum,int aptNum,bool isPlanned){
+		public static void AttachToApt(int procNum,int aptNum,bool isPlanned) {
 			List<int> procNums=new List<int>();
 			procNums.Add(procNum);
 			AttachToApt(procNums,aptNum,isPlanned);
 		}
 
-		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned){
-			if(procNums.Count==0){
+		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned) {
+			if(procNums.Count==0) {
 				return;
 			}
 			string command="UPDATE procedurelog SET ";
-			if(isPlanned){
+			if(isPlanned) {
 				command+="PlannedAptNum";
 			}
-			else{
+			else {
 				command+="AptNum";
 			}
 			command+="="+POut.PInt(aptNum)+" WHERE ";
-			for(int i=0;i<procNums.Count;i++){
-				if(i>0){
+			for(int i=0;i<procNums.Count;i++) {
+				if(i>0) {
 					command+=" OR ";
 				}
 				command+="ProcNum="+POut.PInt(procNums[i]);
@@ -957,20 +767,20 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		public static void DetachFromApt(List<int> procNums,bool isPlanned){
-			if(procNums.Count==0){
+		public static void DetachFromApt(List<int> procNums,bool isPlanned) {
+			if(procNums.Count==0) {
 				return;
 			}
 			string command="UPDATE procedurelog SET ";
-			if(isPlanned){
+			if(isPlanned) {
 				command+="PlannedAptNum";
 			}
-			else{
+			else {
 				command+="AptNum";
 			}
 			command+="=0 WHERE ";
-			for(int i=0;i<procNums.Count;i++){
-				if(i>0){
+			for(int i=0;i<procNums.Count;i++) {
+				if(i>0) {
 					command+=" OR ";
 				}
 				command+="ProcNum="+POut.PInt(procNums[i]);
@@ -981,54 +791,6 @@ namespace OpenDental{
 
 		//--------------------Taken from Procedure class--------------------------------------------------
 
-
-
-
-		
-		///<summary>Base estimate or override is retrieved from supplied claimprocs. Does not take into consideration annual max or deductible.  If limitToTotal set to true, then it does limit total of pri+sec to not be more than total fee.  The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
-		public static double GetEst(Procedure proc,ClaimProc[] claimProcs,PriSecTot pst,PatPlan[] patPlans,bool limitToTotal) {
-			double priBaseEst=0;
-			double secBaseEst=0;
-			double priOverride=-1;
-			double secOverride=-1;
-			for(int i=0;i<claimProcs.Length;i++) {
-				//adjustments automatically ignored since no ProcNum
-				if(claimProcs[i].Status==ClaimProcStatus.CapClaim
-					|| claimProcs[i].Status==ClaimProcStatus.Preauth
-					|| claimProcs[i].Status==ClaimProcStatus.Supplemental) {
-					continue;
-				}
-				if(claimProcs[i].ProcNum==proc.ProcNum) {
-					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-						//if this is a Cap, then this will still work. Est comes out 0.
-						priBaseEst=claimProcs[i].BaseEst;
-						priOverride=claimProcs[i].OverrideInsEst;
-					}
-					else if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-						secBaseEst=claimProcs[i].BaseEst;
-						secOverride=claimProcs[i].OverrideInsEst;
-					}
-				}
-			}
-			if(priOverride!=-1) {
-				priBaseEst=priOverride;
-			}
-			if(secOverride!=-1) {
-				secBaseEst=secOverride;
-			}
-			if(limitToTotal && proc.ProcFee-priBaseEst-secBaseEst < 0) {
-				secBaseEst=proc.ProcFee-priBaseEst;
-			}
-			switch(pst) {
-				case PriSecTot.Pri:
-					return priBaseEst;
-				case PriSecTot.Sec:
-					return secBaseEst;
-				case PriSecTot.Tot:
-					return priBaseEst+secBaseEst;
-			}
-			return 0;
-		}
 
 		/*
 		///<summary>Gets allowedOverride for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module when calculating PPOs. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
@@ -1074,179 +836,17 @@ namespace OpenDental{
 					//preAuth -no
 					|| claimProcs[i].Status==ClaimProcStatus.Received
 					|| claimProcs[i].Status==ClaimProcStatus.Supplemental
-					) 
-				{
+					) {
 					retVal+=claimProcs[i].WriteOff;
 				}
 				if(!PrefC.GetBool("BalancesDontSubtractIns")//this is the typical situation
-					&& claimProcs[i].Status==ClaimProcStatus.NotReceived) 
-				{
+					&& claimProcs[i].Status==ClaimProcStatus.NotReceived) {
 					//so, if user IS using "balances don't subtract ins", and a proc as been sent but not received,
 					//then we do not subtract the writeoff because it's considered part of the estimate.
 					retVal+=claimProcs[i].WriteOff;
 				}
 			}
 			return retVal;
-		}
-
-		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc array can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set IsInitialEntry true from Chart module; this is for cap procs.</summary>
-		public static void ComputeEstimates(Procedure proc,int patNum,ClaimProc[] claimProcs,bool IsInitialEntry,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benefitList) {
-			bool doCreate=true;
-			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
-				//don't automatically create an estimate for completed procedures
-				//especially if they are older than today
-				//Very important after a conversion from another software.
-				//This may need to be relaxed a little for offices that enter treatment a few days after it's done.
-				doCreate=false;
-			}
-			//first test to see if each estimate matches an existing patPlan (current coverage),
-			//delete any other estimates
-			for(int i=0;i<claimProcs.Length;i++) {
-				if(claimProcs[i].ProcNum!=proc.ProcNum) {
-					continue;
-				}
-				if(claimProcs[i].PlanNum==0) {
-					continue;
-				}
-				if(claimProcs[i].Status==ClaimProcStatus.CapClaim
-					|| claimProcs[i].Status==ClaimProcStatus.Preauth
-					|| claimProcs[i].Status==ClaimProcStatus.Supplemental) {
-					continue;
-					//ignored: adjustment
-					//included: capComplete,CapEstimate,Estimate,NotReceived,Received
-				}
-				if(claimProcs[i].Status!=ClaimProcStatus.Estimate && claimProcs[i].Status!=ClaimProcStatus.CapEstimate) {
-					continue;
-				}
-				bool planIsCurrent=false;
-				for(int p=0;p<patPlans.Length;p++) {
-					if(patPlans[p].PlanNum==claimProcs[i].PlanNum) {
-						planIsCurrent=true;
-						break;
-					}
-				}
-				//If claimProc estimate is for a plan that is not current, delete it
-				if(!planIsCurrent) {
-					ClaimProcs.Delete(claimProcs[i]);
-				}
-			}
-			InsPlan PlanCur;
-			bool estExists;
-			bool cpAdded=false;
-			//loop through all patPlans (current coverage), and add any missing estimates
-			for(int p=0;p<patPlans.Length;p++) {//typically, loop will only have length of 1 or 2
-				if(!doCreate) {
-					break;
-				}
-				//test to see if estimate exists
-				estExists=false;
-				for(int i=0;i<claimProcs.Length;i++) {
-					if(claimProcs[i].ProcNum!=proc.ProcNum) {
-						continue;
-					}
-					if(claimProcs[i].PlanNum==0) {
-						continue;
-					}
-					if(claimProcs[i].Status==ClaimProcStatus.CapClaim
-						|| claimProcs[i].Status==ClaimProcStatus.Preauth
-						|| claimProcs[i].Status==ClaimProcStatus.Supplemental) {
-						continue;
-						//ignored: adjustment
-						//included: capComplete,CapEstimate,Estimate,NotReceived,Received
-					}
-					if(patPlans[p].PlanNum!=claimProcs[i].PlanNum) {
-						continue;
-					}
-					estExists=true;
-					break;
-				}
-				if(estExists) {
-					continue;
-				}
-				//estimate is missing, so add it.
-				ClaimProc cp=new ClaimProc();
-				cp.ProcNum=proc.ProcNum;
-				cp.PatNum=patNum;
-				cp.ProvNum=proc.ProvNum;
-				PlanCur=InsPlans.GetPlan(patPlans[p].PlanNum,PlanList);
-				if(PlanCur==null) {
-					continue;//??
-				}
-				if(PlanCur.PlanType=="c") {
-					if(proc.ProcStatus==ProcStat.C) {
-						cp.Status=ClaimProcStatus.CapComplete;
-					}
-					else {
-						cp.Status=ClaimProcStatus.CapEstimate;//this may be changed below
-					}
-				}
-				else {
-					cp.Status=ClaimProcStatus.Estimate;
-				}
-				cp.PlanNum=PlanCur.PlanNum;
-				cp.DateCP=proc.ProcDate;
-				cp.AllowedOverride=-1;
-				cp.PercentOverride=-1;
-				cp.OverrideInsEst=-1;
-				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.CodeNum).NoBillIns;
-				cp.OverAnnualMax=-1;
-				cp.PaidOtherIns=-1;
-				cp.CopayOverride=-1;
-				cp.ProcDate=proc.ProcDate;
-				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
-				ClaimProcs.Insert(cp);
-				cpAdded=true;
-			}
-			//if any were added, refresh the list
-			if(cpAdded) {
-				claimProcs=ClaimProcs.Refresh(patNum);
-			}
-			for(int i=0;i<claimProcs.Length;i++) {
-				if(claimProcs[i].ProcNum!=proc.ProcNum) {
-					continue;
-				}
-				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
-				//claimProcs[i].DateCP=proc.ProcDate;
-				claimProcs[i].ProcDate=proc.ProcDate;
-				//capitation estimates are always forced to follow the status of the procedure
-				PlanCur=InsPlans.GetPlan(claimProcs[i].PlanNum,PlanList);
-				if(PlanCur!=null
-					&& PlanCur.PlanType=="c"
-					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete
-					|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) {
-					if(IsInitialEntry) {
-						//this will be switched to CapComplete further down if applicable.
-						//This makes ComputeBaseEst work properly on new cap procs w status Complete
-						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
-					}
-					else if(proc.ProcStatus==ProcStat.C) {
-						claimProcs[i].Status=ClaimProcStatus.CapComplete;
-					}
-					else {
-						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
-					}
-				}
-				//ignored: adjustment
-				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
-				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
-				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Pri,PlanList,patPlans,benefitList);
-				}
-				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Sec,PlanList,patPlans,benefitList);
-				}
-				if(IsInitialEntry
-					&& claimProcs[i].Status==ClaimProcStatus.CapEstimate
-					&& proc.ProcStatus==ProcStat.C) {
-					claimProcs[i].Status=ClaimProcStatus.CapComplete;
-				}
-				//prov only updated if still an estimate
-				if(claimProcs[i].Status==ClaimProcStatus.Estimate
-					|| claimProcs[i].Status==ClaimProcStatus.CapEstimate) {
-					claimProcs[i].ProvNum=proc.ProvNum;
-				}
-				ClaimProcs.Update(claimProcs[i]);
-			}
 		}
 
 		///<summary>Used in deciding how to display procedures in Account. The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs at all are attached to this procedure.</summary>
@@ -1272,7 +872,7 @@ namespace OpenDental{
 
 		///<summary>Used in ContrAccount.CreateClaim when validating selected procedures. Returns true if there is any claimproc for this procedure and plan which is marked NoBillIns.  The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are set NoBillIns.</summary>
 		public static bool NoBillIns(Procedure proc,ClaimProc[] List,int planNum) {
-			if(proc==null){
+			if(proc==null) {
 				return false;
 			}
 			for(int i=0;i<List.Length;i++) {
@@ -1319,8 +919,8 @@ namespace OpenDental{
 
 		///<summary>Only called from FormProcEditAll to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAttachedToClaim(List<Procedure> procList,ClaimProc[] claimprocList) {
-			for(int j=0;j<procList.Count;j++){
-				if(IsAttachedToClaim(procList[j],claimprocList)){
+			for(int j=0;j<procList.Count;j++) {
+				if(IsAttachedToClaim(procList[j],claimprocList)) {
 					return true;
 				}
 			}
@@ -1328,12 +928,12 @@ namespace OpenDental{
 		}
 
 		///<summary>Queries the database to determine if this procedure is attached to a claim already.</summary>
-		public static bool IsAttachedToClaim(int procNum){
+		public static bool IsAttachedToClaim(int procNum) {
 			string command="SELECT COUNT(*) FROM claimproc "
 				+"WHERE ProcNum="+POut.PInt(procNum)+" "
 				+"AND ClaimNum>0";
 			DataTable table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()=="0"){
+			if(table.Rows[0][0].ToString()=="0") {
 				return false;
 			}
 			return true;
@@ -1385,128 +985,9 @@ namespace OpenDental{
 			return null;
 		}
 
-		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
-		public static int GlobalUpdateFees(){
-			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
-				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
-				procedurelog.ProcFee,insplan.PlanType
-				FROM procedurelog
-				LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
-				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
-				AND patplan.Ordinal=1
-				LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum
-				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
-				WHERE procedurelog.ProcStatus=1";
-/*@"SELECT procedurelog.ProcCode,insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,
-				patient.PriProv,ProcNum
-				FROM procedurelog,patient
-				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
-				AND patplan.Ordinal=1
-				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
-				WHERE procedurelog.ProcStatus=1
-				AND patient.PatNum=procedurelog.PatNum
-			";*/
-			DataTable table=General.GetTable(command);
-			int priPlanFeeSched;
-			//int feeSchedNum;
-			int patFeeSched;
-			int patProv;
-			string planType;
-			double insfee;
-			double standardfee;
-			double newFee;
-			double oldFee;
-			int rowsChanged=0;
-			for(int i=0;i<table.Rows.Count;i++){
-				priPlanFeeSched=PIn.PInt(table.Rows[i]["PlanFeeSched"].ToString());
-				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
-				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
-				planType=PIn.PString(table.Rows[i]["PlanType"].ToString());
-				insfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv));
-				if(planType=="p") {//PPO
-					standardfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
-					if(standardfee>insfee) {
-						newFee=standardfee;
-					}
-					else {
-						newFee=insfee;
-					}
-				}
-				else {
-					newFee=insfee;
-				}
-				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
-				if(newFee==oldFee) {
-					continue;
-				}
-				command="UPDATE procedurelog SET ProcFee='"+POut.PDouble(newFee)+"' "
-					+"WHERE ProcNum="+table.Rows[i]["ProcNum"].ToString();
-				rowsChanged+=General.NonQ(command);
-			}
-			return rowsChanged;
-		}
-
 		
 
 
-	}
-
-	/*================================================================================================================
-	=========================================== class ProcedureComparer =============================================*/
-
-	///<summary>This sorts procedures based on priority, then tooth number, then code (but if Canadian lab code, uses proc code here instead of lab code).  Finally, if comparing a proc and its Canadian lab code, it puts the lab code after the proc.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
-	public class ProcedureComparer:IComparer {
-		///<summary>This sorts procedures based on priority, then tooth number.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
-		int IComparer.Compare(Object objx,Object objy) {
-			Procedure x=(Procedure)objx;
-			Procedure y=(Procedure)objy;
-			//first, by priority
-			if(x.Priority!=y.Priority) {//if priorities are different
-				if(x.Priority==0){
-					return 1;//x is greater than y. Priorities always come first.
-				}
-				if(y.Priority==0){
-					return -1;//x is less than y. Priorities always come first.
-				}
-				return DefC.GetOrder(DefCat.TxPriorities,x.Priority).CompareTo(DefC.GetOrder(DefCat.TxPriorities,y.Priority));
-			}
-			//priorities are the same, so sort by toothrange
-			if(x.ToothRange != y.ToothRange){
-				//empty toothranges come before filled toothrange values
-				return x.ToothRange.CompareTo(y.ToothRange);
-			}
-			//toothranges are the same (usually empty), so compare toothnumbers
-			if(x.ToothNum != y.ToothNum){
-				//this also puts invalid or empty toothnumbers before the others.
-				return Tooth.ToInt(x.ToothNum).CompareTo(Tooth.ToInt(y.ToothNum));
-			}
-			//priority and toothnums are the same, so sort by code.
-			/*string adaX=x.Code;
-			if(x.ProcNumLab !=0){//if x is a Canadian lab proc
-				//then use the Code of the procedure instead of the lab code
-				adaX=Procedures.GetOneProc(
-			}
-			string adaY=y.Code;*/
-			return ProcedureCodes.GetStringProcCode(x.CodeNum).CompareTo(ProcedureCodes.GetStringProcCode(y.CodeNum));
-			//return x.Code.CompareTo(y.Code);
-			//return 0;//priority, tooth number, and code are all the same
-		}
 
 	}
-
-	
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-

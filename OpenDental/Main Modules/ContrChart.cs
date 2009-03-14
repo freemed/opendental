@@ -4647,7 +4647,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -4765,7 +4765,7 @@ namespace OpenDental{
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
 			Recalls.Synch(PatCur.PatNum);
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
 		}
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
@@ -6325,7 +6325,7 @@ namespace OpenDental{
 					return;
 				}
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
-				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,PatCur.SiteNum);//loops through each proc
+				ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList,PatCur.SiteNum);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					PatCur.GetNameLF() + ", "
 					+ apt.ProcDescript + ", "
@@ -6416,7 +6416,7 @@ namespace OpenDental{
 				//Tried to move it to the business layer, but too complex for now.
 				//Procedures.SetComplete(
 				//	((Procedure)gridProg.Rows[gridProg.SelectedIndices[i]].Tag).ProcNum,PIn.PDate(textDate.Text));
-				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				ProcedureL.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			}
 			Recalls.Synch(PatCur.PatNum);
 			//if(skipped>0){
