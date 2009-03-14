@@ -2143,12 +2143,12 @@ namespace OpenDental
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(243, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(243,6);
 			// 
 			// FormAnestheticRecord
 			// 
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(884, 764);
+			this.ClientSize = new System.Drawing.Size(884,764);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
 			this.Controls.Add(this.butCancel);
@@ -2197,16 +2197,13 @@ namespace OpenDental
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
-		public AnesthMedsGivens medCur;
 
+		public AnesthMedsGivens medCur;
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
 			RefreshListAnesthetics();
-			
-			//necessary because we want the newest record at the top of the list selected and no records throws an exception
-			
+			//necessary because we want the newest record at the top of the list selected and no records generates an exception
 			try 
 				{
 					 listAnesthetics.SelectedIndex = 0;
@@ -2215,23 +2212,15 @@ namespace OpenDental
 				{
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
 				}
-
-			
-			if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
-				{	
-				}
-
 			IsStartingUp = true;
 			//display Patient name
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
-
 			RefreshComboBoxes();
-
 				if (listAnesthetics.SelectedIndex == -1)
 				{
-					//prevents user from throwing exception when no record exists yet
+					//prevents user from generating an exception when no record exists yet
 					butDoseEnter.Enabled = false;
 					//prevents exception if user tries to save to db when no record exists yet
 					butOK.Enabled = false;
@@ -2243,52 +2232,35 @@ namespace OpenDental
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
-				
 			try
 			{
 				//this will be an empty string if there are no records yet, and will throw an exception
 				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				
 			}
 			catch
 			{
 				return;
 			}
-
-			//FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
 			this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
-
 			IsStartingUp = true;
-
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
-
 			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
 			IsStartingUp = false;
-			
 		}
 
-		private void RefreshListAnesthetics()
-		{
-
+		private void RefreshListAnesthetics(){
 			//most recent date at the top
 			AnestheticRecords.Refresh(PatCur.PatNum);
 			listAnesthetics.Items.Clear();
-
 			for (int i = 0; i < AnestheticRecords.List.Length; i++)
 			{
-
 				listAnesthetics.Items.Add(AnestheticRecords.List[i].AnestheticDate);
 				anestheticRecordCur = AnestheticRecords.List[i].AnestheticRecordNum;
-
 			}
-
 		}
 
 		private void RefreshComboBoxes(){
-
 			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMed.Items.Clear();
 			this.comboAnesthMed.Items.Insert(0, "");
@@ -2298,7 +2270,6 @@ namespace OpenDental
 				this.comboAnesthMed.Items.Add(bindComboQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
 				this.comboAnesthMed.SelectedIndex = 0;
 			}
-
 				//Anesthetist comboBox
 				this.comboAnesthetist.Items.Clear();
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
@@ -2313,7 +2284,6 @@ namespace OpenDental
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboAnesthetist.SelectedIndex = i;
 				}
-
 				if (comboAnesthetist.SelectedIndex == -1)
 				{
 					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
@@ -2335,11 +2305,9 @@ namespace OpenDental
 					{
 						comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
-
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboSurgeon.SelectedIndex = i;
 				}
-
 				if (comboSurgeon.SelectedIndex == -1)
 				{
 					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
@@ -2364,7 +2332,6 @@ namespace OpenDental
 					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
 						comboAsst.SelectedIndex = i;
 				}
-
 				if (comboAsst.SelectedIndex == -1)
 				{
 					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
@@ -2401,18 +2368,14 @@ namespace OpenDental
 					{
 						comboCirc.SelectedIndex = defaultindex;
 					}
-
 				}
 }
 
 		//Load saved data into form for selected Anesthetic Record
 		private void FillControls(int PatNum, int anestheticRecordCur){
-
-			
 			if (listAnesthetics.SelectedIndex == -1)
 			{	
-				
-				//prevents user from throwing exception when no record exists yet
+				//prevents user from generating an exception when no record exists yet
 				butDoseEnter.Enabled = false;
 				//prevents exception if user tries to save to db with no items in list
 				butOK.Enabled = false;
@@ -2428,19 +2391,15 @@ namespace OpenDental
 				butSignTopaz.Enabled = true;
 				butClearSig.Enabled = true;
 			}
-
 			string command ="SELECT * "                   
 			+ " FROM anestheticdata"					
 			+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
-	
 			DataTable table = General.GetTable(command);
 			AnestheticData Cur;
-		
 			for (int i = 0; i < table.Rows.Count; i++)
 			{
 				Cur = new AnestheticData();
 				AnesthDataCur = Cur;
-				
 				Cur.AnestheticDataNum = PIn.PInt(table.Rows[i][0].ToString());
 				Cur.AnestheticRecordNum = PIn.PInt(table.Rows[i][1].ToString());
 				Cur.AnesthOpen = PIn.PString(table.Rows[i][2].ToString());
@@ -2492,9 +2451,7 @@ namespace OpenDental
 				Cur.HgtUnitsCm = PIn.PBool(table.Rows[i][48].ToString());
 				Cur.Signature = PIn.PString(table.Rows[i][49].ToString());
 				Cur.SigIsTopaz = PIn.PBool(table.Rows[i][50].ToString());
-
 				//Populate controls from db
-
 				textAnesthOpen.Text = Cur.AnesthOpen;
 				textSurgOpen.Text = Cur.SurgOpen;
 				textSurgClose.Text = Cur.SurgClose;
@@ -2507,7 +2464,6 @@ namespace OpenDental
 				comboAsst.SelectedItem = Cur.Asst.ToString();
 				//comboCirc
 				comboCirc.SelectedItem = Cur.Circulator.ToString();
-
 				//VSM, set to "" if no networked monitor has written its name to the db
 				if (Cur.VSMName == null)
 				{
@@ -2527,33 +2483,26 @@ namespace OpenDental
 					textVSMSerNum.Text = Cur.VSMSerNum;
 				}
 				//load comboASA
-
 				comboASA.SelectedItem = Cur.ASA;
-				
 				//load comboASA_EModifier
 					if (Cur.ASA_EModifier == "E")
 					{
 						comboASA_EModifier.SelectedIndex = 1;
 					}
-
 				//comboO2LMin
 					comboO2LMin.SelectedItem = Cur.O2LMin.ToString();
-
 				//comboN2OLMin
 					comboN2OLMin.SelectedItem = Cur.N2OLMin.ToString();
-
 				//radRteNasCan
 				if (Cur.RteNasCan == true)
 					{
 						radRteNasCan.Checked = true;
 					}
-
 				//radNasHood
 				if (Cur.RteNasHood == true)
 				{
 					radRteNasHood.Checked = true;
 				}
-
 				//radRteETT
 				if (Cur.RteETT == true)
 				{
@@ -2603,16 +2552,12 @@ namespace OpenDental
 				{
 					radIVSideL.Checked = true;
 				}
-				
 				//comboIVAtt
 				comboIVAtt.SelectedItem = Cur.IVAtt.ToString();
-				
 				//comboIVF
 				comboIVF.SelectedItem = Cur.IVF.ToString();
-
 				//textIVFVol
 				textIVFVol.Text = Cur.IVFVol.ToString();
-
 				//checkMonBP
 				if (Cur.MonBP == true)
 				{
@@ -2645,16 +2590,13 @@ namespace OpenDental
 				}
 				//notes
 				richTextNotes.Text = Cur.Notes;
-
 				//PatWgt
 				textPatWgt.Text = Cur.PatWgt.ToString();
-
 				//radWgtUnitsLbs
 				if (Cur.WgtUnitsLbs == true)
 				{
 					radWgtUnitsLbs.Checked = true;
 				}
-
 				//comboWgtUnitsKgs
 				if (Cur.WgtUnitsKgs == true)
 				{
@@ -2677,19 +2619,15 @@ namespace OpenDental
 				{
 					anesthScore = AnestheticRecords.GetAnesthScore(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 					AnesthScore = Convert.ToString(anesthScore);
-
 				}
 				catch
 				{
 					AnesthScore = "0";
 				}
-
 				this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 			}
-
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
-
 			if (listAnesthetics.SelectedIndex != -1) //catches exception when no Anesthetic Records saved yet
 			{
 				if (AnesthDataCur.SigIsTopaz)
@@ -2717,9 +2655,7 @@ namespace OpenDental
 					}
 				}
 				else
-				
 				{
-					
 					if (AnesthDataCur.Signature != null && AnesthDataCur.Signature != "")
 					{
 						sigBox.Visible = true;
@@ -2738,20 +2674,17 @@ namespace OpenDental
 						}
 						sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
 					}
-
 				}
 			}
 			
 		}
-		private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 
+		private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-		
 		}
 
 		private void butAddAnesthetic_Click(object sender, EventArgs e){
-
 			IsUpdate = false;
 			AnestheticRecordCur = new AnestheticRecord();
 			AnestheticRecordCur.PatNum = PatCur.PatNum;
@@ -2762,13 +2695,11 @@ namespace OpenDental
 			//save data from form in db
 			AnestheticRecords.InsertAnestheticData(AnestheticRecordCur);
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = 0; // AnestheticRecords.List.Length = 1;//Add -1 after List.Length to select in ascending order
-			
+			listAnesthetics.SelectedIndex = 0; //Add -1 after List.Length to select in ascending order
 		}
 
-		//deletes an Anesthetic from the list of saved Anesthetics
+		/// <summary> deletes an Anesthetic from the list of saved Anesthetics</summary>
 		private void butDelAnesthetic_Click(object sender, System.EventArgs e){
-
 			//used at bottom of method but must be set here before it gets deleted
 			string anestheticRecordNum = "";
 			anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
@@ -2780,17 +2711,11 @@ namespace OpenDental
 			}
 			if (MessageBox.Show(Lan.g(this, "Delete Anesthetic?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
 			{
-
 				return;
 			}
-
 			Userod curUser = Security.CurUser;
-
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
-
-				//if (Security.IsAuthorized(Permissions.AnesthesiaControlMeds)) //this works too
-
 				AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
 				RefreshListAnesthetics();
 				try
@@ -2801,20 +2726,17 @@ namespace OpenDental
 				{
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
 				}
-
 				if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
 				{
-					//prevents user from throwing exception when no record exists yet
+					//prevents user from generating an exception when no record exists yet
 					butDoseEnter.Enabled = false;
 					//prevents exception if user tries to save to db with no items in list
 					butOK.Enabled = false;
 					butClose.Enabled = false;
-
 					//deletes any Anesthetic Meds that may have already been entered and then returns the quantities back into Inventory
 					for (int i = 0; i < listAnesthMedsGiven.Count; i++)
 					{
 						AMedications.DeleteAMedDose(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(listAnesthMedsGiven[i].AnestheticRecordNum));
-
 					}
 					FillGridAnesthMeds(Convert.ToInt32(anestheticRecordNum));
 				}
@@ -2835,23 +2757,19 @@ namespace OpenDental
 					}
 				return;
 			}
-
 			else
 			{
 				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
 			}
-
 		}
 
 		private void butCancel_Click(object sender, EventArgs e){
-
 			DialogResult = DialogResult.Cancel;
 		}
 
 		private void FillGridAnesthMeds(int anestheticRecordNum){
 			listAnesthMedsGiven = AnesthMedsGiven.CreateObjects(anestheticRecordNum);
-
 			AnesthMedsGivens.RefreshCache(anestheticRecordNum);
 			gridAnesthMeds.BeginUpdate();
 			gridAnesthMeds.Columns.Clear();
@@ -2879,9 +2797,7 @@ namespace OpenDental
 
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
-
 			listAnesthVSData = AnesthVSData.CreateObjects(anestheticRecordNum);
-
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
 			gridVSData.Columns.Clear();
@@ -2908,97 +2824,72 @@ namespace OpenDental
 				row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
 				row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
 				row.Cells.Add(AnesthVSDataC.Listt[i].Temp);
-
 				gridVSData.Rows.Add(row);
 			}
 			gridVSData.EndUpdate();
 		}
 
 		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
-
 		}
 
 		private void checkBox7_CheckedChanged(object sender, EventArgs e){
-
 		}
 
 		private void label26_Click(object sender, EventArgs e){
-
 		}
 
 		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e){
-
 		}
 
 		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e){
-			
 				FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
 		}
 
 		private void sigBox_Click(object sender, EventArgs e){
-
 		}
 
 		private void button20_Click(object sender, EventArgs e){
-
 		}
 
-
 		private void textBoxSurgOpen_TextChanged(object sender, EventArgs e){
-
 		}
 
 		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e){
-
 		}
 
 		private void textBoxSurgClose_TextChanged(object sender, EventArgs e){
-
 		}
 
 		private void butAnesthOpen_Click(object sender, EventArgs e){
-			
 			textAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows "AM/PM", change to "HH:mm:ss" for military time
-			
-        }
+		}
 
 		private void butSurgOpen_Click(object sender, EventArgs e){
-
 			textSurgOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
-
 		}
 
 		private void butSurgClose_Click(object sender, EventArgs e){	
-
 			textSurgClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
-			
 		}
 
 		private void butAnesthClose_Click(object sender, EventArgs e){	
-		
 			textAnesthClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 			butAnesthScore.Focus();
 		}
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e){
-
 			Userod curUser = Security.CurUser;
-
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
-
 				return;
-
 			}
 			else
 			{
 				MessageBox.Show(this, "You must be an administrator to unlock this action");
 				return;
 			}
-
 		}
 
 		private void butAddAnesthMeds_Click(object sender, EventArgs e){
@@ -3022,7 +2913,7 @@ namespace OpenDental
 				width = image.Width * e.MarginBounds.Height / image.Height;
 			}
 			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
+			e.Graphics.DrawImage(image, destRect,0,0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
 		}
 
 		public void StartPrint(Stream streamToPrint, string streamType){
