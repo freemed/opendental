@@ -1552,7 +1552,7 @@ namespace OpenDental{
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
-				if(!ProcedureCodes.HList.ContainsKey(codes[i])){
+				if(!ProcedureCodeC.HList.ContainsKey(codes[i])){
 					MsgBox.Show(this,"Definition contains invalid code.");
 					return;
 				}

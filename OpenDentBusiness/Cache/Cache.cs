@@ -83,7 +83,7 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Prefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll){
-				//ProcedureCodes.Refresh();
+				ds.Tables.Add(ProcedureCodes.RefreshCache());
 				//ProcCodeNotes.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll){

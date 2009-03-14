@@ -394,7 +394,7 @@ namespace OpenDental{
 		#endregion
 		
 		private void FormProcCodeNew_Load(object sender,EventArgs e) {
-			ProcedureCodes.Refresh();
+			ProcedureCodes.RefreshCache();
 			listType.Items.Add(Lan.g(this,"none"));
 			listType.Items.Add(Lan.g(this,"Exam"));
 			listType.Items.Add(Lan.g(this,"Xray"));
@@ -721,7 +721,7 @@ namespace OpenDental{
 		private void butAnother_Click(object sender,EventArgs e) {
 			string previous=textNewCode.Text;
 			if(AddProc()){
-				ProcedureCodes.Refresh();
+				ProcedureCodes.RefreshCache();
 				if(CultureInfo.CurrentCulture.Name=="en-US" && listType.SelectedIndex!=0) {
 					textNewCode.Text="D";
 				}

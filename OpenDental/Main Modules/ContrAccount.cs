@@ -3139,7 +3139,7 @@ namespace OpenDental {
 		}
 
 		private void MenuItemRepeatStand_Click(object sender,System.EventArgs e) {
-			if(!ProcedureCodes.HList.ContainsKey("001")) {
+			if(!ProcedureCodeC.HList.ContainsKey("001")) {
 				return;
 			}
 			RepeatCharge repeat=new RepeatCharge();
@@ -3159,7 +3159,7 @@ namespace OpenDental {
 		}
 
 		private void MenuItemRepeatEmail_Click(object sender,System.EventArgs e) {
-			if(!ProcedureCodes.HList.ContainsKey("008")) {
+			if(!ProcedureCodeC.HList.ContainsKey("008")) {
 				return;
 			}
 			RepeatCharge repeat=new RepeatCharge();

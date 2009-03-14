@@ -871,11 +871,11 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textMedicalCode.Text!="" && !ProcedureCodes.HList.Contains(textMedicalCode.Text)){
+			if(textMedicalCode.Text!="" && !ProcedureCodeC.HList.Contains(textMedicalCode.Text)){
 				MsgBox.Show(this,"Invalid medical code.  It must refer to an existing procedure code entered separately");
 				return;
 			}
-			if(textSubstitutionCode.Text!="" && !ProcedureCodes.HList.Contains(textSubstitutionCode.Text)) {
+			if(textSubstitutionCode.Text!="" && !ProcedureCodeC.HList.Contains(textSubstitutionCode.Text)) {
 				MsgBox.Show(this,"Invalid substitution code.  It must refer to an existing procedure code entered separately");
 				return;
 			}

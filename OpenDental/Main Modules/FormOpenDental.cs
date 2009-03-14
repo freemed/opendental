@@ -1379,7 +1379,7 @@ namespace OpenDental{
 				menuItemReallocate.Visible=false;
 			#endif
 			if(!PrefC.GetBool("ADAdescriptionsReset")) {
-				ProcedureCodes.ResetADAdescriptions();
+				ProcedureCodeL.ResetADAdescriptions();
 				Prefs.UpdateBool("ADAdescriptionsReset",true);
 			}
 			Splash.Dispose();
@@ -1679,7 +1679,7 @@ namespace OpenDental{
 
 			//}
 			if(itypeList.Contains((int)InvalidType.ProcCodes) || isAll){
-				ProcedureCodes.Refresh();
+				//ProcedureCodes.Refresh();
 				ProcCodeNotes.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll){

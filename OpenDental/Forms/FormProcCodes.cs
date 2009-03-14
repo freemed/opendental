@@ -729,9 +729,9 @@ namespace OpenDental{
 			}
 			FormFeeScheds FormF=new FormFeeScheds();
 			FormF.ShowDialog();
-			DataValid.SetInvalid(InvalidType.FeeScheds, InvalidType.Fees);
-			Fees.Refresh();
-			ProcedureCodes.Refresh();
+			DataValid.SetInvalid(InvalidType.FeeScheds, InvalidType.Fees,InvalidType.ProcCodes);
+			//Fees.Refresh();
+			//ProcedureCodes.RefreshCache();
 			changed=true;
 			FillFeeSchedules();
 			for(int i=0;i<FeeSchedC.ListShort.Count;i++){
@@ -751,7 +751,7 @@ namespace OpenDental{
 				return;
 			}
 			Fees.Refresh();
-			ProcedureCodes.Refresh();
+			ProcedureCodes.RefreshCache();
 			changed=true;
 			FillGrid();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Fee Schedule Tools");
@@ -804,7 +804,7 @@ namespace OpenDental{
 				return;
 			}
 			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
-			DataValid.SetInvalid(InvalidType.Defs);
+			DataValid.SetInvalid(InvalidType.Defs,InvalidType.ProcCodes,InvalidType.Fees);
 			changed=true;
 			FillCats();
 			FillGrid();
@@ -843,7 +843,7 @@ namespace OpenDental{
 			}
 			int retVal=0;
 			for(int i=0;i<listCodes.Count;i++) {
-				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)) {
+				if(ProcedureCodeC.HList.ContainsKey(listCodes[i].ProcCode)) {
 					continue;//don't import duplicates.
 				}
 				listCodes[i].ProcCat=DefC.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);

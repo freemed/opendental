@@ -3,28 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Windows.Forms;
-using OpenDentBusiness;
+//using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ProcedureCodes {
-		///<summary>key:ProcCode, value:ProcedureCode</summary>
-		public static Hashtable HList;
 		///<summary></summary>
-		private static List<ProcedureCode> Listt;
+		public static DataTable RefreshCache() {
+			string c="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
+			DataTable table=General.GetTable(c);
+			table.TableName="ProcedureCode";
+			FillCache(table);
+			return table;
+		}
 
-		///<summary></summary>
-		public static void Refresh() {
-			HList=new Hashtable();
-			ProcedureCode tempCode=new ProcedureCode();
-			string command="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
-			DataTable table=General.GetTable(command);
-			Listt=TableToList(table);
-			for(int i=0;i<Listt.Count;i++) {
+		public static void FillCache(DataTable table) {
+			ProcedureCodeC.Listt=TableToList(table);
+			ProcedureCodeC.HList=new Hashtable();
+			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
 				try {
-					HList.Add(Listt[i].ProcCode,Listt[i].Copy());
+					ProcedureCodeC.HList.Add(ProcedureCodeC.Listt[i].ProcCode,ProcedureCodeC.Listt[i].Copy());
 				}
 				catch {
 				}
@@ -105,9 +104,6 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
 				//DateTStamp
 			code.CodeNum=General.NonQ(command,true);
-			ProcedureCodes.Refresh();
-			//Cur already set
-			//MessageBox.Show(Cur.PayNum.ToString());
 		}
 
 		///<summary></summary>
@@ -144,11 +140,11 @@ namespace OpenDental{
 		///<summary>Returns the ProcedureCode for the supplied procCode.</summary>
 		public static ProcedureCode GetProcCode(string myCode){
 			if(myCode==null){
-				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
-			if(HList.Contains(myCode)){
-				return (ProcedureCode)HList[myCode];
+			if(ProcedureCodeC.HList.Contains(myCode)) {
+				return (ProcedureCode)ProcedureCodeC.HList[myCode];
 			}
 			else{
 				return new ProcedureCode();
@@ -161,9 +157,9 @@ namespace OpenDental{
 				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
-			for(int i=0;i<Listt.Count;i++){
-				if(Listt[i].CodeNum==codeNum){
-					return Listt[i];
+			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
+				if(ProcedureCodeC.Listt[i].CodeNum==codeNum) {
+					return ProcedureCodeC.Listt[i];
 				}
 			}
 			return new ProcedureCode();
@@ -174,8 +170,8 @@ namespace OpenDental{
 			if(myCode==null || myCode=="") {
 				return 0;
 			}
-			if(HList.Contains(myCode)) {
-				return ((ProcedureCode)HList[myCode]).CodeNum;
+			if(ProcedureCodeC.HList.Contains(myCode)) {
+				return ((ProcedureCode)ProcedureCodeC.HList[myCode]).CodeNum;
 			}
 			return 0;
 			//else {
@@ -188,19 +184,19 @@ namespace OpenDental{
 			if(procCode==null || procCode=="") {
 				return 0;
 			}
-			if(!HList.Contains(procCode)) {
+			if(!ProcedureCodeC.HList.Contains(procCode)) {
 				return 0;
 			}
-			ProcedureCode proc=(ProcedureCode)HList[procCode];
-			if(proc.SubstitutionCode!="" && HList.Contains(proc.SubstitutionCode)){
+			ProcedureCode proc=(ProcedureCode)ProcedureCodeC.HList[procCode];
+			if(proc.SubstitutionCode!="" && ProcedureCodeC.HList.Contains(proc.SubstitutionCode)) {
 				if(proc.SubstOnlyIf==SubstitutionCondition.Always){
-					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
+					return ((ProcedureCode)ProcedureCodeC.HList[proc.SubstitutionCode]).CodeNum;
 				}
 				if(proc.SubstOnlyIf==SubstitutionCondition.Molar && Tooth.IsMolar(toothNum)){
-					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
+					return ((ProcedureCode)ProcedureCodeC.HList[proc.SubstitutionCode]).CodeNum;
 				}
 				if(proc.SubstOnlyIf==SubstitutionCondition.SecondMolar && Tooth.IsSecondMolar(toothNum)) {
-					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
+					return ((ProcedureCode)ProcedureCodeC.HList[proc.SubstitutionCode]).CodeNum;
 				}
 			}
 			return proc.CodeNum;
@@ -211,9 +207,9 @@ namespace OpenDental{
 				return "";
 				//throw new ApplicationException("CodeNum cannot be zero.");
 			}
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].CodeNum==codeNum) {
-					return Listt[i].ProcCode;
+			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
+				if(ProcedureCodeC.Listt[i].CodeNum==codeNum) {
+					return ProcedureCodeC.Listt[i].ProcCode;
 				}
 			}
 			throw new ApplicationException("Missing codenum");
@@ -224,7 +220,7 @@ namespace OpenDental{
 			if(myCode==null || myCode=="") {
 				return false;
 			}
-			if(HList.Contains(myCode)) {
+			if(ProcedureCodeC.HList.Contains(myCode)) {
 				return true;
 			}
 			else {
@@ -236,9 +232,9 @@ namespace OpenDental{
 		public static ProcedureCode[] GetProcList(){
 			List<ProcedureCode> retVal=new List<ProcedureCode>();
 			for(int j=0;j<DefC.Short[(int)DefCat.ProcCodeCats].Length;j++){
-				for(int k=0;k<Listt.Count;k++){
-					if(DefC.Short[(int)DefCat.ProcCodeCats][j].DefNum==Listt[k].ProcCat){
-						retVal.Add(Listt[k].Copy());
+				for(int k=0;k<ProcedureCodeC.Listt.Count;k++) {
+					if(DefC.Short[(int)DefCat.ProcCodeCats][j].DefNum==ProcedureCodeC.Listt[k].ProcCat) {
+						retVal.Add(ProcedureCodeC.Listt[k].Copy());
 					}
 				}
 			}
@@ -285,12 +281,12 @@ namespace OpenDental{
 
 		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
 		public static string GetLaymanTerm(int codeNum) {
-			for(int i=0;i<Listt.Count;i++){
-				if(Listt[i].CodeNum==codeNum){
-					if(Listt[i].LaymanTerm !=""){
-						return Listt[i].LaymanTerm;
+			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
+				if(ProcedureCodeC.Listt[i].CodeNum==codeNum) {
+					if(ProcedureCodeC.Listt[i].LaymanTerm !="") {
+						return ProcedureCodeC.Listt[i].LaymanTerm;
 					}
-					return Listt[i].Descript;
+					return ProcedureCodeC.Listt[i].Descript;
 				}
 			}
 			return "";
@@ -324,7 +320,7 @@ namespace OpenDental{
 				if(!def.IsHidden) {
 					def.IsHidden=true;
 					Defs.Update(def);
-					CacheL.Refresh(InvalidType.Defs);
+					Defs.RefreshCache();
 				}
 			}
 			if(catNum==0) {
@@ -334,7 +330,7 @@ namespace OpenDental{
 				def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
 				def.IsHidden=true;
 				Defs.Insert(def);
-				CacheL.Refresh(InvalidType.Defs);
+				Defs.RefreshCache();
 				catNum=def.DefNum;
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -350,28 +346,9 @@ namespace OpenDental{
 				if(!def.IsHidden) {
 					def.IsHidden=true;
 					Defs.Update(def);
-					CacheL.Refresh(InvalidType.Defs);
+					Defs.RefreshCache();
 				}
 			}
-		}
-
-		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
-		public static void ResetADAdescriptions() {
-			ResetADAdescriptions(CDT.Class1.GetADAcodes());
-		}
-
-		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
-		public static void ResetADAdescriptions(List<ProcedureCode> codeList) {
-			ProcedureCode code;
-			for(int i=0;i<codeList.Count;i++) {
-				if(!ProcedureCodes.IsValidCode(codeList[i].ProcCode)) {
-					continue;
-				}
-				code=ProcedureCodes.GetProcCode(codeList[i].ProcCode);
-				code.Descript=codeList[i].Descript;
-				ProcedureCodes.Update(code);
-			}
-			//don't forget to refresh procedurecodes.
 		}
 
 		public static void ResetApptProcsQuickAdd() {

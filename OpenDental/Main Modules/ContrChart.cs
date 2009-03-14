@@ -5224,11 +5224,11 @@ namespace OpenDental{
 			}
 			if(CultureInfo.CurrentCulture.Name=="en-US"
 				&& Regex.IsMatch(textProcCode.Text,@"^\d{4}$")//if exactly 4 digits
-				&& !ProcedureCodes.HList.ContainsKey(textProcCode.Text))//and the 4 digit code is not found
+				&& !ProcedureCodeC.HList.ContainsKey(textProcCode.Text))//and the 4 digit code is not found
 			{
 				textProcCode.Text="D"+textProcCode.Text;
 			}
-			if(!ProcedureCodes.HList.ContainsKey(textProcCode.Text)) {
+			if(!ProcedureCodeC.HList.ContainsKey(textProcCode.Text)) {
 				MessageBox.Show(Lan.g(this,"Invalid code."));
 				//textProcCode.Text="";
 				textProcCode.SelectionStart=textProcCode.Text.Length;

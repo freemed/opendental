@@ -91,12 +91,11 @@ namespace OpenDental{
 				Prefs.FillCache(ds.Tables["Pref"]);
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll){
-				//ProcedureCodes.Refresh();
+				ProcedureCodes.FillCache(ds.Tables["ProcedureCode"]);
 				//ProcCodeNotes.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll){
 				Programs.FillCache(ds.Tables["Program"]);
-
 				//ProgramProperties.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll){
