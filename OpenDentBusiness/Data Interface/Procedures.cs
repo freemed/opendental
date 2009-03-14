@@ -536,7 +536,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
-		public static Procedure[] GetProcsForSingle(int aptNum,bool isPlanned) {
+		public static List<Procedure> GetProcsForSingle(int aptNum,bool isPlanned) {
 			string command;
 			if(isPlanned) {
 				command = "SELECT * from procedurelog WHERE PlannedAptNum = '"+POut.PInt(aptNum)+"'";
@@ -544,7 +544,7 @@ namespace OpenDentBusiness {
 			else {
 				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PInt(aptNum)+"'";
 			}
-			return RefreshAndFill(command).ToArray();
+			return RefreshAndFill(command);//.ToArray();
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>

@@ -119,10 +119,10 @@ namespace OpenDental{
 		}
 
 		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
-		public static void SetProvidersInAppointment(Appointment apt,Procedure[] procList) {
+		public static void SetProvidersInAppointment(Appointment apt,List<Procedure> procList) {
 			ProcedureCode procCode;
 			Procedure changedProc;
-			for(int i=0;i<procList.Length;i++) {
+			for(int i=0;i<procList.Count;i++) {
 				changedProc=procList[i].Copy();
 				if(apt.ProvHyg!=0) {//if the appointment has a hygiene provider
 					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);

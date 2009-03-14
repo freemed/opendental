@@ -10,14 +10,10 @@ using System.Text.RegularExpressions;
 namespace OpenDental{
 	///<summary></summary>
 	public class ProcedureCodes {
-		///<summary></summary>
-		private static DataTable tableStat;
-		//<summary></summary>
-		//public static ArrayList RecallAL;
 		///<summary>key:ProcCode, value:ProcedureCode</summary>
-		public static Hashtable HList;//
+		public static Hashtable HList;
 		///<summary></summary>
-		public static ProcedureCode[] List;
+		private static List<ProcedureCode> Listt;
 
 		///<summary></summary>
 		public static void Refresh() {
@@ -25,18 +21,13 @@ namespace OpenDental{
 			ProcedureCode tempCode=new ProcedureCode();
 			string command="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
 			DataTable table=General.GetTable(command);
-			tableStat=table.Copy();
-			List=TableToList(table).ToArray();
-			//RecallAL=new ArrayList();
-			for(int i=0;i<List.Length;i++) {
+			Listt=TableToList(table);
+			for(int i=0;i<Listt.Count;i++) {
 				try {
-					HList.Add(List[i].ProcCode,List[i].Copy());
+					HList.Add(Listt[i].ProcCode,Listt[i].Copy());
 				}
 				catch {
 				}
-				//if(List[i].SetRecall) {
-				//	RecallAL.Add(List[i]);
-				//}
 			}
 		}
 
@@ -170,9 +161,9 @@ namespace OpenDental{
 				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
-			for(int i=0;i<List.Length;i++){
-				if(List[i].CodeNum==codeNum){
-					return List[i];
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].CodeNum==codeNum){
+					return Listt[i];
 				}
 			}
 			return new ProcedureCode();
@@ -220,9 +211,9 @@ namespace OpenDental{
 				return "";
 				//throw new ApplicationException("CodeNum cannot be zero.");
 			}
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].CodeNum==codeNum) {
-					return List[i].ProcCode;
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeNum==codeNum) {
+					return Listt[i].ProcCode;
 				}
 			}
 			throw new ApplicationException("Missing codenum");
@@ -243,38 +234,15 @@ namespace OpenDental{
 
 		///<summary>Grouped by Category.  Used only in FormRpProcCodes.</summary>
 		public static ProcedureCode[] GetProcList(){
-			//ProcedureCode[] ProcList=new ProcedureCode[tableStat.Rows.Count];
-			//int i=0;
-			ProcedureCode procCode;
-			ArrayList AL=new ArrayList();
+			List<ProcedureCode> retVal=new List<ProcedureCode>();
 			for(int j=0;j<DefC.Short[(int)DefCat.ProcCodeCats].Length;j++){
-				for(int k=0;k<tableStat.Rows.Count;k++){
-					if(DefC.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][5].ToString())){
-						procCode=new ProcedureCode();
-						procCode.CodeNum=PIn.PInt(tableStat.Rows[k][0].ToString());
-						procCode.ProcCode = PIn.PString(tableStat.Rows[k][1].ToString());
-						procCode.Descript= PIn.PString(tableStat.Rows[k][2].ToString());
-						procCode.AbbrDesc= PIn.PString(tableStat.Rows[k][3].ToString());
-						procCode.ProcCat = PIn.PInt   (tableStat.Rows[k][5].ToString());
-						AL.Add(procCode);
-						//i++;
+				for(int k=0;k<Listt.Count;k++){
+					if(DefC.Short[(int)DefCat.ProcCodeCats][j].DefNum==Listt[k].ProcCat){
+						retVal.Add(Listt[k].Copy());
 					}
 				}
 			}
-			/*for(int k=0;k<tableStat.Rows.Count;k++){
-				if(PIn.PInt(tableStat.Rows[k][4].ToString())==255){
-					ProcList[i]=new ProcedureCode();
-					ProcList[i].ProcCode = PIn.PString(tableStat.Rows[k][0].ToString());
-					ProcList[i].Descript= PIn.PString(tableStat.Rows[k][1].ToString());
-					ProcList[i].AbbrDesc= PIn.PString(tableStat.Rows[k][2].ToString());
-					ProcList[i].ProcCat = 255;
-					i++;
-				}
-			}*/
-			ProcedureCode[] retVal=new ProcedureCode[AL.Count];
-			AL.CopyTo(retVal);
-			return retVal;
-			//return ProcList;
+			return retVal.ToArray();
 		}
 
 		///<summary>Gets a list of procedure codes directly from the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
@@ -312,23 +280,17 @@ namespace OpenDental{
 				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
 				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
 				+"ORDER BY ProcCat,procedurecode.ProcCode";
-			//MsgBoxCopyPaste msg=new MsgBoxCopyPaste(command);
-			//msg.ShowDialog();
 			return General.GetTable(command);
 		}
 
 		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
 		public static string GetLaymanTerm(int codeNum) {
-			//if(myADA==null) {
-			//	MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
-			//	return "";
-			//}
-			for(int i=0;i<List.Length;i++){
-				if(List[i].CodeNum==codeNum){
-					if(List[i].LaymanTerm !=""){
-						return List[i].LaymanTerm;
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].CodeNum==codeNum){
+					if(Listt[i].LaymanTerm !=""){
+						return Listt[i].LaymanTerm;
 					}
-					return List[i].Descript;
+					return Listt[i].Descript;
 				}
 			}
 			return "";

@@ -39,15 +39,29 @@ namespace OpenDentBusiness.HL7 {
 			seg.SetField(19,apt.AptNum.ToString());
 			msg.Segments.Add(seg);
 			//FT1----------------------------------------------------------
-			//List<Procedure> procs=Procedures.
-			//for(int i
-			seg=new SegmentHL7(SegmentName.FT1);
-			seg.SetField(0,"FT1");
-			//seg.SetField(,"");
-			
+			List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
+			for(int i=0;i<procs.Count;i++) {
+				seg=new SegmentHL7(SegmentName.FT1);
+				seg.SetField(0,"FT1");
+				seg.SetField(1,(i+1).ToString());
+				seg.SetField(4,procs[i].ProcDate.ToString("yyyyMMddHHmmss"));
+				seg.SetField(5,procs[i].ProcDate.ToString("yyyyMMddHHmmss"));
+				seg.SetField(6,"CG");
+				seg.SetField(10,"1.0");
+				seg.SetField(16,"");//????
+				seg.SetField(19,procs[i].DiagnosticCode);
+				seg.SetField(20,"");//performed by provider.  Required. Incomplete.
+				seg.SetField(21,"");//ordering provider. Required. Incomplete.
+				seg.SetField(22,"");//copay, optional
+				//seg.SetField(25,ProcedureCodes.  procs[i].CodeNum);
+				//seg.SetField(,"");
+				//seg.SetField(,"");
+				//seg.SetField(,"");
 
 
-			msg.Segments.Add(seg);
+
+				msg.Segments.Add(seg);
+			}
 			seg=new SegmentHL7(SegmentName.DG1);
 			msg.Segments.Add(seg);
 		}
