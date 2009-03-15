@@ -1662,7 +1662,7 @@ namespace OpenDental
 				else{
 					toothnum=proc.ToothNum;
 				}
-				CarrierAllowedAmount=InsPlans.GetAllowed(ProcedureCodes.GetStringProcCode(ProcCodeNum),ClaimProcCur.PlanNum,PlanList,
+				CarrierAllowedAmount=InsPlanL.GetAllowed(ProcedureCodes.GetStringProcCode(ProcCodeNum),ClaimProcCur.PlanNum,PlanList,
 					toothnum,ClaimProcCur.ProvNum);
 				if(CarrierAllowedAmount==-1){
 					textCarrierAllowed.Text="";

@@ -73,9 +73,6 @@ namespace OpenDentBusiness.HL7 {
 			return retVal;
 		}
 
-		public string GenerateMessage() {
-			return "";
-		}
 	}
 
 	public enum MessageType {

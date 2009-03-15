@@ -1330,6 +1330,8 @@ namespace OpenDental{
 				return;
 			}
 			//This next line used to read InvalidTypes.AllLocal-InvalidTypes.Prefs.  But we can't really do that now.
+//a great optimization to make here would be to NOT do this.
+//Each class would refresh on its own if null instead of this shotgun approach.
 			RefreshLocalData(InvalidType.AllLocal);
 			//Lan.Refresh();//automatically skips if current culture is en-US
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US

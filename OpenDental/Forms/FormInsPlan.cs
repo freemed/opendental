@@ -3069,7 +3069,7 @@ namespace OpenDental{
 				return;
 			}
 			try {
-				InsPlans.Delete(PlanCur);//checks dependencies first. Also deletes benefits,claimprocs,patplan and recomputes all estimates.
+				InsPlanL.Delete(PlanCur);//checks dependencies first. Also deletes benefits,claimprocs,patplan and recomputes all estimates.
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -3080,7 +3080,7 @@ namespace OpenDental{
 
 		private void butDrop_Click(object sender,System.EventArgs e) {
 			//should we save the plan info first?  Probably not.
-			PatPlans.Delete(PatPlanCur.PatPlanNum);//Estimates recomputed within Delete()
+			PatPlanL.Delete(PatPlanCur.PatPlanNum);//Estimates recomputed within Delete()
 			//PlanCur.ComputeEstimatesForCur();
 			DialogResult=DialogResult.OK;
 		}
@@ -3814,7 +3814,7 @@ namespace OpenDental{
 			}
 			else{//also triggered when IsNew, because box is unchecked and hidden
 				Benefits.UpdateList(benefitListOld,benefitList);
-				InsPlans.ComputeEstimatesForPlan(PlanCur.PlanNum);
+				InsPlanL.ComputeEstimatesForPlan(PlanCur.PlanNum);
 			}
 			//Synchronize PlanNote----------------------------------------------------------------------------------------------
 			if(planNums.Count==1 && IsForAll){
@@ -3892,10 +3892,10 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNewPlan){//this would also be new coverage
-				InsPlans.Delete(PlanCur);//also drops
+				InsPlanL.Delete(PlanCur);//also drops
 			}
 			else if(IsNewPatPlan){//but plan is not new
-				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
+				PatPlanL.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
 		}
 

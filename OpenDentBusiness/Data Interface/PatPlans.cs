@@ -1,10 +1,10 @@
 using System;
 using System.Data;
 using System.Collections;
-using System.Windows.Forms;
-using OpenDentBusiness;
+using System.Collections.Generic;
+//using System.Windows.Forms;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatPlans {
 		///<summary>Gets a list of all patplans for a given patient</summary>
@@ -12,23 +12,25 @@ namespace OpenDental{
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
-			return Refresh(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
-		private static PatPlan[] Refresh(string command){
+		private static List<PatPlan> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
-			PatPlan[] List=new PatPlan[table.Rows.Count];
+			PatPlan patplan;
+			List<PatPlan> retVal=new List<PatPlan>();
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new PatPlan();
-				List[i].PatPlanNum  = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum      = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].PlanNum     = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].Ordinal     = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].IsPending   = PIn.PBool(table.Rows[i][4].ToString());
-				List[i].Relationship= (Relat)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].PatID       = PIn.PString(table.Rows[i][6].ToString());
+				patplan=new PatPlan();
+				patplan.PatPlanNum  = PIn.PInt(table.Rows[i][0].ToString());
+				patplan.PatNum      = PIn.PInt(table.Rows[i][1].ToString());
+				patplan.PlanNum     = PIn.PInt(table.Rows[i][2].ToString());
+				patplan.Ordinal     = PIn.PInt(table.Rows[i][3].ToString());
+				patplan.IsPending   = PIn.PBool(table.Rows[i][4].ToString());
+				patplan.Relationship= (Relat)PIn.PInt(table.Rows[i][5].ToString());
+				patplan.PatID       = PIn.PString(table.Rows[i][6].ToString());
+				retVal.Add(patplan);
 			}
-			return List;
+			return retVal;
 		}
 	
 		///<summary></summary>
@@ -109,42 +111,6 @@ namespace OpenDental{
 			return "";
 		}
 
-		///<summary>Deletes the patplan with the specified patPlanNum.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Then, recomputes all estimates for this patient because their coverage is now different.  Also sets patient.HasIns to the correct value.</summary>
-		public static void Delete(int patPlanNum){
-			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
-			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
-				return;
-			}
-			int patNum=PIn.PInt(table.Rows[0][0].ToString());
-			PatPlan[] patPlans=Refresh(patNum);
-			bool doDecrement=false;
-			for(int i=0;i<patPlans.Length;i++){
-				if(doDecrement){//patPlan has already been deleted, so decrement the rest.
-					command="UPDATE patplan SET Ordinal="+POut.PInt(patPlans[i].Ordinal-1)
-						+" WHERE PatPlanNum="+POut.PInt(patPlans[i].PatPlanNum);
-					General.NonQ(command);
-					continue;
-				}
-				if(patPlans[i].PatPlanNum==patPlanNum){
-					command="DELETE FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
-					General.NonQ(command);
-					command="DELETE FROM benefit WHERE PatPlanNum=" +POut.PInt(patPlanNum);
-					General.NonQ(command);
-					doDecrement=true;
-				}
-			}
-			Family fam=Patients.GetFamily(patNum);
-			Patient pat=fam.GetPatient(patNum);
-			ClaimProc[] claimProcs=ClaimProcs.Refresh(patNum);
-			Procedure[] procs=Procedures.Refresh(patNum);
-			patPlans=PatPlans.Refresh(patNum);
-			InsPlan[] planList=InsPlans.Refresh(fam);
-			Benefit[] benList=Benefits.Refresh(patPlans);
-			ProcedureL.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList);
-			Patients.SetHasIns(patNum);
-		}
-
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
 		public static void SetOrdinal(int patPlanNum,int newOrdinal){
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
@@ -201,9 +167,19 @@ namespace OpenDental{
 
 		public static PatPlan[] GetByPlanNum(int planNum){
 			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.PInt(planNum)+"'";
-			return Refresh(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
+		///<summary>Will return null if none exists.</summary>
+		public static PatPlan GetPatPlan(int patNum,int ordinal) {
+			string command="SELECT * FROM patplan WHERE PatNum="+POut.PInt(patNum)
+				+" AND Ordinal="+POut.PInt(ordinal);
+			List<PatPlan> list=RefreshAndFill(command);
+			if(list.Count==0) {
+				return null;
+			}
+			return list[0];
+		}
 		
 		
 	}

@@ -16,10 +16,14 @@ using OpenDental.DataAccess;//this namespace is in the OpenDentBusiness project.
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
-		//private string 
+		private System.Windows.Forms.Timer timer;
+		private string inFolder;
 
 		public ServiceHL7() {
 			InitializeComponent();
+			timer=new System.Windows.Forms.Timer();
+			timer.Tick+=new EventHandler(timer_Tick);
+			timer.Interval=1800;//just under 2 seconds.
 		}
 
 		protected override void OnStart(string[] args) {
@@ -66,6 +70,9 @@ namespace OpenDentHL7 {
 				AND programproperty.PropertyDesc='HL7FolderOut'";
 			DataTable table=General.GetTable(command);
 			string hl7folderOut=table.Rows[0][0].ToString();
+			if(!Directory.Exists(hl7folderOut)) {
+				throw new ApplicationException(hl7folderOut+" does not exist.");
+			}
 			FileSystemWatcher watcher=new FileSystemWatcher(hl7folderOut);//'out' from eCW
 			watcher.Created += new FileSystemEventHandler(OnCreated);
 			watcher.Renamed += new RenamedEventHandler(OnRenamed);
@@ -75,6 +82,17 @@ namespace OpenDentHL7 {
 			for(int i=0;i<existingFiles.Length;i++) {
 				ProcessMessage(File.ReadAllText(existingFiles[i]));
 			}
+			//start polling the db for new HL7 messages to send
+			command=@"SELECT PropertyValue FROM programproperty,program
+				WHERE programproperty.ProgramNum=program.ProgramNum
+				AND program.ProgName='eClinicalWorks'
+				AND programproperty.PropertyDesc='HL7FolderIn'";
+			table=General.GetTable(command);
+			inFolder=table.Rows[0][0].ToString();
+			if(!Directory.Exists(inFolder)) {
+				throw new ApplicationException(inFolder+" does not exist.");
+			}
+			timer.Enabled=true;
 		}
 
 		private static void OnCreated(object source,FileSystemEventArgs e) {
@@ -101,6 +119,16 @@ namespace OpenDentHL7 {
 
 		protected override void OnStop() {
 			//inform od via signal that this service has shut down
+			timer.Enabled=false;
+		}
+
+		void timer_Tick(object sender,EventArgs e) {
+			List<HL7Msg> list=HL7Msgs.GetAllPending();
+			for(int i=0;i<list.Count;i++) {
+				File.WriteAllText(Path.Combine(inFolder,list[i].AptNum.ToString()+".txt"),list[i].MsgText);
+				list[i].HL7Status=HL7MessageStatus.OutSent;
+				HL7Msgs.WriteObject(list[i]);//set the status to sent.
+			}
 		}
 	}
 }

@@ -35,11 +35,13 @@ namespace OpenDentBusiness.HL7 {
 			//PV1 (appointment)-------------------------------------------------
 			seg=new SegmentHL7(SegmentName.PV1);
 			seg.SetField(0,"PV1");
-			seg.SetField(7,"");//attending provider. Required, but we'll work on it later.
+			Provider prov=Providers.GetProv(apt.ProvNum);
+			seg.SetField(7,prov.Abbr,prov.LName,prov.FName,prov.MI);
 			seg.SetField(19,apt.AptNum.ToString());
 			msg.Segments.Add(seg);
 			//FT1----------------------------------------------------------
 			List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
+			ProcedureCode procCode;
 			for(int i=0;i<procs.Count;i++) {
 				seg=new SegmentHL7(SegmentName.FT1);
 				seg.SetField(0,"FT1");
@@ -48,26 +50,29 @@ namespace OpenDentBusiness.HL7 {
 				seg.SetField(5,procs[i].ProcDate.ToString("yyyyMMddHHmmss"));
 				seg.SetField(6,"CG");
 				seg.SetField(10,"1.0");
-				seg.SetField(16,"");//????
+				seg.SetField(16,"");//location code and description???
 				seg.SetField(19,procs[i].DiagnosticCode);
-				seg.SetField(20,"");//performed by provider.  Required. Incomplete.
-				seg.SetField(21,"");//ordering provider. Required. Incomplete.
-				seg.SetField(22,"");//copay, optional
-				//seg.SetField(25,ProcedureCodes.  procs[i].CodeNum);
-				//seg.SetField(,"");
-				//seg.SetField(,"");
-				//seg.SetField(,"");
-
-
-
+				prov=Providers.GetProv(procs[i].ProvNum);
+				seg.SetField(20,prov.Abbr,prov.LName,prov.FName,prov.MI);//performed by provider.
+				seg.SetField(21,prov.Abbr,prov.LName,prov.FName,prov.MI);//ordering provider.
+				seg.SetField(22,procs[i].ProcFee.ToString("F2"));
+				procCode=ProcedureCodes.GetProcCode(procs[i].CodeNum);
+				seg.SetField(25,procCode.ProcCode);
+				if(procCode.TreatArea==TreatmentArea.ToothRange){
+					seg.SetField(26,procs[i].ToothRange,"");
+				}
+				else{
+					seg.SetField(26,procs[i].ToothNum,procs[i].Surf);
+				}
 				msg.Segments.Add(seg);
 			}
-			seg=new SegmentHL7(SegmentName.DG1);
-			msg.Segments.Add(seg);
+			//DG1 optional, so we'll skip for now---------------------------------
+			//seg=new SegmentHL7(SegmentName.DG1);
+			//msg.Segments.Add(seg);
 		}
 
 		public string GenerateMessage() {
-			return msg.GenerateMessage();
+			return msg.ToString();
 		}
 
 		private string ConvertGender(PatientGender gender){

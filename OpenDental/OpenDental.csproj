@@ -232,6 +232,8 @@
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
     <Compile Include="Data Interface\AnestheticMeds.cs" />
     <Compile Include="Data Interface\AnesthMedsGiven.cs" />
+    <Compile Include="Data Interface\InsPlanL.cs" />
+    <Compile Include="Data Interface\PatPlanL.cs" />
     <Compile Include="Data Interface\PhoneOverrides.cs" />
     <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
@@ -273,7 +275,6 @@
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\Fees.cs" />
-    <Compile Include="Data Interface\InsPlans.cs" />
     <Compile Include="Data Interface\Instructors.cs" />
     <Compile Include="Data Interface\JournalEntries.cs" />
     <Compile Include="Data Interface\Lan.cs" />
@@ -286,7 +287,6 @@
     <Compile Include="Data Interface\AccountModuleL.cs" />
     <Compile Include="Data Interface\PatFieldDefs.cs" />
     <Compile Include="Data Interface\PatFields.cs" />
-    <Compile Include="Data Interface\PatPlans.cs" />
     <Compile Include="Data Interface\Payments.cs" />
     <Compile Include="Data Interface\PayPeriods.cs" />
     <Compile Include="Data Interface\PayPlanCharges.cs" />

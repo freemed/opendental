@@ -87,6 +87,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDeleteProc;
 		private OpenDental.UI.Button butComplete;
 		private CheckBox checkTimeLocked;
+		///<summary>This is the way to pass a "signal" up to the parent form that OD is to close.</summary>
+		public bool CloseOD;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -1012,9 +1014,8 @@ namespace OpenDental{
 			}
 			if(Programs.IsEnabled("eClinicalWorks")) {
 				butComplete.Visible=true;
-//We need to use different criteria here.  We should see if the HL7 message was actually sent.
-				/*
-				if(AptCur.AptStatus==ApptStatus.Complete) {
+//We also need to make sure that this aptNum matches the one passed in by eCW.
+				if(HL7Msgs.MessageWasSent(AptCur.AptNum)) {
 					butComplete.Text="Revise";
 					if(!Security.IsAuthorized(Permissions.Setup,true)) {
 						butComplete.Enabled=false;
@@ -1022,7 +1023,7 @@ namespace OpenDental{
 				}
 				else {
 					butComplete.Text="Complete";
-				}*/
+				}
 			}
 			else {
 				butComplete.Visible=false;
@@ -1821,7 +1822,7 @@ namespace OpenDental{
 			//This is only used with eCW.
 //only allow user to get this far if aptNum matches visit num previously passed in by eCW.
 			if(butComplete.Text=="Complete") {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send completed procedures to eClinicalWorks and exit?")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send attached procedures to eClinicalWorks and exit?")) {
 					return;
 				}
 //need to save the appointment first.
@@ -1831,8 +1832,10 @@ namespace OpenDental{
 				msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
 				msg.MsgText=dft.GenerateMessage();
 				HL7Msgs.WriteObject(msg);
+				CloseOD=true;
+				DialogResult=DialogResult.OK;
 			}
-			if(butComplete.Text=="Revise") {
+			else if(butComplete.Text=="Revise") {
 
 			}
 		}

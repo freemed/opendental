@@ -94,7 +94,7 @@ namespace OpenDentBusiness.HL7 {
 			pat.HmPhone=PhoneParse(seg.GetFieldFullText(13));
 			pat.WkPhone=PhoneParse(seg.GetFieldFullText(14));
 			pat.Position=MaritalStatusParse(seg.GetFieldFullText(16));
-			pat.ChartNumber=seg.GetFieldFullText(18);
+			//pat.ChartNumber=seg.GetFieldFullText(18);//this is wrong
 			pat.SSN=seg.GetFieldFullText(19);
 		}
 
@@ -112,38 +112,52 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
-		///<summary>The pat will already have guarantor set as self.  Guarantor is based on "account number", which is synonymous with our ChartNumber.  if chartNumber is blank, it does nothing.  If relationship is self, it does nothing.</summary>
+		///<summary>A new pat will already have guarantor set as self. If relationship is self, this loop does nothing.</summary>
 		public static void ProcessGT1(Patient pat,SegmentHL7 seg) {
-			string chartNumber=seg.GetFieldFullText(2);
-			if(chartNumber=="") {
-				return;
-			}
+			int guarNum=PIn.PInt(seg.GetFieldFullText(2));
 			if(seg.GetFieldFullText(11)=="1"){//if relationship is self
 				return;
 			}
-			return;
-			Patient guar=Patients.GetPatByChartNumber(chartNumber);
-			//we can't add a guarantor.  Because we don't know the patNum.
-			//And if we pick a random patNum, it will collide later with a patient added by eCW.
-			//So all we can possibly do is to assign this patient to the guarantor only if it already exists.
-			if(guar!=null) {
-				pat.Guarantor=guar.PatNum;
-			}
-			/*
-			if(guar==null) {
+			pat.Guarantor=guarNum;
+			Patient guar=Patients.GetPat(guarNum);
+			Patient guarOld=null;
+			bool isNewGuar= guar==null;
+			if(isNewGuar) {//then we need to add guarantor to db
 				guar=new Patient();
-				guar.PatNum=patNum;
-				pat.Guarantor=patNum;
-				pat.PriProv=PrefC.GetInt("PracticeDefaultProv");
-				pat.BillingType=PrefC.GetInt("PracticeDefaultBillType");
-			}*/
+				guar.PatNum=guarNum;
+				guar.PriProv=PrefC.GetInt("PracticeDefaultProv");
+				guar.BillingType=PrefC.GetInt("PracticeDefaultBillType");
+			}
+			else {
+				guarOld=pat.Copy();
+			}
+			guar.Guarantor=guarNum;
+			guar.LName=seg.GetFieldComponent(3,0);
+			guar.FName=seg.GetFieldComponent(3,1);
+			guar.MiddleI=seg.GetFieldComponent(3,2);
+			guar.Address=seg.GetFieldComponent(5,0);
+			guar.Address2=seg.GetFieldComponent(5,1);
+			guar.City=seg.GetFieldComponent(5,2);
+			guar.State=seg.GetFieldComponent(5,3);
+			guar.Zip=seg.GetFieldComponent(5,4);
+			guar.HmPhone=PhoneParse(seg.GetFieldFullText(6));
+			guar.WkPhone=PhoneParse(seg.GetFieldFullText(7));
+			guar.Birthdate=DateParse(seg.GetFieldFullText(8));
+			guar.Gender=GenderParse(seg.GetFieldFullText(9));
+			//11. Guarantor relationship to patient.  We can't really do anything with this value
+			guar.SSN=seg.GetFieldFullText(12);
 		}
 
 		public static void ProcessIN1(Patient pat,SegmentHL7 seg) {
-//major problems here with patient ID's for insured.
-			//as a general strategy, if certain things are the same, like guarantor and carrier,
+			//as a general strategy, if certain things are the same, like subscriber and carrier,
 			//then we change the existing plan.
-			//However, if basics change at all, then we 
+			//However, if basics change at all, then we drop the old plan and create a new one
+			int ordinal=PIn.PInt(seg.GetFieldFullText(1));
+			PatPlan oldPatPlan=PatPlans.GetPatPlan(pat.PatNum,ordinal);
+			if(oldPatPlan==null) {
+				//create a new plan and a new patplan
+			}
+			//InsPlan oldPlan=InsPlans.g
 		}
 
 		///<summary>yyyyMMdd.  If not in that format, it returns minVal.</summary>
@@ -230,7 +244,6 @@ namespace OpenDentBusiness.HL7 {
 			if(provAbbr==""){
 				return 0;
 			}
-			int provNum=0;
 			Provider prov=Providers.GetProvByAbbr(provAbbr);
 			bool isNewProv=false;
 			bool provChanged=false;

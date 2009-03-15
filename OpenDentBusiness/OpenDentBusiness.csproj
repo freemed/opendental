@@ -144,6 +144,8 @@
     <Compile Include="Data Interface\AnesthVSDatas.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
+    <Compile Include="Data Interface\InsPlans.cs" />
+    <Compile Include="Data Interface\PatPlans.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\ProcedureCodes.cs" />

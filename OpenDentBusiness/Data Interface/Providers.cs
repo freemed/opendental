@@ -274,6 +274,16 @@ namespace OpenDentBusiness{
 					return ProviderC.ListLong[i].Copy();
 				}
 			}
+			//If using eCW, a provider might have been added from the business layer.
+			//The UI layer won't know about the addition.
+			//So we need to refresh if we can't initially find the prov.
+			RefreshCache();
+			//and try again
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].Abbr==abbr) {
+					return ProviderC.ListLong[i].Copy();
+				}
+			}
 			return null;
 		}
 

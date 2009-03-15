@@ -166,7 +166,7 @@ namespace OpenDental.Bridges {
 							InsPlans.Update(insplans[j]);
 							PatPlan[] patplans=PatPlans.GetByPlanNum(insplans[j].PlanNum);
 							for(int k=0;k<patplans.Length;k++) {
-								PatPlans.Delete(patplans[k].PatPlanNum);
+								PatPlanL.Delete(patplans[k].PatPlanNum);
 							}
 						}
 					} catch(ApplicationException ex) {
@@ -675,7 +675,7 @@ namespace OpenDental.Bridges {
 					((Benefit)benefitList[j]).PlanNum=planNum;
 					Benefits.Insert((Benefit)benefitList[j]);
 				}
-				InsPlans.ComputeEstimatesForPlan(planNum);
+				InsPlanL.ComputeEstimatesForPlan(planNum);
 			}
 			return table.Rows.Count;
 			//MessageBox.Show(plan.BenefitNotes);

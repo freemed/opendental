@@ -4534,6 +4534,10 @@ namespace OpenDental{
 				FormApptEdit FormA=new FormApptEdit(PIn.PInt(row["AptNum"].ToString()));
 				//PinIsVisible=false
 				FormA.ShowDialog();
+				if(FormA.CloseOD) {
+					((Form)this.Parent).Close();
+					return;
+				}
 				if(FormA.DialogResult!=DialogResult.OK) {
 					return;
 				}

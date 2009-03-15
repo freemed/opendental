@@ -32,16 +32,26 @@ namespace OpenDentBusiness{
 		///<Summary>Gets one HL7Msg from the database.</Summary>
 		public static HL7Msg CreateObject(int HL7MsgNum){
 			return DataObjectFactory<HL7Msg>.CreateObject(HL7MsgNum);
-		}
-
-		public static List<HL7Msg> GetHL7Msgs(int[] HL7MsgNums){
-			Collection<HL7Msg> collectState=DataObjectFactory<HL7Msg>.CreateObjects(HL7MsgNums);
-			return new List<HL7Msg>(collectState);		
 		}*/
+
+		public static List<HL7Msg> GetAllPending(){
+			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.PInt((int)HL7MessageStatus.OutPending);
+			Collection<HL7Msg> collection=DataObjectFactory<HL7Msg>.CreateObjects(command);
+			return new List<HL7Msg>(collection);		
+		}
 
 		///<summary></summary>
 		public static void WriteObject(HL7Msg hL7Msg){
 			DataObjectFactory<HL7Msg>.WriteObject(hL7Msg);
+		}
+
+		///<summary></summary>
+		public static bool MessageWasSent(int aptNum) {
+			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.PInt(aptNum);
+			if(General.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
 		}
 
 		/*
