@@ -77,6 +77,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a Program link with the given name or number exists and is enabled.</summary>
 		public static bool IsEnabled(string progName){
+			if(ProgramC.HList==null) {
+				Programs.RefreshCache();
+			}
 			if(ProgramC.HList.ContainsKey(progName) && ((Program)ProgramC.HList[progName]).Enabled) {
 				return true;
 			}

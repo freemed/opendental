@@ -3011,20 +3011,17 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			if(!Programs.IsEnabled("eClinicalWorks")){
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
-		 	//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			if(PrefC.GetBoolSilent("EnableAnesthMod",true)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
 			}
 			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
-			//if(SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count>0){
-				button.Style=ODToolBarButtonStyle.DropDownButton;
-				button.DropDownMenu=menuConsent;
-			//}
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuConsent;
 			ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -3135,7 +3132,9 @@ namespace OpenDental{
 				toothChart.Enabled=false;
 				gridProg.Enabled=false;
 				butBig.Enabled=false;
-				ToolBarMain.Buttons["Rx"].Enabled=false;
+				if(!Programs.IsEnabled("eClinicalWorks")) {
+					ToolBarMain.Buttons["Rx"].Enabled=false;
+				}
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
 				if(PrefC.GetBoolSilent("EnableAnesthMod", false)){
@@ -3153,7 +3152,9 @@ namespace OpenDental{
 				toothChart.Enabled=true;
 				gridProg.Enabled=true;
 				butBig.Enabled=true;
-				ToolBarMain.Buttons["Rx"].Enabled=true;
+				if(!Programs.IsEnabled("eClinicalWorks")) {
+					ToolBarMain.Buttons["Rx"].Enabled=true;
+				}
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
 				//turns off Anesthesia Module button if pref is not checked in Module Setup
@@ -3472,103 +3473,105 @@ namespace OpenDental{
 			}
 			ODGridCell cell;
 			//medical fields-----------------------------------------------------------------
-			//premed flag.
-			if(PatCur.Premed){
-				row=new ODGridRow();
-				row.Cells.Add("");
-				cell=new ODGridCell();
-				cell.Text=Lan.g("TableChartPtInfo","Premedicate");
-				cell.ColorText=Color.Red;
-				cell.Bold=YN.Yes;
-				row.Cells.Add(cell);
-				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-				row.Tag="med";
-				gridPtInfo.Rows.Add(row);
-			}
-			//diseases
-			Disease[] DiseaseList=Diseases.Refresh(PatCur.PatNum);
-			row=new ODGridRow();
-			cell=new ODGridCell(Lan.g("TableChartPtInfo","Diseases"));
-			cell.Bold=YN.Yes;
-			row.Cells.Add(cell);
-			if(DiseaseList.Length>0) {
-				row.Cells.Add("");
-			}
-			else {
-				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
-			}
-			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-			row.Tag="med";
-			gridPtInfo.Rows.Add(row);
-			for(int i=0;i<DiseaseList.Length;i++) {
-				row=new ODGridRow();
-				cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
-				cell.ColorText=Color.Red;
-				cell.Bold=YN.Yes;
-				row.Cells.Add(cell);
-				row.Cells.Add(DiseaseList[i].PatNote);
-				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-				row.Tag="med";
-				gridPtInfo.Rows.Add(row);
-			}
-			//MedUrgNote 
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableChartPtInfo","Med Urgent"));
-			cell=new ODGridCell();
-			cell.Text=PatCur.MedUrgNote;
-			cell.ColorText=Color.Red;
-			cell.Bold=YN.Yes;
-			row.Cells.Add(cell);
-			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-			row.Tag="med";
-			gridPtInfo.Rows.Add(row);
-			//Medical
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableChartPtInfo","Medical Summary"));
-			row.Cells.Add(PatientNoteCur.Medical);
-			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-			row.Tag="med";
-			gridPtInfo.Rows.Add(row);
-			//Service
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableChartPtInfo","Service Notes"));
-			row.Cells.Add(PatientNoteCur.Service);
-			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-			row.Tag="med";
-			gridPtInfo.Rows.Add(row);
-			//medications
-			Medications.Refresh();
-			MedicationPats.Refresh(PatCur.PatNum);
-			row=new ODGridRow();
-			cell=new ODGridCell(Lan.g("TableChartPtInfo","Medications"));
-			cell.Bold=YN.Yes;
-			row.Cells.Add(cell);
-			if(MedicationPats.List.Length>0) {
-				row.Cells.Add("");
-			}
-			else{
-				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
-			}
-			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
-			row.Tag="med";
-			gridPtInfo.Rows.Add(row);
-			string text;
-			Medication med;
-			for(int i=0;i<MedicationPats.List.Length;i++) {
-				row=new ODGridRow();
-				med=Medications.GetMedication(MedicationPats.List[i].MedicationNum);
-				text=med.MedName;
-				if(med.MedicationNum != med.GenericNum){
-					text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
+			if(!Programs.IsEnabled("eClinicalWorks")) {
+				//premed flag.
+				if(PatCur.Premed) {
+					row=new ODGridRow();
+					row.Cells.Add("");
+					cell=new ODGridCell();
+					cell.Text=Lan.g("TableChartPtInfo","Premedicate");
+					cell.ColorText=Color.Red;
+					cell.Bold=YN.Yes;
+					row.Cells.Add(cell);
+					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+					row.Tag="med";
+					gridPtInfo.Rows.Add(row);
 				}
-				row.Cells.Add(text);
-				text=MedicationPats.List[i].PatNote
-					+"("+Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes+")";
-				row.Cells.Add(text);
+				//diseases
+				Disease[] DiseaseList=Diseases.Refresh(PatCur.PatNum);
+				row=new ODGridRow();
+				cell=new ODGridCell(Lan.g("TableChartPtInfo","Diseases"));
+				cell.Bold=YN.Yes;
+				row.Cells.Add(cell);
+				if(DiseaseList.Length>0) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(Lan.g("TableChartPtInfo","none"));
+				}
 				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
-			}
+				for(int i=0;i<DiseaseList.Length;i++) {
+					row=new ODGridRow();
+					cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+					cell.ColorText=Color.Red;
+					cell.Bold=YN.Yes;
+					row.Cells.Add(cell);
+					row.Cells.Add(DiseaseList[i].PatNote);
+					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+					row.Tag="med";
+					gridPtInfo.Rows.Add(row);
+				}
+				//MedUrgNote 
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g("TableChartPtInfo","Med Urgent"));
+				cell=new ODGridCell();
+				cell.Text=PatCur.MedUrgNote;
+				cell.ColorText=Color.Red;
+				cell.Bold=YN.Yes;
+				row.Cells.Add(cell);
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
+				gridPtInfo.Rows.Add(row);
+				//Medical
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g("TableChartPtInfo","Medical Summary"));
+				row.Cells.Add(PatientNoteCur.Medical);
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
+				gridPtInfo.Rows.Add(row);
+				//Service
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g("TableChartPtInfo","Service Notes"));
+				row.Cells.Add(PatientNoteCur.Service);
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
+				gridPtInfo.Rows.Add(row);
+				//medications
+				Medications.Refresh();
+				MedicationPats.Refresh(PatCur.PatNum);
+				row=new ODGridRow();
+				cell=new ODGridCell(Lan.g("TableChartPtInfo","Medications"));
+				cell.Bold=YN.Yes;
+				row.Cells.Add(cell);
+				if(MedicationPats.List.Length>0) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(Lan.g("TableChartPtInfo","none"));
+				}
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
+				gridPtInfo.Rows.Add(row);
+				string text;
+				Medication med;
+				for(int i=0;i<MedicationPats.List.Length;i++) {
+					row=new ODGridRow();
+					med=Medications.GetMedication(MedicationPats.List[i].MedicationNum);
+					text=med.MedName;
+					if(med.MedicationNum != med.GenericNum) {
+						text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
+					}
+					row.Cells.Add(text);
+					text=MedicationPats.List[i].PatNote
+						+"("+Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes+")";
+					row.Cells.Add(text);
+					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
+					row.Tag="med";
+					gridPtInfo.Rows.Add(row);
+				}
+			}//if !eCW.enabled
 			gridPtInfo.EndUpdate();
 		}
 

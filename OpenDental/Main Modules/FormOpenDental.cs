@@ -216,7 +216,7 @@ namespace OpenDental{
 			Splash=new FormSplash();
 			Splash.Show();
 			InitializeComponent();
-//toolbar
+			//toolbar
 			ToolBarMain=new ODToolBar();
 			ToolBarMain.Location=new Point(51,0);
 			ToolBarMain.Size=new Size(931,25);
@@ -232,7 +232,6 @@ namespace OpenDental{
 			myOutlookBar.Dock=DockStyle.Left;
 			myOutlookBar.ButtonClicked+=new ButtonClickedEventHandler(myOutlookBar_ButtonClicked);
 			this.Controls.Add(myOutlookBar);
-			
 			//contrAppt
 			ContrAppt2=new ContrAppt();
 			ContrAppt2.Visible=false;
@@ -1274,6 +1273,9 @@ namespace OpenDental{
 				return;
 			}
 			//This next line used to read InvalidTypes.AllLocal-InvalidTypes.Prefs.  But we can't really do that now.
+			if(Programs.IsEnabled("eClinicalWorks")){
+				Splash.Dispose();
+			}
 //a great optimization to make here would be to NOT do this.
 //Each class would refresh on its own if null instead of this shotgun approach.
 			RefreshLocalData(InvalidType.AllLocal);
@@ -1346,6 +1348,12 @@ namespace OpenDental{
 				userControlTasks1.InitializeOnStartup();
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				myOutlookBar.SelectedIndex=4;//Chart module
+				ToolBarMain.Height=0;//this should force the modules further up on the screen
+				ToolBarMain.Visible=false;
+				LayoutControls();
+			}
 			myOutlookBar.Invalidate();
 			LayoutToolBar();
 			SetModuleSelected();
@@ -1368,6 +1376,7 @@ namespace OpenDental{
 					}
 				}
 			#endif
+			FillPatientButton(0,"",false,"",0);
 			ThreadCommandLine=new Thread(new ThreadStart(Listen));
 			if(!IsSecondInstance) {//can't use a port that's already in use.
 				ThreadCommandLine.Start();
@@ -1375,7 +1384,6 @@ namespace OpenDental{
 			if(CommandLineArgs.Length>0) {
 				ProcessCommandLine(CommandLineArgs);
 			}
-			FillPatientButton(0,"",false,"",0);
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
@@ -1631,6 +1639,13 @@ namespace OpenDental{
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll){
 				if(Programs.GetCur("PT").Enabled){
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
+				}
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					myOutlookBar.Buttons[0].Visible=false;
+					myOutlookBar.Buttons[1].Visible=false;
+					myOutlookBar.Buttons[2].Visible=false;
+					myOutlookBar.Buttons[5].Visible=false;
+					myOutlookBar.Buttons[6].Visible=false;
 				}
 			}
 			if(itypeList.Contains((int)InvalidType.Providers) || isAll){

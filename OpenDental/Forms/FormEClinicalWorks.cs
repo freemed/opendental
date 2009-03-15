@@ -128,6 +128,7 @@ namespace OpenDental{
 			this.checkEnabled.TabIndex = 41;
 			this.checkEnabled.Text = "Enabled";
 			this.checkEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkEnabled.Click += new System.EventHandler(this.checkEnabled_Click);
 			// 
 			// label1
 			// 
@@ -296,6 +297,10 @@ namespace OpenDental{
 			throw new ApplicationException("Property not found: "+desc);
 		}
 
+		private void checkEnabled_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"You will need to restart Open Dental to see the effects.");
+		}
+
 		private bool SaveToDb(){
 			if(textProgDesc.Text==""){
 				MessageBox.Show("Description may not be blank.");
@@ -330,6 +335,8 @@ namespace OpenDental{
 		private void FormProgramLinkEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			
 		}
+
+	
 
 		
 
