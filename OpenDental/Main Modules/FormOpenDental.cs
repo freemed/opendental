@@ -98,7 +98,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemClaimForms;
 		private System.Windows.Forms.MenuItem menuItemContacts;
 		private System.Windows.Forms.MenuItem menuItemMedications;
-		private OpenDental.OutlookBar myOutlookBar;
 		private System.Windows.Forms.ImageList imageList32;
 		private System.Windows.Forms.MenuItem menuItemApptViews;
 		private System.Windows.Forms.MenuItem menuItemComputers;
@@ -147,13 +146,6 @@ namespace OpenDental{
 		private DateTime signalLastRefreshed;
 		private FormSplash Splash;
 		private Bitmap bitmapIcon;
-		private ContrAppt ContrAppt2;
-		private ContrFamily ContrFamily2;
-		private ContrAccount ContrAccount2;
-		private ContrTreat ContrTreat2;
-		private ContrDocs ContrDocs2;
-		private ContrChart ContrChart2;
-		private ContrStaff ContrManage2;
 		private MenuItem menuItemCreateAtoZFolders;
 		private MenuItem menuItemLaboratories;
 		///<summary>A list of button definitions for this computer.</summary>
@@ -167,7 +159,6 @@ namespace OpenDental{
 		private MenuItem menuItemReqStudents;
 		private MenuItem menuItemAutoNotes;
 		private MenuItem menuItemReallocate;
-		private UserControlTasks userControlTasks1;
 		private MenuItem menuItemMergeDatabases;
 		private MenuItem menuItemDisplayFields;
 		private Panel panelSplitter;
@@ -178,7 +169,6 @@ namespace OpenDental{
 		private MenuItem menuItemDockBottom;
 		private MenuItem menuItemDockRight;
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
-		private OpenDental.UI.ODToolBar ToolBarMain;
 		private ImageList imageListMain;
 		private ContextMenu menuPatient;
 		private ContextMenu menuLabel;
@@ -209,6 +199,16 @@ namespace OpenDental{
 		private TcpListener TcpListenerCommandLine;
 		///<summary>True if there is already a different instance of OD running.  This prevents attempting to start the listener.</summary>
 		public bool IsSecondInstance;
+		private UserControlTasks userControlTasks1;
+		private ContrAppt ContrAppt2;
+		private ContrFamily ContrFamily2;
+		private ContrAccount ContrAccount2;
+		private ContrTreat ContrTreat2;
+		private ContrChart ContrChart2;
+		private ContrDocs ContrDocs2;
+		private ContrStaff ContrManage2;
+		private OutlookBar myOutlookBar;
+		private OpenDental.UI.ODToolBar ToolBarMain;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -216,14 +216,64 @@ namespace OpenDental{
 			Splash=new FormSplash();
 			Splash.Show();
 			InitializeComponent();
+//toolbar
+			ToolBarMain=new ODToolBar();
+			ToolBarMain.Location=new Point(51,0);
+			ToolBarMain.Size=new Size(931,25);
+			ToolBarMain.Dock=DockStyle.Top;
+			ToolBarMain.ImageList=imageListMain;
+			ToolBarMain.ButtonClick+=new ODToolBarButtonClickEventHandler(ToolBarMain_ButtonClick);
+			this.Controls.Add(ToolBarMain);
+			//outlook bar
+			myOutlookBar=new OutlookBar();
+			myOutlookBar.Location=new Point(0,0);
+			myOutlookBar.Size=new Size(51,626);
+			myOutlookBar.ImageList=imageList32;
+			myOutlookBar.Dock=DockStyle.Left;
+			myOutlookBar.ButtonClicked+=new ButtonClickedEventHandler(myOutlookBar_ButtonClicked);
+			this.Controls.Add(myOutlookBar);
+			
+			//contrAppt
+			ContrAppt2=new ContrAppt();
+			ContrAppt2.Visible=false;
 			ContrAppt2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrAppt2);
+			//contrFamily
+			ContrFamily2=new ContrFamily();
+			ContrFamily2.Visible=false;
 			ContrFamily2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrFamily2);
+			//contrAccount
+			ContrAccount2=new ContrAccount();
+			ContrAccount2.Visible=false;
 			ContrAccount2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrAccount2);
+			//contrTreat
+			ContrTreat2=new ContrTreat();
+			ContrTreat2.Visible=false;
 			ContrTreat2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrTreat2);
+			//contrChart
+			ContrChart2=new ContrChart();
+			ContrChart2.Visible=false;
 			ContrChart2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrChart2);
+			//contrDocs
+			ContrDocs2=new ContrDocs();
+			ContrDocs2.Visible=false;
 			ContrDocs2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrDocs2);
+			//contrManage
+			ContrManage2=new ContrStaff();
+			ContrManage2.Visible=false;
 			ContrManage2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
+			this.Controls.Add(ContrManage2);
+			//userControlTasks
+			userControlTasks1=new UserControlTasks();
+			userControlTasks1.Visible=false;
+			userControlTasks1.GoToChanged+=new EventHandler(userControlTasks1_GoToChanged);
 			GotoModule.ModuleSelected+=new ModuleEventHandler(GotoModule_ModuleSelected);
+			this.Controls.Add(userControlTasks1);
 			panelSplitter.ContextMenu=menuSplitter;
 			menuItemDockBottom.Checked=true;
 			phonePanel=new UserControlPhonePanel();
@@ -362,17 +412,7 @@ namespace OpenDental{
 			this.menuEmail = new System.Windows.Forms.ContextMenu();
 			this.menuLetter = new System.Windows.Forms.ContextMenu();
 			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.userControlTasks1 = new OpenDental.UserControlTasks();
-			this.ContrManage2 = new OpenDental.ContrStaff();
-			this.ContrChart2 = new OpenDental.ContrChart();
-			this.ContrDocs2 = new OpenDental.ContrDocs();
-			this.ContrTreat2 = new OpenDental.ContrTreat();
-			this.ContrAccount2 = new OpenDental.ContrAccount();
-			this.ContrFamily2 = new OpenDental.ContrFamily();
-			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
-			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.SuspendLayout();
 			// 
@@ -1161,81 +1201,6 @@ namespace OpenDental{
 			this.timerDisabledKey.Interval = 600000;
 			this.timerDisabledKey.Tick += new System.EventHandler(this.timerDisabledKey_Tick);
 			// 
-			// ToolBarMain
-			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(931,25);
-			this.ToolBarMain.TabIndex = 178;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// userControlTasks1
-			// 
-			this.userControlTasks1.Location = new System.Drawing.Point(57,498);
-			this.userControlTasks1.Name = "userControlTasks1";
-			this.userControlTasks1.Size = new System.Drawing.Size(783,139);
-			this.userControlTasks1.TabIndex = 28;
-			this.userControlTasks1.Visible = false;
-			this.userControlTasks1.GoToChanged += new System.EventHandler(this.userControlTasks1_GoToChanged);
-			// 
-			// ContrManage2
-			// 
-			this.ContrManage2.Location = new System.Drawing.Point(77,31);
-			this.ContrManage2.Name = "ContrManage2";
-			this.ContrManage2.Size = new System.Drawing.Size(877,547);
-			this.ContrManage2.TabIndex = 27;
-			this.ContrManage2.Visible = false;
-			// 
-			// ContrChart2
-			// 
-			this.ContrChart2.Location = new System.Drawing.Point(77,49);
-			this.ContrChart2.Name = "ContrChart2";
-			this.ContrChart2.Size = new System.Drawing.Size(865,589);
-			this.ContrChart2.TabIndex = 26;
-			this.ContrChart2.Visible = false;
-			// 
-			// ContrDocs2
-			// 
-			this.ContrDocs2.Location = new System.Drawing.Point(0,0);
-			this.ContrDocs2.Name = "ContrDocs2";
-			this.ContrDocs2.Size = new System.Drawing.Size(939,585);
-			this.ContrDocs2.TabIndex = 179;
-			this.ContrDocs2.Visible = false;
-			// 
-			// ContrTreat2
-			// 
-			this.ContrTreat2.Location = new System.Drawing.Point(97,47);
-			this.ContrTreat2.Name = "ContrTreat2";
-			this.ContrTreat2.Size = new System.Drawing.Size(857,612);
-			this.ContrTreat2.TabIndex = 24;
-			this.ContrTreat2.Visible = false;
-			// 
-			// ContrAccount2
-			// 
-			this.ContrAccount2.Location = new System.Drawing.Point(109,38);
-			this.ContrAccount2.Name = "ContrAccount2";
-			this.ContrAccount2.Size = new System.Drawing.Size(796,599);
-			this.ContrAccount2.TabIndex = 23;
-			this.ContrAccount2.Visible = false;
-			// 
-			// ContrFamily2
-			// 
-			this.ContrFamily2.Location = new System.Drawing.Point(109,38);
-			this.ContrFamily2.Name = "ContrFamily2";
-			this.ContrFamily2.Size = new System.Drawing.Size(845,599);
-			this.ContrFamily2.TabIndex = 22;
-			this.ContrFamily2.Visible = false;
-			// 
-			// ContrAppt2
-			// 
-			this.ContrAppt2.Location = new System.Drawing.Point(97,42);
-			this.ContrAppt2.Name = "ContrAppt2";
-			this.ContrAppt2.Size = new System.Drawing.Size(857,643);
-			this.ContrAppt2.TabIndex = 21;
-			this.ContrAppt2.Visible = false;
-			// 
 			// lightSignalGrid1
 			// 
 			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
@@ -1245,17 +1210,6 @@ namespace OpenDental{
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
 			// 
-			// myOutlookBar
-			// 
-			this.myOutlookBar.Dock = System.Windows.Forms.DockStyle.Left;
-			this.myOutlookBar.ImageList = this.imageList32;
-			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
-			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,626);
-			this.myOutlookBar.TabIndex = 18;
-			this.myOutlookBar.Text = "outlookBar1";
-			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
-			// 
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
@@ -1263,18 +1217,8 @@ namespace OpenDental{
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,626);
-			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
-			this.Controls.Add(this.userControlTasks1);
-			this.Controls.Add(this.ContrManage2);
-			this.Controls.Add(this.ContrChart2);
-			this.Controls.Add(this.ContrDocs2);
-			this.Controls.Add(this.ContrTreat2);
-			this.Controls.Add(this.ContrAccount2);
-			this.Controls.Add(this.ContrFamily2);
-			this.Controls.Add(this.ContrAppt2);
 			this.Controls.Add(this.lightSignalGrid1);
-			this.Controls.Add(this.myOutlookBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu;
@@ -2300,6 +2244,7 @@ namespace OpenDental{
 				phonePanel.Visible=false;
 				panelSplitter.Visible=false;
 			}
+			
 			ContrAccount2.Location=position;
 			ContrAccount2.Width=width;
 			ContrAccount2.Height=height;
