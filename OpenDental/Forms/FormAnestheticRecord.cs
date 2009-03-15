@@ -22,17 +22,17 @@ namespace OpenDental
 {
 	public class FormAnestheticRecord : System.Windows.Forms.Form{
 		public static Userod CurUser;
-        private bool IsStartingUp;
+		private bool IsStartingUp;
 		private bool IsUpdate;
 		private AnestheticRecord AnestheticRecordCur;
 		public AnestheticData AnesthDataCur;
-        public Patient PatCur;
-        public bool IsNew;
-        private GroupBox groupBoxVS;
+		public Patient PatCur;
+		public bool IsNew;
+		private GroupBox groupBoxVS;
 		private Label labelVSM;
 		private TextBox textVSMName;
 		private Label labelVSMSerNum;
-        private TextBox textVSMSerNum;
+		private TextBox textVSMSerNum;
 		private GroupBox groupBoxSidebarRt;
 		private Label labelASA;
 		private ComboBox comboASA;
@@ -74,63 +74,63 @@ namespace OpenDental
 		private RadioButton radMedRouteIM;
 		private RadioButton radMedRoutePO;
 		private RadioButton radMedRouteRectal;
-        private GroupBox groupBoxTimes;
-        private TextBox textAnesthOpen;
-        private OpenDental.UI.Button butSurgClose;
-        private TextBox textSurgClose;
-        private TextBox textAnesthClose;
-        private OpenDental.UI.Button butAnesthOpen;
-        private OpenDental.UI.Button butAnesthClose;
-        private OpenDental.UI.Button butSurgOpen;
-        private TextBox textSurgOpen;
+		private GroupBox groupBoxTimes;
+		private TextBox textAnesthOpen;
+		private OpenDental.UI.Button butSurgClose;
+		private TextBox textSurgClose;
+		private TextBox textAnesthClose;
+		private OpenDental.UI.Button butAnesthOpen;
+		private OpenDental.UI.Button butAnesthClose;
+		private OpenDental.UI.Button butSurgOpen;
+		private TextBox textSurgOpen;
 		private Label labelIVAnesthetics;
-        private Label labelAsst;
-        private ComboBox comboCirc;
-        private OpenDental.UI.Button butDelAnesthetic;
-        private Label labelCirc;
-        private ComboBox comboAsst;
-        private OpenDental.UI.Button butAddAnesthetic;
-        private ListBox listAnesthetics;
-        private Label labelAnesthMed;
-        private ODGrid gridAnesthMeds;
-        private GroupBox groupBoxDoseCalc;
+		private Label labelAsst;
+		private ComboBox comboCirc;
+		private OpenDental.UI.Button butDelAnesthetic;
+		private Label labelCirc;
+		private ComboBox comboAsst;
+		private OpenDental.UI.Button butAddAnesthetic;
+		private ListBox listAnesthetics;
+		private Label labelAnesthMed;
+		private ODGrid gridAnesthMeds;
+		private GroupBox groupBoxDoseCalc;
 		private OpenDental.UI.Button butDose20;
-        private OpenDental.UI.Button butDose10;
-        private OpenDental.UI.Button butDose7;
-        private OpenDental.UI.Button butDose8;
-        private OpenDental.UI.Button butDose9;
-        private OpenDental.UI.Button butDose6;
-        private OpenDental.UI.Button butDose5;
-        private OpenDental.UI.Button butDose4;
-        private OpenDental.UI.Button butDose3;
-        private OpenDental.UI.Button butDose2;
-        private OpenDental.UI.Button butDose1;
-        private OpenDental.UI.Button butDose0;
-        private OpenDental.UI.Button butDose25;
+		private OpenDental.UI.Button butDose10;
+		private OpenDental.UI.Button butDose7;
+		private OpenDental.UI.Button butDose8;
+		private OpenDental.UI.Button butDose9;
+		private OpenDental.UI.Button butDose6;
+		private OpenDental.UI.Button butDose5;
+		private OpenDental.UI.Button butDose4;
+		private OpenDental.UI.Button butDose3;
+		private OpenDental.UI.Button butDose2;
+		private OpenDental.UI.Button butDose1;
+		private OpenDental.UI.Button butDose0;
+		private OpenDental.UI.Button butDose25;
 		private OpenDental.UI.Button butDose50;
-        private OpenDental.UI.Button butDoseEnter;
-        private OpenDental.UI.Button butDoseDecPoint;
-        private ComboBox comboAnesthMed;
-        private ComboBox comboSurgeon;
-        private Label labelSurgeon;
-        private ComboBox comboAnesthetist;
-        private TextBox textAnesthDose;
-        private Label labelDose;
-        private Label labelAnesthetist;
-        private TextBox textPatient;
-        private Label labelPatient;
-        private Label labelPatID;
+		private OpenDental.UI.Button butDoseEnter;
+		private OpenDental.UI.Button butDoseDecPoint;
+		private ComboBox comboAnesthMed;
+		private ComboBox comboSurgeon;
+		private Label labelSurgeon;
+		private ComboBox comboAnesthetist;
+		private TextBox textAnesthDose;
+		private Label labelDose;
+		private Label labelAnesthetist;
+		private TextBox textPatient;
+		private Label labelPatient;
+		private Label labelPatID;
 		private TextBox textPatID;
-        private GroupBox groupBoxAnesthMeds;
-        private Label label1;
+		private GroupBox groupBoxAnesthMeds;
+		private Label label1;
 		private RadioButton radWgtUnitsKgs;
-        private ComboBox comboNPOTime;
+		private ComboBox comboNPOTime;
 		private RadioButton radWgtUnitsLbs;
-        private TextBox textPatHgt;
-        private Label labelPatWgt;
-        private Label labelPatHgt;
-        private TextBox textPatWgt;
-        private ODGrid gridVSData;
+		private TextBox textPatHgt;
+		private Label labelPatWgt;
+		private Label labelPatHgt;
+		private TextBox textPatWgt;
+		private ODGrid gridVSData;
 		private RadioButton radMedRouteNasal;
 		private GroupBox groupBoxMonitors;
 		private CheckBox checkMonPrecordial;
@@ -211,9 +211,7 @@ namespace OpenDental
 		public Patient pat;
 		public int PatNum;
 
-		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur)
-		{
-
+		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur){
 			//
 			// Required for Windows Form Designer support
 			//
@@ -222,7 +220,6 @@ namespace OpenDental
 			PatCur = patCur;
 			AnestheticRecord anestheticRecordCur = new AnestheticRecord();
 			AnestheticRecordCur = anestheticRecordCur;
-
 			Lan.F(this);
 			allowTopaz = (Environment.OSVersion.Platform != PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			sigBox.SetTabletState(1);
@@ -246,9 +243,9 @@ namespace OpenDental
 				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
 		}
+
 		/// <summary>Clean up any resources being used.</summary>
-		protected override void Dispose(bool disposing)
-		{
+		protected override void Dispose(bool disposing){
 			if (disposing)
 			{
 				if (components != null)
