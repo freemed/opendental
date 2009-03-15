@@ -301,7 +301,7 @@ namespace OpenDental{
 				}
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(procs[i]).AbbrDesc;
 			}
-			Appointments.InsertOrUpdate(AptCur,null,true);	
+			Appointments.Insert(AptCur);	
 			Procedure ProcCur;
 			PatPlan[] patPlanList=PatPlans.Refresh(patCur.PatNum);
 			Benefit[] benefitList=Benefits.Refresh(patPlanList);

@@ -669,7 +669,7 @@ namespace OpenDental{
 				//new appt will be placed on pinboard instead of specific time
 			}
 			try {
-				Appointments.InsertOrUpdate(AptCur,null,true);
+				Appointments.Insert(AptCur);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -734,7 +734,7 @@ namespace OpenDental{
 				//new appt will be placed on pinboard instead of specific time
 			}
 			try{
-				Appointments.InsertOrUpdate(AptCur,null,true);
+				Appointments.Insert(AptCur);
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);

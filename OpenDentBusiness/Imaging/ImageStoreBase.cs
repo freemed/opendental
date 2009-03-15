@@ -284,10 +284,11 @@ namespace OpenDental.Imaging {
 			DocCur.DateCreated = DateTime.Today;
 			//Find the category, hopefully 'Patient Information'
 			//otherwise, just default to first one
-			int iCategory = iCategory = DefC.Short[(int)DefCat.ImageCats][0].DefNum; ;
-			for(int i = 0; i < DefC.Short[(int)DefCat.ImageCats].Length; i++) {
-				if(DefC.Short[(int)DefCat.ImageCats][i].ItemName == "Patient Information") {
-					iCategory = DefC.Short[(int)DefCat.ImageCats][i].DefNum;
+			Def[] defs=DefC.GetList(DefCat.ImageCats);
+			int iCategory = defs[0].DefNum; ;
+			for(int i = 0;i < defs.Length;i++) {
+				if(defs[i].ItemName == "Patient Information") {
+					iCategory = defs[i].DefNum;
 				}
 			}
 			DocCur.DocCategory = iCategory;

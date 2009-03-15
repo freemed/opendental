@@ -11,6 +11,14 @@ namespace OpenDentBusiness {
 		///<summary>Stores all defs in a 2D array.</summary>
 		public static Def[][] Long;
 
+		///<summary>Gets a list of defs for one category.</summary>
+		public static Def[] GetList(DefCat defCat) {
+			if(Short==null) {
+				Defs.RefreshCache();
+			}
+			return Short[(int)defCat];
+		}
+
 		///<summary>Get one def from Long.  Returns null if not found.  Only used for very limited situations.  Other Get functions tend to be much more useful since they don't return null.  There is also BIG potential for silent bugs if you use this.ItemOrder instead of GetOrder().</summary>
 		public static Def GetDef(DefCat myCat,int myDefNum) {
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {

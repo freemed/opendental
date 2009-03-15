@@ -3936,6 +3936,7 @@ namespace OpenDental{
 			string ssn="";
 			string userName="";
 			string passHash="";
+			string aptNum="";
 			for(int i=0;i<args.Length;i++) {
 				if(args[i].StartsWith("PatNum=")) {
 					try {
@@ -3954,6 +3955,9 @@ namespace OpenDental{
 				}
 				if(args[i].StartsWith("PassHash=") && args[i].Length>9) {
 					passHash=args[i].Substring(9);
+				}
+				if(args[i].StartsWith("AptNum=") && args[i].Length>7) {
+					aptNum=args[i].Substring(7);
 				}
 			}
 			//Username and password-----------------------------------------------------
@@ -4066,6 +4070,8 @@ namespace OpenDental{
 					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 				}
 			}
+			//AptNum-------------------------------------------------------------
+			Bridges.ECW.AptNum=PIn.PInt(aptNum);
 			
 
 		}

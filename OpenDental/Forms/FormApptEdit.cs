@@ -1014,15 +1014,27 @@ namespace OpenDental{
 			}
 			if(Programs.IsEnabled("eClinicalWorks")) {
 				butComplete.Visible=true;
-//We also need to make sure that this aptNum matches the one passed in by eCW.
+				//for eCW, we need to hide some things--------------------
+				butDelete.Visible=false;
+				butPin.Visible=false;
+				butTask.Visible=false;
+				butAddComm.Visible=false;
 				if(HL7Msgs.MessageWasSent(AptCur.AptNum)) {
 					butComplete.Text="Revise";
 					if(!Security.IsAuthorized(Permissions.Setup,true)) {
 						butComplete.Enabled=false;
 					}
+					butOK.Enabled=false;
+					gridProc.Enabled=false;
+					listQuickAdd.Enabled=false;
+					butAdd.Enabled=false;
+					butDeleteProc.Enabled=false;
 				}
-				else {
+				else {//hl7 was not sent for this appt
 					butComplete.Text="Complete";
+					if(Bridges.ECW.AptNum != AptCur.AptNum) {
+						butComplete.Enabled=false;
+					}
 				}
 			}
 			else {
@@ -1820,23 +1832,31 @@ namespace OpenDental{
 
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
-//only allow user to get this far if aptNum matches visit num previously passed in by eCW.
 			if(butComplete.Text=="Complete") {
+				//user can only get this far if aptNum matches visit num previously passed in by eCW.
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send attached procedures to eClinicalWorks and exit?")) {
 					return;
 				}
-//need to save the appointment first.
-				OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT(AptCur,pat);
-				HL7Msg msg=new HL7Msg();
-				msg.AptNum=AptCur.AptNum;
-				msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
-				msg.MsgText=dft.GenerateMessage();
-				HL7Msgs.WriteObject(msg);
+				if(!UpdateToDB()) {
+					return;
+				}
+				Bridges.ECW.SendHL7(AptCur,pat);
 				CloseOD=true;
+				if(IsNew) {
+					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
+					+AptCur.AptDateTime.ToString()+", "
+					+AptCur.ProcDescript);
+				}
 				DialogResult=DialogResult.OK;
 			}
 			else if(butComplete.Text=="Revise") {
-
+				MsgBox.Show(this,"Any changes that you make will not be sent to eCW.  You will also have to make the same changes in eCW.");
+				//revise is only clickable if user has permission
+				butOK.Enabled=true;
+				gridProc.Enabled=true;
+				listQuickAdd.Enabled=true;
+				butAdd.Enabled=true;
+				butDeleteProc.Enabled=true;
 			}
 		}
 

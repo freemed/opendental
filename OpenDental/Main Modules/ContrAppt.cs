@@ -1933,7 +1933,7 @@ namespace OpenDental{
 				aptCur.NextAptNum=aptCur.AptNum;
 				aptCur.AptStatus=ApptStatus.Scheduled;
 				try{
-					Appointments.InsertOrUpdate(aptCur,null,true);//now, aptnum is different.
+					Appointments.Insert(aptCur);//now, aptnum is different.
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);
@@ -1965,7 +1965,7 @@ namespace OpenDental{
 			}//if planned appointment is on pinboard
 			else{//simple drag off pinboard to a new date/time
 				try{
-					Appointments.InsertOrUpdate(aptCur,aptOld,false);
+					Appointments.Update(aptCur,aptOld);
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
 						PatCurName+", "
 						+aptCur.ProcDescript
@@ -2574,7 +2574,7 @@ namespace OpenDental{
 			}
 			apt.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			try {
-				Appointments.InsertOrUpdate(apt,aptOld,false);
+				Appointments.Update(apt,aptOld);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -2818,7 +2818,7 @@ namespace OpenDental{
 							}
 						}
 						try{
-							Appointments.InsertOrUpdate(apt,aptOld,false);
+							Appointments.Update(apt,aptOld);
 						}
 						catch(ApplicationException ex){
 							MessageBox.Show(ex.Message);
@@ -2876,7 +2876,7 @@ namespace OpenDental{
 					apt.IsHygiene=curOp.IsHygiene;
 					apt.ClinicNum=curOp.ClinicNum;
 					try{
-						Appointments.InsertOrUpdate(apt,null,true);
+						Appointments.Insert(apt);
 					}
 					catch(ApplicationException ex){
 						MessageBox.Show(ex.Message);

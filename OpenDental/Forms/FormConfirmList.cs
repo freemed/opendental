@@ -488,7 +488,7 @@ namespace OpenDental{
 				int selectedI=comboStatus.SelectedIndex;
 				apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
 				try{
-					Appointments.InsertOrUpdate(apt,aptOld,false);
+					Appointments.Update(apt,aptOld);
 				}
 				catch(ApplicationException ex){
 					Cursor=Cursors.Default;

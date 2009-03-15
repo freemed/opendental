@@ -5771,7 +5771,7 @@ namespace OpenDental{
 			AptCur.AptStatus=ApptStatus.Planned;
 			AptCur.AptDateTime=DateTime.Today;
 			AptCur.Pattern="/X/";
-			Appointments.InsertOrUpdate(AptCur,null,true);
+			Appointments.Insert(AptCur);
 			PlannedAppt plannedAppt=new PlannedAppt();
 			plannedAppt.AptNum=AptCur.AptNum;
 			plannedAppt.PatNum=PatCur.PatNum;
@@ -5798,7 +5798,7 @@ namespace OpenDental{
 			if(allProcsHyg && PatCur.SecProv!=0){
 				Appointment aptOld=AptCur.Copy();
 				AptCur.ProvNum=PatCur.SecProv;
-				Appointments.InsertOrUpdate(AptCur,aptOld,false);
+				Appointments.Update(AptCur,aptOld);
 			}
 			Patient patOld=PatCur.Copy();
 			//PatCur.NextAptNum=AptCur.AptNum;

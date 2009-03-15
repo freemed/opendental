@@ -191,6 +191,7 @@
     <Compile Include="HL7\FieldHL7.cs" />
     <Compile Include="HL7\MessageHL7.cs" />
     <Compile Include="HL7\SegmentHL7.cs" />
+    <Compile Include="HL7\SegmentPID.cs" />
     <Compile Include="HL7\SIU.cs" />
     <Compile Include="Imaging\ApplySettings.cs" />
     <Compile Include="Imaging\FileStore.cs" />

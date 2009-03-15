@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
+    <Compile Include="Bridges\ECW.cs" />
     <Compile Include="Bridges\Tesia_statements.cs" />
     <Compile Include="Bridges\Dolphin.cs" />
     <Compile Include="Bridges\Digora.cs" />

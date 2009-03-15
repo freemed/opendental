@@ -221,9 +221,10 @@ namespace OpenDentBusiness {
 			patientPict=null;
 			//first establish which category pat pics are in
 			int defNumPicts=0;
-			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
-				if(Regex.IsMatch(DefC.Short[(int)DefCat.ImageCats][i].ItemValue,@"P")){
-					defNumPicts=DefC.Short[(int)DefCat.ImageCats][i].DefNum;
+			Def[] defs=DefC.GetList(DefCat.ImageCats);
+			for(int i=0;i<defs.Length;i++){
+				if(Regex.IsMatch(defs[i].ItemValue,@"P")){
+					defNumPicts=defs[i].DefNum;
 					break;
 				}
 			}
@@ -324,7 +325,7 @@ namespace OpenDentBusiness {
 					Document doc=new Document();
 					doc.DateCreated=DateTime.Today;
 					doc.Description=fileList[j];
-					doc.DocCategory=DefC.Short[(int)DefCat.ImageCats][0].DefNum;//First category.
+					doc.DocCategory=DefC.GetList(DefCat.ImageCats)[0].DefNum;//First category.
 					doc.FileName=fileList[j];
 					doc.PatNum=patient.PatNum;
 					Insert(doc,patient);
@@ -363,7 +364,7 @@ namespace OpenDentBusiness {
 				+"DocCategory<0";
 			raw=dcon.GetTable(command);
 			if(raw.Rows.Count>0){//Are there any invisible documents?
-				command="UPDATE document SET DocCategory='"+DefC.Short[(int)DefCat.ImageCats][0].DefNum
+				command="UPDATE document SET DocCategory='"+DefC.GetList(DefCat.ImageCats)[0].DefNum
 					+"' WHERE PatNum='"+patNum+"' AND (";
 				for(int i=0;i<raw.Rows.Count;i++){
 					command+="DocNum='"+PIn.PInt(raw.Rows[i]["DocNum"].ToString())+"' ";
@@ -402,7 +403,7 @@ namespace OpenDentBusiness {
 				+"DocCategory<0";
 			raw=dcon.GetTable(command);
 			if(raw.Rows.Count>0) {//Are there any invisible mounts?
-				command="UPDATE mount SET DocCategory='"+DefC.Short[(int)DefCat.ImageCats][0].DefNum
+				command="UPDATE mount SET DocCategory='"+DefC.GetList(DefCat.ImageCats)[0].DefNum
 					+"' WHERE PatNum='"+patNum+"' AND (";
 				for(int i=0;i<raw.Rows.Count;i++) {
 					command+="MountNum='"+PIn.PInt(raw.Rows[i]["MountNum"].ToString())+"' ";

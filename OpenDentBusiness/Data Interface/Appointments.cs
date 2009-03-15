@@ -232,27 +232,29 @@ namespace OpenDentBusiness{
 			}
 		}*/
 
-		///<summary>If IsNew, just supply null for oldApt.</summary>
-		public static void InsertOrUpdate(Appointment appt, Appointment oldApt,bool IsNew){
+		/*
+
+		///<summary></summary>
+		public static void InsertOrUpdate(Appointment appt,Appointment oldApt,bool IsNew) {
 			//if(){
-				//throw new Exception(Lan.g(this,""));
+			//throw new Exception(Lan.g(this,""));
 			//}
-			if(IsNew){
+			if(IsNew) {
 				Insert(appt);
 			}
-			else{
-				if(oldApt==null){
+			else {
+				if(oldApt==null) {
 					throw new ApplicationException("oldApt cannot be null if updating.");
 				}
 				Update(appt,oldApt);
 			}
-		}
+		}*/
 
 		///<summary></summary>
-		private static void Insert(Appointment appt){
+		public static void Insert(Appointment appt){
 			//make sure all fields are properly filled:
 			if(appt.Confirmed==0){
-				appt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;
+				appt.Confirmed=DefC.GetList(DefCat.ApptConfirmed)[0].DefNum;
 			}
 			if(appt.ProvNum==0){
 				appt.ProvNum=ProviderC.List[0].ProvNum;
