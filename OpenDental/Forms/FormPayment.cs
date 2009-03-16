@@ -1112,7 +1112,7 @@ namespace OpenDental{
 			info.Arguments+="/RECEIPT:"+PaymentCur.PayNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
 			info.Arguments+="/AUTOCLOSE ";
-			string resultfile=Path.GetDirectoryName(prog.Path)+"XResult.txt";
+			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\"";
 			//info.Arguments+="/MID:223496";//what's this?
 			Cursor=Cursors.WaitCursor;
