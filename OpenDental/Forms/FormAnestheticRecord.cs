@@ -2732,9 +2732,12 @@ namespace OpenDental
 					butClose.Enabled = false;
 					//deletes any Anesthetic Meds that may have already been entered and then returns the quantities back into Inventory
 					for (int i = 0; i < listAnesthMedsGiven.Count; i++)
-					{
-						AMedications.DeleteAMedDose(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(listAnesthMedsGiven[i].AnestheticRecordNum));
+					{ 
+						AMedications.DeleteAMedDose(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
 					}
+					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
+					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
+					anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 					FillGridAnesthMeds(Convert.ToInt32(anestheticRecordNum));
 				}
 				else
