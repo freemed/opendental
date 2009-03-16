@@ -452,6 +452,10 @@ namespace OpenDental{
 			GetConfig();
 			FillCombosComputerNames();
 			FillComboDatabases();
+			/*
+			MessageBox.Show("Startup path: "+Application.StartupPath+"\r\n"
+				+"Executable path: "+Application.ExecutablePath+"\r\n"
+				+"Current directory: "+Environment.CurrentDirectory);*/
 		}
 
 		///<summary>Gets a list of all computer names on the network (this is not easy)</summary>
@@ -587,10 +591,11 @@ namespace OpenDental{
 			//1. /home/username/.opendental/config.xml (or corresponding user path in Windows)
 			//2. /etc/opendental/config.xml (or corresponding machine path in Windows) (should be default for new installs) 
 			//3. Application Directory/FreeDentalConfig.xml (read-only if user is not admin)
-			if(!File.Exists("FreeDentalConfig.xml")){
+			string xmlPath=ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml");
+			if(!File.Exists(xmlPath)){
 				FileStream fs;
 				try {
-					fs=File.Create("FreeDentalConfig.xml");
+					fs=File.Create(xmlPath);
 				}
 				catch {
 					MessageBox.Show("The very first time that the program is run, it must be run as an Admin.  If using Vista, right click, run as Admin.");
@@ -612,7 +617,7 @@ namespace OpenDental{
 			}
 			XmlDocument document=new XmlDocument();
 			try{
-				document.Load("FreeDentalConfig.xml");
+				document.Load(xmlPath);
 				XPathNavigator Navigator=document.CreateNavigator();
 				XPathNavigator nav;
 				//Database type
@@ -751,7 +756,7 @@ namespace OpenDental{
 				XmlWriterSettings settings = new XmlWriterSettings();
 				settings.Indent = true;
 				settings.IndentChars = ("    ");
-				using(XmlWriter writer=XmlWriter.Create("FreeDentalConfig.xml",settings)) {
+				using(XmlWriter writer=XmlWriter.Create(ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml"),settings)) {
 					writer.WriteStartElement("ConnectionSettings");
 					if(RemotingClient.RemotingRole==RemotingRole.ClientDirect){
 						writer.WriteStartElement("DatabaseConnection");
