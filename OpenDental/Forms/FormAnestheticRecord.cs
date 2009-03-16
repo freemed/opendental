@@ -2730,20 +2730,15 @@ namespace OpenDental
 					//prevents exception if user tries to save to db with no items in list
 					butOK.Enabled = false;
 					butClose.Enabled = false;
-					//deletes any Anesthetic Meds that may have already been entered and then returns the quantities back into Inventory
+					//deletes any Anesthetic Meds that may have already been entered on an Anesthetic Record and then returns the quantities back into Inventory
+					int AnestheticRecordNum = Convert.ToInt32(anestheticRecordNum);
+					listAnesthMedsGiven=AnesthMedsGiven.CreateObjects(AnestheticRecordNum);
 					for (int i = 0; i < listAnesthMedsGiven.Count; i++)
-				
-					{ 
-
-						AMedications.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
-					
-						butDoseEnter.Enabled = true;
-					}
-
-
+						{ 
+							AMedications.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
+						}
 					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
-					
-						listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
+					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
 					
 					try//will generate an exception if deletion is done with only one anesthetic record in the list, because now there are no more records
 					{
