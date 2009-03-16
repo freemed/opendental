@@ -117,7 +117,6 @@ namespace OpenDentBusiness{
 			get { return anesthMedNumChanged; }
 		}
 
-
 	}
 
 	

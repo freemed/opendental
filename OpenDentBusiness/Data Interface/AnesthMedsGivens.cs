@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 				medCur.AnestheticMedNum  = PIn.PInt(table.Rows[i][0].ToString());
 				medCur.AnestheticRecordNum   = PIn.PString(table.Rows[i][1].ToString());
 				medCur.AnesthMedName         = PIn.PString(table.Rows[i][2].ToString());
-                medCur.QtyGiven       = PIn.PString(table.Rows[i][3].ToString());
+				medCur.QtyGiven       = PIn.PString(table.Rows[i][3].ToString());
 				medCur.QtyWasted           = PIn.PString(table.Rows[i][4].ToString());
 				medCur.DoseTimeStamp = PIn.PString(table.Rows[i][5].ToString());
 				medCur.AnesthMedNum = PIn.PString(table.Rows[i][6].ToString());
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<Summary>Gets one Anesthetic Medication Supplier from the database.</Summary>
+		///<Summary>Gets one Anesthetic Medication Given from the database.</Summary>
 		public static AnestheticMedsGiven CreateObject(int AnestheticMedNum){
 			return DataObjectFactory<AnestheticMedsGiven>.CreateObject(AnestheticMedNum);
 		}
@@ -56,27 +56,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DeleteObject(AnestheticMedsGiven AnesthMedName){
-			//validate that not already in use.
-			//string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
-			/*DataTable table=General.GetTable(command);
-			string pats="";
-			for(int i=0;i<table.Rows.Count;i++){
-				if(i>0){
-					pats+=", ";
-				}
-				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
-			}
-			/*if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("Pharmacys","Pharmacy is already in use by patient(s). Not allowed to delete. "+pats));
-			}*/
-			//DataObjectFactory<AnestheticMedsGiven>.DeleteObject(medCur);
+
+			DataObjectFactory<AnestheticMedsGiven>.DeleteObject(AnesthMedName);
 		}
 
-		//public static void DeleteObject(int PharmacyNum){
-		//	DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
-		//}
-
-		public static string GetAnestheticMedNum(int AnestheticMedNum){
+		public static string GetAnestheticMedName(int AnestheticMedNum){
 			if(AnestheticMedNum==0){
 				return "";
 			}
@@ -87,12 +71,6 @@ namespace OpenDentBusiness{
 			}
 			return "";
 		}
-
-
-		/*public static int GetAnestheticMedNum (int AnestheticMedNum){
-			int anestheticMedNum = AnestheticMedNum;
-			return anestheticMedNum;
-		}*/
 
 		}
 }

@@ -332,6 +332,22 @@ namespace OpenDentBusiness
 		
 		}
 
+				///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
+		public static void DeleteAnesthMedsGiven(string anesthMedName, double  QtyGiven, double QtyWasted, string TimeStamp, int anestheticRecordNum){
+	
+			//Update anesthmedsinventory
+			double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) + QtyGiven + QtyWasted;
+			string command3 = "UPDATE anesthmedsinventory SET "
+					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
+					+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
+			General.NonQ(command3);
+
+			//Update anesthmedsgiven
+			string command = "DELETE FROM anesthmedsgiven WHERE AnestheticRecordNum = " + anestheticRecordNum;
+			General.NonQ(command);
+		
+		}
+
 		/// <summary>Returns QtyOnHand for anesthetic medication inventory adjustment calculations/// </summary>
 
 		public static double GetQtyOnHand(string aMed){
