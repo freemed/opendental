@@ -23,7 +23,7 @@ namespace OpenDental {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ClassConvertDatabase {
-		private System.Version LatestVersion=new Version("6.5.0.0");//This value must be changed when a new conversion is to be triggered.
+		private System.Version LatestVersion=new Version("6.6.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -180,11 +180,11 @@ namespace OpenDental {
 				command="UPDATE preference SET ValueString = '6.4.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To6_5_0();
+			To6_5_1();
 		}
 
-		private void To6_5_0() {
-			if(FromVersion<new Version("6.5.0.0")) {
+		private void To6_5_1() {
+			if(FromVersion<new Version("6.5.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ShowFeatureMedicalInsurance','0','')";
@@ -254,20 +254,26 @@ namespace OpenDental {
 						INDEX (AptNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
-
-
-
-
-
-
-
-
 				}
 				else {//oracle
 
 				}
-				command="UPDATE preference SET ValueString = '6.5.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '6.5.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To6_6_0();
+		}
+
+		private void To6_6_0() {
+			if(FromVersion<new Version("6.6.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+
+				}
+				else {//oracle
+
+				}				
+				command="UPDATE preference SET ValueString = '6.6.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
 			//To6_?_0();
