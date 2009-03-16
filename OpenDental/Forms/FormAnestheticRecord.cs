@@ -2736,8 +2736,16 @@ namespace OpenDental
 						AMedications.DeleteAMedDose(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
 					}
 					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
-					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
+					
+						listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
+					
+					try//will generate an exception if deletion is done with only one anesthetic record in the list, because now there are no more records
+					{
 					anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+					}
+					catch
+					{
+					}
 					FillGridAnesthMeds(Convert.ToInt32(anestheticRecordNum));
 				}
 				else
