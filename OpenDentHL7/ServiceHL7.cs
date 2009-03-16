@@ -80,7 +80,7 @@ namespace OpenDentHL7 {
 			//process all waiting messages
 			string[] existingFiles=Directory.GetFiles(hl7folderOut);
 			for(int i=0;i<existingFiles.Length;i++) {
-				ProcessMessage(File.ReadAllText(existingFiles[i]));
+				ProcessMessage(existingFiles[i]);
 			}
 			//start polling the db for new HL7 messages to send
 			command=@"SELECT PropertyValue FROM programproperty,program
@@ -96,14 +96,15 @@ namespace OpenDentHL7 {
 		}
 
 		private static void OnCreated(object source,FileSystemEventArgs e) {
-			ProcessMessage(File.ReadAllText(e.FullPath));
+			ProcessMessage(e.FullPath);
 		}
 
 		private static void OnRenamed(object source,RenamedEventArgs e) {
-			ProcessMessage(File.ReadAllText(e.FullPath));
+			ProcessMessage(e.FullPath);
 		}
-
-		private static void ProcessMessage(string msgtext) {
+		
+		private static void ProcessMessage(string fullPath) {
+			string msgtext=File.ReadAllText(fullPath);
 			MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
 			if(msg.MsgType==MessageType.ADT) {
 				ADT.ProcessMessage(msg);
@@ -115,6 +116,7 @@ namespace OpenDentHL7 {
 			//else if(msg.MsgType==MessageType.DFT) {
 				//ADT.ProcessMessage(msg);
 			//}
+			File.Delete(fullPath);
 		}
 
 		protected override void OnStop() {
