@@ -2277,22 +2277,8 @@ namespace OpenDental
 					{
 						comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
-
-					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-						comboAnesthetist.SelectedIndex = i;
 				}
-				if (comboAnesthetist.SelectedIndex == -1)
-				{
-					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-					if (defaultindex == -1)
-					{//default provider hidden
-						comboAnesthetist.SelectedIndex = 0;
-					}
-					else
-					{
-						comboAnesthetist.SelectedIndex = defaultindex;
-					}
-				}
+				
 				//Surgeon comboBox
 				this.comboSurgeon.Items.Clear();
 				comboSurgeon.Items.Add(Lan.g(this, ""));
@@ -2302,21 +2288,8 @@ namespace OpenDental
 					{
 						comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
-					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-						comboSurgeon.SelectedIndex = i;
 				}
-				if (comboSurgeon.SelectedIndex == -1)
-				{
-					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-					if (defaultindex == -1)
-					{//default provider hidden
-						comboSurgeon.SelectedIndex = 0;
-					}
-					else
-					{
-						comboSurgeon.SelectedIndex = defaultindex;
-					}
-				}
+
 				//Surgical assistant comboBox
 				this.comboAsst.Items.Clear();
 				comboAsst.Items.Add(Lan.g(this, ""));
@@ -2326,21 +2299,9 @@ namespace OpenDental
 					{
 						comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
-					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-						comboAsst.SelectedIndex = i;
+				
 				}
-				if (comboAsst.SelectedIndex == -1)
-				{
-					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-					if (defaultindex == -1)
-					{//default provider hidden
-						comboAsst.SelectedIndex = 0;
-					}
-					else
-					{
-						comboAsst.SelectedIndex = defaultindex;
-					}
-				}
+
 				//Circulator comboBox
 				this.comboCirc.Items.Clear();
 				comboCirc.Items.Add(Lan.g(this, ""));
@@ -2349,23 +2310,11 @@ namespace OpenDental
 					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2)
 					{
 						comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-					}
-					if (ProviderC.List[i].ProvNum == PatCur.PriProv)
-						comboCirc.SelectedIndex = i;
+					}	
+				
 				}
-
-				if (comboCirc.SelectedIndex == -1)
-				{
-					int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
-					if (defaultindex == -1)
-					{//default provider hidden
-						comboCirc.SelectedIndex = 0;
-					}
-					else
-					{
-						comboCirc.SelectedIndex = defaultindex;
-					}
-				}
+		
+	
 }
 
 		//Load saved data into form for selected Anesthetic Record
