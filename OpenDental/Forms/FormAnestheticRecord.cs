@@ -2695,17 +2695,19 @@ namespace OpenDental
 			listAnesthetics.SelectedIndex = 0; //Add -1 after List.Length to select in ascending order
 		}
 
-		/// <summary> deletes an Anesthetic from the list of saved Anesthetics</summary>
+		/// <summary> deletes an Anesthetic Record from the list of saved Anesthetic Records</summary>
 		private void butDelAnesthetic_Click(object sender, System.EventArgs e){
-			//used at bottom of method but must be set here before it gets deleted
 			string anestheticRecordNum = "";
-			anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-
-			if (listAnesthetics.SelectedIndex == -1)
+			try
 			{
-				MessageBox.Show(Lan.g(this, "Please select an item first."));
+			anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			}
+			catch
+			{
+				MessageBox.Show(Lan.g(this, "No records to delete"));
 				return;
 			}
+
 			if (MessageBox.Show(Lan.g(this, "Delete Anesthetic?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
 			{
 				return;
@@ -2755,10 +2757,9 @@ namespace OpenDental
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
-				try
+				try //will be null and generate an exception if the Anesthetic Record has just been deleted, and it's the only one on the list
 					{
-					//will be null and generate an exception if the Anesthetic Record has just been deleted, and it's the only one on the list
-					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+						FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 					}
 				catch
 					{
