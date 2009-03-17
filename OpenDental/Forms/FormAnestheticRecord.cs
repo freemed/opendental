@@ -2653,11 +2653,11 @@ namespace OpenDental
 			}
 			catch
 			{
-				MessageBox.Show(Lan.g(this, "No records to delete"));
+				MessageBox.Show(Lan.g(this,"No records to delete"));
 				return;
 			}
 
-			if (MessageBox.Show(Lan.g(this, "Delete Anesthetic?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
+			if (MessageBox.Show(Lan.g(this,"Delete Anesthetic?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
 			{
 				return;
 			}
@@ -2718,7 +2718,7 @@ namespace OpenDental
 			}
 			else
 			{
-				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
@@ -2846,7 +2846,7 @@ namespace OpenDental
 			}
 			else
 			{
-				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
@@ -3105,12 +3105,12 @@ namespace OpenDental
 			{
 				if (textAnesthDose.Text == "")
 					{
-						MessageBox.Show("Dose Field Can Not Be Empty");
+						MessageBox.Show(Lan.g(this,"Dose Field Can Not Be Empty"));
 						textAnesthDose.Focus();
 					}
 				else if (comboAnesthMed.SelectedIndex == 0)
 				{
-					MessageBox.Show("Please select an Anesthetic Medication");
+					MessageBox.Show(Lan.g(this,"Please select an Anesthetic Medication"));
 					comboAnesthMed.Focus();
 				}
 			}
@@ -3118,7 +3118,7 @@ namespace OpenDental
 			Regex regex = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
 			if (!(regex.IsMatch(textAnesthDose.Text)) && textAnesthDose.Text != "")
 			{
-				MessageBox.Show("Dose should be xxxx.xx format");
+				MessageBox.Show(Lan.g(this,"Dose should be xxxx.xx format"));
 				textAnesthDose.Focus();
 			}
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
@@ -3196,7 +3196,7 @@ namespace OpenDental
 			}
 			else
 			{
-				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
@@ -3260,7 +3260,7 @@ namespace OpenDental
 			Regex regexHgt = new Regex("^^\\d{1,2}?$");
 			if (!regexHgt.IsMatch(textPatHgt.Text) && textPatHgt.Text != "")
 			{
-				MessageBox.Show("The height field should be a two digit integer");
+				MessageBox.Show(Lan.g(this,"The height field should be a two digit integer"));
 				textPatHgt.Focus();
 			}
 			else
@@ -3268,7 +3268,7 @@ namespace OpenDental
 				Regex regexWgt = new Regex("^^\\d{1,3}?$");
 				if (!regexWgt.IsMatch(textPatWgt.Text) && textPatWgt.Text != "")
 				{
-					MessageBox.Show("The weight field should be a 1-3 digit integer");
+					MessageBox.Show(Lan.g(this,"The weight field should be a 1-3 digit integer"));
 					textPatWgt.Focus();
 				}
 				else
@@ -3353,7 +3353,7 @@ namespace OpenDental
 						//ASA should be selected
 						if (comboASA.SelectedIndex == -1)
 						{
-							MessageBox.Show(this, "Please select an ASA rating");
+							MessageBox.Show(Lan.g(this,"Please select an ASA rating"));
 							comASA = "";
 						}
 						else if (comboASA.SelectedIndex != -1)
@@ -3401,7 +3401,7 @@ namespace OpenDental
 						//NPO time should be selected
 						if (comboNPOTime.SelectedIndex == -1)
 						{
-							MessageBox.Show(this, "Please select an NPO time");
+							MessageBox.Show(Lan.g(this,"Please select an NPO time"));
 							comNPOTime = "";
 						}
 						else if (comboNPOTime.SelectedIndex != -1)
@@ -3469,11 +3469,11 @@ namespace OpenDental
 				}
 			catch
 				{
-					MessageBox.Show(this, "You need to create an Anesthetic Record first");
+					MessageBox.Show(Lan.g(this,"You need to create an Anesthetic Record first"));
 					return;
 				}
 			} //this is done only to give the user some visual feedback that the data has in fact been saved to the db
-			MessageBox.Show(this,"Data has been saved to the database");
+			MessageBox.Show(Lan.g(this,"Data has been saved to the database"));
 		}
 
 		private void comboIVSite_SelectedIndexChanged(object sender, EventArgs e){
@@ -3579,11 +3579,11 @@ namespace OpenDental
 				}
 				catch
 				{
-					MessageBox.Show(this, "You need to create an Anesthetic Record first");
+					MessageBox.Show(Lan.g(this,"You need to create an Anesthetic Record first"));
 					return;
 				}
 			} //this is done only to give the user some visual feedback that the data has in fact been saved to the db
-			MessageBox.Show(this, "Data has been saved to the database");
+			MessageBox.Show(Lan.g(this,"Data has been saved to the database"));
 		}
 }
 
