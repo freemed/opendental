@@ -247,7 +247,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RemotingClient.cs" />
-    <Compile Include="SheetFramework\SheetEnums.cs" />
+    <Compile Include="SheetFramework\SheetEnums.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TableTypes\AnestheticData.cs">
       <SubType>Code</SubType>
     </Compile>
