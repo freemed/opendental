@@ -95,7 +95,7 @@ namespace OpenDental{
 
 				if (comboAnesthMedName.SelectedIndex == -1 || textQty.Text == "" || comboSupplierName.SelectedIndex == -1 || textInvoiceNum.Text == "" )
 				{
-					MessageBox.Show("All fields are mandatory.");
+					MessageBox.Show(Lan.g(this,"All fields are mandatory."));
 					return;
 				}
 				else
@@ -103,7 +103,7 @@ namespace OpenDental{
 					Regex regex = new Regex("^\\d{1,6}?$");
 					if (!(regex.IsMatch(textQty.Text)) && textQty.Text != "")
 					{
-						MessageBox.Show("The Quantity field should be a 1-6 digit integer.");
+						MessageBox.Show(Lan.g(this,"The Quantity field should be a 1-6 digit integer."));
 						textQty.Focus();
 						return;
 					}
@@ -113,7 +113,7 @@ namespace OpenDental{
 						{
 							if (textInvoiceNum.Text.Trim() == "")
 							{
-								MessageBox.Show("Invoice # does not accept spaces");
+								MessageBox.Show(Lan.g(this,"Invoice # does not accept spaces."));
 								textInvoiceNum.Focus();
 							}
 
@@ -122,14 +122,14 @@ namespace OpenDental{
 					}
 
 					//the current QtyOnHand of a scheduled anesthetic medication
-					double qtyOnHand = Convert.ToDouble(AMedications.GetQtyOnHand(comboAnesthMedName.SelectedItem.ToString()));
+					double qtyOnHand = Convert.ToDouble(AnesthMeds.GetQtyOnHand(comboAnesthMedName.SelectedItem.ToString()));
 
 					//records transaction into tableanesthmedsintake which tracks intake of scheduled anesthetic medications into inventory
 					int supplierIDNum = AnesthMedSuppliers.GetSupplierIDNum(comboSupplierName.SelectedIndex);
-					AMedications.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
+					AnesthMeds.InsertMed_Intake(comboAnesthMedName.SelectedItem.ToString(), Convert.ToInt32(textQty.Text), supplierIDNum.ToString(), textInvoiceNum.Text);
 					
 					//updates QtyOnHand in tableanesthmedsinventory when a new order of scheduled anesthetic medications is received into inventory
-					AMedications.UpdateAMedInvAdj(comboAnesthMedName.SelectedItem.ToString(), Convert.ToDouble(textQty.Text), qtyOnHand);
+					AnesthMeds.UpdateAMedInvAdj(comboAnesthMedName.SelectedItem.ToString(), Convert.ToDouble(textQty.Text), qtyOnHand);
 							
 					DialogResult = DialogResult.OK;
 					Close();

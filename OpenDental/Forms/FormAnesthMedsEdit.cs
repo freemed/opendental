@@ -65,7 +65,7 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
-			AnestheticMeds.DeleteObject(Med);
+			AnesthMeds.DeleteObject(Med);
 			DialogResult =DialogResult.OK;
 		}
 
@@ -124,10 +124,8 @@ namespace OpenDental {
 			double newQty = Convert.ToDouble(Med.QtyOnHand) + Convert.ToDouble(AdjustNumCur.QtyAdj);
 			Med.QtyOnHand = newQty.ToString();
 
-			AnestheticMeds.WriteObject(Med);
+			AnesthMeds.WriteObject(Med);
 			DialogResult=DialogResult.OK;
-
-
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
@@ -149,7 +147,7 @@ namespace OpenDental {
 		private void textQtyAdj_TextChanged(object sender, EventArgs e){
 			
 			//prevents user from using this form to enter initial quantities. This should be done on FormAnestheticMedsIntake
-			if (AMedications.GetQtyOnHand(textAnesthMedName.Text) == 0)
+			if (AnesthMeds.GetQtyOnHand(textAnesthMedName.Text) == 0)
 			{
 				MessageBox.Show(this, "Please use the 'Intake new meds' button on the previous form \rto add initial inventory quantities");
 				butOK.Enabled = false;

@@ -5,7 +5,7 @@ using OpenDental.DataAccess;
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-using OpenDental;
+//using OpenDental;
 
 namespace OpenDentBusiness{
 

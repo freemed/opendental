@@ -2214,7 +2214,8 @@ namespace OpenDental
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
 			textPatID.Text = PatCur.PatNum.ToString();
-			RefreshComboBoxes();
+			RefreshProvComboBoxes();
+			RefreshAnesthMedComboBoxes();
 				if (listAnesthetics.SelectedIndex == -1)
 				{
 					//prevents user from generating an exception when no record exists yet
@@ -2257,8 +2258,8 @@ namespace OpenDental
 			}
 		}
 
-		private void RefreshComboBoxes(){
-			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
+		private void RefreshAnesthMedComboBoxes(){
+						//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMed.Items.Clear();
 			this.comboAnesthMed.Items.Insert(0, "");
 			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
@@ -2267,13 +2268,15 @@ namespace OpenDental
 				this.comboAnesthMed.Items.Add(bindComboQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
 				this.comboAnesthMed.SelectedIndex = 0;
 			}
+		}
+
+		private void RefreshProvComboBoxes(){
 				//Anesthetist comboBox
 				this.comboAnesthetist.Items.Clear();
 				comboAnesthetist.Items.Add(Lan.g(this, ""));
 				for (int i = 0; i < ProviderC.List.Length; i++)
 				{
 					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1)
-
 					{
 						comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 					}
@@ -2313,7 +2316,7 @@ namespace OpenDental
 					}	
 				
 				}
-		
+			
 	
 }
 
@@ -2683,10 +2686,10 @@ namespace OpenDental
 					butClose.Enabled = false;
 					//deletes any Anesthetic Meds that may have already been entered on an Anesthetic Record and then returns the quantities back into Inventory
 					int AnestheticRecordNum = Convert.ToInt32(anestheticRecordNum);
-					listAnesthMedsGiven=AnesthMedsGiven.CreateObjects(AnestheticRecordNum);
+					listAnesthMedsGiven=AnesthMedsGivens.CreateObjects(AnestheticRecordNum);
 					for (int i = 0; i < listAnesthMedsGiven.Count; i++)
 						{ 
-							AMedications.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
+							AnesthMeds.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
 						}
 					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
@@ -2728,7 +2731,7 @@ namespace OpenDental
 		}
 
 		private void FillGridAnesthMeds(int anestheticRecordNum){
-			listAnesthMedsGiven = AnesthMedsGiven.CreateObjects(anestheticRecordNum);
+			listAnesthMedsGiven = AnesthMedsGivens.CreateObjects(anestheticRecordNum);
 			AnesthMedsGivens.RefreshCache(anestheticRecordNum);
 			gridAnesthMeds.BeginUpdate();
 			gridAnesthMeds.Columns.Clear();
@@ -2756,7 +2759,7 @@ namespace OpenDental
 
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
-			listAnesthVSData = AnesthVSData.CreateObjects(anestheticRecordNum);
+			listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
 			gridVSData.Columns.Clear();
@@ -3099,7 +3102,7 @@ namespace OpenDental
 			 if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
 			{
 				double amtWasted = 0;
-				AMedications.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AMedications.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()), Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted), 0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()), AMedications.GetAnesthMedNum(comboAnesthMed.SelectedItem.ToString()));
+				AnesthMeds.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AnesthMeds.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()), Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted), 0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()), AnesthMeds.GetAnesthMedNum(comboAnesthMed.SelectedItem.ToString()));
 			}
 			else
 			{
@@ -3412,11 +3415,11 @@ namespace OpenDental
 						if (IsUpdate == false)
 						{
 							int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-							int value2 = AMedications.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
+							int value2 = AnesthMeds.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
 						}
 						else
 						{
-							int value = AMedications.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
+							int value = AnesthMeds.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
 							if (value != 0)
 							{
 								FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));	
@@ -3509,7 +3512,8 @@ namespace OpenDental
 		private void checkInventoryToolStripMenuItem_Click(object sender, EventArgs e){
 			FormAnestheticMedsInventory FormMI = new FormAnestheticMedsInventory();
 			FormMI.ShowDialog();
-			RefreshComboBoxes();
+			RefreshAnesthMedComboBoxes();
+			FormMI.DialogResult = DialogResult.OK;
 		}
 
 		private void exitToolStripMenuItem2_Click(object sender, EventArgs e){
@@ -3599,7 +3603,9 @@ namespace OpenDental
 		private void providersToolStripMenuItem_Click(object sender, EventArgs e){
 			FormProviderSelect FormPS = new FormProviderSelect();
 			FormPS.ShowDialog();
-			RefreshComboBoxes();
+			RefreshProvComboBoxes();
+			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+	
 		}
 
 

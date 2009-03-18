@@ -14,23 +14,17 @@ namespace OpenDental {
 		
 		private List<AnesthMedsInventory> listAnestheticMeds;
 		
-
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
 			Lan.F(this);    
 		}
 
 		private void FormAnestheticMedsInventory_Load(object sender, System.EventArgs e){
-
 			FillGrid();
 		}
 
-		private void FillGrid()
-		{
-
-			listAnestheticMeds = AnestheticMeds.CreateObjects();
-			
-
+		private void FillGrid(){
+			listAnestheticMeds = AnesthMeds.CreateObjects();
 			gridAnesthMedsInventory.BeginUpdate();
 			gridAnesthMedsInventory.Columns.Clear();
 			ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
@@ -54,15 +48,11 @@ namespace OpenDental {
 		}
 
 		private void butAddAnesthMeds_Click(object sender, EventArgs e){
-
-
 				AnesthMedsInventory med = new AnesthMedsInventory();
 				med.IsNew = true;
-
 				FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
 				FormM.Med = med;
 				FormM.ShowDialog();
-			
 			if (FormM.DialogResult == DialogResult.OK)
 			{
 				FillGrid();
@@ -75,12 +65,8 @@ namespace OpenDental {
 			Userod curUser = Security.CurUser;
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
-
-
 				FormAnesthMedsEdit FormME = new FormAnesthMedsEdit();
-				
 				FormME.Med = listAnestheticMeds[e.Row];
-				
 				FormME.ShowDialog();
 				if (FormME.DialogResult == DialogResult.OK)
 				{
@@ -91,7 +77,7 @@ namespace OpenDental {
 			}
 			else
 			{
-				MessageBox.Show(this, "You must be an administrator with rights to control anesthetic medication inventory levels to unlock this action");
+				MessageBox.Show(Lan.g(this, "You must be an administrator with rights to control anesthetic medication inventory levels to unlock this action"));
 				return;
 			} 
 
@@ -101,7 +87,7 @@ namespace OpenDental {
 			if (FormM.DialogResult == DialogResult.OK)
 			{
 				FillGrid();
-            }
+			}
 		}
 
 		private void butAnesthMedIntake_Click(object sender, EventArgs e){
@@ -167,7 +153,7 @@ namespace OpenDental {
 			else
 			{
 
-				MessageBox.Show(this, "You must be an administrator to unlock this action");
+				MessageBox.Show(Lan.g(this, "You must be an administrator to unlock this action"));
 				return;
 
 			} 

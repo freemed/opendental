@@ -53,20 +53,20 @@ namespace OpenDental
 			Regex regexQtyWasted = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
 			if (!(regexDose.IsMatch(textDose.Text)) && textDose.Text != "")
 			{
-				MessageBox.Show("Dose should be xxx.xx format");
+				MessageBox.Show(Lan.g(this,"Dose should be xxx.xx format"));
 				textQtyWasted.Focus();
 			}
 			
 			else if (!(regexQtyWasted.IsMatch(textQtyWasted.Text)) && textQtyWasted.Text != "")
 			{
-				MessageBox.Show("Amount wasted should be xxx.xx format");
+				MessageBox.Show(Lan.g(this,"Amount wasted should be xxx.xx format"));
 				textQtyWasted.Focus();
 			}
 			else
 			{
 				double dose = Convert.ToDouble(textDose.Text);
 				double amtWasted = Convert.ToDouble(textQtyWasted.Text);
-				AMedications.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticMedNum, anestheticRecordNum);
+				AnesthMeds.UpdateAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(amtWasted), textDoseTimeStamp.Text, anestheticMedNum, anestheticRecordNum);
 				Close();
 			}
 
@@ -82,18 +82,18 @@ namespace OpenDental
 			Regex regexQtyWasted = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
 			if (!(regexDose.IsMatch(textDose.Text)) && textDose.Text != "")
 			{
-				MessageBox.Show("Dose should be xxx.xx format");
+				MessageBox.Show(Lan.g(this,"Dose should be xxx.xx format"));
 				textQtyWasted.Focus();
 			}
 
 			else if (!(regexQtyWasted.IsMatch(textQtyWasted.Text)) && textQtyWasted.Text != "")
 			{
-				MessageBox.Show("Amount wasted should be xxx.xx format");
+				MessageBox.Show(Lan.g(this,"Amount wasted should be xxx.xx format"));
 				textQtyWasted.Focus();
 			}
 			else
 			{
-				AMedications.DeleteAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(textQtyWasted.Text), textDoseTimeStamp.Text, anestheticRecordNum);
+				AnesthMeds.DeleteAMedDose(textAnesthMedName.Text, Convert.ToDouble(textDose.Text), Convert.ToDouble(textQtyWasted.Text), textDoseTimeStamp.Text, anestheticRecordNum);
 
 				DialogResult = DialogResult.OK;
 			}
