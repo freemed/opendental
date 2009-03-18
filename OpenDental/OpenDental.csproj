@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -206,9 +206,6 @@
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountL.cs" />
-    <Compile Include="Data Interface\AnesthVSData.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Data Interface\CacheL.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />
@@ -231,8 +228,6 @@
     <Compile Include="Data Interface\AutoCodeL.cs" />
     <Compile Include="Data Interface\AutoCodeItemL.cs" />
     <Compile Include="Data Interface\ClaimFormItemL.cs" />
-    <Compile Include="Data Interface\AnestheticMeds.cs" />
-    <Compile Include="Data Interface\AnesthMedsGiven.cs" />
     <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\PatPlanL.cs" />
     <Compile Include="Data Interface\PhoneOverrides.cs" />
