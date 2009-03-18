@@ -62,7 +62,7 @@ namespace OpenDental.Bridges{
 				Process proc=new Process();
 				proc.StartInfo=new ProcessStartInfo(pathDolDb,"Find -i"+patientId);
 				proc.Start();
-				proc.WaitForExit(5000);//5 seconds
+				proc.WaitForExit();//proc.WaitForExit(5000);//5 seconds
 				int exitcode=proc.ExitCode;//0=notfound, 135=found
 				if(exitcode==0){//not found
 					Process.Start(pathDolDb,"AddPatient -f\""+filename+"\" -i"+patientId);
