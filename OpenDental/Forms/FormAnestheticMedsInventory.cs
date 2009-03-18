@@ -60,7 +60,6 @@ namespace OpenDental {
 
 		}
 
-
 		private void gridAnesthMedsInventory_CellDoubleClick(object sender, ODGridClickEventArgs e){
 			Userod curUser = Security.CurUser;
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
@@ -72,7 +71,6 @@ namespace OpenDental {
 				{
 					FillGrid();
 				}
-
 				return;
 			}
 			else
@@ -81,13 +79,6 @@ namespace OpenDental {
 				return;
 			} 
 
-			FormAnesthMedsEdit FormM = new FormAnesthMedsEdit();
-			FormM.Med = listAnestheticMeds[e.Row];
-			FormM.ShowDialog();
-			if (FormM.DialogResult == DialogResult.OK)
-			{
-				FillGrid();
-			}
 		}
 
 		private void butAnesthMedIntake_Click(object sender, EventArgs e){
@@ -110,20 +101,6 @@ namespace OpenDental {
 
 		}
 
-		/*private void butAdjustQtys_Click(object sender, EventArgs e){
-
-			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds)){
-				FormAnestheticMedsAdjQtys FormA = new FormAnestheticMedsAdjQtys();
-				FormA.ShowDialog();
-				return;
-			}
-			else {
-				MessageBox.Show(this, "You must be an administrator to unlock this action");
-				return;
-			} 
-        }*/
-
 		private void butClose_Click(object sender, EventArgs e){
 			Close();
 		}
@@ -136,26 +113,20 @@ namespace OpenDental {
             DialogResult = DialogResult.Cancel;
 		}
 
-		private void butAdjustQtys_Click(object sender, EventArgs e)
-		{
+		private void butAdjustQtys_Click(object sender, EventArgs e){
 			Userod curUser = Security.CurUser;
-
 			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
 			{
-
 				FormAnesthMedsEdit FormA = new FormAnesthMedsEdit();
 				AnesthMedsInventory med = new AnesthMedsInventory();
 				med.IsNew = true;
 				FormA.ShowDialog();
 				return;
 			}
-
 			else
 			{
-
 				MessageBox.Show(Lan.g(this, "You must be an administrator to unlock this action"));
 				return;
-
 			} 
 
 		}
