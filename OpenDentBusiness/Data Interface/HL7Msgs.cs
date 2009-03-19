@@ -34,8 +34,10 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<HL7Msg>.CreateObject(HL7MsgNum);
 		}*/
 
-		public static List<HL7Msg> GetAllPending(){
+		public static List<HL7Msg> GetAllPending(out string diagnosticMsg){
+			diagnosticMsg=DataConnection.GetCurrentConnectionString();
 			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.PInt((int)HL7MessageStatus.OutPending);
+			diagnosticMsg+=".   "+command;
 			Collection<HL7Msg> collection=DataObjectFactory<HL7Msg>.CreateObjects(command);
 			return new List<HL7Msg>(collection);		
 		}

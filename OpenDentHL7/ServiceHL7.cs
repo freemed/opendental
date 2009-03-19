@@ -125,9 +125,19 @@ namespace OpenDentHL7 {
 		}
 
 		void timer_Tick(object sender,EventArgs e) {
-			List<HL7Msg> list=HL7Msgs.GetAllPending();
+			string diagnosticMsg="";
+			List<HL7Msg> list=HL7Msgs.GetAllPending(out diagnosticMsg);
+			if(list.Count==0) {
+				EventLog.WriteEntry("No messages found.  Connection string and query: "+diagnosticMsg);
+			}
+			else {
+				EventLog.WriteEntry("Messages found: "+list.Count.ToString());
+			}
+			string filename;
 			for(int i=0;i<list.Count;i++) {
-				File.WriteAllText(Path.Combine(inFolder,list[i].AptNum.ToString()+".txt"),list[i].MsgText);
+				filename=Path.Combine(inFolder,list[i].AptNum.ToString()+".txt");
+				EventLog.WriteEntry("Attempting to create file: "+filename);
+				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.WriteObject(list[i]);//set the status to sent.
 			}
