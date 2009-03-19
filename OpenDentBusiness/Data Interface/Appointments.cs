@@ -250,8 +250,12 @@ namespace OpenDentBusiness{
 			}
 		}*/
 
-		///<summary></summary>
-		public static void Insert(Appointment appt){
+		public static void Insert(Appointment appt) {
+			Insert(appt,false);
+		}
+
+		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
+		public static void Insert(Appointment appt,bool includeAptNum) {
 			//make sure all fields are properly filled:
 			if(appt.Confirmed==0){
 				appt.Confirmed=DefC.GetList(DefCat.ApptConfirmed)[0].DefNum;
@@ -260,11 +264,11 @@ namespace OpenDentBusiness{
 				appt.ProvNum=ProviderC.List[0].ProvNum;
 			}
 			//now, save to db----------------------------------------------------------------------------------------
-			if(PrefC.RandomKeys){
+			if(!includeAptNum && PrefC.RandomKeys) {
 				appt.AptNum=MiscData.GetKey("appointment","AptNum");
 			}
 			string command="INSERT INTO appointment (";
-			if(PrefC.RandomKeys){
+			if(includeAptNum || PrefC.RandomKeys) {
 				command+="AptNum,";
 			}
 			command+="patnum,aptstatus, "
@@ -272,7 +276,7 @@ namespace OpenDentBusiness{
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
 				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene,"//DateTStamp
 				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed) VALUES(";
-			if(PrefC.RandomKeys){
+			if(includeAptNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
 			}
 			command+=
@@ -302,7 +306,7 @@ namespace OpenDentBusiness{
 				    +POut.PDateT (appt.DateTimeSeated)+", "
 				    +POut.PDateT (appt.DateTimeDismissed)+")";
 				//DateTStamp
-			if(PrefC.RandomKeys){
+			if(includeAptNum || PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else{

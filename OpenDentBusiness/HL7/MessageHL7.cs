@@ -49,11 +49,14 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>If an optional segment is not present, it will return null.</summary>
-		public SegmentHL7 GetSegment(SegmentName segmentName) {
+		public SegmentHL7 GetSegment(SegmentName segmentName,bool isRequired) {
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].Name==segmentName) {
 					return Segments[i];
 				}
+			}
+			if(isRequired) {
+				throw new ApplicationException(segmentName+" segment is missing.");
 			}
 			return null;
 		}

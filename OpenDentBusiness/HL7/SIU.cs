@@ -5,7 +5,7 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	public class SIU {
 		public static void ProcessMessage(MessageHL7 message){
-			SegmentHL7 seg=message.GetSegment(SegmentName.PID);
+			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			int patNum=PIn.PInt(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
 			Patient patOld=null;
@@ -22,16 +22,17 @@ namespace OpenDentBusiness.HL7 {
 			}
 			SegmentPID.ProcessPID(pat,seg);
 			//PV1-patient visit---------------------------
-			seg=message.GetSegment(SegmentName.PV1);
+			seg=message.GetSegment(SegmentName.PV1,true);
 			SegmentPID.ProcessPV1(pat,seg);
 			//SCH- Schedule Activity Information
-			seg=message.GetSegment(SegmentName.SCH);
+			seg=message.GetSegment(SegmentName.SCH,true);
 			int aptNum=PIn.PInt(seg.GetFieldFullText(1));
 			Appointment apt=Appointments.GetOneApt(aptNum);
 			Appointment aptOld=null;
 			bool isNewApt = apt==null;
 			if(isNewApt) {
 				apt=new Appointment();
+				apt.AptNum=aptNum;
 				apt.PatNum=pat.PatNum;
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
@@ -42,27 +43,30 @@ namespace OpenDentBusiness.HL7 {
 				return;//we can't process this message because wrong patnum.  No good way to notify user yet.
 			}
 			apt.Note=seg.GetFieldFullText(7);
-			apt.Pattern=ProcessDuration(seg.GetFieldFullText(9));
-			//10 is a duplicate of 9
-			//11-Some components are duplicates.  We just want start time
+			//apt.Pattern=ProcessDuration(seg.GetFieldFullText(9));
+			//9 and 10 are not actually available, in spite of the documentation.
+			//11-We need start time and stop time
 			apt.AptDateTime=DateTimeParse(seg.GetFieldComponent(11,3));
-			//AIG is optional, but looks like the only way to get provider----------------
-			seg=message.GetSegment(SegmentName.AIG);
+			DateTime stopTime=DateTimeParse(seg.GetFieldComponent(11,4));
+			apt.Pattern=ProcessPattern(apt.AptDateTime,stopTime);
+			apt.ProvNum=pat.PriProv;//just in case there's not AIG segment.
+			//AIG is optional, but looks like the only way to get provider for the appt-----------
+			seg=message.GetSegment(SegmentName.AIG,false);
 			int provNum=SegmentPID.ProvProcess(seg.GetField(3));
 			if(provNum!=0) {
 				apt.ProvNum=provNum;
 			}
 			//AIL,AIP seem to be optional, and I'm going to ignore them for now.
 			if(isNewApt){
-				Appointments.Insert(apt);
+				Appointments.Insert(apt,true);
 			}
 			else{
 				Appointments.Update(apt,aptOld);
 			}
 		}
 
-		private static string ProcessDuration(string minuteTxt) {
-			int minutes=PIn.PInt(minuteTxt);
+		private static string ProcessPattern(DateTime startTime,DateTime stopTime) {
+			int minutes=(int)((stopTime-startTime).TotalMinutes);
 			if(minutes==0){
 				return "//";//we don't want it to be zero minutes
 			}

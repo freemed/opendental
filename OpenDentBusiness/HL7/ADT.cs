@@ -29,7 +29,7 @@ namespace OpenDentBusiness.HL7 {
 			//MSH-Ignore
 			//EVN-Ignore
 			//PID-------------------------------------
-			SegmentHL7 seg=message.GetSegment(SegmentName.PID);
+			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			int patNum=PIn.PInt(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
 			Patient patOld=null;
@@ -46,17 +46,17 @@ namespace OpenDentBusiness.HL7 {
 			}
 			SegmentPID.ProcessPID(pat,seg);
 			//PV1-patient visit---------------------------
-			seg=message.GetSegment(SegmentName.PV1);
+			seg=message.GetSegment(SegmentName.PV1,false);
 			if(seg!=null) {//this seg is optional
 				SegmentPID.ProcessPV1(pat,seg);
 			}
 			//PD1-additional patient demographics------------
-			seg=message.GetSegment(SegmentName.PD1);
+			seg=message.GetSegment(SegmentName.PD1,false);
 			if(seg!=null) {//this seg is optional
 				ProcessPD1(pat,seg);
 			}
 			//GT1-Guarantor-------------------------------------
-			seg=message.GetSegment(SegmentName.GT1);
+			seg=message.GetSegment(SegmentName.GT1,true);
 			SegmentPID.ProcessGT1(pat,seg);
 			//IN1-Insurance-------------------------------------
 			List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
