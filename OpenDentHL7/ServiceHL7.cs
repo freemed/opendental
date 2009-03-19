@@ -16,14 +16,11 @@ using OpenDental.DataAccess;//this namespace is in the OpenDentBusiness project.
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
-		private System.Windows.Forms.Timer timer;
-		private string inFolder;
+		private System.Threading.Timer timer;
+		private static string inFolder;
 
 		public ServiceHL7() {
 			InitializeComponent();
-			timer=new System.Windows.Forms.Timer();
-			timer.Tick+=new EventHandler(timer_Tick);
-			timer.Interval=1800;//just under 2 seconds.
 		}
 
 		protected override void OnStart(string[] args) {
@@ -92,7 +89,11 @@ namespace OpenDentHL7 {
 			if(!Directory.Exists(inFolder)) {
 				throw new ApplicationException(inFolder+" does not exist.");
 			}
-			timer.Enabled=true;
+			TimerCallback callback=new TimerCallback(TimerCallbackFunction);
+			timer=new System.Threading.Timer(callback,null,1800,1800);
+			//timer.
+			//timer.Tick+=new EventHandler(timer_Tick);
+			//timer.Interval=1800;//just under 2 seconds.
 		}
 
 		private static void OnCreated(object source,FileSystemEventArgs e) {
@@ -121,22 +122,23 @@ namespace OpenDentHL7 {
 
 		protected override void OnStop() {
 			//inform od via signal that this service has shut down
-			timer.Enabled=false;
+			//timer.Enabled=false;
+			timer.Dispose();
 		}
 
-		void timer_Tick(object sender,EventArgs e) {
+		private static void TimerCallbackFunction(Object stateInfo) {
 			string diagnosticMsg="";
 			List<HL7Msg> list=HL7Msgs.GetAllPending(out diagnosticMsg);
-			if(list.Count==0) {
-				EventLog.WriteEntry("No messages found.  Connection string and query: "+diagnosticMsg);
-			}
-			else {
-				EventLog.WriteEntry("Messages found: "+list.Count.ToString());
-			}
+			//if(list.Count==0) {
+			//	EventLog.WriteEntry("No messages found.  Connection string and query: "+diagnosticMsg);
+			//}
+			//else {
+			//	EventLog.WriteEntry("Messages found: "+list.Count.ToString());
+			//}
 			string filename;
 			for(int i=0;i<list.Count;i++) {
 				filename=Path.Combine(inFolder,list[i].AptNum.ToString()+".txt");
-				EventLog.WriteEntry("Attempting to create file: "+filename);
+				//EventLog.WriteEntry("Attempting to create file: "+filename);
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.WriteObject(list[i]);//set the status to sent.
