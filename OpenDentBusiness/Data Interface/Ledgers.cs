@@ -189,9 +189,9 @@ namespace OpenDentBusiness{
 				//memory table 't'.
 				"(SELECT cp.PatNum,SUM(cp.InsPayEst+cp.Writeoff) InsEst "+
 						"FROM claimproc cp "+
-						"WHERE cp.Status=0 AND "+
-							(guarantor==0?"":("cp.PatNum IN "+familyPatNums+" AND "))+
-							"cp.ProcDate<=DATE("+asOfDate+") "+
+						"WHERE ((cp.Status=0 AND cp.ProcDate<=DATE("+asOfDate+")) OR (cp.Status=1 AND cp.DateCP>DATE("+asOfDate+"))) AND "+
+							"cp.DateEntry<=DATE("+asOfDate+") "+
+							(guarantor==0?"":(" AND cp.PatNum IN "+familyPatNums))+
 						"GROUP BY cp.PatNum) t "+//not received claims.
 				//Update the tempaging table with the insurance estimates for each patient.
 				"SET a.InsEst=t.InsEst "+
