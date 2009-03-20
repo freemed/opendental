@@ -1379,7 +1379,9 @@ namespace OpenDental{
 			FillPatientButton(0,"",false,"",0);
 			ThreadCommandLine=new Thread(new ThreadStart(Listen));
 			if(!IsSecondInstance) {//can't use a port that's already in use.
-				ThreadCommandLine.Start();
+				//js We can't do this yet.  I tried it already, and it consumes nearly 100% CPU.  Not while testing, but later.
+				//So until we really need to do it, it's easiest no just not start the thread for now.
+				//ThreadCommandLine.Start();
 			}
 			if(CommandLineArgs.Length>0) {
 				ProcessCommandLine(CommandLineArgs);
