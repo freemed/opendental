@@ -3509,11 +3509,12 @@ namespace OpenDental{
 		}
 
 		private void OnDelete_Click(){
-			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			int selectedAptNum=ContrApptSingle.SelectedAptNum;
+			Appointment apt = Appointments.GetOneApt(selectedAptNum);
 			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
-			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			int thisI=GetIndex(selectedAptNum);
 			if(thisI==-1) {//selected appt is on a different day
 				MsgBox.Show(this,"Please select an appointment first.");
 				return;
@@ -3567,9 +3568,18 @@ namespace OpenDental{
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "Deleted");
 			}
-			AppointmentL.Delete(ContrApptSingle.SelectedAptNum);
+			AppointmentL.Delete(selectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;
 			pinBoard.SelectedIndex=-1;
+			DataRow row;
+			for(int i=0;i<pinBoard.ApptList.Count;i++) {
+				row=pinBoard.ApptList[i].DataRoww;
+				if(selectedAptNum.ToString()==row["AptNum"].ToString()) {
+					pinBoard.SelectedIndex=i;
+					pinBoard.ClearSelected();
+					pinBoard.SelectedIndex=-1;
+				}
+			}
 			//ContrApptSingle.PinBoardIsSelected=false;
 			PatCurNum=0;
 			ModuleSelected(PatCurNum);
