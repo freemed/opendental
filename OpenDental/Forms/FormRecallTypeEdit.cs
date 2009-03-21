@@ -645,7 +645,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(listTriggers.Items.Count==0){
+			if(listTriggers.Items.Count==0 && comboSpecial.SelectedIndex!=2) {//except child prophy
 				if(!MsgBox.Show(this,true,"Warning! clearing all triggers for a recall type will cause all patient recalls of that type to be deleted, even those with notes.  Continue anyway?")){
 					return;
 				}
