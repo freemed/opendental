@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -175,6 +176,10 @@ namespace OpenDental {
 				|| comboType.SelectedIndex==-1) 
 			{
 				MsgBox.Show(this,"Please make sure that the Description and Type are not blank");
+				return;
+			}
+			if(!Regex.IsMatch(textBoxControlDescript.Text,"^[a-zA-Z_0-9 ]*$")){
+				MsgBox.Show(this,"The description can only contain letters, numbers, underscore, and space.");
 				return;
 			}
 			ControlCur.Descript=textBoxControlDescript.Text.ToString();
