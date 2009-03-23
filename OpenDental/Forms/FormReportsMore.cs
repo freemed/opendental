@@ -341,7 +341,8 @@ namespace OpenDental{
 				Lan.g(this,"Outstanding Insurance Claims"),
 				Lan.g(this,"Procedures Not Billed to Insurance"),
 				Lan.g(this,"PPO Writeoffs"),
-				Lan.g(this,"Payment Plans") 
+				Lan.g(this,"Payment Plans"),
+                Lan.g(this,"Receivable Breakdown Report")// KS
 			});
 			listLists.Items.AddRange(new string[] {
 				Lan.g(this,"Appointments"),
@@ -550,6 +551,11 @@ namespace OpenDental{
 					FormPP.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Payment Plans.");
 					break;
+                case 8://Receivable Breakdown Report  KS
+                    FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
+                    FormRcv.ShowDialog();
+                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Receivable Breakdown Report.");
+                    break;
 			}
 		}
 

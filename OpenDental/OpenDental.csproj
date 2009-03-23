@@ -381,6 +381,9 @@
     <Compile Include="Forms Reports\FormRpArizonaPrimaryCareEncounter.Designer.cs">
       <DependentUpon>FormRpArizonaPrimaryCareEncounter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms Reports\FormRpReceivablesBreakdown.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms Reports\FormRpTreatmentFinder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3731,6 +3734,9 @@
     <EmbeddedResource Include="Forms Reports\FormRpArizonaPrimaryCareEncounter.resx">
       <DependentUpon>FormRpArizonaPrimaryCareEncounter.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms Reports\FormRpReceivablesBreakdown.resx">
+      <DependentUpon>FormRpReceivablesBreakdown.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpTreatmentFinder.resx">
       <DependentUpon>FormRpTreatmentFinder.cs</DependentUpon>
