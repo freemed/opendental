@@ -97,11 +97,27 @@ namespace OpenDentHL7 {
 		}
 
 		private static void OnCreated(object source,FileSystemEventArgs e) {
-			ProcessMessage(e.FullPath);
+			int i=0;
+			while(i<5) {
+				try {
+					ProcessMessage(e.FullPath);
+					break;
+				}
+				catch { }
+				i++;
+			}
 		}
 
 		private static void OnRenamed(object source,RenamedEventArgs e) {
-			ProcessMessage(e.FullPath);
+			int i=0;
+			while(i<5) {
+				try {
+					ProcessMessage(e.FullPath);
+					break;
+				}
+				catch { }
+				i++;
+			}
 		}
 		
 		private static void ProcessMessage(string fullPath) {
