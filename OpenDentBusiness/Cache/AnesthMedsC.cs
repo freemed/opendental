@@ -7,7 +7,7 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness {
 	public class AnesthMedsC {
-		///<summary>This is the list used most often. It does not include hidden providers.</summary>
+		///<summary></summary>
 		public static AnesthMedsC[] Listt;
 
 	}

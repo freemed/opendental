@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 			con.Close();
 		}
 
-				public static DataTable RefreshCache(int anestheticRecordNum){
+		public static DataTable RefreshCache(int anestheticRecordNum){
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthmedsgiven WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY DoseTimeStamp DESC"; //most recent at top of list
 			DataTable table=General.GetTable(c);

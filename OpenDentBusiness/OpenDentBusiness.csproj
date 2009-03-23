@@ -94,6 +94,7 @@
     <Compile Include="Cache\AnesthMedsC.cs" />
     <Compile Include="Cache\AnesthMedInvAdjC.cs" />
     <Compile Include="Cache\AnesthVSDataC.cs" />
+    <Compile Include="Cache\Anes_HL7DataC.cs" />
     <Compile Include="Cache\ProcedureCodeC.cs" />
     <Compile Include="Cache\ProgramPropertyC.cs" />
     <Compile Include="Cache\ProgramC.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Data Interface\ClaimFormItems.cs" />
     <Compile Include="Data Interface\AnesthMedSuppliers.cs" />
     <Compile Include="Data Interface\AnesthMedInvAdjs.cs" />
+    <Compile Include="Data Interface\Anes_HL7Datas.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="TableTypes\AnesthMedsInventoryAdj.cs" />
     <Compile Include="TableTypes\AnesthScore.cs" />
     <Compile Include="TableTypes\AnestheticVSData.cs" />
+    <Compile Include="TableTypes\Anes_hl7data.cs" />
     <Compile Include="TableTypes\FeeSched.cs" />
     <Compile Include="TableTypes\HL7Msg.cs" />
     <Compile Include="TableTypes\PhoneNumber.cs" />
