@@ -2762,8 +2762,11 @@ namespace OpenDental
 
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
-			Anes_HL7Datas.GetHL7Message(anestheticRecordNum, PatCur.PatNum);
-	
+			try
+			{
+			Anes_HL7Datas.GetHL7Message(anestheticRecordNum, PatCur.PatNum);//if db has been set up with HL7 schema
+			}
+			catch{}
 			listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
