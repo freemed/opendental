@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 			}
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
-		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7){
+		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string anesthDateTime){
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
 			string[] hL7OBXSeg; //OBX segments
@@ -189,35 +189,36 @@ namespace OpenDentBusiness{
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
 			if (checkblankVS != 0) //filters empty segments; inserts valid ones to db
 				{
-					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp); 
+					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, anesthDateTime); 
 				}
 			return;
 		}
 
-		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
+		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string anesthDateTime){
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
-			if (listAnesthVSData.Count == 0)
-			{
-			AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);
-			}
-			for (int n=0; n < listAnesthVSData.Count;n++)
+
+			long anesthDT = Convert.ToInt64(anesthDateTime);
+			long vsTS = Convert.ToInt64(VSTimeStamp);
+
+			canAdd = true;
+			for (int o=0; o < listAnesthVSData.Count;o++)//looks to see if a vs has already been written to the db
+				{
+					if (listAnesthVSData[o].VSTimeStamp == VSTimeStamp)
 						{
-							canAdd = true;
-							for (int o=0; o < listAnesthVSData.Count;o++)//looks to see if a vs has already been written to the db
-							{
-								if (listAnesthVSData[o].VSTimeStamp == VSTimeStamp)
-								{
-									canAdd = false;//sets this to false if it has
-									return;
-								}
-							}
-							if (canAdd !=false)
-								{
-									AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);					
-									return;
-								}
+							canAdd = false;//sets this to false if it has
+							return;
 						}
+				}
+			if (canAdd !=false)
+				{
+					if (vsTS <= anesthDT) //filters out messages that don't belong with this Anesthetic Record
+						{
+							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);		
+						}
+					return;
+							
+				}
 			}
 
 	}

@@ -2764,6 +2764,8 @@ namespace OpenDental
 
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
+			DateTime anesthDT = Convert.ToDateTime(listAnesthetics.SelectedItem);
+			string anesthDateTime = anesthDT.ToString("yyyyMMddhhmmss");
 			int AnestheticRecordNum =AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
 			try
 			{
@@ -2771,7 +2773,7 @@ namespace OpenDental
 				for (int i = 0; i < listAnes_hl7data.Count; i++)
 						{ 
 
-							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message));//if db has been set up with HL7 schema
+					Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime);//if db has been set up with HL7 schema
 						}
 				//Anes_HL7Datas.RefreshCache();
 			}							
