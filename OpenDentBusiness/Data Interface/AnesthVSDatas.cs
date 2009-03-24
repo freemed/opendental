@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 			}
 		}
 			
-		public static int InsertVSData(int anestheticRecordNum,int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp ){
+		public static void InsertVSData(int anestheticRecordNum,int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp ){
 			string command = "INSERT INTO anesthvsdata (AnestheticRecordNum,PatNum,VSMName,VSMSerNum, BPSys, BPDias, BPMAP, HR, SpO2, Temp, EtCO2,VSTimeStamp)" +
 				"VALUES(" + POut.PInt(anestheticRecordNum) + "," 
 				+ POut.PInt(patNum) + ",'"
@@ -71,8 +71,9 @@ namespace OpenDentBusiness{
 				+ POut.PInt(temp) + ","
 				+ POut.PInt(EtCO2) + ",'"
 				+ POut.PString(VSTimeStamp)+"')";
-				int val =  General.NonQ(command);
-				return val;
+				//int val =  General.NonQ(command);
+				//return val;
+				General.NonQ(command);
 
 		}
 
@@ -94,21 +95,27 @@ namespace OpenDentBusiness{
 				
 		}
 
-			public static string GetVSTimeStamp(int anestheticRecordNum){
+			public static string GetVSTimeStamp(string vSTimeStamp){
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT VSTimeStamp FROM anesthvsdata WHERE AnestheticRecordNum=" + anestheticRecordNum +"";
-			string VSTimeStamp = Convert.ToString(cmd.ExecuteScalar());
+			cmd.CommandText = "SELECT * FROM anesthvsdata WHERE VSTimeStamp" + vSTimeStamp +"";
+			try
+				{
+					vSTimeStamp = Convert.ToString(cmd.ExecuteScalar()); //might be null on the first pass 
+				}
+			catch 
+				{
+					vSTimeStamp = "";
+				}
 			con.Close();
-			return VSTimeStamp;
-		}
-
+			return vSTimeStamp;
+					
+			}
 	}
-
 }
 
 

@@ -21,9 +21,15 @@ namespace OpenDentBusiness{
 		private static MySqlConnection con;
 
 		public static List<Anes_hl7data> CreateObjects(int anestheticRecordNum) {
-				string cmd="SELECT HL7Message FROM anes_hl7data";
+				string cmd="SELECT * FROM anes_hl7data";
 				return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
+				
 			}
+
+		public static void WriteObject(Anes_hl7data hl7){
+
+			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
+		}
 
 		/*public static void ProcessHL7Messages(int anestheticRecordNum, int patNum, List<Anes_hl7data> listAnes_HL7Data)
 		{
@@ -35,7 +41,14 @@ namespace OpenDentBusiness{
 			}
 		
 		}*/
-
+			public static DataTable RefreshCache(){
+			string c="SELECT HL7Message FROM anes_hl7data"; 
+			DataTable table=General.GetTable(c);
+			table.TableName="anest_hl7data";
+			FillCache(table);
+			return table;
+			}
+			
 			public static void FillCache(DataTable table){
 			Anes_HL7DataC.Listt=new List<Anes_hl7data>();
 			Anes_hl7data hl7Cur;
@@ -76,21 +89,16 @@ namespace OpenDentBusiness{
 						con.Close();
 					}
 				con.Open();
-				cmd.CommandText = "SELECT HL7Message FROM anes_hl7data";
+				cmd.CommandText = "SELECT * FROM anes_hl7data";
 				string rawHL7 = Convert.ToString(cmd.ExecuteScalar());
 				con.Close();
 				return rawHL7;
 			}
 			
-		public static void GetHL7Message(int anestheticRecordNum, int patNum){
-			//for (int i = 0; i < listAnes_HL7Data.Count; i++){
+		public static void GetHL7Message(int anestheticRecordNum, int patNum, string rawHL7){
 
-					//string rawHL7 = listAnes_HL7Data[i].HL7Message;
-					string rawHL7 = GetHL7List();
-					ParseHL7Messages(anestheticRecordNum, patNum, rawHL7);
-				//	return listAnes_HL7Data[i].HL7Message;
-			//}
-
+					//ParseHL7Messages(anestheticRecordNum, patNum, Convert.ToString(rawHL7));
+					
 			}
 
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4
@@ -108,11 +116,15 @@ namespace OpenDentBusiness{
 			int HR = 0;
 			int temp = 0;
 			int EtCO2 = 0;
-			string VSTimeStamp = "";
+			//string VSTimeStamp = "";
 
 			hL7OBX = Regex.Split(rawHL7, @"OBX");
+			string VSTimeStamp = "";
+		
 			for (int count=0; count < hL7OBX.Length; count ++)
 			{
+				if (Regex.Match(rawHL7, @"Alarm").Success != true) //discard alarm warnings
+				{
 				string subSegment = hL7OBX[count].ToString();
 				if (count < hL7OBX.Length)
 				{
@@ -203,7 +215,7 @@ namespace OpenDentBusiness{
 																					}
 																			}
 																}
-																InsertOrUpdate(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp);
+																
 											
 
 											/*}
@@ -215,19 +227,28 @@ namespace OpenDentBusiness{
 					
 					}
 				}
-			}
-		}
-		public static void InsertOrUpdate(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
-			if (AnesthVSDatas.GetVSTimeStamp(anestheticRecordNum) == "")// != VSTimeStamp)
-				{
-					int value = AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2, VSTimeStamp);
 				}
-			if (AnesthVSDatas.GetVSTimeStamp(anestheticRecordNum) == VSTimeStamp)
+				else return;
+			}
+			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
+			if (checkblankVS != 0) //filters blank segments
+				{
+					InsertOrUpdate(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp); 
+				}
+			return;
+		}
+
+		public static void InsertOrUpdate(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
+			if (AnesthVSDatas.GetVSTimeStamp(VSTimeStamp) == VSTimeStamp)
 				{
 					int value = AnesthVSDatas.UpdateVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2, VSTimeStamp);
 				}
+			else if (AnesthVSDatas.GetVSTimeStamp(VSTimeStamp)== "")
+				{
+					AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2, VSTimeStamp);
+				}
 		}
-
+		
 	}
 
 }

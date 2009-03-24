@@ -153,7 +153,7 @@ namespace OpenDental
 		public int anestheticRecordCur;
 		private List<AnestheticMedsGiven> listAnesthMedsGiven;
 		private List<AnestheticVSData> listAnesthVSData;
-		public List<Anes_hl7data> listAnes_HL7Data;
+		public List<Anes_hl7data> listAnes_hl7data;
 		public string AnesthScore;
 		public int anesthScore;
 		public int CurPatNum;
@@ -2198,6 +2198,7 @@ namespace OpenDental
 		}
 
 		public AnesthMedsGivens medCur;
+		public Anes_hl7data hl7Cur;
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
 			RefreshListAnesthetics();
@@ -2248,6 +2249,7 @@ namespace OpenDental
 			sigBox.Visible = true;
 			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			IsStartingUp = false;
+
 		}
 
 		private void RefreshListAnesthetics(){
@@ -2762,11 +2764,23 @@ namespace OpenDental
 
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
+			int AnestheticRecordNum =AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
 			try
 			{
-			Anes_HL7Datas.GetHL7Message(anestheticRecordNum, PatCur.PatNum);//if db has been set up with HL7 schema
-			}
-			catch{}
+				listAnes_hl7data = Anes_HL7Datas.CreateObjects(AnestheticRecordNum);
+				for (int i = 0; i < listAnes_hl7data.Count; i++)
+						{ 
+
+							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message));//if db has been set up with HL7 schema
+						}
+				//Anes_HL7Datas.RefreshCache();
+			}							
+			catch
+				{
+					
+				}
+			
+
 			listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
@@ -2799,8 +2813,6 @@ namespace OpenDental
 			gridVSData.EndUpdate();
 		
 		}
-
-
 
 		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
 		}

@@ -4,10 +4,10 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>A unique HL7 message from a networked vital sign monitor.</summary>
-	[DataObject("Anes_hl7data")]
+	[DataObject("anes_hl7data")]
 	public class Anes_hl7data : DataObjectBase{
 
-		[DataField("MessageID",PrimaryKey=true,AutoNumber=true)]
+		[DataField("MessageID",PrimaryKey=true,AutoNumber=false)]
 		private string messageID;
 		private bool messageIDChanged;
 		///<summary>Primary key.</summary>
