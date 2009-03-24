@@ -71,8 +71,6 @@ namespace OpenDentBusiness{
 				+ POut.PInt(temp) + ","
 				+ POut.PInt(EtCO2) + ",'"
 				+ POut.PString(VSTimeStamp)+"')";
-				//int val =  General.NonQ(command);
-				//return val;
 				General.NonQ(command);
 
 		}
@@ -96,21 +94,23 @@ namespace OpenDentBusiness{
 		}
 
 			public static string GetVSTimeStamp(string vSTimeStamp){
+			string VSTimeStamp = vSTimeStamp;
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT * FROM anesthvsdata WHERE VSTimeStamp" + vSTimeStamp +"";
-			try
+			cmd.CommandText = "SELECT * FROM anesthvsdata WHERE VSTimeStamp = '"+ vSTimeStamp +"'" + "ORDER BY VSTimeStamp DESC" ;
+				try
 				{
 					vSTimeStamp = Convert.ToString(cmd.ExecuteScalar()); //might be null on the first pass 
 				}
-			catch 
+				catch 
 				{
 					vSTimeStamp = "";
 				}
+			
 			con.Close();
 			return vSTimeStamp;
 					

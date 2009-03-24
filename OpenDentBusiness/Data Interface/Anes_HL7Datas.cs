@@ -16,6 +16,8 @@ namespace OpenDentBusiness{
 	
 	public class Anes_HL7Datas{
 
+		public static bool canAdd;
+		public static string vSTimeStamp;
 		public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
@@ -23,7 +25,6 @@ namespace OpenDentBusiness{
 		public static List<Anes_hl7data> CreateObjects(int anestheticRecordNum) {
 				string cmd="SELECT * FROM anes_hl7data";
 				return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
-				
 			}
 
 		public static void WriteObject(Anes_hl7data hl7){
@@ -31,16 +32,6 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
 		}
 
-		/*public static void ProcessHL7Messages(int anestheticRecordNum, int patNum, List<Anes_hl7data> listAnes_HL7Data)
-		{
-			for (int i = 0; i < listAnes_HL7Data.Count; i++)
-			{
-					string rawHL7 = listAnes_HL7Data[i].HL7Message;
-					ParseHL7Messages(anestheticRecordNum, patNum, rawHL7);
-
-			}
-		
-		}*/
 			public static DataTable RefreshCache(){
 			string c="SELECT HL7Message FROM anes_hl7data"; 
 			DataTable table=General.GetTable(c);
@@ -95,17 +86,10 @@ namespace OpenDentBusiness{
 				return rawHL7;
 			}
 			
-		public static void GetHL7Message(int anestheticRecordNum, int patNum, string rawHL7){
-
-					//ParseHL7Messages(anestheticRecordNum, patNum, Convert.ToString(rawHL7));
-					
-			}
-
-		//This method currently works for a Philips VM4 speaking HL7 v. 2.4
+		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
 		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7){
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
-			string[] hL7OBXParsed; //an array of the HL7 segments
 			string[] hL7OBXSeg; //OBX segments
 			string VSMName = "";
 			string VSMSerNum = "";
@@ -116,143 +100,128 @@ namespace OpenDentBusiness{
 			int HR = 0;
 			int temp = 0;
 			int EtCO2 = 0;
-			//string VSTimeStamp = "";
-
+			//split the rawHL7 message into OBX Segments
 			hL7OBX = Regex.Split(rawHL7, @"OBX");
 			string VSTimeStamp = "";
 		
 			for (int count=0; count < hL7OBX.Length; count ++)
 			{
-				if (Regex.Match(rawHL7, @"Alarm").Success != true) //discard alarm warnings
+				if (Regex.Match(rawHL7, @"Alarm").Success != true) //discard messages with alarm warnings
 				{
 				string subSegment = hL7OBX[count].ToString();
 				if (count < hL7OBX.Length)
-				{
-					//parses VSTimeStamp from message header (MSH)
-					if (count == 0)
 					{
-						hL7MSH = Regex.Split(subSegment,@"\|");
-					
-						for (int m=0; m < hL7MSH.Length; m++)	
+						//parses VSTimeStamp from message header (MSH)
+						if (count == 0)
 							{
-								if (m == 6)
+								hL7MSH = Regex.Split(subSegment,@"\|");
+								for (int m=0; m < hL7MSH.Length; m++)	
 									{
-										VSTimeStamp = hL7MSH[m].ToString();
+										if (m == 6)
+										{
+											VSTimeStamp = hL7MSH[m].ToString();
+										}
 									}
+								}							
+							//parse the OBX segments for vital sign data
+							for (int j=0; j < hL7OBX.Length;j++)	
+								{		
+									string subSeg = hL7OBX[j].ToString();
+									hL7OBXSeg = Regex.Split(subSeg, @"\|");
+									if (Regex.Match(hL7OBX[j], @"SpO2").Success == true)
+										{	
+											for (int k=0; k < hL7OBXSeg.Length;k++)
+												{
+													if (k == 5)
+														{
+															SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
+														}
+													}
+											}
+									if (Regex.Match(hL7OBX[j], @"NBPs").Success == true)
+										{
+											for (int k=0; k < hL7OBXSeg.Length;k++)
+												{
+													if (k == 5)
+														{
+															NBPs = Convert.ToInt32(hL7OBXSeg[k].ToString());
+														}
+													}
+											}
+
+										if (Regex.Match(hL7OBX[j], @"NBPd").Success == true)
+											{
+												for (int k=0; k < hL7OBXSeg.Length;k++)
+													{
+														if (k == 5)
+															{
+																NBPd = Convert.ToInt32(hL7OBXSeg[k].ToString());
+															}
+														}
+												}
+
+											if (Regex.Match(hL7OBX[j], @"NBPm").Success == true)
+												{
+													for (int k=0; k < hL7OBXSeg.Length;k++)
+														{
+															if (k == 5)
+																{
+																	NBPm = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																}
+															}
+													}		
+												if (Regex.Match(hL7OBX[j], @"HR").Success == true)
+													{
+														for (int k=0; k < hL7OBXSeg.Length;k++)
+															{
+																if (k == 5)
+																	{
+																		HR = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																	}
+															}
+														}
+					
+										}
 							}
 					}
-					//gets vitals sign data segments
-					/*hL7OBXParsed = Regex.Split(subSegment, @"\|"); //data within segments are separated by "|"
-					for (int i=0; i < hL7OBXParsed.Length; i++)	
-					{
-						if (i == 3)//3rd parameter in the parsed seqment contains the VS data
-							{
-							
-								for (int counter=0; counter < hL7OBXParsed.Length; counter ++)	
-									{ 
-										if (counter == 23) //PID segment
-										{
-										if (hL7OBXParsed[counter] == Convert.ToString(patNum))//patNum matches PID from monitor
-											{*/
-												for (int j=0; j < hL7OBX.Length;j++)	
-												{		
-													
-														string subSeg = hL7OBX[j].ToString();
-														hL7OBXSeg = Regex.Split(subSeg, @"\|");
-
-														if (Regex.Match(hL7OBX[j], @"SpO2").Success == true)
-															{	
-																for (int k=0; k < hL7OBXSeg.Length;k++)
-																	{
-																		if (k == 5)
-																		{
-																			SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
-
-																		}
-																	}
-																}
-											
-															if (Regex.Match(hL7OBX[j], @"NBPs").Success == true)
-																{
-																	for (int k=0; k < hL7OBXSeg.Length;k++)
-																		{
-																			if (k == 5)
-																			{
-																				NBPs = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																			}
-																		}
-																}
-
-																if (Regex.Match(hL7OBX[j], @"NBPd").Success == true)
-																	{
-																		for (int k=0; k < hL7OBXSeg.Length;k++)
-																			{
-																				if (k == 5)
-																				{
-																					NBPd = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																				}
-																			}
-																		}
-
-																	if (Regex.Match(hL7OBX[j], @"NBPm").Success == true)
-																		{
-																			for (int k=0; k < hL7OBXSeg.Length;k++)
-																				{
-																					if (k == 5)
-																					{
-																						NBPm = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																					}
-																				}
-																			}		
-
-																		if (Regex.Match(hL7OBX[j], @"HR").Success == true)
-																			{
-																				for (int k=0; k < hL7OBXSeg.Length;k++)
-																					{
-																						if (k == 5)
-																							{
-																							HR = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																					}
-																			}
-																}
-																
-											
-
-											/*}
-													
-											}
-									}
-								}
-						}*/
-					
-					}
-				}
-				}
-				else return;
+					else return;
 			}
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
-			if (checkblankVS != 0) //filters blank segments
+			if (checkblankVS != 0) //filters empty segments; inserts valid ones to db
 				{
-					InsertOrUpdate(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp); 
+					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp); 
 				}
 			return;
 		}
 
-		public static void InsertOrUpdate(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
-			if (AnesthVSDatas.GetVSTimeStamp(VSTimeStamp) == VSTimeStamp)
-				{
-					int value = AnesthVSDatas.UpdateVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2, VSTimeStamp);
-				}
-			else if (AnesthVSDatas.GetVSTimeStamp(VSTimeStamp)== "")
-				{
-					AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2, VSTimeStamp);
-				}
-		}
-		
+		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
+			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
+			AnesthVSDatas.RefreshCache(anestheticRecordNum);
+			if (listAnesthVSData.Count == 0)
+			{
+			AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);
+			}
+			for (int n=0; n < listAnesthVSData.Count;n++)
+						{
+							canAdd = true;
+							for (int o=0; o < listAnesthVSData.Count;o++)//looks to see if a vs has already been written to the db
+							{
+								if (listAnesthVSData[o].VSTimeStamp == VSTimeStamp)
+								{
+									canAdd = false;//sets this to false if it has
+									return;
+								}
+							}
+							if (canAdd !=false)
+								{
+									AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);					
+									return;
+								}
+						}
+			}
+
 	}
-
 }
-
 
 
 
