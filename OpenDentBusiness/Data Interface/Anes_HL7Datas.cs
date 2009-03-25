@@ -237,7 +237,7 @@ namespace OpenDentBusiness{
 			if (canAdd !=false)
 				{
 					if (anesthDT <= vsTS)
-						if (vsTS <= anesthCT)//filters out messages that don't belong with this Anesthetic Record.Need to add AnesthClose time to the right side of this expression to complete the filtering
+						if (vsTS <= anesthCT)//filters out messages that don't belong with this Anesthetic Record.
 						{
 							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);		
 						}
