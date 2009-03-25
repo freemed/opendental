@@ -2805,14 +2805,32 @@ namespace OpenDental
 			ODGridRow row;
 			for (int i = 0; i < AnesthVSDataC.Listt.Count; i++)
 			{
+				Double vSTimeStamp = Convert.ToDouble(AnesthVSDataC.Listt[i].VSTimeStamp);
+				string vsts = String.Format("{0:0000-00-00 00:00:00}",vSTimeStamp);
+				DateTime VSTS = Convert.ToDateTime(vsts);
+				string VSTStamp = VSTS.ToString("hh:mm:ss tt");
+				
 				row = new ODGridRow();
-				row.Cells.Add(AnesthVSDataC.Listt[i].VSTimeStamp);
-				row.Cells.Add(AnesthVSDataC.Listt[i].BPSys + "/" + AnesthVSDataC.Listt[i].BPDias);
-				row.Cells.Add(AnesthVSDataC.Listt[i].BPMAP);
-				row.Cells.Add(AnesthVSDataC.Listt[i].HR);
-				row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
-				row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
-				row.Cells.Add(AnesthVSDataC.Listt[i].Temp);
+				row.Cells.Add(VSTStamp); //(AnesthVSDataC.Listt[i].VSTimeStamp);
+				//because "---" look better than "0's" for blank values...
+				if (AnesthVSDataC.Listt[i].BPSys == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].BPSys + "/" + AnesthVSDataC.Listt[i].BPDias);
+				if (AnesthVSDataC.Listt[i].BPMAP == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].BPMAP);
+				if (AnesthVSDataC.Listt[i].HR == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].HR);
+				if (AnesthVSDataC.Listt[i].SpO2 == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
+				if (AnesthVSDataC.Listt[i].EtCO2 == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
+				if (AnesthVSDataC.Listt[i].Temp == "0")
+					{row.Cells.Add("---");}
+				else row.Cells.Add(AnesthVSDataC.Listt[i].Temp);
 				gridVSData.Rows.Add(row);
 			}
 			gridVSData.EndUpdate();
