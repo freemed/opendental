@@ -117,11 +117,22 @@ namespace OpenDentBusiness{
 								hL7MSH = Regex.Split(subSegment,@"\|");
 								for (int m=0; m < hL7MSH.Length; m++)	
 									{
+										if (m == 2) //gets VSM name
+											{
+												VSMName = hL7MSH[m].ToString();
+											}
+
+										if (m ==42) //gets VSM serial number
+											{
+												VSMSerNum = hL7MSH[m].ToString();
+											}
+
 										if (m == 6)
 										{
 											VSTimeStamp = hL7MSH[m].ToString();
 										}
 									}
+								AnesthMeds.UpdateVSMData(anestheticRecordNum,VSMName,VSMSerNum);
 								}							
 							//parse the OBX segments for vital sign data
 							for (int j=0; j < hL7OBX.Length;j++)	
@@ -180,7 +191,6 @@ namespace OpenDentBusiness{
 																	}
 															}
 														}
-					
 										}
 							}
 					}
