@@ -132,8 +132,9 @@ namespace OpenDentBusiness{
 											VSTimeStamp = hL7MSH[m].ToString();
 										}
 									}
-								AnesthMeds.UpdateVSMData(anestheticRecordNum,VSMName,VSMSerNum);
-								}							
+								
+								}		
+							AnesthMeds.UpdateVSMData(anestheticRecordNum,VSMName,VSMSerNum);					
 							//parse the OBX segments for vital sign data
 							for (int j=0; j < hL7OBX.Length;j++)	
 								{		
@@ -145,7 +146,10 @@ namespace OpenDentBusiness{
 												{
 													if (k == 5)
 														{
-															SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
+															if ((Regex.Match(hL7OBX[j], @"HR").Success != true))//sometimes this monitor (Philips SureSigns VM4) appends an SpO2 segment to the HR segment which will incorrectly place the HR value here
+																{
+																	SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																}
 														}
 													}
 											}

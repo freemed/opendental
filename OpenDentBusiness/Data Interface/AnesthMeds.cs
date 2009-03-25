@@ -20,7 +20,7 @@ namespace OpenDentBusiness
 		static MySqlConnection con;
 		public MySqlCommand cmd;
 				
-				///<summary>Gets all Anesthetic Medications from the database</summary>
+		///<summary>Gets all Anesthetic Medications from the database</summary>
 		public static List<AnesthMedsInventory> CreateObjects() {
 			string command="SELECT * FROM anesthmedsinventory ORDER BY AnesthMedName";
 			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
@@ -73,8 +73,9 @@ namespace OpenDentBusiness
 			command2.CommandText = "SELECT Max(AnestheticRecordNum)  FROM opendental_test.anestheticrecord a,opendental_test.Patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
 			command2.Connection = con;
 			int supplierID = Convert.ToInt32(command2.ExecuteScalar());
-			return supplierID;
 			con.Close();
+			return supplierID;
+			
 		}
 
   ///<summary>Inserts the selected Anesthetic medication and dose values into the anesthmedsgiven table in the database</summary>
@@ -134,7 +135,6 @@ namespace OpenDentBusiness
 				+ POut.PBool(SigIsTopaz) + ")";
 				int val =  General.NonQ(command);
 				return val;
-
 		}
 
 		public static void UpdateVSMData(int anestheticRecordNum, string VSMName, string VSMSerNum){
@@ -298,7 +298,6 @@ namespace OpenDentBusiness
 				+ ",QtyWasted			=" + POut.PDouble((amtwasted)) + " "
 				+ ",DoseTimeStamp		='" + POut.PString(Convert.ToString(dosetimestamp)) + "'"
 				+ "WHERE AnestheticMedNum = " + anestheticMedNum + " AND AnestheticRecordNum = " + anestheticRecordNum;
-				//+ "WHERE DoseTimeStamp ='" + Convert.ToString(dosetimestamp) + "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
 			General.NonQ(command3);
 		}
 
@@ -309,7 +308,6 @@ namespace OpenDentBusiness
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			//command.CommandText = "SELECT QtyGiven FROM anesthmedsgiven WHERE AnesthMedName ='" + anesthMedName + "'" + " AND DoseTimeStamp='" + doseTimeStamp + "'";
 			command.CommandText = "SELECT QtyGiven FROM anesthmedsgiven WHERE AnesthMedName ='" + anesthMedName + "'" + " AND AnestheticMedNum = " + anestheticMedNum ;
 			command.Connection = con;
 			string qtyGiven = Convert.ToString(command.ExecuteScalar());
@@ -410,7 +408,6 @@ namespace OpenDentBusiness
 			if (con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			//if (con.State == ConnectionState.Open) MessageBox.Show("Connection to MySQL opened through OLE DB Provider"); //for testing mySQL connection
 			cmd.CommandText = "SELECT AnestheticMedNum FROM anesthmedsinventory WHERE AnesthMedName='" + aMed + "'";
 			string anesthmednum = Convert.ToString(cmd.ExecuteScalar());
 			int anesthMedNum = Convert.ToInt32(anesthmednum);

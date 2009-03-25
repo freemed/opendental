@@ -2774,8 +2774,7 @@ namespace OpenDental
 				listAnes_hl7data = Anes_HL7Datas.CreateObjects(AnestheticRecordNum);
 				for (int i = 0; i < listAnes_hl7data.Count; i++)
 						{ 
-
-					Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime);//if db has been set up with HL7 schema
+							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime);//if db has been set up with HL7 schema
 						}
 				Anes_HL7Datas.RefreshCache();
 			}							
@@ -2784,7 +2783,6 @@ namespace OpenDental
 					
 				}
 			
-
 			listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
@@ -2792,6 +2790,8 @@ namespace OpenDental
 			ODGridColumn col = new ODGridColumn(Lan.g(this, "Time Stamp"), 130);
 			gridVSData.Columns.Add(col);
 			col = new ODGridColumn(Lan.g(this, "BP"), 60);
+			gridVSData.Columns.Add(col);
+			col = new ODGridColumn(Lan.g(this, "MAP"), 60);
 			gridVSData.Columns.Add(col);
 			col = new ODGridColumn(Lan.g(this, "HR"), 60);
 			gridVSData.Columns.Add(col);
@@ -2808,6 +2808,7 @@ namespace OpenDental
 				row = new ODGridRow();
 				row.Cells.Add(AnesthVSDataC.Listt[i].VSTimeStamp);
 				row.Cells.Add(AnesthVSDataC.Listt[i].BPSys + "/" + AnesthVSDataC.Listt[i].BPDias);
+				row.Cells.Add(AnesthVSDataC.Listt[i].BPMAP);
 				row.Cells.Add(AnesthVSDataC.Listt[i].HR);
 				row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
 				row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
