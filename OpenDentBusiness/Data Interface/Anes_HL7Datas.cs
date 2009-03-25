@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 			}
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
-		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string anesthDateTime){
+		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string anesthDateTime, string anesthCloseTime){
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
 			string[] hL7OBXSeg; //OBX segments
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 												{
 													if (k == 5)
 														{
-															if ((Regex.Match(hL7OBX[j], @"HR").Success != true))//sometimes this monitor (Philips SureSigns VM4) appends an SpO2 segment to the HR segment which will incorrectly place the HR value here
+															if ((Regex.Match(hL7OBX[j], @"HR").Success != true))//sometimes this monitor (Philips SureSigns VM4) appends an SpO2 segment to the HR segment which will incorrectly place the HR value here by breaking the Reqex.
 																{
 																	SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
 																}
@@ -203,18 +203,28 @@ namespace OpenDentBusiness{
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
 			if (checkblankVS != 0) //filters empty segments; inserts valid ones to db
 				{
-					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, anesthDateTime); 
+					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, anesthDateTime, anesthCloseTime); 
 				}
 			return;
 		}
 
-		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string anesthDateTime){
+		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string anesthDateTime, string anesthCloseTime){
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
-
+			//These conversions are needed so dates and times can be compared as numeric strings
+			string AnesthDateTime = anesthDateTime.ToString();
+			string AnesDate = AnesthDateTime.Remove(8,6);
+			Double ADate = Convert.ToDouble(AnesDate);//needs to be a Double for String.Format to work
+			string ADT = String.Format("{0:0000-00-00}",ADate);
+			string ADTNumString = String.Format("{0:00000000}",ADate);
+			DateTime AnesthClose_Time = Convert.ToDateTime(ADT+" " +anesthCloseTime);
+			string AnesthCloseTime = AnesthClose_Time.ToString(ADTNumString+"hhmmss");
+			string vSTS = VSTimeStamp.ToString();
+			
+			long vsTS = Convert.ToInt64(vSTS);
 			long anesthDT = Convert.ToInt64(anesthDateTime);
-			long vsTS = Convert.ToInt64(VSTimeStamp);
-
+			long anesthCT = Convert.ToInt64(AnesthCloseTime);
+			
 			canAdd = true;
 			for (int o=0; o < listAnesthVSData.Count;o++)//looks to see if a vs has already been written to the db
 				{
@@ -226,7 +236,8 @@ namespace OpenDentBusiness{
 				}
 			if (canAdd !=false)
 				{
-					if (vsTS <= anesthDT) //filters out messages that don't belong with this Anesthetic Record
+					if (anesthDT <= vsTS)
+						if (vsTS <= anesthCT)//filters out messages that don't belong with this Anesthetic Record.Need to add AnesthClose time to the right side of this expression to complete the filtering
 						{
 							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);		
 						}

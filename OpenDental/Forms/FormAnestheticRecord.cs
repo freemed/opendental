@@ -2774,7 +2774,7 @@ namespace OpenDental
 				listAnes_hl7data = Anes_HL7Datas.CreateObjects(AnestheticRecordNum);
 				for (int i = 0; i < listAnes_hl7data.Count; i++)
 						{ 
-							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime);//if db has been set up with HL7 schema
+							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime, textAnesthClose.Text);//if db has been set up with HL7 schema
 						}
 				Anes_HL7Datas.RefreshCache();
 			}							
