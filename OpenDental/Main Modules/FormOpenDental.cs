@@ -211,10 +211,13 @@ namespace OpenDental{
 		private OpenDental.UI.ODToolBar ToolBarMain;
 
 		///<summary></summary>
-		public FormOpenDental(){
+		public FormOpenDental(string[] cla){
 			Logger.openlog.Log("Initializing Open Dental...",Logger.Severity.INFO);
+			CommandLineArgs=cla;
 			Splash=new FormSplash();
-			Splash.Show();
+			if(CommandLineArgs.Length==0) {
+				Splash.Show();
+			}
 			InitializeComponent();
 			//toolbar
 			ToolBarMain=new ODToolBar();
@@ -1266,7 +1269,9 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			Splash=new FormSplash();
-			Splash.Show();
+			if(CommandLineArgs.Length==0) {
+				Splash.Show();
+			}
 			if(!PrefsStartup()){
 				Cursor=Cursors.Default;
 				Splash.Dispose();

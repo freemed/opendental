@@ -25,6 +25,7 @@ namespace OpenDental {
 					break;
 				}
 			}
+			/*
 			if(args.Length>0) {//if any command line args, then we will attempt to reuse an existing OD window.
 				if(isSecondInstance){
 					FormCommandLinePassOff formCommandLine=new FormCommandLinePassOff();
@@ -33,13 +34,13 @@ namespace OpenDental {
 					Application.Run(formCommandLine);
 					return;
 				}
-			}
+			}*/
 			Application.EnableVisualStyles();//changes appearance to XP
 			Application.DoEvents();//workaround for a known MS bug in the line above
-			FormOpenDental formOD=new FormOpenDental();
+			string[] cla=new string[args.Length];
+			args.CopyTo(cla,0);
+			FormOpenDental formOD=new FormOpenDental(cla);
 			formOD.IsSecondInstance=isSecondInstance;
-			formOD.CommandLineArgs=new string[args.Length];
-			args.CopyTo(formOD.CommandLineArgs,0);
 			Application.Run(formOD);
 		}
 

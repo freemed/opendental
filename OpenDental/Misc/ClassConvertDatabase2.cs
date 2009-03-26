@@ -267,7 +267,30 @@ namespace OpenDental {
 		private void To6_6_0() {
 			if(FromVersion<new Version("6.6.0.0")) {
 				string command;
+				DataTable table;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					//Change defaults for XDR bridge-------------------------------------------------------------------
+					command="SELECT Enabled,ProgramNum FROM program WHERE ProgName='XDR'";
+					table=General.GetTable(command);
+					if(table.Rows.Count>0 && table.Rows[0]["Enabled"].ToString()=="0") {//if XDR not enabled
+						//change the defaults
+						int programNum=PIn.PInt(table.Rows[0]["ProgramNum"].ToString());
+						command="UPDATE program SET Path='"+POut.PString(@"C:\XDRClient\Bin\XDR.exe")+"' WHERE ProgramNum="+POut.PInt(programNum);
+						General.NonQ(command);
+						command="UPDATE programproperty SET PropertyValue='"+POut.PString(@"C:\XDRClient\Bin\infofile.txt")+"' "
+							+"WHERE ProgramNum="+POut.PInt(programNum)+" "
+							+"AND PropertyDesc='InfoFile path'";
+						General.NonQ(command);
+						command="UPDATE toolbutitem SET ToolBar=7 "//The toolbar at the top that is common to all modules.
+							+"WHERE ProgramNum="+POut.PInt(programNum);
+						General.NonQ(command);
+					}
+
+
+
+
+
+
 
 				}
 				else {//oracle
