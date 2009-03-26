@@ -33,6 +33,9 @@ namespace OpenDental
         private Label labelProvider;
         private ListBox listClinic;
         private Label labClinic;
+        private GroupBox groupInsBox;
+        private RadioButton radioWriteoffPay;
+        private RadioButton radioWriteoffProc;
         private FormQuery FormQuery2;
 
         ///<summary></summary>
@@ -70,6 +73,10 @@ namespace OpenDental
             this.labelProvider = new System.Windows.Forms.Label();
             this.listClinic = new System.Windows.Forms.ListBox();
             this.labClinic = new System.Windows.Forms.Label();
+            this.groupInsBox = new System.Windows.Forms.GroupBox();
+            this.radioWriteoffPay = new System.Windows.Forms.RadioButton();
+            this.radioWriteoffProc = new System.Windows.Forms.RadioButton();
+            this.groupInsBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // butCancel
@@ -81,7 +88,7 @@ namespace OpenDental
             this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
             this.butCancel.CornerRadius = 4F;
             this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.butCancel.Location = new System.Drawing.Point(468, 220);
+            this.butCancel.Location = new System.Drawing.Point(468, 233);
             this.butCancel.Name = "butCancel";
             this.butCancel.Size = new System.Drawing.Size(75, 26);
             this.butCancel.TabIndex = 3;
@@ -95,7 +102,7 @@ namespace OpenDental
             this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
             this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
             this.butOK.CornerRadius = 4F;
-            this.butOK.Location = new System.Drawing.Point(378, 220);
+            this.butOK.Location = new System.Drawing.Point(378, 233);
             this.butOK.Name = "butOK";
             this.butOK.Size = new System.Drawing.Size(75, 26);
             this.butOK.TabIndex = 2;
@@ -152,12 +159,46 @@ namespace OpenDental
             this.labClinic.TabIndex = 32;
             this.labClinic.Text = "Clinic";
             // 
+            // groupInsBox
+            // 
+            this.groupInsBox.Controls.Add(this.radioWriteoffProc);
+            this.groupInsBox.Controls.Add(this.radioWriteoffPay);
+            this.groupInsBox.Location = new System.Drawing.Point(27, 204);
+            this.groupInsBox.Name = "groupInsBox";
+            this.groupInsBox.Size = new System.Drawing.Size(270, 66);
+            this.groupInsBox.TabIndex = 33;
+            this.groupInsBox.TabStop = false;
+            this.groupInsBox.Text = "Show Insurance Writeoffs";
+            // 
+            // radioWriteoffPay
+            // 
+            this.radioWriteoffPay.AutoSize = true;
+            this.radioWriteoffPay.Location = new System.Drawing.Point(7, 20);
+            this.radioWriteoffPay.Name = "radioWriteoffPay";
+            this.radioWriteoffPay.Size = new System.Drawing.Size(171, 17);
+            this.radioWriteoffPay.TabIndex = 0;
+            this.radioWriteoffPay.TabStop = true;
+            this.radioWriteoffPay.Text = "Using insurance payment date.";
+            this.radioWriteoffPay.UseVisualStyleBackColor = true;
+            // 
+            // radioWriteoffProc
+            // 
+            this.radioWriteoffProc.AutoSize = true;
+            this.radioWriteoffProc.Location = new System.Drawing.Point(7, 38);
+            this.radioWriteoffProc.Name = "radioWriteoffProc";
+            this.radioWriteoffProc.Size = new System.Drawing.Size(130, 17);
+            this.radioWriteoffProc.TabIndex = 1;
+            this.radioWriteoffProc.TabStop = true;
+            this.radioWriteoffProc.Text = "Using procedure date.";
+            this.radioWriteoffProc.UseVisualStyleBackColor = true;
+            // 
             // FormRpReceivablesBreakdown
             // 
             this.AcceptButton = this.butOK;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.butCancel;
-            this.ClientSize = new System.Drawing.Size(567, 258);
+            this.ClientSize = new System.Drawing.Size(567, 271);
+            this.Controls.Add(this.groupInsBox);
             this.Controls.Add(this.labClinic);
             this.Controls.Add(this.listClinic);
             this.Controls.Add(this.labelProvider);
@@ -174,6 +215,8 @@ namespace OpenDental
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Receivables Brekdown";
             this.Load += new System.EventHandler(this.FormRpReceivablesBreakdown_Load);
+            this.groupInsBox.ResumeLayout(false);
+            this.groupInsBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,6 +224,7 @@ namespace OpenDental
         #endregion
         private void FormRpReceivablesBreakdown_Load(object sender, EventArgs e)
         {
+            radioWriteoffPay.Checked = true;
             listProv.Items.Add(Lan.g(this, "Practice"));
             for (int i = 0; i < ProviderC.List.Length; i++)
             {
@@ -251,7 +295,7 @@ namespace OpenDental
                 else
                 {
                     bDate = wDate;
-                    eDate = POut.PDate(date1.SelectionStart).Substring(1, 10);
+                    eDate = POut.PDate(date1.SelectionStart.AddDays(1)).Substring(1, 10);// Needed because all Queries are < end date to get correct Starting AR
                 }
                 string whereProv;//used as the provider portion of the where clauses.
                 //each whereProv needs to be set up separately for each query
@@ -303,13 +347,29 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
-                + "DateCP >= '" + bDate + "' "
-                + "AND DateCP <= '" + eDate + "' "
-                + "AND Status = '7' "//CapComplete
-                + whereProv
-                + " GROUP BY DateCP "
-                + "ORDER BY DateCP";
+                if (radioWriteoffPay.Checked)
+                {
+                    Queries.CurReport.Query = "SELECT DateCP, "
+                    + "SUM(WriteOff) FROM claimproc WHERE "
+                    + "DateCP >= '" + bDate + "' "
+                    + "AND DateCP < '" + eDate + "' "
+                    + "AND Status = '7' "//CapComplete
+                    + whereProv
+                    + " GROUP BY DateCP "
+                    + "ORDER BY DateCP";
+                }
+                else
+                {
+                    Queries.CurReport.Query = "SELECT ProcDate, "
+                    + "SUM(WriteOff) FROM claimproc WHERE "
+                    + "ProcDate >= '" + bDate + "' "
+                    + "AND ProcDate < '" + eDate + "' "
+                    + "AND Status = '7' "//CapComplete
+                    + whereProv
+                    + " GROUP BY ProcDate "
+                    + "ORDER BY ProcDate";
+                }
+
                 Queries.SubmitTemp(); //create TableTemp
                 TableCapWriteoff = Queries.TableTemp.Copy();
                 whereProv = "";
@@ -330,13 +390,28 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT DateCP,SUM(WriteOff) FROM claimproc WHERE "
-                + "DateCP >= '" + bDate + "' "
-                + "AND DateCP < '" + eDate + "' "
-                + "AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
-                + whereProv
-                + " GROUP BY DateCP "
-                + "ORDER BY DateCP";
+                if (radioWriteoffPay.Checked)
+                {
+                    Queries.CurReport.Query = "SELECT DateCP, "
+                    + "SUM(WriteOff) FROM claimproc WHERE "
+                    + "DateCP >= '" + bDate + "' "
+                    + "AND DateCP < '" + eDate + "' "
+                    + "AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
+                    + whereProv
+                    + " GROUP BY DateCP "
+                    + "ORDER BY DateCP";
+                }
+                else
+                {
+                    Queries.CurReport.Query = "SELECT ProcDate, "
+                    + "SUM(WriteOff) FROM claimproc WHERE "
+                    + "ProcDate >= '" + bDate + "' "
+                    + "AND ProcDate < '" + eDate + "' "
+                    + "AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
+                    + whereProv
+                    + " GROUP BY ProcDate "
+                    + "ORDER BY ProcDate";
+                }
                 Queries.SubmitTemp(); //create TableTemp
                 TableInsWriteoff = Queries.TableTemp.Copy();
                 whereProv = "";
@@ -471,6 +546,7 @@ namespace OpenDental
                         Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
                     }
                     Queries.CurReport.ColTotal = new double[Queries.TableQ.Columns.Count];
+                    eDate = POut.PDate(date1.SelectionStart).Substring(1, 10);// Reset EndDate to Selected Date
                     DateTime[] dates = new DateTime[(PIn.PDate(eDate) - PIn.PDate(bDate)).Days + 1];
                     for (int i = 0; i < dates.Length; i++)
                     {//usually 31 days in loop
