@@ -78,9 +78,9 @@ namespace OpenDental{
 			// 
 			this.checkA1.Location = new System.Drawing.Point(45,111);
 			this.checkA1.Name = "checkA1";
-			this.checkA1.Size = new System.Drawing.Size(151,20);
+			this.checkA1.Size = new System.Drawing.Size(200,20);
 			this.checkA1.TabIndex = 8;
-			this.checkA1.Text = "Online (Carbonite, etc)";
+			this.checkA1.Text = "Online (Mozy, Carbonite, etc)";
 			this.checkA1.UseVisualStyleBackColor = true;
 			// 
 			// label3

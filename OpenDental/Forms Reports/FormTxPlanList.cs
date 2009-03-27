@@ -312,7 +312,7 @@ namespace OpenDental
 
             // Create Rows
             gridTxPlanList.Rows.Clear();
-            for (int i = 0; i < AddrTable.Rows.Count - 1; i++)
+            for (int i = 0; i <= AddrTable.Rows.Count - 1; i++)
             {
                 PatNum = PIn.PInt(AddrTable.Rows[i]["PatNum"].ToString());
                 PriMax = 0;
@@ -358,12 +358,13 @@ namespace OpenDental
                       "FROM procedurelog,procedurecode,claimproc " +
                       "WHERE procedurelog.PatNum = " + PatNum.ToString() + 
                       " AND claimproc.ProcNum = procedurelog.ProcNum " +
+                      "AND claimproc.PaidOtherIns < 0 " +
+                      "AND claimproc.Status = 6 " + 
                       "AND procedurelog.CodeNum = procedurecode.CodeNum " +
                       "AND procedurelog.ProcStatus = 1 " +
                       "AND procedurelog.ProcFee > 0 " +
                       "AND procedurelog.DateTP >= '" + procDate + "' " + whereProc + whereProv;
                       
-
             // "AND procedurelog.PatNum = claimproc.PatNum " + Removed SPK     
             PatientTreatmentTable = General.GetTable(command);
             for (int i = 0; i <= PatientTreatmentTable.Rows.Count - 1; i++)
