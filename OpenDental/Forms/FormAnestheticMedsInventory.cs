@@ -13,6 +13,7 @@ namespace OpenDental {
 	public partial class FormAnestheticMedsInventory:Form {
 		
 		private List<AnesthMedsInventory> listAnestheticMeds;
+		public HorizontalAlignment textAlign;
 		
 		public FormAnestheticMedsInventory() {
 			InitializeComponent();
@@ -27,11 +28,12 @@ namespace OpenDental {
 			listAnestheticMeds = AnesthMeds.CreateObjects();
 			gridAnesthMedsInventory.BeginUpdate();
 			gridAnesthMedsInventory.Columns.Clear();
-			ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"), 200);
+			textAlign=HorizontalAlignment.Center;
+			ODGridColumn col = new ODGridColumn(Lan.g(this, "Anesthetic Medication"),200,textAlign);
 			gridAnesthMedsInventory.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "How Supplied"), 200);
+			col = new ODGridColumn(Lan.g(this, "How Supplied"),200,textAlign);
 			gridAnesthMedsInventory.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"), 180);
+			col = new ODGridColumn(Lan.g(this, "Quantity on Hand (mL)"),180,textAlign);
 			gridAnesthMedsInventory.Columns.Add(col);
 			gridAnesthMedsInventory.Rows.Clear();
 			ODGridRow row;

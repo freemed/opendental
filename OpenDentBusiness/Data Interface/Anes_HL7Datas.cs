@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 				Anes_HL7DataC.Listt.Add(hl7Cur);
 			}
 		}
+
 			public static string GetHL7List(){
 				MySqlCommand cmd = new MySqlCommand();
 				con = new MySqlConnection(DataSettings.ConnectionString);

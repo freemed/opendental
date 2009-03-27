@@ -13,6 +13,8 @@ namespace OpenDental{
 	public class FormAnesthMedSuppliers:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butAddNew;
 		private OpenDental.UI.Button butClose;
+		public HorizontalAlignment textAlign;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -138,21 +140,21 @@ namespace OpenDental{
 			AnesthMedSuppliers.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"SupplierName"),200);
+			textAlign=HorizontalAlignment.Center;
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"SupplierName"),200,textAlign);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Phone"),100);
+			col=new ODGridColumn(Lan.g(this,"Phone"),100,textAlign);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Fax"),100);
+			col=new ODGridColumn(Lan.g(this,"Fax"),100,textAlign);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"City"),140);
+			col=new ODGridColumn(Lan.g(this,"City"),140,textAlign);
 			gridMain.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this,"State"),160);
+            col = new ODGridColumn(Lan.g(this,"State"),160,textAlign);
             gridMain.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this,"WebSite"), 140);
+            col = new ODGridColumn(Lan.g(this,"WebSite"), 140,textAlign);
             gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			string txt;
 			for(int i=0;i<AnesthMedSupplierC.Listt.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(AnesthMedSupplierC.Listt[i].SupplierName);

@@ -211,6 +211,7 @@ namespace OpenDental
 		private ToolStripSeparator toolStripSeparator3;
 		public Patient pat;
 		public int PatNum;
+		public HorizontalAlignment textAlign;
 
 		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur){
 			//
@@ -2742,13 +2743,14 @@ namespace OpenDental
 			AnesthMedsGivens.RefreshCache(anestheticRecordNum);
 			gridAnesthMeds.BeginUpdate();
 			gridAnesthMeds.Columns.Clear();
-			ODGridColumn col = new ODGridColumn(Lan.g(this, "Medication"), 130);
+			textAlign=HorizontalAlignment.Center;
+			ODGridColumn col = new ODGridColumn(Lan.g(this, "Medication"),130,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Dose"),60);
+			col = new ODGridColumn(Lan.g(this, "Dose"),60,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Waste"), 60);
+			col = new ODGridColumn(Lan.g(this, "Waste"),60,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "TimeStamp"),50);
+			col = new ODGridColumn(Lan.g(this, "TimeStamp"),50,textAlign);
 			gridAnesthMeds.Columns.Add(col);
 			gridAnesthMeds.Rows.Clear();
 			ODGridRow row;
@@ -2787,19 +2789,20 @@ namespace OpenDental
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
 			gridVSData.Columns.Clear();
-			ODGridColumn col = new ODGridColumn(Lan.g(this, "Time Stamp"), 130);
+			textAlign=HorizontalAlignment.Center;
+			ODGridColumn col = new ODGridColumn(Lan.g(this, "Time Stamp"),130,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "BP"), 60);
+			col = new ODGridColumn(Lan.g(this,"BP"),60,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "MAP"), 60);
+			col = new ODGridColumn(Lan.g(this,"MAP"),60,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "HR"), 60);
+			col = new ODGridColumn(Lan.g(this,"HR"),60,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "SpO2"), 60);
+			col = new ODGridColumn(Lan.g(this,"SpO2"),60,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "EtCO2"), 60);
+			col = new ODGridColumn(Lan.g(this,"EtCO2"),60,textAlign);
 			gridVSData.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Temp"), 50);
+			col = new ODGridColumn(Lan.g(this,"Temp"),50,textAlign);
 			gridVSData.Columns.Add(col);
 			gridVSData.Rows.Clear();
 			ODGridRow row;
