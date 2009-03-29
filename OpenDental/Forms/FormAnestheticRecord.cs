@@ -66,7 +66,6 @@ namespace OpenDental
 		private GroupBox groupBoxMedRoute;
 		private RadioButton radMedRouteIVButtFly;
 		private RadioButton radMedRouteIVCath;
-		private PrintDialog printDialog;
 		private Label labelEMod;
 		private ComboBox comboASA_EModifier;
 		private Label labelEscortCellNum;
@@ -162,6 +161,7 @@ namespace OpenDental
 		//Variables used for printing functionality..
 		//
 		private System.IO.Stream streamToPrint;
+		private PrintDialog printDialog;
 		private PrintDocument printDocument3;
 		private ToolStripMenuItem providersToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator4;
@@ -2906,27 +2906,6 @@ namespace OpenDental
 		private void butAddAnesthMeds_Click(object sender, EventArgs e){
 		}
 
-		private void printDocument2_PrintPage(object sender, PrintPageEventArgs e){
-			System.IO.StreamReader streamReader = new StreamReader(this.streamToPrint);
-			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
-			int x = e.MarginBounds.X;
-			int y = e.MarginBounds.Y;
-			int width = image.Width;
-			int height = image.Height;
-			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
-			{
-				width = e.MarginBounds.Width;
-				height = image.Height * e.MarginBounds.Width / image.Width;
-			}
-			else
-			{
-				height = e.MarginBounds.Height;
-				width = image.Width * e.MarginBounds.Height / image.Height;
-			}
-			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-			e.Graphics.DrawImage(image, destRect,0,0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
-		}
-
 		public void StartPrint(Stream streamToPrint, string streamType){
 			this.printDocument3.PrintPage += new PrintPageEventHandler(printDocument3_PrintPage);
 			this.streamToPrint = streamToPrint;
@@ -3177,26 +3156,6 @@ namespace OpenDental
 			textAnesthDose.Text = "";
 			comboAnesthMed.SelectedIndex = 0;
 		}
-
-		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e){
-			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
-			int x = e.MarginBounds.X;
-			int y = e.MarginBounds.Y;
-			int width = image.Width;
-			int height = image.Height;
-			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
-			{
-				width = e.MarginBounds.Width;
-				height = image.Height * e.MarginBounds.Width / image.Width;
-			}
-			else
-			{
-				height = e.MarginBounds.Height;
-				width = image.Width * e.MarginBounds.Height / image.Height;
-			}
-			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
-		 }
 
 		private void FormAnestheticRecord_FormClosing(object sender, System.ComponentModel.CancelEventArgs e){
 			if (allowTopaz)

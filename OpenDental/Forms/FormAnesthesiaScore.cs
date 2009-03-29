@@ -1,26 +1,28 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using System.Data;
+using OpenDental.DataAccess;
 using OpenDentBusiness;
 using OpenDental.UI;
-using System.Data;
-using System.Drawing.Imaging;
+using CodeBase;
 using System.IO;
 
 namespace OpenDental {
 	public partial class FormAnesthesiaScore:Form {
 
 		public static Userod CurUser;
-		private AnestheticRecord AnestheticRecordCur;
 		private Patient PatCur;
-		private int patNum;
-		private string curDate;
 		public int ActQ2;
 		public int ActQ1;
 		public int ActQ0;
@@ -43,20 +45,35 @@ namespace OpenDental {
 		public int DischCondUnstable;
 		public int AnestheticRecordNum;
 		public string AnesthClose;
-		
+				
+		//
+		//Variables used for printing functionality..
+		//
+		public PrintDialog printDialog;
+		public System.IO.Stream streamToPrint;
+		public FileStream fileStream;
+		public PrintDocument printDocument;
+		public string streamType;
+		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
+		public static extern bool BitBlt(
+			IntPtr hdcDest, // handle to destination DC
+			int nXDest, // x-coord of destination upper-left corner
+			int nYDest, // y-coord of destination upper-left corner
+			int nWidth, // width of destination rectangle
+			int nHeight, // height of destination rectangle
+			IntPtr hdcSrc, // handle to source DC
+			int nXSrc, // x-coordinate of source upper-left corner
+			int nYSrc, // y-coordinate of source upper-left corner
+			System.Int32 dwRop); // raster operation code
 
 		public FormAnesthesiaScore(Patient patCur, int anestheticRecordNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PatCur = patCur;
 			AnestheticRecordNum = anestheticRecordNum;
-			
-			
 		}
 
-		private void FormAnesthesiaScore_Load(object sender, EventArgs e)
-		{
-			
+		private void FormAnesthesiaScore_Load(object sender, EventArgs e){
 			//display Patient name
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
 			//display Patient ID number
@@ -130,43 +147,33 @@ namespace OpenDental {
 			ColorQ1 = 1;
 		}
 		textPARSSTotal.Text = Convert.ToString(ActQ2 + ActQ1 + ActQ0 + RespQ2 + RespQ1 + RespQ0 + CircQ2 + CircQ1 + CircQ0 + ConcQ2 + ConcQ1 + ConcQ0 + ColorQ2 + ColorQ1 + ColorQ0);
-
-		
-
-		
+	
 }
-	private void butOK_Click(object sender,EventArgs e) {
 
+	private void butOK_Click(object sender,EventArgs e) {
 			int QActivity = 0;
 			int QResp = 0;
 			int QCirc = 0;
 			int QConc = 0;
 			int QColor = 0;
 			int AnesthesiaScore = 0;
-
-
-			if (radDischAmb.Checked == true)
-			{
+			if (radDischAmb.Checked == true){
 				DischAmb = 1;
 			}
 
-			if (radDischWheelChr.Checked == true)
-			{
+			if (radDischWheelChr.Checked == true){
 				DischWheelChr = 1;
 			}
 
-			if (radDischAmbulance.Checked == true)
-			{
+			if (radDischAmbulance.Checked == true){
 				DischAmbulance = 1;
 			}
 
-			if (radDischCondStable.Checked == true)
-			{
+			if (radDischCondStable.Checked == true){
 				DischCondStable = 1;
 			}
 
-			if (radDischCondUnstable.Checked == true)
-			{
+			if (radDischCondUnstable.Checked == true){
 				DischCondUnstable = 1;
 			}
 
@@ -314,94 +321,135 @@ namespace OpenDental {
 		}
 
 
-		private void radDischUnstable_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radDischUnstable_CheckedChanged(object sender, EventArgs e){
 			
 		}
 
-		private void textPatient_TextChanged(object sender, EventArgs e)
-		{
+		private void textPatient_TextChanged(object sender, EventArgs e){
 
 		}
 
-		private void radActivityQ2_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radActivityQ2_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radActivityQ1_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radActivityQ1_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radActivityQ0_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radActivityQ0_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radRespQ2_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radRespQ2_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radRespQ1_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radRespQ1_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radRespQ0_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radRespQ0_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radCircQ2_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radCircQ2_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radCircQ1_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radCircQ1_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radCircQ0_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radCircQ0_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radConcQ2_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radConcQ2_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radConcQ1_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radConcQ1_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radConcQ0_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radConcQ0_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radColorQ2_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radColorQ2_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radColorQ1_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radColorQ1_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void radColorQ0_CheckedChanged(object sender, EventArgs e)
-		{
+		private void radColorQ0_CheckedChanged(object sender, EventArgs e){
 			RefreshScore();
 		}
 
-		private void textDate_TextChanged(object sender, EventArgs e)
-		{
+		private void textDate_TextChanged(object sender, EventArgs e){
 
 		}
+
+		public void butPrint_Click(object sender,EventArgs e) {
+			Graphics g1 = this.CreateGraphics();
+			Image MyImage = new Bitmap(600, 700, g1);
+			Graphics g2 = Graphics.FromImage(MyImage);
+			IntPtr dc1 = g1.GetHdc();
+			IntPtr dc2 = g2.GetHdc();
+			BitBlt(dc2, 0, 0, 600, 700, dc1, 0, 0, 13369376);
+			g1.ReleaseHdc(dc1);
+			g2.ReleaseHdc(dc2);
+			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
+			StartPrint(fileStream,"Image");
+			fileStream.Close();
+			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
+			{
+				System.IO.File.Delete(@"c:\PrintPage.jpg");
+			}
+		}
+
+		public void printDocument_PrintPage(object sender, PrintPageEventArgs e){
+			System.IO.StreamReader streamReader = new StreamReader(this.streamToPrint);
+			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
+			int x = e.MarginBounds.X;
+			int y = e.MarginBounds.Y;
+			int width = image.Width;
+			int height = image.Height;
+			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
+			{
+				width = e.MarginBounds.Width;
+				height = image.Height * e.MarginBounds.Width / image.Width;
+			}
+			else
+			{
+				height = e.MarginBounds.Height;
+				width = image.Width * e.MarginBounds.Height / image.Height;
+			}
+			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
+			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
+		}
+
+		public void StartPrint(Stream streamToPrint, string streamType){
+			printDocument = new PrintDocument();
+			this.printDocument.PrintPage += new PrintPageEventHandler(printDocument_PrintPage);
+			this.streamToPrint = streamToPrint;
+			this.streamType = streamType;
+			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
+			PrintDialog1.AllowSomePages = true;
+			PrintDialog1.ShowHelp = true;
+			PrintDialog1.Document = printDocument;
+			PrintDialog1.UseEXDialog = true; //needed because PrintDialog was not showing on 64 bit Vista systems
+				if (PrintDialog1.ShowDialog() == DialogResult.OK)
+					{
+						this.printDocument.Print();
+					}
+			}
+
+
+
 	}
 }
