@@ -272,9 +272,10 @@ namespace OpenDental {
 					//Change defaults for XDR bridge-------------------------------------------------------------------
 					command="SELECT Enabled,ProgramNum FROM program WHERE ProgName='XDR'";
 					table=General.GetTable(command);
+					int programNum;
 					if(table.Rows.Count>0 && table.Rows[0]["Enabled"].ToString()=="0") {//if XDR not enabled
 						//change the defaults
-						int programNum=PIn.PInt(table.Rows[0]["ProgramNum"].ToString());
+						programNum=PIn.PInt(table.Rows[0]["ProgramNum"].ToString());
 						command="UPDATE program SET Path='"+POut.PString(@"C:\XDRClient\Bin\XDR.exe")+"' WHERE ProgramNum="+POut.PInt(programNum);
 						General.NonQ(command);
 						command="UPDATE programproperty SET PropertyValue='"+POut.PString(@"C:\XDRClient\Bin\infofile.txt")+"' "
@@ -285,7 +286,46 @@ namespace OpenDental {
 							+"WHERE ProgramNum="+POut.PInt(programNum);
 						General.NonQ(command);
 					}
-
+					//iCat Bridge---------------------------------------------------------------------------
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'iCat', "
+						+"'iCat from www.imagingsciences.com', "
+						+"'0', "
+						+"'"+POut.PString(@"C:\Program Files\ISIP\iCATVision\Vision.exe")+"', "
+						+"'', "
+						+"'')";
+					programNum=General.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+						+"'0')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'Acquisition computer name', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'XML output file path', "
+						+"'"+POut.PString(@"C:\iCat\Out\pm.xml")+"')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'Return folder path', "
+						+"'"+POut.PString(@"C:\iCat\Return")+"')";
+					General.NonQ(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+						+"'iCat')";
+					General.NonQ(command);
 
 
 

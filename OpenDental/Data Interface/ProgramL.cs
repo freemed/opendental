@@ -77,6 +77,10 @@ namespace OpenDental{
 				FormHC.ShowDialog();
 				return;
 			}
+			else if(prog.ProgName=="iCat") {
+				ICat.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="ImageFX") {
 				ImageFX.SendData(prog,pat);
 				return;

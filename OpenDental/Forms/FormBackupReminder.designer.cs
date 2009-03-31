@@ -95,9 +95,9 @@ namespace OpenDental{
 			// 
 			this.checkA2.Location = new System.Drawing.Point(45,131);
 			this.checkA2.Name = "checkA2";
-			this.checkA2.Size = new System.Drawing.Size(250,20);
+			this.checkA2.Size = new System.Drawing.Size(530,20);
 			this.checkA2.TabIndex = 9;
-			this.checkA2.Text = "Removable (external HD, USB drive, etc)";
+			this.checkA2.Text = "Removable (external HD, USB drive, etc) (using manual, SyncBack, etc.)";
 			this.checkA2.UseVisualStyleBackColor = true;
 			// 
 			// checkA4

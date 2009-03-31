@@ -1368,6 +1368,7 @@ namespace OpenDental{
 			}
 			Bridges.Trojan.StartupCheck();
 			FormUAppoint.StartThreadIfEnabled();
+			Bridges.ICat.StartFileWatcher();
 			#if !TRIALONLY
 				if(PrefC.GetDate("BackupReminderLastDateRun").AddMonths(1)<DateTime.Today) {
 					FormBackupReminder FormBR=new FormBackupReminder();
@@ -3823,6 +3824,7 @@ namespace OpenDental{
 
 		private void FormOpenDental_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
 			FormUAppoint.AbortThread();
+			//ICat.AbortThread
 			if(ThreadCommandLine!=null) {
 				ThreadCommandLine.Abort();
 			}
