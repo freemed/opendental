@@ -71,26 +71,34 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/*
 		///<Summary>This is only meaningful if local connection instead of through server.  This might be added to be able to access from ODR when users start customizing their RDL reports.  But for now, we should build the connection string programmatically</Summary>
 		public static string GetCurrentConnectionString(){
-//ONLY TEMPORARY
+			//ONLY TEMPORARY
 			return BuildSimpleConnectionString(DatabaseType.MySql,ServerName,Database,DefaultPortNum().ToString(),MysqlUser,MysqlPass);
-		}
+		}*/
 
-		public static string BuildSimpleConnectionString(DatabaseType pDbType,string pServer,string pDatabase,string pPort,string pUserID,string pPassword){
+		public static string BuildSimpleConnectionString(DatabaseType pDbType,string pServer,string pDatabase,string pUserID,string pPassword){
+			string serverName=pServer;
+			string port=DefaultPortNum().ToString();
+			if(pServer.Contains(":")) {
+				string[] serverNamePort=pServer.Split(new char[] { ':' },StringSplitOptions.RemoveEmptyEntries);
+				serverName=serverNamePort[0];
+				port=serverNamePort[1];
+			}
 			string connectStr="";
 			if(DBtype==DatabaseType.Oracle){
 				connectStr=
 					"Data Source=(DESCRIPTION=(ADDRESS_LIST="
-				+ "(ADDRESS=(PROTOCOL=TCP)(HOST="+pServer+")(PORT="+pPort+")))"
+				+ "(ADDRESS=(PROTOCOL=TCP)(HOST="+serverName+")(PORT="+port+")))"
 				+ "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME="+pDatabase+")));"
 				+ "User Id="+pUserID+";Password="+pPassword+";";
 			}
 			else if(DBtype==DatabaseType.MySql){
 				connectStr=
-					"Server="+pServer
+					"Server="+serverName
+					+";Port="+port//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
 					+";Database="+pDatabase
-					//+";Port="+pPort//required due to Mono bug
 					//+";Connect Timeout=20"
 					+";User ID="+pUserID
 					+";Password="+pPassword
@@ -100,8 +108,8 @@ namespace OpenDentBusiness{
 			return connectStr;
 		}
 
-		private string BuildSimpleConnectionString(string pServer,string pDatabase,string pPort,string pUserID,string pPassword){
-			return BuildSimpleConnectionString(DBtype,pServer,pDatabase,pPort,pUserID,pPassword);
+		private string BuildSimpleConnectionString(string pServer,string pDatabase,string pUserID,string pPassword){
+			return BuildSimpleConnectionString(DBtype,pServer,pDatabase,pUserID,pPassword);
 		}
 
 		private void PrepOracleConnection(){
@@ -117,17 +125,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This needs to be run every time we switch databases, especially on startup.  Will throw an exception if fails.  Calling class should catch exception.</summary>
-		public void SetDb(string server, string db,string user, string password, string userLow, string passLow, DatabaseType dbtype){
+		public void SetDb(string server,string db,string user, string password, string userLow, string passLow, DatabaseType dbtype){
 			DBtype=dbtype;
-			string connectStr=BuildSimpleConnectionString(server,db,DefaultPortNum().ToString(),user,password);
+			string connectStr=BuildSimpleConnectionString(server,db,user,password);
 			string connectStrLow="";
 			if(userLow!=""){
-				connectStrLow=BuildSimpleConnectionString(server,db,DefaultPortNum().ToString(),userLow,passLow);
+				connectStrLow=BuildSimpleConnectionString(server,db,userLow,passLow);
 			}
 			TestConnection(connectStr,connectStrLow,dbtype);
 			//connection strings must be valid, so OK to set permanently
 			Database=db;
-			ServerName=server;
+			ServerName=server;//yes, it includes the port
 			MysqlUser=user;
 			MysqlPass=password;
 			MysqlUserLow=userLow;
@@ -192,7 +200,7 @@ namespace OpenDentBusiness{
 		public DataConnection(bool isLow){
 			string connectStr=ConnectionString;
 			if(connectStr.Length<1){
-				connectStr=BuildSimpleConnectionString(ServerName,Database,DefaultPortNum().ToString(),MysqlUserLow,MysqlPassLow);
+				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
 			}
 			if(DBtype==DatabaseType.Oracle){
 				conOr=new OracleConnection(connectStr);
@@ -211,7 +219,7 @@ namespace OpenDentBusiness{
 		public DataConnection(){
 			string connectStr=ConnectionString;
 			if(connectStr.Length<1) {
-				connectStr=BuildSimpleConnectionString(ServerName,Database,DefaultPortNum().ToString(),MysqlUser,MysqlPass);
+				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
 			}
 			if(DBtype==DatabaseType.Oracle){
 				conOr=new OracleConnection(connectStr);
@@ -238,7 +246,7 @@ namespace OpenDentBusiness{
 		public DataConnection(string database) {
 			string connectStr=ConnectionString;//this doesn't really set it to the new db as intended. Deal with later.
 			if(connectStr.Length<1) {
-				connectStr=BuildSimpleConnectionString(ServerName,database,DefaultPortNum().ToString(),MysqlUser,MysqlPass);
+				connectStr=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
 			}
 			if(DBtype==DatabaseType.Oracle){
 				conOr=new OracleConnection(connectStr);
@@ -259,7 +267,7 @@ namespace OpenDentBusiness{
 		public DataConnection(string serverName, string database, string mysqlUser, string mysqlPass,DatabaseType dtype){
 			string connectStr=ConnectionString;
 			if(connectStr.Length<1){
-				connectStr=BuildSimpleConnectionString(dtype,serverName,database,DefaultPortNum().ToString(),mysqlUser,mysqlPass);
+				connectStr=BuildSimpleConnectionString(dtype,serverName,database,mysqlUser,mysqlPass);
 			}
 			if(dtype==DatabaseType.Oracle){
 				conOr=new OracleConnection(connectStr);

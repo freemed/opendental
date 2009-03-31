@@ -35,24 +35,33 @@ namespace OpenDental.DataAccess {
 			set { dbType = value; }
 		}
 
-		public static void CreateConnectionString(string server, string database, string username, string password) {
-			CreateConnectionString(server, DefaultPortNum, database, username, password);
-		}
+		//public static void CreateConnectionString(string server, string database, string username, string password) {
+		//	CreateConnectionString(server, DefaultPortNum, database, username, password);
+		//}
 
-		public static void CreateConnectionString(string server, int port, string database, string username, string password) {
+		/// <summary>The server can include the port after a colon.</summary>
+		public static void CreateConnectionString(string server, string database, string username, string password) {
+			string serverName=server;
+			string port=DefaultPortNum.ToString();
+			if(server.Contains(":")) {
+				string[] serverNamePort=server.Split(new char[] { ':' },StringSplitOptions.RemoveEmptyEntries);
+				serverName=serverNamePort[0];
+				port=serverNamePort[1];
+			}
 			switch (DbType) {
 				case DatabaseType.Oracle:
 					ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST="
-					+ "(ADDRESS=(PROTOCOL=TCP)(HOST=" + server + ")(PORT=" + port + ")))"
+					+ "(ADDRESS=(PROTOCOL=TCP)(HOST=" + serverName + ")(PORT=" + port + ")))"
 					+ "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=" + database + ")));"
 					+ "User Id=" + username + ";Password=" + password + ";";
 					break;
 				case DatabaseType.MySql:
-					ConnectionString = "Server=" + server
-					+ ";Database=" + database
-					+ ";User ID=" + username
-					+ ";Password=" + password
-					+ ";CharSet=utf8";
+					ConnectionString = "Server=" + serverName
+						+ ";Port=" + port
+						+ ";Database=" + database
+						+ ";User ID=" + username
+						+ ";Password=" + password
+						+ ";CharSet=utf8";
 					break;
 				default:
 					throw new NotSupportedException();

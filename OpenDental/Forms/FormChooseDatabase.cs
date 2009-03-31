@@ -739,8 +739,9 @@ namespace OpenDental{
 					if(textConnectionString.Text.Length>0){
 						DataSettings.ConnectionString = textConnectionString.Text; 
 						dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
-					}else{
-						DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
+					}
+					else{
+						DataSettings.CreateConnectionString(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text);
 						dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 					}
 					//a direct connection does not utilize lower privileges.
