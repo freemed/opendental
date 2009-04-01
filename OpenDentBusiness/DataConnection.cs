@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 
 		public DataConnection(bool isLow){
 			string connectStr=ConnectionString;
-			if(connectStr.Length<1){
+			if(connectStr.Length<1 && ServerName!=null) {
 				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
 			}
 			if(DBtype==DatabaseType.Oracle){
@@ -218,7 +218,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public DataConnection(){
 			string connectStr=ConnectionString;
-			if(connectStr.Length<1) {
+			if(connectStr.Length<1 && ServerName!=null) {
 				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
 			}
 			if(DBtype==DatabaseType.Oracle){
