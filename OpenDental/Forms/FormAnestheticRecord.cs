@@ -177,7 +177,6 @@ namespace OpenDental
 		private MenuStrip menuStrip1;
 		private ToolStripMenuItem filesToolStripMenuItem;
 		private ToolStripMenuItem saveToolStripMenuItem;
-		//private ToolStripMenuItem saveCloseToolStripMenuItem;
 		private ToolStripMenuItem exitToolStripMenuItem;
 		private ToolStripMenuItem reportsToolStripMenuItem;
 		private ToolStripMenuItem checkInventoryLevelsToolStripMenuItem;
@@ -2249,7 +2248,7 @@ namespace OpenDental
 		}
 
 		private void RefreshAnesthMedComboBoxes(){
-						//Binds the combobox comboBoxAnesthMed with Medication names from the database.
+			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMed.Items.Clear();
 			this.comboAnesthMed.Items.Insert(0, "");
 			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
@@ -2306,11 +2305,10 @@ namespace OpenDental
 					}	
 				
 				}
-			
-	
+
 }
 
-		//Load saved data into form for selected Anesthetic Record
+		/// <summary> Load saved data into form for selected Anesthetic Record/// </summary>
 		private void FillControls(int PatNum, int anestheticRecordCur){
 			if (listAnesthetics.SelectedIndex == -1)
 			{	
@@ -2758,7 +2756,7 @@ namespace OpenDental
 				listAnes_hl7data = Anes_HL7Datas.CreateObjects(AnestheticRecordNum);
 				for (int i = 0; i < listAnes_hl7data.Count; i++)
 						{ 
-							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), anesthDateTime, textAnesthClose.Text);//if db has been set up with HL7 schema
+							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), Convert.ToString(listAnes_hl7data[i].MessageID), anesthDateTime, textAnesthClose.Text);//if db has been set up with HL7 schema
 						}
 				Anes_HL7Datas.RefreshCache();
 			}							
@@ -2885,9 +2883,6 @@ namespace OpenDental
 			}
 		}
 
-		private void butAddAnesthMeds_Click(object sender, EventArgs e){
-		}
-
 		private void label3_Click(object sender, EventArgs e){
 		}
 
@@ -2933,7 +2928,6 @@ namespace OpenDental
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
 			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
-			//textUser.Text = Userods.GetName(AnestheticDataCur.UserNum);
 		}
 
 		private void sigBox_MouseUp(object sender, MouseEventArgs e){
@@ -2944,7 +2938,6 @@ namespace OpenDental
 				//sigBox handles its own pen input.
 				SigChanged = true;
 				AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
-				//textUser.Text = Userods.GetName(AnestheticDataCur.UserNum);
 			}
 		}
 
@@ -2960,7 +2953,6 @@ namespace OpenDental
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
 			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
-			//textUser.Text = Userods.GetName(AnestheticDataCur.UserNum);
 		}
 
 		private void butDoseDecPoint_Click(object sender, EventArgs e){//Adds a decimal point to a dose
@@ -3478,7 +3470,7 @@ namespace OpenDental
 
 		private void printToolStripMenuItem_Click(object sender, EventArgs e){
 			//printPage = new PrintWindow();
-			//printPage.Print(this.Handle);   ****Printing disabled for now
+			//printPage.Print(this.Handle);   //****Printing disabled for now
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
@@ -3495,7 +3487,7 @@ namespace OpenDental
 				AnestheticDataCur = new AnestheticData();
 				FormAnestheticRecord FormAR = new FormAnestheticRecord(pat, AnestheticDataCur);
 				FormAR.ShowDialog();
-				//catches exception where patient we are switching from has no saved aneshetics, thus FillControls throws a null ref exception
+				//Catches exception: If patient we are switching from has no saved aneshetics, FillControls will generate a null ref exception 
 				try
 				{
 					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
@@ -3551,10 +3543,7 @@ namespace OpenDental
 		}
 
 		private void textVSMName_TextChanged(object sender,EventArgs e) {
-
 		}
 
-
-	
 	}
 }

@@ -326,6 +326,11 @@ namespace OpenDental {
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'iCat')";
 					General.NonQ(command);
+					string[] commands = new string[]{
+					"ALTER TABLE anesthvsdata ADD MessageID varchar(50)"
+					,"ALTER TABLE anesthvsdata ADD HL7Message longtext"
+					};
+					General.NonQ(commands);
 
 
 

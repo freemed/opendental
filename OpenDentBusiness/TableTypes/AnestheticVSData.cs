@@ -190,6 +190,36 @@ namespace OpenDentBusiness{
 			get { return vSTimeStampChanged; }
 		}
 
+		[DataField("MessageID")]
+		private string messageID;
+		bool messageIDChanged;
+		/// <summary>Time Stamp</summary>
+
+		public string MessageID
+		{
+			get { return messageID; }
+			set { messageID = value; MarkDirty(); messageIDChanged = true; }
+		}
+		public bool MessageIDChanged
+		{
+			get { return messageIDChanged; }
+		}
+
+				[DataField("HL7Message")]
+		private string hL7Message;
+		bool hL7MessageChanged;
+		/// <summary>Time Stamp</summary>
+
+		public string HL7Message
+		{
+			get { return hL7Message; }
+			set { hL7Message = value; MarkDirty(); hL7MessageChanged = true; }
+		}
+		public bool HL7MessageChanged
+		{
+			get { return hL7MessageChanged; }
+		}
+
 
 	}
 

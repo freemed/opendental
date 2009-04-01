@@ -27,6 +27,12 @@ namespace OpenDentBusiness{
 				return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
 			}
 
+		///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
+		public static void DeleteHL7Msg(string messageID){
+			string command = "DELETE FROM anes_hl7data WHERE MessageID='" + messageID + "'";
+			General.NonQ(command);
+		}
+
 		public static void WriteObject(Anes_hl7data hl7){
 
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
@@ -88,7 +94,7 @@ namespace OpenDentBusiness{
 			}
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
-		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string anesthDateTime, string anesthCloseTime){
+		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string messageID, string anesthDateTime, string anesthCloseTime){
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
 			string[] hL7OBXSeg; //OBX segments
@@ -101,12 +107,18 @@ namespace OpenDentBusiness{
 			int HR = 0;
 			int temp = 0;
 			int EtCO2 = 0;
+			string MessageID = messageID;
+			string HL7Message=rawHL7;
 			//split the rawHL7 message into OBX Segments
 			hL7OBX = Regex.Split(rawHL7, @"OBX");
 			string VSTimeStamp = "";
 		
 			for (int count=0; count < hL7OBX.Length; count ++)
 			{
+				if (Regex.Match(rawHL7, @"Alarm").Success == true)
+				{
+					Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));//deletes message from anes_hl7data so we don't keep reimporting it
+				}
 				if (Regex.Match(rawHL7, @"Alarm").Success != true) //discard messages with alarm warnings
 				{
 				string subSegment = hL7OBX[count].ToString();
@@ -260,12 +272,15 @@ namespace OpenDentBusiness{
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
 			if (checkblankVS != 0) //filters empty segments; inserts valid ones to db
 				{
-					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, anesthDateTime, anesthCloseTime); 
+					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthCloseTime); 
 				}
+			Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));//deletes message from anes_hl7data so we don't keep reimporting old messages because that slows things down too much	
+				
 			return;
+
 		}
 
-		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string anesthDateTime, string anesthCloseTime){
+		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp,string MessageID, string HL7Message, string anesthDateTime, string anesthCloseTime){
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			//These conversions are needed so dates and times can be compared as numeric strings. All times are compared as military times. Consequently, the vital sign monitor(s) should be set up to export times as military times or this section will break.
@@ -298,11 +313,13 @@ namespace OpenDentBusiness{
 						{
 							if (NBPs !=0)//data with a BP of zero is usually a partial reading so we discard
 								{
-							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);	
+							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp,MessageID,HL7Message);	
 								}
-						}
+
+						}					
+
 					return;
-							
+
 				}
 			}
 

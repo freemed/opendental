@@ -57,8 +57,8 @@ namespace OpenDentBusiness{
 			}
 		}
 			
-		public static void InsertVSData(int anestheticRecordNum,int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp ){
-			string command = "INSERT INTO anesthvsdata (AnestheticRecordNum,PatNum,VSMName,VSMSerNum, BPSys, BPDias, BPMAP, HR, SpO2, Temp, EtCO2,VSTimeStamp)" +
+		public static void InsertVSData(int anestheticRecordNum,int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string MessageID, string HL7Message){
+			string command = "INSERT INTO anesthvsdata (AnestheticRecordNum,PatNum,VSMName,VSMSerNum, BPSys, BPDias, BPMAP, HR, SpO2, Temp, EtCO2,VSTimeStamp, MessageID, HL7Message)" +
 				"VALUES(" + POut.PInt(anestheticRecordNum) + "," 
 				+ POut.PInt(patNum) + ",'"
 				+ POut.PString(VSMName) + "','"
@@ -70,12 +70,14 @@ namespace OpenDentBusiness{
 				+ POut.PInt(SpO2) + ","
 				+ POut.PInt(temp) + ","
 				+ POut.PInt(EtCO2) + ",'"
-				+ POut.PString(VSTimeStamp)+"')";
+				+ POut.PString(VSTimeStamp) + "','"
+				+	POut.PString(MessageID) + "','"
+				+ POut.PString(HL7Message)+ "')";
 				General.NonQ(command);
 
 		}
 
-						public static int UpdateVSData(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp){
+						public static int UpdateVSData(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string MessageID, string HL7Message){
 						string command = "UPDATE anesthvsdata SET "
 						+ " PatNum = " + POut.PInt(patNum) + " " 
 						+ " ,VSMName = '" + POut.PString(VSMName) + "' "
@@ -87,6 +89,8 @@ namespace OpenDentBusiness{
 						+ " ,SpO2 = "+ POut.PInt(SpO2) + " "
 						+ " ,Temp = "+ POut.PInt(temp) + " "
 						+ " ,EtCO2 = "+ POut.PInt(EtCO2) + " "
+						+ " ,MessageID = '" + POut.PString(MessageID) + "' "
+						+ " ,HL7Message = '" + POut.PString(HL7Message) + "' "
 						+ "WHERE VSTimeStamp='" + Convert.ToString(VSTimeStamp)+ "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
 				int val = General.NonQ(command);
 							return val;
