@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		private static MySqlConnection con;
 
 		public static List<Anes_hl7data> CreateObjects(int anestheticRecordNum) {
-				string cmd="SELECT * FROM anes_hl7data";
+				string cmd="SELECT * FROM anes_hl7data ORDER BY DateLoaded ASC";
 				return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
 			}
 
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 			public static DataTable RefreshCache(){
 			string c="SELECT HL7Message FROM anes_hl7data"; 
 			DataTable table=General.GetTable(c);
-			table.TableName="anest_hl7data";
+			table.TableName="anes_hl7data";
 			FillCache(table);
 			return table;
 			}
@@ -137,8 +137,13 @@ namespace OpenDentBusiness{
 								}		
 							AnesthMeds.UpdateVSMData(anestheticRecordNum,VSMName,VSMSerNum);					
 							//parse the OBX segments for vital sign data
+
 							for (int j=0; j < hL7OBX.Length;j++)	
-								{		
+								{	int SpO2Matched = 0;//Certain VS monitors append an extra VS parameter after the last OBX segment
+									int NBPsMatched = 0;//which breaks the Regex(es). These variables are set to "1" once a match 
+									int NBPdMatched = 0;//is made prevent data from one parameter from being written to another
+									int NBPmMatched = 0;
+									int HRMatched = 0;
 									string subSeg = hL7OBX[j].ToString();
 									hL7OBXSeg = Regex.Split(subSeg, @"\|");
 									if (Regex.Match(hL7OBX[j], @"SpO2").Success == true)
@@ -146,12 +151,20 @@ namespace OpenDentBusiness{
 											for (int k=0; k < hL7OBXSeg.Length;k++)
 												{
 													if (k == 5)
-														{
-															if ((Regex.Match(hL7OBX[j], @"HR").Success != true))//sometimes this monitor (Philips SureSigns VM4) appends an SpO2 segment to the HR segment which will incorrectly place the HR value here by breaking the Reqex.
-																{
-																	SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																}
-														}
+															{
+																	try
+																		{
+																			if (SpO2Matched == 0)
+																				{
+																					SpO2 = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																					SpO2Matched = SpO2Matched + 1;
+																				}
+																		}
+																	catch
+																		{
+																			SpO2 = 0;
+																		}
+															}
 													}
 											}
 									if (Regex.Match(hL7OBX[j], @"NBPs").Success == true)
@@ -159,43 +172,86 @@ namespace OpenDentBusiness{
 											for (int k=0; k < hL7OBXSeg.Length;k++)
 												{
 													if (k == 5)
-														{
-															NBPs = Convert.ToInt32(hL7OBXSeg[k].ToString());
+														{		 
+																try
+																		{
+																			if (NBPsMatched == 0)
+																				{
+																					NBPs = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																					NBPsMatched = NBPsMatched + 1;
+																				}
+																		}
+																catch
+																		{
+																			NBPs = 0;
+																		}
 														}
 													}
 											}
 
-										if (Regex.Match(hL7OBX[j], @"NBPd").Success == true)
-											{
-												for (int k=0; k < hL7OBXSeg.Length;k++)
-													{
-														if (k == 5)
-															{
-																NBPd = Convert.ToInt32(hL7OBXSeg[k].ToString());
+											if (Regex.Match(hL7OBX[j], @"NBPd").Success == true)
+												{
+													for (int k=0; k < hL7OBXSeg.Length;k++)
+														{ 
+															if (k == 5)
+																{
+																	try
+																		{
+																			if (NBPdMatched == 0)
+																				{
+																					NBPd = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																					NBPdMatched = NBPdMatched + 1;
+																				}
+																		}
+																	catch
+																		{
+																			NBPd = 0;
+																		}
+																	}
 															}
-														}
-												}
-
+											}
 											if (Regex.Match(hL7OBX[j], @"NBPm").Success == true)
 												{
 													for (int k=0; k < hL7OBXSeg.Length;k++)
-														{
+														{	
 															if (k == 5)
 																{
-																	NBPm = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																}
+																	try
+																		{
+																			if (NBPmMatched == 0)
+																				{
+																					NBPm = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																					NBPmMatched = NBPmMatched + 1;
+																				}
+																		}
+																	catch
+																		{
+																			NBPm = 0;
+																		}
 															}
-													}		
+													}	
+												}
 												if (Regex.Match(hL7OBX[j], @"HR").Success == true)
 													{
 														for (int k=0; k < hL7OBXSeg.Length;k++)
 															{
 																if (k == 5)
 																	{
-																		HR = Convert.ToInt32(hL7OBXSeg[k].ToString());
-																	}
-															}
-														}
+																			try
+																				{
+																					if (HRMatched == 0)
+																					{
+																						HR = Convert.ToInt32(hL7OBXSeg[k].ToString());
+																						HRMatched = HRMatched + 1;
+																					}
+																				}
+																		catch
+																			{
+																				HR = 0;
+																			}
+																		}
+																}
+													}
 										}
 							}
 					}
@@ -212,14 +268,14 @@ namespace OpenDentBusiness{
 		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string anesthDateTime, string anesthCloseTime){
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
-			//These conversions are needed so dates and times can be compared as numeric strings
+			//These conversions are needed so dates and times can be compared as numeric strings. All times are compared as military times. Consequently, the vital sign monitor(s) should be set up to export times as military times or this section will break.
 			string AnesthDateTime = anesthDateTime.ToString();
 			string AnesDate = AnesthDateTime.Remove(8,6);
 			Double ADate = Convert.ToDouble(AnesDate);//needs to be a Double for String.Format to work
 			string ADT = String.Format("{0:0000-00-00}",ADate);
 			string ADTNumString = String.Format("{0:00000000}",ADate);
-			DateTime AnesthClose_Time = Convert.ToDateTime(ADT+" " +anesthCloseTime);
-			string AnesthCloseTime = AnesthClose_Time.ToString(ADTNumString+"hhmmss");
+			DateTime AnesthClose_Time = Convert.ToDateTime(ADT+" " +anesthCloseTime); //Need to add ADT to give yyyyMMdd since anesthCloseTime is saved as a partial string
+			string AnesthCloseTime = AnesthClose_Time.ToString(ADTNumString+"HHmmss");
 			string vSTS = VSTimeStamp.ToString();
 			
 			long vsTS = Convert.ToInt64(vSTS);
@@ -237,10 +293,13 @@ namespace OpenDentBusiness{
 				}
 			if (canAdd !=false)
 				{
-					if (anesthDT <= vsTS)
-						if (vsTS <= anesthCT)//filters out messages that don't belong with this Anesthetic Record.
+					if (anesthCT >= vsTS)
+						if (vsTS >= anesthDT)//filters out messages that don't belong with this Anesthetic Record.
 						{
-							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);		
+							if (NBPs !=0)//data with a BP of zero is usually a partial reading so we discard
+								{
+							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp);	
+								}
 						}
 					return;
 							

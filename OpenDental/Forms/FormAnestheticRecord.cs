@@ -157,26 +157,9 @@ namespace OpenDental
 		public int anesthScore;
 		public int CurPatNum;
 		public int SelectedPatNum;
-		//
-		//Variables used for printing functionality..
-		//
-		private System.IO.Stream streamToPrint;
 		private PrintDialog printDialog;
-		private PrintDocument printDocument3;
 		private ToolStripMenuItem providersToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator4;
-		string streamType;
-		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
-		private static extern bool BitBlt(
-			IntPtr hdcDest, // handle to destination DC
-			int nXDest, // x-coord of destination upper-left corner
-			int nYDest, // y-coord of destination upper-left corner
-			int nWidth, // width of destination rectangle
-			int nHeight, // height of destination rectangle
-			IntPtr hdcSrc, // handle to source DC
-			int nXSrc, // x-coordinate of source upper-left corner
-			int nYSrc, // y-coordinate of source upper-left corner
-			System.Int32 dwRop); // raster operation code
 		private RadioButton radHgtUnitsCm;
 		private RadioButton radHgtUnitsIn;
 		private GroupBox groupBoxWgt;
@@ -212,6 +195,7 @@ namespace OpenDental
 		public Patient pat;
 		public int PatNum;
 		public HorizontalAlignment textAlign;
+		//public PrintWindow printPage; //****disabled for now
 
 		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur){
 			//
@@ -332,7 +316,6 @@ namespace OpenDental
 			this.gridVSData = new OpenDental.UI.ODGrid();
 			this.textVSMSerNum = new System.Windows.Forms.TextBox();
 			this.textVSMName = new System.Windows.Forms.TextBox();
-			this.printDialog = new System.Windows.Forms.PrintDialog();
 			this.groupBoxTimes = new System.Windows.Forms.GroupBox();
 			this.textAnesthOpen = new System.Windows.Forms.TextBox();
 			this.butSurgClose = new OpenDental.UI.Button();
@@ -398,7 +381,6 @@ namespace OpenDental
 			this.checkInventoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.providersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.printDocument3 = new System.Drawing.Printing.PrintDocument();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkInventoryLevelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2769,7 +2751,7 @@ namespace OpenDental
 		//Fills the Anesth Vital Signs table
 		private void FillGridVSData(int anestheticRecordNum){
 			DateTime anesthDT = Convert.ToDateTime(listAnesthetics.SelectedItem);
-			string anesthDateTime = anesthDT.ToString("yyyyMMddhhmmss");
+			string anesthDateTime = anesthDT.ToString("yyyyMMddHHmmss");
 			int AnestheticRecordNum =AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
 			try
 			{
@@ -2904,41 +2886,6 @@ namespace OpenDental
 		}
 
 		private void butAddAnesthMeds_Click(object sender, EventArgs e){
-		}
-
-		public void StartPrint(Stream streamToPrint, string streamType){
-			this.printDocument3.PrintPage += new PrintPageEventHandler(printDocument3_PrintPage);
-			this.streamToPrint = streamToPrint;
-			this.streamType = streamType;
-			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
-			PrintDialog1.AllowSomePages = true;
-			PrintDialog1.ShowHelp = true;
-			PrintDialog1.Document = printDocument3;
-			PrintDialog1.UseEXDialog = true; //needed because PrintDialog was not showing on 64 bit Vista systems
-				if (PrintDialog1.ShowDialog() == DialogResult.OK)
-					{
-						this.printDocument3.Print();
-					}
-			}
-
-		private void printDocument3_PrintPage(object sender, PrintPageEventArgs e){
-			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
-			int x = e.MarginBounds.X;
-			int y = e.MarginBounds.Y;
-			int width = image.Width;
-			int height = image.Height;
-			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
-			{
-				width = e.MarginBounds.Width;
-				height = image.Height * e.MarginBounds.Width / image.Width;
-			}
-			else
-			{
-				height = e.MarginBounds.Height;
-				width = image.Width * e.MarginBounds.Height / image.Height;
-			}
-			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
 		}
 
 		private void label3_Click(object sender, EventArgs e){
@@ -3530,22 +3477,8 @@ namespace OpenDental
 		}
 
 		private void printToolStripMenuItem_Click(object sender, EventArgs e){
-			Graphics g1 = this.CreateGraphics();
-			Image MyImage = new Bitmap(890, 770, g1);
-			Graphics g2 = Graphics.FromImage(MyImage);
-			IntPtr dc1 = g1.GetHdc();
-			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 890, 770, dc1, 0, 0, 13369376);
-			g1.ReleaseHdc(dc1);
-			g2.ReleaseHdc(dc2);
-			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
-			StartPrint(fileStream, "Image");
-			fileStream.Close();
-			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
-			{
-				System.IO.File.Delete(@"c:\PrintPage.jpg");
-			}
+			//printPage = new PrintWindow();
+			//printPage.Print(this.Handle);   ****Printing disabled for now
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown

@@ -45,26 +45,7 @@ namespace OpenDental {
 		public int DischCondUnstable;
 		public int AnestheticRecordNum;
 		public string AnesthClose;
-				
-		//
-		//Variables used for printing functionality..
-		//
-		public PrintDialog printDialog;
-		public System.IO.Stream streamToPrint;
-		public FileStream fileStream;
-		public PrintDocument printDocument;
-		public string streamType;
-		[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
-		public static extern bool BitBlt(
-			IntPtr hdcDest, // handle to destination DC
-			int nXDest, // x-coord of destination upper-left corner
-			int nYDest, // y-coord of destination upper-left corner
-			int nWidth, // width of destination rectangle
-			int nHeight, // height of destination rectangle
-			IntPtr hdcSrc, // handle to source DC
-			int nXSrc, // x-coordinate of source upper-left corner
-			int nYSrc, // y-coordinate of source upper-left corner
-			System.Int32 dwRop); // raster operation code
+		//public PrintWindow printWindow; //for PrintWindow class, disabled for now
 
 		public FormAnesthesiaScore(Patient patCur, int anestheticRecordNum) {
 			InitializeComponent();
@@ -220,7 +201,6 @@ namespace OpenDental {
 				Cur.DischAmbulance = PIn.PInt(table.Rows[i][10].ToString());
 				Cur.DischCondStable = PIn.PInt(table.Rows[i][11].ToString());
 				Cur.DischCondUnstable = PIn.PInt(table.Rows[i][12].ToString());
-
 				//fill radQActivity
 				if (Cur.QActivity == 2)
 				{
@@ -315,18 +295,15 @@ namespace OpenDental {
 			}
 		}
 
-
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
 
 		private void radDischUnstable_CheckedChanged(object sender, EventArgs e){
-			
 		}
 
 		private void textPatient_TextChanged(object sender, EventArgs e){
-
 		}
 
 		private void radActivityQ2_CheckedChanged(object sender, EventArgs e){
@@ -390,66 +367,12 @@ namespace OpenDental {
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e){
-
 		}
 
 		public void butPrint_Click(object sender,EventArgs e) {
-			Graphics g1 = this.CreateGraphics();
-			Image MyImage = new Bitmap(600, 700, g1);
-			Graphics g2 = Graphics.FromImage(MyImage);
-			IntPtr dc1 = g1.GetHdc();
-			IntPtr dc2 = g2.GetHdc();
-			BitBlt(dc2, 0, 0, 600, 700, dc1, 0, 0, 13369376);
-			g1.ReleaseHdc(dc1);
-			g2.ReleaseHdc(dc2);
-			MyImage.Save(@"c:\PrintPage.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-			FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
-			StartPrint(fileStream,"Image");
-			fileStream.Close();
-			if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
-			{
-				System.IO.File.Delete(@"c:\PrintPage.jpg");
-			}
+			//printWindow = new PrintWindow();
+			//printWindow.Print(this.Handle);  //***Printing disabled for now
 		}
-
-		public void printDocument_PrintPage(object sender, PrintPageEventArgs e){
-			System.IO.StreamReader streamReader = new StreamReader(this.streamToPrint);
-			System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
-			int x = e.MarginBounds.X;
-			int y = e.MarginBounds.Y;
-			int width = image.Width;
-			int height = image.Height;
-			if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
-			{
-				width = e.MarginBounds.Width;
-				height = image.Height * e.MarginBounds.Width / image.Width;
-			}
-			else
-			{
-				height = e.MarginBounds.Height;
-				width = image.Width * e.MarginBounds.Height / image.Height;
-			}
-			System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-			e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
-		}
-
-		public void StartPrint(Stream streamToPrint, string streamType){
-			printDocument = new PrintDocument();
-			this.printDocument.PrintPage += new PrintPageEventHandler(printDocument_PrintPage);
-			this.streamToPrint = streamToPrint;
-			this.streamType = streamType;
-			System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
-			PrintDialog1.AllowSomePages = true;
-			PrintDialog1.ShowHelp = true;
-			PrintDialog1.Document = printDocument;
-			PrintDialog1.UseEXDialog = true; //needed because PrintDialog was not showing on 64 bit Vista systems
-				if (PrintDialog1.ShowDialog() == DialogResult.OK)
-					{
-						this.printDocument.Print();
-					}
-			}
-
-
 
 	}
 }
