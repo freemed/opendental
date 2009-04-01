@@ -2926,6 +2926,10 @@ namespace OpenDental{
 			try{
 				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
+				SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,ProcCur.PatNum,
+					"Delete for: "
+					+PatCur.GetNameLF()+", "+ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode+", "
+					+ProcCur.ProcFee.ToString("c"));
 				DialogResult=DialogResult.OK;	
 			}
 			catch(Exception ex){
