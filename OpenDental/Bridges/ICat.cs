@@ -30,17 +30,17 @@ namespace OpenDental.Bridges{
 			}
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Acquisition computer name");
-			//try {
+			try {
 				if(Environment.MachineName.ToUpper()==PPCur.PropertyValue.ToUpper()) {
 					SendDataServer(ProgramCur,ForProgram,pat);
 				}
 				else {
 					SendDataWorkstation(ProgramCur,ForProgram,pat);
 				}
-			//}
-			//catch(Exception e) {
-			//	MessageBox.Show("Error: "+e.Message);
-			//}
+			}
+			catch(Exception e) {
+				MessageBox.Show("Error: "+e.Message);
+			}
 		}
 
 		///<summary>XML file.</summary>
@@ -146,9 +146,9 @@ namespace OpenDental.Bridges{
 			writer.Close();//This probably "unlocks" the file.
 			//unlock file----------------------------------------------------------------------
 			//They say to unlock the file here
-			Process.Start(xmlOutputFile);
+			//Process.Start(xmlOutputFile);
 			//MessageBox.Show(
-			//MessageBox.Show("Done.");
+			MessageBox.Show("Done.");
 		}
 
 		///<summary>Command line.</summary>
@@ -172,12 +172,12 @@ namespace OpenDental.Bridges{
 			if(!Directory.Exists(returnFolder)) {
 				return;
 			}
-			FileSystemWatcher watcher=new FileSystemWatcher();
+			FileSystemWatcher watcher=new FileSystemWatcher(returnFolder,"*.xml");
 			watcher.Created += new FileSystemEventHandler(OnCreated);
 			watcher.Renamed += new RenamedEventHandler(OnRenamed);
 			watcher.EnableRaisingEvents=true;
 			//process all waiting files
-			string[] existingFiles=Directory.GetFiles(PPCur.PropertyValue);
+			string[] existingFiles=Directory.GetFiles(returnFolder,"*.xml");
 			for(int i=0;i<existingFiles.Length;i++) {
 				ProcessFile(existingFiles[i]);
 			}
@@ -216,28 +216,37 @@ namespace OpenDental.Bridges{
 				//No xml file, so nothing to process.
 				return;
 			}
-			XmlDocument docOut=new XmlDocument();
 			try {
+				string patId=filename.Split(new char[] { '_' },StringSplitOptions.RemoveEmptyEntries)[0];
+				XmlDocument docOut=new XmlDocument();
 				docOut.Load(xmlOutputFile);
+				XmlElement elementPatients=docOut.DocumentElement;
+				if(elementPatients==null) {//if no Patients element, then document is corrupt or new
+					return;
+				}
+				//figure out if patient is in the list------------------------------------------
+				XmlElement elementPat=null;
+				for(int i=0;i<elementPatients.ChildNodes.Count;i++) {
+					if(elementPatients.ChildNodes[i].SelectSingleNode("ID").InnerXml==patId) {
+						elementPat=(XmlElement)elementPatients.ChildNodes[i];
+					}
+				}
+				if(elementPat==null) {
+					//patient not in xml document
+					return;
+				}
+				elementPatients.RemoveChild(elementPat);
+				XmlWriterSettings settings=new XmlWriterSettings();
+				settings.Indent=true;
+				settings.IndentChars="   ";
+				XmlWriter writer=XmlWriter.Create(xmlOutputFile,settings);
+				docOut.Save(writer);
+				writer.Close();
+				File.Delete(fullPath);
 			}
 			catch {
 				return;
 			}
-			/*
-				
-				=File.ReadAllText(fullPath);
-			MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
-			if(msg.MsgType==MessageType.ADT) {
-				ADT.ProcessMessage(msg);
-			}
-			else if(msg.MsgType==MessageType.SIU) {
-				SIU.ProcessMessage(msg);
-			}
-			//we won't be processing DFT messages.
-			//else if(msg.MsgType==MessageType.DFT) {
-			//ADT.ProcessMessage(msg);
-			//}
-			File.Delete(fullPath);*/
 		}
 
 
