@@ -270,12 +270,15 @@ namespace OpenDentBusiness{
 					else return;
 			}
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
-			if (checkblankVS != 0) //filters empty segments; inserts valid ones to db
+			if (checkblankVS != 0) //filters out empty segments; inserts valid ones to db
 				{
 					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthCloseTime); 
 				}
-			Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));//deletes message from anes_hl7data so we don't keep reimporting old messages because that slows things down too much	
-				
+
+			if (NBPs == 0)//filters out partial messages
+				{
+						Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));
+				}	
 			return;
 
 		}
@@ -306,21 +309,24 @@ namespace OpenDentBusiness{
 							return;
 						}
 				}
+
 			if (canAdd !=false)
 				{
 					if (anesthCT >= vsTS)
 						if (vsTS >= anesthDT)//filters out messages that don't belong with this Anesthetic Record.
 						{
+							
 							if (NBPs !=0)//data with a BP of zero is usually a partial reading so we discard
 								{
 							AnesthVSDatas.InsertVSData(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd, NBPm, HR, SpO2, temp, EtCO2,VSTimeStamp,MessageID,HL7Message);	
 								}
-
+							Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));//deletes messages from anes_hl7data 
 						}					
 
 					return;
-
 				}
+
+
 			}
 
 	}

@@ -2635,7 +2635,7 @@ namespace OpenDental
 			listAnesthetics.SelectedIndex = 0; //Add -1 after List.Length to select in ascending order
 		}
 
-		/// <summary> deletes an Anesthetic Record from the list of saved Anesthetic Records</summary>
+		/// <summary> D eletes an Anesthetic Record from the list of saved Anesthetic Records</summary>
 		private void butDelAnesthetic_Click(object sender, System.EventArgs e){
 			string anestheticRecordNum = "";
 			try
@@ -2681,14 +2681,13 @@ namespace OpenDental
 						}
 					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
-					
 					try//will generate an exception if deletion is done with only one anesthetic record in the list, because now there are no more records
-					{
-					anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-					}
+						{
+							anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+						}
 					catch
-					{
-					}
+						{
+						}
 					FillGridAnesthMeds(Convert.ToInt32(anestheticRecordNum));
 				}
 				else
@@ -2746,7 +2745,10 @@ namespace OpenDental
 			gridAnesthMeds.EndUpdate();
 		}
 
-		//Fills the Anesth Vital Signs table
+		/// <summary>
+		/// Fills the Anesth Vital Signs table
+		/// </summary>
+		/// <param name="anestheticRecordNum"></param>
 		private void FillGridVSData(int anestheticRecordNum){
 			DateTime anesthDT = Convert.ToDateTime(listAnesthetics.SelectedItem);
 			string anesthDateTime = anesthDT.ToString("yyyyMMddHHmmss");
@@ -3470,7 +3472,7 @@ namespace OpenDental
 
 		private void printToolStripMenuItem_Click(object sender, EventArgs e){
 			//printPage = new PrintWindow();
-			//printPage.Print(this.Handle);   //****Printing disabled for now
+			// printPage.Print(this.Handle);   //****Printing disabled for now
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
