@@ -9,7 +9,6 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-//using MySql.Data.MySqlClient;
 using OpenDentBusiness;
 using CodeBase;
 
@@ -495,7 +494,7 @@ namespace OpenDental{
 			}
 			//Ensure that the backup from and backup to paths are different. This is to prevent the live database
 			//from becoming corrupt.
-			if(this.textBackupFromPath.Text.ToLower()==this.textBackupToPath.Text.ToLower()) {
+			if(this.textBackupFromPath.Text.Trim().ToLower()==this.textBackupToPath.Text.Trim().ToLower()) {
 				MsgBox.Show(this,"The backup from path and backup to path must be different.");
 				return;
 			}
@@ -538,6 +537,7 @@ namespace OpenDental{
 				workerThread.Abort();
 				return;
 			}
+			MessageBox.Show(Lan.g(this,"Backup complete."));
 			Close();
 		}
 
@@ -549,27 +549,34 @@ namespace OpenDental{
 				100 });//max of 100 keeps dlg from closing
 			string dbName=MiscData.GetCurrentDatabase();
 			double dbSize=GetFileSizes(textBackupFromPath.Text+dbName)/1024;
-			//lower level objects are used here to prevent closing the connection.
-			//MySqlConnection con=new MySqlConnection(FormChooseDatabase.GetConnectionString());
-			//MySqlCommand cmd=new MySqlCommand();
-			//cmd.Connection=con;
-			//cmd.CommandText="FLUSH TABLES WITH READ LOCK";//locks all tables for all databases 
-			//con.Open();
 			try{
-				//cmd.ExecuteNonQuery();
 				string dbtopath=ODFileUtils.CombinePaths(textBackupToPath.Text,dbName);
 				if(Directory.Exists(dbtopath)){// D:\opendental
 					Directory.Delete(dbtopath,true);
 				}
 				string fromPath=ODFileUtils.CombinePaths(textBackupFromPath.Text,dbName);
 				string toPath=textBackupToPath.Text;
-				//CopyDirectory(,);
 				DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
 				Directory.CreateDirectory(ODFileUtils.CombinePaths(toPath,dirInfo.Name));
 				FileInfo[] files=dirInfo.GetFiles();
 				curVal=0;//curVal gets increased
 				for(int i=0;i<files.Length;i++){
-					File.Copy(files[i].FullName,ODFileUtils.CombinePaths(new string [] {	toPath,dirInfo.Name,files[i].Name}),true);
+					string fromFile=files[i].FullName;
+					string toFile=ODFileUtils.CombinePaths(new string[] { toPath,dirInfo.Name,files[i].Name });
+					if(File.Exists(toFile)) {
+						if(files[i].LastWriteTime!=File.GetLastWriteTime(toFile)) {//if modification dates don't match
+							FileAttributes fa=File.GetAttributes(toFile);
+							bool isReadOnly=((fa&FileAttributes.ReadOnly)==FileAttributes.ReadOnly);
+							if(isReadOnly) {
+								//If the destination file exists and is marked as read only, then we must mark it as a
+								//normal read/write file before it may be overwritten.
+								File.SetAttributes(toFile,FileAttributes.Normal);//Remove read only from the destination file.
+							}
+							File.Copy(fromFile,toFile,true);
+						}
+					} else {//file doesn't exist, so just copy
+						File.Copy(fromFile,toFile);
+					}
 					curVal+=(double)files[i].Length/(double)1024/(double)1024;
 					if(curVal<dbSize){//this avoids setting progress bar to max, which would close the dialog.
 						Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal,
@@ -577,16 +584,10 @@ namespace OpenDental{
 							dbSize});
 					}
 				}
-				//cmd.CommandText="UNLOCK TABLES";//might not be needed if con is actually closed.
-				//cmd.ExecuteNonQuery();
 			}
 			catch{//for instance, if abort.
-				//con.Close();
-				//con.Dispose();
 				return;
 			}
-			//con.Close();
-			//con.Dispose();
 			//A to Z folder------------------------------------------------------------------------------------
 			if(ShouldUseAtoZFolder()) {
 				string atozFull=ODFileUtils.RemoveTrailingSeparators(FormPath.GetPreferredImagePath());
@@ -604,7 +605,7 @@ namespace OpenDental{
 					ODFileUtils.CombinePaths(new string[] {textBackupToPath.Text,atozDir,""}),// D:\OpenDentalData\
 					atozSize);
 			}
-			//force dlg to close even if no files copied or calculation was slightly off.
+			//force dialog to close even if no files copied or calculation was slightly off.
 			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,"",0});
 		}
 
@@ -651,7 +652,6 @@ namespace OpenDental{
 			for(int i=0;i<files.Length;i++){
 				if(!File.Exists(ODFileUtils.CombinePaths(toPath,files[i].Name))){
 					retVal+=(int)(files[i].Length/1024);
-					//Debug.WriteLine("Added: "+toPath+files[i].Name);
 				}
 			}
 			return retVal;
@@ -686,65 +686,33 @@ namespace OpenDental{
 				CopyDirectoryIncremental(ODFileUtils.CombinePaths(dirs[i].FullName,""),
 					ODFileUtils.CombinePaths(destPath,""),maxSize);
 			}
-			//DateTime startCopyTime=DateTime.Now;
 			FileInfo[] files=dirInfo.GetFiles();//of fromPath
 			for(int i=0;i<files.Length;i++){
-				string file=ODFileUtils.CombinePaths(toPath,files[i].Name);
-				if(File.Exists(file)){
-					if(files[i].LastWriteTime!=File.GetLastWriteTime(file)){//if modification dates don't match
-						File.Copy(files[i].FullName,file,true);
+				string fromFile=files[i].FullName;
+				string toFile=ODFileUtils.CombinePaths(toPath,files[i].Name);
+				if(File.Exists(toFile)){
+					if(files[i].LastWriteTime!=File.GetLastWriteTime(toFile)){//if modification dates don't match
+						FileAttributes fa=File.GetAttributes(toFile);
+						bool isReadOnly=((fa&FileAttributes.ReadOnly)==FileAttributes.ReadOnly);
+						if(isReadOnly){
+							//If the destination file exists and is marked as read only, then we must mark it as a
+							//normal read/write file before it may be overwritten.
+							File.SetAttributes(toFile,FileAttributes.Normal);//Remove read only from the destination file.
+						}
+						File.Copy(fromFile,toFile,true);
 					}
 				}
-				else{//file doesn't exist, so copy
-					File.Copy(files[i].FullName,file);
-					curVal+=(double)files[i].Length/1048576.0; //Number of megabytes.
-					if(curVal<maxSize){//this avoids setting progress bar to max, which would close the dialog.
-						//double aveCopyRate=curVal/(DateTime.Now-startCopyTime).Seconds;
-						//TimeSpan secondsRemaining=new TimeSpan(0,0,(int)((maxSize-curVal)/aveCopyRate));
-						Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal,
-							Lan.g(this,"A to Z folder: ?currentVal MB of ?maxVal MB copied"),//+". "+
-										//Environment.NewLine+"Estimated Time Remaining: "+secondsRemaining.ToString(),
+				else{//file doesn't exist, so just copy
+					File.Copy(fromFile,toFile);
+				}
+				curVal+=(double)files[i].Length/1048576.0; //Number of megabytes.
+				if(curVal<maxSize) {//this avoids setting progress bar to max, which would close the dialog.
+					Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { curVal,
+							Lan.g(this,"A to Z folder: ?currentVal MB of ?maxVal MB copied"),
 							maxSize});
-					}
 				}
 			}
 		}
-
-		/*
-		///<summary>A simple function that copies a directory and all its contents to a new location.  An exception will be thrown if the directory already exists.  fromPath is the fully qualified path of the directory to copy.  toPath is the parent directory into which it will be copied.  Both paths must include a trailing \.  Only used for db copy, and includes informing the user of progress.</summary>
-		private void CopyDirectorySimplified(string fromPath,string toPath){
-			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
-			Directory.CreateDirectory(toPath+dirInfo.Name);//TODO: Use ODFileUtils.CombinePaths()!
-			DirectoryInfo[] dirs=dirInfo.GetDirectories();
-			for(int i=0;i<dirs.Length;i++){
-				CopyDirectory(dirs[i].FullName+@"\",toPath+dirInfo.Name+@"\");
-			}
-			FileInfo[] files=dirInfo.GetFiles();
-			for(int i=0;i<files.Length;i++){
-				File.Copy(files[i].FullName,toPath+dirInfo.Name+@"\"+files[i].Name);//TODO: Use ODFileUtils.CombinePaths()!
-				curVal+=(double)files[i].Length/1024/1024;
-					//((double)(chunk*i)+((double)buffer.Length/1024))/1024;
-				Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal });
-			}
-		}*/
-
-		/*
-		///<summary>A recursive fuction that copies a directory and all its contents to a new location.  An exception will be thrown if the directory already exists.  fromPath is the fully qualified path of the directory to copy.  toPath is the parent directory into which it will be copied.  Both paths must include a trailing \.</summary>
-		private void CopyDirectory(string fromPath,string toPath){
-			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
-			Directory.CreateDirectory(toPath+dirInfo.Name);//TODO: Use ODFileUtils.CombinePaths()!
-			DirectoryInfo[] dirs=dirInfo.GetDirectories();
-			for(int i=0;i<dirs.Length;i++){
-				CopyDirectory(dirs[i].FullName+@"\",toPath+dirInfo.Name+@"\");
-			}
-			FileInfo[] files=dirInfo.GetFiles();
-			for(int i=0;i<files.Length;i++){
-				File.Copy(files[i].FullName,toPath+dirInfo.Name+@"\"+files[i].Name);//TODO: Use ODFileUtils.CombinePaths()!
-				curVal+=(double)files[i].Length/1024/1024;
-				//((double)(chunk*i)+((double)buffer.Length/1024))/1024;
-				Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal });
-			}
-		}*/
 
 		private void butRestore_Click(object sender, System.EventArgs e) {			
 			if(textBackupRestoreFromPath.Text!="" && !textBackupRestoreFromPath.Text.EndsWith(""+Path.DirectorySeparatorChar)){
