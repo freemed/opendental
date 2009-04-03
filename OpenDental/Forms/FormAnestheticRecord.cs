@@ -2185,6 +2185,7 @@ namespace OpenDental
 		public Anes_hl7data hl7Cur;
 
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
+			this.Text = "Anesthetic Record - Patient:" + Patients.GetPat(PatCur.PatNum).GetNameLF( ) + " - " + PatCur.PatNum;
 			RefreshListAnesthetics();
 			//necessary because we want the newest record at the top of the list selected and no records generates an exception
 			try 
@@ -3472,7 +3473,7 @@ namespace OpenDental
 
 		private void printToolStripMenuItem_Click(object sender, EventArgs e){
 			//printPage = new PrintWindow();
-			// printPage.Print(this.Handle);   //****Printing disabled for now
+			//printPage.Print(this.Handle);   //****Printing disabled for now
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown

@@ -162,7 +162,7 @@ namespace OpenDentBusiness{
 										{	
 											for (int k=0; k < hL7OBXSeg.Length;k++)
 												{
-													if (k == 5)
+													if (k == 5)//5th part of the OBX segment contains the vital sign data
 															{
 																	try
 																		{
@@ -275,7 +275,7 @@ namespace OpenDentBusiness{
 					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthCloseTime); 
 				}
 
-			if (NBPs == 0)//filters out partial messages
+			if (NBPs == 0)//filters out partial messages from the import db 
 				{
 						Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));
 				}	

@@ -233,13 +233,13 @@ namespace OpenDentBusiness
 				{
 					AMName = anesth_Medname.Replace("'", "''");
 				}
-			string doseTimeStamp = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
+			string doseTimeStamp = MiscData.GetNowDateTime().ToString("HH:mm:ss");
 			//update anesthmedsgiven
 			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp,QtyOnHandOld,AnesthMedNum) VALUES('" + anestheticRecordNum + "','" + AMName + "','" + dose + "','" + amtwasted + "','" + doseTimeStamp + "','" + qtyonhandold + "','" + anesthmednum + "'" + ")";
 			General.NonQ(command);
 			string command2 = "UPDATE anesthmedsgiven SET "
 					+ "QtyOnHandOld = " + GetQtyOnHand(AMName) + " "
-					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" + "AND DoseTimeStamp= '" + Convert.ToString(doseTimeStamp) + "'";
+					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" + "AND DoseTimeStamp= '" + doseTimeStamp + "'";
 			General.NonQ(command2);
 			//update anesthmedsinventory
 			double AdjQty = GetQtyOnHand(AMName) - dose;
