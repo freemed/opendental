@@ -301,19 +301,15 @@ namespace OpenDentBusiness{
 			long vsTS = Convert.ToInt64(vSTS);
 			long anesthOT = Convert.ToInt64(AnesthOpenTime);
 			long anesthCT = Convert.ToInt64(AnesthCloseTime);
-			
-			canAdd = true;
+		
 			for (int o=0; o < listAnesthVSData.Count;o++)//looks to see if a vs has already been written to the db
 				{
 					if (listAnesthVSData[o].VSTimeStamp == VSTimeStamp)
 						{
-							canAdd = false;//sets this to false if it has
+							Anes_HL7Datas.DeleteHL7Msg(Convert.ToString(MessageID));//deletes messages from anes_hl7data 
 							return;
 						}
 				}
-
-			if (canAdd !=false)
-				{
 					if (anesthCT >= vsTS)
 						if (vsTS >= anesthOT)//filters out messages that don't belong with this Anesthetic Record.
 						{
@@ -326,8 +322,6 @@ namespace OpenDentBusiness{
 						}					
 
 					return;
-				}
-
 
 			}
 
