@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 			}
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
-		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string messageID, string anesthDateTime, string anesthCloseTime){
+		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string messageID, string anesthDateTime, string anesthOpenTime, string anesthCloseTime){
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
 			string[] hL7OBXSeg; //OBX segments
@@ -174,7 +174,7 @@ namespace OpenDentBusiness{
 																		}
 																	catch
 																		{
-																			SpO2 = 0;
+																			SpO2 = 0;//otherwise it's null
 																		}
 															}
 													}
@@ -272,7 +272,7 @@ namespace OpenDentBusiness{
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
 			if (checkblankVS != 0) //filters out empty segments; inserts valid ones to db
 				{
-					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthCloseTime); 
+					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthOpenTime, anesthCloseTime); 
 				}
 
 			if (NBPs == 0)//filters out partial messages from the import db 
@@ -283,7 +283,7 @@ namespace OpenDentBusiness{
 
 		}
 
-		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp,string MessageID, string HL7Message, string anesthDateTime, string anesthCloseTime){
+		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp,string MessageID, string HL7Message, string anesthDateTime,string anesthOpenTime, string anesthCloseTime){
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			//These conversions are needed so dates and times can be compared as numeric strings. All times are compared as military times. Consequently, the vital sign monitor(s) should be set up to export times as military times or this section will break.
@@ -293,11 +293,13 @@ namespace OpenDentBusiness{
 			string ADT = String.Format("{0:0000-00-00}",ADate);
 			string ADTNumString = String.Format("{0:00000000}",ADate);
 			DateTime AnesthClose_Time = Convert.ToDateTime(ADT+" " +anesthCloseTime); //Need to add ADT to give yyyyMMdd since anesthCloseTime is saved as a partial string
+			DateTime AnesthOpen_Time = Convert.ToDateTime(ADT+" " +anesthOpenTime);
 			string AnesthCloseTime = AnesthClose_Time.ToString(ADTNumString+"HHmmss");
+			string AnesthOpenTime = AnesthOpen_Time.ToString(ADTNumString+"HHmmss");
 			string vSTS = VSTimeStamp.ToString();
 			
 			long vsTS = Convert.ToInt64(vSTS);
-			long anesthDT = Convert.ToInt64(anesthDateTime);
+			long anesthOT = Convert.ToInt64(AnesthOpenTime);
 			long anesthCT = Convert.ToInt64(AnesthCloseTime);
 			
 			canAdd = true;
@@ -313,7 +315,7 @@ namespace OpenDentBusiness{
 			if (canAdd !=false)
 				{
 					if (anesthCT >= vsTS)
-						if (vsTS >= anesthDT)//filters out messages that don't belong with this Anesthetic Record.
+						if (vsTS >= anesthOT)//filters out messages that don't belong with this Anesthetic Record.
 						{
 							
 							if (NBPs !=0)//data with a BP of zero is usually a partial reading so we discard
