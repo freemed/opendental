@@ -100,6 +100,7 @@ namespace OpenDentBusiness{
 			string[] hL7OBXSeg; //OBX segments
 			string VSMName = "";
 			string VSMSerNum = "";
+			int patID = 0;
 			int SpO2 = 0;
 			int NBPs = 0;
 			int NBPd = 0;
@@ -133,6 +134,11 @@ namespace OpenDentBusiness{
 										if (m == 2) //gets VSM name
 											{
 												VSMName = hL7MSH[m].ToString();
+											}
+
+										if (m==23) //gets pat ID num
+											{
+												patID = Convert.ToInt32(hL7MSH[m].ToString());
 											}
 
 										if (m ==42) //gets VSM serial number
@@ -272,7 +278,10 @@ namespace OpenDentBusiness{
 			int checkblankVS = NBPs + NBPd + HR + SpO2 + temp + EtCO2;
 			if (checkblankVS != 0) //filters out empty segments; inserts valid ones to db
 				{
-					InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthOpenTime, anesthCloseTime); 
+					if (patID == patNum)
+					{
+						InsertVitalSigns(anestheticRecordNum, patNum, VSMName, VSMSerNum, NBPs, NBPd,  NBPm,  HR, SpO2, temp, EtCO2, VSTimeStamp, MessageID, HL7Message,anesthDateTime, anesthOpenTime, anesthCloseTime); 
+					}
 				}
 
 			if (NBPs == 0)//filters out partial messages from the import db 
