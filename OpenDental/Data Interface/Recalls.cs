@@ -210,6 +210,7 @@ namespace OpenDental{
 			Interval interv;
 			Patient pat;
 			ContactMethod contmeth;
+			int guarNum;
 			string numberOfReminders;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
@@ -303,7 +304,13 @@ namespace OpenDental{
 				row["guarFName"]=rawtable.Rows[i]["_guarFName"].ToString();
 				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
-				row["maxDateDue"]=dictMaxDateDue[PIn.PInt(rawtable.Rows[i]["Guarantor"].ToString())];
+				guarNum=PIn.PInt(rawtable.Rows[i]["Guarantor"].ToString());
+				if(dictMaxDateDue.ContainsKey(guarNum)) {
+					row["maxDateDue"]=dictMaxDateDue[guarNum];
+				}
+				else {
+					row["maxDateDue"]=DateTime.MinValue;
+				}
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				if(numberOfReminders=="0") {
 					row["numberOfReminders"]="";
