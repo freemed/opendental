@@ -8,7 +8,19 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static List<Operatory> Listt;
 		///<summary>A list of only those operatories that are visible.</summary>
-		public static List<Operatory> ListShort;
+		private static List<Operatory> listShort;
+
+		public static List<Operatory> ListShort {
+			get {
+				if(listShort==null) {
+					Operatories.RefreshCache();
+				}
+				return listShort;
+			}
+			set {
+				listShort=value;
+			}
+		}
 
 		
 

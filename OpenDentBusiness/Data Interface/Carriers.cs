@@ -8,10 +8,33 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Carriers{
-		///<summary></summary>
-		public static Carrier[] List;
+		private static Carrier[] list;
+		private static Hashtable hList;
+
+		public static Carrier[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
+
 		///<summary>A hashtable of all carriers.</summary>
-		public static Hashtable HList;
+		public static Hashtable HList {
+			get {
+				if(hList==null) {
+					Refresh();
+				}
+				return hList;
+			}
+			set {
+				hList=value;
+			}
+		}
 	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 		public static DataTable Refresh(){

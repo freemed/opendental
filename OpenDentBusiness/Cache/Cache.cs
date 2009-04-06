@@ -46,6 +46,9 @@ namespace OpenDentBusiness {
 				//SchoolClasses.Refresh();
 				//SchoolCourses.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
+				ds.Tables.Add(DisplayFields.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll){
 				//EmailTemplates.Refresh();
 				//DiseaseDefs.Refresh();
@@ -63,7 +66,6 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				//CovCatL.Refresh();
 				//CovSpanL.Refresh();
-				ds.Tables.Add(DisplayFields.Refresh());
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
 				//Letters.Refresh();
@@ -75,6 +77,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				ds.Tables.Add(Operatories.RefreshCache());
 				//AccountingAutoPayL.Refresh();
+			}
+			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
+				//PatFieldDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
 				ds.Tables.Add(Pharmacies.RefreshCache());
@@ -126,7 +131,6 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
 				//ZipCodes.Refresh();
-				//PatFieldDefs.Refresh();
 			}
 			return ds;
 		}

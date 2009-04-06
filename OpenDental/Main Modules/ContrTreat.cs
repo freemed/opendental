@@ -120,6 +120,7 @@ namespace OpenDental{
 		//private int pagesPrinted;
 		private CheckBox checkShowDiscount;
 		private List<Claim> ClaimList;
+		private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrTreat(){
@@ -630,7 +631,10 @@ namespace OpenDental{
 		#endregion
 
 		///<summary>Only called on startup, but after local data loaded from db.</summary>
-		public void InitializeOnStartup(){
+		public void InitializeOnStartup() {
+			if(InitializedOnStartup) {
+				return;
+			}
 			checkShowCompleted.Checked=PrefC.GetBool("TreatPlanShowCompleted");
 			//checkShowIns.Checked=PrefC.GetBool("TreatPlanShowIns");
 			//checkShowDiscount.Checked=PrefC.GetBool("TreatPlanShowDiscount");

@@ -78,7 +78,7 @@ namespace OpenDental{
 
 		#endregion
 
-		#region Manually Created Variables
+		#region ManuallyCreatedVariables
 
 		///<summary>Used to display Topaz signatures on Windows. Is added dynamically to avoid native code references crashing MONO.</summary>
 		private Control sigBoxTopaz;
@@ -149,10 +149,10 @@ namespace OpenDental{
 		private IImageStore imageStore;
     private bool allowTopaz;
 		DateTime treeDocumentMouseMoveTime=new DateTime(1,1,1);
-
 		///<summary></summary>
 		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
-		#endregion
+		private bool InitializedOnStartup;
+		#endregion ManuallyCreatedVariables
 
 		///<summary></summary>
 		public ContrDocs(){
@@ -621,6 +621,9 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
+			if(InitializedOnStartup) {
+				return;
+			}
 			MouseDownOrigin=new Point();
 			Lan.C(this, new System.Windows.Forms.Control[] {
 				//this.button1,

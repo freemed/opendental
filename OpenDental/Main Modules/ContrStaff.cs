@@ -67,6 +67,7 @@ namespace OpenDental{
 		private Employee EmployeeCur;
 		private FormBilling FormB;
 		private int PatCurNum;
+		private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -640,7 +641,10 @@ namespace OpenDental{
 		}
 
 		///<summary>Only gets run on startup.</summary>
-		public void InitializeOnStartup(){
+		public void InitializeOnStartup() {
+			if(InitializedOnStartup) {
+				return;
+			}
 			//can't use Lan.F
 			Lan.C(this,new Control[]
 				{

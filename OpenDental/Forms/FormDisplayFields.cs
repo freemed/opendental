@@ -264,7 +264,7 @@ namespace OpenDental{
 
 		private void FormDisplayFields_Load(object sender,EventArgs e) {
 			labelCategory.Text=category.ToString();
-			DisplayFields.Refresh();
+			DisplayFields.RefreshCache();
 			ListShowing=DisplayFields.GetForCategory(category);
 			FillGrids();
 		}
@@ -393,7 +393,7 @@ namespace OpenDental{
 				return;
 			}
 			DisplayFields.SaveListForCategory(ListShowing,category);
-			DataValid.SetInvalid(InvalidType.InsCats);
+			DataValid.SetInvalid(InvalidType.DisplayFields);
 			DialogResult=DialogResult.OK;
 		}
 

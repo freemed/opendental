@@ -8,8 +8,20 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary></summary>
 	public class PatFieldDefs {
+		private static PatFieldDef[] list;
+
 		///<summary>A list of all allowable patFields.</summary>
-		public static PatFieldDef[] List;
+		public static PatFieldDef[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Gets a list of all PatFieldDefs when program first opens.</summary>
 		public static void Refresh() {

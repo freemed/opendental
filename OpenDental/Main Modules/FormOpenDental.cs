@@ -1281,22 +1281,20 @@ namespace OpenDental{
 			if(Programs.IsEnabled("eClinicalWorks")){
 				Splash.Dispose();
 			}
-//a great optimization to make here would be to NOT do this.
-//Each class would refresh on its own if null instead of this shotgun approach.
-			RefreshLocalData(InvalidType.AllLocal);
+			//We no longer do this shotgun approach because it can slow the loading time.
+			//RefreshLocalData(InvalidType.AllLocal);
+			RefreshLocalData(InvalidType.Prefs,InvalidType.Defs,InvalidType.Providers,//obviously heavily used
+				InvalidType.Signals,//so when mouse moves over light buttons, it won't crash
+				InvalidType.Programs,//so it can check eCW for which modules to show
+				InvalidType.ToolBut);//so program buttons will show in all the toolbars
+			FillSignalButtons(null);
+			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
 			//Lan.Refresh();//automatically skips if current culture is en-US
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
 			signalLastRefreshed=MiscData.GetNowDateTime();
 			timerSignals.Interval=PrefC.GetInt("ProcessSigsIntervalInSecs")*1000;
 			timerSignals.Enabled=true;
-			ContrAccount2.InitializeOnStartup();
-			ContrAppt2.InitializeOnStartup();
-			ContrChart2.InitializeOnStartup();
-			ContrDocs2.InitializeOnStartup();
-			ContrFamily2.InitializeOnStartup();
-			ContrManage2.InitializeOnStartup();
-			ContrTreat2.InitializeOnStartup();
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");
 			myOutlookBar.Buttons[1].Caption=Lan.g(this,"Family");
@@ -1448,135 +1446,8 @@ namespace OpenDental{
 				isAll=true;
 			}
 			if(itypeList.Contains((int)InvalidType.Prefs) || isAll){
-			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
-				//Prefs_client.RefreshClient();
-				if(((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="1"){
-					menuItemSchools.Visible=false;
-					menuItemCounties.Visible=false;
-					menuItemScreening.Visible=false;
-					//menuItemPHSep.Visible=false;
-					//menuItemPHRawScreen.Visible=false;
-					//menuItemPHRawPop.Visible=false;
-					//menuItemPHScreen.Visible=false;
-				}
-				else{
-					menuItemSchools.Visible=true;
-					menuItemCounties.Visible=true;
-					menuItemScreening.Visible=true;
-					//menuItemPHSep.Visible=true;
-					//menuItemPublicHealth.Visible=true;
-					//menuItemPHRawScreen.Visible=true;
-					//menuItemPHRawPop.Visible=true;
-					//menuItemPHScreen.Visible=true;
-				}
-				if(PrefC.GetBool("EasyNoClinics")){
-					menuItemClinics.Visible=false;
-				}
-				else{
-					menuItemClinics.Visible=true;
-				}
-				if(((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="1"){
-					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Procs");
-				}
-				else{
-					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Chart");
-				}
-				if(((Pref)PrefC.HList["EasyBasicModules"]).ValueString=="1"){
-					myOutlookBar.Buttons[3].Visible=false;
-					myOutlookBar.Buttons[5].Visible=false;
-					myOutlookBar.Buttons[6].Visible=false;
-					//pictButtons.Visible=false;
-				}
-				else{
-					myOutlookBar.Buttons[3].Visible=true;
-					myOutlookBar.Buttons[5].Visible=true;
-					myOutlookBar.Buttons[6].Visible=true;
-					//pictButtons.Visible=true;
-				}
-				myOutlookBar.Invalidate();
-				if(PrefC.GetBool("EasyHideDentalSchools")){
-					menuItemSchoolClass.Visible=false;
-					menuItemSchoolCourses.Visible=false;
-					//menuItemInstructors.Visible=false;
-					//menuItemCourseGrades.Visible=false;
-					menuItemRequirementsNeeded.Visible=false;
-					menuItemReqStudents.Visible=false;
-				}
-				else{
-					menuItemSchoolClass.Visible=true;
-					menuItemSchoolCourses.Visible=true;
-					//menuItemInstructors.Visible=true;
-					//menuItemCourseGrades.Visible=true;
-					menuItemRequirementsNeeded.Visible=true;
-					menuItemReqStudents.Visible=true;
-				}
-				if(PrefC.GetBool("EasyHideRepeatCharges")){
-					menuItemRepeatingCharges.Visible=false;
-				}
-				else{
-					menuItemRepeatingCharges.Visible=true;
-				}
-
-				if(PrefC.GetString("DistributorKey")=="") {
-					menuItemCustomerManage.Visible=false;
-				}
-				else {
-					menuItemCustomerManage.Visible=true;
-				}
-				ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
-				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
-				CheckCustomReports();
-				ContrChart2.InitializeLocalData();
-				if(PrefC.GetBool("TaskListAlwaysShowsAtBottom")){
-					//separate if statement to prevent database call if not showing task list at bottom to begin with
-					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
-					if(computerPref.TaskKeepListHidden){
-						userControlTasks1.Visible = false;
-					}
-					else{//task list show
-						userControlTasks1.Visible = true;
-						userControlTasks1.InitializeOnStartup();
-						if(computerPref.TaskDock == 0){//bottom
-							menuItemDockBottom.Checked = true;
-							menuItemDockRight.Checked = false;
-							panelSplitter.Cursor=Cursors.HSplit;
-							panelSplitter.Height=7;
-							int splitterNewY=540;
-							if(computerPref.TaskY!=0){
-								splitterNewY=computerPref.TaskY;
-								if(splitterNewY<300){
-									splitterNewY=300;//keeps it from going too high
-								}
-								if(splitterNewY>ClientSize.Height-50){
-									splitterNewY=ClientSize.Height-panelSplitter.Height-50;//keeps it from going off the bottom edge
-								}
-							}
-							panelSplitter.Location=new Point(myOutlookBar.Width,splitterNewY);
-						}
-						else{//right
-							menuItemDockRight.Checked = true;
-							menuItemDockBottom.Checked = false;
-							panelSplitter.Cursor=Cursors.VSplit;
-							panelSplitter.Width=7;
-							int splitterNewX=900;
-							if(computerPref.TaskX!=0){
-								splitterNewX=computerPref.TaskX;
-								if(splitterNewX<300){
-									splitterNewX=300;//keeps it from going too far to the left
-								}
-								if(splitterNewX>ClientSize.Width-50){
-									splitterNewX=ClientSize.Width-panelSplitter.Width-50;//keeps it from going off the right edge
-								}
-							}
-							panelSplitter.Location=new Point(splitterNewX,ToolBarMain.Height);
-						}
-					}
-				}
-				else{
-					userControlTasks1.Visible = false;
-				}
-				LayoutControls();
-			}//if(InvalidTypes.Prefs)
+				//all moved to RefreshLocalDataPostCleanup
+			}
 			if(itypeList.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				AutoCodeL.Refresh();
 				AutoCodeItemL.Refresh();
@@ -1593,9 +1464,6 @@ namespace OpenDental{
 			}
 			if(itypeList.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
-				SigElementDefs.Refresh();
-				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
-				FillSignalButtons(null);
 			}
 			if(itypeList.Contains((int)InvalidType.Computers) || isAll){
 				Computers.Refresh();
@@ -1608,6 +1476,9 @@ namespace OpenDental{
 			if(itypeList.Contains((int)InvalidType.DentalSchools) || isAll){
 				SchoolClasses.Refresh();
 				SchoolCourses.Refresh();
+			}
+			if(itypeList.Contains((int)InvalidType.DisplayFields) || isAll) {
+				//DisplayFields.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.Email) || isAll){
 			//if((itypes & InvalidTypes.Email)==InvalidTypes.Email){
@@ -1624,7 +1495,6 @@ namespace OpenDental{
 			if(itypeList.Contains((int)InvalidType.InsCats) || isAll){
 				CovCatL.Refresh();
 				CovSpanL.Refresh();
-				DisplayFields.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.Letters) || isAll){
 				Letters.Refresh();
@@ -1637,6 +1507,9 @@ namespace OpenDental{
 				//Operatory_client.Refresh();
 				AccountingAutoPayL.Refresh();
 			}
+			if(itypeList.Contains((int)InvalidType.PatFields) || isAll) {
+				PatFieldDefs.Refresh();
+			}
 			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
 
 			//}
@@ -1645,16 +1518,7 @@ namespace OpenDental{
 				ProcCodeNotes.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll){
-				if(Programs.GetCur("PT").Enabled){
-					Bridges.PaperlessTechnology.InitializeFileWatcher();
-				}
-				if(Programs.IsEnabled("eClinicalWorks")) {
-					myOutlookBar.Buttons[0].Visible=false;
-					myOutlookBar.Buttons[1].Visible=false;
-					myOutlookBar.Buttons[2].Visible=false;
-					myOutlookBar.Buttons[5].Visible=false;
-					myOutlookBar.Buttons[6].Visible=false;
-				}
+				//
 			}
 			if(itypeList.Contains((int)InvalidType.Providers) || isAll){
 				//Provider_client.RefreshOnClient();
@@ -1670,6 +1534,10 @@ namespace OpenDental{
 				UserGroups.Refresh();
 				GroupPermissionL.Refresh();
 			}
+			if(itypeList.Contains((int)InvalidType.Signals) || isAll) {
+				SigElementDefs.Refresh();
+				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+			}
 			if(itypeList.Contains((int)InvalidType.Startup) || isAll){
 				Employers.Refresh();//only needed when opening the prog. After that, automated.
 				ElectIDs.Refresh();//only run on startup
@@ -1678,21 +1546,155 @@ namespace OpenDental{
 			//InvalidTypes.Tasks not handled here.
 			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll){
 				ToolButItems.Refresh();
+			}
+			if(itypeList.Contains((int)InvalidType.Views) || isAll){
+				AppointmentRuleL.Refresh();
+			}
+			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
+				ZipCodes.Refresh();
+			}
+			RefreshLocalDataPostCleanup(itypeList,isAll,itypes);
+		}
+
+		///<summary>Performs a few tasks that must be done when local data is changed.</summary>
+		private void RefreshLocalDataPostCleanup(List<int> itypeList,bool isAll,params InvalidType[] itypes) {
+			if(itypeList.Contains((int)InvalidType.Prefs) || isAll) {
+				if(((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="1") {
+					menuItemSchools.Visible=false;
+					menuItemCounties.Visible=false;
+					menuItemScreening.Visible=false;
+				}
+				else {
+					menuItemSchools.Visible=true;
+					menuItemCounties.Visible=true;
+					menuItemScreening.Visible=true;
+				}
+				if(PrefC.GetBool("EasyNoClinics")) {
+					menuItemClinics.Visible=false;
+				}
+				else {
+					menuItemClinics.Visible=true;
+				}
+				if(((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="1") {
+					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Procs");
+				}
+				else {
+					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Chart");
+				}
+				if(((Pref)PrefC.HList["EasyBasicModules"]).ValueString=="1") {
+					myOutlookBar.Buttons[3].Visible=false;
+					myOutlookBar.Buttons[5].Visible=false;
+					myOutlookBar.Buttons[6].Visible=false;
+				}
+				else {
+					myOutlookBar.Buttons[3].Visible=true;
+					myOutlookBar.Buttons[5].Visible=true;
+					myOutlookBar.Buttons[6].Visible=true;
+				}
+				myOutlookBar.Invalidate();
+				if(PrefC.GetBool("EasyHideDentalSchools")) {
+					menuItemSchoolClass.Visible=false;
+					menuItemSchoolCourses.Visible=false;
+					menuItemRequirementsNeeded.Visible=false;
+					menuItemReqStudents.Visible=false;
+				}
+				else {
+					menuItemSchoolClass.Visible=true;
+					menuItemSchoolCourses.Visible=true;
+					menuItemRequirementsNeeded.Visible=true;
+					menuItemReqStudents.Visible=true;
+				}
+				if(PrefC.GetBool("EasyHideRepeatCharges")) {
+					menuItemRepeatingCharges.Visible=false;
+				}
+				else {
+					menuItemRepeatingCharges.Visible=true;
+				}
+
+				if(PrefC.GetString("DistributorKey")=="") {
+					menuItemCustomerManage.Visible=false;
+				}
+				else {
+					menuItemCustomerManage.Visible=true;
+				}
+				ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
+				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
+				CheckCustomReports();
+				ContrChart2.InitializeLocalData();
+				if(PrefC.GetBool("TaskListAlwaysShowsAtBottom")) {
+					//separate if statement to prevent database call if not showing task list at bottom to begin with
+					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
+					if(computerPref.TaskKeepListHidden) {
+						userControlTasks1.Visible = false;
+					}
+					else {//task list show
+						userControlTasks1.Visible = true;
+						userControlTasks1.InitializeOnStartup();
+						if(computerPref.TaskDock == 0) {//bottom
+							menuItemDockBottom.Checked = true;
+							menuItemDockRight.Checked = false;
+							panelSplitter.Cursor=Cursors.HSplit;
+							panelSplitter.Height=7;
+							int splitterNewY=540;
+							if(computerPref.TaskY!=0) {
+								splitterNewY=computerPref.TaskY;
+								if(splitterNewY<300) {
+									splitterNewY=300;//keeps it from going too high
+								}
+								if(splitterNewY>ClientSize.Height-50) {
+									splitterNewY=ClientSize.Height-panelSplitter.Height-50;//keeps it from going off the bottom edge
+								}
+							}
+							panelSplitter.Location=new Point(myOutlookBar.Width,splitterNewY);
+						}
+						else {//right
+							menuItemDockRight.Checked = true;
+							menuItemDockBottom.Checked = false;
+							panelSplitter.Cursor=Cursors.VSplit;
+							panelSplitter.Width=7;
+							int splitterNewX=900;
+							if(computerPref.TaskX!=0) {
+								splitterNewX=computerPref.TaskX;
+								if(splitterNewX<300) {
+									splitterNewX=300;//keeps it from going too far to the left
+								}
+								if(splitterNewX>ClientSize.Width-50) {
+									splitterNewX=ClientSize.Width-panelSplitter.Width-50;//keeps it from going off the right edge
+								}
+							}
+							panelSplitter.Location=new Point(splitterNewX,ToolBarMain.Height);
+						}
+					}
+				}
+				else {
+					userControlTasks1.Visible = false;
+				}
+				LayoutControls();
+			}//if(InvalidTypes.Prefs)
+			if(itypeList.Contains((int)InvalidType.Signals) || isAll) {
+				FillSignalButtons(null);
+			}
+			if(itypeList.Contains((int)InvalidType.Programs) || isAll) {
+				if(Programs.GetCur("PT").Enabled) {
+					Bridges.PaperlessTechnology.InitializeFileWatcher();
+				}
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					myOutlookBar.Buttons[0].Visible=false;
+					myOutlookBar.Buttons[1].Visible=false;
+					myOutlookBar.Buttons[2].Visible=false;
+					myOutlookBar.Buttons[5].Visible=false;
+					myOutlookBar.Buttons[6].Visible=false;
+				}
+			}
+			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll) {
 				ContrAccount2.LayoutToolBar();
 				ContrAppt2.LayoutToolBar();
 				ContrChart2.LayoutToolBar();
 				ContrDocs2.LayoutToolBar();
 				ContrFamily2.LayoutToolBar();
 			}
-			if(itypeList.Contains((int)InvalidType.Views) || isAll){
-				AppointmentRuleL.Refresh();
-				//ApptView_client.Refresh();
-				//ApptViewItem_client.Refresh();
+			if(itypeList.Contains((int)InvalidType.Views) || isAll) {
 				ContrAppt2.FillViews();
-			}
-			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
-				ZipCodes.Refresh();
-				PatFieldDefs.Refresh();
 			}
 			ContrTreat2.InitializeLocalData();//easier to leave this here for now than to split it.
 		}
@@ -2718,36 +2720,43 @@ namespace OpenDental{
 		private void SetModuleSelected(){
 			switch(myOutlookBar.SelectedIndex){
 				case 0:
+					ContrAppt2.InitializeOnStartup();
 					ContrAppt2.Visible=true;
 					this.ActiveControl=this.ContrAppt2;
 					ContrAppt2.ModuleSelected(CurPatNum);
 					break;
 				case 1:
+					ContrFamily2.InitializeOnStartup();
 					ContrFamily2.Visible=true;
 					this.ActiveControl=this.ContrFamily2;
 					ContrFamily2.ModuleSelected(CurPatNum);
 					break;
 				case 2:
+					ContrAccount2.InitializeOnStartup();
 					ContrAccount2.Visible=true;
 					this.ActiveControl=this.ContrAccount2;
 					ContrAccount2.ModuleSelected(CurPatNum);
 					break;
 				case 3:
+					ContrTreat2.InitializeOnStartup();
 					ContrTreat2.Visible=true;
 					this.ActiveControl=this.ContrTreat2;
 					ContrTreat2.ModuleSelected(CurPatNum);
 					break;
 				case 4:
+					ContrChart2.InitializeOnStartup();
 					ContrChart2.Visible=true;
 					this.ActiveControl=this.ContrChart2;
 					ContrChart2.ModuleSelected(CurPatNum);
 					break;
 				case 5:
+					ContrDocs2.InitializeOnStartup();
 					ContrDocs2.Visible=true;
 					this.ActiveControl=this.ContrDocs2;
 					ContrDocs2.ModuleSelected(CurPatNum);
 					break;
 				case 6:
+					//ContrManage2.InitializeOnStartup();//This gets done earlier.
 					ContrManage2.Visible=true;
 					this.ActiveControl=this.ContrManage2;
 					ContrManage2.ModuleSelected(CurPatNum);

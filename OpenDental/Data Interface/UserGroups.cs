@@ -7,8 +7,20 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class UserGroups {
+		private static UserGroup[] list;
+
 		///<summary>A list of all user groups, ordered by description.</summary>
-		public static UserGroup[] List;
+		public static UserGroup[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh() {

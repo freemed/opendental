@@ -63,6 +63,9 @@ namespace OpenDental{
 
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
 		public static void GetForProgram(int programNum){
+			if(List==null) {
+				Refresh();
+			}
 			ForProgram=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProgramNum==programNum){
@@ -72,7 +75,10 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>
-		public static ArrayList GetForToolBar(ToolBarsAvail toolbar){
+		public static ArrayList GetForToolBar(ToolBarsAvail toolbar) {
+			if(List==null) {
+				Refresh();
+			}
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ToolBar==toolbar && Programs.IsEnabled(List[i].ProgramNum)){

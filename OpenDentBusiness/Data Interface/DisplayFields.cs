@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDentBusiness {
 	public class DisplayFields {
 
-		public static DataTable Refresh() {
+		public static DataTable RefreshCache() {
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
 			DataTable table = General.GetTable(command);
 			table.TableName="DisplayField";

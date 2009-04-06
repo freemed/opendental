@@ -10,8 +10,20 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary></summary>
 	public class SigButDefs {
+		private static SigButDef[] listt;
+
 		///<summary>A list of all SigButDefs.</summary>
-		public static SigButDef[] Listt;
+		public static SigButDef[] Listt {
+			get {
+				if(listt==null) {
+					Refresh();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
 
 		///<summary>Gets a list of all SigButDefs when program first opens.  Also refreshes SigButDefElements and attaches all elements to the appropriate buttons.</summary>
 		public static void Refresh() {

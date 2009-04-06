@@ -7,15 +7,45 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class DefC {
 		///<summary>Stores all defs in a 2D array except the hidden ones.  The first dimension is the category, in int format.  The second dimension is the index of the definition in this category.  This is dependent on how it was refreshed, and not on what is in the database.  If you need to reference a specific def, then the DefNum is more effective.</summary>
-		public static Def[][] Short;
+		private static Def[][] shortt;
 		///<summary>Stores all defs in a 2D array.</summary>
-		public static Def[][] Long;
+		private static Def[][] longg;
+
+		public static Def[][] Long {
+			get {
+				if(longg==null) {
+					Defs.RefreshCache();
+				}
+				return longg;
+			}
+			set {
+				longg=value;
+			}
+		}
+
+		public static Def[][] Short {
+			get {
+				if(shortt==null) {
+					Defs.RefreshCache();
+				}
+				return shortt;
+			}
+			set {
+				shortt=value;
+			}
+		}
+
+		public static bool DefShortIsNull {
+			get {
+				if(shortt==null) {
+					return true;
+				}
+				return false;
+			}
+		}
 
 		///<summary>Gets a list of defs for one category.</summary>
 		public static Def[] GetList(DefCat defCat) {
-			if(Short==null) {
-				Defs.RefreshCache();
-			}
 			return Short[(int)defCat];
 		}
 
@@ -43,7 +73,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns 0 if it can't find the named def.  If the name is blank, then it returns the first def in the category.</summary>
-		public static int GetByExactName(DefCat myCat, string itemName) {
+		public static int GetByExactName(DefCat myCat,string itemName) {
 			if(itemName=="") {
 				return DefC.Long[(int)myCat][0].DefNum;//return the first one in the list
 			}

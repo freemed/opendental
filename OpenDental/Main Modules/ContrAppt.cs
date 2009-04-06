@@ -138,6 +138,7 @@ namespace OpenDental{
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
 		//private ContrApptSingle PinApptSingle;
+		private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -1269,7 +1270,7 @@ namespace OpenDental{
 			tabControl.Location=new Point(panelAptInfo.Left,panelAptInfo.Bottom+1);
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
-			if(DefC.Short!=null) {
+			if(!DefC.DefShortIsNull) {
 				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
@@ -1278,10 +1279,18 @@ namespace OpenDental{
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
+			if(InitializedOnStartup) {
+				return;
+			}
+			//if(DefC.DefShortIsNull) {
+			//	Defs.RefreshCache();//So that when RefreshPeriod, LayoutPanels, ComputeColWidth gets called.
+			LayoutPanels();
+			//}
 			ContrApptSheet.RowsPerIncr=1;
 			Appointments.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
 			RefreshPeriod();
+			FillViews();
 			if(ApptViewC.List.Length>0){//if any views
 				SetView(1);//default to first view
 			}

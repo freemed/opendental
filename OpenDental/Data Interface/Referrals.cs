@@ -9,14 +9,26 @@ namespace OpenDental{
 ///<summary></summary>
 	public class Referrals{
 		///<summary>All referrals for all patients</summary>
-		public static Referral[] List;
+		private static Referral[] list;
 		//should later add a faster refresh sequence.
 		//private static Hashtable HList;
+
+		public static Referral[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Refreshes all referrals for all patients.  Need to rework at some point so less memory is consumed.  Also refreshes dynamically, so no need to invalidate local data.</summary>
 		public static void Refresh(){
 			string command=
-				"SELECT * from referral "
+				"SELECT * FROM referral "
 				+"ORDER BY lname";
  			DataTable table=General.GetTable(command);
 			List=new Referral[table.Rows.Count];

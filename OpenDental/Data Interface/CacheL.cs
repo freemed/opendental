@@ -40,8 +40,6 @@ namespace OpenDental{
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
-				//SigElementDefs.Refresh();
-				//SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll){
 				//Computers.Refresh();
@@ -53,6 +51,9 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll){
 				//SchoolClasses.Refresh();
 				//SchoolCourses.Refresh();
+			}
+			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
+				DisplayFields.FillCache(ds.Tables["DisplayField"]); ;
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll){
 				//EmailTemplates.Refresh();
@@ -71,7 +72,6 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				//CovCatL.Refresh();
 				//CovSpanL.Refresh();
-				DisplayFields.FillCache(ds.Tables["DisplayField"]);;
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
 				//Letters.Refresh();
@@ -83,6 +83,9 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				Operatories.FillCache(ds.Tables["Operatory"]);
 				//AccountingAutoPayL.Refresh();
+			}
+			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
+				//PatFieldDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
 				Pharmacies.FillCache(ds.Tables["Pharmacy"]);
@@ -108,6 +111,10 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				Userods.FillCache(ds.Tables["Userod"]);
 			}
+			if(itypes.Contains((int)InvalidType.Signals) || isAll) {
+				//SigElementDefs.Refresh();
+				//SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll){
 				Sites.FillCache(ds.Tables["Site"]);
 			}
@@ -126,7 +133,6 @@ namespace OpenDental{
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
 				//ZipCodes.Refresh();
-				//PatFieldDefs.Refresh();
 			}
 
 

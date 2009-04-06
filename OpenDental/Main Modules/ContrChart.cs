@@ -265,6 +265,7 @@ namespace OpenDental{
 		private RadioButton radioEntryCn;
 		private CheckBox checkShowCn;
 		private int Chartscrollval;
+		private bool InitializedOnStartup;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -2887,15 +2888,6 @@ namespace OpenDental{
 		}
 		#endregion
 
-		/*public bool DataValid{
-      get{
-        return dataValid;
-      }
-      set{
-        dataValid=value;
-      }
-    }*/
-
 		private void ContrChart_Layout(object sender, System.Windows.Forms.LayoutEventArgs e){
 			gridProg.Height=ClientSize.Height-tabControlImages.Height-gridProg.Location.Y+1;
 			if(panelImages.Visible){
@@ -2924,6 +2916,9 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
+			if(InitializedOnStartup) {
+				return;
+			}
 			newStatus=ProcStat.TP;
 			//ApptPlanned=new ContrApptSingle();
 			//ApptPlanned.Location=new Point(1,3);

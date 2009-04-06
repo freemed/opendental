@@ -232,11 +232,11 @@ namespace OpenDentBusiness{
 		AutoCodesProcButtons,
 		///<summary></summary>
 		Carriers,
-		///<summary>Also includes Signal/message defs.</summary>
+		///<summary></summary>
 		ClearHouses,
 		///<summary></summary>
 		Computers,
-		///<summary>Also includes DisplayFields</summary>
+		///<summary></summary>
 		InsCats,
 		///<summary>Also includes payperiods.</summary>
 		Employees,
@@ -262,7 +262,7 @@ namespace OpenDentBusiness{
 		Providers,
 		///<summary></summary>
 		ClaimForms,
-		///<summary>Also includes patientfields</summary>
+		///<summary></summary>
 		ZipCodes,
 		///<summary></summary>
 		LetterMerge,
@@ -283,7 +283,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		FeeScheds,
 		///<summary>34. This is used internally by OD, Inc with the phonenumber table and the phone server.</summary>
-		PhoneNumbers
+		PhoneNumbers,
+		///<summary>35. Signal/message defs</summary>
+		Signals,
+		///<summary>36</summary>
+		DisplayFields,
+		///<summary>37</summary>
+		PatFields
 	}
 	//<summary></summary>
 	/*public enum ButtonType{
