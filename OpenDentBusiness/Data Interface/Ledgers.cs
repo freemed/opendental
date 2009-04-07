@@ -13,6 +13,20 @@ namespace OpenDentBusiness{
 
 		///<summary>Computes aging the family specified. Specify guarantor=0 in order to calculate aging for all familes.  Gets all info from database.</summary>
 		public static void ComputeAging(int guarantor,DateTime AsOfDate){
+			//Zero out either entire database or entire family.
+			//Need to zero everything out first to catch former guarantors.
+			string command="UPDATE patient SET "
+				+"Bal_0_30   = 0"
+				+",Bal_31_60 = 0"
+				+",Bal_61_90 = 0"
+				+",BalOver90 = 0"
+				+",InsEst    = 0"
+				+",BalTotal  = 0"
+				+",PayPlanDue= 0";
+			if(guarantor!=0) {
+				command+=" WHERE Guarantor="+POut.PInt(guarantor);
+			}
+			General.NonQ(command);
 			if(AsOfDate.Year<1880){
 				AsOfDate=DateTime.Today;
 			}
@@ -23,7 +37,6 @@ namespace OpenDentBusiness{
 			//Unfortunately, this has one side effect, which is that our MySQL connector reopens the MySQL
 			//connection every time a command is run, so the temporary tables only last for a single MySQL
 			//command. To get around this issue, we run the aging script as a single command/script.
-			string command="";
 			string asOfDate=POut.PDate(AsOfDate);
 			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")));
 			string thirtyDaysAgo=POut.PDate(AsOfDate.AddDays(-30));
