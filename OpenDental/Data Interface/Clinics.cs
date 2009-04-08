@@ -8,7 +8,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class Clinics {
 		///<summary></summary>
-		public static Clinic[] List;
+		private static Clinic[] list;
+
+		public static Clinic[] List{
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Refresh all clinics</summary>
 		public static void Refresh() {

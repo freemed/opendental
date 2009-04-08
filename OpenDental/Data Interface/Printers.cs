@@ -11,12 +11,12 @@ namespace OpenDental{
 	///<summary>Handles all the business logic for printers.  Used heavily by the UI.  Every single function that makes changes to the database must be completely autonomous and do ALL validation itself.</summary>
 	public class Printers{
 		///<summary>List of all printers.</summary>
-		private static Printer[] List;
+		private static Printer[] list;
 		
 		///<summary></summary>
 		public static void Refresh(){
 			string command="SELECT * FROM printer";
-			List=RefreshAndFill(command);
+			list=RefreshAndFill(command);
 		}
 
 		///<summary></summary>
@@ -153,12 +153,15 @@ namespace OpenDental{
 
 		///<summary>Gets the set printer whether or not it is valid.</summary>
 		public static Printer GetForSit(PrintSituation sit){
+			if(list==null) {
+				Refresh();
+			}
 			Computer compCur=Computers.GetCur();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ComputerNum==compCur.ComputerNum
-					&& List[i].PrintSit==sit)
+			for(int i=0;i<list.Length;i++){
+				if(list[i].ComputerNum==compCur.ComputerNum
+					&& list[i].PrintSit==sit)
 				{
-					return List[i];
+					return list[i];
 				}
 			}
 			return null;

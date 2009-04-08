@@ -8,8 +8,7 @@ namespace OpenDental{
 
 	///<summary></summary>
 	public class Medications{
-		//not refreshed with local data.  Only refreshed as needed.
-		///<summary>All medications.</summary>
+		///<summary>All medications.  Not refreshed with local data.  Only refreshed as needed.</summary>
 		public static Medication[] List;
 		///<summary></summary>
 		private static Hashtable HList;

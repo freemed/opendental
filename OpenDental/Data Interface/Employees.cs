@@ -9,10 +9,33 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Employees{
-		///<summary></summary>
-		public static Employee[] ListLong;
-		///<summary></summary>
-		public static Employee[] ListShort;//does not include hidden employees
+		private static Employee[] listLong;
+		private static Employee[] listShort;
+
+		public static Employee[] ListLong {
+			get {
+				if(listLong==null) {
+					Refresh();
+				}
+				return listLong;
+			}
+			set {
+				listLong=value;
+			}
+		}
+
+		///<summary>Does not include hidden employees</summary>
+		public static Employee[] ListShort {
+			get {
+				if(listShort==null) {
+					Refresh();
+				}
+				return listShort;
+			}
+			set {
+				listShort=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh(){

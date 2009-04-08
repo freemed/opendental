@@ -9,11 +9,34 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class ClaimForms {
-		///<summary>List of all claim forms.</summary>
-		public static ClaimForm[] ListLong;
-		///<summary>List of all claim forms except those marked as hidden.</summary>
-		public static ClaimForm[] ListShort;
+		private static ClaimForm[] listLong;
+		private static ClaimForm[] listShort;
 
+		///<summary>List of all claim forms.</summary>
+		public static ClaimForm[] ListLong {
+			get {
+				if(listLong==null) {
+					Refresh();
+				}
+				return listLong;
+			}
+			set {
+				listLong=value;
+			}
+		}
+
+		///<summary>List of all claim forms except those marked as hidden.</summary>
+		public static ClaimForm[] ListShort {
+			get {
+				if(listShort==null) {
+					Refresh();
+				}
+				return listShort;
+			}
+			set {
+				listShort=value;
+			}
+		}
 
 		///<summary>Fills ListShort and ListLong with all claimforms from the db. Also attaches corresponding claimformitems to each.</summary>
 		public static void Refresh() {

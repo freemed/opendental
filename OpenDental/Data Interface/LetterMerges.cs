@@ -9,7 +9,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class LetterMerges {
 		///<summary>List of all lettermerges.</summary>
-		public static LetterMerge[] Listt;
+		private static LetterMerge[] list;
+
+		public static LetterMerge[] Listt {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 #if !DISABLE_MICROSOFT_OFFICE
 		private static Word.Application wordApp;

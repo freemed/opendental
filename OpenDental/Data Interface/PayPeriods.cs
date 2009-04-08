@@ -8,7 +8,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class PayPeriods {
 		///<summary>A list of all payperiods.</summary>
-		public static PayPeriod[] List;
+		private static PayPeriod[] list;
+
+		public static PayPeriod[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Fills List with all payperiods, ordered by startdate.</summary>
 		public static void Refresh() {

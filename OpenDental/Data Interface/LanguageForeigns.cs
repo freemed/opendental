@@ -9,12 +9,24 @@ namespace OpenDental{
 	///<summary></summary>
 	public class LanguageForeigns {
 		///<summary>just translations for the culture currently being used.  If a translation is missing, it tries to use a translation from another culture with the same language. Key=ClassType+English. Value =LanguageForeign object.  When support for multiple simultaneous languages is added, there will still be a current culture, but then we will add a supplemental way to extract translations for alternate cultures.</summary>
-		public static Hashtable HList;
+		private static Hashtable hList;
+
+		public static Hashtable HList {
+			get {
+				if(hList==null) {
+					Refresh(CultureInfo.CurrentCulture);
+				}
+				return hList;
+			}
+			set {
+				hList=value;
+			}
+		}
 
 		///<summary>Called once when the program first starts up.  Then only if user downloads new translations or adds their own.</summary>
 		public static void Refresh(CultureInfo cultureInfo) {
 			HList=new Hashtable();
-			if(CultureInfo.CurrentCulture.Name=="en-US") {
+			if(cultureInfo.Name=="en-US") {
 				return;
 			}
 			//load all translations for the current culture, using other culture of same language if no trans avail.

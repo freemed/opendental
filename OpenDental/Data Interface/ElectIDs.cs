@@ -9,8 +9,20 @@ namespace OpenDental{
 
 	///<summary>Refreshed with local data.</summary>
 	public class ElectIDs{
+		private static ElectID[] list;
+
 		///<summary>This is the list of all electronic IDs.</summary>
-		public static ElectID[] List;
+		public static ElectID[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Since users not allowed to edit, this only gets run on startup.</summary>
 		public static void Refresh(){

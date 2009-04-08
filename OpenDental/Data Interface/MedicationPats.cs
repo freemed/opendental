@@ -8,8 +8,8 @@ namespace OpenDental{
 
 	///<summary></summary>
 	public class MedicationPats{
-		///<summary></summary>
-		public static MedicationPat[] List;//for current pat
+		///<summary>for current pat</summary>
+		public static MedicationPat[] List;
 
 		///<summary></summary>
 		public static void Refresh(int patNum){

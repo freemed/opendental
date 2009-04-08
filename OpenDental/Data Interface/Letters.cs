@@ -10,7 +10,19 @@ namespace OpenDental{
 	///<summary>Letters are refreshed as local data.</summary>
 	public class Letters{
 		///<summary>List of</summary>
-		public static Letter[] List;
+		private static Letter[] list;
+
+		public static Letter[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh(){

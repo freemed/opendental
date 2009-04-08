@@ -8,8 +8,20 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary>emailtemplates are refreshed as local data.</summary>
 	public class EmailTemplates {
+		private static EmailTemplate[] list;
+
 		///<summary>List of all email templates</summary>
-		public static EmailTemplate[] List;
+		public static EmailTemplate[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh() {

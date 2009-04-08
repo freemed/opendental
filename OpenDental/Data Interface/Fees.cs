@@ -81,6 +81,9 @@ namespace OpenDental{
 			if(feeSchedNum==0){
 				return null;
 			}
+			if(Dict==null) {
+				Refresh();
+			}
 			FeeKey key=new FeeKey();
 			key.codeNum=codeNum;
 			key.feeSchedNum=feeSchedNum;
@@ -100,6 +103,9 @@ namespace OpenDental{
 			}
 			if(FeeScheds.GetIsHidden(feeSchedNum)){
 				return -1;//you cannot obtain fees for hidden fee schedules
+			}
+			if(Dict==null) {
+				Refresh();
 			}
 			FeeKey key=new FeeKey();
 			key.codeNum=codeNum;
@@ -168,6 +174,9 @@ namespace OpenDental{
 
 		///<summary>Copies any fee objects over to the new fee schedule.  Usually run ClearFeeSched first.  Be careful exactly which int's you supply.</summary>
 		public static void CopyFees(int fromFeeSched,int toFeeSched){
+			if(Listt==null) {
+				Refresh();
+			}
 			Fee fee;
 			for(int i=0;i<Listt.Count;i++){
 				if(Listt[i].FeeSched!=fromFeeSched){
@@ -181,6 +190,9 @@ namespace OpenDental{
 
 		///<summary>Increases the fee schedule by percent.  Round should be the number of decimal places, either 0,1,or 2.</summary>
 		public static void Increase(int feeSched,int percent,int round){
+			if(Listt==null) {
+				Refresh();
+			}
 			Fee fee;
 			double newVal;
 			for(int i=0;i<Listt.Count;i++){

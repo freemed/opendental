@@ -719,7 +719,6 @@ namespace OpenDental{
 			PatCur=null;
 			InsPlanList=null;
 			//Claims.List=null;
-			Claims.HList=null;
 			//ClaimProcs.List=null;
 			//from FillMain:
 			ProcList=null;

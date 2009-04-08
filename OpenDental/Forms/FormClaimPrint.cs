@@ -436,7 +436,8 @@ namespace OpenDental{
 			Family FamCur=Patients.GetFamily(ThisPatNum);
 			Patient PatCur=FamCur.GetPatient(ThisPatNum);
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
-			ClaimCur=((Claim)Claims.HList[ThisClaimNum]).Copy();
+			ClaimCur=Claims.GetFromList(ClaimList,ThisClaimNum);
+				//((Claim)Claims.HList[ThisClaimNum]).Copy();
 			PlanList=InsPlans.Refresh(FamCur);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,PlanList);
 			if(otherPlan==null){

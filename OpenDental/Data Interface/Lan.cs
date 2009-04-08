@@ -9,11 +9,23 @@ namespace OpenDental{
 	///<summary>Handles database commands for the language table in the database.</summary>
 	public class Lan{
 		///<summary>key=ClassType+English.  Value =Language object.</summary>
-		public static Hashtable HList;
+		private static Hashtable hList;
 		///<summary></summary>
-		private static Language[] List;
+		private static Language[] list;
 		///<summary>Used by g to keep track of whether any language items were inserted into db. If so a refresh gets done.</summary>
 		private static bool itemInserted;
+
+		public static Hashtable HList {
+			get {
+				if(hList==null) {
+					Refresh();
+				}
+				return hList;
+			}
+			set {
+				hList=value;
+			}
+		}
 
 		///<summary>Refreshed automatically to always be kept current with all phrases, regardless of whether there are any entries in LanguageForeign table.</summary>
 		public static void Refresh(){
@@ -23,15 +35,15 @@ namespace OpenDental{
 			}
 			string command="SELECT * from language";
 			DataTable table=General.GetTable(command);
-			List=new Language[table.Rows.Count];
+			list=new Language[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Language();
+				list[i]=new Language();
 				//List[i].EnglishCommentsOld= PIn.PString(table.Rows[i][0].ToString());
-				List[i].ClassType      = PIn.PString(table.Rows[i][1].ToString());
-				List[i].English        = PIn.PString(table.Rows[i][2].ToString());
-				List[i].IsObsolete     = PIn.PBool  (table.Rows[i][3].ToString());
-				if(!HList.ContainsKey(List[i].ClassType+List[i].English)){
-					HList.Add(List[i].ClassType+List[i].English,List[i]);
+				list[i].ClassType      = PIn.PString(table.Rows[i][1].ToString());
+				list[i].English        = PIn.PString(table.Rows[i][2].ToString());
+				list[i].IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
+				if(!HList.ContainsKey(list[i].ClassType+list[i].English)) {
+					HList.Add(list[i].ClassType+list[i].English,list[i]);
 				}
 			}
 			//MessageBox.Show(List.Length.ToString());

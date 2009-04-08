@@ -9,8 +9,8 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Claims{
-		///<summary></summary>
-		public static Hashtable HList;
+		//<summary></summary>
+		//public static Hashtable HList;
 		
 		///<summary></summary>
 		public static List<ClaimPaySplit> RefreshByCheck(int claimPaymentNum, bool showUnattached){
@@ -85,12 +85,7 @@ namespace OpenDental{
 		private static List<Claim> SubmitAndFill(string command){
 			DataTable table=General.GetTable(command);
 			Claim tempClaim;
-			//if(!single){
 			List<Claim> claims=new List<Claim>();
-				//Claim[table.Rows.Count];
-			HList=new Hashtable();
-			//}
-			//Claim retVal=new Claim();
 			for(int i=0;i<table.Rows.Count;i++){
 				tempClaim=new Claim();
 				tempClaim.ClaimNum     =		PIn.PInt   (table.Rows[i][0].ToString());
@@ -135,19 +130,21 @@ namespace OpenDental{
 				tempClaim.AttachedFlags =   PIn.PString(table.Rows[i][39].ToString());
 				tempClaim.AttachmentID  =   PIn.PString(table.Rows[i][40].ToString());
 				claims.Add(tempClaim);
-				//if(single){
-				//	retVal=tempClaim;
-				//}
-				//else{
-					//List[i]=tempClaim.Copy();
-				HList.Add(tempClaim.ClaimNum,tempClaim.Copy());
-				//}
 			}
 			return claims;
 		}
 
+		public static Claim GetFromList(List<Claim> list,int claimNum) {
+			for(int i=0;i<list.Count;i++) {
+				if(list[i].ClaimNum==claimNum) {
+					return list[i].Copy();
+				}
+			}
+			return null;
+		}
+
 		///<summary></summary>
-		public static void Insert(Claim Cur){
+		public static void Insert(Claim Cur) {
 			if(PrefC.RandomKeys){
 				Cur.ClaimNum=MiscData.GetKey("claim","ClaimNum");
 			}

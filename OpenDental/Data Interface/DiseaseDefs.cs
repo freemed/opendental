@@ -8,10 +8,34 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary></summary>
 	public class DiseaseDefs {
+		private static DiseaseDef[] listLong;
+		private static DiseaseDef[] list;
+
 		///<summary>A list of all Diseases.</summary>
-		public static DiseaseDef[] ListLong;
+		public static DiseaseDef[] ListLong{
+			get {
+				if(listLong==null) {
+					Refresh();
+				}
+				return listLong;
+			}
+			set {
+				listLong=value;
+			}
+		}
+
 		///<summary>The list that is typically used. Does not include hidden diseases.</summary>
-		public static DiseaseDef[] List;
+		public static DiseaseDef[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Gets a list of all DiseaseDefs when program first opens.</summary>
 		public static void Refresh() {

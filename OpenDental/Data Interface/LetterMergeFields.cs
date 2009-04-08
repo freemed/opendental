@@ -9,7 +9,7 @@ namespace OpenDental{
 	///<summary></summary>
 	public class LetterMergeFields {
 		///<summary>List of all lettermergeFields.</summary>
-		private static LetterMergeField[] Listt;
+		private static LetterMergeField[] list;
 
 		///<summary></summary>
 		public static void Refresh() {
@@ -17,12 +17,12 @@ namespace OpenDental{
 				"SELECT * FROM lettermergefield "
 				+"ORDER BY FieldName";
 			DataTable table=General.GetTable(command);
-			Listt=new LetterMergeField[table.Rows.Count];
+			list=new LetterMergeField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				Listt[i]=new LetterMergeField();
-				Listt[i].FieldNum      = PIn.PInt(table.Rows[i][0].ToString());
-				Listt[i].LetterMergeNum= PIn.PInt(table.Rows[i][1].ToString());
-				Listt[i].FieldName     = PIn.PString(table.Rows[i][2].ToString());
+				list[i]=new LetterMergeField();
+				list[i].FieldNum      = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].LetterMergeNum= PIn.PInt(table.Rows[i][1].ToString());
+				list[i].FieldName     = PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
 
@@ -74,10 +74,13 @@ namespace OpenDental{
 
 		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The result is a collection of strings representing field names.</summary>
 		public static List<string> GetForLetter(int letterMergeNum){
+			if(list==null) {
+				Refresh();
+			}
 			List<string> retVal=new List<string>();
-			for(int i=0;i<Listt.Length;i++){
-				if(Listt[i].LetterMergeNum==letterMergeNum){
-					retVal.Add(Listt[i].FieldName);
+			for(int i=0;i<list.Length;i++) {
+				if(list[i].LetterMergeNum==letterMergeNum) {
+					retVal.Add(list[i].FieldName);
 				}
 			}
 			return retVal;

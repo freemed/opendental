@@ -9,10 +9,33 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary>Employers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if an employerNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 	public class Employers{
-		///<summary></summary>
-		public static Employer[] List;
+		private static Employer[] list;
+		private static Hashtable hList;
+
+		public static Employer[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
+
 		///<summary>A hashtable of all employers.</summary>
-		public static Hashtable HList;
+		public static Hashtable HList {
+			get {
+				if(hList==null) {
+					Refresh();
+				}
+				return hList;
+			}
+			set {
+				hList=value;
+			}
+		}
 
 		///<summary>The functions that use this are smart enought to refresh as needed.  So no need to invalidate local data for little stuff.</summary>
 		public static void Refresh(){

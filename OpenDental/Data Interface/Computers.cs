@@ -8,7 +8,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class Computers {
 		///<summary>A list of all computers that have logged into the database in the past.  Might be some extra computer names in the list unless user has cleaned it up.</summary>
-		public static Computer[] List;
+		private static Computer[] list;
+
+		public static Computer[] List{
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh() {

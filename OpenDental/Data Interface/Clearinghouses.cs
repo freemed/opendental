@@ -19,7 +19,9 @@ namespace OpenDental{
 				}
 				return list;
 			}
-			//set{list=List;}
+			set{
+				list=value;
+			}
 		}
 
 		///<summary></summary>
