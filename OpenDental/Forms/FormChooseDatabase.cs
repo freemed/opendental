@@ -16,7 +16,7 @@ using System.Xml;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDental{
 	///<summary></summary>

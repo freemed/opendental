@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 	public class DataFieldAttribute : Attribute {
 		public DataFieldAttribute(string databaseName) {

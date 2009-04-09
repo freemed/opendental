@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
 	public class DataObjectAttribute : Attribute {
 		public DataObjectAttribute(string tableName) {

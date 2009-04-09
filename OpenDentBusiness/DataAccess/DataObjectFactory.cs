@@ -9,7 +9,7 @@ using System.Drawing;
 using MySql.Data.Types;
 using MySql.Data.MySqlClient;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	/// <summary>
 	/// Provides common methods for creating, reading, updating and deleting <see cref="IDataObject"/> objects.
 	/// </summary>

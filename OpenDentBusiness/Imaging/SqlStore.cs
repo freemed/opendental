@@ -6,7 +6,7 @@ using System.Text;
 using OpenDentBusiness;
 using System.Data;
 using System.IO;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDental.Imaging {
 	public class SqlStore : ImageStoreBase {

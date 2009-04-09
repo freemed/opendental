@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>A unique HL7 message from a networked vital sign monitor.</summary>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Text;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 

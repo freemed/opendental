@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using OpenDentBusiness;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDental {
 	public class ODDataRow:Dictionary<string,string>{

@@ -12,7 +12,7 @@ using System.Threading;
 using OpenDentBusiness.Framework.Remoting;
 using System.Reflection;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	[TestFixture()]
 	public class DataTests {
 		private const int DatabaseMaxInteger = 65535;

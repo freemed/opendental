@@ -6,7 +6,7 @@ using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using MySql.Data.MySqlClient;
 
 

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using System.Diagnostics;
 
 namespace OpenDentBusiness {

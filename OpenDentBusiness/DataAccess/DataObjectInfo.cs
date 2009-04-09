@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using OpenDentBusiness.Properties;
 
-namespace OpenDental.DataAccess
+namespace OpenDentBusiness.DataAccess
 {
 	/// <summary>
 	/// Exposes various methods for obtaining more information about a <see cref="IDataObject"/> class.

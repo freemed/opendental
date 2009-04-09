@@ -8,7 +8,7 @@ using OpenDentBusiness;
 using MySql.Data.MySqlClient;
 using Oracle.DataAccess.Client;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	public static class DataSettings {
 		private static string connectionString = "Server=localhost;Database=opendental;Uid=root;Pwd=;";
 		public static string ConnectionString {

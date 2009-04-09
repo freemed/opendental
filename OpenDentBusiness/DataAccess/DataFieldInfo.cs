@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	public class DataFieldInfo {
 		public DataFieldInfo(FieldInfo field, DataFieldAttribute attribute) {
 			this.field = field;

@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.Xml.Schema;
 using System.Xml;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	/// <summary>
 	/// The base class for classes that correspond to a table in the database.
 	/// </summary>

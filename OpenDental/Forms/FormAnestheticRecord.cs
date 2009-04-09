@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Data;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using OpenDentBusiness;
 using OpenDental.UI;
 using CodeBase;

@@ -7,7 +7,7 @@ using System.IO;
 using System.Xml.Serialization;
 using OpenDentBusiness;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	public static class FactoryServer<T>
 		where T : DataObjectBase, new() {
 		/// <summary>

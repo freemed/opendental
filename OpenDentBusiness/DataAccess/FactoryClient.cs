@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml.Serialization;
 using OpenDentBusiness;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	public static class FactoryClient<T>
 		where T : DataObjectBase, new() {
 		public static object SendRequest(string command, T dataObject, object[] args) {

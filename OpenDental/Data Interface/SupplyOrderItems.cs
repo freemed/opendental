@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDental{
 	

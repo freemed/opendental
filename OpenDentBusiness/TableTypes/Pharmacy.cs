@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>An individual pharmacy store.</summary>

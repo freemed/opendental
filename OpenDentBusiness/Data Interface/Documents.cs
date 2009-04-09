@@ -7,7 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using OpenDentBusiness.Imaging;
 using OpenDental.Imaging;
 

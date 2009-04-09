@@ -16,7 +16,7 @@ using System.Xml.Serialization;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using System.Reflection;
 using OpenDentServer.Properties;
 

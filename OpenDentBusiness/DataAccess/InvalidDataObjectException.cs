@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDental.DataAccess
+namespace OpenDentBusiness.DataAccess
 {
 
 	[global::System.Serializable]

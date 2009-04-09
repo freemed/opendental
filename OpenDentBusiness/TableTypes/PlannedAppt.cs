@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Links one planned appointment to one patient.  Allows multiple planned appointments per patient.  Also see the PlannedIsDone field. A planned appointment is an appointment that will show in the Chart module and in the Planned appointment tracker. It will never show in the Appointments module. In other words, it is the suggested next appoinment rather than an appointment that has already been scheduled.</summary>

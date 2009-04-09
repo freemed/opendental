@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using OpenDentBusiness;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	public class FactoryTransferObject<T> : DataTransferObject 
 		where T: DataObjectBase, new() {
 

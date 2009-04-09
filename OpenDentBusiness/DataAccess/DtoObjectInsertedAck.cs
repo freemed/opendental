@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	/// <summary>
 	/// Informs the client that an IDataObject has been inserted into the database. It contains
 	/// the primary key of the inserted object (which may be auto-generated).

@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
-using OpenDental.DataAccess;
+using OpenDentBusiness.DataAccess;
 using System.Text.RegularExpressions;
 
 namespace OpenDental{

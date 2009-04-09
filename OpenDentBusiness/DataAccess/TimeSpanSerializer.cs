@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace OpenDental.DataAccess {
+namespace OpenDentBusiness.DataAccess {
 	/// <summary>
 	/// The <see cref="TimeSpan"/> class cannot be serialized using the standard <see cref="XmlSerializer"/> class,
 	/// see for example <see href="http://www.google.com/search?q=TimeSpan+XmlSerializer"/>. Therefore, we implement

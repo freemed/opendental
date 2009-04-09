@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
-using OpenDental.DataAccess;//this namespace is in the OpenDentBusiness project.
+using OpenDentBusiness.DataAccess;//this namespace is in the OpenDentBusiness project.
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
