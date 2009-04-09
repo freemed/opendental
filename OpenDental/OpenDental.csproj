@@ -247,7 +247,6 @@
     <Compile Include="Data Interface\SupplyOrderItems.cs" />
     <Compile Include="Data Interface\SupplyOrders.cs" />
     <Compile Include="Data Interface\Supplies.cs" />
-    <Compile Include="Data Interface\Suppliers.cs" />
     <Compile Include="Data Interface\SupplyNeededs.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\Popups.cs" />
@@ -314,7 +313,6 @@
     <Compile Include="Data Interface\RxAlerts.cs" />
     <Compile Include="Data Interface\RxDefs.cs" />
     <Compile Include="Data Interface\RxPats.cs" />
-    <Compile Include="Data Interface\SchedDefaults.cs" />
     <Compile Include="Data Interface\Schedules.cs" />
     <Compile Include="Data Interface\SchoolClasses.cs" />
     <Compile Include="Data Interface\SchoolCourses.cs" />

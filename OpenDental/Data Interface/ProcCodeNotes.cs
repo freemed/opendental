@@ -11,7 +11,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class ProcCodeNotes{
 		///<summary>All notes for all procedurecodes.</summary>
-		public static List<ProcCodeNote> Listt;
+		private static List<ProcCodeNote> list;
+
+		public static List<ProcCodeNote> Listt {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		public static void Refresh(){
 			string command="SELECT * FROM proccodenote";

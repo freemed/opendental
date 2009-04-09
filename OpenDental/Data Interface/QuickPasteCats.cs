@@ -8,7 +8,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class QuickPasteCats {
 		///<summary></summary>
-		public static QuickPasteCat[] List;
+		private static QuickPasteCat[] list;
+
+		public static QuickPasteCat[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh() {

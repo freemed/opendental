@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
+//using System.Windows.Forms;
+//using OpenDentBusiness;
 using OpenDental.DataAccess;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Suppliers {
 

@@ -9,7 +9,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class SigButDefElements {
 		///<summary>A list of all elements for all buttons</summary>
-		public static SigButDefElement[] List;
+		private static SigButDefElement[] list;
+
+		public static SigButDefElement[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Gets all SigButDefElements for all buttons, ordered by type: user,extras, message.</summary>
 		public static void Refresh() {

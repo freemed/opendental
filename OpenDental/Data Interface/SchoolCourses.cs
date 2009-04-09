@@ -8,7 +8,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class SchoolCourses {
 		///<summary>A list of all schoolcourses, organized by course ID.</summary>
-		public static SchoolCourse[] List;
+		private static SchoolCourse[] list;
+
+		public static SchoolCourse[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Refreshes all SchoolCourses.</summary>
 		public static void Refresh() {

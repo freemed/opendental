@@ -10,7 +10,19 @@ namespace OpenDental {
 	///<summary></summary>
 	public class SigElementDefs {
 		///<summary>A list of all SigElementDefs.</summary>
-		public static SigElementDef[] List;
+		private static SigElementDef[] list;
+
+		public static SigElementDef[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Gets a list of all SigElementDefs when program first opens.</summary>
 		public static void Refresh() {

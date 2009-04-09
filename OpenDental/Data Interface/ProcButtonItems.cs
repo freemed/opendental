@@ -7,7 +7,19 @@ namespace OpenDental{
 	///<summary></summary>
 	public class ProcButtonItems {
 		///<summary>All procbuttonitems for all buttons.</summary>
-		public static ProcButtonItem[] List;
+		private static ProcButtonItem[] list;
+
+		public static ProcButtonItem[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Fills List in preparation for later usage.</summary>
 		public static void Refresh() {

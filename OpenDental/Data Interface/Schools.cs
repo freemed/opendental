@@ -9,9 +9,21 @@ namespace OpenDental{
   ///<summary></summary>
 	public class Schools{
 		///<summary>This list is only refreshed as needed rather than being part of the local data.</summary>
-		public static School[] List;
+		private static School[] list;
 		///<summary>Used in screening window. Simpler interface.</summary>
 		public static string[] ListNames;
+
+		public static School[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary>Refreshes List as needed directly from the database.  List only includes items that will show in dropdown list.</summary>
 		public static void Refresh(string name){

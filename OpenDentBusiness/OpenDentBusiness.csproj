@@ -184,6 +184,7 @@
     <Compile Include="Data Interface\PatientNotes.cs" />
     <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\Providers.cs" />
+    <Compile Include="Data Interface\Suppliers.cs" />
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>

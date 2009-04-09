@@ -11,7 +11,6 @@ namespace OpenDental{
 		///<summary>All referrals for all patients</summary>
 		private static Referral[] list;
 		//should later add a faster refresh sequence.
-		//private static Hashtable HList;
 
 		public static Referral[] List {
 			get {
@@ -32,7 +31,6 @@ namespace OpenDental{
 				+"ORDER BY lname";
  			DataTable table=General.GetTable(command);
 			List=new Referral[table.Rows.Count];
-			//HList=new Hashtable();
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Referral();
 				List[i].ReferralNum= PIn.PInt   (table.Rows[i][0].ToString());
@@ -57,7 +55,6 @@ namespace OpenDental{
 				List[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
 				List[i].NationalProvID     = PIn.PString   (table.Rows[i][20].ToString());
 				List[i].Slip       = PIn.PInt   (table.Rows[i][21].ToString());
-				//HList.Add(List[i].ReferralNum,List[i].Copy());
 			}
 		}
 
@@ -188,7 +185,6 @@ namespace OpenDental{
 				return "";
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ReferralNum==referralNum) {
-					//Referral refer=(Referral)HList[referralNum];
 					if(List[i].Telephone.Length==10) {
 						return List[i].Telephone.Substring(0,3)+"-"+List[i].Telephone.Substring(3,3)+"-"+List[i].Telephone.Substring(6);
 					}

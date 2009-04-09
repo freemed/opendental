@@ -10,6 +10,19 @@ namespace OpenDental{
 		///<summary></summary>
 		public static ScreenGroup[] List;
 
+		/*This doesn't seem to work because we need a date range.
+		public static ScreenGroup[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}*/
+
 		///<summary></summary>
 		public static void Refresh(DateTime fromDate,DateTime toDate){
 			string command =

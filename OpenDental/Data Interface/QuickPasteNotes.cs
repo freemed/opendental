@@ -27,7 +27,6 @@ namespace OpenDental{
 				List[i].Abbreviation     = PIn.PString(table.Rows[i][4].ToString());
 			}
 		}
-	
 
 		///<summary></summary>
 		public static void Insert(QuickPasteNote note){
@@ -65,7 +64,6 @@ namespace OpenDental{
 				+" WHERE QuickPasteNoteNum = '"+POut.PInt (note.QuickPasteNoteNum)+"'";
  			General.NonQ(command);
 		}
-
 		
 		///<summary></summary>
 		public static void Delete(QuickPasteNote note){
@@ -86,15 +84,11 @@ namespace OpenDental{
 			return true;
 		}
 
-
-
-
-	
-
-	
-
 		///<summary>Only used from FormQuickPaste to get all notes for the selected cat.</summary>
 		public static QuickPasteNote[] GetForCat(int cat){
+			if(List==null) {
+				Refresh();
+			}
 			ArrayList ALnotes=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].QuickPasteCatNum==cat){
@@ -110,6 +104,9 @@ namespace OpenDental{
 
 		///<summary>Called on KeyUp from various textBoxes in the program to look for a ?abbrev and attempt to substitute.  Substitutes the text if found.</summary>
 		public static string Substitute(string text,QuickPasteType type){
+			if(List==null) {
+				Refresh();
+			}
 			int typeIndex=QuickPasteCats.GetDefaultType(type);
 			for(int i=0;i<List.Length;i++){
 				if(List[i].Abbreviation==""){
