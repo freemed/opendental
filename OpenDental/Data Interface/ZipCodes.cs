@@ -5,17 +5,38 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-
-	
   ///<summary></summary>
 	public class ZipCodes{
 		///<summary></summary>
-		public static ZipCode[] List;
+		private static ZipCode[] list;
 		///<summary></summary>
-		public static ArrayList ALFrequent;
+		private static ArrayList aLFrequent;
 		///<summary></summary>
 		public static ArrayList ALMatches;
-		//public static Hashtable HList; 
+		
+		public static ZipCode[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
+
+		public static ArrayList ALFrequent {
+			get {
+				if(aLFrequent==null) {
+					Refresh();
+				}
+				return aLFrequent;
+			}
+			set {
+				aLFrequent=value;
+			}
+		}
 
 		///<summary>Refresh done on startup and then whenever a change is made.</summary>
 		public static void Refresh(){

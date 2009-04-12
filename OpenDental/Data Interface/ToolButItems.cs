@@ -8,9 +8,21 @@ namespace OpenDental{
   ///<summary></summary>
 	public class ToolButItems{
 		///<summary></summary>
-		public static ToolButItem[] List;
+		private static ToolButItem[] list;
 		///<summary></summary>
 		public static ArrayList ForProgram;
+
+		public static ToolButItem[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh(){

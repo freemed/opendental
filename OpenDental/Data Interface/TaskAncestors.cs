@@ -10,7 +10,6 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDental{
 	///<summary></summary>
 	public class TaskAncestors {
-
 	
 		///<summary></summary>
 		public static void WriteObject(TaskAncestor ancestor){

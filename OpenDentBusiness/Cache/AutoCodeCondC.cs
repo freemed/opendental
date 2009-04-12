@@ -6,7 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class AutoCodeCondC {
 		///<summary></summary>
-		public static AutoCodeCond[] List;
+		private static AutoCodeCond[] list;
+
+		public static AutoCodeCond[] List {
+			get {
+				if(list==null) {
+					AutoCodeConds.RefreshCache();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 	}
 }

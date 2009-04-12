@@ -6,7 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class AppointmentRuleC {
 		///<summary></summary>
-		public static AppointmentRule[] List;
+		private static AppointmentRule[] list;
+
+		public static AppointmentRule[] List {
+			get {
+				if(list==null) {
+					AppointmentRules.RefreshCache();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 	}
 }

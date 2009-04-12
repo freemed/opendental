@@ -22,22 +22,22 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
-			AccountC.listLong=new Account[table.Rows.Count];
+			AccountC.ListLong=new Account[table.Rows.Count];
 			ArrayList AL=new ArrayList();
-			for(int i=0;i<AccountC.listLong.Length;i++) {
-				AccountC.listLong[i]=new Account();
-				AccountC.listLong[i].AccountNum  = PIn.PInt(table.Rows[i][0].ToString());
-				AccountC.listLong[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				AccountC.listLong[i].AcctType    = (AccountType)PIn.PInt(table.Rows[i][2].ToString());
-				AccountC.listLong[i].BankNumber  = PIn.PString(table.Rows[i][3].ToString());
-				AccountC.listLong[i].Inactive    = PIn.PBool(table.Rows[i][4].ToString());
-				AccountC.listLong[i].AccountColor= Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
-				if(!AccountC.listLong[i].Inactive) {
-					AL.Add(AccountC.listLong[i].Copy());
+			for(int i=0;i<AccountC.ListLong.Length;i++) {
+				AccountC.ListLong[i]=new Account();
+				AccountC.ListLong[i].AccountNum  = PIn.PInt(table.Rows[i][0].ToString());
+				AccountC.ListLong[i].Description = PIn.PString(table.Rows[i][1].ToString());
+				AccountC.ListLong[i].AcctType    = (AccountType)PIn.PInt(table.Rows[i][2].ToString());
+				AccountC.ListLong[i].BankNumber  = PIn.PString(table.Rows[i][3].ToString());
+				AccountC.ListLong[i].Inactive    = PIn.PBool(table.Rows[i][4].ToString());
+				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
+				if(!AccountC.ListLong[i].Inactive) {
+					AL.Add(AccountC.ListLong[i].Copy());
 				}
 			}
-			AccountC.listShort=new Account[AL.Count];
-			AL.CopyTo(AccountC.listShort);
+			AccountC.ListShort=new Account[AL.Count];
+			AL.CopyTo(AccountC.ListShort);
 		}
 
 		///<summary></summary>

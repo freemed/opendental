@@ -6,8 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class RecallTriggerC {
 		///<summary>A list of all recall triggers.</summary>
-		public static List<RecallTrigger> Listt;
+		private static List<RecallTrigger> listt;
 
+		public static List<RecallTrigger> Listt {
+			get {
+				if(listt==null) {
+					RecallTriggers.RefreshCache();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
 		
 	}
 }

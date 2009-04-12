@@ -6,7 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ClaimFormItemC {
 		///<summary></summary>
-		public static ClaimFormItem[] List;
+		private static ClaimFormItem[] list;
+
+		public static ClaimFormItem[] List {
+			get {
+				if(list==null) {
+					ClaimFormItems.RefreshCache();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 	}
 }

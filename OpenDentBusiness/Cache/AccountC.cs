@@ -7,31 +7,32 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>The two lists get refreshed the first time they are needed rather than at startup.</summary>
 	public class AccountC {
-		internal static Account[] listLong;
-		internal static Account[] listShort;
+		private static Account[] listLong;
+		private static Account[] listShort;
 
 		///<summary></summary>
 		public static Account[] ListLong {
 			get {
-				if(AccountC.listLong==null) {
-					DataTable table=Accounts.RefreshCache();
-					Accounts.FillCache(table);
+				if(listLong==null) {
+					Accounts.RefreshCache();
 				}
-				return AccountC.listLong;
+				return listLong;
 			}
-			/*set {
-				title=value;
-			}*/
+			set {
+				listLong=value;
+			}
 		}
 
 		///<summary>Used for display. Does not include inactive</summary>
 		public static Account[] ListShort {
 			get {
-				if(AccountC.listShort==null) {
-					DataTable table=Accounts.RefreshCache();
-					Accounts.FillCache(table);
+				if(listShort==null) {
+					Accounts.RefreshCache();
 				}
-				return AccountC.listShort;
+				return listShort;
+			}
+			set {
+				listShort=value;
 			}
 		}
 

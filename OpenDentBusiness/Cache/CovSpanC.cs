@@ -12,7 +12,6 @@ namespace OpenDentBusiness {
 			get {
 				if(list==null) {
 					CovSpans.RefreshCache();
-					DisplayFields.RefreshCache();
 				}
 				return list;
 			}

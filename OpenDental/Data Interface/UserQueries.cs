@@ -9,9 +9,21 @@ namespace OpenDental{
 ///<summary></summary>
 	public class UserQueries{
 		///<summary></summary>
-		public static UserQuery[] List;
+		private static UserQuery[] list;
 		///<summary></summary>
 		public static bool IsSelected;
+
+		public static UserQuery[] List {
+			get {
+				if(list==null) {
+					Refresh();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 
 		///<summary></summary>
 		public static void Refresh(){

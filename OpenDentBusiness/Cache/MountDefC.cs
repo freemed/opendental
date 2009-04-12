@@ -6,7 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class MountDefC {
 		///<summary>A list of all MountDefs.</summary>
-		public static List<MountDef> Listt;
+		private static List<MountDef> listt;
+
+		public static List<MountDef> Listt {
+			get {
+				if(listt==null) {
+					MountDefs.RefreshCache();
+				}
+				return listt;
+			}
+			set {
+				listt=value;
+			}
+		}
 
 	}
 }

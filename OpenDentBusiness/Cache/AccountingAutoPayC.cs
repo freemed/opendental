@@ -6,7 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class AccountingAutoPayC {
 		///<summary></summary>
-		public static ArrayList AList;
+		private static ArrayList aList;
+
+		public static ArrayList AList {
+			get {
+				if(aList==null) {
+					AccountingAutoPays.RefreshCache();
+				}
+				return aList;
+			}
+			set {
+				aList=value;
+			}
+		}
 
 	}
 }

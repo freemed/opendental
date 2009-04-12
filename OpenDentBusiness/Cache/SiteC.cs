@@ -6,8 +6,19 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class SiteC {
 		///<summary>A list of all sites.</summary>
-		public static Site[] List;
+		private static Site[] list;
 
+		public static Site[] List {
+			get {
+				if(list==null) {
+					Sites.RefreshCache();
+				}
+				return list;
+			}
+			set {
+				list=value;
+			}
+		}
 		
 	}
 }
