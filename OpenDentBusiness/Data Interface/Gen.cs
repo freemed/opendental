@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class Gen {
 		///<summary></summary>
 		public static DataSet GetDS(MethodNameDS methodName, params object[] parameters) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetDS dto=new DtoGetDS();
 				dto.MethodNameDS=methodName;
 				dto.Parameters=parameters;
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable GetTable(MethodNameTable methodName, params object[] parameters) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetTable dto=new DtoGetTable();
 				dto.MethodNameTable=methodName;
 				dto.Parameters=parameters;

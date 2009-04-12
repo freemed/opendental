@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 
 	///<summary>This is used for initial login in old tcp architecture.</summary>
 	public class DtoLogin:DtoCommandBase {
-		public string Database;
+		//public string Database;
 		public string OdUser;
 		public string OdPassHash;
 	}

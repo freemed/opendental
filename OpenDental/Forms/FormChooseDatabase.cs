@@ -37,22 +37,18 @@ namespace OpenDental{
 		//private bool mysqlIsStarted;
 		private CheckBox checkNoShow;
 		private GroupBox groupServer;
-		private ComboBox comboServerName2;
 		private Label label9;
 		private Label label6;
-		private ComboBox comboDatabase2;
-		private Label label12;
 		private TextBox textUser2;
 		private TextBox textPassword2;
 		private Label label10;
 		private Label label11;
 		private CheckBox checkConnectServer;
-		private Label label5;
-		private ValidNumber textPort;
 		public bool NoShow;
 		private Label label7;
 		private ListBox listType;
 		private Label label8;
+		private TextBox textURI;
 		private TextBox textConnectionString;
 		//<summary>There are notes about only using this variable for the client, and DataConnection.DBtype only if in the business layer.  Well, we are now going to get rid of this, and use DataConnection.DBtype no matter where we are.  We just have to remember to set it even if we are not going to use the same DataConnection.  In other words, we have to set both DataConnections.</summary>
 		//public static DatabaseType DBtype;
@@ -96,15 +92,10 @@ namespace OpenDental{
 			this.checkNoShow = new System.Windows.Forms.CheckBox();
 			this.comboComputerName = new System.Windows.Forms.ComboBox();
 			this.groupServer = new System.Windows.Forms.GroupBox();
-			this.textPort = new OpenDental.ValidNumber();
-			this.label5 = new System.Windows.Forms.Label();
-			this.comboDatabase2 = new System.Windows.Forms.ComboBox();
-			this.label12 = new System.Windows.Forms.Label();
 			this.textUser2 = new System.Windows.Forms.TextBox();
 			this.textPassword2 = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.comboServerName2 = new System.Windows.Forms.ComboBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkConnectServer = new System.Windows.Forms.CheckBox();
@@ -114,6 +105,7 @@ namespace OpenDental{
 			this.textConnectionString = new System.Windows.Forms.TextBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textURI = new System.Windows.Forms.TextBox();
 			this.groupDirect.SuspendLayout();
 			this.groupServer.SuspendLayout();
 			this.SuspendLayout();
@@ -224,69 +216,30 @@ namespace OpenDental{
 			// 
 			// groupServer
 			// 
-			this.groupServer.Controls.Add(this.textPort);
-			this.groupServer.Controls.Add(this.label5);
-			this.groupServer.Controls.Add(this.comboDatabase2);
-			this.groupServer.Controls.Add(this.label12);
+			this.groupServer.Controls.Add(this.textURI);
 			this.groupServer.Controls.Add(this.textUser2);
 			this.groupServer.Controls.Add(this.textPassword2);
 			this.groupServer.Controls.Add(this.label10);
 			this.groupServer.Controls.Add(this.label11);
-			this.groupServer.Controls.Add(this.comboServerName2);
 			this.groupServer.Controls.Add(this.label9);
 			this.groupServer.Controls.Add(this.label6);
 			this.groupServer.Location = new System.Drawing.Point(16,305);
 			this.groupServer.Name = "groupServer";
-			this.groupServer.Size = new System.Drawing.Size(376,273);
+			this.groupServer.Size = new System.Drawing.Size(328,200);
 			this.groupServer.TabIndex = 2;
 			this.groupServer.TabStop = false;
-			this.groupServer.Text = "Connect to Server Component - Only for advanced users";
-			// 
-			// textPort
-			// 
-			this.textPort.Location = new System.Drawing.Point(22,112);
-			this.textPort.MaxVal = 999999;
-			this.textPort.MinVal = 0;
-			this.textPort.Name = "textPort";
-			this.textPort.Size = new System.Drawing.Size(100,20);
-			this.textPort.TabIndex = 0;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(20,93);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(308,18);
-			this.label5.TabIndex = 18;
-			this.label5.Text = "Port";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// comboDatabase2
-			// 
-			this.comboDatabase2.Location = new System.Drawing.Point(22,153);
-			this.comboDatabase2.MaxDropDownItems = 100;
-			this.comboDatabase2.Name = "comboDatabase2";
-			this.comboDatabase2.Size = new System.Drawing.Size(280,21);
-			this.comboDatabase2.TabIndex = 1;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(19,133);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(296,18);
-			this.label12.TabIndex = 15;
-			this.label12.Text = "DataBase";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.groupServer.Text = "Connect to Web Server - Only for advanced users";
 			// 
 			// textUser2
 			// 
-			this.textUser2.Location = new System.Drawing.Point(22,195);
+			this.textUser2.Location = new System.Drawing.Point(23,114);
 			this.textUser2.Name = "textUser2";
 			this.textUser2.Size = new System.Drawing.Size(280,20);
 			this.textUser2.TabIndex = 2;
 			// 
 			// textPassword2
 			// 
-			this.textPassword2.Location = new System.Drawing.Point(22,236);
+			this.textPassword2.Location = new System.Drawing.Point(23,155);
 			this.textPassword2.Name = "textPassword2";
 			this.textPassword2.PasswordChar = '*';
 			this.textPassword2.Size = new System.Drawing.Size(280,20);
@@ -295,7 +248,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(20,217);
+			this.label10.Location = new System.Drawing.Point(21,136);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(281,18);
 			this.label10.TabIndex = 11;
@@ -304,53 +257,44 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(20,176);
+			this.label11.Location = new System.Drawing.Point(21,95);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(295,18);
 			this.label11.TabIndex = 14;
 			this.label11.Text = "Open Dental User (not MySQL user)";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// comboServerName2
-			// 
-			this.comboServerName2.Location = new System.Drawing.Point(22,70);
-			this.comboServerName2.MaxDropDownItems = 100;
-			this.comboServerName2.Name = "comboServerName2";
-			this.comboServerName2.Size = new System.Drawing.Size(280,21);
-			this.comboServerName2.TabIndex = 10;
-			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(20,50);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(310,18);
+			this.label9.Size = new System.Drawing.Size(283,18);
 			this.label9.TabIndex = 9;
-			this.label9.Text = "Server Name";
+			this.label9.Text = "URI";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label6
 			// 
 			this.label6.Location = new System.Drawing.Point(19,23);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(311,32);
+			this.label6.Size = new System.Drawing.Size(297,32);
 			this.label6.TabIndex = 0;
-			this.label6.Text = "Read the manual to learn how to install the server component.";
+			this.label6.Text = "Read the manual to learn how to install the web server.";
 			// 
 			// checkConnectServer
 			// 
-			this.checkConnectServer.AutoSize = true;
 			this.checkConnectServer.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkConnectServer.Location = new System.Drawing.Point(16,277);
 			this.checkConnectServer.Name = "checkConnectServer";
-			this.checkConnectServer.Size = new System.Drawing.Size(212,18);
+			this.checkConnectServer.Size = new System.Drawing.Size(328,18);
 			this.checkConnectServer.TabIndex = 1;
-			this.checkConnectServer.Text = "Connect to Server Component instead";
+			this.checkConnectServer.Text = "Connect to Web Server instead";
 			this.checkConnectServer.UseVisualStyleBackColor = true;
 			this.checkConnectServer.Click += new System.EventHandler(this.checkConnectServer_Click);
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(411,289);
+			this.label7.Location = new System.Drawing.Point(361,290);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(223,18);
 			this.label7.TabIndex = 19;
@@ -360,7 +304,7 @@ namespace OpenDental{
 			// listType
 			// 
 			this.listType.FormattingEnabled = true;
-			this.listType.Location = new System.Drawing.Point(414,311);
+			this.listType.Location = new System.Drawing.Point(364,312);
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(99,30);
 			this.listType.TabIndex = 20;
@@ -368,7 +312,7 @@ namespace OpenDental{
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(412,357);
+			this.label8.Location = new System.Drawing.Point(362,357);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(165,13);
 			this.label8.TabIndex = 21;
@@ -376,11 +320,11 @@ namespace OpenDental{
 			// 
 			// textConnectionString
 			// 
-			this.textConnectionString.Location = new System.Drawing.Point(414,375);
+			this.textConnectionString.Location = new System.Drawing.Point(364,375);
 			this.textConnectionString.Multiline = true;
 			this.textConnectionString.Name = "textConnectionString";
 			this.textConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textConnectionString.Size = new System.Drawing.Size(262,202);
+			this.textConnectionString.Size = new System.Drawing.Size(312,130);
 			this.textConnectionString.TabIndex = 22;
 			// 
 			// butCancel
@@ -392,7 +336,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(602,632);
+			this.butCancel.Location = new System.Drawing.Point(601,535);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 6;
@@ -407,17 +351,24 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(509,632);
+			this.butOK.Location = new System.Drawing.Point(508,535);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textURI
+			// 
+			this.textURI.Location = new System.Drawing.Point(23,71);
+			this.textURI.Name = "textURI";
+			this.textURI.Size = new System.Drawing.Size(280,20);
+			this.textURI.TabIndex = 15;
+			// 
 			// FormChooseDatabase
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(733,672);
+			this.ClientSize = new System.Drawing.Size(716,574);
 			this.Controls.Add(this.textConnectionString);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.listType);
@@ -550,8 +501,8 @@ namespace OpenDental{
 			string[] computerNames=GetComputerNames();
 			comboComputerName.Items.Clear();
 			comboComputerName.Items.AddRange(computerNames);
-			comboServerName2.Items.Clear();
-			comboServerName2.Items.AddRange(computerNames);
+			//comboServerName2.Items.Clear();
+			//comboServerName2.Items.AddRange(computerNames);
 		}
 
 		private void FillComboDatabases(){
@@ -654,12 +605,12 @@ namespace OpenDental{
 					//If there is a ServerConnection, then use it.
 					checkConnectServer.Checked=true;
 					groupDirect.Enabled=false;
-					comboServerName2.Text=nav.SelectSingleNode("ComputerName").Value;
-					XPathNavigator navport=nav.SelectSingleNode("ServerPort");
-					if(navport!=null) {
-						textPort.Text=navport.Value;
-					}
-					comboDatabase2.Text=nav.SelectSingleNode("Database").Value;
+					textURI.Text=nav.SelectSingleNode("URI").Value;
+					//XPathNavigator navport=nav.SelectSingleNode("ServerPort");
+					//if(navport!=null) {
+					//	textPort.Text=navport.Value;
+					//}
+					//comboDatabase2.Text=nav.SelectSingleNode("Database").Value;
 					textUser2.Select();
 					return;
 				}
@@ -703,25 +654,23 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkConnectServer.Checked){
-				if(textPort.errorProvider1.GetError(textPort)!="") {
-					MsgBox.Show(this,"Please fix data entry errors first.");
-					return;
-				}
-				string originalServer=RemotingClient.ServerName;
-				int originalPort=RemotingClient.ServerPort;
-				RemotingClient.ServerName=comboServerName2.Text;
-				RemotingClient.ServerPort=PIn.PInt(textPort.Text);
+				string originalURI=RemotingClient.ServerURI;
+				//string originalServer=RemotingClient.ServerName;
+				//int originalPort=RemotingClient.ServerPort;
+				RemotingClient.ServerURI=textURI.Text;
+				//RemotingClient.ServerPort=PIn.PInt(textPort.Text);
 				DtoLogin dto=new DtoLogin();
-				dto.Database=comboDatabase2.Text;
+				//dto.Database=comboDatabase2.Text;
 				dto.OdUser=textUser2.Text;
 				dto.OdPassHash=Userods.EncryptPassword(textPassword2.Text);
 				try{
 					RemotingClient.ProcessCommand(dto);
-					RemotingClient.RemotingRole=RemotingRole.ClientTcp;
+					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){
-					RemotingClient.ServerName=originalServer;
-					RemotingClient.ServerPort=originalPort;
+					//RemotingClient.ServerName=originalServer;
+					//RemotingClient.ServerPort=originalPort;
+					RemotingClient.ServerURI=originalURI;
 					MessageBox.Show(ex.Message);
 					return;
 				}
@@ -783,17 +732,17 @@ namespace OpenDental{
 						writer.WriteEndElement();
 						writer.WriteEndElement();
 					}
-					else if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
+					else if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 						writer.WriteStartElement("ServerConnection");
-						writer.WriteStartElement("ComputerName");
-						writer.WriteString(comboServerName2.Text);
+						writer.WriteStartElement("URI");
+						writer.WriteString(textURI.Text);
 						writer.WriteEndElement();
-						writer.WriteStartElement("ServerPort");
-						writer.WriteString(textPort.Text);
-						writer.WriteEndElement();
-						writer.WriteStartElement("Database");
-						writer.WriteString(comboDatabase2.Text);
-						writer.WriteEndElement();
+						//writer.WriteStartElement("ServerPort");
+						//writer.WriteString(textPort.Text);
+						//writer.WriteEndElement();
+						//writer.WriteStartElement("Database");
+						//writer.WriteString(comboDatabase2.Text);
+						//writer.WriteEndElement();
 						writer.WriteEndElement();
 					}
 					writer.WriteStartElement("DatabaseType");

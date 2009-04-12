@@ -60,14 +60,7 @@ namespace OpenDental{
 			//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
 			DataTable table=null;
 			try {
-				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					table=RemotingClient.ProcessQuery(dto).Tables[0];
-				}
-				else {
-					table=General.GetTable(command);
-				}
+				table=General.GetTable(command);
 			}
 			catch{
 				//MessageBox.Show(e.Message);

@@ -38,10 +38,12 @@ namespace OpenDentBusiness.DataAccess {
 		/// <param name="query">The query to execute on the server.</param>
 		/// <returns>A collection of objects of type <typeparamref name="T"/>.</returns>
 		public static Collection<T> CreateObjects(string query) {
-			if (query == null)
+			if(query == null) {
 				throw new ArgumentNullException("query");
-			if (RemotingClient.RemotingRole==RemotingRole.ClientTcp){
-				return (Collection<T>)FactoryClient<T>.SendRequest("CreateObjects", default(T), new object[] { query });
+			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+query);
+				//return (Collection<T>)FactoryClient<T>.SendRequest("CreateObjects", default(T), new object[] { query });
 			}
 			Collection<T> values;
 			using (IDbConnection connection = DataSettings.GetConnection())
@@ -66,8 +68,9 @@ namespace OpenDentBusiness.DataAccess {
 			if (query == null){
 				throw new ArgumentNullException("query");
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
-				return (T)FactoryClient<T>.SendRequest("CreateObject", default(T), new object[] { query });
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+query);
+				//return (T)FactoryClient<T>.SendRequest("CreateObject", default(T), new object[] { query });
 			}
 			T value;
 			using (IDbConnection connection = DataSettings.GetConnection())
@@ -468,7 +471,7 @@ namespace OpenDentBusiness.DataAccess {
 				// The primary key as already been updated. No need to retrieve it from the database.
 				updatePrimaryKey = false;
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoObjectInsertedAck ack = (DtoObjectInsertedAck)FactoryClient<T>.SendRequest("WriteObject", value, new object[] { overrideAutoNumber });
 				DataObjectInfo<T>.SetPrimaryKeys(value, ack.PrimaryKeys);
 				value.OnSaved(EventArgs.Empty);
@@ -641,7 +644,7 @@ namespace OpenDentBusiness.DataAccess {
 		}
 
 		public static void DeleteObject(int id) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				FactoryClient<T>.SendRequest("DeleteObject", default(T), new object[] { id });
 				return;
 			}
@@ -679,7 +682,7 @@ namespace OpenDentBusiness.DataAccess {
 			if (value.IsNew){
 				throw new InvalidOperationException(Resources.ObjectNotSaved);
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				FactoryClient<T>.SendRequest("DeleteObject", value, new object[] {});
 				value.OnDeleted(EventArgs.Empty);
 				return;

@@ -11,26 +11,9 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness {
 		public class RemotingClient {
-		//<summary>This will only be true if this dll is on a local workstation, and this workstation has successfully connected directly to the database.  What this fails to tell us is whether this is a workstation or server, which is going to become quite critical.</summary>
-		//public static bool OpenDentBusinessIsLocal;
-		//<summary>This will be true on a SilverLight client, but false on the server.  Once we have completely shifted to web services, we might combine this with OpenDentBusinessIsLocal.</summary>
-		//public static bool IsSLclient;
-			///<summary>This dll will be in one of these five roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
+			///<summary>This dll will be in one of these three roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
 		public static RemotingRole RemotingRole;
-		private static TcpClient client;
-		private static NetworkStream netStream;
-		public static string ServerName;
-		public static int ServerPort;
-		private const int BufferSize = 1024;
-
-		/*public bool IsDirectConnect{
-			get{
-				if(RemotingRole==RemotingRole.ClientDirect
-					|| RemotingRole==RemotingRole.ClientTcp
-					|| RemotingRole==RemotingRole.ClientWeb
-
-			}
-		}*/
+		public static string ServerURI;
 
 		public static DataSet ProcessQuery(DtoQueryBase dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
@@ -51,7 +34,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>This is the new way. It will be replacing the many different types of DTOs that we currently have.</summary>
+		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);
@@ -111,6 +94,8 @@ namespace OpenDentBusiness {
 		}		
 
 		internal static byte[] SendAndReceive(DataTransferObject dto){
+			throw new NotImplementedException();
+			/*
 			byte[] data=dto.Serialize();
 			if(client==null){
 				try{
@@ -132,9 +117,10 @@ namespace OpenDentBusiness {
 			}
 			//Receive the TcpServer.response-------------------------------------
 			data = ReadDataFromStream(netStream);
-			return data;
+			return data;*/
 		}
 
+			/*
 		public static void Disconnect() {
 			if(netStream != null) {
 				netStream.Close();
@@ -144,8 +130,9 @@ namespace OpenDentBusiness {
 				client.Close();
 				client = null;
 			}
-		}
+		}*/
 
+			/*
 		public static byte[] ReadDataFromStream(Stream stream) {
 			byte[] value = null;
 
@@ -173,7 +160,7 @@ namespace OpenDentBusiness {
 			}
 
 			return value;
-		}
+		}*/
 
 		public static void WriteDataToStream(Stream stream, byte[] data) {
 			stream.Write(data, 0, data.Length);

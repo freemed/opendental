@@ -18,13 +18,13 @@ namespace OpenDental{
 		///<summary>This throws an exception if it fails for any reason.</summary>
 		public static void MakeABackup() {
 			//try {
-				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-					DtoMiscDataMakeABackup dto=new DtoMiscDataMakeABackup();
-					RemotingClient.ProcessCommand(dto);
-				}
-				else {
+				//if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
+				//	DtoMiscDataMakeABackup dto=new DtoMiscDataMakeABackup();
+				//	RemotingClient.ProcessCommand(dto);
+				//}
+				//else {
 					OpenDentBusiness.MiscData.MakeABackup();
-				}
+				//}
 			//}
 			//catch(Exception e) {
 			//	MessageBox.Show(e.Message);
