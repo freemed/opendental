@@ -25,20 +25,20 @@ namespace OpenDentBusiness.DataAccess {
 			}
 			Type factoryType = typeof(DataObjectFactory<T>);
 			Type returnType = GetReturnType(typeof(T), command.Command);
-			MethodInfo method=factoryType.GetMethod(command.Command,BindingFlags.Public | BindingFlags.Static,null,command.GetAllParameterTypes(),null);
+			MethodInfo method=factoryType.GetMethod(command.Command.ToString(),BindingFlags.Public | BindingFlags.Static,null,command.GetAllParameterTypes(),null);
 			object value;
 			switch(command.Command) {
-				case "CreateObjects":
+				case enumDtoCommand.CreateObjects:
 					value = method.Invoke(null, command.GetAllParameters());
 					break;
-				case "CreateObject":
+				case enumDtoCommand.CreateObject:
 					value = method.Invoke(null, command.GetAllParameters());
 					break;
-				case "WriteObject":
+				case enumDtoCommand.WriteObject:
 					method.Invoke(null, command.GetAllParameters());
 					value = new DtoObjectInsertedAck(DataObjectInfo<T>.GetPrimaryKeys(command.DataObject));
 					break;
-				case "DeleteObject":
+				case enumDtoCommand.DeleteObject:
 					method.Invoke(null, command.GetAllParameters());
 					value = new DtoServerAck();
 					break;
@@ -49,16 +49,16 @@ namespace OpenDentBusiness.DataAccess {
 			serializer.Serialize(stream, value);
 		}
 
-		public static Type GetReturnType(Type type, string command) {
-			switch (command) {
-				case "CreateObjects":
+		public static Type GetReturnType(Type type,enumDtoCommand command) {
+			switch(command) {
+				case enumDtoCommand.CreateObjects:
 					return typeof(Collection<>).MakeGenericType(type);
-				case "CreateObject":
+				case enumDtoCommand.CreateObject:
 					// This returns a T
 					return type;
-				case "WriteObject":
+				case enumDtoCommand.WriteObject:
 					return typeof(DtoObjectInsertedAck);
-				case "DeleteObject":
+				case enumDtoCommand.DeleteObject:
 					return typeof(DtoServerAck);
 				default:
 					throw new ArgumentOutOfRangeException("command");

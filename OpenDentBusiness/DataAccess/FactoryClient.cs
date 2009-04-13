@@ -9,18 +9,20 @@ using OpenDentBusiness;
 namespace OpenDentBusiness.DataAccess {
 	public static class FactoryClient<T>
 		where T : DataObjectBase, new() {
-		public static object SendRequest(string command, T dataObject, object[] args) {
+		public static object SendRequest(enumDtoCommand command,T dataObject,object[] args) {
 			FactoryTransferObject<T> fto = new FactoryTransferObject<T>();
 			fto.Command = command;
 			fto.DataObject = dataObject;
 			fto.Parameters = args;
-			byte[] buffer = RemotingClient.SendAndReceive(fto);//this might throw an exception if server unavailable
+			string result=RemotingClient.SendAndReceive(fto);//this might throw an exception if server unavailable
+			//byte[] buffer = 
 			object value;
-			using (MemoryStream memStream = new MemoryStream(buffer)) {
+			//using (MemoryStream memStream = new MemoryStream(buffer)) {
 				Type returnType = FactoryServer<T>.GetReturnType(typeof(T), command);
-				XmlSerializer serializer = new XmlSerializer(returnType);
-				value = serializer.Deserialize(memStream);
-			}
+				//XmlSerializer serializer = new XmlSerializer(returnType);
+				value = DataTransferObject.Deserialize(result);
+					//serializer.Deserialize(memStream);
+			//}
 			return value;
 		}
 	}

@@ -11,7 +11,7 @@ using System.Diagnostics;
 namespace OpenDentBusiness {
 	///<summary>Provides a base class for the many types of DTO classes that we will need.  A DTO class is a simple data storage object.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
 	public abstract class DataTransferObject {
-			
+		/*	
 		public byte[] Serialize(){
 			XmlSerializer serializer = new XmlSerializer(this.GetType());
 			byte[] retVal = null;
@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 			Debug.Assert(retVal[retVal.Length - 1] != '\0', "The serialized data cannot contain NULL characters.");
 			return retVal;
 		}
-
+		
 		public static DataTransferObject Deserialize(byte[] data) {
 			Debug.Assert(data[data.Length - 1] != '\0', "The serialized data cannot contain NULL characters.");
 			MemoryStream memStream=new MemoryStream(data);
@@ -47,9 +47,9 @@ namespace OpenDentBusiness {
 			DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(memStream);		
 			memStream.Close();
 			return retVal;
-		}
+		}*/
 
-		public string SerializeToStr(){
+		public string Serialize(){
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter writer=XmlWriter.Create(strBuild);
 			XmlSerializer serializer = new XmlSerializer(this.GetType());
@@ -107,7 +107,7 @@ namespace OpenDentBusiness {
 	public class DtoGetDS:DataTransferObject{
 		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
 		public MethodNameDS MethodNameDS;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
@@ -117,7 +117,7 @@ namespace OpenDentBusiness {
 	public class DtoGetTable:DataTransferObject{
 		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
 		public MethodNameTable MethodNameTable;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;

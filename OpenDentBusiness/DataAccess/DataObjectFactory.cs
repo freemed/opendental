@@ -472,7 +472,7 @@ namespace OpenDentBusiness.DataAccess {
 				updatePrimaryKey = false;
 			}
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DtoObjectInsertedAck ack = (DtoObjectInsertedAck)FactoryClient<T>.SendRequest("WriteObject", value, new object[] { overrideAutoNumber });
+				DtoObjectInsertedAck ack = (DtoObjectInsertedAck)FactoryClient<T>.SendRequest(enumDtoCommand.WriteObject, value, new object[] { overrideAutoNumber });
 				DataObjectInfo<T>.SetPrimaryKeys(value, ack.PrimaryKeys);
 				value.OnSaved(EventArgs.Empty);
 				return;
@@ -645,7 +645,7 @@ namespace OpenDentBusiness.DataAccess {
 
 		public static void DeleteObject(int id) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				FactoryClient<T>.SendRequest("DeleteObject", default(T), new object[] { id });
+				FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, default(T), new object[] { id });
 				return;
 			}
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
@@ -683,7 +683,7 @@ namespace OpenDentBusiness.DataAccess {
 				throw new InvalidOperationException(Resources.ObjectNotSaved);
 			}
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				FactoryClient<T>.SendRequest("DeleteObject", value, new object[] {});
+				FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, value, new object[] {});
 				value.OnDeleted(EventArgs.Empty);
 				return;
 			}

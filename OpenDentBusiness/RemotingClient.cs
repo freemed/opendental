@@ -16,8 +16,11 @@ namespace OpenDentBusiness {
 		public static string ServerURI;
 
 		public static DataSet ProcessQuery(DtoQueryBase dto){
-			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
-			MemoryStream memStream=new MemoryStream(buffer);
+			throw new NotImplementedException();
+			/*
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			//byte[] buffer=
+			//MemoryStream memStream=new MemoryStream(buffer);
 			XmlSerializer serializer;
 			try{
 				serializer = new XmlSerializer(typeof(DataSet));
@@ -31,11 +34,13 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)serializer.Deserialize(memStream);
 				memStream.Close();
 				throw new Exception(exception.Message);
-			}
+			}*/
 		}
 
 		///<summary></summary>
-		public static DataSet ProcessGetDS(DtoGetDS dto){
+		public static DataSet ProcessGetDS(DtoGetDS dto) {
+			throw new NotImplementedException();
+			/*
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);
 			XmlSerializer serializer;
@@ -51,10 +56,12 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)serializer.Deserialize(memStream);
 				memStream.Close();
 				throw new Exception(exception.Message);
-			}
+			}*/
 		}
 
-		public static DataTable ProcessGetTable(DtoGetTable dto){
+		public static DataTable ProcessGetTable(DtoGetTable dto) {
+			throw new NotImplementedException();
+			/*
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);
 			XmlSerializer serializer;
@@ -70,11 +77,13 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)serializer.Deserialize(memStream);
 				memStream.Close();
 				throw new Exception(exception.Message);
-			}
+			}*/
 		}
 
 		///<summary>InsertID will be returned for Insert commands.  Other commands return the number of rows affected which is usually just ignored.</summary>
-		public static int ProcessCommand(DtoCommandBase dto){
+		public static int ProcessCommand(DtoCommandBase dto) {
+			throw new NotImplementedException();
+			/*
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);
 			XmlSerializer serializer;
@@ -90,10 +99,10 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)serializer.Deserialize(memStream);
 				memStream.Close();
 				throw new Exception(exception.Message);
-			}
+			}*/
 		}		
 
-		internal static byte[] SendAndReceive(DataTransferObject dto){
+		internal static string SendAndReceive(DataTransferObject dto){
 			throw new NotImplementedException();
 			/*
 			byte[] data=dto.Serialize();
@@ -160,13 +169,13 @@ namespace OpenDentBusiness {
 			}
 
 			return value;
-		}*/
+		}
 
 		public static void WriteDataToStream(Stream stream, byte[] data) {
 			stream.Write(data, 0, data.Length);
 			stream.WriteByte((byte)'\0');
 			stream.Flush();
-		}
+		}*/
 	}
 
 }
