@@ -499,7 +499,12 @@ namespace OpenDental{
 					}
 				}
 				else{
-					row.Cells.Add(fields[f].Description);
+					if(fields[f].InternalName=="PatFields") {
+						//don't add a cell
+					}
+					else {
+						row.Cells.Add(fields[f].Description);
+					}
 				}
 				switch(fields[f].InternalName){
 					case "Last":
