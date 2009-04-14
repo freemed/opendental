@@ -177,7 +177,7 @@ namespace OpenDental{
 				}
 			}
 			Cursor=Cursors.WaitCursor;
-			Ledgers.ComputeAging(0,PIn.PDate(textDateCalc.Text));
+			Ledgers.ComputeAging(0,PIn.PDate(textDateCalc.Text),true);
 			if(Prefs.UpdateString("DateLastAging",POut.PDate(PIn.PDate(textDateCalc.Text),false))){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

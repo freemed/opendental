@@ -441,10 +441,10 @@ namespace OpenDentBusiness {
 			DataTable table=new DataTable("account");
 			//run aging.  This need serious optimization-------------------------------------------------------
 			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")));
+				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")),false);
 			}
 			else{
-				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
+				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today,false);
 			}
 			//Now, back to getting the tables------------------------------------------------------------------
 			DataRow row;
