@@ -142,7 +142,7 @@ namespace OpenDental.Eclaims{
 			Fill(106,"");//''
 			//proc 1
 			Fill(107,"P1Date","MM/dd/yyyy");
-			Fill(108,"P1ToothNumOrArea");
+			Fill(108,"P1ToothNumber");
 			Fill(109,"P1Surface");
 			Fill(110,"");//diag index
 			Fill(111,"P1Code");
@@ -151,7 +151,7 @@ namespace OpenDental.Eclaims{
 			Fill(114,"P1Fee");
 			//proc 2
 			Fill(115,"P2Date","MM/dd/yyyy");
-			Fill(116,"P2ToothNumOrArea");
+			Fill(116,"P2ToothNumber");
 			Fill(117,"P2Surface");
 			Fill(118,"");
 			Fill(119,"P2Code");
@@ -160,7 +160,7 @@ namespace OpenDental.Eclaims{
 			Fill(122,"P2Fee");
 			//proc 3
 			Fill(123,"P3Date","MM/dd/yyyy");
-			Fill(124,"P3ToothNumOrArea");
+			Fill(124,"P3ToothNumber");
 			Fill(125,"P3Surface");
 			Fill(126,"");
 			Fill(127,"P3Code");
@@ -169,7 +169,7 @@ namespace OpenDental.Eclaims{
 			Fill(130,"P3Fee");
 			//proc 4
 			Fill(131,"P4Date","MM/dd/yyyy");
-			Fill(132,"P4ToothNumOrArea");
+			Fill(132,"P4ToothNumber");
 			Fill(133,"P4Surface");
 			Fill(134,"");
 			Fill(135,"P4Code");
@@ -178,7 +178,7 @@ namespace OpenDental.Eclaims{
 			Fill(138,"P4Fee");
 			//proc 5
 			Fill(139,"P5Date","MM/dd/yyyy");
-			Fill(140,"P5ToothNumOrArea");
+			Fill(140,"P5ToothNumber");
 			Fill(141,"P5Surface");
 			Fill(142,"");
 			Fill(143,"P5Code");
@@ -187,7 +187,7 @@ namespace OpenDental.Eclaims{
 			Fill(146,"P5Fee");
 			//proc 6
 			Fill(147,"P6Date","MM/dd/yyyy");
-			Fill(148,"P6ToothNumOrArea");
+			Fill(148,"P6ToothNumber");
 			Fill(149,"P6Surface");
 			Fill(150,"");
 			Fill(151,"P6Code");
@@ -196,7 +196,7 @@ namespace OpenDental.Eclaims{
 			Fill(154,"P6Fee");
 			//proc 7
 			Fill(155,"P7Date","MM/dd/yyyy");
-			Fill(156,"P7ToothNumOrArea");
+			Fill(156,"P7ToothNumber");
 			Fill(157,"P7Surface");
 			Fill(158,"");
 			Fill(159,"P7Code");
@@ -205,7 +205,7 @@ namespace OpenDental.Eclaims{
 			Fill(162,"P7Fee");
 			//proc 8
 			Fill(163,"P8Date","MM/dd/yyyy");
-			Fill(164,"P8ToothNumOrArea");
+			Fill(164,"P8ToothNumber");
 			Fill(165,"P8Surface");
 			Fill(166,"");
 			Fill(167,"P8Code");
@@ -214,55 +214,55 @@ namespace OpenDental.Eclaims{
 			Fill(170,"P8Fee");
 			//end of procs
 			Fill(171,"TotalFee");
-			Fill(172,"");//payment by other plan. They want us to fill this in, but we don't know how.
+			Fill(172,"");//payment by other plan. Only applicable on secondary insurance.
 			Fill(173,"");//max allowable
 			Fill(174,"");//deductible
 			Fill(175,"");//carrier percent
 			Fill(176,"");//carrier pays
 			Fill(177,"");//patient pays
-			Fill(178,"Miss1");
-			Fill(179,"Miss2");
-			Fill(180,"Miss3");
-			Fill(181,"Miss4");
-			Fill(182,"Miss5");
-			Fill(183,"Miss6");
-			Fill(184,"Miss7");
-			Fill(185,"Miss8");
-			Fill(186,"Miss9");
-			Fill(187,"Miss10");
-			Fill(188,"Miss11");
-			Fill(189,"Miss12");
-			Fill(190,"Miss13");
-			Fill(191,"Miss14");
-			Fill(192,"Miss15");
-			Fill(193,"Miss16");
-			Fill(194,"");//A through
+			Fill(178,"");//Work injury.  Only x is accepted.
+			Fill(179,"P1Area");
+			Fill(180,"");
+			Fill(181,"P2Area");
+			Fill(182,"");
+			Fill(183,"P3Area");
+			Fill(184,"");
+			Fill(185,"P4Area");
+			Fill(186,"");
+			Fill(187,"P5Area");
+			Fill(188,"");
+			Fill(189,"P6Area");
+			Fill(190,"");
+			Fill(191,"P7Area");
+			Fill(192,"");
+			Fill(193,"P8Area");
+			Fill(194,"");
 			Fill(195,"");
-			Fill(196,"");
+			Fill(196,"P9Area");
 			Fill(197,"");
 			Fill(198,"");
 			Fill(199,"");
 			Fill(200,"");
 			Fill(201,"");
 			Fill(202,"");
-			Fill(203,"");//through J
-			Fill(204,"Miss32");
-			Fill(205,"Miss31");
-			Fill(206,"Miss30");
-			Fill(207,"Miss29");
-			Fill(208,"Miss28");
-			Fill(209,"Miss27");
-			Fill(210,"Miss26");
-			Fill(211,"Miss25");
-			Fill(212,"Miss24");
-			Fill(213,"Miss23");
-			Fill(214,"Miss22");
-			Fill(215,"Miss21");
-			Fill(216,"OtherInsCarrierName");
+			Fill(203,"");
+			Fill(204,"P10Area");
+			Fill(205,"");
+			Fill(206,"");
+			Fill(207,"");
+			Fill(208,"");
+			Fill(209,"");
+			Fill(210,"");
+			Fill(211,"");
+			Fill(212,"");
+			Fill(213,"");
+			Fill(214,"");
+			Fill(215,"");
+			Fill(216,"OtherInsCarrierName");//COB insurance company name
 			Fill(217,"OtherInsAddress");
-			Fill(218,"Miss18");
-			Fill(219,"Miss17");
-			Fill(220,"");//T through
+			Fill(218,"");//COB ins City
+			Fill(219,"");//COB ins State
+			Fill(220,"");
 			Fill(221,"");
 			Fill(222,"");
 			Fill(223,"");
@@ -271,18 +271,18 @@ namespace OpenDental.Eclaims{
 			Fill(226,"");
 			Fill(227,"");
 			Fill(228,"");
-			Fill(229,"");//through K
+			Fill(229,"");
 			Fill(230,"Remarks");
-			Fill(231,"");//remarks line 2
-			Fill(232,"");//remarks line 3
-			Fill(233,"");//remarks line 4
-			Fill(234,"TreatingDentistSignature");
+			Fill(231,"");
+			Fill(232,"");
+			Fill(233,"");
+			Fill(234,"");
 			Fill(235,"TreatingDentistLicense");
 			Fill(236,"TreatingDentistSigDate");
-			Fill(237,"TreatingDentistAddress");
-			Fill(238,"TreatingDentistCity");
-			Fill(239,"TreatingDentistST");
-			Fill(240,"TreatingDentistZip");
+			Fill(237,"");
+			Fill(238,"");
+			Fill(239,"");
+			Fill(240,"");
 			ClaimFormItem[] listForForm=new ClaimFormItem[241];
 			//items.CopyTo(ClaimFormItems.ListForForm,0);
 			FormClaimPrint FormCP=new FormClaimPrint();
