@@ -6,10 +6,6 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class AutoCodeItemL {
-		public static void Refresh(){
-			DataTable table=Gen.GetTable(MethodNameTable.AutoCodeItem_RefreshCache);
-			AutoCodeItems.FillCache(table);//now, we have an arrays on both the client and the server.
-		}
 
 		///<summary>Only called from ContrChart.listProcButtons_Click.  Called once for each tooth selected and for each autocode item attached to the button.</summary>
 		public static int GetCodeNum(int autoCodeNum,string toothNum,string surf,bool isAdditional,int patNum,int age){

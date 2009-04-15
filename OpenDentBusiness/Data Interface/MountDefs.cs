@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using OpenDentBusiness;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
@@ -14,12 +15,13 @@ namespace OpenDentBusiness {
 		public static DataTable RefreshCache() {
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="MountDef";
 			FillCache(table);
 			return table;
 		}	
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			MountDefC.Listt=new List<MountDef>();
 			MountDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {

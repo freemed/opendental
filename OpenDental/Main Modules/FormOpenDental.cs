@@ -1452,9 +1452,9 @@ namespace OpenDental{
 				AccountingAutoPays.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
-				AutoCodeL.Refresh();
-				AutoCodeItemL.Refresh();
-				AutoCodeCondL.Refresh();
+				AutoCodes.RefreshCache();
+				AutoCodeItems.RefreshCache();
+				AutoCodeConds.RefreshCache();
 				ProcButtons.Refresh();
 				ProcButtonItems.Refresh();
 			}
@@ -1462,7 +1462,7 @@ namespace OpenDental{
 				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
 			}
 			if(itypeList.Contains((int)InvalidType.ClaimForms) || isAll){
-				ClaimFormItemL.Refresh();
+				ClaimFormItems.RefreshCache();
 				ClaimForms.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.ClearHouses) || isAll){
@@ -1497,7 +1497,7 @@ namespace OpenDental{
 			}
 			if(itypeList.Contains((int)InvalidType.InsCats) || isAll){
 				CovCatL.Refresh();
-				CovSpanL.Refresh();
+				CovSpans.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.Letters) || isAll){
 				Letters.Refresh();
@@ -1534,7 +1534,7 @@ namespace OpenDental{
 			if(itypeList.Contains((int)InvalidType.Security) || isAll){
 				//Userod_client.Refresh();
 				UserGroups.Refresh();
-				GroupPermissionL.Refresh();
+				GroupPermissions.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.Signals) || isAll) {
 				SigElementDefs.Refresh();
@@ -1550,7 +1550,7 @@ namespace OpenDental{
 				ToolButItems.Refresh();
 			}
 			if(itypeList.Contains((int)InvalidType.Views) || isAll){
-				AppointmentRuleL.Refresh();
+				AppointmentRules.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
 				ZipCodes.Refresh();

@@ -175,7 +175,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			MountDefL.Refresh();
+			MountDefs.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<MountDefC.Listt.Count;i++){
 				listMain.Items.Add(MountDefC.Listt[i].Description);

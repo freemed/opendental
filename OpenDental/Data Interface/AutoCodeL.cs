@@ -6,10 +6,6 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class AutoCodeL{
-		public static void Refresh(){
-			DataTable table=Gen.GetTable(MethodNameTable.AutoCode_RefreshCache);
-			AutoCodes.FillCache(table);//now, we have an arrays on both the client and the server.
-		}
 
 		///<summary>Deletes all current autocodes and then adds the default autocodes.  Procedure codes must have already been entered or they cannot be added as an autocode.</summary>
 		public static void SetToDefault(){

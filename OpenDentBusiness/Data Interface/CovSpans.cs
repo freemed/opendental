@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -12,12 +13,13 @@ namespace OpenDentBusiness{
 				"SELECT * FROM covspan"
 				+" ORDER BY FromCode";
 			//+" ORDER BY CovCatNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="CovSpan";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			CovSpanC.List=new CovSpan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				CovSpanC.List[i]=new CovSpan();

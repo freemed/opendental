@@ -572,7 +572,7 @@ namespace OpenDental{
 		}
 
 		private void FillTreePerm(){
-			GroupPermissionL.Refresh();
+			GroupPermissions.RefreshCache();
 			if(SelectedGroupNum==0){
 				labelPerm.Text="";
 				treePermissions.Enabled=false;

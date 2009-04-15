@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -11,12 +12,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * from autocode";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="AutoCode";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			AutoCodeC.HList=new Hashtable();
 			AutoCodeC.List=new AutoCode[table.Rows.Count];
 			ArrayList ALshort=new ArrayList();//int of indexes of short list

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	
@@ -16,12 +17,13 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from account "
 				+" ORDER BY AcctType,Description";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="Account";
 			FillCache(table);//on the server side
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			AccountC.ListLong=new Account[table.Rows.Count];
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<AccountC.ListLong.Length;i++) {

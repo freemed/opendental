@@ -273,7 +273,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimForms_Load(object sender, System.EventArgs e) {
-			ClaimFormItemL.Refresh();
+			ClaimFormItems.RefreshCache();
 			FillList();
 		}
 
@@ -337,7 +337,7 @@ namespace OpenDental{
 				return;
 			}
 			changed=true;
-			ClaimFormItemL.Refresh();
+			ClaimFormItems.RefreshCache();
 			FillList();
 		}
 
@@ -357,7 +357,7 @@ namespace OpenDental{
 				ClaimFormCur.Items[i].ClaimFormNum=newClaimFormNum;
 				ClaimFormItems.Insert(ClaimFormCur.Items[i]);
 			}
-			ClaimFormItemL.Refresh();
+			ClaimFormItems.RefreshCache();
 			changed=true;
 			FillList();
 		}
@@ -397,7 +397,7 @@ namespace OpenDental{
 				return;
 			}
 			MessageBox.Show("Imported");
-			ClaimFormItemL.Refresh();
+			ClaimFormItems.RefreshCache();
 			changed=true;
 			FillList();
 		}
@@ -432,7 +432,7 @@ namespace OpenDental{
 			int retVal=0;
 			bool isNew=true;
 			if(isUpdateSequence){
-				ClaimFormItemL.Refresh();
+				ClaimFormItems.RefreshCache();
 				ClaimForms.Refresh();
 			}
 			if(tempClaimForm.UniqueID!=""){//if it's blank, it's always inserted.

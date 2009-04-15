@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
   ///<summary></summary>
@@ -13,12 +14,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * from autocodecond ORDER BY cond";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="AutoCodeCond";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			//HList=new Hashtable();
 			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){

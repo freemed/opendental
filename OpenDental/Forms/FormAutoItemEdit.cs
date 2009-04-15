@@ -156,8 +156,8 @@ namespace OpenDental{
 		}
 		#endregion
 
- 		private void FormAutoItemEdit_Load(object sender, System.EventArgs e) { 
-      AutoCodeCondL.Refresh();    
+ 		private void FormAutoItemEdit_Load(object sender, System.EventArgs e) {
+			AutoCodeConds.RefreshCache();    
 			if(IsNew){
 				this.Text=Lan.g(this,"Add Auto Code Item");  
 			}

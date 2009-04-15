@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -11,12 +12,13 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * FROM claimformitem ORDER BY imagefilename desc";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="ClaimFormItem";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			ClaimFormItemC.List=new ClaimFormItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				ClaimFormItemC.List[i]=new ClaimFormItem();

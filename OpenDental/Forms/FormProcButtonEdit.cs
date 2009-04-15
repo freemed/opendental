@@ -344,7 +344,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormChartProcedureEntryEdit_Load(object sender, System.EventArgs e) {
-      AutoCodeL.Refresh(); 
+			AutoCodes.RefreshCache();
       ProcButtonItems.Refresh();     
       if(IsNew){
         this.Text=Lan.g(this,"Add Procedure Button");

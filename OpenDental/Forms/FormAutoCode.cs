@@ -126,7 +126,7 @@ namespace OpenDental{
 		}
 
     private void FillList(){
-      AutoCodeL.Refresh();
+			AutoCodes.RefreshCache();
       listAutoCodes.Items.Clear();
       for(int i=0;i<AutoCodeC.List.Length;i++){
         if(AutoCodeC.List[i].IsHidden){

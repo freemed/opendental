@@ -300,7 +300,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			AccountL.Refresh();
+			Accounts.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableChartOfAccounts","Type"),70);

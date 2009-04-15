@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -10,12 +11,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM grouppermission";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="GroupPermission";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			GroupPermissionC.List=new GroupPermission[table.Rows.Count];
 			for(int i=0;i<GroupPermissionC.List.Length;i++) {
 				GroupPermissionC.List[i]=new GroupPermission();
