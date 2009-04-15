@@ -247,6 +247,9 @@
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Meth.cs" />
+    <Compile Include="ODDataSet\ODDataRow.cs" />
+    <Compile Include="ODDataSet\ODDataSet.cs" />
+    <Compile Include="ODDataSet\ODDataTable.cs" />
     <Compile Include="PIn.cs" />
     <Compile Include="POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

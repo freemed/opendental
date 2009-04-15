@@ -11,6 +11,8 @@ using System.Diagnostics;
 namespace OpenDentBusiness {
 	///<summary>Provides a base class for the many types of DTO classes that we will need.  A DTO class is a simple data storage object.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
 	public abstract class DataTransferObject {
+
+
 		/*	
 		public byte[] Serialize(){
 			XmlSerializer serializer = new XmlSerializer(this.GetType());
@@ -145,7 +147,7 @@ namespace OpenDentBusiness {
 		public object[] Parameters;
 	}
 
-	///<summary>Sends a command (not a query).  The result will be an ack or exception.</summary>
+	///<summary>Sends a command.  The result will be an ack or exception.</summary>
 	public class DtoSendCmd:DataTransferObject{
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;

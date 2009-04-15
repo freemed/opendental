@@ -5,16 +5,13 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reflection;
 using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
-using OpenDentBusiness;
 using OpenDentBusiness.DataAccess;
 
-namespace OpenDental {
-	public class ODDataRow:Dictionary<string,string>{
+namespace OpenDentBusiness {
+	public class ODDataRow:SortedList<string,string>{//Dictionary<string,string>{
 		public string this[int index]{
       get{
-				return this.ElementAt(index).Value;
+				return this.Values[index];
       }
 		}
 

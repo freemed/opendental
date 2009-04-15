@@ -274,7 +274,7 @@ namespace OpenDental{
 					adj.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 					delta=familyBals[p]-PIn.PDouble(tablePatients.Rows[p]["EstBalance"].ToString());//works whether pos or neg
 					adj.AdjAmt=delta;
-					Adjustments.InsertOrUpdate(adj,true);
+					Adjustments.Insert(adj);
 					command="UPDATE patient SET EstBalance=EstBalance+'"+POut.PDouble(delta)+"' WHERE PatNum="+tablePatients.Rows[p]["PatNum"].ToString();
 					General.NonQ(command);
 					changed++;

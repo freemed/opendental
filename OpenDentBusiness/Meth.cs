@@ -10,13 +10,13 @@ namespace OpenDentBusiness {
 		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return a DataTable and must not take any arguments.</summary>
 		public static DataTable GetTable(MethodBase methodBase,string command) {
 			#if DEBUG
-				//We will take the time to verify that it returns a DataTable
+				//Verify that it returns a DataTable
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
 				if(methodInfo.ReturnType != typeof(DataTable)) {
-					throw new ApplicationException("Gen.GetTable calling class must return DataTable.");
+					throw new ApplicationException("Meth.GetTable calling class must return DataTable.");
 				}
 				if(methodInfo.GetParameters().Length>0) {
-					throw new ApplicationException("Gen.GetTable calling class cannot require any parameters.");
+					throw new ApplicationException("Meth.GetTable calling class cannot require any parameters.");
 				}
 			#endif
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -31,6 +31,32 @@ namespace OpenDentBusiness {
 			else {
 				DataConnection dcon=new DataConnection();
 				return dcon.GetTable(command);
+			}
+		}
+
+		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return void and must take the same parameters as passed in here.</summary>
+		public static void SendCmd(MethodBase methodBase, string command, params object[] parameters) {
+			#if DEBUG
+				//Verify that it returns void
+				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+				if(methodInfo.ReturnType != typeof(void)) {
+					throw new ApplicationException("Meth.SendCmd calling class must return void.");
+				}
+			#endif
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				DtoSendCmd dto=new DtoSendCmd();
+				dto.MethodNameCmd=methodBase.DeclaringType.Name+"."+methodBase.Name;
+				//dto.Parameters=;
+				dto.Parameters=parameters;
+				dto.Credentials=new Credentials();
+				dto.Credentials.Username=Security.CurUser.UserName;
+				dto.Credentials.PassHash=Security.CurUser.Password;
+				RemotingClient.ProcessCommand(dto);
+				//this method will not return the result.
+			}
+			else {
+				DataConnection dcon=new DataConnection();
+				dcon.NonQ(command);
 			}
 		}
 

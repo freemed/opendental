@@ -582,7 +582,7 @@ namespace OpenDental{
 			AdjustmentCur.AdjNote = "";//"Finance Charge";
 			AdjustmentCur.AdjAmt = Math.Round(((PIn.PDouble(APR) * .01d / 12d) * OverallBalance),2);
 			AdjustmentCur.ProvNum = PriProv;
-			Adjustments.InsertOrUpdate(AdjustmentCur,true);
+			Adjustments.Insert(AdjustmentCur);
 		}
 
 		private void AddBillingCharge(int PatNum, DateTime date, string BillingChargeAmount, int PriProv) {
@@ -595,7 +595,7 @@ namespace OpenDental{
 			AdjustmentCur.AdjNote = "";//"Billing Charge";
 			AdjustmentCur.AdjAmt = PIn.PDouble(BillingChargeAmount);
 			AdjustmentCur.ProvNum = PriProv;
-			Adjustments.InsertOrUpdate(AdjustmentCur,true);
+			Adjustments.Insert(AdjustmentCur);
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

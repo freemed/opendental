@@ -109,8 +109,8 @@ namespace OpenDentBusiness {
 			//throw new NotImplementedException();
 			string dtoString=dto.Serialize();
 			OpenDentalServer.ServiceMain service=new OpenDentBusiness.OpenDentalServer.ServiceMain();
-			service.ProcessRequest(dtoString);
-			string result="";
+			string result=service.ProcessRequest(dtoString);
+		
 			try {
 
 			}

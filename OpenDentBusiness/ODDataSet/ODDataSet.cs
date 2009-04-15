@@ -5,11 +5,9 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reflection;
 using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
-using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
+	/*
 	public class ODDataSet {
 		public ODDataTableCollection Tables;
 
@@ -54,7 +52,7 @@ namespace OpenDental {
       }
 		}
 	}
-
+	*/
 	
 
 	

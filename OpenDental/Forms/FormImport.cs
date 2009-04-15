@@ -4010,17 +4010,17 @@ namespace OpenDental{
 				}
 				//if the balance column exists. Needs to come AFTER initial insert in case we don't have primary key to work with
 				if(radioPatients.Checked){
-						if(table.Columns["Balance"]!=null){
-								adj=new Adjustment();
-								adj.PatNum=PIn.PInt(table.Rows[i][pkCol].ToString());
-								adj.AdjAmt=PIn.PDouble(table.Rows[i][table.Columns["Balance"].Ordinal].ToString());
-								adj.AdjType=adjType;
-								//adj.AdjDate=DateTime.Today;//automatically handled
-								adj.ProcDate=DateTime.Today;
-								adj.AdjDate=DateTime.Today;
-								adj.ProvNum=pat.PriProv;
-								Adjustments.InsertOrUpdate(adj,true);
-						}
+					if(table.Columns["Balance"]!=null){
+						adj=new Adjustment();
+						adj.PatNum=PIn.PInt(table.Rows[i][pkCol].ToString());
+						adj.AdjAmt=PIn.PDouble(table.Rows[i][table.Columns["Balance"].Ordinal].ToString());
+						adj.AdjType=adjType;
+						//adj.AdjDate=DateTime.Today;//automatically handled
+						adj.ProcDate=DateTime.Today;
+						adj.AdjDate=DateTime.Today;
+						adj.ProvNum=pat.PriProv;
+						Adjustments.Insert(adj);
+					}
 				}
 			}//rows
 			Cursor=Cursors.Default;

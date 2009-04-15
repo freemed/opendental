@@ -2,15 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-//using System.Windows.Forms;
-using OpenDentBusiness;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the adjustment table in the db.</summary>
 	public class Adjustments {
 
 		///<summary></summary>
-		private static void Update(Adjustment adj){
+		public static void Update(Adjustment adj){
 			string command="UPDATE adjustment SET " 
 				+ "adjdate = "      +POut.PDate  (adj.AdjDate)
 				+ ",adjamt = '"      +POut.PDouble(adj.AdjAmt)+"'"
@@ -22,12 +21,11 @@ namespace OpenDentBusiness{
 				+ ",ProcNum = '"     +POut.PInt   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
 				+" WHERE adjNum = '" +POut.PInt   (adj.AdjNum)+"'";
-			//MessageBox.Show(string command);
- 			General.NonQ(command);
+			Meth.SendCmd(MethodInfo.GetCurrentMethod(),command,adj);
 		}
 
 		///<summary></summary>
-		private static void Insert(Adjustment adj){
+		public static void Insert(Adjustment adj){
 			if(PrefC.RandomKeys){
 				adj.AdjNum=MiscData.GetKey("adjustment","AdjNum");
 			}
@@ -63,6 +61,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/*
 		///<summary></summary>
 		public static void InsertOrUpdate(Adjustment adj, bool IsNew){
 			//if(){
@@ -74,7 +73,7 @@ namespace OpenDentBusiness{
 			else{
 				Update(adj);
 			}
-		}
+		}*/
 
 		///<summary>This will soon be eliminated or changed to only allow deleting on same day as EntryDate.</summary>
 		public static void Delete(Adjustment adj){

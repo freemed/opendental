@@ -5,11 +5,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reflection;
 using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	public class ODDataTable{
 		public string Name;
 		public List<ODDataRow> Rows;
@@ -20,17 +17,19 @@ namespace OpenDental{
 		}
 
 		public ODDataTable(string xmlData){
-			XElement rootElement=XElement.Parse(xmlData);
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(xmlData);
 			Rows=new List<ODDataRow>();
 			Name="";
 			ODDataRow currentRow;
-			foreach(XElement elementRow in rootElement.Elements()){
+			XmlNodeList nodesRows=doc.DocumentElement.ChildNodes;
+			for(int i=0;i<nodesRows.Count;i++) {
 				currentRow=new ODDataRow();
-				if(Name==""){
-					Name=elementRow.Name.ToString();
+				if(Name=="") {
+					Name=nodesRows[i].Name;
 				}
-				foreach(XElement elementCell in elementRow.Elements()){
-					currentRow.Add(elementCell.Name.ToString(),elementCell.Value);
+				foreach(XmlNode nodeCell in nodesRows[i].ChildNodes) {
+					currentRow.Add(nodeCell.Name.ToString(),nodeCell.InnerXml);
 				}
 				Rows.Add(currentRow);
 			}

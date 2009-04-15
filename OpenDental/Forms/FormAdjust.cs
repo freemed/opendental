@@ -409,7 +409,12 @@ namespace OpenDental{
 			}
 			AdjustmentCur.AdjNote=textNote.Text;
 			try{
-				Adjustments.InsertOrUpdate(AdjustmentCur,IsNew);
+				if(IsNew) {
+					Adjustments.Insert(AdjustmentCur);
+				}
+				else {
+					Adjustments.Update(AdjustmentCur);
+				}
 			}
 			catch(Exception ex){//even though it doesn't currently throw any exceptions
 				MessageBox.Show(ex.Message);
