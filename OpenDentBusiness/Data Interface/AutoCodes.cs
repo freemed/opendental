@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * from autocode";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="AutoCode";
 			FillCache(table);
 			return table;

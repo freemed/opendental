@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary>A more secure version of "General", which passes specific method names to the server instead of just queries.  This also packages username and pass hash if remote.  User permissions will gradually be incorporated here.</summary>
+	///<summary>Gen is short for General.  Not sure how it will be used yet.  It will probably just replace General.  </summary>
 	public class Gen {
 		///<summary>stub</summary>
 		public static DataSet GetDS(MethodNameDS methodName,params object[] parameters) {
@@ -35,29 +35,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return a DataTable.</summary>
-		public static DataTable GetTable(MethodBase methodBase,string command) {
-			#if DEBUG
-				//We will take the time to verify that it returns a DataTable
-				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
-				if(methodInfo.ReturnType != typeof(DataTable)) {
-					throw new ApplicationException("Gen.GetTable calling class must return DataTable.");
-				}
-			#endif
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DtoGetTable dto=new DtoGetTable();
-				dto.MethodNameTable=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				//dto.Parameters=;
-				dto.Credentials=new Credentials();
-				dto.Credentials.Username=Security.CurUser.UserName;
-				dto.Credentials.PassHash=Security.CurUser.Password;
-				return RemotingClient.ProcessGetTable(dto);
-			}
-			else {
-				DataConnection dcon=new DataConnection();
-				return dcon.GetTable(command);
-			}
-		}
+		
 
 		/*
 		///<summary>Usually, there is a just a single parameter for the query.</summary>

@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		public static DataTable RefreshCache() {
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="MountDef";
 			FillCache(table);
 			return table;

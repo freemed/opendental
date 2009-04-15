@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM covspan"
 				+" ORDER BY FromCode";
 			//+" ORDER BY CovCatNum";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="CovSpan";
 			FillCache(table);
 			return table;

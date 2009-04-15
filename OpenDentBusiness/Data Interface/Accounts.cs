@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from account "
 				+" ORDER BY AcctType,Description";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Account";
 			FillCache(table);//on the server side
 			return table;

@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets a list of all AccountingAutoPays.</summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM accountingautopay";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="AccountingAutoPay";
 			FillCache(table);
 			return table;

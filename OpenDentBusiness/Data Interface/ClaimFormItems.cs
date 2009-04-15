@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * FROM claimformitem ORDER BY imagefilename desc";
-			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="ClaimFormItem";
 			FillCache(table);
 			return table;

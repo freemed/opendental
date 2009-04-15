@@ -4,6 +4,7 @@ using System.Data;
 using System.Text;
 
 namespace OpenDentBusiness {
+	///<summary>This class will be completely phased out.  It is no longer acceptable for the UI to be sending queries.</summary>
 	public class General {
 		///<summary>This method now also throws an exception instead of a messagebox if it fails.  So it's identical to GetTableEx.</summary>
 		public static DataTable GetTable(string command) {
