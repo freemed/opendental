@@ -82,9 +82,9 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	///<summary>This is used for initial login in old tcp architecture.</summary>
+	/*
+	///<summary>This is used for initial login.</summary>
 	public class DtoLogin:DtoCommandBase {
-		//public string Database;
 		public string OdUser;
 		public string OdPassHash;
 	}
@@ -95,7 +95,7 @@ namespace OpenDentBusiness {
 
 	///<summary>All queries should inherit from this rather than directly from the DTO.  This kind of DTO will trigger a Dataset or DataTable result.</summary>
 	public class DtoQueryBase:DataTransferObject {
-	}
+	}*/
 
 	///<summary>The username and password are internal to OD.  They are not the MySQL username and password.</summary>
 	public class Credentials{
@@ -105,64 +105,66 @@ namespace OpenDentBusiness {
 
 	///<summary>This DTO is planned to replace all the DtoQueryBase types.  Having multiple DTO types takes too long to program, so there should only be one type which is used for everything.  We will also eventually move to simpler XML representation of the datasets instead of using the dotNet serialization.</summary>
 	public class DtoGetDS:DataTransferObject{
-		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		///<summary>Always passed with new web service.    Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public MethodNameDS MethodNameDS;
+		public string MethodNameDS;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
 
 	///<summary></summary>
 	public class DtoGetTable:DataTransferObject{
-		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public MethodNameTable MethodNameTable;
+		public string MethodNameTable;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
 
 	///<summary>Gets a simple string.</summary>
 	public class DtoGetString:DataTransferObject{
-		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
-		public MethodNameString MethodNameString;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodNameString;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
 
 	///<summary>Gets an object which must be serializable.  Calling code will convert object to specific type.</summary>
 	public class DtoGetObject:DataTransferObject{
-		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
-		public MethodNameObject MethodNameObject;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodNameObject;
 		///<summary>This is the string representation of the type of object that we expect back as a result.</summary>
 		public string ObjectType;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
 
-	///<summary>The result will be an ack or exception.</summary>
+	///<summary>Sends a command (not a query).  The result will be an ack or exception.</summary>
 	public class DtoSendCmd:DataTransferObject{
-		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
-		public MethodNameCmd MethodNameCmd;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodNameCmd;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
 
+	//public class DtoGeneralGetTableLow:DtoQueryBase {
+	//	public string Command;
+	//}
+	
+	/*
 	public class DtoGeneralGetTable:DtoQueryBase {
 		public string Command;
 	}
 
-	public class DtoGeneralGetTableLow:DtoQueryBase {
-		public string Command;
-	}
-
+	
 	public class DtoGeneralGetDataSet:DtoQueryBase {
 		public string Commands;
 	}
@@ -170,14 +172,14 @@ namespace OpenDentBusiness {
 	public class DtoGeneralNonQ:DtoCommandBase {
 		public string Command;
 		public bool GetInsertID;
-	}
+	}*/
 
 	///<summary>IDorRows will be the InsertID for insert type commands.  For some other commands, it will be the rows changed, and for some commands, it will just be 0.</summary>
 	public class DtoServerAck:DataTransferObject {
 		public int IDorRows;
 	}
 
-	///<summary>OpenDentBusiness and all the DA classes are designed to throw an exception if something goes wrong.  If using OpenDentBusiness through the remote server, then the server catches the exception and passes it back to the main program using this DTO.  The client then turns it back into an exception so that it behaves just like if OpenDentBusiness was getting called locally.</summary>
+	///<summary>OpenDentBusiness and all the DA classes are designed to throw an exception if something goes wrong.  If using OpenDentBusiness through the remote server, then the server catches the exception and passes it back to the main program using this DTO.  The client then turns it back into an exception so that it behaves just as if OpenDentBusiness was getting called locally.</summary>
 	public class DtoException{
 		public string Message;
 	}

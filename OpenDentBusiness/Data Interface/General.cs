@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using OpenDentBusiness;
 
 namespace OpenDentBusiness {
 	public class General {
@@ -39,8 +38,13 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 
 		///<summary>This is used for queries written by the user.  If using the server component, it uses the user with lower privileges  to prevent injection attack.</summary>
 		public static DataTable GetTableLow(string command) {
+			throw new NotImplementedException();
+			/*
 			DataTable retVal;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				DtoGetTable dto=new DtoGetTable();
+				dto.Credentials=new Credentials();
+				dto.Credentials.Username=Secur
 				DtoGeneralGetTableLow dto=new DtoGeneralGetTableLow();
 				dto.Command=command;
 				retVal=RemotingClient.ProcessQuery(dto).Tables[0].Copy();
@@ -49,7 +53,7 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 				retVal=DataCore.GetTable(command).Tables[0].Copy();
 			}
 			retVal.TableName="";//this is needed for FormQuery dataGrid
-			return retVal;
+			return retVal;*/
 		}
 
 		///<summary>This is for multiple queries all concatenated together with ;</summary>

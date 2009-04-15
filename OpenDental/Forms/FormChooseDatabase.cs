@@ -655,21 +655,12 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkConnectServer.Checked){
 				string originalURI=RemotingClient.ServerURI;
-				//string originalServer=RemotingClient.ServerName;
-				//int originalPort=RemotingClient.ServerPort;
 				RemotingClient.ServerURI=textURI.Text;
-				//RemotingClient.ServerPort=PIn.PInt(textPort.Text);
-				DtoLogin dto=new DtoLogin();
-				//dto.Database=comboDatabase2.Text;
-				dto.OdUser=textUser2.Text;
-				dto.OdPassHash=Userods.EncryptPassword(textPassword2.Text);
 				try{
-					RemotingClient.ProcessCommand(dto);
+					Security.LogInWeb(textUser2.Text,textPassword2.Text);
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){
-					//RemotingClient.ServerName=originalServer;
-					//RemotingClient.ServerPort=originalPort;
 					RemotingClient.ServerURI=originalURI;
 					MessageBox.Show(ex.Message);
 					return;

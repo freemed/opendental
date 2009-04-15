@@ -1505,7 +1505,7 @@ namespace OpenDental{
 			}
 			if(itypeList.Contains((int)InvalidType.Operatories) || isAll){
 				//Operatory_client.Refresh();
-				AccountingAutoPayL.Refresh();
+				AccountingAutoPays.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.PatFields) || isAll) {
 				PatFieldDefs.Refresh();

@@ -1,9 +1,8 @@
 using System;
 using System.Windows.Forms;
-using OpenDentBusiness;
 using System.Data;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Security{
 		///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
@@ -167,6 +166,18 @@ namespace OpenDental{
 			command="UPDATE userod SET Password='' WHERE UserNum="+POut.PString(table.Rows[0][0].ToString());
 			General.NonQ(command);
 		}*/
+
+		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.</summary>
+		public static void LogInWeb(string userName,string password) {
+			//Because RemotingRole has not been set, and because CurUser has not been set,
+			//this particular method is more verbose than most.  It's not a good example of the standard way of doing things.
+			DtoSendCmd dto=new DtoSendCmd();
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=userName;
+			dto.Credentials.PassHash=Userods.EncryptPassword(password);
+			dto.MethodNameCmd="Security.LogInWeb";
+			RemotingClient.ProcessCommand(dto);//can throw exception
+		}
 
 	}
 }

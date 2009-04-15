@@ -15,9 +15,9 @@ namespace OpenDentBusiness {
 		public static RemotingRole RemotingRole;
 		public static string ServerURI;
 
+/*
 		public static DataSet ProcessQuery(DtoQueryBase dto){
 			throw new NotImplementedException();
-			/*
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			//byte[] buffer=
 			//MemoryStream memStream=new MemoryStream(buffer);
@@ -34,8 +34,8 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)serializer.Deserialize(memStream);
 				memStream.Close();
 				throw new Exception(exception.Message);
-			}*/
-		}
+			}
+		}*/
 
 		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto) {
@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>InsertID will be returned for Insert commands.  Other commands return the number of rows affected which is usually just ignored.</summary>
-		public static int ProcessCommand(DtoCommandBase dto) {
+		public static int ProcessCommand(DtoSendCmd dto) {
 			//throw new NotImplementedException();
 			string result=SendAndReceive(dto);
 

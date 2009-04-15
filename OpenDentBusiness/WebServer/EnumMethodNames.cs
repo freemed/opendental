@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness{
+	//Both enums below are STUBS.  Remove each enum as it is rewritten.
+	
 	///<summary>MethodNames for retrieving datasets.</summary>
 	public enum MethodNameDS{
 		AccountModule_GetAll,
@@ -20,7 +22,6 @@ namespace OpenDentBusiness{
 	///<summary>MethodNames for retrieving tables as DataTables or as Xml tables.</summary>
 	public enum MethodNameTable{
 		Account_RefreshCache,
-		AccountingAutoPay_RefreshCache,
 		AppointmentRule_RefreshCache,
 		AutoCode_RefreshCache,
 		AutoCodeCond_RefreshCache,
@@ -32,7 +33,7 @@ namespace OpenDentBusiness{
 		MountDef_RefreshCache,
 		Patient_GetPtDataTable,
 	}
-
+	/*
 	///<summary>MethodNames for retrieving strings.</summary>
 	public enum MethodNameString{
 		Userod_CheckDbUserPassword
@@ -49,5 +50,5 @@ namespace OpenDentBusiness{
 		
 	}
 
-
+	*/
 }

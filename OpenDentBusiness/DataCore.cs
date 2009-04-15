@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -52,7 +53,14 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static DataSet GetDsByMethod(MethodNameDS methodName, object[] parameters) {
+		public static DataSet GetDsByMethod(string classMethod,object[] parameters) {
+			string className=classMethod.Split('.')[0];
+			string methodName=classMethod.Split('.')[1];
+			Type classType=Type.GetType("OpenDentBusiness."+className);
+			MethodInfo methodInfo=classType.GetMethod(methodName);
+			DataSet result=(DataSet)methodInfo.Invoke(null,parameters);
+			return result;
+			/*
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
@@ -77,11 +85,18 @@ namespace OpenDentBusiness {
 				case  MethodNameDS.FamilyModule_GetAll:
 					return FamilyModules.GetAll((int)parameters[0]);
 			}
-
+			*/
 		}
 
 		///<summary></summary>
-		public static DataTable GetTableByMethod(MethodNameTable methodName, object[] parameters) {
+		public static DataTable GetTableByMethod(string classMethod,object[] parameters) {
+			string className=classMethod.Split('.')[0];
+			string methodName=classMethod.Split('.')[1];
+			Type classType=Type.GetType("OpenDentBusiness."+className);
+			MethodInfo methodInfo=classType.GetMethod(methodName);
+			DataTable result=(DataTable)methodInfo.Invoke(null,parameters);
+			return result;
+			/*
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
@@ -112,9 +127,10 @@ namespace OpenDentBusiness {
 						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
 						(string)parameters[9],(string)parameters[10],(int)parameters[11],(bool)parameters[12],(bool)parameters[13],
 						(int)parameters[14],(DateTime)parameters[15],(int)parameters[16]);
-			}
+			}*/
 		}
 
+		/*
 		public static string GetXmlTableByMethod(MethodNameTable methodName,object[] parameters) {
 			DataTable table=GetTableByMethod(methodName,parameters);
 			string retVal=XmlConverter.TableToXml(table);
@@ -155,7 +171,7 @@ namespace OpenDentBusiness {
 			DataSet ds=GetDsByMethod(methodName,parameters);
 			string retVal=XmlConverter.DsToXml(ds);
 			return retVal;
-		}
+		}*/
 
 
 	}

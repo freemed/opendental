@@ -159,6 +159,7 @@
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
+    <Compile Include="Data Interface\Security.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
     <Compile Include="Data Interface\SheetFields.cs" />

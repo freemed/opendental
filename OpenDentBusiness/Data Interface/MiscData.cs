@@ -123,8 +123,8 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	public class DtoMiscDataMakeABackup:DtoCommandBase {
-	}
+	//public class DtoMiscDataMakeABackup:DtoCommandBase {
+	//}
 }
 
 

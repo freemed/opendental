@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -10,13 +11,13 @@ namespace OpenDentBusiness{
 		///<summary>Gets a list of all AccountingAutoPays.</summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM accountingautopay";
-			DataTable table=General.GetTable(command);
+			DataTable table=Gen.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="AccountingAutoPay";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		private static void FillCache(DataTable table){
 			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new AccountingAutoPay();
