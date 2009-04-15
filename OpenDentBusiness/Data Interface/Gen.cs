@@ -17,11 +17,6 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>stub</summary>
-		public static DataTable GetTable(MethodNameTable methodName,params object[] parameters) {
-			return null;
-		}
-
 		///<summary></summary>
 		public static DataSet GetDS(MethodBase methodInfo, params object[] parameters) {
 			string classMethod=methodInfo.DeclaringType.Name+"."+methodInfo.Name;
