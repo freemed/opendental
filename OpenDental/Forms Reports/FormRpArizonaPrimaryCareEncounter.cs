@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		private void butBrowse_Click(object sender,EventArgs e) {
 			if(folderEncounter.ShowDialog()==DialogResult.OK){
-				this.textEncounterFile.Text=this.folderEncounter.SelectedPath;
+				this.textEncounterFolder.Text=this.folderEncounter.SelectedPath;
 			}
 		}
 
