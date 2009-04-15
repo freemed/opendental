@@ -4,9 +4,8 @@ using System.Data;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClaimForms {
 		private static ClaimForm[] listLong;
