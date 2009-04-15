@@ -52,6 +52,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+/*
 		///<summary></summary>
 		public static DataSet GetDsByMethod(string classMethod,object[] parameters) {
 			string className=classMethod.Split('.')[0];
@@ -59,8 +60,9 @@ namespace OpenDentBusiness {
 			Type classType=Type.GetType("OpenDentBusiness."+className);
 			MethodInfo methodInfo=classType.GetMethod(methodName);
 			DataSet result=(DataSet)methodInfo.Invoke(null,parameters);
-			return result;
-			/*
+			return result;*/
+		///<summary></summary>
+		public static DataSet GetDsByMethod(MethodNameDS methodName,object[] parameters) {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
@@ -85,7 +87,6 @@ namespace OpenDentBusiness {
 				case  MethodNameDS.FamilyModule_GetAll:
 					return FamilyModules.GetAll((int)parameters[0]);
 			}
-			*/
 		}
 
 		///<summary></summary>

@@ -7,12 +7,17 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>A more secure version of "General", which passes specific method names to the server instead of just queries.  This also packages username and pass hash if remote.  User permissions will gradually be incorporated here.</summary>
 	public class Gen {
-		///<summary></summary>
+		///<summary>stub</summary>
 		public static DataSet GetDS(MethodNameDS methodName,params object[] parameters) {
-			return null;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return null;
+			}
+			else {
+				return DataCore.GetDsByMethod(methodName,parameters);
+			}
 		}
 
-		///<summary></summary>
+		///<summary>stub</summary>
 		public static DataTable GetTable(MethodNameTable methodName,params object[] parameters) {
 			return null;
 		}
@@ -30,7 +35,8 @@ namespace OpenDentBusiness{
 				return RemotingClient.ProcessGetDS(dto);
 			}
 			else {
-				return DataCore.GetDsByMethod(classMethod,parameters);
+				return null;
+				//return DataCore.GetDsByMethod(classMethod,parameters);
 			}
 		}
 
