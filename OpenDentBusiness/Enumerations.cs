@@ -268,7 +268,7 @@ namespace OpenDentBusiness{
 		LetterMerge,
 		///<summary></summary>
 		DentalSchools,
-		///<summary>Includes AccountingAutoPay.</summary>
+		///<summary></summary>
 		Operatories,
 		///<summary></summary>
 		TaskPopup,
@@ -289,7 +289,9 @@ namespace OpenDentBusiness{
 		///<summary>36</summary>
 		DisplayFields,
 		///<summary>37</summary>
-		PatFields
+		PatFields,
+		///<summary>38</summary>
+		AccountingAutoPays
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

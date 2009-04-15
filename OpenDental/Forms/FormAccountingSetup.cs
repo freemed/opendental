@@ -455,7 +455,7 @@ namespace OpenDental{
 			}
 			//pay------------------------------------------------------------------------------------------
 			AccountingAutoPays.SaveList(payAL);//just deletes them all and starts over
-			DataValid.SetInvalid(InvalidType.Operatories);
+			DataValid.SetInvalid(InvalidType.AccountingAutoPays);
 			if(Prefs.UpdateInt("AccountingCashIncomeAccount",PickedPayAccountNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

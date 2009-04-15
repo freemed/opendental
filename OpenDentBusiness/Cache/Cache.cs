@@ -16,6 +16,9 @@ namespace OpenDentBusiness {
 				isAll=true;
 			}
 			DataSet ds=new DataSet();
+			if(itypes.Contains((int)InvalidType.AccountingAutoPays) || isAll) {
+				//AccountingAutoPayL.Refresh();
+			}
 			if(itypes.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				//AutoCodeL.Refresh();
 				//AutoCodeItemL.Refresh();
@@ -76,7 +79,6 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				ds.Tables.Add(Operatories.RefreshCache());
-				//AccountingAutoPayL.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
 				//PatFieldDefs.Refresh();

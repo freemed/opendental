@@ -1448,6 +1448,9 @@ namespace OpenDental{
 			if(itypeList.Contains((int)InvalidType.Prefs) || isAll){
 				//all moved to RefreshLocalDataPostCleanup
 			}
+			if(itypeList.Contains((int)InvalidType.AccountingAutoPays) || isAll) {
+				AccountingAutoPays.RefreshCache();
+			}
 			if(itypeList.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				AutoCodeL.Refresh();
 				AutoCodeItemL.Refresh();
@@ -1505,7 +1508,6 @@ namespace OpenDental{
 			}
 			if(itypeList.Contains((int)InvalidType.Operatories) || isAll){
 				//Operatory_client.Refresh();
-				AccountingAutoPays.RefreshCache();
 			}
 			if(itypeList.Contains((int)InvalidType.PatFields) || isAll) {
 				PatFieldDefs.Refresh();

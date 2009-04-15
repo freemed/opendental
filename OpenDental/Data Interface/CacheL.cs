@@ -24,6 +24,9 @@ namespace OpenDental{
 			if(itypes.Contains((int)InvalidType.AllLocal)){
 				isAll=true;
 			}
+			if(itypes.Contains((int)InvalidType.AccountingAutoPays) || isAll) {
+				//AccountingAutoPayL.Refresh();
+			}
 			if(itypes.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				//AutoCodeL.Refresh();
 				//AutoCodeItemL.Refresh();
@@ -82,7 +85,6 @@ namespace OpenDental{
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				Operatories.FillCache(ds.Tables["Operatory"]);
-				//AccountingAutoPayL.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
 				//PatFieldDefs.Refresh();

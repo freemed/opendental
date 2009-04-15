@@ -41,14 +41,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return a DataTable.</summary>
-		public static DataTable GetTable(MethodBase methodInfo,string command) {
-			MethodInfo info;
-			//if(info.
-			//if(methodInfo.
-			string classMethod=methodInfo.DeclaringType.Name+"."+methodInfo.Name;
+		public static DataTable GetTable(MethodBase methodBase,string command) {
+			#if DEBUG
+				//We will take the time to verify that it returns a DataTable
+				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+				if(methodInfo.ReturnType != typeof(DataTable)) {
+					throw new ApplicationException("Gen.GetTable calling class must return DataTable.");
+				}
+			#endif
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetTable dto=new DtoGetTable();
-				dto.MethodNameTable=classMethod;
+				dto.MethodNameTable=methodBase.DeclaringType.Name+"."+methodBase.Name;
 				//dto.Parameters=;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;
