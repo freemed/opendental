@@ -40,8 +40,11 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Usually, there is a just a single parameter for the query.</summary>
+		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return a DataTable.</summary>
 		public static DataTable GetTable(MethodBase methodInfo,string command) {
+			MethodInfo info;
+			//if(info.
+			//if(methodInfo.
 			string classMethod=methodInfo.DeclaringType.Name+"."+methodInfo.Name;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetTable dto=new DtoGetTable();
