@@ -216,19 +216,25 @@
     <Compile Include="Data Interface\Clearinghouses.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\Commlogs.cs" />
-    <Compile Include="Data Interface\ComputerPrefs.cs" />
-    <Compile Include="Data Interface\Computers.cs" />
-    <Compile Include="Data Interface\Contacts.cs" />
+    <Compile Include="Data Interface\Computers.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
     <Compile Include="Data Interface\AutoCodeL.cs" />
     <Compile Include="Data Interface\AutoCodeItemL.cs" />
+    <Compile Include="Data Interface\Etranss.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data Interface\Fees.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\PatPlanL.cs" />
-    <Compile Include="Data Interface\PhoneOverrides.cs" />
-    <Compile Include="Data Interface\ScheduleOps.cs" />
+    <Compile Include="Data Interface\PerioMeasures.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovCatL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
@@ -239,53 +245,16 @@
     <Compile Include="Data Interface\SupplyOrders.cs" />
     <Compile Include="Data Interface\Supplies.cs" />
     <Compile Include="Data Interface\SupplyNeededs.cs" />
-    <Compile Include="Data Interface\EmailAttaches.cs" />
-    <Compile Include="Data Interface\Popups.cs" />
-    <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\ReqStudents.cs" />
     <Compile Include="Data Interface\ReqNeededs.cs" />
-    <Compile Include="Data Interface\LabTurnarounds.cs" />
-    <Compile Include="Data Interface\LabCases.cs" />
-    <Compile Include="Data Interface\Laboratories.cs" />
-    <Compile Include="Data Interface\Etranss.cs" />
-    <Compile Include="Data Interface\FormPats.cs" />
-    <Compile Include="Data Interface\Counties.cs" />
     <Compile Include="Data Interface\DefL.cs" />
-    <Compile Include="Data Interface\Deposits.cs" />
-    <Compile Include="Data Interface\DiseaseDefs.cs" />
-    <Compile Include="Data Interface\Diseases.cs" />
-    <Compile Include="Data Interface\Dunnings.cs" />
-    <Compile Include="Data Interface\ElectIDs.cs" />
-    <Compile Include="Data Interface\EmailMessages.cs" />
-    <Compile Include="Data Interface\EmailTemplates.cs" />
-    <Compile Include="Data Interface\Employees.cs" />
-    <Compile Include="Data Interface\Employers.cs" />
-    <Compile Include="Data Interface\Fees.cs" />
-    <Compile Include="Data Interface\Instructors.cs" />
-    <Compile Include="Data Interface\JournalEntries.cs" />
     <Compile Include="Data Interface\Lan.cs" />
-    <Compile Include="Data Interface\LanguageForeigns.cs" />
-    <Compile Include="Data Interface\LetterMergeFields.cs" />
-    <Compile Include="Data Interface\LetterMerges.cs" />
-    <Compile Include="Data Interface\Letters.cs" />
-    <Compile Include="Data Interface\MedicationPats.cs" />
-    <Compile Include="Data Interface\Medications.cs" />
     <Compile Include="Data Interface\AccountModuleL.cs" />
-    <Compile Include="Data Interface\PatFieldDefs.cs" />
-    <Compile Include="Data Interface\PatFields.cs" />
-    <Compile Include="Data Interface\Payments.cs" />
-    <Compile Include="Data Interface\PayPeriods.cs" />
-    <Compile Include="Data Interface\PayPlanCharges.cs" />
-    <Compile Include="Data Interface\PayPlans.cs" />
-    <Compile Include="Data Interface\PaySplits.cs" />
     <Compile Include="Data Interface\PerioExams.cs" />
-    <Compile Include="Data Interface\PerioMeasures.cs" />
     <Compile Include="Data Interface\Printers.cs" />
-    <Compile Include="Data Interface\ProcButtonItems.cs" />
-    <Compile Include="Data Interface\ProcButtons.cs" />
     <Compile Include="Data Interface\ProcedureCodeL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
@@ -296,7 +265,6 @@
     <Compile Include="Data Interface\QuickPasteCats.cs" />
     <Compile Include="Data Interface\QuickPasteNotes.cs" />
     <Compile Include="Data Interface\Recalls.cs" />
-    <Compile Include="Data Interface\Reconciles.cs" />
     <Compile Include="Data Interface\RefAttaches.cs" />
     <Compile Include="Data Interface\Referrals.cs" />
     <Compile Include="Data Interface\RegistrationKeys.cs" />
@@ -304,7 +272,6 @@
     <Compile Include="Data Interface\RxAlerts.cs" />
     <Compile Include="Data Interface\RxDefs.cs" />
     <Compile Include="Data Interface\RxPats.cs" />
-    <Compile Include="Data Interface\Schedules.cs" />
     <Compile Include="Data Interface\SchoolClasses.cs" />
     <Compile Include="Data Interface\SchoolCourses.cs" />
     <Compile Include="Data Interface\Schools.cs" />
@@ -321,7 +288,6 @@
     <Compile Include="Data Interface\TerminalActives.cs" />
     <Compile Include="Data Interface\ToolButItems.cs" />
     <Compile Include="Data Interface\ToothInitials.cs" />
-    <Compile Include="Data Interface\Transactions.cs" />
     <Compile Include="Data Interface\TreatPlans.cs" />
     <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />

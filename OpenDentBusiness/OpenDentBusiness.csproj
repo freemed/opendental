@@ -60,6 +60,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.Word, Version=8.2.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
@@ -150,12 +154,50 @@
     <Compile Include="Data Interface\ClaimPayments.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
     <Compile Include="Data Interface\ClockEvents.cs" />
+    <Compile Include="Data Interface\Commlogs.cs" />
+    <Compile Include="Data Interface\ComputerPrefs.cs" />
+    <Compile Include="Data Interface\Contacts.cs" />
+    <Compile Include="Data Interface\Counties.cs" />
+    <Compile Include="Data Interface\Deposits.cs" />
+    <Compile Include="Data Interface\DiseaseDefs.cs" />
+    <Compile Include="Data Interface\Diseases.cs" />
+    <Compile Include="Data Interface\Dunnings.cs" />
+    <Compile Include="Data Interface\ElectIDs.cs" />
+    <Compile Include="Data Interface\EmailAttaches.cs" />
+    <Compile Include="Data Interface\EmailMessages.cs" />
+    <Compile Include="Data Interface\EmailTemplates.cs" />
+    <Compile Include="Data Interface\Employees.cs" />
+    <Compile Include="Data Interface\Employers.cs" />
+    <Compile Include="Data Interface\FormPats.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
+    <Compile Include="Data Interface\Instructors.cs" />
+    <Compile Include="Data Interface\JournalEntries.cs" />
+    <Compile Include="Data Interface\LabCases.cs" />
+    <Compile Include="Data Interface\Laboratories.cs" />
+    <Compile Include="Data Interface\LabTurnarounds.cs" />
+    <Compile Include="Data Interface\LanguageForeigns.cs" />
+    <Compile Include="Data Interface\LetterMergeFields.cs" />
+    <Compile Include="Data Interface\LetterMerges.cs" />
+    <Compile Include="Data Interface\Letters.cs" />
+    <Compile Include="Data Interface\MedicationPats.cs" />
+    <Compile Include="Data Interface\Medications.cs" />
+    <Compile Include="Data Interface\PatFieldDefs.cs" />
+    <Compile Include="Data Interface\PatFields.cs" />
     <Compile Include="Data Interface\PatPlans.cs" />
+    <Compile Include="Data Interface\Payments.cs" />
+    <Compile Include="Data Interface\PayPeriods.cs" />
+    <Compile Include="Data Interface\PayPlanCharges.cs" />
+    <Compile Include="Data Interface\PayPlans.cs" />
+    <Compile Include="Data Interface\PaySplits.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
+    <Compile Include="Data Interface\PhoneOverrides.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
+    <Compile Include="Data Interface\Popups.cs" />
+    <Compile Include="Data Interface\ProcButtonItems.cs" />
+    <Compile Include="Data Interface\ProcButtons.cs" />
+    <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
     <Compile Include="Data Interface\ProgramProperties.cs" />
@@ -163,6 +205,9 @@
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
+    <Compile Include="Data Interface\Reconciles.cs" />
+    <Compile Include="Data Interface\ScheduleOps.cs" />
+    <Compile Include="Data Interface\Schedules.cs" />
     <Compile Include="Data Interface\Security.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
@@ -193,6 +238,7 @@
     <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\Suppliers.cs" />
     <Compile Include="Data Interface\TimeAdjusts.cs" />
+    <Compile Include="Data Interface\Transactions.cs" />
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
