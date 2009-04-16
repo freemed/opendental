@@ -213,8 +213,9 @@
     </Compile>
     <Compile Include="Data Interface\Claims.cs" />
     <Compile Include="Data Interface\ClaimValCodeLog.cs" />
-    <Compile Include="Data Interface\Clearinghouses.cs" />
-    <Compile Include="Data Interface\Clinics.cs" />
+    <Compile Include="Data Interface\Clearinghouses.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
