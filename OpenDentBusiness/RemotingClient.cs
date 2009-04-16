@@ -82,10 +82,15 @@ namespace OpenDentBusiness {
 
 		///<summary>InsertID will be returned for Insert commands.  Other commands return the number of rows affected which is usually just ignored.</summary>
 		public static int ProcessCommand(DtoSendCmd dto) {
-			//throw new NotImplementedException();
-			string result=SendAndReceive(dto);
-
-			return 0;
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			try {
+				DtoServerAck ack=(DtoServerAck)DataTransferObject.Deserialize(result);
+				return ack.IDorRows;
+			}
+			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
 			/*
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);
@@ -110,14 +115,13 @@ namespace OpenDentBusiness {
 			string dtoString=dto.Serialize();
 			OpenDentalServer.ServiceMain service=new OpenDentBusiness.OpenDentalServer.ServiceMain();
 			string result=service.ProcessRequest(dtoString);
-		
-			try {
+			//try {
+				//result=
+			//}
+			//catch {
 
-			}
-			catch {
-
-			}
-			return "";
+			//}
+			return result;
 			/*
 			byte[] data=dto.Serialize();
 			if(client==null){

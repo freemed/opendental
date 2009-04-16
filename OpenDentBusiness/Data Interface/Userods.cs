@@ -207,11 +207,16 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass) {
+			return EncryptPassword(inputPass,false);
+		}
+
+		///<summary></summary>
+		public static string EncryptPassword(string inputPass,bool skipECW) {
 			if(inputPass=="") {
 				return "";
 			}
 			HashAlgorithm algorithm=HashAlgorithm.Create("MD5");
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(!skipECW && Programs.IsEnabled("eClinicalWorks")) {
 				byte[] asciiBytes=Encoding.ASCII.GetBytes(inputPass);
 				byte[] hashbytes=algorithm.ComputeHash(asciiBytes);//length=16
 				byte digit1;

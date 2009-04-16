@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Data;
 
@@ -167,16 +168,36 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}*/
 
-		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.</summary>
-		public static void LogInWeb(string userName,string password) {
-			//Because RemotingRole has not been set, and because CurUser has not been set,
-			//this particular method is more verbose than most.  It's not a good example of the standard way of doing things.
-			DtoSendCmd dto=new DtoSendCmd();
-			dto.Credentials=new Credentials();
-			dto.Credentials.Username=userName;
-			dto.Credentials.PassHash=Userods.EncryptPassword(password);
-			dto.MethodNameCmd="Security.LogInWeb";
-			RemotingClient.ProcessCommand(dto);//can throw exception
+		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  RemotingIsLocal is false from workstation and true from server.</summary>
+		public static void LogInWeb(string oduser,string odpasshash,bool remotingIsLocal) {
+			if(remotingIsLocal) {
+				DataConnection dcon=new DataConnection();
+				//Try to connect to the database
+				try {
+					dcon.SetDb("localhost","development66","root","","","",DatabaseType.MySql);
+					//Console.WriteLine(oduser);
+				}
+				catch {
+					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
+				}
+				//Then, check username and password
+				if(!Userods.CheckUserAndPassword(oduser,odpasshash)) {
+					throw new Exception("Invalid username or password.");
+				}
+				//return 0;//meaningless
+			}
+			else {
+				//Because RemotingRole has not been set, and because CurUser has not been set,
+				//this particular method is more verbose than most and does not use Meth.
+				//It's not a good example of the standard way of doing things.
+				DtoSendCmd dto=new DtoSendCmd();
+				dto.Credentials=new Credentials();
+				dto.Credentials.Username=oduser;
+				dto.Credentials.PassHash=odpasshash;//Userods.EncryptPassword(password);
+				dto.MethodNameCmd="Security.LogInWeb";
+				dto.Parameters=new object[] { oduser,odpasshash,true };
+				RemotingClient.ProcessCommand(dto);//can throw exception
+			}
 		}
 
 	}

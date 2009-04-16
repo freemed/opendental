@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml;
 
 namespace OpenDentBusiness {
+	///<summary></summary>
 	public class DataCore {
 		///<summary></summary>
 		public static DataSet GetTable(string command) {

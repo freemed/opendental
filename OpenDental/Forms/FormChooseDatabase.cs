@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -657,7 +658,8 @@ namespace OpenDental{
 				string originalURI=RemotingClient.ServerURI;
 				RemotingClient.ServerURI=textURI.Text;
 				try{
-					Security.LogInWeb(textUser2.Text,textPassword2.Text);
+					//if we want to support eCW here, we will have to make the user indicated it.  No way to tell from the database yet.
+					Security.LogInWeb(textUser2.Text,Userods.EncryptPassword(textPassword2.Text,true),false);
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){

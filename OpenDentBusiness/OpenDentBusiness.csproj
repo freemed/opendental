@@ -36,7 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\OpenDentBusiness.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\OpenDentBusiness.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputType>Library</OutputType>
     <AssemblyName>OpenDentBusiness</AssemblyName>

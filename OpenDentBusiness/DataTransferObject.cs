@@ -147,7 +147,7 @@ namespace OpenDentBusiness {
 		public object[] Parameters;
 	}
 
-	///<summary>Sends a command.  The result will be an ack or exception.</summary>
+	///<summary>Sends a command.  A command cannot contain a query.  This is more like an RPC.  The result will be an ack or exception.  The return type for these classes is always void.</summary>
 	public class DtoSendCmd:DataTransferObject{
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
