@@ -239,17 +239,15 @@
     <Compile Include="Data Interface\CovCatL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\PrefL.cs" />
-    <Compile Include="Data Interface\TaskAncestors.cs" />
-    <Compile Include="Data Interface\TaskSubscriptions.cs" />
-    <Compile Include="Data Interface\SupplyOrderItems.cs" />
-    <Compile Include="Data Interface\SupplyOrders.cs" />
-    <Compile Include="Data Interface\Supplies.cs" />
-    <Compile Include="Data Interface\SupplyNeededs.cs" />
+    <Compile Include="Data Interface\RefAttaches.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data Interface\Referrals.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\ReqStudents.cs" />
-    <Compile Include="Data Interface\ReqNeededs.cs" />
     <Compile Include="Data Interface\DefL.cs" />
     <Compile Include="Data Interface\Lan.cs" />
     <Compile Include="Data Interface\AccountModuleL.cs" />
@@ -257,41 +255,8 @@
     <Compile Include="Data Interface\Printers.cs" />
     <Compile Include="Data Interface\ProcedureCodeL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
-    <Compile Include="Data Interface\ProcTPs.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
-    <Compile Include="Data Interface\ProviderIdents.cs" />
-    <Compile Include="Data Interface\QuestionDefs.cs" />
-    <Compile Include="Data Interface\Questions.cs" />
-    <Compile Include="Data Interface\QuickPasteCats.cs" />
-    <Compile Include="Data Interface\QuickPasteNotes.cs" />
-    <Compile Include="Data Interface\Recalls.cs" />
-    <Compile Include="Data Interface\RefAttaches.cs" />
-    <Compile Include="Data Interface\Referrals.cs" />
-    <Compile Include="Data Interface\RegistrationKeys.cs" />
-    <Compile Include="Data Interface\RepeatCharges.cs" />
-    <Compile Include="Data Interface\RxAlerts.cs" />
-    <Compile Include="Data Interface\RxDefs.cs" />
-    <Compile Include="Data Interface\RxPats.cs" />
-    <Compile Include="Data Interface\SchoolClasses.cs" />
-    <Compile Include="Data Interface\SchoolCourses.cs" />
-    <Compile Include="Data Interface\Schools.cs" />
-    <Compile Include="Data Interface\ScreenGroups.cs" />
-    <Compile Include="Data Interface\Screens.cs" />
     <Compile Include="Data Interface\SecurityLogs.cs" />
-    <Compile Include="Data Interface\SigButDefElements.cs" />
-    <Compile Include="Data Interface\SigButDefs.cs" />
-    <Compile Include="Data Interface\SigElementDefs.cs" />
-    <Compile Include="Data Interface\SigElements.cs" />
-    <Compile Include="Data Interface\Signals.cs" />
-    <Compile Include="Data Interface\TaskLists.cs" />
-    <Compile Include="Data Interface\Tasks.cs" />
-    <Compile Include="Data Interface\TerminalActives.cs" />
-    <Compile Include="Data Interface\ToolButItems.cs" />
-    <Compile Include="Data Interface\ToothInitials.cs" />
-    <Compile Include="Data Interface\TreatPlans.cs" />
-    <Compile Include="Data Interface\UserGroups.cs" />
-    <Compile Include="Data Interface\UserQueries.cs" />
-    <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="Eclaims\AOS.cs" />
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />

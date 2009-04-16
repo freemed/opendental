@@ -60,6 +60,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CDT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\CDT.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Word, Version=8.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
@@ -200,14 +204,33 @@
     <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
+    <Compile Include="Data Interface\ProcTPs.cs" />
     <Compile Include="Data Interface\ProgramProperties.cs" />
     <Compile Include="Data Interface\Programs.cs" />
+    <Compile Include="Data Interface\ProviderIdents.cs" />
+    <Compile Include="Data Interface\QuestionDefs.cs" />
+    <Compile Include="Data Interface\Questions.cs" />
+    <Compile Include="Data Interface\QuickPasteCats.cs" />
+    <Compile Include="Data Interface\QuickPasteNotes.cs" />
+    <Compile Include="Data Interface\Recalls.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
     <Compile Include="Data Interface\Reconciles.cs" />
+    <Compile Include="Data Interface\RegistrationKeys.cs" />
+    <Compile Include="Data Interface\RepeatCharges.cs" />
+    <Compile Include="Data Interface\ReqNeededs.cs" />
+    <Compile Include="Data Interface\ReqStudents.cs" />
+    <Compile Include="Data Interface\RxAlerts.cs" />
+    <Compile Include="Data Interface\RxDefs.cs" />
+    <Compile Include="Data Interface\RxPats.cs" />
     <Compile Include="Data Interface\ScheduleOps.cs" />
     <Compile Include="Data Interface\Schedules.cs" />
+    <Compile Include="Data Interface\SchoolClasses.cs" />
+    <Compile Include="Data Interface\SchoolCourses.cs" />
+    <Compile Include="Data Interface\Schools.cs" />
+    <Compile Include="Data Interface\ScreenGroups.cs" />
+    <Compile Include="Data Interface\Screens.cs" />
     <Compile Include="Data Interface\Security.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
@@ -223,6 +246,11 @@
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\Prefs.cs" />
+    <Compile Include="Data Interface\SigButDefElements.cs" />
+    <Compile Include="Data Interface\SigButDefs.cs" />
+    <Compile Include="Data Interface\SigElementDefs.cs" />
+    <Compile Include="Data Interface\SigElements.cs" />
+    <Compile Include="Data Interface\Signals.cs" />
     <Compile Include="Data Interface\Sites.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
@@ -237,8 +265,23 @@
     <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\Suppliers.cs" />
+    <Compile Include="Data Interface\Supplies.cs" />
+    <Compile Include="Data Interface\SupplyNeededs.cs" />
+    <Compile Include="Data Interface\SupplyOrderItems.cs" />
+    <Compile Include="Data Interface\SupplyOrders.cs" />
+    <Compile Include="Data Interface\TaskAncestors.cs" />
+    <Compile Include="Data Interface\TaskLists.cs" />
+    <Compile Include="Data Interface\Tasks.cs" />
+    <Compile Include="Data Interface\TaskSubscriptions.cs" />
+    <Compile Include="Data Interface\TerminalActives.cs" />
     <Compile Include="Data Interface\TimeAdjusts.cs" />
+    <Compile Include="Data Interface\ToolButItems.cs" />
+    <Compile Include="Data Interface\ToothInitials.cs" />
     <Compile Include="Data Interface\Transactions.cs" />
+    <Compile Include="Data Interface\TreatPlans.cs" />
+    <Compile Include="Data Interface\UserGroups.cs" />
+    <Compile Include="Data Interface\UserQueries.cs" />
+    <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
