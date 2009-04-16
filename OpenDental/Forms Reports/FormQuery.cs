@@ -896,7 +896,7 @@ namespace OpenDental{
             //referralnum             
             case "referralnum":
 							if(PIn.PInt(tableOut.Rows[i][j].ToString())!=0){
-								Referral referral=Referrals.GetReferral
+								Referral referral=ReferralL.GetReferral
 									(PIn.PInt(tableOut.Rows[i][j].ToString()));
 								tableOut.Rows[i][j]
 									=referral.LName+", "+referral.FName+" "+referral.MName;
@@ -1107,7 +1107,7 @@ namespace OpenDental{
 				if(justPreview){
 					printPreviewControl2.Document=pd2;
 				}
-				else if(Printers.SetPrinter(pd2,PrintSituation.Default)){
+				else if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
 					pd2.Print();
 				}
 			}

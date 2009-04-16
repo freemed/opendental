@@ -2651,10 +2651,10 @@ namespace OpenDental {
 			ClaimProc[] claimProcsFam=null;			
 			if(isFamMax || isFamDed){
 				claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else{
-				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
@@ -2679,10 +2679,10 @@ namespace OpenDental {
 					isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 					if(isFamMax || isFamDed) {
 						claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-						Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+						ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 					}
 					else {
-						Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+						ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 					}
 					//Claims.Cur=ClaimCur;
 				}
@@ -2933,10 +2933,10 @@ namespace OpenDental {
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
@@ -2981,10 +2981,10 @@ namespace OpenDental {
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -3055,10 +3055,10 @@ namespace OpenDental {
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
@@ -3100,10 +3100,10 @@ namespace OpenDental {
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point

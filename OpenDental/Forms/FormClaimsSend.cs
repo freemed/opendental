@@ -476,7 +476,7 @@ namespace OpenDental{
 				else{
 					warnings="";
 					missingData=Eclaims.Eclaims.GetMissingData(listQueue[i],out warnings);
-					row.Cells.Add(Clearinghouses.GetDescript(listQueue[i].ClearinghouseNum));
+					row.Cells.Add(ClearinghouseL.GetDescript(listQueue[i].ClearinghouseNum));
 					row.Cells.Add(warnings);
 					row.Cells.Add(missingData);
 				}
@@ -545,7 +545,7 @@ namespace OpenDental{
 
 		private void OnBlank_Click(){
 			PrintDocument pd=new PrintDocument();
-			if(!Printers.SetPrinter(pd,PrintSituation.Claim)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)){
 				return;
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();
@@ -568,7 +568,7 @@ namespace OpenDental{
 				}
 			}
 			PrintDocument pd=new PrintDocument();
-			if(!Printers.SetPrinter(pd,PrintSituation.Claim)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)){
 				return;
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
@@ -590,7 +590,7 @@ namespace OpenDental{
 				return;
 			}
 			//PrintDocument pd=new PrintDocument();//only used to pass printerName
-			//if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
+			//if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)){
 			//	return;
 			//}
 			//Carrier carrier;
@@ -620,7 +620,7 @@ namespace OpenDental{
 				clearDefault=Clearinghouses.GetDefault();
 			}
 			else{
-				clearDefault=Clearinghouses.GetClearinghouse(clearinghouseNum);
+				clearDefault=ClearinghouseL.GetClearinghouse(clearinghouseNum);
 			}
 			if(clearDefault!=null && clearDefault.ISA08=="113504607" && Process.GetProcessesByName("TesiaLink").Length==0){
 				#if DEBUG
@@ -958,7 +958,7 @@ namespace OpenDental{
 					pView.ShowDialog();
 				}
 				else {
-					if(Printers.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
 						pd2.Print();
 					}
 				}

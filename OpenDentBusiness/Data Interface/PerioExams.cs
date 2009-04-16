@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Drawing;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PerioExams{
 		///<summary>List of all perio exams for the current patient.</summary>
@@ -72,36 +70,6 @@ namespace OpenDental{
 			command= "DELETE from periomeasure WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";
 			General.NonQ(command);
 		}
-
-		///<summary>Used by PerioMeasures when refreshing to organize array.</summary>
-		public static int GetExamIndex(int perioExamNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PerioExamNum==perioExamNum){
-					return i;
-				}
-			}
-			MessageBox.Show("Error. PerioExamNum not in list: "+perioExamNum.ToString());
-			return 0;
-		}
-
 	
 	}
-	
-	
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

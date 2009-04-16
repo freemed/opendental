@@ -156,10 +156,15 @@
     <Compile Include="Data Interface\Anes_HL7Datas.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />
+    <Compile Include="Data Interface\ClaimProcs.cs" />
+    <Compile Include="Data Interface\Claims.cs" />
+    <Compile Include="Data Interface\ClaimValCodeLog.cs" />
+    <Compile Include="Data Interface\Clearinghouses.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
     <Compile Include="Data Interface\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
+    <Compile Include="Data Interface\Computers.cs" />
     <Compile Include="Data Interface\Contacts.cs" />
     <Compile Include="Data Interface\Counties.cs" />
     <Compile Include="Data Interface\Deposits.cs" />
@@ -172,6 +177,7 @@
     <Compile Include="Data Interface\EmailTemplates.cs" />
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
+    <Compile Include="Data Interface\Fees.cs" />
     <Compile Include="Data Interface\FormPats.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
@@ -195,10 +201,13 @@
     <Compile Include="Data Interface\PayPlanCharges.cs" />
     <Compile Include="Data Interface\PayPlans.cs" />
     <Compile Include="Data Interface\PaySplits.cs" />
+    <Compile Include="Data Interface\PerioExams.cs" />
+    <Compile Include="Data Interface\PerioMeasures.cs" />
     <Compile Include="Data Interface\PhoneNumbers.cs" />
     <Compile Include="Data Interface\PhoneOverrides.cs" />
     <Compile Include="Data Interface\PlannedAppts.cs" />
     <Compile Include="Data Interface\Popups.cs" />
+    <Compile Include="Data Interface\Printers.cs" />
     <Compile Include="Data Interface\ProcButtonItems.cs" />
     <Compile Include="Data Interface\ProcButtons.cs" />
     <Compile Include="Data Interface\ProcCodeNotes.cs" />
@@ -217,6 +226,8 @@
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
     <Compile Include="Data Interface\Reconciles.cs" />
+    <Compile Include="Data Interface\RefAttaches.cs" />
+    <Compile Include="Data Interface\Referrals.cs" />
     <Compile Include="Data Interface\RegistrationKeys.cs" />
     <Compile Include="Data Interface\RepeatCharges.cs" />
     <Compile Include="Data Interface\ReqNeededs.cs" />
@@ -232,6 +243,7 @@
     <Compile Include="Data Interface\ScreenGroups.cs" />
     <Compile Include="Data Interface\Screens.cs" />
     <Compile Include="Data Interface\Security.cs" />
+    <Compile Include="Data Interface\SecurityLogs.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
     <Compile Include="Data Interface\SheetFields.cs" />

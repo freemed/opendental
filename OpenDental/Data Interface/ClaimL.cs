@@ -1,0 +1,164 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+using OpenDentBusiness;
+
+namespace OpenDental{
+	///<summary></summary>
+	public class ClaimL{
+
+		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient (or for this plan if fam max or ded).  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
+		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,InsPlan[] PlanList,Claim ClaimCur,PatPlan[] patPlans,Benefit[] benefitList){
+			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
+			double claimFee=0;
+			double dedApplied=0;
+			double insPayEst=0;
+			double insPayAmt=0;
+			double writeoff=0;
+			InsPlan PlanCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
+			if(PlanCur==null){
+				return;
+			}
+			int provNum;
+			double dedRem;
+			int patPlanNum=PatPlans.GetPatPlanNum(patPlans,ClaimCur.PlanNum);
+			//this next line has to be done outside the loop.  Takes annual max into consideration 
+			double insRem;//no changes get made to insRem in the loop.
+			if(patPlanNum==0){//patient does not have current coverage
+				insRem=0;
+			} else if(ClaimProcsForClaim[0].ProcDate.Year<1880) {
+				insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,ClaimCur.PlanNum,
+						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
+			} else {
+				insRem=InsPlans.GetInsRem(ClaimProcList,ClaimProcsForClaim[0].ProcDate,ClaimCur.PlanNum,
+						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
+			}
+			//first loop handles totals for received items.
+			for(int i=0;i<ClaimProcsForClaim.Length;i++){
+				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.Received){
+					continue;//disregard any status except Receieved.
+				}
+				claimFee+=ClaimProcsForClaim[i].FeeBilled;
+				dedApplied+=ClaimProcsForClaim[i].DedApplied;
+				insPayEst+=ClaimProcsForClaim[i].InsPayEst;
+				insPayAmt+=ClaimProcsForClaim[i].InsPayAmt;
+			}
+			//loop again only for procs not received.
+			//And for preauth.
+			Procedure ProcCur;
+			for(int i=0;i<ClaimProcsForClaim.Length;i++){
+				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.NotReceived
+					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
+					continue;
+				}
+				ProcCur=Procedures.GetProcFromList(procList,ClaimProcsForClaim[i].ProcNum);
+				if(ProcCur.ProcNum==0){
+					continue;//ignores payments, etc
+				}
+				//fee:
+				int qty=ProcCur.UnitQty + ProcCur.BaseUnits;
+				if(qty==0){
+					qty=1;
+				}
+				if(PlanCur.ClaimsUseUCR){//use UCR for the provider of the procedure
+					provNum=ProcCur.ProvNum;
+					if(provNum==0){//if no prov set, then use practice default.
+						provNum=PrefC.GetInt("PracticeDefaultProv");
+					}
+					ClaimProcsForClaim[i].FeeBilled=qty*(Fees.GetAmount0(//get the fee based on code and prov fee sched
+						ProcCur.CodeNum,ProviderC.ListLong[Providers.GetIndexLong(provNum)].FeeSched));
+				}
+				else{//don't use ucr.  Use the procedure fee instead.
+					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
+				}
+				claimFee+=ClaimProcsForClaim[i].FeeBilled;
+				if(ClaimCur.ClaimType=="PreAuth" || ClaimCur.ClaimType=="Other"){
+					//only the fee gets calculated, the rest does not
+					ClaimProcs.Update(ClaimProcsForClaim[i]);
+					continue;
+				}
+				//deduct:
+				if(patPlanNum==0){//patient does not have current coverage
+					dedRem=0;
+				}
+				else{
+					dedRem=InsPlans.GetDedRem(ClaimProcList,ClaimProcsForClaim[i].ProcDate,ClaimCur.PlanNum,patPlanNum,
+						ClaimCur.ClaimNum,PlanList,benefitList,ProcedureCodes.GetStringProcCode(ProcCur.CodeNum))
+						-dedApplied;//subtracts deductible amounts already applied on this claim
+					if(dedRem<0) {
+						dedRem=0;
+					}
+				}
+				if(dedRem > ClaimProcsForClaim[i].FeeBilled){//if deductible is more than cost of procedure
+					ClaimProcsForClaim[i].DedApplied=ClaimProcsForClaim[i].FeeBilled;
+				}
+				else{
+					ClaimProcsForClaim[i].DedApplied=dedRem;
+				}
+				if(ClaimCur.ClaimType=="P"){//primary
+					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,PlanList,patPlans,benefitList);//handles dedBeforePerc
+					ClaimProcsForClaim[i].InsPayEst=ProcedureL.GetEst(ProcCur,ClaimProcList,PriSecTot.Pri,patPlans,true);	
+				}
+				else if(ClaimCur.ClaimType=="S"){//secondary
+					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,PlanList,patPlans,benefitList);
+					ClaimProcsForClaim[i].InsPayEst=ProcedureL.GetEst(ProcCur,ClaimProcList,PriSecTot.Sec,patPlans,true);
+				}
+				if(ClaimCur.ClaimType=="P" || ClaimCur.ClaimType=="S"){
+					if(ClaimProcsForClaim[i].DedBeforePerc) {
+						int percent=100;
+						if(ClaimProcsForClaim[i].Percentage!=-1) {
+							percent=ClaimProcsForClaim[i].Percentage;
+						}
+						if(ClaimProcsForClaim[i].PercentOverride!=-1) {
+							percent=ClaimProcsForClaim[i].PercentOverride;
+						}
+						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied*(double)percent/100d;
+					}
+					else {
+						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
+					}
+				}
+				//claimtypes other than P and S only changed manually
+				if(ClaimProcsForClaim[i].InsPayEst < 0){
+					//example: if inspayest = 19 - 50(ded) for total of -31.
+					ClaimProcsForClaim[i].DedApplied+=ClaimProcsForClaim[i].InsPayEst;//eg. 50+(-31)=19
+					ClaimProcsForClaim[i].InsPayEst=0;
+					//so only 19 of deductible gets applied, and inspayest is 0
+				}
+				if(insRem-insPayEst<0) {//total remaining ins-Estimated so far on this claim
+					ClaimProcsForClaim[i].InsPayEst=0;
+				}
+				else if(ClaimProcsForClaim[i].InsPayEst>insRem-insPayEst) {
+					ClaimProcsForClaim[i].InsPayEst=insRem-insPayEst;
+				}
+				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
+					ClaimProcsForClaim[i].WriteOff=0;
+					if(ClaimCur.ClaimType=="P" && PlanCur.PlanType=="p"){//Primary && PPO
+						double insplanAllowed=Fees.GetAmount(ProcCur.CodeNum,PlanCur.FeeSched);
+						if(insplanAllowed!=-1) {
+							ClaimProcsForClaim[i].WriteOff=ProcCur.ProcFee-insplanAllowed;
+						}
+						//else, if -1 fee not found, then do not show a writeoff. User can change writeoff if they disagree.
+					}
+					writeoff+=ClaimProcsForClaim[i].WriteOff;
+				}
+				dedApplied+=ClaimProcsForClaim[i].DedApplied;
+				insPayEst+=ClaimProcsForClaim[i].InsPayEst;
+				ClaimProcsForClaim[i].ProcDate=ProcCur.ProcDate.Date;//this solves a rare bug. Keeps dates synched.
+					//It's rare enough that I'm not goint to add it to the db maint tool.
+				ClaimProcs.Update(ClaimProcsForClaim[i]);
+				//but notice that the ClaimProcs lists are not refreshed until the loop is finished.
+			}//for claimprocs.forclaim
+			ClaimCur.ClaimFee=claimFee;
+			ClaimCur.DedApplied=dedApplied;
+			ClaimCur.InsPayEst=insPayEst;
+			ClaimCur.InsPayAmt=insPayAmt;
+			ClaimCur.WriteOff=writeoff;
+			//Cur=ClaimCur;
+			Claims.Update(ClaimCur);
+		}
+	}//end class Claims
+
+}

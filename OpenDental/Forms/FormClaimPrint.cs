@@ -392,7 +392,7 @@ namespace OpenDental{
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pagesPrinted=0;
-			if(Printers.SetPrinter(pd2,PrintSituation.Claim)){
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Claim)){
 				try{
 					pd2.Print();
 				}
@@ -475,7 +475,7 @@ namespace OpenDental{
 				}				
 			}	
 			if(ClaimCur.ReferringProv>0){
-				ClaimReferral=Referrals.GetReferral(ClaimCur.ReferringProv);
+				ClaimReferral=ReferralL.GetReferral(ClaimCur.ReferringProv);
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);

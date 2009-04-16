@@ -456,7 +456,7 @@ namespace OpenDental {
 				}
 				else{
 					int referralNum=PIn.PInt(parameter.ParamValue.ToString());
-					referral=Referrals.GetReferral(referralNum);
+					referral=ReferralL.GetReferral(referralNum);
 					if(referral.EMail!=""){
 						FormS.Email2Address=referral.EMail;
 						FormS.Email2=true;

@@ -993,7 +993,7 @@ namespace OpenDental{
 					totFee+=fee;
 					#region ShowMaxDed
 					if(checkShowMaxDed.Checked){//whether visible or not
-						//math sequence and logic based on Claims.CalculateAndUpdate(). It's really complicated.
+						//math sequence and logic based on ClaimL.CalculateAndUpdate(). It's really complicated.
 						//We will skip Procedure.ComputeEstimates(), and assume that all estimates have been created properly.
 						if(PatPlanList.Length>0){//Primary
 							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
@@ -1043,7 +1043,7 @@ namespace OpenDental{
 								if(insRem<0) {
 									insRem=0;
 								}
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
+								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
 								claimproc.InsPayEst=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
 								if(claimproc.DedBeforePerc) {
 									int percent=100;
@@ -1116,7 +1116,7 @@ namespace OpenDental{
 								}
 								//next line is supposed to handle dedBeforePerc, but it will get confused with sec ins.
 								//There is no easy solution
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
+								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
 								secIns=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
 								//this math is done here instead of in GetEst to ensure accuracy:
 								if(fee-priIns-secIns < 0) {
@@ -1747,7 +1747,7 @@ namespace OpenDental{
 				pView.printPreviewControl2.Document=printdoc;
 				pView.ShowDialog();			
 			#else
-				if(Printers.SetPrinter(pd2,PrintSituation.TPPerio)){
+				if(PrinterL.SetPrinter(pd2,PrintSituation.TPPerio)){
 					printdoc.PrinterSettings=pd2.PrinterSettings;
 					printdoc.Print();
 				}
@@ -2563,10 +2563,10 @@ namespace OpenDental{
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			//FormCE.CalculateEstimates(

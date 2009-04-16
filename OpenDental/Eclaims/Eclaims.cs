@@ -28,7 +28,7 @@ namespace OpenDental.Eclaims
 			}
 			//divide the items by clearinghouse:
 			for(int i=0;i<queueItems.Count;i++){
-				claimsByCHouse[Clearinghouses.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
+				claimsByCHouse[ClearinghouseL.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
 			}
 			//for any clearinghouses with claims, send them:
 			int batchNum;
@@ -153,7 +153,7 @@ namespace OpenDental.Eclaims
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
 		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warnings){
 			warnings="";
-			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItem.ClearinghouseNum);
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			if(clearhouse.Eformat==ElectronicClaimFormat.X12){
 				string retVal=X12.GetMissingData(queueItem,out warnings);
 				return retVal;

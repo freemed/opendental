@@ -20,7 +20,7 @@ namespace OpenDental.Eclaims {
 		///<summary>Called from Eclaims and includes multiple claims.</summary>
 		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
 			Clearinghouse clearhouse=GetClearinghouse();//clearinghouse must be valid to get to this point.
-				//Clearinghouses.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
+				//ClearinghouseL.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
 //Warning: this path is not handled properly if trailing slash is missing:
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
@@ -759,7 +759,7 @@ namespace OpenDental.Eclaims {
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
 		public static string GetMissingData(ClaimSendQueueItem queueItem) {
 			string retVal="";
-			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItem.ClearinghouseNum);
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
 			CanadianClaim canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);

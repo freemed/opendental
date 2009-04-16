@@ -207,18 +207,10 @@
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\CacheL.cs" />
     <Compile Include="Data Interface\ClaimFormL.cs" />
+    <Compile Include="Data Interface\ClaimL.cs" />
     <Compile Include="Data Interface\ClaimPaymentL.cs" />
-    <Compile Include="Data Interface\ClaimProcs.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data Interface\Claims.cs" />
-    <Compile Include="Data Interface\ClaimValCodeLog.cs" />
-    <Compile Include="Data Interface\Clearinghouses.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data Interface\Computers.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data Interface\ClaimProcL.cs" />
+    <Compile Include="Data Interface\ClearinghouseL.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
@@ -227,36 +219,27 @@
     <Compile Include="Data Interface\Etranss.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\Fees.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data Interface\FeeL.cs" />
     <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\PatPlanL.cs" />
-    <Compile Include="Data Interface\PerioMeasures.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data Interface\PerioExamL.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\CovCatL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
+    <Compile Include="Data Interface\PerioMeasureL.cs" />
     <Compile Include="Data Interface\PrefL.cs" />
-    <Compile Include="Data Interface\RefAttaches.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data Interface\Referrals.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data Interface\PrinterL.cs" />
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\DefL.cs" />
     <Compile Include="Data Interface\Lan.cs" />
     <Compile Include="Data Interface\AccountModuleL.cs" />
-    <Compile Include="Data Interface\PerioExams.cs" />
-    <Compile Include="Data Interface\Printers.cs" />
     <Compile Include="Data Interface\ProcedureCodeL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
-    <Compile Include="Data Interface\SecurityLogs.cs" />
+    <Compile Include="Data Interface\RefAttachL.cs" />
+    <Compile Include="Data Interface\ReferralL.cs" />
     <Compile Include="Eclaims\AOS.cs" />
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />

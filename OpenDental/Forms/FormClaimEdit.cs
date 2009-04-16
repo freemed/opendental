@@ -2982,10 +2982,10 @@ namespace OpenDental{
 			bool isFamDed=Benefits.GetIsFamDed(benefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed){
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+				ClaimL.CalculateAndUpdate(claimProcsFam,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
 			}
 			else{
-				Claims.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+				ClaimL.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
 			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
@@ -3551,7 +3551,7 @@ namespace OpenDental{
 
 		private void butReferralEdit_Click(object sender,EventArgs e) {
 			//only enabled if ClaimCur.ReferringProv!=0
-			Referral refer=Referrals.GetReferral(ClaimCur.ReferringProv);
+			Referral refer=ReferralL.GetReferral(ClaimCur.ReferringProv);
 			if(refer==null){
 				MsgBox.Show(this,"Referral not found.");
 				textRefProv.Text="";
@@ -3600,7 +3600,7 @@ namespace OpenDental{
 			gridP.BackColor = System.Drawing.SystemColors.Window;
 			gridP.Size = new System.Drawing.Size(595,665);
 			PerioExams.Refresh(PatCur.PatNum);
-			PerioMeasures.Refresh(PatCur.PatNum);
+			PerioMeasureL.Refresh(PatCur.PatNum);
 			gridP.SelectedExam=PerioExams.List.Length-1;
 			gridP.LoadData();
 			Bitmap bitmap=new Bitmap(595,665);
@@ -3736,7 +3736,7 @@ namespace OpenDental{
 		private void butLabel_Click(object sender, System.EventArgs e) {
 			//LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)){
 				return;
 			}
 			//ask if print secondary?
@@ -3769,7 +3769,7 @@ namespace OpenDental{
 			}
 			UpdateClaim();
 			PrintDocument pd=new PrintDocument();
-			if(!Printers.SetPrinter(pd,PrintSituation.Claim)) {
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)) {
 				return;
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();
@@ -3865,10 +3865,10 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].ClaimNum=0;
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Length>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Pri,PlanList,PatPlanList,benList);
+						ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Pri,PlanList,PatPlanList,benList);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Length>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Sec,PlanList,PatPlanList,benList);
+						ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Sec,PlanList,PatPlanList,benList);
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

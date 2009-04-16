@@ -173,7 +173,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"To"));
 				}
 				row.Cells.Add(Referrals.GetNameFL(RefAttachList[i].ReferralNum));
-				//referral=Referrals.GetReferral(RefAttachList[i].ReferralNum);
+				//referral=ReferralL.GetReferral(RefAttachList[i].ReferralNum);
 				if(RefAttachList[i].RefDate.Year < 1880){
 					row.Cells.Add("");
 				}
@@ -242,7 +242,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a referral first");
 				return;
 			}
-			Referral referral=Referrals.GetReferral(RefAttachList[idx].ReferralNum);
+			Referral referral=ReferralL.GetReferral(RefAttachList[idx].ReferralNum);
 			SheetDef sheetDef;
 			if(referral.Slip==0){
 				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);

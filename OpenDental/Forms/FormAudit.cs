@@ -415,7 +415,7 @@ namespace OpenDental{
 			printPreview.ShowDialog();
 			#else
 				try {
-					if(Printers.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
 						pd.Print();
 					}
 				}

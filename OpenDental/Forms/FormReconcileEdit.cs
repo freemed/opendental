@@ -531,7 +531,7 @@ namespace OpenDental{
 			pView.ShowDialog();
 #else
 			//Always prints to the Windows default printer.
-			if(Printers.SetPrinter(pd2,PrintSituation.Default)){
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
 				printdoc.Print();
 			}
 #endif

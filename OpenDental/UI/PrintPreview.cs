@@ -173,7 +173,7 @@ namespace OpenDental.UI{
 		}
 
 		private void OnPrint_Click() {
-			if(!Printers.SetPrinter(Document,Sit)){
+			if(!PrinterL.SetPrinter(Document,Sit)){
 				return;
 			}
 			if(Document.OriginAtMargins){

@@ -563,7 +563,7 @@ namespace OpenDental{
 				return;
 			}
 			PrintDocument pd=new PrintDocument();
-			if(!Printers.SetPrinter(pd,PrintSituation.Default)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Default)){
 				return;
 			}
 			if(!CreateDataFile(dataFile,letterCur)){

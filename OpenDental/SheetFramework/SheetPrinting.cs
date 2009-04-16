@@ -52,7 +52,7 @@ namespace OpenDental {
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(!Printers.SetPrinter(pd,sit)) {
+					if(!PrinterL.SetPrinter(pd,sit)) {
 						return;
 					}
 					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
@@ -126,7 +126,7 @@ namespace OpenDental {
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(!Printers.SetPrinter(pd,sit)) {
+					if(!PrinterL.SetPrinter(pd,sit)) {
 						return;
 					}
 					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);

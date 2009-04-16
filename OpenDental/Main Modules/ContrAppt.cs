@@ -3090,7 +3090,7 @@ namespace OpenDental{
 				pView.printPreviewControl2.Document=pd2;
   			pView.ShowDialog();
 			#else
-				if(!Printers.SetPrinter(pd2,PrintSituation.Appointments)){
+				if(!PrinterL.SetPrinter(pd2,PrintSituation.Appointments)){
 					return;
 				}
 				try{
@@ -4017,7 +4017,7 @@ namespace OpenDental{
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintApptCard);
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd2.OriginAtMargins=true;//forces origin to upper left of actual page
-			if(Printers.SetPrinter(pd2,PrintSituation.Postcard)){
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Postcard)){
 				pd2.Print();
 			}
 		}

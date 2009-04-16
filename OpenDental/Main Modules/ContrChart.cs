@@ -6525,7 +6525,7 @@ namespace OpenDental{
 					pView.ShowDialog();				
 			  }
 				else{
-					if(Printers.SetPrinter(pd2,PrintSituation.Default)){
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
 						pd2.Print();
 					}
 				}
@@ -6585,7 +6585,7 @@ namespace OpenDental{
 					pView.ShowDialog();
 				}
 				else {
-					if(Printers.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
 						pd2.Print();
 					}
 				}

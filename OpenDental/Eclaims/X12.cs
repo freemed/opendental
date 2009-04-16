@@ -54,7 +54,7 @@ namespace OpenDental.Eclaims
 
 		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.  The string needs to be parsed to determine the transaction numbers used for each claim.</summary>
 		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
-			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItems[0].ClearinghouseNum);
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItems[0].ClearinghouseNum);
 			List<ClaimSendQueueItem> functionalGroupDental=new List<ClaimSendQueueItem>();
 			List<ClaimSendQueueItem> functionalGroupMedical=new List<ClaimSendQueueItem>();
 			for(int i=0;i<queueItems.Count;i++){
@@ -1663,7 +1663,7 @@ namespace OpenDental.Eclaims
 		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warning){
 			string retVal="";
 			warning="";
-			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItem.ClearinghouseNum);
+			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
 			//if(clearhouse.Eformat==ElectronicClaimFormat.X12){//not needed since this is always true

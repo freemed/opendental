@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Computers {
 		///<summary>A list of all computers that have logged into the database in the past.  Might be some extra computer names in the list unless user has cleaned it up.</summary>
@@ -27,11 +25,11 @@ namespace OpenDental{
 			//first, make sure this computer is in the db:
 			string command=
 				"SELECT * from computer "
-				+"WHERE compname = '"+SystemInformation.ComputerName+"'";
+				+"WHERE compname = '"+Environment.MachineName+"'";
 			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0) {
 				Computer Cur=new Computer();
-				Cur.CompName=SystemInformation.ComputerName;
+				Cur.CompName=Environment.MachineName;
 				Computers.Insert(Cur);
 			}
 			//then, refresh List:
@@ -97,31 +95,12 @@ namespace OpenDental{
 		///<summary>Only called from Printers.GetForSit</summary>
 		public static Computer GetCur(){
 			for(int i=0;i<List.Length;i++){
-				if(SystemInformation.ComputerName.ToUpper()==List[i].CompName.ToUpper()){
+				if(Environment.MachineName.ToUpper()==List[i].CompName.ToUpper()) {
 					return List[i];
 				}
 			}
 			return null;//this will never happen
-		}
-   
-
-	
+		}	
 
 	}
-
-	
-
-	
-
-
-
 }
-
-
-
-
-
-
-
-
-

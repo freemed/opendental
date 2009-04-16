@@ -434,7 +434,7 @@ namespace OpenDental{
 		}
 
 		private void OnPrint_Click() {
-			if(!Printers.SetPrinter(Document,PrintSituation.TPPerio)){
+			if(!PrinterL.SetPrinter(Document,PrintSituation.TPPerio)){
 				return;
 			}
 			if(Document.OriginAtMargins){

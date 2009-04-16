@@ -255,7 +255,7 @@ namespace OpenDental{
 			pd.PrinterSettings.MinimumPage=1;
 			pd.DefaultPageSettings.Landscape=viewer.PageWidth>viewer.PageHeight;
 			try{
-				if(Printers.SetPrinter(pd,PrintSituation.Default)){
+				if(PrinterL.SetPrinter(pd,PrintSituation.Default)){
 					if(pd.PrinterSettings.PrintRange==PrintRange.Selection) {
 						pd.PrinterSettings.FromPage=viewer.PageCurrent;
 					}

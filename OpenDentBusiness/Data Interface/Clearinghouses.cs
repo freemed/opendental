@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Clearinghouses {
 		///<summary>List of all clearinghouses.</summary>
@@ -173,17 +171,6 @@ namespace OpenDental{
 			return defaultCH.ClearinghouseNum;
 		}
 
-		///<summary>Returns the clearinghouse specified by the given num.</summary>
-		public static Clearinghouse GetClearinghouse(int clearinghouseNum){
-			for(int i=0;i<list.Length;i++){
-				if(list[i].ClearinghouseNum==clearinghouseNum){
-					return list[i];
-				}
-			}
-			MessageBox.Show("Error. Could not locate Clearinghouse.");
-			return null;
-		}
-
 		///<summary>Returns the default clearinghouse. If no default present, returns null.</summary>
 		public static Clearinghouse GetDefault(){
 			for(int i=0;i<List.Length;i++){
@@ -193,42 +180,6 @@ namespace OpenDental{
 			}
 			return null;
 		}
-		
-		///<summary></summary>
-		public static string GetDescript(int clearinghouseNum){
-			if(clearinghouseNum==0){
-				return "";
-			}
-			return GetClearinghouse(clearinghouseNum).Description;
-		}
-
-		///<summary>Gets the index of this clearinghouse within List</summary>
-		public static int GetIndex(int clearinghouseNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ClearinghouseNum==clearinghouseNum){
-					return i;
-				}
-			}
-			MessageBox.Show("Clearinghouses.GetIndex failed.");
-			return -1;
-		}
-
-		
-
 
 	}
-
-	
-
-
-
 }
-
-
-
-
-
-
-
-
-

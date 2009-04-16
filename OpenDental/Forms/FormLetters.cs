@@ -450,7 +450,7 @@ namespace OpenDental{
 			pd2=new PrintDocument();
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
-			if(!Printers.SetPrinter(pd2,PrintSituation.Default)){
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)){
 				return;
 			}
 			try{
@@ -577,7 +577,7 @@ namespace OpenDental{
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins = true;
-			if(!Printers.SetPrinter(pd2,PrintSituation.Default)) {
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
 				return;
 			}
 			try {
@@ -658,7 +658,7 @@ namespace OpenDental{
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins = true;
-			if(!Printers.SetPrinter(pd2,PrintSituation.Default)) {
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
 				return;
 			}
 			try {

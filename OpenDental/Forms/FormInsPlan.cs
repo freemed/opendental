@@ -3088,7 +3088,7 @@ namespace OpenDental{
 		private void butLabel_Click(object sender,System.EventArgs e) {
 			//LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
+			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)) {
 				return;
 			}
 			//this is useless code. Revisit later.

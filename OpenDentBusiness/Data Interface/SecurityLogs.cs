@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SecurityLogs {
 
@@ -107,29 +105,10 @@ namespace OpenDental{
 			SecurityLog securityLog=new SecurityLog();
 			securityLog.PermType=permType;
 			securityLog.UserNum=Security.CurUser.UserNum;
-			securityLog.LogText="From: "+SystemInformation.ComputerName+" - "+logText;
+			securityLog.LogText="From: "+Environment.MachineName+" - "+logText;
 			securityLog.PatNum=patNum;
 			SecurityLogs.Insert(securityLog);
-		}
-
-		
+		}	
 
 	}
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
