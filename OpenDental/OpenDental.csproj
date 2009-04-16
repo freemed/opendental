@@ -216,7 +216,6 @@
     <Compile Include="Data Interface\Clearinghouses.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Computers.cs" />
@@ -320,7 +319,6 @@
     <Compile Include="Data Interface\TaskLists.cs" />
     <Compile Include="Data Interface\Tasks.cs" />
     <Compile Include="Data Interface\TerminalActives.cs" />
-    <Compile Include="Data Interface\TimeAdjusts.cs" />
     <Compile Include="Data Interface\ToolButItems.cs" />
     <Compile Include="Data Interface\ToothInitials.cs" />
     <Compile Include="Data Interface\Transactions.cs" />

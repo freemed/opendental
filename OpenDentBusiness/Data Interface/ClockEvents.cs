@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClockEvents {
 		///<summary>isBreaks is ignored if getAll is true.</summary>

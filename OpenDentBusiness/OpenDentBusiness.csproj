@@ -148,8 +148,8 @@
     <Compile Include="Data Interface\Anes_HL7Datas.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />
-    <Compile Include="Data Interface\ClaimValCodeLog.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
+    <Compile Include="Data Interface\ClockEvents.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
@@ -192,6 +192,7 @@
     <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\Suppliers.cs" />
+    <Compile Include="Data Interface\TimeAdjusts.cs" />
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
