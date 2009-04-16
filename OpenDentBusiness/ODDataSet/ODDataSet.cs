@@ -19,7 +19,6 @@ namespace OpenDentBusiness {
 			ODDataRow currentRow;
 			XmlNodeList nodesRows=doc.DocumentElement.ChildNodes;
 			for(int i=0;i<nodesRows.Count;i++) {
-			//foreach(XElement elementRow in rootElement.Elements()) {
 				currentRow=new ODDataRow();
 				if(currentTable.Name=="") {
 					currentTable.Name=nodesRows[i].Name;
@@ -35,27 +34,6 @@ namespace OpenDentBusiness {
 				currentTable.Rows.Add(currentRow);
 			}
 			this.Tables.Add(currentTable);
-			/*
-			XElement rootElement=XElement.Parse(xmlData);
-			ODDataTable currentTable=new ODDataTable();
-			//Dictionary<string,string> currentRow;
-			ODDataRow currentRow;
-			foreach(XElement elementRow in rootElement.Elements()){
-				currentRow=new ODDataRow();//new Dictionary<string,string>();
-				if(currentTable.Name==""){
-					currentTable.Name=elementRow.Name.ToString();
-				}
-				else if(currentTable.Name!=elementRow.Name.ToString()){
-					this.Tables.Add(currentTable);
-					currentTable=new ODDataTable();
-					currentTable.Name=elementRow.Name.ToString();
-				}
-				foreach(XElement elementCell in elementRow.Elements()){
-					currentRow.Add(elementCell.Name.ToString(),elementCell.Value);
-				}
-				currentTable.Rows.Add(currentRow);
-			}
-			this.Tables.Add(currentTable);*/
 		}
 	}
 
