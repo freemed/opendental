@@ -10,12 +10,6 @@ namespace OpenDental{
 	///<summary>Handles database commands related to the definition table in the db.  The related DefB class is referenced frequently from many different areas of the program.</summary>
 	public class DefL{
 
-		///<summary></summary>
-		public static void HideDef(Def def){
-			def.IsHidden=true;
-			Defs.Update(def);
-		}
-
 		///<summary>Returns the new selected.</summary>
 		public static int MoveUp(bool isSelected,int selected,Def[] list){
 			if(isSelected==false){
@@ -25,8 +19,8 @@ namespace OpenDental{
 			if(selected==0){
 				return selected;
 			}
-			SetOrder(selected-1,list[selected].ItemOrder,list);
-			SetOrder(selected,list[selected].ItemOrder-1,list);
+			Defs.SetOrder(selected-1,list[selected].ItemOrder,list);
+			Defs.SetOrder(selected,list[selected].ItemOrder-1,list);
 			selected-=1;
 			return selected;
 		}
@@ -40,37 +34,11 @@ namespace OpenDental{
 			if(selected==list.Length-1){
 				return selected;
 			}
-			SetOrder(selected+1,list[selected].ItemOrder,list);
-			SetOrder(selected,list[selected].ItemOrder+1,list);
+			Defs.SetOrder(selected+1,list[selected].ItemOrder,list);
+			Defs.SetOrder(selected,list[selected].ItemOrder+1,list);
 			selected+=1;
 			return selected;
-		}
-
-		///<summary></summary>
-		private static void SetOrder(int mySelNum, int myItemOrder,Def[] list){
-			Def def=list[mySelNum];
-			def.ItemOrder=myItemOrder;
-			//Cur=temp;
-			Defs.Update(def);
-		}
-
-		
-
-		
+		}		
 
 	}
-
-	
-
-	
-
 }
-
-
-
-
-
-
-
-
-

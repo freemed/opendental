@@ -406,7 +406,7 @@ namespace OpenDental{
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++){	
 					if(IsWeeklyView){
-						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
+						if(ApptViewItems.GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
 						}
 						//this is a workaround because we start on Monday:
@@ -416,7 +416,7 @@ namespace OpenDental{
 						}
 						rect=new RectangleF(
 							TimeWidth+1+(dayofweek)*ColDayWidth
-							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+							+ColAptWidth*ApptViewItems.GetIndexOp(schedForType[i].Ops[o])+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColAptWidth-1
@@ -424,12 +424,12 @@ namespace OpenDental{
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
 					else{
-						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1){
+						if(ApptViewItems.GetIndexOp(schedForType[i].Ops[o])==-1){
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
-							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
+							+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Ops[o])+1
 							+ProvWidth*2//so they don't overlap prov bars
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow

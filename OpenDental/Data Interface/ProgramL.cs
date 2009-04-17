@@ -176,24 +176,5 @@ namespace OpenDental{
 			}
 		}
 
-
-
-
 	}
-
-	
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-

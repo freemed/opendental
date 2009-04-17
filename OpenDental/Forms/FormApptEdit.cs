@@ -1827,7 +1827,7 @@ namespace OpenDental{
 				}
 			}
 			else{
-				ProcedureL.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
+				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
 			return true;
 		}

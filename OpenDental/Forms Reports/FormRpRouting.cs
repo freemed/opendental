@@ -341,7 +341,7 @@ namespace OpenDental
 			Procedure[] procsAll=Procedures.Refresh(pat.PatNum);
 			Procedure[] procsApt=Procedures.GetProcsOneApt(Appts[pagesPrinted].AptNum,procsAll);
 			for(int i=0;i<procsApt.Length;i++) {
-				str="   "+ProcedureL.GetDescription(procsApt[i]);
+				str="   "+Procedures.GetDescription(procsApt[i]);
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 			}
@@ -531,7 +531,7 @@ namespace OpenDental
 				if(procsAll[i].ProcStatus!=ProcStat.TP){
 					continue;
 				}
-				str=ProcedureL.GetDescription(procsAll[i]);
+				str=Procedures.GetDescription(procsAll[i]);
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 			}

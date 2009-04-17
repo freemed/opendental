@@ -120,5 +120,20 @@ namespace OpenDentBusiness {
 				+" AND ItemOrder > "+POut.PInt(def.ItemOrder);
 			General.NonQ(command);
 		}
+
+		///<summary></summary>
+		public static void HideDef(Def def) {
+			def.IsHidden=true;
+			Defs.Update(def);
+		}
+
+		///<summary></summary>
+		public static void SetOrder(int mySelNum,int myItemOrder,Def[] list) {
+			Def def=list[mySelNum];
+			def.ItemOrder=myItemOrder;
+			//Cur=temp;
+			Defs.Update(def);
+		}
+
 	}
 }

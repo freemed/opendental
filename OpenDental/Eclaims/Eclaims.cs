@@ -126,7 +126,7 @@ namespace OpenDental.Eclaims
 				}
 				if(Clearinghouses.List[i].Eformat!=ElectronicClaimFormat.Canadian){
 					for(int j=0;j<claimsByCHouse[i].Count;j++){
-						Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
+						EtransL.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
 							Clearinghouses.List[i].ClearinghouseNum,etype,messageText,batchNum);
 					}
 				}

@@ -3193,25 +3193,25 @@ namespace OpenDental{
 					return;
 				}
 				if(ProcCur.Surf=="U"){
-					verifyCode=AutoCodeItemL.VerifyCode
+					verifyCode=AutoCodeItems.VerifyCode
 						(ProcedureCode2.CodeNum,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
 				}
 				else{
-					verifyCode=AutoCodeItemL.VerifyCode
+					verifyCode=AutoCodeItems.VerifyCode
 						(ProcedureCode2.CodeNum,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
 				}
 			}
 			else if(ProcedureCode2.TreatArea==TreatmentArea.ToothRange){
 				//test for max or mand.
 				if(listBoxTeeth.SelectedItems.Count<1)
-					verifyCode=AutoCodeItemL.VerifyCode
+					verifyCode=AutoCodeItems.VerifyCode
 						(ProcedureCode2.CodeNum,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
 				else
-					verifyCode=AutoCodeItemL.VerifyCode
+					verifyCode=AutoCodeItems.VerifyCode
 						(ProcedureCode2.CodeNum,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
 			}
 			else{//surf or tooth
-				verifyCode=AutoCodeItemL.VerifyCode
+				verifyCode=AutoCodeItems.VerifyCode
 					(ProcedureCode2.CodeNum,ProcCur.ToothNum,ProcCur.Surf,false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);
 			}
 			if(ProcedureCode2.CodeNum!=verifyCode){

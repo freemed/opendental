@@ -204,24 +204,19 @@
     <Compile Include="Bridges\TrophyEnhanced.cs" />
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
-    <Compile Include="Data Interface\aaLocalDataInterface.cs" />
-    <Compile Include="Data Interface\ClaimFormL.cs" />
     <Compile Include="Data Interface\ClaimL.cs" />
-    <Compile Include="Data Interface\ClaimPaymentL.cs" />
     <Compile Include="Data Interface\ClaimProcL.cs" />
     <Compile Include="Data Interface\ClearinghouseL.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
-    <Compile Include="Data Interface\AutoCodeL.cs" />
-    <Compile Include="Data Interface\AutoCodeItemL.cs" />
-    <Compile Include="Data Interface\Etranss.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data Interface\EtransL.cs" />
     <Compile Include="Data Interface\FeeL.cs" />
     <Compile Include="Data Interface\InsPlanL.cs" />
+    <Compile Include="Data Interface\Lan.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\PatPlanL.cs" />
     <Compile Include="Data Interface\PerioExamL.cs" />
-    <Compile Include="Data Interface\OperatoryL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\PerioMeasureL.cs" />
     <Compile Include="Data Interface\PrefL.cs" />
@@ -230,8 +225,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\DefL.cs" />
-    <Compile Include="Data Interface\Lan.cs" />
-    <Compile Include="Data Interface\ProcedureCodeL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\RefAttachL.cs" />

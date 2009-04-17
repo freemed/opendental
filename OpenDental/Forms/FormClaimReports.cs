@@ -266,7 +266,7 @@ namespace OpenDental{
 				Directory.CreateDirectory(archiveDir);
 			}
 			for(int i=0;i<files.Length;i++) {
-				Etranss.ProcessIncomingReport(
+				EtransL.ProcessIncomingReport(
 					File.GetCreationTime(files[i]),
 					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
 					File.ReadAllText(files[i]));

@@ -985,9 +985,253 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
-		
+		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
+		public static string ConvertProcToString(int codeNum,string surf,string toothNum) {
+			string strLine="";
+			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
+			switch(code.TreatArea) {
+				case TreatmentArea.Surf:
+					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+surf+"-";//""#12-MOD-"
+					break;
+				case TreatmentArea.Tooth:
+					strLine+="#"+Tooth.ToInternat(toothNum)+"-";//"#12-"
+					break;
+				default://area 3 or 0 (mouth)
+					break;
+				case TreatmentArea.Quad:
+					strLine+=surf+"-";//"UL-"
+					break;
+				case TreatmentArea.Sextant:
+					strLine+="S"+surf+"-";//"S2-"
+					break;
+				case TreatmentArea.Arch:
+					strLine+=surf+"-";//"U-"
+					break;
+				case TreatmentArea.ToothRange:
+					//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+					break;
+			}//end switch
+			strLine+=code.AbbrDesc;
+			return strLine;
+		}
 
+		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
+		public static string GetDescription(Procedure proc) {
+			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
+		}
 
+		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
+		public static void SetProvidersInAppointment(Appointment apt,List<Procedure> procList) {
+			ProcedureCode procCode;
+			Procedure changedProc;
+			for(int i=0;i<procList.Count;i++) {
+				changedProc=procList[i].Copy();
+				if(apt.ProvHyg!=0) {//if the appointment has a hygiene provider
+					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
+					if(procCode.IsHygiene) {//hygiene proc
+						changedProc.ProvNum=apt.ProvHyg;
+					} else {//dentist proc
+						changedProc.ProvNum=apt.ProvNum;
+					}
+				} else {//same provider for every procedure
+					changedProc.ProvNum=apt.ProvNum;
+				}
+				changedProc.ClinicNum=apt.ClinicNum;
+				Procedures.Update(changedProc,procList[i]);//won't go to db unless a field has changed.
+			}
+		}
 
+		///<summary>Gets a list of procedures representing extracted teeth.  Status of C,EC,orEO. Includes procs with toothNum "1"-"32".  Will not include procs with unreasonable dates.  Used for Canadian e-claims instead of the usual ToothInitials.GetMissingOrHiddenTeeth, because Canada requires dates on the extracted teeth.  Supply all procedures for the patient.</summary>
+		public static List<Procedure> GetExtractedTeeth(Procedure[] procList) {
+			List<Procedure> extracted=new List<Procedure>();
+			ProcedureCode procCode;
+			for(int i=0;i<procList.Length;i++) {
+				if(procList[i].ProcStatus!=ProcStat.C&&procList[i].ProcStatus!=ProcStat.EC&&procList[i].ProcStatus!=ProcStat.EO) {
+					continue;
+				}
+				if(!Tooth.IsValidDB(procList[i].ToothNum)) {
+					continue;
+				}
+				if(Tooth.IsSuperNum(procList[i].ToothNum)) {
+					continue;
+				}
+				if(Tooth.IsPrimary(procList[i].ToothNum)) {
+					continue;
+				}
+				if(procList[i].ProcDate.Year<1880||procList[i].ProcDate>DateTime.Today) {
+					continue;
+				}
+				procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
+				if(procCode.TreatArea!=TreatmentArea.Tooth) {
+					continue;
+				}
+				if(procCode.PaintType!=ToothPaintingType.Extraction) {
+					continue;
+				}
+				extracted.Add(procList[i].Copy());
+			}
+			return extracted;
+		}
+
+		///<summary>Base estimate or override is retrieved from supplied claimprocs. Does not take into consideration annual max or deductible.  If limitToTotal set to true, then it does limit total of pri+sec to not be more than total fee.  The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
+		public static double GetEst(Procedure proc,ClaimProc[] claimProcs,PriSecTot pst,PatPlan[] patPlans,bool limitToTotal) {
+			double priBaseEst=0;
+			double secBaseEst=0;
+			double priOverride=-1;
+			double secOverride=-1;
+			for(int i=0;i<claimProcs.Length;i++) {
+				//adjustments automatically ignored since no ProcNum
+				if(claimProcs[i].Status==ClaimProcStatus.CapClaim
+					||claimProcs[i].Status==ClaimProcStatus.Preauth
+					||claimProcs[i].Status==ClaimProcStatus.Supplemental) {
+					continue;
+				}
+				if(claimProcs[i].ProcNum==proc.ProcNum) {
+					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
+						//if this is a Cap, then this will still work. Est comes out 0.
+						priBaseEst=claimProcs[i].BaseEst;
+						priOverride=claimProcs[i].OverrideInsEst;
+					} else if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
+						secBaseEst=claimProcs[i].BaseEst;
+						secOverride=claimProcs[i].OverrideInsEst;
+					}
+				}
+			}
+			if(priOverride!=-1) {
+				priBaseEst=priOverride;
+			}
+			if(secOverride!=-1) {
+				secBaseEst=secOverride;
+			}
+			if(limitToTotal&&proc.ProcFee-priBaseEst-secBaseEst<0) {
+				secBaseEst=proc.ProcFee-priBaseEst;
+			}
+			switch(pst) {
+				case PriSecTot.Pri:
+					return priBaseEst;
+				case PriSecTot.Sec:
+					return secBaseEst;
+				case PriSecTot.Tot:
+					return priBaseEst+secBaseEst;
+			}
+			return 0;
+		}
+
+		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
+		public static int GlobalUpdateFees() {
+			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
+				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
+				procedurelog.ProcFee,insplan.PlanType
+				FROM procedurelog
+				LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
+				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
+				AND patplan.Ordinal=1
+				LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum
+				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
+				WHERE procedurelog.ProcStatus=1";
+			/*@"SELECT procedurelog.ProcCode,insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,
+							patient.PriProv,ProcNum
+							FROM procedurelog,patient
+							LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
+							AND patplan.Ordinal=1
+							LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
+							WHERE procedurelog.ProcStatus=1
+							AND patient.PatNum=procedurelog.PatNum
+						";*/
+			DataTable table=General.GetTable(command);
+			int priPlanFeeSched;
+			//int feeSchedNum;
+			int patFeeSched;
+			int patProv;
+			string planType;
+			double insfee;
+			double standardfee;
+			double newFee;
+			double oldFee;
+			int rowsChanged=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				priPlanFeeSched=PIn.PInt(table.Rows[i]["PlanFeeSched"].ToString());
+				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
+				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
+				planType=PIn.PString(table.Rows[i]["PlanType"].ToString());
+				insfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv));
+				if(planType=="p") {//PPO
+					standardfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
+					if(standardfee>insfee) {
+						newFee=standardfee;
+					} else {
+						newFee=insfee;
+					}
+				} else {
+					newFee=insfee;
+				}
+				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
+				if(newFee==oldFee) {
+					continue;
+				}
+				command="UPDATE procedurelog SET ProcFee='"+POut.PDouble(newFee)+"' "
+					+"WHERE ProcNum="+table.Rows[i]["ProcNum"].ToString();
+				rowsChanged+=General.NonQ(command);
+			}
+			return rowsChanged;
+		}
+
+		///<summary>Used from TP to get a list of all TP procs, ordered by priority, toothnum.</summary>
+		public static Procedure[] GetListTP(Procedure[] procList) {
+			ArrayList AL=new ArrayList();
+			for(int i=0;i<procList.Length;i++) {
+				if(procList[i].ProcStatus==ProcStat.TP) {
+					AL.Add(procList[i]);
+				}
+			}
+			IComparer myComparer=new ProcedureComparer();
+			AL.Sort(myComparer);
+			Procedure[] retVal=new Procedure[AL.Count];
+			AL.CopyTo(retVal);
+			return retVal;
+		}
 	}
+
+	/*================================================================================================================
+	=========================================== class ProcedureComparer =============================================*/
+
+	///<summary>This sorts procedures based on priority, then tooth number, then code (but if Canadian lab code, uses proc code here instead of lab code).  Finally, if comparing a proc and its Canadian lab code, it puts the lab code after the proc.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+	public class ProcedureComparer:IComparer {
+		///<summary>This sorts procedures based on priority, then tooth number.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+		int IComparer.Compare(Object objx,Object objy) {
+			Procedure x=(Procedure)objx;
+			Procedure y=(Procedure)objy;
+			//first, by priority
+			if(x.Priority!=y.Priority) {//if priorities are different
+				if(x.Priority==0) {
+					return 1;//x is greater than y. Priorities always come first.
+				}
+				if(y.Priority==0) {
+					return -1;//x is less than y. Priorities always come first.
+				}
+				return DefC.GetOrder(DefCat.TxPriorities,x.Priority).CompareTo(DefC.GetOrder(DefCat.TxPriorities,y.Priority));
+			}
+			//priorities are the same, so sort by toothrange
+			if(x.ToothRange!=y.ToothRange) {
+				//empty toothranges come before filled toothrange values
+				return x.ToothRange.CompareTo(y.ToothRange);
+			}
+			//toothranges are the same (usually empty), so compare toothnumbers
+			if(x.ToothNum!=y.ToothNum) {
+				//this also puts invalid or empty toothnumbers before the others.
+				return Tooth.ToInt(x.ToothNum).CompareTo(Tooth.ToInt(y.ToothNum));
+			}
+			//priority and toothnums are the same, so sort by code.
+			/*string adaX=x.Code;
+			if(x.ProcNumLab !=0){//if x is a Canadian lab proc
+				//then use the Code of the procedure instead of the lab code
+				adaX=Procedures.GetOneProc(
+			}
+			string adaY=y.Code;*/
+			return ProcedureCodes.GetStringProcCode(x.CodeNum).CompareTo(ProcedureCodes.GetStringProcCode(y.CodeNum));
+			//return x.Code.CompareTo(y.Code);
+			//return 0;//priority, tooth number, and code are all the same
+		}
+	}
+
 }

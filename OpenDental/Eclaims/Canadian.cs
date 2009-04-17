@@ -51,7 +51,7 @@ namespace OpenDental.Eclaims {
 			List<CanadianExtract> missingListDates;
 			string txt;
 			for(int i=0;i<queueItems.Count;i++){
-				etrans=Etranss.SetClaimSentOrPrinted(queueItems[i].ClaimNum,queueItems[i].PatNum,
+				etrans=EtransL.SetClaimSentOrPrinted(queueItems[i].ClaimNum,queueItems[i].PatNum,
 					clearhouse.ClearinghouseNum,EtransType.Claim_CA,"",0);
 				txt="";
 				claim=Claims.GetClaim(queueItems[i].ClaimNum);

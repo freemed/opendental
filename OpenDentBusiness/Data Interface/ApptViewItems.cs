@@ -124,7 +124,14 @@ namespace OpenDentBusiness{
 			return retVal;//(int[])AL.ToArray(typeof(int));
 		}
 
-
+		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
+		public static int GetIndexOp(int opNum) {
+			for(int i=0;i<VisOps.Length;i++) {
+				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)
+					return i;
+			}
+			return -1;
+		}
 
 	}
 

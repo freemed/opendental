@@ -57,7 +57,7 @@ namespace OpenDental{
 				cp.BaseEst=cp.AllowedOverride;
 			}
 			else{
-				double carrierAllowed=InsPlanL.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList,
+				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList,
 					proc.ToothNum,cp.ProvNum);
 				if(carrierAllowed!=-1){
 					cp.BaseEst=carrierAllowed;
@@ -75,10 +75,10 @@ namespace OpenDental{
 			//copayOverride never recalculated
 			if(resetAll) {
 				if(pst==PriSecTot.Pri) {
-					cp.CopayAmt=InsPlanL.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
+					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
 				}
 				else if(pst==PriSecTot.Sec) {
-					cp.CopayAmt=InsPlanL.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
+					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
 				}
 				else {//pst.Other
 					cp.CopayAmt=-1;

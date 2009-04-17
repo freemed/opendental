@@ -845,7 +845,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
-			ProcListTP=ProcedureL.GetListTP(ProcList);//sorted by priority, then toothnum
+			ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
 			PlanList=TreatPlans.Refresh(PatCur.PatNum);
 			ProcTPList=ProcTPs.Refresh(PatCur.PatNum);
 			OpenDental.UI.ODGridRow row;
@@ -1044,7 +1044,7 @@ namespace OpenDental{
 									insRem=0;
 								}
 								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
-								claimproc.InsPayEst=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
+								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
 								if(claimproc.DedBeforePerc) {
 									int percent=100;
 									if(claimproc.Percentage!=-1){
@@ -1117,7 +1117,7 @@ namespace OpenDental{
 								//next line is supposed to handle dedBeforePerc, but it will get confused with sec ins.
 								//There is no easy solution
 								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
-								secIns=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
+								secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
 								//this math is done here instead of in GetEst to ensure accuracy:
 								if(fee-priIns-secIns < 0) {
 									secIns=fee-priIns;
@@ -1152,8 +1152,8 @@ namespace OpenDental{
 						}
 					}//showMaxDed
 					else{
-						priIns=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,true);
-						secIns=ProcedureL.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,true);
+						priIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,true);
+						secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,true);
 					}
 					#endregion ShowMaxDed
 					subpriIns+=priIns;

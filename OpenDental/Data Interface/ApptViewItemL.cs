@@ -50,7 +50,7 @@ namespace OpenDental{
 					if(ApptViewItemC.List[i].ApptViewNum==ApptViewCur.ApptViewNum){
 						tempAL.Add(ApptViewItemC.List[i]);
 						if(ApptViewItemC.List[i].OpNum>0){//op
-							index=OperatoryL.GetOrder(ApptViewItemC.List[i].OpNum);
+							index=Operatories.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
 								ALops.Add(index);
 							}
@@ -88,13 +88,5 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
-		public static int GetIndexOp(int opNum){
-			for(int i=0;i<ApptViewItems.VisOps.Length;i++){
-				if(OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum==opNum)
-					return i;
-			}		
-			return -1;
-		}
 	}
 }

@@ -293,7 +293,7 @@ namespace OpenDental{
 				MessageBox.Show("Procedure codes inserted: "+rowsInserted);
 			}
 			if(checkAutocodes.Checked) {
-				AutoCodeL.SetToDefault();
+				AutoCodes.SetToDefault();
 				DataValid.SetInvalid(InvalidType.AutoCodes);
 			}
 			if(checkProcButtons.Checked) {

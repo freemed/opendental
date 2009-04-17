@@ -177,6 +177,7 @@
     <Compile Include="Data Interface\EmailTemplates.cs" />
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
+    <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\Fees.cs" />
     <Compile Include="Data Interface\FormPats.cs" />
     <Compile Include="Data Interface\HL7Msgs.cs" />

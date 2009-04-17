@@ -1330,7 +1330,7 @@ namespace OpenDental{
 				menuItemReallocate.Visible=false;
 			#endif
 			if(!PrefC.GetBool("ADAdescriptionsReset")) {
-				ProcedureCodeL.ResetADAdescriptions();
+				ProcedureCodes.ResetADAdescriptions();
 				Prefs.UpdateBool("ADAdescriptionsReset",true);
 			}
 			Splash.Dispose();

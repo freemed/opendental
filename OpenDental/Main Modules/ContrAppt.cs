@@ -1868,7 +1868,7 @@ namespace OpenDental{
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
-				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
+				int startingOp=ApptViewItems.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
 					aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
@@ -1988,7 +1988,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			ProcedureL.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
+			Procedures.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
 			TempApptSingle.Dispose();
 			pinBoard.ClearSelected();
 			//PinApptSingle.Visible=false;
@@ -2517,7 +2517,7 @@ namespace OpenDental{
 				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
 			if(DoesOverlap(apt)) {
-				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
+				int startingOp=ApptViewItems.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
 					apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
@@ -2589,7 +2589,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 			if(apt.AptStatus!=ApptStatus.Complete){
-				ProcedureL.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+				Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
 			}
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
 				PatCurName+", "
@@ -2877,7 +2877,7 @@ namespace OpenDental{
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
 					apt.Op=SheetClickedonOp;
-					Operatory curOp=OperatoryL.GetOperatory(apt.Op);
+					Operatory curOp=Operatories.GetOperatory(apt.Op);
 					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 						apt.ProvNum=curOp.ProvDentist;
 					}

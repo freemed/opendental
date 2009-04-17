@@ -564,7 +564,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select item first,"));
 				return;
 			}
-			DefL.HideDef(DefsList[DefsSelected]);
+			Defs.HideDef(DefsList[DefsSelected]);
 			changed=true;
 			FillDefs();
 		}

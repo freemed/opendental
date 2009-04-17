@@ -537,7 +537,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			int rowsChanged=ProcedureL.GlobalUpdateFees();
+			int rowsChanged=Procedures.GlobalUpdateFees();
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Fees changed: ")+rowsChanged.ToString());
 			DialogResult=DialogResult.OK;
