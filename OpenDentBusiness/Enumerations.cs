@@ -244,7 +244,7 @@ namespace OpenDentBusiness{
 		Startup,
 		///<summary></summary>
 		Defs,
-		///<summary> Also includes diseases.</summary>
+		///<summary></summary>
 		Email,
 		///<summary></summary>
 		Fees,
@@ -293,7 +293,9 @@ namespace OpenDentBusiness{
 		///<summary>38</summary>
 		AccountingAutoPays,
 		///<summary>39</summary>
-		ProcButtons
+		ProcButtons,
+		///<summary>40</summary>
+		Diseases
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

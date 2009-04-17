@@ -83,8 +83,8 @@ namespace OpenDentBusiness {
 				//	return Cache.Refresh((string)parameters[0]);
 				case  MethodNameDS.Chart_GetAll:
 					return ChartModules.GetAll((int)parameters[0],(bool)parameters[1]);
-				case  MethodNameDS.CovCats_RefreshCache:
-					return CovCats.RefreshCache();
+				//case  MethodNameDS.CovCats_RefreshCache:
+				//	return CovCats.RefreshCache();
 				case  MethodNameDS.FamilyModule_GetAll:
 					return FamilyModules.GetAll((int)parameters[0]);
 			}

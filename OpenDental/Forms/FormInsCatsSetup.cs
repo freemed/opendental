@@ -230,7 +230,7 @@ namespace OpenDental {
 		}
 
 		private void FillSpans() {
-			CovCatL.Refresh();
+			CovCats.RefreshCache();
 			CovSpans.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -247,7 +247,7 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			CovSpan[] spansForCat;
-			for(int i=0;i<CovCatC.Listt.Length;i++){
+			for(int i=0;i<CovCatC.Listt.Count;i++){
 				row=new ODGridRow();
 				row.Tag=CovCatC.Listt[i].Copy();
 				row.ColorBackG=Color.FromArgb(225,225,225);
@@ -384,7 +384,7 @@ namespace OpenDental {
 
 		private void butAddCat_Click(object sender, System.EventArgs e) {
 			CovCat covcat=new CovCat();
-			covcat.CovOrder=CovCatC.Listt.Length;
+			covcat.CovOrder=CovCatC.Listt.Count;
 			covcat.DefaultPercent=-1;
 			FormInsCatEdit FormE=new FormInsCatEdit(covcat);
 			FormE.IsNew=true;

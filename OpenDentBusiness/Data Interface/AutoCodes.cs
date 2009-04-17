@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			AutoCodeC.HList=new Hashtable();
 			AutoCodeC.List=new AutoCode[table.Rows.Count];
 			ArrayList ALshort=new ArrayList();//int of indexes of short list

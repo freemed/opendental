@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public static Carrier[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		public static Hashtable HList {
 			get {
 				if(hList==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return hList;
 			}
@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
-		public static DataTable Refresh(){
+		public static DataTable RefreshCache(){
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
 			DataTable table=General.GetTable(command);
@@ -320,7 +320,7 @@ namespace OpenDentBusiness{
 				return ((Carrier)HList[carrierNum]).CarrierName;
 			}
 			//if the carrierNum could not be found:
-			Refresh();
+			RefreshCache();
 			if(HList.ContainsKey(carrierNum)){
 				return ((Carrier)HList[carrierNum]).CarrierName;
 			}
@@ -339,7 +339,7 @@ namespace OpenDentBusiness{
 				return (Carrier)HList[carrierNum];
 			}
 			//if the carrierNum could not be found:
-			Refresh();
+			RefreshCache();
 			if(HList.ContainsKey(carrierNum)){
 				return (Carrier)HList[carrierNum];
 			}

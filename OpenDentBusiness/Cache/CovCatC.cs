@@ -5,11 +5,11 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class CovCatC {
-		private static CovCat[] listt;
-		private static CovCat[] listShort;
+		private static List<CovCat> listt;
+		private static List<CovCat> listShort;
 
 		///<summary>All CovCats</summary>
-		public static CovCat[] Listt {
+		public static List<CovCat> Listt {
 			get {
 				if(listt==null) {
 					CovCats.RefreshCache();
@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only CovCats that are not hidden.</summary>
-		public static CovCat[] ListShort {
+		public static List<CovCat> ListShort {
 			get {
 				if(listShort==null) {
 					CovCats.RefreshCache();
@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static int GetOrderLong(int covCatNum) {
-			for(int i=0;i<Listt.Length;i++) {
+			for(int i=0;i<Listt.Count;i++) {
 				if(covCatNum==Listt[i].CovCatNum) {
 					return i;
 				}

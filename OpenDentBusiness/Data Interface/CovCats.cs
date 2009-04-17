@@ -1,64 +1,38 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class CovCats {
 		///<summary></summary>
-		public static DataSet RefreshCache(){
-			string command="SELECT * FROM covcat ORDER BY covorder;"
-				+"SELECT * FROM covcat WHERE IsHidden = 0 ORDER BY CovOrder";
-			DataSet ds=General.GetDataSet(command);
-			FillCache(ds);
-			return ds;
+		public static DataTable RefreshCache(){
+			string command="SELECT * FROM covcat ORDER BY covorder";
+			DataTable table=General.GetTable(command);
+			FillCache(table);
+			return table;
 		}
 
 		///<summary></summary>
-		public static void FillCache(DataSet ds) {
-			DataTable table=ds.Tables[0];
-			CovCatC.Listt=new CovCat[table.Rows.Count];
+		public static void FillCache(DataTable table) {
+			CovCat covcat;
+			CovCatC.Listt=new List<CovCat>();
+			CovCatC.ListShort=new List<CovCat>();
 			for(int i=0;i<table.Rows.Count;i++) {
-				CovCatC.Listt[i]=new CovCat();
-				CovCatC.Listt[i].CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
-				CovCatC.Listt[i].Description   =PIn.PString(table.Rows[i][1].ToString());
-				CovCatC.Listt[i].DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
-				CovCatC.Listt[i].CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
-				CovCatC.Listt[i].IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
-				CovCatC.Listt[i].EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
-			}
-			table=ds.Tables[1];
-			CovCatC.ListShort=new CovCat[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				CovCatC.ListShort[i]=new CovCat();
-				CovCatC.ListShort[i].CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
-				CovCatC.ListShort[i].Description   =PIn.PString(table.Rows[i][1].ToString());
-				CovCatC.ListShort[i].DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
-				CovCatC.ListShort[i].CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
-				CovCatC.ListShort[i].IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
-				CovCatC.ListShort[i].EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
+				covcat=new CovCat();
+				covcat.CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
+				covcat.Description   =PIn.PString(table.Rows[i][1].ToString());
+				covcat.DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
+				covcat.CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
+				covcat.IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
+				covcat.EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
+				CovCatC.Listt.Add(covcat);
+				if(!covcat.IsHidden) {
+					CovCatC.ListShort.Add(covcat);
+				}
 			}
 		}
-		
-		/*
-		///<summary></summary>
-		public static void Refresh() {
-			DataSet ds=null;
-			try {
-				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-					DtoCovCatRefresh dto=new DtoCovCatRefresh();
-					ds=RemotingClient.ProcessQuery(dto);
-					CovCatB.FillLists(ds);//now, we have both lists on both the client and the server.
-				}
-				else {
-					CovCatB.Refresh();
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}
-		}*/
 
 		///<summary></summary>
 		public static void Update(CovCat covcat) {
@@ -99,7 +73,7 @@ namespace OpenDentBusiness {
 		public static void MoveDown(CovCat covcat) {
 			RefreshCache();
 			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
-			if(oldOrder==CovCatC.Listt.Length-1) {
+			if(oldOrder==CovCatC.Listt.Count-1) {
 				return;
 			}
 			SetOrder(CovCatC.Listt[oldOrder],oldOrder+1);
@@ -114,7 +88,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static CovCat GetCovCat(int covCatNum){
-			for(int i=0;i<CovCatC.Listt.Length;i++) {
+			for(int i=0;i<CovCatC.Listt.Count;i++) {
 				if(covCatNum==CovCatC.Listt[i].CovCatNum) {
 					return CovCatC.Listt[i].Copy();
 				}
@@ -125,7 +99,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static double GetDefaultPercent(int myCovCatNum){
 			double retVal=0;
-			for(int i=0;i<CovCatC.Listt.Length;i++){
+			for(int i=0;i<CovCatC.Listt.Count;i++){
 				if(myCovCatNum==CovCatC.Listt[i].CovCatNum){
 					retVal=(double)CovCatC.Listt[i].DefaultPercent;
 				}
@@ -136,7 +110,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static string GetDesc(int covCatNum){
 			string retStr="";
-			for(int i=0;i<CovCatC.Listt.Length;i++){
+			for(int i=0;i<CovCatC.Listt.Count;i++){
 				if(covCatNum==CovCatC.Listt[i].CovCatNum){
 					retStr=CovCatC.Listt[i].Description;
 				}
@@ -148,7 +122,7 @@ namespace OpenDentBusiness {
 		public static int GetCovCatNum(int orderShort){
 			//need to check this again:
 			int retVal=0;
-			for(int i=0;i<CovCatC.ListShort.Length;i++){
+			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				if(orderShort==CovCatC.ListShort[i].CovOrder){
 					retVal=CovCatC.ListShort[i].CovCatNum;
 				}
@@ -159,7 +133,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static int GetOrderShort(int CovCatNum){
 			int retVal=-1;
-			for(int i=0;i<CovCatC.ListShort.Length;i++){
+			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				if(CovCatNum==CovCatC.ListShort[i].CovCatNum){
 					retVal=i;
 				}
@@ -169,7 +143,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a matching benefit category from the short list.  Returns null if not found, which should be tested for.</summary>
 		public static CovCat GetForEbenCat(EbenefitCategory eben){
-			for(int i=0;i<CovCatC.ListShort.Length;i++) {
+			for(int i=0;i<CovCatC.ListShort.Count;i++) {
 				if(eben==CovCatC.ListShort[i].EbenefitCat) {
 					return CovCatC.ListShort[i];
 				}

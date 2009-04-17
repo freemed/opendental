@@ -1552,7 +1552,7 @@ namespace OpenDental {
 					selectedPlan1.PlanType="";
 					InsPlans.Insert(selectedPlan1);
 					Benefit ben;
-					for(int i=0;i<CovCatC.ListShort.Length;i++){
+					for(int i=0;i<CovCatC.ListShort.Count;i++){
 						if(CovCatC.ListShort[i].DefaultPercent==-1){
 							continue;
 						}
@@ -1610,7 +1610,7 @@ namespace OpenDental {
 					selectedPlan2.PlanType="";
 					InsPlans.Insert(selectedPlan2);
 					Benefit ben;
-					for(int i=0;i<CovCatC.ListShort.Length;i++){
+					for(int i=0;i<CovCatC.ListShort.Count;i++){
 						if(CovCatC.ListShort[i].DefaultPercent==-1){
 							continue;
 						}

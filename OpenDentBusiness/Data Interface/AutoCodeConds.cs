@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			//HList=new Hashtable();
 			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){

@@ -56,46 +56,48 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(AutoCodeConds.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Carriers) || isAll){
-				//Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
+				ds.Tables.Add(Carriers.RefreshCache());//run on startup, after telephone reformat, after list edit.
 			}
 			if(itypes.Contains((int)InvalidType.ClaimForms) || isAll){
-				//ClaimFormItemL.Refresh();
-				//ClaimForms.Refresh();
+				ds.Tables.Add(ClaimFormItems.RefreshCache());
+				ClaimForms.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll){
-				//Computers.Refresh();
-				//Printers.Refresh();
+				Computers.Refresh();
+				Printers.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Defs) || isAll){
 				ds.Tables.Add(Defs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll){
-				//SchoolClasses.Refresh();
-				//SchoolCourses.Refresh();
+				SchoolClasses.Refresh();
+				SchoolCourses.Refresh();
+			}
+			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
+				DiseaseDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				ds.Tables.Add(DisplayFields.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll){
-				//EmailTemplates.Refresh();
-				//DiseaseDefs.Refresh();
+				EmailTemplates.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Employees) || isAll){
-				//Employees.Refresh();
-				//PayPeriods.Refresh();
+				Employees.Refresh();
+				PayPeriods.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
-				//Fees.Refresh();
+				Fees.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll){
 				ds.Tables.Add(FeeScheds.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
-				//CovCatL.Refresh();
-				//CovSpanL.Refresh();
+				ds.Tables.Add(CovCats.RefreshCache());
+				ds.Tables.Add(CovSpans.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
 				//Letters.Refresh();
@@ -187,51 +189,53 @@ namespace OpenDentBusiness {
 				AccountingAutoPays.FillCache(ds.Tables["AccountingAutoPay"]);
 			}
 			if(itypes.Contains((int)InvalidType.AutoCodes) || isAll) {
-				//AutoCodeL.Refresh();
-				//AutoCodeItemL.Refresh();
-				//AutoCodeCondL.Refresh();
+				AutoCodes.FillCache(ds.Tables["AutoCode"]);
+				AutoCodeItems.FillCache(ds.Tables["AutoCodeItem"]);
+				AutoCodeConds.FillCache(ds.Tables["AutoCodeCond"]);
 			}
 			if(itypes.Contains((int)InvalidType.Carriers) || isAll) {
-				//Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
+				Carriers.FillCache(ds.Tables["Carrier"]);//run on startup, after telephone reformat, after list edit.
 			}
 			if(itypes.Contains((int)InvalidType.ClaimForms) || isAll) {
-				//ClaimFormItemL.Refresh();
-				//ClaimForms.Refresh();
+				ClaimFormItems.FillCache(ds.Tables["ClaimFormItem"]);
+				ClaimForms.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll) {
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll) {
-				//Computers.Refresh();
-				//Printers.Refresh();
+				Computers.Refresh();
+				Printers.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Defs) || isAll) {
 				Defs.FillCache(ds.Tables["Def"]);
 			}
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll) {
-				//SchoolClasses.Refresh();
-				//SchoolCourses.Refresh();
+				SchoolClasses.Refresh();
+				SchoolCourses.Refresh();
+			}
+			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
+				DiseaseDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				DisplayFields.FillCache(ds.Tables["DisplayField"]); ;
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll) {
-				//EmailTemplates.Refresh();
-				//DiseaseDefs.Refresh();
+				EmailTemplates.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Employees) || isAll) {
-				//Employees.Refresh();
-				//PayPeriods.Refresh();
+				Employees.Refresh();
+				PayPeriods.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll) {
-				//Fees.Refresh();
+				Fees.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll) {
 				FeeScheds.FillCache(ds.Tables["FeeSched"]);
 			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll) {
-				//CovCatL.Refresh();
-				//CovSpanL.Refresh();
+				FeeScheds.FillCache(ds.Tables["CovCat"]);
+				FeeScheds.FillCache(ds.Tables["CovSpan"]);
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll) {
 				//Letters.Refresh();

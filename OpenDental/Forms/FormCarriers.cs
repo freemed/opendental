@@ -210,7 +210,7 @@ namespace OpenDental{
 			else{
 				checkCDAnet.Visible=false;
 			}
-			Carriers.Refresh();
+			Carriers.RefreshCache();
 			FillGrid();
 		}
 

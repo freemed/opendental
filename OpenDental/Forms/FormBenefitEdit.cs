@@ -352,13 +352,13 @@ namespace OpenDental{
 				checkPat.Checked=true;
 			}
 			listCategory.Items.Clear();
-			for(int i=0;i<CovCatC.ListShort.Length;i++){
+			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				listCategory.Items.Add(CovCatC.ListShort[i].Description);
 				if(CovCatC.ListShort[i].CovCatNum==BenCur.CovCatNum){
 					listCategory.SelectedIndex=i;
 				}
 			}
-			if(listCategory.SelectedIndex==-1 && CovCatC.ListShort.Length>0){
+			if(listCategory.SelectedIndex==-1 && CovCatC.ListShort.Count>0){
 				listCategory.SelectedIndex=0;
 			}
 			textProcCode.Text=ProcedureCodes.GetStringProcCode(BenCur.CodeNum);

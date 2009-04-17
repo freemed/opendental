@@ -205,7 +205,6 @@
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
-    <Compile Include="Data Interface\CacheL.cs" />
     <Compile Include="Data Interface\ClaimFormL.cs" />
     <Compile Include="Data Interface\ClaimL.cs" />
     <Compile Include="Data Interface\ClaimPaymentL.cs" />
@@ -224,7 +223,6 @@
     <Compile Include="Data Interface\PatPlanL.cs" />
     <Compile Include="Data Interface\PerioExamL.cs" />
     <Compile Include="Data Interface\OperatoryL.cs" />
-    <Compile Include="Data Interface\CovCatL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\PerioMeasureL.cs" />
     <Compile Include="Data Interface\PrefL.cs" />

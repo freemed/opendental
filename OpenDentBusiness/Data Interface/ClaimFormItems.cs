@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			ClaimFormItemC.List=new ClaimFormItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				ClaimFormItemC.List[i]=new ClaimFormItem();
