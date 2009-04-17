@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new AccountingAutoPay();

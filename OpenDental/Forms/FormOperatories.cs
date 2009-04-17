@@ -181,7 +181,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			CacheL.Refresh(InvalidType.Operatories);
+			Cache.Refresh(InvalidType.Operatories);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableOperatories","Op Name"),150);

@@ -113,7 +113,7 @@ namespace OpenDental{
 					//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
 					Prefs.UpdateBool("CorruptedDatabase",false,true);//more forceful refresh in order to properly change flag
 				}
-				CacheL.Refresh(InvalidType.Prefs);
+				Cache.Refresh(InvalidType.Prefs);
 				return true;
 #if !DEBUG
 			}

@@ -183,7 +183,7 @@ namespace OpenDental{
 
 		private void FormAutoCode_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
+				DataValid.SetInvalid(InvalidType.AutoCodes);
 			}
       DialogResult=DialogResult.OK;
 		}

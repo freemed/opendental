@@ -1394,7 +1394,7 @@ namespace OpenDental{
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
 		private bool PrefsStartup(){
-			CacheL.Refresh(InvalidType.Prefs);
+			Cache.Refresh(InvalidType.Prefs);
 			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
@@ -1402,7 +1402,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
-				CacheL.Refresh(InvalidType.Security);
+				Cache.Refresh(InvalidType.Security);
 				FormPath FormP=new FormPath();
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK){
@@ -1413,7 +1413,7 @@ namespace OpenDental{
 				//menuItemClaimForms.Visible=usingAtoZ;
 				//CheckCustomReports();
 				//this.RefreshCurrentModule();
-				CacheL.Refresh(InvalidType.Prefs);//because listening thread not started yet.
+				Cache.Refresh(InvalidType.Prefs);//because listening thread not started yet.
 			}
 			if(!PrefL.CheckProgramVersion()){
 				return false;
@@ -1426,7 +1426,7 @@ namespace OpenDental{
 					Application.Exit();
 					return false;
 				}
-				CacheL.Refresh(InvalidType.Prefs);
+				Cache.Refresh(InvalidType.Prefs);
 			}
 			Lan.Refresh();//automatically skips if current culture is en-US
 			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
@@ -1440,11 +1440,20 @@ namespace OpenDental{
 			for(int i=0;i<itypes.Length;i++){
 				itypeList.Add((int)itypes[i]);
 			}
-			CacheL.Refresh(itypeList);
+			string itypesStr="";
 			bool isAll=false;
-			if(itypeList.Contains((int)InvalidType.AllLocal)){
-				isAll=true;
+			for(int i=0;i<itypes.Length;i++) {
+				if(i>0) {
+					itypesStr+=",";
+				}
+				itypesStr+=((int)itypes[i]).ToString();
+				if(itypes[i]==InvalidType.AllLocal){
+					isAll=true;
+				}
 			}
+			Cache.RefreshCache(itypesStr);
+			RefreshLocalDataPostCleanup(itypeList,isAll,itypes);
+			/*
 			if(itypeList.Contains((int)InvalidType.Prefs) || isAll){
 				//all moved to RefreshLocalDataPostCleanup
 			}
@@ -1554,8 +1563,7 @@ namespace OpenDental{
 			}
 			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
 				ZipCodes.Refresh();
-			}
-			RefreshLocalDataPostCleanup(itypeList,isAll,itypes);
+			}*/
 		}
 
 		///<summary>Performs a few tasks that must be done when local data is changed.</summary>

@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		///<summary>6 Also includes appt rules</summary>
 		Views,
 		///<summary></summary>
-		AutoCodesProcButtons,
+		AutoCodes,
 		///<summary></summary>
 		Carriers,
 		///<summary></summary>
@@ -291,7 +291,9 @@ namespace OpenDentBusiness{
 		///<summary>37</summary>
 		PatFields,
 		///<summary>38</summary>
-		AccountingAutoPays
+		AccountingAutoPays,
+		///<summary>39</summary>
+		ProcButtons
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

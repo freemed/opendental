@@ -20,8 +20,8 @@ namespace OpenDental{
 				feeSched.FeeSchedType=FeeScheduleType.Normal;
 				feeSched.IsNew=true;
 				FeeScheds.WriteObject(feeSched);
-				CacheL.Refresh(InvalidType.FeeScheds);
-				Fees.Refresh();
+				//Cache.Refresh(InvalidType.FeeScheds);
+				//Fees.Refresh();
 				DataValid.SetInvalid(InvalidType.FeeScheds, InvalidType.Fees);
 			}
 			if(feeSched.IsHidden){

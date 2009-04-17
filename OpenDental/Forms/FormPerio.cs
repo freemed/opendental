@@ -1326,7 +1326,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][1].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidType.Defs);
+			Cache.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1342,7 +1342,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][2].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidType.Defs);
+			Cache.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1358,7 +1358,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][4].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidType.Defs);
+			Cache.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1374,7 +1374,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][5].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidType.Defs);
+			Cache.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1422,7 +1422,7 @@ namespace OpenDental{
 			pref.ValueString=currentValue.ToString();
 			Prefs.Update(pref);
 			localDefsChanged=true;
-			CacheL.Refresh(InvalidType.Prefs);
+			Cache.Refresh(InvalidType.Prefs);
 			if(sender==updownProb){
 				textRedProb.Text=currentValue.ToString();
 				textCountProb.Text=gridP.CountTeeth(PerioSequenceType.Probing).Count.ToString();

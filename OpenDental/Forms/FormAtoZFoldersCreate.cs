@@ -215,7 +215,7 @@ namespace OpenDental{
 				//set "use A to Z folders" check-box to checked.
 				Prefs.UpdateString("DocPath",rootDir);
 				Prefs.UpdateString("AtoZfolderNotRequired","0");
-				CacheL.Refresh(InvalidType.Prefs);
+				Cache.Refresh(InvalidType.Prefs);
 				//Prefs_client.RefreshClient();
 			}
 			catch(Exception ex) {

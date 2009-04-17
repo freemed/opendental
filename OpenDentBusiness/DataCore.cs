@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 			MethodInfo methodInfo=classType.GetMethod(methodName);
 			DataSet result=(DataSet)methodInfo.Invoke(null,parameters);
 			return result;*/
-		///<summary></summary>
+		///<summary>This is a STUB, but do not remove it entirely.</summary>
 		public static DataSet GetDsByMethod(MethodNameDS methodName,object[] parameters) {
 			switch (methodName){
 				default:
@@ -79,8 +79,8 @@ namespace OpenDentBusiness {
 					return Appointments.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
 				case  MethodNameDS.Appointment_RefreshOneApt:
 					return Appointments.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
-				case MethodNameDS.Cache_Refresh:
-					return Cache.Refresh((string)parameters[0]);
+				//case MethodNameDS.Cache_Refresh:
+				//	return Cache.Refresh((string)parameters[0]);
 				case  MethodNameDS.Chart_GetAll:
 					return ChartModules.GetAll((int)parameters[0],(bool)parameters[1]);
 				case  MethodNameDS.CovCats_RefreshCache:
@@ -90,6 +90,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
+	/*
 		///<summary></summary>
 		public static DataTable GetTableByMethod(string classMethod,object[] parameters) {
 			string className=classMethod.Split('.')[0];
@@ -98,7 +99,7 @@ namespace OpenDentBusiness {
 			MethodInfo methodInfo=classType.GetMethod(methodName);
 			DataTable result=(DataTable)methodInfo.Invoke(null,parameters);
 			return result;
-			/*
+		
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
@@ -129,8 +130,8 @@ namespace OpenDentBusiness {
 						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
 						(string)parameters[9],(string)parameters[10],(int)parameters[11],(bool)parameters[12],(bool)parameters[13],
 						(int)parameters[14],(DateTime)parameters[15],(int)parameters[16]);
-			}*/
-		}
+			}
+		}*/
 
 		/*
 		public static string GetXmlTableByMethod(MethodNameTable methodName,object[] parameters) {

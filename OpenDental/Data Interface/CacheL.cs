@@ -5,12 +5,22 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class CacheL {
+		/*
 		public static void Refresh(InvalidType itype){
-			List<int> listInt=new List<int>();
-			listInt.Add((int)itype);
-			Refresh(listInt);
+			List<int> itypes=new List<int>();
+			itypes.Add((int)itype);
+			/*string itypesStr="";
+			for(int i=0;i<itypes.Count;i++) {
+				if(i>0) {
+					itypesStr+=",";
+				}
+				itypesStr+=itypes[i].ToString();
+			}
+			//Refresh(itypesStr);
+			Refresh(itypes);
 		}
 
+		
 		public static void Refresh(List<int> itypes){
 			string itypesStr="";
 			for(int i=0;i<itypes.Count;i++){
@@ -138,9 +148,7 @@ namespace OpenDental{
 			}
 
 
-
-
-		}
+		}*/
 
 	}
 }

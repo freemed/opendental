@@ -707,7 +707,7 @@ namespace OpenDental {
 				SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0){
-				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
+				DataValid.SetInvalid(InvalidType.AutoCodes);
 			}
 			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
@@ -1280,7 +1280,7 @@ namespace OpenDental {
 				SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0){
-				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
+				DataValid.SetInvalid(InvalidType.ProcButtons);
 			}
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"ProcButtonItems deleted due to invalid autocode: ")+numberFixed.ToString()+"\r\n";
