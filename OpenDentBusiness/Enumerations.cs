@@ -240,8 +240,8 @@ namespace OpenDentBusiness{
 		InsCats,
 		///<summary>Also includes payperiods.</summary>
 		Employees,
-		///<summary></summary>
-		Startup,
+		///<summary>Deprecated.</summary>
+		StartupOld,
 		///<summary></summary>
 		Defs,
 		///<summary></summary>

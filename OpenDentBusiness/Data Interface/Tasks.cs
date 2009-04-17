@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Not part of cache refresh.</summary>
 	public class Tasks {
 		///<summary></summary>
 		public static ArrayList LastOpenList;

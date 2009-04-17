@@ -100,17 +100,17 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(CovSpans.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
-				//Letters.Refresh();
+				Letters.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll){
-				//LetterMergeFields.Refresh();
-				//LetterMerges.Refresh();
+				LetterMergeFields.Refresh();
+				LetterMerges.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				ds.Tables.Add(Operatories.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
-				//PatFieldDefs.Refresh();
+				PatFieldDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
 				ds.Tables.Add(Pharmacies.RefreshCache());
@@ -119,12 +119,12 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Prefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ProcButtons) || isAll) {
-				//ProcButtons.Refresh();
-				//ProcButtonItems.Refresh();
+				ProcButtons.Refresh();
+				ProcButtonItems.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll){
 				ds.Tables.Add(ProcedureCodes.RefreshCache());
-				//ProcCodeNotes.Refresh();
+				ProcCodeNotes.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll){
 				ds.Tables.Add(Programs.RefreshCache());
@@ -134,8 +134,8 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Providers.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll){
-				//QuickPasteNotes.Refresh();
-				//QuickPasteCats.Refresh();
+				QuickPasteNotes.Refresh();
+				QuickPasteCats.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.RecallTypes) || isAll){
 				ds.Tables.Add(RecallTypes.RefreshCache());
@@ -149,27 +149,22 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(SheetFieldDefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Signals) || isAll) {
-				//SigElementDefs.Refresh();
-				//SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+				SigElementDefs.Refresh();
+				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll){
 				ds.Tables.Add(Sites.RefreshCache());
 			}
-			if(itypes.Contains((int)InvalidType.Startup) || isAll){
-				//Employers.Refresh();//only needed when opening the prog. After that, automated.
-				//ElectIDs.Refresh();//only run on startup
-				//Referrals.Refresh();//Referrals are also refreshed dynamically.
-			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll){
-				//ToolButItems.Refresh();
+				ToolButItems.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ds.Tables.Add(ApptViews.RefreshCache());
 				ds.Tables.Add(ApptViewItems.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
-				//ZipCodes.Refresh();
+				ZipCodes.Refresh();
 			}
 			return ds;
 		}
@@ -238,17 +233,17 @@ namespace OpenDentBusiness {
 				FeeScheds.FillCache(ds.Tables["CovSpan"]);
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll) {
-				//Letters.Refresh();
+				Letters.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll) {
-				//LetterMergeFields.Refresh();
-				//LetterMerges.Refresh();
+				LetterMergeFields.Refresh();
+				LetterMerges.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll) {
 				Operatories.FillCache(ds.Tables["Operatory"]);
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
-				//PatFieldDefs.Refresh();
+				PatFieldDefs.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll) {
 				Pharmacies.FillCache(ds.Tables["Pharmacy"]);
@@ -257,49 +252,48 @@ namespace OpenDentBusiness {
 				Prefs.FillCache(ds.Tables["Pref"]);
 			}
 			if(itypes.Contains((int)InvalidType.ProcButtons) || isAll) {
-				//ProcButtons.Refresh();
-				//ProcButtonItems.Refresh();
+				ProcButtons.Refresh();
+				ProcButtonItems.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll) {
 				ProcedureCodes.FillCache(ds.Tables["ProcedureCode"]);
-				//ProcCodeNotes.Refresh();
+				ProcCodeNotes.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll) {
 				Programs.FillCache(ds.Tables["Program"]);
-				//ProgramProperties.Refresh();
+				Programs.FillCache(ds.Tables["ProgramProperty"]);
 			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll) {
 				Providers.FillCache(ds.Tables["Provider"]);
 			}
 			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll) {
-				//QuickPasteNotes.Refresh();
-				//QuickPasteCats.Refresh();
+				QuickPasteNotes.Refresh();
+				QuickPasteCats.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll) {
 				Userods.FillCache(ds.Tables["Userod"]);
 			}
+			if(itypes.Contains((int)InvalidType.Sheets) || isAll) {
+				SheetDefs.FillCache(ds.Tables["SheetDef"]);
+				SheetFieldDefs.FillCache(ds.Tables["SheetFieldDef"]);
+			}
 			if(itypes.Contains((int)InvalidType.Signals) || isAll) {
-				//SigElementDefs.Refresh();
-				//SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+				SigElementDefs.Refresh();
+				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll) {
 				Sites.FillCache(ds.Tables["Site"]);
 			}
-			if(itypes.Contains((int)InvalidType.Startup) || isAll) {
-				//Employers.Refresh();//only needed when opening the prog. After that, automated.
-				//ElectIDs.Refresh();//only run on startup
-				//Referrals.Refresh();//Referrals are also refreshed dynamically.
-			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll) {
-				//ToolButItems.Refresh();
+				ToolButItems.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll) {
 				ApptViews.FillCache(ds.Tables["ApptView"]);
 				ApptViewItems.FillCache(ds.Tables["ApptViewItem"]);
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll) {
-				//ZipCodes.Refresh();
+				ZipCodes.Refresh();
 			}
 
 		}

@@ -6,7 +6,7 @@ using System.Data;
 namespace OpenDentBusiness{
 ///<summary></summary>
 	public class Referrals{
-		///<summary>All referrals for all patients</summary>
+		///<summary>All referrals for all patients.  Not part of cache refresh.  Just as needed.</summary>
 		private static Referral[] list;
 		//should later add a faster refresh sequence.
 

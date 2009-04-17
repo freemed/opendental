@@ -5,7 +5,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness{
-	///<summary>Employers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if an employerNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
+	///<summary>Employers are not refreshed with cache refresh, but are refreshed as needed. A full refresh is frequently triggered if an employerNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 	public class Employers{
 		private static Employer[] list;
 		private static Hashtable hList;

@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace OpenDentBusiness{
 
-	///<summary>Refreshed with local data.</summary>
+	///<summary>Not part of cache refresh.  Just as needed.</summary>
 	public class ElectIDs{
 		private static ElectID[] list;
 
