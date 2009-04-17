@@ -555,7 +555,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="WebServer\EnumMethodNames.cs" />
     <Compile Include="WebServer\XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>

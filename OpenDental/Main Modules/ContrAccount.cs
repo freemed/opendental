@@ -1780,7 +1780,7 @@ namespace OpenDental {
 				panelTotalOwes.Top=-38;
 				viewingInRecall=true;
 			}
-			DataSetMain=AccountModuleL.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
+			DataSetMain=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
@@ -3310,7 +3310,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			Statements.WriteObject(stmt);
 			FormRpStatement FormST=new FormRpStatement();
-			DataSet dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
+			DataSet dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 			FormST.CreateStatementPdf(stmt,PatCur,FamCur,dataSet);
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);

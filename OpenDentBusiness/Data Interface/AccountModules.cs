@@ -1,10 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Data;
-using System.Text;
-using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
 
 namespace OpenDentBusiness {
 	public class AccountModules {
@@ -18,6 +19,9 @@ namespace OpenDentBusiness {
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled);
+			} 
 			fam=Patients.GetFamily(patNum);
 			if(intermingled){
 				patNum=fam.List[0].PatNum;//guarantor
@@ -41,6 +45,9 @@ namespace OpenDentBusiness {
 
 		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
 		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,singlePatient,fromDate,toDate,intermingled);
+			}
 			//int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
 			//bool intermingled=PIn.PBool(parameters[4]);
@@ -71,7 +78,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
 		public static DataSet GetPayPlanAmort(int payPlanNum){
-			//int payPlanNum=PIn.PInt(parameters[0]);
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),payPlanNum);
+			} 
 			retVal=new DataSet();
 			DataTable table=GetPayPlanAmortTable(payPlanNum);
 			retVal.Tables.Add(table);

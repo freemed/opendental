@@ -717,7 +717,7 @@ namespace OpenDental {
 				Intermingled = true;
 			}
 			DataSet dataSet;
-			dataSet = AccountModuleL.GetStatement(PatientID,Singlepatient,DateRangeFrom,DateRangeTo,
+			dataSet = AccountModules.GetStatement(PatientID,Singlepatient,DateRangeFrom,DateRangeTo,
 				 Intermingled);
 			DataTable tableAccount = dataSet.Tables["account"];
 			string tablename;

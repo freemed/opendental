@@ -8,33 +8,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class AppointmentL {
-		public static DataSet GetApptEdit(int aptNum){
-			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum);
-		}
-
-		public static DataTable GetApptEditProcs(int aptNum) {
-			//this is quick and dirty. Get all the tables, but only use the one we are interested in.
-			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum).Tables["Procedure"].Copy();
-		}
-
-		public static DataTable GetApptEditComm(int aptNum) {
-			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum).Tables["Comm"].Copy();
-		}
-
-		public static DataTable GetApptEditMisc(int aptNum) {
-			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum).Tables["Misc"].Copy();
-		}
-
-		///<summary>Contains all data needed to display appointments for a period.</summary>
-		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd){
-			return Gen.GetDS(MethodNameDS.Appointment_RefreshPeriod,dateStart,dateEnd);
-		}
-
-		///<summary>The resulting datatable will have just one row in it.</summary>
-		public static DataTable RefreshOneApt(int aptNum,bool isPlanned){
-			return Gen.GetDS(MethodNameDS.Appointment_RefreshOneApt,aptNum,isPlanned).Tables["Appointments"].Copy();
-		}
-
+		
 		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 2 years into the future.</summary>
 		public static DateTime[] GetSearchResults(int aptNum,DateTime afterDate,int[] providers,int resultCount,
 			TimeSpan beforeTime,TimeSpan afterTime)

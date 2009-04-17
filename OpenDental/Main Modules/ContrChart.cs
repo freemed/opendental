@@ -3744,7 +3744,7 @@ namespace OpenDental{
 			}
 			DataSetMain=null;
 			if(PatCur!=null){
-				DataSetMain=ChartModule.GetAll(PatCur.PatNum,checkAudit.Checked);
+				DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();

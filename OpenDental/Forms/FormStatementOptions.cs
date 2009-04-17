@@ -819,7 +819,7 @@ namespace OpenDental{
 				FormRpStatement FormST=new FormRpStatement();
 				Family fam=Patients.GetFamily(StmtCur.PatNum);
 				Patient pat=fam.GetPatient(StmtCur.PatNum);
-				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				DataSet dataSet=AccountModules.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
 				FormST.CreateStatementPdf(StmtCur,pat,fam,dataSet);
 				#if DEBUG
 					FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
@@ -852,7 +852,7 @@ namespace OpenDental{
 				FormRpStatement FormST=new FormRpStatement();
 				Family fam=Patients.GetFamily(StmtCur.PatNum);
 				Patient pat=fam.GetPatient(StmtCur.PatNum);
-				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				DataSet dataSet=AccountModules.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
 				FormST.CreateStatementPdf(StmtCur,pat,fam,dataSet);
 				if(!CreateEmailMessage()){
 					Cursor=Cursors.Default;
@@ -922,7 +922,7 @@ namespace OpenDental{
 				FormRpStatement FormST=new FormRpStatement();
 				Family fam=Patients.GetFamily(StmtCur.PatNum);
 				Patient pat=fam.GetPatient(StmtCur.PatNum);
-				DataSet dataSet=AccountModuleL.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
+				DataSet dataSet=AccountModules.GetStatement(StmtCur.PatNum,StmtCur.SinglePatient,StmtCur.DateRangeFrom,StmtCur.DateRangeTo,StmtCur.Intermingled);
 				FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
 				FormST.ShowDialog();
 				Cursor=Cursors.Default;

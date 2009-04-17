@@ -210,7 +210,6 @@
     <Compile Include="Data Interface\ClaimPaymentL.cs" />
     <Compile Include="Data Interface\ClaimProcL.cs" />
     <Compile Include="Data Interface\ClearinghouseL.cs" />
-    <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
     <Compile Include="Data Interface\AutoCodeL.cs" />
@@ -232,7 +231,6 @@
     </Compile>
     <Compile Include="Data Interface\DefL.cs" />
     <Compile Include="Data Interface\Lan.cs" />
-    <Compile Include="Data Interface\AccountModuleL.cs" />
     <Compile Include="Data Interface\ProcedureCodeL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />

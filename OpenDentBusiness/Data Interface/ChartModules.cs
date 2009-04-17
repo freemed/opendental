@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
@@ -10,6 +11,9 @@ namespace OpenDentBusiness {
 		private static DataTable rawApt;
 
 		public static DataSet GetAll(int patNum,bool isAuditMode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,isAuditMode);
+			} 
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetProgNotes(patNum,isAuditMode));
 			retVal.Tables.Add(GetPlannedApt(patNum));

@@ -1456,7 +1456,7 @@ namespace OpenDental{
 				//there cannot be a selected appointment if no patient is loaded.
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
-			DS=AppointmentL.RefreshPeriod(startDate,endDate);
+			DS=Appointments.RefreshPeriod(startDate,endDate);
 			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
 			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
@@ -1720,10 +1720,10 @@ namespace OpenDental{
 					}
 				}
 				if(row==null){
-					row=AppointmentL.RefreshOneApt(aptNums[a],false).Rows[0];
+					row=Appointments.RefreshOneApt(aptNums[a],false).Tables["Appointments"].Rows[0];
 					if(row["AptStatus"].ToString()=="6") {//planned
 						//then do it again the right way
-						row=AppointmentL.RefreshOneApt(aptNums[a],true).Rows[0];
+						row=Appointments.RefreshOneApt(aptNums[a],true).Tables["Appointments"].Rows[0];
 					}
 				}
 				pinBoard.AddAppointment(row);

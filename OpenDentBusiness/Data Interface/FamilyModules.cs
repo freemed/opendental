@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
 	public class FamilyModules {
 		public static DataSet GetAll(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			DataSet ds=new DataSet();
 			string command=Patients.GetFamilySelectCommand(patNum);
 			DataTable table=General.GetTable(command);

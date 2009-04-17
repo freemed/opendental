@@ -1114,7 +1114,8 @@ namespace OpenDental{
 			FormCommItem FormCI=new FormCommItem(item);
 			FormCI.ShowDialog();
 			DS.Tables.Remove("Comm");
-			DS.Tables.Add(AppointmentL.GetApptEditComm(AptCur.AptNum));
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Comm"].Copy());
+				//AppointmentL.GetApptEditComm(AptCur.AptNum));
 			FillComm();
 		}
 
@@ -1128,7 +1129,8 @@ namespace OpenDental{
 			FormCI.IsNew=true;
 			FormCI.ShowDialog();
 			DS.Tables.Remove("Comm");
-			DS.Tables.Add(AppointmentL.GetApptEditComm(AptCur.AptNum));
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Comm"].Copy());
+				//AppointmentL.GetApptEditComm(AptCur.AptNum));
 			FillComm();
 		}
 
@@ -1620,7 +1622,7 @@ namespace OpenDental{
 				selectedProcs[i]=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString();
 			}
 			DS.Tables.Remove("Procedure");
-			DS.Tables.Add(AppointmentL.GetApptEditProcs(AptCur.AptNum));
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Procedure"].Copy());
 			FillProcedures();
 			for(int i=0;i<gridProc.Rows.Count;i++){
 				for(int j=0;j<selectedProcs.Length;j++){
@@ -1661,7 +1663,7 @@ namespace OpenDental{
 				//Deleting or detaching labcase would have been done from in that window
 			}
 			DS.Tables.Remove("Misc");
-			DS.Tables.Add(AppointmentL.GetApptEditMisc(AptCur.AptNum));
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Misc"].Copy());
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 		}
 
@@ -1674,7 +1676,7 @@ namespace OpenDental{
 				return;
 			}
 			DS.Tables.Remove("Misc");
-			DS.Tables.Add(AppointmentL.GetApptEditMisc(AptCur.AptNum));
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Misc"].Copy());
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirements"].ToString();
 		}
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
@@ -660,8 +661,11 @@ namespace OpenDentBusiness{
 			return list;
 		}
 
-		///<summary>Parameters: 1:dateStart, 2:dateEnd</summary>
+		///<summary></summary>
 		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+			} 
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(dateStart,dateEnd,0,false));//parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
@@ -670,8 +674,11 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>Parameters: 1:AptNum 2:IsPlanned</summary>
+		///<summary></summary>
 		public static DataSet RefreshOneApt(int aptNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
+			} 
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(DateTime.MinValue,DateTime.MinValue,aptNum,isPlanned));
 			return retVal;
@@ -1176,6 +1183,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Parameters: 1:AptNum</summary>
 		public static DataSet GetApptEdit(int aptNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetApptTable(aptNum));
 			retVal.Tables.Add(GetPatTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
