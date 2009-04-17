@@ -204,7 +204,7 @@
     <Compile Include="Bridges\TrophyEnhanced.cs" />
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
-    <Compile Include="Data Interface\aaDataInterface.cs" />
+    <Compile Include="Data Interface\aaLocalDataInterface.cs" />
     <Compile Include="Data Interface\ClaimFormL.cs" />
     <Compile Include="Data Interface\ClaimL.cs" />
     <Compile Include="Data Interface\ClaimPaymentL.cs" />
@@ -4101,7 +4101,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataClient\" />
     <Folder Include="SmartCards\Linux\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

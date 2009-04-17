@@ -1923,7 +1923,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			AppointmentL.Delete(AptCur.AptNum);
+			Appointments.Delete(AptCur.AptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
 				"Delete for patient: "
 				+pat.GetNameLF()+", "
@@ -1952,7 +1952,7 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew) {
-				AppointmentL.Delete(AptCur.AptNum);
+				Appointments.Delete(AptCur.AptNum);
 			}
 		}
 

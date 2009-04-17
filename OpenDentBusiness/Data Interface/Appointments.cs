@@ -1490,6 +1490,39 @@ namespace OpenDentBusiness{
 		}
 
 		//private static DataRow GetRowFromTable(
+		///<summary></summary>
+		public static void Delete(int aptNum) {
+			string command;
+			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
+			DataTable table=General.GetTable(command);
+			Patient pat=Patients.GetPat(PIn.PInt(table.Rows[0]["PatNum"].ToString()));
+			if(table.Rows[0]["IsNewPatient"].ToString()=="1") {
+				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
+			}
+			//procs
+			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
+				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else {
+				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			//labcases
+			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
+				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else {
+				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			//plannedappt
+			command="DELETE FROM plannedappt WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+			//we will not reset item orders here
+			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
+			General.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);
+		}
 
 	}
 }

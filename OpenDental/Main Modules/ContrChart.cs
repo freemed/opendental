@@ -5815,7 +5815,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
-				AppointmentL.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
+				Appointments.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -5854,7 +5854,7 @@ namespace OpenDental{
 						return; 
 					}
 					for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
-						AppointmentL.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()));
+						Appointments.Delete(PIn.PInt(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()));
 					}
 				}
 				PatCur.PlannedIsDone=true;

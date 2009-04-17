@@ -3252,7 +3252,7 @@ namespace OpenDental{
 			}
 			else{//for normal appt:
 				//this gets rid of new appointments that never made it off the pinboard
-				AppointmentL.Delete(PIn.PInt(row["AptNum"].ToString()));
+				Appointments.Delete(PIn.PInt(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModulePatient(0);
@@ -3577,7 +3577,7 @@ namespace OpenDental{
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "Deleted");
 			}
-			AppointmentL.Delete(selectedAptNum);
+			Appointments.Delete(selectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;
 			pinBoard.SelectedIndex=-1;
 			DataRow row;
