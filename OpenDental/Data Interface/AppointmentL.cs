@@ -152,10 +152,6 @@ namespace OpenDental{
 				/ContrApptSheet.Lh;//rounds down
 		}
 
-		
-
-
-
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
 		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,InsPlan[] planList){
 			List<Recall> recallList=Recalls.GetList(patCur.PatNum);
