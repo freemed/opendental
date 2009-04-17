@@ -34,7 +34,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>The calling class MUST return a DataSet and must take the same parameters as passed in here.  Only used if RemotingRole=ClientWeb.  Only used in one class so far: Cache.  Need to reevaluate after using in a few more classes.</summary>
+		///<summary>The calling class MUST return a DataSet and must take the same parameters as passed in here.  Only used if RemotingRole=ClientWeb, so check RemotingRole before using.</summary>
 		public static DataSet GetDS(MethodBase methodBase,params object[] parameters) {
 			#if DEBUG
 				//Verify that it returns a DataSet
@@ -64,7 +64,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return void and must take the same parameters as passed in here.</summary>
-		public static void SendCmd(MethodBase methodBase, string command, params object[] parameters) {
+		public static void NonQ(MethodBase methodBase, string command, params object[] parameters) {
 			#if DEBUG
 				//Verify that it returns void
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
@@ -75,7 +75,6 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoSendCmd dto=new DtoSendCmd();
 				dto.MethodNameCmd=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				//dto.Parameters=;
 				dto.Parameters=parameters;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;

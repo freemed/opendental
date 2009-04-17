@@ -181,7 +181,8 @@ namespace OpenDentBusiness{
 					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
 				}
 				//Then, check username and password
-				if(!Userods.CheckUserAndPassword(oduser,odpasshash)) {
+				Userod user=Userods.CheckUserAndPassword(oduser,odpasshash);
+				if(user==null) {
 					throw new Exception("Invalid username or password.");
 				}
 				//return 0;//meaningless

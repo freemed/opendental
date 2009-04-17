@@ -105,19 +105,17 @@ namespace OpenDentBusiness {
 		}
 
 
-		///<summary>Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns true if user and password valid.</summary>
-		public static bool CheckUserAndPassword(string username, string passhash){
-			string command="SELECT Password FROM userod WHERE UserName='"+POut.PString(username)+"'";
-			DataConnection dcon=new DataConnection();
-			DataTable table=dcon.GetTable(command);
-			if(table.Rows.Count==0){//user does not exist
-				return false;
+		///<summary>Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns a user object if user and password are valid.  Otherwise, returns null.</summary>
+		public static Userod CheckUserAndPassword(string username, string passhash){
+			RefreshCache();
+			Userod user=GetUserByName(username);
+			if(user==null){
+				return null;
 			}
-			string actualHash=table.Rows[0][0].ToString();
-			if(actualHash==passhash){
-				return true;
+			if(user.Password==passhash) {
+				return user;
 			}
-			return false;
+			return null;
 		}
 
 		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is use everywhere except in the log on screen.</summary>
@@ -184,6 +182,7 @@ namespace OpenDentBusiness {
 			//todo?: make sure no users have blank passwords.
 		}
 
+		/*
 		///<summary>Used by the SL logon window to validate credentials.  Send in the password unhashed.  If invalid, it will always throw an exception of some type.  If it is valid, then it will return the hashed password.  This is the only place where the config file is read, and it's only read on startup.  So the web service needs to be restarted if the config file changes.</summary>
 		public static string CheckDbUserPassword(string configFilePath,string username,string password){
 			//for some reason, this static variable was remaining true even if the webservice was restarted.
@@ -204,7 +203,7 @@ namespace OpenDentBusiness {
 				throw new Exception("Invalid username or password.");
 			}
 			return passhash;
-		}
+		}*/
 
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass) {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -69,7 +70,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(Fee fee){
 			string command="DELETE FROM fee WHERE FeeNum="+fee.FeeNum;
-			General.NonQ(command);
+			Meth.NonQ(MethodInfo.GetCurrentMethod(),command,fee);
 		}
 
 		public static Fee GetFee(int codeNum,int feeSchedNum){

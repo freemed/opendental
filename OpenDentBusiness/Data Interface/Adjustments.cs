@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 				+ ",ProcNum = '"     +POut.PInt   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
 				+" WHERE adjNum = '" +POut.PInt   (adj.AdjNum)+"'";
-			Meth.SendCmd(MethodInfo.GetCurrentMethod(),command,adj);
+			Meth.NonQ(MethodInfo.GetCurrentMethod(),command,adj);
 		}
 
 		///<summary></summary>

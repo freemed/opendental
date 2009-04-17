@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Data;
 using System.Windows.Forms;
@@ -6,6 +6,7 @@ using OpenDentBusiness;
 using System.Net;
 
 namespace OpenDental{
+	
 	
 	///<summary>Miscellaneous database functions.</summary>
 	public class MiscData{
@@ -92,7 +93,7 @@ namespace OpenDental{
 	
 
 	
-}
+}*/
 
 
 

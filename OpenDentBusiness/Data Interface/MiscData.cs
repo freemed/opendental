@@ -121,10 +121,17 @@ namespace OpenDentBusiness {
 			}
 			return 0;
 		}
+
+		public static string GetCurrentDatabase() {
+			string command="SELECT database()";
+			DataTable table=General.GetTable(command);
+			return PIn.PString(table.Rows[0][0].ToString());
+		}
+
+
 	}
 
-	//public class DtoMiscDataMakeABackup:DtoCommandBase {
-	//}
+	
 }
 
 
