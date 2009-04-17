@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
 using System.Text;
 using OpenDentBusiness.DataAccess;
 
@@ -13,7 +14,7 @@ namespace OpenDentBusiness{
 		//<summary></summary>
 		public static DataTable RefreshCache(){
 			string c="SELECT * from sheetData ORDER BY Description";
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
 			table.TableName="sheetData";
 			FillCache(table);
 			return table;

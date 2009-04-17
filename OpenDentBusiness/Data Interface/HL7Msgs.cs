@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
 using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
@@ -12,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string c="SELECT * from HL7Msg ORDER BY Description";
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="HL7Msg";
 			FillCache(table);
 			return table;

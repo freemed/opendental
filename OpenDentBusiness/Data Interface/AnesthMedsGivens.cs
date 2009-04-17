@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
@@ -90,7 +91,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(int anestheticRecordNum){
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthmedsgiven WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY DoseTimeStamp DESC"; //most recent at top of list
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
 			table.TableName="AnesthMedsGiven";
 			FillCache(table);
 			return table;

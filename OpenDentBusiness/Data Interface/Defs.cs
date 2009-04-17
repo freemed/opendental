@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
@@ -13,7 +14,7 @@ namespace OpenDentBusiness {
 			//}
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
-			DataTable table=dcon.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Def";
 			FillCache(table);
 			return table;

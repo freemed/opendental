@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
@@ -9,7 +10,8 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM covcat ORDER BY covorder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			table.TableName="CovCat";
 			FillCache(table);
 			return table;
 		}

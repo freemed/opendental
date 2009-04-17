@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace OpenDentBusiness{
@@ -13,7 +14,7 @@ namespace OpenDentBusiness{
 		///<summary>Does not get called directly from the UI.</summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Provider";
 			FillCache(table);
 			return table;

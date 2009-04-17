@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using OpenDentBusiness;
 
 namespace OpenDentBusiness{
@@ -21,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * from apptviewitem ORDER BY ElementOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="ApptViewItem";
 			FillCache(table);
 			return table;

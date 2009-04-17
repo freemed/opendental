@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -9,7 +10,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM preference";
 			DataConnection dcon=new DataConnection();
-			DataTable table=dcon.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Pref";
 			FillCache(table);
 			return table;

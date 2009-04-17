@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -11,7 +12,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM operatory "
 				+"ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Operatory";
 			FillCache(table);
 			return table;

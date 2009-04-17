@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,7 +20,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM userod ORDER BY UserName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Userod";
 			FillCache(table);
 			return table;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
@@ -34,19 +35,18 @@ namespace OpenDentBusiness{
 		}
 
 		public static void WriteObject(Anes_hl7data hl7){
-
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
 		}
 
-			public static DataTable RefreshCache(){
+		public static DataTable RefreshCache(){
 			string c="SELECT HL7Message FROM anes_hl7data"; 
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
 			table.TableName="anes_hl7data";
 			FillCache(table);
 			return table;
-			}
+		}
 			
-			public static void FillCache(DataTable table){
+		public static void FillCache(DataTable table){
 			Anes_HL7DataC.Listt=new List<Anes_hl7data>();
 			Anes_hl7data hl7Cur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -78,20 +78,20 @@ namespace OpenDentBusiness{
 			}
 		}
 
-			public static string GetHL7List(){
-				MySqlCommand cmd = new MySqlCommand();
-				con = new MySqlConnection(DataSettings.ConnectionString);
-				cmd.Connection = con;
-				if (con.State == ConnectionState.Open)
-					{
-						con.Close();
-					}
-				con.Open();
-				cmd.CommandText = "SELECT * FROM anes_hl7data";
-				string rawHL7 = Convert.ToString(cmd.ExecuteScalar());
-				con.Close();
-				return rawHL7;
-			}
+		public static string GetHL7List(){
+			MySqlCommand cmd = new MySqlCommand();
+			con = new MySqlConnection(DataSettings.ConnectionString);
+			cmd.Connection = con;
+			if (con.State == ConnectionState.Open)
+				{
+					con.Close();
+				}
+			con.Open();
+			cmd.CommandText = "SELECT * FROM anes_hl7data";
+			string rawHL7 = Convert.ToString(cmd.ExecuteScalar());
+			con.Close();
+			return rawHL7;
+		}
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
 		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string messageID, string anesthDateTime, string anesthOpenTime, string anesthCloseTime){

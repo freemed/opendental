@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
 using OpenDentBusiness.DataAccess;
 using MySql.Data.MySqlClient;
-using System.Text.RegularExpressions;
-
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(int anestheticRecordNum){
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthvsdata WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY VSTimeStamp DESC"; //most recent at top of list
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
 			table.TableName="AnesthVSData";
 			FillCache(table);
 			return table;

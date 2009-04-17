@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 
@@ -10,7 +11,7 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM programproperty";
-			DataTable table=General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="ProgramProperty";
 			FillCache(table);
 			return table;

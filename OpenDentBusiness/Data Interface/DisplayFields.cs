@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -12,7 +13,7 @@ namespace OpenDentBusiness {
 
 		public static DataTable RefreshCache() {
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
-			DataTable table = General.GetTable(command);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="DisplayField";
 			FillCache(table);
 			return table;

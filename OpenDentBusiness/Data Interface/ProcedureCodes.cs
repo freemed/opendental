@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 //using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
@@ -12,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string c="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
-			DataTable table=General.GetTable(c);
+			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
 			table.TableName="ProcedureCode";
 			FillCache(table);
 			return table;
