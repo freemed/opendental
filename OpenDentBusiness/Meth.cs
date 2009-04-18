@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 			#endif
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetTable dto=new DtoGetTable();
-				dto.MethodNameTable=methodBase.DeclaringType.Name+"."+methodBase.Name;
+				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
 				//dto.Parameters=;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;
@@ -47,7 +47,7 @@ namespace OpenDentBusiness {
 			//string methodName=methodBase.Name;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetDS dto=new DtoGetDS();
-				dto.MethodNameDS=methodBase.DeclaringType.Name+"."+methodBase.Name;
+				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
 				dto.Parameters=parameters;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 			#endif
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoSendCmd dto=new DtoSendCmd();
-				dto.MethodNameCmd=methodBase.DeclaringType.Name+"."+methodBase.Name;
+				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
 				dto.Parameters=parameters;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;

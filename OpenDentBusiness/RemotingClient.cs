@@ -80,6 +80,24 @@ namespace OpenDentBusiness {
 			}*/
 		}
 
+		///<summary></summary>
+		public static object ProcessGetObject(DtoGetObject dto) {
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			try {
+				XmlSerializer serializer=new XmlSerializer(Type.GetType("OpenDentBusiness."+dto.ObjectType));
+				StringReader strReader=new StringReader(result);
+				XmlReader xmlReader=XmlReader.Create(strReader);
+				object obj=serializer.Deserialize(xmlReader);
+				strReader.Close();
+				xmlReader.Close();
+				return obj;
+			}
+			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
+		}	
+
 		///<summary>InsertID will be returned for Insert commands.  Other commands return the number of rows affected which is usually just ignored.</summary>
 		public static int ProcessCommand(DtoSendCmd dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
@@ -91,23 +109,6 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
-			/*
-			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
-			MemoryStream memStream=new MemoryStream(buffer);
-			XmlSerializer serializer;
-			try{
-				serializer = new XmlSerializer(typeof(DtoServerAck));
-				DtoServerAck ack=(DtoServerAck)serializer.Deserialize(memStream);
-				memStream.Close();
-				return ack.IDorRows;
-			}
-			catch{
-				memStream=new MemoryStream(buffer);//just in case stream is in wrong position.
-				serializer = new XmlSerializer(typeof(DtoException));
-				DtoException exception=(DtoException)serializer.Deserialize(memStream);
-				memStream.Close();
-				throw new Exception(exception.Message);
-			}*/
 		}		
 
 		internal static string SendAndReceive(DataTransferObject dto){

@@ -110,7 +110,7 @@ namespace OpenDentBusiness {
 		///<summary>Always passed with new web service.    Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodNameDS;
+		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodNameTable;
+		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodNameString;
+		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
@@ -140,7 +140,7 @@ namespace OpenDentBusiness {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodNameObject;
+		public string MethodName;
 		///<summary>This is the string representation of the type of object that we expect back as a result.</summary>
 		public string ObjectType;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
@@ -152,10 +152,12 @@ namespace OpenDentBusiness {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodNameCmd;
+		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
+
+
 
 	//public class DtoGeneralGetTableLow:DtoQueryBase {
 	//	public string Command;

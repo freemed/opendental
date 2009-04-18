@@ -93,6 +93,7 @@ namespace OpenDental{
 			this.checkNoShow = new System.Windows.Forms.CheckBox();
 			this.comboComputerName = new System.Windows.Forms.ComboBox();
 			this.groupServer = new System.Windows.Forms.GroupBox();
+			this.textURI = new System.Windows.Forms.TextBox();
 			this.textUser2 = new System.Windows.Forms.TextBox();
 			this.textPassword2 = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
@@ -106,7 +107,6 @@ namespace OpenDental{
 			this.textConnectionString = new System.Windows.Forms.TextBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textURI = new System.Windows.Forms.TextBox();
 			this.groupDirect.SuspendLayout();
 			this.groupServer.SuspendLayout();
 			this.SuspendLayout();
@@ -231,12 +231,20 @@ namespace OpenDental{
 			this.groupServer.TabStop = false;
 			this.groupServer.Text = "Connect to Web Server - Only for advanced users";
 			// 
+			// textURI
+			// 
+			this.textURI.Location = new System.Drawing.Point(23,71);
+			this.textURI.Name = "textURI";
+			this.textURI.Size = new System.Drawing.Size(280,20);
+			this.textURI.TabIndex = 15;
+			// 
 			// textUser2
 			// 
 			this.textUser2.Location = new System.Drawing.Point(23,114);
 			this.textUser2.Name = "textUser2";
 			this.textUser2.Size = new System.Drawing.Size(280,20);
 			this.textUser2.TabIndex = 2;
+			this.textUser2.Text = "Admin";
 			// 
 			// textPassword2
 			// 
@@ -245,6 +253,7 @@ namespace OpenDental{
 			this.textPassword2.PasswordChar = '*';
 			this.textPassword2.Size = new System.Drawing.Size(280,20);
 			this.textPassword2.TabIndex = 3;
+			this.textPassword2.Text = "pass";
 			this.textPassword2.UseSystemPasswordChar = true;
 			// 
 			// label10
@@ -358,13 +367,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// textURI
-			// 
-			this.textURI.Location = new System.Drawing.Point(23,71);
-			this.textURI.Name = "textURI";
-			this.textURI.Size = new System.Drawing.Size(280,20);
-			this.textURI.TabIndex = 15;
 			// 
 			// FormChooseDatabase
 			// 
@@ -659,7 +661,8 @@ namespace OpenDental{
 				RemotingClient.ServerURI=textURI.Text;
 				try{
 					//if we want to support eCW here, we will have to make the user indicated it.  No way to tell from the database yet.
-					Security.LogInWeb(textUser2.Text,Userods.EncryptPassword(textPassword2.Text,true),false);
+					Userod user=Security.LogInWeb(textUser2.Text,Userods.EncryptPassword(textPassword2.Text,true),"");
+					Security.CurUser=user;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
 				}
 				catch(Exception ex){

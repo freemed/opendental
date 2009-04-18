@@ -138,8 +138,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Will throw an exception if it fails for any reason.  This will directly access the config file on the disk, read the values, and set the DataConnection to the new database.  This is only triggered on startup of SL the first time someone tries to log on.</summary>
-		private static void LoadDatabaseInfoFromFile(string configFilePath){
+		///<summary>Will throw an exception if it fails for any reason.  This will directly access the config file on the disk, read the values, and set the DataConnection to the new database.  This is only triggered when someone tries to log on.</summary>
+		public static void LoadDatabaseInfoFromFile(string configFilePath){
 			if(!File.Exists(configFilePath)){
 				throw new Exception("Could not find "+configFilePath+" on the web server.");
 			}

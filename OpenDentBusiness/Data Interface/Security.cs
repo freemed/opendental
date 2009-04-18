@@ -2,6 +2,9 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Data;
+using System.IO;
+using System.Web;
+using CodeBase;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -168,36 +171,37 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}*/
 
-		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  RemotingIsLocal is false from workstation and true from server.</summary>
-		public static void LogInWeb(string oduser,string odpasshash,bool remotingIsLocal) {
-			if(remotingIsLocal) {
-				DataConnection dcon=new DataConnection();
-				//Try to connect to the database
-				try {
-					dcon.SetDb("localhost","development66","root","","","",DatabaseType.MySql);
-					//Console.WriteLine(oduser);
-				}
-				catch {
-					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
-				}
+		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>
+		public static Userod LogInWeb(string oduser,string odpasshash,string configPath) {
+			if(configPath != "") {
+				Userods.LoadDatabaseInfoFromFile(ODFileUtils.CombinePaths(configPath,"OpenDentalServerConfig.xml"));
+					//ODFileUtils.CombinePaths(
+					//  ,"OpenDentalServerConfig.xml"));
+					//Path.GetDirectoryName(Application.ExecutablePath),"OpenDentalServerConfig.xml"));
+					//Application.StartupPath,"OpenDentalServerConfig.xml"));
+					//Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"OpenDentalServerConfig.xml"));
+					//Environment.CurrentDirectory,"OpenDentalServerConfig.xml"));
 				//Then, check username and password
 				Userod user=Userods.CheckUserAndPassword(oduser,odpasshash);
 				if(user==null) {
 					throw new Exception("Invalid username or password.");
 				}
+				Security.CurUser=user;
+				return user;
 				//return 0;//meaningless
 			}
 			else {
 				//Because RemotingRole has not been set, and because CurUser has not been set,
 				//this particular method is more verbose than most and does not use Meth.
 				//It's not a good example of the standard way of doing things.
-				DtoSendCmd dto=new DtoSendCmd();
+				DtoGetObject dto=new DtoGetObject();
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=oduser;
 				dto.Credentials.PassHash=odpasshash;//Userods.EncryptPassword(password);
-				dto.MethodNameCmd="Security.LogInWeb";
-				dto.Parameters=new object[] { oduser,odpasshash,true };
-				RemotingClient.ProcessCommand(dto);//can throw exception
+				dto.MethodName="Security.LogInWeb";
+				dto.ObjectType=typeof(Userod).Name;
+				dto.Parameters=new object[] { oduser,odpasshash,configPath };
+				return (Userod)RemotingClient.ProcessGetObject(dto);//can throw exception
 			}
 		}
 
