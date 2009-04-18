@@ -39,24 +39,14 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto) {
-			throw new NotImplementedException();
-			/*
-			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
-			MemoryStream memStream=new MemoryStream(buffer);
-			XmlSerializer serializer;
+			string result=SendAndReceive(dto);
 			try {
-				serializer = new XmlSerializer(typeof(DataSet));
-				DataSet retVal=(DataSet)serializer.Deserialize(memStream);
-				memStream.Close();
-				return retVal;
+				return XmlConverter.XmlToDs(result);
 			}
 			catch {
-				memStream=new MemoryStream(buffer);//just in case stream is in wrong position.
-				serializer = new XmlSerializer(typeof(DtoException));
-				DtoException exception=(DtoException)serializer.Deserialize(memStream);
-				memStream.Close();
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
-			}*/
+			}
 		}
 
 		public static DataTable ProcessGetTable(DtoGetTable dto) {
@@ -123,78 +113,9 @@ namespace OpenDentBusiness {
 
 			//}
 			return result;
-			/*
-			byte[] data=dto.Serialize();
-			if(client==null){
-				try{
-					client = new TcpClient(ServerName,ServerPort);
-					netStream = client.GetStream();
-				}
-				catch{
-					throw new Exception("Server is refusing the connection. Either the server program is not running, or a port on the server is being blocked by a firewall.");
-				}
-			}
-			try{
-				WriteDataToStream(netStream, data);
-			}
-			catch (Exception e){
-				netStream.Close();
-				client.Close();
-				client=null;
-				throw e;
-			}
-			//Receive the TcpServer.response-------------------------------------
-			data = ReadDataFromStream(netStream);
-			return data;*/
 		}
 
-			/*
-		public static void Disconnect() {
-			if(netStream != null) {
-				netStream.Close();
-				netStream = null;
-			}
-			if(client != null) {
-				client.Close();
-				client = null;
-			}
-		}*/
-
-			/*
-		public static byte[] ReadDataFromStream(Stream stream) {
-			byte[] value = null;
-
-			using (MemoryStream memoryStream = new MemoryStream()) {
-				byte[] buffer = new byte[BufferSize];
-				// The number of bytes read from the stream to the buffer
-				int bytesRead = 0;	
-				// A boolean indicating if the message has ending (i.e. no more data available; indicated by
-				// a '\0' charater at the end of the data
-				bool messageEnded = false;
-
-				while (!messageEnded) {
-					bytesRead = stream.Read(buffer, 0, BufferSize);
-					
-					// Check for a '\0' character at the end of the data
-					messageEnded = bytesRead > 0 && buffer[bytesRead - 1] == '\0';
-					// The terminating character doesn't really count as data.
-					if (messageEnded)
-						bytesRead--;
-
-					memoryStream.Write(buffer, 0, bytesRead);
-				}
-
-				value = memoryStream.ToArray();
-			}
-
-			return value;
-		}
-
-		public static void WriteDataToStream(Stream stream, byte[] data) {
-			stream.Write(data, 0, data.Length);
-			stream.WriteByte((byte)'\0');
-			stream.Flush();
-		}*/
+		
 	}
 
 }
