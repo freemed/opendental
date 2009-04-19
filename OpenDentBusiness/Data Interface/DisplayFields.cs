@@ -12,8 +12,11 @@ namespace OpenDentBusiness {
 	public class DisplayFields {
 
 		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="DisplayField";
 			FillCache(table);
 			return table;

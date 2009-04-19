@@ -11,10 +11,13 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Providers{
 		
-		///<summary>Does not get called directly from the UI.</summary>
-		public static DataTable RefreshCache(){
+		///<summary></summary>
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="Provider";
 			FillCache(table);
 			return table;

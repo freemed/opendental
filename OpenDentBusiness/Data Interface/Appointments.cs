@@ -1181,7 +1181,7 @@ namespace OpenDentBusiness{
 		//Get DS for one appointment in Edit window--------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------
 
-		///<summary>Parameters: 1:AptNum</summary>
+		///<summary></summary>
 		public static DataSet GetApptEdit(int aptNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),aptNum);

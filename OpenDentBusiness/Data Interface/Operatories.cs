@@ -10,9 +10,12 @@ namespace OpenDentBusiness{
 
 		///<summary>Refresh all operatories</summary>
 		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM operatory "
 				+"ORDER BY ItemOrder";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="Operatory";
 			FillCache(table);
 			return table;

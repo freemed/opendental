@@ -1,13 +1,13 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary>Gen is short for General.  This can NEVER be used until a check has been made higher in the method for whether RemotingRole is ClientWeb.  Only allowed to use this if direct or server.</summary>
+	///<summary>Gen is short for General.  Not used</summary>
 	public class Gen {
-		/*
+		
 		///<summary>STUB</summary>
 		public static DataSet GetDS(MethodNameDS methodName,params object[] parameters) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -63,9 +63,9 @@ namespace OpenDentBusiness{
 				return result;
 				//return DataCore.GetTableByMethod(classMethod,parameters);
 			}
-		}*/
+		}
 
 
 
 	}
-}
+}*/

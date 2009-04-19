@@ -10,9 +10,12 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Sites{
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string c="SELECT * from site ORDER BY Description";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
+			DataTable table=General.GetTable(c);
 			table.TableName="Site";
 			FillCache(table);
 			return table;

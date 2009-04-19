@@ -20,9 +20,12 @@ namespace OpenDentBusiness{
 		public static ApptViewItem[] ApptRows;
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * from apptviewitem ORDER BY ElementOrder";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="ApptViewItem";
 			FillCache(table);
 			return table;

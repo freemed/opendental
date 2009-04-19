@@ -38,9 +38,12 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
 		}
 
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string c="SELECT HL7Message FROM anes_hl7data"; 
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
+			DataTable table=General.GetTable(c);
 			table.TableName="anes_hl7data";
 			FillCache(table);
 			return table;

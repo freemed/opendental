@@ -10,9 +10,12 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SheetFieldDefs{
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string c="SELECT * FROM sheetfielddef ORDER BY SheetDefNum";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
+			DataTable table=General.GetTable(c);
 			table.TableName="sheetfielddef";
 			FillCache(table);
 			return table;

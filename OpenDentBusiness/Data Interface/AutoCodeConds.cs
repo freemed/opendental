@@ -12,9 +12,12 @@ namespace OpenDentBusiness{
 		//public static Hashtable HList; 
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * from autocodecond ORDER BY cond";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="AutoCodeCond";
 			FillCache(table);
 			return table;

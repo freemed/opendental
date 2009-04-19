@@ -9,12 +9,12 @@ namespace OpenDentBusiness {
 	public class Defs {
 		///<summary>If using remoting, then the calling program is responsible for filling the arrays on the client since the automated part only happens on the server.  So there are TWO sets of arrays in a server situation, but only one in a small office that connects directly to the database.</summary>
 		public static DataTable RefreshCache(){
-			//if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
-			//	throw new ApplicationException("Defs.Refresh incorrect RemotingRole.");
-			//}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="Def";
 			FillCache(table);
 			return table;

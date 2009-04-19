@@ -13,10 +13,13 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command=
 				"SELECT * from account "
 				+" ORDER BY AcctType,Description";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="Account";
 			FillCache(table);//on the server side
 			return table;

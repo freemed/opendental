@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 				+ ",ProcNum = '"     +POut.PInt   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
 				+" WHERE adjNum = '" +POut.PInt   (adj.AdjNum)+"'";
-			Meth.NonQ(MethodInfo.GetCurrentMethod(),command,adj);
+			General.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -99,6 +99,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Adjustment> RefreshAndFill(string command){
+			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+			//	return (List<Adjustment>)Meth.GetObject(MethodBase.GetCurrentMethod(),command);
+			//}
  			DataTable table=General.GetTable(command);
 			List<Adjustment> retVal=new List<Adjustment>();
 			Adjustment adj;

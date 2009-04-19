@@ -221,9 +221,6 @@
     <Compile Include="Data Interface\PerioMeasureL.cs" />
     <Compile Include="Data Interface\PrefL.cs" />
     <Compile Include="Data Interface\PrinterL.cs" />
-    <Compile Include="Data Interface\MiscData.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Data Interface\DefL.cs" />
     <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />

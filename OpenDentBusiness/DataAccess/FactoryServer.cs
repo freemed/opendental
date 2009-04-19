@@ -40,7 +40,7 @@ namespace OpenDentBusiness.DataAccess {
 					break;
 				case enumDtoCommand.DeleteObject:
 					method.Invoke(null, command.GetAllParameters());
-					value = new DtoServerAck();
+					value = 0;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException("command");
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.DataAccess {
 				case enumDtoCommand.WriteObject:
 					return typeof(DtoObjectInsertedAck);
 				case enumDtoCommand.DeleteObject:
-					return typeof(DtoServerAck);
+					return typeof(int);
 				default:
 					throw new ArgumentOutOfRangeException("command");
 			}

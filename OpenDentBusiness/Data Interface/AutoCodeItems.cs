@@ -11,9 +11,12 @@ namespace OpenDentBusiness{
 		public static AutoCodeItem[] ListForCode;//all items for a specific AutoCode
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM autocodeitem";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="AutoCodeItem";
 			FillCache(table);
 			return table;

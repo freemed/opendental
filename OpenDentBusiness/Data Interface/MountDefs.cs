@@ -12,9 +12,12 @@ namespace OpenDentBusiness {
 		
 		///<summary>Gets a list of all MountDefs when program first opens.  Also refreshes MountItemDefs and attaches all items to the appropriate mounts.</summary>
 		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="MountDef";
 			FillCache(table);
 			return table;

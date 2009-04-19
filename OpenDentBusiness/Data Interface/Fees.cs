@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(Fee fee){
 			string command="DELETE FROM fee WHERE FeeNum="+fee.FeeNum;
-			Meth.NonQ(MethodInfo.GetCurrentMethod(),command,fee);
+			General.NonQ(command);
 		}
 
 		public static Fee GetFee(int codeNum,int feeSchedNum){

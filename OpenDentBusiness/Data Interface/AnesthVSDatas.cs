@@ -11,13 +11,13 @@ using OpenDental;
 using OpenDentBusiness.DataAccess;
 using MySql.Data.MySqlClient;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness {
 	///<summary></summary>
-	public class AnesthVSDatas{
+	public class AnesthVSDatas {
 
 		public MySqlCommand cmd;
-		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
-		private static MySqlConnection con;
+		//<summary>This is the connection that is used by the data adapter for all queries.  js-not allowed</summary>
+		//private static MySqlConnection con;
 
 		///<summary>Gets those vital signs tied to a unique AnestheticRecordNum from the database</summary>
 		public static List<AnestheticVSData> CreateObjects(int anestheticRecordNum) {
@@ -25,19 +25,22 @@ namespace OpenDentBusiness{
 			return new List<AnestheticVSData>(DataObjectFactory<AnestheticVSData>.CreateObjects(command));
 		}
 
-		public static DataTable RefreshCache(int anestheticRecordNum){
+		public static DataTable RefreshCache(int anestheticRecordNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthvsdata WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY VSTimeStamp DESC"; //most recent at top of list
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
+			DataTable table=General.GetTable(c);
 			table.TableName="AnesthVSData";
 			FillCache(table);
 			return table;
 		}
 
-		public static void FillCache(DataTable table){
+		public static void FillCache(DataTable table) {
 			AnesthVSDataC.Listt=new List<AnestheticVSData>();
 			AnestheticVSData vsCur;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				vsCur=new AnestheticVSData();
 				vsCur.IsNew = false;
 				vsCur.AnesthVSDataNum		=	PIn.PInt(table.Rows[i][0].ToString());
@@ -56,8 +59,8 @@ namespace OpenDentBusiness{
 				AnesthVSDataC.Listt.Add(vsCur);
 			}
 		}
-			
-		public static void InsertVSData(int anestheticRecordNum,int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string MessageID, string HL7Message){
+
+		public static void InsertVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
 			string command = "INSERT INTO anesthvsdata (AnestheticRecordNum,PatNum,VSMName,VSMSerNum, BPSys, BPDias, BPMAP, HR, SpO2, Temp, EtCO2,VSTimeStamp, MessageID, HL7Message)" +
 				"VALUES(" + POut.PInt(anestheticRecordNum) + "," 
 				+ POut.PInt(patNum) + ",'"
@@ -73,12 +76,12 @@ namespace OpenDentBusiness{
 				+ POut.PString(VSTimeStamp) + "','"
 				+	POut.PString(MessageID) + "','"
 				+ POut.PString(HL7Message)+ "')";
-				General.NonQ(command);
+			General.NonQ(command);
 
 		}
 
-						public static int UpdateVSData(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum,int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp, string MessageID, string HL7Message){
-						string command = "UPDATE anesthvsdata SET "
+		public static int UpdateVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
+			string command = "UPDATE anesthvsdata SET "
 						+ " PatNum = " + POut.PInt(patNum) + " " 
 						+ " ,VSMName = '" + POut.PString(VSMName) + "' "
 						+ " ,VSMSerNum = '" + POut.PString(VSMSerNum) + "' "
@@ -92,33 +95,32 @@ namespace OpenDentBusiness{
 						+ " ,MessageID = '" + POut.PString(MessageID) + "' "
 						+ " ,HL7Message = '" + POut.PString(HL7Message) + "' "
 						+ "WHERE VSTimeStamp='" + Convert.ToString(VSTimeStamp)+ "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
-				int val = General.NonQ(command);
-							return val;
-				
+			int val = General.NonQ(command);
+			return val;
+
 		}
 
-			public static string GetVSTimeStamp(string vSTimeStamp){
+		///<summary>jsparks-It would be better to use General here.  But I don't understand what ExecuteScalar is doing.</summary>
+		public static string GetVSTimeStamp(string vSTimeStamp) {
 			string VSTimeStamp = vSTimeStamp;
 			MySqlCommand cmd = new MySqlCommand();
-			con = new MySqlConnection(DataSettings.ConnectionString);
+			MySqlConnection con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
-			if (con.State == ConnectionState.Open)
+			if(con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT * FROM anesthvsdata WHERE VSTimeStamp = '"+ vSTimeStamp +"'" + "ORDER BY VSTimeStamp DESC" ;
-				try
-				{
-					vSTimeStamp = Convert.ToString(cmd.ExecuteScalar()); //might be null on the first pass 
-				}
-				catch 
-				{
-					vSTimeStamp = "";
-				}
-			
+			cmd.CommandText = "SELECT * FROM anesthvsdata WHERE VSTimeStamp = '"+ vSTimeStamp +"'" + "ORDER BY VSTimeStamp DESC";
+			try {
+				vSTimeStamp = Convert.ToString(cmd.ExecuteScalar()); //might be null on the first pass 
+			}
+			catch {
+				vSTimeStamp = "";
+			}
+
 			con.Close();
 			return vSTimeStamp;
-					
-			}
+
+		}
 	}
 }
 

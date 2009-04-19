@@ -10,13 +10,15 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary>A list of Anesthetic Medication Suppliers (Vendors) </summary>
 	public class AnesthMedSuppliers{
-
-        public bool IsNew;
+		public bool IsNew;
 
 		///<summary></summary> 
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),c);
+			DataTable table=General.GetTable(c);
 			table.TableName="AnesthMedSuppliers";
 			FillCache(table);
 			return table;

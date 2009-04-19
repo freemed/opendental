@@ -5,37 +5,34 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>Short for Method.  Will probably be used extensively since many data interface classes will need this.  An assortment of methods to allow easy retrieval of info from database without risking sending queries directly.  Only useful where one query is used in a method.  If multiple queries are to be used, then manually test RemotingRole and then use Gen.</summary>
+	///<summary>Short for Method.  ONLY used if ClientWeb.  This must be tested at top of the method in question.  These will be used extensively since ALL data interface classes will need this.  This completely avoids sending queries directly to the server.  Must pass all the parameters from the original query.</summary>
 	public class Meth {
-		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return a DataTable and must not take any arguments.</summary>
-		public static DataTable GetTable(MethodBase methodBase,string command) {
+		///<summary></summary>
+		public static DataTable GetTable(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetTable may only be used when RemotingRole is ClientWeb.");
+			}
 			#if DEBUG
 				//Verify that it returns a DataTable
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
 				if(methodInfo.ReturnType != typeof(DataTable)) {
 					throw new ApplicationException("Meth.GetTable calling class must return DataTable.");
 				}
-				if(methodInfo.GetParameters().Length>0) {
-					throw new ApplicationException("Meth.GetTable calling class cannot require any parameters.");
-				}
 			#endif
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				DtoGetTable dto=new DtoGetTable();
 				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				//dto.Parameters=;
+				dto.Parameters=parameters;
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;
 				dto.Credentials.PassHash=Security.CurUser.Password;
 				return RemotingClient.ProcessGetTable(dto);
-			}
-			else {
-				DataConnection dcon=new DataConnection();
-				return dcon.GetTable(command);
-			}
 		}
 
-		///<summary>The calling class MUST return a DataSet and must take the same parameters as passed in here.  Only used if RemotingRole=ClientWeb, so check RemotingRole before using.</summary>
+		///<summary></summary>
 		public static DataSet GetDS(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetDS may only be used when RemotingRole is ClientWeb.");
+			}
 			#if DEBUG
 				//Verify that it returns a DataSet
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
@@ -43,50 +40,74 @@ namespace OpenDentBusiness {
 					throw new ApplicationException("Meth.GetDS calling class must return DataSet.");
 				}
 			#endif
-			//string className=methodBase.DeclaringType.Name;
-			//string methodName=methodBase.Name;
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DtoGetDS dto=new DtoGetDS();
-				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				dto.Parameters=parameters;
-				dto.Credentials=new Credentials();
-				dto.Credentials.Username=Security.CurUser.UserName;
-				dto.Credentials.PassHash=Security.CurUser.Password;
-				return RemotingClient.ProcessGetDS(dto);
-			}
-			else {
-				throw new NotSupportedException();
-					//string assemb=Assembly.GetAssembly(typeof(General)).FullName;//any OpenDentBusiness class will do.
-				//Type classType=Type.GetType("OpenDentBusiness."+methodBase.DeclaringType.Name);//+","+assemb);
-				//MethodInfo methodI=classType.GetMethod(methodBase.Name);
-				//return (DataSet)methodI.Invoke(null,parameters);
-			}
+			DtoGetDS dto=new DtoGetDS();
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Parameters=parameters;
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetDS(dto);
 		}
 
-		///<summary>The query will NOT be used if ClientWeb.  The calling class MUST return void and must take the same parameters as passed in here.</summary>
-		public static void NonQ(MethodBase methodBase, string command, params object[] parameters) {
+		///<summary></summary>
+		public static int GetInt(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetInt may only be used when RemotingRole is ClientWeb.");
+			}
+			#if DEBUG
+				//Verify that it returns an int
+				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+				if(methodInfo.ReturnType != typeof(int)) {
+					throw new ApplicationException("Meth.GetInt calling class must return int.");
+				}
+			#endif
+			DtoGetInt dto=new DtoGetInt();
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Parameters=parameters;
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetInt(dto);
+		}
+
+		///<summary></summary>
+		public static void GetVoid(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetVoid may only be used when RemotingRole is ClientWeb.");
+			}
 			#if DEBUG
 				//Verify that it returns void
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
-				if(methodInfo.ReturnType != typeof(void)) {
-					throw new ApplicationException("Meth.SendCmd calling class must return void.");
+				if(methodInfo.ReturnType != null) {
+					throw new ApplicationException("Meth.GetVoid calling class must return void.");
 				}
 			#endif
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DtoSendCmd dto=new DtoSendCmd();
-				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				dto.Parameters=parameters;
-				dto.Credentials=new Credentials();
-				dto.Credentials.Username=Security.CurUser.UserName;
-				dto.Credentials.PassHash=Security.CurUser.Password;
-				RemotingClient.ProcessCommand(dto);
-				//this method will not return the result.
-			}
-			else {
-				DataConnection dcon=new DataConnection();
-				dcon.NonQ(command);
-			}
+			DtoGetInt dto=new DtoGetInt();
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Parameters=parameters;
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			RemotingClient.ProcessGetInt(dto);//ignore the result
 		}
+
+		///<summary></summary>
+		public static T GetObject<T>(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetObject may only be used when RemotingRole is ClientWeb.");
+			}
+			//can't verify return type
+			DtoGetObject dto=new DtoGetObject();
+			dto.ObjectType=typeof(T).Name;
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Parameters=parameters;
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetObject<T>(dto);
+		}
+
+
 
 
 	}

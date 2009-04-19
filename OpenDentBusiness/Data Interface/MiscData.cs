@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Net;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 
@@ -124,6 +125,15 @@ namespace OpenDentBusiness {
 
 		public static string GetCurrentDatabase() {
 			string command="SELECT database()";
+			DataTable table=General.GetTable(command);
+			return PIn.PString(table.Rows[0][0].ToString());
+		}
+
+		public static string GetMySqlVersion() {
+			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+			//	return Meth.get(MethodBase.GetCurrentMethod(),[put all the parameters for the method here]);
+			//}
+			string command="SELECT @@version";
 			DataTable table=General.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());
 		}

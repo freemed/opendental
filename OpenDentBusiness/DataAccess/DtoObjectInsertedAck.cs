@@ -8,7 +8,7 @@ namespace OpenDentBusiness.DataAccess {
 	/// Informs the client that an IDataObject has been inserted into the database. It contains
 	/// the primary key of the inserted object (which may be auto-generated).
 	/// </summary>
-	public class DtoObjectInsertedAck : DtoServerAck {
+	public class DtoObjectInsertedAck : DataTransferObject {
 		public DtoObjectInsertedAck() {
 		}
 

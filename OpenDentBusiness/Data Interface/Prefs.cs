@@ -7,10 +7,13 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Prefs{
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM preference";
 			DataConnection dcon=new DataConnection();
-			DataTable table=Meth.GetTable(MethodInfo.GetCurrentMethod(),command);
+			DataTable table=General.GetTable(command);
 			table.TableName="Pref";
 			FillCache(table);
 			return table;

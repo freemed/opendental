@@ -103,12 +103,7 @@ namespace OpenDental {
 			if(DataConnection.DBtype!=DatabaseType.MySql){
 				return true;
 			}
-			string command="SELECT @@version";
-			DataTable table=General.GetTable(command);
-			string thisVersion=PIn.PString(table.Rows[0][0].ToString());
-			//if(thisVersion.Substring(0,3)=="4.0"){
-			//do nothing
-			//}
+			string thisVersion=MiscData.GetMySqlVersion();
 			if(thisVersion.Substring(0,3)=="4.1"
 				|| thisVersion.Substring(0,3)=="5.0"
 				|| thisVersion.Substring(0,3)=="5.1")
@@ -135,8 +130,8 @@ namespace OpenDental {
 					return false;//but this should never happen
 				}
 				MessageBox.Show("Backup performed");
-				command="SHOW TABLES";
-				table=General.GetTable(command);
+				string command="SHOW TABLES";
+				DataTable table=General.GetTable(command);
 				string[] tableNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
 					tableNames[i]=table.Rows[i][0].ToString();
