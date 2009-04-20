@@ -13,11 +13,8 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * from autocodecond ORDER BY cond";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="AutoCodeCond";
 			FillCache(table);
 			return table;

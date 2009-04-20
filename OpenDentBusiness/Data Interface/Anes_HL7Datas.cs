@@ -39,11 +39,8 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
-			string c="SELECT HL7Message FROM anes_hl7data"; 
-			DataTable table=General.GetTable(c);
+			string c="SELECT HL7Message FROM anes_hl7data";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="anes_hl7data";
 			FillCache(table);
 			return table;

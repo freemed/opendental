@@ -10,16 +10,12 @@ using System.Windows.Forms;
 namespace OpenDentBusiness{
 	
 	public class Accounts {
-		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string command=
 				"SELECT * from account "
 				+" ORDER BY AcctType,Description";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Account";
 			FillCache(table);//on the server side
 			return table;

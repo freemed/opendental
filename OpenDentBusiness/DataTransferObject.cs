@@ -71,8 +71,18 @@ namespace OpenDentBusiness {
 		public object[] Parameters;
 	}
 
-	///<summary>Gets a simple string.</summary>
-	public class DtoGetString:DataTransferObject{
+	///<summary>Gets an int.</summary>
+	public class DtoGetInt:DataTransferObject{
+		///<summary>Always passed with new web service.  Never null.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodName;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	///<summary>Used when the return type is void.  It will still return 0 to ack.</summary>
+	public class DtoGetVoid:DataTransferObject {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
@@ -93,8 +103,8 @@ namespace OpenDentBusiness {
 		public object[] Parameters;
 	}
 
-	///<summary>Gets an int.</summary>
-	public class DtoGetInt:DataTransferObject{
+	///<summary>Gets a simple string.</summary>
+	public class DtoGetString:DataTransferObject{
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
@@ -102,6 +112,20 @@ namespace OpenDentBusiness {
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}
+
+	///<summary>Gets a bool.</summary>
+	public class DtoGetBool:DataTransferObject {
+		///<summary>Always passed with new web service.  Never null.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodName;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	
+
+	
 
 	//<summary>IDorRows will be the InsertID for insert type commands.  For some other commands, it will be the rows changed, and for some commands, it will just be 0.</summary>
 	//public class DtoServerAck:DataTransferObject {

@@ -11,11 +11,8 @@ namespace OpenDentBusiness{
 	public class SheetDefs{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM sheetdef ORDER BY Description";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="sheetdef";
 			FillCache(table);
 			return table;

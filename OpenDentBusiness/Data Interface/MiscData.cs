@@ -124,15 +124,18 @@ namespace OpenDentBusiness {
 		}
 
 		public static string GetCurrentDatabase() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT database()";
 			DataTable table=General.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());
 		}
 
 		public static string GetMySqlVersion() {
-			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-			//	return Meth.get(MethodBase.GetCurrentMethod(),[put all the parameters for the method here]);
-			//}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT @@version";
 			DataTable table=General.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());

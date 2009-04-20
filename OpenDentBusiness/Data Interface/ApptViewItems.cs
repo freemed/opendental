@@ -21,11 +21,8 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * from apptviewitem ORDER BY ElementOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ApptViewItem";
 			FillCache(table);
 			return table;

@@ -2975,15 +2975,15 @@ namespace OpenDental{
 		public void InitializeLocalData(){
 			butAddKey.Visible=PrefC.GetBool("DistributorKey");
 			butForeignKey.Visible=PrefC.GetBool("DistributorKey");
-			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
-			toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
-			toothChart.PreferredPixelFormatNumber=computerPrefs.PreferredPixelFormatNum;
-			toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last preference set here, because this causes the 
+			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			toothChart.UseHardware=computerPref.GraphicsUseHardware;
+			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
+			toothChart.SimpleMode=computerPref.GraphicsSimple;	//Must be last preference set here, because this causes the 
 																													//pixel format to be recreated.
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
-			computerPrefs.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
-			ComputerPrefs.Update(computerPrefs);
-			if(computerPrefs.GraphicsSimple){
+			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+			ComputerPrefs.Update(computerPref);
+			if(computerPref.GraphicsSimple){
 				butBig.Visible=false;				
 			}else{
 				butBig.Visible=true;

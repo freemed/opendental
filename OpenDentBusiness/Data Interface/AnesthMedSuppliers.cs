@@ -14,11 +14,8 @@ namespace OpenDentBusiness{
 
 		///<summary></summary> 
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="AnesthMedSuppliers";
 			FillCache(table);
 			return table;

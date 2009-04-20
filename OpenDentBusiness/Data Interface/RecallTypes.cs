@@ -11,11 +11,8 @@ namespace OpenDentBusiness{
 	public class RecallTypes{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM recalltype ORDER BY Description";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="RecallType";
 			FillCache(table);
 			return table;

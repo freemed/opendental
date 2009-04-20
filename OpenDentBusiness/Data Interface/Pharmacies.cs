@@ -11,11 +11,8 @@ namespace OpenDentBusiness{
 	public class Pharmacies{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM pharmacy ORDER BY StoreName";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="Pharmacy";
 			FillCache(table);
 			return table;

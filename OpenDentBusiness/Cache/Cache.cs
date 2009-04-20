@@ -6,18 +6,18 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class Cache {
+		/// <summary>This is only used in the RefreshCache methods.  Used instead of Meth.  The command is only used if not ClientWeb.</summary>
+		public static DataTable GetTableRemotelyIfNeeded(MethodBase methodBase,string command) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(methodBase);
+			}
+			else {
+				return General.GetTable(command);
+			}
+		}
+
 		///<summary>This is only called from the UI.  Its purpose is to refresh the cache for one type on both the workstation and server.</summary>
 		public static void Refresh(InvalidType itype) {
-			//List<int> itypes=new List<int>();
-			//itypes.Add((int)itype);
-			/*string itypesStr="";
-			for(int i=0;i<itypes.Count;i++) {
-				if(i>0) {
-					itypesStr+=",";
-				}
-				itypesStr+=itypes[i].ToString();
-			}*/
-			//Refresh(itypesStr);
 			int intItype=(int)itype;
 			RefreshCache(intItype.ToString());
 		}
@@ -149,15 +149,15 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(SheetFieldDefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Signals) || isAll) {
-				SigElementDefs.Refresh();
-				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+				ds.Tables.Add(SigElementDefs.RefreshCache());
+				ds.Tables.Add(SigButDefs.RefreshCache());//includes SigButDefElements.Refresh()
 			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll){
 				ds.Tables.Add(Sites.RefreshCache());
 			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll){
-				ToolButItems.Refresh();
+				ds.Tables.Add(ToolButItems.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ds.Tables.Add(ApptViews.RefreshCache());
@@ -261,7 +261,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll) {
 				Programs.FillCache(ds.Tables["Program"]);
-				Programs.FillCache(ds.Tables["ProgramProperty"]);
+				ProgramProperties.FillCache(ds.Tables["ProgramProperty"]);
 			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll) {
 				Providers.FillCache(ds.Tables["Provider"]);
@@ -278,15 +278,15 @@ namespace OpenDentBusiness {
 				SheetFieldDefs.FillCache(ds.Tables["SheetFieldDef"]);
 			}
 			if(itypes.Contains((int)InvalidType.Signals) || isAll) {
-				SigElementDefs.Refresh();
-				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
+				SigElementDefs.FillCache(ds.Tables["SigElementDef"]);
+				SigButDefs.FillCache(ds.Tables["SigButDef"]);//includes SigButDefElements.Refresh()
 			}
 			if(itypes.Contains((int)InvalidType.Sites) || isAll) {
 				Sites.FillCache(ds.Tables["Site"]);
 			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.ToolBut) || isAll) {
-				ToolButItems.Refresh();
+				ToolButItems.FillCache(ds.Tables["ToolButItem"]);
 			}
 			if(itypes.Contains((int)InvalidType.Views) || isAll) {
 				ApptViews.FillCache(ds.Tables["ApptView"]);

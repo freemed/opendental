@@ -12,11 +12,8 @@ namespace OpenDentBusiness{
 	public class ProcedureCodes {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="ProcedureCode";
 			FillCache(table);
 			return table;

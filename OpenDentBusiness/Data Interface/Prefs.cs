@@ -8,12 +8,8 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Prefs{
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * FROM preference";
-			DataConnection dcon=new DataConnection();
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Pref";
 			FillCache(table);
 			return table;
@@ -98,6 +94,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateString(string prefName,string newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
@@ -107,7 +104,14 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PString(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				//Result of Meth is ignored.
+				Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+				//doesn't exit out of this method here.
+			}
+			else {
+				General.NonQ(command);
+			}
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=newValue;

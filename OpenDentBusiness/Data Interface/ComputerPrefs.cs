@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using CodeBase;
 using System.Net;
+using System.Reflection;
+using CodeBase;
 
 namespace OpenDentBusiness {
 	public class ComputerPrefs {
@@ -102,6 +103,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int Update(ComputerPref computerPref){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
+			}
 			string command="UPDATE computerpref SET "
 				+"ComputerName='"+POut.PString(computerPref.ComputerName)+"',"
 				+"GraphicsUseHardware='"+POut.PBool(computerPref.GraphicsUseHardware)+"',"

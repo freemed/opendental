@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
   ///<summary></summary>
@@ -13,7 +14,7 @@ namespace OpenDentBusiness{
 		public static ToolButItem[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -23,10 +24,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Refresh(){
-			string command =
-				"SELECT * from toolbutitem";
-			DataTable table=General.GetTable(command);;
+		public static DataTable RefreshCache() {
+			string command="SELECT * from toolbutitem";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ToolButItem";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new ToolButItem[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ToolButItem();
@@ -74,7 +81,7 @@ namespace OpenDentBusiness{
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
 		public static void GetForProgram(int programNum){
 			if(List==null) {
-				Refresh();
+				RefreshCache();
 			}
 			ForProgram=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -87,7 +94,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>
 		public static ArrayList GetForToolBar(ToolBarsAvail toolbar) {
 			if(List==null) {
-				Refresh();
+				RefreshCache();
 			}
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){

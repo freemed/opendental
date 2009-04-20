@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
@@ -14,7 +15,7 @@ namespace OpenDentBusiness {
 		public static SigButDef[] Listt {
 			get {
 				if(listt==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listt;
 			}
@@ -24,10 +25,17 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of all SigButDefs when program first opens.  Also refreshes SigButDefElements and attaches all elements to the appropriate buttons.</summary>
-		public static void Refresh() {
-			SigButDefElements.Refresh();
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM sigbutdef ORDER BY ButtonIndex";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="SigButDef";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			SigButDefElements.RefreshCache();
 			Listt=new SigButDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				Listt[i]=new SigButDef();

@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 			if(table.TableName==""){
 				throw new ApplicationException("OpenDentBusiness.WebServer.XmlConverter.TableToXml requires a tablename matching the type of the collection.");
 			}
-			table.WriteXml(xmlWriter);
+			table.WriteXml(xmlWriter,XmlWriteMode.WriteSchema);
 			xmlWriter.Close();
 			return strBuild.ToString();
 		}

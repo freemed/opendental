@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
+using System.Reflection;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
@@ -13,7 +14,7 @@ namespace OpenDentBusiness {
 		public static SigElementDef[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -23,9 +24,16 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of all SigElementDefs when program first opens.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM sigelementdef ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="SigElementDef";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new SigElementDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigElementDef();

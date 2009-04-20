@@ -34,9 +34,7 @@ namespace OpenDental {
 			string database="";
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql){
-				command="SELECT database()";
-				DataTable table=General.GetTable(command);
-				database=PIn.PString(table.Rows[0][0].ToString());
+				database=MiscData.GetCurrentDatabase();
 			}
 			if(storedVersion<currentVersion) {
 				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());

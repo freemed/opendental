@@ -229,7 +229,7 @@ namespace OpenDental{
 		}
 
 		private void FillLists(){
-			SigElementDefs.Refresh();
+			SigElementDefs.RefreshCache();
 			ListUser=SigElementDefs.GetSubList(SignalElementType.User);
 			ListExtras=SigElementDefs.GetSubList(SignalElementType.Extra);
 			ListMessages=SigElementDefs.GetSubList(SignalElementType.Message);

@@ -26,12 +26,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static DataTable RefreshCache(int anestheticRecordNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthvsdata WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY VSTimeStamp DESC"; //most recent at top of list
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="AnesthVSData";
 			FillCache(table);
 			return table;

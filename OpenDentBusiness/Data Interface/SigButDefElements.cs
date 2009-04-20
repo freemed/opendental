@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -11,7 +12,7 @@ namespace OpenDentBusiness{
 		public static SigButDefElement[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,9 +22,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all SigButDefElements for all buttons, ordered by type: user,extras, message.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM sigbutdefelement";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="SigButDefElement";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new SigButDefElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigButDefElement();

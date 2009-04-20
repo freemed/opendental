@@ -11,11 +11,8 @@ namespace OpenDentBusiness{
 	public class FeeScheds{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string c="SELECT * FROM feesched ORDER BY ItemOrder";
-			DataTable table=General.GetTable(c);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="FeeSched";
 			FillCache(table);
 			return table;

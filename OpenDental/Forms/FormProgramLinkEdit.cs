@@ -336,7 +336,7 @@ namespace OpenDental{
 		private void FillForm(){
 			//this is not refined enough to be called more than once on the form because it will not
 			//remember the toolbars that were selected.
-			ToolButItems.Refresh();
+			ToolButItems.RefreshCache();
 			ProgramProperties.RefreshCache();
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;

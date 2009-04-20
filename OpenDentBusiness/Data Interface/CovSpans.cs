@@ -9,14 +9,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			string command=
 				"SELECT * FROM covspan"
 				+" ORDER BY FromCode";
 			//+" ORDER BY CovCatNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="CovSpan";
 			FillCache(table);
 			return table;

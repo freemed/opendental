@@ -191,8 +191,8 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			SigButDefs.Refresh();
-			SigButDefElements.Refresh();
+			SigButDefs.RefreshCache();
+			SigButDefElements.RefreshCache();
 			if(listComputers.SelectedIndex==-1){//although I don't know how this could happen
 				listComputers.SelectedIndex=0;
 			}

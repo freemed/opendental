@@ -15,6 +15,17 @@ namespace OpenDentBusiness {
 		public static RemotingRole RemotingRole;
 		public static string ServerURI;
 
+		public static DataTable ProcessGetTable(DtoGetTable dto) {
+			string result=SendAndReceive(dto);
+			try {
+				return XmlConverter.XmlToTable(result);
+			}
+			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
+		}
+
 		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto) {
 			string result=SendAndReceive(dto);
@@ -27,12 +38,22 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static DataTable ProcessGetTable(DtoGetTable dto) {
-			string result=SendAndReceive(dto);
+		///<summary></summary>
+		public static int ProcessGetInt(DtoGetInt dto) {
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
-				return XmlConverter.XmlToTable(result);
+				return PIn.PInt(result);
 			}
 			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
+		}
+
+		///<summary></summary>
+		public static void ProcessGetVoid(DtoGetVoid dto) {
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			if(result!="0"){
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
@@ -55,18 +76,32 @@ namespace OpenDentBusiness {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
-		}	
+		}
 
 		///<summary></summary>
-		public static int ProcessGetInt(DtoGetInt dto) {
+		public static string ProcessGetString(DtoGetString dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			DtoException exception;
 			try {
-				return PIn.PInt(result);
+				exception=(DtoException)DataTransferObject.Deserialize(result);
 			}
 			catch {
-				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
-				throw new Exception(exception.Message);
+				return result;
 			}
+			throw new Exception(exception.Message);
+		}
+
+		///<summary></summary>
+		public static bool ProcessGetBool(DtoGetBool dto) {
+			string result=SendAndReceive(dto);
+			if(result=="True") {
+				return true;
+			}
+			if(result=="False") {
+				return false;
+			}
+			DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+			throw new Exception(exception.Message);
 		}
 
 	
