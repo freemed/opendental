@@ -9,9 +9,15 @@ using OpenDentBusiness.DataAccess;
 using System.Diagnostics;
 
 namespace OpenDentBusiness {
-	///<summary>Provides a base class for the many types of DTO classes that we will need.  A DTO class is a simple data storage object.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
+	///<summary>Provides a base class for DTO classes.  A DTO class is a simple data storage object.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
 	public abstract class DataTransferObject {
-
+		///<summary>Always passed with new web service.  Never null.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		public string MethodName;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+		
 		public string Serialize(){
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter writer=XmlWriter.Create(strBuild);
@@ -53,74 +59,38 @@ namespace OpenDentBusiness {
 
 	///<summary></summary>
 	public class DtoGetDS:DataTransferObject{
-		///<summary>Always passed with new web service.    Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+	
 	}
 
 	///<summary></summary>
 	public class DtoGetTable:DataTransferObject{
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		
 	}
 
 	///<summary>Gets an int.</summary>
 	public class DtoGetInt:DataTransferObject{
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		
 	}
 
 	///<summary>Used when the return type is void.  It will still return 0 to ack.</summary>
 	public class DtoGetVoid:DataTransferObject {
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		
 	}
 
 	///<summary>Gets an object which must be serializable.  Calling code will convert object to specific type.</summary>
 	public class DtoGetObject:DataTransferObject{
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
 		///<summary>This is the string representation of the type of object that we expect back as a result.</summary>
 		public string ObjectType;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
 	}
 
 	///<summary>Gets a simple string.</summary>
 	public class DtoGetString:DataTransferObject{
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		
 	}
 
 	///<summary>Gets a bool.</summary>
 	public class DtoGetBool:DataTransferObject {
-		///<summary>Always passed with new web service.  Never null.</summary>
-		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		
 	}
 
 	

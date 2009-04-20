@@ -102,10 +102,11 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static int Update(ComputerPref computerPref){
+		public static int Update2(TestClass testClass){//ComputerPref computerPref){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),testClass);
 			}
+			/*
 			string command="UPDATE computerpref SET "
 				+"ComputerName='"+POut.PString(computerPref.ComputerName)+"',"
 				+"GraphicsUseHardware='"+POut.PBool(computerPref.GraphicsUseHardware)+"',"
@@ -122,8 +123,17 @@ namespace OpenDentBusiness {
 				+"TaskX='"+POut.PInt(computerPref.TaskX)+"',"
 				+"TaskY='"+POut.PInt(computerPref.TaskY)+"' "
 				+"WHERE ComputerPrefNum='"+POut.PInt(computerPref.ComputerPrefNum)+"'";
-			return General.NonQ(command);
+			return General.NonQ(command);*/
+			return 0;
 		}
 
+		public static int Update(ComputerPref computerPref) {
+			return 0;
+		}
+
+	}
+
+	public class TestClass{
+		public int TestInt;
 	}
 }

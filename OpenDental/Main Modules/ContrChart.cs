@@ -2982,7 +2982,9 @@ namespace OpenDental{
 																													//pixel format to be recreated.
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
 			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
-			ComputerPrefs.Update(computerPref);
+			TestClass tc=new TestClass();
+			tc.TestInt=0;
+			ComputerPrefs.Update2(tc);//computerPref);
 			if(computerPref.GraphicsSimple){
 				butBig.Visible=false;				
 			}else{
