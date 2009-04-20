@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(Cur.AutoCodeItemNum)+"', "
 				+"'"+POut.PInt((int)Cur.Cond)+"')";
 			//MessageBox.Show(string command);
-			Cur.AutoCodeCondNum=General.NonQ(command,true);
+			Cur.AutoCodeCondNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -48,21 +48,21 @@ namespace OpenDentBusiness{
 				+"autocodeitemnum='"+POut.PInt(Cur.AutoCodeItemNum)+"'"
 				+",cond ='"     +POut.PInt((int)Cur.Cond)+"'"
 				+" WHERE autocodecondnum = '"+POut.PInt(Cur.AutoCodeCondNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(AutoCodeCond Cur){
 			string command= "DELETE from autocodecond WHERE autocodecondnum = '"
 				+POut.PInt(Cur.AutoCodeCondNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void DeleteForItemNum(int itemNum){
 			string command= "DELETE from autocodecond WHERE autocodeitemnum = '"
 				+POut.PInt(itemNum)+"'";//AutoCodeItems.Cur.AutoCodeItemNum)
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Reconcile[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Reconcile[] List=new Reconcile[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Reconcile();
@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 				+POut.PDate  (reconcile.DateReconcile)+", "
 				+"'"+POut.PBool  (reconcile.IsLocked)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				reconcile.ReconcileNum=General.NonQ(command,true);
+				reconcile.ReconcileNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -72,19 +72,19 @@ namespace OpenDentBusiness{
 				+",DateReconcile = "+POut.PDate  (reconcile.DateReconcile)+" "
 				+",IsLocked = '"     +POut.PBool  (reconcile.IsLocked)+"' "
 				+"WHERE ReconcileNum = '"+POut.PInt(reconcile.ReconcileNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Throws exception if Reconcile is in use.</summary>
 		public static void Delete(Reconcile reconcile) {
 			//check to see if any journal entries are attached to this Reconcile
 			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum="+POut.PInt(reconcile.ReconcileNum);
-			if(General.GetCount(command)!="0"){
+			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lan.g("FormReconcileEdit",
 					"Not allowed to delete a Reconcile with existing journal entries."));
 			}
 			command="DELETE FROM reconcile WHERE ReconcileNum = "+POut.PInt(reconcile.ReconcileNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

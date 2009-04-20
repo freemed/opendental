@@ -217,7 +217,7 @@ namespace OpenDental{
 			try{
 				//ConvertDB.ExecuteFile(fileName);
 				string content = File.ReadAllText(fileName).Trim();
-				General.NonQ(content);
+				Db.NonQ(content);
 			}
 			catch{
 				MessageBox.Show("Translations not installed properly.");

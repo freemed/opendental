@@ -386,15 +386,15 @@ namespace OpenDental{
 			string command;
 			//We need a very small table that tells us which tp is the most recent.
 			//command="DROP TABLE IF EXISTS temptp;";
-			//General.NonQ(command);
+			//Db.NonQ(command);
 			//command=@"CREATE TABLE temptp(
 			//	DateTP date NOT NULL default '0001-01-01')";
-			//General.NonQ(command);
+			//Db.NonQ(command);
 			//command+=@"CREATE TABLE temptp
 			//	SELECT MAX(treatplan.DateTP) DateTP
 			//	FROM treatplan
 			//	WHERE PatNum="+POut.PInt(PatCur.PatNum)+";";
-			//General.NonQ(command);
+			//Db.NonQ(command);
 			command="SET @maxTpDate=(SELECT MAX(treatplan.DateTP) FROM treatplan WHERE PatNum="+POut.PInt(PatCur.PatNum)+");";
 			command+="SELECT ";
 			for(int i=0;i<letter.Fields.Count;i++){
@@ -468,7 +468,7 @@ namespace OpenDental{
 				+"WHERE patient.PatNum="+POut.PInt(PatCur.PatNum)
 				+" GROUP BY patient.PatNum "
 				+"ORDER BY refattach.ItemOrder";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			table=FormQuery.MakeReadable(table);
 			try{
 			  using(StreamWriter sw=new StreamWriter(fileName,false)){

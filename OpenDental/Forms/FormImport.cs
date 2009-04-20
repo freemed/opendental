@@ -2643,7 +2643,7 @@ namespace OpenDental{
 				return;
 			}*/
 			string command="SELECT COUNT(*) FROM patient";
-			if(General.GetCount(command)!="0"){
+			if(Db.GetCount(command)!="0"){
 				if(!MsgBox.Show(this,true,"Warning! This database already has at least one patient.  It is typically recommended to start with a blank database.  Continue anyway?"))
 				{
 					DialogResult=DialogResult.Cancel;
@@ -2760,7 +2760,7 @@ namespace OpenDental{
 			}
 			//make sure table doesn't already exist
 			string command="SHOW TABLES";
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			for(int i=0;i<tempT.Rows.Count;i++){
 				if(tempT.Rows[i][0].ToString()==newTable){
 					MsgBox.Show(this,"Table already exists.");
@@ -2809,7 +2809,7 @@ namespace OpenDental{
 				}
 			}
 			command+=")";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//We might not be on the server, so make a copy of the file in the temporary directory 
 			//on the local computer before loading.
 			string newPath=ODFileUtils.CombinePaths(Path.GetTempPath(),Path.GetFileName(textFileName.Text));
@@ -2820,12 +2820,12 @@ namespace OpenDental{
 				+"OPTIONALLY ENCLOSED BY '"+POut.PString("\"")
 				+@"' ESCAPED BY '\\' LINES TERMINATED BY '\r\n'";
 			//MessageBox.Show("Preparing to run: "+command);
-			General.NonQ(command);
+			Db.NonQ(command);
 			File.Delete(newPath);//Remove temporary file.
 			if(this.radioColNamRow.Checked){
 				//Remove the first row containing the column names, as they are not useful and possibly harmful to the conversion.
 				command="DELETE FROM "+newTable+" LIMIT 1";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			FillTableNames();
 			comboTableName.SelectedItem=newTable;
@@ -2835,7 +2835,7 @@ namespace OpenDental{
 
 		private void FillTableNames(){
 			string command="SHOW TABLES";
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			comboTableName.Items.Clear();
 			comboCopyFromTable.Items.Clear();
 			comboCopyToTable.Items.Clear();
@@ -2862,7 +2862,7 @@ namespace OpenDental{
 				comboTableName.SelectedIndex=0;
 			}
 			string command="SELECT * FROM "+POut.PString(comboTableName.SelectedItem.ToString());
- 			table=General.GetTable(command);
+ 			table=Db.GetTable(command);
 			comboColEdit.Items.Clear();
 			comboColMove.Items.Clear();
 			comboColMoveAfter.Items.Clear();
@@ -2901,7 +2901,7 @@ namespace OpenDental{
 		private void GetPK(){
 			//missing feature: check for no table selected
 			string command="SHOW INDEX FROM "+POut.PString(comboTableName.SelectedItem.ToString());
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			if(tempT.Rows.Count==0){
 				comboColPK.SelectedIndex=-1;
 				pkCol="";
@@ -2926,7 +2926,7 @@ namespace OpenDental{
 				 command+=';';//Ensure that commands are always terminated, but only with a single ';', otherwise there are blank queries that are somtimes created due to 2 ';' characters.
 			}
 			try{
-				 General.NonQ(command);//If SQL command fails, then the SQL statement is not written to the conversion script.
+				 Db.NonQ(command);//If SQL command fails, then the SQL statement is not written to the conversion script.
 				 StreamWriter writer=File.AppendText(GetScriptPath());
 				 writer.Write("\r\n"+command);
 				 writer.Flush();
@@ -2947,44 +2947,44 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			string command="SHOW INDEX FROM "+POut.PString(comboTableName.SelectedItem.ToString());
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			if(tempT.Rows.Count!=0){//if a primary key exists
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP PRIMARY KEY";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			pkCol=comboColPK.SelectedItem.ToString();
 			//first, test to see if it's a blank column
 			command="SELECT COUNT(*) FROM "+comboTableName.SelectedItem.ToString()+" WHERE "+pkCol+"!=''";
-			tempT=General.GetTable(command);
+			tempT=Db.GetTable(command);
 			if(tempT.Rows[0][0].ToString()=="0"){//all blank
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" CHANGE "+pkCol+" "+pkCol
 					+" int unsigned NOT NULL auto_increment, "
 					+" ADD PRIMARY KEY ("+pkCol+")";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP PRIMARY KEY,"
-				//General.NonQ(command);
+				//Db.NonQ(command);
 				//command="ALTER TABLE "+comboTableName.SelectedItem.ToString()
 					+" CHANGE "+pkCol+" "+pkCol+" text NOT NULL,"
 					+" ADD PRIMARY KEY ("+pkCol+"(10))";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{//primary keys already exist.
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" ADD PRIMARY KEY ("+pkCol+"(10))";
 				bool commandSuccess=true;
 				try{
-						General.NonQ(command);
+						Db.NonQ(command);
 				}catch{
 						commandSuccess=false;
 				}
 				if(!commandSuccess){
 					command="SELECT COUNT(*) - COUNT(DISTINCT "+pkCol+") FROM "+comboTableName.SelectedItem.ToString();
-					DataTable dupCount=General.GetTable(command);
+					DataTable dupCount=Db.GetTable(command);
 					if(MessageBox.Show("There are "+PIn.PInt(dupCount.Rows[0][0].ToString())
 						+" duplicate values in the given column. Remove duplicates and continue?",
 						"Duplicate Values",
 						MessageBoxButtons.YesNo)==DialogResult.Yes){
 						command="ALTER IGNORE TABLE "+comboTableName.SelectedItem.ToString()+" ADD PRIMARY KEY ("+pkCol+"(10))";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 			}
@@ -2995,14 +2995,14 @@ namespace OpenDental{
 
 		private void butClearPK_Click(object sender, System.EventArgs e) {
 			string command="SHOW INDEX FROM "+POut.PString(comboTableName.SelectedItem.ToString());
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			if(tempT.Rows.Count==0){
 				MsgBox.Show(this,"No primary key to clear.");
 				GetPK();
 			}
 			else{//if a primary key exists
 				command="ALTER TABLE "+POut.PString(comboTableName.SelectedItem.ToString())+" DROP PRIMARY KEY";
-				General.NonQ(command);
+				Db.NonQ(command);
 				GetPK();
 				MessageBox.Show("done");
 			}
@@ -3033,7 +3033,7 @@ namespace OpenDental{
 				return;
 			}
 			string command="DROP TABLE "+comboTableName.SelectedItem;
-			General.NonQ(command);
+			Db.NonQ(command);
 			FillTableNames();
 			if(comboTableName.Items.Count>0){
 				comboTableName.SelectedIndex=0;
@@ -3417,7 +3417,7 @@ namespace OpenDental{
 			}
 			//Make sure none of the patnums already exists
 			string command="SELECT PatNum FROM patient";
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			for(int j=0;j<table.Rows.Count;j++){
 				for(int i=0;i<tempT.Rows.Count;i++){
 					if(tempT.Rows[i][0].ToString()==table.Rows[j]["PatNum"].ToString()){
@@ -3513,7 +3513,7 @@ namespace OpenDental{
 			}
 			//Make sure none of the patnums already exists
 			string command="SELECT PatNum FROM patient";
-			DataTable tempT=General.GetTable(command);
+			DataTable tempT=Db.GetTable(command);
 			for(int j=0;j<table.Rows.Count;j++){
 				for(int i=0;i<tempT.Rows.Count;i++){
 					if(tempT.Rows[i][0].ToString()==table.Rows[j]["PatNum"].ToString()){
@@ -3759,7 +3759,7 @@ namespace OpenDental{
 
 		private void butRunScript_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			General.NonQ(textScript.Text);
+			Db.NonQ(textScript.Text);
 			Cursor=Cursors.Default;
 			FillGrid();
 			GetPK();
@@ -4309,7 +4309,7 @@ namespace OpenDental{
 			if(radioPatients.Checked){
 				//make sure no PatNum already exists
 				string command="SELECT PatNum FROM patient";
-				DataTable tempT=General.GetTable(command);
+				DataTable tempT=Db.GetTable(command);
 				bool exists;
 				if(radioInsert.Checked){//Insert: no duplicates allowed
 					for(int j=0;j<table.Rows.Count;j++){
@@ -4375,7 +4375,7 @@ namespace OpenDental{
 				}
 				//Get the column names of the newly selected temporary table.
 				string command="SELECT * FROM "+comboCopyFromTable.SelectedItem.ToString()+" LIMIT 1";
-				DataTable result=General.GetTable(command);
+				DataTable result=Db.GetTable(command);
 				listCopyFromTable.Items.Clear();
 				for(int i=0;i<result.Columns.Count;i++){
 						listCopyFromTable.Items.Add(result.Columns[i].ColumnName);
@@ -4388,7 +4388,7 @@ namespace OpenDental{
 				}
 				//Get the column names of the newly selected temporary table.
 				string command="SELECT * FROM "+comboCopyToTable.SelectedItem.ToString()+" LIMIT 1";
-				DataTable result=General.GetTable(command);
+				DataTable result=Db.GetTable(command);
 				listCopyToTable.Items.Clear();
 				for(int i=0;i<result.Columns.Count;i++){
 						listCopyToTable.Items.Add(result.Columns[i].ColumnName);
@@ -4524,7 +4524,7 @@ namespace OpenDental{
 				string tempTable=comboFindDups.SelectedItem.ToString();
 				//Get the column names of the newly selected temporary table.
 				string command="SELECT * FROM "+tempTable+" LIMIT 1";
-				DataTable result=General.GetTable(command);
+				DataTable result=Db.GetTable(command);
 				listDupRowCols.Items.Clear();
 				for(int i=0;i<result.Columns.Count;i++){
 						listDupRowCols.Items.Add(result.Columns[i].ColumnName);
@@ -4549,7 +4549,7 @@ namespace OpenDental{
 				//Create the table where the result will be stored.
 				string tab="temp"+textDupRowTable.Text;
 				string command="CREATE TABLE "+tab+" SELECT * FROM "+comboFindDups.Text;
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Modify the copy table so it is all upper-cased if we care about case insensitivity.
 				if(checkFindDupsInsensitive.Checked){
 						command="UPDATE "+tab+" SET ";
@@ -4560,11 +4560,11 @@ namespace OpenDental{
 										command+=",";
 								}
 						}
-						General.NonQ(command);
+						Db.NonQ(command);
 				}
 				string tab2=tab+"2";
 				command="CREATE TABLE "+tab2+" SELECT * FROM "+tab;
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM "+tab+" WHERE (SELECT COUNT(*) FROM "+tab2+" WHERE ";
 				for(int i=0;i<listDupRowCols.SelectedItems.Count;i++){
 						string colName=listDupRowCols.SelectedItems[i].ToString();
@@ -4574,9 +4574,9 @@ namespace OpenDental{
 						}
 				}			
 				command+=" LIMIT 2)=1";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DROP TABLE "+tab2;
-				General.NonQ(command);
+				Db.NonQ(command);
 				Cursor=Cursors.Default;			
 				FillTableNames();
 				comboTableName.Text=tab;
@@ -4592,21 +4592,21 @@ namespace OpenDental{
 				string command="";
 				//Calculate the current number of rows in the table.
 				command="SELECT COUNT(*) FROM "+comboDeleteExDupsTable.Text;
-				DataTable result=General.GetTable(command);	
+				DataTable result=Db.GetTable(command);	
 				int oldNumCols=PIn.PInt(result.Rows[0][0].ToString());				
 				//Copy the table to another temporary table, removing rows which are exact duplicates.
 				string tempTab=comboDeleteExDupsTable.Text+"Copy";
 				command="CREATE TABLE "+tempTab+" SELECT DISTINCTROW * FROM "+comboDeleteExDupsTable.Text;
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Now delete the original temporary table.
 				command="DROP TABLE "+comboDeleteExDupsTable.Text;
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Then rename the new temporary table to the old table name.
 				command="ALTER TABLE "+tempTab+" RENAME TO "+comboDeleteExDupsTable.Text;
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Recalculate the current number of rows in the table.
 				command="SELECT COUNT(*) FROM "+comboDeleteExDupsTable.Text;
-				result=General.GetTable(command);
+				result=Db.GetTable(command);
 				int newNumCols=PIn.PInt(result.Rows[0][0].ToString());
 				MessageBox.Show("Deleted "+(oldNumCols-newNumCols)+" duplicate rows.");				
 			}

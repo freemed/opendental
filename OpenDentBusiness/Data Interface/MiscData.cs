@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return PIn.PDateT(table.Rows[0][0].ToString());
 		}
 
@@ -30,11 +30,11 @@ namespace OpenDentBusiness {
 			if(numComputers==0 || myComputerNum==0){
 				try{
 					string command="SELECT COUNT(*) FROM computer";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					numComputers=PIn.PInt(table.Rows[0][0].ToString());
 					command="SELECT COUNT(*) FROM computer WHERE ComputerNum<=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
 						"like '"+Dns.GetHostName()+"')";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					myComputerNum=PIn.PInt(table.Rows[0][0].ToString());
 				}catch{
 					//This computer has not yet been added to the computer table. Generate any old random number as long as it is unique.
@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 
 		private static bool KeyInUse(string tablename,string field,int keynum){
 			string command="SELECT COUNT(*) FROM "+tablename+" WHERE "+field+"="+keynum.ToString();
-			if(General.GetCount(command)=="0"){
+			if(Db.GetCount(command)=="0"){
 				return false;
 			}
 			return true;//already in use
@@ -128,7 +128,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT database()";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());
 		}
 
@@ -137,7 +137,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT @@version";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());
 		}
 

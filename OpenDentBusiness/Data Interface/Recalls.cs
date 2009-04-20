@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Recall> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<Recall> list=new List<Recall>();
 			Recall recall;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 				+"AND (appointment.AptStatus=1 "//Scheduled
 				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
 				+"GROUP BY patient.Guarantor";
-			DataTable maxTable=General.GetTable(command);
+			DataTable maxTable=Db.GetTable(command);
 			//key=guarantor, value=maxDateDue
 			Dictionary<int,DateTime> dictMaxDateDue=new Dictionary<int,DateTime>();
 			for(int i=0;i<maxTable.Rows.Count;i++) {
@@ -202,7 +202,7 @@ namespace OpenDentBusiness{
 				command+=") ";
 			}
 			command+="GROUP BY recall.PatNum ";
- 			DataTable rawtable=General.GetTable(command);
+ 			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
 			Interval interv;
@@ -388,10 +388,10 @@ namespace OpenDentBusiness{
 				//DateTStamp
 				+"'"+POut.PInt   (recall.RecallTypeNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				recall.RecallNum=General.NonQ(command,true);
+				recall.RecallNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -409,13 +409,13 @@ namespace OpenDentBusiness{
 				//DateTStamp
 				+",RecallTypeNum = '"  +POut.PInt   (recall.RecallTypeNum)+"' "
 				+" WHERE RecallNum = '"+POut.PInt   (recall.RecallNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Recall recall) {
 			string command= "DELETE from recall WHERE RecallNum = "+POut.PInt(recall.RecallNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
 		}
 
@@ -483,7 +483,7 @@ namespace OpenDentBusiness{
 				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EC)+" "
 				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EO)+") "
 				+"GROUP BY RecallTypeNum";
-			DataTable tableDates=General.GetTable(command);
+			DataTable tableDates=Db.GetTable(command);
 			//Go through the type list and either update recalls, or create new recalls.
 			//Recalls that are no longer active because their type has no triggers will be ignored.
 			//It is assumed that there are no duplicate recall types for a patient.
@@ -611,7 +611,7 @@ namespace OpenDentBusiness{
 			string command="SELECT PatNum "
 				+"FROM patient "
 				+"WHERE PatStatus=0";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				Synch(PIn.PInt(table.Rows[i][0].ToString()));
 			}
@@ -638,7 +638,7 @@ namespace OpenDentBusiness{
 				command+="recall.RecallNum="+POut.PInt(recallNums[i]);
 			}
 			command+=") GROUP BY patient.Guarantor";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command=@"SELECT patient.Address,patguar.Address guarAddress,
 				patient.Address2,patguar.Address2 guarAddress2,
 				patient.City,patguar.City guarCity,recall.DateDue,patient.Email,patguar.Email guarEmail,
@@ -664,9 +664,9 @@ namespace OpenDentBusiness{
         command+="recall.RecallNum="+POut.PInt(recallNums[i]);
       }
 			command+=" GROUP BY recall.RecallNum";
-			DataTable rawTable=General.GetTable(command);
+			DataTable rawTable=Db.GetTable(command);
 			command="DROP TABLE IF EXISTS temprecallmaxdate";
-			General.NonQ(command);
+			Db.NonQ(command);
 			List<DataRow> rawRows=new List<DataRow>();
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				rawRows.Add(rawTable.Rows[i]);
@@ -811,7 +811,7 @@ namespace OpenDentBusiness{
 		public static void UpdateStatus(int recallNum,int newStatus){
 			string command="UPDATE recall SET RecallStatus="+newStatus.ToString()
 				+" WHERE RecallNum="+recallNum.ToString();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

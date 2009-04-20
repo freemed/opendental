@@ -156,19 +156,19 @@ namespace OpenDentBusiness{
 			/*string command="UPDATE userod,grouppermissions SET userod.Password='' "
 				+"WHERE grouppermissions.UserGroupNum=userod.UserGroupNum "
 				+"AND grouppermissions.PermType=24";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			 */
 			//Code updated to be compatible with Oracle as well as MySQL.
 			/*
 			string command="SELECT userod.UserNum FROM userod,grouppermissions "
 				+"WHERE grouppermissions.UserGroupNum=userod.UserGroupNum "
 				+"AND grouppermissions.PermType=24";
-			DataTable table=General.GetTable(command); 
+			DataTable table=Db.GetTable(command); 
 			if(table.Rows.Count==0){
 				throw new ApplicationException("No admin exists.");
 			}
 			command="UPDATE userod SET Password='' WHERE UserNum="+POut.PString(table.Rows[0][0].ToString());
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>

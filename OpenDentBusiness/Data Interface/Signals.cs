@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 			//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
 			DataTable table=null;
 			try {
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 			}
 			catch{
 				//MessageBox.Show(e.Message);
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				+",AckTime = "     +POut.PDateT (sig.AckTime)
 				+",TaskNum = '"    +POut.PInt   (sig.TaskNum)+"'"
 				+" WHERE SignalNum = '"+POut.PInt(sig.SignalNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -126,10 +126,10 @@ namespace OpenDentBusiness{
 				+POut.PDateT (sig.AckTime)+", "
 				+"'"+POut.PInt(sig.TaskNum)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				sig.SignalNum=General.NonQ(command,true);
+ 				sig.SignalNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 			string command= "DELETE from Signal WHERE SignalNum = '"
 				+POut.PInt(SignalNum)+"'";
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		///<summary>After a refresh, this is used to determine whether the Appt Module needs to be refreshed.  Must supply the current date showing as well as the recently retrieved signal list.</summary>
@@ -239,7 +239,7 @@ namespace OpenDentBusiness{
 				+"AND signal.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
 				+"AND sigelementdef.LightRow="+POut.PInt(buttonIndex);
-			General.NonQ(command);*/
+			Db.NonQ(command);*/
 			//Rewritten so that the SQL is compatible with both Oracle and MySQL.
 			string command= "SELECT signal.SignalNum FROM signal,sigelement,sigelementdef "
 				+"WHERE signal.AckTime < '1880-01-01' "
@@ -247,7 +247,7 @@ namespace OpenDentBusiness{
 				+"AND signal.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
 				+"AND sigelementdef.LightRow="+POut.PInt(buttonIndex);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
@@ -264,7 +264,7 @@ namespace OpenDentBusiness{
 					command+=" OR ";
 				}
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

@@ -34,7 +34,7 @@ namespace OpenDentBusiness
 		public static void DeleteObject(AnesthMedsInventory med){
 			//validate that anesthetic med is not already in use.
 			string command = "SELECT COUNT(*) FROM anesthmedsgiven WHERE AnesthMedNum=" + POut.PInt(med.AnestheticMedNum);
-			int count=PIn.PInt(General.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
 			if (count > 0)
 			{
 				MessageBox.Show(Lan.g("AnesthMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
@@ -133,7 +133,7 @@ namespace OpenDentBusiness
 				+ POut.PInt(HgtUnitsCm) + ",'"
 				+ POut.PString(Signature) + "',"
 				+ POut.PBool(SigIsTopaz) + ")";
-				int val =  General.NonQ(command);
+				int val =  Db.NonQ(command);
 				return val;
 		}
 
@@ -143,7 +143,7 @@ namespace OpenDentBusiness
 				+	"VSMName ='"	+ POut.PString(VSMName) + "' "
 				+	",VSMSerNum ='"	+ POut.PString(VSMSerNum) + "'"
 				+	"WHERE AnestheticRecordNum =" + anestheticRecordNum + "";	
-				General.NonQ(command);
+				Db.NonQ(command);
 		}
 
 		/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
@@ -200,7 +200,7 @@ namespace OpenDentBusiness
 				+	",Signature			='"	+ POut.PString(Signature)+ "' "
 				+	",SigIsTopaz		="	+ POut.PBool(SigIsTopaz)+ " "
 				+	"WHERE AnestheticRecordNum =" + anestheticRecordNum + "";	
-		int val = General.NonQ(command);
+		int val = Db.NonQ(command);
 		return val;
 	}
 		/// <summary>Inserts the data from anesthetic intake form into the anesthmedsintake table in the database</summary>
@@ -221,9 +221,9 @@ namespace OpenDentBusiness
 				}
 		 
 			string command = "INSERT INTO anesthmedsintake(IntakeDate,AnesthMedName,Qty,SupplierIDNum,InvoiceNum)values('" + MiscData.GetNowDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "','" + AMname + "'," + qty + ",'" + supplier + "','" + Inum + "')";
-			General.NonQ(command);
+			Db.NonQ(command);
 			string command1 = "UPDATE anesthmedsinventory SET QtyOnHand = '" + qty + "' WHERE AnesthMedName = '" + AMname + "'";
-			General.NonQ(command1);
+			Db.NonQ(command1);
 		}
 
 		/// <summary>Inserts the newly added anesthetic medication and how supplied into the anesthmedsgiven table in the database</summary>
@@ -236,17 +236,17 @@ namespace OpenDentBusiness
 			string doseTimeStamp = MiscData.GetNowDateTime().ToString("HH:mm:ss");
 			//update anesthmedsgiven
 			string command = "INSERT INTO anesthmedsgiven(AnestheticRecordNum,AnesthMedName,QtyGiven,QtyWasted,DoseTimeStamp,QtyOnHandOld,AnesthMedNum) VALUES('" + anestheticRecordNum + "','" + AMName + "','" + dose + "','" + amtwasted + "','" + doseTimeStamp + "','" + qtyonhandold + "','" + anesthmednum + "'" + ")";
-			General.NonQ(command);
+			Db.NonQ(command);
 			string command2 = "UPDATE anesthmedsgiven SET "
 					+ "QtyOnHandOld = " + GetQtyOnHand(AMName) + " "
 					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'" + "AND DoseTimeStamp= '" + doseTimeStamp + "'";
-			General.NonQ(command2);
+			Db.NonQ(command2);
 			//update anesthmedsinventory
 			double AdjQty = GetQtyOnHand(AMName) - dose;
 			string command3 = "UPDATE anesthmedsinventory SET "
 					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 					+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
-			General.NonQ(command3);
+			Db.NonQ(command3);
 		}
 
 		public static void UpdateAMedDose(string anesthMedName, double dose, double amtwasted, string dosetimestamp, int anestheticMedNum, int anestheticRecordNum){
@@ -263,14 +263,14 @@ namespace OpenDentBusiness
 					string command = "UPDATE anesthmedsinventory SET "
 							+ " QtyOnHand		=	" + POut.PDouble(newQty) + " "
 							+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
-					General.NonQ(command);
+					Db.NonQ(command);
 
 				//the new qty to be deducted from inventory
 					double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) - (dose) - (amtwasted);
 					string command2 = "UPDATE anesthmedsinventory SET "
 						+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
-					General.NonQ(command2);
+					Db.NonQ(command2);
 			}
 
 			else if (Convert.ToDouble(GetQtyWasted(anesthMedName, dosetimestamp, anestheticMedNum)) != amtwasted) //no adjustment made if textQtyWasted textbox is filled with same amt
@@ -281,14 +281,14 @@ namespace OpenDentBusiness
 					string command = "UPDATE anesthmedsinventory SET "
 						+ " QtyOnHand		=	" + POut.PDouble(newWaste) + " "
 						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
-					General.NonQ(command);
+					Db.NonQ(command);
 
 				//now, deduct the new wasted qty
 					double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) - (amtwasted);
 					string command2 = "UPDATE anesthmedsinventory SET "
 						+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 						+ "WHERE AnesthMedName ='" + Convert.ToString(AMName) + "'";
-					General.NonQ(command2);
+					Db.NonQ(command2);
 			}
 		
 			//update anesthmedsgiven
@@ -298,7 +298,7 @@ namespace OpenDentBusiness
 				+ ",QtyWasted			=" + POut.PDouble((amtwasted)) + " "
 				+ ",DoseTimeStamp		='" + POut.PString(Convert.ToString(dosetimestamp)) + "'"
 				+ "WHERE AnestheticMedNum = " + anestheticMedNum + " AND AnestheticRecordNum = " + anestheticRecordNum;
-			General.NonQ(command3);
+			Db.NonQ(command3);
 		}
 
 		public static double GetQtyGiven(string anesthMedName, string doseTimeStamp, int anestheticMedNum){
@@ -340,7 +340,7 @@ namespace OpenDentBusiness
 					AMedname = anesthMedName.Replace("'", "''");
 				}
 			string command = "UPDATE anesthmedsinventory SET QtyOnHand = '" + Convert.ToString(adjQty) + "' WHERE AnesthMedName = '" + anesthMedName + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 
 		}
 
@@ -356,7 +356,7 @@ namespace OpenDentBusiness
 				howsupplied2 = howsupplied.Replace("'", "''");
 			}
 			string command = "UPDATE anesthmedsinventory SET QtyOnHand=" + newQTY + " WHERE AnestheticMed= '" + aMed2 + "' and AnesthHowSupplied='" + howsupplied2 + "' and QtyOnHand=" + qtyOnHand;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		
 		///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
@@ -366,10 +366,10 @@ namespace OpenDentBusiness
 			string command3 = "UPDATE anesthmedsinventory SET "
 					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 					+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
-			General.NonQ(command3);
+			Db.NonQ(command3);
 			//Update anesthmedsgiven
 			string command = "DELETE FROM anesthmedsgiven WHERE AnesthMedName='" + anesthMedName + "' and QtyGiven=" + QtyGiven + " and DoseTimeStamp='" + TimeStamp.ToString() + "'" + " and AnestheticRecordNum = " + anestheticRecordNum;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 				///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
@@ -379,10 +379,10 @@ namespace OpenDentBusiness
 			string command3 = "UPDATE anesthmedsinventory SET "
 					+ " QtyOnHand		=	" + POut.PDouble(AdjQty) + " "
 					+ "WHERE AnesthMedName ='" + Convert.ToString(anesthMedName) + "'";
-			General.NonQ(command3);
+			Db.NonQ(command3);
 			//Update anesthmedsgiven
 			string command = "DELETE FROM anesthmedsgiven WHERE AnestheticRecordNum = " + anestheticRecordNum;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/// <summary>Returns QtyOnHand for anesthetic medication inventory adjustment calculations/// </summary>

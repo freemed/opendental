@@ -57,10 +57,10 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
 				+"'"+POut.PBool(plan.IsHidden)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				plan.PlanNum=General.NonQ(command,true);
+				plan.PlanNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Called from FormInsPlan when applying changes to all identical insurance plans. This updates the synchronized fields for all plans like the specified insPlan.  Current InsPlan must be set to the new values that we want.  BenefitNotes and SubscNote are specific to subscriber and are not changed.  PlanNotes are handled separately in a different function after this one is complete.</summary>
@@ -129,7 +129,7 @@ namespace OpenDentBusiness {
 				+"AND DivisionNo = '"     +POut.PString(like.DivisionNo)+"'"
 				+"AND CarrierNum = '"     +POut.PInt   (like.CarrierNum)+"' "
 				+"AND IsMedical = '"      +POut.PBool  (like.IsMedical)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0.  If still not found, returns null.</summary>
@@ -223,7 +223,7 @@ namespace OpenDentBusiness {
 		}
 
 		private static InsPlan[] RefreshFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			InsPlan[] PlanList=new InsPlan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				PlanList[i]=new InsPlan();
@@ -447,7 +447,7 @@ namespace OpenDentBusiness {
 			string command="SELECT insplan.PlanNum,carrier.CarrierName "
 				+"FROM insplan,carrier "
 				+"WHERE insplan.CarrierNum=carrier.CarrierNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Hashtable HListAll=new Hashtable(table.Rows.Count);
 			int plannum;
 			string carrierName;
@@ -478,7 +478,7 @@ namespace OpenDentBusiness {
 				s+=" PlanNum="+POut.PInt(planNums[i]);
 			}
 			string command="SELECT DISTINCT PlanNote FROM insplan WHERE"+s;
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				retVal[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -500,7 +500,7 @@ namespace OpenDentBusiness {
 			}
 			string command="UPDATE insplan SET PlanNote='"+POut.PString(newNote)+"' "
 				+"WHERE"+s;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Called from FormInsPlan when user wants to view a benefit note for similar plans.  Should never include the current plan that the user is editing.  This function will get one note from the database, not including blank notes.  If no note can be found, then it returns empty string.</summary>
@@ -521,7 +521,7 @@ namespace OpenDentBusiness {
 			}else{//Assume MySQL
 				command+="LIMIT 1";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			//string[] retVal=new string[];
 			if(table.Rows.Count==0){
 				return "";
@@ -551,7 +551,7 @@ namespace OpenDentBusiness {
 				+"AND insplan.IsMedical = '"  +POut.PBool(isMedical)+"' "
 				+"AND insplan.PlanNum != "    +POut.PInt(excludePlan)
 				+" ORDER BY LName,FName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				retStr[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -577,7 +577,7 @@ namespace OpenDentBusiness {
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
 				+"AND insplan.IsMedical = '"  +POut.PBool  (isMedical)+"'"
 				+"AND insplan.PlanNum != "+POut.PInt(planNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<int> retVal=new List<int>();
 			//if(includePlanNum){
 			//	retVal=new int[table.Rows.Count+1];
@@ -646,7 +646,7 @@ namespace OpenDentBusiness {
 			else {//not by employer
 				command+="ORDER BY CarrierName";
 			}
-			DataTable rawT=General.GetTable(command);
+			DataTable rawT=Db.GetTable(command);
 			for(int i=0;i<rawT.Rows.Count;i++) {
 				row=table.NewRow();
 				row["Address"]=rawT.Rows[i]["Address"].ToString();
@@ -707,7 +707,7 @@ namespace OpenDentBusiness {
 			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,insplan.PlanType,"
 				+"insplan."+pFeeSched+" "
 				+"ORDER BY carrier.CarrierName,employer.EmpName,insplan.GroupNum";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		///<summary>Based on the four supplied parameters, it updates all similar plans.  Used in a specific tool: FormFeesForIns.</summary>
@@ -721,7 +721,7 @@ namespace OpenDentBusiness {
 				+"AND carrier.CarrierName='"+POut.PString(carrierName)+"' "
 				+"AND insplan.GroupNum='"+POut.PString(groupNum)+"' "
 				+"AND insplan.GroupName='"+POut.PString(groupName)+"'";
-			 return General.NonQ(command);
+			 return Db.NonQ(command);
 			 */
 			//Code rewritten so that it is not only MySQL compatible, but Oracle compatible as well.
 			string command="SELECT insplan.PlanNum FROM insplan,carrier "
@@ -730,7 +730,7 @@ namespace OpenDentBusiness {
 				+"AND carrier.CarrierName='"+POut.PString(carrierName)+"' "
 				+"AND insplan.GroupNum='"+POut.PString(groupNum)+"' "
 				+"AND insplan.GroupName='"+POut.PString(groupName)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return 0;
 			}
@@ -755,14 +755,14 @@ namespace OpenDentBusiness {
 				}
 			}
 			command+=")";
-			return General.NonQ(command);
+			return Db.NonQ(command);
 		}
 
 		///<summary>Returns number of rows affected.</summary>
 		public static int ConvertToNewClaimform(int oldClaimFormNum, int newClaimFormNum){
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
-			return General.NonQ(command);
+			return Db.NonQ(command);
 		}
 
 		///<summary>Returns the number of fee schedules added.  It doesn't inform the user of how many plans were affected, but there will obviously be a certain number of plans for every new fee schedule.</summary>
@@ -774,7 +774,7 @@ namespace OpenDentBusiness {
 				+"AND insplan.AllowedFeeSched=0 "
 				+"AND insplan.PlanType='' "
 				+"GROUP BY carrier.CarrierName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			//loop through all the carrier names
 			string carrierName;
 			FeeSched sched;
@@ -800,7 +800,7 @@ namespace OpenDentBusiness {
 				//assign the fee sched to many plans
 				//for compatibility with Oracle, get a list of all carrierNums that use the carriername
 				command="SELECT CarrierNum FROM carrier WHERE CarrierName='"+POut.PString(carrierName)+"'";
-				tableCarrierNums=General.GetTable(command);
+				tableCarrierNums=Db.GetTable(command);
 				if(tableCarrierNums.Rows.Count==0){
 					continue;//I don't see how this could happen
 				}
@@ -816,7 +816,7 @@ namespace OpenDentBusiness {
 					command+="CarrierNum="+tableCarrierNums.Rows[c]["CarrierNum"].ToString();
 				}
 				command+=")";
-				retVal+=General.NonQ(command);
+				retVal+=Db.NonQ(command);
 			}
 			return retVal;
 		}
@@ -824,7 +824,7 @@ namespace OpenDentBusiness {
 		public static int UnusedGetCount() {
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
-			int count=PIn.PInt(General.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
 			return count;
 		}
 
@@ -832,7 +832,7 @@ namespace OpenDentBusiness {
 			string command="UPDATE insplan SET IsHidden=1 "
 				+"WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		//public static int GenerateOneAllowedFeeSchedule(){

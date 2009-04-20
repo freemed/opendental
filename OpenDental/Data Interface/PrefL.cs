@@ -129,7 +129,7 @@ namespace OpenDental {
 				}
 				MessageBox.Show("Backup performed");
 				string command="SHOW TABLES";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string[] tableNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
 					tableNames[i]=table.Rows[i][0].ToString();
@@ -137,7 +137,7 @@ namespace OpenDental {
 				for(int i=0;i<tableNames.Length;i++) {
 					if(tableNames[i]!="procedurecode") {
 						command="ALTER TABLE "+tableNames[i]+" CONVERT TO CHARACTER SET utf8";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				string[] commands=new string[]
@@ -156,12 +156,12 @@ namespace OpenDental {
 					//,"ALTER TABLE covspan MODIFY ToCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 					//,"ALTER TABLE fee MODIFY OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				//and set the default too
 				command="ALTER DATABASE CHARACTER SET utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES('DatabaseConvertedForMySql41','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				MessageBox.Show("converted");
 				//Refresh();
 			}

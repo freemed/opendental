@@ -19,7 +19,7 @@ namespace OpenDentBusiness
         public static DataSet bindAMedName()  
         {
             cmd = "SELECT AnesthMedName FROM anesthmedsinventory ORDER BY AnesthMedName";
-            ds=General.GetDataSet(cmd);
+            ds=Db.GetDataSet(cmd);
             if (ds != null)
             {
                 ds.Dispose();
@@ -35,7 +35,7 @@ namespace OpenDentBusiness
         public static DataSet bindDropDowns() 
         {
             cmd = "SELECT UserName FROM userod where IsHidden = 0";
-            ds = General.GetDataSet(cmd);
+            ds = Db.GetDataSet(cmd);
             if (ds != null)
             {
                 ds.Dispose();
@@ -51,7 +51,7 @@ namespace OpenDentBusiness
         public static DataSet bindSuppliers()
         {
             cmd = "SELECT SupplierName FROM anesthmedsuppliers ORDER BY SupplierName";
-            ds = General.GetDataSet(cmd);
+            ds = Db.GetDataSet(cmd);
             if (ds != null)
             {
                 ds.Dispose();

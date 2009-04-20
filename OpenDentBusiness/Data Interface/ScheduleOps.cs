@@ -23,10 +23,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt   (op.ScheduleNum)+"', "
 				+"'"+POut.PInt   (op.OperatoryNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				op.ScheduleOpNum=General.NonQ(command,true);
+				op.ScheduleOpNum=Db.NonQ(command,true);
 			}
 		}
 

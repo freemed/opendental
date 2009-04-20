@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 				+"AND SGDate <= "+POut.PDateT(toDate.AddDays(1))+" "
 				//added one day since it's calculated based on midnight.
 				+"ORDER BY SGDate,ScreenGroupNum";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			List=new ScreenGroup[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ScreenGroup();
@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PString(Cur.Description)+"', "
 				+POut.PDate  (Cur.SGDate)+")";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.ScreenGroupNum=General.NonQ(command,true);
+ 				Cur.ScreenGroupNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -69,15 +69,15 @@ namespace OpenDentBusiness{
 				+"Description ='"  +POut.PString(Cur.Description)+"'"
 				+",SGDate ="      +POut.PDate  (Cur.SGDate)
 				+" WHERE ScreenGroupNum = '" +POut.PInt(Cur.ScreenGroupNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>This will also delete all screen items, so may need to ask user first.</summary>
 		public static void Delete(ScreenGroup Cur){
 			string command="DELETE from screen WHERE ScreenGroupNum ='"+POut.PInt(Cur.ScreenGroupNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE from screengroup WHERE ScreenGroupNum ='"+POut.PInt(Cur.ScreenGroupNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

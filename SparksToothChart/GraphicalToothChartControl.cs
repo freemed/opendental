@@ -2,10 +2,10 @@
 Copyright (C) 2006  Jordan Sparks, DMD.  http://www.open-dent.com,  http://www.docsparks.com
 
 This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU General Public License as published by the Free Software Foundation; either version 2 of the License,
+GNU Db Public License as published by the Free Software Foundation; either version 2 of the License,
 or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but without any warranty. See the GNU General Public License
+This program is distributed in the hope that it will be useful, but without any warranty. See the GNU Db Public License
 for more details, available at http://www.opensource.org/licenses/gpl-license.php
 
 Any changes to this program must follow the guidelines of the GPL license if a modified version is to be

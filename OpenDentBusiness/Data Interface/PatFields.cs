@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all PatFields for a given patient.</summary>
 		public static PatField[] Refresh(int patNum) {
 			string command="SELECT * FROM patfield WHERE PatNum="+POut.PInt(patNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			PatField[] List=new PatField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatField();
@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 				+",FieldName = '"        +POut.PString(pf.FieldName)+"'"
 				+",FieldValue = '"       +POut.PString(pf.FieldValue)+"'"
 				+" WHERE PatFieldNum  ='"+POut.PInt   (pf.PatFieldNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -49,17 +49,17 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(pf.FieldName)+"', "
 				+"'"+POut.PString(pf.FieldValue)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				pf.PatFieldNum=General.NonQ(command,true);
+				pf.PatFieldNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(PatField pf) {
 			string command="DELETE FROM patfield WHERE PatFieldNum ="+POut.PInt(pf.PatFieldNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Frequently returns null.</summary>

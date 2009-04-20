@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public int PatNum;
 		///<summary>The registration key as stored in the customer database.</summary>
 		public string RegKey;
-		///<summary>General note about the registration key. Specifically, the note must include information about the location to which this key pertains, since once at least one key must be assigned to each location to be legal.</summary>
+		///<summary>Db note about the registration key. Specifically, the note must include information about the location to which this key pertains, since once at least one key must be assigned to each location to be legal.</summary>
 		public string Note;
 		///<summary>This will help later with tracking for licensing.</summary>
 		public DateTime DateStarted;

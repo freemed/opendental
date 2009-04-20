@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 				"SELECT * from perioexam"
 				+" WHERE PatNum = '"+patNum.ToString()+"'"
 				+" ORDER BY perioexam.ExamDate";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new PerioExam[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new PerioExam();
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 				+",ExamDate = "    +POut.PDate  (Cur.ExamDate)
 				+",ProvNum = '"    +POut.PInt   (Cur.ProvNum)+"'"
 				+" WHERE PerioExamNum = '"+POut.PInt(Cur.PerioExamNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -56,19 +56,19 @@ namespace OpenDentBusiness{
 				+POut.PDate  (Cur.ExamDate)+", "
 				+"'"+POut.PInt   (Cur.ProvNum)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.PerioExamNum=General.NonQ(command,true);
+ 				Cur.PerioExamNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(PerioExam Cur){
 			string command= "DELETE from perioexam WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE from periomeasure WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 	
 	}

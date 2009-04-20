@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<PatPlan> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			PatPlan patplan;
 			List<PatPlan> retVal=new List<PatPlan>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 				+",Relationship = '"+POut.PInt   ((int)p.Relationship)+"'"
 				+",PatID = '"       +POut.PString(p.PatID)+"'"
 				+" WHERE PatPlanNum = '" +POut.PInt(p.PatPlanNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -67,10 +67,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)p.Relationship)+"', "
 				+"'"+POut.PString(p.PatID)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				p.PatPlanNum=General.NonQ(command,true);
+ 				p.PatPlanNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		public void Delete(){
 			string command="DELETE FROM patplan WHERE PatPlanNum ="+POut.PInt(PatPlanNum);
 			DataConnection dcon=new DataConnection();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
 		public static void SetOrdinal(int patPlanNum,int newOrdinal){
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
@@ -137,12 +137,12 @@ namespace OpenDentBusiness{
 				}
 				command="UPDATE patplan SET Ordinal="+POut.PInt(curOrdinal)
 					+" WHERE PatPlanNum="+POut.PInt(patPlans[i].PatPlanNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				curOrdinal++;
 			}
 			command="UPDATE patplan SET Ordinal="+POut.PInt(newOrdinal)
 				+" WHERE PatPlanNum="+POut.PInt(patPlanNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Loops through the supplied list to find the one patplan needed.</summary>

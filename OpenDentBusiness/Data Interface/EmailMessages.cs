@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets one email message from the database.</summary>
 		public static EmailMessage GetOne(int msgNum){
 			string command="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.PInt(msgNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			EmailMessage Cur=new EmailMessage();
 			if(table.Rows.Count==0)
 				return null;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 			Cur.MsgDateTime    =PIn.PDateT (table.Rows[0][6].ToString());
 			Cur.SentOrReceived =(CommSentOrReceived)PIn.PInt(table.Rows[0][7].ToString());
 			command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.PInt(msgNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			Cur.Attachments=new List<EmailAttach>();
 			EmailAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -49,10 +49,10 @@ namespace OpenDentBusiness{
 				+ ",MsgDateTime = "+POut.PDateT(message.MsgDateTime)+" "
 				+ ",SentOrReceived = '"+POut.PInt((int)message.SentOrReceived)+"' "
 				+"WHERE EmailMessageNum = "+POut.PInt(message.EmailMessageNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//now, delete all attachments and recreate.
 			command="DELETE FROM emailattach WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<message.Attachments.Count;i++) {
 				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;
 				EmailAttaches.Insert(message.Attachments[i]);
@@ -82,10 +82,10 @@ namespace OpenDentBusiness{
 				+POut.PDateT(message.MsgDateTime)+", "
 				+"'"+POut.PInt((int)message.SentOrReceived)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				message.EmailMessageNum=General.NonQ(command,true);
+				message.EmailMessageNum=Db.NonQ(command,true);
 			}
 			//now, insert all the attaches.
 			for(int i=0;i<message.Attachments.Count;i++) {
@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 				return;//this prevents deletion of all commlog entries of something goes wrong.
 			}
 			string command="DELETE FROM emailmessage WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		

@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Printer[] RefreshAndFill(string command){
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			Printer[] pList=new Printer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				pList[i]=new Printer();
@@ -63,10 +63,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (cur.DisplayPrompt)+"')";
 			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				cur.PrinterNum=General.NonQ(command,true);
+ 				cur.PrinterNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -78,14 +78,14 @@ namespace OpenDentBusiness{
 				+",PrinterName = '"  +POut.PString(cur.PrinterName)+"' "
 				+",DisplayPrompt = '"+POut.PBool  (cur.DisplayPrompt)+"' "
 				+"WHERE PrinterNum = '"+POut.PInt(cur.PrinterNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		private static void Delete(Printer cur){
 			string command="DELETE FROM printer "
 				+"WHERE PrinterNum = "+POut.PInt(cur.PrinterNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static bool PrinterIsInstalled(string name){
@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 			//Computer compCur=Computers.GetCur();
 			string command="SELECT ComputerNum FROM computer "
 				+"WHERE CompName = '"+POut.PString(computerName)+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;//computer not yet entered in db.
 			}
@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 		public static void ClearAll(){
 			//first, delete all entries
 			string command="DELETE FROM printer";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			//then, add one printer for each computer. Default and show prompt
 			Computers.Refresh();
 			Printer cur;

@@ -840,7 +840,7 @@ namespace OpenDental{
 				sw.Write(tableData.ToString());
 			}
 			string command="LOAD DATA INFILE '"+tempFile.Replace("\\","/")+"' INTO TABLE "+tableName;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		private void butSave_Click(object sender, System.EventArgs e) {

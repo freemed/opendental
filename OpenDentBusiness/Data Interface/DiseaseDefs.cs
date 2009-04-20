@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all DiseaseDefs when program first opens.</summary>
 		public static void Refresh() {
 			string command="SELECT * FROM diseasedef ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ListLong=new DiseaseDef[table.Rows.Count];
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				+",ItemOrder = '"   +POut.PInt   (def.ItemOrder)+"'"
 				+",IsHidden = '"    +POut.PBool  (def.IsHidden)+"'"
 				+" WHERE DiseaseDefNum  ='"+POut.PInt   (def.DiseaseDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -71,7 +71,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(def.DiseaseName)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PBool  (def.IsHidden)+"')";
-			def.DiseaseDefNum=General.NonQ(command,true);
+			def.DiseaseDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
@@ -79,7 +79,7 @@ namespace OpenDentBusiness {
 			string command="SELECT LName,FName FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "
 				+"AND disease.DiseaseDefNum='"+POut.PInt(def.DiseaseDefNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lan.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
 					+" "+Lan.g("DiseaseDef","patients, including")+" \r\n";
@@ -92,7 +92,7 @@ namespace OpenDentBusiness {
 				throw new ApplicationException(s);
 			}
 			command="DELETE FROM diseasedef WHERE DiseaseDefNum ="+POut.PInt(def.DiseaseDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Moves the selected item up in the listLong.</summary>

@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(field.Description)+"'," 
 				+"'"+POut.PInt   (field.ColumnWidth)+"', "
 				+"'"+POut.PInt   ((int)field.Category)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 			+"DisplayFieldName = '"+POut.PString(DisplayField.DisplayFieldName)+"', "
 			+"ControlsToInc = '"+POut.PString(DisplayField.ControlsToInc)+"' "
 			+"WHERE DisplayFieldNum = '"+POut.PInt(DisplayField.DisplayFieldNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		*/
 
@@ -245,7 +245,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			string command="DELETE FROM displayfield WHERE Category="+POut.PInt((int)category);
-			General.NonQ(command);
+			Db.NonQ(command);
 			if(isDefault){
 				return;
 			}

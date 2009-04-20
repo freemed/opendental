@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<ProcCodeNote> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<ProcCodeNote> retVal=new List<ProcCodeNote>();
 			ProcCodeNote note;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (note.ProvNum)+"', "
 				+"'"+POut.PString(note.Note)+"', "
 				+"'"+POut.PString(note.ProcTime)+"')";
-			note.ProcCodeNoteNum=General.NonQ(command,true);
+			note.ProcCodeNoteNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -68,12 +68,12 @@ namespace OpenDentBusiness{
 				+ ",Note = '"      +POut.PString(note.Note)+"'"
 				+ ",ProcTime = '"  +POut.PString(note.ProcTime)+"'"
 				+" WHERE ProcCodeNoteNum = "+POut.PInt(note.ProcCodeNoteNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void Delete(int procCodeNoteNum){
 			string command="DELETE FROM proccodenote WHERE ProcCodeNoteNum = "+POut.PInt(procCodeNoteNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets the note for the given provider, if one exists.  Otherwise, gets the proccode.defaultnote.</summary>

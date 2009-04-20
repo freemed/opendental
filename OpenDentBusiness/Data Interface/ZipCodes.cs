@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		public static void Refresh(){
 			string command =
 				"SELECT * from zipcode ORDER BY zipcodedigits";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			//HList=new Hashtable();
 			ALFrequent=new ArrayList();
 			List=new ZipCode[table.Rows.Count];
@@ -77,10 +77,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.State)+"', "
 				+"'"+POut.PBool  (Cur.IsFrequent)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.ZipCodeNum=General.NonQ(command,true);
+ 				Cur.ZipCodeNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -92,13 +92,13 @@ namespace OpenDentBusiness{
 				+",state ='"       +POut.PString(Cur.State)+"'"
 				+",isfrequent ='"  +POut.PBool  (Cur.IsFrequent)+"'"
 				+" WHERE zipcodenum = '"+POut.PInt(Cur.ZipCodeNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ZipCode Cur){
 			string command = "DELETE from zipcode WHERE zipcodenum = '"+POut.PInt(Cur.ZipCodeNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

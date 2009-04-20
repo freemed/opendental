@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static RxDef[] Refresh() {
 			string command="SELECT * FROM rxdef ORDER BY Drug";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RxDef[] List=new RxDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RxDef();
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				+",Notes = '"     +POut.PString(def.Notes)+"'"
 				+",IsControlled='"+POut.PBool  (def.IsControlled)+"'"
 				+" WHERE RxDefNum = '" +POut.PInt(def.RxDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -47,15 +47,15 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(def.Refills)+"', "
 				+"'"+POut.PString(def.Notes)+"', "
 				+"'"+POut.PBool(def.IsControlled)+"')";
-			def.RxDefNum=General.NonQ(command,true);
+			def.RxDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Also deletes all RxAlerts that were attached.</summary>
 		public static void Delete(RxDef def) {
 			string command="DELETE FROM rxalert WHERE RxDefNum="+POut.PInt(def.RxDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE FROM rxdef WHERE RxDefNum = "+POut.PInt(def.RxDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

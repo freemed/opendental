@@ -168,7 +168,7 @@ namespace OpenDental{
 
 		private int RecalcAll(){
 			string command="SELECT PatNum FROM patient";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int changed=0;
 			bool result;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -189,7 +189,7 @@ namespace OpenDental{
 				+"+IFNULL((SELECT SUM(AdjAmt) FROM adjustment WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) "
 				+"-IFNULL((SELECT SUM(SplitAmt) FROM paysplit WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) CalcBalance, "
 				+"IFNULL((SELECT SUM(InsPayEst) FROM claimproc WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) Estimate ";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			double calcBal=PIn.PDouble(table.Rows[0]["CalcBalance"].ToString());
 			if(!PrefC.GetBool("BalancesDontSubtractIns")){//most common
 				calcBal-=PIn.PDouble(table.Rows[0]["Estimate"].ToString());
@@ -197,7 +197,7 @@ namespace OpenDental{
 			double estBal=PIn.PDouble(table.Rows[0]["EstBalance"].ToString());
 			if(calcBal!=estBal) {
 				command="UPDATE patient SET EstBalance='"+POut.PDouble(calcBal)+"' WHERE PatNum="+POut.PInt(patNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				return true;
 			}
 			return false;
@@ -205,7 +205,7 @@ namespace OpenDental{
 
 		private int ReallocateAll(){
 			string command="SELECT DefNum FROM definition WHERE Category=1 AND ItemName='Reallocation'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int defnum;
 			if(table.Rows.Count==0){
 				Def def=new Def();
@@ -222,7 +222,7 @@ namespace OpenDental{
 			}
 			//find all families where someone has a negative balance.
 			command="SELECT DISTINCT Guarantor FROM patient WHERE EstBalance < 0";
-			DataTable tableGuarantors=General.GetTable(command);
+			DataTable tableGuarantors=Db.GetTable(command);
 			int changed=0;
 			//bool result;
 			double[] familyBals;
@@ -231,7 +231,7 @@ namespace OpenDental{
 			Double delta;
 			for(int i=0;i<tableGuarantors.Rows.Count;i++) {
 				command="SELECT PatNum,EstBalance FROM patient WHERE Guarantor="+tableGuarantors.Rows[i][0].ToString();
-				tablePatients=General.GetTable(command);
+				tablePatients=Db.GetTable(command);
 				if(tablePatients.Rows.Count==1){//impossible to allocate
 					continue;
 				}
@@ -276,7 +276,7 @@ namespace OpenDental{
 					adj.AdjAmt=delta;
 					Adjustments.Insert(adj);
 					command="UPDATE patient SET EstBalance=EstBalance+'"+POut.PDouble(delta)+"' WHERE PatNum="+tablePatients.Rows[p]["PatNum"].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 					changed++;
 				}
 			}

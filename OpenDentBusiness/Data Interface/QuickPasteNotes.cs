@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from quickpastenote "
 				+"ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new QuickPasteNote[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteNote();
@@ -45,10 +45,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(note.Note)+"', "
 				+"'"+POut.PString(note.Abbreviation)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				note.QuickPasteNoteNum=General.NonQ(command,true);
+ 				note.QuickPasteNoteNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -60,14 +60,14 @@ namespace OpenDentBusiness{
 				+",Note = '"          +POut.PString(note.Note)+"'"
 				+",Abbreviation = '"  +POut.PString(note.Abbreviation)+"'"
 				+" WHERE QuickPasteNoteNum = '"+POut.PInt (note.QuickPasteNoteNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 		
 		///<summary></summary>
 		public static void Delete(QuickPasteNote note){
 			string command="DELETE from quickpastenote WHERE QuickPasteNoteNum = '"
 				+POut.PInt(note.QuickPasteNoteNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>When saving an abbrev, this makes sure that the abbreviation is not already in use.</summary>
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM quickpastenote WHERE "
 				+"Abbreviation='"+POut.PString(note.Abbreviation)+"' "
 				+"AND QuickPasteNoteNum != '"+POut.PInt (note.QuickPasteNoteNum)+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return false;
 			}

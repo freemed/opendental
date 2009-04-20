@@ -35,13 +35,13 @@ namespace OpenDentBusiness{
 
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM anesthmedsgiven WHERE DoseTimeStamp="+POut.PString(med.DoseTimeStamp);
-			int count=PIn.PInt(General.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
             //disabled during development, will probably need to enable for release
 			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));
 			}*/
 			command="SELECT COUNT(*) FROM anesthmedsgiven WHERE DoseTimeStamp="+POut.PString(med.DoseTimeStamp);
-			count=PIn.PInt(General.GetCount(command));
+			count=PIn.PInt(Db.GetCount(command));
             //disabled for now...
 			/*if(count>0) {
 				throw new ApplicationException(Lan.g("AnestheticMeds","Anesthetic Medication is already in use. Not allowed to delete."));

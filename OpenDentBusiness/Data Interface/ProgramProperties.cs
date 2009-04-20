@@ -40,7 +40,7 @@ namespace OpenDentBusiness {
 				+",PropertyDesc  = '" +POut.PString(Cur.PropertyDesc)+"'"
 				+",PropertyValue = '" +POut.PString(Cur.PropertyValue)+"'"
 				+" WHERE ProgramPropertyNum = '"+POut.PInt(Cur.ProgramPropertyNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>This can only be called from ClassConversions. Users not allowed to add properties so there is no user interface.</summary>
@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(Cur.PropertyDesc)+"', "
 				+"'"+POut.PString(Cur.PropertyValue)+"')";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//Cur.ProgramNum=InsertID;
 		}
 
@@ -59,7 +59,7 @@ namespace OpenDentBusiness {
 		///<summary>This can only be called from ClassConversions. Users not allowed to delete properties so there is no user interface.</summary>
 		public static void Delete(ProgramProperty Cur){
 			string command= "DELETE from programproperty WHERE programpropertynum = '"+Cur.ProgramPropertyNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns a List of programproperties attached to the specified programNum</summary>
@@ -88,7 +88,7 @@ namespace OpenDentBusiness {
 			string command="UPDATE programproperty SET PropertyValue='"+POut.PString(propval)+"' "
 				+"WHERE ProgramNum="+POut.PInt(programNum)+" "
 				+"AND PropertyDesc='"+POut.PString(desc)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>After GetForProgram has been run, this gets one of those properties.</summary>
@@ -132,7 +132,7 @@ namespace OpenDentBusiness {
 		public static string GetValFromDb(int programNum,string desc){
 			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)
 				+" AND PropertyDesc='"+POut.PString(desc)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return "";
 			}

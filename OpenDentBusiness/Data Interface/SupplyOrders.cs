@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 			//validate that not already in use-no
 			//delete associated orderItems
 			string command="DELETE FROM supplyorderitem WHERE SupplyOrderNum="+POut.PInt(order.SupplyOrderNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			DataObjectFactory<SupplyOrder>.DeleteObject(order);
 		}
 

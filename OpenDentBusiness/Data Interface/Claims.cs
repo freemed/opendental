@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 					+" GROUP BY claimproc.ClaimNum";
 			}
 			command+=" ORDER BY _patName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<ClaimPaySplit> splits=new List<ClaimPaySplit>();
 			ClaimPaySplit split;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				+" WHERE ClaimNum = "+claimNum.ToString();
 			Claim retClaim=SubmitAndFill(command)[0];
 			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.PInt(claimNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			retClaim.Attachments=new List<ClaimAttach>();
 			ClaimAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Claim> SubmitAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Claim tempClaim;
 			List<Claim> claims=new List<Claim>();
 			for(int i=0;i<table.Rows.Count;i++){
@@ -203,10 +203,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.AttachedFlags)+"', "
 				+"'"+POut.PString(Cur.AttachmentID)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				Cur.ClaimNum=General.NonQ(command,true);
+				Cur.ClaimNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -254,10 +254,10 @@ namespace OpenDentBusiness{
 				+",AttachedFlags = '" + POut.PString(Cur.AttachedFlags)+"' "
 				+",AttachmentID = '"  + POut.PString(Cur.AttachmentID)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//now, delete all attachments and recreate.
 			command="DELETE FROM claimattach WHERE ClaimNum="+POut.PInt(Cur.ClaimNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<Cur.Attachments.Count;i++) {
 				Cur.Attachments[i].ClaimNum=Cur.ClaimNum;
 				ClaimAttaches.Insert(Cur.Attachments[i]);
@@ -267,11 +267,11 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(Claim Cur){
 			string command = "DELETE FROM claim WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command = "DELETE FROM canadianextract WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -280,7 +280,7 @@ namespace OpenDentBusiness{
 				+"claimnum = '0' "
 				+"WHERE claimnum = '"+POut.PInt(Cur.ClaimNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -310,7 +310,7 @@ namespace OpenDentBusiness{
 			}
 			command+="ORDER BY insplan.IsMedical, patient.LName";//this puts the medical claims at the end, helping with the looping in X12.
 			//MessageBox.Show(string command);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				listQueue[i]=new ClaimSendQueueItem();
@@ -360,7 +360,7 @@ namespace OpenDentBusiness{
 				+"AND ("+str.ToString()+") "
 				+"ORDER BY carrier.ElectID,claim.ProvBill,insplan.Subscriber,insplan.Subscriber!=claim.PatNum,claim.PatNum";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			object[,] myA=new object[5,table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				myA[0,i]=PIn.PString(table.Rows[i][0].ToString());

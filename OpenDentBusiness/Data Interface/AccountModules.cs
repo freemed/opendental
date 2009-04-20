@@ -1640,7 +1640,7 @@ namespace OpenDentBusiness {
 			string command = 
 				"SELECT FamFinancial "
 				+"FROM patientnote WHERE patnum ="+POut.PInt(fam.List[0].PatNum);
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			//for(int i=0;i<raw.Rows.Count;i++){
 			row=table.NewRow();
 			row["descript"]="FamFinancial";
@@ -1663,7 +1663,7 @@ namespace OpenDentBusiness {
 			command="SELECT SUM(inspayest+writeoff) FROM claimproc "
 				+"WHERE status = 0 "//not received
 				+"AND PatNum="+POut.PInt(patNum);
-			raw=General.GetTable(command);
+			raw=Db.GetTable(command);
 			row=table.NewRow();
 			row["descript"]="patInsEst";
 			row["value"]=raw.Rows[0][0].ToString();

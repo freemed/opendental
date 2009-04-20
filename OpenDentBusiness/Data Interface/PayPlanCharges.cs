@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<PayPlanCharge> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
 			PayPlanCharge ppcharge;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 				+",Note = '"           +POut.PString(charge.Note)+"'"
 				+",ProvNum = '"        +POut.PInt   (charge.ProvNum)+"'"
 				+" WHERE PayPlanChargeNum = '"+POut.PInt(charge.PayPlanChargeNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -92,10 +92,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(charge.Note)+"', "
 				+"'"+POut.PInt   (charge.ProvNum)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				charge.PayPlanChargeNum=General.NonQ(command,true);
+ 				charge.PayPlanChargeNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		public static void Delete(PayPlanCharge charge){
 			string command= "DELETE from payplancharge WHERE PayPlanChargeNum = '"
 				+POut.PInt(charge.PayPlanChargeNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void DeleteAllInPlan(int payPlanNum){
 			string command="DELETE FROM payplancharge WHERE PayPlanNum="+payPlanNum.ToString();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all QuestionDefs.</summary>
 		public static QuestionDef[] Refresh() {
 			string command="SELECT * FROM questiondef ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			QuestionDef[] List=new QuestionDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new QuestionDef();
@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 				+",ItemOrder = '"    +POut.PInt   (def.ItemOrder)+"'"
 				+",QuestType = '"    +POut.PInt   ((int)def.QuestType)+"'"
 				+" WHERE QuestionDefNum  ='"+POut.PInt   (def.QuestionDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -39,13 +39,13 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(def.Description)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PInt   ((int)def.QuestType)+"')";
-			def.QuestionDefNum=General.NonQ(command,true);
+			def.QuestionDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Ok to delete whenever, because no patients are tied to this table by any dependencies.</summary>
 		public static void Delete(QuestionDef def) {
 			string command="DELETE FROM questiondef WHERE QuestionDefNum ="+POut.PInt(def.QuestionDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

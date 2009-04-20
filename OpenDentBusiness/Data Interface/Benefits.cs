@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM benefit"
 				+" WHERE"+s;
 			//Debug.WriteLine(command);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Benefit[] List=new Benefit[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Benefit();
@@ -55,7 +55,7 @@ namespace OpenDentBusiness {
 			if(patPlanNum!=0) {
 				command+=" OR PatPlanNum = "+POut.PInt(patPlanNum);
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<Benefit> retVal=new List<Benefit>();
 			Benefit ben;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -93,7 +93,7 @@ namespace OpenDentBusiness {
 				+"AND DivisionNo = '"  +POut.PString(like.DivisionNo)+"'"
 				+"AND CarrierNum = '"  +POut.PInt(like.CarrierNum)+"' "
 				+"AND IsMedical = '"   +POut.PBool(like.IsMedical)+"' ";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string planNums="";
 			for(int i=0;i<table.Rows.Count;i++) {
 				if(i>0) {
@@ -105,7 +105,7 @@ namespace OpenDentBusiness {
 			if(table.Rows.Count>0){
 				//Get all benefits for all those plans
 				command="SELECT * FROM benefit WHERE"+planNums;
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				benList=new Benefit[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
 					benList[i]=new Benefit();
@@ -166,7 +166,7 @@ namespace OpenDentBusiness {
 				+",CodeNum = '"         +POut.PInt   (ben.CodeNum)+"'"
 				+",CoverageLevel = '"   +POut.PInt   ((int)ben.CoverageLevel)+"'"
 				+" WHERE BenefitNum  ='"+POut.PInt   (ben.BenefitNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -197,17 +197,17 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(ben.CodeNum)+"', "
 				+"'"+POut.PInt((int)ben.CoverageLevel)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				ben.BenefitNum=General.NonQ(command,true);
+				ben.BenefitNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(Benefit ben) {
 			string command="DELETE FROM benefit WHERE BenefitNum ="+POut.PInt(ben.BenefitNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		
 		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
@@ -491,7 +491,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<planNums.Count;i++){//loop through each plan
 				//delete all benefits for all identical plans
 				command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(planNums[i]);
-				General.NonQ(command);
+				Db.NonQ(command);
 				for(int j=0;j<newBenefitList.Count;j++){//loop through the new list
 					if(newBenefitList[j]==null) {
 						continue;
@@ -571,7 +571,7 @@ namespace OpenDentBusiness {
 		///<summary>Deletes all benefits for a plan from the database.  Only used in FormInsPlan when picking a plan from the list.  Need to clear out benefits so that they won't be picked up when choosing benefits for all.</summary>
 		public static void DeleteForPlan(int planNum){
 			string command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(planNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	}

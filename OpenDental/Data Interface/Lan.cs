@@ -34,7 +34,7 @@ namespace OpenDental{
 				return;
 			}
 			string command="SELECT * from language";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			list=new Language[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				list[i]=new Language();
@@ -61,7 +61,7 @@ namespace OpenDental{
 				+"'"+POut.PString(Cur.ClassType)+"', "
 				+"'"+POut.PString(Cur.English)+"','',0)";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -78,7 +78,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public static string[] GetListCat(){
 			string command="SELECT Distinct ClassType FROM language ORDER BY ClassType ";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] ListCat=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				ListCat[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -90,7 +90,7 @@ namespace OpenDental{
 		public static Language[] GetListForCat(string classType){
 			string command="SELECT * FROM language "
 				+"WHERE ClassType = BINARY '"+POut.PString(classType)+"' ORDER BY English";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Language[] ListForCat=new Language[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				ListForCat[i]=new Language();
@@ -324,7 +324,7 @@ namespace OpenDental{
 				}
 			}
 			command+=")";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	}

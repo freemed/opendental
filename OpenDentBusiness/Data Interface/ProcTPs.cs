@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<ProcTP> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<ProcTP> retVal=new List<ProcTP>();
 			ProcTP proc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 				+",PatAmt = '"     +POut.PDouble(proc.PatAmt)+"'"
 				+",Discount = '"   +POut.PDouble(proc.Discount)+"'"
 				+" WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -99,10 +99,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(proc.PatAmt)+"', "
 				+"'"+POut.PDouble(proc.Discount)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				proc.ProcTPNum=General.NonQ(command,true);
+ 				proc.ProcTPNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 		///<summary>There are no dependencies.</summary>
 		public static void Delete(ProcTP proc){
 			string command= "DELETE from proctp WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Gets a list for just one tp.  Used in TP module.  Supply a list of all ProcTPs for pt.</summary>
@@ -142,7 +142,7 @@ namespace OpenDentBusiness{
 		public static void DeleteForTP(int treatPlanNum){
 			string command="DELETE FROM proctp "
 				+"WHERE TreatPlanNum="+POut.PInt(treatPlanNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

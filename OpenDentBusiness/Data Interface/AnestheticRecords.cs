@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM anestheticrecord"
 				+ " WHERE PatNum = '" + patNum.ToString() + "'"
 				+ " ORDER BY anestheticrecord.AnestheticDate DESC";
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			List = new AnestheticRecord[table.Rows.Count];
 			for (int i = 0; i < table.Rows.Count; i++)
 			{
@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				+ ",AnestheticDate = " + POut.PDateT(Cur.AnestheticDate) + "'"
 				+ ",ProvNum = '" + POut.PInt(Cur.ProvNum) + "'"
 				+ " WHERE AnestheticRecordNum = '" + POut.PInt(Cur.AnestheticRecordNum) + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Creates a new AnestheticRecord in the db</summary>
@@ -80,11 +80,11 @@ namespace OpenDentBusiness{
 				+ "'" + POut.PInt(Cur.ProvNum) + "')";
 			if (PrefC.RandomKeys)
 			{
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else
 			{
-				Cur.AnestheticRecordNum = General.NonQ(command, true);
+				Cur.AnestheticRecordNum = Db.NonQ(command, true);
 			}
 		}
 
@@ -111,20 +111,20 @@ namespace OpenDentBusiness{
 				"" + POut.PInt(Cur.AnestheticRecordNum) + ")";
 			if (PrefC.RandomKeys)
 			{
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else
 			{
-				Cur.AnestheticRecordNum = General.NonQ(command, true);
+				Cur.AnestheticRecordNum = Db.NonQ(command, true);
 			}
 		}
 		///<summary>Deletes an Anesthetic Record and the corresponding Anesthetic Data</summary>
 		public static void Delete(AnestheticRecord Cur)
 		{
 			string command = "DELETE FROM anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			string command2 = "DELETE FROM anestheticdata WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
-			General.NonQ(command2);
+			Db.NonQ(command2);
 		}
 
 		/// <summary>/// Gets the Anesthetic Record number from the anestheticrecord table./// </summary>
@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 		{
 
 			string command = "INSERT INTO anesthscore(AnestheticRecordNum,QActivity,QResp,QCirc,QConc,QColor,AnesthesiaScore,DischAmb,DischWheelChr,DischAmbulance,DischCondStable,DischCondUnstable) VALUES('" + AnestheticRecordNum + "','" + QActivity + "','" + QResp + "','" + QCirc + "','" + QConc + "','" + QColor + "','" + AnesthesiaScore + "','" + DischAmb + "','" + DischWheelChr + "','" + DischAmbulance + "','" + DischCondStable + "','" + DischCondUnstable + "'" + ")";
-			General.NonQ(command);
+			Db.NonQ(command);
 
 		}
 
@@ -204,7 +204,7 @@ namespace OpenDentBusiness{
 				+ ",DischCondStable = '" + POut.PInt(DischCondStable) + "'"
 				+ ",DischCondUnstable = '" + POut.PInt(DischCondUnstable) + "'"
 				+ " WHERE AnestheticRecordNum = '" + POut.PInt(AnestheticRecordNum) + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static int GetAnesthScore(int AnestheticRecordNum)

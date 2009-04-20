@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 		}
 
 		private static Disease[] RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Disease[] List=new Disease[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Disease();
@@ -46,7 +46,7 @@ namespace OpenDentBusiness {
 				+",DiseaseDefNum = '"+POut.PInt   (disease.DiseaseDefNum)+"'"
 				+",PatNote = '"      +POut.PString(disease.PatNote)+"'"
 				+" WHERE DiseaseNum  ='"+POut.PInt   (disease.DiseaseNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -67,23 +67,23 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt   (disease.DiseaseDefNum)+"', "
 				+"'"+POut.PString(disease.PatNote)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				disease.DiseaseNum=General.NonQ(command,true);
+				disease.DiseaseNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(Disease disease) {
 			string command="DELETE FROM disease WHERE DiseaseNum ="+POut.PInt(disease.DiseaseNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes all diseases for one patient.</summary>
 		public static void DeleteAllForPt(int patNum){
 			string command="DELETE FROM disease WHERE PatNum ="+POut.PInt(patNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		

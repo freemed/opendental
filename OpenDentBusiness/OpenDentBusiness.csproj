@@ -255,7 +255,6 @@
     <Compile Include="Data Interface\Defs.cs" />
     <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\FamilyModules.cs" />
-    <Compile Include="Data Interface\Gen.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\Prefs.cs" />
@@ -268,7 +267,7 @@
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
-    <Compile Include="Data Interface\General.cs" />
+    <Compile Include="Data Interface\Db.cs" />
     <Compile Include="Data Interface\Ledgers.cs" />
     <Compile Include="Data Interface\MountDefs.cs" />
     <Compile Include="Data Interface\MountItemDefs.cs" />

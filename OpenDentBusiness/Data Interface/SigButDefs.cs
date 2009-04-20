@@ -56,7 +56,7 @@ namespace OpenDentBusiness {
 				+",SynchIcon = '"   +POut.PInt(def.SynchIcon)+"'"
 				+",ComputerName = '"+POut.PString(def.ComputerName)+"'"
 				+" WHERE SigButDefNum  ='"+POut.PInt(def.SigButDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -67,21 +67,21 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(def.ButtonIndex)+"', "
 				+"'"+POut.PInt(def.SynchIcon)+"', "
 				+"'"+POut.PString(def.ComputerName)+"')";
-			def.SigButDefNum=General.NonQ(command,true);
+			def.SigButDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(SigButDef def) {
 			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PInt(def.SigButDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM sigbutdef WHERE SigButDefNum ="+POut.PInt(def.SigButDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used in the Button edit dialog.</summary>
 		public static void DeleteElements(SigButDef def) {
 			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PInt(def.SigButDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Loops through the element list and pulls out one element of a specific type. Used in the button edit window.</summary>

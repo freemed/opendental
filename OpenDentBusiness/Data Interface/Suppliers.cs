@@ -24,12 +24,12 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(Supplier supp){
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM supplyorder WHERE SupplierNum="+POut.PInt(supp.SupplierNum);
-			int count=PIn.PInt(General.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
 			if(count>0) {
 				throw new ApplicationException(Lan.g("Supplies","Supplier is already in use on an order. Not allowed to delete."));
 			}
 			command="SELECT COUNT(*) FROM supply WHERE SupplierNum="+POut.PInt(supp.SupplierNum);
-			count=PIn.PInt(General.GetCount(command));
+			count=PIn.PInt(Db.GetCount(command));
 			if(count>0) {
 				throw new ApplicationException(Lan.g("Supplies","Supplier is already in use on a supply. Not allowed to delete."));
 			}

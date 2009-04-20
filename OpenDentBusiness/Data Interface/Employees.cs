@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Refresh(){
 			string command="SELECT * FROM employee ORDER BY IsHidden,FName,LName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ListLong=new Employee[table.Rows.Count];
 			ArrayList tempList=new ArrayList();
 			//Employee temp;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				+ ",PhoneExt = '"   +POut.PInt   (Cur.PhoneExt)+"' "
 				+"WHERE EmployeeNum = '"+POut.PInt(Cur.EmployeeNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (Cur.IsHidden)+"', "
 				+"'"+POut.PString(Cur.ClockStatus)+"', "
 				+"'"+POut.PInt   (Cur.PhoneExt)+"')";
-			Cur.EmployeeNum=General.NonQ(command,true);
+			Cur.EmployeeNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Surround with try-catch</summary>
@@ -110,26 +110,26 @@ namespace OpenDentBusiness{
 			//appointment.Assistant will not block deletion
 			//schedule.EmployeeNum will not block deletion
 			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum);
-			if(General.GetCount(command)!="0"){
+			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lan.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached clock events."));
 			}
 			command="SELECT COUNT(*) FROM timeadjust WHERE EmployeeNum="+POut.PInt(employeeNum);
-			if(General.GetCount(command)!="0") {
+			if(Db.GetCount(command)!="0") {
 				throw new ApplicationException(Lan.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached time adjustments."));
 			}
 			command="SELECT COUNT(*) FROM userod WHERE EmployeeNum="+POut.PInt(employeeNum);
-			if(General.GetCount(command)!="0") {
+			if(Db.GetCount(command)!="0") {
 				throw new ApplicationException(Lan.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached user."));
 			}
 			command="UPDATE appointment SET Assistant=0 WHERE Assistant="+POut.PInt(employeeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM schedule WHERE EmployeeNum="+POut.PInt(employeeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE FROM employee WHERE EmployeeNum ="+POut.PInt(employeeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -203,7 +203,7 @@ namespace OpenDentBusiness{
 		public static DataTable GetPhoneTable(){
 			string command="SELECT * FROM phone";
 			try{
-				return General.GetTable(command);
+				return Db.GetTable(command);
 			}
 			catch{
 				return new DataTable();
@@ -219,7 +219,7 @@ namespace OpenDentBusiness{
 				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
 				WHERE phone.Extension="+POut.PInt(extens)
 				+" GROUP BY phone.Extension";
-			DataTable tablePhone=General.GetTable(command);
+			DataTable tablePhone=Db.GetTable(command);
 			if(tablePhone.Rows.Count==0){
 				return;
 			}
@@ -234,13 +234,13 @@ namespace OpenDentBusiness{
 			command="UPDATE phone SET ClockStatus='"+POut.PString(clockStatus)+"', "
 				+"ColorBar="+colorBar.ToArgb().ToString()+" "
 				+"WHERE Extension="+extens;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used when clocking in and out, but not through the phone grid.  Keeps the phone grid current. Handles situations where employee is listed on two different extensions.</summary>
 		public static void SetPhoneClockStatus(int employeeNum,string clockStatus){
 			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.PInt(employeeNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int extension;
 			string curClockStatus;
 			for(int i=0;i<table.Rows.Count;i++){

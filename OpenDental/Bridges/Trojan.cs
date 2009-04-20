@@ -102,7 +102,7 @@ namespace OpenDental.Bridges {
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
 					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
-				pendingDeletionTable=General.GetTable(command);
+				pendingDeletionTable=Db.GetTable(command);
 				if(pendingDeletionTable.Rows.Count>0){
 					FormPrintReport fpr=new FormPrintReport();
 					fpr.Text="Trojan Plans Pending Deletion: Contact Patients";
@@ -143,7 +143,7 @@ namespace OpenDental.Bridges {
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
 					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
 					"ORDER BY i.TrojanID,p.LName,p.FName";
-				pendingDeletionTableTrojan=General.GetTable(command);
+				pendingDeletionTableTrojan=Db.GetTable(command);
 				if(pendingDeletionTableTrojan.Rows.Count>0) {
 					FormPrintReport fpr=new FormPrintReport();
 					fpr.Text="Trojan Plans Pending Deletion: Contact Trojan";
@@ -654,7 +654,7 @@ namespace OpenDental.Bridges {
 			//plan
 			plan.CarrierNum=carrier.CarrierNum;
 			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.PString(plan.TrojanID)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int planNum;
 			for(int i=0;i<table.Rows.Count;i++){
 				planNum=PIn.PInt(table.Rows[i][0].ToString());
@@ -666,10 +666,10 @@ namespace OpenDental.Bridges {
 					+"CarrierNum='" +POut.PInt   (plan.CarrierNum)+"', "
 					+"BenefitNotes='"+POut.PString(plan.BenefitNotes)+"' "
 					+"WHERE PlanNum="+POut.PInt(planNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				//clear benefits
 				command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(planNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				//benefitList
 				for(int j=0;j<benefitList.Count;j++) {
 					((Benefit)benefitList[j]).PlanNum=planNum;

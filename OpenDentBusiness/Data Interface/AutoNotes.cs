@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 
 		public static void Refresh() {
 			string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			Listt=new List<AutoNote>();
 			AutoNote note;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 				+"VALUES ("			
 				+"'"+POut.PString(autonote.AutoNoteName)+"'," 
 				+"'"+POut.PString(autonote.MainText)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -41,21 +41,21 @@ namespace OpenDentBusiness {
 				+"AutoNoteName = '"+POut.PString(autonote.AutoNoteName)+"', "
 				+"MainText = '"+POut.PString(autonote.MainText)+"' "
 				+"WHERE AutoNoteNum = '"+POut.PInt(autonote.AutoNoteNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(int autoNoteNum) {
 			string command="DELETE FROM autonote "
 				+"WHERE AutoNoteNum = "+POut.PInt(autoNoteNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
 		public static bool AutoNoteNameUsed(string AutoNoteName, string OriginalAutoNoteName) {
 			string command="SELECT AutoNoteName FROM autonote WHERE "
 			+"AutoNoteName = '"+AutoNoteName+"'"+" AND AutoNoteName != '"+OriginalAutoNoteName+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			bool IsUsed=false;
 			if (table.Rows.Count!=0) {//found duplicate control name				
 				IsUsed=true;
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		public static List<AutoNote> AutoNoteEdit(string AutoNoteName) { 
 			string command="SELECT AutoNoteName, AutoNoteNum, ControlsToInc FROM autonote "
 				+"WHERE AutoNoteName = "+"'"+AutoNoteName+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<AutoNote> Listt=new List<AutoNote>();
 			//List = new AutoNote[table.Rows.Count];
 			AutoNote note= new AutoNote();

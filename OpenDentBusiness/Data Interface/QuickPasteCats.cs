@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from quickpastecat "
 				+"ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new QuickPasteCat[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteCat();
@@ -55,10 +55,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(cat.DefaultForTypes)+"')";
 			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				cat.QuickPasteCatNum=General.NonQ(command,true);
+ 				cat.QuickPasteCatNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -69,14 +69,14 @@ namespace OpenDentBusiness{
 				+",ItemOrder = '"      +POut.PInt   (cat.ItemOrder)+"'"
 				+",DefaultForTypes = '"+POut.PString(cat.DefaultForTypes)+"'"
 				+" WHERE QuickPasteCatNum = '"+POut.PInt (cat.QuickPasteCatNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(QuickPasteCat cat){
 			string command="DELETE from quickpastecat WHERE QuickPasteCatNum = '"
 				+POut.PInt(cat.QuickPasteCatNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

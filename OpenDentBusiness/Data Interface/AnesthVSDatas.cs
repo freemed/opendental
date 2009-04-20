@@ -73,7 +73,7 @@ namespace OpenDentBusiness {
 				+ POut.PString(VSTimeStamp) + "','"
 				+	POut.PString(MessageID) + "','"
 				+ POut.PString(HL7Message)+ "')";
-			General.NonQ(command);
+			Db.NonQ(command);
 
 		}
 
@@ -92,12 +92,12 @@ namespace OpenDentBusiness {
 						+ " ,MessageID = '" + POut.PString(MessageID) + "' "
 						+ " ,HL7Message = '" + POut.PString(HL7Message) + "' "
 						+ "WHERE VSTimeStamp='" + Convert.ToString(VSTimeStamp)+ "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
-			int val = General.NonQ(command);
+			int val = Db.NonQ(command);
 			return val;
 
 		}
 
-		///<summary>jsparks-It would be better to use General here.  But I don't understand what ExecuteScalar is doing.</summary>
+		///<summary>jsparks-It would be better to use Db here.  But I don't understand what ExecuteScalar is doing.</summary>
 		public static string GetVSTimeStamp(string vSTimeStamp) {
 			string VSTimeStamp = vSTimeStamp;
 			MySqlCommand cmd = new MySqlCommand();

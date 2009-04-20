@@ -10,7 +10,7 @@ namespace OpenDental {
 		///<summary>Deletes the patplan with the specified patPlanNum.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Then, recomputes all estimates for this patient because their coverage is now different.  Also sets patient.HasIns to the correct value.</summary>
 		public static void Delete(int patPlanNum) {
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return;
 			}
@@ -21,14 +21,14 @@ namespace OpenDental {
 				if(doDecrement) {//patPlan has already been deleted, so decrement the rest.
 					command="UPDATE patplan SET Ordinal="+POut.PInt(patPlans[i].Ordinal-1)
 						+" WHERE PatPlanNum="+POut.PInt(patPlans[i].PatPlanNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 					continue;
 				}
 				if(patPlans[i].PatPlanNum==patPlanNum) {
 					command="DELETE FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM benefit WHERE PatPlanNum=" +POut.PInt(patPlanNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 					doDecrement=true;
 				}
 			}

@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<ReqStudent> RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<ReqStudent> reqList=new List<ReqStudent>();
 			ReqStudent req;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				+ ",InstructorNum = '"  +POut.PInt(req.InstructorNum)+"'"   
 				+ ",DateCompleted = "   +POut.PDate(req.DateCompleted)      
 				+" WHERE ReqStudentNum = '" +POut.PInt(req.ReqStudentNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -79,10 +79,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(req.InstructorNum)+"', "
 				    +POut.PDate(req.DateCompleted)+")";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				req.ReqStudentNum=General.NonQ(command,true);
+				req.ReqStudentNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				throw new Exception(Lan.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
 			}
 			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PInt(reqStudentNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static DataTable RefreshOneStudent(int provNum){
@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN appointment ON reqstudent.AptNum=appointment.AptNum "
 				+"WHERE reqstudent.ProvNum="+POut.PInt(provNum)
 				+" ORDER BY CourseID,ReqDescript";
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			DateTime AptDateTime;
 			DateTime dateCompleted;
 			for(int i=0;i<raw.Rows.Count;i++) {
@@ -158,7 +158,7 @@ namespace OpenDentBusiness{
 				+"WHERE provider.SchoolClassNum="+POut.PInt(classNum)
 				+" GROUP BY provider.ProvNum "
 				+"ORDER BY LName,FName";
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				row["donereq"]=raw.Rows[i]["donereq"].ToString();
@@ -194,7 +194,7 @@ namespace OpenDentBusiness{
 			//}
 			+" AND SchoolClassNum="+POut.PInt(schoolClass);
 			command+=" ORDER BY Descript";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		
@@ -202,7 +202,7 @@ namespace OpenDentBusiness{
 		public static void SynchApt(List<ReqStudent> reqsAttached,int aptNum){
 			//first, detach all from this appt
 			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			if(reqsAttached.Count==0) {
 				return;
 			}
@@ -222,7 +222,7 @@ namespace OpenDentBusiness{
 				+"WHERE provider.ProvNum=reqstudent.ProvNum "
 				+"AND reqstudent.ReqNeededNum="+POut.PInt(reqNeededNum)
 				+" AND reqstudent.DateCompleted > "+POut.PDate(new DateTime(1880,1,1));
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal+=table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString()+"\r\n";
@@ -234,11 +234,11 @@ namespace OpenDentBusiness{
 		///<summary>Attaches a req to an appointment.  Importantly, it also sets the patNum to match the apt.</summary>
 		public static void AttachToApt(int reqStudentNum,int aptNum) {
 			string command="SELECT PatNum FROM appointment WHERE AptNum="+POut.PInt(aptNum);
-			string patNum=General.GetCount(command);
+			string patNum=Db.GetCount(command);
 			command="UPDATE reqstudent SET AptNum="+POut.PInt(aptNum)
 				+", PatNum="+patNum
 				+" WHERE ReqStudentNum="+POut.PInt(reqStudentNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 

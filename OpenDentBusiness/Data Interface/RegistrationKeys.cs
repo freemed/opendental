@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 					command+="OR ";
 				}
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
 			for(int i=0;i<keys.Length;i++){
 				keys[i]=new RegistrationKey();
@@ -48,7 +48,7 @@ namespace OpenDentBusiness {
 				+",DateEnded="+POut.PDate(registrationKey.DateEnded)+" "
 				+",IsForeign='"+POut.PBool(registrationKey.IsForeign)+"' "
 				+" WHERE RegistrationKeyNum='"+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Inserts a new and unique registration key into the database.</summary>
@@ -85,19 +85,19 @@ namespace OpenDentBusiness {
 				+POut.PDate(registrationKey.DateDisabled)+","
 				+POut.PDate(registrationKey.DateEnded)+","
 				+"'"+POut.PBool(registrationKey.IsForeign)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void Delete(int registrationKeyNum){
 			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
 				+POut.PInt(registrationKeyNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
 		public static bool KeyIsInUse(string regKey) {
 			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.PString(regKey)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return (table.Rows.Count>0);
 		}
 
@@ -154,7 +154,7 @@ namespace OpenDentBusiness {
 				OR Date_ > '0001-01-01'
 				ORDER BY tempRegKeys.PatNum;
 				DROP TABLE IF EXISTS tempRegKeys;";
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			DataRow row;
 			DateTime dateRepeatStop;
 			for(int i=0;i<raw.Rows.Count;i++) {

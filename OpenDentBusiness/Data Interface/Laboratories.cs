@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Laboratory> FillFromCommand(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<Laboratory> ListLabs=new List<Laboratory>();
 			Laboratory lab;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(lab.Notes)+"', "
 				+"'"+POut.PString(lab.LabSlip)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				lab.LaboratoryNum=General.NonQ(command,true);
+				lab.LaboratoryNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 				+ ",Notes = '"         +POut.PString(lab.Notes)+"'"
 				+ ",LabSlip = '"       +POut.PString(lab.LabSlip)+"'"
 				+" WHERE LaboratoryNum = '" +POut.PInt(lab.LaboratoryNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 				+"WHERE patient.PatNum=labcase.PatNum "
 				+"AND LaboratoryNum ="+POut.PInt(labNum)+" "
 				+"LIMIT 30";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			}
 			//delete
 			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.PInt(labNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		/*

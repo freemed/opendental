@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all RxAlerts for one RxDef.</summary>
 		public static RxAlert[] Refresh(int rxDefNum) {
 			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.PInt(rxDefNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RxAlert[] List=new RxAlert[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RxAlert();
@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 				+"RxDefNum = '"      +POut.PInt   (alert.RxDefNum)+"'"
 				+",DiseaseDefNum = '"+POut.PInt   (alert.DiseaseDefNum)+"'"
 				+" WHERE RxAlertNum  ='"+POut.PInt   (alert.RxAlertNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -36,13 +36,13 @@ namespace OpenDentBusiness {
 			string command="INSERT INTO rxalert (RxDefNum,DiseaseDefNum) VALUES("
 				+"'"+POut.PInt   (alert.RxDefNum)+"', "
 				+"'"+POut.PInt   (alert.DiseaseDefNum)+"')";
-			alert.RxAlertNum=General.NonQ(command,true);
+			alert.RxAlertNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
 		public static void Delete(RxAlert alert) {
 			string command="DELETE FROM rxalert WHERE RxAlertNum ="+POut.PInt(alert.RxAlertNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

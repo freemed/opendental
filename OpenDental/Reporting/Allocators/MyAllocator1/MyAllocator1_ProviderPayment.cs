@@ -132,7 +132,7 @@ namespace OpenDental.Reporting.Allocators
 		public static string CreatTableString(OpenDentBusiness.DatabaseType type1)
 		{
 			// Note command to create table
-			// //General.NonQ(MyAllocator1_ProviderPayment.CreatTableString());
+			// //Db.NonQ(MyAllocator1_ProviderPayment.CreatTableString());
 			// Put here for reference not for implementation of code. CreatTableString does not check for existance of table.
 			string command = "";
 			if (type1 == OpenDentBusiness.DatabaseType.MySql)
@@ -259,7 +259,7 @@ namespace OpenDental.Reporting.Allocators
 				{
 					string UpdateTempTableCommand = "INSERT INTO " + TABLENAME + "_temp (Guarantor,AllocStatus) VALUES "
 						+ "( " + GuarantorsToAllocate[j].ToString() + ", " + ((int)ProcessingState.Started_and_Incomplete).ToString() + " ) ";
-					General.NonQ(UpdateTempTableCommand);
+					Db.NonQ(UpdateTempTableCommand);
 					allocator.AllocateWithOutToolCheck(GuarantorsToAllocate[j]);
 					iProgress = (j*100) / (GuarantorsToAllocate.Length - 1);
 					if (bw.CancellationPending) // Try to cancel between allocations which does a lot of writting
@@ -272,7 +272,7 @@ namespace OpenDental.Reporting.Allocators
 					}
 					UpdateTempTableCommand = "UPDATE " + TABLENAME + "_temp SET AllocStatus =" + ((int)ProcessingState.Complete).ToString() 
 							+"  WHERE Guarantor = " + GuarantorsToAllocate[j].ToString();
-					General.NonQ(UpdateTempTableCommand);
+					Db.NonQ(UpdateTempTableCommand);
 				}
 				iProgress = (to * 100) / (GuarantorsToAllocate.Length - 1);
 				bw.ReportProgress(iProgress, "Finished Batch " + from + "-" + to + " of " + GuarantorsToAllocate.Length + " Guarantors.");
@@ -296,7 +296,7 @@ namespace OpenDental.Reporting.Allocators
 					+ "Do you want to create this table?"), Lan.g(this, "Create Table"), MessageBoxButtons.YesNoCancel);
 				if (dr == DialogResult.Yes)
 				{
-					General.NonQ(MyAllocator1_ProviderPayment.CreatTableString(OpenDentBusiness.DatabaseType.MySql));
+					Db.NonQ(MyAllocator1_ProviderPayment.CreatTableString(OpenDentBusiness.DatabaseType.MySql));
 				}
 			}
 			rValOK_TO_RUN = TableExists(TABLENAME);
@@ -309,7 +309,7 @@ namespace OpenDental.Reporting.Allocators
 		{
 			bool rvalExists = false;
 			string cmd = "SHOW TABLES LIKE '" + tblName + "'";
-			DataTable dt = General.GetTable(cmd);
+			DataTable dt = Db.GetTable(cmd);
 			if (dt != null && dt.Rows.Count != 0 && dt.Columns.Count != 0)
 			{
 				if (dt.Rows[0][0].ToString() == tblName)
@@ -344,11 +344,11 @@ namespace OpenDental.Reporting.Allocators
 				if (dr == DialogResult.Yes) // THEY Want to START OVER --DROP TABLE AND RECREATE
 				{
 					string dropCommand = "DROP TABLE " + TABLENAME + "_temp";
-					General.NonQ(dropCommand);
+					Db.NonQ(dropCommand);
 					dropCommand = "DROP TABLE " + TABLENAME ;
-					General.NonQ(dropCommand);
-					General.NonQ(CreatTableString(OpenDentBusiness.DatabaseType.MySql));
-					General.NonQ(Create_AP_temp_table_string(OpenDentBusiness.DatabaseType.MySql));
+					Db.NonQ(dropCommand);
+					Db.NonQ(CreatTableString(OpenDentBusiness.DatabaseType.MySql));
+					Db.NonQ(Create_AP_temp_table_string(OpenDentBusiness.DatabaseType.MySql));
 				}
 				if (dr == DialogResult.No) // Don't want to start over 
 				{
@@ -363,7 +363,7 @@ namespace OpenDental.Reporting.Allocators
 			}
 			else // Temp table does not exists so create it!
 			{
-				General.NonQ(Create_AP_temp_table_string(OpenDentBusiness.DatabaseType.MySql));
+				Db.NonQ(Create_AP_temp_table_string(OpenDentBusiness.DatabaseType.MySql));
 			}
 			#endregion
 			//  Here is what needs to be done:
@@ -376,7 +376,7 @@ namespace OpenDental.Reporting.Allocators
 				#region Handle Incomplete Proccessed Guarantors
 			string cmd2 = "SELECT tempIndex, Guarantor, AllocStatus FROM " + TempTableName
 					+ " WHERE AllocStatus = " + ((int)ProcessingState.Started_and_Incomplete).ToString();
-				DataTable dt = General.GetTable(cmd2);
+				DataTable dt = Db.GetTable(cmd2);
 
 				if (dt.Rows.Count != 0)
 				{
@@ -395,15 +395,15 @@ namespace OpenDental.Reporting.Allocators
 							updateCommand1 += "OR ";
 						}
 					}
-					General.NonQ(deleteCommand1); // deletes entries from allocation_provider
-					General.NonQ(updateCommand1);// updates status in allocation_provider_temp
+					Db.NonQ(deleteCommand1); // deletes entries from allocation_provider
+					Db.NonQ(updateCommand1);// updates status in allocation_provider_temp
 				}
 				#endregion
 				#region Generate a list of unprocessed guarantors
 				string ProccessedGuarantors_command = "SELECT Guarantor FROM " + TABLENAME + "_temp WHERE AllocStatus = "
 					+ ((int)ProcessingState.Complete);
-				DataTable dt3 = General.GetTable(ProccessedGuarantors_command);
-				DataTable dtODGuarantors = General.GetTable("SELECT DISTINCT(Guarantor) FROM Patient");
+				DataTable dt3 = Db.GetTable(ProccessedGuarantors_command);
+				DataTable dtODGuarantors = Db.GetTable("SELECT DISTINCT(Guarantor) FROM Patient");
 				for (int i = 0; i < dtODGuarantors.Rows.Count; i++)
 					OD_Guarantors.Add(Int32.Parse(dtODGuarantors.Rows[i][0].ToString()));
 				if (dt3.Rows.Count != 0)

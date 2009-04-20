@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>Fills List in preparation for later usage.</summary>
 		public static void Refresh() {
 			string command="SELECT * FROM procbuttonitem";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new ProcButtonItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButtonItem();
@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(item.OldCode)+"', "
 				+"'"+POut.PInt   (item.AutoCodeNum)+"', "
 				+"'"+POut.PInt   (item.CodeNum)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -53,13 +53,13 @@ namespace OpenDentBusiness{
 				+ ",AutoCodeNum='" +POut.PInt   (item.AutoCodeNum)+"'"
 				+ ",CodeNum='" +POut.PInt   (item.CodeNum)+"'"
 				+" WHERE ProcButtonItemNum = '"+POut.PInt(item.ProcButtonItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ProcButtonItem item) {
 			string command="DELETE FROM procbuttonitem WHERE ProcButtonItemNum = '"+POut.PInt(item.ProcButtonItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void DeleteAllForButton(int procButtonNum){
 			string command= "DELETE from procbuttonitem WHERE procbuttonnum = '"+POut.PInt(procButtonNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	}

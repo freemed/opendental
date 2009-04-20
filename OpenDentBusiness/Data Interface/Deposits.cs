@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Deposit[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Deposit[] List=new Deposit[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Deposit();
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 				+",Amount = '"         +POut.PDouble(dep.Amount)+"'"
 				+" WHERE DepositNum ='"+POut.PInt   (dep.DepositNum)+"'";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -70,10 +70,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(dep.BankAccountInfo)+"', "
 				+"'"+POut.PDouble(dep.Amount)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				dep.DepositNum=General.NonQ(command,true);
+ 				dep.DepositNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -83,22 +83,22 @@ namespace OpenDentBusiness{
 			string command="";
 			if(dep.DepositNum !=0){
 				command="SELECT COUNT(*) FROM transaction WHERE DepositNum ="+POut.PInt(dep.DepositNum);
-				if(PIn.PInt(General.GetCount(command))>0) {
+				if(PIn.PInt(Db.GetCount(command))>0) {
 					throw new ApplicationException(Lan.g("Deposits","Cannot delete deposit because it is attached to a transaction."));
 				}
 			}
 			/*/check claimpayment 
 			command="SELECT COUNT(*) FROM claimpayment WHERE DepositNum ="+POut.PInt(DepositNum);
-			if(PIn.PInt(General.GetCount(command))>0){
+			if(PIn.PInt(Db.GetCount(command))>0){
 				throw new InvalidProgramException(Lan.g("Deposits","Cannot delete deposit because it has payments attached"));
 			}*/
 			//ready to delete
 			command="UPDATE payment SET DepositNum=0 WHERE DepositNum="+POut.PInt(dep.DepositNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="UPDATE claimpayment SET DepositNum=0 WHERE DepositNum="+POut.PInt(dep.DepositNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE FROM deposit WHERE DepositNum="+POut.PInt(dep.DepositNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

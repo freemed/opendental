@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Refresh(){
 			string command="SELECT * FROM canadiannetwork";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			listt=new List<CanadianNetwork>();
 			CanadianNetwork network;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -50,10 +50,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PString(network.Abbrev)+"', "
 				+"'"+POut.PString(network.Descript)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				network.CanadianNetworkNum=General.NonQ(command,true);
+				network.CanadianNetworkNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 				+ "Abbrev = '"+POut.PString(Cur.Abbrev)+"' "
 				+ ",Descript='"+POut.PString(Cur.Descript)+"' "
 				+"WHERE CanadianNetworkNum = '"+POut.PInt(Cur.CanadianNetworkNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

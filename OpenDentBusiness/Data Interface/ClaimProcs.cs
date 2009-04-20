@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static ClaimProc[] RefreshAndFill(string command){
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			ClaimProc[] List=new ClaimProc[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ClaimProc();
@@ -115,10 +115,10 @@ namespace OpenDentBusiness{
 			command+=", '"+POut.PInt(cp.LineNumber)+"')";
 			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				cp.ClaimProcNum=General.NonQ(command,true);
+				cp.ClaimProcNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -156,13 +156,13 @@ namespace OpenDentBusiness{
 				+",LineNumber= '"     +POut.PInt(cp.LineNumber)+"'"
 				+" WHERE claimprocnum = '"+POut.PInt(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ClaimProc cp) {
 			string command= "DELETE from claimproc WHERE claimprocNum = '"+POut.PInt(cp.ClaimProcNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used when creating a claim to create any missing claimProcs. Also used in FormProcEdit if click button to add Estimate.  Inserts it into db. It will still be altered after this to fill in the fields that actually attach it to the claim.</summary>
@@ -398,7 +398,7 @@ namespace OpenDentBusiness{
 				+"inspayamt != 0 AND ("
 				+"claimpaymentNum = '"+claimPaymentNum+"' OR claimpaymentNum = '0')";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>

@@ -1008,7 +1008,7 @@ namespace OpenDental{
 			else{
 				command+="0";
 			}
-			int result=General.NonQ(command);
+			int result=Db.NonQ(command);
 			MessageBox.Show(Lan.g(this,"Plans changed: ")+result.ToString());
 		}
 

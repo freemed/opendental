@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM languageforeign "
 				+"WHERE Culture LIKE '"+cultureInfo.TwoLetterISOLanguageName+"%' "
 				+"ORDER BY Culture";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			LanguageForeign lf;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lf=new LanguageForeign();
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(lf.Culture)+"', "
 				+"'"+POut.PString(lf.Translation)+"', "
 				+"'"+POut.PString(lf.Comments)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 				+" WHERE ClassType= BINARY '"+POut.PString(lf.ClassType)+"'" 
 				+" AND English= BINARY '"+POut.PString(lf.English)+"'"
 				+" AND Culture= '"+CultureInfo.CurrentCulture.Name+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 				+"WHERE ClassType=BINARY '"+POut.PString(lf.ClassType)+"' "
 				+"AND English=BINARY '"    +POut.PString(lf.English)+"' "
 				+"AND Culture='"+CultureInfo.CurrentCulture.Name+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Only used during export to get a list of all translations for specified culture only.</summary>
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE Culture='"+CultureInfo.CurrentCulture.Name+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new LanguageForeign();
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE ClassType='"+POut.PString(classType)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			LanguageForeign[] List=new LanguageForeign[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new LanguageForeign();

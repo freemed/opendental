@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Payment[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Payment[] List=new Payment[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Payment();
@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 			/*string command="SELECT DepositNum,PayAmt FROM payment "
 					+"WHERE PayNum="+POut.PInt(PayNum);
 			DataConnection dcon=new DataConnection();
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return;
 			}
@@ -128,21 +128,21 @@ namespace OpenDentBusiness{
 				+ ",DepositNum = '"  +POut.PInt   (pay.DepositNum)+"'"
 				+" WHERE payNum = '" +POut.PInt   (pay.PayNum)+"'";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			/*
 			command="UPDATE paysplit SET DatePay='"+POut.PDate(PayDate)
 				+"' WHERE PayNum = "+POut.PInt(PayNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			//set IsSplit
 			command="SELECT COUNT(*) FROM paysplit WHERE PayNum="+POut.PInt(PayNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="1"){
 				command="UPDATE payment SET IsSplit=0 WHERE PayNum="+POut.PInt(PayNum);
 			}
 			else{
 				command="UPDATE payment SET IsSplit=1 WHERE PayNum="+POut.PInt(PayNum);
 			}
-			General.NonQ(command);*/
+			Db.NonQ(command);*/
 		}
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
@@ -176,17 +176,17 @@ namespace OpenDentBusiness{
 			}
 			command+=", '"+POut.PInt   (pay.DepositNum)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				pay.PayNum=General.NonQ(command,true);
+ 				pay.PayNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary>Deletes the payment as well as all splits.  Surround by try catch, because it will throw an exception if trying to delete a payment attached to a deposit.</summary>
 		public static void Delete(Payment pay){
 			string command="SELECT DepositNum FROM payment WHERE PayNum="+POut.PInt(pay.PayNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
@@ -196,10 +196,10 @@ namespace OpenDentBusiness{
 				#endif
 			}
 			command= "DELETE from payment WHERE payNum = '"+pay.PayNum.ToString()+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			//this needs to be improved to handle EstBal
 			command= "DELETE from paysplit WHERE payNum = '"+pay.PayNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//PaySplit[] splitList=PaySplits.RefreshPaymentList(PayNum);
 			//for(int i=0;i<splitList.Length;i++){
 			//	splitList[i].Delete();
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 		public static bool AllocationRequired(double payAmt, int patNum){
 			string command="SELECT EstBalance FROM patient "
 				+"WHERE PatNum = "+POut.PInt(patNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			double estBal=0;
 			if(table.Rows.Count>0){
 				estBal=PIn.PDouble(table.Rows[0][0].ToString());
@@ -220,7 +220,7 @@ namespace OpenDentBusiness{
 					FROM claimproc
 					WHERE PatNum="+POut.PInt(patNum)+" "
 					+"AND Status=0"; //NotReceived
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0){
 					estBal-=PIn.PDouble(table.Rows[0][0].ToString());
 				}
@@ -236,7 +236,7 @@ namespace OpenDentBusiness{
 			string command= 
 				"SELECT Guarantor FROM patient "
 				+"WHERE PatNum = "+POut.PInt(pay.PatNum);
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return new List<PaySplit>();
 			}
@@ -248,7 +248,7 @@ namespace OpenDentBusiness{
 				+"WHERE Guarantor = "+table.Rows[0][0].ToString()+" "
 				+"GROUP BY patient.PatNum";
 				//+" ORDER BY PatNum!="+POut.PInt(pay.PatNum);//puts current patient in position 0 //Oracle does not allow
- 			table=General.GetTable(command);
+ 			table=Db.GetTable(command);
 			List<Patient> pats=new List<Patient>();
 			Patient pat;
 			//first, put the current patient at position 0.
@@ -323,7 +323,7 @@ namespace OpenDentBusiness{
 				}
 				command="UPDATE patient SET EstBalance=EstBalance-"+POut.PDouble(amtSplits[i])
 					+" WHERE PatNum="+POut.PInt(pats[i].PatNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 			}*/
 			return retVal;
 		}

@@ -15,7 +15,7 @@ namespace OpenDental{
 			string command=
 				"SELECT * FROM instructor "
 				+"ORDER BY LName,FName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new Instructor[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Instructor();
@@ -34,7 +34,7 @@ namespace OpenDental{
 				+",FName = '"         +POut.PString(instr.FName)+"'"
 				+",Suffix = '"        +POut.PString(instr.Suffix)+"'"
 				+" WHERE InstructorNum = '"+POut.PInt(instr.InstructorNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -55,10 +55,10 @@ namespace OpenDental{
 				+"'"+POut.PString(instr.FName)+"', "
 				+"'"+POut.PString(instr.Suffix)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				instr.InstructorNum=General.NonQ(command,true);
+ 				instr.InstructorNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace OpenDental{
 
 			string command= "DELETE from instructor WHERE InstructorNum = '"
 				+POut.PInt(instr.InstructorNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

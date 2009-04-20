@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 				+ ",ProcNum = '"     +POut.PInt   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
 				+" WHERE adjNum = '" +POut.PInt   (adj.AdjNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 			}
 			command+=")";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				adj.AdjNum=General.NonQ(command,true);
+ 				adj.AdjNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		public static void Delete(Adjustment adj){
 			string command="DELETE FROM adjustment "
 				+"WHERE AdjNum = '"+adj.AdjNum.ToString()+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Gets all adjustments for a single patient.</summary>
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 			//	return (List<Adjustment>)Meth.GetObject(MethodBase.GetCurrentMethod(),command);
 			//}
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			List<Adjustment> retVal=new List<Adjustment>();
 			Adjustment adj;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -160,11 +160,11 @@ namespace OpenDentBusiness{
 			int numAdj;
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'FinanceChargeAdjustmentType'";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			numAdj=PIn.PInt(table.Rows[0][0].ToString());
 			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
 				+" AND AdjType="+POut.PInt(numAdj);
-			return General.NonQ(command);
+			return Db.NonQ(command);
 		}
 
 		///<summary>Returns the number of billing charges deleted.</summary>
@@ -173,11 +173,11 @@ namespace OpenDentBusiness{
 			int numAdj;
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'BillingChargeAdjustmentType'";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			numAdj=PIn.PInt(table.Rows[0][0].ToString());
 			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
 				+" AND AdjType="+POut.PInt(numAdj);
-			return General.NonQ(command);
+			return Db.NonQ(command);
 		}
 
 	}

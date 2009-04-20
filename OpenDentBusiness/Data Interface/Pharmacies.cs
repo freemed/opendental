@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int PharmacyNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){

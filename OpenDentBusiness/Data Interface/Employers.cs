@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		public static void Refresh(){
 			HList=new Hashtable();
 			string command= "SELECT * from employer ORDER BY EmpName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new Employer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Employer();
@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 			Cur=new Employer();//just in case no rows are returned
 			if(employerNum==0) return;
 			string command="SELECT * FROM employer WHERE EmployerNum = '"+employerNum+"'";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			for(int i=0;i<table.Rows.Count;i++){//almost always just 1 row, but sometimes 0
 				Cur.EmployerNum   =PIn.PInt   (table.Rows[i][0].ToString());
 				Cur.EmpName       =PIn.PString(table.Rows[i][1].ToString());
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				+ ",Zip= '"        +POut.PString(Cur.Zip)+"' "
 				+ ",Phone= '"      +POut.PString(Cur.Phone)+"' "
 				+" WHERE EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -106,24 +106,24 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.Zip)+"', "
 				+"'"+POut.PString(Cur.Phone)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				Cur.EmployerNum=General.NonQ(command,true);
+				Cur.EmployerNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary>There MUST not be any dependencies before calling this or there will be invalid foreign keys.  This is only called from FormEmployers after proper validation.</summary>
 		public static void Delete(Employer Cur){
 			string command="DELETE from employer WHERE EmployerNum = '"+Cur.EmployerNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns a list of patients that are dependent on the Cur employer. The list includes carriage returns for easy display.  Used before deleting an employer to make sure employer is not in use.</summary>
 		public static string DependentPatients(Employer Cur){
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient" 
 				+" WHERE EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -139,7 +139,7 @@ namespace OpenDentBusiness{
 			string command="SELECT insplan.Carrier,CONCAT(patient.LName,patient.FName) FROM insplan,patient" 
 				+" WHERE insplan.Subscriber=patient.PatNum"
 				+" AND insplan.EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT EmployerNum FROM employer" 
 				+" WHERE EmpName = '"+POut.PString(empName)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				return PIn.PInt(table.Rows[0][0].ToString());
 			}
@@ -221,13 +221,13 @@ namespace OpenDentBusiness{
 				string command="UPDATE patient SET EmployerNum = '"+newNum
 					+"' WHERE EmployerNum = '"+employerNums[i].ToString()+"'";
 				//MessageBox.Show(string command);
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE insplan SET EmployerNum = '"+newNum
 					+"' WHERE EmployerNum = '"+employerNums[i].ToString()+"'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM employer"
 					+" WHERE EmployerNum = '"+employerNums[i].ToString()+"'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 		}
 

@@ -24,21 +24,21 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void SubmitCur(){
 			string command = CurReport.Query;
-			DataTable table=General.GetTableLow(command);
+			DataTable table=Db.GetTableLow(command);
 			TableQ=table.Copy();
 		}
 
 		///<summary>Runs the query and fills TableTemp with the result.</summary>
 		public static void SubmitTemp(){
 			string command = CurReport.Query;
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			TableTemp=table.Copy();
 		}
 
 		///<summary></summary>
 		public static void SubmitNonQ(){
 			string command = CurReport.Query;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 	}
 

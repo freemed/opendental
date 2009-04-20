@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.ElementOrder)+"', "
 				+"'"+POut.PInt   (Cur.ElementColor.ToArgb())+"')";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//Cur.ApptViewNum=InsertID;
 		}
 
@@ -68,21 +68,21 @@ namespace OpenDentBusiness{
 				+",ElementOrder = '"+POut.PInt   (Cur.ElementOrder)+"'"
 				+",ElementColor = '"+POut.PInt   (Cur.ElementColor.ToArgb())+"'"
 				+" WHERE ApptViewItemNum = '"+POut.PInt(Cur.ApptViewItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ApptViewItem Cur){
 			string command="DELETE from apptviewitem WHERE ApptViewItemNum = '"
 				+POut.PInt(Cur.ApptViewItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes all apptviewitems for the current apptView.</summary>
 		public static void DeleteAllForView(ApptView view){
 			string c="DELETE from apptviewitem WHERE ApptViewNum = '"
 				+POut.PInt(view.ApptViewNum)+"'";
-			General.NonQ(c);
+			Db.NonQ(c);
 		}
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>

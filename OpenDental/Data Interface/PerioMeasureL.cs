@@ -16,7 +16,7 @@ namespace OpenDental{
 				+" WHERE periomeasure.PerioExamNum = perioexam.PerioExamNum"
 				+" AND perioexam.PatNum = '"+patNum.ToString()+"'"
 				+" ORDER BY perioexam.ExamDate";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			PerioMeasures.List=new PerioMeasure[PerioExams.List.Length,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
 			int curExamI=0;
 			PerioMeasure Cur;

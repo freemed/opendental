@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>Will frequently return null when no canadianClaim saved yet.</summary>
 		public static CanadianClaim GetForClaim(int claimNum){
 			string command="SELECT * FROM canadianclaim WHERE ClaimNum="+POut.PInt(claimNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
 			}
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			string command="INSERT INTO canadianclaim (ClaimNum) VALUES("
 				+"'"+POut.PInt   (claimNum)+"')";
 				//+"'"+POut.PString(schoolName)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 			CanadianClaim retVal=new CanadianClaim();
 			retVal.ClaimNum=claimNum;
 			retVal.MaterialsForwarded="";
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 				+ ",PayeeCode = '"        +POut.PInt   (Cur.PayeeCode)+"' "
 				+"WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		

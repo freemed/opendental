@@ -179,7 +179,7 @@ namespace OpenDentBusiness.HL7 {
 		IN1,
 		///<summary>Scheduling Activity Information</summary>
 		SCH,
-		///<summary>General Resource Appointment Information</summary>
+		///<summary>Db Resource Appointment Information</summary>
 		AIG,
 		///<summary>Location Resource Appointment Information</summary>
 		AIL,

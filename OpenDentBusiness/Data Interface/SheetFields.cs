@@ -41,8 +41,8 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int sheetFieldNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
-			DataTable table=General.GetTable(command);
-			//int count=PIn.PInt(General.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		public static void SetDrawings(List<SheetField> drawingList,int sheetNum){
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum)
 				+" AND FieldType="+POut.PInt((int)SheetFieldType.Drawing);
-			General.NonQ(command);
+			Db.NonQ(command);
 			foreach(SheetField field in drawingList){
 				WriteObject(field);
 			}

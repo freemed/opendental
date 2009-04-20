@@ -507,7 +507,7 @@ namespace OpenDental{
 			string command=@"SELECT MAX(ProcDate) FROM procedurelog,patient
 				WHERE patient.PatNum=procedurelog.PatNum
 				AND patient.Guarantor="+POut.PInt(guarCur.PatNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			DateTime lastProcDate;
 			if(table.Rows.Count==0){
 				lastProcDate=DateTime.MinValue;//this should never happen
@@ -518,7 +518,7 @@ namespace OpenDental{
 			command=@"SELECT MAX(DatePay) FROM paysplit,patient
 				WHERE patient.PatNum=paysplit.PatNum
 				AND patient.Guarantor="+POut.PInt(guarCur.PatNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			DateTime lastPayDate;
 			if(table.Rows.Count==0) {
 				lastPayDate=DateTime.MinValue;
@@ -646,18 +646,18 @@ namespace OpenDental{
 			str.Append(textPassword.Text+"*");//validated
 			str.Append(Clip(Security.CurUser.UserName,25)+"\r\n");//There is always a logged in user
 			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int previousNum=PIn.PInt(table.Rows[0][0].ToString());
 			int thisNum=previousNum+1;
 			command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
 				+" AND ValueString='"+POut.PInt(previousNum)+"'";
-			int result=General.NonQ(command);
+			int result=Db.NonQ(command);
 			while(result!=1){//someone else sent one at the same time
 				previousNum++;
 				thisNum++;
 				command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
 					+" AND ValueString='"+POut.PInt(previousNum)+"'";
-				result=General.NonQ(command);
+				result=Db.NonQ(command);
 			}
 			string outputFile="CT"+thisNum.ToString().PadLeft(6,'0')+".TRO";
 			File.AppendAllText(folderPath+outputFile,str.ToString());
@@ -669,7 +669,7 @@ namespace OpenDental{
 				return;
 			}
 			command="UPDATE patient SET BillingType="+POut.PInt(billingType)+" WHERE Guarantor="+POut.PInt(patCur.Guarantor);
-			General.NonQ(command);
+			Db.NonQ(command);
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
 		}

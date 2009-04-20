@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>Refresh all clinics</summary>
 		public static void Refresh() {
 			string command="SELECT * FROM clinic";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new Clinic[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Clinic();
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clinic.BankNumber)+"', "
 				+"'"+POut.PInt   ((int)clinic.DefaultPlaceService)+"', "
 				+"'"+POut.PInt   (clinic.InsBillingProv)+"')";
- 			clinic.ClinicNum=General.NonQ(command,true);
+ 			clinic.ClinicNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 				+ ",DefaultPlaceService='"+POut.PInt   ((int)clinic.DefaultPlaceService)+"'"
 				+ ",InsBillingProv='"     +POut.PInt   (clinic.InsBillingProv)+"'"
 				+" WHERE ClinicNum = '" +POut.PInt(clinic.ClinicNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 			//check patients for dependencies
 			string command="SELECT LName,FName FROM patient WHERE ClinicNum ="
 				+POut.PInt(clinic.ClinicNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			command="SELECT patient.LName,patient.FName FROM patient,payment "
 				+"WHERE payment.ClinicNum ="+POut.PInt(clinic.ClinicNum)
 				+" AND patient.PatNum=payment.PatNum";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 				+" AND patient.PatNum=claimproc.PatNum"
 				+" AND claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
 				+"GROUP BY claimpayment.ClaimPaymentNum";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -121,7 +121,7 @@ namespace OpenDentBusiness{
 			command="SELECT patient.LName,patient.FName FROM patient,appointment "
 				+"WHERE appointment.ClinicNum ="+POut.PInt(clinic.ClinicNum)
 				+" AND patient.PatNum=appointment.PatNum";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -134,7 +134,7 @@ namespace OpenDentBusiness{
 			command="SELECT patient.LName,patient.FName FROM patient,procedurelog "
 				+"WHERE procedurelog.ClinicNum ="+POut.PInt(clinic.ClinicNum)
 				+" AND patient.PatNum=procedurelog.PatNum";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 			//check operatories for dependencies
 			command="SELECT OpName FROM operatory "
 				+"WHERE ClinicNum ="+POut.PInt(clinic.ClinicNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string ops="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -158,7 +158,7 @@ namespace OpenDentBusiness{
 			//delete
 			command= "DELETE FROM clinic" 
 				+" WHERE ClinicNum = "+POut.PInt(clinic.ClinicNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Returns null if clinic not found.</summary>

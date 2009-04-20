@@ -2332,7 +2332,7 @@ namespace OpenDental
 			string command ="SELECT * "                   
 			+ " FROM anestheticdata"					
 			+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			AnestheticData Cur;
 			for (int i = 0; i < table.Rows.Count; i++)
 			{

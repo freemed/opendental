@@ -282,7 +282,7 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GNU General Public License (GPL)
+        ///   Looks up a localized string similar to The GNU Db Public License (GPL)
         ///
         ///Version 2, June 1991
         ///
@@ -299,7 +299,7 @@ namespace OpenDental.Properties {
         ///
         ///
         ///The licenses for most software are designed to take away your
-        ///freedom to share and change it. By contrast, the GNU General Public
+        ///freedom to share and change it. By contrast, the GNU Db Public
         ///License is intended to guarantee your freedom to share and  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GPL {

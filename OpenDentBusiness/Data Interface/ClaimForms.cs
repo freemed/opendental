@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		public static void Refresh() {
 			string command=
 				"SELECT * FROM claimform";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ListLong=new ClaimForm[table.Rows.Count];
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (cf.OffsetX)+"', "
 				+"'"+POut.PInt   (cf.OffsetY)+"')";
 			//MessageBox.Show(string command);
- 			cf.ClaimFormNum=General.NonQ(command,true);
+ 			cf.ClaimFormNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 				+",OffsetX = '"     +POut.PInt   (cf.OffsetX)+"' "
 				+",OffsetY = '"     +POut.PInt   (cf.OffsetY)+"' "
 				+"WHERE ClaimFormNum = '"+POut.PInt   (cf.ClaimFormNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary> Called when cancelling out of creating a new claimform, and from the claimform window when clicking delete. Returns true if successful or false if dependencies found.</summary>
@@ -106,17 +106,17 @@ namespace OpenDentBusiness{
 			}else{//Assume MySQL
 				command+="LIMIT 1";
 			}
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==1){
 				return false;
 			}
 			//Then, delete the claimform
 			command="DELETE FROM claimform "
 				+"WHERE ClaimFormNum = '"+POut.PInt(cf.ClaimFormNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM claimformitem "
 				+"WHERE ClaimFormNum = '"+POut.PInt(cf.ClaimFormNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			return true;
 		}
 
@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 			//first get a list of the ClaimFormNums with this UniqueId
 			string command=
 				"SELECT ClaimFormNum FROM claimform WHERE UniqueID ='"+cf.UniqueID.ToString()+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			int[] claimFormNums=new int[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				claimFormNums[i]=PIn.PInt   (table.Rows[i][0].ToString());
@@ -136,7 +136,7 @@ namespace OpenDentBusiness{
 				Update(cf);
 				command="DELETE FROM claimformitem "
 					+"WHERE ClaimFormNum = '"+POut.PInt(claimFormNums[i])+"'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				for(int j=0;j<cf.Items.Length;j++){
 					cf.Items[j].ClaimFormNum=claimFormNums[i];
 					ClaimFormItems.Insert(cf.Items[j]);
@@ -159,7 +159,7 @@ namespace OpenDentBusiness{
 		public static int Reassign(int oldClaimFormNum, int newClaimFormNum){
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
-			return General.NonQ(command);
+			return Db.NonQ(command);
 		}
 
 

@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 
 		public static ClaimCondCodeLog GetOne(int ClaimNum){
 			string command="SELECT * FROM claimcondcodelog WHERE ClaimNum='" + ClaimNum + "'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			CurCondCodeLog = new ClaimCondCodeLog();
 			if(table.Rows.Count>0){
 			//for(int i=0;i<table.Rows.Count;i++){

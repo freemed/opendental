@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 
 		///<summary>For now, all transactions are retrieved singly.  Returns null if no match found.</summary>
 		private static Transaction RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return null;
 			}
@@ -70,10 +70,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (trans.DepositNum)+"', "
 				+"'"+POut.PInt   (trans.PayNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				trans.TransactionNum=General.NonQ(command,true);
+				trans.TransactionNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -85,15 +85,15 @@ namespace OpenDentBusiness{
 				+",DepositNum = '"   +POut.PInt   (trans.DepositNum)+"' "
 				+",PayNum = '"       +POut.PInt   (trans.PayNum)+"' "
 				+"WHERE TransactionNum = '"+POut.PInt(trans.TransactionNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Also deletes all journal entries for the transaction.  Will later throw an error if journal entries attached to any reconciles.  Be sure to surround with try-catch.</summary>
 		public static void Delete(Transaction trans) {
 			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.PInt(trans.TransactionNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE FROM transaction WHERE TransactionNum = "+POut.PInt(trans.TransactionNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 		public static bool IsReconciled(Transaction trans){
 			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum !=0"
 				+" AND TransactionNum="+POut.PInt(trans.TransactionNum);
-			if(General.GetCount(command)=="0") {
+			if(Db.GetCount(command)=="0") {
 				return false;
 			}
 			return true;

@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				//DateTStamp
 				+ ",AnesthProvType = '"+POut.PInt(prov.AnesthProvType)+ "'"
 				+" WHERE provnum = '" +POut.PInt(prov.ProvNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -132,13 +132,13 @@ namespace OpenDentBusiness{
 				//DateTStamp
 				+ "'"+POut.PInt(prov.AnesthProvType)+"')";
 			//MessageBox.Show(string command);
- 			prov.ProvNum=General.NonQ(command,true);
+ 			prov.ProvNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
@@ -155,12 +155,12 @@ namespace OpenDentBusiness{
 			else {
 				command+="ORDER BY ItemOrder";
 			}
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		public static List<Provider> GetUAppoint(DateTime changedSince){
 			string command="SELECT * FROM provider WHERE DateTStamp > "+POut.PDateT(changedSince);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}
 
@@ -340,7 +340,7 @@ namespace OpenDentBusiness{
 		public static int GetNextItemOrder(){
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return 1;
 			}
@@ -351,7 +351,7 @@ namespace OpenDentBusiness{
 		public static string GetDuplicateAbbrs(){
 			string command="SELECT Abbr FROM provider p1 WHERE EXISTS"
 				+"(SELECT * FROM provider p2 WHERE p1.ProvNum!=p2.ProvNum AND p1.Abbr=p2.Abbr) GROUP BY Abbr";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return "";
 			}

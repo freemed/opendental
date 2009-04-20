@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 				"SELECT * from school "
 				+"WHERE SchoolName LIKE '"+name+"%' "
 				+"ORDER BY SchoolName";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			List=new School[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new School();
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT SchoolName from school "
 				+"ORDER BY SchoolName";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			ListNames=new string[table.Rows.Count];
 			for(int i=0;i<ListNames.Length;i++){
 				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.SchoolName)+"', "
 				+"'"+POut.PString(Cur.SchoolCode)+"')";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Updates the schoolname and code in the school table, and also updates all patients that were using the oldschool name.</summary>
@@ -72,18 +72,18 @@ namespace OpenDentBusiness{
 				+"SchoolName ='"  +POut.PString(Cur.SchoolName)+"'"
 				+",SchoolCode ='" +POut.PString(Cur.SchoolCode)+"'"
 				+" WHERE SchoolName = '"+POut.PString(Cur.OldSchoolName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//then, update all patients using that school
 			command = "UPDATE patient SET "
 				+"GradeSchool ='"  +POut.PString(Cur.SchoolName)+"'"
 				+" WHERE GradeSchool = '"+POut.PString(Cur.OldSchoolName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Must run UsedBy before running this.</summary>
 		public static void Delete(School Cur){
 			string command = "DELETE from school WHERE SchoolName = '"+POut.PString(Cur.SchoolName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Use before DeleteCur to determine if this school name is in use. Returns a formatted string that can be used to quickly display the names of all patients using the schoolname.</summary>
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT LName,FName from patient "
 				+"WHERE GradeSchool = '"+POut.PString(schoolName)+"' ";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			if(table.Rows.Count==0)
 				return "";
 			string retVal="";
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT * from school "
 				+"WHERE SchoolName = '"+POut.PString(schoolName)+"' ";
-			DataTable table=General.GetTable(command);;
+			DataTable table=Db.GetTable(command);;
 			if(table.Rows.Count==0)
 				return false;
 			else

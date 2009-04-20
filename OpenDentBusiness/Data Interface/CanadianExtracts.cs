@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>The list can be 0 length.</summary>
 		public static List<CanadianExtract> GetForClaim(int claimNum){
 			string command="SELECT * FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<CanadianExtract> retVal=new List<CanadianExtract>();
 			CanadianExtract extract;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 
 		public static void UpdateForClaim(int claimNum, List<CanadianExtract> missinglist){
 			string command="DELETE FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<missinglist.Count;i++){
 				missinglist[i].ClaimNum=claimNum;
 				Insert(missinglist[i]);
@@ -71,10 +71,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(cur.ToothNum)+"', "
 				+POut.PDate  (cur.DateExtraction)+")";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				cur.CanadianExtractNum=General.NonQ(command,true);
+				cur.CanadianExtractNum=Db.NonQ(command,true);
 			}
 		}
 

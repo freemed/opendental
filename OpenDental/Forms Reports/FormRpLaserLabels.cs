@@ -1043,7 +1043,7 @@ namespace OpenDental
                     if (radioButSingle.Checked == true)
                     {
                         command += " WHERE CONCAT(CONCAT(carrier.CarrierName,carrier.Address),carrier.City) = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
-                        RptAddrTable = General.GetTable(command);
+                        RptAddrTable = Db.GetTable(command);
                         AddrTable = RptAddrTable.Clone();
                         int numLabels = (int)numericInsCoSingle.Value;
                         for (int i = 0; i <= numLabels; ++i)
@@ -1163,7 +1163,7 @@ namespace OpenDental
         }
         private void buildLabelTable(string getData)
         {
-            AddrTable = General.GetTable(getData);
+            AddrTable = Db.GetTable(getData);
             buildLabels();
         }
 

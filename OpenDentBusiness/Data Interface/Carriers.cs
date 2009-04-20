@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			table.TableName="Carrier";
 			FillCache(table);
 			return table;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 			}
 			command+="GROUP BY carrier.CarrierNum "
 				+"ORDER BY CarrierName";
-			tableRaw=General.GetTable(command);
+			tableRaw=Db.GetTable(command);
 			table=new DataTable();
 			table.Columns.Add("Address");
 			table.Columns.Add("Address2");
@@ -170,20 +170,20 @@ namespace OpenDentBusiness{
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
 						+"AND IsCDA=1 "
 						+"AND CarrierNum != "+POut.PInt(Cur.CarrierNum);
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {//if there already exists a Canadian carrier with that ElectID
 						throw new ApplicationException(Lan.g("Carriers","EDI Code already in use."));
 					}
 				}
 				//so the edited carrier looks good, but now we need to make sure that the original was allowed to be changed.
 				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(PIn.PBool(table.Rows[0][1].ToString())//if original carrier IsCDA
 					&& PIn.PString(table.Rows[0][0].ToString()) !=Cur.ElectID)//and the ElectID was changed
 				{
 					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.PInt(Cur.CarrierNum)
 						+" OR CarrierNum2="+POut.PInt(Cur.CarrierNum);
-					if(General.GetCount(command)!="0"){
+					if(Db.GetCount(command)!="0"){
 						throw new ApplicationException(Lan.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
 					}
 				}
@@ -205,7 +205,7 @@ namespace OpenDentBusiness{
 				+ ",IsHidden= '"     +POut.PBool(Cur.IsHidden)+"' "
 				+"WHERE CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
@@ -222,7 +222,7 @@ namespace OpenDentBusiness{
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
 						+"AND IsCDA=1";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
 						throw new ApplicationException(Lan.g("Carriers","EDI Code already in use."));
 					}
@@ -256,10 +256,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.CanadianNetworkNum)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.CarrierNum=General.NonQ(command,true);
+ 				Cur.CarrierNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -270,7 +270,7 @@ namespace OpenDentBusiness{
 				+" WHERE patient.PatNum=insplan.Subscriber"
 				+" AND insplan.CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'"
 				+" ORDER BY LName,FName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string strInUse;
 			if(table.Rows.Count>0){
 				strInUse="";//new string[table.Rows.Count];
@@ -285,7 +285,7 @@ namespace OpenDentBusiness{
 			//look for dependencies in etrans table.
 			command="SELECT DateTimeTrans FROM etrans WHERE CarrierNum="+POut.PInt(Cur.CarrierNum)
 				+" OR CarrierNum2="+POut.PInt(Cur.CarrierNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				strInUse="";
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -297,7 +297,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lan.g("Carriers","Not allowed to delete carrier because it is in use in the etrans table.  Dates of claim sent history include ")+strInUse);
 			}
 			command="DELETE from carrier WHERE CarrierNum = "+POut.PInt(Cur.CarrierNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns a list of insplans that are dependent on the Cur carrier. Used to display in carrier edit.</summary>
@@ -306,7 +306,7 @@ namespace OpenDentBusiness{
 				+" WHERE patient.PatNum=insplan.Subscriber"
 				+" AND insplan.CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'"
 				+" ORDER BY LName,FName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				retStr[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -365,7 +365,7 @@ namespace OpenDentBusiness{
 				+"AND Phone = '"      +POut.PString(Cur.Phone)+"' "
 				+"AND ElectID = '"    +POut.PString(Cur.ElectID)+"' "
 				+"AND NoSendElect = '"+POut.PBool  (Cur.NoSendElect)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//A matching carrier was found in the database, so we will use it.
 				Cur.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
@@ -378,7 +378,7 @@ namespace OpenDentBusiness{
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
 						+"AND IsCDA=1";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
 						Cur.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
 						//set Cur.CarrierNum to the carrier found (all other carrier fields will still be wrong)
@@ -432,7 +432,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<carrierNumList.Count;i++) {
 				command+=" OR (CarrierNum2="+carrierNumList[i].ToString()+" AND CarrierTransCounter2>0)";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string ecount=table.Rows[0][0].ToString();
 			if(ecount!="0"){
 				throw new ApplicationException(Lan.g("Carriers","Not allowed to combine carriers because some are in use in the etrans table.  Number of entries involved: ")+ecount);
@@ -443,10 +443,10 @@ namespace OpenDentBusiness{
 					continue;
 				command="UPDATE insplan SET CarrierNum = '"+POut.PInt(pickedCarrierNum)
 					+"' WHERE CarrierNum = "+POut.PInt(carrierNums[i]);
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM carrier"
 					+" WHERE CarrierNum = '"+carrierNums[i].ToString()+"'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 		}
 
@@ -521,7 +521,7 @@ namespace OpenDentBusiness{
 				command+=" patient.PatNum="+POut.PInt(patients[i].PatNum);
 			}
 			command+=" GROUP BY patient.PatNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Dictionary<int,string> retVal=new Dictionary<int,string>();
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal.Add(PIn.PInt(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());

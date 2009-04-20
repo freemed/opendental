@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM schoolclass "
 				+"ORDER BY GradYear,Descript";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new SchoolClass[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SchoolClass();
@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				+",GradYear = '"      +POut.PInt   (sc.GradYear)+"'"
 				+",Descript = '"      +POut.PString(sc.Descript)+"'"
 				+" WHERE SchoolClassNum = '"+POut.PInt(sc.SchoolClassNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -62,10 +62,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt   (sc.GradYear)+"', "
 				+"'"+POut.PString(sc.Descript)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				sc.SchoolClassNum=General.NonQ(command,true);
+ 				sc.SchoolClassNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -87,20 +87,20 @@ namespace OpenDentBusiness{
 			//check for attached providers
 			string  command="SELECT COUNT(*) FROM provider WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0"){
 				throw new Exception(Lan.g("SchoolClasses","Class already in use by providers."));
 			}
 			//check for attached reqneededs.
 			command="SELECT COUNT(*) FROM reqneeded WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lan.g("SchoolClasses","Class already in use by 'requirements needed' table."));
 			}
 			command= "DELETE from schoolclass WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		public static string GetDescript(int SchoolClassNum){

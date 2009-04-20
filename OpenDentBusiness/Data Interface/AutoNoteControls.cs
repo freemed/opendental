@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 		}
 
 		private static List<AutoNoteControl> RefreshAndFill(string command) {
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			List<AutoNoteControl> retVal=new List<AutoNoteControl>();
 			AutoNoteControl noteCont;
 			for (int i=0;i<table.Rows.Count;i++){
@@ -39,7 +39,7 @@ namespace OpenDentBusiness {
 			+"'"+POut.PString(autonotecontrol.ControlType)+"', "
 			+"'"+POut.PString(autonotecontrol.ControlLabel)+"' ,"			
 			+"'"+POut.PString(autonotecontrol.ControlOptions)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 
@@ -50,13 +50,13 @@ namespace OpenDentBusiness {
 				+"ControlLabel = '"+POut.PString(autonotecontrol.ControlLabel)+"', "
 				+"ControlOptions = '"+POut.PString(autonotecontrol.ControlOptions)+"' "
 				+"WHERE AutoNoteControlNum = '"+POut.PInt(autonotecontrol.AutoNoteControlNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void Delete(int autoNoteControlNum) {
 			//no validation for now.
 			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.PInt(autoNoteControlNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Will return null if can't match.</summary>
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 		public static void RefreshControl(string ControlNumToShow) {
 			string command = "SELECT * FROM autonotecontrol "
 				+"WHERE AutoNoteControlNum = '"+ControlNumToShow+"'";
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			Listt=new List<AutoNoteControl>();
 			//List = new AutoNote[table.Rows.Count];
 			AutoNoteControl noteCont;
@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 		public static List<AutoNoteControl> ControlNumToName(string controlNum) {
 			string command="SELECT Descript FROM autonotecontrol "
 			+"WHERE AutoNoteControlNum = "+"'"+controlNum+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Listt=new List<AutoNoteControl>();
 			AutoNoteControl note;
 			note = new AutoNoteControl();
@@ -112,7 +112,7 @@ namespace OpenDentBusiness {
 		public static bool ControlNameUsed(string ControlName, string OriginalControlName) {
 			string command="SELECT Descript FROM autonotecontrol WHERE "
 			+"Descript = '"+POut.PString(ControlName)+"' AND Descript != '"+POut.PString(OriginalControlName)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			bool isUsed=false;
 			if (table.Rows.Count!=0) {//found duplicate control name				
 				isUsed=true;

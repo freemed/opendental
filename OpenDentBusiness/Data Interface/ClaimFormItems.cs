@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PFloat (item.Width)+"', "
 				+"'"+POut.PFloat (item.Height)+"')";
 			//MessageBox.Show(string command);
- 			item.ClaimFormItemNum=General.NonQ(command,true);
+ 			item.ClaimFormItemNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -61,14 +61,14 @@ namespace OpenDentBusiness{
 				+",width = '"        +POut.PFloat (item.Width)+"' "
 				+",height = '"       +POut.PFloat (item.Height)+"' "
 				+"WHERE ClaimFormItemNum = '"+POut.PInt   (item.ClaimFormItemNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ClaimFormItem item){
 			string command = "DELETE FROM claimformitem "
 				+"WHERE ClaimFormItemNum = '"+POut.PInt(item.ClaimFormItemNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

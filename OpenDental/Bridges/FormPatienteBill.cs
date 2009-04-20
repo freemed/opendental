@@ -72,7 +72,7 @@ namespace OpenDental {
 
 			// Get Login / Password
 			command = @"select loginid,password from clearinghouse where isDefault=1";
-			table = General.GetTable(command);
+			table = Db.GetTable(command);
 			if(table.Rows.Count != 0) {
 				loginID = PIn.PString(table.Rows[0][0].ToString());
 				passWord = PIn.PString(table.Rows[0][1].ToString());
@@ -411,7 +411,7 @@ namespace OpenDental {
 				command = @"SELECT FName,LName,Suffix,StateLicense
                             FROM provider
                             WHERE provnum=" + PrefC.GetString("PracticeDefaultProv");
-				DataTable RenderingTable = General.GetTable(command);
+				DataTable RenderingTable = Db.GetTable(command);
 				if(RenderingTable.Rows.Count > 0) {
 					RPName = RenderingTable.Rows[0]["FName"].ToString() + " " + RenderingTable.Rows[0]["LName"].ToString() + " " + RenderingTable.Rows[0]["Suffix"].ToString();
 					RPLicense = RenderingTable.Rows[0]["StateLicense"].ToString();
@@ -463,7 +463,7 @@ namespace OpenDental {
                                 BalTotal,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90
                             FROM Patient Where Patnum=" + PatientID +
                             " AND patnum=guarantor";
-				DataTable PatientTable = General.GetTable(command);
+				DataTable PatientTable = Db.GetTable(command);
 
 				if(PatientTable.Rows.Count > 0) {
 					FName = PatientTable.Rows[0]["FName"].ToString();
@@ -672,7 +672,7 @@ namespace OpenDental {
 		private void PrepareNotes(int PatientID,XmlNode EisStatementPatient) {
 			string note = string.Empty;
 			command = @"SELECT Note FROM Statement Where Patnum=" + PatientID;
-			DataTable NoteTable = General.GetTable(command);
+			DataTable NoteTable = Db.GetTable(command);
 
 			if(NoteTable.Rows.Count > 0) {
 				note = NoteTable.Rows[0]["Note"].ToString();
@@ -701,7 +701,7 @@ namespace OpenDental {
 			command = @"Select SinglePatient,DateRangeFrom,DateRangeTo,Intermingled
                         FROM statement WHERE PatNum = " + PatientID;
 
-			DataTable StmtTable = General.GetTable(command);
+			DataTable StmtTable = Db.GetTable(command);
 			bool Singlepatient,Intermingled;
 			DateTime DateRangeFrom,DateRangeTo;
 			if(StmtTable.Rows.Count > 0) {

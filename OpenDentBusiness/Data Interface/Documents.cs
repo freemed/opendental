@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets the document with the specified document number.</summary>
 		public static Document GetByNum(int docNum){
 			string command="SELECT * FROM document WHERE DocNum='"+docNum+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count<1){
 				return new Document();
 			}
@@ -72,7 +72,7 @@ namespace OpenDentBusiness {
 		}
 
 		private static Document[] RefreshAndFill(string command) {
-			return Fill(General.GetTable(command));
+			return Fill(Db.GetTable(command));
 		}
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
@@ -114,10 +114,10 @@ namespace OpenDentBusiness {
 					+"'"+POut.PBool  (IsDeleted)+"')";//ditto*/
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				doc.DocNum=General.NonQ(command,true);
+				doc.DocNum=Db.NonQ(command,true);
 			}
 			//If the current filename is just an extension, then assign it a unique name.
 			if(doc.FileName==Path.GetExtension(doc.FileName)) {
@@ -132,7 +132,7 @@ namespace OpenDentBusiness {
 				doc.FileName+=doc.DocNum.ToString()+extension;//ensures unique name
 				//there is still a slight chance that someone manually added a file with this name, so quick fix:
 				command="SELECT FileName FROM document WHERE PatNum="+POut.PInt(doc.PatNum);
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string[] usedNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
 					usedNames[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -172,13 +172,13 @@ namespace OpenDentBusiness {
 				+ ",MountItemNum ='"		 +POut.PInt(doc.MountItemNum)+"'"
 				+" WHERE DocNum = '"     +POut.PInt(doc.DocNum)+"'";
 			//MessageBox.Show(cmd.CommandText);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Document doc){
 			string command= "DELETE from document WHERE DocNum = '"+doc.DocNum.ToString()+"'";
-			General.NonQ(command);	
+			Db.NonQ(command);	
 		}
 
 		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder.</summary>
@@ -194,7 +194,7 @@ namespace OpenDentBusiness {
 				command+=" OR document.DocNum = '"+docNums[i].ToString()+"'";
 			}
 			//remember, they will not be in the correct order.
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Hashtable hList=new Hashtable();//key=docNum, value=path
 			//one row for each document, but in the wrong order
 			for(int i=0;i<table.Rows.Count;i++){
@@ -298,7 +298,7 @@ namespace OpenDentBusiness {
 			Document[] documents=new Document[mountItems.Length];
 			for(int i=0;i<mountItems.Length;i++){
 				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"'";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count<1){
 					documents[i]=null;
 				}else{
@@ -312,7 +312,7 @@ namespace OpenDentBusiness {
 		public static int InsertMissing(Patient patient,string[] fileList){
 			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			for(int j=0;j<fileList.Length;j++){
 				if(!IsAcceptableFileName(fileList[j])){
 					continue;

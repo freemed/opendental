@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM referral "
 				+"ORDER BY lname";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			List=new Referral[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Referral();
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				+ ",NationalProvID='"+POut.PString(refer.NationalProvID)+"'"
 				+ ",Slip = '"      +POut.PInt(refer.Slip)+"'"
 				+" WHERE ReferralNum = '" +POut.PInt(refer.ReferralNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -122,10 +122,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(refer.NationalProvID)+"', "
 				+"'"+POut.PInt   (refer.Slip)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				refer.ReferralNum=General.NonQ(command,true);
+				refer.ReferralNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -133,7 +133,7 @@ namespace OpenDentBusiness{
 		public static void Delete(Referral refer) {
 			string command= "DELETE FROM referral "
 				+"WHERE referralnum = '"+refer.ReferralNum+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

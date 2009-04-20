@@ -144,7 +144,7 @@ namespace OpenDental
 				//WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
 				//+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
 				+"GROUP BY payplan.PayPlanNum ORDER BY LName,FName";
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			//DateTime payplanDate;
 			Patient pat;
 			double princ;

@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all TerminalActives.  Used by the terminal monitor window and by the terminal window itself.  Data is retrieved at regular short intervals, so functions as a messaging system.</summary>
 		private static TerminalActive[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			TerminalActive[] List=new TerminalActive[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TerminalActive();
@@ -44,7 +44,7 @@ namespace OpenDentBusiness {
 				+",TerminalStatus = '"+POut.PInt   ((int)te.TerminalStatus)+"'"
 				+",PatNum = '"        +POut.PInt   (te.PatNum)+"'"
 				+" WHERE TerminalActiveNum  ='"+POut.PInt   (te.TerminalActiveNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -65,17 +65,17 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt   ((int)te.TerminalStatus)+"', "
 				+"'"+POut.PInt   (te.PatNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				te.TerminalActiveNum=General.NonQ(command,true);
+				te.TerminalActiveNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(TerminalActive te) {
 			string command="DELETE FROM terminalactive WHERE TerminalActiveNum ="+POut.PInt(te.TerminalActiveNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	
@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 		///<summary>Run when starting up a terminal window to delete any previous entries for this computer that didn't get deleted properly.</summary>
 		public static void DeleteAllForComputer(string computerName){
 			string command="DELETE FROM terminalactive WHERE ComputerName ='"+POut.PString(computerName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Called whenever user wants to edit patient info.  Not allowed to if patient edit window is open at a terminal.  Once patient is done at terminal, then staff allowed back into patient edit window.</summary>
@@ -92,7 +92,7 @@ namespace OpenDentBusiness {
 			string command="SELECT COUNT(*) FROM terminalactive WHERE PatNum="+POut.PInt(patNum)
 				+" AND (TerminalStatus="+POut.PInt((int)TerminalStatusEnum.PatientInfo)
 				+" OR TerminalStatus="+POut.PInt((int)TerminalStatusEnum.UpdateOnly)+")";
-			if(General.GetCount(command)=="0"){
+			if(Db.GetCount(command)=="0"){
 				return false;
 			}
 			return true;

@@ -28,9 +28,9 @@ namespace OpenDental {
 		private void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
 				string command="ALTER TABLE fee CHANGE FeeSched FeeSched int NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.2.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_3_1();
 		}
@@ -40,24 +40,24 @@ namespace OpenDental {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncPath','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncLastFileNumber','0','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('MobileSyncDateTimeLastRun','0001-01-01','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//I had originally deleted these.  But decided instead to just comment them as obsolete because I think it caused a bug in our upgrade.
 					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName = 'LettersIncludeReturnAddress'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName ='StationaryImage'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET Comments = 'Obsolete' WHERE PrefName ='StationaryDocument'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.3.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_3_3();
 		}
@@ -65,9 +65,9 @@ namespace OpenDental {
 		private void To6_3_3() {
 			if(FromVersion<new Version("6.3.3.0")) {
 				string command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('CoPay_FeeSchedule_BlankLikeZero','1','1 to treat blank entries like zero copay.  0 to make patient responsible on blank entries.')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.3.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_3_4();
 		}
@@ -75,9 +75,9 @@ namespace OpenDental {
 		private void To6_3_4() {
 			if(FromVersion<new Version("6.3.4.0")) {
 				string command="ALTER TABLE sheetfielddef CHANGE FieldValue FieldValue text NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.3.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_4_1();
 		}
@@ -87,77 +87,77 @@ namespace OpenDental {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE preference SET Comments = '-1 indicates min for all dates' WHERE PrefName = 'RecallDaysPast'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET Comments = '-1 indicates max for all dates' WHERE PrefName = 'RecallDaysFuture'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysFirstReminder','-1','-1 indicates do not show')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('RecallShowIfDaysSecondReminder','-1','-1 indicates do not show')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage','You are due for your regular dental check-up on ?DueDate  Please call our office today to schedule an appointment.','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg','You are due for your regular dental check-up.  [FamilyList]  Please call our office today to schedule an appointment.','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject2','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage2','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage2','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					string prefVal;
 					DataTable table;
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardMessage'";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?DueDate","[DueDate]");
 					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardMessage'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPostcardFamMsg'";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?FamilyList","[FamilyList]");
 					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='RecallPostcardFamMsg'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='ConfirmPostcardMessage'";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					prefVal=table.Rows[0][0].ToString().Replace("?date","[date]");
 					prefVal=prefVal.Replace("?time","[time]");
 					command="UPDATE preference SET ValueString='"+POut.PString(prefVal)+"' WHERE PrefName='ConfirmPostcardMessage'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject3','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailMessage3','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardMessage3','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg2','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailFamMsg3','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardFamMsg2','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallPostcardFamMsg3','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autonote CHANGE ControlsToInc MainText text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autonote SET MainText = ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlType='Text' WHERE ControlType='MultiLineTextBox'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlType='OneResponse' WHERE ControlType='ComboBox'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlType='Text' WHERE ControlType='TextBox'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autonotecontrol SET ControlOptions=MultiLineText WHERE MultiLineText != ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autonotecontrol DROP PrefaceText";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autonotecontrol DROP MultiLineText";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.4.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_4_4();
 		}
@@ -167,7 +167,7 @@ namespace OpenDental {
 				string command;
 				//Convert comma-delimited autonote controls to carriage-return delimited.
 				command="SELECT AutoNoteControlNum,ControlOptions FROM autonotecontrol";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string newVal;
 				for(int i=0;i<table.Rows.Count;i++) {
 					newVal=table.Rows[i]["ControlOptions"].ToString();
@@ -175,10 +175,10 @@ namespace OpenDental {
 					newVal=newVal.Replace(",","\r\n");
 					command="UPDATE autonotecontrol SET ControlOptions='"+POut.PString(newVal)
 						+"' WHERE AutoNoteControlNum="+table.Rows[i]["AutoNoteControlNum"].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '6.4.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_5_1();
 		}
@@ -188,29 +188,29 @@ namespace OpenDental {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ShowFeatureMedicalInsurance','0','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingUseElectronic','0','Set to 1 to used e-billing.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectVendorId','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectVendorPMSCode','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectCreditCardChoices','V,MC','Choices of V,MC,D,A comma delimited.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectClientAcctNumber','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectUserName','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingElectPassword','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES(12,22,'Status Condition','',-8978432,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES(22,16,'Condition','',-5169880,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES(22,17,'Condition (light)','',-1678747,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingIgnoreInPerson','0','Set to 1 to ignore walkout statements.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//eClinicalWorks Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -220,31 +220,31 @@ namespace OpenDental {
 						+"'', "
 						+"'', "
 						+"'')";
-					int programNum=General.NonQ(command,true);
+					int programNum=Db.NonQ(command,true);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'HL7FolderIn', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'HL7FolderOut', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'DefaultUserGroup', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = "ALTER TABLE anesthmedsgiven ADD AnesthMedNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = "ALTER TABLE provider ADD AnesthProvType int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS hl7msg";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE hl7msg (
 						HL7MsgNum int NOT NULL auto_increment,
 						HL7Status int NOT NULL,
@@ -253,13 +253,13 @@ namespace OpenDental {
 						PRIMARY KEY (HL7MsgNum),
 						INDEX (AptNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.5.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_6_0();
 		}
@@ -271,20 +271,20 @@ namespace OpenDental {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Change defaults for XDR bridge-------------------------------------------------------------------
 					command="SELECT Enabled,ProgramNum FROM program WHERE ProgName='XDR'";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					int programNum;
 					if(table.Rows.Count>0 && table.Rows[0]["Enabled"].ToString()=="0") {//if XDR not enabled
 						//change the defaults
 						programNum=PIn.PInt(table.Rows[0]["ProgramNum"].ToString());
 						command="UPDATE program SET Path='"+POut.PString(@"C:\XDRClient\Bin\XDR.exe")+"' WHERE ProgramNum="+POut.PInt(programNum);
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="UPDATE programproperty SET PropertyValue='"+POut.PString(@"C:\XDRClient\Bin\infofile.txt")+"' "
 							+"WHERE ProgramNum="+POut.PInt(programNum)+" "
 							+"AND PropertyDesc='InfoFile path'";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="UPDATE toolbutitem SET ToolBar=7 "//The toolbar at the top that is common to all modules.
 							+"WHERE ProgramNum="+POut.PInt(programNum);
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//iCat Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -295,42 +295,42 @@ namespace OpenDental {
 						+"'"+POut.PString(@"C:\Program Files\ISIP\iCATVision\Vision.exe")+"', "
 						+"'', "
 						+"'')";
-					programNum=General.NonQ(command,true);
+					programNum=Db.NonQ(command,true);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Acquisition computer name', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'XML output file path', "
 						+"'"+POut.PString(@"C:\iCat\Out\pm.xml")+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Return folder path', "
 						+"'"+POut.PString(@"C:\iCat\Return")+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'iCat')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					string[] commands = new string[]{
 					"ALTER TABLE anesthvsdata ADD MessageID varchar(50)"
 					,"ALTER TABLE anesthvsdata ADD HL7Message longtext"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 
 
 
@@ -342,7 +342,7 @@ namespace OpenDental {
 
 				}				
 				command="UPDATE preference SET ValueString = '6.6.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			//To6_?_0();
 		}

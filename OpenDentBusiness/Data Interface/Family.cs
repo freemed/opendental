@@ -97,7 +97,7 @@ namespace OpenDentBusiness
 				"SELECT PatNum,LName,FName,MiddleI,Preferred,CreditType,Guarantor,HasIns,SSN " 
 				+"FROM patient "
 				+"WHERE PatNum = '"+patNum.ToString()+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return new Patient();
 			}

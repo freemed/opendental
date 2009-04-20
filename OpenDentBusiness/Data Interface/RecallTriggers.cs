@@ -51,8 +51,8 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int RecallTriggerNum){
 			//validate that not already in use.
 			string command="SELECT LName,FName FROM patient WHERE RecallTriggerNum="+POut.PInt(RecallTriggerNum);
-			DataTable table=General.GetTable(command);
-			//int count=PIn.PInt(General.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 
 		public static void SetForType(int recallTypeNum,List<RecallTrigger> triggerList){
 			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.PInt(recallTypeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<triggerList.Count;i++){
 				triggerList[i].IsNew=true;
 				triggerList[i].RecallTypeNum=recallTypeNum;

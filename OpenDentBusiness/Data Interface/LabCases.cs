@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
 					+" OR AptStatus="+POut.PInt((int)ApptStatus.UnschedList)+") ";
 			}
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			DateTime AptDateTime;
 			DateTime date;
 			for(int i=0;i<raw.Rows.Count;i++) {
@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 					+"LEFT JOIN patient ON labcase.PatNum=patient.PatNum "
 					+"LEFT JOIN laboratory ON labcase.LaboratoryNum=laboratory.LaboratoryNum "
 					+"WHERE AptNum=0";
-				raw=General.GetTable(command);
+				raw=Db.GetTable(command);
 				for(int i=0;i<raw.Rows.Count;i++) {
 					row=table.NewRow();
 					row["AptDateTime"]=DateTime.MinValue;
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<LabCase> FillFromCommand(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			LabCase lab;
 			List<LabCase> retVal=new List<LabCase>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -214,10 +214,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (lab.ProvNum)+"', "
 				+"'"+POut.PString(lab.Instructions)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				lab.LabCaseNum=General.NonQ(command,true);
+				lab.LabCaseNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace OpenDentBusiness{
 				+ ",ProvNum = '"        +POut.PInt   (lab.ProvNum)+"'"
 				+ ",Instructions = '"   +POut.PString(lab.Instructions)+"'"
 				+" WHERE LabCaseNum = '"+POut.PInt(lab.LabCaseNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 
@@ -247,7 +247,7 @@ namespace OpenDentBusiness{
 			//check patients for dependencies
 			string command="SELECT LName,FName FROM patient WHERE LabCaseNum ="
 				+POut.PInt(LabCase.LabCaseNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
 				for(int i=0;i<table.Rows.Count;i++){
@@ -258,19 +258,19 @@ namespace OpenDentBusiness{
 			}*/
 			//delete
 			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.PInt(labCaseNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Attaches a labcase to an appointment.</summary>
 		public static void AttachToAppt(int labCaseNum,int aptNum){
 			string command="UPDATE labcase SET AptNum="+POut.PInt(aptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Attaches a labcase to a planned appointment.</summary>
 		public static void AttachToPlannedAppt(int labCaseNum,int plannedAptNum) {
 			string command="UPDATE labcase SET PlannedAptNum="+POut.PInt(plannedAptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Frequently returns null.</summary>

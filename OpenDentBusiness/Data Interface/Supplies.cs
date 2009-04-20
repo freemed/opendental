@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(Supply supp){
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
-			int count=PIn.PInt(General.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
 			if(count>0){
 				throw new ApplicationException(Lan.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			}
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		public static int GetLastItemOrder(int supplierNum,int catNum){
 			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.PInt(supplierNum)
 				+" AND Category="+POut.PInt(catNum)+" AND IsHidden=0";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return -1;
 			}

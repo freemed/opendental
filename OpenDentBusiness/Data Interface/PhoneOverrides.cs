@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<PhoneOverride> SubmitAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<PhoneOverride> list=new List<PhoneOverride>();
 			PhoneOverride phoneCur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -52,10 +52,10 @@ namespace OpenDentBusiness{
 				+POut.PInt(phoneCur.EmpCurrent)+","
 				+POut.PBool(phoneCur.IsAvailable)+","
 				+"'"+POut.PString(phoneCur.Explanation)+"')";
-			phoneCur.PhoneOverrideNum=General.NonQ(command,true);
+			phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
 			if(phoneCur.IsAvailable){
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
-				DataTable tableEmp=General.GetTable(command);
+				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
 					if(status=="Working"){
@@ -77,10 +77,10 @@ namespace OpenDentBusiness{
 				+"IsAvailable="+POut.PBool(phoneCur.IsAvailable)+","
 				+"Explanation='"+POut.PString(phoneCur.Explanation)+"' "
 				+"WHERE PhoneOverrideNum="+POut.PInt(phoneCur.PhoneOverrideNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			if(phoneCur.IsAvailable){
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
-				DataTable tableEmp=General.GetTable(command);
+				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
 					if(status=="Working"){
@@ -96,9 +96,9 @@ namespace OpenDentBusiness{
 
 		public static void Delete(PhoneOverride phoneCur){
 			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.PInt(phoneCur.PhoneOverrideNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
-			DataTable tableEmp=General.GetTable(command);
+			DataTable tableEmp=Db.GetTable(command);
 			if(tableEmp.Rows.Count>0){
 				string status=tableEmp.Rows[0][0].ToString();
 				if(status=="Working"){

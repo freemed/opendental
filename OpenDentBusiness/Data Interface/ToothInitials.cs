@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM toothinitial"
 				+" WHERE PatNum = "+POut.PInt(patNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<ToothInitial> tList=new List<ToothInitial>();
 			ToothInitial ti;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -52,10 +52,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(init.DrawingSegment)+"', "
 				+"'"+POut.PInt   (init.ColorDraw.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				init.ToothInitialNum=General.NonQ(command,true);
+				init.ToothInitialNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -69,13 +69,13 @@ namespace OpenDentBusiness{
 				+"DrawingSegment = '"+POut.PString(init.DrawingSegment)+"', "
 				+"ColorDraw = '"     +POut.PInt   (init.ColorDraw.ToArgb())+"' "
 				+"WHERE ToothInitialNum = '"+POut.PInt(init.ToothInitialNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ToothInitial init) {
 			string command= "DELETE FROM toothinitial WHERE ToothInitialNum = '"+init.ToothInitialNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		
 		///<summary>Sets teeth missing, or sets primary, or sets movement values.  It first clears the value from the database, then adds a new row to represent that value.  Movements require an amount.  If movement amt is 0, then no row gets added.</summary>
@@ -132,14 +132,14 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PInt(patNum)
 				+" AND ToothNum='"+POut.PString(tooth_id)
 				+"' AND InitialType="+POut.PInt((int)initialType);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Sets teeth not missing, or sets to perm, or clears movement values.  Clears all the values of one type for all teeth in the mouth.</summary>
 		public static void ClearAllValuesForType(int patNum,ToothInitialType initialType) {
 			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PInt(patNum)
 				+" AND InitialType="+POut.PInt((int)initialType);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets a list of missing teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>

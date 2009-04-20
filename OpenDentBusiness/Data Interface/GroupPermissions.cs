@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 				+",UserGroupNum = '"+POut.PInt   (gp.UserGroupNum)+"'"
 				+",PermType = '"    +POut.PInt   ((int)gp.PermType)+"'"
 				+" WHERE GroupPermNum = '"+POut.PInt(gp.GroupPermNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (gp.NewerDays)+"', "
 				+"'"+POut.PInt   (gp.UserGroupNum)+"', "
 				+"'"+POut.PInt   ((int)gp.PermType)+"')";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -74,14 +74,14 @@ namespace OpenDentBusiness{
 			if(permType==Permissions.SecurityAdmin){
 				//need to make sure that at least one other user has this permission
 				command="SELECT COUNT(*) FROM grouppermission WHERE PermType='"+POut.PInt((int)permType)+"'";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				if(table.Rows[0][0].ToString()=="1"){//only one, so this would delete the last one.
 					throw new Exception(Lan.g("FormSecurity","At least one group must have Security Admin permission."));
 				}
 			}
 			command="DELETE from grouppermission WHERE UserGroupNum='"+POut.PInt(groupNum)+"' "
 				+"AND PermType='"+POut.PInt((int)permType)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Gets a GroupPermission based on the supplied userGroupNum and permType.  If not found, then it returns null.  Used in FormSecurity when double clicking on a dated permission or when clicking the all button.</summary>

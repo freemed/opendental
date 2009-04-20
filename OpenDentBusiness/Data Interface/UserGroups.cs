@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Refresh() {
 			string command="SELECT * from usergroup ORDER BY Description";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new UserGroup[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new UserGroup();
@@ -37,27 +37,27 @@ namespace OpenDentBusiness{
 			string command= "UPDATE usergroup SET " 
 				+"Description = '"  +POut.PString(group.Description)+"'"
 				+" WHERE UserGroupNum = '"+POut.PInt(group.UserGroupNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Insert(UserGroup group){
 			string command= "INSERT INTO usergroup (Description) VALUES("
 				+"'"+POut.PString(group.Description)+"')";
- 			group.UserGroupNum=General.NonQ(command,true);
+ 			group.UserGroupNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Checks for dependencies first</summary>
 		public static void Delete(UserGroup group){
 			string command="SELECT COUNT(*) FROM userod WHERE UserGroupNum='"
 				+POut.PInt(group.UserGroupNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lan.g("UserGroups","Must move users to another group first."));
 			}
 			command= "DELETE FROM usergroup WHERE UserGroupNum='"
 				+POut.PInt(group.UserGroupNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>

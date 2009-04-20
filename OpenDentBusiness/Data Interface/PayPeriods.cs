@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>Fills List with all payperiods, ordered by startdate.</summary>
 		public static void Refresh() {
 			string command="SELECT * from payperiod ORDER BY DateStart";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new PayPeriod[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new PayPeriod();
@@ -52,10 +52,10 @@ namespace OpenDentBusiness{
 				+POut.PDate  (pp.DateStop)+", "
 				+POut.PDate  (pp.DatePaycheck)+")";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				pp.PayPeriodNum=General.NonQ(command,true);
+				pp.PayPeriodNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -66,13 +66,13 @@ namespace OpenDentBusiness{
 				+",DateStop = "    +POut.PDate  (pp.DateStop)+" "
 				+",DatePaycheck = "+POut.PDate  (pp.DatePaycheck)+" "
 				+"WHERE PayPeriodNum = '"+POut.PInt(pp.PayPeriodNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(PayPeriod pp) {
 			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.PInt(pp.PayPeriodNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

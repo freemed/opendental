@@ -78,7 +78,7 @@ namespace OpenDental.Reporting.Allocators
 			int rVal = 0;
 			try
 			{
-				rVal = int.Parse(General.GetTable("SELECT guarantor FROM patient WHERE patnum= " + Patient.ToString()).Rows[0][0].ToString());
+				rVal = int.Parse(Db.GetTable("SELECT guarantor FROM patient WHERE patnum= " + Patient.ToString()).Rows[0][0].ToString());
 			}
 			catch { }
 			return rVal;

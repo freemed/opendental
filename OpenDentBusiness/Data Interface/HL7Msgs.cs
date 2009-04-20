@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static bool MessageWasSent(int aptNum) {
 			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.PInt(aptNum);
-			if(General.GetCount(command)=="0") {
+			if(Db.GetCount(command)=="0") {
 				return false;
 			}
 			return true;
@@ -63,8 +63,8 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int HL7MsgNum){
 			//validate that not already in use.
 			string command="SELECT LName,FName FROM patient WHERE HL7MsgNum="+POut.PInt(HL7MsgNum);
-			DataTable table=General.GetTable(command);
-			//int count=PIn.PInt(General.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){

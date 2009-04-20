@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		//}
 
 		private static void FillList(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			HList=new Hashtable();
 			List=new Medication[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 				+ ",notes = '"       +POut.PString(Cur.Notes)+"'"
 				+" WHERE medicationnum = '" +POut.PInt   (Cur.MedicationNum)+"'";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -69,17 +69,17 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.GenericNum)+"', "
 				+"'"+POut.PString(Cur.Notes)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.MedicationNum=General.NonQ(command,true);
+ 				Cur.MedicationNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary>Dependent brands and patients will already be checked.</summary>
 		public static void Delete(Medication Cur){
 			string command = "DELETE from medication WHERE medicationNum = '"+Cur.MedicationNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns a list of all patients using this medication.</summary>
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM medicationpat,patient "
 				+"WHERE medicationpat.PatNum=patient.PatNum "
 				+"AND medicationpat.MedicationNum="+medicationNum.ToString();
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				"SELECT MedName FROM medication "
 				+"WHERE GenericNum="+medicationNum.ToString()
 				+" AND MedicationNum !="+medicationNum.ToString();//except this med
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal[i]=PIn.PString(table.Rows[i][0].ToString());

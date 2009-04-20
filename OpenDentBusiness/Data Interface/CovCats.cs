@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 				+",IsHidden = '"       +POut.PBool  (covcat.IsHidden)+"'"
 				+",EbenefitCat = '"    +POut.PInt((int)covcat.EbenefitCat)+"'"
 				+" WHERE covcatnum = '"+POut.PInt(covcat.CovCatNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(covcat.CovOrder)+"', "
 				+"'"+POut.PBool(covcat.IsHidden)+"', "
 				+"'"+POut.PInt((int)covcat.EbenefitCat)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

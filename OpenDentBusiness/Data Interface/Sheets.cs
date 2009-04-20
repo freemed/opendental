@@ -82,8 +82,8 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int sheetNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
-			DataTable table=General.GetTable(command);
-			//int count=PIn.PInt(General.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){
@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lan.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			DataObjectFactory<Sheet>.DeleteObject(sheetNum);
 		}
 

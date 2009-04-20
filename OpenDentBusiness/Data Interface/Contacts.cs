@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static void Refresh(int category){
 			string command="SELECT * from contact WHERE category = '"+category+"'"
 				+" ORDER BY LName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List = new Contact[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new Contact();
@@ -48,10 +48,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.Category)+"', "
 				+"'"+POut.PString(Cur.Notes)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.ContactNum=General.NonQ(command,true);
+ 				Cur.ContactNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -66,13 +66,13 @@ namespace OpenDentBusiness{
 				+",notes = '"   +POut.PString(Cur.Notes)+"' "
 				+"WHERE contactnum = '"+POut.PInt  (Cur.ContactNum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Contact Cur){
 			string command = "DELETE FROM contact WHERE contactnum = '"+Cur.ContactNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	}

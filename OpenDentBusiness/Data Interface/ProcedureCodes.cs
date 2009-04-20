@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 
 		public static List<ProcedureCode> GetUAppoint(DateTime changedSince){
 			string command="SELECT * FROM procedurecode WHERE DateTStamp > "+POut.PDateT(changedSince);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}
 
@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(code.SubstitutionCode)+"', "
 				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
 				//DateTStamp
-			code.CodeNum=General.NonQ(command,true);
+			code.CodeNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -135,7 +135,7 @@ namespace OpenDentBusiness{
 				+ ",SubstOnlyIf = '"   +POut.PInt   ((int)code.SubstOnlyIf)+"'"
 				//DateTStamp
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns the ProcedureCode for the supplied procCode.</summary>
@@ -277,7 +277,7 @@ namespace OpenDentBusiness{
 				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
 				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
 				+"ORDER BY ProcCat,procedurecode.ProcCode";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
@@ -299,21 +299,21 @@ namespace OpenDentBusiness{
 			string command=@"SELECT CodeNum,ProcCode FROM procedurecode
 				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)
 				AND ProcCode LIKE 'T%'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int codenum;
 			for(int i=0;i<table.Rows.Count;i++) {
 				codenum=PIn.PInt(table.Rows[i]["CodeNum"].ToString());
 				command="DELETE FROM fee WHERE CodeNum="+POut.PInt(codenum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM procedurecode WHERE CodeNum="+POut.PInt(codenum);
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			//then, move any other T codes to obsolete category
 			command=@"SELECT DISTINCT ProcCat FROM procedurecode,definition 
 				WHERE procedurecode.ProcCode LIKE 'T%'
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			int catNum=DefC.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
 			Def def;
 			if(catNum!=0) {//if a category exists with that name
@@ -337,7 +337,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="UPDATE procedurecode SET ProcCat="+POut.PInt(catNum)
 					+" WHERE ProcCat="+table.Rows[i][0].ToString();
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			//finally, set Never Used category to be hidden.  This isn't really part of clearing Tcodes, but is required
 			//because many customers won't have that category hidden
@@ -354,7 +354,7 @@ namespace OpenDentBusiness{
 
 		public static void ResetApptProcsQuickAdd() {
 			string command= "DELETE FROM definition WHERE Category=3";
-			General.NonQ(command);
+			Db.NonQ(command);
 			string[] array=new string[] {
 				"CompEx-4BW-Pano-Pro-Flo","D0150,D0274,D0330,D1110,D1204",
 				"CompEx-2BW-Pano-ChPro-Flo","D0150,D0272,D0330,D1120,D1203",

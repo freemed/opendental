@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (op.ProvHygienist)+"', "
 				+"'"+POut.PBool  (op.IsHygiene)+"', "
 				+"'"+POut.PInt   (op.ClinicNum)+"')";
- 			op.OperatoryNum=General.NonQ(command,true);
+ 			op.OperatoryNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 				//DateTStamp
 				+" WHERE OperatoryNum = '" +POut.PInt(op.OperatoryNum)+"'";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 
 		public static List<Operatory> GetUAppoint(DateTime changedSince){
 			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.PDateT(changedSince);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}
 

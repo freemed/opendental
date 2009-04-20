@@ -58,7 +58,7 @@ namespace OpenDental {
 			string command="";
 			//Locate the payment definition number for copayments of patients using the Arizona Primary Care program.
 			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
-			DataTable copayDefNumTab=General.GetTable(command);
+			DataTable copayDefNumTab=Db.GetTable(command);
 			if(copayDefNumTab.Rows.Count!=1){
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
@@ -71,7 +71,7 @@ namespace OpenDental {
 				"AND LOWER(TRIM(c.CarrierName))='noah' AND "+
 				"(SELECT MAX(a.AptDateTime) FROM appointment a WHERE a.PatNum=p.PatNum AND a.AptStatus="+((int)ApptStatus.Complete)+") BETWEEN "+
 					POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
-			DataTable primaryCarePatients=General.GetTable(command);
+			DataTable primaryCarePatients=Db.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
 				command="SELECT "+
@@ -100,7 +100,7 @@ namespace OpenDental {
 						"LOWER(f.FieldName)=LOWER('"+statusStr+"') LIMIT 1)) CareStatus "+//Status
 					"FROM patient p WHERE "+
 					"p.PatNum="+patNum;
-				DataTable primaryCareReportRow=General.GetTable(command);
+				DataTable primaryCareReportRow=Db.GetTable(command);
 				if(primaryCareReportRow.Rows.Count!=1) {
 					//Either the results are ambiguous or for some reason, the patient number listed in the patfield table
 					//does not actually exist. In either of these cases, it makes the most sense to just skip this patient

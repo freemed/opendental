@@ -60,10 +60,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (acct.Inactive)+"', "
 				+"'"+POut.PInt   (acct.AccountColor.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				acct.AccountNum=General.NonQ(command,true);
+				acct.AccountNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -76,20 +76,20 @@ namespace OpenDentBusiness{
 				+",Inactive = '"    +POut.PBool  (acct.Inactive)+"' "
 				+",AccountColor = '"+POut.PInt   (acct.AccountColor.ToArgb())+"' "
 				+"WHERE AccountNum = '"+POut.PInt(acct.AccountNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Throws exception if account is in use.</summary>
 		public static void Delete(Account acct) {
 			//check to see if account has any journal entries
 			string command="SELECT COUNT(*) FROM journalentry WHERE AccountNum="+POut.PInt(acct.AccountNum);
-			if(General.GetCount(command)!="0"){
+			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lan.g("FormAccountEdit",
 					"Not allowed to delete an account with existing journal entries."));
 			}
 			//Check various preference entries
 			command="SELECT ValueString FROM preference WHERE PrefName='AccountingDepositAccounts'";
-			string result=General.GetCount(command);
+			string result=Db.GetCount(command);
 			string[] strArray=result.Split(new char[] {','});
 			for(int i=0;i<strArray.Length;i++){
 				if(strArray[i]==acct.AccountNum.ToString()){
@@ -97,12 +97,12 @@ namespace OpenDentBusiness{
 				}
 			}
 			command="SELECT ValueString FROM preference WHERE PrefName='AccountingIncomeAccount'";
-			result=General.GetCount(command);
+			result=Db.GetCount(command);
 			if(result==acct.AccountNum.ToString()) {
 				throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
 			}
 			command="SELECT ValueString FROM preference WHERE PrefName='AccountingCashIncomeAccount'";
-			result=General.GetCount(command);
+			result=Db.GetCount(command);
 			if(result==acct.AccountNum.ToString()) {
 				throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			command="DELETE FROM account WHERE AccountNum = "+POut.PInt(acct.AccountNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used to test the sign on debits and credits for the five different account types</summary>
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 			string command="SELECT SUM(DebitAmt),SUM(CreditAmt) FROM journalentry "
 				+"WHERE AccountNum="+POut.PInt(accountNum)
 				+" GROUP BY AccountNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			double debit=0;
 			double credit=0;
 			if(table.Rows.Count>0){
@@ -225,7 +225,7 @@ namespace OpenDentBusiness{
 			}
 			command+="GROUP BY account.AccountNum, account.AcctType, account.Description, account.BankNumber,"
 				+"account.Inactive, account.AccountColor ORDER BY AcctType, Description";
-			DataTable rawTable=General.GetTable(command);
+			DataTable rawTable=Db.GetTable(command);
 			AccountType aType;
 			double debit=0;
 			double credit=0;
@@ -261,7 +261,7 @@ namespace OpenDentBusiness{
 				+"AND DateDisplayed < "+POut.PDate(firstofYear)//all from previous years
 				+" AND (AcctType=3 OR AcctType=4) "//income or expenses
 				+"GROUP BY AcctType ORDER BY AcctType";//income first, but could return zero rows.
-			rawTable=General.GetTable(command);
+			rawTable=Db.GetTable(command);
 			double balance=0;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
@@ -291,7 +291,7 @@ namespace OpenDentBusiness{
 			}
 			command+="GROUP BY account.AccountNum, account.AcctType, account.Description, account.BankNumber,"
 				+"account.Inactive, account.AccountColor ORDER BY AcctType, Description";
-			rawTable=General.GetTable(command);
+			rawTable=Db.GetTable(command);
 			for(int i=0;i<rawTable.Rows.Count;i++) {
 				row=table.NewRow();
 				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());

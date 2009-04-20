@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 
 		public static List<DeletedObject> GetUAppoint(DateTime changedSince){
 			string command="SELECT * FROM deletedobject WHERE DateTStamp > "+POut.PDateT(changedSince);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<DeletedObject> list=new List<DeletedObject>();
 			DeletedObject delObj;
 			for(int i=0;i<table.Rows.Count;i++) {

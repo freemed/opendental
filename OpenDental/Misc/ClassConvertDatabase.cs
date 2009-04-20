@@ -147,7 +147,7 @@ namespace OpenDental{
 		public void ExecuteFile(string fileName) {
 			string path = Path.Combine("ConversionFiles", fileName);
 			string content = File.ReadAllText(path).Trim();
-			General.NonQ(content);
+			Db.NonQ(content);
 		}
 
 		private void To2_8_2() {
@@ -158,7 +158,7 @@ namespace OpenDental{
 					,"DROP TABLE instemplate"
 					,"UPDATE preference SET ValueString = '2.8.2.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_8_3();
 		}
@@ -171,7 +171,7 @@ namespace OpenDental{
 					,"INSERT INTO preference VALUES ('PatientSelectUsesSearchButton','0')"
 					,"UPDATE preference SET ValueString = '2.8.3.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_8_6();
 		}
@@ -186,7 +186,7 @@ namespace OpenDental{
 					,"ALTER TABLE patient CHANGE SSN SSN VARCHAR(100) NOT NULL"
 					,"UPDATE preference SET ValueString = '2.8.6.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_8_10();
 		}
@@ -204,7 +204,7 @@ namespace OpenDental{
 					,"INSERT INTO preference VALUES ('CustomizedForPracticeWeb','0')"
 					,"UPDATE preference SET ValueString = '2.8.10.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_8_14();
 		}
@@ -221,7 +221,7 @@ namespace OpenDental{
 					,"ALTER TABLE procedurelog CHANGE Dx Dx smallint unsigned NOT NULL"
 					,"UPDATE preference SET ValueString = '2.8.14.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_9_1();
 		}
@@ -233,7 +233,7 @@ namespace OpenDental{
 				{
 					"UPDATE preference SET ValueString = '2.9.1.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_9_2();
 		}
@@ -247,7 +247,7 @@ namespace OpenDental{
 					,"ALTER TABLE appointment ADD Assistant smallint unsigned NOT NULL"
 					,"UPDATE preference SET ValueString = '2.9.2.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_9_5();
 		}
@@ -259,7 +259,7 @@ namespace OpenDental{
 					"ALTER TABLE autocode ADD LessIntrusive tinyint(1) unsigned NOT NULL"
 					,"UPDATE preference SET ValueString = '2.9.5.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To2_9_8();
 		}
@@ -269,7 +269,7 @@ namespace OpenDental{
 				string claimFormNum;
 				//Change the PlaceNumericCode field for both HCFA forms
 				string command="SELECT ClaimFormNum FROM claimform WHERE UniqueID = '4'";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string[] commands;
 				if(table.Rows.Count>0) {
 					claimFormNum=table.Rows[0][0].ToString();
@@ -294,10 +294,10 @@ namespace OpenDental{
 						+"WHERE FieldName='PlaceNumericCode' && ClaimFormNum='"+claimFormNum+"' "
 						+"&& YPos='917'"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID = '5'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=table.Rows[0][0].ToString();
 					commands=new string[]
@@ -321,11 +321,11 @@ namespace OpenDental{
 						+"WHERE FieldName='PlaceNumericCode' && ClaimFormNum='"+claimFormNum+"' "
 						+"&& YPos='917'"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				//ADA2002 medicaid id's
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID = '1'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=table.Rows[0][0].ToString();
 					commands=new string[]
@@ -335,11 +335,11 @@ namespace OpenDental{
 						,"INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+"'"+claimFormNum+"','BillingDentistMedicaidID','39','990','120','14')"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				//ADA2000 employer and 3 radiograph fields.
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID = '3'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=table.Rows[0][0].ToString();
 					commands=new string[]
@@ -353,13 +353,13 @@ namespace OpenDental{
 						,"INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+"'"+claimFormNum+"','RadiographsNumAttached','460','545','35','14')"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				commands=new string[]
 				{
 					"UPDATE preference SET ValueString = '2.9.8.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_0_1();
 		}
@@ -371,7 +371,7 @@ namespace OpenDental{
 			string command="SELECT CovCatNum FROM covspan "
 				+"WHERE '"+POut.PString(procCode)+"' > FromCode "
 				+"AND '"+POut.PString(procCode)+"' < ToCode";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return 0;//this code is not in any category, so coverage=0
 			}
@@ -382,7 +382,7 @@ namespace OpenDental{
 				+"OR PlanNum = '"+secPlanNum.ToString()+"' "
 				+"OR PriPatNum = '"+patNum.ToString()+"' "
 				+"OR SecPatNum = '"+patNum.ToString()+"')";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return 0;//no percentages have been entered for this patient or plan
 			}
@@ -410,7 +410,7 @@ namespace OpenDental{
 				ExecuteFile("convert_3_0_1.txt");//might throw an exception which we handle.
 				//convert appointment patterns from ten minute to five minute intervals---------------------
 				string command="SELECT AptNum,Pattern FROM appointment";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				StringBuilder sb;
 				string pattern;
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -423,11 +423,11 @@ namespace OpenDental{
 					command="UPDATE appointment SET "
 						+"Pattern='"+POut.PString(sb.ToString())+"' "
 						+"WHERE AptNum='"+table.Rows[i][0].ToString()+"'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//add the default 5 Elements to each ApptView-----------------------------------------------
 				command="SELECT ApptViewNum FROM apptview";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				string[] commands;
 				for(int i=0;i<table.Rows.Count;i++) {
 					commands=new string[]
@@ -443,7 +443,7 @@ namespace OpenDental{
 						,"INSERT INTO apptviewitem(ApptViewNum,ElementDesc,ElementOrder,ElementColor) "
 							+"VALUES('"+table.Rows[i][0].ToString()+"','Production','4','-16777216')"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				//MessageBox.Show("Appointments converted.");
 				//Any claimprocs attached to claims with ins being Cap, should be CapClaim, even if paid
@@ -451,11 +451,11 @@ namespace OpenDental{
 					+"WHERE claimproc.PlanNum=insplan.PlanNum "
 					+"AND claimproc.ClaimNum != '0' "
 					+"AND insplan.PlanType='c'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE claimproc SET Status='5' "//CapClaim
 						+"WHERE ClaimProcNum='"+table.Rows[i][0].ToString()+"'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//edit any existing claimprocs-------------------------------------------------------------
 				//These are all associated with claims, but we are not changing the claim values,
@@ -477,7 +477,7 @@ namespace OpenDental{
 					+"AND claimproc.Status != 2 "//skips preauths
 					+"AND claimproc.Status != 4 "//skips supplemental
 					+"AND claimproc.Status != 5 ";//skips capClaim
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				procTable=table.Copy();//so that we can perform other queries
 				for(int i=0;i<procTable.Rows.Count;i++) {
 					planNum=PIn.PInt(procTable.Rows[i][4].ToString());//claimproc.PlanNum
@@ -517,7 +517,7 @@ namespace OpenDental{
 						//+"CopayOverride='-1'"
 						+" WHERE ClaimProcNum='"+procTable.Rows[i][0].ToString()+"'";
 					//MessageBox.Show(command);
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//convert all estimates into claimprocs-------------------------------------------------
 				command="SELECT procedurelog.ProcNum,procedurelog.PatNum,"//0,1
@@ -538,7 +538,7 @@ namespace OpenDental{
 					+"AND NOT EXISTS (SELECT * FROM claimproc WHERE claimproc.ProcNum=procedurelog.ProcNum)";
 				//claimproc.ClaimProcNum IS NULL "//only if not already attached to a claim
 				//+"OR claimproc.Status='5')";//or CapClaim
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				procTable=table.Copy();//so that we can perform other queries
 				int status=0;
 				double copay=0;
@@ -569,7 +569,7 @@ namespace OpenDental{
 								+"'-1',"//OverAnnualMax
 								+"'-1'"//PaidOtherIns
 								+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 						//secondary
 						if(PIn.PInt(procTable.Rows[i][4].ToString())!=0) {//if has sec ins
@@ -592,7 +592,7 @@ namespace OpenDental{
 								+"'-1',"//OverAnnualMax
 								+"'-1'"//PaidOtherIns
 								+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 						continue;
 					}//1. noBillIns
@@ -629,7 +629,7 @@ namespace OpenDental{
 							+"'-1',"//PaidOtherIns
 							+"'"+procTable.Rows[i][10].ToString()+"'"//noBillIns is allowed for cap
 							+")";
-						General.NonQ(command);
+						Db.NonQ(command);
 						continue;
 					}
 					//3. standard primary estimate:
@@ -662,7 +662,7 @@ namespace OpenDental{
 						+"'-1',"//PaidOtherIns
 						+"'"+baseEst.ToString()+"'"//BaseEst
 						+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//4. standard secondary estimate
 					//secondary can be in addition to primary, or not at all
 					planNum=PIn.PInt(procTable.Rows[i][4].ToString());//secPlanNum
@@ -696,17 +696,17 @@ namespace OpenDental{
 						+"'-1',"//PaidOtherIns
 						+"'"+baseEst.ToString()+"'"//BaseEst
 						+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}//loop procedures
 				command="UPDATE claimproc SET ProcDate=DateCP";//affects ALL patients
-				General.NonQ(command);
+				Db.NonQ(command);
 				//MessageBox.Show("Procedure percentages converted to claimprocs.");
 				commands=new string[]
 				{
 					"UPDATE procedurelog SET OverridePri='0',OverrideSec='0',NoBillIns='0',"
 						+"IsCovIns='0',CapCoPay='0'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				//convert medical/service notes from defs table to quickpaste notes----------------------
 				commands=new string[]
 				{
@@ -719,34 +719,34 @@ namespace OpenDental{
 					,"INSERT INTO quickpastecat "
 						+"VALUES ('4','Medical History','3','11')"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="SELECT * FROM definition WHERE Category='8'";//Medical Notes
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO quickpastenote (QuickPasteCatNum,ItemOrder,Note) "
 						+"VALUES ('1','"+i.ToString()+"','"
 						+POut.PString(table.Rows[i][3].ToString())+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO quickpastenote (QuickPasteCatNum,ItemOrder,Note) "
 						+"VALUES ('2','"+i.ToString()+"','"
 						+POut.PString(table.Rows[i][3].ToString())+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO quickpastenote (QuickPasteCatNum,ItemOrder,Note) "
 						+"VALUES ('4','"+i.ToString()+"','"
 						+POut.PString(table.Rows[i][3].ToString())+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="SELECT * FROM definition WHERE Category='14'";//Service Notes
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO quickpastenote (QuickPasteCatNum,ItemOrder,Note) "
 						+"VALUES ('3','"+i.ToString()+"','"
 						+POut.PString(table.Rows[i][3].ToString())+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//add image categories to the chart module-----------------------------------------------
 				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				int lastI=PIn.PInt(table.Rows[0][0].ToString());
 				commands=new string[]
 				{
@@ -760,7 +760,7 @@ namespace OpenDental{
 						+"VALUES(18,"+POut.PInt(lastI+4)+",'Photos','X')"
 					,"UPDATE preference SET ValueString = '3.0.1.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_0_2();
 		}
@@ -774,7 +774,7 @@ namespace OpenDental{
 					,"INSERT INTO preference VALUES('TreatPlanShowIns','1')"
 					,"UPDATE preference SET ValueString = '3.0.2.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_0_3();
 		}
@@ -783,7 +783,7 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.0.3.0")) {
 				string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM payplan,patient "
 					+"WHERE patient.PatNum=payplan.PatNum";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					string planPats="";
 					for(int i=0;i<table.Rows.Count;i++) {
@@ -805,7 +805,7 @@ namespace OpenDental{
 					,"UPDATE payplan SET TotalCost = TotalAmount"
 					,"UPDATE preference SET ValueString = '3.0.3.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_0_4();
 		}
@@ -818,7 +818,7 @@ namespace OpenDental{
 					,"ALTER TABLE adjustment CHANGE AdjNote AdjNote text NOT NULL"
 					,"UPDATE preference SET ValueString = '3.0.4.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_0_5();
 		}
@@ -829,11 +829,11 @@ namespace OpenDental{
 				string command="SELECT patient.PatNum FROM patient,procedurelog "
 					+"WHERE patient.PatNum=procedurelog.PatNum "
 					+"AND patient.PatStatus=4";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM procedurelog "
 						+"WHERE PatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Delete extra est entries caused when patient switched plans before conversion:
 				command=@"SELECT 
@@ -846,11 +846,11 @@ namespace OpenDental{
 					AND cp1.ProcNum=cp2.ProcNum
 					AND cp1.ClaimProcNum!=cp2.ClaimProcNum
 					AND cp1.Status=6";//estimate
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM claimproc "
 						+"WHERE ClaimProcNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				string[] commands=new string[]
 				{
@@ -859,7 +859,7 @@ namespace OpenDental{
 					,"UPDATE claimform SET UniqueID='' WHERE UniqueID='OD0'"
 					,"UPDATE preference SET ValueString = '3.0.5.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_1_0();
 		}
@@ -876,25 +876,25 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\sidexis\sidexis.exe")+"', "
 					+"'', "
 					+"'')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Sirona')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//convert recall
 				//For inactive patients, assume no meaningful info if patients inactive,
 				//so no need to create a recall. Only convert active patients.
 				command="SELECT PatNum,RecallStatus,RecallInterval "
 					+"FROM patient WHERE PatStatus=0";
-				DataTable patTable=General.GetTable(command);
+				DataTable patTable=Db.GetTable(command);
 				DataTable table;
 				DateTime previousDate;
 				DateTime dueDate;
@@ -916,7 +916,7 @@ namespace OpenDental{
 						+"OR procedurelog.ProcStatus = 3 "
 						+"OR procedurelog.ProcStatus = 4) "
 						+"GROUP BY procedurelog.PatNum";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count==0) {
 						previousDate=DateTime.MinValue;
 					}
@@ -950,10 +950,10 @@ namespace OpenDental{
 						+POut.PDate(previousDate)+", "
 						+"'"+POut.PInt(newInterval.ToInt())+"', "
 						+"'"+POut.PInt(status)+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}//for int i<patTable
 				command="UPDATE preference SET ValueString = '3.1.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_1_3();
 		}
@@ -1026,7 +1026,7 @@ namespace OpenDental{
 						+"VALUES ('21','7','Commlog Appt Related','','-886','0')"
 					,"UPDATE preference SET ValueString = '3.1.3.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_1_4();
 		}
@@ -1041,7 +1041,7 @@ namespace OpenDental{
 					,"UPDATE provider SET OutlineColor ='-11711155'"
 					,"UPDATE preference SET ValueString = '3.1.4.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_1_13();
 		}
@@ -1052,11 +1052,11 @@ namespace OpenDental{
 				string command="SELECT medicationpat.MedicationPatNum FROM medicationpat "
 					+"LEFT JOIN medication ON medicationpat.MedicationNum=medication.MedicationNum "
 					+"WHERE medication.MedicationNum IS NULL";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM medicationpat WHERE MedicationPatNum="
 						+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				string[] commands=new string[]
 				{
@@ -1067,7 +1067,7 @@ namespace OpenDental{
 					,"UPDATE preference SET ValueString = '3.1.13.0' WHERE PrefName = 'DataBaseVersion'"
 				};
 
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_1_16();
 		}
@@ -1079,32 +1079,32 @@ namespace OpenDental{
 					LEFT JOIN insplan on patient.PriPlanNum=insplan.PlanNum
 					WHERE patient.PriPlanNum != 0
 					AND insplan.PlanNum IS NULL";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE patient set PriPlanNum=0 "
 						+"WHERE PatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command=@"SELECT ClaimProcNum FROM claimproc
 					LEFT JOIN insplan ON claimproc.PlanNum=insplan.PlanNum
 					WHERE insplan.PlanNum IS NULL";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM claimproc "
 						+"WHERE ClaimProcNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command=@"SELECT ClaimNum FROM claim
 					LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum
 					WHERE insplan.PlanNum IS NULL";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM claim "
 						+"WHERE ClaimNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '3.1.16.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_4_0();
 		}
@@ -1115,20 +1115,20 @@ namespace OpenDental{
 				//----------------Copy payment dates into paysplits--------------------------------------
 				string command="SELECT paysplit.SplitNum,payment.PayDate FROM payment,paysplit "
 					+"WHERE payment.PayNum=paysplit.PayNum";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE paysplit SET "
 						+"DatePay="+POut.PDate(PIn.PDate(table.Rows[i][1].ToString()))+" "
 						+"WHERE SplitNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//----------------Convert all discounts to adjustments-----------------------------------
 				//add adjustment categories.
 				command="SELECT Max(ItemOrder) FROM definition WHERE Category=1";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				int firstItemOrder=PIn.PInt(table.Rows[0][0].ToString())+1;
 				command="SELECT * FROM definition WHERE Category=15 ORDER BY ItemOrder";//cat=DiscountTypes
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				Hashtable HDiscToAdj=new Hashtable();//key=original defNum(discountType. value=new defNum(AdjType)
 				int numAdj=0;
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -1138,7 +1138,7 @@ namespace OpenDental{
 					+"'"+POut.PString(PIn.PString(table.Rows[i][3].ToString()))+"', "//item name
 					+"'-', "//itemValue. All discounts are negative
 					+"'"+table.Rows[i][6].ToString()+"')";//is hidden
-					numAdj=General.NonQ(command,true);
+					numAdj=Db.NonQ(command,true);
 					HDiscToAdj.Add(PIn.PInt(table.Rows[i][0].ToString()),//defNum of disc
 						numAdj);//defNum of adj
 				}
@@ -1147,7 +1147,7 @@ namespace OpenDental{
 				//create new adjustments from existing discounts
 				command="SELECT * FROM paysplit WHERE IsDiscount=1";//0=SplitNum,1=SplitAmt,2=PatNum,3=ProcDate,
 				//4=PayNum,5=IsDiscount,6=DiscountType,7=ProvNum,8=PayPlanNum,9=DatePay
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO adjustment (AdjDate,AdjAmt,PatNum, "
 					+"AdjType,ProvNum,ProcDate) "//AdjNote
@@ -1159,13 +1159,13 @@ namespace OpenDental{
 					+"'"+POut.PInt(PIn.PInt(table.Rows[i][7].ToString()))+"', "//provNum
 					+POut.PDate(PIn.PDate(table.Rows[i][3].ToString()))+")";//procDate
 					//note
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="DELETE FROM paysplit WHERE IsDiscount=1";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//--------------------Printers----------------------------------------------------------
 				command="SELECT * FROM computer WHERE PrinterName != ''";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO printer (ComputerNum,PrintSit,PrinterName,"
 					+"DisplayPrompt) "
@@ -1174,10 +1174,10 @@ namespace OpenDental{
 					+"'"+POut.PInt((int)PrintSituation.Default)+"', "
 					+"'"+POut.PString(PIn.PString(table.Rows[i][2].ToString()))+"', "
 					+"'1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE computer SET PrinterName = ''";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//HouseCalls link-----------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -1187,31 +1187,31 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'"+POut.PString(@"Typical Export Path is C:\HouseCalls\")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Export Path', "
 					+"'"+POut.PString(@"C:\HouseCalls\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'HouseCalls')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Delete program links for WebClaim and Renaissance--------------------------------------
 
 
 				//Final cleanup-------------------------------------------------------------------------
 				command="UPDATE preference SET ValueString = '3.4.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_4_7();
 		}
@@ -1226,7 +1226,7 @@ namespace OpenDental{
 						+@"'','4','')"
 					,"UPDATE preference SET ValueString = '3.4.7.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_4_10();
 		}
@@ -1238,7 +1238,7 @@ namespace OpenDental{
 				{
 					"UPDATE preference SET ValueString = '3.4.10.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_4_11();
 		}
@@ -1254,22 +1254,22 @@ namespace OpenDental{
 					+"'DxStart.exe', "
 					+"'', "
 					+"'"+POut.PString(@"Typical file path is DxStart.exe which is available from Planmeca and should be placed in the same folder as this program.")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Planmeca')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=
 					"UPDATE preference SET ValueString = '3.4.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_4_16();
 		}
@@ -1281,7 +1281,7 @@ namespace OpenDental{
 					@"UPDATE clearinghouse SET Description='ClaimConnect',ExportPath='C:\\ClaimConnect\\Upload\\' WHERE Description='WebClaim'"
 					,"UPDATE preference SET ValueString = '3.4.16.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_4_17();
 		}
@@ -1293,7 +1293,7 @@ namespace OpenDental{
 					"UPDATE patient SET DateFirstVisit='0001-01-01' WHERE DateFirstVisit='0000-00-00'"
 					,"UPDATE preference SET ValueString = '3.4.17.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_4_24();
 		}
@@ -1302,16 +1302,16 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.4.24.0")) {
 				//Delete program links for WebClaim and Renaissance--------------------------------------
 				string command="SELECT ProgramNum FROM program WHERE ProgName='WebClaim' OR ProgName='Renaissance'";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM program WHERE ProgramNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM toolbutitem WHERE ProgramNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Fix utf8 binary collations for ADACode columns-------------------------------------------
 				command="SELECT @@version";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				string thisVersion=PIn.PString(table.Rows[0][0].ToString());
 				string[] commands;
 				if(thisVersion.Substring(0,3)=="4.1" || thisVersion.Substring(0,3)=="5.0") {
@@ -1330,7 +1330,7 @@ namespace OpenDental{
 						,"ALTER TABLE covspan MODIFY FromCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 						,"ALTER TABLE covspan MODIFY ToCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 				}
 				commands=new string[]
 				{
@@ -1341,7 +1341,7 @@ namespace OpenDental{
 						+@"'C:\\Inmediata\\Reports\\','6','C:\\Program Files\\Inmediata\\IMPlug.exe')"
 					,"UPDATE preference SET ValueString = '3.4.24.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_5_0();
 		}
@@ -1351,11 +1351,11 @@ namespace OpenDental{
 				ExecuteFile("convert_3_5_0.txt");//Might throw an exception which we handle.
 				//Add patient picture category to images
 				string command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int lastI=PIn.PInt(table.Rows[0][0].ToString());
 				command="INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
 					+"VALUES(18,"+POut.PInt(lastI+1)+",'Patient Pictures','P')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//ImageFX link-----------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -1365,30 +1365,30 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\ImageFX\ImageFX.exe")+"', "
 					+"'', "
 					+"'"+POut.PString(@"Typical file path is C:\ImageFX\ImageFX.exe")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'ImageFX')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//fix the provider ID field----------------------------------------------------------------
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD1'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					command="UPDATE claimformitem SET FieldName='BillingDentistProviderID' WHERE FieldName='BillingDentistMedicaidID' "
 						+"AND ClaimFormNum="+table.Rows[0][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command=
 					"UPDATE preference SET ValueString = '3.5.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_5_1();
 		}
@@ -1400,7 +1400,7 @@ namespace OpenDental{
 					"ALTER TABLE schedule CHANGE Note Note TEXT NOT NULL"
 					,"UPDATE preference SET ValueString = '3.5.1.0' WHERE PrefName = 'DataBaseVersion'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 			}
 			To3_5_3();
 		}
@@ -1416,26 +1416,26 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\MedicTalk\reports\mtconnector.exe")+"', "
 					+"'', "
 					+"'"+POut.PString(@"No command line is needed.  Typical path is C:\MedicTalk\reports\mtconnector.exe")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'DentForms')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE tasklist SET DateType=0 WHERE Parent !=0";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE task SET DateType=0, TaskStatus=0 WHERE TaskListNum !=0";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=
 					"UPDATE preference SET ValueString = '3.5.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_6_0();
 		}
@@ -1446,7 +1446,7 @@ namespace OpenDental{
 				string command;
 				command=
 					"UPDATE preference SET ValueString = '3.6.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_6_1();
 		}
@@ -1456,14 +1456,14 @@ namespace OpenDental{
 				string command;
 				//Not sure how some of the dates got out of synch:
 				command="UPDATE payment,paysplit SET paysplit.DatePay=payment.PayDate WHERE paysplit.PayNum=payment.PayNum";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//or how procedures can accidently get attached to appointments for different patients:
 				command="UPDATE procedurelog,appointment SET procedurelog.AptNum=0 "
 					+"WHERE procedurelog.AptNum=appointment.AptNum AND appointment.PatNum!=procedurelog.PatNum";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=
 					"UPDATE preference SET ValueString = '3.6.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_6_4();
 		}
@@ -1487,7 +1487,7 @@ namespace OpenDental{
 						,"ALTER TABLE covspan MODIFY ToCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 						,"ALTER TABLE fee MODIFY ADACode varchar(15) character set utf8 collate utf8_bin NOT NULL"
 					};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				commands=new string[]
 				{
 					//AOS DATA clearinghouse----------------------------------------ADDED by SPK 7/13/05----------------------
@@ -1496,9 +1496,9 @@ namespace OpenDental{
 					+@"VALUES('AOS Data systems','C:\\Program Files\\AOS\\','0','','1','AOS','','',"
 					+@"'C:\\Program Files\\AOS\\','7','C:\\Program Files\\AOS\\AOSCommunicator\\AOSCommunicator.exe')"
  				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				string command="UPDATE preference SET ValueString = '3.6.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_6_5();
 		}
@@ -1510,13 +1510,13 @@ namespace OpenDental{
 					+"LEFT JOIN procedurelog ON procedurelog.ProcNum=adjustment.ProcNum "
 					+"WHERE adjustment.ProcNum !=0 "
 					+"AND procedurelog.ProcNum IS NULL";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM adjustment WHERE AdjNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '3.6.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_0();
 		}
@@ -1530,7 +1530,7 @@ namespace OpenDental{
 					+"PeriodPayment,Term,AccumulatedDue,DateFirstPay,DownPayment,"//6-10
 					+"Note,TotalCost,LastPayment "//11-13
 					+"FROM payplan";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int payPlanNum;//0
 				int patNum;//1
 				int guarantor;//2
@@ -1578,7 +1578,7 @@ namespace OpenDental{
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"', "
 							+"'Downpayment')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					if(APR==0) {
 						monthlyRate=0;
@@ -1616,7 +1616,7 @@ namespace OpenDental{
 							+POut.PDate(chargeDate)+", "
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}//loop term
 					//last payment
 					if(lastPayment!=0) {
@@ -1635,7 +1635,7 @@ namespace OpenDental{
 							+POut.PDate(chargeDate)+", "
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				//get rid of unwanted columns in pay plans
@@ -1650,10 +1650,10 @@ namespace OpenDental{
 						,"ALTER TABLE payplan DROP TotalCost"
 						,"ALTER TABLE payplan DROP LastPayment"
 					};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				//Operatories----------------------------------------------------------------------------------------------
 				command="SELECT DefNum,ItemOrder,ItemName,ItemValue,IsHidden FROM definition WHERE Category=9 ORDER BY ItemOrder";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				//Hashtable hashOps=new Hashtable();//key=defNum,value=OperatoryNum
 				int defNum;//represents the old opNum as it was in the database
 				int opNum;//the newly assigned key
@@ -1668,20 +1668,20 @@ namespace OpenDental{
 						+"'"+POut.PString(itemValue)+"', "
 						+"'"+table.Rows[i][1].ToString()+"', "
 						+"'"+table.Rows[i][4].ToString()+"')";
-					opNum=General.NonQ(command,true);
+					opNum=Db.NonQ(command,true);
 					command="UPDATE appointment SET Op="+POut.PInt(opNum)+" WHERE Op="+POut.PInt(defNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE scheddefault SET Op="+POut.PInt(opNum)+" WHERE Op="+POut.PInt(defNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE apptviewitem SET OpNum="+POut.PInt(opNum)+" WHERE OpNum="+POut.PInt(defNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="DELETE FROM definition WHERE Category=9";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//final cleanup-----------------------------------------------------------------------------------------
 				command=
 					"UPDATE preference SET ValueString = '3.7.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_2();
 		}
@@ -1690,25 +1690,25 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.7.2.0")) {
 				//add the new permission types to each group
 				string command="SELECT UserGroupNum FROM usergroup";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
 					groupNum=PIn.PInt(table.Rows[i][0].ToString());
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",25)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",26)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",27)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//by default, nobody will have permission to backup
 					//command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",28)";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//also by default, nobody will have permission to TimcardsEditAll
 				}
 				command="ALTER TABLE user ADD EmployeeNum smallint NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.7.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_3();
 		}
@@ -1716,15 +1716,15 @@ namespace OpenDental{
 		private void To3_7_3() {
 			if(FromVersion < new Version("3.7.3.0")) {
 				string command="ALTER TABLE securitylog ADD PatNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE tasklist ADD DateTimeEntry datetime NOT NULL default '0001-01-01'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE task ADD DateTimeEntry datetime NOT NULL default '0001-01-01'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('BalancesDontSubtractIns','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.7.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_4();
 		}
@@ -1740,10 +1740,10 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\Program Files\EasyNotesPro\AppBarProcess.exe")+"', "
 					+"'"+POut.PString("\""+@"C:\Program Files\EasyNotesPro\DefaultDentalToolbar.etb"+"\""+" OpenDental false")+"', "
 					+"'"+POut.PString(@"Do not try to add buttons to your toolbars because that won't work.  Typical path is C:\Program Files\EasyNotesPro\AppBarProcess.exe")+"')";
-				General.NonQ(command,true);
+				Db.NonQ(command,true);
 				command=
 					"UPDATE preference SET ValueString = '3.7.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_5();
 		}
@@ -1751,13 +1751,13 @@ namespace OpenDental{
 		private void To3_7_5() {
 			if(FromVersion < new Version("3.7.5.0")) {
 				string command="INSERT INTO preference VALUES ('TimecardSecurityEnabled','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('RecallCardsShowReturnAdd','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD BenefitNotes text NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.7.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_7_6();
 		}
@@ -1765,9 +1765,9 @@ namespace OpenDental{
 		private void To3_7_6() {
 			if(FromVersion < new Version("3.7.6.0")) {
 				string command="ALTER TABLE clinic ADD DefaultPlaceService tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.7.6.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_8_0();
 		}
@@ -1777,12 +1777,12 @@ namespace OpenDental{
 				ExecuteFile("convert_3_8_0.txt");//Might throw an exception which we handle.
 				//add deposit slip permission to each group
 				string command="SELECT UserGroupNum FROM usergroup";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
 					groupNum=PIn.PInt(table.Rows[i][0].ToString());
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",30)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Populate the new column: claimpayment.CarrierName
 				command="SELECT claimpayment.ClaimPaymentNum,carrier.CarrierName "
@@ -1791,14 +1791,14 @@ namespace OpenDental{
 					+"AND claimproc.PlanNum = insplan.PlanNum "
 					+"AND insplan.CarrierNum = carrier.CarrierNum "
 					+"GROUP BY claimpayment.ClaimPaymentNum";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE claimpayment SET CarrierName='"+POut.PString(PIn.PString(table.Rows[i][1].ToString()))+"' "
 						+"WHERE ClaimPaymentNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '3.8.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_8_5();
 		}
@@ -1807,16 +1807,16 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.8.5.0")) {
 				//Make a few changes to the paths in the ENP bridge
 				string command;//="SELECT ProgramNum FROM program WHERE ProgName='EasyNotesPro'";
-				//DataTable table=General.GetTable(command);
+				//DataTable table=Db.GetTable(command);
 				//if(table.Rows.Count>0){//otherwise user might have deleted the bridge
 				//int programNum=PIn.PInt(table.Rows[0][0].ToString());
 				command="UPDATE program SET "
 					+"CommandLine='"+POut.PString("\""+@"C:\Program Files\EasyNotesPro\DefaultDentalToolbar.etb"+"\""+" standalone true")+"' "
 					+"WHERE ProgName='EasyNotesPro'";//+POut.PInt(programNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				//}
 				command="UPDATE preference SET ValueString = '3.8.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_0();
 		}
@@ -1829,11 +1829,11 @@ namespace OpenDental{
 				DataTable table;
 				if(CultureInfo.CurrentCulture.Name=="en-US") {
 					command="DELETE FROM languageforeign";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {
 					command="SELECT DISTINCT Culture FROM languageforeign";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					CultureInfo ci;
 					for(int i=0;i<table.Rows.Count;i++) {
 						try {
@@ -1851,14 +1851,14 @@ namespace OpenDental{
 						}
 						command="UPDATE languageforeign SET Culture='"+FormC.NewName+"' "
 							+"WHERE Culture='"+table.Rows[i][0].ToString()+"'";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				//------------------------------------------------------------------------------------------------------------
 				//move all patient.PriPlanNum,PriRelationship,SecPlanNum,SecRelationship,
 				//PriPending,SecPending,PriPatID,SecPatID to PatPlan objects
 				command="SELECT PatNum,PriPlanNum,PriRelationship,PriPending,PriPatID FROM patient WHERE PriPlanNum>0";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO patplan (PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID) VALUES ("
 						+table.Rows[i][0].ToString()+","//patnum
@@ -1868,10 +1868,10 @@ namespace OpenDental{
 						+table.Rows[i][2].ToString()+","//Relationship
 						+"'"+POut.PString(PIn.PString(table.Rows[i][4].ToString()))+"'"//PatID
 						+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="SELECT PatNum,SecPlanNum,SecRelationship,SecPending,SecPatID FROM patient WHERE SecPlanNum>0";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO patplan (PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID) VALUES ("
 						+table.Rows[i][0].ToString()+","//patnum
@@ -1881,36 +1881,36 @@ namespace OpenDental{
 						+table.Rows[i][2].ToString()+","//Relationship
 						+"'"+POut.PString(PIn.PString(table.Rows[i][4].ToString()))+"'"//PatID
 						+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//convert all covpat.PriPatNum and SecPatNum to PatPlanNum-----------------------------------------------------
 				//primary
 				command="SELECT covpat.CovPatNum,patplan.PatPlanNum FROM covpat,patplan "
 					+"WHERE covpat.PriPatNum=patplan.PatNum "
 					+"AND patplan.Ordinal=1";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE covpat SET PatPlanNum="+table.Rows[i][1].ToString()
 						+" WHERE CovPatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//secondary
 				command="SELECT covpat.CovPatNum,patplan.PatPlanNum FROM covpat,patplan "
 					+"WHERE covpat.PriPatNum=patplan.PatNum "
 					+"AND patplan.Ordinal=2";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE covpat SET PatPlanNum="+table.Rows[i][1].ToString()
 						+" WHERE CovPatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//set patient.HasInsurance for everyone-----------------------------------------------------------------------
 				command="SELECT DISTINCT PatNum FROM patplan";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE patient SET HasIns='I'"
 						+" WHERE PatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//delete unwanted columns-------------------------------------------------------------------------------------
 				string[] commands=new string[] {
@@ -1937,10 +1937,10 @@ namespace OpenDental{
 					,"ALTER TABLE insplan DROP ElectID"
 					,"ALTER TABLE insplan DROP Employer"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				//final cleanup----------------------------------------------------------------------------------------------
 				command="UPDATE preference SET ValueString = '3.9.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_1();
 		}
@@ -1948,15 +1948,15 @@ namespace OpenDental{
 		private void To3_9_1() {
 			if(FromVersion < new Version("3.9.1.0")) {
 				string command="UPDATE preference SET PrefName = 'BackupToPath' WHERE PrefName = 'BackupPath'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('BackupFromPath', '"+POut.PString(@"C:\mysql\data\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('BackupRestoreFromPath', '"+POut.PString(@"D:\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('BackupRestoreToPath', '"+POut.PString(@"C:\mysql\data\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_2();
 		}
@@ -1972,27 +1972,27 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'"+POut.PString(@"No command line or path is needed.")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Text file path', "
 					+"'"+POut.PString(@"C:\patdata.txt")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'DBSWin')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_3();
 		}
@@ -2000,59 +2000,59 @@ namespace OpenDental{
 		private void To3_9_3() {
 			if(FromVersion < new Version("3.9.3.0")) {
 				string command="UPDATE preference SET ValueString = '-1' WHERE PrefName = 'InsBillingProv' AND ValueString='1'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add diagnosis fields to HCFA-1500
 				int claimFormNum;
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD4'";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD5'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="ALTER TABLE procedurelog ADD IsPrincDiag tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_4();
 		}
@@ -2060,9 +2060,9 @@ namespace OpenDental{
 		private void To3_9_4() {
 			if(FromVersion < new Version("3.9.4.0")) {
 				string command="INSERT INTO preference VALUES ('BillingIncludeChanged', '1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_5();
 		}
@@ -2070,9 +2070,9 @@ namespace OpenDental{
 		private void To3_9_5() {
 			if(FromVersion < new Version("3.9.5.0")) {
 				string command="INSERT INTO preference VALUES ('BackupRestoreAtoZToPath', '"+POut.PString(@"C:\OpenDentalData\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_6();
 		}
@@ -2080,11 +2080,11 @@ namespace OpenDental{
 		private void To3_9_6() {
 			if(FromVersion < new Version("3.9.6.0")) {
 				string command="ALTER TABLE referral CHANGE PatNum PatNum int NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE refattach CHANGE PatNum PatNum int NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.6.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_8();
 		}
@@ -2100,19 +2100,19 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'"+POut.PString(@"No command line or path is needed.")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'DentX')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Lightyear bridge--------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2122,21 +2122,21 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\Program Files\Speedvision\speedvision.exe")+"', "
 					+"'', "
 					+"'"+POut.PString(@"Path is usually C:\Program Files\Speedvision\speedvision.exe.  No command line is needed.")+"')";
-				programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Lightyear')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.8.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_9();
 		}
@@ -2148,9 +2148,9 @@ namespace OpenDental{
 					+"SenderID,Password,ResponsePath,CommBridge,ClientProgram) "
 					+@"VALUES('Post-n-Track','C:\\PostnTrack\\Exports\\','0','','1','PostnTrack','','',"
 					+@"'C:\\PostnTrack\\Reports\\','8','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_17();
 		}
@@ -2159,7 +2159,7 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.9.17.0")) {
 				//Rename VixWin to VixWinOld-----------------------------------------------------------------------
 				string command="UPDATE program SET ProgName='VixWinOld' WHERE ProgName='VixWin'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add new VixWin bridge---------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2169,21 +2169,21 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\VixWin\VixWin.exe")+"', "
 					+"'', "
 					+"'')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'VixWin')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.17.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To3_9_18();
 		}
@@ -2192,12 +2192,12 @@ namespace OpenDental{
 			if(FromVersion < new Version("3.9.18.0")) {
 				//fixes random keys problems:
 				string command="ALTER TABLE referral CHANGE ReferralNum ReferralNum mediumint unsigned NOT NULL auto_increment";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//these two lines were previously in place and must be accounted for.
 				//command="ALTER TABLE patient CHANGE NextAptNum NextAptNum mediumint unsigned NOT NULL";
-				//General.NonQ(command);
+				//Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '3.9.18.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_0();
 		}
@@ -2210,41 +2210,41 @@ namespace OpenDental{
 				//Running this loop adds a few minutes to the process, but is unavoidable.
 				//Add some indexes to make this query go faster
 				string command="ALTER TABLE covpat ADD INDEX indexPlanNum (PlanNum)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE covpat ADD INDEX indexCovCatNum (CovCatNum)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE covpat ADD INDEX indexPatPlanNum (PatPlanNum)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE covpat ADD INDEX indexCovPatNum (CovPatNum)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"SELECT * FROM covpat c1
 					WHERE EXISTS(SELECT * FROM covpat c2 
 					WHERE c1.PlanNum=c2.PlanNum
 					AND c1.CovCatNum=c2.CovCatNum
 					AND c1.PatPlanNum=c2.PatPlanNum
 					AND c1.CovPatNum<c2.CovPatNum)";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="DELETE FROM covpat WHERE CovPatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
-				//Add a CovCat for General------------------------------------------------------------------------------
+				//Add a CovCat for Db------------------------------------------------------------------------------
 				command="UPDATE covcat SET CovOrder=CovOrder+1";//Move all other covcats down one in order
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO covcat (Description,DefaultPercent,IsPreventive,"
 					+"CovOrder,IsHidden) VALUES('General',-1,0,0,0)";
-				int covCatNumGeneral=General.NonQ(command,true);
+				int covCatNumGeneral=Db.NonQ(command,true);
 				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNumGeneral)+",'D0000','D9999')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add a note to all InsPlans that do not renew in Jan----------------------------------------------------------
 				command="SELECT PlanNum,RenewMonth FROM insplan WHERE RenewMonth != '1'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE insplan SET "
 						+"PlanNote = CONCAT('BENEFIT YEAR BEGINS IN MONTH "+table.Rows[i][1].ToString()
 						+". SET EFFECTIVE DATE TO MATCH.',PlanNote) "
 						+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Convert CovPats to Benefits---------------------------------------------------------------------------------
 				command="SELECT DISTINCT covpat.CovCatNum,covpat.PlanNum,covpat.Percent,covpat.PatPlanNum,"//0-3
@@ -2255,7 +2255,7 @@ namespace OpenDental{
 					+"LEFT JOIN covcat ON covpat.CovCatNum=covcat.CovCatNum";
 				Debug.WriteLine(command);
 				//+"ORDER BY covpat.PatPlanNum DESC";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					//percentages
 					command="INSERT INTO benefit (PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod"
@@ -2272,7 +2272,7 @@ namespace OpenDental{
 					else {
 						command+="'1')";//TimePeriod=ServiceYear
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 					//deductibles waived on preventive
 					if(table.Rows[i][6].ToString()=="-1"//deductible=-1(unknown)
 						|| table.Rows[i][6].ToString()=="0"//deductible=0
@@ -2296,12 +2296,12 @@ namespace OpenDental{
 					else {
 						command+="'1')";//TimePeriod=ServiceYear
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Convert remaining InsPlan fields to benefits-------------------------------------------------------------
 				command="SELECT PlanNum,AnnualMax,Deductible,FloToAge,MissToothExcl,MajorWait,OrthoMax,RenewMonth "
 					+"FROM insplan";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					//AnnualMax
 					if(PIn.PDouble(table.Rows[i][1].ToString())>0) {//if there is an annual max
@@ -2319,7 +2319,7 @@ namespace OpenDental{
 						else {
 							command+="'"+POut.PInt((int)BenefitTimePeriod.ServiceYear)+"')";
 						}
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//Deductible
 					if(PIn.PDouble(table.Rows[i][2].ToString())>-1) {//if there is a deductible
@@ -2337,7 +2337,7 @@ namespace OpenDental{
 						else {
 							command+="'"+POut.PInt((int)BenefitTimePeriod.ServiceYear)+"')";
 						}
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//FloToAge
 					if(CultureInfo.CurrentCulture.Name=="en-US" && table.Rows[i][3].ToString() != "-1") {
@@ -2358,7 +2358,7 @@ namespace OpenDental{
 						}
 						command+="'"+POut.PInt((int)BenefitQuantity.AgeLimit)+"', "
 							+"'"+table.Rows[i][3].ToString()+"')";//this should work for 0,18, and 99
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//MissToothExcl
 					if(table.Rows[i][4].ToString()!="0") {//if it's not unknown
@@ -2366,7 +2366,7 @@ namespace OpenDental{
 							+"PlanNote = CONCAT('Missing tooth exclusion: "+((YN)PIn.PInt(table.Rows[i][4].ToString())).ToString()
 							+". ',PlanNote) "
 							+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//MajorWait
 					if(table.Rows[i][5].ToString()!="0") {//if it's not unknown
@@ -2374,7 +2374,7 @@ namespace OpenDental{
 							+"PlanNote = CONCAT('Wait on major: "+((YN)PIn.PInt(table.Rows[i][5].ToString())).ToString()
 							+". ',PlanNote) "
 							+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//OrthoMax
 					if(PIn.PInt(table.Rows[i][6].ToString())>0) {//not -1 or 0
@@ -2382,7 +2382,7 @@ namespace OpenDental{
 							+"PlanNote = CONCAT('Ortho Max: "+table.Rows[i][6].ToString()
 							+". ',PlanNote) "
 							+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				string[] commands=new string[]
@@ -2402,7 +2402,7 @@ namespace OpenDental{
 					,"UPDATE insplan SET SubscNote=PlanNote"
 					,"UPDATE insplan SET PlanNote=''"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				//Add enhanced Trophy bridge---------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2412,19 +2412,19 @@ namespace OpenDental{
 					+"'"+POut.PString(@"TW.exe")+"', "
 					+"'', "
 					+"'"+POut.PString(@"The storage path is where all images are stored.  For instance \\SERVER\TrophyImages (no trailing \).  Each patient must also have a folder specified in the patient edit window.  For instance S\SmithJohn or whatever the current folder structure is.")+"')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Storage Path', "
 					+"'')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Trophy')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add DentalEye bridge----------------------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2434,96 +2434,96 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\DentalEye\DentalEye.exe")+"', "
 					+"'', "
 					+"'')";
-				programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'DentalEye')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add lab fee fields to Canadian claim form
 				int claimFormNum;
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6'";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					//get rid of the existing dentist fee column.
 					command="DELETE FROM claimformitem WHERE ClaimFormNum='"+POut.PInt(claimFormNum)
 						+"' AND XPos=342 AND FieldName LIKE '%Fee'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//add the lab fee column
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P1Lab',440,394,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P2Lab',440,411,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P3Lab',440,428,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P4Lab',440,445,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P5Lab',440,462,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P6Lab',440,479,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P7Lab',440,496,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P8Lab',440,513,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P9Lab',440,530,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P10Lab',440,547,66,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//add the dentist fee column (fee-lab)
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P1FeeMinusLab',342,394,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P2FeeMinusLab',342,411,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P3FeeMinusLab',342,428,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P4FeeMinusLab',342,445,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P5FeeMinusLab',342,462,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P6FeeMinusLab',342,479,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P7FeeMinusLab',342,496,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P8FeeMinusLab',342,513,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P9FeeMinusLab',342,530,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
 						+POut.PInt(claimFormNum)+",'P10FeeMinusLab',342,547,62,16)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//make dates wider so the year doesn't get cut off
 					command="UPDATE claimformitem SET Width=85,XPos=28 "
 						+"WHERE FieldName LIKE 'P%Date' AND XPos=38 "
 						+"AND ClaimFormNum="+POut.PInt(claimFormNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//add chart of accounts-----------------------------------------------------------------
 				commands=new string[]
@@ -2542,9 +2542,9 @@ namespace OpenDental{
 					,"INSERT INTO account (Description,AcctType) VALUES('Services',4)"
 					,"INSERT INTO account (Description,AcctType) VALUES('Wages',4)"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="UPDATE preference SET ValueString = '4.0.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_2();
 		}
@@ -2552,31 +2552,31 @@ namespace OpenDental{
 		private void To4_0_2() {
 			if(FromVersion < new Version("4.0.2.0")) {
 				string command="ALTER TABLE account ADD Inactive tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//add accounting permission to each admin group------------------------------------------------------
 				command="SELECT UserGroupNum FROM grouppermission "
 					+"WHERE PermType="+POut.PInt((int)Permissions.SecurityAdmin);
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
 					groupNum=PIn.PInt(table.Rows[i][0].ToString());
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) "
 						+"VALUES("+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.AccountingCreate)+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) "
 						+"VALUES("+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.AccountingEdit)+")";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//fix the planned appointment 'done' feature--------------------------------------------------------------
 				command="ALTER TABLE patient ADD PlannedIsDone tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE patient SET PlannedIsDone=1 WHERE NextAptNum = -1";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//these two lines were previously in place in version 3.9.18.  Calling them again doesn't hurt
 				command="ALTER TABLE patient CHANGE NextAptNum NextAptNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_3();
 		}
@@ -2584,22 +2584,22 @@ namespace OpenDental{
 		private void To4_0_3() {
 			if(FromVersion < new Version("4.0.3.0")) {
 				string command="ALTER TABLE account ADD AccountColor int NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE account SET AccountColor = -1";//white
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('AccountingDepositAccounts','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('AccountingIncomeAccount','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//two of these were simply deleted in the very next upgrade.
 				//command="INSERT INTO preference VALUES ('AccountingCashDepAccounts','')";
-				//General.NonQ(command);
+				//Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('AccountingCashIncomeAccount','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//command="INSERT INTO preference VALUES ('AccountingCashPaymentType','')";
-				//General.NonQ(command);
+				//Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_4();
 		}
@@ -2612,15 +2612,15 @@ namespace OpenDental{
 					PickList varchar(255) NOT NULL,
 					PRIMARY KEY (AccountingAutoPayNum)
 					) DEFAULT CHARSET=utf8;";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM preference WHERE PrefName='AccountingCashDepAccounts'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM preference WHERE PrefName='AccountingCashPaymentType'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE transaction ADD PayNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_5();
 		}
@@ -2636,11 +2636,11 @@ namespace OpenDental{
 					IsLocked tinyint unsigned NOT NULL,
 					PRIMARY KEY (ReconcileNum)
 					) DEFAULT CHARSET=utf8;";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE journalentry ADD ReconcileNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_9();
 		}
@@ -2648,9 +2648,9 @@ namespace OpenDental{
 		private void To4_0_9() {
 			if(FromVersion < new Version("4.0.9.0")) {
 				string command="INSERT INTO preference VALUES ('SkipComputeAgingInAccount','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_10();
 		}
@@ -2666,7 +2666,7 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'No path is needed.  No buttons are available.  Uses the standalone Trojan program.')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add IAP bridge----------------------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -2676,15 +2676,15 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'No path is needed.  No buttons are available.')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//fix referrals
 				command="ALTER TABLE refattach CHANGE ReferralNum ReferralNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//disable medical claims
 				command="INSERT INTO preference VALUES ('MedicalEclaimsEnabled','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.10.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_11();
 		}
@@ -2697,13 +2697,13 @@ namespace OpenDental{
 					WHERE benefit.PlanNum=insplan.PlanNum
 					AND (PlanType='f' OR PlanType='c')
 					AND BenefitType=1";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++){
 					command="DELETE FROM benefit WHERE BenefitNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.0.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_0_13();
 		}
@@ -2712,11 +2712,11 @@ namespace OpenDental{
 			if(FromVersion < new Version("4.0.13.0")) {
 				//Add sales tax fields. Even though we will not use them yet, some customers might make user of them. 
 				string command="INSERT INTO preference VALUES ('SalesTaxPercentage','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE procedurecode ADD IsTaxed tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.0.13.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_1_0();
 		}
@@ -2726,80 +2726,80 @@ namespace OpenDental{
 				string command;
 				if(CultureInfo.CurrentCulture.Name=="en-US"){
 					//Convert CovCats to new names and ranges----------------------------------------------------------------------
-					//General
+					//Db
 					command="UPDATE covcat SET EbenefitCat=1 WHERE Description='General'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Hide all previous covcats.
 					command="UPDATE covcat SET IsHidden=1 WHERE Description != 'General'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Create all the new cateories from scratch
 					int covCatNum;
 					//Diagnostic
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Diagnostic','100','"
 						+POut.PInt((int)EbenefitCategory.Diagnostic)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0000','D0999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//RoutinePreventive
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Preventive','100','"
 						+POut.PInt((int)EbenefitCategory.RoutinePreventive)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D1000','D1999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Restorative
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Restorative','80','"
 						+POut.PInt((int)EbenefitCategory.Restorative)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D2000','D2999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Endo
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Endo','80','"
 						+POut.PInt((int)EbenefitCategory.Endodontics)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D3000','D3999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Perio
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Perio','80','"
 						+POut.PInt((int)EbenefitCategory.Periodontics)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D4000','D4999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//OralSurgery
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Oral Surgery','80','"
 						+POut.PInt((int)EbenefitCategory.OralSurgery)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D7000','D7999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Crowns
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Crowns','50','"
 						+POut.PInt((int)EbenefitCategory.Crowns)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D2700','D2799')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Prosth
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Prosth','50','"
 						+POut.PInt((int)EbenefitCategory.Prosthodontics)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D5000','D5899')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D6200','D6899')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//MaxProsth
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Maxillofacial Prosth','-1','"
 						+POut.PInt((int)EbenefitCategory.MaxillofacialProsth)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D5900','D5999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Accident
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Accident','-1','"
 						+POut.PInt((int)EbenefitCategory.Accident)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					//Ortho
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Ortho','-1','"
 						+POut.PInt((int)EbenefitCategory.Orthodontics)+"')";
-					covCatNum=General.NonQ(command,true);
+					covCatNum=Db.NonQ(command,true);
 					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D8000','D8999')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Then, order everything
 					command="SELECT * FROM covcat ORDER BY "
 						+"EbenefitCat != "+POut.PInt((int)EbenefitCategory.General)
@@ -2814,27 +2814,27 @@ namespace OpenDental{
 						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.MaxillofacialProsth)
 						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Accident)
 						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Orthodontics);
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++){
 						command="UPDATE covcat SET CovOrder="+POut.PInt(i)+" WHERE CovCatNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				command="ALTER TABLE fee ADD INDEX indexADACode (ADACode)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE fee ADD INDEX indexFeeSched (FeeSched)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//ProcButton categories---------------------------------------------------------------------------------
 				command="ALTER TABLE procbutton ADD Category smallint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO definition (category,itemorder,itemname) VALUES(26,0,'All')";
-				int defNum=General.NonQ(command,true);
+				int defNum=Db.NonQ(command,true);
 				command="UPDATE procbutton SET Category="+POut.PInt(defNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE procbutton ADD ButtonImage text NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.1.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_1_2();
 		}
@@ -2843,13 +2843,13 @@ namespace OpenDental{
 			if(FromVersion < new Version("4.1.2.0")) {
 				string command;
 				command="DELETE FROM preference WHERE PrefName= 'SkipComputeAgingInAccount'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('StatementShowReturnAddress','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('ShowIDinTitleBar','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.1.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_2_0();
 		}
@@ -2859,9 +2859,9 @@ namespace OpenDental{
 				string command;
 				//string[] commands;//=new string[] {
 				command="ALTER TABLE procedurecode ADD PaintType tinyint NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="SELECT * FROM definition WHERE Category=22 ORDER BY ItemOrder";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				Color cDark;
 				Color cLight;
 				for(int i=0;i<table.Rows.Count;i++){
@@ -2870,50 +2870,50 @@ namespace OpenDental{
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(22,"
 						+POut.PInt(i+5)+",'"+POut.PString(PIn.PString(table.Rows[i][3].ToString())+" (light)")
 						+"','" +POut.PInt(cLight.ToArgb())+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Conversions to painting type are listed in order previously displayed.
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.Extraction)+" WHERE GTypeNum=1";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.Implant)+" WHERE GTypeNum=10";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.RCT)+" WHERE GTypeNum=4";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.PostBU)+" WHERE GTypeNum=5";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingDark)+" WHERE GTypeNum=2";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=3";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=19";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=11";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownDark)+" WHERE GTypeNum=6";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=7";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=20";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=9";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeDark)+" WHERE GTypeNum=12";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=13";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=21";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=14";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//veneer not painted
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureDark)+" WHERE GTypeNum=24";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=25";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=26";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=27";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE toothinitial(
 					ToothInitialNum mediumint unsigned NOT NULL auto_increment,
 					PatNum mediumint unsigned NOT NULL,
@@ -2922,22 +2922,22 @@ namespace OpenDental{
           Movement float NOT NULL,
 					PRIMARY KEY (ToothInitialNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//convert all previous extractions to missing teeth.
 				command="SELECT PatNum,ToothNum FROM procedurelog,procedurecode "
 					+"WHERE procedurelog.ADACode=procedurecode.ADACode "
 					+"AND procedurecode.RemoveTooth=1 "
 					+"AND (procedurelog.ProcStatus=2 OR procedurelog.ProcStatus=3 OR procedurelog.ProcStatus=4)";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO toothinitial(PatNum,ToothNum,InitialType) VALUES("
 						+table.Rows[i][0].ToString()+",'"
 						+POut.PString(PIn.PString(table.Rows[i][1].ToString()))
 						+"',0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.2.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_2_1();
 		}
@@ -2945,7 +2945,7 @@ namespace OpenDental{
 		private void To4_2_1() {
 			if(FromVersion < new Version("4.2.1.0")) {
 				string command="SELECT PatNum,PrimaryTeeth FROM patient WHERE PrimaryTeeth != ''";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string[] priTeeth;
 				for(int i=0;i<table.Rows.Count;i++){
 					priTeeth=(PIn.PString(table.Rows[i][1].ToString())).Split(new char[] {','});
@@ -2956,11 +2956,11 @@ namespace OpenDental{
 						command="INSERT INTO toothinitial (PatNum,ToothNum,InitialType) VALUES("
 							+table.Rows[i][0].ToString()
 							+",'"+POut.PString(priTeeth[t])+"',2)";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				command="UPDATE preference SET ValueString = '4.2.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_2_8();
 		}
@@ -2968,9 +2968,9 @@ namespace OpenDental{
 		private void To4_2_8() {
 			if(FromVersion < new Version("4.2.8.0")) {
 				string command="UPDATE procedurecode SET PaintType=13, TreatArea=2 WHERE ADACode='D1351'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.2.8.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_2_9();
 		}
@@ -2987,19 +2987,19 @@ namespace OpenDental{
 					+"'"+POut.PString(@"fp32")+"', "
 					+"'', "
 					+"'No command line is needed.')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Florida Probe')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Add Dr Ceph bridge----------------------------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -3009,21 +3009,21 @@ namespace OpenDental{
 					+"'', "
 					+"'', "
 					+"'No path or command line is needed.')";
-				programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Dr Ceph')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.2.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_2_10();
 		}
@@ -3031,12 +3031,12 @@ namespace OpenDental{
 		private void To4_2_10() {
 			if(FromVersion < new Version("4.2.10.0")) {
 				string command="ALTER TABLE procedurecode ADD GraphicColor int NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,6,"
 						+"'CommLog',-65536)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.2.10.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_3_0();
 		}
@@ -3054,15 +3054,15 @@ namespace OpenDental{
 					+"'"+POut.PString(@"https://secure.newpatientform.com/ODXNewForms.aspx?un=[username]&pw=[password]")+"', "
 					+"'', "
 					+"'This function automatically downloads and imports new patient forms that have been completed online.  The button only works from the Images module.')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ImagesModule).ToString()+"', "
 					+"'NewPatientForm')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.3.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_3_3();
 		}
@@ -3070,7 +3070,7 @@ namespace OpenDental{
 		private void To4_3_3() {
 			if(FromVersion < new Version("4.3.3.0")) {
 				string command="INSERT INTO preference VALUES ('ReportFolderName','Reports')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				string imagePath=PrefC.GetString("DocPath");
 				string reportDir=ODFileUtils.CombinePaths(imagePath,"Reports");
 				if(!Directory.Exists(reportDir)) {
@@ -3079,7 +3079,7 @@ namespace OpenDental{
 					}
 				}
 				command="UPDATE preference SET ValueString = '4.3.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_3_4();
 		}
@@ -3088,7 +3088,7 @@ namespace OpenDental{
 			if(FromVersion < new Version("4.3.4.0")) {
 				//get rid of any leading ? in quickpastenote
 				string command="SELECT QuickPasteNoteNum,Abbreviation FROM quickpastenote";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				string note;
 				for(int i=0;i<table.Rows.Count;i++) {
 					note=PIn.PString(table.Rows[i][1].ToString());
@@ -3096,11 +3096,11 @@ namespace OpenDental{
 						note=note.Replace("?","");
 						command="UPDATE quickpastenote SET Abbreviation='"+POut.PString(note)+"' "
 							+"WHERE QuickPasteNoteNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				}
 				command="UPDATE preference SET ValueString = '4.3.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_4_0();
 		}
@@ -3118,19 +3118,19 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\Program Files\PerioPal\PerioPal.exe")+"', "
 					+"'', "
 					+"'')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'PerioPal')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//add MediaDent bridge
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -3140,28 +3140,28 @@ namespace OpenDental{
 					+"'mediadent.exe', "
 					+"'', "
 					+"'"+POut.PString(@"Example of image folder: C:\Mediadent\patients\")+"')";
-				programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Image Folder', "
 					+"'"+POut.PString(@"C:\Mediadent\patients\")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'MediaDent')";
-				General.NonQ(command);
+				Db.NonQ(command);
 
 				command="UPDATE preference SET ValueString = '4.4.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_4_9();
 		}
@@ -3169,13 +3169,13 @@ namespace OpenDental{
 		private void To4_4_9() {
 			if(FromVersion < new Version("4.4.9.0")) {
 				string command="INSERT INTO preference VALUES ('EasyHideHospitals','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD Ward varchar(255) NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE schedule CHANGE ScheduleNum ScheduleNum mediumint unsigned NOT NULL auto_increment";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.4.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_4_10();
 		}
@@ -3188,9 +3188,9 @@ namespace OpenDental{
 					+"SenderID,Password,ResponsePath,CommBridge,ClientProgram) "
 					+@"VALUES('EMS','C:\\EMS\\Exports\\','0','','1','EMS','','',"
 					+@"'','0','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.4.10.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_5_0();
 		}
@@ -3208,9 +3208,9 @@ namespace OpenDental{
 					"ALTER TABLE procedurelog DROP HideGraphical",
 					"ALTER TABLE procedurelog CHANGE NextAptNum PlannedAptNum  mediumint unsigned NOT NULL"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="DROP TABLE IF EXISTS procnote";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE procnote(
 					ProcNoteNum mediumint unsigned NOT NULL auto_increment,
 					PatNum mediumint unsigned NOT NULL,
@@ -3223,34 +3223,34 @@ namespace OpenDental{
 					INDEX (ProcNum),
 					INDEX (UserNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//All previous notes will not have a user assigned.
 				command=@"INSERT INTO procnote (PatNum,ProcNum,EntryDateTime,Note)
 					SELECT PatNum,ProcNum,DateLocked,ProcNote
 					FROM procedurelog
 					WHERE ProcNote != ''";
-				General.NonQ(command);
+				Db.NonQ(command);
 				commands=new string[]
 				{
 					"ALTER TABLE procedurelog DROP DateLocked",
 					"ALTER TABLE procedurelog DROP ProcNote"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				commands=new string[]
 				{
 					"ALTER TABLE procnote ADD SigIsTopaz tinyint unsigned NOT NULL",
 					"ALTER TABLE procnote ADD Signature text NOT NULL"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				commands=new string[]
 				{
 					"INSERT INTO preference VALUES ('EmailUsername','')",
 					"INSERT INTO preference VALUES ('EmailPassword','')",
 					"INSERT INTO preference VALUES ('EmailPort','587')"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="DROP TABLE IF EXISTS emailattach";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE emailattach(
 					EmailAttachNum mediumint unsigned NOT NULL auto_increment,
 					EmailMessageNum mediumint unsigned NOT NULL,
@@ -3259,7 +3259,7 @@ namespace OpenDental{
 					PRIMARY KEY (EmailAttachNum),
 					INDEX (EmailMessageNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//We never change previous conversion scripts to support new features.  This code gets skipped on Linux.
 				if(!Directory.Exists(PrefC.GetString("DocPath")+"EmailAttachments")) {
 					if(Directory.Exists(PrefC.GetString("DocPath"))) {
@@ -3280,9 +3280,9 @@ namespace OpenDental{
 					"INSERT INTO preference VALUES ('BankAddress','')",
 					"ALTER TABLE procedurelog CHANGE ProcDate ProcDate datetime NOT NULL default '0001-01-01 00:00:00'"
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="UPDATE preference SET ValueString = '4.5.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_5_1();
 		}
@@ -3290,11 +3290,11 @@ namespace OpenDental{
 		private void To4_5_1() {
 			if(FromVersion<new Version("4.5.1.0")) {
 				string command="UPDATE procedurelog SET AptNum=0 WHERE ProcStatus=6";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString='' WHERE PrefName='BillingSelectBillingTypes'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.5.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_5_14();
 		}
@@ -3310,29 +3310,29 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\Program Files\DxS\bin\XDR.exe")+"', "
 					+"'', "
 					+"'')";
-				int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'InfoFile path', "
 					+"'"+POut.PString(@"C:\Program Files\Dxs\bin\infofile.txt")+"')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'XDR')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD FilingCode tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.5.14.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_5_21();
 		}
@@ -3341,15 +3341,15 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.5.21.0")) {
 				//All 4 of these fields added on 12/21/06:
 				string command="ALTER TABLE patient ADD PreferConfirmMethod tinyint unsigned NOT NULL AFTER Ward";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD SchedBeforeTime time AFTER PreferConfirmMethod";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD SchedAfterTime time AFTER SchedBeforeTime";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD SchedDayOfWeek tinyint unsigned NOT NULL AFTER SchedAfterTime";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.5.21.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_0();
 		}
@@ -3358,7 +3358,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.6.0.0")) {
 				string command;
 				command="DROP TABLE IF EXISTS formpat";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE formpat(
 					FormPatNum mediumint unsigned NOT NULL auto_increment,
 					PatNum mediumint unsigned NOT NULL,
@@ -3366,31 +3366,31 @@ namespace OpenDental{
 					PRIMARY KEY (FormPatNum),
 					INDEX (PatNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE emailmessage ADD SentOrReceived tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE emailmessage SET SentOrReceived = 1 WHERE YEAR(MsgDateTime) > '1900'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE emailmessage SET MsgDateTime = NOW() WHERE YEAR(MsgDateTime) < '1900'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DELETE FROM commlog WHERE EmailMessageNum > 0";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE commlog DROP EmailMessageNum";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE question ADD FormPatNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="SELECT DISTINCT PatNum FROM question";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				int formPatNum;
 				for(int i=0;i<table.Rows.Count;i++){
 					command="INSERT INTO formpat (PatNum,FormDateTime) VALUES("
 						+"'"+table.Rows[i][0].ToString()+"', NOW())";
-					formPatNum=General.NonQ(command,true);
+					formPatNum=Db.NonQ(command,true);
 					command="UPDATE question SET FormPatNum="+POut.PInt(formPatNum)+" WHERE PatNum="+table.Rows[i][0].ToString();
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="DROP TABLE IF EXISTS etrans";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE etrans(
 					EtransNum mediumint unsigned NOT NULL auto_increment,
 					DateTimeTrans datetime NOT NULL default '0001-01-01',
@@ -3408,9 +3408,9 @@ namespace OpenDental{
 					INDEX (CarrierNum),
 					INDEX (CarrierNum2)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DROP TABLE IF EXISTS canadianclaim";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE canadianclaim(
 					ClaimNum mediumint unsigned NOT NULL,
 					MaterialsForwarded char(5) NOT NULL,
@@ -3428,19 +3428,19 @@ namespace OpenDental{
 					PayeeCode tinyint unsigned NOT NULL,
 					PRIMARY KEY (ClaimNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE carrier ADD IsCDA tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE carrier ADD IsPMP tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE provider ADD CanadianOfficeNum varchar(100) NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('LanguagesUsedByPatients','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD Language varchar(100) NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="DROP TABLE IF EXISTS canadianextract";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE canadianextract(
 					CanadianExtractNum mediumint unsigned NOT NULL auto_increment,
 					ClaimNum mediumint unsigned NOT NULL,
@@ -3449,34 +3449,34 @@ namespace OpenDental{
 					PRIMARY KEY (CanadianExtractNum),
 					INDEX (ClaimNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD DentaideCardSequence tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added 11/30/06 after r42.
 				command="ALTER TABLE etrans ADD MessageText text NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added 12/2/06 after r46:
 				command="ALTER TABLE procedurelog DROP LabFee";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE procedurelog ADD ProcNumLab mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added 12/8/06 after r57:
 				command="ALTER TABLE procedurecode ADD IsCanadianLab tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added 12/21/06 after r71:
 				//Also, see the previous method at line 3450, where 4 more fields were added.
 				command="ALTER TABLE claimproc ADD LineNumber tinyint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added 12/22/06 after r72:
 				command="DROP TABLE IF EXISTS canadiannetwork";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command=@"CREATE TABLE canadiannetwork(
 					CanadianNetworkNum mediumint unsigned NOT NULL auto_increment,
 					Abbrev varchar(20) NOT NULL,
 					Descript varchar(255) NOT NULL,
 					PRIMARY KEY (CanadianNetworkNum)
 					) DEFAULT CHARSET=utf8";
-				General.NonQ(command);
+				Db.NonQ(command);
 				string[] commands=new string[]
 				{
 					"INSERT INTO canadiannetwork VALUES (1,'AHI','BC Emergis (formerly Assure Health Inc)')",
@@ -3486,9 +3486,9 @@ namespace OpenDental{
 					"INSERT INTO canadiannetwork VALUES (5,'MBC','Manitoba Blue Cross')",
 					"INSERT INTO canadiannetwork VALUES (6,'PBC','Pacific Blue Cross')"					
 				};
-				General.NonQ(commands);
+				Db.NonQ(commands);
 				command="UPDATE preference SET ValueString = '4.6.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_2();
 		}
@@ -3497,17 +3497,17 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.6.2.0")) {
 				string command;
 				command="ALTER TABLE carrier ADD CDAnetVersion varchar(100) NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE carrier ADD CanadianNetworkNum mediumint unsigned NOT NULL";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//CDAnet clearinghouse------------------------------------------------------------------------------------
 				command="INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,ReceiverID,"
 					+"SenderID,Password,ResponsePath,CommBridge,ClientProgram) "
 					+@"VALUES('CDAnet','C:\\CCD\\','0','','3','','','',"
 					+@"'','9','C:\\CCD\\CCD32.exe')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_6();
 		}
@@ -3515,11 +3515,11 @@ namespace OpenDental{
 		private void To4_6_6() {
 			if(FromVersion<new Version("4.6.6.0")) {
 				string command="DROP TABLE IF EXISTS userod";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE user RENAME TO userod";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.6.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_9();
 		}
@@ -3860,13 +3860,13 @@ namespace OpenDental{
 		private void To4_6_9() {
 			if(FromVersion<new Version("4.6.9.0")) {
 				string command="ALTER TABLE commlog CHANGE Mode Mode_ tinyint(3) unsigned NOT NULL default '0'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD PreferContactMethod tinyint unsigned NOT NULL AFTER PreferConfirmMethod";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD PreferRecallMethod tinyint unsigned NOT NULL AFTER PreferContactMethod";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_11();
 		}
@@ -3874,9 +3874,9 @@ namespace OpenDental{
 		private void To4_6_11() {
 			if(FromVersion<new Version("4.6.11.0")) {
 				string command="INSERT INTO preference VALUES ('OracleInsertId','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_12();
 		}
@@ -3891,15 +3891,15 @@ namespace OpenDental{
 					if(removeNotNullFieldCommands[i+2].ToUpper()!="TEXT") {//For all fields which are not of text type, define default.
 						command+=" default ''";
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//added after r49
 				command="INSERT INTO preference VALUES ('DefaultClaimForm','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE patient ADD AdmitDate date NOT NULL default '0001-01-01'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.12.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_13();
 		}
@@ -3909,9 +3909,9 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.6.13.0")) {
 				string command="";
 				command="INSERT INTO preference VALUES ('RegistrationNumberClaim','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.6.13.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_19();
 		}
@@ -3928,13 +3928,13 @@ namespace OpenDental{
 					+ "'" + POut.PString(@"\Juliew\mj32.exe") + "', "
 					+ "' C /ALINK', "
 					+ "'" + POut.PString(@"Typical file path with parameters is C:\Juliew\mj32.exe C /ALINK.  Use C /LINK for QV version < 3.15. Letter C refers to drive.") + "')";
-				int programNum =General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum =Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+ "VALUES ("
 					+ "'" + POut.PInt(programNum) + "', "
 					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
 					+ "'Owandy')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Vipersoft bridge:
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+") VALUES("
@@ -3944,29 +3944,29 @@ namespace OpenDental{
 					+"'"+POut.PString(@"C:\Program Files\Vipersoft\Vipersoft.exe")+"', "
 					+"'', "
 					+"'')";
-				programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+				programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+"VALUES ("
 					+"'"+programNum.ToString()+"', "
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Vipersoft')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE userod ADD ClinicNum mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else{
 					command="ALTER TABLE userod ADD ClinicNum int";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.6.19.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_6_22();
 		}
@@ -3977,10 +3977,10 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE sigelementdef CHANGE Sound Sound mediumtext";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.6.22.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_7_1();
 		}
@@ -3991,39 +3991,39 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE document ADD CropX mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropY mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropW mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropH mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD WindowingMin mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD WindowingMax mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else{
 					command="ALTER TABLE document ADD CropX int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropY int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropW int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD CropH int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD WindowingMin int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD WindowingMax int";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="INSERT INTO preference VALUES ('ImageWindowingMin','64')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('ImageWindowingMax','192')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="DROP TABLE IF EXISTS mountdef";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mountdef(
 						MountDefNum int NOT NULL auto_increment,
 						Description varchar(255),
@@ -4045,10 +4045,10 @@ namespace OpenDental{
 						PRIMARY KEY (MountDefNum)
 						)";
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS mountitemdef";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mountitemdef(
 						MountItemDefNum int NOT NULL auto_increment,
 						MountDefNum int NOT NULL,
@@ -4070,9 +4070,9 @@ namespace OpenDental{
 						PRIMARY KEY (MountItemDefNum)
 						)";
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('XRayExposureLevel','1')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Dxis Bridge---------------------------------------------------------------------------
 				command = "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 					+ ") VALUES("
@@ -4082,42 +4082,42 @@ namespace OpenDental{
 					+ "'" + POut.PString(@"C:\Dxis\Dxis.exe") + "', "
 					+ "'', "
 					+ "'" + POut.PString(@"") + "')";
-				int programNum =General.NonQ(command,true);//we now have a ProgramNum to work with
+				int programNum =Db.NonQ(command,true);//we now have a ProgramNum to work with
 				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+ "VALUES ("
 					+ "'" + POut.PInt(programNum) + "', "
 					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
 					+ "'DXIS')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r25:
 				command="INSERT INTO preference VALUES ('ToothChartLowerQuality','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r61
 				command="INSERT INTO preference VALUES ('AtoZfolderNotRequired','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r113
 				command = "INSERT INTO preference VALUES('SolidBlockouts','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r129
 				command="ALTER TABLE procedurelog ADD CPTModifier varchar(255)";//valid for Oracle, too.
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="ALTER TABLE procedurelog ADD RevenueCode varchar(255)";//valid for Oracle, too.
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r130
 				command="INSERT INTO preference VALUES ('AgingCalculatedMonthlyInsteadOfDaily','0')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r141:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog ADD BillingTypeOne smallint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD BillingTypeTwo smallint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else{//Oracle
 					command="ALTER TABLE procedurelog ADD BillingTypeOne int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD BillingTypeTwo int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Added after r146:
 				//Tesia clearinghouse------------------------------------
@@ -4125,9 +4125,9 @@ namespace OpenDental{
 					SenderID,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort) 
 					VALUES('Tesia','C:\\Tesia\\Exports\\','0','','1','Tesia','','',
 					'','0','','0','0')";//Valid for Oracle too.
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.7.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_7_4();
 		}
@@ -4137,9 +4137,9 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.7.4.0")) {
 				string command="";
 				command="UPDATE clearinghouse SET ReceiverID='113504607' WHERE ReceiverID='Tesia'";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.7.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_8_1();
 		}
@@ -4152,56 +4152,56 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ISA05='30' WHERE ReceiverID='660610220' OR ReceiverID='AOS'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ISA05='ZZ' WHERE ReceiverID!='660610220' AND ReceiverID!='AOS'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
-					string defProvSSN=General.GetTable(command).Rows[0][0].ToString().Replace("-","");
+					string defProvSSN=Db.GetTable(command).Rows[0][0].ToString().Replace("-","");
 					command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
 						+"WHERE ReceiverID='660610220' OR ReceiverID='AOS' OR ReceiverID='113504607'";//Inmediata,AOS, or Tesia
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD ISA07 varchar(255) AFTER SenderTIN";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ISA07='30' WHERE ReceiverID='330989922' OR ReceiverID='660610220' OR ReceiverID='AOS'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse CHANGE ReceiverID ISA08 varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD ISA15 varchar(255) AFTER ISA08";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ISA15='P'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse DROP SenderID";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD SenderName varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD SenderTelephone varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clearinghouse ADD GS03 varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
-					string AOSnumber=General.GetTable(command).Rows[0][0].ToString();
+					string AOSnumber=Db.GetTable(command).Rows[0][0].ToString();
 					command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefC.GetString("PracticeTitle"))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefC.GetString("PracticePhone"))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET GS03=ISA08";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}else{//Oracle
 					//Recreate clearinghouse table from scratch. The data in this table is not likely to be important, and 
 					//can always be added again through the program. Recreating the table is easier than trying to mimic the
 					//above dozen or so mysql statements.
 					command="DROP TABLE clearinghouse PURGE";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE TABLE clearinghouse("
 						+"ClearinghouseNum number(8,0) NOT NULL,"
 						+"Description varchar(255) default '',"
@@ -4226,12 +4226,12 @@ namespace OpenDental{
 						+"GS03 varchar(255) default NULL"
 						+",PRIMARY KEY (ClearinghouseNum)"
 						+");";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//added after r167:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS laboratory";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE laboratory(
 						LaboratoryNum mediumint NOT NULL auto_increment,
 						Description varchar(255),
@@ -4250,11 +4250,11 @@ namespace OpenDental{
 						PRIMARY KEY(LaboratoryNum)
 						)";
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				//added after r168:
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS labcase";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE labcase(
 						LabCaseNum mediumint NOT NULL auto_increment,
 						PatNum mediumint NOT NULL,
@@ -4283,15 +4283,15 @@ namespace OpenDental{
 						PRIMARY KEY(LabCaseNum)
 						)";
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				//Added after r180
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE document CHANGE WithPat PatNum mediumint(8) unsigned NOT NULL default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS mount";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mount(
 						MountNum int NOT NULL auto_increment,
 						PatNum mediumint NOT NULL,
@@ -4301,9 +4301,9 @@ namespace OpenDental{
 						ImgType tinyint(3) unsigned NOT NULL default '0',
 						PRIMARY KEY (MountNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS mountitem";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mountitem(
 						MountItemNum int NOT NULL auto_increment,
 						MountNum int NOT NULL,
@@ -4311,12 +4311,12 @@ namespace OpenDental{
 						Ypos mediumint(9) NOT NULL,
 						PRIMARY KEY (MountItemNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}else {//Oracle
 					command="ALTER TABLE document RENAME COLUMN WithPat TO PatNum";//Oracle fails here.
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE document ADD (MountItemNum int NOT NULL)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mount(
 						MountNum int NOT NULL,
 						PatNum number(5,0) NOT NULL,
@@ -4326,7 +4326,7 @@ namespace OpenDental{
 						ImgType number(3,0) default '0' NOT NULL,
 						PRIMARY KEY (MountNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE mountitem(
 						MountItemNum int NOT NULL,
 						MountNum int NOT NULL,
@@ -4334,38 +4334,38 @@ namespace OpenDental{
 						Ypos number(9,0) NOT NULL,
 						PRIMARY KEY (MountItemNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				//Added after r186
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS proclicense";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE proclicense(
 						ProcLicenseNum mediumint(5) NOT NULL auto_increment,
 						ADACode varchar(15) default '',
 						Descript varchar(255) default '',
 						PRIMARY KEY (ProcLicenseNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}else {//Oracle
 					command="ALTER TABLE procedurecode ADD (PreExisting number(1,0) default '0' NOT NULL)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE proclicense(
 						ProcLicenseNum number(5,0) NOT NULL,
 						ADACode varchar(15) default '',
 						Descript varchar(255) default '',
 						PRIMARY KEY (ProcLicenseNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE procedurecode SET PreExisting =1";//to indicate which procedurecodes existed before this version.
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="INSERT INTO preference VALUES ('ADAComplianceDateTime','')";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.8.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_8_3();
 		}
@@ -4375,11 +4375,11 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.8.3.0")) {
 				//preferences should not be deleted since it causes bugs when upgrading.
 				//string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
-				//General.NonQ(command);
+				//Db.NonQ(command);
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS computerpref";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL auto_increment,
 						ComputerName varchar(64) NOT NULL,
@@ -4396,9 +4396,9 @@ namespace OpenDental{
 						PRIMARY KEY (ComputerPrefNum)
 						)";
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '4.8.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_8_8();
 		}
@@ -4409,16 +4409,16 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE quickpastenote CHANGE QuickPasteCatNum QuickPasteCatNum mediumint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//Oracle
 					//Cannot specify 'NOT NULL' when already not null. Additionally, not specifying 'NOT NULL' leaves
 					//the column as not null, so the following Oracle statement is equivalent the the above MySQL.
 					command="ALTER TABLE quickpastenote MODIFY (QuickPasteCatNum number(5,0))";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.8.8.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_8_9();
 		}
@@ -4679,10 +4679,10 @@ namespace OpenDental{
 						//sequence/trigger pairs for those which are auto_incement, we do not need to worry about the auto_increment
 						//flag here (columns[i+2]).
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.8.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_9_1();
 		}
@@ -4694,97 +4694,97 @@ namespace OpenDental{
 				DataTable table;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD CodeNum int NOT NULL FIRST";//this column will be the new primary key
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum), CHANGE CodeNum CodeNum int NOT NULL auto_increment";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode CHANGE ADACode ProcCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD INDEX (ProcCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//this is written in such a way as to be compatible with Oracle.
 					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r215
 					command="UPDATE procedurelog SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE fee ADD CodeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE fee SET fee.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=fee.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE fee SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r216
 					command="ALTER TABLE appointmentrule CHANGE ADACodeStart CodeStart varchar(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointmentrule CHANGE ADACodeEnd CodeEnd varchar(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r217
 					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autocodeitem ADD CodeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autocodeitem SET autocodeitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=autocodeitem.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autocodeitem SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r218
 					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE benefit ADD CodeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET benefit.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=benefit.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM procedurecode WHERE ProcCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET CodeNum=0 WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
 						+"benefit.CodeNum=procedurecode.CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
 						+"procedurelog.CodeNum=procedurecode.CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r219
 					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procbuttonitem ADD CodeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procbuttonitem SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r220
 					command="ALTER TABLE proclicense CHANGE ADACode ProcCode varchar(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proctp CHANGE ADACode ProcCode varchar(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge CHANGE ADACode ProcCode varchar(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r238
 					command="ALTER TABLE labcase ADD ProvNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r240
 					command="ALTER TABLE labcase ADD Instructions text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r243
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,7,"
 						+"'LabCase',-65536)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//commented this "Appointment" option out after r294 and added it back with other related custom colors after r293
 					//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,8,"
 					//	+"'Appointment',-8388480)";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//Added after r244
 					command="DROP TABLE IF EXISTS labturnaround";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE labturnaround(
 					LabTurnaroundNum int NOT NULL auto_increment,
 					LaboratoryNum int NOT NULL,
@@ -4793,7 +4793,7 @@ namespace OpenDental{
 					DaysActual smallint NOT NULL,
 					PRIMARY KEY (LabTurnaroundNum)
 					) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r250
 					int laboratoryNum=0;
 					//Determine the first available primary key number in the database. This is necessary because a sequence/trigger
@@ -4802,13 +4802,13 @@ namespace OpenDental{
 					do {
 						laboratoryNum++;
 						command="SELECT LaboratoryNum FROM laboratory WHERE LaboratoryNum='"+laboratoryNum+"'";
-						table=General.GetTable(command);
+						table=Db.GetTable(command);
 					} while(table.Rows.Count>0);
 					command="INSERT INTO laboratory (LaboratoryNum,Description,Phone,Notes,LabSlip) VALUES('"
 						+laboratoryNum+"','Default Lab','','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT * FROM appointment WHERE Lab != 0";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO labcase (LabCaseNum,PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 							+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
@@ -4839,109 +4839,109 @@ namespace OpenDental{
 						}
 						command+=table.Rows[i]["ProvNum"].ToString()+", "
 							+"'')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//Added after r269
 					command="INSERT INTO preference VALUES('PrintSimpleStatements','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BrokenApptCommLogNotAdjustment','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowNotesInAccount','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PlannedApptTreatedAsRegularAppt','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BoldFamilyAccountBalanceView','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowProgressNotesInsteadofCommLog','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowUrgFinNoteInProgressNotes','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StationaryImage','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StationaryDocument','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r271
 					command="ALTER TABLE schedule ADD EmployeeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r278
 					command="ALTER TABLE procedurelog DROP CPTModifier";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog DROP RevenueCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod1 char(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod2 char(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod3 char(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod4 char(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD RevCode varchar(45)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD UnitCode char(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD UnitQty char(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r283
 					command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//this next one is hard to run manually and can be skipped by developers:
 					command="UPDATE preference Set ValueString= '"+PrefC.GetInt("PracticeDefaultProv").ToString()
 						+"' WHERE PrefName='ScheduleProvUnassigned'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r292
 					command="INSERT INTO preference VALUES('AccountingLockDate','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r294
 					//this first line replaces the one commented out earlier in v4.9
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
 					+"'Appointment Text - Today',-8388480,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,9,'Appointment Background - Today',-886,0)";//yellow
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,10,'Past Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,'Past Appointment Background','-1',0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,12,'Future Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,'Future Appointment Background','-7278960',0)";//green
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,'Broken/Unschd Appt Text','-8388480',0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,'Broken/Unschd Appt Background','-1',0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,16,'Planned Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,'Planned Appointment Background',-1,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r299
 					command="INSERT INTO preference VALUES('FuchsListSelectionColor','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r301
 					//Load ADA2006 claimform (without background)---------------------------------------------------------------------
 					try {
 						int claimFormNum=FormClaimForms.ImportForm("",true,Properties.Resources.ClaimForm2006);
 						if(CultureInfo.CurrentCulture.Name=="en-US") {
 							command="UPDATE preference SET ValueString="+POut.PInt(claimFormNum)+" WHERE PrefName='DefaultClaimForm'";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 						command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)
 							+" WHERE insplan.ClaimFormNum= (SELECT claimform.ClaimFormNum FROM claimform WHERE claimform.UniqueID='OD1')";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)+" WHERE insplan.ClaimFormNum=0";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 						//user will have to do it manually
 					}
 					//added after r303
 					command="INSERT INTO preference VALUES('RegistrationKey','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r304
 					command="INSERT INTO preference VALUES('DistributorKey','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS registrationkey";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE registrationkey(
 						RegistrationKeyNum int NOT NULL auto_increment,
 						PatNum int NOT NULL,
@@ -4949,19 +4949,19 @@ namespace OpenDental{
 						Note varchar(4000),
 						PRIMARY KEY (RegistrationKeyNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r306
 					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					//Here we want to add a new column CodeNum and make it the primary key in the procedurecode table.
 					//However, it appears to be difficult to change a table primary key, so here we create a backup of
 					//the old procedurecode table and recreate the procedure code table, copying in the old data. Also,
 					//we desire the primary key to be the first column, which also appears to be difficult to specify in Oracle.
 					command="ALTER TABLE procedurecode RENAME COLUMN ADACode TO ProcCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode RENAME TO procedurecodeold";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE procedurecode (
 					CodeNum int default '0' NOT NULL,
 					ProcCode varchar2(15) NOT NULL,
@@ -4987,11 +4987,11 @@ namespace OpenDental{
 					PreExisting int default '0' NOT NULL,
 					PRIMARY KEY(CodeNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX ind_procedurecode_ProcCode ON procedurecode (ProcCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT * FROM procedurecodeold";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						//Must specify CodeNum here, because auto-incrementation does not take place until an appropriate trigger
 						//and sequence are created in the database maintenence tool after this database upgrade is completed. Since
@@ -5022,109 +5022,109 @@ namespace OpenDental{
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["LaymanTerm"].ToString()))+"',"
 							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsCanadianLab"].ToString()))+"',"
 							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["PreExisting"].ToString()))+"')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="ALTER TABLE procedurelog ADD CodeNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//this is written in such a way as to be compatible with Oracle.
 					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog RENAME COLUMN ADACode TO OldCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog MODIFY (OldCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r215
 					command="UPDATE procedurelog SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE fee RENAME COLUMN ADACode TO OldCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE fee MODIFY (OldCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE fee ADD CodeNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE fee SET fee.CodeNum=(SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=fee.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE fee SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r216
 					command="ALTER TABLE appointmentrule RENAME COLUMN ADACodeStart TO CodeStart";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointmentrule MODIFY (CodeStart varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointmentrule RENAME COLUMN ADACodeEnd TO CodeEnd";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointmentrule MODIFY (CodeEnd varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r217
 					command="ALTER TABLE autocodeitem RENAME COLUMN ADACode TO OldCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autocodeitem MODIFY (OldCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE autocodeitem ADD CodeNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autocodeitem SET autocodeitem.CodeNum=(SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=autocodeitem.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE autocodeitem SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r218
 					command="ALTER TABLE benefit RENAME COLUMN ADACode TO OldCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE benefit MODIFY (OldCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE benefit ADD CodeNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET benefit.CodeNum=(SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=benefit.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM procedurecode WHERE ProcCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE benefit SET CodeNum=0 WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
 						+"benefit.CodeNum=procedurecode.CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
 						+"procedurelog.CodeNum=procedurecode.CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r219
 					command="ALTER TABLE procbuttonitem RENAME COLUMN ADACode TO OldCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procbuttonitem MODIFY (OldCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM procbuttonitem WHERE EXISTS(SELECT procedurecode.CodeNum FROM procedurecode,procbuttonitem WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procbuttonitem ADD CodeNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum=(SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procbuttonitem SET OldCode=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r220
 					command="ALTER TABLE proclicense RENAME COLUMN ADACode TO ProcCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proclicense MODIFY (ProcCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proctp RENAME COLUMN ADACOde TO ProcCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proctp MODIFY (ProcCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge RENAME COLUMN ADACode TO ProcCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge MODIFY (ProcCode varchar2(15))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r238
 					command="ALTER TABLE labcase ADD ProvNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r240
 					command="ALTER TABLE labcase ADD Instructions varchar2(4000)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r243
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,7,'LabCase',-65536,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//commented this "Appointment" option out after r294 and added it back with other related custom colors after r293
 					//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
 					//	+"'Appointment',-8388480,0)";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//Added after r244
 					command=@"CREATE TABLE labturnaround(
 					LabTurnaroundNum int default '0' NOT NULL,
@@ -5134,13 +5134,13 @@ namespace OpenDental{
 					DaysActual int default '0' NOT NULL,
 					PRIMARY KEY (LabTurnaroundNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r250
 					command="INSERT INTO laboratory (LaboratoryNum,Description,Phone,Notes,LabSlip) "
 						+"VALUES((SELECT CASE WHEN MAX(LaboratoryNum) IS NULL THEN 1 ELSE MAX(LaboratoryNum)+1 END FROM laboratory),'Default Lab','','','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT * FROM appointment WHERE Lab != 0";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO labcase (LabCaseNum,PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 							+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
@@ -5171,116 +5171,116 @@ namespace OpenDental{
 						}
 						command+=table.Rows[i]["ProvNum"].ToString()+", "
 							+"'')";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//Added after r269
 					command="INSERT INTO preference VALUES('PrintSimpleStatements','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BrokenApptCommLogNotAdjustment','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowNotesInAccount','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PlannedApptTreatedAsRegularAppt','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BoldFamilyAccountBalanceView','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowProgressNotesInsteadofCommLog','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ShowUrgFinNoteInProgressNotes','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StationaryImage','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StationaryDocument','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r271
 					command="ALTER TABLE schedule ADD EmployeeNum int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Added after r278
 					command="ALTER TABLE procedurelog DROP COLUMN CPTModifier";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog DROP COLUMN RevenueCode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod1 varchar2(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod2 varchar2(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod3 varchar2(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD CodeMod4 varchar2(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD RevCode varchar2(45)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD UnitCode varchar2(2)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD UnitQty varchar2(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r283
 					command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//this next one is hard to run manually and can be skipped by developers:
 					command="UPDATE preference Set ValueString= '"+PrefC.GetInt("PracticeDefaultProv").ToString()
 						+"' WHERE PrefName='ScheduleProvUnassigned'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r292
 					command="INSERT INTO preference VALUES('AccountingLockDate','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r294
 					//this first line replaces the one commented out earlier in v4.9
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,8,'Appointment Text - Today',-8388480,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,9,'Appointment Background - Today',-886,0)";//yellow
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,10,'Past Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,11,'Past Appointment Background','-1',0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,12,'Future Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,13,'Future Appointment Background','-7278960',0)";//green
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,14,'Broken/Unschd Appt Text','-8388480',0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,15,'Broken/Unschd Appt Background','-1',0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,16,'Planned Appointment Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,17,'Planned Appointment Background',-1,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r299
 					command="INSERT INTO preference VALUES('FuchsListSelectionColor','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r301
 					//Load ADA2006 claimform (without background)---------------------------------------------------------------------
 					try {
 						int claimFormNum=FormClaimForms.ImportForm("",true,Properties.Resources.ClaimForm2006);
 						if(CultureInfo.CurrentCulture.Name=="en-US") {
 							command="UPDATE preference SET ValueString="+POut.PInt(claimFormNum)+" WHERE PrefName='DefaultClaimForm'";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 						command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)
 							+" WHERE insplan.ClaimFormNum= (SELECT claimform.ClaimFormNum FROM claimform WHERE claimform.UniqueID='OD1')";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)+" WHERE insplan.ClaimFormNum=0";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 						//user will have to do it manually
 					}
 					//added after r303
 					command="INSERT INTO preference VALUES('RegistrationKey','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r304
 					command="INSERT INTO preference VALUES('DistributorKey','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE registrationkey(
 						RegistrationKeyNum int default '0' NOT NULL,
 						PatNum int default '0' NOT NULL,
@@ -5288,13 +5288,13 @@ namespace OpenDental{
 						Note varchar2(4000),
 						PRIMARY KEY (RegistrationKeyNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r306
 					command="ALTER TABLE preference MODIFY (ValueString varchar2(4000) default '')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_9_2();
 		}
@@ -5305,15 +5305,15 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog DROP INDEX indexADACode";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD INDEX (CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//Oracle
 					command="CREATE INDEX ind_procedurelog_CodeNum ON procedurelog (CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_9_5();
 		}
@@ -5326,21 +5326,21 @@ namespace OpenDental{
 					//fix labcase.LaboratoryNum orphaned keys.
 					//get target labnum
 					command="SELECT LaboratoryNum FROM laboratory";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					string labnum=table.Rows[0][0].ToString();//just use the first lab we can find.
 					command="SELECT LaboratoryNum FROM labcase WHERE NOT EXISTS (SELECT * FROM laboratory WHERE laboratory.LaboratoryNum=labcase.LaboratoryNum) GROUP BY LaboratoryNum";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="UPDATE labcase SET LaboratoryNum="+labnum+" WHERE LaboratoryNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				} else {//oracle
 					//fix labcase.LaboratoryNum orphaned keys.
 					command="UPDATE labcase SET LaboratoryNum=0 WHERE LaboratoryNum NOT IN (SELECT DISTINCT LaboratoryNum FROM laboratory)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_9_7();
 		}
@@ -5353,12 +5353,12 @@ namespace OpenDental{
 					//customers who's data has been converted to using a varchar 4000 here. After this command is
 					//run, every MySQL user will be using text in the preference value column.
 					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {
 					//Already converted to varchar2 4000 for Oracle. No conversion necessary here.
 				}
 				command="UPDATE preference SET ValueString = '4.9.7.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To4_9_11();
 		}
@@ -5368,13 +5368,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_0();
 		}
@@ -5386,7 +5386,7 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//after r318
 					command="DROP TABLE IF EXISTS reqneeded";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE reqneeded(
 						ReqNeededNum int NOT NULL auto_increment,
 						Descript varchar(255),
@@ -5394,52 +5394,52 @@ namespace OpenDental{
 						SchoolClassNum int NOT NULL,
 						PRIMARY KEY (ReqNeededNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r320
 					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r337,r362,r378
 					command="ALTER TABLE mountitem ADD OrdinalPos int NOT NULL default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mountitem ADD Width int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mountitem ADD Height int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Note text default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Width int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Height int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After 342:
 					command="UPDATE apptviewitem SET ElementDesc='Procs' WHERE ElementDesc='ProcDescript'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After 365: These are for new auto recall appointment functions and film/SRP indicators
 					command="INSERT INTO preference VALUES('RecallPatternChild','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallProceduresChild','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallPatternPerio','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallProceduresPerio','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallPerioTriggerProcs','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoProc','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					if((((Pref)PrefC.HList["RecallBW"]).ValueString)=="") {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
 					} else {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','0')";
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallDisablePerioAlt','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r366
 					command="DROP TABLE IF EXISTS reqstudent";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE reqstudent(
 						ReqStudentNum int NOT NULL auto_increment,
 						ReqNeededNum int NOT NULL,
@@ -5454,40 +5454,40 @@ namespace OpenDental{
 						INDEX (ReqNeededNum),
 						INDEX (ProvNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r381
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,18,'Patient Note Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,19,'Patient Note Background',-1,0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD ClaimForm int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD EFormat int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r393
 					//command="DROP TABLE proclicense";//js-let's keep this around for a while.
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//after 401
 					//-8355712 drk gray, -16777056 drkblue, -16777216 black, -1051718 lt yellow
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,6,"
 					+"'Patient Note Text',-16777216,0)";//black
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,7,"
 					+"'Patient Note Background',-1051718,0)";//post-it note yellow
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,8,"
 					+"'Patient Note - Pt Name',-16777056,0)";//drk blue
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,9,"
 					+"'Completed Pt. Note Text',-16777216,0)";//black
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,10,"
 					+"'Completed Pt. Note Background',-8355712,0)";//drk gray
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,20,'Completed Pt Note Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,21,'Completed Pt Note Background',-1,0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r438
 					//X-Charge Bridge---------------------------------------------------------------------------
 					command=@"INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note
@@ -5498,26 +5498,26 @@ namespace OpenDental{
 						+POut.PString(@"C:\Program Files\X-Charge\XCharge.exe")+"', "
 						+"'', "
 						+"'"+POut.PString(@"This setup is typically performed by right clicking on the X-Charge icon in the payment window.")+"')";
-					int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+					int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'PaymentType', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r442
 					command="INSERT INTO preference VALUES('FuchsOptionsOn','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//change these from 0 to nothing
 					command="UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryImage'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=command="UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryDocument'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('WordProcessorPath','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r457
 					command="ALTER TABLE refattach CHANGE RefAttachNum RefAttachNum int unsigned NOT NULL auto_increment";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					//after r318
 					command=@"CREATE TABLE reqneeded(
@@ -5527,49 +5527,49 @@ namespace OpenDental{
 						SchoolClassNum int default '0' NOT NULL,
 						PRIMARY KEY (ReqNeededNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r320
 					command="ALTER TABLE userod ADD ProvNum int";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r337,r362,r378
 					command="ALTER TABLE mountitem ADD OrdinalPos int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mountitem ADD Width int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mountitem ADD Height int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Note varchar2(4000) default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Width int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE mount ADD Height int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After 342:
 					command="UPDATE apptviewitem SET ElementDesc='Procs' WHERE ElementDesc='ProcDescript'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After 365: These are for new auto recall appointment functions and film/SRP indicators
 					command="INSERT INTO preference VALUES('RecallPatternChild','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallProceduresChild','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallPatternPerio','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallProceduresPerio','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallPerioTriggerProcs','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoProc','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					if((((Pref)PrefC.HList["RecallBW"]).ValueString)=="") {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
 					} else {
 						command="INSERT INTO preference VALUES('RecallDisableAutoFilms','0')";
 					}
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('RecallDisablePerioAlt','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r366
 					command=@"CREATE TABLE reqstudent(
 						ReqStudentNum int default '0' NOT NULL,
@@ -5583,48 +5583,48 @@ namespace OpenDental{
 						DateCompleted date default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						PRIMARY KEY (ReqStudentNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX ind_reqstudent_ReqNeededNum ON reqstudent (ReqNeededNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX ind_reqstudent_ProvNum ON reqstudent (ProvNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r381
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,18,'Patient Note Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,19,'Patient Note Background',-1,0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD ClaimForm int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD EFormat int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r393
 					//command="DROP TABLE proclicense";//js-let's keep this around for a while.
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//after 401
 					//-8355712 drk gray, -16777056 drkblue, -16777216 black, -1051718 lt yellow
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),17,6,'Patient Note Text',-16777216,0)";//black
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),17,7,'Patient Note Background',-1051718,0)";//post-it note yellow
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),17,8,'Patient Note - Pt Name',-16777056,0)";//drk blue
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),17,9,'Completed Pt. Note Text',-16777216,0)";//black
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),17,10,'Completed Pt. Note Background',-8355712,0)";//drk gray
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,20,'Completed Pt Note Text',-8388480,0)";//purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),12,21,'Completed Pt Note Background',-1,0)";//white
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r438
 					//X-Charge Bridge---------------------------------------------------------------------------
 					command=@"INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note
@@ -5636,30 +5636,30 @@ namespace OpenDental{
 						+"'"+POut.PString(@"C:\Program Files\X-Charge\XCharge.exe")+"', "
 						+"'', "
 						+"'This setup is typically performed by right clicking on the X-Charge icon in the payment window.')";
-					General.NonQ(command);//we now have a ProgramNum to work with
+					Db.NonQ(command);//we now have a ProgramNum to work with
 					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"(SELECT MAX(ProgramPropertyNum)+1 FROM programproperty),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
 						+"'PaymentType', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r442
 					command="INSERT INTO preference VALUES('FuchsOptionsOn','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//change these from 0 to nothing
 					command="UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryImage'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=command="UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryDocument'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('WordProcessorPath','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//After r457
 					command="ALTER TABLE refattach MODIFY (RefAttachNum int)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_2();
 		}
@@ -5670,13 +5670,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_4();
 		}
@@ -5687,25 +5687,25 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD SensorType varchar(255) default 'D'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorBinned varchar(1) default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorPort int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorExposure int default '1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle.
 					command="ALTER TABLE computerpref ADD SensorType varchar2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorBinned varchar2(1) default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorPort int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD SensorExposure int default '1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_5();
 		}
@@ -5716,13 +5716,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref CHANGE SensorType SensorType varchar(255) default 'D'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle.
 					command="ALTER TABLE computerpref MODIFY (SensorType varchar2(255) default 'D')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_6();
 		}
@@ -5733,14 +5733,14 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Adjust the ada 2006 total fee location to fit be in box #33.
 					command="UPDATE claimformitem SET  YPos='694' WHERE  FieldName='TotalFee' AND ClaimFormNum=(SELECT ClaimFormNum FROM claimform WHERE Description LIKE '%ADA 2006%')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					//Adjust the ada 2006 total fee location to fit be in box #33.
 					command="UPDATE claimformitem SET  YPos='694' WHERE  FieldName='TotalFee' AND ClaimFormNum=(SELECT ClaimFormNum FROM claimform WHERE Description LIKE '%ADA 2006%')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.6.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_7();
 		}
@@ -5750,21 +5750,21 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE clearinghouse SET ExportPath = '"+POut.PString(@"C:\TesiaLink\OUT\")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\TesiaLink\IN\")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ClientProgram = '"+POut.PString(@"C:\Program Files\TesiaLink\TesiaLink.exe")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE clearinghouse SET ExportPath = '"+POut.PString(@"C:\TesiaLink\OUT\")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\TesiaLink\IN\")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE clearinghouse SET ClientProgram = '"+POut.PString(@"C:\Program Files\TesiaLink\TesiaLink.exe")+"' WHERE ISA08='113504607'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.7.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_10();
 		}
@@ -5774,13 +5774,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE preference SET ValueString = '0' WHERE PrefName = 'ShowProgressNotesInsteadofCommLog'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE preference SET ValueString = '0' WHERE PrefName = 'ShowProgressNotesInsteadofCommLog'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.10.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_0_11();
 		}
@@ -5794,13 +5794,13 @@ namespace OpenDental{
 				//So the reset tool will always be run on startup.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT preference VALUES('ADAdescriptionsReset','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference VALUES('ADAdescriptionsReset','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.0.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_1();
 		}
@@ -5810,7 +5810,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS claimvalcodelog";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE claimvalcodelog( 
 					ClaimValCodeLogNum int unsigned NOT NULL auto_increment, 
 					ClaimNum int unsigned NOT NULL, 
@@ -5820,11 +5820,11 @@ namespace OpenDental{
 					Ordinal int unsigned NOT NULL, 
 					PRIMARY KEY (ClaimValCodeLogNum) 
 					) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE referral ADD NationalProvID varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS claimcondcodelog";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE claimcondcodelog (
 					ClaimCondCodeLogNum int unsigned NOT NULL auto_increment,
 					ClaimNum int unsigned NOT NULL,
@@ -5841,35 +5841,35 @@ namespace OpenDental{
 					Code10 varchar(2),
 					PRIMARY KEY (ClaimCondCodeLogNum)
 					) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r566
 					command="INSERT INTO preference VALUES('ApptBubbleDelay','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r567
 					//Change Tesia clearinghouse settings to use internal functions instead of external program for uploading.
 					//do this later:
 					//command="UPDATE clearinghouse SET ClientProgram = '' WHERE ISA08='113504607'";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//command="UPDATE clearinghouse SET CommBridge = '10' WHERE ISA08='113504607'";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//after r627  No longer use TesiaLink folder.
 					//do this later:
 					//command="UPDATE clearinghouse SET ExportPath = '"+POut.PString(@"C:\Tesia\OUT\")+"' WHERE ISA08='113504607'";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\Tesia\IN\")+"' WHERE ISA08='113504607'";
-					//General.NonQ(command);
+					//Db.NonQ(command);
 					//after r630. Altered again after r659
 					command="DROP TABLE IF EXISTS autonote";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE autonote (
 					AutoNoteNum int unsigned NOT NULL auto_increment,
 					AutoNoteName varchar(50),
 					ControlsToInc text,
 					PRIMARY KEY (AutoNoteNum)
 					) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS autonotecontrol";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE autonotecontrol (
 					AutoNoteControlNum int unsigned NOT NULL auto_increment,
 					Descript varchar(50),
@@ -5880,28 +5880,28 @@ namespace OpenDental{
 					ControlOptions text,
 					PRIMARY KEY (AutoNoteControlNum)
 					) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r665
 					command=@"ALTER TABLE mount MODIFY DocCategory INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r672
 					command=@"ALTER TABLE document MODIFY DocCategory INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r673
 					command=@"ALTER TABLE document MODIFY DegreesRotated SMALLINT NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r678
 					command="ALTER TABLE etrans ADD BatchNumber INT NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE etrans ADD AckCode varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					try {
 						command="SELECT COUNT(*) FROM claimvalcodelog";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE claimvalcodelog PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist
 					}
 					command=@"CREATE TABLE claimvalcodelog( 
@@ -5913,15 +5913,15 @@ namespace OpenDental{
 						Ordinal int default '0' NOT NULL, 
 						PRIMARY KEY (ClaimValCodeLogNum) 
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE referral ADD NationalProvID varchar2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM claimcondcodelog";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE claimcondcodelog PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE claimcondcodelog (
@@ -5940,17 +5940,17 @@ namespace OpenDental{
 						Code10 varchar2(2),
 						PRIMARY KEY (ClaimCondCodeLogNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r566
 					command="INSERT INTO preference VALUES('ApptBubbleDelay','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r630. Altered again after r659
 					try {
 						command="SELECT COUNT(*) FROM autonote";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point
 						command="DROP TABLE autonote PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE autonote (
@@ -5959,13 +5959,13 @@ namespace OpenDental{
 						ControlsToInc varchar2(4000),
 						PRIMARY KEY (AutoNoteNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM autonotecontrol";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE autonotecontrol PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE autonotecontrol (
@@ -5978,24 +5978,24 @@ namespace OpenDental{
 						ControlOptions varchar2(4000),
 						PRIMARY KEY (AutoNoteControlNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r665
 					command=@"ALTER TABLE mount MODIFY DocCategory INTEGER";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r672
 					command=@"ALTER TABLE document MODIFY DocCategory INTEGER";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					// After r673
 					command=@"ALTER TABLE document MODIFY DegreesRotated INT";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r678
 					command="ALTER TABLE etrans ADD BatchNumber INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE etrans ADD AckCode varchar2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_3();
 		}
@@ -6005,17 +6005,17 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD GraphicsDoubleBuffering varchar(1) default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD PreferredPixelFormatNum int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle.
 					command="ALTER TABLE computerpref ADD GraphicsDoubleBuffering varchar2(1) default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD PreferredPixelFormatNum int default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_4();
 		}
@@ -6025,13 +6025,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE etrans ADD TransSetNum INT NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="ALTER TABLE etrans ADD TransSetNum INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_5();
 		}
@@ -6041,13 +6041,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE etrans ADD Note text";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="ALTER TABLE etrans ADD Note varchar(4000)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.5.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_11();
 		}
@@ -6057,13 +6057,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE computerpref SET PreferredPixelFormatNum='0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE computerpref SET PreferredPixelFormatNum='0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_12();
 		}
@@ -6073,25 +6073,25 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE computerpref SET PreferredPixelFormatNum='0'";//again
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsUseHardware='1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsDoubleBuffering='1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsSimple='0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE computerpref SET PreferredPixelFormatNum='0'";//again
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsUseHardware='1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsDoubleBuffering='1'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE computerpref SET GraphicsSimple='0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.12.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_18();
 		}
@@ -6101,13 +6101,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE computerpref SET GraphicsDoubleBuffering=0, PreferredPixelFormatNum=0";//again
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE computerpref SET GraphicsDoubleBuffering=0, PreferredPixelFormatNum=0";//again
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.18.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_1_19();
 		}
@@ -6117,13 +6117,13 @@ namespace OpenDental{
 				string command="";
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="UPDATE computerpref SET GraphicsDoubleBuffering=0, PreferredPixelFormatNum=0";//again (last time, hopefully)
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="UPDATE computerpref SET GraphicsDoubleBuffering=0, PreferredPixelFormatNum=0";//again (last time, hopefully)
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.1.19.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_2_0();
 		}
@@ -6133,77 +6133,77 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference VALUES('UseBillingAddressOnClaims','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingAddress','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingAddress2','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingCity','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingST','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingZip','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPath','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPassword','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectBillingType','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPreviousFileNumber','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE userod ADD IsHidden BOOL NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patientnote ADD CCNumber VARCHAR(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patientnote ADD CCExpiration date NOT NULL default '0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StoreCCnumbers','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE payplancharge ADD ProvNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE payplancharge SET ProvNum=(SELECT PriProv FROM patient WHERE patient.PatNum=payplancharge.PatNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('AppointmentBubblesDisabled','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference VALUES('UseBillingAddressOnClaims','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingAddress','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingAddress2','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingCity','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingST','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('PracticeBillingZip','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPath','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPassword','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectBillingType','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TrojanExpressCollectPreviousFileNumber','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE userod ADD IsHidden varchar(2) default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patientnote ADD CCNumber VARCHAR2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patientnote ADD CCExpiration date default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('StoreCCnumbers','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE payplancharge ADD ProvNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE payplancharge SET ProvNum=(SELECT PriProv FROM patient WHERE patient.PatNum=payplancharge.PatNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('AppointmentBubblesDisabled','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.2.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_3_0();
 		}
@@ -6213,21 +6213,21 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD BaseUnits int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD ShowBaseUnits TINYINT(1) NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proctp ADD Discount double NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claimproc CHANGE AllowedAmt AllowedOverride double NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE refattach ADD RefToStatus TINYINT unsigned NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE refattach ADD Note text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD SubstitutionCode VARCHAR(25)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS proccodenote";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE proccodenote (
 						ProcCodeNoteNum int NOT NULL auto_increment,
 						CodeNum int NOT NULL,
@@ -6236,79 +6236,79 @@ namespace OpenDental{
 						ProcTime varchar(255),				
 						PRIMARY KEY (ProcCodeNoteNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD DedBeforePerc TINYINT(1) NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD BaseUnits int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog MODIFY UnitQty int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('DeductibleBeforePercentAsDefault','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE benefit ADD CoverageLevel int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD SubstOnlyIf int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD StartTime int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD StopTime int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2391'";
-					if(General.GetCount(command)=="1") {
+					if(Db.GetCount(command)=="1") {
 						command="UPDATE procedurecode SET SubstitutionCode='D2140',SubstOnlyIf=1 WHERE ProcCode='D2391'";//1 surf
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2392'";
-					if(General.GetCount(command)=="1") {
+					if(Db.GetCount(command)=="1") {
 						command="UPDATE procedurecode SET SubstitutionCode='D2150',SubstOnlyIf=1 WHERE ProcCode='D2392'";//2 surf
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2393'";
-					if(General.GetCount(command)=="1") {
+					if(Db.GetCount(command)=="1") {
 						command="UPDATE procedurecode SET SubstitutionCode='D2160',SubstOnlyIf=1 WHERE ProcCode='D2393'";//3 surf
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2394'";
-					if(General.GetCount(command)=="1") {
+					if(Db.GetCount(command)=="1") {
 						command="UPDATE procedurecode SET SubstitutionCode='D2161',SubstOnlyIf=1 WHERE ProcCode='D2394'";//4+ surf
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="INSERT INTO preference VALUES('TaskListAlwaysShowsAtBottom','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog ADD IsStatementSent tinyint(1) NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET IsStatementSent=1 WHERE CommType=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog CHANGE CommType CommType int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,0,'ApptRelated','APPT')";
-					int defNum=General.NonQ(command,true);
+					int defNum=Db.NonQ(command,true);
 					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=2";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,1,'Insurance','')";
-					defNum=General.NonQ(command,true);
+					defNum=Db.NonQ(command,true);
 					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=3";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,2,'Financial','FIN')";
-					defNum=General.NonQ(command,true);
+					defNum=Db.NonQ(command,true);
 					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=4";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,3,'Recall','RECALL')";
-					defNum=General.NonQ(command,true);
+					defNum=Db.NonQ(command,true);
 					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=5";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,4,'Misc','MISC')";
-					defNum=General.NonQ(command,true);
+					defNum=Db.NonQ(command,true);
 					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=6";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=0 WHERE CommType=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS displayfield";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE displayfield (
 						DisplayFieldNum int NOT NULL auto_increment,
 						InternalName varchar(255),
@@ -6317,30 +6317,30 @@ namespace OpenDental{
 						ColumnWidth int NOT NULL,		
 						PRIMARY KEY (DisplayFieldNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="ALTER TABLE procedurecode ADD BaseUnits int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD ShowBaseUnits INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE proctp ADD Discount BINARY_DOUBLE default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claimproc MODIFY (AllowedAmt BINARY_DOUBLE default '0')";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claimproc RENAME COLUMN AllowedAmt TO AllowedOverride";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE refattach ADD RefToStatus INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE refattach ADD Note varchar2(4000)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD SubstitutionCode VARCHAR2(25)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM proccodenote";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE proccodenote PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//Table doesn't exist
 					}
 					command=@"CREATE TABLE proccodenote (
@@ -6351,80 +6351,80 @@ namespace OpenDental{
 							ProcTime varchar(255),				
 							PRIMARY KEY (ProcCodeNoteNum)
 					)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD DedBeforePerc INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD BaseUnits int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog MODIFY UnitQty int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('DeductibleBeforePercentAsDefault','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE benefit ADD CoverageLevel int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD SubstOnlyIf int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD StartTime int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD StopTime int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Not necessary to first check if this code exists. This command will always work, even if the code isn't there.
 					command="UPDATE procedurecode SET SubstitutionCode='D2140',SubstOnlyIf=1 WHERE ProcCode='D2391'";//1 surf
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Not necessary to first check if this code exists. This command will always work, even if the code isn't there.
 					command="UPDATE procedurecode SET SubstitutionCode='D2150',SubstOnlyIf=1 WHERE ProcCode='D2392'";//2 surf
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Not necessary to first check if this code exists. This command will always work, even if the code isn't there.
 					command="UPDATE procedurecode SET SubstitutionCode='D2160',SubstOnlyIf=1 WHERE ProcCode='D2393'";//3 surf
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Not necessary to first check if this code exists. This command will always work, even if the code isn't there.
 					command="UPDATE procedurecode SET SubstitutionCode='D2161',SubstOnlyIf=1 WHERE ProcCode='D2394'";//4+ surf
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TaskListAlwaysShowsAtBottom','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog ADD IsStatementSent int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET IsStatementSent=1 WHERE CommType=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog MODIFY(CommType int default '0')";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),27,0,'ApptRelated','APPT')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=(SELECT MAX(DefNum) FROM definition) WHERE CommType=2";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),27,1,'Insurance','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=(SELECT MAX(DefNum) FROM definition) WHERE CommType=3";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),27,2,'Financial','FIN')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=(SELECT MAX(DefNum) FROM definition) WHERE CommType=4";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),27,3,'Recall','RECALL')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=(SELECT MAX(DefNum) FROM definition) WHERE CommType=5";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//-----------------
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),27,4,'Misc','MISC')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=(SELECT MAX(DefNum) FROM definition) WHERE CommType=6";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE commlog SET CommType=0 WHERE CommType=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM displayfield";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//Table exists at this point.
 						command="DROP TABLE displayfield PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//Table doesn't exist.
 					}
 					command=@"CREATE TABLE displayfield (
@@ -6435,10 +6435,10 @@ namespace OpenDental{
 							ColumnWidth int default '0' NOT NULL,		
 							PRIMARY KEY (DisplayFieldNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_3_1();
 		}
@@ -6447,7 +6447,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.3.1.0")) {
 				string command;
 				command="UPDATE preference SET ValueString = '5.3.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_3_9();
 		}
@@ -6457,27 +6457,27 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						//detach all procedures
 						command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="DELETE FROM appointment WHERE AptNum="+table.Rows[i][0].ToString();
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 				} else {//oracle
 					command="UPDATE procedurelog SET AptNum=0 WHERE AptNum IN (SELECT AptNum FROM appointment WHERE Pattern='')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum IN "+
 						"(SELECT PlannedAptNum FROM appointment WHERE Pattern='')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM appointment WHERE Pattern=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.3.9.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_3_11();
 		}
@@ -6488,48 +6488,48 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE appointment ADD INDEX indexProvNum (ProvNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="ALTER TABLE appointment ADD INDEX indexProvHyg (ProvHyg)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="ALTER TABLE labcase ADD INDEX indexAptNum (AptNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="ALTER TABLE appointment ADD INDEX indexAptDateTime (AptDateTime)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 				} else {//oracle
 					command="CREATE INDEX APPOINTMENT_PROVNUM ON appointment (ProvNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="CREATE INDEX APPOINTMENT_PROVHYG ON appointment (ProvHyg)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="CREATE INDEX LABCASE_APTNUM ON labcase (AptNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="CREATE INDEX APPOINTMENT_APTDATETIME ON appointment (AptDateTime)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 				}
 				command="UPDATE preference SET ValueString = '5.3.11.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_4_0();
 		}
@@ -6539,7 +6539,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS files";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE files
 						(
 							DocNum    int        NOT NULL,
@@ -6547,9 +6547,9 @@ namespace OpenDental{
 							Thumbnail longblob   NULL,
 							PRIMARY KEY(DocNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ImageStore', 'OpenDental.Imaging.FileStore')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//PT Dental Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -6559,13 +6559,13 @@ namespace OpenDental{
 						+"'', "
 						+"'', "
 						+"'"+POut.PString(@"No path is needed.  It is hard coded.")+"')";
-					int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+					int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Dental')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
 						+"'PTupdate', "
@@ -6574,37 +6574,37 @@ namespace OpenDental{
 						+"'', "
 						+"'', "
 						+"'"+POut.PString(@"This is the second part of the PT Dental bridge.  It allows the 'update' button to be customized separately.")+"')";
-					programNum=General.NonQ(command,true);
+					programNum=Db.NonQ(command,true);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Update')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD Title VARCHAR(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM reqstudent WHERE DateCompleted < '1900-01-01' AND AptNum=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE provider CHANGE Abbr Abbr VARCHAR(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog ADD UserNum INT NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD AtoZpath VARCHAR(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE patient MODIFY PriProv INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE patient MODIFY SecProv INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE patient MODIFY FeeSched INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE patient MODIFY BillingType INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE patient MODIFY ClinicNum INTEGER NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS popup";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE popup(
 						PopupNum int NOT NULL auto_increment,
 						PatNum int NOT NULL,
@@ -6612,40 +6612,40 @@ namespace OpenDental{
 						IsDisabled tinyint(1) NOT NULL,		
 						PRIMARY KEY (PopupNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateStarted DATE NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateDisabled DATE NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateEnded DATE NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD IsForeign BOOL NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateStarted=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateEnded='0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateDisabled='0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('UpdateWindowShowsClassicView','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BillingExcludeInsPending','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('UpdateServerAddress','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET PrefName='UpdateCode' WHERE PrefName='RegistrationNumber'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD DateTP DATE NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurelog SET DateTP=ProcDate";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					try {
 						command="SELECT COUNT(*) FROM files";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//Table exists at this point.
 						command="DROP TABLE files PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE files(
@@ -6654,9 +6654,9 @@ namespace OpenDental{
 							Thumbnail blob NULL,
 							PRIMARY KEY(DocNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ImageStore', 'OpenDental.Imaging.FileStore')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//PT Dental Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -6667,14 +6667,14 @@ namespace OpenDental{
 						+"'', "
 						+"'', "
 						+"'No path is needed.  It is hard coded.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
 						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Dental')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
 						+"(SELECT MAX(ProgramNum)+1 FROM program),"
@@ -6684,42 +6684,42 @@ namespace OpenDental{
 						+"'', "
 						+"'', "
 						+"'This is the second part of the PT Dental bridge.  It allows the ''update'' button to be customized separately.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
 						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Update')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD Title VARCHAR2(15)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM reqstudent WHERE DateCompleted < '1900-01-01' AND AptNum=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE provider MODIFY Abbr VARCHAR2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog ADD UserNum INT default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD AtoZpath VARCHAR2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient MODIFY PriProv INTEGER default '0'";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient MODIFY SecProv INTEGER default '0'";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient MODIFY FeeSched INTEGER default '0'";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient MODIFY BillingType INTEGER default '0'";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient MODIFY ClinicNum INTEGER default '0'";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM popup";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//Table exists at this point.
 						command="DROP TABLE popup PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE popup(
@@ -6729,36 +6729,36 @@ namespace OpenDental{
 						IsDisabled int default '0' NOT NULL,		
 						PRIMARY KEY (PopupNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateStarted DATE default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateDisabled DATE default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD DateEnded DATE default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD IsForeign varchar2(1) default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateStarted=(SELECT CURRENT_DATE FROM dual)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateEnded=TO_DATE('0001-01-01','YYYY-MM-DD')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE registrationkey SET DateDisabled=TO_DATE('0001-01-01','YYYY-MM-DD')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('UpdateWindowShowsClassicView','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('BillingExcludeInsPending','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('UpdateServerAddress','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET PrefName='UpdateCode' WHERE PrefName='RegistrationNumber'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD DateTP DATE default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurelog SET DateTP=ProcDate";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_4_1();
 		}
@@ -6767,7 +6767,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.4.1.0")) {
 				string command;
 				command="UPDATE preference SET ValueString = '5.4.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_4_7();
 		}
@@ -6777,13 +6777,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference VALUES('RegistrationKeyIsDisabled','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference VALUES('RegistrationKeyIsDisabled','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.4.7.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_4_14();
 		}
@@ -6794,14 +6794,14 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command=@"UPDATE task SET ObjectType=2 WHERE ObjectType=1 AND task.KeyNum!=0
 						AND NOT EXISTS(SELECT * FROM patient WHERE PatNum=KeyNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command=@"UPDATE task SET ObjectType=2 WHERE ObjectType=1 AND task.KeyNum!=0
 						AND NOT EXISTS(SELECT * FROM patient WHERE PatNum=KeyNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.4.14.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_5_1();
 		}
@@ -6811,7 +6811,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS claimattach";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE claimattach (
 						ClaimAttachNum int NOT NULL auto_increment,
 						ClaimNum int NOT NULL,
@@ -6819,25 +6819,25 @@ namespace OpenDental{
 						ActualFileName varchar(255),
 						PRIMARY KEY (ClaimAttachNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r1050
 					command="ALTER TABLE treatplan ADD Signature text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE treatplan ADD SigIsTopaz tinyint(1) not null";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TreatPlanPriorityForDeclined','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS supplyneeded";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE supplyneeded (
 						SupplyNeededNum int NOT NULL auto_increment,
 						Description text,
 						DateAdded DATE NOT NULL,
 						PRIMARY KEY (SupplyNeededNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS supplier";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE supplier (
 						SupplierNum int NOT NULL auto_increment,
 						Name varchar(255),
@@ -6849,9 +6849,9 @@ namespace OpenDental{
 						Note text,
 						PRIMARY KEY (SupplierNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS supply";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE supply (
 						SupplyNum int NOT NULL auto_increment,
 						SupplierNum int NOT NULL,
@@ -6866,9 +6866,9 @@ namespace OpenDental{
 						INDEX (SupplierNum)
 						) DEFAULT CHARSET=utf8";
 					//the above definition has changed repeatedly.  You might need to drop the table and do it again:
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS supplyorder";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE supplyorder (
 						SupplyOrderNum int NOT NULL auto_increment,
 						SupplierNum int NOT NULL,
@@ -6878,9 +6878,9 @@ namespace OpenDental{
 						PRIMARY KEY (SupplyOrderNum),
 						INDEX (SupplierNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS supplyorderitem";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE supplyorderitem (
 						SupplyOrderItemNum int NOT NULL auto_increment,
 						SupplyOrderNum int NOT NULL,
@@ -6891,10 +6891,10 @@ namespace OpenDental{
 						INDEX (SupplyOrderNum),
 						INDEX (SupplyNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//supplyorder was altered later.
 					command="DROP TABLE IF EXISTS tasksubscription";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE tasksubscription (
 						TaskSubscriptionNum int NOT NULL auto_increment,
 						UserNum int NOT NULL,
@@ -6902,11 +6902,11 @@ namespace OpenDental{
 						PRIMARY KEY (TaskSubscriptionNum),
 						INDEX (UserNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TasksCheckOnStartup','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS taskancestor";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE taskancestor (
 						TaskAncestorNum int NOT NULL auto_increment,
 						TaskNum int NOT NULL,
@@ -6915,20 +6915,20 @@ namespace OpenDental{
 						INDEX (TaskNum),
 						INDEX (TaskListNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TaskAncestorsAllSetInVersion55','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ApptExclamationShowForUnsentIns','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ProviderIncomeTransferShows','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					try {
 						command="SELECT COUNT(*) FROM claimattach";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//Table exists at this point.
 						command="DROP TABLE claimattach PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE claimattach (
@@ -6938,20 +6938,20 @@ namespace OpenDental{
 						ActualFileName varchar2(255),
 						PRIMARY KEY (ClaimAttachNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//after r1050
 					command="ALTER TABLE treatplan ADD Signature varchar(4000)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE treatplan ADD SigIsTopaz int default '0' not null";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TreatPlanPriorityForDeclined','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM supplyneeded";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE supplyneeded PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist
 					}
 					command=@"CREATE TABLE supplyneeded (
@@ -6960,13 +6960,13 @@ namespace OpenDental{
 						DateAdded DATE default TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						PRIMARY KEY (SupplyNeededNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM supplier";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE supplier PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE supplier (
@@ -6980,13 +6980,13 @@ namespace OpenDental{
 						Note varchar2(4000),
 						PRIMARY KEY (SupplierNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM supply";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE supply PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE supply (
@@ -7002,15 +7002,15 @@ namespace OpenDental{
 						PRIMARY KEY (SupplyNum)
 						)";
 					//the above definition has changed repeatedly.  You might need to drop the table and do it again:
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX SUPPLY_SUPPLIERNUM ON supply (SupplierNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM supplyorder";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE supplyorder PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE supplyorder (
@@ -7021,15 +7021,15 @@ namespace OpenDental{
 						AmountTotal BINARY_DOUBLE default '0' NOT NULL,
 						PRIMARY KEY (SupplyOrderNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX SUPPLYORDER_SUPPLIERNUM ON supplyorder (SupplierNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM supplyorderitem";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE supplyorderitem PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE supplyorderitem (
@@ -7040,18 +7040,18 @@ namespace OpenDental{
 						Price BINARY_DOUBLE NOT NULL,
 						PRIMARY KEY (SupplyOrderItemNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX SUPPLYORDERITEM_SUPPLYORDERNUM ON supplyorderitem (SupplyOrderNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX SUPPLYORDERITEM_SUPPLYNUM ON supplyorderitem (SupplyNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//supplyorder was altered later.
 					try {
 						command="SELECT COUNT(*) FROM tasksubscription";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE tasksubscription PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE tasksubscription (
@@ -7060,17 +7060,17 @@ namespace OpenDental{
 						TaskListNum int default '0' NOT NULL,
 						PRIMARY KEY (TaskSubscriptionNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX TASKSUBSCRIPTION_USERNUM ON tasksubscription (UserNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TasksCheckOnStartup','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM taskancestor";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE taskancestor PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE taskancestor (
@@ -7079,20 +7079,20 @@ namespace OpenDental{
 						TaskListNum int default '0' NOT NULL,
 						PRIMARY KEY (TaskAncestorNum)
 						)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX TASKANCESTOR_TASKNUM ON taskancestor (TaskNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX TASKANCESTOR_TASKLISTNUM ON taskancestor (TaskListNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('TaskAncestorsAllSetInVersion55','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ApptExclamationShowForUnsentIns','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference VALUES('ProviderIncomeTransferShows','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.5.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_6_1();
 		}
@@ -7102,21 +7102,21 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD TaskKeepListHidden tinyint(1) NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskDock int NOT NULL default '0'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskX int NOT NULL default '900'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskY int NOT NULL default '625'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r1182
 					command="UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\\\TempImages\\\\')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r1239
 					command="DROP TABLE IF EXISTS statement";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE statement (
 							StatementNum int NOT NULL auto_increment,
 							PatNum int NOT NULL,
@@ -7135,21 +7135,21 @@ namespace OpenDental{
 							INDEX (PatNum),
 							INDEX (DocNum)
 							) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS docattach";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
-					int defnum=PIn.PInt(General.GetCount(command));
+					int defnum=PIn.PInt(Db.GetCount(command));
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
 						+"VALUES(18,"+POut.PInt(defnum+1)+",'Statements','S',0,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('AutoResetTPEntryStatus','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ShowAccountFamilyCommEntries','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//convert all existing statement commlog entries to statement objects
 					command="SELECT * FROM commlog WHERE IsStatementSent= 1";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO statement (PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,"
 							+"IsSent) VALUES ("
@@ -7167,70 +7167,70 @@ namespace OpenDental{
 							command+="0,";
 						}
 						command+="1)";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="DELETE FROM commlog WHERE IsStatementSent=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE dunning ADD MessageBold text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE dunning SET MessageBold=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsLastDays','45')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsIntermingle','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsNote','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD CodeSubstNone tinyint(1) NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BackupExcludeImageFolder','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE task ADD UserNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('InsDefaultPPOpercent','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('TimecardUsersDontEditOwnCard','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE task ADD DateTimeFinished datetime NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE task SET DateTimeFinished ="+POut.PDate(DateTime.MinValue);
 					//equiv to:UPDATE task SET DateTimeFinished ='0001-01-01'
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE signal ADD TaskNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE signal ADD INDEX indexAckTime (AckTime)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('EmailUseSSL','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='PrintSimpleStatements'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='BoldFamilyAccountBalanceView'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('PayPlansBillInAdvanceDays','10')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD PayPlanDue double NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="ALTER TABLE computerpref ADD TaskKeepListHidden int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskDock int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskX int default '900' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE computerpref ADD TaskY int default '625' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r1182
 					command="UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\\\TempImages\\\\')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//added after r1239
 					try {
 						command="SELECT COUNT(*) FROM statement";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE statement PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command=@"CREATE TABLE statement (
@@ -7249,78 +7249,78 @@ namespace OpenDental{
 							DocNum int default '0' NOT NULL,
 							PRIMARY KEY (StatementNum)
 							)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX STATEMENT_PATNUM ON statement (PatNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX STATEMENT_DOCNUM ON statement (DocNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					try {
 						command="SELECT COUNT(*) FROM docattach";
-						General.GetTable(command);
+						Db.GetTable(command);
 						//The table exists at this point.
 						command="DROP TABLE docattach PURGE";
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {//The table does not exist.
 					}
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
 						+"VALUES((SELECT MAX(DefNum)+1 FROM definition),18,"
 						+"(SELECT MAX(ItemOrder)+1 FROM definition WHERE Category=18),'Statements','S',0,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('AutoResetTPEntryStatus','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ShowAccountFamilyCommEntries','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//convert all existing statement commlog entries to statement objects
 					command="INSERT INTO statement (PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,IsSent) "+
 						"SELECT PatNum,CommDateTime,TO_DATE('0001-01-01','YYYY-MM-DD'),TO_DATE('2200-01-01','YYYY-MM-DD'),Note,'',"+
 							"CASE Mode_ WHEN 4 THEN 1 WHEN 1 THEN 2 ELSE 0 END,1 "+
 						"FROM commlog "+
 						"WHERE IsStatementSent=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM commlog WHERE IsStatementSent=1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE dunning ADD MessageBold varchar2(4000)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE dunning SET MessageBold=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsLastDays','45')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsIntermingle','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsNote','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD CodeSubstNone int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('BackupExcludeImageFolder','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE task ADD UserNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('InsDefaultPPOpercent','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('TimecardUsersDontEditOwnCard','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"ALTER TABLE task ADD DateTimeFinished timestamp
 						default TO_TIMESTAMP('0001-01-01 00:00:00','YYYY-MM-DD HH24:MI:SS')  NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE task SET DateTimeFinished=TO_DATE('0001-01-01','YYYY-MM-DD')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE signal ADD TaskNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX SIGNAL_ACKTIME ON signal (AckTime)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('EmailUseSSL','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='PrintSimpleStatements'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='BoldFamilyAccountBalanceView'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('PayPlansBillInAdvanceDays','10')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD PayPlanDue BINARY_DOUBLE default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.6.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_6_18();
 		}
@@ -7330,18 +7330,18 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,7,'Insurance Payment',-16744448,0)";//Green
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,8,'Received Ins Claim',-5220352,0)";//drkOrange
 				} else {//oracle
 					command=@"INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) 
 						VALUES((SELECT MAX(DefNum)+1 FROM definition),0,7,'Insurance Payment',-16744448,0)";//Green
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) 
 						VALUES((SELECT MAX(DefNum)+1 FROM definition),0,8,'Received Ins Claim',-5220352,0)";//drkOrange
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '5.6.18.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_6_22();
 		}
@@ -7352,22 +7352,22 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE paysplit ADD INDEX (ProcNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="ALTER TABLE paysplit ADD INDEX (PayNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 				} else {//oracle
 					command="CREATE INDEX PAYSPLIT_PROCNUM ON paysplit (ProcNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX PAYSPLIT_PAYNUM ON paysplit (PayNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.6.22.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_6_28();
 		}
@@ -7385,19 +7385,19 @@ namespace OpenDental{
 						+"'', "
 						+"'', "
 						+"'"+POut.PString(@"No path is needed.")+"')";
-					int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+					int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Digora')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					//Digora Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -7415,17 +7415,17 @@ namespace OpenDental{
 						+"(SELECT MAX(ProgramNum) FROM program),"
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Digora')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.6.28.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_6_31();
 		}
@@ -7435,13 +7435,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.6.31.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_7_1();
 		}
@@ -7451,106 +7451,106 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('StatementSummaryShowInsInfo','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('IntermingleFamilyDefault','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,9,'Received Pre-Auth',-8388480,0)";//Purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE commlog ADD INDEX (PatNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 					}
 					command="ALTER TABLE claim ADD AttachedImages int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachedModels int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachedFlags varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachmentID varchar(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//new claim form fields for attachments---------------------------------
 					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD8'";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
 						string claimFormNum=table.Rows[0][0].ToString();
 						command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 							+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedImagesNum','',746,779,27,14)";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 							+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedModelsNum','',796,779,27,14)";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//Appt time override----------------------------------------------------
 					//This query uses nested CONCATs for compatibility with Oracle database:
 					//Also, an assumption is made that the user is on 10min increments.  This is a somewhat safe assumption, since 15 minute offices will not track their time as closely.  The inconvenience will be minor in any case.
 					command="UPDATE appointment SET Note=CONCAT('AddTime: ',CONCAT(AddTime,CONCAT('0',CONCAT(' ',Note)))) WHERE AddTime !=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET AddTime=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment CHANGE AddTime TimeLocked tinyint(1) NOT NULL";//bool
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurelog SET UnitQty=1 WHERE UnitQty=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM signal";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//currently, the max length will end up being about 100, but that wouldn't leave much room for expansion with only 256.
 					command="ALTER TABLE signal CHANGE ITypes ITypes text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE userod ADD TaskListInBox int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('StatementSummaryShowInsInfo','1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('IntermingleFamilyDefault','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemColor,IsHidden) "+
 						"VALUES((SELECT MAX(DefNum)+1 FROM definition),0,9,'Received Pre-Auth',-8388480,0)";//Purple
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="CREATE INDEX COMMLOG_PATNUM ON commlog (PatNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachedImages int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachedModels int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachedFlags varchar2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE claim ADD AttachmentID varchar2(255)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//new claim form fields for attachments---------------------------------
 					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD8'";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
 						string claimFormNum=table.Rows[0][0].ToString();
 						command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 							+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedImagesNum','',746,779,27,14)";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 							+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedModelsNum','',796,779,27,14)";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//Appt time override----------------------------------------------------
 					//Also, an assumption is made that the user is on 10min increments.  This is a somewhat safe assumption, since 15 minute offices will not track their time as closely.  The inconvenience will be minor in any case.
 					command="UPDATE appointment SET Note=CONCAT('AddTime: ',CONCAT(AddTime,CONCAT('0',CONCAT(' ',Note)))) WHERE AddTime !=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET AddTime=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment RENAME COLUMN AddTime TO TimeLocked";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment MODIFY (TimeLocked int default '0')";//already not null
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurelog SET UnitQty=1 WHERE UnitQty=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM signal";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//currently, the max length will end up being about 100, but that wouldn't leave much room for expansion with only 256.
 					command="ALTER TABLE signal MODIFY (ITypes varchar2(4000))";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE userod ADD TaskListInBox int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.7.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_7_3();
 		}
@@ -7560,13 +7560,13 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('DockPhonePanelShow','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('DockPhonePanelShow','0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.7.3.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_7_4();
 		}
@@ -7577,24 +7577,24 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 						//might already exist
 					}
 					command="ALTER TABLE employee ADD PhoneExt int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} else {//oracle
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					} catch {
 						//might already exist
 					}
 					command="ALTER TABLE employee ADD PhoneExt int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.7.4.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_7_15();
 		}
@@ -7605,16 +7605,16 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE procedurelog ADD INDEX (PlannedAptNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					catch {
 					}
 				}else{//oracle
 					command="CREATE INDEX PROCEDURELOG_PLANNEDAPTNUM ON procedurelog (PlannedAptNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.7.15.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_8_1();
 		}
@@ -7624,36 +7624,36 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="DROP TABLE IF EXISTS site";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE site (
 						SiteNum int NOT NULL auto_increment,
 						Description varchar(255),
 						Note text,
 						PRIMARY KEY (SiteNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO site (Description,Note) SELECT SchoolName,SchoolCode FROM school"; 
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO site (Description,Note) SELECT distinct GradeSchool,'' FROM patient WHERE GradeSchool !='' AND NOT EXISTS(SELECT * FROM site WHERE site.Description=patient.GradeSchool)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD SiteNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE patient SET patient.SiteNum= (SELECT site.SiteNum FROM site WHERE site.Description=patient.GradeSchool)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient DROP COLUMN GradeSchool";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient DROP COLUMN PrimaryTeeth";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurelog ADD SiteNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE preference ADD Comments text default ''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE preference SET Comments=''";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('TitleBarShowSite','0','Shows the site.Description of the patient.Site in the main title bar.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS pharmacy";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE pharmacy (
 						PharmacyNum int NOT NULL auto_increment,
 						PharmID varchar(255),
@@ -7668,20 +7668,20 @@ namespace OpenDental{
 						Note text,
 						PRIMARY KEY (PharmacyNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE rxpat ADD PharmacyNum int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE clinic ADD InsBillingProv int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT ValueString FROM preference WHERE PrefName= 'InsBillingProv'";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					int practiceBillingProv=PIn.PInt(table.Rows[0][0].ToString());
 					command="UPDATE clinic SET InsBillingProv='"+practiceBillingProv.ToString()+"'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE displayfield ADD Category int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS sheet";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE sheet (
 						SheetNum int NOT NULL auto_increment,
 						SheetType int NOT NULL,
@@ -7696,9 +7696,9 @@ namespace OpenDental{
 						PRIMARY KEY (SheetNum),
 						INDEX (PatNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS sheetfield";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE sheetfield (
 						SheetFieldNum int NOT NULL auto_increment,
 						SheetNum int NOT NULL,
@@ -7716,9 +7716,9 @@ namespace OpenDental{
 						PRIMARY KEY (SheetFieldNum),
 						INDEX (SheetNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS sheetdef";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE sheetdef (
 						SheetDefNum int NOT NULL auto_increment,
 						Description varchar(255),
@@ -7730,9 +7730,9 @@ namespace OpenDental{
 						IsLandscape tinyint NOT NULL,	
 						PRIMARY KEY (SheetDefNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS sheetfielddef";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE sheetfielddef (
 						SheetFieldDefNum int NOT NULL auto_increment,
 						SheetDefNum int NOT NULL,
@@ -7750,17 +7750,17 @@ namespace OpenDental{
 						PRIMARY KEY (SheetFieldDefNum),
 						INDEX (SheetDefNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE referral ADD Slip int default '0' NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('LabelPatientDefaultSheetDefNum','0','0 indicates default.  Otherwise, foreign key to SheetDefNum.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else{//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '5.8.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_8_2();
 		}
@@ -7771,20 +7771,20 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE fee ADD INDEX (CodeNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					catch {
 					}
 					command="UPDATE claim SET AttachedFlags='Mail' WHERE AttachedFlags IS NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}else{//oracle
 					command="CREATE INDEX FEE_CODENUM ON fee (CodeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE claim SET AttachedFlags='Mail' WHERE AttachedFlags IS NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.8.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To5_9_1();
 		}
@@ -7794,19 +7794,19 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DELETE FROM preference WHERE PrefName='RxOrientVert'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RxAdjustRight'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RxAdjustDown'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RxGeneric'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE rxdef ADD IsControlled tinyint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE rxpat ADD IsControlled tinyint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE rxdef SET IsControlled = 1";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//UAppoint Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -7816,57 +7816,57 @@ namespace OpenDental{
 						+"'"+POut.PString(@"https://s0.uappoint.com/Sync")+"', "
 						+"'', "
 						+"'')";
-					int programNum=General.NonQ(command,true);
+					int programNum=Db.NonQ(command,true);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'Username', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'Password', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'WorkstationName', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'IntervalSeconds', "
 						+"'15')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'DateTimeLastUploaded', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'SynchStatus', "
 						+"'')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE patient SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE provider ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE provider SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS deletedobject";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE deletedobject (
 						DeletedObjectNum int NOT NULL auto_increment,
 						ObjectNum int NOT NULL,
@@ -7874,30 +7874,30 @@ namespace OpenDental{
 						DateTStamp TimeStamp,
 						PRIMARY KEY (DeletedObjectNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE schedule ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE schedule SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE operatory ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE operatory SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE recall ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE recall SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode ADD DateTStamp TimeStamp";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE procedurecode SET DateTStamp=NOW()";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD IsHidden tinyint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE carrier ADD IsHidden tinyint NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE insplan ADD INDEX (CarrierNum)";
 					try {
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					catch {
 					}
@@ -7916,15 +7916,15 @@ namespace OpenDental{
 					catch{
 					}
 					command="DELETE FROM preference WHERE PrefName='ShowNotesInAccount'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AllowSettingProcsComplete','0','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} 
 				else {//oracle
 					
 				}
 				command="UPDATE preference SET ValueString = '5.9.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_0_1();
 		}
@@ -7934,15 +7934,15 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject','Continuing Care Reminder','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallStatusMailed','0','FK to definition.DefNum')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallStatusEmailed','0','FK to definition.DefNum')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE toothinitial ADD DrawingSegment text";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE toothinitial ADD ColorDraw int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Dolphin bridge------------------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -7952,50 +7952,50 @@ namespace OpenDental{
 						+"'"+POut.PString(@"C:\Dolphin\")+"', "
 						+"'', "
 						+"'The path is to a folder rather than to a specific file.  Filename property refers to the input filename used to transer data.')";
-					int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+					int programNum=Db.NonQ(command,true);//we now have a ProgramNum to work with
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
 						+"'"+programNum.ToString()+"', "
 						+"'Filename', "
 						+"'"+POut.PString(@"C:\Dolphin\Import\Import.txt")+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.PInt(programNum)+"', "
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Dolphin')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment ADD DateTimeArrived DateTime NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET DateTimeArrived = '0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment ADD DateTimeSeated DateTime NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET DateTimeSeated = '0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE appointment ADD DateTimeDismissed DateTime NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE appointment SET DateTimeDismissed = '0001-01-01'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AppointmentTimeArrivedTrigger','0','FK to definition.DefNum, Category ApptConfirmed.  0 indicates no trigger.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AppointmentTimeSeatedTrigger','0','FK to definition.DefNum, Category ApptConfirmed.  0 indicates no trigger.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AppointmentTimeDismissedTrigger','0','FK to definition.DefNum, Category ApptConfirmed.  0 indicates no trigger.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ApptModuleRefreshesEveryMinute','1','Keeps the waiting room indicator times current.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//RECALL---------------------------------------------------------------------------------------
 					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS recalltype";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE recalltype (
 						RecallTypeNum int NOT NULL auto_increment,
 						Description varchar(255),
@@ -8004,9 +8004,9 @@ namespace OpenDental{
 						Procedures varchar(255),
 						PRIMARY KEY (RecallTypeNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS recalltrigger";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE recalltrigger (
 						RecallTriggerNum int NOT NULL auto_increment,
 						RecallTypeNum int NOT NULL,
@@ -8015,71 +8015,71 @@ namespace OpenDental{
 						INDEX (CodeNum),
 						INDEX (RecallTypeNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Basic recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPattern'";
-					string timepattern=General.GetCount(command);
+					string timepattern=Db.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProcedures'";
-					string procs=General.GetCount(command);
+					string procs=Db.GetCount(command);
 					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(1,'Prophy',"
 						+"393216,"//six months
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT CodeNum FROM procedurecode WHERE SetRecall=1";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++){
 						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(1,"+table.Rows[i][0].ToString()+")";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialProphy','1','FK to recalltype.RecallTypeNum.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Child recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternChild'";
-					timepattern=General.GetCount(command);
+					timepattern=Db.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresChild'";
-					procs=General.GetCount(command);
+					procs=Db.GetCount(command);
 					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(2,'Child Prophy',"
 						+"0,"
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//no triggers
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialChildProphy','2','FK to recalltype.RecallTypeNum.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Perio recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternPerio'";
-					timepattern=General.GetCount(command);
+					timepattern=Db.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresPerio'";
-					procs=General.GetCount(command);
+					procs=Db.GetCount(command);
 					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
 						+"VALUES(3,'Perio',"
 						+"262144,"//4 months.
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
-					string triggerStr=General.GetCount(command);
+					string triggerStr=Db.GetCount(command);
 					List<string> perioCodeNums=new List<string>();
 					string codeNum;
 					if(triggerStr!=""){
 						string[] triggerArray=triggerStr.Split(',');
 						for(int i=0;i<triggerArray.Length;i++){
 							command="SELECT CodeNum FROM procedurecode WHERE ProcCode='"+POut.PString(triggerArray[i])+"'";
-							table=General.GetTable(command);
+							table=Db.GetTable(command);
 							if(table.Rows.Count==0){
 								continue;
 							}
 							codeNum=table.Rows[0][0].ToString();
 							perioCodeNums.Add(codeNum);
 							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(3,"+codeNum+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 					}
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialPerio','3','FK to recalltype.RecallTypeNum.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					if(CultureInfo.CurrentCulture.Name=="en-US"){
 						//4BWX-----------------------------------------------------------------------------
 						timepattern="";
@@ -8089,13 +8089,13 @@ namespace OpenDental{
 							+"16777216,"//one year.
 							+"'"+timepattern+"',"
 							+"'"+POut.PString(procs)+"')";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D0274'";
-						table=General.GetTable(command);
+						table=Db.GetTable(command);
 						if(table.Rows.Count>0){
 							codeNum=table.Rows[0][0].ToString();
 							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(4,"+codeNum+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 						//Pano-----------------------------------------------------------------------------
 						timepattern="";
@@ -8105,24 +8105,24 @@ namespace OpenDental{
 							+"83886080,"//5 years.
 							+"'"+timepattern+"',"
 							+"'"+POut.PString(procs)+"')";
-						General.NonQ(command);
+						Db.NonQ(command);
 						command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D0330'";
-						table=General.GetTable(command);
+						table=Db.GetTable(command);
 						if(table.Rows.Count>0){
 							codeNum=table.Rows[0][0].ToString();
 							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(5,"+codeNum+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 					}
 					//Set existing recall objects to new types--------------------------------------------------
 					command="UPDATE recall SET RecallTypeNum=1 WHERE RecallTypeNum=0";
-					General.NonQ(command);
+					Db.NonQ(command);
 					for(int i=0;i<perioCodeNums.Count;i++){
 						command="UPDATE recall SET RecallTypeNum=3 WHERE EXISTS("
 							+"SELECT * FROM procedurelog WHERE procedurelog.PatNum=recall.PatNum "
 							+"AND procedurelog.CodeNum="+perioCodeNums[i]+" "
 							+"AND procedurelog.ProcStatus=2)";//complete
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					//an automatic synch would violate the rule of not calling external methods.
 					//Recalls.SynchAllPatients();
@@ -8131,47 +8131,47 @@ namespace OpenDental{
 					msgbox.ShowDialog();
 					//Get rid of unused prefs-----------------------------------------------------------------
 					command="DELETE FROM preference WHERE PrefName='RecallPattern'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallProcedures'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallPatternChild'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallProceduresChild'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode DROP SetRecall";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE procedurecode DROP RemoveTooth";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallBW'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallFMXPanoProc'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallDisableAutoFilms'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallFMXPanoYrInterval'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallDisablePerioAlt'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallPatternPerio'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallProceduresPerio'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES (21,8,'Family Module Referral','',-2823993,0)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE payplan ADD CompletedAmt double NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="UPDATE payplan SET CompletedAmt=(SELECT SUM(Principal) FROM payplancharge WHERE payplan.PayPlanNum=payplancharge.PayPlanNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ChartQuickAddHideAmalgam','0','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 				} 
 				else {//oracle
 					
 				}
 				command="UPDATE preference SET ValueString = '6.0.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_0_2();
 		}
@@ -8180,9 +8180,9 @@ namespace OpenDental{
 			if(FromVersion<new Version("6.0.2.0")) {
 				string command;
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypesShowingInList','1,3','Comma-delimited list. FK to recalltype.RecallTypeNum.')";//1=prophy,3=perio
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.0.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_1_1();
 		}
@@ -8192,7 +8192,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS plannedappt";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE plannedappt (
 						PlannedApptNum int NOT NULL auto_increment,
 						PatNum int NOT NULL,
@@ -8202,38 +8202,38 @@ namespace OpenDental{
 						INDEX (PatNum),
 						INDEX (AptNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT PatNum,NextAptNum FROM patient WHERE NextAptNum != 0";
-					DataTable table=General.GetTable(command);
+					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO plannedappt (PatNum,AptNum,ItemOrder) VALUES("
 							+table.Rows[i]["PatNum"].ToString()+","
 							+table.Rows[i]["NextAptNum"].ToString()+",0)";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="ALTER TABLE patient DROP NextAptNum";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Billing charges------------------------------------------------------------------------------------------
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeOrFinanceIsDefault', 'Finance','Value is a string, either Billing or Finance.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT Max(ItemOrder) FROM definition WHERE Category=1";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					int billingchargeItemOrder=PIn.PInt(table.Rows[0][0].ToString())+1;
 					command="INSERT INTO definition (category,itemorder,itemname,itemvalue) VALUES("
 						+"1, "//category=AdjTypes
 						+"'"+POut.PInt(billingchargeItemOrder)+"', "//itemOrder
 						+"'Billing Charge', "//itemname
 						+"'+')";//itemValue
-					int numAdj=General.NonQ(command,true);
+					int numAdj=Db.NonQ(command,true);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAdjustmentType', "
 						+"'"+POut.PInt(numAdj)+"','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeLastRun', '0001-01-01','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAmount', '2','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS scheduleop";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE scheduleop (
 						ScheduleOpNum int NOT NULL auto_increment,
 						ScheduleNum int NOT NULL,
@@ -8242,11 +8242,11 @@ namespace OpenDental{
 						INDEX (ScheduleNum),
 						INDEX (OperatoryNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//conversion to new operatory paradigm for blockouts-------------------------------------------------------------------
 					//get all visible ops
 					command="SELECT OperatoryNum FROM operatory WHERE IsHidden=0";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					List<int> visibleOps=new List<int>();
 					for(int i=0;i<table.Rows.Count;i++) {
 						visibleOps.Add(PIn.PInt(table.Rows[i]["OperatoryNum"].ToString()));
@@ -8254,31 +8254,31 @@ namespace OpenDental{
 					//convert blockouts with op=0
 					command="SELECT ScheduleNum FROM schedule WHERE SchedType=2 "//blockout
 						+"AND Op=0";//indicates all ops
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						//for each schedule, we need to insert a separate scheduleop for each visible op
 						for(int o=0;o<visibleOps.Count;o++) {
 							command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
 								+table.Rows[i]["ScheduleNum"].ToString()+","
 								+POut.PInt(visibleOps[o])+")";
-							General.NonQ(command);
+							Db.NonQ(command);
 						}
 					}
 					//convert blockouts with op>0
 					command="SELECT ScheduleNum,Op FROM schedule WHERE SchedType=2 "//blockout
 						+"AND Op>0";//indicates one assigned op
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
 							+table.Rows[i]["ScheduleNum"].ToString()+","
 							+table.Rows[i]["Op"].ToString()+")";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="ALTER TABLE schedule DROP Op";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Fee schedule name conversion-------------------------------------------------------------------------------
 					command="DROP TABLE IF EXISTS feesched";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE feesched (
 						FeeSchedNum int NOT NULL auto_increment,
 						Description varchar(255),
@@ -8287,9 +8287,9 @@ namespace OpenDental{
 						IsHidden tinyint(1) NOT NULL,
 						PRIMARY KEY (FeeSchedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="SELECT DefNum,ItemName,ItemValue,ItemOrder,IsHidden FROM definition WHERE Category=7";//fee schedule names
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						command="INSERT INTO feesched(FeeSchedNum,Description,FeeSchedType,ItemOrder,IsHidden) VALUES("
 							+table.Rows[i]["DefNum"].ToString()+","
@@ -8305,22 +8305,22 @@ namespace OpenDental{
 						}
 						command+=table.Rows[i]["ItemOrder"].ToString()+","//although this will be reset in the UI
 							+table.Rows[i]["IsHidden"].ToString()+")";
-						General.NonQ(command);
+						Db.NonQ(command);
 					}
 					command="DELETE FROM definition WHERE Category=7";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//end of fee schedule
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('AllowedFeeSchedsAutomate','0','0 or 1')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BackupReminderLastDateRun','0001-01-01','')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//Anesthesia Module Conversions-----------------------------------------------------
 					//field to toggle Anesthesia Module on or off. Turned 'off' by default
 					command = "INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('EnableAnesthMod', '0','0 or 1, Toggles Anesthesia Module Off and On. Disabled (0) by default')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//individual unique records of delivered anesthetics
 					command="DROP TABLE IF EXISTS anestheticrecord";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anestheticrecord (
 						AnestheticRecordNum int(11) NOT NULL auto_increment,
 						PatNum int(11) NOT NULL,
@@ -8330,10 +8330,10 @@ namespace OpenDental{
 						INDEX (PatNum),
 						INDEX (ProvNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//data recorded for an individual anesthetic on a given date and time
 					command="DROP TABLE IF EXISTS anestheticdata";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anestheticdata (
 						AnestheticDataNum int(11) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -8389,10 +8389,10 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticDataNum),
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//a list of anesthetic medications to be delivered to a patient
 					command="DROP TABLE IF EXISTS anesthmedsgiven";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsgiven(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -8403,10 +8403,10 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticMedNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//a list of DEA scheduled anesthetic medications taken into inventory from a Supplier. Qtys are always in milliLiters so inventory count works properly.
 					command="DROP TABLE IF EXISTS anesthmedsintake";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
@@ -8417,10 +8417,10 @@ namespace OpenDental{
 						InvoiceNum char(20) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//fields required to create inventory of anesthetic medications
 					command="DROP TABLE IF EXISTS anesthmedsinventory";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventory (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AnestheticMed char(20) NOT NULL,
@@ -8428,10 +8428,10 @@ namespace OpenDental{
 						QtyOnHand int(5) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//fields required to adjust inventory of anesthetic medications
 					command="DROP TABLE IF EXISTS anesthmedsinventoryadj";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventoryadj (
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						AdjPos int(4) NOT NULL,
@@ -8442,10 +8442,10 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticMedNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//a list of suppliers of anesthetic medications
 					command="DROP TABLE IF EXISTS anesthmedsuppliers";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsuppliers (
 						SupplierIDNum int(3) NOT NULL auto_increment,
 						SupplierName char(32) NOT NULL,
@@ -8461,10 +8461,10 @@ namespace OpenDental{
 						Notes text NOT NULL,
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//keeps the post-anesthesia score and discharge data
 					command="DROP TABLE IF EXISTS anesthscore";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthscore (
 						AnestheticRecordNum int(7) NOT NULL auto_increment,
 						QActivity smallint(1) NOT NULL,
@@ -8480,10 +8480,10 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticRecordNum),
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//keeps data auto-imported from networkable vital sign monitors
 					command="DROP TABLE IF EXISTS anesthvsdata";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthvsdata (
 						AnestheticRecordNum int(7) NOT NULL auto_increment,
 						VSMName char(20) NOT NULL,
@@ -8497,13 +8497,13 @@ namespace OpenDental{
 						Temp int(3) NOT NULL,
 						PRIMARY KEY (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.1.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_1_8();
 		}
@@ -8514,9 +8514,9 @@ namespace OpenDental{
 					+"AND EXISTS(SELECT * FROM grouppermission "
 					+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "//24
 					+"AND grouppermission.UserGroupNum=userod.UserGroupNum)";
-				General.NonQ(command);
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.1.8.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_2_1();
 		}
@@ -8526,7 +8526,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command = "DROP TABLE IF EXISTS anesthmedsintake";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsintake(
 						AnestheticMedNum int(3) NOT NULL auto_increment,
 						IntakeDate datetime NOT NULL,
@@ -8537,9 +8537,9 @@ namespace OpenDental{
 						InvoiceNum char(20) NOT NULL,
 						PRIMARY KEY (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = "DROP TABLE IF EXISTS anesthmedsinventoryadj";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsinventoryadj (
 						AdjustNum int(11) NOT NULL auto_increment,
 						AnestheticMedNum int(11) NOT NULL,
@@ -8550,9 +8550,9 @@ namespace OpenDental{
 						PRIMARY KEY (AdjustNum),
 						INDEX (AnestheticMedNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="DROP TABLE IF EXISTS anestheticdata";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anestheticdata (
 						AnestheticDataNum int(11) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -8608,9 +8608,9 @@ namespace OpenDental{
 						PRIMARY KEY (AnestheticDataNum),
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = "DROP TABLE IF EXISTS anesthmedsuppliers";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthmedsuppliers (
 						SupplierIDNum int(3) NOT NULL auto_increment,
 						SupplierName varchar(255) NOT NULL,
@@ -8627,7 +8627,7 @@ namespace OpenDental{
 						Notes text,
 						PRIMARY KEY (SupplierIDNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					string[] commands = new string[]{
 						"ALTER table userod ADD AnesthProvType int(2) default '3' NOT NULL"
 						,"ALTER table anesthmedsinventory CHANGE AnestheticMedNum AnestheticMedNum int NOT NULL auto_increment"
@@ -8642,9 +8642,9 @@ namespace OpenDental{
 						,"ALTER table anesthmedsgiven CHANGE DoseTimeStamp DoseTimeStamp char(32)"
 						,"ALTER table anesthmedsgiven ADD QtyOnHandOld double"
 					};
-					General.NonQ(commands);
+					Db.NonQ(commands);
 					command = "DROP TABLE IF EXISTS anesthscore";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthscore (
 						AnesthScoreNum int(11) NOT NULL auto_increment,
 						AnestheticRecordNum int(11),
@@ -8662,10 +8662,10 @@ namespace OpenDental{
 						PRIMARY KEY (AnesthScoreNum),
 						INDEX (AnestheticRecordNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					//keeps data auto-imported from networkable vital sign monitors
 					command = "DROP TABLE IF EXISTS anesthvsdata";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command = @"CREATE TABLE anesthvsdata (
 						AnesthVSDataNum int(11) NOT NULL auto_increment,
 						AnestheticRecordNum int(11) NOT NULL,
@@ -8682,29 +8682,29 @@ namespace OpenDental{
 						VSTimeStamp char(32),
 						PRIMARY KEY (AnesthVSDataNum)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (EmployeeNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (ProvNum)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE schedule ADD INDEX (SchedDate)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockDate','0001-01-01','If present, global lock on procedures, payments, insurance payments, and adjustments.  Prevents editing old entries and backdating entries.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('SecurityLockIncludesAdmin','0','0 or 1.  If 1, administrators are also locked out by date.')";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD ResponsParty int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE patient ADD INDEX (ResponsParty)";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command="ALTER TABLE treatplan ADD ResponsParty int NOT NULL";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '6.2.1.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_2_2();
 		}
@@ -8714,7 +8714,7 @@ namespace OpenDental{
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS phonenumber";
-					General.NonQ(command);
+					Db.NonQ(command);
 					command=@"CREATE TABLE phonenumber (
 						PhoneNumberNum int NOT NULL auto_increment,
 						PatNum int NOT NULL,
@@ -8723,13 +8723,13 @@ namespace OpenDental{
 						INDEX (PatNum),
 						INDEX (PhoneNumberVal)
 						) DEFAULT CHARSET=utf8";
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else {
 
 				}
 				command="UPDATE preference SET ValueString = '6.2.2.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			To6_2_9();
 		}

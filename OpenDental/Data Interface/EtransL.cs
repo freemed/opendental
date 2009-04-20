@@ -15,7 +15,7 @@ namespace OpenDental{
 			string command="UPDATE claim SET ClaimStatus = 'S',"
 				+"DateSent= "+POut.PDate(MiscData.GetNowDateTime())
 				+" WHERE claimnum = "+POut.PInt(claimNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
 			etrans.ClearinghouseNum=clearinghouseNum;
@@ -29,7 +29,7 @@ namespace OpenDental{
 				+"LEFT JOIN insplan insplan2 ON insplan2.PlanNum=claim.PlanNum2 "
 				+"LEFT JOIN carrier carrier2 ON carrier2.CarrierNum=insplan2.CarrierNum "
 				+"WHERE claim.ClaimNum="+POut.PInt(claimNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			etrans.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
 			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
 			etrans.MessageText=messageText;
@@ -42,7 +42,7 @@ namespace OpenDental{
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
 				command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
 					if(etrans.OfficeSequenceNumber==999999) {//if the office has sent > 1 million messages, and has looped back around to 1.
@@ -55,7 +55,7 @@ namespace OpenDental{
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans "
 					+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum);
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
 					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
@@ -65,7 +65,7 @@ namespace OpenDental{
 				}
 				command="SELECT MAX(CarrierTransCounter2) FROM etrans "
 					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
@@ -80,7 +80,7 @@ namespace OpenDental{
 					etrans.CarrierTransCounter2=1;
 					command="SELECT MAX(CarrierTransCounter) FROM etrans "
 						+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum2);
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
 						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 					}
@@ -89,7 +89,7 @@ namespace OpenDental{
 					}
 					command="SELECT MAX(CarrierTransCounter2) FROM etrans "
 						+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum2);
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
 						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 					}
@@ -125,7 +125,7 @@ namespace OpenDental{
 							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
-						General.NonQ(command);
+						Db.NonQ(command);
 					} else {//partially accepted
 						List<int> transNums=x997.GetTransNums();
 						string ack;
@@ -137,7 +137,7 @@ namespace OpenDental{
 									+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 									+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 									+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
-								General.NonQ(command);
+								Db.NonQ(command);
 							}
 						}
 					}

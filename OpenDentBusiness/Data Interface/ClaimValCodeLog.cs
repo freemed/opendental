@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public static double GetValAmountTotal(Claim Cur, string Code){
 			double total = 0;
 			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + POut.PInt(Cur.ClaimNum) + "' AND ValCode='" + POut.PString(Code) + "'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				total+=PIn.PDouble(table.Rows[i][4].ToString());
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 
 		public static ArrayList GetValCodes(Claim Cur){
 			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + Cur.ClaimNum + "'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
 				ClaimValCode vc = new ClaimValCode();
@@ -45,14 +45,14 @@ namespace OpenDentBusiness {
 						+"'"+POut.PString(vc.ValCode)+"', "
 						+"'"+POut.PDouble(vc.ValAmount)+"', "
 						+"'"+POut.PInt(vc.Ordinal)+"')";
- 					General.NonQ(command);
+ 					Db.NonQ(command);
 				} else {
 				  string command="UPDATE claimvalcodelog SET "
 				    +"ClaimNum='" + POut.PInt(vc.ClaimNum) + "',"
 				    +"ValCode='" + POut.PString(vc.ValCode) + "',"
 				    +"ValAmount='" + POut.PDouble(vc.ValAmount) + "' "
 				    +"WHERE ClaimValCodeLogNum='" + POut.PInt(vc.ClaimValCodeLogNum) + "'";
-				  General.NonQ(command);
+				  Db.NonQ(command);
 				}
 			}
 		} //Update

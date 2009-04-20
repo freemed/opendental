@@ -308,7 +308,7 @@ namespace OpenDental{
 				+"AND FName='"+POut.PString(pat.FName)+"' "
 				+"AND Birthdate="+POut.PDate(pat.Birthdate)+" "
 				+"AND PatStatus!=4";//not deleted
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			Patient existingPat=null;
 			existingPatOld=null;//we will need this to do an update.
 			if(table.Rows.Count>0){//a patient already exists, so only add missing fields
@@ -386,7 +386,7 @@ namespace OpenDental{
 						+"AND FName='"+POut.PString(guar.FName)+"' "
 						+"AND Birthdate="+POut.PDate(guar.Birthdate)+" "
 						+"AND PatStatus!=4";//not deleted
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0){//a guar already exists, so simply attach. Make no other changes
 						existingPatOld=pat.Copy();
 						pat.Guarantor=PIn.PInt(table.Rows[0][0].ToString());
@@ -427,7 +427,7 @@ namespace OpenDental{
 					+"AND FName='"+POut.PString(subsc.FName)+"' "
 					+"AND Birthdate="+POut.PDate(subsc.Birthdate)+" "
 					+"AND PatStatus!=4";//not deleted
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0){//a subsc already exists, so simply attach. Make no other changes
 					plan.Subscriber=PIn.PInt(table.Rows[0][0].ToString());
 				}

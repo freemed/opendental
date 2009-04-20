@@ -18,7 +18,7 @@ namespace OpenDental{
 			Benefit[] benefitList=Benefits.Refresh(patPlans);
 			//this query could be improved slightly to only get notes of interest.
 			string command="SELECT * FROM procnote WHERE PatNum="+POut.PInt(apt.PatNum)+" ORDER BY EntryDateTime";
-			DataTable rawNotes=General.GetTable(command);
+			DataTable rawNotes=Db.GetTable(command);
 			//CovPats.Refresh(PlanList,patPlans);
 			//bool doResetRecallStatus=false;
 			ProcedureCode procCode;

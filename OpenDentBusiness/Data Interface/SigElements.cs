@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 				command+="SignalNum="+POut.PInt(signalList[i].SignalNum);
 			}
 			command+=") ORDER BY sigelementdef.SigElementType";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			SigElement[] List=new SigElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigElement();
@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				+",SigType = '"    +POut.PInt   ((int)SigType)+"'"
 				+" WHERE SigElementNum = '"+POut.PInt(SigElementNum)+"'";
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		///<summary></summary>
@@ -63,10 +63,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt   (se.SigElementDefNum)+"', "
 				+"'"+POut.PInt   (se.SignalNum)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				se.SigElementNum=General.NonQ(command,true);
+ 				se.SigElementNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 			string command= "DELETE from SigElement WHERE SigElementNum = '"
 				+POut.PInt(SigElementNum)+"'";
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		///<summary>Loops through the supplied sigElement list and pulls out all elements for one specific signal.</summary>

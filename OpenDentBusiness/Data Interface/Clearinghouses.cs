@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		public static void Refresh() {
 			string command=
 				"SELECT * FROM clearinghouse";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			list=new Clearinghouse[table.Rows.Count];
 			HList=new Hashtable();
 			string[] payors;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clearhouse.SenderName)+"', "
 				+"'"+POut.PString(clearhouse.SenderTelephone)+"', "
 				+"'"+POut.PString(clearhouse.GS03)+"')";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -114,14 +114,14 @@ namespace OpenDentBusiness{
 				+",SenderTelephone='"+POut.PString(clearhouse.SenderTelephone)+"' "
 				+",GS03 = '"         +POut.PString(clearhouse.GS03)+"' "
 				+"WHERE ClearinghouseNum = '"+POut.PInt   (clearhouse.ClearinghouseNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Clearinghouse clearhouse){
 			string command="DELETE FROM clearinghouse "
 				+"WHERE ClearinghouseNum = '"+POut.PInt(clearhouse.ClearinghouseNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets the last batch number for this clearinghouse and increments it by one.  Saves the new value, then returns it.  So even if the new value is not used for some reason, it will have already been incremented. Remember that LastBatchNumber is never accurate with local data in memory.</summary>
@@ -129,7 +129,7 @@ namespace OpenDentBusiness{
 			//get last batch number
 			string command="SELECT LastBatchNumber FROM clearinghouse "
 				+"WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			int batchNum=PIn.PInt(table.Rows[0][0].ToString());
 			//and increment it by one
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 			//save the new batch number. Even if user cancels, it will have incremented.
 			command="UPDATE clearinghouse SET LastBatchNumber="+batchNum.ToString()
 				+" WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			return batchNum;
 		}
 

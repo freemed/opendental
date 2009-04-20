@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		private static List<TaskList> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<TaskList> retVal=new List<TaskList>();
 			TaskList tasklist;
 			string desc;
@@ -167,7 +167,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM tasklist "
 				+"WHERE ObjectType="+POut.PInt((int)oType)
 				+" ORDER BY Descript";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			TaskList[] List=new TaskList[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TaskList();
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 				+",ObjectType = '"    +POut.PInt   ((int)tlist.ObjectType)+"'"
 				+",DateTimeEntry = " +POut.PDateT (tlist.DateTimeEntry)
 				+" WHERE TaskListNum = '" +POut.PInt (tlist.TaskListNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -229,10 +229,10 @@ namespace OpenDentBusiness{
 			}
 			command+=")";//DateTimeEntry set to current server time
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				tlist.TaskListNum=General.NonQ(command,true);
+ 				tlist.TaskListNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -259,23 +259,23 @@ namespace OpenDentBusiness{
 		///<summary>Throws exception if any child tasklists or tasks.</summary>
 		public static void Delete(TaskList tlist){
 			string command="SELECT COUNT(*) FROM tasklist WHERE Parent="+POut.PInt(tlist.TaskListNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it still has child lists attached."));
 			}
 			command="SELECT COUNT(*) FROM task WHERE TaskListNum="+POut.PInt(tlist.TaskListNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it still has child tasks attached."));
 			}
 			command="SELECT COUNT(*) FROM userod WHERE TaskListInBox="+POut.PInt(tlist.TaskListNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it is attached to a user inbox."));
 			}
 			command= "DELETE from tasklist WHERE TaskListNum = '"
 				+POut.PInt(tlist.TaskListNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		

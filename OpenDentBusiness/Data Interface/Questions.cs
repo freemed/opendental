@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		public static Question[] Refresh(int patNum) {
 			string command="SELECT * FROM question WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Question[] List=new Question[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Question();
@@ -33,7 +33,7 @@ namespace OpenDentBusiness {
 				+",Answer = '"     +POut.PString(quest.Answer)+"'"
 				+",FormPatNum = '" +POut.PInt   (quest.FormPatNum)+"'"
 				+" WHERE QuestionNum  ='"+POut.PInt   (quest.QuestionNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -56,10 +56,10 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(quest.Answer)+"', "
 				+"'"+POut.PInt   (quest.FormPatNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				quest.QuestionNum=General.NonQ(command,true);
+				quest.QuestionNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 		/*public void Delete() {
 			string command="DELETE FROM question WHERE QuestionNum ="+POut.PInt(QuestionNum);
 			DataConnection dcon=new DataConnection();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 	
@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 		///<summary>Checks the database to see if the specified patient has previously answered a questionnaire.</summary>
 		public static bool PatHasQuest(int patNum){
 			string command="SELECT COUNT(*) FROM question WHERE PatNum="+POut.PInt(patNum);
-			if(General.GetCount(command)=="0"){
+			if(Db.GetCount(command)=="0"){
 				return false;			
 			}
 			return true;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness {
 		///<summary>Deletes all questions for this patient.</summary>
 		public static void DeleteAllForPat(int patNum) {
 			string command="DELETE FROM question WHERE PatNum ="+POut.PInt(patNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 	*/
 		

@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Commlog[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Commlog[] List=new Commlog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Commlog();
@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 				//+"'"+POut.PBool  (comm.IsStatementSent)+"', "
 				+"'"+POut.PInt   (comm.UserNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				comm.CommlogNum=General.NonQ(command,true);
+				comm.CommlogNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -87,13 +87,13 @@ namespace OpenDentBusiness{
 				//+"IsStatementSent = '"+POut.PBool  (comm.IsStatementSent)+"', "
 				+"UserNum = '"        +POut.PInt   (comm.UserNum)+"' "
 				+"WHERE commlognum = '"+POut.PInt(comm.CommlogNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Commlog comm) {
 			string command= "DELETE FROM commlog WHERE CommLogNum = '"+POut.PInt(comm.CommlogNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 				command+=" AND PatNum="+POut.PInt(patNum)+" AND CommType="+POut.PInt(recallType)
 					+" AND Mode_="+POut.PInt((int)_mode)
 					+" AND SentOrReceived=1";
-				if(General.GetCount(command)!="0"){
+				if(Db.GetCount(command)!="0"){
 					return;
 				}
 			}

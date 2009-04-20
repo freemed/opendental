@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 			} 
 			DataSet ds=new DataSet();
 			string command=Patients.GetFamilySelectCommand(patNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			table.TableName="Patient";
 			table.Columns.Add("Age");
 			table.Columns.Add("PrimaryTeethOld");
@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			table.TableName="PatPlan";
 			return table;
 		}
@@ -69,7 +69,7 @@ namespace OpenDentBusiness {
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL
 			//Debug.WriteLine(command);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			table.TableName="InsPlan";
 			return table;
 		}

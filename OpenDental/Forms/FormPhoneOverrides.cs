@@ -23,7 +23,7 @@ namespace OpenDental {
 
 		private void FillGrid(){
 			string command="SELECT * FROM phoneoverride";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Ext",35);

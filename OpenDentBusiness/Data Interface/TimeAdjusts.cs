@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 				//adding a day takes it to midnight of the specified toDate
 				+" AND TimeEntry <= "+POut.PDate(toDate.AddDays(1));
 			command+=" ORDER BY TimeEntry";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			TimeAdjust[] List=new TimeAdjust[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new TimeAdjust();
@@ -49,10 +49,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(adj.OTimeHours.TotalHours)+"', "
 				+"'"+POut.PString(adj.Note)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				adj.TimeAdjustNum=General.NonQ(command,true);
+				adj.TimeAdjustNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -65,13 +65,13 @@ namespace OpenDentBusiness{
 				+",OTimeHours = '"+POut.PDouble(adj.OTimeHours.TotalHours)+"' "
 				+",Note = '"      +POut.PString(adj.Note)+"' "
 				+"WHERE TimeAdjustNum = '"+POut.PInt(adj.TimeAdjustNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(TimeAdjust adj) {
 			string command= "DELETE FROM timeadjust WHERE TimeAdjustNum = "+POut.PInt(adj.TimeAdjustNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

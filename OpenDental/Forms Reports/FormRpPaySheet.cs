@@ -362,8 +362,8 @@ namespace OpenDental{
 			if(!checkAllTypes.Checked && listTypes.SelectedIndices.Count==0){
 				queryPat+=" LIMIT 0";
 			}
-			DataTable tableIns=General.GetTable(queryIns);
-			DataTable tablePat=General.GetTable(queryPat);
+			DataTable tableIns=Db.GetTable(queryIns);
+			DataTable tablePat=Db.GetTable(queryPat);
 			FormReport FormR=new FormReport();
 			FormR.SourceRdlString=Properties.Resources.PaymentsRDL;
 			FormR.RdlReport.DataSets["Data"].SetData(tableIns);

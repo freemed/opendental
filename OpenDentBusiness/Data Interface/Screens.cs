@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 				"SELECT * from screen "
 				+"WHERE ScreenGroupNum = '"+POut.PInt(screenGroupNum)+"' "
 				+"ORDER BY ScreenGroupOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new OpenDentBusiness.Screen[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new OpenDentBusiness.Screen();
@@ -82,10 +82,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.ScreenGroupOrder)+"', "
 				+"'"+POut.PString(Cur.Comments)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.ScreenNum=General.NonQ(command,true);
+ 				Cur.ScreenNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 				+",ScreenGroupOrder ='" +POut.PInt   (Cur.ScreenGroupOrder)+"'"
 				+",Comments ='"         +POut.PString(Cur.Comments)+"'"
 				+" WHERE ScreenNum = '" +POut.PInt(Cur.ScreenNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Updates all screens for a group with the date,prov, and location info of the current group.</summary>
@@ -127,13 +127,13 @@ namespace OpenDentBusiness{
 				+",ProvNum ='"          +POut.PInt   (ScreenGroupCur.ProvNum)+"'"
 				+",ProvName ='"         +POut.PString(ScreenGroupCur.ProvName)+"'"
 				+" WHERE ScreenGroupNum = '" +ScreenGroupCur.ScreenGroupNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(OpenDentBusiness.Screen Cur){
 			string command = "DELETE from screen WHERE ScreenNum = '"+POut.PInt(Cur.ScreenNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

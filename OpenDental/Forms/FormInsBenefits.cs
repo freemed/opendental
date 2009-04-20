@@ -1155,7 +1155,7 @@ namespace OpenDental{
 				//Flo
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D1204"
 					&& ben.BenefitType==InsBenefitType.Limitations
-					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum//ignored
+					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
 					&& ben.Percent==0
@@ -1167,7 +1167,7 @@ namespace OpenDental{
 				//BWs
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D0274"//4BW
 					&& ben.BenefitType==InsBenefitType.Limitations
-					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum//ignored
+					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
 					&& ben.Percent==0
@@ -1190,7 +1190,7 @@ namespace OpenDental{
 				//Pano
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D0330"//Pano
 					&& ben.BenefitType==InsBenefitType.Limitations
-					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum//ignored
+					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
 					&& ben.Percent==0

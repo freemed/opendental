@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM schoolcourse "
 				+"ORDER BY CourseID";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new SchoolCourse[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SchoolCourse();
@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				+",CourseID = '"       +POut.PString(sc.CourseID)+"'"
 				+",Descript = '"       +POut.PString(sc.Descript)+"'"
 				+" WHERE SchoolCourseNum = '"+POut.PInt(sc.SchoolCourseNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -62,10 +62,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PString(sc.CourseID)+"', "
 				+"'"+POut.PString(sc.Descript)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				sc.SchoolCourseNum=General.NonQ(command,true);
+ 				sc.SchoolCourseNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -87,21 +87,21 @@ namespace OpenDentBusiness{
 			//check for attached reqneededs---------------------------------------------------------------------
 			string command="SELECT COUNT(*) FROM reqneeded WHERE SchoolCourseNum = '"
 				+POut.PInt(courseNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'requirements needed' table."));
 			}
 			//check for attached reqstudents--------------------------------------------------------------------------
 			command="SELECT COUNT(*) FROM reqstudent WHERE SchoolCourseNum = '"
 				+POut.PInt(courseNum)+"'";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'student requirements' table."));
 			}
 			//delete---------------------------------------------------------------------------------------------
 			command= "DELETE from schoolcourse WHERE SchoolCourseNum = '"
 				+POut.PInt(courseNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Description is CourseID Descript.</summary>

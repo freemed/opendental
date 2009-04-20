@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM refattach"
 				+" WHERE PatNum = "+POut.PInt(patNum)
 				+" ORDER BY itemorder";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RefAttach[] List=new RefAttach[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RefAttach();
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 				+ ",RefToStatus = '"+POut.PInt   ((int)attach.RefToStatus)+"'"
 				+ ",Note = '"       +POut.PString(attach.Note)+"'"
 				+" WHERE RefAttachNum = '" +POut.PInt(attach.RefAttachNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -62,14 +62,14 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool(attach.IsFrom)+"', "
 				+"'"+POut.PInt ((int)attach.RefToStatus)+"', "
 				+"'"+POut.PString(attach.Note)+"')";
- 			attach.RefAttachNum=General.NonQ(command,true);
+ 			attach.RefAttachNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
 		public static void Delete(RefAttach attach){
 			string command= "DELETE FROM refattach "
 				+"WHERE refattachnum = '"+attach.RefAttachNum+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}		
 
 		///<summary></summary>
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT * FROM refattach"
 				+" WHERE ReferralNum = '"+referralNum+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count > 0){
 				return true;
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				+"AND refattach.ReferralNum=referral.ReferralNum "
 				+"AND refattach.IsFrom="+POut.PBool(IsFrom)
 				+" AND referral.ReferralNum="+refNum.ToString();
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				retStr[i]=PIn.PString(table.Rows[i][0].ToString());

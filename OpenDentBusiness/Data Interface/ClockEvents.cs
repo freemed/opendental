@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 					command+=" AND (ClockStatus = '0' OR ClockStatus = '1')";
 			}
 			command+=" ORDER BY TimeDisplayed";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ClockEvent[] List=new ClockEvent[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new ClockEvent();
@@ -58,10 +58,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)ce.ClockStatus)+"', "
 				+"'"+POut.PString(ce.Note)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				ce.ClockEventNum=General.NonQ(command,true);
+				ce.ClockEventNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -75,13 +75,13 @@ namespace OpenDentBusiness{
 				+",ClockStatus = '"   +POut.PInt   ((int)ce.ClockStatus)+"' "
 				+",Note = '"          +POut.PString(ce.Note)+"' "
 				+"WHERE ClockEventNum = '"+POut.PInt(ce.ClockEventNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ClockEvent ce) {
 			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.PInt(ce.ClockEventNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets directly from the database.  Returns true if the last time clock entry for this employee was a clockin.</summary>
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			}else{//Assume MySQL
 				command+=" LIMIT 1";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)//if this employee has never clocked in or out.
 				return false;
 			if(PIn.PBool(table.Rows[0][0].ToString())){//if the last clockevent was a clockin
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 			}else{//Assum MySQL
 				command+="LIMIT 1";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)//if this employee has never clocked in or out.
 				return TimeClockStatus.Home;
 			return (TimeClockStatus)PIn.PInt(table.Rows[0][0].ToString());

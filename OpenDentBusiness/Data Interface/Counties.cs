@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				"SELECT * from county "
 				+"WHERE CountyName LIKE '"+name+"%' "
 				+"ORDER BY CountyName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new County[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new County();
@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT CountyName from county "
 				+"ORDER BY CountyName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ListNames=new string[table.Rows.Count];
 			for(int i=0;i<ListNames.Length;i++){
 				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.CountyName)+"', "
 				+"'"+POut.PString(Cur.CountyCode)+"')";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//Cur.ZipCodeNum=InsertID;
 		}
 
@@ -60,18 +60,18 @@ namespace OpenDentBusiness{
 				+"CountyName ='"  +POut.PString(Cur.CountyName)+"'"
 				+",CountyCode ='" +POut.PString(Cur.CountyCode)+"'"
 				+" WHERE CountyName = '"+POut.PString(Cur.OldCountyName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//then, update all patients using that County
 			command = "UPDATE patient SET "
 				+"County ='"  +POut.PString(Cur.CountyName)+"'"
 				+" WHERE County = '"+POut.PString(Cur.OldCountyName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Must run UsedBy before running this.</summary>
 		public static void Delete(County Cur){
 			string command= "DELETE from county WHERE CountyName = '"+POut.PString(Cur.CountyName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Use before DeleteCur to determine if this County name is in use. Returns a formatted string that can be used to quickly display the names of all patients using the Countyname.</summary>
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT LName,FName from patient "
 				+"WHERE County = '"+POut.PString(countyName)+"' ";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return "";
 			string retVal="";
@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT * from county "
 				+"WHERE CountyName = '"+POut.PString(countyName)+"' ";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return false;
 			else

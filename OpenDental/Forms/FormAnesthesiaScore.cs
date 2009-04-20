@@ -183,7 +183,7 @@ namespace OpenDental {
 			+ " FROM anesthscore"
 			+ " WHERE AnestheticRecordNum = " + AnestheticRecordNum;
 
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			AnesthScore Cur;
 			for (int i = 0; i < table.Rows.Count; i++)
 			{

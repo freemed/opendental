@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 			string command= "INSERT INTO accountingautopay (PayType,PickList) VALUES("
 				+"'"+POut.PInt   (pay.PayType)+"', "
 				+"'"+POut.PString(pay.PickList)+"')";
-			pay.AccountingAutoPayNum=General.NonQ(command,true);
+			pay.AccountingAutoPayNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into full descriptions separated by carriage returns.</summary>
@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 		///<summary>Saves the list of accountingAutoPays to the database.  Deletes all existing ones first.</summary>
 		public static void SaveList(ArrayList AL) {
 			string command="DELETE FROM accountingautopay";
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<AL.Count;i++){
 				Insert((AccountingAutoPay)AL[i]);
 			}

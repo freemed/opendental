@@ -78,8 +78,8 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(int RecallTypeNum){
 			//validate that not already in use.
 			string command="SELECT LName,FName FROM patient WHERE RecallTypeNum="+POut.PInt(RecallTypeNum);
-			DataTable table=General.GetTable(command);
-			//int count=PIn.PInt(General.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";
 			for(int i=0;i<table.Rows.Count;i++){
 				if(i>0){

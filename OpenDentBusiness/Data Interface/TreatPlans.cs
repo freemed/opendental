@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM treatplan "
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY DateTP";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			TreatPlan[] List=new TreatPlan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TreatPlan();
@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 				+",SigIsTopaz = '"+POut.PBool  (tp.SigIsTopaz)+"'"
 				+",ResponsParty='"+POut.PInt   (tp.ResponsParty)+"'"
 				+" WHERE TreatPlanNum = '"+POut.PInt(tp.TreatPlanNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -66,10 +66,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (tp.SigIsTopaz)+"', "
 				+"'"+POut.PInt   (tp.ResponsParty)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				tp.TreatPlanNum=General.NonQ(command,true);
+ 				tp.TreatPlanNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -77,13 +77,13 @@ namespace OpenDentBusiness{
 		public static void Delete(TreatPlan tp){
 			//check proctp for dependencies
 			string command="SELECT * FROM proctp WHERE TreatPlanNum ="+POut.PInt(tp.TreatPlanNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//this should never happen
 				throw new InvalidProgramException(Lan.g("TreatPlans","Cannot delete treatment plan because it has ProcTP's attached"));
 			}
 			command= "DELETE from treatplan WHERE TreatPlanNum = '"+POut.PInt(tp.TreatPlanNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		public static string GetHashString(TreatPlan tp,List<ProcTP> proclist) {

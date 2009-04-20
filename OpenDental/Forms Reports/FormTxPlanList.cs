@@ -276,7 +276,7 @@ namespace OpenDental
                 whereProv += ")";
             }
 
-            AddrTable = General.GetTable(command);
+            AddrTable = Db.GetTable(command);
             int PatNum;
             // Variables for Primary Insurance
             double PriMax;
@@ -366,7 +366,7 @@ namespace OpenDental
                       "AND procedurelog.DateTP >= '" + procDate + "' " + whereProc + whereProv;
                       
             // "AND procedurelog.PatNum = claimproc.PatNum " + Removed SPK     
-            PatientTreatmentTable = General.GetTable(command);
+            PatientTreatmentTable = Db.GetTable(command);
             for (int i = 0; i <= PatientTreatmentTable.Rows.Count - 1; i++)
             {
                 row = new OpenDental.UI.ODGridRow();

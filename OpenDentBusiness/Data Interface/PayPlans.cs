@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 
 		private static List<PayPlan> RefreshAndFill(string command){
 			List<PayPlan> retVal=new List<PayPlan>();
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			//PayPlan[] List=new PayPlan[table.Rows.Count];
 			PayPlan payplan;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 				+",PlanNum = '"       +POut.PInt   (plan.PlanNum)+"'"
 				+",CompletedAmt = '"  +POut.PDouble(plan.CompletedAmt)+"'"
 				+" WHERE PayPlanNum = '" +POut.PInt(plan.PayPlanNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -90,24 +90,24 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (plan.PlanNum)+"', "
 				+"'"+POut.PDouble(plan.CompletedAmt)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				plan.PayPlanNum=General.NonQ(command,true);
+ 				plan.PayPlanNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary>Called from FormPayPlan.  Also deletes all attached payplancharges.  Throws exception if there are any paysplits attached.</summary>
 		public static void Delete(PayPlan plan){
 			string command="SELECT COUNT(*) FROM paysplit WHERE PayPlanNum="+plan.PayPlanNum.ToString();
-			if(General.GetCount(command)!="0"){
+			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException
 					(Lan.g("PayPlans","You cannot delete a payment plan with payments attached.  Unattach the payments first."));
 			}
 			command="DELETE FROM payplancharge WHERE PayPlanNum="+plan.PayPlanNum.ToString();
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM payplan WHERE PayPlanNum ="+plan.PayPlanNum.ToString();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/// <summary>Gets info directly from database. Used from PayPlan and Account windows to get the amount paid so far on one payment plan.</summary>
@@ -115,7 +115,7 @@ namespace OpenDentBusiness{
 			string command="SELECT SUM(paysplit.SplitAmt) FROM paysplit "
 				+"WHERE paysplit.PayPlanNum = '"+payPlanNum.ToString()+"' "
 				+"GROUP BY paysplit.PayPlanNum";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return 0;
 			}

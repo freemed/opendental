@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		public static void Refresh(){
 			string command="SELECT * from electid "
 				+"ORDER BY CarrierName";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			List=new ElectID[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new ElectID();

@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<PaySplit> RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<PaySplit> retVal=new List<PaySplit>();
 			PaySplit split;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 				+ ",ProcNum = '"     +POut.PInt   (split.ProcNum)+"'"
 				//+ ",DateEntry = '"   +POut.PDate  (DateEntry)+"'"//not allowed to change
 				+" WHERE splitNum = '" +POut.PInt (split.SplitNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -95,17 +95,17 @@ namespace OpenDentBusiness{
 			}
 			command+=")";//DateEntry: date of server
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				split.SplitNum=General.NonQ(command,true);
+ 				split.SplitNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary>Deletes the paysplit.</summary>
 		public static void Delete(PaySplit split){
 			string command= "DELETE from paysplit WHERE splitNum = "+POut.PInt(split.SplitNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Returns all paySplits for the given procNum. Must supply a list of all paysplits for the patient.</summary>

@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(rule.CodeStart)+"', "
 				+"'"+POut.PString(rule.CodeEnd)+"', "
 				+"'"+POut.PBool  (rule.IsEnabled)+"')";
- 			rule.AppointmentRuleNum=General.NonQ(command,true);
+ 			rule.AppointmentRuleNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -47,14 +47,14 @@ namespace OpenDentBusiness{
 				+ ",CodeEnd = '"   +POut.PString(rule.CodeEnd)+"'"
 				+ ",IsEnabled = '"    +POut.PBool  (rule.IsEnabled)+"'"
 				+" WHERE AppointmentRuleNum = '" +POut.PInt   (rule.AppointmentRuleNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(AppointmentRule rule){
 			string command="DELETE FROM appointmentrule" 
 				+" WHERE AppointmentRuleNum = "+POut.PInt(rule.AppointmentRuleNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Whenever an appointment is scheduled, the procedures which would be double booked are calculated.  In this method, those procedures are checked to see if the double booking should be blocked.  If double booking is indeed blocked, then a separate function will tell the user which category.</summary>

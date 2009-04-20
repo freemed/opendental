@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 			if(userNum!=0) {
 				command+=" AND UserNum="+POut.PInt(userNum);
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new SecurityLog();
@@ -60,10 +60,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(log.LogText)+"', "
 				+"'"+POut.PInt   (log.PatNum)+"')";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				log.SecurityLogNum=General.NonQ(command,true);
+ 				log.SecurityLogNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM securitylog "
 				+"WHERE PatNum= '"+POut.PInt(patNum)+"' "
 				+"AND ("+types+")";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new SecurityLog();

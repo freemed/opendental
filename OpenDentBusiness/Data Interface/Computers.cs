@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * from computer "
 				+"WHERE compname = '"+Environment.MachineName+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				Computer Cur=new Computer();
 				Cur.CompName=Environment.MachineName;
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static Computer[] GetList() {
 			string command="SELECT * FROM computer ORDER BY CompName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Computer[] list=new Computer[table.Rows.Count];
 			for(int i=0;i<list.Length;i++) {
 				list[i]=new Computer();
@@ -67,10 +67,10 @@ namespace OpenDentBusiness{
 				"'"+POut.PString(comp.CompName)+"')";
 				//+"'"+POut.PString(PrinterName)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				comp.ComputerNum=General.NonQ(command,true);
+ 				comp.ComputerNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -83,13 +83,13 @@ namespace OpenDentBusiness{
 				+"WHERE ComputerNum = '"+POut.PInt(ComputerNum)+"'";
 			//MessageBox.Show(string command);
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		///<summary></summary>
 		public static void Delete(Computer comp){
 			string command= "DELETE FROM computer WHERE computernum = '"+comp.ComputerNum.ToString()+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Only called from Printers.GetForSit</summary>

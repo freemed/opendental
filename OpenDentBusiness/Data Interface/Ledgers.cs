@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 			if(guarantor!=0) {
 				command+=" WHERE Guarantor="+POut.PInt(guarantor);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 			if(AsOfDate.Year<1880){
 				AsOfDate=DateTime.Today;
 			}
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 			if(guarantor!=0) {
 				familyPatNums="(";
 				command="SELECT p.PatNum FROM patient p WHERE p.Guarantor="+guarantor+";";
-				DataTable tFamilyPatNums=General.GetTable(command);
+				DataTable tFamilyPatNums=Db.GetTable(command);
 				for(int i=0;i<tFamilyPatNums.Rows.Count;i++) {
 					if(i>0) {
 						familyPatNums+=",";
@@ -303,7 +303,7 @@ namespace OpenDentBusiness{
 					"p.InsEst=f.InsEst,"+
 					"p.PayPlanDue=f.PayPlanDue "+
 				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 	}
 

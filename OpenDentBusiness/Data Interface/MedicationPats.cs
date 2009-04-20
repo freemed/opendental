@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public static void Refresh(int patNum){
 			string command =
 				"SELECT * from medicationpat WHERE patnum = '"+patNum+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new MedicationPat[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new MedicationPat();
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				+ ",patnote = '"      +POut.PString(Cur.PatNote)+"'"
 				+" WHERE medicationpatnum = '" +POut.PInt   (Cur.MedicationPatNum)+"'";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -55,10 +55,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.MedicationNum)+"', "
 				+"'"+POut.PString(Cur.PatNote)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.MedicationPatNum=General.NonQ(command,true);
+ 				Cur.MedicationPatNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		public static void Delete(MedicationPat Cur){
 			string command = "DELETE from medicationpat WHERE medicationpatNum = '"
 				+Cur.MedicationPatNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		
 	}

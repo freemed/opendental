@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Task> RefreshAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<Task> retVal=new List<Task>();
 			Task task;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 				+",UserNum = '"       +POut.PInt   (task.UserNum)+"'"
 				+",DateTimeFinished ="+POut.PDateT (task.DateTimeFinished)
 				+" WHERE TaskNum = '" +POut.PInt(task.TaskNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			//need to optimize this later to skip unless TaskListNumChanged
 			TaskAncestors.Synch(task);
 		}
@@ -223,10 +223,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (task.UserNum)+"',"
 				+POut.PDateT (task.DateTimeFinished)+")";
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				task.TaskNum=General.NonQ(command,true);
+ 				task.TaskNum=Db.NonQ(command,true);
 			}
 			TaskAncestors.Synch(task);
 		}
@@ -256,9 +256,9 @@ namespace OpenDentBusiness{
 		///<summary>Deleting a task never causes a problem, so no dependencies are checked.</summary>
 		public static void Delete(Task task){
 			string command= "DELETE from task WHERE TaskNum = "+POut.PInt(task.TaskNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			command="DELETE from taskancestor WHERE TaskNum = "+POut.PInt(task.TaskNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
@@ -269,7 +269,7 @@ namespace OpenDentBusiness{
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
 				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
 				+" AND task.TaskStatus="+POut.PInt((int)TaskStatusEnum.New);
-			return PIn.PInt(General.GetCount(command));
+			return PIn.PInt(Db.GetCount(command));
 		}
 	
 	

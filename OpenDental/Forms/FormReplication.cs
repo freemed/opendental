@@ -190,7 +190,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			string command="SELECT DATABASE()";
-			string currentDatabaseName=PIn.PString(General.GetTable(command).Rows[0][0].ToString());
+			string currentDatabaseName=PIn.PString(Db.GetTable(command).Rows[0][0].ToString());
 			//Loop through each of the selected computers and restart the slave service to force replication to start, then wait until replication is completed.
 			for(int i=0;i<gridReplicationComputers.SelectedIndices.Length;i++) {
 				string compName=gridReplicationComputers.Rows[gridReplicationComputers.SelectedIndices[i]].Cells[0].Text;
@@ -240,7 +240,7 @@ namespace OpenDental{
 		private void butSelectServers_Click(object sender,EventArgs e) {
 			//A server is considered a replication server if it is selected in the server list, and it is possible to connect to mysql into a database by the current database name using the Open Dental replication user.
 			string command="SELECT DATABASE()";
-			string currentDatabaseName=PIn.PString(General.GetTable(command).Rows[0][0].ToString());
+			string currentDatabaseName=PIn.PString(Db.GetTable(command).Rows[0][0].ToString());
 			gridReplicationComputers.SetSelected(false);//Un-select all computers to start.
 			for(int i=0;i<gridReplicationComputers.Rows.Count;i++){
 				try{

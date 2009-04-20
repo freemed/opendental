@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
 		public static void DeleteHL7Msg(string messageID){
 			string command = "DELETE FROM anes_hl7data WHERE MessageID='" + messageID + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void WriteObject(Anes_hl7data hl7){

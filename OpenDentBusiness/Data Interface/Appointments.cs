@@ -187,7 +187,7 @@ namespace OpenDentBusiness{
 				command+=POut.PInt(appts[i].AptNum);
 			}
 			command+=")";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string str;
 			for(int i=0;i<appts.Count;i++){
 				str="";
@@ -206,7 +206,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
 		private static List<Appointment> FillList(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return TableToObjects(table);
 		}
 
@@ -220,7 +220,7 @@ namespace OpenDentBusiness{
 			else{
 				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 			//now, attach all
 			for(int i=0;i<procNums.Length;i++){
 				if(isPlanned) {
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 				else {
 					command="UPDATE procedurelog SET AptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
 				}
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 		}*/
 
@@ -308,10 +308,10 @@ namespace OpenDentBusiness{
 				    +POut.PDateT (appt.DateTimeDismissed)+")";
 				//DateTStamp
 			if(includeAptNum || PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				appt.AptNum=General.NonQ(command,true);
+				appt.AptNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -451,7 +451,7 @@ namespace OpenDentBusiness{
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE AptNum = '"+POut.PInt(appt.AptNum)+"'";
- 			int rowsChanged=General.NonQ(c);
+ 			int rowsChanged=Db.NonQ(c);
 			//MessageBox.Show(c);
 			return rowsChanged;
 		}
@@ -507,7 +507,7 @@ namespace OpenDentBusiness{
 				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
 			}
 			command+="ORDER BY AptDateTime";
-			DataTable rawtable=General.GetTable(command);
+			DataTable rawtable=Db.GetTable(command);
 			DateTime dateT;
 			Patient pat;
 			ContactMethod contmeth;
@@ -585,7 +585,7 @@ namespace OpenDentBusiness{
 				command+="appointment.AptNum="+aptNums[i].ToString();
 			}
 			command+=") ORDER BY patient.LName,patient.FName";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
@@ -601,20 +601,20 @@ namespace OpenDentBusiness{
 				command+=",DateTimeDismissed=NOW()";
 			}
 			command+=" WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
 		public static void SetPattern(int aptNum,string newPattern) {
 			string command="UPDATE appointment SET Pattern='"+POut.PString(newPattern)+"' WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Use to send to unscheduled list, or to set broken.</summary>
 		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
 			string command="UPDATE appointment SET AptStatus="+POut.PInt((int)newStatus)
 				+" WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static Appointment TableToObject(DataTable table) {
@@ -1157,7 +1157,7 @@ namespace OpenDentBusiness{
 				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
 				+"GROUP BY schedule.ScheduleNum "
 				+"ORDER BY StartTime";
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			//the times come back as times rather than datetimes.  This causes problems.  That's why we're not just returning raw.
 			DataRow row;
 			for(int i=0;i<raw.Rows.Count;i++){
@@ -1204,7 +1204,7 @@ namespace OpenDentBusiness{
 
 		private static DataTable GetApptTable(int aptNum){
 			string command="SELECT * FROM appointment WHERE AptNum="+aptNum.ToString();
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			table.TableName="Appointment";
 			return table;
 		}
@@ -1215,7 +1215,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("field");
 			table.Columns.Add("value");
 			string command="SELECT * FROM patient WHERE PatNum="+patNum;
-			DataTable rawPat=General.GetTable(command);
+			DataTable rawPat=Db.GetTable(command);
 			DataRow row;
 			//Patient Name--------------------------------------------------------------------------
 			row=table.NewRow();
@@ -1277,7 +1277,7 @@ namespace OpenDentBusiness{
 			//Patient family balance----------------------------------------------------------------
 			command="SELECT BalTotal,InsEst FROM patient WHERE Guarantor='"
 				+rawPat.Rows[0]["Guarantor"].ToString()+"'";
-			DataTable familyBalance=General.GetTable(command);
+			DataTable familyBalance=Db.GetTable(command);
 			row=table.NewRow();
 			row["field"]=Lan.g("FormApptEdit","Family Balance");
 			double balance=PIn.PDouble(familyBalance.Rows[0]["BalTotal"].ToString())
@@ -1340,7 +1340,7 @@ namespace OpenDentBusiness{
 					+"AND Date(ProcDate)="+POut.PDate(aptDate)+")";//same date
 			}
 			command+=")";
-			DataTable rawProc=General.GetTable(command);
+			DataTable rawProc=Db.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
 				row=table.NewRow();
 				if(apptStatus=="6"){//planned
@@ -1408,7 +1408,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("Note");
 			string command="SELECT * FROM commlog WHERE PatNum="+patNum+" AND IsStatementSent=0 "//don't include StatementSent
 				+"ORDER BY CommDateTime";
-			DataTable rawComm=General.GetTable(command);
+			DataTable rawComm=Db.GetTable(command);
 			for(int i=0;i<rawComm.Rows.Count;i++) {
 				row=table.NewRow();
 				row["commDateTime"]=PIn.PDateT(rawComm.Rows[i]["commDateTime"].ToString()).ToShortDateString();
@@ -1435,7 +1435,7 @@ namespace OpenDentBusiness{
 			else {
 				command+="labcase.AptNum="+aptNum;
 			}
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			DateTime date;
 			DateTime dateDue;
 			//for(int i=0;i<raw.Rows.Count;i++) {//always return one row:
@@ -1476,7 +1476,7 @@ namespace OpenDentBusiness{
 				+"FROM reqstudent,provider "//schoolcourse "
 				+"WHERE reqstudent.ProvNum=provider.ProvNum "
 				+"AND reqstudent.AptNum="+aptNum;
-			raw=General.GetTable(command);
+			raw=Db.GetTable(command);
 			row["requirements"]="";
 			for(int i=0;i<raw.Rows.Count;i++){
 				if(i!=0){
@@ -1494,7 +1494,7 @@ namespace OpenDentBusiness{
 		public static void Delete(int aptNum) {
 			string command;
 			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Patient pat=Patients.GetPat(PIn.PInt(table.Rows[0]["PatNum"].ToString()));
 			if(table.Rows[0]["IsNewPatient"].ToString()=="1") {
 				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
@@ -1506,7 +1506,7 @@ namespace OpenDentBusiness{
 			else {
 				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 			//labcases
 			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
 				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
@@ -1514,13 +1514,13 @@ namespace OpenDentBusiness{
 			else {
 				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 			//plannedappt
 			command="DELETE FROM plannedappt WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//we will not reset item orders here
 			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.Appointment,aptNum);
 		}
 

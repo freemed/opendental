@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 				+",CommandLine  = '"+POut.PString(Cur.CommandLine)+"'"
 				+",Note  = '"       +POut.PString(Cur.Note)+"'"
 				+" WHERE programnum = '"+POut.PInt(Cur.ProgramNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -65,15 +65,15 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.CommandLine)+"', "
 				+"'"+POut.PString(Cur.Note)+"')";
 			//MessageBox.Show(cmd.CommandText);
-			Cur.ProgramNum=General.NonQ(command, true);
+			Cur.ProgramNum=Db.NonQ(command, true);
 		}
 
 		///<summary>This can only be called by the user if it is a program link that they created. Included program links cannot be deleted.  If calling this from ClassConversion, must delete any dependent ProgramProperties first.  It will delete ToolButItems for you.</summary>
 		public static void Delete(Program prog){
 			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.PInt(prog.ProgramNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command = "DELETE from program WHERE ProgramNum = '"+prog.ProgramNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns true if a Program link with the given name or number exists and is enabled.</summary>

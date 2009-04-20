@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 
 		public static void Synch(Task task){
 			string command="DELETE FROM taskancestor WHERE TaskNum="+POut.PInt(task.TaskNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			int taskListNum=0;
 			int parentNum=task.TaskListNum;
 			DataTable table;
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				}
 				//get the parent
 				command="SELECT TaskListNum,Parent FROM tasklist WHERE TaskListNum="+POut.PInt(parentNum);
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count==0){//in case of database inconsistency
 					break;
 				}

@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static JournalEntry[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			JournalEntry[] List=new JournalEntry[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new JournalEntry();
@@ -91,10 +91,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(je.CheckNumber)+"', "
 				+"'"+POut.PInt   (je.ReconcileNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				je.JournalEntryNum=General.NonQ(command,true);
+				je.JournalEntryNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -114,13 +114,13 @@ namespace OpenDentBusiness{
 				+",CheckNumber = '"  +POut.PString(je.CheckNumber)+"' "
 				+",ReconcileNum = '" +POut.PInt   (je.ReconcileNum)+"' "
 				+"WHERE JournalEntryNum = '"+POut.PInt(je.JournalEntryNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(JournalEntry je) {
 			string command= "DELETE FROM journalentry WHERE JournalEntryNum = "+POut.PInt(je.JournalEntryNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used in FormTransactionEdit to synch database with changes user made to the journalEntry list for a transaction.  Must supply an old list for comparison.  Only the differences are saved.  Surround with try/catch, because it will thrown an exception if any entries are negative.</summary>
@@ -205,7 +205,7 @@ namespace OpenDentBusiness{
 			}
 			if(str!=""){
 				command+=str;
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			command="UPDATE journalentry SET ReconcileNum="+POut.PInt(reconcileNum)+" WHERE";
 			str="";
@@ -219,7 +219,7 @@ namespace OpenDentBusiness{
 			}
 			if(str!=""){
 				command+=str;
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace OpenDentBusiness{
 		public static void DeleteForTrans(int transactionNum){
 			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.PInt(transactionNum);
 			DataConnection dcon=new DataConnection();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 

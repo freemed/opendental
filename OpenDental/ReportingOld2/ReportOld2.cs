@@ -417,7 +417,7 @@ namespace OpenDental.ReportingOld2
 				//then, submit the query
 			}
 			//MessageBox.Show(outputQuery);
-			reportTable=General.GetTable(outputQuery);
+			reportTable=Db.GetTable(outputQuery);
 				//ODReportData.SubmitQuery(outputQuery);
 			return true;
 		}

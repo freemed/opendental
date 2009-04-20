@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Refresh() {
 			string command="SELECT * from providerident";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			list=new ProviderIdent[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new ProviderIdent();
@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 				+",SuppIDType = '"+POut.PInt   ((int)pi.SuppIDType)+"'"
 				+",IDNumber = '"  +POut.PString(pi.IDNumber)+"'"
 				+" WHERE ProviderIdentNum = '"+POut.PInt(pi.ProviderIdentNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)pi.SuppIDType)+"', "
 				+"'"+POut.PString(pi.IDNumber)+"')";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			//ClaimProcNum=dcon.InsertID;
 		}
 
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		public static void Delete(ProviderIdent pi){
 			string command= "DELETE FROM providerident "
 				+"WHERE ProviderIdentNum = "+POut.PInt(pi.ProviderIdentNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Gets all supplemental identifiers that have been attached to this provider. Used in the provider edit window.</summary>
@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 		///<summary>Called from FormProvEdit if cancel on a new provider.</summary>
 		public static void DeleteAllForProv(int provNum){
 			string command= "DELETE from providerident WHERE provnum = '"+POut.PInt(provNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		/// <summary></summary>

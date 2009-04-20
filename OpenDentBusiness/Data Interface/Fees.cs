@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			Fee fee;
 			FeeKey key;
 			string command="SELECT * FROM fee";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
 				fee=new Fee();
 				fee.FeeNum       =PIn.PInt(table.Rows[i][0].ToString());
@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 				if(Dict.ContainsKey(key)){
 					//if fee was already loaded for this code, delete this duplicate.
 					command="DELETE FROM fee WHERE FeeNum ="+POut.PInt(fee.FeeNum);
-					General.NonQ(command);
+					Db.NonQ(command);
 				}
 				else{
 					Dict.Add(key,fee);
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 				//+ ",usedefaultcov = '"+POut.PBool  (fee.UseDefaultCov)+"'"
 				+ ",CodeNum = '"      +POut.PInt   (fee.CodeNum)+"'"
 				+" WHERE FeeNum = '"  +POut.PInt   (fee.FeeNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -64,13 +64,13 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (fee.UseDefaultFee)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultCov)+"', "
 				+"'"+POut.PInt   (fee.CodeNum)+"')";
- 			fee.FeeNum=General.NonQ(command,true);
+ 			fee.FeeNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
 		public static void Delete(Fee fee){
 			string command="DELETE FROM fee WHERE FeeNum="+fee.FeeNum;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static Fee GetFee(int codeNum,int feeSchedNum){
@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		///<summary>Clears all fees from one fee schedule.  Supply the DefNum of the feeSchedule.</summary>
 		public static void ClearFeeSched(int schedNum){
 			string command="DELETE FROM fee WHERE FeeSched="+schedNum;
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Copies any fee objects over to the new fee schedule.  Usually run ClearFeeSched first.  Be careful exactly which int's you supply.</summary>

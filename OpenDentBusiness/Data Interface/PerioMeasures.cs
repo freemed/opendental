@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 				+",Lvalue = '"      +POut.PInt   (Cur.Lvalue)+"'"
 				+",DLvalue = '"     +POut.PInt   (Cur.DLvalue)+"'"
 				+" WHERE PerioMeasureNum = '"+POut.PInt(Cur.PerioMeasureNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.Lvalue)+"', "
 				+"'"+POut.PInt   (Cur.DLvalue)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				Cur.PerioMeasureNum=General.NonQ(command,true);
+ 				Cur.PerioMeasureNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		public static void Delete(PerioMeasure Cur){
 			string command= "DELETE from periomeasure WHERE PerioMeasureNum = '"
 				+Cur.PerioMeasureNum.ToString()+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>For the current exam, clears existing skipped teeth and resets them to the specified skipped teeth. The ArrayList valid values are 1-32 int.</summary>
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 			string command = "DELETE from periomeasure WHERE "
 				+"PerioExamNum = '"+perioExamNum.ToString()+"' "
 				+"AND SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//then add the new ones in one at a time.
 			PerioMeasure Cur;
 			for(int i=0;i<skippedTeeth.Count;i++){
@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 				+"SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"' "
 				+"AND PerioExamNum = '"+perioExamNum.ToString()+"' "
 				+"AND ToothValue = '1'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ArrayList retList=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
 				retList.Add(PIn.PInt(table.Rows[i][0].ToString()));

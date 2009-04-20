@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
 					+"AND Etype!=21 "
 					+"ORDER BY DateTimeTrans";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");
 			tHist.Columns.Add("patName");
 			tHist.Columns.Add("CarrierName");
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Etrans SubmitAndFill(string command){
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
 			}
@@ -157,10 +157,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
 				+"'"+POut.PString(etrans.Note)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				etrans.EtransNum=General.NonQ(command,true);
+				etrans.EtransNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -182,7 +182,7 @@ namespace OpenDentBusiness{
 				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
 				+"Note= '"                +POut.PString(etrans.Note)+"' "
 				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
@@ -209,18 +209,18 @@ namespace OpenDentBusiness{
 			//Get next OfficeSequenceNumber-----------------------------------------------------------------------------------------
 			etrans.OfficeSequenceNumber=0;
 			string command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0) {
 				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
 				if(etrans.OfficeSequenceNumber==999999){//if the office has sent > 1 million messages, and has looped back around to 1.
 					//get the date of the most recent max
 					//This works, but it got even more complex for CarrierTransCounter, so we will just throw an exception for now.
 					/*command="SELECT MAX(DateTimeTrans) FROM etrans WHERE OfficeSequenceNumber=999999";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					DateTime maxDateT=PIn.PDateT(table.Rows[0][0].ToString());
 					//then, just get the max that's newer than that.
 					command="SELECT MAX(OfficeSequenceNumber) FROM etrans WHERE DateTimeTrans > '"+POut.PDateT(maxDateT)+"'";
-					table=General.GetTable(command);
+					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
 						etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
 					}*/
@@ -233,7 +233,7 @@ namespace OpenDentBusiness{
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans"
 					+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum);
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
 					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 				}
 				command="SELECT MAX(CarrierTransCounter2) FROM etrans "
 					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
@@ -264,14 +264,14 @@ namespace OpenDentBusiness{
 		public static void SetMessage(int etransNum, string msg) {
 			string command= "UPDATE etrans SET MessageText='"+POut.PString(msg)+"' "
 				+"WHERE EtransNum = '"+POut.PInt(etransNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes the etrans entry and changes the status of the claim back to W.  If it encounters an entry that's not a claim, it skips it for now.  Later, it will handle all types of undo.  It will also check Canadian claims to prevent alteration if an ack or EOB has been received.</summary>
 		public static void Undo(int etransNum){
 			//see if it's a claim.
 			string command="SELECT ClaimNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int claimNum=PIn.PInt(table.Rows[0][0].ToString());
 			if(claimNum==0){//if no claim
 				return;//for now
@@ -280,22 +280,22 @@ namespace OpenDentBusiness{
 
 			//Change the claim back to W.
 			command="UPDATE claim SET ClaimStatus='W' WHERE ClaimNum="+POut.PInt(claimNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			//Delete this etrans
 			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes the etrans entry.  Only used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will throw exception if there's a message attached to the etrans or if the etrans does not exist.</summary>
 		public static void Delete(int etransNum) {
 			//see if there's a message
 			string command="SELECT MessageText FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!=""){//this throws exception if 0 rows.
 				throw new ApplicationException("Error. Etrans must not have messagetext attached yet.");
 			}
 			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 		
 	}

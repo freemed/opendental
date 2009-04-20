@@ -65,7 +65,7 @@ namespace OpenDentHL7 {
 				WHERE programproperty.ProgramNum=program.ProgramNum
 				AND program.ProgName='eClinicalWorks'
 				AND programproperty.PropertyDesc='HL7FolderOut'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string hl7folderOut=table.Rows[0][0].ToString();
 			if(!Directory.Exists(hl7folderOut)) {
 				throw new ApplicationException(hl7folderOut+" does not exist.");
@@ -84,7 +84,7 @@ namespace OpenDentHL7 {
 				WHERE programproperty.ProgramNum=program.ProgramNum
 				AND program.ProgName='eClinicalWorks'
 				AND programproperty.PropertyDesc='HL7FolderIn'";
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			inFolder=table.Rows[0][0].ToString();
 			if(!Directory.Exists(inFolder)) {
 				throw new ApplicationException(inFolder+" does not exist.");

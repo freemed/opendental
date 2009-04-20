@@ -25,16 +25,16 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt  (Cur.PatNum)+"', "
 				+POut.PDateT(Cur.FormDateTime)+")";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				Cur.FormPatNum=General.NonQ(command,true);
+				Cur.FormPatNum=Db.NonQ(command,true);
 			}
 		}
 
 		public static FormPat GetOne(int formPatNum){
 			string command= "SELECT * FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;//should never happen.
 			}
@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 			form.FormDateTime=PIn.PDateT(table.Rows[0][2].ToString());
 			form.QuestionList=new List<Question>();
 			command="SELECT * FROM question WHERE FormPatNum="+POut.PInt(formPatNum);
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			Question quest;
 			for(int i=0;i<table.Rows.Count;i++){
 				quest=new Question();
@@ -64,9 +64,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(int formPatNum){
 			string command="DELETE FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM question WHERE FormPatNum="+POut.PInt(formPatNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

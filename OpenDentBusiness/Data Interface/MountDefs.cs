@@ -44,7 +44,7 @@ namespace OpenDentBusiness {
 				+",Width = '" +POut.PInt(def.Width)+"'"
 				+",Height = '" +POut.PInt(def.Height)+"'"
 				+" WHERE MountDefNum  ='"+POut.PInt (def.MountDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -56,15 +56,15 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(def.IsRadiograph)+"', "
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
-			def.MountDefNum=General.NonQ(command,true);
+			def.MountDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountDefNum) {
 			string command="DELETE FROM mountdef WHERE MountDefNum="+POut.PInt(mountDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM mountitemdef WHERE MountDefNum ="+POut.PInt(mountDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		

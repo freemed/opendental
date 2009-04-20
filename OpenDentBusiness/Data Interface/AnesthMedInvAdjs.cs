@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 				"SELECT * from anesthmedsinventoryadj"
 				+ " WHERE AnestheticMedNum = '"+anestheticMedNum.ToString()+"'"
 				+ " ORDER BY anesthmedsinventoryadj.TimeStamp DESC";
-			DataTable table = General.GetTable(command);
+			DataTable table = Db.GetTable(command);
 			List = new AnesthMedsInventoryAdj[table.Rows.Count];
 			for (int i = 0; i < table.Rows.Count; i++){
 				List[i] = new AnesthMedsInventoryAdj();
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 				+ ",Notes = '" + POut.PString(Cur.Notes) + "' "
 				+ ",TimeStamp = " + POut.PDateT(Cur.TimeStamp) + "' "
 				+ " WHERE AdjustNum = '" + POut.PInt(Cur.AdjustNum) + "' ";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -72,17 +72,17 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.Notes)+"', "
 				+POut.PDateT(Cur.TimeStamp)+")"; 
 			if (PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				Cur.AdjustNum = General.NonQ(command, true);
+				Cur.AdjustNum = Db.NonQ(command, true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(AnesthMedsInventoryAdj Cur) {
 			string command = "DELETE from anesthmedsinventoryadj WHERE AdjustNum = '" + Cur.AdjustNum.ToString() + "'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/// <summary>

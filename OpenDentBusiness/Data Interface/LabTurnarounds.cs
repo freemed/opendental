@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static List<LabTurnaround> GetForLab(int laboratoryNum) {
 			string command="SELECT * FROM labturnaround WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List<LabTurnaround> retVal=new List<LabTurnaround>();
 			LabTurnaround lab;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>This is used when saving a laboratory.  All labturnarounds for the lab are deleted and recreated.  So the list that's passed in will not have the correct keys set.  The key columns will be ignored.</summary>
 		public static void SetForLab(int labNum,List<LabTurnaround> lablist){
 			string command="DELETE FROM labturnaround WHERE LaboratoryNum="+POut.PInt(labNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<lablist.Count;i++){
 				lablist[i].LaboratoryNum=labNum;
 				Insert(lablist[i]);
@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (lab.DaysPublished)+"', "
 				+"'"+POut.PInt   (lab.DaysActual)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				lab.LabTurnaroundNum=General.NonQ(command,true);
+				lab.LabTurnaroundNum=Db.NonQ(command,true);
 			}
 		}
 

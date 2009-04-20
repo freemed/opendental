@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM lettermergefield "
 				+"ORDER BY FieldName";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			list=new LetterMergeField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new LetterMergeField();
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(lmf.FieldName)+"')";
 			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				lmf.FieldNum=General.NonQ(command,true);
+ 				lmf.FieldNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 				+",FieldName = '"    +POut.PString(FieldName)+"' "
 				+"WHERE FieldNum = '"+POut.PInt(FieldNum)+"'";
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		/*
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM lettermergefield "
 				+"WHERE FieldNum = "+POut.PInt(FieldNum);
 			DataConnection dcon=new DataConnection();
-			General.NonQ(command);
+			Db.NonQ(command);
 		}*/
 
 		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The result is a collection of strings representing field names.</summary>
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 		public static void DeleteForLetter(int letterMergeNum){
 			string command="DELETE FROM lettermergefield "
 				+"WHERE LetterMergeNum = "+POut.PInt(letterMergeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		

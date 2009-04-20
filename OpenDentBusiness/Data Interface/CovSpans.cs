@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 				+",FromCode = '"+POut.PString(span.FromCode)+"'"
 				+",ToCode = '"  +POut.PString(span.ToCode)+"'"
 				+" WHERE CovSpanNum = '"+POut.PInt(span.CovSpanNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (span.CovCatNum)+"', "
 				+"'"+POut.PString(span.FromCode)+"', "
 				+"'"+POut.PString(span.ToCode)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		public static void Delete(CovSpan span) {
 			string command="DELETE FROM covspan"
 				+" WHERE CovSpanNum = '"+POut.PInt(span.CovSpanNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

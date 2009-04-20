@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 				+"AND supply.SupplyNum=supplyorderitem.SupplyNum "
 				+"AND supplyorderitem.SupplyOrderNum="+POut.PInt(orderNum)+" "
 				+"ORDER BY definition.ItemOrder,supply.ItemOrder";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		public static SupplyOrderItem CreateObject(int supplyOrderItemNum){

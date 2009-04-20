@@ -10,12 +10,12 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.PInt(schoolClass)
 				+" AND SchoolCourseNum="+POut.PInt(schoolCourse)
 				+" ORDER BY Descript";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		public static ReqNeeded GetReq(int reqNeededNum){
 			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.PInt(reqNeededNum);
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
 			}
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				+ ",SchoolCourseNum = '"+POut.PInt   (req.SchoolCourseNum)+"'"
 				+ ",SchoolClassNum = '" +POut.PInt   (req.SchoolClassNum)+"'"   
 				+" WHERE ReqNeededNum = '" +POut.PInt(req.ReqNeededNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (req.SchoolCourseNum)+"', "
 				+"'"+POut.PInt   (req.SchoolClassNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				req.ReqNeededNum=General.NonQ(command,true);
+				req.ReqNeededNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			//still need to validate
 			string command= "DELETE FROM reqneeded "
 				+"WHERE ReqNeededNum = "+POut.PInt(reqNeededNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -85,19 +85,19 @@ namespace OpenDentBusiness{
 			command="DELETE FROM reqstudent "
 				+"WHERE NOT EXISTS(SELECT * FROM reqneeded WHERE reqstudent.ReqNeededNum=reqneeded.ReqNeededNum) "
 				+"AND reqstudent.DateCompleted < "+POut.PDate(new DateTime(1880,1,1));
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				reqNeededNum=PIn.PInt(table.Rows[i]["ReqNeededNum"].ToString());
 				descript=PIn.PString(table.Rows[i]["Descript"].ToString());
 				//2. Update.  Update the description for all students using this requirement.
 				command="UPDATE reqstudent SET Descript='"+POut.PString(descript)+"' "
 					+"WHERE ReqNeededNum="+POut.PInt(reqNeededNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 				//3. Insert.  Get list of students that do not have this req.  For each student, insert.
 				command="SELECT ProvNum FROM provider WHERE SchoolClassNum="+POut.PInt(schoolClassNum)
 					+" AND NOT EXISTS(SELECT * FROM reqstudent WHERE reqstudent.ProvNum=provider.ProvNum"
 					+" AND ReqNeededNum="+POut.PInt(reqNeededNum)+")";
-				tStudent=General.GetTable(command);
+				tStudent=Db.GetTable(command);
 				for(int s=0;s<tStudent.Rows.Count;s++){
 					req=new ReqStudent();
 					req.Descript=descript;

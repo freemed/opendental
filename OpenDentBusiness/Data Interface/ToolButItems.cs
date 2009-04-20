@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.ProgramNum)+"', "
 				+"'"+POut.PInt   ((int)Cur.ToolBar)+"', "
 				+"'"+POut.PString(Cur.ButtonText)+"')";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>This in not currently being used.</summary>
@@ -61,21 +61,21 @@ namespace OpenDentBusiness{
 				+",ToolBar ='"   +POut.PInt   ((int)Cur.ToolBar)+"'"
 				+",ButtonText ='"+POut.PString(Cur.ButtonText)+"'"
 				+" WHERE ToolButItemNum = '"+POut.PInt(Cur.ToolButItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>This is not currently being used.</summary>
 		public static void Delete(ToolButItem Cur){
 			string command = "DELETE from toolbutitem WHERE ToolButItemNum = '"
 				+POut.PInt(Cur.ToolButItemNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes all ToolButItems for the Programs.Cur.  This is used regularly when saving a Program link because of the way the user interface works.</summary>
 		public static void DeleteAllForProgram(int programNum){
 			string command = "DELETE from toolbutitem WHERE ProgramNum = '"
 				+POut.PInt(programNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>

@@ -23,10 +23,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(attach.DisplayedFileName)+"', "
 				+"'"+POut.PString(attach.ActualFileName)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				attach.EmailAttachNum=General.NonQ(command,true);
+				attach.EmailAttachNum=Db.NonQ(command,true);
 			}
 		}
 

@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 				+",SigType = '"    +POut.PInt   ((int)SigType)+"'"
 				+" WHERE SigButDefElementNum = '"+POut.PInt(SigButDefElementNum)+"'";
 			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}*/
 
 		///<summary></summary>
@@ -63,13 +63,13 @@ namespace OpenDentBusiness{
 			command+=
 				 "'"+POut.PInt   (element.SigButDefNum)+"', "
 				+"'"+POut.PInt   (element.SigElementDefNum)+"')";
- 			element.ElementNum=General.NonQ(command,true);
+ 			element.ElementNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
 		public static void Delete(SigButDefElement element){
 			string command= "DELETE from sigbutdefelement WHERE ElementNum = '"+POut.PInt(element.ElementNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

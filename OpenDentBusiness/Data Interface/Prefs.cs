@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				+"ValueString = '"+POut.PString(pref.ValueString)+"' "
 				//+",Comments = '"  +POut.PString(pref.Comments)+"' "
 				+" WHERE PrefName = '"+POut.PString(pref.PrefName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.PInt(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=newValue.ToString();
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDouble(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			return true;
 		}
 
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PBool(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			return true;
 		}
 
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				//doesn't exit out of this method here.
 			}
 			else {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDateT(newValue,false)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=POut.PDateT(newValue,false);

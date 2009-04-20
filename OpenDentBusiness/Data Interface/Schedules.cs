@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 					"WHERE so.ScheduleNum=s.ScheduleNum "+
 					"GROUP BY so.ScheduleNum) AS CHAR(4000)),'') ops "+
 				"FROM ("+command+") s";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return ConvertTableToList(table);
 		}
 
@@ -148,9 +148,9 @@ namespace OpenDentBusiness{
 				+ ",Status = '"      +POut.PInt   ((int)sched.Status)+"'"
 				+ ",EmployeeNum = '" +POut.PInt   (sched.EmployeeNum)+"'"
 				+" WHERE ScheduleNum = '" +POut.PInt (sched.ScheduleNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			command="DELETE FROM scheduleop WHERE ScheduleNum="+POut.PInt (sched.ScheduleNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
 				op=new ScheduleOp();
@@ -185,10 +185,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)sched.Status)+"', "
 				+"'"+POut.PInt   (sched.EmployeeNum)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				sched.ScheduleNum=General.NonQ(command,true);
+				sched.ScheduleNum=Db.NonQ(command,true);
 			}
 			ScheduleOp op;
 			for(int i=0;i<sched.Ops.Count;i++){
@@ -264,7 +264,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(Schedule sched){
 			string command= "DELETE from schedule WHERE schedulenum = '"+POut.PInt(sched.ScheduleNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 			if(sched.SchedType==ScheduleType.Provider){
 				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,sched.ScheduleNum);
 			}
@@ -379,7 +379,7 @@ namespace OpenDentBusiness{
 				+"SchedDate="    +POut.PDate(date)+" "
 				+"AND SchedType='"+POut.PInt((int)ScheduleType.Blockout)+"' ";
 				//+"AND ProvNum='"  +POut.PInt(provNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//CheckIfDeletedLastBlockout(date);
 		}
 
@@ -387,7 +387,7 @@ namespace OpenDentBusiness{
 			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday
 				+"AND SchedType=0 "//practice
 				+"AND SchedDate= "+POut.PDate(date);
-			string result=General.GetCount(command);
+			string result=Db.GetCount(command);
 			if(result=="0"){
 				return false;
 			}
@@ -438,7 +438,7 @@ namespace OpenDentBusiness{
 			//else{
 				command+="ORDER BY SchedDate,employee.FName,provider.ItemOrder,StartTime";
 			//}
-			DataTable raw=General.GetTable(command);
+			DataTable raw=Db.GetTable(command);
 			DateTime dateSched;
 			DateTime startTime;
 			DateTime stopTime;
@@ -541,14 +541,14 @@ namespace OpenDentBusiness{
 			//make deleted entries for synch purposes:
 			string command="SELECT ScheduleNum FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
 				+"AND SchedType="+POut.PInt((int)ScheduleType.Provider);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PInt(table.Rows[i][0].ToString()));
 			}
 			//Then, bulk delete.
 			command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
 				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";
-			General.NonQ(command);
+			Db.NonQ(command);
 			for(int i=0;i<SchedList.Count;i++){
 				Insert(SchedList[i]);
 			}
@@ -574,7 +574,7 @@ namespace OpenDentBusiness{
 					+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
 					+"AND SchedType="+POut.PInt((int)ScheduleType.Provider)
 					+" AND ("+orClause+")";
-				DataTable table=General.GetTable(command);
+				DataTable table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++){
 					DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PInt(table.Rows[i][0].ToString()));
 				}
@@ -601,7 +601,7 @@ namespace OpenDentBusiness{
 				orClause+="schedule.EmployeeNum="+POut.PInt(empNums[i])+" ";
 			}
 			command+=orClause+")";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Clears all Blockout schedule entries for the given date range and the given ops.</summary>
@@ -618,7 +618,7 @@ namespace OpenDentBusiness{
 						command="DELETE FROM scheduleop "
 							+"WHERE ScheduleNum="+POut.PInt(listSched[i].ScheduleNum)+" "
 							+"AND OperatoryNum="+POut.PInt(opNums[o]);
-						General.NonQ(command);
+						Db.NonQ(command);
 						listSched[i].Ops.Remove(opNums[o]);
 					}
 				}
@@ -629,7 +629,7 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				command="DELETE FROM schedule WHERE ScheduleNum="+POut.PInt(listSched[i].ScheduleNum);
-				General.NonQ(command);
+				Db.NonQ(command);
 			}			
 		}
 

@@ -246,7 +246,7 @@ namespace OpenDental.Eclaims {
 			if(value==null){
 				return false;
 			}
-			//General format is correct. Now check specific values.
+			//Db format is correct. Now check specific values.
 			foreach(ValueRequirement valReq in valueRequirements){
 				if(!valReq.MeetsRequirement(formData,value)){
 					return false;

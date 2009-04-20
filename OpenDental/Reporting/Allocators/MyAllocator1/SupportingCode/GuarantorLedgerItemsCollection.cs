@@ -247,7 +247,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			string cmd2 = "SELECT PayTableSource, PaySourceNum, IsFullyAllocated, Amount, ProvNum FROM "
 					+ MyAllocator1_ProviderPayment.TABLENAME
 					+ "\nWHERE Guarantor = " + this.GUARANTOR_NUMBER;
-			DataTable dt2_AllocTbl = General.GetTable(cmd2);
+			DataTable dt2_AllocTbl = Db.GetTable(cmd2);
 			System.Collections.Hashtable htCurrentRecord = new System.Collections.Hashtable();
 			for (int i = 0; i < dt2_AllocTbl.Rows.Count; i++)
 			{
@@ -414,7 +414,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 							if (i < keys2Delete.Count - 1)
 								dropUnusedCommand += "\nOR ";
 						}
-						General.NonQ(dropUnusedCommand);
+						Db.NonQ(dropUnusedCommand);
 					}
 				}
 				catch (Exception exc)
@@ -438,7 +438,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 						if (i < SplitsToDrop.Count - 1)
 							cmd += "\nOR ";
 					}
-					General.NonQ(cmd);
+					Db.NonQ(cmd);
 				}
 				// Add Spilt to AllocationTable
 				if (SplitsToWrite.Count != 0)
@@ -469,7 +469,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 						if (i < SplitsToWrite.Count - 1 && SplitsToWrite[i].PAYMENT_SPLITS.Count != 0)
 							cmd += " , \n  ";
 					}
-					General.NonQ(cmd);
+					Db.NonQ(cmd);
 				}
 
 			}
@@ -792,14 +792,14 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 
 				//	QueryResult qr = QueryResult.RunQuery(PP_ODSQLPullStrings_LedgerItem.PullAll_FromOD(m_GuarantorNumber, false));
-				DataTable dt_ODItems = General.GetTable(PP_ODSQLPullStrings_LedgerItem.PullAll_FromOD(m_GuarantorNumber, false));
+				DataTable dt_ODItems = Db.GetTable(PP_ODSQLPullStrings_LedgerItem.PullAll_FromOD(m_GuarantorNumber, false));
 
 				string cmd2 = "SELECT PayTableSource, PaySourceNum, " //0 ,1
 								+ " IsFullyAllocated, Amount, ProvNum, " // 2, 3, 4
 								+ " AllocToTableSource, AllocToSourceNum  FROM " // 5, 6
 					+ MyAllocator1_ProviderPayment.TABLENAME
 					+ "\nWHERE Guarantor = " + this.GUARANTOR_NUMBER; 
-				DataTable dt2_AllocTbl_Items = General.GetTable(cmd2);
+				DataTable dt2_AllocTbl_Items = Db.GetTable(cmd2);
 
 
 				if (dt_ODItems.Rows.Count != 0 && dt_ODItems.Columns.Count != 0)

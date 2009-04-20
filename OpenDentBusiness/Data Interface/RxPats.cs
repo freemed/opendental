@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM rxpat"
 				+" WHERE PatNum = '"+POut.PInt(patNum)+"'"
 				+" ORDER BY RxDate";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RxPat[] List=new RxPat[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RxPat();
@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		public static RxPat GetRx(int rxNum) {
 			string command="SELECT * FROM rxpat"
 				+" WHERE RxNum = "+POut.PInt(rxNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			RxPat rx=new RxPat();
 			rx.RxNum       = PIn.PInt(table.Rows[0][0].ToString());
 			rx.PatNum      = PIn.PInt(table.Rows[0][1].ToString());
@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 				+ ",PharmacyNum = '"+POut.PInt   (rx.PharmacyNum)+"'"
 				+ ",IsControlled='" +POut.PBool  (rx.IsControlled)+"'"
 				+" WHERE RxNum = '" +POut.PInt   (rx.RxNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -90,17 +90,17 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (rx.PharmacyNum)+"', "
 				+"'"+POut.PBool  (rx.IsControlled)+"')";
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
-				rx.RxNum=General.NonQ(command,true);
+				rx.RxNum=Db.NonQ(command,true);
 			}
 		}
 
 		///<summary></summary>
 		public static void Delete(int rxNum) {
 			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.PInt(rxNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 

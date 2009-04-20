@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		public static void Refresh() {
 			string command=
 				"SELECT * FROM lettermerge ORDER BY Description";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Listt=new LetterMerge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				Listt[i]=new LetterMerge();
@@ -82,10 +82,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (merge.Category)+"')";
 			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				merge.LetterMergeNum=General.NonQ(command,true);
+ 				merge.LetterMergeNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -97,14 +97,14 @@ namespace OpenDentBusiness{
 				+",DataFileName = '" +POut.PString(merge.DataFileName)+"' "
 				+",Category = '"     +POut.PInt   (merge.Category)+"' "
 				+"WHERE LetterMergeNum = '"+POut.PInt(merge.LetterMergeNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(LetterMerge merge){
 			string command="DELETE FROM lettermerge "
 				+"WHERE LetterMergeNum = "+POut.PInt(merge.LetterMergeNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Supply the index of the cat within DefC.Short.</summary>

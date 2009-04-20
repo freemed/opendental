@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		public static Dunning[] Refresh() {
 			string command="SELECT * FROM dunning "
 				+"ORDER BY BillingType,AgeAccount,InsIsPending";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Dunning[] List=new Dunning[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Dunning();
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (dun.AgeAccount)+"', "
 				+"'"+POut.PInt   ((int)dun.InsIsPending)+"', "
 				+"'"+POut.PString(dun.MessageBold)+"')";
- 			dun.DunningNum=General.NonQ(command,true);
+ 			dun.DunningNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -45,14 +45,14 @@ namespace OpenDentBusiness{
 				+ ",InsIsPending = '"    +POut.PInt   ((int)dun.InsIsPending)+"'"
 				+ ",MessageBold = '"     +POut.PString(dun.MessageBold)+"'"
 				+" WHERE DunningNum = '" +POut.PInt   (dun.DunningNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(Dunning dun){
 			string command="DELETE FROM dunning" 
 				+" WHERE DunningNum = "+POut.PInt(dun.DunningNum);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Will return null if no dunning matches the given criteria.</summary>

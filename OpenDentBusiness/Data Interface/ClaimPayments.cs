@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 				+"WHERE claimpayment.ClaimPaymentNum = claimproc.ClaimPaymentNum "
 				+"AND claimproc.ClaimNum = '"+POut.PInt(claimNum)+"' "
 				+"GROUP BY claimpayment.ClaimPaymentNum, BankBranch, CheckDate, CheckNum, Note";//required by Oracle
-			DataTable rawT=General.GetTable(command);
+			DataTable rawT=Db.GetTable(command);
 			DateTime date;
 			for(int i=0;i<rawT.Rows.Count;i++) {
 				row=table.NewRow();
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static ClaimPayment[] RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			ClaimPayment[] List=new ClaimPayment[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ClaimPayment();
@@ -121,10 +121,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (cp.DepositNum)+"', "
 				+"'"+POut.PString(cp.CarrierName)+"')";
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				cp.ClaimPaymentNum=General.NonQ(command,true);
+ 				cp.ClaimPaymentNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 		public static void Update(ClaimPayment cp){
 			string command="SELECT DepositNum,CheckAmt FROM claimpayment "
 				+"WHERE ClaimPaymentNum="+POut.PInt(cp.ClaimPaymentNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
@@ -152,14 +152,14 @@ namespace OpenDentBusiness{
 				+",CarrierName = '"+POut.PString(cp.CarrierName)+"' "
 				+"WHERE ClaimPaymentnum = '"+POut.PInt   (cp.ClaimPaymentNum)+"'";
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary>Surround by try catch, because it will throw an exception if trying to delete a claimpayment attached to a deposit.</summary>
 		public static void Delete(ClaimPayment cp){
 			string command="SELECT DepositNum FROM claimpayment "
 				+"WHERE ClaimPaymentNum="+POut.PInt(cp.ClaimPaymentNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
 			}
@@ -172,11 +172,11 @@ namespace OpenDentBusiness{
 				+"ClaimPaymentNum=0 "
 				+"WHERE claimpaymentNum="+POut.PInt(cp.ClaimPaymentNum);
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command= "DELETE FROM claimpayment "
 				+"WHERE ClaimPaymentnum ="+POut.PInt(cp.ClaimPaymentNum);
 			//MessageBox.Show(string command);
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 

@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 				+",Sound = '"         +POut.PString(def.Sound)+"'"
 				+",ItemOrder = '"     +POut.PInt   (def.ItemOrder)+"'"
 				+" WHERE SigElementDefNum  ='"+POut.PInt   (def.SigElementDefNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -70,15 +70,15 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(def.SigText)+"', "
 				+"'"+POut.PString(def.Sound)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"')";
-			def.SigElementDefNum=General.NonQ(command,true);
+			def.SigElementDefNum=Db.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.  This routine, deletes references in the SigButDefElement table.  References in the SigElement table are left hanging.  The user interface needs to be able to handle missing elementdefs.</summary>
 		public static void Delete(SigElementDef def) {
 			string command="DELETE FROM sigbutdefelement WHERE SigElementDefNum="+POut.PInt(def.SigElementDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 			command="DELETE FROM sigelementdef WHERE SigElementDefNum ="+POut.PInt(def.SigElementDefNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>

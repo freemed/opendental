@@ -285,7 +285,7 @@ namespace OpenDentBusiness {
 					+"WHERE userod.ProvNum=provider.ProvNum "
 					+"AND SchoolClassNum="+POut.PInt(schoolClassNum)
 					+" ORDER BY UserName";
-				return General.GetTable(command);
+				return Db.GetTable(command);
 			}
 			command="SELECT * FROM userod ";
 			if(usertype=="emp"){
@@ -301,7 +301,7 @@ namespace OpenDentBusiness {
 				command+="WHERE ProvNum=0 AND EmployeeNum=0 ";
 			}
 			command+="ORDER BY UserName";
-			return General.GetTable(command);
+			return Db.GetTable(command);
 		}
 
 		///<summary></summary>
@@ -317,7 +317,7 @@ namespace OpenDentBusiness {
 				+",TaskListInBox = '"+POut.PInt   (user.TaskListInBox)+"'"
                 + ",AnesthProvType = '"+POut.PInt  (user.AnesthProvType)+"'"
 				+" WHERE UserNum = '"+POut.PInt   (user.UserNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -333,7 +333,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool  (user.IsHidden)+"', "
 				+"'"+POut.PInt   (user.TaskListInBox)+"', "
                 + "'"+POut.PInt  (user.AnesthProvType)+"')";
- 			user.UserNum=General.NonQ(command,true);
+ 			user.UserNum=Db.NonQ(command,true);
 		}
 
 		///<summary>Surround with try/catch because it can throw exceptions.</summary>
@@ -356,14 +356,14 @@ namespace OpenDentBusiness {
 				command="SELECT COUNT(*) FROM grouppermission "
 					+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "
 					+"AND UserGroupNum="+POut.PInt(user.UserGroupNum);
-				if(General.GetCount(command)=="0"){//if this user would not have admin
+				if(Db.GetCount(command)=="0"){//if this user would not have admin
 					//make sure someone else has admin
 					command="SELECT COUNT(*) FROM userod,grouppermission "
 						+"WHERE grouppermission.PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"'"
 						+" AND userod.UserGroupNum=grouppermission.UserGroupNum"
 						+" AND userod.IsHidden =0"
 						+" AND userod.UserNum != "+POut.PInt(user.UserNum);
-					if(General.GetCount(command)=="0"){//there are no other users with this permission
+					if(Db.GetCount(command)=="0"){//there are no other users with this permission
 						throw new Exception(Lan.g("Users","At least one user must have Security Admin permission."));
 					}
 				}
@@ -372,7 +372,7 @@ namespace OpenDentBusiness {
 			command="SELECT COUNT(*) FROM grouppermission "
 				+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "
 				+"AND UserGroupNum="+POut.PInt(user.UserGroupNum);
-			if(General.GetCount(command)!="0"//if this user is admin
+			if(Db.GetCount(command)!="0"//if this user is admin
 				&& user.IsHidden)//and hidden
 			{
 				throw new Exception(Lan.g("Userods","Admins cannot be hidden."));
@@ -392,7 +392,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.PString(username)+"' "
 				+"AND UserNum !="+POut.PInt(excludeUserNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
 				return true;
 			}

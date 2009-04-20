@@ -71,10 +71,10 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(proc.SiteNum)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else {
-				proc.ProcNum=General.NonQ(command,true);
+				proc.ProcNum=Db.NonQ(command,true);
 			}
 			if(proc.Note!="") {
 				ProcNote note=new ProcNote();
@@ -292,7 +292,7 @@ namespace OpenDentBusiness {
 			if(comma) {
 				c+=" WHERE ProcNum = '"+POut.PInt(proc.ProcNum)+"'";
 				//DataConnection dcon=new DataConnection();
-				rowsChanged=General.NonQ(c);
+				rowsChanged=Db.NonQ(c);
 			}
 			else {
 				//rowsChanged=0;//this means no change is actually required.
@@ -333,18 +333,18 @@ namespace OpenDentBusiness {
 			//Test to see if any payment at all has been received for this proc
 			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PInt(procNum)
 				+" AND InsPayAmt > 0 AND Status != "+POut.PInt((int)ClaimProcStatus.Preauth);
-			if(General.GetCount(command)!="0") {
+			if(Db.GetCount(command)!="0") {
 				throw new Exception(Lan.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
 			}
 			//delete adjustments
 			command="DELETE FROM adjustment WHERE ProcNum='"+POut.PInt(procNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//delete claimprocs
 			command="DELETE from claimproc WHERE ProcNum = '"+POut.PInt(procNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 			//resynch appointment description-------------------------------------------------------------------------------------
 			command="SELECT AptNum,PlannedAptNum FROM procedurelog WHERE ProcNum = "+POut.PInt(procNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			string aptnum=table.Rows[0][0].ToString();
 			string plannedaptnum=table.Rows[0][1].ToString();
 			string procdescript;
@@ -353,7 +353,7 @@ namespace OpenDentBusiness {
 					WHERE procedurecode.CodeNum=procedurelog.CodeNum
 					AND ProcNum != "+POut.PInt(procNum)
 					+" AND procedurelog.AptNum="+aptnum;
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				procdescript="";
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i>0) procdescript+=", ";
@@ -361,14 +361,14 @@ namespace OpenDentBusiness {
 				}
 				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
 					+"WHERE AptNum="+aptnum;
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			if(plannedaptnum!="0") {
 				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
 					WHERE procedurecode.CodeNum=procedurelog.CodeNum
 					AND ProcNum != "+POut.PInt(procNum)
 					+" AND procedurelog.PlannedAptNum="+plannedaptnum;
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 				procdescript="";
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i>0) procdescript+=", ";
@@ -376,38 +376,38 @@ namespace OpenDentBusiness {
 				}
 				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
 					+"WHERE NextAptNum="+plannedaptnum;
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			//set the procedure deleted-----------------------------------------------------------------------------------------
 			command="UPDATE procedurelog SET ProcStatus = "+POut.PInt((int)ProcStat.D)+", "
 				+"AptNum=0, "
 				+"PlannedAptNum=0 "
 				+"WHERE ProcNum = '"+POut.PInt(procNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void UpdateAptNum(int procNum,int newAptNum) {
 			string command="UPDATE procedurelog SET AptNum = "+POut.PInt(newAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void UpdatePlannedAptNum(int procNum,int newPlannedAptNum) {
 			string command="UPDATE procedurelog SET PlannedAptNum = "+POut.PInt(newPlannedAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void UpdatePriority(int procNum,int newPriority) {
 			string command="UPDATE procedurelog SET Priority = "+POut.PInt(newPriority)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void UpdateFee(int procNum,double newFee) {
 			string command="UPDATE procedurelog SET ProcFee = "+POut.PDouble(newFee)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
@@ -415,7 +415,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PInt(patNum)
 				+" AND ProcStatus !=6"//don't include deleted
 				+" ORDER BY ProcDate";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			Procedure[] procList=ConvertToList(table).ToArray();
 			return procList;
 		}
@@ -441,7 +441,7 @@ namespace OpenDentBusiness {
 			else {//Assume MySQL
 				command+="LIMIT 1";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return proc;
 			}
@@ -475,7 +475,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		private static List<Procedure> RefreshAndFill(string command) {
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			return ConvertToList(table);
 		}
 
@@ -652,7 +652,7 @@ namespace OpenDentBusiness {
 			string command="SELECT Count(*) from procedurelog WHERE "
 				+"PatNum = '"+POut.PInt(pat.PatNum)+"' "
 				+"AND ProcStatus = '2'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(PIn.PInt(table.Rows[0][0].ToString())>0) {
 				return;//there are already completed procs (for all situations)
 			}
@@ -671,13 +671,13 @@ namespace OpenDentBusiness {
 			}
 			//MessageBox.Show(cmd.CommandText);
 			//dcon.NonQ(command);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static int GetCodeNum(int procNum) {
 			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return 0;
 			}
@@ -687,7 +687,7 @@ namespace OpenDentBusiness {
 		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static double GetProcFee(int procNum) {
 			string command="SELECT ProcFee FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return 0;
 			}
@@ -697,7 +697,7 @@ namespace OpenDentBusiness {
 		///<summary>Used twice in FormClaimProc.  Gets value directly from database.</summary>
 		public static string GetToothNum(int procNum) {
 			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return "";
 			}
@@ -709,7 +709,7 @@ namespace OpenDentBusiness {
 			string command="SELECT COUNT(*) FROM procedurelog "
 				+"WHERE PatNum="+patNum.ToString()
 				+" AND ProcStatus=2";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
 				return false;
 			}
@@ -723,7 +723,7 @@ namespace OpenDentBusiness {
 				+"WHERE ToothNum='"+toothNum+"' "
 				+"AND PatNum="+POut.PInt(patNum)
 				+" AND InitialType=0";//missing
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0") {
 				return true;
 			}
@@ -733,7 +733,7 @@ namespace OpenDentBusiness {
 				+"AND procedurelog.ToothNum='"+toothNum+"' "
 				+"AND procedurelog.PatNum="+patNum.ToString()
 				+" AND procedurecode.PaintType=1";//extraction
-			table=General.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0") {
 				return true;
 			}
@@ -764,7 +764,7 @@ namespace OpenDentBusiness {
 				}
 				command+="ProcNum="+POut.PInt(procNums[i]);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void DetachFromApt(List<int> procNums,bool isPlanned) {
@@ -785,7 +785,7 @@ namespace OpenDentBusiness {
 				}
 				command+="ProcNum="+POut.PInt(procNums[i]);
 			}
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 
@@ -932,7 +932,7 @@ namespace OpenDentBusiness {
 			string command="SELECT COUNT(*) FROM claimproc "
 				+"WHERE ProcNum="+POut.PInt(procNum)+" "
 				+"AND ClaimNum>0";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
 				return false;
 			}
@@ -1138,7 +1138,7 @@ namespace OpenDentBusiness {
 							WHERE procedurelog.ProcStatus=1
 							AND patient.PatNum=procedurelog.PatNum
 						";*/
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			int priPlanFeeSched;
 			//int feeSchedNum;
 			int patFeeSched;
@@ -1171,7 +1171,7 @@ namespace OpenDentBusiness {
 				}
 				command="UPDATE procedurelog SET ProcFee='"+POut.PDouble(newFee)+"' "
 					+"WHERE ProcNum="+table.Rows[i]["ProcNum"].ToString();
-				rowsChanged+=General.NonQ(command);
+				rowsChanged+=Db.NonQ(command);
 			}
 			return rowsChanged;
 		}

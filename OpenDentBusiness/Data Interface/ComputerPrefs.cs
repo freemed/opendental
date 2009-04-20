@@ -31,7 +31,7 @@ namespace OpenDentBusiness {
 			computerPref.TaskX=900;
 			computerPref.TaskY=625;
 			try{
-				table=General.GetTable(command);
+				table=Db.GetTable(command);
 			}catch{
 				//In case of database error, just use default graphics settings so that it is possible for the program to start.
 				return computerPref;
@@ -96,9 +96,9 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(computerPref.TaskY)+"')";
 			if(PrefC.RandomKeys)
 			{
-				General.NonQ(command);
+				Db.NonQ(command);
 			}else{
-				computerPref.ComputerPrefNum=General.NonQ(command,true);
+				computerPref.ComputerPrefNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace OpenDentBusiness {
 				+"TaskX='"+POut.PInt(computerPref.TaskX)+"',"
 				+"TaskY='"+POut.PInt(computerPref.TaskY)+"' "
 				+"WHERE ComputerPrefNum='"+POut.PInt(computerPref.ComputerPrefNum)+"'";
-			return General.NonQ(command);*/
+			return Db.NonQ(command);*/
 			return 0;
 		}
 

@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 				return Meth.GetTable(methodBase);
 			}
 			else {
-				return General.GetTable(command);
+				return Db.GetTable(command);
 			}
 		}
 

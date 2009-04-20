@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public static void Refresh() {
 			string command=
 				"SELECT * from emailtemplate ORDER BY Subject";
-			DataTable table=General.GetTable(command);
+			DataTable table=Db.GetTable(command);
 			List=new EmailTemplate[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new EmailTemplate();
@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(template.BodyText)+"')";
 			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys){
-				General.NonQ(command);
+				Db.NonQ(command);
 			}
 			else{
- 				template.EmailTemplateNum=General.NonQ(command,true);
+ 				template.EmailTemplateNum=Db.NonQ(command,true);
 			}
 		}
 
@@ -67,14 +67,14 @@ namespace OpenDentBusiness{
 				+ "Subject = '"  +POut.PString(template.Subject)+"' "
 				+ ",BodyText = '"+POut.PString(template.BodyText)+"' "
 				+"WHERE EmailTemplateNum = '"+POut.PInt(template.EmailTemplateNum)+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(EmailTemplate template){
 			string command= "DELETE from emailtemplate WHERE EmailTemplateNum = '"
 				+template.EmailTemplateNum.ToString()+"'";
- 			General.NonQ(command);
+ 			Db.NonQ(command);
 		}
 
 		

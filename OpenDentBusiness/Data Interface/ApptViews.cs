@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			string c="SELECT * from apptview ORDER BY itemorder";
-			DataTable table=General.GetTable(c);
+			DataTable table=Db.GetTable(c);
 			table.TableName="ApptView";
 			FillCache(table);
 			return table;
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.ItemOrder)+"', "
 				+"'"+POut.PInt   (Cur.RowsPerIncr)+"')";
 			//MessageBox.Show(string command);
-			Cur.ApptViewNum=General.NonQ(command,true);
+			Cur.ApptViewNum=Db.NonQ(command,true);
 		}
 
 		///<summary></summary>
@@ -44,14 +44,14 @@ namespace OpenDentBusiness{
 				+",ItemOrder = '"  +POut.PInt   (Cur.ItemOrder)+"'"
 				+",RowsPerIncr = '"+POut.PInt   (Cur.RowsPerIncr)+"'"
 				+" WHERE ApptViewNum = '"+POut.PInt(Cur.ApptViewNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Delete(ApptView Cur){
 			string command="DELETE from apptview WHERE ApptViewNum = '"
 				+POut.PInt(Cur.ApptViewNum)+"'";
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 	

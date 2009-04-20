@@ -7,7 +7,7 @@ namespace OpenDental.SmartCards.Belgium {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Status {
 		/// <summary>
-		/// General Error Code
+		/// Db Error Code
 		/// </summary>
 		[MarshalAs(UnmanagedType.I4)]
 		public ErrorCodeOptions General;

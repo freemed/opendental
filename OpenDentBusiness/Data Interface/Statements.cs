@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		public static void DeleteObject(Statement statement){
 			//validate that not already in use.
 			//string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
-			//int count=PIn.PInt(General.GetCount(command));
+			//int count=PIn.PInt(Db.GetCount(command));
 			//if(count>0){
 			//	throw new ApplicationException(Lan.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			//}
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		///<summary>Queries the database to determine if there are any unsent statements.</summary>
 		public static bool UnsentStatementsExist(){
 			string command="SELECT COUNT(*) FROM statement WHERE IsSent=0";
-			if(General.GetCount(command)=="0"){
+			if(Db.GetCount(command)=="0"){
 				return false;
 			}
 			return true;
@@ -55,13 +55,13 @@ namespace OpenDentBusiness{
 		public static void MarkSent(int statementNum,DateTime dateSent) {
 			string command="UPDATE statement SET DateSent="+POut.PDate(dateSent)+", "
 				+"IsSent=1 WHERE StatementNum="+POut.PInt(statementNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		public static void AttachDoc(int statementNum,int docNum) {
 			string command="UPDATE statement SET DocNum="+POut.PInt(docNum)
 				+" WHERE StatementNum="+POut.PInt(statementNum);
-			General.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>For orderBy, use 0 for BillingType and 1 for PatientName.</summary>
@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 			else{
 				command+="ORDER BY LName,FName";
 			}
-			DataTable rawTable=General.GetTable(command);
+			DataTable rawTable=Db.GetTable(command);
 			Patient pat;
 			StatementMode mode;
 			double balTotal;
