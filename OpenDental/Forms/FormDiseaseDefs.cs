@@ -200,7 +200,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			DiseaseDefs.Refresh();
+			DiseaseDefs.RefreshCache();
 			listMain.Items.Clear();
 			string s;
 			for(int i=0;i<DiseaseDefs.ListLong.Length;i++){

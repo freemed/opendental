@@ -772,7 +772,7 @@ namespace OpenDental{
 			if(FormFE.DialogResult==DialogResult.OK) {
 				FeeChanged=true;
 			}
-			Fees.Refresh();
+			Fees.RefreshCache();
 			//tbFees.SelectedRow=-1;
 			FillFees();
 		}

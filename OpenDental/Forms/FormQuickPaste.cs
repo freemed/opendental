@@ -401,7 +401,7 @@ namespace OpenDental{
 			else{
 				QuickPasteCats.Delete(quickCat);
 			}
-			QuickPasteCats.Refresh();
+			QuickPasteCats.RefreshCache();
 			FillCats();
 			FillNotes();
 		}
@@ -423,8 +423,8 @@ namespace OpenDental{
 				QuickPasteCats.List[i].ItemOrder--;
 				QuickPasteCats.Update(QuickPasteCats.List[i]);
 			}
-			QuickPasteNotes.Refresh();
-			QuickPasteCats.Refresh();
+			QuickPasteNotes.RefreshCache();
+			QuickPasteCats.RefreshCache();
 			FillCats();
 			FillNotes();
 			localChanged=true;
@@ -443,7 +443,7 @@ namespace OpenDental{
 			QuickPasteCats.List[listCat.SelectedIndex-1].ItemOrder++;
 			QuickPasteCats.Update(QuickPasteCats.List[listCat.SelectedIndex-1]);
 			listCat.SelectedIndex--;
-			QuickPasteCats.Refresh();
+			QuickPasteCats.RefreshCache();
 			FillCats();
 			FillNotes();
 			localChanged=true;
@@ -462,7 +462,7 @@ namespace OpenDental{
 			QuickPasteCats.List[listCat.SelectedIndex+1].ItemOrder--;
 			QuickPasteCats.Update(QuickPasteCats.List[listCat.SelectedIndex+1]);
 			listCat.SelectedIndex++;
-			QuickPasteCats.Refresh();
+			QuickPasteCats.RefreshCache();
 			FillCats();
 			FillNotes();
 			localChanged=true;
@@ -481,7 +481,7 @@ namespace OpenDental{
 			if(FormQ.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			QuickPasteCats.Refresh();
+			QuickPasteCats.RefreshCache();
 			FillCats();
 			FillNotes();
 			localChanged=true;
@@ -513,7 +513,7 @@ namespace OpenDental{
 				}
 				localChanged=true;
 			}
-			QuickPasteNotes.Refresh();
+			QuickPasteNotes.RefreshCache();
 			FillNotes();
 		}
 
@@ -530,7 +530,7 @@ namespace OpenDental{
 					QuickPasteNotes.Update(notesForCat[i]);
 				}
 			}
-			QuickPasteNotes.Refresh();
+			QuickPasteNotes.RefreshCache();
 			FillNotes();
 			localChanged=true;//?
 		}
@@ -548,7 +548,7 @@ namespace OpenDental{
 			notesForCat[listNote.SelectedIndex-1].ItemOrder++;
 			QuickPasteNotes.Update(notesForCat[listNote.SelectedIndex-1]);
 			listNote.SelectedIndex--;
-			QuickPasteNotes.Refresh();
+			QuickPasteNotes.RefreshCache();
 			FillNotes();
 			localChanged=true;
 		}
@@ -566,7 +566,7 @@ namespace OpenDental{
 			notesForCat[listNote.SelectedIndex+1].ItemOrder--;
 			QuickPasteNotes.Update(notesForCat[listNote.SelectedIndex+1]);
 			listNote.SelectedIndex++;
-			QuickPasteNotes.Refresh();
+			QuickPasteNotes.RefreshCache();
 			FillNotes();
 			localChanged=true;
 		}

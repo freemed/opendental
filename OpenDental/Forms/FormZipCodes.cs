@@ -128,7 +128,7 @@ namespace OpenDental{
 		}
 
 		private void FillTable(){
-			ZipCodes.Refresh();
+			ZipCodes.RefreshCache();
   		tbZips.ResetRows(ZipCodes.List.Length);
 			tbZips.SetGridColor(Color.Gray);
 			tbZips.SetBackGColor(Color.White);      

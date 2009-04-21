@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public static ZipCode[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		public static ArrayList ALFrequent {
 			get {
 				if(aLFrequent==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return aLFrequent;
 			}
@@ -37,25 +37,29 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Refresh done on startup and then whenever a change is made.</summary>
-		public static void Refresh(){
-			string command =
-				"SELECT * from zipcode ORDER BY zipcodedigits";
-			DataTable table=Db.GetTable(command);;
-			//HList=new Hashtable();
+		public static DataTable RefreshCache() {
+			string command=
+			"SELECT * from zipcode ORDER BY zipcodedigits";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ZipCode";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			ALFrequent=new ArrayList();
 			List=new ZipCode[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
+			for(int i=0;i<List.Length;i++) {
 				List[i]=new ZipCode();
-				List[i].ZipCodeNum   =PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].ZipCodeNum=PIn.PInt(table.Rows[i][0].ToString());
 				List[i].ZipCodeDigits=PIn.PString(table.Rows[i][1].ToString());
-				List[i].City         =PIn.PString(table.Rows[i][2].ToString());	
-				List[i].State        =PIn.PString(table.Rows[i][3].ToString());	
-				List[i].IsFrequent   =PIn.PBool  (table.Rows[i][4].ToString());
-				if(List[i].IsFrequent){
+				List[i].City=PIn.PString(table.Rows[i][2].ToString());
+				List[i].State=PIn.PString(table.Rows[i][3].ToString());
+				List[i].IsFrequent=PIn.PBool(table.Rows[i][4].ToString());
+				if(List[i].IsFrequent) {
 					ALFrequent.Add(List[i]);
 				}
-				//HList.Add(List[i].ZipCodeNum,List[i]);
 			}
 		}
 

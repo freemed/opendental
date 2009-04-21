@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public static EmailTemplate[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -22,17 +22,23 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * from emailtemplate ORDER BY Subject";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="EmailTemplate";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new EmailTemplate[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new EmailTemplate();
 				List[i].EmailTemplateNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Subject         =PIn.PString(table.Rows[i][1].ToString());
-				List[i].BodyText        =PIn.PString(table.Rows[i][2].ToString());
+				List[i].Subject=PIn.PString(table.Rows[i][1].ToString());
+				List[i].BodyText=PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
 

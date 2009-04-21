@@ -1708,7 +1708,7 @@ namespace OpenDental
 			FormFE.FeeCur=FeeCur;
 			FormFE.ShowDialog();
 			if(FormFE.DialogResult==DialogResult.OK){
-				Fees.Refresh();
+				Fees.RefreshCache();
 				DataValid.SetInvalid(InvalidType.Fees);
 			}
 			FillAllowed();

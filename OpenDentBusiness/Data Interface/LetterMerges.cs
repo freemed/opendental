@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public static LetterMerge[] Listt {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -44,20 +44,26 @@ namespace OpenDentBusiness{
 			}
 		}
 #endif
-		
-		///<summary>Must have run LetterMergeFields first.</summary>
-		public static void Refresh() {
+
+		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * FROM lettermerge ORDER BY Description";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="LetterMerge";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			Listt=new LetterMerge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				Listt[i]=new LetterMerge();
-				Listt[i].LetterMergeNum= PIn.PInt(table.Rows[i][0].ToString());
-				Listt[i].Description   = PIn.PString(table.Rows[i][1].ToString());
-				Listt[i].TemplateName  = PIn.PString(table.Rows[i][2].ToString());
-				Listt[i].DataFileName  = PIn.PString(table.Rows[i][3].ToString());
-				Listt[i].Category      = PIn.PInt(table.Rows[i][4].ToString());
+				Listt[i].LetterMergeNum=PIn.PInt(table.Rows[i][0].ToString());
+				Listt[i].Description=PIn.PString(table.Rows[i][1].ToString());
+				Listt[i].TemplateName=PIn.PString(table.Rows[i][2].ToString());
+				Listt[i].DataFileName=PIn.PString(table.Rows[i][3].ToString());
+				Listt[i].Category=PIn.PInt(table.Rows[i][4].ToString());
 				Listt[i].Fields=LetterMergeFields.GetForLetter(Listt[i].LetterMergeNum);
 			}
 		}

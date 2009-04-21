@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static QuickPasteCat[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,19 +21,25 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * from quickpastecat "
 				+"ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="QuickPasteCat";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new QuickPasteCat[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteCat();
-				List[i].QuickPasteCatNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description     = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder       = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].DefaultForTypes = PIn.PString(table.Rows[i][3].ToString());
+				List[i].QuickPasteCatNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
+				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].DefaultForTypes=PIn.PString(table.Rows[i][3].ToString());
 			}
 		}
 

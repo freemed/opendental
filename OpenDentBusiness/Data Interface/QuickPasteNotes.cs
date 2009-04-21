@@ -10,20 +10,26 @@ namespace OpenDentBusiness{
 		///<summary>list of all notes for all categories. Not very useful.</summary>
 		private static QuickPasteNote[] List;
 
-		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * from quickpastenote "
 				+"ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="QuickPasteNote";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new QuickPasteNote[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteNote();
-				List[i].QuickPasteNoteNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].QuickPasteCatNum = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].ItemOrder        = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].Note             = PIn.PString(table.Rows[i][3].ToString());
-				List[i].Abbreviation     = PIn.PString(table.Rows[i][4].ToString());
+				List[i].QuickPasteNoteNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].QuickPasteCatNum=PIn.PInt(table.Rows[i][1].ToString());
+				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].Note=PIn.PString(table.Rows[i][3].ToString());
+				List[i].Abbreviation=PIn.PString(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -86,7 +92,7 @@ namespace OpenDentBusiness{
 		///<summary>Only used from FormQuickPaste to get all notes for the selected cat.</summary>
 		public static QuickPasteNote[] GetForCat(int cat){
 			if(List==null) {
-				Refresh();
+				RefreshCache();
 			}
 			ArrayList ALnotes=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -104,7 +110,7 @@ namespace OpenDentBusiness{
 		///<summary>Called on KeyUp from various textBoxes in the program to look for a ?abbrev and attempt to substitute.  Substitutes the text if found.</summary>
 		public static string Substitute(string text,QuickPasteType type){
 			if(List==null) {
-				Refresh();
+				RefreshCache();
 			}
 			int typeIndex=QuickPasteCats.GetDefaultType(type);
 			for(int i=0;i<List.Length;i++){

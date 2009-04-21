@@ -4235,7 +4235,7 @@ namespace OpenDental{
 				ProcButtonList=new ProcButton[0];
 				return;
 			}
-			ProcButtons.Refresh();
+			ProcButtons.RefreshCache();
 			ProcButtonList=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][listButtonCats.SelectedIndex-1].DefNum);
 			ListViewItem item;
 			for(int i=0;i<ProcButtonList.Length;i++){

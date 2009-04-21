@@ -159,7 +159,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Employees.Refresh();
+			Employees.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormEmployeeSelect","FName"),75);

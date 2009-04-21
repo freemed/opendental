@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static Computer[] List{
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,9 +21,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh() {
-			//first, make sure this computer is in the db:
+		private static void EnsureComputerInDB(){
 			string command=
 				"SELECT * from computer "
 				+"WHERE compname = '"+Environment.MachineName+"'";
@@ -33,24 +31,28 @@ namespace OpenDentBusiness{
 				Cur.CompName=Environment.MachineName;
 				Computers.Insert(Cur);
 			}
-			//then, refresh List:
-			List=GetList();
+		}
+
+		public static DataTable RefreshCache() {
+			EnsureComputerInDB();
+			string command="SELECT * FROM computer ORDER BY CompName";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Computer";
+			FillCache(table);
+			return table;
 		}
 
 		///<summary></summary>
-		public static Computer[] GetList() {
-			string command="SELECT * FROM computer ORDER BY CompName";
-			DataTable table=Db.GetTable(command);
-			Computer[] list=new Computer[table.Rows.Count];
-			for(int i=0;i<list.Length;i++) {
-				list[i]=new Computer();
-				list[i].ComputerNum = PIn.PInt(table.Rows[i][0].ToString());
-				list[i].CompName    = PIn.PString(table.Rows[i][1].ToString());
+		public static void FillCache(DataTable table) {
+			List=new Computer[table.Rows.Count];
+			for(int i=0;i<List.Length;i++) {
+				List[i]=new Computer();
+				List[i].ComputerNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].CompName=PIn.PString(table.Rows[i][1].ToString());
 			}
-			return list;
 		}
 
-			///<summary>ONLY use this if compname is not already present</summary>
+		///<summary>ONLY use this if compname is not already present</summary>
 		public static void Insert(Computer comp){
 			if(PrefC.RandomKeys){
 				comp.ComputerNum=MiscData.GetKey("computer","ComputerNum");

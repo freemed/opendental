@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static ProcButtonItem[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,20 +21,26 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Fills List in preparation for later usage.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM procbuttonitem";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ProcButtonItem";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new ProcButtonItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButtonItem();
 				List[i].ProcButtonItemNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].ProcButtonNum    =PIn.PInt(table.Rows[i][1].ToString());
-				List[i].OldCode          =PIn.PString(table.Rows[i][2].ToString());
-				List[i].AutoCodeNum      =PIn.PInt(table.Rows[i][3].ToString());
-				List[i].CodeNum          =PIn.PInt(table.Rows[i][4].ToString());
+				List[i].ProcButtonNum=PIn.PInt(table.Rows[i][1].ToString());
+				List[i].OldCode=PIn.PString(table.Rows[i][2].ToString());
+				List[i].AutoCodeNum=PIn.PInt(table.Rows[i][3].ToString());
+				List[i].CodeNum=PIn.PInt(table.Rows[i][4].ToString());
 			}
-		}	
+		}
 
 		///<summary>Must have already checked procCode for nonduplicate.</summary>
 		public static void Insert(ProcButtonItem item) {

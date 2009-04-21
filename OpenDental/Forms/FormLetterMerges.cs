@@ -324,8 +324,8 @@ namespace OpenDental{
 				ListForCat=new List<LetterMerge>();
 				return;
 			}
-			LetterMergeFields.Refresh();
-			LetterMerges.Refresh();
+			LetterMergeFields.RefreshCache();
+			LetterMerges.RefreshCache();
 			ListForCat=LetterMerges.GetListForCat(listCategories.SelectedIndex);
 			for(int i=0;i<ListForCat.Count;i++){
 				listLetters.Items.Add(ListForCat[i].Description);

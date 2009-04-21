@@ -10,37 +10,42 @@ namespace OpenDentBusiness{
 	public class Printers{
 		///<summary>List of all printers.</summary>
 		private static Printer[] list;
-		
-		///<summary></summary>
-		public static void Refresh(){
+
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM printer";
-			list=RefreshAndFill(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Printer";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			list=new Printer[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				list[i]=new Printer();
+				list[i].PrinterNum=PIn.PInt(table.Rows[i][0].ToString());
+				list[i].ComputerNum=PIn.PInt(table.Rows[i][1].ToString());
+				list[i].PrintSit=(PrintSituation)PIn.PInt(table.Rows[i][2].ToString());
+				list[i].PrinterName=PIn.PString(table.Rows[i][3].ToString());
+				list[i].DisplayPrompt=PIn.PBool(table.Rows[i][4].ToString());
+			}
 		}
 
 		///<summary></summary>
 		public static Printer GetOnePrinter(PrintSituation sit,int compNum){
+			Printer[] tempList=list;
 			string command="SELECT * FROM printer WHERE "
 				+"PrintSit = '"      +POut.PInt((int)sit)+"' "
 				+"AND ComputerNum ='"+POut.PInt(compNum)+"'";
-			Printer[] printerList=RefreshAndFill(command);
-			if(printerList.Length==0){
+			DataTable table=Db.GetTable(command);
+			FillCache(table);
+			if(list.Length==0){
 				return null;
 			}
-			return printerList[0];
-		}
-
-		private static Printer[] RefreshAndFill(string command){
- 			DataTable table=Db.GetTable(command);
-			Printer[] pList=new Printer[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				pList[i]=new Printer();
-				pList[i].PrinterNum    = PIn.PInt   (table.Rows[i][0].ToString());
-				pList[i].ComputerNum   = PIn.PInt   (table.Rows[i][1].ToString());
-				pList[i].PrintSit      =(PrintSituation)PIn.PInt(table.Rows[i][2].ToString());
-				pList[i].PrinterName   = PIn.PString(table.Rows[i][3].ToString());
-				pList[i].DisplayPrompt = PIn.PBool  (table.Rows[i][4].ToString());
-			}
-			return pList;
+			Printer result=list[0];
+			list=tempList;
+			return result;
 		}
 
 		///<summary></summary>
@@ -101,7 +106,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets the set printer whether or not it is valid.</summary>
 		public static Printer GetForSit(PrintSituation sit){
 			if(list==null) {
-				Refresh();
+				RefreshCache();
 			}
 			Computer compCur=Computers.GetCur();
 			for(int i=0;i<list.Length;i++){
@@ -152,7 +157,7 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM printer";
  			Db.NonQ(command);
 			//then, add one printer for each computer. Default and show prompt
-			Computers.Refresh();
+			Computers.RefreshCache();
 			Printer cur;
 			for(int i=0;i<Computers.List.Length;i++){
 				cur=new Printer();

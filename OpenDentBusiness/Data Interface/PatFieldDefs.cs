@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 		public static PatFieldDef[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -22,15 +22,21 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Gets a list of all PatFieldDefs when program first opens.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM patfielddef";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="PatFieldDef";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new PatFieldDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatFieldDef();
-				List[i].PatFieldDefNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].FieldName     = PIn.PString(table.Rows[i][1].ToString());
+				List[i].PatFieldDefNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].FieldName=PIn.PString(table.Rows[i][1].ToString());
 			}
 		}
 

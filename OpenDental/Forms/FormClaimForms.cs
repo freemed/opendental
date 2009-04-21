@@ -279,7 +279,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void FillList(){
-			ClaimForms.Refresh();
+			ClaimForms.RefreshCache();
 			listClaimForms.Items.Clear();
 			comboReassign.Items.Clear();
 			string description;
@@ -433,7 +433,7 @@ namespace OpenDental{
 			bool isNew=true;
 			if(isUpdateSequence){
 				ClaimFormItems.RefreshCache();
-				ClaimForms.Refresh();
+				ClaimForms.RefreshCache();
 			}
 			if(tempClaimForm.UniqueID!=""){//if it's blank, it's always inserted.
 				for(int i=0;i<ClaimForms.ListLong.Length;i++){

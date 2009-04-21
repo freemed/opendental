@@ -625,7 +625,7 @@ namespace OpenDental{
 					return;
 				}
 				Printers.ClearAll();
-				Printers.Refresh();
+				Printers.RefreshCache();
 				string printerName="";
 				if(comboDefault.SelectedIndex==0){
 					printerName="";

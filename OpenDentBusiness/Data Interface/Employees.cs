@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public static Employee[] ListLong {
 			get {
 				if(listLong==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listLong;
 			}
@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		public static Employee[] ListShort {
 			get {
 				if(listShort==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listShort;
 			}
@@ -36,28 +36,34 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh(){
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM employee ORDER BY IsHidden,FName,LName";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Employee";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			ListLong=new Employee[table.Rows.Count];
 			ArrayList tempList=new ArrayList();
 			//Employee temp;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new Employee();
-				ListLong[i].EmployeeNum = PIn.PInt   (table.Rows[i][0].ToString());
-				ListLong[i].LName =       PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].FName =       PIn.PString(table.Rows[i][2].ToString());
-				ListLong[i].MiddleI =     PIn.PString(table.Rows[i][3].ToString());
-				ListLong[i].IsHidden =    PIn.PBool  (table.Rows[i][4].ToString());
-				ListLong[i].ClockStatus =	PIn.PString(table.Rows[i][5].ToString());
-				ListLong[i].PhoneExt =    PIn.PInt   (table.Rows[i][6].ToString());
-				if(!ListLong[i].IsHidden){
+				ListLong[i].EmployeeNum=PIn.PInt(table.Rows[i][0].ToString());
+				ListLong[i].LName=PIn.PString(table.Rows[i][1].ToString());
+				ListLong[i].FName=PIn.PString(table.Rows[i][2].ToString());
+				ListLong[i].MiddleI=PIn.PString(table.Rows[i][3].ToString());
+				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][4].ToString());
+				ListLong[i].ClockStatus=PIn.PString(table.Rows[i][5].ToString());
+				ListLong[i].PhoneExt=PIn.PInt(table.Rows[i][6].ToString());
+				if(!ListLong[i].IsHidden) {
 					tempList.Add(ListLong[i]);
 				}
 			}
 			ListShort=new Employee[tempList.Count];
-			for(int i=0;i<tempList.Count;i++){
+			for(int i=0;i<tempList.Count;i++) {
 				ListShort[i]=(Employee)tempList[i];
 			}
 		}

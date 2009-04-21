@@ -134,7 +134,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			PatFieldDefs.Refresh();
+			PatFieldDefs.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<PatFieldDefs.List.Length;i++){
 				listMain.Items.Add(PatFieldDefs.List[i].FieldName);

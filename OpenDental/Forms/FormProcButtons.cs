@@ -277,7 +277,7 @@ namespace OpenDental{
 				ButtonList=new ProcButton[0];
 				return;
 			}
-			ProcButtons.Refresh();
+			ProcButtons.RefreshCache();
 			ButtonList=ProcButtons.GetForCat(selectedCat);
 			//first check and fix any order problems
 			for(int i=0;i<ButtonList.Length;i++) {

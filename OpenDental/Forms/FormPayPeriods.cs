@@ -128,7 +128,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			PayPeriods.Refresh();
+			PayPeriods.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Start Date",80);

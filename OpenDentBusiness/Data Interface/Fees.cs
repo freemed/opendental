@@ -10,31 +10,36 @@ namespace OpenDentBusiness{
 		private static Dictionary<FeeKey,Fee> Dict;
 		private static List<Fee> Listt;
 
-		///<summary>Refreshes all fees and loads them into dict and list.  </summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
+			string command="SELECT * FROM fee";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Fee";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			Dict=new Dictionary<FeeKey,Fee>();
 			Listt=new List<Fee>();
 			Fee fee;
 			FeeKey key;
-			string command="SELECT * FROM fee";
-			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
 				fee=new Fee();
-				fee.FeeNum       =PIn.PInt(table.Rows[i][0].ToString());
-				fee.Amount       =PIn.PDouble(table.Rows[i][1].ToString());
+				fee.FeeNum=PIn.PInt(table.Rows[i][0].ToString());
+				fee.Amount=PIn.PDouble(table.Rows[i][1].ToString());
 				//fee.OldCode      =PIn.PString(table.Rows[i][2].ToString());
-				fee.FeeSched     =PIn.PInt(table.Rows[i][3].ToString());
+				fee.FeeSched=PIn.PInt(table.Rows[i][3].ToString());
 				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
 				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
-				fee.CodeNum      =PIn.PInt(table.Rows[i][6].ToString());
+				fee.CodeNum=PIn.PInt(table.Rows[i][6].ToString());
 				key.codeNum=fee.CodeNum;
 				key.feeSchedNum=fee.FeeSched;
-				if(Dict.ContainsKey(key)){
+				if(Dict.ContainsKey(key)) {
 					//if fee was already loaded for this code, delete this duplicate.
-					command="DELETE FROM fee WHERE FeeNum ="+POut.PInt(fee.FeeNum);
+					string command="DELETE FROM fee WHERE FeeNum ="+POut.PInt(fee.FeeNum);
 					Db.NonQ(command);
-				}
-				else{
+				} else {
 					Dict.Add(key,fee);
 					Listt.Add(fee);
 				}
@@ -81,7 +86,7 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			if(Dict==null) {
-				Refresh();
+				RefreshCache();
 			}
 			FeeKey key=new FeeKey();
 			key.codeNum=codeNum;
@@ -104,7 +109,7 @@ namespace OpenDentBusiness{
 				return -1;//you cannot obtain fees for hidden fee schedules
 			}
 			if(Dict==null) {
-				Refresh();
+				RefreshCache();
 			}
 			FeeKey key=new FeeKey();
 			key.codeNum=codeNum;
@@ -174,7 +179,7 @@ namespace OpenDentBusiness{
 		///<summary>Copies any fee objects over to the new fee schedule.  Usually run ClearFeeSched first.  Be careful exactly which int's you supply.</summary>
 		public static void CopyFees(int fromFeeSched,int toFeeSched){
 			if(Listt==null) {
-				Refresh();
+				RefreshCache();
 			}
 			Fee fee;
 			for(int i=0;i<Listt.Count;i++){
@@ -190,7 +195,7 @@ namespace OpenDentBusiness{
 		///<summary>Increases the fee schedule by percent.  Round should be the number of decimal places, either 0,1,or 2.</summary>
 		public static void Increase(int feeSched,int percent,int round){
 			if(Listt==null) {
-				Refresh();
+				RefreshCache();
 			}
 			Fee fee;
 			double newVal;

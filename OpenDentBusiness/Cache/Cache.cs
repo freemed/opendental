@@ -60,37 +60,37 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.ClaimForms) || isAll){
 				ds.Tables.Add(ClaimFormItems.RefreshCache());
-				ClaimForms.Refresh();
+				ds.Tables.Add(ClaimForms.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll){
-				Computers.Refresh();
-				Printers.Refresh();
+				ds.Tables.Add(Computers.RefreshCache());
+				ds.Tables.Add(Printers.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Defs) || isAll){
 				ds.Tables.Add(Defs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll){
-				SchoolClasses.Refresh();
-				SchoolCourses.Refresh();
+				ds.Tables.Add(SchoolClasses.RefreshCache());
+				ds.Tables.Add(SchoolCourses.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
-				DiseaseDefs.Refresh();
+				ds.Tables.Add(DiseaseDefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				ds.Tables.Add(DisplayFields.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll){
-				EmailTemplates.Refresh();
+				ds.Tables.Add(EmailTemplates.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Employees) || isAll){
-				Employees.Refresh();
-				PayPeriods.Refresh();
+				ds.Tables.Add(Employees.RefreshCache());
+				ds.Tables.Add(PayPeriods.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
-				Fees.Refresh();
+				ds.Tables.Add(Fees.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll){
 				ds.Tables.Add(FeeScheds.RefreshCache());
@@ -100,17 +100,17 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(CovSpans.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll){
-				Letters.Refresh();
+				ds.Tables.Add(Letters.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll){
-				LetterMergeFields.Refresh();
-				LetterMerges.Refresh();
+				ds.Tables.Add(LetterMergeFields.RefreshCache());
+				ds.Tables.Add(LetterMerges.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				ds.Tables.Add(Operatories.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
-				PatFieldDefs.Refresh();
+				ds.Tables.Add(PatFieldDefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
 				ds.Tables.Add(Pharmacies.RefreshCache());
@@ -119,12 +119,12 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Prefs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ProcButtons) || isAll) {
-				ProcButtons.Refresh();
-				ProcButtonItems.Refresh();
+				ds.Tables.Add(ProcButtons.RefreshCache());
+				ds.Tables.Add(ProcButtonItems.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll){
 				ds.Tables.Add(ProcedureCodes.RefreshCache());
-				ProcCodeNotes.Refresh();
+				ds.Tables.Add(ProcCodeNotes.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll){
 				ds.Tables.Add(Programs.RefreshCache());
@@ -134,8 +134,8 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Providers.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll){
-				QuickPasteNotes.Refresh();
-				QuickPasteCats.Refresh();
+				ds.Tables.Add(QuickPasteNotes.RefreshCache());
+				ds.Tables.Add(QuickPasteCats.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.RecallTypes) || isAll){
 				ds.Tables.Add(RecallTypes.RefreshCache());
@@ -164,7 +164,7 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(ApptViewItems.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
-				ZipCodes.Refresh();
+				ds.Tables.Add(ZipCodes.RefreshCache());
 			}
 			return ds;
 		}
@@ -193,37 +193,37 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.ClaimForms) || isAll) {
 				ClaimFormItems.FillCache(ds.Tables["ClaimFormItem"]);
-				ClaimForms.Refresh();
+				ClaimForms.FillCache(ds.Tables["ClaimForm"]);
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll) {
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll) {
-				Computers.Refresh();
-				Printers.Refresh();
+				Computers.FillCache(ds.Tables["Computer"]);
+				Printers.FillCache(ds.Tables["Printer"]);
 			}
 			if(itypes.Contains((int)InvalidType.Defs) || isAll) {
 				Defs.FillCache(ds.Tables["Def"]);
 			}
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll) {
-				SchoolClasses.Refresh();
-				SchoolCourses.Refresh();
+				SchoolClasses.FillCache(ds.Tables["SchoolClass"]);
+				SchoolClasses.FillCache(ds.Tables["SchoolCourse"]);
 			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
-				DiseaseDefs.Refresh();
+				DiseaseDefs.FillCache(ds.Tables["DiseaseDef"]);
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
-				DisplayFields.FillCache(ds.Tables["DisplayField"]); ;
+				DisplayFields.FillCache(ds.Tables["DisplayField"]);
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll) {
-				EmailTemplates.Refresh();
+				EmailTemplates.FillCache(ds.Tables["EmailTemplate"]);
 			}
 			if(itypes.Contains((int)InvalidType.Employees) || isAll) {
-				Employees.Refresh();
-				PayPeriods.Refresh();
+				Employees.FillCache(ds.Tables["Employee"]);
+				PayPeriods.FillCache(ds.Tables["PayPeriod"]);
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll) {
-				Fees.Refresh();
+				Fees.FillCache(ds.Tables["Fee"]);
 			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll) {
 				FeeScheds.FillCache(ds.Tables["FeeSched"]);
@@ -233,17 +233,17 @@ namespace OpenDentBusiness {
 				FeeScheds.FillCache(ds.Tables["CovSpan"]);
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll) {
-				Letters.Refresh();
+				Letters.FillCache(ds.Tables["Fee"]);
 			}
 			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll) {
-				LetterMergeFields.Refresh();
-				LetterMerges.Refresh();
+				LetterMergeFields.FillCache(ds.Tables["LetterMergeFields"]);
+				LetterMerges.FillCache(ds.Tables["LetterMerge"]);
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll) {
 				Operatories.FillCache(ds.Tables["Operatory"]);
 			}
 			if(itypes.Contains((int)InvalidType.PatFields) || isAll) {
-				PatFieldDefs.Refresh();
+				PatFieldDefs.FillCache(ds.Tables["PatFieldDef"]);
 			}
 			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll) {
 				Pharmacies.FillCache(ds.Tables["Pharmacy"]);
@@ -252,12 +252,12 @@ namespace OpenDentBusiness {
 				Prefs.FillCache(ds.Tables["Pref"]);
 			}
 			if(itypes.Contains((int)InvalidType.ProcButtons) || isAll) {
-				ProcButtons.Refresh();
-				ProcButtonItems.Refresh();
+				ProcButtons.FillCache(ds.Tables["ProcButton"]);
+				ProcButtonItems.FillCache(ds.Tables["ProcButtonItem"]);
 			}
 			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll) {
 				ProcedureCodes.FillCache(ds.Tables["ProcedureCode"]);
-				ProcCodeNotes.Refresh();
+				ProcCodeNotes.FillCache(ds.Tables["ProcCodeNote"]);
 			}
 			if(itypes.Contains((int)InvalidType.Programs) || isAll) {
 				Programs.FillCache(ds.Tables["Program"]);
@@ -267,8 +267,8 @@ namespace OpenDentBusiness {
 				Providers.FillCache(ds.Tables["Provider"]);
 			}
 			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll) {
-				QuickPasteNotes.Refresh();
-				QuickPasteCats.Refresh();
+				QuickPasteNotes.FillCache(ds.Tables["QuickPasteNote"]);
+				QuickPasteCats.FillCache(ds.Tables["QuickPasteCat"]);
 			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll) {
 				Userods.FillCache(ds.Tables["Userod"]);
@@ -293,18 +293,10 @@ namespace OpenDentBusiness {
 				ApptViewItems.FillCache(ds.Tables["ApptViewItem"]);
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll) {
-				ZipCodes.Refresh();
+				ZipCodes.FillCache(ds.Tables["ZipCode"]);
 			}
 
 		}
-
-
-
-
-
-
-
-
 
 	}
 }

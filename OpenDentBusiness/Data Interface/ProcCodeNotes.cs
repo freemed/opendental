@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		public static List<ProcCodeNote> Listt {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -24,31 +24,37 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static void Refresh(){
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM proccodenote";
-			Listt=RefreshAndFill(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ProcCodeNote";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			list=new List<ProcCodeNote>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				ProcCodeNote note=new ProcCodeNote();
+				note.ProcCodeNoteNum=PIn.PInt(table.Rows[i][0].ToString());
+				note.CodeNum=PIn.PInt(table.Rows[i][1].ToString());
+				note.ProvNum=PIn.PInt(table.Rows[i][2].ToString());
+				note.Note=PIn.PString(table.Rows[i][3].ToString());
+				note.ProcTime=PIn.PString(table.Rows[i][4].ToString());
+				list.Add(note);
+			}
 		}
 
 		///<summary></summary>
 		public static List<ProcCodeNote> GetList(int codeNum) {
+			List<ProcCodeNote> tempList=list;
 			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.PInt(codeNum);
-			return RefreshAndFill(command);
-		}
-
-		private static List<ProcCodeNote> RefreshAndFill(string command){
 			DataTable table=Db.GetTable(command);
-			List<ProcCodeNote> retVal=new List<ProcCodeNote>();
-			ProcCodeNote note;
-			for(int i=0;i<table.Rows.Count;i++) {
-				note=new ProcCodeNote();
-				note.ProcCodeNoteNum=PIn.PInt(table.Rows[i][0].ToString());
-				note.CodeNum      	=PIn.PInt(table.Rows[i][1].ToString());
-				note.ProvNum        =PIn.PInt(table.Rows[i][2].ToString());
-				note.Note           =PIn.PString(table.Rows[i][3].ToString());
-				note.ProcTime       =PIn.PString(table.Rows[i][4].ToString());
-				retVal.Add(note);
-			}
-			return retVal;
+			FillCache(table);
+			List<ProcCodeNote> result=list;
+			list=tempList;
+			return result;
 		}
 
 		///<summary></summary>

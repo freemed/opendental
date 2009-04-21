@@ -376,7 +376,7 @@ namespace OpenDental{
 
 		///<summary>When using Arizona Primary Care, there must be a handful of pre-defined patient fields which are required  to generate the Arizona Primary Care reports. This function will return true if all of the required patient fields exist which are necessary to run the Arizona Primary Care reports. Otherwise, false is returned.</summary>
 		public static bool UsingArizonaPrimaryCare() {
-			PatFieldDefs.Refresh();
+			PatFieldDefs.RefreshCache();
 			string[] patientFieldNames=new string[] {
 				"SPID#",
 				"Eligibility Status",

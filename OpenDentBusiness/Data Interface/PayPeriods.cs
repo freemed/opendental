@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static PayPeriod[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,17 +21,23 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Fills List with all payperiods, ordered by startdate.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * from payperiod ORDER BY DateStart";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="PayPeriod";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new PayPeriod[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new PayPeriod();
-				List[i].PayPeriodNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].DateStart    = PIn.PDate(table.Rows[i][1].ToString());
-				List[i].DateStop     = PIn.PDate(table.Rows[i][2].ToString());
-				List[i].DatePaycheck = PIn.PDate(table.Rows[i][3].ToString());
+				List[i].PayPeriodNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].DateStart=PIn.PDate(table.Rows[i][1].ToString());
+				List[i].DateStop=PIn.PDate(table.Rows[i][2].ToString());
+				List[i].DatePaycheck=PIn.PDate(table.Rows[i][3].ToString());
 			}
 		}
 

@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public static ClaimForm[] ListLong {
 			get {
 				if(listLong==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listLong;
 			}
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		public static ClaimForm[] ListShort {
 			get {
 				if(listShort==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listShort;
 			}
@@ -38,24 +38,29 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Fills ListShort and ListLong with all claimforms from the db. Also attaches corresponding claimformitems to each.</summary>
-		public static void Refresh() {
-			string command=
-				"SELECT * FROM claimform";
-			DataTable table=Db.GetTable(command);
+		public static DataTable RefreshCache() {
+			string command="SELECT * FROM claimform";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ClaimForm";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			ListLong=new ClaimForm[table.Rows.Count];
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new ClaimForm();
-				ListLong[i].ClaimFormNum= PIn.PInt(table.Rows[i][0].ToString());
-				ListLong[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].IsHidden    = PIn.PBool(table.Rows[i][2].ToString());
-				ListLong[i].FontName    = PIn.PString(table.Rows[i][3].ToString());
-				ListLong[i].FontSize    = PIn.PFloat(table.Rows[i][4].ToString());
-				ListLong[i].UniqueID    = PIn.PString(table.Rows[i][5].ToString());
-				ListLong[i].PrintImages = PIn.PBool(table.Rows[i][6].ToString());
-				ListLong[i].OffsetX     = PIn.PInt(table.Rows[i][7].ToString());
-				ListLong[i].OffsetY     = PIn.PInt(table.Rows[i][8].ToString());
+				ListLong[i].ClaimFormNum=PIn.PInt(table.Rows[i][0].ToString());
+				ListLong[i].Description=PIn.PString(table.Rows[i][1].ToString());
+				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][2].ToString());
+				ListLong[i].FontName=PIn.PString(table.Rows[i][3].ToString());
+				ListLong[i].FontSize=PIn.PFloat(table.Rows[i][4].ToString());
+				ListLong[i].UniqueID=PIn.PString(table.Rows[i][5].ToString());
+				ListLong[i].PrintImages=PIn.PBool(table.Rows[i][6].ToString());
+				ListLong[i].OffsetX=PIn.PInt(table.Rows[i][7].ToString());
+				ListLong[i].OffsetY=PIn.PInt(table.Rows[i][8].ToString());
 				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
 				if(!ListLong[i].IsHidden)
 					tempAL.Add(ListLong[i]);

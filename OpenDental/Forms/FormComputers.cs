@@ -132,7 +132,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Computers.Refresh();
+			Computers.RefreshCache();
 			listComputer.Items.Clear();
 			string itemName="";
 			for(int i=0;i<Computers.List.Length;i++){

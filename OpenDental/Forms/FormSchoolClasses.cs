@@ -115,7 +115,7 @@ namespace OpenDental{
 			if(listMain.SelectedIndex!=-1){
 				previousSelected=SchoolClasses.List[listMain.SelectedIndex].SchoolClassNum;
 			}
-			SchoolClasses.Refresh();
+			SchoolClasses.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<SchoolClasses.List.Length;i++){
 				listMain.Items.Add(SchoolClasses.List[i].GradYear.ToString()+" - "+SchoolClasses.List[i].Descript);

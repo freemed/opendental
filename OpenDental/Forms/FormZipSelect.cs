@@ -205,7 +205,7 @@ namespace OpenDental{
 				return;
 			}
 			changed=true;
-			ZipCodes.Refresh();
+			ZipCodes.RefreshCache();
 			ZipCodes.GetALMatches(FormZCE.ZipCodeCur.ZipCodeDigits);
 			FillList();
 		}
@@ -222,7 +222,7 @@ namespace OpenDental{
 				return;
 			}
 			changed=true;
-			ZipCodes.Refresh();
+			ZipCodes.RefreshCache();
 			ZipCodes.GetALMatches(FormZCE.ZipCodeCur.ZipCodeDigits);
 			FillList();
 		}
@@ -235,7 +235,7 @@ namespace OpenDental{
 			ZipCode ZipCodeCur=(ZipCode)ZipCodes.ALMatches[listMatches.SelectedIndex];
 			ZipCodes.Delete(ZipCodeCur);
 			changed=true;
-			ZipCodes.Refresh();
+			ZipCodes.RefreshCache();
 			//next line might not be right.
 			ZipCodes.GetALMatches(ZipCodeCur.ZipCodeDigits);
 			FillList();

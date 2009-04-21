@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public static ProcButton[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -22,18 +22,24 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM procbutton ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ProcButton";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new ProcButton[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButton();
 				List[i].ProcButtonNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description  =PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder    =PIn.PInt(table.Rows[i][2].ToString());
-				List[i].Category     =PIn.PInt(table.Rows[i][3].ToString());
-				List[i].ButtonImage  =PIn.PBitmap(table.Rows[i][4].ToString());
+				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
+				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].Category=PIn.PInt(table.Rows[i][3].ToString());
+				List[i].ButtonImage=PIn.PBitmap(table.Rows[i][4].ToString());
 			}
 		}
 

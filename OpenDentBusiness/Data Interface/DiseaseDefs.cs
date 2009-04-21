@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 		public static DiseaseDef[] ListLong{
 			get {
 				if(listLong==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return listLong;
 			}
@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 		public static DiseaseDef[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -36,18 +36,24 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Gets a list of all DiseaseDefs when program first opens.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM diseasedef ORDER BY ItemOrder";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="DiseaseDef";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			ListLong=new DiseaseDef[table.Rows.Count];
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new DiseaseDef();
-				ListLong[i].DiseaseDefNum= PIn.PInt(table.Rows[i][0].ToString());
-				ListLong[i].DiseaseName  = PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].ItemOrder    = PIn.PInt(table.Rows[i][2].ToString());
-				ListLong[i].IsHidden     = PIn.PBool(table.Rows[i][3].ToString());
+				ListLong[i].DiseaseDefNum=PIn.PInt(table.Rows[i][0].ToString());
+				ListLong[i].DiseaseName=PIn.PString(table.Rows[i][1].ToString());
+				ListLong[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][3].ToString());
 				if(!ListLong[i].IsHidden) {
 					AL.Add(ListLong[i]);
 				}

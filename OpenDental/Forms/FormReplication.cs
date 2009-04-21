@@ -176,7 +176,7 @@ namespace OpenDental{
 		}
 
 		private void FillServerGrid() {
-			Computer[] computers=Computers.GetList();
+			Computer[] computers=Computers.List;
 			gridReplicationComputers.BeginUpdate();
 			gridReplicationComputers.Rows.Clear();
 			for(int i=0;i<computers.Length;i++) {

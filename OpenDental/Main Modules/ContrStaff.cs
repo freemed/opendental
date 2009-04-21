@@ -675,7 +675,7 @@ namespace OpenDental{
 
 		private void RefreshModuleData(int patNum){
 			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
-			Employees.Refresh();
+			Employees.RefreshCache();
 			//RefreshModulePatient(patNum);
 		}
 

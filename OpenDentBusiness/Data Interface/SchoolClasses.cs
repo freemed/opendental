@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static SchoolClass[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -21,20 +21,27 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Refreshes all SchoolClasses.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command=
 				"SELECT * FROM schoolclass "
 				+"ORDER BY GradYear,Descript";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="SchoolClass";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new SchoolClass[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SchoolClass();
-				List[i].SchoolClassNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].GradYear      = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].Descript      = PIn.PString(table.Rows[i][2].ToString());
+				List[i].SchoolClassNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].GradYear=PIn.PInt(table.Rows[i][1].ToString());
+				List[i].Descript=PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
+
 
 		///<summary></summary>
 		private static void Update(SchoolClass sc){

@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public static Letter[] List {
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -23,20 +23,23 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		public static void Refresh(){
-			//HList=new Hashtable();
-			string command = 
+		public static DataTable RefreshCache() {
+			string command=
 				"SELECT * from letter ORDER BY Description";
-			DataTable table=Db.GetTable(command);
-			//Employer temp=new Employer();
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Letter";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
 			List=new Letter[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Letter();
-				List[i].LetterNum  =PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].LetterNum=PIn.PInt(table.Rows[i][0].ToString());
 				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				List[i].BodyText   =PIn.PString(table.Rows[i][2].ToString());
-				//HList.Add(List[i].LetterNum,List[i]);
+				List[i].BodyText=PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
 

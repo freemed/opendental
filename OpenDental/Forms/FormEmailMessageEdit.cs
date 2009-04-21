@@ -504,7 +504,7 @@ namespace OpenDental{
 			if(FormE.DialogResult!=DialogResult.OK){
 				return;
 			}
-			EmailTemplates.Refresh();
+			EmailTemplates.RefreshCache();
 			templatesChanged=true;
 			FillList();
 		}
@@ -517,7 +517,7 @@ namespace OpenDental{
 			if(FormE.DialogResult!=DialogResult.OK){
 				return;
 			}
-			EmailTemplates.Refresh();
+			EmailTemplates.RefreshCache();
 			templatesChanged=true;
 			FillList();
 		}
@@ -532,7 +532,7 @@ namespace OpenDental{
 				return;
 			}
 			EmailTemplates.Delete(EmailTemplates.List[listTemplates.SelectedIndex]);
-			EmailTemplates.Refresh();
+			EmailTemplates.RefreshCache();
 			templatesChanged=true;
 			FillList();
 		}

@@ -750,7 +750,7 @@ namespace OpenDental{
 			if(FormF.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			Fees.Refresh();
+			Fees.RefreshCache();
 			ProcedureCodes.RefreshCache();
 			changed=true;
 			FillGrid();
@@ -928,7 +928,7 @@ namespace OpenDental{
 				FormFE.FeeCur=FeeCur;
 				FormFE.ShowDialog();
 				if(FormFE.DialogResult==DialogResult.OK) {
-					Fees.Refresh();
+					Fees.RefreshCache();
 					changed=true;
 					FillGrid();
 				}
