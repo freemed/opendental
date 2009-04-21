@@ -783,7 +783,7 @@ namespace OpenDental.Eclaims
 				string pwk02;
 				string idCode=claim.AttachmentID;
 				if(idCode==""){//must be min of two char, so we need to make one up.
-					idCode=patient.LName;
+					idCode="  ";
 				}
 				idCode=Sout(idCode,80,2);
 				if(claim.AttachedFlags.Contains("Mail")){
