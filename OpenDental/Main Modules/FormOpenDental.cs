@@ -2836,10 +2836,20 @@ namespace OpenDental{
 				ContrAppt2.FunctionKeyPress(e.KeyCode);
 			}
 			Keys keys=e.KeyCode;
+			//Ctrl-Alt-R is supposed to show referral window, but it doesn't work on some computers.
 			if((e.Modifiers&Keys.Alt)==Keys.Alt
 				&& (e.Modifiers&Keys.Control)==Keys.Control
 				&& (e.KeyCode&Keys.R)==Keys.R
 				&& CurPatNum!=0)
+			{
+				FormReferralsPatient FormRE=new FormReferralsPatient();
+				FormRE.PatNum=CurPatNum;
+				FormRE.ShowDialog();
+			}
+			//so we're also going to use Ctrl-X to show the referral window.
+			if((e.Modifiers&Keys.Control)==Keys.Control
+				&& (e.KeyCode&Keys.X)==Keys.X
+				&& CurPatNum!=0) 
 			{
 				FormReferralsPatient FormRE=new FormReferralsPatient();
 				FormRE.PatNum=CurPatNum;
