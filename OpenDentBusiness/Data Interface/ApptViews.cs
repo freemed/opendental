@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Reflection;
 
 namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the apptview table in the database.</summary>
