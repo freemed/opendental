@@ -297,6 +297,7 @@
     <Compile Include="DataConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DtoObject.cs" />
     <Compile Include="HL7\ADT.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
     <Compile Include="HL7\DFT.cs" />
@@ -555,7 +556,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="WebServer\XmlConverter.cs" />
+    <Compile Include="XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
@@ -600,6 +601,9 @@
     </None>
     <None Include="Web References\OpenDentalServer\ServiceMain.disco" />
     <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebServer\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
