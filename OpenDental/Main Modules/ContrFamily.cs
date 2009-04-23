@@ -218,7 +218,7 @@ namespace OpenDental{
 			PlanList=InsPlans.Refresh(FamCur);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
-			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
+			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			PatFieldList=PatFields.Refresh(patNum);
 		}
 
@@ -750,16 +750,16 @@ namespace OpenDental{
 			ODGridRow row;
 			DateTime recallDate;
 			ODGridCell cell;
-			for(int i=0;i<FamCur.List.Length;i++){
+			for(int i=0;i<FamCur.ListPats.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(FamCur.GetNameInFamLFI(i));
-				row.Cells.Add(Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString()));
-				row.Cells.Add(Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString()));
-				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
-				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
+				row.Cells.Add(Lan.g("enumPatientPosition",FamCur.ListPats[i].Position.ToString()));
+				row.Cells.Add(Lan.g("enumPatientGender",FamCur.ListPats[i].Gender.ToString()));
+				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.ListPats[i].PatStatus.ToString()));
+				row.Cells.Add(Patients.AgeToString(FamCur.ListPats[i].Age));
 				recallDate=DateTime.MinValue;
 				for(int j=0;j<RecallList.Count;j++){
-					if(RecallList[j].PatNum==FamCur.List[i].PatNum
+					if(RecallList[j].PatNum==FamCur.ListPats[i].PatNum
 						&& (RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")
 						|| RecallList[j].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")))
 					{
@@ -790,9 +790,9 @@ namespace OpenDental{
 			//}
 			//tbFamily.SelectedRow=e.Row;
 			//tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
-				FamCur.List[e.Row].ChartNumber);
-			ModuleSelected(FamCur.List[e.Row].PatNum);
+			OnPatientSelected(FamCur.ListPats[e.Row].PatNum,FamCur.ListPats[e.Row].GetNameLF(),FamCur.ListPats[e.Row].Email!="",
+				FamCur.ListPats[e.Row].ChartNumber);
+			ModuleSelected(FamCur.ListPats[e.Row].PatNum);
 		}
 
 		//private void butAddPt_Click(object sender, System.EventArgs e) {
@@ -884,7 +884,7 @@ namespace OpenDental{
 			}
 			Patient PatOld=PatCur.Copy();
 			if(PatCur.PatNum==PatCur.Guarantor){//if selecting guarantor
-				if(FamCur.List.Length==1){
+				if(FamCur.ListPats.Length==1){
 					if(!MsgBox.Show(this,true,"Delete Patient?"))
 						return;
 					PatCur.PatStatus=PatientStatus.Deleted;
@@ -943,7 +943,7 @@ namespace OpenDental{
 			Patient PatOld=PatCur.Copy();
 			//Patient PatCur;
 			if(PatCur.PatNum==PatCur.Guarantor){//if guarantor selected
-				if(FamCur.List.Length==1){//and no other family members
+				if(FamCur.ListPats.Length==1){//and no other family members
 					//no need to check insurance.  It will follow.
 					if(!MsgBox.Show(this,true,"Moving the guarantor will cause two families to be combined.  The financial notes for both families will be combined and may need to be edited.  The address notes will also be combined and may need to be edited. Do you wish to continue?"))
 						return;

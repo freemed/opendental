@@ -146,8 +146,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSubscriberSelect_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<FamCur.List.Length;i++){
-				listPats.Items.Add(FamCur.List[i].GetNameFL());
+			for(int i=0;i<FamCur.ListPats.Length;i++){
+				listPats.Items.Add(FamCur.ListPats[i].GetNameFL());
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace OpenDental{
 			if(listPats.SelectedIndex==-1){
 				return;
 			}
-			SelectedPatNum=FamCur.List[listPats.SelectedIndex].PatNum;
+			SelectedPatNum=FamCur.ListPats[listPats.SelectedIndex].PatNum;
 			DialogResult=DialogResult.OK;
 		}
 
@@ -175,7 +175,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please pick a patient first.");
 				return;
 			}
-			SelectedPatNum=FamCur.List[listPats.SelectedIndex].PatNum;
+			SelectedPatNum=FamCur.ListPats[listPats.SelectedIndex].PatNum;
 			DialogResult=DialogResult.OK;
 		}
 

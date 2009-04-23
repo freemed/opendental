@@ -940,13 +940,13 @@ namespace OpenDental{
 				textAddrNotes.Visible=true;
 			}
 			checkSame.Checked=true;
-			for(int i=0;i<FamCur.List.Length;i++) {
-				if(PatCur.HmPhone!=FamCur.List[i].HmPhone
-					|| PatCur.Address!=FamCur.List[i].Address
-					|| PatCur.Address2!=FamCur.List[i].Address2
-					|| PatCur.City!=FamCur.List[i].City
-					|| PatCur.State!=FamCur.List[i].State
-					|| PatCur.Zip!=FamCur.List[i].Zip)
+			for(int i=0;i<FamCur.ListPats.Length;i++) {
+				if(PatCur.HmPhone!=FamCur.ListPats[i].HmPhone
+					|| PatCur.Address!=FamCur.ListPats[i].Address
+					|| PatCur.Address2!=FamCur.ListPats[i].Address2
+					|| PatCur.City!=FamCur.ListPats[i].City
+					|| PatCur.State!=FamCur.ListPats[i].State
+					|| PatCur.Zip!=FamCur.ListPats[i].Zip)
 				{
 					checkSame.Checked=false;
 				}

@@ -218,19 +218,19 @@ namespace OpenDentBusiness {
 				"(SELECT * from insplan "
 				+"WHERE";
 			//subscribers in family
-			for(int i=0;i<Fam.List.Length;i++) {
+			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.PInt(Fam.List[i].PatNum);
+				command+=" Subscriber="+POut.PInt(Fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
 			command+=") UNION (SELECT insplan.* FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
-			for(int i=0;i<Fam.List.Length;i++) {
+			for(int i=0;i<Fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.PInt(Fam.List[i].PatNum);
+				command+=" patplan.PatNum="+POut.PInt(Fam.ListPats[i].PatNum);
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL

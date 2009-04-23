@@ -295,10 +295,10 @@ namespace OpenDental{
 				comboProvFrom.Items.Add(ProviderC.List[i].Abbr);
 				comboProvTo.Items.Add(ProviderC.List[i].Abbr);
 			}
-			for(int i=0;i<FamCur.List.Length;i++) {
+			for(int i=0;i<FamCur.ListPats.Length;i++) {
 				comboFromPat.Items.Add(FamCur.GetNameInFamFL(i));
 				comboToPat.Items.Add(FamCur.GetNameInFamFL(i));
-				if(FamCur.List[i].PatNum==PatNum){
+				if(FamCur.ListPats[i].PatNum==PatNum){
 					comboFromPat.SelectedIndex=i;
 					comboToPat.SelectedIndex=i;
 				}
@@ -333,11 +333,11 @@ namespace OpenDental{
 			comboToPat.SelectedIndex=-1;
 			textFromPat.Text="";
 			textToPat.Text="";
-			for(int i=0;i<FamCur.List.Length;i++){
-				if(FamCur.List[i].PatNum==FromPatNum){
+			for(int i=0;i<FamCur.ListPats.Length;i++){
+				if(FamCur.ListPats[i].PatNum==FromPatNum){
 					comboFromPat.SelectedIndex=i;
 				}
-				if(FamCur.List[i].PatNum==ToPatNum) {
+				if(FamCur.ListPats[i].PatNum==ToPatNum) {
 					comboToPat.SelectedIndex=i;
 				}
 			}
@@ -350,12 +350,12 @@ namespace OpenDental{
 		}
 
 		private void comboFromPat_SelectionChangeCommitted(object sender,EventArgs e) {
-			FromPatNum=FamCur.List[comboFromPat.SelectedIndex].PatNum;
+			FromPatNum=FamCur.ListPats[comboFromPat.SelectedIndex].PatNum;
 			ShowPats();
 		}
 
 		private void comboToPat_SelectionChangeCommitted(object sender,EventArgs e) {
-			ToPatNum=FamCur.List[comboToPat.SelectedIndex].PatNum;
+			ToPatNum=FamCur.ListPats[comboToPat.SelectedIndex].PatNum;
 			ShowPats();
 		}
 

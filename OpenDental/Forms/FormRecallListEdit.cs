@@ -594,20 +594,20 @@ namespace OpenDental{
 			listFamily.Items.Clear();
 			Appointment[] aptsOnePat;
 			ListViewItem item;
-			List<Recall> recallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
+			List<Recall> recallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			DateTime dateDue;
 			DateTime dateSched;
-			for(int i=0;i<FamCur.List.Length;i++){
+			for(int i=0;i<FamCur.ListPats.Length;i++){
 				item=new ListViewItem(FamCur.GetNameInFamFLI(i));
-				if(FamCur.List[i].PatNum==PatCur.PatNum){
+				if(FamCur.ListPats[i].PatNum==PatCur.PatNum){
 					item.BackColor=Color.Silver;
 				}
-				item.SubItems.Add(Patients.AgeToString(FamCur.List[i].Age));
-				item.SubItems.Add(FamCur.List[i].Gender.ToString());
+				item.SubItems.Add(Patients.AgeToString(FamCur.ListPats[i].Age));
+				item.SubItems.Add(FamCur.ListPats[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
 				dateSched=DateTime.MinValue;
 				for(int j=0;j<recallList.Count;j++){
-					if(recallList[j].PatNum==FamCur.List[i].PatNum
+					if(recallList[j].PatNum==FamCur.ListPats[i].PatNum
 						&& (recallList[j].RecallTypeNum==RecallTypes.PerioType
 						|| recallList[j].RecallTypeNum==RecallTypes.ProphyType))
 					{

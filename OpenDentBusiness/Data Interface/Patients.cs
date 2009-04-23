@@ -31,8 +31,8 @@ namespace OpenDentBusiness{
 			foreach(Patient patient in patients) {
 				patient.Age = DateToAge(patient.Birthdate);
 			}
-			fam.List=new Patient[patients.Count];
-			patients.CopyTo(fam.List,0);
+			fam.ListPats=new Patient[patients.Count];
+			patients.CopyTo(fam.ListPats,0);
 			return fam;
 		}
 
@@ -1005,7 +1005,7 @@ namespace OpenDentBusiness{
 		public static void ChangeGuarantorToCur(Family Fam,Patient Pat){
 			//Move famfinurgnote to current patient:
 			string command= "UPDATE patient SET "
-				+"FamFinUrgNote = '"+POut.PString(Fam.List[0].FamFinUrgNote)+"' "
+				+"FamFinUrgNote = '"+POut.PString(Fam.ListPats[0].FamFinUrgNote)+"' "
 				+"WHERE PatNum = "+POut.PInt(Pat.PatNum);
  			Db.NonQ(command);
 			command= "UPDATE patient SET FamFinUrgNote = '' "
@@ -1038,7 +1038,7 @@ namespace OpenDentBusiness{
 				"UPDATE patient SET "
 				//+"addrnote = '"+POut.PString(FamilyList[GuarIndex].FamAddrNote)
 				//									+POut.PString(cur.FamAddrNote)+"', "
-				+"famfinurgnote = '"+POut.PString(Fam.List[0].FamFinUrgNote)
+				+"famfinurgnote = '"+POut.PString(Fam.ListPats[0].FamFinUrgNote)
 				+POut.PString(Pat.FamFinUrgNote)+"' "
 				+"WHERE patnum = '"+Pat.Guarantor.ToString()+"'";
  			Db.NonQ(command);
@@ -1427,8 +1427,8 @@ namespace OpenDentBusiness{
 			menu.MenuItems.Add("-");
 			menu.MenuItems.Add("FAMILY");
 			if(patNum!=0 && fam!=null){
-				for(int i=0;i<fam.List.Length;i++){
-					menu.MenuItems.Add(fam.List[i].GetNameLF(),onClick);
+				for(int i=0;i<fam.ListPats.Length;i++){
+					menu.MenuItems.Add(fam.ListPats[i].GetNameLF(),onClick);
 				}
 			}
 		}
@@ -1469,7 +1469,7 @@ namespace OpenDentBusiness{
 			if(fam==null){
 				return 0;//will never happen
 			}
-			return fam.List[index-buttonLastFivePatNums.Count-2].PatNum;
+			return fam.ListPats[index-buttonLastFivePatNums.Count-2].PatNum;
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>

@@ -710,9 +710,9 @@ namespace OpenDental
 		///<summary>PaySplit.Patient is one value that is always kept in synch with the display.  If program changes PaySplit.Patient, then it will run this method to update the display.  If user changes display, then _MouseDown is run to update the PaySplit.Patient.</summary>
 		private void FillPatient(){
 			listPatient.Items.Clear();
-			for(int i=0;i<FamCur.List.Length;i++){
+			for(int i=0;i<FamCur.ListPats.Length;i++){
 				listPatient.Items.Add(FamCur.GetNameInFamLFI(i));
-				if(PaySplitCur.PatNum==FamCur.List[i].PatNum){
+				if(PaySplitCur.PatNum==FamCur.ListPats[i].PatNum){
 					listPatient.SelectedIndex=i;
 				}
 			}
@@ -720,7 +720,7 @@ namespace OpenDental
 			if(PaySplitCur.PatNum==0){
 				listPatient.SelectedIndex=0;
 				//the initial patient will be the first patient in the family, usually guarantor
-				PaySplitCur.PatNum=FamCur.List[0].PatNum;
+				PaySplitCur.PatNum=FamCur.ListPats[0].PatNum;
 			}
 			if(listPatient.SelectedIndex==-1){//patient not in family
 				checkPatOtherFam.Checked=true;
@@ -757,7 +757,7 @@ namespace OpenDental
 			if(listPatient.SelectedIndex==-1){
 				return;
 			}
-			PaySplitCur.PatNum=FamCur.List[listPatient.SelectedIndex].PatNum;
+			PaySplitCur.PatNum=FamCur.ListPats[listPatient.SelectedIndex].PatNum;
 		}
 
 		private void FillProcedure(){
@@ -889,7 +889,7 @@ namespace OpenDental
 					return;
 				}
 				//PayPlan[] planListAll=PayPlans.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum,0);
-				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(FamCur.List[listPatient.SelectedIndex].PatNum);
+				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(FamCur.ListPats[listPatient.SelectedIndex].PatNum);
 				if(payPlanList.Count==0){//no valid plans
 					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
 					checkPayPlan.Checked=false;
@@ -900,7 +900,7 @@ namespace OpenDental
 					return;
 				}
 				//more than one valid PayPlan
-				List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum);
+				List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(FamCur.ListPats[listPatient.SelectedIndex].PatNum);
 				FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
 				//FormPPS.ValidPlans=payPlanList;
 				FormPPS.ShowDialog();

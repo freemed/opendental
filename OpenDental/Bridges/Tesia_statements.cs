@@ -23,7 +23,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Adds the xml for one statement.</summary>
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
-			Patient guar=fam.List[0];
+			Patient guar=fam.ListPats[0];
 			writer.WriteStartElement("Statement");
 			//writer.WriteAttributeString("CreditCardChoice",PrefC.GetString("BillingElectCreditCardChoices"));
 			//remit address----------------------------------------------------------

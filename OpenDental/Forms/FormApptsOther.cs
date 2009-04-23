@@ -423,23 +423,23 @@ namespace OpenDental{
 
 		private void Filltb(){
 			SelectedPatNum=PatCur.PatNum;//just in case user has selected a different family member
-			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
+			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			Appointment[] aptsOnePat;
 			listFamily.Items.Clear();
 			ListViewItem item;
 			DateTime dateDue;
 			DateTime dateSched;
-			for(int i=0;i<FamCur.List.Length;i++){
+			for(int i=0;i<FamCur.ListPats.Length;i++){
 				item=new ListViewItem(FamCur.GetNameInFamFLI(i));
-				if(FamCur.List[i].PatNum==PatCur.PatNum){
+				if(FamCur.ListPats[i].PatNum==PatCur.PatNum){
 					item.BackColor=Color.Silver;
 				}
-				item.SubItems.Add(FamCur.List[i].Age.ToString());
-				item.SubItems.Add(FamCur.List[i].Gender.ToString());
+				item.SubItems.Add(FamCur.ListPats[i].Age.ToString());
+				item.SubItems.Add(FamCur.ListPats[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
 				dateSched=DateTime.MinValue;
 				for(int j=0;j<RecallList.Count;j++){
-					if(RecallList[j].PatNum==FamCur.List[i].PatNum
+					if(RecallList[j].PatNum==FamCur.ListPats[i].PatNum
 						&& (RecallList[j].RecallTypeNum==RecallTypes.PerioType
 						|| RecallList[j].RecallTypeNum==RecallTypes.ProphyType))
 					{
@@ -526,7 +526,7 @@ namespace OpenDental{
 				tbApts.Cell[4,i]=ListOth[i].ProcDescript;
 				tbApts.Cell[5,i]=ListOth[i].Note;
 			}
-			textFinUrg.Text=FamCur.List[0].FamFinUrgNote;
+			textFinUrg.Text=FamCur.ListPats[0].FamFinUrgNote;
 			tbApts.LayoutTables();
 		}
 
@@ -599,8 +599,8 @@ namespace OpenDental{
 			List <InsPlan> planList;
 			Appointment apt=null;
 			Recall recall;
-			for(int i=0;i<FamCur.List.Length;i++){
-				procList=Procedures.Refresh(FamCur.List[i].PatNum);
+			for(int i=0;i<FamCur.ListPats.Length;i++){
+				procList=Procedures.Refresh(FamCur.ListPats[i].PatNum);
 				//recallList=Recalls.GetList(FamCur.List[i].PatNum);//get the recall for this pt
 				//if(recallList.Count==0) {
 					//MsgBox.Show(this,"This patient does not have any recall due.");
@@ -611,7 +611,7 @@ namespace OpenDental{
 				//}
 				planList=InsPlans.Refresh(FamCur);
 				try{
-					apt=AppointmentL.CreateRecallApt(FamCur.List[i],procList,planList);
+					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList);
 				}
 				catch(Exception ex){
 					//MessageBox.Show(ex.Message);
@@ -619,7 +619,7 @@ namespace OpenDental{
 				}
 				AptNumsSelected.Add(apt.AptNum);
 				oResult=OtherResult.PinboardAndSearch;
-				recall=Recalls.GetRecallProphyOrPerio(FamCur.List[i].PatNum);//should not return null
+				recall=Recalls.GetRecallProphyOrPerio(FamCur.ListPats[i].PatNum);//should not return null
 				if(recall.DateDue<DateTime.Today) {
 					DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
 				}
@@ -832,7 +832,7 @@ namespace OpenDental{
 		private void listFamily_Click(object sender,EventArgs e) {
 			//Changes the patient to whoever was clicked in the list 
 			int oldPatNum=PatCur.PatNum;
-			int newPatNum=FamCur.List[listFamily.SelectedIndices[0]].PatNum;
+			int newPatNum=FamCur.ListPats[listFamily.SelectedIndices[0]].PatNum;
 			if(newPatNum==oldPatNum){
 				return;
 			}

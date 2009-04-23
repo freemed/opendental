@@ -78,7 +78,7 @@ namespace OpenDental.Bridges {
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
 			writer.WriteAttributeString("CreditCardChoice",PrefC.GetString("BillingElectCreditCardChoices"));
 			writer.WriteStartElement("Patient");
-			Patient guar=fam.List[0];
+			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
 			writer.WriteElementString("Account",guar.PatNum.ToString());
 			writer.WriteElementString("Address1",guar.Address);

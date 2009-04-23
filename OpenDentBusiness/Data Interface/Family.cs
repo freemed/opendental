@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -12,13 +13,13 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>List of patients in the family.</summary>
-		public Patient[] List;
+		public Patient[] ListPats;
 
 		///<summary>Tries to get the LastName,FirstName of the patient from this family.  If not found, then gets the name from the database.</summary>
 		public string GetNameInFamLF(int myPatNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PatNum==myPatNum){
-					return List[i].GetNameLF();
+			for(int i=0;i<ListPats.Length;i++){
+				if(ListPats[i].PatNum==myPatNum){
+					return ListPats[i].GetNameLF();
 				}
 			}
 			return GetLim(myPatNum).GetNameLF();
@@ -27,20 +28,20 @@ namespace OpenDentBusiness
 		///<summary>Gets last, (preferred) first middle</summary>
 		public string GetNameInFamLFI(int myi){
 			string retStr="";
-			if(List[myi].Preferred==""){
-				retStr=List[myi].LName+", "+List[myi].FName+" "+List[myi].MiddleI; 
+			if(ListPats[myi].Preferred==""){
+				retStr=ListPats[myi].LName+", "+ListPats[myi].FName+" "+ListPats[myi].MiddleI; 
 			}
 			else{
-				retStr=List[myi].LName+", '"+List[myi].Preferred+"' "+List[myi].FName+" "+List[myi].MiddleI;
+				retStr=ListPats[myi].LName+", '"+ListPats[myi].Preferred+"' "+ListPats[myi].FName+" "+ListPats[myi].MiddleI;
 			}
 			return retStr;
 		}
 
 		///<summary>Gets a formatted name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
 		public string GetNameInFamFL(int myPatNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PatNum==myPatNum){
-					return List[i].GetNameFL();
+			for(int i=0;i<ListPats.Length;i++){
+				if(ListPats[i].PatNum==myPatNum){
+					return ListPats[i].GetNameFL();
 				}
 			}
 			return GetLim(myPatNum).GetNameFL();
@@ -49,20 +50,20 @@ namespace OpenDentBusiness
 		///<summary>Gets (preferred)first middle last</summary>
 		public string GetNameInFamFLI(int myi){
 			string retStr="";
-			if(List[myi].Preferred==""){
-				retStr=List[myi].FName+" "+List[myi].MiddleI+" "+List[myi].LName; 
+			if(ListPats[myi].Preferred==""){
+				retStr=ListPats[myi].FName+" "+ListPats[myi].MiddleI+" "+ListPats[myi].LName; 
 			}
 			else{
-				retStr="'"+List[myi].Preferred+"' "+List[myi].FName+" "+List[myi].MiddleI+" "+List[myi].LName;
+				retStr="'"+ListPats[myi].Preferred+"' "+ListPats[myi].FName+" "+ListPats[myi].MiddleI+" "+ListPats[myi].LName;
 			}
 			return retStr;
 		}
 
 		///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
 		public string GetNameInFamFirst(int myPatNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PatNum==myPatNum){
-					return List[i].GetNameFirst();
+			for(int i=0;i<ListPats.Length;i++){
+				if(ListPats[i].PatNum==myPatNum){
+					return ListPats[i].GetNameFirst();
 				}
 			}
 			return GetLim(myPatNum).GetNameFirst();
@@ -70,8 +71,8 @@ namespace OpenDentBusiness
 
 		///<summary>The index of the patient within the family.  Returns -1 if not found.</summary>
 		public int GetIndex(int patNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PatNum==patNum){
+			for(int i=0;i<ListPats.Length;i++){
+				if(ListPats[i].PatNum==patNum){
 					return i;
 				}
 			}
@@ -81,9 +82,9 @@ namespace OpenDentBusiness
 		///<summary>Gets a copy of a specific patient from within the family. Does not make a call to the database.</summary>
 		public Patient GetPatient(int patNum){
 			Patient retVal=null;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].PatNum==patNum){
-					retVal=List[i].Copy();
+			for(int i=0;i<ListPats.Length;i++){
+				if(ListPats[i].PatNum==patNum){
+					retVal=ListPats[i].Copy();
 				}
 			}
 			return retVal;

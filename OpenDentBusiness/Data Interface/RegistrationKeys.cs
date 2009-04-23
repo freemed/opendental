@@ -16,9 +16,9 @@ namespace OpenDentBusiness {
 		public static RegistrationKey[] GetForPatient(int patNum){
 			string command="SELECT * FROM registrationkey WHERE ";
 			Family fam=Patients.GetFamily(patNum);
-			for(int i=0;i<fam.List.Length;i++){
-				command+="PatNum="+POut.PInt(fam.List[i].PatNum)+" ";
-				if(i<fam.List.Length-1){
+			for(int i=0;i<fam.ListPats.Length;i++){
+				command+="PatNum="+POut.PInt(fam.ListPats[i].PatNum)+" ";
+				if(i<fam.ListPats.Length-1){
 					command+="OR ";
 				}
 			}

@@ -790,13 +790,13 @@ namespace OpenDental{
 			List <InsPlan> planList;
 			Appointment apt;
 			List<int> patNums;
-			for(int i=0;i<fam.List.Length;i++) {
-				procList=Procedures.Refresh(fam.List[i].PatNum);
+			for(int i=0;i<fam.ListPats.Length;i++) {
+				procList=Procedures.Refresh(fam.ListPats[i].PatNum);
 				patNums=new List<int>();
-				patNums.Add(fam.List[i].PatNum);
+				patNums.Add(fam.ListPats[i].PatNum);
 				planList=InsPlans.Refresh(fam);
 				try{
-					apt=AppointmentL.CreateRecallApt(fam.List[i],procList,planList);
+					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],procList,planList);
 				}
 				catch{//(Exception ex){
 					continue;

@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 			} 
 			fam=Patients.GetFamily(patNum);
 			if(intermingled){
-				patNum=fam.List[0].PatNum;//guarantor
+				patNum=fam.ListPats[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
 			retVal=new DataSet();
@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 			fam=Patients.GetFamily(patNum);
 			//bool intermingled=PIn.PBool(parameters[4]);
 			if(intermingled){
-				patNum=fam.List[0].PatNum;//guarantor
+				patNum=fam.ListPats[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
 			//bool viewingInRecall=PIn.PBool(parameters[1]);
@@ -472,11 +472,11 @@ namespace OpenDentBusiness {
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (WriteOff>0 OR InsPayAmt!=0) "
 				+"AND (";
-			for(int i=0;i<fam.List.Length;i++){
+			for(int i=0;i<fam.ListPats.Length;i++){
 				if(i!=0){
 					command+="OR ";
 				}
-				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+="PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 			}
 			command+=") GROUP BY ClaimNum,DateCP ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -527,11 +527,11 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			string familyPatNums="";
-			for(int i=0;i<fam.List.Length;i++) {
+			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(i!=0) {
 					familyPatNums+=", ";
 				}
-				familyPatNums+=POut.PInt(fam.List[i].PatNum);
+				familyPatNums+=POut.PInt(fam.ListPats[i].PatNum);
 			}
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT "
@@ -652,11 +652,11 @@ namespace OpenDentBusiness {
 			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,PatNum,ProvNum,AdjNote "
 				+"FROM adjustment "
 				+"WHERE (";
-			for(int i=0;i<fam.List.Length;i++){
+			for(int i=0;i<fam.ListPats.Length;i++){
 				if(i!=0){
 					command+="OR ";
 				}
-				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+="PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 			}
 			command+=") ORDER BY AdjDate";
 			DataTable rawAdj=dcon.GetTable(command);
@@ -711,11 +711,11 @@ namespace OpenDentBusiness {
 					+"FROM paysplit "
 					+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 					+"WHERE (";
-				for(int i=0;i<fam.List.Length;i++) {
+				for(int i=0;i<fam.ListPats.Length;i++) {
 					if(i!=0) {
 						command+="OR ";
 					}
-					command+="paysplit.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+					command+="paysplit.PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 				}
 				command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
 				rawPay=dcon.GetTable(command);
@@ -733,11 +733,11 @@ namespace OpenDentBusiness {
 				+"FROM paysplit ps "
 				+"LEFT JOIN payment p ON ps.PayNum=p.PayNum "
 				+"WHERE (";
-				for(int i=0;i<fam.List.Length;i++) {
+				for(int i=0;i<fam.ListPats.Length;i++) {
 					if(i!=0) {
 						command+="OR ";
 					}
-					command+="ps.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+					command+="ps.PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 				}
 				command+=") ORDER BY ps.PayNum,ps.PatNum,ps.ProcDate";
 				rawPay=dcon.GetTable(command);
@@ -839,11 +839,11 @@ namespace OpenDentBusiness {
 					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
 					+"WHERE ClaimType != 'PreAuth' "
 					+"AND (";
-				for(int i=0;i<fam.List.Length;i++){
+				for(int i=0;i<fam.ListPats.Length;i++){
 					if(i!=0){
 						command+="OR ";
 					}
-					command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+					command+="claim.PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 				}
 				command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
 				rawClaim=dcon.GetTable(command);
@@ -861,11 +861,11 @@ namespace OpenDentBusiness {
 					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
 					+"WHERE ClaimType != 'PreAuth' "
 					+"AND (";
-				for(int i=0;i<fam.List.Length;i++) {
+				for(int i=0;i<fam.ListPats.Length;i++) {
 					if(i!=0) {
 						command+="OR ";
 					}
-					command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+					command+="claim.PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 				}
 				command+=") ORDER BY claim.ClaimNum";
 				rawClaim=dcon.GetTable(command);
@@ -1038,11 +1038,11 @@ namespace OpenDentBusiness {
 			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum, Note, NoteBold "
 				+"FROM statement "
 				+"WHERE (";
-			for(int i=0;i<fam.List.Length;i++){
+			for(int i=0;i<fam.ListPats.Length;i++){
 				if(i!=0){
 					command+="OR ";
 				}
-				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+="PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 			}
 			command+=") ORDER BY DateSent";
 			DataTable rawState=dcon.GetTable(command);
@@ -1112,12 +1112,12 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN insplan ON insplan.PlanNum=payplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"WHERE  (";
-			for(int i=0;i<fam.List.Length;i++){
+			for(int i=0;i<fam.ListPats.Length;i++){
 				if(i!=0){
 					command+="OR ";
 				}
-				command+="payplan.Guarantor ="+POut.PInt(fam.List[i].PatNum)+" "
-					+"OR payplan.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+="payplan.Guarantor ="+POut.PInt(fam.ListPats[i].PatNum)+" "
+					+"OR payplan.PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 			}
 			command+=") GROUP BY payplan.PayPlanNum ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -1192,12 +1192,12 @@ namespace OpenDentBusiness {
 				for(int i=0;i<rows.Count;i++){
 					table.Rows.Add(rows[i]);
 				}
-				rowsByPat=new DataTable[fam.List.Length];
+				rowsByPat=new DataTable[fam.ListPats.Length];
 				for(int p=0;p<rowsByPat.Length;p++){
 					rowsByPat[p]=new DataTable();
 					SetTableColumns(rowsByPat[p]);
 					for(int i=0;i<rows.Count;i++){
-						if(rows[i]["PatNum"].ToString()==fam.List[p].PatNum.ToString()){
+						if(rows[i]["PatNum"].ToString()==fam.ListPats[p].PatNum.ToString()){
 							rowsByPat[p].ImportRow(rows[i]);
 						}
 					}
@@ -1302,10 +1302,10 @@ namespace OpenDentBusiness {
 			}
 			else{
 				for(int p=0;p<rowsByPat.Length;p++){
-					if(p>0 && isForStatement && fam.List[p].PatStatus==PatientStatus.Deceased && fam.List[p].EstBalance==0){
+					if(p>0 && isForStatement && fam.ListPats[p].PatStatus==PatientStatus.Deceased && fam.ListPats[p].EstBalance==0){
 						continue;
 					}
-					DataTable tablep=new DataTable("account"+fam.List[p].PatNum.ToString());
+					DataTable tablep=new DataTable("account"+fam.ListPats[p].PatNum.ToString());
 					SetTableColumns(tablep);
 					for(int i=0;i<rowsByPat[p].Rows.Count;i++) {
 						tablep.ImportRow(rowsByPat[p].Rows[i]);
@@ -1550,11 +1550,11 @@ namespace OpenDentBusiness {
 			List<DataRow> rowspat=new List<DataRow>();
 			double bal;
 			double balfam=0;
-			for(int p=0;p<fam.List.Length;p++){
+			for(int p=0;p<fam.ListPats.Length;p++){
 				row=table.NewRow();
 				bal=0;
 				for(int i=0;i<rows.Count;i++) {
-					if(fam.List[p].PatNum.ToString()==rows[i]["PatNum"].ToString()){
+					if(fam.ListPats[p].PatNum.ToString()==rows[i]["PatNum"].ToString()){
 						bal+=(double)rows[i]["chargesDouble"];
 						bal-=(double)rows[i]["creditsDouble"];
 					}
@@ -1562,13 +1562,13 @@ namespace OpenDentBusiness {
 				balfam+=bal;
 				row["balanceDouble"]=bal;
 				row["balance"]=bal.ToString("n");
-				row["name"]=fam.List[p].GetNameLF();
-				row["PatNum"]=fam.List[p].PatNum.ToString();
+				row["name"]=fam.ListPats[p].GetNameLF();
+				row["PatNum"]=fam.ListPats[p].PatNum.ToString();
 				rowspat.Add(row);
-				if(bal!=fam.List[p].EstBalance){
-					Patient patnew=fam.List[p].Copy();
+				if(bal!=fam.ListPats[p].EstBalance){
+					Patient patnew=fam.ListPats[p].Copy();
 					patnew.EstBalance=bal;
-					Patients.Update(patnew,fam.List[p]);
+					Patients.Update(patnew,fam.ListPats[p]);
 				}
 			}
 			//Row for entire family
@@ -1576,7 +1576,7 @@ namespace OpenDentBusiness {
 			row["balanceDouble"]=balfam;
 			row["balance"]=balfam.ToString("f");
 			row["name"]=Lan.g("AccountModule","Entire Family");
-			row["PatNum"]=fam.List[0].PatNum.ToString();
+			row["PatNum"]=fam.ListPats[0].PatNum.ToString();
 			rowspat.Add(row);
 			for(int i=0;i<rowspat.Count;i++) {
 				table.Rows.Add(rowspat[i]);
@@ -1603,11 +1603,11 @@ namespace OpenDentBusiness {
 				command+="PatNum ="+POut.PInt(patNum);
 			}
 			else{
-				for(int i=0;i<fam.List.Length;i++){
+				for(int i=0;i<fam.ListPats.Length;i++){
 					if(i!=0){
 						command+="OR ";
 					}
-					command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+					command+="PatNum ="+POut.PInt(fam.ListPats[i].PatNum)+" ";
 				}
 			}
 			command+=") ORDER BY PatNum,AptDateTime";
@@ -1639,7 +1639,7 @@ namespace OpenDentBusiness {
 			List<DataRow> rows=new List<DataRow>();
 			string command = 
 				"SELECT FamFinancial "
-				+"FROM patientnote WHERE patnum ="+POut.PInt(fam.List[0].PatNum);
+				+"FROM patientnote WHERE patnum ="+POut.PInt(fam.ListPats[0].PatNum);
 			DataTable raw=Db.GetTable(command);
 			//for(int i=0;i<raw.Rows.Count;i++){
 			row=table.NewRow();

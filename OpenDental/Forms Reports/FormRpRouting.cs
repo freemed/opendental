@@ -393,13 +393,13 @@ namespace OpenDental
 			str=Lan.g(this,"Other Family Members");
 			g.DrawString(str,fontHeading,brush,x,y);
 			y+=18;
-			for(int i=0;i<fam.List.Length;i++) {
-				if(fam.List[i].PatNum==pat.PatNum) {
+			for(int i=0;i<fam.ListPats.Length;i++) {
+				if(fam.ListPats[i].PatNum==pat.PatNum) {
 					continue;
 				}
-				str=fam.List[i].GetNameFL();
-				if(fam.List[i].Age>0){
-					str+=",   "+fam.List[i].Age.ToString();
+				str=fam.ListPats[i].GetNameFL();
+				if(fam.ListPats[i].Age>0){
+					str+=",   "+fam.ListPats[i].Age.ToString();
 				}
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
@@ -500,25 +500,25 @@ namespace OpenDental
 			str=Lan.g(this,"Account Info");
 			g.DrawString(str,fontHeading,brush,x,y);
 			y+=18;
-			str=Lan.g(this,"Guarantor:")+" "+fam.List[0].GetNameFL();
+			str=Lan.g(this,"Guarantor:")+" "+fam.ListPats[0].GetNameFL();
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
-			str=Lan.g(this,"Balance:")+(fam.List[0].BalTotal-fam.List[0].InsEst).ToString("c");
-			if(fam.List[0].InsEst>.01){
-				str+="  ("+fam.List[0].BalTotal.ToString("c")+" - "
-					+fam.List[0].InsEst.ToString("c")+" "+Lan.g(this,"InsEst")+")";
+			str=Lan.g(this,"Balance:")+(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c");
+			if(fam.ListPats[0].InsEst>.01){
+				str+="  ("+fam.ListPats[0].BalTotal.ToString("c")+" - "
+					+fam.ListPats[0].InsEst.ToString("c")+" "+Lan.g(this,"InsEst")+")";
 			}
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
 			str=Lan.g(this,"Aging:")
-				+"  0-30:"+fam.List[0].Bal_0_30.ToString("c")
-				+"  31-60:"+fam.List[0].Bal_31_60.ToString("c")
-				+"  61-90:"+fam.List[0].Bal_61_90.ToString("c")
-				+"  90+:"+fam.List[0].BalOver90.ToString("c");
+				+"  0-30:"+fam.ListPats[0].Bal_0_30.ToString("c")
+				+"  31-60:"+fam.ListPats[0].Bal_31_60.ToString("c")
+				+"  61-90:"+fam.ListPats[0].Bal_61_90.ToString("c")
+				+"  90+:"+fam.ListPats[0].BalOver90.ToString("c");
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
 			str=Lan.g(this,"Fam Urgent Fin Note:")
-				+fam.List[0].FamFinUrgNote;
+				+fam.ListPats[0].FamFinUrgNote;
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
 			y+=10;

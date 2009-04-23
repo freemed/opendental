@@ -1546,22 +1546,22 @@ namespace OpenDental{
 			checkSame.Checked=true;
 			checkNotesSame.Checked=true;
 			if(PatCur!=null){
-				for(int i=0;i<FamCur.List.Length;i++){
-					if(PatCur.HmPhone!=FamCur.List[i].HmPhone
-						|| PatCur.Address!=FamCur.List[i].Address
-						|| PatCur.Address2!=FamCur.List[i].Address2
-						|| PatCur.City!=FamCur.List[i].City
-						|| PatCur.State!=FamCur.List[i].State
-						|| PatCur.Zip!=FamCur.List[i].Zip
-						|| PatCur.CreditType!=FamCur.List[i].CreditType
-						|| PatCur.BillingType!=FamCur.List[i].BillingType
-						|| PatCur.PriProv!=FamCur.List[i].PriProv
-						|| PatCur.SecProv!=FamCur.List[i].SecProv
-						|| PatCur.FeeSched!=FamCur.List[i].FeeSched)
+				for(int i=0;i<FamCur.ListPats.Length;i++){
+					if(PatCur.HmPhone!=FamCur.ListPats[i].HmPhone
+						|| PatCur.Address!=FamCur.ListPats[i].Address
+						|| PatCur.Address2!=FamCur.ListPats[i].Address2
+						|| PatCur.City!=FamCur.ListPats[i].City
+						|| PatCur.State!=FamCur.ListPats[i].State
+						|| PatCur.Zip!=FamCur.ListPats[i].Zip
+						|| PatCur.CreditType!=FamCur.ListPats[i].CreditType
+						|| PatCur.BillingType!=FamCur.ListPats[i].BillingType
+						|| PatCur.PriProv!=FamCur.ListPats[i].PriProv
+						|| PatCur.SecProv!=FamCur.ListPats[i].SecProv
+						|| PatCur.FeeSched!=FamCur.ListPats[i].FeeSched)
 					{
 						checkSame.Checked=false;
 					}
-					if(PatCur.AddrNote!=FamCur.List[i].AddrNote)
+					if(PatCur.AddrNote!=FamCur.ListPats[i].AddrNote)
 					{
 						checkNotesSame.Checked=false;
 					}

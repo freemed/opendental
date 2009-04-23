@@ -1734,10 +1734,10 @@ namespace OpenDental {
 				return;
 			if(UrgFinNoteChanged) {
 				//Patient tempPat=Patients.Cur;
-				Patient patOld=FamCur.List[0].Copy();
+				Patient patOld=FamCur.ListPats[0].Copy();
 				//Patients.CurOld=Patients.Cur.Copy();//important
-				FamCur.List[0].FamFinUrgNote=textUrgFinNote.Text;
-				Patients.Update(FamCur.List[0],patOld);
+				FamCur.ListPats[0].FamFinUrgNote=textUrgFinNote.Text;
+				Patients.Update(FamCur.ListPats[0],patOld);
 				//Patients.GetFamily(tempPat.PatNum);
 				UrgFinNoteChanged=false;
 			}
@@ -1870,11 +1870,11 @@ namespace OpenDental {
 			}
 			gridAcctPat.EndUpdate();
 			if(isSelectingFamily){
-				gridAcctPat.SetSelected(FamCur.List.Length,true);
+				gridAcctPat.SetSelected(FamCur.ListPats.Length,true);
 			}
 			else{
-				for(int i=0;i<FamCur.List.Length;i++) {
-					if(FamCur.List[i].PatNum==PatCur.PatNum) {
+				for(int i=0;i<FamCur.ListPats.Length;i++) {
+					if(FamCur.ListPats[i].PatNum==PatCur.PatNum) {
 						gridAcctPat.SetSelected(i,true);
 					}
 				}
@@ -1895,7 +1895,7 @@ namespace OpenDental {
 				textFinNotes.Text="";
 			}
 			else{
-				textUrgFinNote.Text=FamCur.List[0].FamFinUrgNote;
+				textUrgFinNote.Text=FamCur.ListPats[0].FamFinUrgNote;
 				textFinNotes.Text=PatientNoteCur.FamFinancial;
 				textFinNotes.Select(textFinNotes.Text.Length+2,1);
 				textFinNotes.ScrollToCaret();
@@ -1932,14 +1932,14 @@ namespace OpenDental {
 
 		private void FillAging(bool isSelectingFamily) {
 			if(PatCur!=null) {
-				textOver90.Text=FamCur.List[0].BalOver90.ToString("F");
-				text61_90.Text=FamCur.List[0].Bal_61_90.ToString("F");
-				text31_60.Text=FamCur.List[0].Bal_31_60.ToString("F");
-				text0_30.Text=FamCur.List[0].Bal_0_30.ToString("F");
-				double total=FamCur.List[0].BalTotal;
+				textOver90.Text=FamCur.ListPats[0].BalOver90.ToString("F");
+				text61_90.Text=FamCur.ListPats[0].Bal_61_90.ToString("F");
+				text31_60.Text=FamCur.ListPats[0].Bal_31_60.ToString("F");
+				text0_30.Text=FamCur.ListPats[0].Bal_0_30.ToString("F");
+				double total=FamCur.ListPats[0].BalTotal;
 				labelTotalAmt.Text=total.ToString("F");
-				labelInsEstAmt.Text=FamCur.List[0].InsEst.ToString("F");
-				labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
+				labelInsEstAmt.Text=FamCur.ListPats[0].InsEst.ToString("F");
+				labelBalanceAmt.Text = (total - FamCur.ListPats[0].InsEst).ToString("f");
 				labelPatEstBalAmt.Text="";
 				if(!isSelectingFamily){
 					DataTable tableMisc=DataSetMain.Tables["misc"];
@@ -2118,7 +2118,7 @@ namespace OpenDental {
 			gridPayPlan.EndUpdate();
 			if(PrefC.GetBool("FuchsOptionsOn")) {
 				panelTotalOwes.Top=1;
-				labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.List[0].BalTotal -FamCur.List[0].InsEst).ToString("F");
+				labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.ListPats[0].BalTotal -FamCur.ListPats[0].InsEst).ToString("F");
 			}
 		}
 
@@ -2495,15 +2495,15 @@ namespace OpenDental {
 			if(ViewingInRecall){
 				return;
 			}
-			if(e.Row==FamCur.List.Length){//last row
-				OnPatientSelected(FamCur.List[0].PatNum,FamCur.List[0].GetNameLF(),FamCur.List[0].Email!="",
-					FamCur.List[0].ChartNumber);
-				ModuleSelected(FamCur.List[0].PatNum,true);
+			if(e.Row==FamCur.ListPats.Length){//last row
+				OnPatientSelected(FamCur.ListPats[0].PatNum,FamCur.ListPats[0].GetNameLF(),FamCur.ListPats[0].Email!="",
+					FamCur.ListPats[0].ChartNumber);
+				ModuleSelected(FamCur.ListPats[0].PatNum,true);
 			}
 			else{
-				OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
-					FamCur.List[e.Row].ChartNumber);
-				ModuleSelected(FamCur.List[e.Row].PatNum);
+				OnPatientSelected(FamCur.ListPats[e.Row].PatNum,FamCur.ListPats[e.Row].GetNameLF(),FamCur.ListPats[e.Row].Email!="",
+					FamCur.ListPats[e.Row].ChartNumber);
+				ModuleSelected(FamCur.ListPats[e.Row].PatNum);
 			}
 		}
 
@@ -3378,9 +3378,9 @@ namespace OpenDental {
 			if(FamCur==null)
 				return;
 			if(UrgFinNoteChanged){
-				Patient PatOld=FamCur.List[0].Copy();
-				FamCur.List[0].FamFinUrgNote=textUrgFinNote.Text;
-				Patients.Update(FamCur.List[0],PatOld);
+				Patient PatOld=FamCur.ListPats[0].Copy();
+				FamCur.ListPats[0].FamFinUrgNote=textUrgFinNote.Text;
+				Patients.Update(FamCur.ListPats[0],PatOld);
 				UrgFinNoteChanged=false;
 			}
 			ModuleSelected(PatCur.PatNum);

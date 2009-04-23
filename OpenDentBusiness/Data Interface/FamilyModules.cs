@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			Family fam=new Family();
-			fam.List=Patients.TableToList(table).ToArray();
+			fam.ListPats=Patients.TableToList(table).ToArray();
 			ds.Tables.Add(table);
 			ds.Tables.Add(GetPatPlanList(patNum));
 			ds.Tables.Add(GetPlanList(fam));
@@ -52,19 +52,19 @@ namespace OpenDentBusiness {
 				"(SELECT insplan.*,'0' FROM insplan "
 				+"WHERE";
 			//subscribers in family
-			for(int i=0;i<fam.List.Length;i++) {
+			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.PInt(fam.List[i].PatNum);
+				command+=" Subscriber="+POut.PInt(fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
 			command+=") UNION (SELECT insplan.*,'0' FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
-			for(int i=0;i<fam.List.Length;i++) {
+			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.PInt(fam.List[i].PatNum);
+				command+=" patplan.PatNum="+POut.PInt(fam.ListPats[i].PatNum);
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL

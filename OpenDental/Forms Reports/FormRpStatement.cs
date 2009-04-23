@@ -372,7 +372,7 @@ namespace OpenDental{
 			MigraDoc.DocumentObjectModel.Font font;
 			//GetPatGuar(PatNums[famIndex][0]);
 			//Family fam=Patients.GetFamily(Stmt.PatNum);
-			Patient PatGuar=fam.List[0];//.Copy();
+			Patient PatGuar=fam.ListPats[0];//.Copy();
 			//Patient pat=fam.GetPatient(Stmt.PatNum);
 			DataTable tableMisc=dataSet.Tables["misc"];
 			//HEADING------------------------------------------------------------------------------
