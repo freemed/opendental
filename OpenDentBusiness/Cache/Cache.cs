@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 		public static void RefreshCache(string itypesStr){
 			DataSet ds=GetCacheDs(itypesStr);
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				//Because otherwise it was handled just fine as part of the GetChacheDs
+				//Because otherwise it was handled just fine as part of the GetCacheDs
 				FillCache(ds,itypesStr);
 			}
 		}

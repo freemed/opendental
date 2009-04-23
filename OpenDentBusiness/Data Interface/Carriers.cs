@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
-			DataTable table=Db.GetTable(command);
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodInfo.GetCurrentMethod(),command);
 			table.TableName="Carrier";
 			FillCache(table);
 			return table;

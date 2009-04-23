@@ -9,6 +9,9 @@ namespace OpenDentBusiness {
 	public class PatFields {
 		///<summary>Gets a list of all PatFields for a given patient.</summary>
 		public static PatField[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PatField[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM patfield WHERE PatNum="+POut.PInt(patNum);
 			DataTable table=Db.GetTable(command);
 			PatField[] List=new PatField[table.Rows.Count];
