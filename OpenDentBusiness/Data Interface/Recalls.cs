@@ -177,6 +177,7 @@ namespace OpenDentBusiness{
 				"AND NOT EXISTS("//test for scheduled appt.
 				+"SELECT * FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
+				+"AND appointment.PatNum=recall.PatNum "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
