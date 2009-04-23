@@ -21,6 +21,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		//No need to check RemotingRole; no call to db.
 		private static void FillCache(DataTable table){
 			AccountC.ListLong=new Account[table.Rows.Count];
 			ArrayList AL=new ArrayList();
@@ -42,6 +43,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Account acct) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),acct);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				acct.AccountNum=MiscData.GetKey("account","AccountNum");
 			}
@@ -69,6 +74,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Account acct) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),acct);
+				return;
+			}
 			string command= "UPDATE account SET "
 				+"Description = '"  +POut.PString(acct.Description)+"' "
 				+",AcctType = '"    +POut.PInt   ((int)acct.AcctType)+"' "
@@ -81,6 +90,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Throws exception if account is in use.</summary>
 		public static void Delete(Account acct) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),acct);
+				return;
+			}
 			//check to see if account has any journal entries
 			string command="SELECT COUNT(*) FROM journalentry WHERE AccountNum="+POut.PInt(acct.AccountNum);
 			if(Db.GetCount(command)!="0"){
@@ -120,6 +133,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used to test the sign on debits and credits for the five different account types</summary>
+		//No need to check RemotingRole; no call to db.
 		public static bool DebitIsPos(AccountType type){
 			switch(type){
 				case AccountType.Asset:
@@ -135,6 +149,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the balance of an account directly from the database.</summary>
 		public static double GetBalance(int accountNum,AccountType acctType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),accountNum,acctType);
+			}
 			string command="SELECT SUM(DebitAmt),SUM(CreditAmt) FROM journalentry "
 				+"WHERE AccountNum="+POut.PInt(accountNum)
 				+" GROUP BY AccountNum";
@@ -160,6 +177,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static bool DepositsLinked(){
 			string depAccounts=PrefC.GetString("AccountingDepositAccounts");
 			if(depAccounts==""){
@@ -173,6 +191,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks the loaded prefs and accountingAutoPays to see if user has setup auto pay linking.  Returns true if so.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static bool PaymentsLinked() {
 			if(AccountingAutoPayC.AList.Count==0){
 				return false;
@@ -185,6 +204,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		//No need to check RemotingRole; no call to db.
 		public static int[] GetDepositAccounts(){
 			string depStr=PrefC.GetString("AccountingDepositAccounts");
 			string[] depStrArray=depStr.Split(new char[] { ',' });
@@ -202,6 +222,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
 		public static DataTable GetFullList(DateTime asOfDate, bool showInactive){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),asOfDate,showInactive);
+			}
 			DataTable table=new DataTable("Accounts");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.

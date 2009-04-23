@@ -18,6 +18,7 @@ namespace OpenDentBusiness {
 		private static double balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled);
@@ -44,6 +45,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,singlePatient,fromDate,toDate,intermingled);
@@ -77,6 +79,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
+		//No need to check RemotingRole; no call to db.
 		public static DataSet GetPayPlanAmort(int payPlanNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),payPlanNum);
@@ -88,6 +91,9 @@ namespace OpenDentBusiness {
 		}
 
 		private static DataTable GetPayPlanAmortTable(int payPlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),payPlanNum);
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplanamort");
 			DataRow row;
@@ -260,6 +266,10 @@ namespace OpenDentBusiness {
 		}*/
 
 		private static void GetCommLog(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Commlog");
 			DataRow row;
@@ -413,6 +423,7 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
+		//No need to check RemotingRole; no call to db.
 		private static void SetTableColumns(DataTable table){
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
@@ -446,6 +457,10 @@ namespace OpenDentBusiness {
 		
 		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If isForStatement, then the resulting payplan table looks totally different.</summary>
 		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,bool isForStatement) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,isForStatement);
+				return;
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.  This need serious optimization-------------------------------------------------------
@@ -1319,6 +1334,7 @@ namespace OpenDentBusiness {
 			//return table;
 		}
 
+		//No need to check RemotingRole; no call to db.
 		private static void SetBalForwardRow(DataRow row,double amt){
 			row["AdjNum"]="0";
 			row["balance"]=amt.ToString("n");
@@ -1348,6 +1364,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case. </summary>
+		//No need to check RemotingRole; no call to db.
 		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
@@ -1425,6 +1442,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
+		//No need to check RemotingRole; no call to db.
 		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
@@ -1539,6 +1557,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
+		//No need to check RemotingRole; no call to db.
 		private static void GetPatientTable(Family fam,List<DataRow> rows){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("patient");
@@ -1586,6 +1605,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Future appointments.</summary>
 		private static void GetApptTable(Family fam,bool singlePatient,int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fam,singlePatient,patNum);
+				return;
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("appts");
 			DataRow row;
@@ -1632,6 +1655,10 @@ namespace OpenDentBusiness {
 		}
 
 		private static void GetMisc(Family fam,int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fam,patNum);
+				return;
+			}
 			DataTable table=new DataTable("misc");
 			DataRow row;
 			table.Columns.Add("descript");

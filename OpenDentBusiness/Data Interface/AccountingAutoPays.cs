@@ -16,6 +16,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		//No need to check RemotingRole; no call to db.
 		public static void FillCache(DataTable table){
 			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -32,6 +33,10 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static void Insert(AccountingAutoPay pay){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
+				return;
+			}
 			string command= "INSERT INTO accountingautopay (PayType,PickList) VALUES("
 				+"'"+POut.PInt   (pay.PayType)+"', "
 				+"'"+POut.PString(pay.PickList)+"')";
@@ -39,6 +44,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into full descriptions separated by carriage returns.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static string GetPickListDesc(AccountingAutoPay pay){
 			string[] numArray=pay.PickList.Split(new char[] { ',' });
 			string retVal="";
@@ -55,6 +61,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into an array of AccountNums.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static int[] GetPickListAccounts(AccountingAutoPay pay) {
 			string[] numArray=pay.PickList.Split(new char[] { ',' });
 			ArrayList AL=new ArrayList();
@@ -70,6 +77,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the AList to find one with the specified payType (defNum).  If none is found, then it returns null.</summary>
+		//No need to check RemotingRole; no call to db.
 		public static AccountingAutoPay GetForPayType(int payType){
 			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
 				if(((AccountingAutoPay)AccountingAutoPayC.AList[i]).PayType==payType){
@@ -81,6 +89,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Saves the list of accountingAutoPays to the database.  Deletes all existing ones first.</summary>
 		public static void SaveList(ArrayList AL) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),AL);
+				return;
+			}
 			string command="DELETE FROM accountingautopay";
 			Db.NonQ(command);
 			for(int i=0;i<AL.Count;i++){
@@ -88,23 +100,6 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		
-
 	}
-	
-
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
