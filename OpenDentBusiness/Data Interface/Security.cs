@@ -199,8 +199,9 @@ namespace OpenDentBusiness{
 				dto.Credentials.Username=oduser;
 				dto.Credentials.PassHash=odpasshash;//Userods.EncryptPassword(password);
 				dto.MethodName="Security.LogInWeb";
-				dto.ObjectType=typeof(Userod).Name;
-				dto.Parameters=new object[] { oduser,odpasshash,configPath };
+				dto.ObjectType=typeof(Userod).FullName;
+				object[] parameters=new object[] { oduser,odpasshash,configPath };
+				dto.Parameters=DtoObject.ConstructArray(parameters);
 				return RemotingClient.ProcessGetObject<Userod>(dto);//can throw exception
 			}
 		}

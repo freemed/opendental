@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
 		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public object[] Parameters;
+		public DtoObject[] Parameters;
 		
 		public string Serialize(){
 			StringBuilder strBuild=new StringBuilder();
@@ -79,7 +79,7 @@ namespace OpenDentBusiness {
 
 	///<summary>Gets an object which must be serializable.  Calling code will convert object to specific type.</summary>
 	public class DtoGetObject:DataTransferObject{
-		///<summary>This is the string representation of the type of object that we expect back as a result.</summary>
+		///<summary>This is the "FullName" string representation of the type of object that we expect back as a result.  Examples: System.Int32, OpenDentBusiness.Patient, OpenDentBusiness.Patient[], List&lt;OpenDentBusiness.Patient&gt;.  DataTable and DataSet not allowed.</summary>
 		public string ObjectType;
 	}
 

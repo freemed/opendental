@@ -57,15 +57,16 @@ namespace OpenDentBusiness {
 		}
 
 		public void ReadXml(XmlReader reader) {
-			//personName = reader.ReadString();
 			reader.ReadToFollowing("TypeName");
 			reader.ReadStartElement("TypeName");
 			TypeName=reader.ReadString();
 			reader.ReadEndElement();//TypeName
-			reader.ReadToFollowing("Obj");
-			reader.ReadStartElement("Obj");
 			while(reader.NodeType!=XmlNodeType.Element) {
 				reader.Read();//gets rid of whitespace if in debug mode.
+			}
+			reader.ReadStartElement("Obj");
+			while(reader.NodeType!=XmlNodeType.Element) {
+				reader.Read();
 			}
 			string strObj=reader.ReadOuterXml();
 			//now get the reader to the correct location
@@ -89,6 +90,7 @@ namespace OpenDentBusiness {
 			XmlSerializer serializer = new XmlSerializer(type);
 			XmlReader reader2=XmlReader.Create(new StringReader(strObj));
 			Obj=serializer.Deserialize(reader2);
+				//Convert.ChangeType(serializer.Deserialize(reader2),type);
 		}
 
 		///<summary>Required by IXmlSerializable</summary>
@@ -96,6 +98,32 @@ namespace OpenDentBusiness {
 			return (null);
 		}
 
+		public static DtoObject[] ConstructArray(object[] objArray) {
+			DtoObject[] retVal=new DtoObject[objArray.Length];
+			for(int i=0;i<objArray.Length;i++) {
+				retVal[i]=new DtoObject(objArray[i]);
+			}
+			return retVal;
+		}
+
+		public static object[] GenerateObjects(DtoObject[] parameters) {
+			object[] retVal=new object[parameters.Length];
+			//Type type;
+			for(int i=0;i<parameters.Length;i++) {
+				//The type should already have been handled in deserialization
+				/*
+				if(parameters[i].TypeName.StartsWith("List<")) {
+					Type typeGen=Type.GetType(parameters[i].TypeName.Substring(5,parameters[i].TypeName.Length-6));
+					Type typeList=typeof(List<>);
+					type=typeList.MakeGenericType(typeGen);
+				}
+				else {
+					type=Type.GetType(parameters[i].TypeName);
+				}*/
+				retVal[i]=parameters[i].Obj;
+			}
+			return retVal;
+		}
 
 	}
 }
