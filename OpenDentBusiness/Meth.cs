@@ -98,7 +98,13 @@ namespace OpenDentBusiness {
 			}
 			//can't verify return type
 			DtoGetObject dto=new DtoGetObject();
-			dto.ObjectType=typeof(T).FullName;
+			if(typeof(T).IsGenericType) {
+				Type listType=typeof(T).GetGenericArguments()[0];
+				dto.ObjectType="List<"+listType.FullName+">";
+			}
+			else {
+				dto.ObjectType=typeof(T).FullName;
+			}
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
 			dto.Parameters=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();

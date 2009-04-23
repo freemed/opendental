@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all recalls for the supplied patients, usually a family or single pat.  Result might have a length of zero.</summary>
 		public static List<Recall> GetList(List<int> patNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),patNums);
+			} 
 			string wherePats="";
 			for(int i=0;i<patNums.Count;i++){
 				if(i!=0){
@@ -30,7 +33,8 @@ namespace OpenDentBusiness{
 				+"OR appointment.AptStatus=4))"//ASAP
 				+"FROM recall "
 				+"WHERE "+wherePats;
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
 		public static List<Recall> GetList(int patNum){
@@ -40,32 +44,40 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary></summary>
-		public static List<Recall> GetList(Patient[] patients){
+		public static List<Recall> GetList(List<Patient> patients){
 			List<int> patNums=new List<int>();
-			for(int i=0;i<patients.Length;i++){
+			for(int i=0;i<patients.Count;i++){
 				patNums.Add(patients[i].PatNum);
 			}
 			return GetList(patNums);
 		}
 
 		public static Recall GetRecall(int recallNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),recallNum);
+			} 
 			string command="SELECT * FROM recall WHERE RecallNum="+POut.PInt(recallNum);
-			return RefreshAndFill(command)[0];
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table)[0];
 		}
 
 		///<summary>Will return a recall or null.</summary>
 		public static Recall GetRecallProphyOrPerio(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum)
 				+" AND (RecallTypeNum="+RecallTypes.ProphyType+" OR RecallTypeNum="+RecallTypes.PerioType+")";
-			List<Recall> recallList=RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			List<Recall> recallList=RefreshAndFill(table);
 			if(recallList.Count==0){
 				return null;
 			}
 			return recallList[0];
 		}
 
-		private static List<Recall> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<Recall> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Recall> list=new List<Recall>();
 			Recall recall;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -90,8 +102,12 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Recall> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),changedSince);
+			} 
 			string command="SELECT * FROM recall WHERE DateTStamp > "+POut.PDateT(changedSince);
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.  If sortAlph is false, it will sort by dueDate.</summary>
@@ -440,7 +456,8 @@ namespace OpenDentBusiness{
 			List<RecallType> typeListActive=RecallTypes.GetActive();
 			List<RecallType> typeList=new List<RecallType>(typeListActive);
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
-			List<Recall> recallList=RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			List<Recall> recallList=RefreshAndFill(table);
 			//determine if this patient is a perio patient.
 			bool isPerio=false;
 			for(int i=0;i<recallList.Count;i++){

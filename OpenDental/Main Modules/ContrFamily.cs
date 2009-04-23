@@ -218,7 +218,7 @@ namespace OpenDental{
 			PlanList=InsPlans.Refresh(FamCur);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
-			RecallList=Recalls.GetList(FamCur.List);
+			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
 			PatFieldList=PatFields.Refresh(patNum);
 		}
 

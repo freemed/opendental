@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenDentBusiness.TableTypes
-{
+namespace OpenDentBusiness.TableTypes{
+///<summary>Intake of anesthetic medications on a given date. Increments the existing anesthetic medication inventory quantities</summary>
 	public class AnestheticMedsIntake{
-		///<summary>Intake of anesthetic medications on a given date. Increments the existing anesthetic medication inventory quantities</summary>
+		
 	
 			///<summary>Primary key.</summary>
 			public int AnestheticMedNum;

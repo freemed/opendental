@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -422,7 +423,7 @@ namespace OpenDental{
 
 		private void Filltb(){
 			SelectedPatNum=PatCur.PatNum;//just in case user has selected a different family member
-			RecallList=Recalls.GetList(FamCur.List);
+			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
 			Appointment[] aptsOnePat;
 			listFamily.Items.Clear();
 			ListViewItem item;

@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all benefits for a given list of patplans for one patient.</summary>
 		public static List <Benefit> Refresh(List<PatPlan> listForPat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return MiscUtils.ArrayToList(Meth.GetObject<Benefit[]>(MethodBase.GetCurrentMethod(),listForPat));
+				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),listForPat);
 			} 
 			if(listForPat.Count==0) {
 				return new List <Benefit> ();
@@ -30,25 +30,27 @@ namespace OpenDentBusiness {
 				+" WHERE"+s;
 			//Debug.WriteLine(command);
 			DataTable table=Db.GetTable(command);
-			List <Benefit> List=new List <Benefit> ();
+			List<Benefit> list=new List<Benefit>();
+			Benefit ben;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Benefit();
-				List[i].BenefitNum       = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].OldCode          = PIn.PString(table.Rows[i][4].ToString());
-				List[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].Percent          = PIn.PInt(table.Rows[i][6].ToString());
-				List[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
-				List[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
-				List[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
-				List[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
-				List[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
-				List[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
+				ben=new Benefit();
+				ben.BenefitNum       = PIn.PInt(table.Rows[i][0].ToString());
+				ben.PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
+				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
+				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
+				ben.OldCode          = PIn.PString(table.Rows[i][4].ToString());
+				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
+				ben.Percent          = PIn.PInt(table.Rows[i][6].ToString());
+				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
+				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
+				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
+				ben.Quantity         = PIn.PInt(table.Rows[i][10].ToString());
+				ben.CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
+				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
+				list.Add(ben);
 			}
-			List.Sort();
-			return List;
+			list.Sort();
+			return list;
 		}
 
 		///<summary>Used in the Plan edit window to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>

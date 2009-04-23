@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -593,7 +594,7 @@ namespace OpenDental{
 			listFamily.Items.Clear();
 			Appointment[] aptsOnePat;
 			ListViewItem item;
-			List<Recall> recallList=Recalls.GetList(FamCur.List);
+			List<Recall> recallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.List));
 			DateTime dateDue;
 			DateTime dateSched;
 			for(int i=0;i<FamCur.List.Length;i++){

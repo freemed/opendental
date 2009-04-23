@@ -85,6 +85,8 @@ namespace OpenDentBusiness {
 				type=typeList.MakeGenericType(typeGen);
 			}
 			else {
+				//This works fine for non-system types as well without specifying the assembly,
+				//because we are already in the OpenDentBusiness assembly.
 				type=Type.GetType(TypeName);
 			}
 			XmlSerializer serializer = new XmlSerializer(type);
