@@ -130,9 +130,9 @@ namespace OpenDental {
 			InsPlan priplan=null;
 			Family fam=Patients.GetFamily(AptCur.PatNum);
 			Patient pat=fam.GetPatient(AptCur.PatNum);
-			InsPlan[] planList=InsPlans.Refresh(fam);
-			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
-			if(patPlanList.Length>0) {
+			List<InsPlan> planList=InsPlans.Refresh(fam);
+			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			if(patPlanList.Count>0) {
 				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
 			}
 			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,planList,patPlanList));

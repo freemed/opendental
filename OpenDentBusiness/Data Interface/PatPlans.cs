@@ -8,15 +8,18 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatPlans {
 		///<summary>Gets a list of all patplans for a given patient</summary>
-		public static PatPlan[] Refresh(int patNum) {
+		public static List<PatPlan> Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
-			return RefreshAndFill(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
-		private static List<PatPlan> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<PatPlan> RefreshAndFill(DataTable table){
 			PatPlan patplan;
 			List<PatPlan> retVal=new List<PatPlan>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -119,16 +122,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			int patNum=PIn.PInt(table.Rows[0][0].ToString());
-			PatPlan[] patPlans=Refresh(patNum);
+			List<PatPlan> patPlans=Refresh(patNum);
 			//int oldOrdinal=GetFromList(patPlans,patPlanNum).Ordinal;
-			if(newOrdinal>patPlans.Length){
-				newOrdinal=patPlans.Length;
+			if(newOrdinal>patPlans.Count){
+				newOrdinal=patPlans.Count;
 			}
 			if(newOrdinal<1){
 				newOrdinal=1;
 			}
 			int curOrdinal=1;
-			for(int i=0;i<patPlans.Length;i++){//Loop through each patPlan.
+			for(int i=0;i<patPlans.Count;i++){//Loop through each patPlan.
 				if(patPlans[i].PatPlanNum==patPlanNum){
 					continue;//the one we are setting will be handled later
 				}
@@ -166,15 +169,23 @@ namespace OpenDentBusiness{
 		}
 
 		public static PatPlan[] GetByPlanNum(int planNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
+			} 
 			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.PInt(planNum)+"'";
-			return RefreshAndFill(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table).ToArray();
 		}
 
 		///<summary>Will return null if none exists.</summary>
 		public static PatPlan GetPatPlan(int patNum,int ordinal) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patNum,ordinal);
+			} 
 			string command="SELECT * FROM patplan WHERE PatNum="+POut.PInt(patNum)
 				+" AND Ordinal="+POut.PInt(ordinal);
-			List<PatPlan> list=RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			List<PatPlan> list=RefreshAndFill(table);
 			if(list.Count==0) {
 				return null;
 			}

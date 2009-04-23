@@ -9,12 +9,15 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Benefits {
 		///<summary>Gets a list of all benefits for a given list of patplans for one patient.</summary>
-		public static Benefit[] Refresh(PatPlan[] listForPat) {
-			if(listForPat.Length==0) {
+		public static Benefit[] Refresh(List<PatPlan> listForPat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Benefit[]>(MethodBase.GetCurrentMethod(),listForPat);
+			} 
+			if(listForPat.Count==0) {
 				return new Benefit[0];
 			}
 			string s="";
-			for(int i=0;i<listForPat.Length;i++) {
+			for(int i=0;i<listForPat.Count;i++) {
 				if(i>0) {
 					s+=" OR";
 				}

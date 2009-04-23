@@ -90,7 +90,7 @@ namespace OpenDental.Eclaims {
 		InsPlan insplan;
 		InsPlan insplan2;
 		ClaimProc[] claimprocs;
-		PatPlan[] patPlansForPatient;
+		List<PatPlan> patPlansForPatient;
 		List<CanadianExtract> missingListAll;
 		List<CanadianExtract> missingListDates;
 

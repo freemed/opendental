@@ -16,6 +16,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets the current date/Time direcly from the server.  Mostly used to prevent uesr from altering the workstation date to bypass security.</summary>
 		public static DateTime GetNowDateTime() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT NOW()";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT CURRENT_TIMESTAMP FROM DUAL";

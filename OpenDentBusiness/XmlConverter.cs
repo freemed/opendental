@@ -53,7 +53,7 @@ namespace OpenDentBusiness {
 		public static string DsToXml(DataSet ds){
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter xmlWriter=XmlWriter.Create(strBuild);
-			ds.WriteXml(xmlWriter);
+			ds.WriteXml(xmlWriter,XmlWriteMode.WriteSchema);
 			xmlWriter.Close();
 			return strBuild.ToString();
 		}

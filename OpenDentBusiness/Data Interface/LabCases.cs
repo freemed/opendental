@@ -128,19 +128,24 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when drawing the appointments for a day.</summary>
 		public static List<LabCase> GetForPeriod(DateTime startDate,DateTime endDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabCase>>(MethodBase.GetCurrentMethod(),startDate,endDate);
+			} 
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.AptNum=appointment.AptNum "
 				+"AND (appointment.AptStatus=1 OR appointment.AptStatus=2 OR appointment.AptStatus=4) "//scheduled,complete,or ASAP
 				+"AND AptDateTime >= "+POut.PDate(startDate)
 				+" AND AptDateTime < "+POut.PDate(endDate.AddDays(1));//midnight of the next morning.
-			return FillFromCommand(command);
+			DataTable table=Db.GetTable(command);
+			return FillFromTable(table);
 		}
 
 		///<summary>Used when drawing the planned appointment.</summary>
 		public static LabCase GetForPlanned(int aptNum) {
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.PlannedAptNum="+POut.PInt(aptNum);
-			List<LabCase> list=FillFromCommand(command);
+			DataTable table=Db.GetTable(command);
+			List<LabCase> list=FillFromTable(table);
 			if(list.Count==0){
 				return null;
 			}
@@ -150,7 +155,8 @@ namespace OpenDentBusiness{
 		///<summary>Gets one labcase from database.</summary>
 		public static LabCase GetOne(int labCaseNum){
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
-			return FillFromCommand(command)[0];
+			DataTable table=Db.GetTable(command);
+			return FillFromTable(table)[0];
 		}
 
 		///<summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</summary>
@@ -162,11 +168,11 @@ namespace OpenDentBusiness{
 			else{
 				command+="AptNum=0";
 			}
-			return FillFromCommand(command);
+			DataTable table=Db.GetTable(command);
+			return FillFromTable(table);
 		}
 
-		public static List<LabCase> FillFromCommand(string command){
-			DataTable table=Db.GetTable(command);
+		public static List<LabCase> FillFromTable(DataTable table){
 			LabCase lab;
 			List<LabCase> retVal=new List<LabCase>();
 			for(int i=0;i<table.Rows.Count;i++) {

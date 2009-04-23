@@ -22,9 +22,17 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a Family object for the supplied patNum.  Use Family.GetPatient to extract the desired patient from the family.</summary>
 		public static Family GetFamily(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Family>(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			string command=GetFamilySelectCommand(patNum);
 			Family fam=new Family();
-			fam.List=SubmitAndFill(command);
+			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
+			foreach(Patient patient in patients) {
+				patient.Age = DateToAge(patient.Birthdate);
+			}
+			fam.List=new Patient[patients.Count];
+			patients.CopyTo(fam.List,0);
 			return fam;
 		}
 
@@ -56,15 +64,23 @@ namespace OpenDentBusiness{
 
 		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found.</summary>
 		public static Patient GetPat(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			if(patNum==0) {
 				return null;
 			}
 			string command="SELECT * FROM patient WHERE PatNum="+POut.PInt(patNum);
-			Patient[] patarray=SubmitAndFill(command);
-			if(patarray.Length==0) {
+			Patient pat=null;
+			try {
+				pat= DataObjectFactory<Patient>.CreateObject(command);
+			}
+			catch { }
+			if(pat==null) {
 				return null;//used in eCW bridge
 			}
-			return patarray[0];
+			pat.Age = DateToAge(pat.Birthdate);
+			return pat;
 		}
 
 		///<summary>Will return null if not found.</summary>
@@ -73,11 +89,16 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			string command="SELECT * FROM patient WHERE ChartNumber="+POut.PString(chartNumber);
-			Patient[] patarray=SubmitAndFill(command);
-			if(patarray.Length==0) {
+			Patient pat=null;
+			try {
+				pat= DataObjectFactory<Patient>.CreateObject(command);
+			}
+			catch { }
+			if(pat==null) {
 				return null;
 			}
-			return patarray[0];
+			pat.Age = DateToAge(pat.Birthdate);
+			return pat;
 		}
 
 		///<summary>Will return null if not found.</summary>
@@ -86,11 +107,16 @@ namespace OpenDentBusiness{
 				return null;
 			}
 			string command="SELECT * FROM patient WHERE SSN="+POut.PString(ssn);
-			Patient[] patarray=SubmitAndFill(command);
-			if(patarray.Length==0) {
+			Patient pat=null;
+			try {
+				pat= DataObjectFactory<Patient>.CreateObject(command);
+			}
+			catch { }
+			if(pat==null) {
 				return null;
 			}
-			return patarray[0];
+			pat.Age = DateToAge(pat.Birthdate);
+			return pat;
 		}
 
 		public static List<Patient> GetUAppoint(DateTime changedSince){
@@ -100,16 +126,6 @@ namespace OpenDentBusiness{
 			return TableToList(table);
 			//List<Patient> retVal=new List<Patient>(DataObjectFactory<Patient>.CreateObjects(command));
 			//return retVal;
-		}
-
-		public static Patient[] SubmitAndFill(string command){
-			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
-			foreach (Patient patient in patients) {
-				patient.Age = DateToAge(patient.Birthdate);
-			}
-			Patient[] retVal = new Patient[patients.Count];
-			patients.CopyTo(retVal, 0);
-			return retVal;
 		}
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
