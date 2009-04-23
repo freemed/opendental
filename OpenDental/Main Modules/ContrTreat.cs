@@ -91,7 +91,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkShowFees;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.ODGrid gridPreAuth;
-		private InsPlan[] InsPlanList;
+		private List <InsPlan> InsPlanList;
 		private OpenDental.UI.ODGrid gridPlans;
 		private TreatPlan[] PlanList;
 		///<summary>A list of all ProcTP objects for this patient.</summary>
@@ -103,8 +103,8 @@ namespace OpenDental{
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
-		private PatPlan[] PatPlanList;
-		private Benefit[] BenefitList;
+		private List <PatPlan> PatPlanList;
+		private List <Benefit> BenefitList;
 		private ArrayList ProcAL;
 		///<summary>Only used for printing graphical chart.</summary>
 		private List<ToothInitial> ToothInitialList;
@@ -753,7 +753,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Print"].Enabled=true;
 				ToolBarMain.Buttons["Email"].Enabled=true;
 				ToolBarMain.Invalidate();
-				if(PatPlanList.Length==0){//patient doesn't have insurance
+				if(PatPlanList.Count==0){//patient doesn't have insurance
 					checkShowIns.Checked=false;
 					checkShowDiscount.Checked=false;
 					checkShowMaxDed.Visible=false;
@@ -945,7 +945,7 @@ namespace OpenDental{
 				bool isFamMax=false;
 				bool isFamDed=false;
 				ClaimProc[] claimProcsFam=null;			
-				if(PatPlanList.Length>0) {//primary
+				if(PatPlanList.Count>0) {//primary
 					PriPlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 					isFamMax=Benefits.GetIsFamMax(BenefitList,PriPlanCur.PlanNum);
 					isFamDed=Benefits.GetIsFamDed(BenefitList,PriPlanCur.PlanNum);
@@ -954,7 +954,7 @@ namespace OpenDental{
 					}
 				}
 				InsPlan SecPlanCur=null;
-				if(PatPlanList.Length>1) {//secondary
+				if(PatPlanList.Count>1) {//secondary
 					SecPlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				}
 				double dedAppliedPri=0;//cumulative per plan
@@ -995,7 +995,7 @@ namespace OpenDental{
 					if(checkShowMaxDed.Checked){//whether visible or not
 						//math sequence and logic based on ClaimL.CalculateAndUpdate(). It's really complicated.
 						//We will skip Procedure.ComputeEstimates(), and assume that all estimates have been created properly.
-						if(PatPlanList.Length>0){//Primary
+						if(PatPlanList.Count>0){//Primary
 							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
 							if(claimproc==null){
 								priIns=0;
@@ -1087,7 +1087,7 @@ namespace OpenDental{
 						else{//no primary ins
 							priIns=0;
 						}
-						if(PatPlanList.Length>1) {//Secondary
+						if(PatPlanList.Count>1) {//Secondary
 							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
 							if(claimproc==null){
 								secIns=0;
@@ -1451,7 +1451,7 @@ namespace OpenDental{
 			double pend=0;
 			double used=0;
 			InsPlan PlanCur;//=new InsPlan();
-			if(PatPlanList.Length>0){
+			if(PatPlanList.Count>0){
 				PlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 				bool isFamMax=Benefits.GetIsFamMax(BenefitList,PlanCur.PlanNum);
 				bool isFamDed=Benefits.GetIsFamDed(BenefitList,PlanCur.PlanNum);
@@ -1505,7 +1505,7 @@ namespace OpenDental{
 					textPriDedRem.Text=(ded-dedUsed).ToString("F");
 				}
 			}
-			if(PatPlanList.Length>1){
+			if(PatPlanList.Count>1){
 				PlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				pend=InsPlans.GetPending
 					(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,BenefitList);

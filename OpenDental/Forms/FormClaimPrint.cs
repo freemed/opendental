@@ -48,7 +48,7 @@ namespace OpenDental{
 		private Procedure[] ProcList;
 		///<summary>This is set externally for Renaissance and generic e-claims.  If it was not set ahead of time, it will set in FillDisplayStrings according to the insPlan.</summary>
 		public ClaimForm ClaimFormCur;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		//private InsPlan[] MedPlanList;
 		private ArrayList MedPlanArrayList;
 		private Claim ClaimCur;
@@ -254,7 +254,7 @@ namespace OpenDental{
 			bool HasMedical = false;
 			if(!PrintBlank){
 				FillProcStrings(pagesPrinted*procLimit,procLimit);
-				for(int i=0;i<PlanList.Length;i++){
+				for(int i=0;i<PlanList.Count;i++){
 					if(PlanList[i].IsMedical){
 						HasMedical=true;
 					}
@@ -731,7 +731,7 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "SubscrID":
-						PatPlan[] patPlans=PatPlans.Refresh(ThisPatNum);
+						List <PatPlan> patPlans=PatPlans.Refresh(ThisPatNum);
 						string patID=PatPlans.GetPatID(patPlans,planCur.PlanNum);
 						if(patID==""){
 							displayStrings[i]=planCur.SubscriberID;
@@ -2633,10 +2633,10 @@ namespace OpenDental{
 			bool isPrimary = false;
 			bool isSecondary = false;
 			bool isTertiary = false;
-			PatPlan[] PatInsPlans = PatPlans.Refresh(ThisPatNum); //get this patients ins plans
+			List <PatPlan> PatInsPlans = PatPlans.Refresh(ThisPatNum); //get this patients ins plans
 			MedClaimsArrayList = new ArrayList(); //list of medical claims for patient
 			MedPlanArrayList = new ArrayList(); //list of medical ins plans for patient and family
-			for(int i=0;i<PatInsPlans.Length;i++){ //fill med ins plans
+			for(int i=0;i<PatInsPlans.Count;i++){ //fill med ins plans
 				PatPlan tempPatPlan = (PatPlan)PatInsPlans[i];
 				InsPlan tempInsPlan = InsPlans.GetPlan(tempPatPlan.PlanNum, PlanList);
 				if(tempInsPlan.IsMedical)

@@ -93,6 +93,7 @@
     <Compile Include="Controls\PrintPanel.Designer.cs">
       <DependentUpon>PrintPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\MiscUtils.cs" />
     <Compile Include="Utilities\ODEnvironment.cs" />
     <Compile Include="Utilities\ODImaging.cs" />
     <Compile Include="Utilities\ODFileUtils.cs" />

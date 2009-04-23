@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -17,7 +18,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private int Subscriber;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		///<summary>When dialogResult=OK, this will contain the PlanNum of the selected plan.  If this is 0, then user has selected the 'New' option.</summary>
 		public int SelectedPlanNum;
 
@@ -137,7 +138,7 @@ namespace OpenDental{
 
 		private void FormInsSelectSubscr_Load(object sender, System.EventArgs e) {
 			PlanList=InsPlans.GetListForSubscriber(Subscriber);
-			for(int i=0;i<PlanList.Length;i++){
+			for(int i=0;i<PlanList.Count;i++){
 				listPlans.Items.Add(InsPlans.GetCarrierName(PlanList[i].PlanNum,PlanList));
 			}
 		}

@@ -2125,11 +2125,11 @@ namespace OpenDental{
 			menuLabel.MenuItems.Add("-");
 			//Carriers---------------------------------------------------------------------------------------
 			Family fam=Patients.GetFamily(CurPatNum);
-			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
-			InsPlan[] PlanList=InsPlans.Refresh(fam);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(CurPatNum);
+			List <InsPlan> PlanList=InsPlans.Refresh(fam);
 			Carrier carrier;
 			InsPlan plan;
-			for(int i=0;i<PatPlanList.Length;i++) {
+			for(int i=0;i<PatPlanList.Count;i++) {
 				plan=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
 				carrier=Carriers.GetCarrier(plan.CarrierNum);
 				menuItem=new MenuItem(carrier.CarrierName,menuLabel_Click);

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -113,7 +114,7 @@ namespace OpenDental
 		private int ProcCodeNum;
 		private Family FamCur;
 		private Patient PatCur;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		private System.Windows.Forms.Label labelCarrierAllowed;
 		private System.Windows.Forms.TextBox textCarrierAllowed;
 		private OpenDental.UI.Button butUpdateAllowed;
@@ -136,7 +137,7 @@ namespace OpenDental
 		private double CarrierAllowedAmount;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
-		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,InsPlan[] planList){
+		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList){
 			ClaimProcCur=claimProcCur;
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
@@ -1574,7 +1575,7 @@ namespace OpenDental
 					textFeeSched.Text=FeeScheds.GetDescription(standardFeeSched);
 				}
 				else{//otherwise, show the plan fee schedule
-					PatPlan[] patPlanList=PatPlans.Refresh(PatCur.PatNum);
+					List <PatPlan> patPlanList=PatPlans.Refresh(PatCur.PatNum);
 					int feeSched=Fees.GetFeeSched(PatCur,PlanList,patPlanList);
 					textFeeSched.Text=FeeScheds.GetDescription(feeSched);
 				}

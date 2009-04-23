@@ -59,7 +59,7 @@ namespace OpenDental{
 		private TextBox textEmail;
 		private Label label6;
 		private OpenDental.UI.Button butCommlog;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 
 		///<summary></summary>
 		public FormRecallListEdit(Recall recallCur){

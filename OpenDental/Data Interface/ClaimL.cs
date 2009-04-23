@@ -10,7 +10,7 @@ namespace OpenDental{
 	public class ClaimL{
 
 		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient (or for this plan if fam max or ded).  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
-		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,InsPlan[] PlanList,Claim ClaimCur,PatPlan[] patPlans,Benefit[] benefitList){
+		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,List <InsPlan> PlanList,Claim ClaimCur,List <PatPlan> patPlans,List <Benefit> benefitList){
 			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			double claimFee=0;
 			double dedApplied=0;

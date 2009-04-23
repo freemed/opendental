@@ -397,10 +397,10 @@ namespace OpenDental.Eclaims
 				}
 				#endregion Billing Provider
 				claim=Claims.GetClaim((int)claimAr[4,i]);				
-				insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
+				insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				//insPlan could be null if db corruption. No error checking for that
 				if(claim.PlanNum2>0){
-					otherPlan=InsPlans.GetPlan(claim.PlanNum2,new InsPlan[] {});
+					otherPlan=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 					otherSubsc=Patients.GetPat(otherPlan.Subscriber);
 					otherCarrier=Carriers.GetCarrier(otherPlan.CarrierNum);
 				}
@@ -606,8 +606,8 @@ namespace OpenDental.Eclaims
 						+Sout(patient.LName,35)+"*"//NM103: Lname
 						+Sout(patient.FName,25));//NM104: Fname
 					string patID=patient.SSN;
-					PatPlan[] patPlans=PatPlans.Refresh(patient.PatNum);
-					for(int p=0;p<patPlans.Length;p++){
+					List <PatPlan> patPlans=PatPlans.Refresh(patient.PatNum);
+					for(int p=0;p<patPlans.Count;p++){
 						if(patPlans[p].PlanNum==claim.PlanNum){
 							patID=patPlans[p].PatID;
 						}
@@ -1718,7 +1718,7 @@ namespace OpenDental.Eclaims
 			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
+			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 			if(insPlan.IsMedical && !PrefC.GetBool("MedicalEclaimsEnabled")) {
 				return "Medical e-claims not allowed";
 			}
@@ -1875,7 +1875,7 @@ namespace OpenDental.Eclaims
 				retVal+="Medicaid ID";
 			}
 			if(claim.PlanNum2>0){
-				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new InsPlan[] {});
+				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				if(carrier2.Address==""){
 					if(retVal!="")

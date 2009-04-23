@@ -76,7 +76,7 @@ namespace OpenDental{
 		///<summary>Family for the patient of this payplan.  Used to display insurance info.</summary>
 		private Family FamCur;
 		///<summary>Used to display insurance info.</summary>
-		private InsPlan[] InsPlanList;
+		private List <InsPlan> InsPlanList;
 		private OpenDental.UI.ODGrid gridCharges;
 		private OpenDental.UI.Button butClear;
 		private OpenDental.UI.Button butAdd;
@@ -951,7 +951,7 @@ namespace OpenDental{
 				return;
 			}
 			PayPlanCur.PlanNum=FormI.SelectedPlan.PlanNum;
-			textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,Patients.GetFamily(PayPlanCur.PatNum),new InsPlan[] {});
+			textInsPlan.Text=InsPlans.GetDescript(PayPlanCur.PlanNum,Patients.GetFamily(PayPlanCur.PatNum),new List <InsPlan> ());
 		}
 
 		private void textTerm_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {

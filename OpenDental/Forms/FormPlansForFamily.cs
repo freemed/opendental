@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -20,7 +21,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<summary>Set this externally.</summary>
 		public Family FamCur;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 
 		///<summary></summary>
 		public FormPlansForFamily()
@@ -137,7 +138,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<PlanList.Length;i++){
+			for(int i=0;i<PlanList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add((i+1).ToString());
 				row.Cells.Add(FamCur.GetNameInFamLF(PlanList[i].Subscriber));

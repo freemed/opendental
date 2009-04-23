@@ -15,7 +15,7 @@ namespace OpenDental{
 		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,int siteNum) {
 			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
-			Benefit[] benefitList=Benefits.Refresh(patPlans);
+			List <Benefit> benefitList=Benefits.Refresh(patPlans);
 			//this query could be improved slightly to only get notes of interest.
 			string command="SELECT * FROM procnote WHERE PatNum="+POut.PInt(apt.PatNum)+" ORDER BY EntryDateTime";
 			DataTable rawNotes=Db.GetTable(command);
@@ -82,7 +82,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc array can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set IsInitialEntry true from Chart module; this is for cap procs.</summary>
-		public static void ComputeEstimates(Procedure proc,int patNum,ClaimProc[] claimProcs,bool IsInitialEntry,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benefitList) {
+		public static void ComputeEstimates(Procedure proc,int patNum,ClaimProc[] claimProcs,bool IsInitialEntry,List <InsPlan> PlanList,List <PatPlan> patPlans,List <Benefit> benefitList) {
 			bool doCreate=true;
 			if(proc.ProcDate<DateTime.Today&&proc.ProcStatus==ProcStat.C) {
 				//don't automatically create an estimate for completed procedures
@@ -111,7 +111,7 @@ namespace OpenDental{
 					continue;
 				}
 				bool planIsCurrent=false;
-				for(int p=0;p<patPlans.Length;p++) {
+				for(int p=0;p<patPlans.Count;p++) {
 					if(patPlans[p].PlanNum==claimProcs[i].PlanNum) {
 						planIsCurrent=true;
 						break;
@@ -126,7 +126,7 @@ namespace OpenDental{
 			bool estExists;
 			bool cpAdded=false;
 			//loop through all patPlans (current coverage), and add any missing estimates
-			for(int p=0;p<patPlans.Length;p++) {//typically, loop will only have length of 1 or 2
+			for(int p=0;p<patPlans.Count;p++) {//typically, loop will only have length of 1 or 2
 				if(!doCreate) {
 					break;
 				}
@@ -238,7 +238,7 @@ namespace OpenDental{
 		}
 
 		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
-		public static void ComputeEstimatesForAll(int patNum,ClaimProc[] claimProcs,Procedure[] procs,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benefitList) {
+		public static void ComputeEstimatesForAll(int patNum,ClaimProc[] claimProcs,Procedure[] procs,List <InsPlan> PlanList,List <PatPlan> patPlans,List <Benefit> benefitList) {
 			for(int i=0;i<procs.Length;i++) {
 				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList);
 			}

@@ -64,9 +64,9 @@ namespace OpenDental {
 				Patient pat=fam.GetPatient(patNum);
 				ClaimProc[] claimProcs=ClaimProcs.Refresh(patNum);
 				Procedure[] procs=Procedures.Refresh(patNum);
-				InsPlan[] plans=InsPlans.Refresh(fam);
-				PatPlan[] patPlans=PatPlans.Refresh(patNum);
-				Benefit[] benefitList=Benefits.Refresh(patPlans);
+				List <InsPlan> plans=InsPlans.Refresh(fam);
+				List <PatPlan> patPlans=PatPlans.Refresh(patNum);
+				List <Benefit> benefitList=Benefits.Refresh(patPlans);
 				ProcedureL.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList);
 				Patients.SetHasIns(patNum);
 			}

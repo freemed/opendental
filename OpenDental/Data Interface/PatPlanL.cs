@@ -15,9 +15,9 @@ namespace OpenDental {
 				return;
 			}
 			int patNum=PIn.PInt(table.Rows[0][0].ToString());
-			PatPlan[] patPlans=PatPlans.Refresh(patNum);
+			List <PatPlan> patPlans=PatPlans.Refresh(patNum);
 			bool doDecrement=false;
-			for(int i=0;i<patPlans.Length;i++) {
+			for(int i=0;i<patPlans.Count;i++) {
 				if(doDecrement) {//patPlan has already been deleted, so decrement the rest.
 					command="UPDATE patplan SET Ordinal="+POut.PInt(patPlans[i].Ordinal-1)
 						+" WHERE PatPlanNum="+POut.PInt(patPlans[i].PatPlanNum);
@@ -37,8 +37,8 @@ namespace OpenDental {
 			ClaimProc[] claimProcs=ClaimProcs.Refresh(patNum);
 			Procedure[] procs=Procedures.Refresh(patNum);
 			patPlans=PatPlans.Refresh(patNum);
-			InsPlan[] planList=InsPlans.Refresh(fam);
-			Benefit[] benList=Benefits.Refresh(patPlans);
+			List <InsPlan> planList=InsPlans.Refresh(fam);
+			List <Benefit> benList=Benefits.Refresh(patPlans);
 			ProcedureL.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList);
 			Patients.SetHasIns(patNum);
 		}

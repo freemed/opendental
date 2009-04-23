@@ -1075,7 +1075,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Base estimate or override is retrieved from supplied claimprocs. Does not take into consideration annual max or deductible.  If limitToTotal set to true, then it does limit total of pri+sec to not be more than total fee.  The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
-		public static double GetEst(Procedure proc,ClaimProc[] claimProcs,PriSecTot pst,PatPlan[] patPlans,bool limitToTotal) {
+		public static double GetEst(Procedure proc,ClaimProc[] claimProcs,PriSecTot pst,List <PatPlan> patPlans,bool limitToTotal) {
 			double priBaseEst=0;
 			double secBaseEst=0;
 			double priOverride=-1;

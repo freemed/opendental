@@ -33,13 +33,13 @@ namespace OpenDental{
 		private Patient PatCur;
 		private Family FamCur;
 		private OpenDental.UI.PictureBox picturePat;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridIns;
-		private PatPlan[] PatPlanList;
+		private List <PatPlan> PatPlanList;
 		private ODGrid gridPat;
 		private ContextMenu menuInsurance;
 		private MenuItem menuPlansForFam;
-		private Benefit[] BenefitList;
+		private List <Benefit> BenefitList;
 		private ODGrid gridFamily;
 		private ODGrid gridRecall;
 		private PatField[] PatFieldList;
@@ -210,7 +210,7 @@ namespace OpenDental{
 			if(patNum==0){
 				PatCur=null;
 				FamCur=null;
-				PatPlanList=new PatPlan[0]; 
+				PatPlanList=new List <PatPlan> (); 
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
@@ -838,7 +838,7 @@ namespace OpenDental{
 			ClaimProc[] claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			Commlog[] commlogList=Commlogs.Refresh(PatCur.PatNum);
 			PayPlan[] payPlanList=PayPlans.Refresh(PatCur.Guarantor,PatCur.PatNum);
-			InsPlan[] planList=InsPlans.Refresh(FamCur);
+			List <InsPlan> planList=InsPlans.Refresh(FamCur);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
 			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
@@ -850,7 +850,7 @@ namespace OpenDental{
 			bool hasComm=commlogList.Length>0;
 			bool hasPayPlans=payPlanList.Length>0;
 			bool hasInsPlans=false;
-			for(int i=0;i<planList.Length;i++){
+			for(int i=0;i<planList.Count;i++){
 				if(planList[i].Subscriber==PatCur.PatNum){
 					hasInsPlans=true;
 				}
@@ -1099,7 +1099,7 @@ namespace OpenDental{
 			//Subscriber has been chosen. Now, pick a plan-------------------------------------------------------------------
 			InsPlan plan=null;
 			bool planIsNew=false;
-			if(InsPlans.GetListForSubscriber(subscriber.PatNum).Length==0){
+			if(InsPlans.GetListForSubscriber(subscriber.PatNum).Count==0){
 				planIsNew=true;
 			}
 			else{
@@ -1148,7 +1148,7 @@ namespace OpenDental{
 			}
 			//Then attach plan------------------------------------------------------------------------------------------------
 			PatPlan patplan=new PatPlan();
-			patplan.Ordinal=PatPlanList.Length+1;//so the ordinal of the first entry will be 1, NOT 0.
+			patplan.Ordinal=PatPlanList.Count+1;//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=PatCur.PatNum;
 			patplan.PlanNum=plan.PlanNum;
 			patplan.Relationship=Relat.Self;
@@ -1164,16 +1164,16 @@ namespace OpenDental{
 		}
 
 		private void FillInsData(){
-			if(PatPlanList.Length==0){
+			if(PatPlanList.Count==0){
 				gridIns.BeginUpdate();
 				gridIns.Columns.Clear();
 				gridIns.Rows.Clear();
 				gridIns.EndUpdate();
 				return;
 			}
-			InsPlan[] planArray=new InsPlan[PatPlanList.Length];//prevents repeated calls to db.
-			for(int i=0;i<PatPlanList.Length;i++){
-				planArray[i]=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
+			List <InsPlan> planArray=new List <InsPlan> ();//prevents repeated calls to db.
+			for(int i=0;i<PatPlanList.Count;i++){
+				planArray.Add(InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList));
 			}
 			gridIns.BeginUpdate();
 			gridIns.Columns.Clear();
@@ -1181,7 +1181,7 @@ namespace OpenDental{
 			OpenDental.UI.ODGridColumn col;
 			col=new ODGridColumn("",150);
 			gridIns.Columns.Add(col);
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				if(planArray[i].IsMedical){
 					col=new ODGridColumn(Lan.g("TableCoverage","Medical"),170);
 					gridIns.Columns.Add(col);
@@ -1202,7 +1202,7 @@ namespace OpenDental{
 			OpenDental.UI.ODGridRow row=new ODGridRow();
 			//subscriber
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber"));
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				row.Cells.Add(FamCur.GetNameInFamFL(planArray[i].Subscriber));
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
@@ -1210,7 +1210,7 @@ namespace OpenDental{
 			//subscriber ID
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber ID"));
-			for(int i=0;i<PatPlanList.Length;i++) {
+			for(int i=0;i<PatPlanList.Count;i++) {
 				row.Cells.Add(planArray[i].SubscriberID);
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
@@ -1218,7 +1218,7 @@ namespace OpenDental{
 			//relationship
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Rel'ship to Sub"));
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				row.Cells.Add(Lan.g("enumRelat",PatPlanList[i].Relationship.ToString()));
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
@@ -1226,7 +1226,7 @@ namespace OpenDental{
 			//patient ID
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Patient ID"));
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				row.Cells.Add(PatPlanList[i].PatID);
 			}
 			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
@@ -1234,7 +1234,7 @@ namespace OpenDental{
 			//pending
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Pending"));
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				if(PatPlanList[i].IsPending){
 					row.Cells.Add("X");
 				}
@@ -1248,21 +1248,21 @@ namespace OpenDental{
 			//employer
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Employer"));
-			for(int i=0;i<PatPlanList.Length;i++) {
+			for(int i=0;i<PatPlanList.Count;i++) {
 				row.Cells.Add(Employers.GetName(planArray[i].EmployerNum));
 			}
 			gridIns.Rows.Add(row);
 			//carrier
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Carrier"));
-			for(int i=0;i<PatPlanList.Length;i++) {
+			for(int i=0;i<PatPlanList.Count;i++) {
 				row.Cells.Add(InsPlans.GetCarrierName(PatPlanList[i].PlanNum,planArray));
 			}
 			gridIns.Rows.Add(row);
 			//plan type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Type"));
-			for(int i=0;i<planArray.Length;i++) {
+			for(int i=0;i<planArray.Count;i++) {
 				switch(planArray[i].PlanType){
 					default://malfunction
 						row.Cells.Add("");
@@ -1285,13 +1285,13 @@ namespace OpenDental{
 			//fee schedule
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Fee Schedule"));
-			for(int i=0;i<planArray.Length;i++) {
+			for(int i=0;i<planArray.Count;i++) {
 				row.Cells.Add(FeeScheds.GetDescription(planArray[i].FeeSched));
 			}
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);
 			//Benefits-----------------------------------------------------------------------------------------------------
-			Benefit[] bensForPat=Benefits.Refresh(PatPlanList);
+			List <Benefit> bensForPat=Benefits.Refresh(PatPlanList);
 			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList);
 			string desc;
 			string val;
@@ -1421,7 +1421,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Ins Plan Note"));
 			OpenDental.UI.ODGridCell cell;
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				cell=new ODGridCell();
 				cell.Text=planArray[i].PlanNote;
 				cell.ColorText=Color.Red;
@@ -1432,7 +1432,7 @@ namespace OpenDental{
 			//Subscriber Note
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Subscriber Note"));
-			for(int i=0;i<PatPlanList.Length;i++) {
+			for(int i=0;i<PatPlanList.Count;i++) {
 				cell=new ODGridCell();
 				cell.Text=planArray[i].SubscNote;
 				cell.ColorText=Color.Red;

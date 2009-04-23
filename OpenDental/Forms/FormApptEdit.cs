@@ -61,7 +61,7 @@ namespace OpenDental{
 		private bool mouseIsDown;
 		private Point mouseOrigin;
 		private Point sliderOrigin;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		private Patient pat;
 		private Family fam;
 		private OpenDental.UI.Button butLab;
@@ -1303,8 +1303,8 @@ namespace OpenDental{
 			//Family fam=Patients.GetFamily(AptCur.PatNum);
 			//Patient pat=fam.GetPatient(AptCur.PatNum);
 			//InsPlan[] planList=InsPlans.Refresh(fam);
-			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
-			if(patPlanList.Length>0) {
+			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			if(patPlanList.Count>0) {
 				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,PlanList);
 			}
 			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,patPlanList));
@@ -1351,7 +1351,7 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
-			Benefit[] benefitList=Benefits.Refresh(patPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
 			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,PlanList,patPlanList,benefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
@@ -1562,8 +1562,8 @@ namespace OpenDental{
 				}
 			}
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
-			PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
+			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
@@ -1582,7 +1582,7 @@ namespace OpenDental{
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
 				ProcCur.DateTP=AptCur.AptDateTime.Date;
 				InsPlan priplan=null;
-				if(PatPlanList.Length>0) {
+				if(PatPlanList.Count>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
 				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList));
@@ -1820,7 +1820,7 @@ namespace OpenDental{
 					if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
 						return false;
 					}
-					PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
+					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());

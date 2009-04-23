@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -448,9 +449,9 @@ namespace OpenDental{
 			plan.CarrierNum=carrier.CarrierNum;
 			InsPlans.Insert(plan);
 			//Then attach plan
-			PatPlan[] PatPlanList=PatPlans.Refresh(pat.PatNum);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(pat.PatNum);
 			PatPlan patplan=new PatPlan();
-			patplan.Ordinal=PatPlanList.Length+1;//so the ordinal of the first entry will be 1, NOT 0.
+			patplan.Ordinal=PatPlanList.Count+1;//so the ordinal of the first entry will be 1, NOT 0.
 			patplan.PatNum=pat.PatNum;
 			patplan.PlanNum=plan.PlanNum;
 			switch(insRelat){

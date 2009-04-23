@@ -84,9 +84,9 @@ namespace OpenDental{
 			if(pat.Birthdate.Year<1880){
 				birthdate="";
 			}
-			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
+			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			int planNum=PatPlans.GetPlanNum(patPlanList,1);
-			InsPlan plan=InsPlans.GetPlan(planNum,new InsPlan[0]);
+			InsPlan plan=InsPlans.GetPlan(planNum,new List <InsPlan> ());
 			Carrier carrier=null;
 			string carrierName="";
 			string carrierAddress="";

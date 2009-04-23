@@ -1,3 +1,4 @@
+using CodeBase;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -9,12 +10,12 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Benefits {
 		///<summary>Gets a list of all benefits for a given list of patplans for one patient.</summary>
-		public static Benefit[] Refresh(List<PatPlan> listForPat) {
+		public static List <Benefit> Refresh(List<PatPlan> listForPat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Benefit[]>(MethodBase.GetCurrentMethod(),listForPat);
+				return MiscUtils.ArrayToList(Meth.GetObject<Benefit[]>(MethodBase.GetCurrentMethod(),listForPat));
 			} 
 			if(listForPat.Count==0) {
-				return new Benefit[0];
+				return new List <Benefit> ();
 			}
 			string s="";
 			for(int i=0;i<listForPat.Count;i++) {
@@ -29,7 +30,7 @@ namespace OpenDentBusiness {
 				+" WHERE"+s;
 			//Debug.WriteLine(command);
 			DataTable table=Db.GetTable(command);
-			Benefit[] List=new Benefit[table.Rows.Count];
+			List <Benefit> List=new List <Benefit> ();
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Benefit();
 				List[i].BenefitNum       = PIn.PInt(table.Rows[i][0].ToString());
@@ -46,7 +47,7 @@ namespace OpenDentBusiness {
 				List[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
 				List[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
 			}
-			Array.Sort(List);
+			List.Sort();
 			return List;
 		}
 
@@ -215,8 +216,8 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
-		public static double GetAnnualMax(Benefit[] list,int planNum,int patPlanNum) {
-			for(int i=0;i<list.Length;i++) {
+		public static double GetAnnualMax(List<Benefit> list,int planNum,int patPlanNum) {
+			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
@@ -238,8 +239,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary>Returns true if there is a family max for the given plan.</Summary>
-		public static bool GetIsFamMax(Benefit[] list,int planNum) {
-			for(int i=0;i<list.Length;i++) {
+		public static bool GetIsFamMax(List <Benefit> list,int planNum) {
+			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum!=planNum) {
 					continue;
 				}
@@ -261,8 +262,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general deductible first.  Does not need to discriminate between family and individual.</summary>
-		public static double GetDeductible(Benefit[] list,int planNum,int patPlanNum) {
-			for(int i=0;i<list.Length;i++) {
+		public static double GetDeductible(List <Benefit> list,int planNum,int patPlanNum) {
+			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
@@ -284,8 +285,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary>Returns true if there is a family deductible for the given plan.</Summary>
-		public static bool GetIsFamDed(Benefit[] list,int planNum) {
-			for(int i=0;i<list.Length;i++) {
+		public static bool GetIsFamDed(List <Benefit> list,int planNum) {
+			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum!=planNum) {
 					continue;
 				}
@@ -307,9 +308,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the bottom of the benefit list, it will get the most specific matching deductible first.</summary>
-		public static double GetDeductibleByCode(Benefit[] benList,int planNum,int patPlanNum,string code) {
+		public static double GetDeductibleByCode(List <Benefit> benList,int planNum,int patPlanNum,string code) {
 			CovSpan[] spansForCat;
-			for(int i=benList.Length-1;i>=0;i--) {
+			for(int i=benList.Count-1;i>=0;i--) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
@@ -338,8 +339,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets the renewal date for annual benefits from the supplied list of benefits.  Looks for a general limitation dollar amount.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Because there is one renew date each year, the date returned will be the asofDate or earlier; the most recent renewal date.</summary>
-		public static DateTime GetRenewDate(Benefit[] list,int planNum,int patPlanNum,DateTime insStartDate,DateTime asofDate) {
-			for(int i=0;i<list.Length;i++) {
+		public static DateTime GetRenewDate(List<Benefit> list,int planNum,int patPlanNum,DateTime insStartDate,DateTime asofDate) {
+			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
 				}
@@ -362,13 +363,13 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only use pri or sec, not tot.  Used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
-		public static int GetPercent(string myCode,InsPlan insPlan,PatPlan patPlan,Benefit[] benList){
+		public static int GetPercent(string myCode,InsPlan insPlan,PatPlan patPlan,List <Benefit> benList){
 			if(insPlan.PlanType=="f" || insPlan.PlanType=="c"){
 				return 100;//flat and cap are always covered 100%
 			}
 			CovSpan[] spansForCat;
 			//loop through benefits starting at bottom (most specific)
-			for(int i=benList.Length-1;i>=0;i--){
+			for(int i=benList.Count-1;i>=0;i--){
 				//if plan benefit, but no match
 				if(benList[i].PlanNum!=0 && insPlan.PlanNum!=benList[i].PlanNum){
 					continue;
@@ -513,15 +514,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in family module display to get a list of benefits.  The main purpose of this function is to group similar benefits for each plan on the same row, making it easier to display in a simple grid.  Supply a list of all benefits for the patient, and the patPlans for the patient.</summary>
-		public static Benefit[,] GetDisplayMatrix(Benefit[] bensForPat,PatPlan[] patPlanList){
+		public static Benefit[,] GetDisplayMatrix(List <Benefit> bensForPat,List <PatPlan> patPlanList){
 			ArrayList AL=new ArrayList();//each object is a Benefit[]
 			Benefit[] row;
 			ArrayList refAL=new ArrayList();//each object is a Benefit from any random column. Used when searching for a type.
 			int col;
-			for(int i=0;i<bensForPat.Length;i++){
+			for(int i=0;i<bensForPat.Count;i++){
 				//determine the column
 				col=-1;
-				for(int j=0;j<patPlanList.Length;j++){
+				for(int j=0;j<patPlanList.Count;j++){
 					if(patPlanList[j].PatPlanNum==bensForPat[i].PatPlanNum
 						|| patPlanList[j].PlanNum==bensForPat[i].PlanNum)
 					{
@@ -543,7 +544,7 @@ namespace OpenDentBusiness {
 				//if no matching type found, add a row, and use that row
 				if(row==null){
 					refAL.Add(bensForPat[i].Copy());
-					row=new Benefit[patPlanList.Length];
+					row=new Benefit[patPlanList.Count];
 					row[col]=bensForPat[i].Copy();
 					AL.Add(row);
 					continue;
@@ -555,15 +556,15 @@ namespace OpenDentBusiness {
 				}
 				//if not null, then add another row.
 				refAL.Add(bensForPat[i].Copy());
-				row=new Benefit[patPlanList.Length];
+				row=new Benefit[patPlanList.Count];
 				row[col]=bensForPat[i].Copy();
 				AL.Add(row);
 			}
 			IComparer myComparer = new BenefitArraySorter();
 			AL.Sort(myComparer);
-			Benefit[,] retVal=new Benefit[patPlanList.Length,AL.Count];
+			Benefit[,] retVal=new Benefit[patPlanList.Count,AL.Count];
 			for(int y=0;y<AL.Count;y++){
-				for(int x=0;x<patPlanList.Length;x++){
+				for(int x=0;x<patPlanList.Count;x++){
 					if(((Benefit[])AL[y])[x]!=null){
 						retVal[x,y]=((Benefit[])AL[y])[x].Copy();
 					}

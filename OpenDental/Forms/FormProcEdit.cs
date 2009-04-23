@@ -94,7 +94,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddAdjust;
 		private OpenDental.TableProcAdj tbAdj;
 		private OpenDental.TableProcPay tbPay;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		private System.Windows.Forms.Label labelIncomplete;
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label label12;
@@ -113,14 +113,14 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDiagnosticCode;//ENP
 		private const uint MSG_GETLASTNOTE=3;
 		private System.Windows.Forms.CheckBox checkIsPrincDiag;//ENP
-		private PatPlan[] PatPlanList;
+		private List <PatPlan> PatPlanList;
 		private ListBox listProcStatus;
 		private Label label14;
 		private Label label15;
 		private Label label16;
 		private OpenDental.UI.Button butClearSig;
 		private OpenDental.UI.SignatureBox sigBox;
-		private Benefit[] BenefitList;
+		private List <Benefit> BenefitList;
 		private bool SigChanged;
 		private ComboBox comboProvNum;
 		private ComboBox comboDx;
@@ -2341,7 +2341,7 @@ namespace OpenDental{
 			if(FormIS.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			Benefit[] benList=Benefits.Refresh(PatPlanList);
+			List <Benefit> benList=Benefits.Refresh(PatPlanList);
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
 			if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
@@ -3233,7 +3233,7 @@ namespace OpenDental{
 				//ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.Code=verifyCode;
 				InsPlan priplan=null;
-				if(PatPlanList.Length>0) {
+				if(PatPlanList.Count>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
 				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));

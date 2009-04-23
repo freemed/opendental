@@ -410,21 +410,21 @@ namespace OpenDental
 			str=Lan.g(this,"Insurance");
 			g.DrawString(str,fontHeading,brush,x,y);
 			y+=18;
-			PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
-			InsPlan[] plans=InsPlans.Refresh(fam);
+			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			List <InsPlan> plans=InsPlans.Refresh(fam);
 			ClaimProc[] claimProcList=ClaimProcs.Refresh(pat.PatNum);
-			Benefit[] benefits=Benefits.Refresh(patPlanList);
+			List <Benefit> benefits=Benefits.Refresh(patPlanList);
 			InsPlan plan;
 			Carrier carrier;
 			string subscriber;
 			double max;
 			double deduct;
-			if(patPlanList.Length==0){
+			if(patPlanList.Count==0){
 				str=Lan.g(this,"none");
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 			}
-			for(int i=0;i<patPlanList.Length;i++){
+			for(int i=0;i<patPlanList.Count;i++){
 				plan=InsPlans.GetPlan(patPlanList[i].PlanNum,plans);
 				carrier=Carriers.GetCarrier(plan.CarrierNum);
 				str=carrier.CarrierName;
@@ -460,7 +460,7 @@ namespace OpenDental
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 				str="";
-				for(int j=0;j<benefits.Length;j++){
+				for(int j=0;j<benefits.Count;j++){
 					if(benefits[j].PlanNum != plan.PlanNum){
 						continue;
 					}

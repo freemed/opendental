@@ -37,7 +37,7 @@ namespace OpenDental.Eclaims {
 			Carrier carrier;
 			InsPlan insPlan2=null;
 			Carrier carrier2=null;
-			PatPlan[] patPlansForPatient;
+			List <PatPlan> patPlansForPatient;
 			Patient patient;
 			Patient subscriber;
 			ClaimProc[] claimProcList;//all claimProcs for a patient.
@@ -59,10 +59,10 @@ namespace OpenDental.Eclaims {
 				clinic=Clinics.GetClinic(claim.ClinicNum);
 				billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
 				treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-				insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] { });
+				insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 				if(claim.PlanNum2>0) {
-					insPlan2=InsPlans.GetPlan(claim.PlanNum2,new InsPlan[] { });
+					insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 					carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 					subscriber2=Patients.GetPat(insPlan2.Subscriber);
 				}
@@ -131,7 +131,7 @@ namespace OpenDental.Eclaims {
 				txt+=TidyAN(insPlan.SubscriberID.Replace("-",""),12);//validated
 				//C17 primary dependant code 2 N
 				string patID="";
-				for(int p=0;p<patPlansForPatient.Length;p++){
+				for(int p=0;p<patPlansForPatient.Count;p++){
 					if(patPlansForPatient[p].PlanNum==claim.PlanNum){
 						patID=patPlansForPatient[p].PatID;
 					}
@@ -229,7 +229,7 @@ namespace OpenDental.Eclaims {
 					txt+=TidyAN(insPlan2.SubscriberID.Replace("-",""),12);//validated
 					//E17 sec dependent code 2 N
 					patID="";
-					for(int p=0;p<patPlansForPatient.Length;p++) {
+					for(int p=0;p<patPlansForPatient.Count;p++) {
 						if(patPlansForPatient[p].PlanNum==claim.PlanNum2) {
 							patID=patPlansForPatient[p].PatID;
 						}
@@ -765,13 +765,13 @@ namespace OpenDental.Eclaims {
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] { });
+			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 			InsPlan insPlan2=null;
 			Carrier carrier2=null;
 			Patient subscriber2=null;
 			if(claim.PlanNum2>0) {
-				insPlan2=InsPlans.GetPlan(claim.PlanNum2,new InsPlan[] { });
+				insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 				carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				subscriber2=Patients.GetPat(insPlan2.Subscriber);
 			}

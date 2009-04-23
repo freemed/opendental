@@ -599,7 +599,7 @@ namespace OpenDental{
 			List<int> carrierNums=new List<int>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				claim=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum);
-				plan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
+				plan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				carrierNums.Add(plan.CarrierNum);
 			}
 			//carrier=Carriers.GetCarrier(plan.CarrierNum);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -442,14 +443,14 @@ namespace OpenDental.Bridges{
 				sw.Write(",");//PAT_NOCORR No correspondence HIPAA
 				sw.Write(",");//PAT_DISRES Internal PT logical, it can be ignored.
 				sw.Write(",");//PAT_LSTUPD Internal PT logical, it can be ignored.
-				PatPlan[] patPlanList=PatPlans.Refresh(pat.PatNum);
+				List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 				Family fam=Patients.GetFamily(pat.PatNum);
-				InsPlan[] planList=InsPlans.Refresh(fam);
+				List <InsPlan> planList=InsPlans.Refresh(fam);
 				PatPlan patplan=null;
 				InsPlan plan=null;
 				Carrier carrier=null;
 				Employer emp=null;
-				if(patPlanList.Length>0){
+				if(patPlanList.Count>0){
 					patplan=patPlanList[0];
 					plan=InsPlans.GetPlan(patplan.PlanNum,planList);
 					carrier=Carriers.GetCarrier(plan.CarrierNum);

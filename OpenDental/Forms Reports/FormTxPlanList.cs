@@ -5,6 +5,7 @@ Retain this text in redistributions.
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -413,9 +414,9 @@ namespace OpenDental
             ref double SecMax, ref double SecPend, ref double SecUsed,
             ref double SecDed, ref double SecDedRemain, ref double SecRemain)
         {
-            PatPlan[] PatPlanList;
-            InsPlan[] InsPlanList;
-            Benefit[] BenefitList;
+            List <PatPlan> PatPlanList;
+            List <InsPlan> InsPlanList;
+            List <Benefit> BenefitList;
             ClaimProc[] ClaimProcList;
             Family FamCur;
 
@@ -433,7 +434,7 @@ namespace OpenDental
             ClaimProcList = ClaimProcs.Refresh(PatNum);
 
             InsPlan PlanCur; //=new InsPlan();
-            if (PatPlanList.Length > 0)
+            if (PatPlanList.Count > 0)
             {
                 PlanCur = InsPlans.GetPlan(PatPlanList[0].PlanNum, InsPlanList);
                 pend = InsPlans.GetPending
@@ -468,7 +469,7 @@ namespace OpenDental
                     PriDedRemain = (ded - dedUsed);
                 }
             }
-            if (PatPlanList.Length > 1)
+            if (PatPlanList.Count > 1)
             {
                 PlanCur = InsPlans.GetPlan(PatPlanList[1].PlanNum, InsPlanList);
                 pend = InsPlans.GetPending // changed below, SPK

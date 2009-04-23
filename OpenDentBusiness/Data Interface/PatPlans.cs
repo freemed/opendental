@@ -86,8 +86,8 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
-		public static int GetPlanNum(PatPlan[] list,int ordinal){
-			for(int i=0;i<list.Length;i++){
+		public static int GetPlanNum(List <PatPlan> list,int ordinal){
+			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
 					return list[i].PlanNum;
 				}
@@ -96,8 +96,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the relationship of the specified ordinal.  If ordinal not valid, then it returns self (0).</summary>
-		public static Relat GetRelat(PatPlan[] list,int ordinal){
-			for(int i=0;i<list.Length;i++){
+		public static Relat GetRelat(List <PatPlan> list,int ordinal){
+			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
 					return list[i].Relationship;
 				}
@@ -105,8 +105,8 @@ namespace OpenDentBusiness{
 			return Relat.Self;
 		}
 
-		public static string GetPatID(PatPlan[] patPlans,int planNum) {
-			for(int p=0;p<patPlans.Length;p++) {
+		public static string GetPatID(List <PatPlan> patPlans,int planNum) {
+			for(int p=0;p<patPlans.Count;p++) {
 				if(patPlans[p].PlanNum==planNum) {
 					return patPlans[p].PatID;
 				}
@@ -159,8 +159,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.  Only used once in Claims.cs.</summary>
-		public static int GetPatPlanNum(PatPlan[] patPlans,int planNum) {
-			for(int i=0;i<patPlans.Length;i++) {
+		public static int GetPatPlanNum(List <PatPlan> patPlans,int planNum) {
+			for(int i=0;i<patPlans.Count;i++) {
 				if(patPlans[i].PlanNum==planNum) {
 					return patPlans[i].PatPlanNum;
 				}

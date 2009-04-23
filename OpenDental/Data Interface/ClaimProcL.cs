@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using OpenDentBusiness;
 
@@ -9,7 +10,7 @@ namespace OpenDental{
 	public class ClaimProcL{
 
 		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.</summary>
-		public static void ComputeBaseEst(ClaimProc cp, Procedure proc,PriSecTot pst,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benList) {//,bool resetValues){ 
+		public static void ComputeBaseEst(ClaimProc cp, Procedure proc,PriSecTot pst,List <InsPlan> PlanList, List <PatPlan> patPlans,List <Benefit> benList) {//,bool resetValues){ 
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
 				|| cp.Status==ClaimProcStatus.Preauth

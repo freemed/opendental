@@ -94,7 +94,7 @@ namespace OpenDental{
 		private Procedure[] ProcList;
 		private Patient PatCur;
 		private Family FamCur;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		private OpenDental.ValidDate textDateService;
 		private DataTable tablePayments;
 			//ClaimPayment[] ClaimPaymentList;
@@ -104,7 +104,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSplit;
 		//private User user;
 		private bool notAuthorized;
-		private PatPlan[] PatPlanList;
+		private List <PatPlan> PatPlanList;
 		private OpenDental.UI.ODGrid gridProc;
 		private OpenDental.UI.Button butSend;
 		private Claim ClaimCur;
@@ -2977,7 +2977,7 @@ namespace OpenDental{
 			if(!ClaimIsValid()){
 				return;
 			}
-			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
 			bool isFamMax=Benefits.GetIsFamMax(benefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(benefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed){
@@ -3851,7 +3851,7 @@ namespace OpenDental{
 				}
 			}
 			else{//all other claim types use original estimate claimproc.
-				Benefit[] benList=Benefits.Refresh(PatPlanList);
+				List <Benefit> benList=Benefits.Refresh(PatPlanList);
 				for(int i=0;i<ClaimProcsForClaim.Length;i++){
 					//ClaimProcs.Cur=ClaimProcs.ForClaim[i];
 					if(ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental//supplementals are duplicate
@@ -3864,10 +3864,10 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
 					ClaimProcsForClaim[i].ClaimNum=0;
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
-					if(ClaimCur.ClaimType=="P" && PatPlanList.Length>0){
+					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
 						ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Pri,PlanList,PatPlanList,benList);
 					}
-					else if(ClaimCur.ClaimType=="S" && PatPlanList.Length>1){
+					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
 						ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Sec,PlanList,PatPlanList,benList);
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;

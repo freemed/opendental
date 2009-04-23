@@ -95,7 +95,7 @@ namespace OpenDental{
 		private FormImageViewer formImageViewer;
 		private Family FamCur;
 		private Patient PatCur;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -107,13 +107,13 @@ namespace OpenDental{
 		private bool headingPrinted;
 		private int headingPrintH;
 		private Document[] DocumentList;
-		private PatPlan[] PatPlanList;
+		private List <PatPlan> PatPlanList;
 		private MenuItem menuItemSetComplete;
 		private MenuItem menuItemEditSelected;
 		private OpenDental.UI.Button butPin;
 		private ListBox listButtonCats;
 		private ListView listViewButtons;
-		private Benefit[] BenefitList;
+		private List <Benefit> BenefitList;
 		private ImageList imageListProcButtons;
 		private ColumnHeader columnHeader1;
 		private TabControl tabProc;
@@ -3412,7 +3412,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Pri Ins"));
 			string name;
-			if(PatPlanList.Length>0) {
+			if(PatPlanList.Count>0) {
 				name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,1),PlanList);
 				if(PatPlanList[0].IsPending)
 					name+=Lan.g("TableChartPtInfo"," (pending)");
@@ -3426,7 +3426,7 @@ namespace OpenDental{
 			//SecIns
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Sec Ins"));
-			if(PatPlanList.Length>1) {
+			if(PatPlanList.Count>1) {
 				name=InsPlans.GetCarrierName(PatPlans.GetPlanNum(PatPlanList,2),PlanList);
 				if(PatPlanList[1].IsPending)
 					name+=Lan.g("TableChartPtInfo"," (pending)");
@@ -4583,7 +4583,7 @@ namespace OpenDental{
 			else {
 				//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 				InsPlan priplan=null;
-				if(PatPlanList.Length>0) {
+				if(PatPlanList.Count>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
 				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
@@ -4688,7 +4688,7 @@ namespace OpenDental{
 			}
 			else {
 				InsPlan priplan=null;
-				if(PatPlanList.Length>0) {
+				if(PatPlanList.Count>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
 				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));

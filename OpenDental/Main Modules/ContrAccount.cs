@@ -2171,9 +2171,9 @@ namespace OpenDental {
 		}
 
 		private void FillInsInfo(){
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			textPriMax.Text = "";
 			textPriDed.Text = "";
@@ -2198,7 +2198,7 @@ namespace OpenDental {
 			double pend = 0;
 			double used = 0;
 			InsPlan PlanCur;//=new InsPlan();
-			if(PatPlanList.Length > 0){
+			if(PatPlanList.Count > 0){
 				PlanCur = InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 				bool isFamMax = Benefits.GetIsFamMax(BenefitList,PlanCur.PlanNum);
 				bool isFamDed = Benefits.GetIsFamDed(BenefitList,PlanCur.PlanNum);
@@ -2260,7 +2260,7 @@ namespace OpenDental {
 					textPriDedRem.Text = (ded - dedUsed).ToString("F");
 				}
 			}
-			if(PatPlanList.Length > 1){
+			if(PatPlanList.Count > 1){
 				PlanCur = InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				pend = InsPlans.GetPending
 					(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,BenefitList);
@@ -2294,7 +2294,7 @@ namespace OpenDental {
 			}
 			//**only different line from tx pl routine fillsummary
 			//**only different line from tx pl routine fillsummary
-			if (PatPlanList.Length == 0)
+			if (PatPlanList.Count == 0)
 			{
 				labelInsLeft.Text = Lan.g(this, "No Ins.");
 				labelInsLeftAmt.Text = "";
@@ -2588,12 +2588,12 @@ namespace OpenDental {
 		}
 
 		private void OnIns_Click() {
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
-			if(PatPlanList.Length==0){
+			if(PatPlanList.Count==0){
 				MsgBox.Show(this,"Patient does not have insurance.");
 				return;
 			}
@@ -2691,7 +2691,7 @@ namespace OpenDental {
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
-		private Claim CreateClaim(string claimType,PatPlan[] PatPlanList,InsPlan[] InsPlanList,ClaimProc[] ClaimProcList,Procedure[] procsForPat){
+		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> InsPlanList,ClaimProc[] ClaimProcList,Procedure[] procsForPat){
 			int claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
@@ -2705,7 +2705,7 @@ namespace OpenDental {
 					break;
 				case "Med":
 					//It's already been verified that a med plan exists
-					for(int i=0;i<PatPlanList.Length;i++){
+					for(int i=0;i<PatPlanList.Count;i++){
 						if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
 							PlanCur=InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList);
 							break;
@@ -2893,12 +2893,12 @@ namespace OpenDental {
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
-			if(PatPlanList.Length==0){
+			if(PatPlanList.Count==0){
 				MessageBox.Show(Lan.g(this,"Patient does not have insurance."));
 				return;
 			}
@@ -2944,12 +2944,12 @@ namespace OpenDental {
 		}
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
-			if(PatPlanList.Length<2){
+			if(PatPlanList.Count<2){
 				MessageBox.Show(Lan.g(this,"Patient does not have secondary insurance."));
 				return;
 			}
@@ -2993,13 +2993,13 @@ namespace OpenDental {
 		}
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			int medPlanNum=0;
-			for(int i=0;i<PatPlanList.Length;i++){
+			for(int i=0;i<PatPlanList.Count;i++){
 				if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
 					medPlanNum=PatPlanList[i].PlanNum;
 					break;
@@ -3069,10 +3069,10 @@ namespace OpenDental {
 		}
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(gridAccount.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));

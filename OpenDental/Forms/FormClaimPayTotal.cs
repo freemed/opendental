@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -36,10 +37,10 @@ namespace OpenDental
 		private Patient PatCur;
 		private Family FamCur;
 		private OpenDental.UI.ODGrid gridMain;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 
 		///<summary></summary>
-		public FormClaimPayTotal(Patient patCur,Family famCur,InsPlan[] planList){
+		public FormClaimPayTotal(Patient patCur,Family famCur,List <InsPlan> planList){
 			InitializeComponent();// Required for Windows Form Designer support
 			FamCur=famCur;
 			PatCur=patCur;

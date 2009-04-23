@@ -149,10 +149,10 @@ namespace OpenDental.Eclaims {
 				canClaim=CanadianClaims.GetForClaim(etrans.ClaimNum);
 				provTreat=Providers.GetProv(claim.ProvTreat);
 				provBill=Providers.GetProv(claim.ProvBill);
-				insplan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[0]);
+				insplan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
 				if(canClaim.SecondaryCoverage=="Y") {//Secondary coverage?
 					secondaryCarrier=Carriers.GetCarrier(etrans.CarrierNum2);
-					insplan2=InsPlans.GetPlan(claim.PlanNum2,new InsPlan[0]);
+					insplan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 					subscriber2=Patients.GetPat(insplan2.Subscriber);
 					if(secondaryCarrier==null || insplan2==null || subscriber2==null) {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");

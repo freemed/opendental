@@ -28,10 +28,10 @@ namespace OpenDental
 		private Patient PatCur;
 		private Family FamCur;
 		private OpenDental.UI.ODGrid gridMain;
-		private InsPlan[] PlanList;
+		private List <InsPlan> PlanList;
 
 		///<summary></summary>
-		public FormClaimPayPreAuth(Patient patCur,Family famCur,InsPlan[] planList) {
+		public FormClaimPayPreAuth(Patient patCur,Family famCur,List <InsPlan> planList) {
 			InitializeComponent();// Required for Windows Form Designer support
 			FamCur=famCur;
 			PatCur=patCur;

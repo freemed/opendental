@@ -1,3 +1,4 @@
+using CodeBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -181,13 +182,13 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
-		public static InsPlan[] GetListForSubscriber(int subscriber) {
+		public static List <InsPlan> GetListForSubscriber(int subscriber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber);
+				return MiscUtils.ArrayToList(Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber));
 			} 
 			string command="SELECT * FROM insplan WHERE Subscriber="+POut.PInt(subscriber);
 			DataTable table=Db.GetTable(command);
-			return RefreshFill(table).ToArray();
+			return RefreshFill(table);
 		}
 
 		///<summary>Only loads one plan from db. Can return null.</summary>
@@ -326,8 +327,8 @@ namespace OpenDentBusiness {
 
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
 		public static double GetInsRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
-			double insUsed=GetInsUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
-			InsPlan plan=InsPlans.GetPlan(planNum,PlanList);
+			double insUsed=GetInsUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,planList,benList);
+			InsPlan plan=InsPlans.GetPlan(planNum,planList);
 			double insPending=GetPending(ClaimProcList,date,plan,patPlanNum,excludeClaim,benList);
 			double annualMax=Benefits.GetAnnualMax(benList,planNum,patPlanNum);
 			if(annualMax<0) {
@@ -418,7 +419,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get pending insurance for a given plan for one benefit year. Include a ClaimProcList which is all claimProcs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The insplan.PlanNum is the plan to get value for.</summary>
-		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,Benefit[] benList) {
+		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
 			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
 				return 0;
@@ -443,7 +444,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied procCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
-		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,InsPlan[] PlanList,Benefit[] benList,string procCode){
+		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List <InsPlan> PlanList,List <Benefit> benList,string procCode){
 			double dedTot=Benefits.GetDeductibleByCode(benList,planNum,patPlanNum,procCode);
 			double dedUsed=GetDedUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
 			if(dedTot-dedUsed<0){
@@ -878,7 +879,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
-		public static double GetAllowed(string procCode,int planNum,InsPlan[] PlanList,string toothNum,int provNum) {
+		public static double GetAllowed(string procCode,int planNum,List <InsPlan> PlanList,string toothNum,int provNum) {
 			if(planNum==0) {
 				return -1;
 			}
