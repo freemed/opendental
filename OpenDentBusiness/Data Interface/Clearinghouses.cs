@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		private static Hashtable HList;
 
 		public static Clearinghouse[] List{
+			//No need to check RemotingRole; no call to db.
 			get{
 				if(list==null){
 					Refresh();
@@ -25,6 +26,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command=
 				"SELECT * FROM clearinghouse";
 			DataTable table=Db.GetTable(command);
@@ -65,6 +70,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts this clearinghouse into database.</summary>
 		public static void Insert(Clearinghouse clearhouse){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clearhouse);
+				return;
+			}
 			string command="INSERT INTO clearinghouse (Description,ExportPath,IsDefault,Payors"
 				+",Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,"
 				+"LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES("
@@ -93,6 +102,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Clearinghouse clearhouse){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clearhouse);
+				return;
+			}
 			string command="UPDATE clearinghouse SET "
 				+"Description = '"  +POut.PString(clearhouse.Description)+"' "
 				+",ExportPath = '"  +POut.PString(clearhouse.ExportPath)+"' "
@@ -120,6 +133,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Clearinghouse clearhouse){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clearhouse);
+				return;
+			}
 			string command="DELETE FROM clearinghouse "
 				+"WHERE ClearinghouseNum = '"+POut.PInt(clearhouse.ClearinghouseNum)+"'";
 			Db.NonQ(command);
@@ -127,6 +144,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the last batch number for this clearinghouse and increments it by one.  Saves the new value, then returns it.  So even if the new value is not used for some reason, it will have already been incremented. Remember that LastBatchNumber is never accurate with local data in memory.</summary>
 		public static int GetNextBatchNumber(Clearinghouse clearhouse){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),clearhouse);
+			}
 			//get last batch number
 			string command="SELECT LastBatchNumber FROM clearinghouse "
 				+"WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
@@ -154,6 +174,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the clearinghouseNum for claims for the supplied payorID.  If the payorID was not entered or if no default was set, then 0 is returned.</summary>
 		public static int GetNumForPayor(string payorID){
+			//No need to check RemotingRole; no call to db.
 			//this is not done because Renaissance does not require payorID
 			//if(payorID==""){
 			//	return ElectronicClaimFormat.None;
@@ -174,6 +195,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the default clearinghouse. If no default present, returns null.</summary>
 		public static Clearinghouse GetDefault(){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].IsDefault){
 					return List[i];

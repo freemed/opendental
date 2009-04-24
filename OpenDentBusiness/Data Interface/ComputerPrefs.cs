@@ -12,8 +12,6 @@ namespace OpenDentBusiness {
 		///<summary>Returns the computer preferences for the computer which this instance of Open Dental is running on.</summary>
 		public static ComputerPref GetForLocalComputer(){
 			string computerName=Dns.GetHostName();//local computer name
-			string command="SELECT * FROM computerpref WHERE ComputerName='"+POut.PString(computerName)+"'";
-			DataTable table;
 			ComputerPref computerPref=new ComputerPref();
 			//OpenGL tooth chart not supported on Unix systems.
 			if(Environment.OSVersion.Platform==PlatformID.Unix) {
@@ -30,12 +28,11 @@ namespace OpenDentBusiness {
 			computerPref.TaskDock=0; //bottom
 			computerPref.TaskX=900;
 			computerPref.TaskY=625;
-			try{
-				table=Db.GetTable(command);
-			}catch{
+			DataTable table=GetPrefsForComputer(computerName);
+			if(table==null){
 				//In case of database error, just use default graphics settings so that it is possible for the program to start.
 				return computerPref;
-			}			
+			}
 			if(table.Rows.Count==0){//Computer prefs do not exist yet.
 				computerPref.ComputerName=computerName;
 				Insert(computerPref);//Create default prefs for the specified computer. Also sets primary key in our computerPref object.
@@ -66,8 +63,24 @@ namespace OpenDentBusiness {
 			return computerPref;
 		}
 
+		private static DataTable GetPrefsForComputer(string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),computerName);
+			}
+			string command="SELECT * FROM computerpref WHERE ComputerName='"+POut.PString(computerName)+"'";
+			try {
+				return Db.GetTable(command);
+			} catch {
+				return null;
+			}
+		}
+
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
 		public static void Insert(ComputerPref computerPref){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerPref);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				computerPref.ComputerPrefNum=MiscData.GetKey("computerpref","ComputerPrefNum");
 			}

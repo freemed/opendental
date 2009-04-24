@@ -9,6 +9,7 @@ namespace OpenDentBusiness {
 	public class CovCats {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM covcat ORDER BY covorder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="CovCat";
@@ -18,6 +19,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			CovCat covcat;
 			CovCatC.Listt=new List<CovCat>();
 			CovCatC.ListShort=new List<CovCat>();
@@ -38,6 +40,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(CovCat covcat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),covcat);
+				return;
+			}
 			string command= "UPDATE covcat SET "
 				+ "Description = '"    +POut.PString(covcat.Description)+"'"
 				+",DefaultPercent = '" +POut.PInt   (covcat.DefaultPercent)+"'"
@@ -50,6 +56,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(CovCat covcat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),covcat);
+				return;
+			}
 			string command="INSERT INTO covcat (Description,DefaultPercent,"
 				+"CovOrder,IsHidden,EbenefitCat) VALUES("
 				+"'"+POut.PString(covcat.Description)+"', "
@@ -62,6 +72,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void MoveUp(CovCat covcat) {
+			//No need to check RemotingRole; no call to db.
 			RefreshCache();
 			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
 			if(oldOrder==0) {
@@ -73,6 +84,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void MoveDown(CovCat covcat) {
+			//No need to check RemotingRole; no call to db.
 			RefreshCache();
 			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
 			if(oldOrder==CovCatC.Listt.Count-1) {
@@ -84,12 +96,14 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		private static void SetOrder(CovCat covcat, int newOrder) {
+			//No need to check RemotingRole; no call to db.
 			covcat.CovOrder=newOrder;
 			Update(covcat);
 		}
 
 		///<summary></summary>
 		public static CovCat GetCovCat(int covCatNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<CovCatC.Listt.Count;i++) {
 				if(covCatNum==CovCatC.Listt[i].CovCatNum) {
 					return CovCatC.Listt[i].Copy();
@@ -100,6 +114,7 @@ namespace OpenDentBusiness {
 		
 		///<summary></summary>
 		public static double GetDefaultPercent(int myCovCatNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<CovCatC.Listt.Count;i++){
 				if(myCovCatNum==CovCatC.Listt[i].CovCatNum){
@@ -111,6 +126,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static string GetDesc(int covCatNum){
+			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<CovCatC.Listt.Count;i++){
 				if(covCatNum==CovCatC.Listt[i].CovCatNum){
@@ -122,6 +138,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static int GetCovCatNum(int orderShort){
+			//No need to check RemotingRole; no call to db.
 			//need to check this again:
 			int retVal=0;
 			for(int i=0;i<CovCatC.ListShort.Count;i++){
@@ -134,6 +151,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static int GetOrderShort(int CovCatNum){
+			//No need to check RemotingRole; no call to db.
 			int retVal=-1;
 			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				if(CovCatNum==CovCatC.ListShort[i].CovCatNum){
@@ -145,6 +163,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a matching benefit category from the short list.  Returns null if not found, which should be tested for.</summary>
 		public static CovCat GetForEbenCat(EbenefitCategory eben){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<CovCatC.ListShort.Count;i++) {
 				if(eben==CovCatC.ListShort[i].EbenefitCat) {
 					return CovCatC.ListShort[i];

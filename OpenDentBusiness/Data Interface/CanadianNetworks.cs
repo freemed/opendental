@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static List<CanadianNetwork> listt;
 
 		public static List<CanadianNetwork> Listt{
+			//No need to check RemotingRole; no call to db.
 			get{
 				if(listt==null){
 					Refresh();
@@ -21,6 +22,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * FROM canadiannetwork";
 			DataTable table=Db.GetTable(command);
 			listt=new List<CanadianNetwork>();
@@ -36,6 +41,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(CanadianNetwork network) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),network);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				network.CanadianNetworkNum=MiscData.GetKey("canadiannetwork","CanadianNetworkNum");
 			}
@@ -60,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(CanadianNetwork Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="UPDATE canadiannetwork SET "
 				+ "Abbrev = '"+POut.PString(Cur.Abbrev)+"' "
 				+ ",Descript='"+POut.PString(Cur.Descript)+"' "
@@ -74,6 +87,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static CanadianNetwork GetNetwork(int networkNum){
+			//No need to check RemotingRole; no call to db.
 			if(listt==null) {
 				Refresh();
 			}

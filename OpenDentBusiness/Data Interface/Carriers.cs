@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		private static Hashtable hList;
 
 		public static Carrier[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -26,6 +27,7 @@ namespace OpenDentBusiness{
 
 		///<summary>A hashtable of all carriers.</summary>
 		public static Hashtable HList {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(hList==null) {
 					RefreshCache();
@@ -39,6 +41,7 @@ namespace OpenDentBusiness{
 	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 		public static DataTable RefreshCache(){
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodInfo.GetCurrentMethod(),command);
@@ -48,6 +51,7 @@ namespace OpenDentBusiness{
 		}
 		
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List=new Carrier[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Carrier();
@@ -72,6 +76,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used to get a list of carriers to display in the FormCarriers window.</summary>
 		public static DataTable GetBigList(bool isCanadian,bool showHidden,string carrierName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),isCanadian,showHidden,carrierName);
+			}
 			DataTable tableRaw;
 			DataTable table;
 			string command;
@@ -211,6 +218,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
 		public static void Insert(Carrier Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command;
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(Cur.IsCDA){
@@ -266,6 +277,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch.  If there are any dependencies, then this will throw an exception.  This is currently only called from FormCarrierEdit.</summary>
 		public static void Delete(Carrier Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			//look for dependencies in insplan table.
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
 				+" WHERE patient.PatNum=insplan.Subscriber"
@@ -303,6 +318,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of insplans that are dependent on the Cur carrier. Used to display in carrier edit.</summary>
 		public static string[] DependentPlans(Carrier Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),Cur);
+			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan" 
 				+" WHERE patient.PatNum=insplan.Subscriber"
 				+" AND insplan.CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'"
@@ -317,6 +335,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the name of a carrier based on the carrierNum.  This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
 		public static string GetName(int carrierNum){
+			//No need to check RemotingRole; no call to db.
 			if(HList.ContainsKey(carrierNum)){
 				return ((Carrier)HList[carrierNum]).CarrierName;
 			}
@@ -331,6 +350,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Replacing GetCur. Gets the specified carrier. This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
 		public static Carrier GetCarrier(int carrierNum){
+			//No need to check RemotingRole; no call to db.
 			if(carrierNum==0){
 				Carrier retVal=new Carrier();
 				retVal.CarrierName="";//instead of null. Helps prevent crash.
@@ -352,6 +372,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Primarily used when user clicks OK from the InsPlan window.  Gets a carrierNum from the database based on the other supplied carrier data.  Sets Cur.CarrierNum accordingly. If there is no matching carrier, then a new carrier is created.  The end result is that Cur will now always have a valid carrierNum to use.</summary>
 		public static void GetCurSame(Carrier Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(Cur.CarrierName==""){
 				Cur=new Carrier();//should probably be null instead
 				return;
@@ -394,6 +418,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns an arraylist of Carriers with names similar to the supplied string.  Used in dropdown list from carrier field for faster entry.  There is a small chance that the list will not be completely refreshed when this is run, but it won't really matter if one carrier doesn't show in dropdown.</summary>
 		public static List<Carrier> GetSimilarNames(string carrierName){
+			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
 			for(int i=0;i<List.Length;i++){
 				//if(i>0 && List[i].CarrierName==List[i-1].CarrierName){
@@ -412,6 +437,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch Combines all the given carriers into one. The carrier that will be used as the basis of the combination is specified in the pickedCarrier argument. Updates insplan, then deletes all the other carriers.</summary>
 		public static void Combine(int[] carrierNums,int pickedCarrierNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),carrierNums,pickedCarrierNum);
+				return;
+			}
 			if(carrierNums.Length==1){
 				return;//nothing to do
 			}
@@ -453,6 +482,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in the FormCarrierCombine window.</summary>
 		public static List<Carrier> GetCarriers(int[] carrierNums){
+			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
 			for(int i=0;i<List.Length;i++){
 				for(int j=0;j<carrierNums.Length;j++){
@@ -467,6 +497,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormInsPlan to check whether another carrier is already using this id.  That way, it won't tell the user that this might be an invalid id.</summary>
 		public static bool ElectIdInUse(string electID){
+			//No need to check RemotingRole; no call to db.
 			if(electID==""){
 				return true;
 			}
@@ -480,6 +511,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used from insplan window when requesting benefits.  Gets carrier based on electID.</summary>
 		public static Carrier GetCanadian(string electID){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ElectID==electID){
 					return List[i];
@@ -489,6 +521,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static Carrier GetByNameAndPhone(string carrierName,string phone){
+			//No need to check RemotingRole; no call to db.
 			if(carrierName==""){
 				throw new ApplicationException("Carrier cannot be blank");
 			}
@@ -506,6 +539,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a dictionary of carrier names for the supplied patient list.</summary>
 		public static Dictionary<int,string> GetCarrierNames(List<Patient> patients){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Dictionary<int,string>>(MethodBase.GetCurrentMethod(),patients);
+			}
 			if(patients.Count==0){
 				return new Dictionary<int,string>();
 			}

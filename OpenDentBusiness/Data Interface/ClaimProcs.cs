@@ -72,6 +72,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ClaimProc cp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				cp.ClaimProcNum=MiscData.GetKey("claimproc","ClaimProcNum");
 			}
@@ -173,12 +177,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ClaimProc cp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			string command= "DELETE from claimproc WHERE claimprocNum = '"+POut.PInt(cp.ClaimProcNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Used when creating a claim to create any missing claimProcs. Also used in FormProcEdit if click button to add Estimate.  Inserts it into db. It will still be altered after this to fill in the fields that actually attach it to the claim.</summary>
 		public static void CreateEst(ClaimProc cp, Procedure proc, InsPlan plan) {
+			//No need to check RemotingRole; no call to db.
 			cp.ProcNum=proc.ProcNum;
 			//claimnum
 			cp.PatNum=proc.PatNum;
@@ -214,6 +223,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts the supplied list into a list of ClaimProcs for one claim.</summary>
 		public static ClaimProc[] GetForClaim(ClaimProc[] List,int claimNum){
+			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
 			ArrayList ALForClaim=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -230,6 +240,7 @@ namespace OpenDentBusiness{
 
 		///<summary>When sending or printing a claim, this converts the supplied list into a list of ClaimProcs that need to be sent.</summary>
 		public static ClaimProc[] GetForSendClaim(ClaimProc[] List,int claimNum){
+			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
 			ArrayList ALForClaim=new ArrayList();
 			bool includeThis;
@@ -258,6 +269,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all ClaimProcs for the current Procedure. The List must be all ClaimProcs for this patient.</summary>
 		public static ClaimProc[] GetForProc(ClaimProc[] List,int procNum){
+			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
 			ArrayList ALForProc=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -279,6 +291,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in TP module to get one estimate. The List must be all ClaimProcs for this patient. If estimate can't be found, then return null.  The procedure is always status TP, so there shouldn't be more than one estimate for one plan.</summary>
 		public static ClaimProc GetEstimate(ClaimProc[] List,int procNum,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].Status==ClaimProcStatus.Preauth){
 					continue;
@@ -292,6 +305,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used once in Account.  The insurance estimate based on all claimprocs with this procNum that are attached to claims. Includes status of NotReceived,Received, and Supplemental. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static string ProcDisplayInsEst(ClaimProc[] List,int procNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum
@@ -309,6 +323,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in Account and in PaySplitEdit. The insurance estimate based on all claimprocs with this procNum, but only for those claimprocs that are not received yet. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcEstNotReceived(ClaimProc[] List,int procNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum
@@ -322,6 +337,7 @@ namespace OpenDentBusiness{
 		
 		///<summary>Used in Account and in PaySplitEdit. The insurance amount paid based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcInsPay(ClaimProc[] List,int procNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum
@@ -338,6 +354,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in PaySplitEdit. The insurance writeoff based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcWriteoff(ClaimProc[] List,int procNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum
@@ -354,6 +371,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcInsPayPri(ClaimProc[] List,int procNum,int planNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum
@@ -371,6 +389,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used once in Account on the Claim line.  The amount paid on a claim only by total, not including by procedure.  The list can be all ClaimProcs for patient, or just those for this claim.</summary>
 		public static double ClaimByTotalOnly(ClaimProc[] List,int claimNum){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClaimNum==claimNum
@@ -384,6 +403,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used once in Account on the Claim line.  The writeoff amount on a claim only by total, not including by procedure.  The list can be all ClaimProcs for patient, or just those for this claim.</summary>
 		public static double ClaimWriteoffByTotalOnly(ClaimProc[] List,int claimNum) {
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ClaimNum==claimNum
@@ -398,6 +418,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Attaches or detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  It also updates their DateCP's to match the claimpayment date.</summary>
 		public static void SetForClaim(int claimNum,int claimPaymentNum,DateTime date,bool setAttached){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum,date,setAttached);
+				return;
+			}
 			string command= "UPDATE claimproc SET ClaimPaymentNum = ";
 			if(setAttached){
 				command+="'"+claimPaymentNum+"' ";
@@ -415,6 +439,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static double ComputeBal(ClaimProc[] List){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			//double pat;
 			for(int i=0;i<List.Length;i++){
@@ -444,6 +469,7 @@ namespace OpenDentBusiness{
 
 		///<summary>After entering estimates from a preauth, this routine is called for each proc to override the ins est.</summary>
 		public static void OverrideInsEst(int procNum,int planNum,double insPayEst,ClaimProc[] claimProcList){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Length;i++) {
 				if(procNum!=claimProcList[i].ProcNum) {
 					continue;

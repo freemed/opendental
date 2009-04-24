@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 	
 		///<summary>The list can be 0 length.</summary>
 		public static List<CanadianExtract> GetForClaim(int claimNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<CanadianExtract>>(MethodBase.GetCurrentMethod(),claimNum);
+			}
 			string command="SELECT * FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
 			DataTable table=Db.GetTable(command);
 			List<CanadianExtract> retVal=new List<CanadianExtract>();
@@ -27,6 +30,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static int CompareByToothNum(CanadianExtract x1,CanadianExtract x2) {
+			//No need to check RemotingRole; no call to db.
 			string t1=x1.ToothNum;
 			string t2=x2.ToothNum;
 			if(t1==null || t1=="" || t2==null || t2=="") {
@@ -46,6 +50,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static void UpdateForClaim(int claimNum, List<CanadianExtract> missinglist){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,missinglist);
+				return;
+			}
 			string command="DELETE FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
 			Db.NonQ(command);
 			for(int i=0;i<missinglist.Count;i++){
@@ -56,6 +64,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(CanadianExtract cur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				cur.CanadianExtractNum=MiscData.GetKey("canadianextract","CanadianExtractNum");
 			}
@@ -85,6 +97,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply a list of CanadianExtracts, and this function will filter it and return only items with dates.</summary>
 		public static List<CanadianExtract> GetWithDates(List<CanadianExtract> missingList){
+			//No need to check RemotingRole; no call to db.
 			List<CanadianExtract> retVal=new List<CanadianExtract>();
 			foreach(CanadianExtract ce in missingList){
 				if(ce.DateExtraction.Year>1880){

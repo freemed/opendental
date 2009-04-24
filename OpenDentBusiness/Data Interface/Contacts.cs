@@ -11,6 +11,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(int category){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),category);
+				return;
+			}
 			string command="SELECT * from contact WHERE category = '"+category+"'"
 				+" ORDER BY LName";
 			DataTable table=Db.GetTable(command);
@@ -29,6 +33,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Contact Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.ContactNum=MiscData.GetKey("contact","ContactNum");
 			}
@@ -58,6 +66,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Contact Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE contact SET "
 				+"lname = '"    +POut.PString(Cur.LName)+"' "
 				+",fname = '"   +POut.PString(Cur.FName)+"' "
@@ -72,6 +84,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Contact Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE FROM contact WHERE contactnum = '"+Cur.ContactNum.ToString()+"'";
 			Db.NonQ(command);
 		}

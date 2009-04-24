@@ -9,6 +9,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all claimformitems for all claimforms.  Items for individual claimforms can later be extracted as needed.</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * FROM claimformitem ORDER BY imagefilename desc";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -18,6 +19,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ClaimFormItemC.List=new ClaimFormItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				ClaimFormItemC.List[i]=new ClaimFormItem();
@@ -35,6 +37,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ClaimFormItem item){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 				+",XPos,YPos,Width,Height) VALUES("
 				+"'"+POut.PInt   (item.ClaimFormNum)+"', "
@@ -51,6 +57,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ClaimFormItem item){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command= "UPDATE claimformitem SET "
 				+"claimformnum = '" +POut.PInt   (item.ClaimFormNum)+"' "
 				+",imagefilename = '"+POut.PString(item.ImageFileName)+"' "
@@ -66,6 +76,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ClaimFormItem item){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command = "DELETE FROM claimformitem "
 				+"WHERE ClaimFormItemNum = '"+POut.PInt(item.ClaimFormItemNum)+"'";
  			Db.NonQ(command);
@@ -74,6 +88,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all claimformitems for the specified claimform from the preloaded List.</summary>
 		public static ClaimFormItem[] GetListForForm(int claimFormNum){
+			//No need to check RemotingRole; no call to db.
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<ClaimFormItemC.List.Length;i++){
 				if(ClaimFormItemC.List[i].ClaimFormNum==claimFormNum){

@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all items for the current patient ordered by date.</summary>
 		public static Commlog[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Commlog[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM commlog"
 				+" WHERE PatNum = '"+patNum+"'"
@@ -18,6 +21,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one commlog item from database.</summary>
 		public static Commlog GetOne(int commlogNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Commlog>(MethodBase.GetCurrentMethod(),commlogNum);
+			}
 			string command=
 				"SELECT * FROM commlog"
 				+" WHERE CommlogNum = "+POut.PInt(commlogNum);
@@ -48,6 +54,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Commlog comm){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),comm);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				comm.CommlogNum=MiscData.GetKey("commlog","CommlogNum");
 			}
@@ -78,6 +88,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Commlog comm) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),comm);
+				return;
+			}
 			string command= "UPDATE commlog SET "
 				+"PatNum = '"         +POut.PInt   (comm.PatNum)+"', "
 				+"CommDateTime= "     +POut.PDateT (comm.CommDateTime)+", "
@@ -93,12 +107,20 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Commlog comm) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),comm);
+				return;
+			}
 			string command= "DELETE FROM commlog WHERE CommLogNum = '"+POut.PInt(comm.CommlogNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
 		public static void InsertForRecall(int patNum,CommItemMode _mode,int numberOfReminders){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,_mode,numberOfReminders);
+				return;
+			}
 			int recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			string command;
 			if(recallType!=0){
@@ -141,6 +163,7 @@ namespace OpenDentBusiness{
 
 		///<Summary>Returns a defnum.  If no match, then it returns the first one in the list in that category.</Summary>
 		public static int GetTypeAuto(CommItemTypeAuto typeauto){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<DefC.Long[(int)DefCat.CommLogTypes].Length;i++){
 				if(DefC.Long[(int)DefCat.CommLogTypes][i].ItemValue==typeauto.ToString()){
 					return DefC.Long[(int)DefCat.CommLogTypes][i].DefNum;

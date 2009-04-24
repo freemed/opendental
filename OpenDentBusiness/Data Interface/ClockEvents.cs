@@ -8,6 +8,9 @@ namespace OpenDentBusiness{
 	public class ClockEvents {
 		///<summary>isBreaks is ignored if getAll is true.</summary>
 		public static ClockEvent[] Refresh(int empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClockEvent[]>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,getAll,isBreaks);
+			}
 			string command=
 				"SELECT * from clockevent WHERE"
 				+" EmployeeNum = '"+POut.PInt(empNum)+"'"
@@ -38,6 +41,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ClockEvent ce) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
+				return;
+			}
 			DateTime serverTime=MiscData.GetNowDateTime();
 			if(PrefC.RandomKeys) {
 				ce.ClockEventNum=MiscData.GetKey("clockevent","ClockEventNum");
@@ -68,6 +75,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ClockEvent ce) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
+				return;
+			}
 			string command= "UPDATE clockevent SET "
 				+"EmployeeNum = '"    +POut.PInt   (ce.EmployeeNum)+"' "
 				+",TimeEntered = "   +POut.PDateT (ce.TimeEntered)+" "
@@ -81,12 +92,19 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ClockEvent ce) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
+				return;
+			}
 			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.PInt(ce.ClockEventNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Gets directly from the database.  Returns true if the last time clock entry for this employee was a clockin.</summary>
 		public static bool IsClockedIn(int employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum);
+			}
 			string command="SELECT ClockIn FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -105,6 +123,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets info directly from database.  If the employee is clocked out, this gets the status for clockin is based on how they last clocked out.  Also used to determine how to initially display timecard.</summary>
 		public static TimeClockStatus GetLastStatus(int employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TimeClockStatus>(MethodBase.GetCurrentMethod(),employeeNum);
+			}
 			string command="SELECT ClockStatus FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -120,11 +141,13 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DateTime GetServerTime(){
+			//No need to check RemotingRole; no call to db.
 			return MiscData.GetNowDateTime();
 		}
 
 		///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
 		public static TimeSpan GetWeekTotal(int empNum,DateTime date){
+			//No need to check RemotingRole; no call to db.
 			ClockEvent[] events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false,false);
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
 			TimeSpan retVal=new TimeSpan(0);

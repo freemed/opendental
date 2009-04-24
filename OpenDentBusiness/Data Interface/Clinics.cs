@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static Clinic[] list;
 
 		public static Clinic[] List{
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -23,6 +24,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Refresh all clinics</summary>
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * FROM clinic";
 			DataTable table=Db.GetTable(command);
 			List=new Clinic[table.Rows.Count];
@@ -44,6 +49,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Clinic clinic){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
+				return;
+			}
 			string command= "INSERT INTO clinic (Description,Address,Address2,City,State,Zip,Phone,"
 				+"BankNumber,DefaultPlaceService,InsBillingProv) VALUES("
 				+"'"+POut.PString(clinic.Description)+"', "
@@ -61,6 +70,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Clinic clinic){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
+				return;
+			}
 			string command= "UPDATE clinic SET " 
 				+ "Description = '"       +POut.PString(clinic.Description)+"'"
 				+ ",Address = '"          +POut.PString(clinic.Address)+"'"
@@ -78,6 +91,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(Clinic clinic){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
+				return;
+			}
 			//check patients for dependencies
 			string command="SELECT LName,FName FROM patient WHERE ClinicNum ="
 				+POut.PInt(clinic.ClinicNum);
@@ -164,6 +181,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns null if clinic not found.</summary>
 		public static Clinic GetClinic(int clinicNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
 					return List[i].Copy();
@@ -174,6 +192,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns an empty string for invalid clinicNums.</summary>
 		public static string GetDesc(int clinicNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
 					return List[i].Description;
@@ -184,6 +203,7 @@ namespace OpenDentBusiness{
 	
 		///<summary>Returns practice default for invalid clinicNums.</summary>
 		public static PlaceOfService GetPlaceService(int clinicNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
 					return List[i].DefaultPlaceService;

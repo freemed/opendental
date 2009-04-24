@@ -14,6 +14,7 @@ namespace OpenDentBusiness{
 
 		///<summary>List of all claim forms.</summary>
 		public static ClaimForm[] ListLong {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(listLong==null) {
 					RefreshCache();
@@ -27,6 +28,7 @@ namespace OpenDentBusiness{
 
 		///<summary>List of all claim forms except those marked as hidden.</summary>
 		public static ClaimForm[] ListShort {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(listShort==null) {
 					RefreshCache();
@@ -39,6 +41,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM claimform";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ClaimForm";
@@ -48,6 +51,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ListLong=new ClaimForm[table.Rows.Count];
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -73,6 +77,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts this claimform into database and retrieves the new primary key.</summary>
 		public static void Insert(ClaimForm cf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cf);
+				return;
+			}
 			string command="INSERT INTO claimform (Description,IsHidden,FontName,FontSize"
 				+",UniqueId,PrintImages,OffsetX,OffsetY) VALUES("
 				+"'"+POut.PString(cf.Description)+"', "
@@ -89,6 +97,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ClaimForm cf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cf);
+				return;
+			}
 			string command="UPDATE claimform SET "
 				+"Description = '" +POut.PString(cf.Description)+"' "
 				+",IsHidden = '"    +POut.PBool  (cf.IsHidden)+"' "
@@ -104,6 +116,9 @@ namespace OpenDentBusiness{
 
 		///<summary> Called when cancelling out of creating a new claimform, and from the claimform window when clicking delete. Returns true if successful or false if dependencies found.</summary>
 		public static bool Delete(ClaimForm cf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),cf);
+			}
 			//first, do dependency testing
 			string command="SELECT * FROM insplan WHERE claimformnum = '"
 				+cf.ClaimFormNum.ToString()+"' ";
@@ -128,6 +143,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates all claimforms with this unique id including all attached items.</summary>
 		public static void UpdateByUniqueID(ClaimForm cf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cf);
+				return;
+			}
 			//first get a list of the ClaimFormNums with this UniqueId
 			string command=
 				"SELECT ClaimFormNum FROM claimform WHERE UniqueID ='"+cf.UniqueID.ToString()+"'";
@@ -152,6 +171,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the claim form specified by the given claimFormNum</summary>
 		public static ClaimForm GetClaimForm(int claimFormNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].ClaimFormNum==claimFormNum){
 					return ListLong[i];
@@ -163,6 +183,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns number of insplans affected.</summary>
 		public static int Reassign(int oldClaimFormNum, int newClaimFormNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
+			}
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
 			return Db.NonQ(command);

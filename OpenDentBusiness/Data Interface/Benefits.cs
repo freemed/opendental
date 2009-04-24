@@ -55,6 +55,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in the Plan edit window to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>
 		public static List<Benefit> RefreshForPlan(int planNum,int patPlanNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),planNum,patPlanNum);
+			}
 			string command="SELECT *"//,IFNULL(covcat.CovCatNum,0) AS covorder "
 				+" FROM benefit"
 				//+" LEFT JOIN covcat ON covcat.CovCatNum=benefit.CovCatNum"
@@ -88,6 +91,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in the Plan edit window to get a typical list of benefits for all identical plans.  If the supplied plan has a planNum, then that planNum will be excluded from result list.  patPlanNum can be 0.</summary>
 		public static List<Benefit> RefreshForAll(InsPlan like) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),like);
+			}
 			if(like.CarrierNum==0){
 				return new List<Benefit>();
 			}
@@ -159,6 +165,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(Benefit ben) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ben);
+				return;
+			}
 			string command="UPDATE benefit SET " 
 				+"PlanNum = '"          +POut.PInt   (ben.PlanNum)+"'"
 				+",PatPlanNum = '"      +POut.PInt   (ben.PatPlanNum)+"'"
@@ -178,6 +188,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(Benefit ben) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ben);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				ben.BenefitNum=MiscData.GetKey("benefit","BenefitNum");
 			}
@@ -213,12 +227,17 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(Benefit ben) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ben);
+				return;
+			}
 			string command="DELETE FROM benefit WHERE BenefitNum ="+POut.PInt(ben.BenefitNum);
 			Db.NonQ(command);
 		}
 		
 		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
 		public static double GetAnnualMax(List<Benefit> list,int planNum,int patPlanNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
@@ -242,6 +261,7 @@ namespace OpenDentBusiness {
 
 		///<Summary>Returns true if there is a family max for the given plan.</Summary>
 		public static bool GetIsFamMax(List <Benefit> list,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum!=planNum) {
 					continue;
@@ -265,6 +285,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general deductible first.  Does not need to discriminate between family and individual.</summary>
 		public static double GetDeductible(List <Benefit> list,int planNum,int patPlanNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
@@ -288,6 +309,7 @@ namespace OpenDentBusiness {
 
 		///<Summary>Returns true if there is a family deductible for the given plan.</Summary>
 		public static bool GetIsFamDed(List <Benefit> list,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum!=planNum) {
 					continue;
@@ -311,6 +333,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the bottom of the benefit list, it will get the most specific matching deductible first.</summary>
 		public static double GetDeductibleByCode(List <Benefit> benList,int planNum,int patPlanNum,string code) {
+			//No need to check RemotingRole; no call to db.
 			CovSpan[] spansForCat;
 			for(int i=benList.Count-1;i>=0;i--) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
@@ -342,6 +365,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets the renewal date for annual benefits from the supplied list of benefits.  Looks for a general limitation dollar amount.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Because there is one renew date each year, the date returned will be the asofDate or earlier; the most recent renewal date.</summary>
 		public static DateTime GetRenewDate(List<Benefit> list,int planNum,int patPlanNum,DateTime insStartDate,DateTime asofDate) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
 					continue;
@@ -366,6 +390,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only use pri or sec, not tot.  Used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
 		public static int GetPercent(string myCode,InsPlan insPlan,PatPlan patPlan,List <Benefit> benList){
+			//No need to check RemotingRole; no call to db.
 			if(insPlan.PlanType=="f" || insPlan.PlanType=="c"){
 				return 100;//flat and cap are always covered 100%
 			}
@@ -395,6 +420,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormInsPlan to sych database with changes user made to the benefit list for a plan.  Must supply an old list for comparison.  Only the differences are saved.</summary>
 		public static void UpdateList(List<Benefit> oldBenefitList,List<Benefit> newBenefitList){
+			//No need to check RemotingRole; no call to db.
 			Benefit newBenefit;
 			for(int i=0;i<oldBenefitList.Count;i++){//loop through the old list
 				newBenefit=null;
@@ -443,6 +469,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormInsPlan when applying changes to all identical plans.  Also used when merging plans. It first compares the old benefit list with the new one.  If there are no changes, it does nothing.  But if there are any changes, then we no longer care what the old benefit list was.  We will just delete it for all similar plans and recreate it.  Returns true if a change was made, false if no change made.</summary>
 		public static bool UpdateListForIdentical(List<Benefit> oldBenefitList,List<Benefit> newBenefitList,List<int> planNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),oldBenefitList,newBenefitList,planNums);
+			}
 			Benefit newBenefit;
 			bool changed=false;
 			for(int i=0;i<newBenefitList.Count;i++) {//loop through the new list
@@ -517,6 +546,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in family module display to get a list of benefits.  The main purpose of this function is to group similar benefits for each plan on the same row, making it easier to display in a simple grid.  Supply a list of all benefits for the patient, and the patPlans for the patient.</summary>
 		public static Benefit[,] GetDisplayMatrix(List <Benefit> bensForPat,List <PatPlan> patPlanList){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();//each object is a Benefit[]
 			Benefit[] row;
 			ArrayList refAL=new ArrayList();//each object is a Benefit from any random column. Used when searching for a type.
@@ -577,6 +607,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Deletes all benefits for a plan from the database.  Only used in FormInsPlan when picking a plan from the list.  Need to clear out benefits so that they won't be picked up when choosing benefits for all.</summary>
 		public static void DeleteForPlan(int planNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
+				return;
+			}
 			string command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(planNum);
 			Db.NonQ(command);
 		}

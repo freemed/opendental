@@ -10,6 +10,9 @@ namespace OpenDentBusiness {
 		public static ArrayList List;
 
 		public static double GetValAmountTotal(Claim Cur, string Code){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),Cur,Code);
+			}
 			double total = 0;
 			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + POut.PInt(Cur.ClaimNum) + "' AND ValCode='" + POut.PString(Code) + "'";
 			DataTable table=Db.GetTable(command);
@@ -20,6 +23,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static ArrayList GetValCodes(Claim Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),Cur);
+			}
 			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + Cur.ClaimNum + "'";
 			DataTable table=Db.GetTable(command);
 			List=new ArrayList();
@@ -37,6 +43,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Update(ArrayList vCodes){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),vCodes);
+				return;
+			}
 			for(int i=0;i<vCodes.Count;i++){
 				ClaimValCode vc = (ClaimValCode)vCodes[i];
 				if(vc.ClaimValCodeLogNum==0){

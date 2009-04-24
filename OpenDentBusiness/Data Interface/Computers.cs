@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static Computer[] list;
 
 		public static Computer[] List{
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -21,20 +22,25 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		private static void EnsureComputerInDB(){
+		private static void EnsureComputerInDB(string computerName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				return;
+			}
 			string command=
 				"SELECT * from computer "
-				+"WHERE compname = '"+Environment.MachineName+"'";
+				+"WHERE compname = '"+computerName+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				Computer Cur=new Computer();
-				Cur.CompName=Environment.MachineName;
+				Cur.CompName=computerName;
 				Computers.Insert(Cur);
 			}
 		}
 
 		public static DataTable RefreshCache() {
-			EnsureComputerInDB();
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			EnsureComputerInDB(Environment.MachineName);
 			string command="SELECT * FROM computer ORDER BY CompName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Computer";
@@ -44,6 +50,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new Computer[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Computer();
@@ -54,6 +61,10 @@ namespace OpenDentBusiness{
 
 		///<summary>ONLY use this if compname is not already present</summary>
 		public static void Insert(Computer comp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),comp);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				comp.ComputerNum=MiscData.GetKey("computer","ComputerNum");
 			}
@@ -91,12 +102,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Computer comp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),comp);
+				return;
+			}
 			string command= "DELETE FROM computer WHERE computernum = '"+comp.ComputerNum.ToString()+"'";
  			Db.NonQ(command);
 		}
 
 		///<summary>Only called from Printers.GetForSit</summary>
 		public static Computer GetCur(){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(Environment.MachineName.ToUpper()==List[i].CompName.ToUpper()) {
 					return List[i];

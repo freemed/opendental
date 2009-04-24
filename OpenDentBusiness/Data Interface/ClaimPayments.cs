@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable GetForClaim(int claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),claimNum);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			table.Columns.Add("amount");
@@ -47,6 +50,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all unattached claimpayments for display in a new deposit.  Excludes payments before dateStart.</summary>
 		public static ClaimPayment[] GetForDeposit(DateTime dateStart,int clinicNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),dateStart,clinicNum);
+			}
 			string command=
 				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
 				+"Checknum,BankBranch,Note,"
@@ -62,6 +68,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all claimpayments for one specific deposit.</summary>
 		public static ClaimPayment[] GetForDeposit(int depositNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),depositNum);
+			}
 			string command=
 				"SELECT ClaimPaymentNum,CheckDate,CheckAmt,"
 				+"Checknum,BankBranch,Note,"
@@ -73,6 +82,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one claimpayment directly from database.</summary>
 		public static ClaimPayment GetOne(int claimPaymentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimPayment>(MethodBase.GetCurrentMethod(),claimPaymentNum);
+			}
 			string command=
 				"SELECT * FROM claimpayment "
 				+"WHERE ClaimPaymentNum = "+POut.PInt(claimPaymentNum);
@@ -80,6 +92,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static ClaimPayment[] RefreshAndFill(string command) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),command);
+			}
 			DataTable table=Db.GetTable(command);
 			ClaimPayment[] List=new ClaimPayment[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -100,6 +115,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ClaimPayment cp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				cp.ClaimPaymentNum=MiscData.GetKey("claimpayment","ClaimPaymentNum");
 			}
@@ -131,6 +150,10 @@ namespace OpenDentBusiness{
 
 		///<summary>If trying to change the amount and attached to a deposit, it will throw an error, so surround with try catch.</summary>
 		public static void Update(ClaimPayment cp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			string command="SELECT DepositNum,CheckAmt FROM claimpayment "
 				+"WHERE ClaimPaymentNum="+POut.PInt(cp.ClaimPaymentNum);
 			DataTable table=Db.GetTable(command);
@@ -158,6 +181,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround by try catch, because it will throw an exception if trying to delete a claimpayment attached to a deposit.</summary>
 		public static void Delete(ClaimPayment cp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			string command="SELECT DepositNum FROM claimpayment "
 				+"WHERE ClaimPaymentNum="+POut.PInt(cp.ClaimPaymentNum);
 			DataTable table=Db.GetTable(command);

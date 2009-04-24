@@ -14,6 +14,10 @@ namespace OpenDentBusiness {
 		public string autoNoteOutput;
 
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
 			DataTable table = Db.GetTable(command);
 			Listt=new List<AutoNote>();
@@ -28,7 +32,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(AutoNote autonote) {		
+		public static void Insert(AutoNote autonote) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonote);
+				return;
+			}
 			string command = "INSERT INTO autonote (AutoNoteName, MainText)"
 				+"VALUES ("			
 				+"'"+POut.PString(autonote.AutoNoteName)+"'," 
@@ -37,7 +45,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Update(AutoNote autonote) {			
+		public static void Update(AutoNote autonote) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonote);
+				return;
+			}
 			string command="UPDATE autonote SET "
 				+"AutoNoteName = '"+POut.PString(autonote.AutoNoteName)+"', "
 				+"MainText = '"+POut.PString(autonote.MainText)+"' "
@@ -47,6 +59,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(int autoNoteNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoNoteNum);
+				return;
+			}
 			string command="DELETE FROM autonote "
 				+"WHERE AutoNoteNum = "+POut.PInt(autoNoteNum);
 			Db.NonQ(command);

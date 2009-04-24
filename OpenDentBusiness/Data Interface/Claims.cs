@@ -13,6 +13,9 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static List<ClaimPaySplit> RefreshByCheck(int claimPaymentNum, bool showUnattached){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
+			}
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) _patName"
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) _feeBilled,SUM(claimproc.InsPayAmt) _insPayAmt,claim.ClaimNum"
@@ -90,6 +93,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Claim> SubmitAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			Claim tempClaim;
 			List<Claim> claims=new List<Claim>();
 			for(int i=0;i<table.Rows.Count;i++){
@@ -141,6 +145,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static Claim GetFromList(List<Claim> list,int claimNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].ClaimNum==claimNum) {
 					return list[i].Copy();
@@ -151,6 +156,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Claim Cur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.ClaimNum=MiscData.GetKey("claim","ClaimNum");
 			}
@@ -220,6 +229,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Claim Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE claim SET "
 				+"patnum = '"          +POut.PInt   (Cur.PatNum)+"' "
 				+",dateservice = "    +POut.PDate  (Cur.DateService)+" "
@@ -274,6 +287,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Claim Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE FROM claim WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
 			Db.NonQ(command);
 			command = "DELETE FROM canadianclaim WHERE ClaimNum = '"+POut.PInt(Cur.ClaimNum)+"'";
@@ -284,6 +301,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DetachProcsFromClaim(Claim Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE procedurelog SET "
 				+"claimnum = '0' "
 				+"WHERE claimnum = '"+POut.PInt(Cur.ClaimNum)+"'";
@@ -299,6 +320,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
 		public static ClaimSendQueueItem[] GetQueueList(int claimNum,int clinicNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimSendQueueItem[]>(MethodBase.GetCurrentMethod(),claimNum,clinicNum);
+			}
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
@@ -336,11 +360,15 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
 		public static object[,] GetX12TransactionInfo(int claimNum){
+			//No need to check RemotingRole; no call to db.
 			return GetX12TransactionInfo(new int[1] {claimNum});
 		}
 
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
 		public static object[,] GetX12TransactionInfo(int[] claimNums){//ArrayList queueItemss){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<object[,]>(MethodBase.GetCurrentMethod(),claimNums);
+			}
 			StringBuilder str=new StringBuilder();
 			for(int i=0;i<claimNums.Length;i++){
 				if(i>0){

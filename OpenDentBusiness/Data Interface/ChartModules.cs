@@ -21,6 +21,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static DataTable GetProgNotes(int patNum,bool isAuditMode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,isAuditMode);
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("ProgNotes");
 			DataRow row;
@@ -696,6 +699,9 @@ namespace OpenDentBusiness {
 		}
 
 		private static DataTable GetPlannedApt(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Planned");
 			DataRow row;
@@ -802,6 +808,7 @@ namespace OpenDentBusiness {
 
 		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
 		public static int CompareChartRows(DataRow x,DataRow y) {
+			//No need to check RemotingRole; no call to db.
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
 					return ProcedureLogic.CompareProcedures(x,y);

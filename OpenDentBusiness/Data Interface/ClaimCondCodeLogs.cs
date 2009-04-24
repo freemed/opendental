@@ -10,6 +10,9 @@ namespace OpenDentBusiness {
 		public static ClaimCondCodeLog CurCondCodeLog;
 
 		public static ClaimCondCodeLog GetOne(int ClaimNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimCondCodeLog>(MethodBase.GetCurrentMethod(),ClaimNum);
+			}
 			string command="SELECT * FROM claimcondcodelog WHERE ClaimNum='" + ClaimNum + "'";
 			DataTable table=Db.GetTable(command);
 			CurCondCodeLog = new ClaimCondCodeLog();

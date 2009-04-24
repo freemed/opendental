@@ -13,6 +13,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(string name){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),name);
+				return;
+			}
 			string command=
 				"SELECT * from county "
 				+"WHERE CountyName LIKE '"+name+"%' "
@@ -29,11 +33,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
+			//No need to check RemotingRole; no call to db.
 			Refresh("");
 		}
 
 		///<summary>Gets an array of strings containing all the counties in alphabetical order.  Used for the screening interface which must be simpler than the usual interface.</summary>
 		public static void GetListNames(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command =
 				"SELECT CountyName from county "
 				+"ORDER BY CountyName";
@@ -46,6 +55,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Need to make sure Countyname not already in db.</summary>
 		public static void Insert(County Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "INSERT INTO county (CountyName,CountyCode) "
 				+"VALUES ("
 				+"'"+POut.PString(Cur.CountyName)+"', "
@@ -57,6 +70,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates the Countyname and code in the County table, and also updates all patients that were using the oldCounty name.</summary>
 		public static void Update(County Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE county SET "
 				+"CountyName ='"  +POut.PString(Cur.CountyName)+"'"
 				+",CountyCode ='" +POut.PString(Cur.CountyCode)+"'"
@@ -71,12 +88,19 @@ namespace OpenDentBusiness{
 
 		///<summary>Must run UsedBy before running this.</summary>
 		public static void Delete(County Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "DELETE from county WHERE CountyName = '"+POut.PString(Cur.CountyName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Use before DeleteCur to determine if this County name is in use. Returns a formatted string that can be used to quickly display the names of all patients using the Countyname.</summary>
 		public static string UsedBy(string countyName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),countyName);
+			}
 			string command=
 				"SELECT LName,FName from patient "
 				+"WHERE County = '"+POut.PString(countyName)+"' ";
@@ -96,6 +120,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Use before InsertCur to determine if this County name already exists. Also used when closing patient edit window to validate that the Countyname exists.</summary>
 		public static bool DoesExist(string countyName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),countyName);
+			}
 			string command =
 				"SELECT * from county "
 				+"WHERE CountyName = '"+POut.PString(countyName)+"' ";

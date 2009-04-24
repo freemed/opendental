@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 	
 		///<summary>Will frequently return null when no canadianClaim saved yet.</summary>
 		public static CanadianClaim GetForClaim(int claimNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<CanadianClaim>(MethodBase.GetCurrentMethod(),claimNum);
+			}
 			string command="SELECT * FROM canadianclaim WHERE ClaimNum="+POut.PInt(claimNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -37,6 +40,9 @@ namespace OpenDentBusiness{
 
 		///<summary>An important part of creating a "canadian claim" is setting all the missing teeth.  So this must be passed in.  It is preferrable to not include any dates with the missing teeth.  This will force the user to enter dates.</summary>
 		public static CanadianClaim Insert(int claimNum, List<CanadianExtract> missingList){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<CanadianClaim>(MethodBase.GetCurrentMethod(),missingList);
+			}
 			CanadianExtracts.UpdateForClaim(claimNum,missingList);
 			string command="INSERT INTO canadianclaim (ClaimNum) VALUES("
 				+"'"+POut.PInt   (claimNum)+"')";
@@ -50,6 +56,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(CanadianClaim Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="UPDATE canadianclaim SET "
 				+ "MaterialsForwarded = '"+POut.PString(Cur.MaterialsForwarded)+"' "
 				+ ",ReferralProviderNum='"+POut.PString(Cur.ReferralProviderNum)+"' "
