@@ -38,6 +38,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(SecurityLog log){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),log);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				log.SecurityLogNum=MiscData.GetKey("securitylog","SecurityLogNum");
 			}

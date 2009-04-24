@@ -426,10 +426,14 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets one procedure directly from the db.  Option to include the note.</summary>
 		public static Procedure GetOneProc(int procNum,bool includeNote) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Procedure>(MethodBase.GetCurrentMethod(),procNum,includeNote);
+			}
 			string command=
 				"SELECT * FROM procedurelog "
 				+"WHERE ProcNum="+procNum.ToString();
-			List<Procedure> procList=RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			List<Procedure> procList=ConvertToList(table);
 			if(procList.Count==0) {
 				//MessageBox.Show(Lan.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
 				return new Procedure();
@@ -445,7 +449,7 @@ namespace OpenDentBusiness {
 			else {//Assume MySQL
 				command+="LIMIT 1";
 			}
-			DataTable table=Db.GetTable(command);
+			table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
 				return proc;
 			}
@@ -478,10 +482,11 @@ namespace OpenDentBusiness {
 			return RefreshAndFill(command).ToArray();
 		}*/
 
+		/*
 		private static List<Procedure> RefreshAndFill(string command) {
 			DataTable table=Db.GetTable(command);
 			return ConvertToList(table);
-		}
+		}*/
 
 		private static List<Procedure> ConvertToList(DataTable table) {
 			List<Procedure> retVal=new List<Procedure>();
@@ -541,6 +546,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
 		public static List<Procedure> GetProcsForSingle(int aptNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
+			}
 			string command;
 			if(isPlanned) {
 				command = "SELECT * from procedurelog WHERE PlannedAptNum = '"+POut.PInt(aptNum)+"'";
@@ -548,7 +556,8 @@ namespace OpenDentBusiness {
 			else {
 				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PInt(aptNum)+"'";
 			}
-			return RefreshAndFill(command);//.ToArray();
+			DataTable table=Db.GetTable(command);
+			return ConvertToList(table);
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
@@ -558,6 +567,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list or GetProductionOneApt.  This process requires only one call to the database.  "myAptNums" is the list of appointments to get procedures for.  isForNext gets procedures for a list of next appointments rather than regular appointments.</summary>
 		public static Procedure[] GetProcsMultApts(int[] myAptNums,bool isForPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Procedure[]>(MethodBase.GetCurrentMethod(),myAptNums,isForPlanned);
+			}
 			if(myAptNums.Length==0) {
 				return new Procedure[0];
 			}
@@ -574,7 +586,8 @@ namespace OpenDentBusiness {
 				}
 			}
 			string command = "SELECT * FROM procedurelog WHERE"+strAptNums;
-			return RefreshAndFill(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return ConvertToList(table).ToArray();
 		}
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>

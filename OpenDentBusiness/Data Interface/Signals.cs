@@ -100,6 +100,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Signal sig){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sig);
+				return;
+			}
 			//we need to explicitly get the server time in advance rather than using NOW(),
 			//because we need to update the signal object soon after creation.
 			//DateTime now=ClockEvents.GetServerTime();

@@ -12,17 +12,24 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of appointments for a period of time in the schedule, whether hidden or not.</summary>
 		public static Appointment[] GetForPeriod(DateTime startDate,DateTime endDate){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),startDate,endDate);
+			}
 			//DateSelected = thisDay;
 			string command=
 				"SELECT * from appointment "
 				+"WHERE AptDateTime BETWEEN '"+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
-			return FillList(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table).ToArray();
 		}
 
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
 		public static Appointment[] RefreshUnsched(string orderby,int provNum,int siteNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
+			}
 			string command="SELECT * FROM appointment ";
 			if(orderby=="alph" || siteNum>0) {
 				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
@@ -43,11 +50,15 @@ namespace OpenDentBusiness{
 			else { //if(orderby=="date"){
 				command+="ORDER BY AptDateTime";
 			}
-			return FillList(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table).ToArray();
 		}
 
 		///<summary>Gets list of asap appointments.</summary>
 		public static List<Appointment> RefreshASAP(int provNum,int siteNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),provNum,siteNum);
+			}
 			string command="SELECT * FROM appointment ";
 			//if(orderby=="alph" || siteNum>0) {
 			//command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
@@ -69,11 +80,15 @@ namespace OpenDentBusiness{
 				command+="ORDER BY AptDateTime";
 			}*/
 			command+="ORDER BY AptDateTime";
-			return FillList(command);
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table);
 		}
 
 		///<summary>Allowed orderby: status, alph, date</summary>
 		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum,int siteNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
+			}
 			string command="SELECT tplanned.*,tregular.aptnum "
 				+"FROM appointment tplanned "
 				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum "
@@ -96,26 +111,35 @@ namespace OpenDentBusiness{
 			else{ //if(orderby=="date"){
 				command+="ORDER BY tplanned.AptDateTime";
 			}
-			return FillList(command);
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table);
 		}
 
 		///<summary>Returns all appointments for the given patient, ordered from earliest to latest.  Used in statements, appt cards, OtherAppts window, etc.</summary>
 		public static Appointment[] GetForPat(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM appointment "
 				+"WHERE patnum = '"+patNum.ToString()+"' "
 				+"ORDER BY AptDateTime";
-			return FillList(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table).ToArray();
 		}
 
 		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
 		public static Appointment GetOneApt(int aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment>(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			if(aptNum==0) {
 				return null;
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE AptNum = '"+POut.PInt(aptNum)+"'";
-			List<Appointment> list=FillList(command);
+			DataTable table=Db.GetTable(command);
+			List<Appointment> list=TableToObjects(table);
 			if(list.Count==0) {
 				return null;
 			}
@@ -124,12 +148,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Appointment GetScheduledPlannedApt(int nextAptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment>(MethodBase.GetCurrentMethod(),nextAptNum);
+			}
 			if(nextAptNum==0) {
 				return null;
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE NextAptNum = '"+POut.PInt(nextAptNum)+"'";
-			List<Appointment> list=FillList(command);
+			DataTable table=Db.GetTable(command);
+			List<Appointment> list=TableToObjects(table);
 			if(list.Count==0) {
 				return null;
 			}
@@ -138,18 +166,24 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all future appointments which are either sched or ASAP.  Ordered by dateTime</summary>
 		public static List<Appointment> GetFutureSchedApts(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM appointment "
 				+"WHERE PatNum = "+POut.PInt(patNum)+" "
 				+"AND AptDateTime > NOW() "
 				+"AND (aptstatus = "+(int)ApptStatus.Scheduled+" "
 				+"OR aptstatus = "+(int)ApptStatus.ASAP+") "
 				+"ORDER BY AptDateTime";
-			List<Appointment> list=FillList(command);
-			return list;
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table);
 		}
 
 		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
 		public static Appointment[] GetRouting(DateTime date,int[] provNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),date,provNums);
+			}
 			string command=
 				"SELECT * FROM appointment "
 				+"WHERE AptDateTime LIKE '"+POut.PDate(date,false)+"%' "
@@ -164,13 +198,18 @@ namespace OpenDentBusiness{
 					+" OR ProvHyg="+POut.PInt(provNums[i]);
 			}
 			command+=") ORDER BY AptDateTime";
-			return FillList(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table).ToArray();
 		}
 
 		public static List<Appointment> GetUAppoint(DateTime changedSince,DateTime excludeOlderThan){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),changedSince,excludeOlderThan);
+			}
 			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.PDateT(changedSince)
 				+" AND AptDateTime > "+POut.PDateT(excludeOlderThan);
-			return FillList(command);
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table);
 		}
 
 		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>
@@ -204,11 +243,12 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		/*
 		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
 		private static List<Appointment> FillList(string command) {
 			DataTable table=Db.GetTable(command);
 			return TableToObjects(table);
-		}
+		}*/
 
 		/*//<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
 		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
@@ -321,6 +361,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
 		public static int Update(Appointment appt, Appointment oldApt){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),appt,oldApt);
+			}
 			bool comma=false;
 			string c = "UPDATE appointment SET ";
 			if(appt.PatNum!=oldApt.PatNum){
