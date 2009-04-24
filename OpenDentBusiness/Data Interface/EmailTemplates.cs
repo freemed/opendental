@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 
 		///<summary>List of all email templates</summary>
 		public static EmailTemplate[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -23,6 +24,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * from emailtemplate ORDER BY Subject";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -33,6 +35,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new EmailTemplate[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new EmailTemplate();
@@ -44,6 +47,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(EmailTemplate template){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),template);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				template.EmailTemplateNum=MiscData.GetKey("emailtemplate","EmailTemplateNum");
 			}
@@ -70,6 +77,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(EmailTemplate template){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),template);
+				return;
+			}
 			string command= "UPDATE emailtemplate SET "
 				+ "Subject = '"  +POut.PString(template.Subject)+"' "
 				+ ",BodyText = '"+POut.PString(template.BodyText)+"' "
@@ -79,6 +90,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(EmailTemplate template){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),template);
+				return;
+			}
 			string command= "DELETE from emailtemplate WHERE EmailTemplateNum = '"
 				+template.EmailTemplateNum.ToString()+"'";
  			Db.NonQ(command);

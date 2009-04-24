@@ -8,6 +8,9 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Diseases {
 		public static Disease GetSpecificDiseaseForPatient(int patNum,int diseaseDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Disease>(MethodBase.GetCurrentMethod(),patNum,diseaseDefNum);
+			}
 			string command="SELECT * FROM disease WHERE PatNum="+POut.PInt(patNum)
 				+" AND DiseaseDefNum="+POut.PInt(diseaseDefNum);
 			Disease[] disList=RefreshAndFill(command);
@@ -19,6 +22,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
 		public static Disease[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Disease[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT disease.* FROM disease,diseasedef "
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 				+"AND PatNum="+POut.PInt(patNum)
@@ -42,6 +48,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(Disease disease) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
+				return;
+			}
 			string command="UPDATE disease SET " 
 				+"PatNum = '"        +POut.PInt   (disease.PatNum)+"'"
 				+",DiseaseDefNum = '"+POut.PInt   (disease.DiseaseDefNum)+"'"
@@ -52,6 +62,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(Disease disease) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				disease.DiseaseNum=MiscData.GetKey("disease","DiseaseNum");
 			}
@@ -77,12 +91,20 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(Disease disease) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
+				return;
+			}
 			string command="DELETE FROM disease WHERE DiseaseNum ="+POut.PInt(disease.DiseaseNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes all diseases for one patient.</summary>
 		public static void DeleteAllForPt(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			string command="DELETE FROM disease WHERE PatNum ="+POut.PInt(patNum);
 			Db.NonQ(command);
 		}

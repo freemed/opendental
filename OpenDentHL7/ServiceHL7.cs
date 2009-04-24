@@ -143,8 +143,8 @@ namespace OpenDentHL7 {
 		}
 
 		private static void TimerCallbackFunction(Object stateInfo) {
-			string diagnosticMsg="";
-			List<HL7Msg> list=HL7Msgs.GetAllPending(out diagnosticMsg);
+			//string diagnosticMsg="";
+			List<HL7Msg> list=HL7Msgs.GetAllPending();
 			//if(list.Count==0) {
 			//	EventLog.WriteEntry("No messages found.  Connection string and query: "+diagnosticMsg);
 			//}

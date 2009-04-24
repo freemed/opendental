@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 
 		///<summary>This is the list of all electronic IDs.</summary>
 		public static ElectID[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -25,6 +26,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Since users not allowed to edit, this only gets run on startup.</summary>
 		public static void Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * from electid "
 				+"ORDER BY CarrierName";
  			DataTable table=Db.GetTable(command);
@@ -42,6 +47,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static ProviderSupplementalID[] GetRequiredIdents(string payorID){
+			//No need to check RemotingRole; no call to db.
 			ElectID electID=GetID(payorID);
 			if(electID==null){
 				return new ProviderSupplementalID[0];
@@ -68,6 +74,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets ONE ElectID that uses the supplied payorID. Even if there are multiple payors using that ID.  So use this carefully.</summary>
 		public static ElectID GetID(string payorID){
+			//No need to check RemotingRole; no call to db.
 			ArrayList electIDs=GetIDs(payorID);
 			if(electIDs.Count==0){
 				return null;
@@ -77,6 +84,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets an arrayList of ElectID objects based on a supplied payorID. If no matches found, then returns array of 0 length. Used to display payors in FormInsPlan and also to get required idents.  This means that all payors with the same ID should have the same required idents and notes.</summary>
 		public static ArrayList GetIDs(string payorID){
+			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].PayorID==payorID){
@@ -88,6 +96,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the names of the payors to display based on the payorID.  Since carriers sometimes share payorIDs, there will often be multiple payor names returned.</summary>
 		public static string[] GetDescripts(string payorID){
+			//No need to check RemotingRole; no call to db.
 			if(payorID==""){
 				return new string[]{};
 			}

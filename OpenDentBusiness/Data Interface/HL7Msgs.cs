@@ -35,22 +35,32 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<HL7Msg>.CreateObject(HL7MsgNum);
 		}*/
 
-		public static List<HL7Msg> GetAllPending(out string diagnosticMsg){
+		public static List<HL7Msg> GetAllPending(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7Msg>>(MethodBase.GetCurrentMethod());
+			}
 			//diagnosticMsg=DataConnection.GetCurrentConnectionString();
 			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.PInt((int)HL7MessageStatus.OutPending);
 			//diagnosticMsg+=".   "+command;
-			diagnosticMsg="";
+			//diagnosticMsg="";
 			Collection<HL7Msg> collection=DataObjectFactory<HL7Msg>.CreateObjects(command);
 			return new List<HL7Msg>(collection);		
 		}
 
 		///<summary></summary>
 		public static void WriteObject(HL7Msg hL7Msg){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7Msg);
+				return;
+			}
 			DataObjectFactory<HL7Msg>.WriteObject(hL7Msg);
 		}
 
 		///<summary></summary>
 		public static bool MessageWasSent(int aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.PInt(aptNum);
 			if(Db.GetCount(command)=="0") {
 				return false;

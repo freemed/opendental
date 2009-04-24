@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets data for the history grid in the SendClaims window.</summary>
 		public static DataTable RefreshHistory(DateTime dateFrom,DateTime dateTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo);
+			}
 			string command="Select CONCAT(CONCAT(patient.LName,', '),patient.FName) AS PatName,carrier.CarrierName,"
 				+"clearinghouse.Description AS Clearinghouse,DateTimeTrans,etrans.OfficeSequenceNumber,"
 				+"etrans.CarrierTransCounter,Etype,etrans.ClaimNum,etrans.EtransNum,etrans.AckCode,etrans.Note "
@@ -74,12 +77,18 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Etrans GetEtrans(int etransNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
+			}
 			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			return SubmitAndFill(command);
 		}
 
 		///<summary></summary>
 		public static Etrans GetAckForTrans(int etransNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
+			}
 			//first, get the actual trans.
 			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			Etrans etrans=SubmitAndFill(command);
@@ -119,6 +128,10 @@ namespace OpenDentBusiness{
 
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
 		public static void Insert(Etrans etrans) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etrans);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
 			}
@@ -167,6 +180,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Etrans etrans) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etrans);
+				return;
+			}
 			string command= "UPDATE etrans SET "
 				+"ClearinghouseNum = '"   +POut.PInt   (etrans.ClearinghouseNum)+"', "
 				+"Etype= '"               +POut.PInt   ((int)etrans.Etype)+"', "
@@ -188,6 +205,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
 		public static Etrans CreateCanadianOutput(int patNum, int carrierNum, int canadianNetworkNum, int clearinghouseNum, EtransType etype){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),patNum,carrierNum,canadianNetworkNum,clearinghouseNum,etype);
+			}
 			//validation of carrier vs network
 			if(etype==EtransType.Eligibility_CA){
 				//only carrierNum is allowed (and required)
@@ -263,6 +283,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used by Canadian code right now.</summary>
 		public static void SetMessage(int etransNum, string msg) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum,msg);
+				return;
+			}
 			string command= "UPDATE etrans SET MessageText='"+POut.PString(msg)+"' "
 				+"WHERE EtransNum = '"+POut.PInt(etransNum)+"'";
 			Db.NonQ(command);
@@ -270,6 +294,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes the etrans entry and changes the status of the claim back to W.  If it encounters an entry that's not a claim, it skips it for now.  Later, it will handle all types of undo.  It will also check Canadian claims to prevent alteration if an ack or EOB has been received.</summary>
 		public static void Undo(int etransNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum);
+				return;
+			}
 			//see if it's a claim.
 			string command="SELECT ClaimNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			DataTable table=Db.GetTable(command);
@@ -289,6 +317,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes the etrans entry.  Only used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will throw exception if there's a message attached to the etrans or if the etrans does not exist.</summary>
 		public static void Delete(int etransNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum);
+				return;
+			}
 			//see if there's a message
 			string command="SELECT MessageText FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			DataTable table=Db.GetTable(command);

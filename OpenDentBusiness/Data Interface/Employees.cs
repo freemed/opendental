@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		private static Employee[] listShort;
 
 		public static Employee[] ListLong {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(listLong==null) {
 					RefreshCache();
@@ -25,6 +26,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Does not include hidden employees</summary>
 		public static Employee[] ListShort {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(listShort==null) {
 					RefreshCache();
@@ -37,6 +39,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM employee ORDER BY IsHidden,FName,LName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Employee";
@@ -46,6 +49,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ListLong=new Employee[table.Rows.Count];
 			ArrayList tempList=new ArrayList();
 			//Employee temp;
@@ -86,6 +90,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Employee Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="UPDATE employee SET " 
 				+ "lname = '"       +POut.PString(Cur.LName)+"' "
 				+ ",fname = '"      +POut.PString(Cur.FName)+"' "
@@ -100,6 +108,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Employee Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "INSERT INTO employee (lname,fname,middlei,ishidden"
 				+",ClockStatus,PhoneExt) "
 				+"VALUES("
@@ -114,6 +126,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try-catch</summary>
 		public static void Delete(int employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum);
+				return;
+			}
 			//appointment.Assistant will not block deletion
 			//schedule.EmployeeNum will not block deletion
 			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum);
@@ -157,11 +173,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns FName MiddleI LName for the provided employee.</summary>
 		public static string GetNameFL(Employee emp) {
+			//No need to check RemotingRole; no call to db.
 			return (emp.FName+" "+emp.MiddleI+" "+emp.LName);
 		}
 
 		///<summary>Loops through List to find matching employee, and returns FName MiddleI LName.</summary>
 		public static string GetNameFL(int employeeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].EmployeeNum==employeeNum) {
 					return GetNameFL(ListLong[i]);
@@ -172,6 +190,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through List to find matching employee, and returns first 2 letters of first name.  Will later be improved with abbr field.</summary>
 		public static string GetAbbr(int employeeNum){
+			//No need to check RemotingRole; no call to db.
 			string retVal="";
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].EmployeeNum==employeeNum){
@@ -185,6 +204,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static Employee GetEmp(int employeeNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].EmployeeNum==employeeNum) {
 					return ListLong[i];
@@ -195,6 +215,7 @@ namespace OpenDentBusiness{
 
 		/// <summary> Returns -1 if employeeNum is not found.  0 if not hidden and 1 if hidden </summary>		
 		public static int IsHidden(int employeeNum){
+			//No need to check RemotingRole; no call to db.
 			int rValue = -1;
 			if (ListLong != null){
 				for (int i = 0; i < ListLong.Length; i++){
@@ -208,6 +229,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable GetPhoneTable(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM phone";
 			try{
 				return Db.GetTable(command);
@@ -218,6 +242,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static void SetPhoneStatus(string clockStatus,int extens){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens);
+				return;
+			}
 			//this code is similar to code in the phone tracking server.
 			//But here, it ONLY changes clockStatus and ColorBar.
 			string command=@"SELECT EmployeeNum,Description,
@@ -246,6 +274,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when clocking in and out, but not through the phone grid.  Keeps the phone grid current. Handles situations where employee is listed on two different extensions.</summary>
 		public static void SetPhoneClockStatus(int employeeNum,string clockStatus){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,clockStatus);
+				return;
+			}
 			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.PInt(employeeNum);
 			DataTable table=Db.GetTable(command);
 			int extension;
@@ -261,6 +293,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Color GetColorBar(string clockStatus,bool overridden,bool isAvailable,int empNum,bool isInUse){
+			//No need to check RemotingRole; no call to db.
 			//there is an exact duplicate of this function in the phone server.
 			Color colorBar=Color.White;
 			if(overridden && !isAvailable){

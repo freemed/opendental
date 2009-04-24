@@ -36,6 +36,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<DeletedObject> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DeletedObject>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
 			string command="SELECT * FROM deletedobject WHERE DateTStamp > "+POut.PDateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			List<DeletedObject> list=new List<DeletedObject>();

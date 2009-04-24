@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		private static void EnsureComputerInDB(string computerName){
+		public static void EnsureComputerInDB(string computerName){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
 				return;

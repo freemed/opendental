@@ -38,6 +38,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static DataTable GetPatPlanList(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
@@ -48,6 +51,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets new List for the specified family.  The only plans it misses are for claims with no current coverage.  These are handled as needed.</summary>
 		public static DataTable GetPlanList(Family fam) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),fam);
+			}
 			string command=
 				"(SELECT insplan.*,'0' FROM insplan "
 				+"WHERE";

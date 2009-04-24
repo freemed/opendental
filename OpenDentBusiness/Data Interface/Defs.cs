@@ -9,6 +9,7 @@ namespace OpenDentBusiness {
 	public class Defs {
 		///<summary>If using remoting, then the calling program is responsible for filling the arrays on the client since the automated part only happens on the server.  So there are TWO sets of arrays in a server situation, but only one in a small office that connects directly to the database.</summary>
 		public static DataTable RefreshCache(){
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -19,6 +20,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used by the refresh method above.</summary>
 		private static Def[] GetForCategory(int catIndex,bool includeHidden,DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<Def> list=new List<Def>();
 			Def def;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -44,6 +46,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
 			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
 				DefC.Long[j]=GetForCategory(j,true,table);
@@ -56,6 +59,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Only used in FormDefinitions</summary>
 		public static Def[] GetCatList(int myCat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Def[]>(MethodBase.GetCurrentMethod(),myCat);
+			}
 			string command=
 				"SELECT * from definition"
 				+" WHERE category = '"+myCat+"'"
@@ -77,6 +83,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(Def def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command = "UPDATE definition SET "
 				+ "Category = '"  +POut.PInt((int)def.Category)+"'"
 				+",ItemOrder = '" +POut.PInt(def.ItemOrder)+"'"
@@ -90,6 +100,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(Def def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command= "INSERT INTO definition (Category,ItemOrder,"
 				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES("
 				+"'"+POut.PInt((int)def.Category)+"', "
@@ -103,6 +117,10 @@ namespace OpenDentBusiness {
 
 		///<summary>CAUTION.  This does not perform all validations.  It only properly validates for one def type right now.</summary>
 		public static void Delete(Def def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			if(def.Category!=DefCat.SupplyCats){
 				throw new ApplicationException("NOT Allowed to delete this type of def.");
 			}
@@ -120,12 +138,15 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void HideDef(Def def) {
+
+			//No need to check RemotingRole; no call to db.
 			def.IsHidden=true;
 			Defs.Update(def);
 		}
 
 		///<summary></summary>
 		public static void SetOrder(int mySelNum,int myItemOrder,Def[] list) {
+			//No need to check RemotingRole; no call to db.
 			Def def=list[mySelNum];
 			def.ItemOrder=myItemOrder;
 			//Cur=temp;

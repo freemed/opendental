@@ -579,8 +579,8 @@ namespace OpenDental{
 			try{
 				Queries.SubmitCur();
 			}
-			catch{
-				MsgBox.Show(this,"Invalid query.");
+			catch(Exception ex){
+				MsgBox.Show(this,"Invalid query: "+ex.Message);
 				return;
 			}
 			/* (for later if more complex queries with loops:)

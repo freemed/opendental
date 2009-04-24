@@ -12,6 +12,7 @@ namespace OpenDentBusiness {
 	public class DisplayFields {
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DisplayField";
@@ -20,6 +21,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			DisplayFieldC.Listt=new List<DisplayField>();
 			DisplayField field;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -35,7 +37,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(DisplayField field) {		
+		public static void Insert(DisplayField field) {	
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),field);
+				return;
+			}
 			string command = "INSERT INTO displayfield (InternalName,ItemOrder,Description,ColumnWidth,Category) VALUES ("			
 				+"'"+POut.PString(field.InternalName)+"'," 
 				+"'"+POut.PInt   (field.ItemOrder)+"',"
@@ -58,6 +64,7 @@ namespace OpenDentBusiness {
 
 		///<Summary>Returns an ordered list for just one category</Summary>
 		public static List<DisplayField> GetForCategory(DisplayFieldCategory category){
+			//No need to check RemotingRole; no call to db.
 			List<DisplayField> retVal=new List<DisplayField>();
 			for(int i=0;i<DisplayFieldC.Listt.Count;i++){
 				if(DisplayFieldC.Listt[i].Category==category){
@@ -71,6 +78,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static List<DisplayField> GetDefaultList(DisplayFieldCategory category){
+			//No need to check RemotingRole; no call to db.
 			List<DisplayField> list=new List<DisplayField>();
 			if(category==DisplayFieldCategory.ProgressNotes){
 				list.Add(new DisplayField("Date",67,category));
@@ -147,6 +155,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
+			//No need to check RemotingRole; no call to db.
 			List<DisplayField> list=new List<DisplayField>();
 			if(category==DisplayFieldCategory.ProgressNotes){
 				list.Add(new DisplayField("Date",67,category));
@@ -223,6 +232,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void SaveListForCategory(List<DisplayField> ListShowing,DisplayFieldCategory category){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ListShowing,category);
+				return;
+			}
 			bool isDefault=true;
 			List<DisplayField> defaultList=GetDefaultList(category);
 			if(ListShowing.Count!=defaultList.Count){

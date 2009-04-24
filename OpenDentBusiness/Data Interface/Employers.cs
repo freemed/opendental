@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		private static Hashtable hList;
 
 		public static Employer[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -25,6 +26,7 @@ namespace OpenDentBusiness{
 
 		///<summary>A hashtable of all employers.</summary>
 		public static Hashtable HList {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(hList==null) {
 					Refresh();
@@ -38,6 +40,10 @@ namespace OpenDentBusiness{
 
 		///<summary>The functions that use this are smart enought to refresh as needed.  So no need to invalidate local data for little stuff.</summary>
 		public static void Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			HList=new Hashtable();
 			string command= "SELECT * from employer ORDER BY EmpName";
 			DataTable table=Db.GetTable(command);
@@ -73,6 +79,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Employer Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="UPDATE employer SET " 
 				+ "EmpName= '"  +POut.PString(Cur.EmpName)+"' "
 				+ ",Address= '"    +POut.PString(Cur.Address)+"' "
@@ -87,6 +97,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Employer Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.EmployerNum=MiscData.GetKey("employer","EmployerNum");
 			}
@@ -116,12 +130,19 @@ namespace OpenDentBusiness{
 
 		///<summary>There MUST not be any dependencies before calling this or there will be invalid foreign keys.  This is only called from FormEmployers after proper validation.</summary>
 		public static void Delete(Employer Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="DELETE from employer WHERE EmployerNum = '"+Cur.EmployerNum.ToString()+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Returns a list of patients that are dependent on the Cur employer. The list includes carriage returns for easy display.  Used before deleting an employer to make sure employer is not in use.</summary>
 		public static string DependentPatients(Employer Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),Cur);
+			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient" 
 				+" WHERE EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
 			DataTable table=Db.GetTable(command);
@@ -137,6 +158,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of insplans that are dependent on the Cur employer. The list includes carriage returns for easy display.  Used before deleting an employer to make sure employer is not in use.</summary>
 		public static string DependentInsPlans(Employer Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),Cur);
+			}
 			string command="SELECT insplan.Carrier,CONCAT(patient.LName,patient.FName) FROM insplan,patient" 
 				+" WHERE insplan.Subscriber=patient.PatNum"
 				+" AND insplan.EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
@@ -153,6 +177,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the name of an employer based on the employerNum.  This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
 		public static string GetName(int employerNum){
+			//No need to check RemotingRole; no call to db.
 			if(employerNum==0){
 				return "";
 			}
@@ -170,6 +195,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets an employer based on the employerNum. This will work even if the list has not been refreshed recently, but if you are going to need a lot of names all at once, then it is faster to refresh first.</summary>
 		public static Employer GetEmployer(int employerNum){
+			//No need to check RemotingRole; no call to db.
 			if(employerNum==0){
 				return new Employer();
 			}
@@ -187,6 +213,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets an employerNum from the database based on the supplied name.  If that empName does not exist, then a new employer is created, and the employerNum for the new employer is returned.</summary>
 		public static int GetEmployerNum(string empName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),empName);
+			}
 			if(empName==""){
 				return 0;
 			}
@@ -205,6 +234,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns an arraylist of Employers with names similar to the supplied string.  Used in dropdown list from employer field for faster entry.  There is a small chance that the list will not be completely refreshed when this is run, but it won't really matter if one employer doesn't show in dropdown.</summary>
 		public static List<Employer> GetSimilarNames(string empName){
+			//No need to check RemotingRole; no call to db.
 			List<Employer> retVal=new List<Employer>();
 			for(int i=0;i<List.Length;i++){
 				//if(Regex.IsMatch(List[i].EmpName,"^"+empName,RegexOptions.IgnoreCase))
@@ -217,6 +247,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Combines all the given employers into one. Updates patient and insplan. Then deletes all the others.</summary>
 		public static void Combine(int[] employerNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employerNums);
+				return;
+			}
 			string newNum=employerNums[0].ToString();
 			for(int i=1;i<employerNums.Length;i++){
 				string command="UPDATE patient SET EmployerNum = '"+newNum

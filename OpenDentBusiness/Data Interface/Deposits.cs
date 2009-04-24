@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all Deposits, ordered by date.  </summary>
 		public static Deposit[] Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Deposit[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM deposit "
 				+"ORDER BY DateDeposit";
 			return RefreshAndFill(command);
@@ -16,6 +19,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets only Deposits which are not attached to transactions.</summary>
 		public static Deposit[] GetUnattached() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Deposit[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM deposit "
 				+"WHERE NOT EXISTS(SELECT * FROM transaction WHERE deposit.DepositNum=transaction.DepositNum) "
 				+"ORDER BY DateDeposit";
@@ -24,6 +30,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a single deposit directly from the database.</summary>
 		public static Deposit GetOne(int depositNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Deposit>(MethodBase.GetCurrentMethod(),depositNum);
+			}
 			string command="SELECT * FROM deposit "
 				+"WHERE DepositNum="+POut.PInt(depositNum);
 			return RefreshAndFill(command)[0];
@@ -44,6 +53,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Deposit dep){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dep);
+				return;
+			}
 			string command= "UPDATE deposit SET "
 				+"DateDeposit = "     +POut.PDate  (dep.DateDeposit)
 				+",BankAccountInfo = '"+POut.PString(dep.BankAccountInfo)+"'"
@@ -55,6 +68,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Deposit dep){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dep);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				dep.DepositNum=MiscData.GetKey("deposit","DepositNum");
 			}
@@ -80,6 +97,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Also handles detaching all payments and claimpayments.  Throws exception if deposit is attached as a source document to a transaction.  The program should have detached the deposit from the transaction ahead of time, so I would never expect the program to throw this exception unless there was a bug.</summary>
 		public static void Delete(Deposit dep){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dep);
+				return;
+			}
 			//check dependencies
 			string command="";
 			if(dep.DepositNum !=0){

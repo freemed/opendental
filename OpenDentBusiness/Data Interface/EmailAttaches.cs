@@ -8,6 +8,10 @@ namespace OpenDentBusiness{
 	public class EmailAttaches{
 
 		public static void Insert(EmailAttach attach) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				attach.EmailAttachNum=MiscData.GetKey("emailattach","EmailAttachNum");
 			}

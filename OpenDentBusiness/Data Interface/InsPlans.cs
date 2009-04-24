@@ -11,6 +11,10 @@ namespace OpenDentBusiness {
 	public class InsPlans {
 		///<summary>Also fills PlanNum from db.</summary>
 		public static void Insert(InsPlan plan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				plan.PlanNum=MiscData.GetKey("insplan","PlanNum");
 			}
@@ -67,6 +71,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(InsPlan plan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
+				return;
+			}
 			string command="UPDATE insplan SET "
 				+"Subscriber = '"    +POut.PInt   (plan.Subscriber)+"'"
 				+",DateEffective = "+POut.PDate  (plan.DateEffective)
@@ -103,6 +111,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Called from FormInsPlan when applying changes to all identical insurance plans. This updates the synchronized fields for all plans like the specified insPlan.  Current InsPlan must be set to the new values that we want.  BenefitNotes and SubscNote are specific to subscriber and are not changed.  PlanNotes are handled separately in a different function after this one is complete.</summary>
 		public static void UpdateForLike(InsPlan like, InsPlan plan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),like,plan);
+				return;
+			}
 			string command= "UPDATE insplan SET "
 				+"EmployerNum = '"     +POut.PInt   (plan.EmployerNum)+"'"
 				+",GroupName = '"      +POut.PString(plan.GroupName)+"'"
@@ -135,6 +147,7 @@ namespace OpenDentBusiness {
 
 		///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0.  If still not found, returns null.</summary>
 		public static InsPlan GetPlan(int planNum,List<InsPlan> planList) {
+			//No need to check RemotingRole; no call to db.
 			InsPlan retPlan=new InsPlan();
 			if(planNum==0) {
 				return null;
@@ -281,6 +294,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a description of the specified plan, including carrier name and subscriber. It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0 for both family and planlist.</summary>
 		public static string GetDescript(int planNum,Family family,List<InsPlan> planList) {
+			//No need to check RemotingRole; no call to db.
 			if(planNum==0)
 				return "";
 			InsPlan plan=GetPlan(planNum,planList);
@@ -314,6 +328,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in Ins lines in Account module and in Family module.</summary>
 		public static string GetCarrierName(int planNum,List<InsPlan> planList) {
+			//No need to check RemotingRole; no call to db.
 			InsPlan plan=GetPlan(planNum,planList);
 			if(plan==null) {
 				return "";
@@ -327,6 +342,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
 		public static double GetInsRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+			//No need to check RemotingRole; no call to db.
 			double insUsed=GetInsUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,planList,benList);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
 			double insPending=GetPending(ClaimProcList,date,plan,patPlanNum,excludeClaim,benList);
@@ -342,6 +358,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>Get insurance benefits used for one benefit year.  Returns actual insurance used based on ClaimProc data. Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
 		public static double GetInsUsed(ClaimProc[] ClaimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
 				return 0;
@@ -383,6 +400,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Get insurance deductible used for one benefit year.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
 		public static double GetDedUsed(ClaimProc[] ClaimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
 				return 0;
@@ -420,6 +438,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Get pending insurance for a given plan for one benefit year. Include a ClaimProcList which is all claimProcs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The insplan.PlanNum is the plan to get value for.</summary>
 		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
+			//No need to check RemotingRole; no call to db.
 			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
 				return 0;
@@ -445,6 +464,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied procCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
 		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List <InsPlan> PlanList,List <Benefit> benList,string procCode){
+			//No need to check RemotingRole; no call to db.
 			double dedTot=Benefits.GetDeductibleByCode(benList,planNum,patPlanNum,procCode);
 			double dedUsed=GetDedUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
 			if(dedTot-dedUsed<0){
@@ -462,6 +482,9 @@ namespace OpenDentBusiness {
 
 		///<summary>This is used in FormQuery.SubmitQuery to allow display of carrier names.</summary>
 		public static Hashtable GetHListAll(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Hashtable>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT insplan.PlanNum,carrier.CarrierName "
 				+"FROM insplan,carrier "
 				+"WHERE insplan.CarrierNum=carrier.CarrierNum";

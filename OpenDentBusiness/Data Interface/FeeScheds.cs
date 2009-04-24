@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class FeeScheds{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM feesched ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="FeeSched";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			FeeSchedC.ListLong=new List<FeeSched>();
 			FeeSchedC.ListShort=new List<FeeSched>();
 			FeeSched sched;
@@ -50,6 +52,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(FeeSched feeSched){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),feeSched);
+				return;
+			}
 			DataObjectFactory<FeeSched>.WriteObject(feeSched);
 		}
 
@@ -77,6 +83,7 @@ namespace OpenDentBusiness{
 		//}*/
 
 		public static string GetDescription(int feeSchedNum){
+			//No need to check RemotingRole; no call to db.
 			if(feeSchedNum==0){
 				return "";
 			}
@@ -89,6 +96,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static bool GetIsHidden(int feeSchedNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
 				if(FeeSchedC.ListLong[i].FeeSchedNum==feeSchedNum){
 					return FeeSchedC.ListLong[i].IsHidden;
@@ -98,6 +106,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static FeeSched GetByExactName(string description){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
 				if(FeeSchedC.ListLong[i].Description==description){
 					return FeeSchedC.ListLong[i].Copy();
@@ -107,6 +116,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static FeeSched GetByExactName(string description,FeeScheduleType feeSchedType){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
 				if(FeeSchedC.ListLong[i].FeeSchedType!=feeSchedType){
 					continue;
@@ -120,6 +130,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used in FormInsPlan and FormFeeScheds.</summary>
 		public static List<FeeSched> GetListForType(FeeScheduleType feeSchedType,bool includeHidden) {
+			//No need to check RemotingRole; no call to db.
 			List<FeeSched> retVal=new List<FeeSched>();
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++) {
 				if(!includeHidden && FeeSchedC.ListLong[i].IsHidden){

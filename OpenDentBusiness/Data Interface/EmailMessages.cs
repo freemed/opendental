@@ -10,6 +10,9 @@ namespace OpenDentBusiness{
 	public class EmailMessages{
 		///<summary>Gets one email message from the database.</summary>
 		public static EmailMessage GetOne(int msgNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EmailMessage>(MethodBase.GetCurrentMethod(),msgNum);
+			}
 			string command="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.PInt(msgNum);
 			DataTable table=Db.GetTable(command);
 			EmailMessage Cur=new EmailMessage();
@@ -41,6 +44,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(EmailMessage message){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),message);
+				return;
+			}
 			string command="UPDATE emailmessage SET "
 				+ "PatNum = '"      +POut.PInt(message.PatNum)+"' "
 				+ ",ToAddress = '"  +POut.PString(message.ToAddress)+"' "
@@ -62,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(EmailMessage message){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),message);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				message.EmailMessageNum=MiscData.GetKey("emailmessage","EmailMessageNum");
 			}
@@ -97,6 +108,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(EmailMessage message){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),message);
+				return;
+			}
 			if(message.EmailMessageNum==0){
 				return;//this prevents deletion of all commlog entries of something goes wrong.
 			}

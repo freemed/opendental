@@ -18,12 +18,18 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static Document[] GetAllWithPat(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM document WHERE PatNum="+POut.PInt(patNum)+" ORDER BY DateCreated";
 			return RefreshAndFill(command);
 		}
 
 		///<summary>Gets the document with the specified document number.</summary>
 		public static Document GetByNum(int docNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Document>(MethodBase.GetCurrentMethod(),docNum);
+			}
 			string command="SELECT * FROM document WHERE DocNum='"+docNum+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count<1){
@@ -34,6 +40,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static Document Fill(DataRow document){
+			//No need to check RemotingRole; no call to db.
 			if(document==null){
 				return null;
 			}
@@ -62,6 +69,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static Document[] Fill(DataTable documents){
+			//No need to check RemotingRole; no call to db.
 			if(documents==null){
 				return new Document[0];
 			}
@@ -73,11 +81,16 @@ namespace OpenDentBusiness {
 		}
 
 		private static Document[] RefreshAndFill(string command) {
+			//No need to check RemotingRole; no call to db.
 			return Fill(Db.GetTable(command));
 		}
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
 		public static void Insert(Document doc,Patient pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),doc,pat);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				doc.DocNum=MiscData.GetKey("document","DocNum");
 			}
@@ -151,6 +164,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(Document doc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),doc);
+				return;
+			}
 			string command="UPDATE document SET " 
 				+ "Description = '"      +POut.PString(doc.Description)+"'"
 				+ ",DateCreated = "     +POut.PDate(doc.DateCreated)
@@ -178,12 +195,19 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(Document doc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),doc);
+				return;
+			}
 			string command= "DELETE from document WHERE DocNum = '"+doc.DocNum.ToString()+"'";
 			Db.NonQ(command);	
 		}
 
 		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder.</summary>
 		public static ArrayList GetPaths(ArrayList docNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),docNums);
+			}
 			if(docNums.Count==0){
 				return new ArrayList();
 			}
@@ -216,9 +240,27 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		public static Document[] GetRawPatPicts(int patNum,int defNumPicts){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum,defNumPicts);
+			}
+			string command="SELECT * FROM document "
+				+"WHERE document.PatNum="+POut.PInt(patNum)
+				+" AND document.DocCategory="+POut.PInt(defNumPicts)
+				+" ORDER BY DateCreated DESC ";
+			//gets the most recent
+			if(DataSettings.DbType==DatabaseType.Oracle) {
+				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
+			} else {//Assume MySQL
+				command+="LIMIT 1";
+			}
+			return RefreshAndFill(command);
+		}
+
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
 		//[Obsolete("This method now throws an exception!")]
 		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
+			//No need to check RemotingRole; no call to db.
 			patientPict=null;
 			//first establish which category pat pics are in
 			int defNumPicts=0;
@@ -232,18 +274,7 @@ namespace OpenDentBusiness {
 			if(defNumPicts==0){//no category set for picts
 				return false;
 			}
-			//then find 
-			string command="SELECT * FROM document "
-				+"WHERE document.PatNum="+POut.PInt(patNum)
-				+" AND document.DocCategory="+POut.PInt(defNumPicts)
-				+" ORDER BY DateCreated DESC ";
-			//gets the most recent
-			if(DataSettings.DbType==DatabaseType.Oracle){
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			}else{//Assume MySQL
-				command+="LIMIT 1";
-			}
-			Document[] pictureDocs=RefreshAndFill(command);
+			Document[] pictureDocs=GetRawPatPicts(patNum,defNumPicts);
 			if(pictureDocs==null || pictureDocs.Length<1){//no pictures
 				return false;
 			}
@@ -293,6 +324,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the documents which correspond to the given mountitems.</summary>
 		public static Document[] GetDocumentsForMountItems(MountItem[] mountItems) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),mountItems);
+			}
 			if(mountItems==null || mountItems.Length<1){
 				return new Document[0];
 			}
@@ -311,6 +345,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
 		public static int InsertMissing(Patient patient,string[] fileList){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patient,fileList);
+			}
 			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
 			DataTable table=Db.GetTable(command);
@@ -338,12 +375,16 @@ namespace OpenDentBusiness {
 
 		///<Summary>Parameters: 1:PatNum</Summary>
 		public static DataSet RefreshForPatient(string[] parameters) {
+			//No need to check RemotingRole; no call to db.
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetTreeListTableForPatient(parameters[0]));
 			return retVal;
 		}
 
 		private static DataTable GetTreeListTableForPatient(string patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("DocumentList");
 			DataRow row;
@@ -457,6 +498,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns false if the file is a specific short file name that is not accepted or contains one of the unsupported file exentions.</summary>
 		public static bool IsAcceptableFileName(string file) {
+			//No need to check RemotingRole; no call to db.
 			string[] specificBadFileNames=new string[] {
 				"thumbs.db"
 			};
@@ -472,6 +514,7 @@ namespace OpenDentBusiness {
 
 		///<summary>When first opening the image module, this tests to see whether a given filename is in the database. Also used when naming a new document to ensure unique name.</summary>
 		public static bool IsFileNameInList(string fileName,string[] usedNames) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<usedNames.Length;i++) {
 				if(usedNames[i]==fileName)
 					return true;

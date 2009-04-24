@@ -63,7 +63,7 @@ namespace OpenDentBusiness {
 			return computerPref;
 		}
 
-		private static DataTable GetPrefsForComputer(string computerName) {
+		public static DataTable GetPrefsForComputer(string computerName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),computerName);
 			}

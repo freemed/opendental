@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static List<Fee> Listt;
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM fee";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Fee";
@@ -20,6 +21,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			Dict=new Dictionary<FeeKey,Fee>();
 			Listt=new List<Fee>();
 			Fee fee;
@@ -48,6 +50,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Fee fee){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
+				return;
+			}
 			string command= "UPDATE fee SET " 
 				+ "Amount = '"        +POut.PDouble(fee.Amount)+"'"
 				//+ ",oldcode = '"      +POut.PString(fee.OldCode)+"'"
@@ -61,6 +67,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Fee fee){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
+				return;
+			}
 			string command= "INSERT INTO fee (amount,OldCode,"
 				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES("
 				+"'"+POut.PDouble(fee.Amount)+"', "
@@ -74,11 +84,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Fee fee){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
+				return;
+			}
 			string command="DELETE FROM fee WHERE FeeNum="+fee.FeeNum;
 			Db.NonQ(command);
 		}
 
 		public static Fee GetFee(int codeNum,int feeSchedNum){
+			//No need to check RemotingRole; no call to db.
 			if(codeNum==0){
 				return null;
 			}
@@ -99,6 +114,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns an amount if a fee has been entered.  Otherwise returns -1.  Not usually used directly.</summary>
 		public static double GetAmount(int codeNum, int feeSchedNum){
+			//No need to check RemotingRole; no call to db.
 			if(codeNum==0){
 				return -1;
 			}
@@ -122,6 +138,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Almost the same as GetAmount.  But never returns -1;  Returns an amount if a fee has been entered.  Returns 0 if code can't be found.</summary>
 		public static double GetAmount0(int codeNum, int feeSched){
+			//No need to check RemotingRole; no call to db.
 			double retVal=GetAmount(codeNum,feeSched);
 			if(retVal==-1){
 				return 0;
@@ -131,6 +148,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the fee schedule from the priinsplan, the patient, or the provider in that order.  Either returns a fee schedule (fk to definition.DefNum) or 0.</summary>
 		public static int GetFeeSched(Patient pat,List <InsPlan> PlanList,List <PatPlan> patPlans){
+			//No need to check RemotingRole; no call to db.
 			//there's not really a good place to put this function, so it's here.
 			int retVal=0;
 			if(PatPlans.GetPlanNum(patPlans,1)!=0){
@@ -161,6 +179,7 @@ namespace OpenDentBusiness{
 
 		///<summary>A simpler version of the same function above.  The required numbers can be obtained in a fairly simple query.  Might return a 0 if the primary provider does not have a fee schedule set.</summary>
 		public static int GetFeeSched(int priPlanFeeSched, int patFeeSched, int patPriProvNum){
+			//No need to check RemotingRole; no call to db.
 			if(priPlanFeeSched!=0){
 				return priPlanFeeSched;
 			}
@@ -172,12 +191,17 @@ namespace OpenDentBusiness{
 
 		///<summary>Clears all fees from one fee schedule.  Supply the DefNum of the feeSchedule.</summary>
 		public static void ClearFeeSched(int schedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),schedNum);
+				return;
+			}
 			string command="DELETE FROM fee WHERE FeeSched="+schedNum;
 			Db.NonQ(command);
 		}
 
 		///<summary>Copies any fee objects over to the new fee schedule.  Usually run ClearFeeSched first.  Be careful exactly which int's you supply.</summary>
 		public static void CopyFees(int fromFeeSched,int toFeeSched){
+			//No need to check RemotingRole; no call to db.
 			if(Listt==null) {
 				RefreshCache();
 			}
@@ -194,6 +218,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Increases the fee schedule by percent.  Round should be the number of decimal places, either 0,1,or 2.</summary>
 		public static void Increase(int feeSched,int percent,int round){
+			//No need to check RemotingRole; no call to db.
 			if(Listt==null) {
 				RefreshCache();
 			}
@@ -215,6 +240,7 @@ namespace OpenDentBusiness{
 
 		///<summary>schedI is the currently displayed index of the fee schedule to save to.  Empty fees never even make it this far and should be skipped earlier in the process.</summary>
 		public static void Import(string codeText,double amt,int feeSchedNum){
+			//No need to check RemotingRole; no call to db.
 			if(!ProcedureCodes.IsValidCode(codeText)){
 				return;//skip for now. Possibly insert a code in a future version.
 			}

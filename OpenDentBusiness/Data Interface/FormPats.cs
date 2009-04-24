@@ -11,6 +11,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(FormPat Cur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				Cur.FormPatNum=MiscData.GetKey("formpat","FormPatNum");
 			}
@@ -34,6 +38,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static FormPat GetOne(int formPatNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<FormPat>(MethodBase.GetCurrentMethod(),formPatNum);
+			}
 			string command= "SELECT * FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -64,6 +71,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(int formPatNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),formPatNum);
+				return;
+			}
 			string command="DELETE FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
 			Db.NonQ(command);
 			command="DELETE FROM question WHERE FormPatNum="+POut.PInt(formPatNum);

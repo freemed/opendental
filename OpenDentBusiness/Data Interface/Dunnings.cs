@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all dunnings.</summary>
 		public static Dunning[] Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Dunning[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM dunning "
 				+"ORDER BY BillingType,AgeAccount,InsIsPending";
 			DataTable table=Db.GetTable(command);
@@ -27,6 +30,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Dunning dun){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dun);
+				return;
+			}
 			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending,"
 				+"MessageBold) VALUES("
 				+"'"+POut.PString(dun.DunMessage)+"', "
@@ -39,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Dunning dun){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dun);
+				return;
+			}
 			string command= "UPDATE dunning SET " 
 				+ "DunMessage = '"       +POut.PString(dun.DunMessage)+"'"
 				+ ",BillingType = '"     +POut.PInt   (dun.BillingType)+"'"
@@ -51,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Dunning dun){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),dun);
+				return;
+			}
 			string command="DELETE FROM dunning" 
 				+" WHERE DunningNum = "+POut.PInt(dun.DunningNum);
  			Db.NonQ(command);
@@ -58,6 +73,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return null if no dunning matches the given criteria.</summary>
 		public static Dunning GetDunning(Dunning[] dunList, int billingType,int ageAccount,YN insIsPending){
+			//No need to check RemotingRole; no call to db.
 			//loop backwards through Dunning list and find the first dunning that matches criteria.
 			for(int i=dunList.Length-1;i>=0;i--){
 				if(dunList[i].BillingType!=0//0 in the list matches all

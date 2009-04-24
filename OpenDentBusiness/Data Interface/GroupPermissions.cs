@@ -9,6 +9,7 @@ namespace OpenDentBusiness{
 	public class GroupPermissions {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM grouppermission";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="GroupPermission";
@@ -17,6 +18,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			GroupPermissionC.List=new GroupPermission[table.Rows.Count];
 			for(int i=0;i<GroupPermissionC.List.Length;i++) {
 				GroupPermissionC.List[i]=new GroupPermission();
@@ -30,6 +32,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Update(GroupPermission gp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp);
+				return;
+			}
 			string command= "UPDATE grouppermission SET " 
 				+"NewerDate = "   +POut.PDate  (gp.NewerDate)
 				+",NewerDays = '"   +POut.PInt   (gp.NewerDays)+"'"
@@ -41,6 +47,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(GroupPermission gp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp);
+				return;
+			}
 			string command= "INSERT INTO grouppermission (NewerDate,NewerDays,UserGroupNum,PermType) "
 				+"VALUES("
 				+POut.PDate  (gp.NewerDate)+", "
@@ -52,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(GroupPermission gp, bool isNew){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp,isNew);
+				return;
+			}
 			if(gp.NewerDate.Year>1880 && gp.NewerDays>0){
 				throw new Exception(Lan.g("GroupPermissions","Date or days can be set, but not both."));
 			}
@@ -70,6 +84,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void RemovePermission(int groupNum,Permissions permType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),groupNum,permType);
+				return;
+			}
 			string command;
 			if(permType==Permissions.SecurityAdmin){
 				//need to make sure that at least one other user has this permission
@@ -86,6 +104,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a GroupPermission based on the supplied userGroupNum and permType.  If not found, then it returns null.  Used in FormSecurity when double clicking on a dated permission or when clicking the all button.</summary>
 		public static GroupPermission GetPerm(int userGroupNum,Permissions permType){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<GroupPermissionC.List.Length;i++){
 				if(GroupPermissionC.List[i].UserGroupNum==userGroupNum && GroupPermissionC.List[i].PermType==permType){
 					return GroupPermissionC.List[i].Copy();
@@ -96,6 +115,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in Security.IsAuthorized</summary>
 		public static bool HasPermission(int userGroupNum,Permissions permType){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<GroupPermissionC.List.Length;i++){
 				if(GroupPermissionC.List[i].UserGroupNum!=userGroupNum || GroupPermissionC.List[i].PermType!=permType){
 					continue;
@@ -107,6 +127,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the description for the specified permisssion.  Already translated.</summary>
 		public static string GetDesc(Permissions perm){
+			//No need to check RemotingRole; no call to db.
 			switch(perm){
 				case Permissions.Accounting:
 					return Lan.g("enumPermissions","Accounting");
@@ -186,6 +207,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool PermTakesDates(Permissions permType){
+			//No need to check RemotingRole; no call to db.
 			if(  permType==Permissions.AdjustmentEdit
 				|| permType==Permissions.PaymentEdit
 				|| permType==Permissions.ProcComplEdit
