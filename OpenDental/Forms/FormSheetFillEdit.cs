@@ -300,7 +300,7 @@ namespace OpenDental {
 			if(checkErase.Checked){
 				//look for any lines that intersect the "eraser".
 				//since the line segments are so short, it's sufficient to check end points.
-				Point point;
+				//Point point;
 				string[] xy;
 				string[] pointStr;
 				float x;

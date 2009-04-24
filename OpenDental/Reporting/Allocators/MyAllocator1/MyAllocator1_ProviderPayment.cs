@@ -56,8 +56,7 @@ namespace OpenDental.Reporting.Allocators
 			{
 				_AllocateExecute(iGuarantor);
 			}
-			catch (Exception e)
-			{
+			catch {
 				AllocatedNormally = false;
 			}
 			return AllocatedNormally;
@@ -100,8 +99,7 @@ namespace OpenDental.Reporting.Allocators
 					AllocatedNomally = true;
 				}
 			}
-			catch (Exception e)
-			{
+			catch{
 				AllocatedNomally = false;
 			}
 			return AllocatedNomally;
@@ -135,7 +133,7 @@ namespace OpenDental.Reporting.Allocators
 			// //Db.NonQ(MyAllocator1_ProviderPayment.CreatTableString());
 			// Put here for reference not for implementation of code. CreatTableString does not check for existance of table.
 			string command = "";
-			if (type1 == OpenDentBusiness.DatabaseType.MySql)
+			if(type1 == OpenDentBusiness.DatabaseType.MySql) {
 				command = "CREATE TABLE " + TABLENAME + " ("
 			   + @"AllocNum INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					AllocType TINYINT,
@@ -149,8 +147,9 @@ namespace OpenDental.Reporting.Allocators
 					IsFullyAllocated TINYINT
 					)
 					DEFAULT CHARSET=utf8";
-			else if (type1 == OpenDentBusiness.DatabaseType.Oracle)
-			;// not implemented yet
+			}
+			//else if (type1 == OpenDentBusiness.DatabaseType.Oracle)
+			//;// not implemented yet
 			return command;
 
 
@@ -191,14 +190,15 @@ namespace OpenDental.Reporting.Allocators
 		public static string Create_AP_temp_table_string(OpenDentBusiness.DatabaseType type1)
 		{
 			string command = "";
-			if (type1 == OpenDentBusiness.DatabaseType.MySql)
+			if(type1 == OpenDentBusiness.DatabaseType.MySql) {
 				command = "CREATE TABLE " + TABLENAME + "_temp \n(\n"
 					+ "   tempIndex INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \n"
 					+ "   Guarantor int NOT NULL, \n"
 					+ "   AllocStatus TINYINT\n)\n"
 					+ "DEFAULT CHARSET=utf8";
-			else if (type1 == OpenDentBusiness.DatabaseType.Oracle)
-				;// not implemented yet
+			}
+			//else if(type1 == OpenDentBusiness.DatabaseType.Oracle)
+			//	;// not implemented yet
 			return command;
 		}
 		#endregion

@@ -424,7 +424,7 @@ namespace OpenDental{
 		private void Filltb(){
 			SelectedPatNum=PatCur.PatNum;//just in case user has selected a different family member
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
-			Appointment[] aptsOnePat;
+			//Appointment[] aptsOnePat;
 			listFamily.Items.Clear();
 			ListViewItem item;
 			DateTime dateDue;
@@ -595,7 +595,7 @@ namespace OpenDental{
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
 			Procedure[] procList;
-			List<Recall> recallList;
+			//List<Recall> recallList;
 			List <InsPlan> planList;
 			Appointment apt=null;
 			Recall recall;
@@ -613,7 +613,7 @@ namespace OpenDental{
 				try{
 					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList);
 				}
-				catch(Exception ex){
+				catch{
 					//MessageBox.Show(ex.Message);
 					continue;
 				}

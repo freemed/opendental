@@ -592,7 +592,7 @@ namespace OpenDental{
 			textNote.Text=RecallCur.Note;
 			//Now, the family list:
 			listFamily.Items.Clear();
-			Appointment[] aptsOnePat;
+			//Appointment[] aptsOnePat;
 			ListViewItem item;
 			List<Recall> recallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			DateTime dateDue;

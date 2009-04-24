@@ -32,7 +32,7 @@ namespace OpenDental {
 			Version storedVersion=new Version(PrefC.GetString("ProgramVersion"));
 			Version currentVersion=new Version(Application.ProductVersion);
 			string database="";
-			string command="";
+			//string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql){
 				database=MiscData.GetCurrentDatabase();
 			}

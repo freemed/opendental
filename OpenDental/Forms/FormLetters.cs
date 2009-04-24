@@ -29,7 +29,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private bool localChanged;
 		private System.Drawing.Printing.PrintDocument pd2;
-		private bool bodyChanged;
+		//private bool bodyChanged;
 		private OpenDental.UI.Button butPrint;
 		private OpenDental.ODtextBox textBody;
 		private int pagesPrinted=0;
@@ -380,7 +380,7 @@ namespace OpenDental{
 				str.Append(PrefC.GetString("PracticeTitle"));
 			}
 			textBody.Text = str.ToString();
-			bodyChanged = false;
+			//bodyChanged = false;
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
@@ -438,7 +438,7 @@ namespace OpenDental{
 		}
 
 		private void textBody_TextChanged(object sender, System.EventArgs e) {
-			bodyChanged=true;
+			//bodyChanged=true;
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
@@ -572,7 +572,7 @@ namespace OpenDental{
 			}
 			str.Append(",\r\n\r\n");
 			textBody.Text = str.ToString();
-			bodyChanged = false;
+			//bodyChanged = false;
 			ExtraImageToPrint = "dmfthankyou.jpg";
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
@@ -653,7 +653,7 @@ namespace OpenDental{
 			}
 			str.Append(",\r\n\r\n");
 			textBody.Text = str.ToString();
-			bodyChanged = false;
+			//bodyChanged = false;
 			ExtraImageToPrint = "refthankyou.jpg";
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);

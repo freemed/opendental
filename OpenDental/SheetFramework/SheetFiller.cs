@@ -186,13 +186,13 @@ namespace OpenDental{
 			}
 			Document[] docList=Documents.GetAllWithPat(pat.PatNum);
 			int category;
-			string fieldVal;//zoom and pan
-			int x;
-			int y;
-			int w;
-			int h;
+			//string fieldVal;//zoom and pan
+			//int x;
+			//int y;
+			//int w;
+			//int h;
 			float ratioObject;
-			float ratioImage;
+			//float ratioImage;
 			Image img;
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.PatImage){

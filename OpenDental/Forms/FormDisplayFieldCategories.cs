@@ -16,10 +16,10 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private bool changed;
+		//private bool changed;
 		private OpenDental.UI.Button butOK;
 		private ListBox listCategory;
-		private List<DisplayField> ListShowing;
+		//private List<DisplayField> ListShowing;
 		//private List<DisplayField> ListAvailable;
 
 		///<summary></summary>

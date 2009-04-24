@@ -177,7 +177,6 @@ namespace OpenDental{
 		private Point OriginalMousePos;
 		private MenuItem menuItemCustomerManage;
 		private System.Windows.Forms.Timer timerDisabledKey;
-		private MenuItem menuItem_ProviderAllocatorSetup;
 		private MenuItem menuItemAnesthesia;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
@@ -283,7 +282,6 @@ namespace OpenDental{
 			this.Controls.Add(phonePanel);
 			phonePanel.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
-			menuItem_ProviderAllocatorSetup.Visible=false;
 		}
 
 		///<summary></summary>
@@ -342,7 +340,6 @@ namespace OpenDental{
 			this.menuItemPractice = new System.Windows.Forms.MenuItem();
 			this.menuItemProcedureButtons = new System.Windows.Forms.MenuItem();
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
-			this.menuItem_ProviderAllocatorSetup = new System.Windows.Forms.MenuItem();
 			this.menuItemQuestions = new System.Windows.Forms.MenuItem();
 			this.menuItemRecall = new System.Windows.Forms.MenuItem();
 			this.menuItemRecallTypes = new System.Windows.Forms.MenuItem();
@@ -521,7 +518,6 @@ namespace OpenDental{
             this.menuItemPractice,
             this.menuItemProcedureButtons,
             this.menuItemLinks,
-            this.menuItem_ProviderAllocatorSetup,
             this.menuItemQuestions,
             this.menuItemRecall,
             this.menuItemRecallTypes,
@@ -715,57 +711,51 @@ namespace OpenDental{
 			this.menuItemLinks.Text = "Program Links";
 			this.menuItemLinks.Click += new System.EventHandler(this.menuItemLinks_Click);
 			// 
-			// menuItem_ProviderAllocatorSetup
-			// 
-			this.menuItem_ProviderAllocatorSetup.Index = 28;
-			this.menuItem_ProviderAllocatorSetup.Text = "Provider Allocator Setup";
-			this.menuItem_ProviderAllocatorSetup.Click += new System.EventHandler(this.menuItem_ProviderAllocatorSetup_Click);
-			// 
 			// menuItemQuestions
 			// 
-			this.menuItemQuestions.Index = 29;
+			this.menuItemQuestions.Index = 28;
 			this.menuItemQuestions.Text = "Questionnaire";
 			this.menuItemQuestions.Click += new System.EventHandler(this.menuItemQuestions_Click);
 			// 
 			// menuItemRecall
 			// 
-			this.menuItemRecall.Index = 30;
+			this.menuItemRecall.Index = 29;
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
 			// 
 			// menuItemRecallTypes
 			// 
-			this.menuItemRecallTypes.Index = 31;
+			this.menuItemRecallTypes.Index = 30;
 			this.menuItemRecallTypes.Text = "RecallTypes";
 			this.menuItemRecallTypes.Click += new System.EventHandler(this.menuItemRecallTypes_Click);
 			// 
 			// menuItemRequirementsNeeded
 			// 
-			this.menuItemRequirementsNeeded.Index = 32;
+			this.menuItemRequirementsNeeded.Index = 31;
 			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
 			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 33;
+			this.menuItemSched.Index = 32;
 			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemSecurity
 			// 
-			this.menuItemSecurity.Index = 34;
+			this.menuItemSecurity.Index = 33;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
 			// menuItemSheets
 			// 
-			this.menuItemSheets.Index = 35;
+			this.menuItemSheets.Index = 34;
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// menuItemEasy
 			// 
-			this.menuItemEasy.Index = 36;
+			this.menuItemEasy.Index = 35;
 			this.menuItemEasy.Text = "Show Features";
 			this.menuItemEasy.Click += new System.EventHandler(this.menuItemEasy_Click);
 			// 
@@ -3339,17 +3329,17 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Program Links");
 		}
 
-		private void menuItem_ProviderAllocatorSetup_Click(object sender, EventArgs e){
+		/*
+		private void menuItem_ProviderAllocatorSetup_Click(object sender,EventArgs e) {
 			// Check Permissions
-			if (!Security.IsAuthorized(Permissions.Setup))
-			{
+			if(!Security.IsAuthorized(Permissions.Setup)) {
 				// Failed security prompts message box. Consider adding overload to not show message.
 				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
 				return;
 			}
 			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
 			fap.ShowDialog();
-		}
+		}*/
 
 		private void menuItemQuestions_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {

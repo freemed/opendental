@@ -157,7 +157,7 @@ namespace OpenDental
 		public int anesthScore;
 		public int CurPatNum;
 		public int SelectedPatNum;
-		private PrintDialog printDialog;
+		//private PrintDialog printDialog;
 		private ToolStripMenuItem providersToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator4;
 		private RadioButton radHgtUnitsCm;

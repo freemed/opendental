@@ -27,7 +27,7 @@ namespace OpenDental{
 		public bool IsNew;
 		public Program ProgramCur;
 		private List<ProgramProperty> PropertyList;
-		private static Thread thread;
+		//private static Thread thread;
 		private TextBox textHL7FolderIn;
 		private TextBox textHL7FolderOut;
 		private Label label4;

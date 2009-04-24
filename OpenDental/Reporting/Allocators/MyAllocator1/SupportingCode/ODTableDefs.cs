@@ -33,7 +33,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			
 			string[] cols = { ProcNum };
 			Type[] types1 = { ProcNumType };
-			string tablename = "ProcedureLog";
+			//string tablename = "ProcedureLog";
 			CheckODTableSetup();
 		}
 
@@ -58,7 +58,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		{
 			string[] cols = { PatNum, Guarantor, LName, FName };
 			Type[] types1 = { PatNumType, GuarantorType, LNameType, FNameType };
-			string tablename = "Patient";
+			//string tablename = "Patient";
 			CheckODTableSetup();
 		}
 

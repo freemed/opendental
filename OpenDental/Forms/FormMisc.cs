@@ -38,7 +38,7 @@ namespace OpenDental{
 		private GroupBox groupBox6;
 		private CheckBox checkTitleBarShowSite;
 		private Label label1;
-		private List<Def> posAdjTypes;
+		//private List<Def> posAdjTypes;
 
 		///<summary></summary>
 		public FormMisc(){

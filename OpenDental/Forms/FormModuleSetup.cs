@@ -44,7 +44,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private CheckBox checkApptExclamation;
 		private CheckBox checkProviderIncomeShows;
-		private ComputerPref computerPref;
+		//private ComputerPref computerPref;
 		private TextBox textClaimAttachPath;
 		private GroupBox groupBox3;
 		private CheckBox checkAutoClearEntryStatus;

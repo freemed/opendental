@@ -11,7 +11,7 @@ namespace OpenDental {
 	public partial class FormProcEditAll:Form {
 		public List<Procedure> ProcList;
 		private List<Procedure> ProcOldList;
-		private bool StartedAttachedToClaim;
+		//private bool StartedAttachedToClaim;
 		private bool AnyAreC;
 
 		public FormProcEditAll() {
@@ -46,7 +46,7 @@ namespace OpenDental {
 			}
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(ProcList[0].PatNum);
 			if(Procedures.IsAttachedToClaim(ProcList,ClaimProcList)){
-				StartedAttachedToClaim=true;
+				//StartedAttachedToClaim=true;
 				//however, this doesn't stop someone from creating a claim while this window is open,
 				//so this is checked at the end, too.
 				textDate.Enabled=false;

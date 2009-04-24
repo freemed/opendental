@@ -45,7 +45,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 		#region Connection Parameter
 		private string _MySqlConnectionString = "";
-		private string _MyOracleConnectionString = ""; // Not implemented yet
+		//private string _MyOracleConnectionString = ""; // Not implemented yet
 		#endregion
 
 		#region Enumerations
@@ -83,7 +83,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		public virtual string ODPullString(int Guarantor, bool IsPulledFlag)
 		{
 		    throw new Exception("Method not Implemented Yet");
-		    return ""; // just used to override
+		    //return ""; // just used to override
 		}
 		#endregion
 

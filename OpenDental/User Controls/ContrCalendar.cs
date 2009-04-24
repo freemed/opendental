@@ -18,12 +18,12 @@ namespace OpenDental {
 	///<summary></summary>
 	public class ContrCalendar:System.Windows.Forms.UserControl {
 		private System.ComponentModel.Container components = null;
-		private int RowCount;
-		private int ColCount;
-		private int RowHeight;
-		private int ColWidth;
-		private int HeaderHeight;
-		private int DayHeadHeight;
+		//private int RowCount;
+		//private int ColCount;
+		//private int RowHeight;
+		//private int ColWidth;
+		//private int HeaderHeight;
+		//private int DayHeadHeight;
 		private DateTime selectedDate;
 		///<summary></summary>
 		public List<OneCalendarDay> ListDays;
@@ -38,10 +38,10 @@ namespace OpenDental {
 		///<summary></summary>
 		public ContrCalendar() {
 			InitializeComponent();
-			RowCount=6;
-			ColCount=7;
-			HeaderHeight=25;
-			DayHeadHeight=15;//(int)FontText.GetHeight()+6;
+			//RowCount=6;
+			//ColCount=7;
+			//HeaderHeight=25;
+			//DayHeadHeight=15;//(int)FontText.GetHeight()+6;
 			//colorBG=SystemColors.Control;
 			//HeadColor=SystemColors.Control;
 			//FootColor=SystemColors.Control;

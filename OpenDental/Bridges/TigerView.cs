@@ -101,7 +101,8 @@ namespace OpenDental.Bridges {
 				if(System.IO.File.Exists(backupFileName)){
 					System.IO.File.Delete(backupFileName);
 				}
-			}catch(Exception exc){
+			}
+			catch{
 				if(System.IO.File.Exists(backupFileName)){
 					System.IO.File.Copy(backupFileName,filePath); // restore backup
 				}

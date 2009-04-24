@@ -294,7 +294,7 @@ namespace OpenDental{
 			//one giant rectangle for everything closed
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
 			//then, loop through each day and operatory
-			Operatory curOp;
+			//Operatory curOp;
 			bool isHoliday;
 			if(IsWeeklyView){
 				for(int d=0;d<NumOfWeekDaysToDisplay;d++){
