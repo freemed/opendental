@@ -502,6 +502,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets all distinct notes for the planNums supplied.  Supply a planNum to exclude it.  Only called when closing FormInsPlan.  Includes blank notes.</summary>
 		public static string[] GetNotesForPlans(List<int> planNums,int excludePlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),planNums,excludePlanNum);
+			}
 			if(planNums.Count==0) {//this should never happen, but just in case...
 				return new string[0];
 			}
@@ -529,6 +532,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Called when closing FormInsPlan to set the PlanNote for multiple plans at once.</summary>
 		public static void UpdateNoteForPlans(List<int> planNums,string newNote){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNums,newNote);
+				return;
+			}
 			if(planNums.Count==0){
 				return;
 			}
@@ -546,6 +553,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Called from FormInsPlan when user wants to view a benefit note for similar plans.  Should never include the current plan that the user is editing.  This function will get one note from the database, not including blank notes.  If no note can be found, then it returns empty string.</summary>
 		public static string GetBenefitNotes(List<int> planNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),planNums);
+			}
 			if(planNums.Count==0){
 				return "";
 			}
@@ -574,6 +584,9 @@ namespace OpenDentBusiness {
 		public static string[] GetSubscribersForSamePlans(string employerName, string groupName, string groupNum,
 				string divisionNo, string carrierName, bool isMedical, int excludePlan)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,excludePlan);
+			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) "
 				+"FROM patient "
 				+"LEFT JOIN insplan ON patient.PatNum=insplan.Subscriber "
@@ -603,6 +616,9 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of PlanNums from the database of plans that have identical info as this one. Used to perform updates to benefits, etc.  Note that you have the option to include the current plan in the list.</summary>
 		public static List<int> GetPlanNumsOfSamePlans(string employerName, string groupName, string groupNum,
 				string divisionNo, string carrierName, bool isMedical, int planNum, bool includePlanNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<int>>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,planNum,includePlanNum);
+			}
 			string command="SELECT PlanNum FROM insplan "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
 				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum ";
@@ -639,6 +655,9 @@ namespace OpenDentBusiness {
 		public static DataTable GetBigList(bool byEmployer,string empName,string carrierName,string groupName,string groupNum,
 			string trojanID,bool showHidden)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),byEmployer,empName,carrierName,groupName,groupNum,trojanID,showHidden);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			table.Columns.Add("Address");
@@ -720,6 +739,9 @@ namespace OpenDentBusiness {
 		public static DataTable GetListFeeCheck(string carrierName,string carrierNameNot,int feeSchedWithout,int feeSchedWith,
 			FeeScheduleType feeSchedType)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),carrierName,carrierNameNot,feeSchedWithout,feeSchedWith,feeSchedType);
+			}
 			string pFeeSched="FeeSched";
 			if(feeSchedType==FeeScheduleType.Allowed){
 				pFeeSched="AllowedFeeSched";
@@ -755,6 +777,9 @@ namespace OpenDentBusiness {
 		public static int SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,int feeSchedNum,
 			FeeScheduleType feeSchedType)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),employerNum,carrierName,groupNum,groupName,feeSchedNum,feeSchedType);
+			}
 			//FIXME:UPDATE-MULTIPLE-TABLES
 			/*string command="UPDATE insplan,carrier SET insplan.FeeSched="+POut.PInt(feeSchedNum)
 				+" WHERE carrier.CarrierNum = insplan.CarrierNum "//employer.EmployerNum = insplan.EmployerNum "
@@ -801,6 +826,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns number of rows affected.</summary>
 		public static int ConvertToNewClaimform(int oldClaimFormNum, int newClaimFormNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
+			}
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
 			return Db.NonQ(command);
@@ -808,6 +836,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the number of fee schedules added.  It doesn't inform the user of how many plans were affected, but there will obviously be a certain number of plans for every new fee schedule.</summary>
 		public static int GenerateAllowedFeeSchedules(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
 			//get carrier names for all plans without an allowed fee schedule.
 			string command="SELECT carrier.CarrierName "
 				+"FROM insplan,carrier "
@@ -863,6 +894,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int UnusedGetCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
 			int count=PIn.PInt(Db.GetCount(command));
@@ -870,6 +904,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void UnusedHideAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="UPDATE insplan SET IsHidden=1 "
 				+"WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
@@ -882,6 +920,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns -1 if no copay feeschedule.  Can return -1 if copay amount is blank.</summary>
 		public static double GetCopay(string myCode,InsPlan plan) {
+			//No need to check RemotingRole; no call to db.
 			if(plan==null) {
 				return -1;
 			}
@@ -902,7 +941,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
-		public static double GetAllowed(string procCode,int planNum,List <InsPlan> PlanList,string toothNum,int provNum) {
+		public static double GetAllowed(string procCode,int planNum,List <InsPlan> PlanList,string toothNum,int
+			provNum) {
+			//No need to check RemotingRole; no call to db.
 			if(planNum==0) {
 				return -1;
 			}
