@@ -98,9 +98,12 @@ namespace OpenDentBusiness.DataAccess {
 					continue;
 				}
 				//note that we are not checking the names of the elements like we probably should.
-				XmlNodeType nodetype=reader.NodeType;
-				string nodename=reader.Name;
-				propVal=reader.ReadElementContentAsString();
+				//XmlNodeType nodetype=reader.NodeType;
+				//string nodename=reader.Name;
+				while(reader.NodeType!=XmlNodeType.Element) {
+					reader.Read();
+				}
+				propVal=reader.ReadElementContentAsString();//reads the entire element including end element
 				propType=prop.PropertyType;
 				if(propVal!=null){
 					try{
@@ -137,6 +140,10 @@ namespace OpenDentBusiness.DataAccess {
 					}
 				}
 			}
+			while(reader.NodeType!=XmlNodeType.EndElement) {
+				reader.Read();
+			}
+			reader.ReadEndElement();
 		}
 
 		public void WriteXml(XmlWriter writer) {

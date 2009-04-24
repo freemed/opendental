@@ -9,22 +9,29 @@ namespace OpenDentBusiness{
 	public class ProcTPs {
 		///<summary>Gets all ProcTPs for a given Patient ordered by ItemOrder.</summary>
 		public static ProcTP[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ProcTP[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM proctp "
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY ItemOrder";
-			return RefreshAndFill(command).ToArray();
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table).ToArray();
 		}
 
 		///<summary>Only used when obtaining the signature data.  Ordered by ItemOrder.</summary>
 		public static List<ProcTP> RefreshForTP(int tpNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcTP>>(MethodBase.GetCurrentMethod(),tpNum);
+			}
 			string command="SELECT * FROM proctp "
 				+"WHERE TreatPlanNum="+POut.PInt(tpNum)
 				+" ORDER BY ItemOrder";
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
-		private static List<ProcTP> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<ProcTP> RefreshAndFill(DataTable table){
 			List<ProcTP> retVal=new List<ProcTP>();
 			ProcTP proc;
 			for(int i=0;i<table.Rows.Count;i++) {

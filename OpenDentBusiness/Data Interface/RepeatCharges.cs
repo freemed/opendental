@@ -8,6 +8,9 @@ namespace OpenDentBusiness{
 	public class RepeatCharges {
 		///<summary>Gets a list of all RepeatCharges for a given patient.  Supply 0 to get a list for all patients.</summary>
 		public static RepeatCharge[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RepeatCharge[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM repeatcharge";
 			if(patNum!=0) {
 				command+=" WHERE PatNum = "+POut.PInt(patNum);

@@ -12,6 +12,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all TreatPlans for a given Patient, ordered by date.</summary>
 		public static TreatPlan[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TreatPlan[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM treatplan "
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY DateTP";

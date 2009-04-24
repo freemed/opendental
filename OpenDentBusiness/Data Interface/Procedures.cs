@@ -413,6 +413,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
 		public static Procedure[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Procedure[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PInt(patNum)
 				+" AND ProcStatus !=6"//don't include deleted
 				+" ORDER BY ProcDate";

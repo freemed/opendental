@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary>For one patient</summary>
 		public static RefAttach[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RefAttach[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM refattach"
 				+" WHERE PatNum = "+POut.PInt(patNum)

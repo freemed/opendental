@@ -54,11 +54,15 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the specified claim from the database.</summary>
 		public static Claim GetClaim(int claimNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Claim>(MethodBase.GetCurrentMethod(),claimNum);
+			}
 			string command="SELECT * FROM claim"
 				+" WHERE ClaimNum = "+claimNum.ToString();
-			Claim retClaim=SubmitAndFill(command)[0];
-			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.PInt(claimNum);
 			DataTable table=Db.GetTable(command);
+			Claim retClaim=SubmitAndFill(table)[0];
+			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.PInt(claimNum);
+			table=Db.GetTable(command);
 			retClaim.Attachments=new List<ClaimAttach>();
 			ClaimAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -74,15 +78,18 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all claims for the specified patient. But without any attachments.</summary>
 		public static List<Claim> Refresh(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Claim>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM claim"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY dateservice";
-			return SubmitAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return SubmitAndFill(table);
 		}
 
-		private static List<Claim> SubmitAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<Claim> SubmitAndFill(DataTable table){
 			Claim tempClaim;
 			List<Claim> claims=new List<Claim>();
 			for(int i=0;i<table.Rows.Count;i++){

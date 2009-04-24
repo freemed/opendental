@@ -1334,17 +1334,19 @@ namespace OpenDental{
 				Prefs.UpdateBool("ADAdescriptionsReset",true);
 			}
 			Splash.Dispose();
-			Userod adminUser=Userods.GetAdminUser();
-			if(adminUser.Password=="") {
-				Security.CurUser=adminUser.Copy();
-			}
-			else {
-				FormLogOn FormL=new FormLogOn();
-				FormL.ShowDialog();
-				if(FormL.DialogResult==DialogResult.Cancel) {
-					Cursor=Cursors.Default;
-					Application.Exit();
-					return;
+			if(Security.CurUser==null) {
+				Userod adminUser=Userods.GetAdminUser();
+				if(adminUser.Password=="") {
+					Security.CurUser=adminUser.Copy();
+				}
+				else {
+					FormLogOn FormL=new FormLogOn();
+					FormL.ShowDialog();
+					if(FormL.DialogResult==DialogResult.Cancel) {
+						Cursor=Cursors.Default;
+						Application.Exit();
+						return;
+					}
 				}
 			}
 			if(userControlTasks1.Visible) {

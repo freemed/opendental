@@ -9,23 +9,30 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static ClaimProc[] Refresh(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimProc[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * from claimproc "
 				+"WHERE PatNum = '"+patNum.ToString()+"' ORDER BY LineNumber";
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
 		///<summary>When using family deduct or max, this gets all claimprocs for the given plan.  This info is needed to compute used and pending insurance.</summary>
 		public static ClaimProc[] RefreshFam(int planNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ClaimProc[]>(MethodBase.GetCurrentMethod(),planNum);
+			}
 			string command=
 				"SELECT * FROM claimproc "
 				+"WHERE PlanNum = "+POut.PInt(planNum);
 				//+" OR PatPlanNum = "+POut.PInt(patPlanNum);
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
 		}
 
-		private static ClaimProc[] RefreshAndFill(string command){
- 			DataTable table=Db.GetTable(command);
+		private static ClaimProc[] RefreshAndFill(DataTable table){
 			ClaimProc[] List=new ClaimProc[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ClaimProc();
@@ -125,6 +132,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ClaimProc cp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
 			string command= "UPDATE claimproc SET "
 				+"ProcNum = '"        +POut.PInt(cp.ProcNum)+"'"
 				+",ClaimNum = '"      +POut.PInt(cp.ClaimNum)+"' "

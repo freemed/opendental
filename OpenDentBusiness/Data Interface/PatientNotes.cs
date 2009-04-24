@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static PatientNote Refresh(int patNum,int guarantor){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PatientNote>(MethodBase.GetCurrentMethod(),patNum,guarantor);
+			}
 			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PInt(patNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
