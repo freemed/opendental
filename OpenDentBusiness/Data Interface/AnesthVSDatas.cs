@@ -21,11 +21,15 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets those vital signs tied to a unique AnestheticRecordNum from the database</summary>
 		public static List<AnestheticVSData> CreateObjects(int anestheticRecordNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<AnestheticVSData>>(MethodBase.GetCurrentMethod(),anestheticRecordNum);
+			}
 			string command="SELECT * FROM anesthvsdata WHERE AnestheticRecordNum='" + anestheticRecordNum + "'" + "ORDER BY VSTimeStamp DESC";
 			return new List<AnestheticVSData>(DataObjectFactory<AnestheticVSData>.CreateObjects(command));
 		}
 
 		public static DataTable RefreshCache(int anestheticRecordNum) {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			int ARNum = anestheticRecordNum;
 			string c="SELECT * FROM anesthvsdata WHERE AnestheticRecordNum ='" + anestheticRecordNum+ "'" + "ORDER BY VSTimeStamp DESC"; //most recent at top of list
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
@@ -35,6 +39,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			AnesthVSDataC.Listt=new List<AnestheticVSData>();
 			AnestheticVSData vsCur;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,6 +63,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void InsertVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anestheticRecordNum,patNum,VSMName,VSMSerNum,NBPs,NBPd,NBPm,HR,SpO2,temp,EtCO2,VSTimeStamp,MessageID,HL7Message);
+				return;
+			}
 			string command = "INSERT INTO anesthvsdata (AnestheticRecordNum,PatNum,VSMName,VSMSerNum, BPSys, BPDias, BPMAP, HR, SpO2, Temp, EtCO2,VSTimeStamp, MessageID, HL7Message)" +
 				"VALUES(" + POut.PInt(anestheticRecordNum) + "," 
 				+ POut.PInt(patNum) + ",'"
@@ -78,6 +87,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int UpdateVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticRecordNum,patNum,VSMName,VSMSerNum,NBPs,NBPd,NBPm,HR,SpO2,temp,EtCO2,VSTimeStamp,MessageID,HL7Message);
+			}
 			string command = "UPDATE anesthvsdata SET "
 						+ " PatNum = " + POut.PInt(patNum) + " " 
 						+ " ,VSMName = '" + POut.PString(VSMName) + "' "
@@ -99,6 +111,9 @@ namespace OpenDentBusiness {
 
 		///<summary>jsparks-It would be better to use Db here.  But I don't understand what ExecuteScalar is doing.</summary>
 		public static string GetVSTimeStamp(string vSTimeStamp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),vSTimeStamp);
+			}
 			string VSTimeStamp = vSTimeStamp;
 			MySqlCommand cmd = new MySqlCommand();
 			MySqlConnection con = new MySqlConnection(DataSettings.ConnectionString);

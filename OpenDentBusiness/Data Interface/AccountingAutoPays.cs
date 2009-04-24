@@ -9,6 +9,7 @@ namespace OpenDentBusiness{
 	public class AccountingAutoPays {
 		///<summary>Gets a list of all AccountingAutoPays.</summary>
 		public static DataTable RefreshCache(){
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM accountingautopay";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="AccountingAutoPay";

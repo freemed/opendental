@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * from autocodecond ORDER BY cond";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="AutoCodeCond";
@@ -21,6 +22,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			//HList=new Hashtable();
 			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){
@@ -34,6 +36,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(AutoCodeCond Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "INSERT INTO autocodecond (AutoCodeItemNum,Cond) "
 				+"VALUES ("
 				+"'"+POut.PInt(Cur.AutoCodeItemNum)+"', "
@@ -44,6 +50,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(AutoCodeCond Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE autocodecond SET "
 				+"autocodeitemnum='"+POut.PInt(Cur.AutoCodeItemNum)+"'"
 				+",cond ='"     +POut.PInt((int)Cur.Cond)+"'"
@@ -53,6 +63,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(AutoCodeCond Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+			}
 			string command= "DELETE from autocodecond WHERE autocodecondnum = '"
 				+POut.PInt(Cur.AutoCodeCondNum)+"'";
 			Db.NonQ(command);
@@ -60,6 +73,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DeleteForItemNum(int itemNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),itemNum);
+				return;
+			}
 			string command= "DELETE from autocodecond WHERE autocodeitemnum = '"
 				+POut.PInt(itemNum)+"'";//AutoCodeItems.Cur.AutoCodeItemNum)
 			Db.NonQ(command);
@@ -67,6 +84,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void GetListForItem(int autoCodeItemNum){
+			//No need to check RemotingRole; no call to db.
 			ALlist=new ArrayList();
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){
 				if(AutoCodeCondC.List[i].AutoCodeItemNum==autoCodeItemNum){
@@ -81,6 +99,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool IsSurf(AutoCondition myAutoCondition){
+			//No need to check RemotingRole; no call to db.
 			switch(myAutoCondition){
 				case AutoCondition.One_Surf:
 				case AutoCondition.Two_Surf:
@@ -95,6 +114,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool ConditionIsMet(AutoCondition myAutoCondition, string toothNum,string surf,bool isAdditional,bool willBeMissing,int age){
+			//No need to check RemotingRole; no call to db.
 			switch(myAutoCondition){
 				case AutoCondition.Anterior:
 					return Tooth.IsAnterior(toothNum);

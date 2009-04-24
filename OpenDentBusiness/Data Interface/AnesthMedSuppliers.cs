@@ -14,6 +14,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary> 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM anesthmedsuppliers ORDER BY SupplierName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="AnesthMedSuppliers";
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			AnesthMedSupplierC.Listt=new List<AnesthMedSupplier>();
 			AnesthMedSupplier supplCur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -46,21 +48,35 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one Anesthetic Medication Supplier from the database.</Summary>
 		public static AnesthMedSupplier CreateObject(int SupplierIDNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<AnesthMedSupplier>(MethodBase.GetCurrentMethod(),SupplierIDNum);
+			}
 			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}
 
 		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] SupplierIDNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<AnesthMedSupplier>>(MethodBase.GetCurrentMethod(),SupplierIDNums);
+			}
 			Collection<AnesthMedSupplier> collectState=DataObjectFactory<AnesthMedSupplier>.CreateObjects(SupplierIDNums);
 			return new List<AnesthMedSupplier>(collectState);		
 		}
 
 		///<summary></summary>
 		public static void WriteObject(AnesthMedSupplier AnesthMedSupplier){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),AnesthMedSupplier);
+				return;
+			}
 			DataObjectFactory<AnesthMedSupplier>.WriteObject(AnesthMedSupplier);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int SupplierIDNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),SupplierIDNum);
+				return;
+			}
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
 			DataTable table=Db.GetTable(command);
@@ -82,6 +98,8 @@ namespace OpenDentBusiness{
 		//}
 
 		public static string GetSupplierName(int AnesthMedSupplierNum){
+
+			//No need to check RemotingRole; no call to db.
 			if(AnesthMedSupplierNum==0){
 				return "";
 			}
@@ -92,7 +110,9 @@ namespace OpenDentBusiness{
 			}
 			return "";
 		}
+
 		public static int GetSupplierIDNum (int AnesthMedSupplierNum){
+			//No need to check RemotingRole; no call to db.
 			int SupplierIDNum = AnesthMedSupplierNum;
 			return SupplierIDNum;
 		}

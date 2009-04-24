@@ -24,21 +24,33 @@ namespace OpenDentBusiness{
 		private static MySqlConnection con;
 
 		public static List<Anes_hl7data> CreateObjects(int anestheticRecordNum) {
-				string cmd="SELECT * FROM anes_hl7data ORDER BY DateLoaded ASC";
-				return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Anes_hl7data>>(MethodBase.GetCurrentMethod(),anestheticRecordNum);
 			}
+			string cmd="SELECT * FROM anes_hl7data ORDER BY DateLoaded ASC";
+			return new List<Anes_hl7data>(DataObjectFactory<Anes_hl7data>.CreateObjects(cmd));
+		}
 
 		///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
 		public static void DeleteHL7Msg(string messageID){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),messageID);
+				return;
+			}
 			string command = "DELETE FROM anes_hl7data WHERE MessageID='" + messageID + "'";
 			Db.NonQ(command);
 		}
 
 		public static void WriteObject(Anes_hl7data hl7){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hl7);
+				return;
+			}
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT HL7Message FROM anes_hl7data";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="anes_hl7data";
@@ -47,6 +59,7 @@ namespace OpenDentBusiness{
 		}
 			
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			Anes_HL7DataC.Listt=new List<Anes_hl7data>();
 			Anes_hl7data hl7Cur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -79,6 +92,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetHL7List(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -95,6 +111,7 @@ namespace OpenDentBusiness{
 			
 		//This method currently works for a Philips VM4 speaking HL7 v. 2.4. Other monitors may work depending on how they output their HL7 messages
 		public static void ParseHL7Messages(int anestheticRecordNum,int patNum, string rawHL7, string messageID, string anesthDateTime, string anesthOpenTime, string anesthCloseTime){
+			//No need to check RemotingRole; no call to db.
 			string[] hL7OBX; //an array of the raw HL7 message
 			string[] hL7MSH; //an array of the MSH segment
 			string[] hL7OBXSeg; //OBX segments
@@ -293,6 +310,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void InsertVitalSigns(int anestheticRecordNum, int patNum, string VSMName, string VSMSerNum, int NBPs, int NBPd, int NBPm, int HR, int SpO2, int temp, int EtCO2, string VSTimeStamp,string MessageID, string HL7Message, string anesthDateTime,string anesthOpenTime, string anesthCloseTime){
+			//No need to check RemotingRole; no call to db.
 			List<AnestheticVSData> listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			//These conversions are needed so dates and times can be compared as numeric strings. All times are compared as military times. Consequently, the vital sign monitor(s) should be set up to export times as military times or this section will break.

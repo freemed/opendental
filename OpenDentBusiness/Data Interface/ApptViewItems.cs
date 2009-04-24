@@ -21,6 +21,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * from apptviewitem ORDER BY ElementOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ApptViewItem";
@@ -29,6 +30,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ApptViewItemC.List=new ApptViewItem[table.Rows.Count];
 			for(int i=0;i<ApptViewItemC.List.Length;i++){
 				ApptViewItemC.List[i]=new ApptViewItem();
@@ -44,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ApptViewItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "INSERT INTO apptviewitem (ApptViewNum,OpNum,ProvNum,ElementDesc,"
 				+"ElementOrder,ElementColor) "
 				+"VALUES ("
@@ -60,6 +66,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ApptViewItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE apptviewitem SET "
 				+"ApptViewNum='"    +POut.PInt   (Cur.ApptViewNum)+"'"
 				+",OpNum = '"       +POut.PInt   (Cur.OpNum)+"'"
@@ -73,6 +83,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ApptViewItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="DELETE from apptviewitem WHERE ApptViewItemNum = '"
 				+POut.PInt(Cur.ApptViewItemNum)+"'";
 			Db.NonQ(command);
@@ -80,6 +94,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all apptviewitems for the current apptView.</summary>
 		public static void DeleteAllForView(ApptView view){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),view);
+				return;
+			}
 			string c="DELETE from apptviewitem WHERE ApptViewNum = '"
 				+POut.PInt(view.ApptViewNum)+"'";
 			Db.NonQ(c);
@@ -87,6 +105,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
 		public static int GetIndexProv(int provNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisProvs.Length;i++){
 				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
 					return i;
@@ -96,6 +115,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
 		public static bool OpIsInView(int opNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForCurView.Length;i++){
 				if(ForCurView[i].OpNum==opNum)
 					return true;
@@ -105,6 +125,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
 		public static bool ProvIsInView(int provNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForCurView.Length;i++){
 				if(ForCurView[i].ProvNum==provNum)
 					return true;
@@ -113,6 +134,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<int> GetOpsForView(int apptViewNum){
+			//No need to check RemotingRole; no call to db.
 			//ArrayList AL=new ArrayList();
 			List<int> retVal=new List<int>();
 			for(int i=0;i<ApptViewItemC.List.Length;i++){
@@ -126,6 +148,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
 		public static int GetIndexOp(int opNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisOps.Length;i++) {
 				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)
 					return i;

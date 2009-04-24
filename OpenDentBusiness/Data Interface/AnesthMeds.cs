@@ -23,16 +23,27 @@ namespace OpenDentBusiness
 				
 		///<summary>Gets all Anesthetic Medications from the database</summary>
 		public static List<AnesthMedsInventory> CreateObjects() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<AnesthMedsInventory>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM anesthmedsinventory ORDER BY AnesthMedName";
 			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
 		}
 
 		public static void WriteObject(AnesthMedsInventory med){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),med);
+				return;
+			}
 			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
 		}
 
 		///<summary>Deletes and Anesthetic Medication from inventory if it has never been given to a patient</summary>
 		public static void DeleteObject(AnesthMedsInventory med){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),med);
+				return;
+			}
 			//validate that anesthetic med is not already in use.
 			string command = "SELECT COUNT(*) FROM anesthmedsgiven WHERE AnesthMedNum=" + POut.PInt(med.AnestheticMedNum);
 			int count=PIn.PInt(Db.GetCount(command));
@@ -48,6 +59,7 @@ namespace OpenDentBusiness
 		}
 
 		public static string GetName(List<AnesthMedsInventory> listAnesthMedInventory, int anestheticMedNum){
+			//No need to check RemotingRole; no call to db.
 			for (int i = 0; i < listAnesthMedInventory.Count; i++)
 			{
 				if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum)
@@ -59,6 +71,7 @@ namespace OpenDentBusiness
 		}
 
 		public static string GetQtyOnHand(List<AnesthMedsInventory> listAnesthMedInventory,int anestheticMedNum){
+			//No need to check RemotingRole; no call to db.
 			for (int i = 0; i < listAnesthMedInventory.Count; i++){
 				if (listAnesthMedInventory[i].AnestheticMedNum == anestheticMedNum){
 					return listAnesthMedInventory[i].QtyOnHand;
@@ -69,6 +82,9 @@ namespace OpenDentBusiness
 
 		/// <summary> Gets the Anesthetic Record number from the anestheticrecord table./// </summary>
 		public static int getRecordNum(int patnum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patnum);
+			}
 			MySqlCommand command2 = new MySqlCommand();
 			con.Open();
 			command2.CommandText = "SELECT Max(AnestheticRecordNum)  FROM opendental_test.anestheticrecord a,opendental_test.Patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
@@ -76,12 +92,13 @@ namespace OpenDentBusiness
 			int supplierID = Convert.ToInt32(command2.ExecuteScalar());
 			con.Close();
 			return supplierID;
-			
 		}
 
   ///<summary>Inserts the selected Anesthetic medication and dose values into the anesthmedsgiven table in the database</summary>
 		public static int InsertAnesth_Data(int anestheticRecordNum,string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm, string Signature, bool SigIsTopaz){
-				
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticRecordNum,anestheticOpen,anestheticClose,surgOpen,surgClose,anesthetist,surgeon,asst,circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm,Signature,SigIsTopaz);
+			}	
 			int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
 			string command = "INSERT INTO anestheticdata (AnestheticRecordNum,AnesthOpen,AnesthClose,SurgOpen,SurgClose,Anesthetist,Surgeon,Asst,Circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm,Signature,SigIsTopaz)" +
 				"VALUES(" + POut.PInt(recordnum) + ",'" 
@@ -139,6 +156,10 @@ namespace OpenDentBusiness
 		}
 
 		public static void UpdateVSMData(int anestheticRecordNum, string VSMName, string VSMSerNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anestheticRecordNum,VSMName,VSMSerNum);
+				return;
+			}
 			int recordnum = AnestheticRecords.GetRecordNum(anestheticRecordNum);
 			string command = "UPDATE anestheticdata SET "
 				+	"VSMName ='"	+ POut.PString(VSMName) + "' "
@@ -149,7 +170,9 @@ namespace OpenDentBusiness
 
 		/// <summary>Updates changes to the selected Anesthetic Record's data in the database</summary>
 		public static int UpdateAnesth_Data(int anestheticRecordNum, string anestheticOpen, string anestheticClose, string surgOpen, string surgClose, string anesthetist, string surgeon, string asst, string circulator, string VSMName, string VSMSerNum, string ASA, string ASA_EModifier, int O2LMin, int N2OLMin, int RteNasCan, int RteNasHood, int RteETT, int MedRouteIVCath, int MedRouteIVButtFly, int MedRouteIM, int MedRoutePO, int MedRouteNasal, int MedRouteRectal, string IVSite, int IVGauge, int IVSideR, int IVSideL, int IVAtt, string IVF, int IVFVol, int MonBP, int MonSpO2, int MonEtCO2, int MonTemp, int MonPrecordial, int MonEKG, string Notes, int PatWgt, int WgtUnitsLbs, int WgtUnitsKgs, int PatHgt, string EscortName, string EscortCellNum, string EscortRel, string NPOTime, int HgtUnitsIn, int HgtUnitsCm, string Signature, bool SigIsTopaz){
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticRecordNum,anestheticOpen,anestheticClose,surgOpen,surgClose,anesthetist,surgeon,asst,circulator,VSMName,VSMSerNum,ASA,ASA_EModifier,O2LMin,N2OLMin,RteNasCan,RteNasHood,RteETT,MedRouteIVCath,MedRouteIVButtFly,MedRouteIM,MedRoutePO,MedRouteNasal,MedRouteRectal,IVSite,IVGauge,IVSideR,IVSideL,IVAtt,IVF,IVFVol,MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,Notes,PatWgt,WgtUnitsLbs,WgtUnitsKgs,PatHgt,EscortName,EscortCellNum,EscortRel,NPOTime,HgtUnitsIn,HgtUnitsCm,Signature,SigIsTopaz);
+			}
 		string command = "UPDATE anestheticdata SET "
 				+	" AnesthOpen		='"	+ POut.PString(anestheticOpen) + "' "
 				+	",AnesthClose		='"	+ POut.PString(anestheticClose) + "' "
@@ -206,6 +229,10 @@ namespace OpenDentBusiness
 	}
 		/// <summary>Inserts the data from anesthetic intake form into the anesthmedsintake table in the database</summary>
 		public static void InsertMed_Intake(string AMedName,int qty,string supplier,string invoice){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),AMedName,qty,supplier,invoice);
+				return;
+			}
 			string AMname = AMedName, Inum = invoice;
 			if (AMedName.Contains("'"))
 				{
@@ -229,6 +256,10 @@ namespace OpenDentBusiness
 
 		/// <summary>Inserts the newly added anesthetic medication and how supplied into the anesthmedsgiven table in the database</summary>
 		public static void InsertAMedDose(string anesth_Medname, double qtyonhandold, double dose, double amtwasted, double qtyonhandnew, int anestheticRecordNum, int anesthmednum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anesth_Medname,qtyonhandold,dose,amtwasted,qtyonhandnew,anestheticRecordNum,anesthmednum);
+				return;
+			}
 			string AMName = anesth_Medname;
 			if (anesth_Medname.Contains("'"))
 				{
@@ -251,6 +282,10 @@ namespace OpenDentBusiness
 		}
 
 		public static void UpdateAMedDose(string anesthMedName, double dose, double amtwasted, string dosetimestamp, int anestheticMedNum, int anestheticRecordNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anesthMedName,dose,amtwasted,dosetimestamp,anestheticMedNum,anestheticRecordNum);
+				return;
+			}
 			string AMName = anesthMedName;
 			if (anesthMedName.Contains("'"))
 			{
@@ -303,6 +338,9 @@ namespace OpenDentBusiness
 		}
 
 		public static double GetQtyGiven(string anesthMedName, string doseTimeStamp, int anestheticMedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),anesthMedName,doseTimeStamp,anestheticMedNum);
+			}
 			MySqlCommand command = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			command.Connection = con;
@@ -317,6 +355,9 @@ namespace OpenDentBusiness
 		}
 
 		public static double GetQtyWasted(string anesthMedName, string doseTimeStamp, int anestheticMedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),anesthMedName,doseTimeStamp,anestheticMedNum);
+			}
 			MySqlCommand command = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			command.Connection = con;
@@ -333,6 +374,10 @@ namespace OpenDentBusiness
 
 		///<summary> Updates the table anesthmedsinventory with the new quantity adjustment</summary>
 		public static void UpdateAMedInvAdj(string anesthMedName, double qty, double qtyOnHand){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anesthMedName,qty,qtyOnHand);
+				return;
+			}
 			double adjQty = 0.0;
 			adjQty = Convert.ToDouble(qty) + Convert.ToDouble(qtyOnHand);
 			string AMedname = anesthMedName;
@@ -347,6 +392,10 @@ namespace OpenDentBusiness
 
 		/// <summary>Updates the table anesthmedsinventory</summary>
 		public static void UpdateAMed_Adj_Qty(string aMed, string howsupplied, int qtyOnHand, int newQTY){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aMed,howsupplied,qtyOnHand,newQTY);
+				return;
+			}
 			string aMed2 = aMed, howsupplied2 = howsupplied;
 			if (aMed.Contains("'"))
 			{
@@ -362,6 +411,10 @@ namespace OpenDentBusiness
 		
 		///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
 		public static void DeleteAMedDose(string anesthMedName, double  QtyGiven, double QtyWasted, string TimeStamp, int anestheticRecordNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anesthMedName,QtyGiven,QtyWasted,TimeStamp,anestheticRecordNum);
+				return;
+			}
 			//Update anesthmedsinventory
 			double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) + QtyGiven + QtyWasted;
 			string command3 = "UPDATE anesthmedsinventory SET "
@@ -375,6 +428,10 @@ namespace OpenDentBusiness
 
 				///<summary>Deletes anesthetic meds from the table anesthmedsgiven, and updates inventory accordingly </summary>
 		public static void DeleteAnesthMedsGiven(string anesthMedName, double  QtyGiven, double QtyWasted, string TimeStamp, int anestheticRecordNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anesthMedName,QtyGiven,QtyWasted,TimeStamp,anestheticRecordNum);
+				return;
+			}
 			//Update anesthmedsinventory
 			double AdjQty = Convert.ToDouble(GetQtyOnHand(anesthMedName)) + QtyGiven + QtyWasted;
 			string command3 = "UPDATE anesthmedsinventory SET "
@@ -388,6 +445,9 @@ namespace OpenDentBusiness
 
 		/// <summary>Returns QtyOnHand for anesthetic medication inventory adjustment calculations/// </summary>
 		public static double GetQtyOnHand(string aMed){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),aMed);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -401,8 +461,12 @@ namespace OpenDentBusiness
 			con.Close();
 			return qtyOnHand;
 		}
+
 		/// <summary>Returns AnesthMedNum. Used to check a unique med num in table anesthmedsgiven vs. those in anesthmedsinventory. 
 		public static int GetAnesthMedNum(string aMed){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),aMed);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;

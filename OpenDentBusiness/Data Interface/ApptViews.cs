@@ -9,6 +9,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache(){
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM apptview ORDER BY itemorder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="ApptView";
@@ -17,6 +18,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ApptViewC.List=new ApptView[table.Rows.Count];
 			for(int i=0;i<ApptViewC.List.Length;i++){
 				ApptViewC.List[i]=new ApptView();
@@ -29,6 +31,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ApptView Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "INSERT INTO apptview (Description,ItemOrder,RowsPerIncr) "
 				+"VALUES ("
 				+"'"+POut.PString(Cur.Description)+"', "
@@ -40,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ApptView Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE apptview SET "
 				+"Description='"   +POut.PString(Cur.Description)+"'"
 				+",ItemOrder = '"  +POut.PInt   (Cur.ItemOrder)+"'"
@@ -50,6 +60,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ApptView Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="DELETE from apptview WHERE ApptViewNum = '"
 				+POut.PInt(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);

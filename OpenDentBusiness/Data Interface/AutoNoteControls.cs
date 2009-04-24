@@ -13,6 +13,9 @@ namespace OpenDentBusiness {
 
 		/// <summary>A list with all the control settings</summary>
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+			}
 			string command = "SELECT * FROM autonotecontrol ORDER BY Descript";
 			Listt=RefreshAndFill(command);
 		}
@@ -34,6 +37,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Insert(AutoNoteControl autonotecontrol) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonotecontrol);
+			}
 			string command = "INSERT INTO autonotecontrol (Descript,ControlType,ControlLabel,ControlOptions)"
 			+"VALUES ("			
 			+"'"+POut.PString(autonotecontrol.Descript)+"', " 
@@ -45,6 +51,10 @@ namespace OpenDentBusiness {
 
 
 		public static void Update(AutoNoteControl autonotecontrol) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonotecontrol);
+				return;
+			}
 			string command="UPDATE autonotecontrol SET "
 				+"ControlType = '"+POut.PString(autonotecontrol.ControlType)+"', "
 				+"Descript = '"+POut.PString(autonotecontrol.Descript)+"', "
@@ -55,6 +65,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Delete(int autoNoteControlNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoNoteControlNum);
+				return;
+			}
 			//no validation for now.
 			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.PInt(autoNoteControlNum);
 			Db.NonQ(command);
@@ -62,6 +76,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Will return null if can't match.</summary>
 		public static AutoNoteControl GetByDescript(string descript) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].Descript==descript) {
 					return Listt[i];

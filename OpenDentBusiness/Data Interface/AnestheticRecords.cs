@@ -23,8 +23,11 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Most recent date *first*. </summary>
-		public static void Refresh(int patNum)
-		{
+		public static void Refresh(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			string command =
 				"SELECT * FROM anestheticrecord"
 				+ " WHERE PatNum = '" + patNum.ToString() + "'"
@@ -43,12 +46,17 @@ namespace OpenDentBusiness{
 		}
 		public AnestheticRecords Copy()
 		{
+			//No need to check RemotingRole; no call to db.
 			return (AnestheticRecords)this.MemberwiseClone();
 		}
 		///<summary></summary>
 		///
 		public static void Update(AnestheticRecord Cur)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE anestheticrecord SET "
 				+ "PatNum = '" + POut.PInt(Cur.PatNum) + "'"
 				+ ",AnestheticDate = " + POut.PDateT(Cur.AnestheticDate) + "'"
@@ -60,6 +68,10 @@ namespace OpenDentBusiness{
 		///<summary>Creates a new AnestheticRecord in the db</summary>
 		public static void Insert(AnestheticRecord Cur)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if (PrefC.RandomKeys)
 			{
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
@@ -92,7 +104,10 @@ namespace OpenDentBusiness{
 		///<summary>Creates a corresponding AnestheticData record in the db</summary>
 		public static void InsertAnestheticData(AnestheticRecord Cur)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if (PrefC.RandomKeys)
 			{
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
@@ -122,6 +137,10 @@ namespace OpenDentBusiness{
 		///<summary>Deletes an Anesthetic Record and the corresponding Anesthetic Data</summary>
 		public static void Delete(AnestheticRecord Cur)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE FROM anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
 			Db.NonQ(command);
 			string command2 = "DELETE FROM anestheticdata WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
@@ -132,6 +151,9 @@ namespace OpenDentBusiness{
 
 		public static int GetRecordNum(int patnum)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patnum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -150,7 +172,9 @@ namespace OpenDentBusiness{
 
 		public static int GetRecordNumByDate(string AnestheticDateCur)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),AnestheticDateCur);
+			}
 			DateTime anestheticDate = Convert.ToDateTime(AnestheticDateCur);
 			//need to format so it matches DateTime format as that's what's in the db; yyyy/MM/dd hh:mm:ss tt is what's displayed in listAnesthetic.SelectedItem
 			string newdate = anestheticDate.ToString("yyyy-MM-dd HH:mm:ss");
@@ -170,6 +194,7 @@ namespace OpenDentBusiness{
 		}
 		public AnestheticRecord GetAnestheticData(int anestheticRecordNum)
 		{
+			//No need to check RemotingRole; no call to db.
 			AnestheticRecord retVal = null;
 			for (int i = 0; i < List.Length; i++)
 			{
@@ -180,18 +205,24 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
+
 		///<summary>Creates an Anesthesia Score record in the db</summary>
 		public static void InsertAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),AnestheticRecordNum,QActivity,QResp,QCirc,QConc,QColor,AnesthesiaScore,DischAmb,DischWheelChr,DischAmbulance,DischCondStable,DischCondUnstable);
+				return;
+			}
 			string command = "INSERT INTO anesthscore(AnestheticRecordNum,QActivity,QResp,QCirc,QConc,QColor,AnesthesiaScore,DischAmb,DischWheelChr,DischAmbulance,DischCondStable,DischCondUnstable) VALUES('" + AnestheticRecordNum + "','" + QActivity + "','" + QResp + "','" + QCirc + "','" + QConc + "','" + QColor + "','" + AnesthesiaScore + "','" + DischAmb + "','" + DischWheelChr + "','" + DischAmbulance + "','" + DischCondStable + "','" + DischCondUnstable + "'" + ")";
 			Db.NonQ(command);
-
 		}
 
 		public static void UpdateAnesthScore(int AnestheticRecordNum, int QActivity, int QResp, int QCirc, int QConc, int QColor, int AnesthesiaScore, int DischAmb, int DischWheelChr, int DischAmbulance, int DischCondStable, int DischCondUnstable)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),AnestheticRecordNum,QActivity,QResp,QCirc,QConc,QColor,AnesthesiaScore,DischAmb,DischWheelChr,DischAmbulance,DischCondStable,DischCondUnstable);
+				return;
+			}
 			string command = "UPDATE anesthscore SET "
 				+ "QActivity = '" + POut.PInt(QActivity) + "'"
 				+ ",QResp = '" + POut.PInt(QResp) + "'"
@@ -210,8 +241,9 @@ namespace OpenDentBusiness{
 
 		public static int GetAnesthScore(int AnestheticRecordNum)
 		{
-
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),AnestheticRecordNum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -227,7 +259,9 @@ namespace OpenDentBusiness{
 
 		public static int GetScoreRecordNum(int AnestheticRecordNum)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),AnestheticRecordNum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -248,7 +282,9 @@ namespace OpenDentBusiness{
 
 		public static string GetAnesthCloseTime(int AnestheticRecordNum)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),AnestheticRecordNum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -264,7 +300,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetAnesthDate(int AnestheticRecordNum){
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),AnestheticRecordNum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;
@@ -282,7 +320,9 @@ namespace OpenDentBusiness{
 
 		public static int GetAnesthProvType(int ProvNum)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),ProvNum);
+			}
 			MySqlCommand cmd = new MySqlCommand();
 			con = new MySqlConnection(DataSettings.ConnectionString);
 			cmd.Connection = con;

@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * from autocode";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="AutoCode";
@@ -18,6 +19,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			AutoCodeC.HList=new Hashtable();
 			AutoCodeC.List=new AutoCode[table.Rows.Count];
 			ArrayList ALshort=new ArrayList();//int of indexes of short list
@@ -40,6 +42,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(AutoCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "INSERT INTO autocode (Description,IsHidden,LessIntrusive) "
 				+"VALUES ("
 				+"'"+POut.PString(Cur.Description)+"', "
@@ -51,6 +57,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(AutoCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE autocode SET "
 				+"Description='"      +POut.PString(Cur.Description)+"'"
 				+",IsHidden = '"      +POut.PBool  (Cur.IsHidden)+"'"
@@ -61,12 +71,17 @@ namespace OpenDentBusiness{
 
 		///<summary>This could be improved since it does not delete any autocode items.</summary>
 		public static void Delete(AutoCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "DELETE from autocode WHERE autocodenum = '"+POut.PInt(Cur.AutoCodeNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</summary>
 		public static int GetNumFromDescript(string descript) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<AutoCodeC.ListShort.Length;i++) {
 				if(AutoCodeC.ListShort[i].Description==descript) {
 					return AutoCodeC.ListShort[i].AutoCodeNum;
@@ -79,6 +94,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all current autocodes and then adds the default autocodes.  Procedure codes must have already been entered or they cannot be added as an autocode.</summary>
 		public static void SetToDefault() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command=@"
 				DELETE FROM autocode;
 				DELETE FROM autocodecond;

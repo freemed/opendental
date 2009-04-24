@@ -214,6 +214,9 @@ namespace OpenDentBusiness{
 
 		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>
 		public static List<string> GetUAppointProcs(List<Appointment> appts){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),appts);
+			}
 			List<string> retVal=new List<string>();
 			if(appts.Count==0){
 				return retVal;
@@ -297,6 +300,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
 		public static void Insert(Appointment appt,bool includeAptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),appt,includeAptNum);
+				return;
+			}
 			//make sure all fields are properly filled:
 			if(appt.Confirmed==0){
 				appt.Confirmed=DefC.GetList(DefCat.ApptConfirmed)[0].DefNum;
@@ -501,6 +508,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in Chart module to test whether a procedure is attached to an appointment with today's date. The procedure might have a different date if still TP status.  ApptList should include all appointments for this patient. Does not make a call to db.</summary>
 		public static bool ProcIsToday(Appointment[] apptList,Procedure proc){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<apptList.Length;i++){
 				if(apptList[i].AptDateTime.Date==DateTime.Today
 					&& apptList[i].AptNum==proc.AptNum
@@ -518,6 +526,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormConfirmList</summary>
 		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,int provNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -616,6 +627,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in Confirm list to just get addresses.</summary>
 		public static DataTable GetAddrTable(int[] aptNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNums);
+			}
 			string command="SELECT patient.LName,patient.FName,patient.MiddleI,patient.Preferred,"
 				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,appointment.AptDateTime "
 				+"FROM patient,appointment "
@@ -633,6 +647,10 @@ namespace OpenDentBusiness{
 
 		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
 		public static void SetConfirmed(int aptNum,int newStatus){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
+				return;
+			}
 			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus);
 			if(PrefC.GetInt("AppointmentTimeArrivedTrigger")==newStatus){
 				command+=",DateTimeArrived=NOW()";
@@ -649,18 +667,27 @@ namespace OpenDentBusiness{
 
 		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
 		public static void SetPattern(int aptNum,string newPattern) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newPattern);
+				return;
+			}
 			string command="UPDATE appointment SET Pattern='"+POut.PString(newPattern)+"' WHERE AptNum="+POut.PInt(aptNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Use to send to unscheduled list, or to set broken.</summary>
 		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
+				return;
+			}
 			string command="UPDATE appointment SET AptStatus="+POut.PInt((int)newStatus)
 				+" WHERE AptNum="+POut.PInt(aptNum);
 			Db.NonQ(command);
 		}
 
 		public static Appointment TableToObject(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			if(table.Rows.Count==0) {
 				return null;
 			}
@@ -668,6 +695,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Appointment> TableToObjects(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<Appointment> list=new List<Appointment>();
 			Appointment apt;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -729,6 +757,9 @@ namespace OpenDentBusiness{
 
 		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=1.  This changes which procedures are retrieved.</summary>
 		private static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,int aptNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd,aptNum,isPlanned);
+			} 
 			//DateTime dateStart=PIn.PDate(strDateStart);
 			//DateTime dateEnd=PIn.PDate(strDateEnd);
 			//int aptNum=PIn.PInt(strAptNum);
@@ -1092,6 +1123,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetPeriodEmployeeSchedTable(DateTime dateStart,DateTime dateEnd) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+			}
 			//DateTime dateStart=PIn.PDate(strDateStart);
 			//DateTime dateEnd=PIn.PDate(strDateEnd);
 			DataConnection dcon=new DataConnection();
@@ -1132,6 +1166,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetPeriodWaitingRoomTable(DateTime dateStart,DateTime dateEnd) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+			}
 			//DateTime dateStart=PIn.PDate(strDateStart);
 			//DateTime dateEnd=PIn.PDate(strDateEnd);
 			DataConnection dcon=new DataConnection();
@@ -1181,6 +1218,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+			}
 			DataTable table=new DataTable("Schedule");
 			table.Columns.Add("ScheduleNum");
 			table.Columns.Add("SchedDate");
@@ -1246,6 +1286,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetApptTable(int aptNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			string command="SELECT * FROM appointment WHERE AptNum="+aptNum.ToString();
 			DataTable table=Db.GetTable(command);
 			table.TableName="Appointment";
@@ -1253,6 +1296,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetPatTable(string patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
 			DataTable table=new DataTable("Patient");
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("field");
@@ -1338,6 +1384,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetProcTable(string patNum,string aptNum,string apptStatus,string aptDateTime) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,aptNum,apptStatus,aptDateTime);
+			}
 			DataTable table=new DataTable("Procedure");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -1430,6 +1479,7 @@ namespace OpenDentBusiness{
 
 		///<summary>The supplied DataRows must include the following columns: attached,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
 		public static int CompareRows(DataRow x,DataRow y) {
+			//No need to check RemotingRole; no call to db.
 			/*if(x["attached"].ToString()!=y["attached"].ToString()){//if one is attached and the other is not
 				if(x["attached"].ToString()=="1"){
 					return -1;
@@ -1442,6 +1492,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetCommTable(string patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
+			}
 			DataTable table=new DataTable("Comm");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -1464,6 +1517,9 @@ namespace OpenDentBusiness{
 		}
 
 		private static DataTable GetMiscTable(string aptNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
+			}
 			DataTable table=new DataTable("Misc");
 			DataRow row;
 			table.Columns.Add("LabCaseNum");
@@ -1535,6 +1591,10 @@ namespace OpenDentBusiness{
 		//private static DataRow GetRowFromTable(
 		///<summary></summary>
 		public static void Delete(int aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum);
+				return;
+			}
 			string command;
 			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
 			DataTable table=Db.GetTable(command);

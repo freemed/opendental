@@ -22,7 +22,11 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Most recent date *first*. </summary>
-		public static void Refresh(int anestheticMedNum){	
+		public static void Refresh(int anestheticMedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),anestheticMedNum);
+				return;
+			}
 			string command =
 				"SELECT * from anesthmedsinventoryadj"
 				+ " WHERE AnestheticMedNum = '"+anestheticMedNum.ToString()+"'"
@@ -42,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(AnesthMedsInventoryAdj Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE anesthmedsinventoryadj SET "
 				+ "AnestheticMedNum = '" + POut.PInt(Cur.AnestheticMedNum) + "' "
 				+ ",QtyAdj = " + POut.PDouble(Cur.QtyAdj) + "' "
@@ -54,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(AnesthMedsInventoryAdj Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if (PrefC.RandomKeys){
 				Cur.AdjustNum = MiscData.GetKey("anesthmedsinventoryadj", "AdjustNum");
 			}
@@ -82,6 +94,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(AnesthMedsInventoryAdj Cur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from anesthmedsinventoryadj WHERE AdjustNum = '" + Cur.AdjustNum.ToString() + "'";
 			Db.NonQ(command);
 		}
@@ -91,7 +107,9 @@ namespace OpenDentBusiness{
 		/// </summary>
 		public static int getRecordNum(int anestheticMedNum)
 		{
-
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticMedNum);
+			}
 			MySqlCommand command2 = new MySqlCommand();
 			con.Open();
 			command2.CommandText = "SELECT AdjustNum from anesthmedsinventoryadj WHERE AnestheticMedNum = '" + anestheticMedNum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/

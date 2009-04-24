@@ -10,6 +10,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Adjustment adj){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			string command="UPDATE adjustment SET " 
 				+ "adjdate = "      +POut.PDate  (adj.AdjDate)
 				+ ",adjamt = '"      +POut.PDouble(adj.AdjAmt)+"'"
@@ -26,6 +30,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Adjustment adj){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				adj.AdjNum=MiscData.GetKey("adjustment","AdjNum");
 			}
@@ -77,6 +85,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This will soon be eliminated or changed to only allow deleting on same day as EntryDate.</summary>
 		public static void Delete(Adjustment adj){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			string command="DELETE FROM adjustment "
 				+"WHERE AdjNum = '"+adj.AdjNum.ToString()+"'";
  			Db.NonQ(command);
@@ -84,6 +96,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all adjustments for a single patient.</summary>
 		public static Adjustment[] Refresh(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Adjustment[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE PatNum = "+POut.PInt(patNum)+" ORDER BY AdjDate";
@@ -92,6 +107,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one adjustment from the db.</summary>
 		public static Adjustment GetOne(int adjNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Adjustment>(MethodBase.GetCurrentMethod(),adjNum);
+			}
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE AdjNum = "+POut.PInt(adjNum);
@@ -99,9 +117,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Adjustment> RefreshAndFill(string command){
-			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-			//	return (List<Adjustment>)Meth.GetObject(MethodBase.GetCurrentMethod(),command);
-			//}
+			//No need to check RemotingRole; no call to db.
  			DataTable table=Db.GetTable(command);
 			List<Adjustment> retVal=new List<Adjustment>();
 			Adjustment adj;
@@ -124,6 +140,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through the supplied list of adjustments and returns an ArrayList of adjustments for the given proc.</summary>
 		public static ArrayList GetForProc(int procNum,Adjustment[] List){
+			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum){
@@ -135,6 +152,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used from ContrAccount and ProcEdit to display and calculate adjustments attached to procs.</summary>
 		public static double GetTotForProc(int procNum,Adjustment[] List){
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcNum==procNum){
@@ -156,6 +174,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the number of finance charges deleted.</summary>
 		public static int UndoFinanceCharges(DateTime dateUndo){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
+			}
 			string command;
 			int numAdj;
 			DataTable table;
@@ -169,6 +190,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the number of billing charges deleted.</summary>
 		public static int UndoBillingCharges(DateTime dateUndo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
+			}
 			string command;
 			int numAdj;
 			DataTable table;
