@@ -45,7 +45,6 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,singlePatient,fromDate,toDate,intermingled);
@@ -79,7 +78,6 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
-		//No need to check RemotingRole; no call to db.
 		public static DataSet GetPayPlanAmort(int payPlanNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),payPlanNum);
@@ -423,8 +421,8 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		//No need to check RemotingRole; no call to db.
 		private static void SetTableColumns(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
 			table.Columns.Add("balance");
@@ -1334,8 +1332,8 @@ namespace OpenDentBusiness {
 			//return table;
 		}
 
-		//No need to check RemotingRole; no call to db.
 		private static void SetBalForwardRow(DataRow row,double amt){
+			//No need to check RemotingRole; no call to db.
 			row["AdjNum"]="0";
 			row["balance"]=amt.ToString("n");
 			row["balanceDouble"]=amt;
@@ -1364,8 +1362,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case. </summary>
-		//No need to check RemotingRole; no call to db.
 		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
+			//No need to check RemotingRole; no call to db.
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
 			DataRow row;
@@ -1442,9 +1440,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
-		//No need to check RemotingRole; no call to db.
 		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient){
-			DataConnection dcon=new DataConnection();
+			//No need to check RemotingRole; no call to db.
+			//DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
 			DataRow row;
 			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
@@ -1557,9 +1555,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
-		//No need to check RemotingRole; no call to db.
 		private static void GetPatientTable(Family fam,List<DataRow> rows){
-			DataConnection dcon=new DataConnection();
+			//No need to check RemotingRole; no call to db.
+			//DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("patient");
 			DataRow row;
 			table.Columns.Add("balance");

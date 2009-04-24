@@ -21,8 +21,8 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		//No need to check RemotingRole; no call to db.
 		private static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			AccountC.ListLong=new Account[table.Rows.Count];
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<AccountC.ListLong.Length;i++) {
@@ -133,8 +133,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used to test the sign on debits and credits for the five different account types</summary>
-		//No need to check RemotingRole; no call to db.
 		public static bool DebitIsPos(AccountType type){
+			//No need to check RemotingRole; no call to db.
 			switch(type){
 				case AccountType.Asset:
 				case AccountType.Expense:
@@ -177,8 +177,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static bool DepositsLinked(){
+			//No need to check RemotingRole; no call to db.
 			string depAccounts=PrefC.GetString("AccountingDepositAccounts");
 			if(depAccounts==""){
 				return false;
@@ -191,8 +191,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks the loaded prefs and accountingAutoPays to see if user has setup auto pay linking.  Returns true if so.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static bool PaymentsLinked() {
+			//No need to check RemotingRole; no call to db.
 			if(AccountingAutoPayC.AList.Count==0){
 				return false;
 			}
@@ -204,8 +204,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		//No need to check RemotingRole; no call to db.
 		public static int[] GetDepositAccounts(){
+			//No need to check RemotingRole; no call to db.
 			string depStr=PrefC.GetString("AccountingDepositAccounts");
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			ArrayList depAL=new ArrayList();

@@ -16,8 +16,8 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		//No need to check RemotingRole; no call to db.
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new AccountingAutoPay();
@@ -44,8 +44,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into full descriptions separated by carriage returns.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static string GetPickListDesc(AccountingAutoPay pay){
+			//No need to check RemotingRole; no call to db.
 			string[] numArray=pay.PickList.Split(new char[] { ',' });
 			string retVal="";
 			for(int i=0;i<numArray.Length;i++) {
@@ -61,8 +61,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into an array of AccountNums.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static int[] GetPickListAccounts(AccountingAutoPay pay) {
+			//No need to check RemotingRole; no call to db.
 			string[] numArray=pay.PickList.Split(new char[] { ',' });
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<numArray.Length;i++) {
@@ -77,8 +77,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the AList to find one with the specified payType (defNum).  If none is found, then it returns null.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static AccountingAutoPay GetForPayType(int payType){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
 				if(((AccountingAutoPay)AccountingAutoPayC.AList[i]).PayType==payType){
 					return (AccountingAutoPay)AccountingAutoPayC.AList[i];
