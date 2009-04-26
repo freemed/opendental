@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all toothinitial entries for the current patient.</summary>
 		public static List<ToothInitial> Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ToothInitial>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM toothinitial"
 				+" WHERE PatNum = "+POut.PInt(patNum);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -7,23 +8,32 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public class MedicationPats{
-		///<summary>for current pat</summary>
+		///<summary>For current pat.  Only used by UI, not business layer.</summary>
 		public static MedicationPat[] List;
 
 		///<summary></summary>
 		public static void Refresh(int patNum){
-			string command =
-				"SELECT * from medicationpat WHERE patnum = '"+patNum+"'";
-			DataTable table=Db.GetTable(command);
-			List=new MedicationPat[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new MedicationPat();
-				List[i].MedicationPatNum=PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PatNum          =PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].MedicationNum   =PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].PatNote         =PIn.PString(table.Rows[i][3].ToString());
-				//HList.Add(List[i].MedicationNum,List[i]);
+			List<MedicationPat> list=GetList(patNum);
+			List=list.ToArray();
+		}
+
+		public static List<MedicationPat> GetList(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
 			}
+			string command ="SELECT * from medicationpat WHERE patnum = '"+patNum+"'";
+			DataTable table=Db.GetTable(command);
+			List<MedicationPat> retVal=new List<MedicationPat>();
+			MedicationPat mp;
+			for(int i=0;i<table.Rows.Count;i++){
+				mp=new MedicationPat();
+				mp.MedicationPatNum=PIn.PInt(table.Rows[i][0].ToString());
+				mp.PatNum          =PIn.PInt(table.Rows[i][1].ToString());
+				mp.MedicationNum   =PIn.PInt(table.Rows[i][2].ToString());
+				mp.PatNote         =PIn.PString(table.Rows[i][3].ToString());
+				retVal.Add(mp);
+			}
+			return retVal;
 		}
 
 		///<summary></summary>

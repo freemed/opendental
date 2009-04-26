@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -14,30 +15,31 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
-			string command =
-				"SELECT * from medication ORDER BY MedName";
-			FillList(command);
+			List<Medication> list=GetList();
+			HList=new Hashtable();
+			List=list.ToArray();
+			for(int i=0;i<list.Count;i++) {
+				HList.Add(list[i].MedicationNum,list[i]);
+			}
 		}
 
-		//<summary></summary>
-		//public static void RefreshGeneric(){
-		//	command =
-		//		"SELECT * from medication WHERE medicationnum = genericnum ORDER BY MedName";
-		//	FillList();
-		//}
-
-		private static void FillList(string command){
-			DataTable table=Db.GetTable(command);
-			HList=new Hashtable();
-			List=new Medication[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Medication();
-				List[i].MedicationNum=PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].MedName      =PIn.PString(table.Rows[i][1].ToString());
-				List[i].GenericNum   =PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].Notes        =PIn.PString(table.Rows[i][3].ToString());
-				HList.Add(List[i].MedicationNum,List[i]);
+		public static List<Medication> GetList() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod());
 			}
+			string command ="SELECT * from medication ORDER BY MedName";
+			DataTable table=Db.GetTable(command);
+			List<Medication> retVal=new List<Medication>();
+			Medication med;
+			for(int i=0;i<table.Rows.Count;i++) {
+				med=new Medication();
+				med.MedicationNum=PIn.PInt(table.Rows[i][0].ToString());
+				med.MedName      =PIn.PString(table.Rows[i][1].ToString());
+				med.GenericNum   =PIn.PInt(table.Rows[i][2].ToString());
+				med.Notes        =PIn.PString(table.Rows[i][3].ToString());
+				retVal.Add(med);
+			}
+			return retVal;
 		}
 
 		///<summary></summary>

@@ -386,7 +386,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		private static DataTable GetTreeListTableForPatient(string patNum){
+		public static DataTable GetTreeListTableForPatient(string patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}
