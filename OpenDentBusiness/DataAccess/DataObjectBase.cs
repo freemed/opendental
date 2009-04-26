@@ -89,6 +89,11 @@ namespace OpenDentBusiness.DataAccess {
 			//	reader.Read();
 			//}
 			//reader.Read();//Main node.  eg. Patient
+			if(reader.EOF) {
+			//	this=null;
+				return;
+			}
+			//throw new NullReferenceException();
 			Type type = GetType();
 			PropertyInfo[] props=type.GetProperties();
 			string propVal;

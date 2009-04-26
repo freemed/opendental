@@ -22,7 +22,8 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM document WHERE PatNum="+POut.PInt(patNum)+" ORDER BY DateCreated";
-			return RefreshAndFill(command);
+			DataTable table=Db.GetTable(command);
+			return Fill(table);
 		}
 
 		///<summary>Gets the document with the specified document number.</summary>
@@ -49,7 +50,7 @@ namespace OpenDentBusiness {
 			doc.Description   =PIn.PString(document[1].ToString());
 			doc.DateCreated   =PIn.PDate(document[2].ToString());
 			doc.DocCategory   =PIn.PInt(document[3].ToString());
-			doc.PatNum       =PIn.PInt(document[4].ToString());
+			doc.PatNum        =PIn.PInt(document[4].ToString());
 			doc.FileName      =PIn.PString(document[5].ToString());
 			doc.ImgType       =(ImageType)PIn.PInt(document[6].ToString());
 			doc.IsFlipped     =PIn.PBool(document[7].ToString());
@@ -80,10 +81,11 @@ namespace OpenDentBusiness {
 			return List;
 		}
 
+		/*
 		private static Document[] RefreshAndFill(string command) {
 			//No need to check RemotingRole; no call to db.
 			return Fill(Db.GetTable(command));
-		}
+		}*/
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
 		public static void Insert(Document doc,Patient pat){
@@ -239,29 +241,12 @@ namespace OpenDentBusiness {
 			}
 			return retVal;
 		}
-
-		public static Document[] GetRawPatPicts(int patNum,int defNumPicts){
+		
+		///<summary>Will return null if no picture for this patient.</summary>
+		public static Document GetPatPictFromDb(int patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum,defNumPicts);
-			}
-			string command="SELECT * FROM document "
-				+"WHERE document.PatNum="+POut.PInt(patNum)
-				+" AND document.DocCategory="+POut.PInt(defNumPicts)
-				+" ORDER BY DateCreated DESC ";
-			//gets the most recent
-			if(DataSettings.DbType==DatabaseType.Oracle) {
-				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
-			} else {//Assume MySQL
-				command+="LIMIT 1";
-			}
-			return RefreshAndFill(command);
-		}
-
-		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		//[Obsolete("This method now throws an exception!")]
-		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
-			//No need to check RemotingRole; no call to db.
-			patientPict=null;
+				return Meth.GetObject<Document>(MethodBase.GetCurrentMethod(),patNum);
+			} 
 			//first establish which category pat pics are in
 			int defNumPicts=0;
 			Def[] defs=DefC.GetList(DefCat.ImageCats);
@@ -272,13 +257,33 @@ namespace OpenDentBusiness {
 				}
 			}
 			if(defNumPicts==0){//no category set for picts
-				return false;
+				return null;
 			}
-			Document[] pictureDocs=GetRawPatPicts(patNum,defNumPicts);
+			//then find 
+			string command="SELECT * FROM document "
+				+"WHERE document.PatNum="+POut.PInt(patNum)
+				+" AND document.DocCategory="+POut.PInt(defNumPicts)
+				+" ORDER BY DateCreated DESC ";
+			//gets the most recent
+			if(DataSettings.DbType==DatabaseType.Oracle){
+				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
+			}else{//Assume MySQL
+				command+="LIMIT 1";
+			}
+			DataTable table=Db.GetTable(command);
+			Document[] pictureDocs=Fill(table);
 			if(pictureDocs==null || pictureDocs.Length<1){//no pictures
-				return false;
+				return null;
 			}
-			string shortFileName=pictureDocs[0].FileName;
+			return pictureDocs[0];
+		}
+
+		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
+		//[Obsolete("This method now throws an exception!")]
+		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
+			patientPict=null;
+			Document pictureDoc=GetPatPictFromDb(patNum);
+			string shortFileName=pictureDoc.FileName;
 			if(shortFileName.Length<1){
 				return false;
 			}
@@ -308,7 +313,7 @@ namespace OpenDentBusiness {
 			Bitmap thumbBitmap;
 			//Gets the cropped/flipped/rotated image with any color filtering applied.
 			Bitmap sourceImage=new Bitmap(fullName);
-			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(pictureDocs[0],sourceImage,ApplySettings.ALL);
+			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(pictureDoc,sourceImage,ApplySettings.ALL);
 			sourceImage.Dispose();
 			thumbBitmap=ImageHelper.GetThumbnail(fullImage,100);
 			fullImage.Dispose();

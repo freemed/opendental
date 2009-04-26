@@ -63,6 +63,8 @@ namespace OpenDentBusiness {
 		public static T ProcessGetObject<T>(DtoGetObject dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
+				return XmlConverter.Deserialize<T>(result);
+				/*
 				XmlSerializer serializer=new XmlSerializer(typeof(T));
 					//Type.GetType("OpenDentBusiness."+dto.ObjectType));
 				StringReader strReader=new StringReader(result);
@@ -70,7 +72,7 @@ namespace OpenDentBusiness {
 				object obj=serializer.Deserialize(xmlReader);
 				strReader.Close();
 				xmlReader.Close();
-				return (T)obj;
+				return (T)obj;*/
 			}
 			catch {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);

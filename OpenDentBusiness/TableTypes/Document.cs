@@ -114,9 +114,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Only allowed 0,90,180, and 270.</summary>
 		[DataField("DegreesRotated")]
-		private short degreesRotated;
+		private int degreesRotated;
 		/// <summary>Only allowed 0,90,180, and 270.</summary>
-		public short DegreesRotated {
+		public int DegreesRotated {
 			get { return degreesRotated; }
 			set { degreesRotated = value; MarkDirty(); degreesRotatedChanged = true; }
 		}
