@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Refresh all operatories</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM operatory "
 				+"ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			OperatoryC.Listt=TableToList(table);
 			OperatoryC.ListShort=new List<Operatory>();
 			for(int i=0;i<OperatoryC.Listt.Count;i++) {
@@ -29,6 +31,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Operatory> TableToList(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Operatory> oplist=new List<Operatory>();
 			Operatory op;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -50,6 +53,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(Operatory op){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
+				return;
+			}
 			string command= "INSERT INTO operatory (OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
 				+"IsHygiene,ClinicNum"//DateTStamp
 				+") VALUES("
@@ -66,6 +73,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Update(Operatory op){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
+				return;
+			}
 			string command= "UPDATE operatory SET " 
 				+ "OpName = '"        +POut.PString(op.OpName)+"'"
 				+ ",Abbrev = '"       +POut.PString(op.Abbrev)+"'"
@@ -83,6 +94,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(Operatory op, bool IsNew){
+			//No need to check RemotingRole; no call to db.
 			//if(){
 				//throw new ApplicationException(Lan.g(this,""));
 			//}
@@ -99,12 +111,16 @@ namespace OpenDentBusiness{
 		//}
 
 		public static List<Operatory> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Operatory>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
 			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.PDateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}
 
 		public static string GetAbbrev(int operatoryNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.Listt.Count;i++){
 				if(OperatoryC.Listt[i].OperatoryNum==operatoryNum){
 					return OperatoryC.Listt[i].Abbrev;
@@ -115,6 +131,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the order of the op within ListShort or -1 if not found.</summary>
 		public static int GetOrder(int opNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.ListShort.Count;i++) {
 				if(OperatoryC.ListShort[i].OperatoryNum==opNum) {
 					return i;
@@ -125,6 +142,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Operatory GetOperatory(int operatoryNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.Listt.Count;i++) {
 				if(OperatoryC.Listt[i].OperatoryNum==operatoryNum) {
 					return OperatoryC.Listt[i].Copy();

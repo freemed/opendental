@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static ClaimProc[] RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ClaimProc[] List=new ClaimProc[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ClaimProc();

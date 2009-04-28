@@ -28,6 +28,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(PlannedAppt plannedAppt){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),plannedAppt);
+				return;
+			}
 			DataObjectFactory<PlannedAppt>.WriteObject(plannedAppt);
 		}
 

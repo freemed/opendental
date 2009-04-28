@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class Pharmacies{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM pharmacy ORDER BY StoreName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="Pharmacy";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			PharmacyC.Listt=new List<Pharmacy>();
 			Pharmacy pharm;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -41,21 +43,35 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one Pharmacy from the database.</Summary>
 		public static Pharmacy CreateObject(int PharmacyNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Pharmacy>(MethodBase.GetCurrentMethod(),PharmacyNum);
+			}
 			return DataObjectFactory<Pharmacy>.CreateObject(PharmacyNum);
 		}
 
 		public static List<Pharmacy> GetPharmacies(int[] PharmacyNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Pharmacy>>(MethodBase.GetCurrentMethod(),PharmacyNums);
+			}
 			Collection<Pharmacy> collectState=DataObjectFactory<Pharmacy>.CreateObjects(PharmacyNums);
 			return new List<Pharmacy>(collectState);		
 		}
 
 		///<summary></summary>
 		public static void WriteObject(Pharmacy Pharmacy){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Pharmacy);
+				return;
+			}
 			DataObjectFactory<Pharmacy>.WriteObject(Pharmacy);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int PharmacyNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),PharmacyNum);
+				return;
+			}
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
 			DataTable table=Db.GetTable(command);
@@ -77,6 +93,7 @@ namespace OpenDentBusiness{
 		//}
 
 		public static string GetDescription(int PharmacyNum){
+			//No need to check RemotingRole; no call to db.
 			if(PharmacyNum==0){
 				return "";
 			}

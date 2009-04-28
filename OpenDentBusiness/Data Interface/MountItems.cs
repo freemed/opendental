@@ -10,6 +10,9 @@ namespace OpenDentBusiness {
 	public class MountItems {
 
 		public static int Insert(MountItem mountItem) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
+			}
 			string command="INSERT INTO mountitem (MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES ("
 				+"'"+POut.PInt(mountItem.MountItemNum)+"',"
 				+"'"+POut.PInt(mountItem.MountNum)+"',"
@@ -22,6 +25,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int Update(MountItem mountItem) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
+			}
 			string command="UPDATE mountitem SET "
 				+"MountNum='"+POut.PInt(mountItem.MountNum)+"',"
 				+"Xpos='"+POut.PInt(mountItem.Xpos)+"',"
@@ -34,12 +40,17 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Delete(MountItem mountItem) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountItem);
+				return;
+			}
 			string command="DELETE FROM mountitem WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Converts the given datarow to a mountitem, assuming that the row represents a mountitem.</summary>
 		public static MountItem Fill(DataRow mountItemRow){
+			//No need to check RemotingRole; no call to db.
 			MountItem mountItem=new MountItem();
 			mountItem.MountItemNum=PIn.PInt(mountItemRow["MountItemNum"].ToString());
 			mountItem.MountNum=PIn.PInt(mountItemRow["MountNum"].ToString());
@@ -53,6 +64,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the list of mount items associated with the given mount key.</summary>
 		public static MountItem[] GetItemsForMount(int mountNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<MountItem[]>(MethodBase.GetCurrentMethod(),mountNum);
+			}
 			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"' ORDER BY OrdinalPos";
 			DataTable result=Db.GetTable(command);
 			MountItem[] mountItems=new MountItem[result.Rows.Count];

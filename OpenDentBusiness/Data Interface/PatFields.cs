@@ -27,6 +27,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(PatField pf) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
+				return;
+			}
 			string command="UPDATE patfield SET " 
 				+"PatNum = '"            +POut.PInt   (pf.PatNum)+"'"
 				+",FieldName = '"        +POut.PString(pf.FieldName)+"'"
@@ -37,6 +41,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(PatField pf) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				pf.PatFieldNum=MiscData.GetKey("patfield","PatFieldNum");
 			}
@@ -62,12 +70,17 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(PatField pf) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
+				return;
+			}
 			string command="DELETE FROM patfield WHERE PatFieldNum ="+POut.PInt(pf.PatFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Frequently returns null.</summary>
 		public static PatField GetByName(string name,PatField[] fieldList){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<fieldList.Length;i++){
 				if(fieldList[i].FieldName==name){
 					return fieldList[i];

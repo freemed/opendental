@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM journalentry "
 				+"WHERE TransactionNum="+POut.PInt(transactionNum);
-			List <JournalEntry> List=RefreshAndFill(command);
+			List<JournalEntry> List=RefreshAndFill(Db.GetTable(command));
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Count;i++) {
 				retVal.Add(List[i]);
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM journalentry "
 				+"WHERE AccountNum="+POut.PInt(accountNum)
 				+" ORDER BY DateDisplayed";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Used in reconcile window.</summary>
@@ -52,11 +52,11 @@ namespace OpenDentBusiness{
 				command+=")";
 			}
 			command+=" ORDER BY DateDisplayed";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		private static List <JournalEntry> RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static List <JournalEntry> RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List <JournalEntry> List=new List <JournalEntry> ();
 			for(int i=0;i<table.Rows.Count;i++) {
 				List.Add(new JournalEntry());

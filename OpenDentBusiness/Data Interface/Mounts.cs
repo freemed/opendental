@@ -9,6 +9,9 @@ namespace OpenDentBusiness {
 	public class Mounts {
 
 		public static int Insert(Mount mount){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+			}
 			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES ("
 				+"'"+POut.PInt(mount.MountNum)+"',"
 				+"'"+POut.PInt(mount.PatNum)+"',"
@@ -23,6 +26,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static int Update(Mount mount){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+			}
 			string command="UPDATE mount SET "
 				+"PatNum='"+POut.PInt(mount.PatNum)+"',"
 				+"DocCategory='"+POut.PInt(mount.DocCategory)+"',"
@@ -37,12 +43,17 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Delete(Mount mount){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),mount);
+				return;
+			}
 			string command="DELETE FROM mount WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Converts the given datarow into a mount object.</summary>
 		public static Mount Fill(DataRow mountRow){
+			//No need to check RemotingRole; no call to db.
 			Mount mount=new Mount();
 			mount.MountNum=PIn.PInt(mountRow["MountNum"].ToString());
 			mount.PatNum=PIn.PInt(mountRow["PatNum"].ToString());
@@ -58,6 +69,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns a single mount object corresponding to the given mount number key.</summary>
 		public static Mount GetByNum(int mountNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Mount>(MethodBase.GetCurrentMethod(),mountNum);
+			}
 			string command="SELECT * FROM mount WHERE MountNum='"+mountNum+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count<0){

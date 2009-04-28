@@ -8,6 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Prefs{
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM preference";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Pref";
@@ -17,6 +18,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			PrefC.HList=new Hashtable();
 			Pref pref;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -31,6 +33,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Pref pref) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pref);
+				return;
+			}
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.PString(pref.ValueString)+"' "
 				//+",Comments = '"  +POut.PString(pref.Comments)+"' "
@@ -49,12 +55,17 @@ namespace OpenDentBusiness{
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.PInt(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			Db.NonQ(command);
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+			}else{
+				Db.NonQ(command);
+			}
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=newValue.ToString();
 			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
-			return true;
+			return retVal;
 		}
 
 		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.</summary>
@@ -68,12 +79,18 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDouble(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			Db.NonQ(command);
-			return true;
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+			}else{
+				Db.NonQ(command);
+			}
+			return retVal;
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateBool(string prefName,bool newValue) {
+			//No need to check RemotingRole; no call to db.
 			return UpdateBool(prefName,newValue,false);
 		}
 
@@ -85,11 +102,16 @@ namespace OpenDentBusiness{
 			if(!isForced && PrefC.GetBool(prefName)==newValue) {
 				return false;//no change needed
 			}
-			string command = "UPDATE preference SET "
+			string command="UPDATE preference SET "
 				+"ValueString = '"+POut.PBool(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			Db.NonQ(command);
-			return true;
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue,isForced);
+			}else{			
+				Db.NonQ(command);
+			}
+			return retVal;
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
@@ -104,9 +126,10 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PString(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				//Result of Meth is ignored.
-				Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
 				//doesn't exit out of this method here.
 			}
 			else {
@@ -116,7 +139,7 @@ namespace OpenDentBusiness{
 			pref.PrefName=prefName;
 			pref.ValueString=newValue;
 			PrefC.HList[prefName]=pref;
-			return true;
+			return retVal;
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
@@ -130,12 +153,17 @@ namespace OpenDentBusiness{
 			string command = "UPDATE preference SET "
 				+"ValueString = '"+POut.PDateT(newValue,false)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			Db.NonQ(command);
+			bool retVal=true;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
+			}else{
+				Db.NonQ(command);
+			}
 			Pref pref=new Pref();
 			pref.PrefName=prefName;
 			pref.ValueString=POut.PDateT(newValue,false);
 			PrefC.HList[prefName]=pref;//in some cases, we just want to change the pref in local memory instead of doing a refresh afterwards.
-			return true;
+			return retVal;
 		}
 
 

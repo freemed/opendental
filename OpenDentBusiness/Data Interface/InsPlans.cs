@@ -253,6 +253,7 @@ namespace OpenDentBusiness {
 		}
 
 		private static List<InsPlan> RefreshFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<InsPlan> planList=new List<InsPlan>();
 			InsPlan plan;
 			for(int i=0;i<table.Rows.Count;i++) {

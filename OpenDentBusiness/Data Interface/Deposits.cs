@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM deposit "
 				+"ORDER BY DateDeposit";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets only Deposits which are not attached to transactions.</summary>
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM deposit "
 				+"WHERE NOT EXISTS(SELECT * FROM transaction WHERE deposit.DepositNum=transaction.DepositNum) "
 				+"ORDER BY DateDeposit";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets a single deposit directly from the database.</summary>
@@ -35,11 +35,11 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM deposit "
 				+"WHERE DepositNum="+POut.PInt(depositNum);
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
-		private static Deposit[] RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static Deposit[] RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			Deposit[] List=new Deposit[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Deposit();

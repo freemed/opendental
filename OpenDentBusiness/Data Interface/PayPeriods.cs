@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static PayPeriod[] list;
 
 		public static PayPeriod[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * from payperiod ORDER BY DateStart";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="PayPeriod";
@@ -31,6 +33,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new PayPeriod[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new PayPeriod();
@@ -43,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PayPeriod pp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				pp.PayPeriodNum=MiscData.GetKey("payperiod","PayPeriodNum");
 			}
@@ -68,6 +75,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PayPeriod pp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
+				return;
+			}
 			string command= "UPDATE payperiod SET "
 				+"DateStart = "    +POut.PDate  (pp.DateStart)+" "
 				+",DateStop = "    +POut.PDate  (pp.DateStop)+" "
@@ -78,12 +89,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(PayPeriod pp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
+				return;
+			}
 			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.PInt(pp.PayPeriodNum);
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static int GetForDate(DateTime date){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(date.Date >= List[i].DateStart.Date && date.Date <= List[i].DateStop.Date){
 					return i;

@@ -9,48 +9,63 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Payments {
 		///<summary>Gets all payments for the specified patient. This has NOTHING to do with pay splits.  Must use pay splits for accounting.  This is only for display in Account module.</summary>
-		public static Payment[] Refresh(int patNum) {
+		public static List <Payment> Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * from payment"
 				+" WHERE PatNum="+patNum.ToString();
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Get one specific payment from db.</summary>
 		public static Payment GetPayment(int payNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Payment>(MethodBase.GetCurrentMethod(),payNum);
+			}
 			string command=
 				"SELECT * from payment"
 				+" WHERE PayNum = '"+payNum+"'";
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
 		///<summary>Get all specified payments.</summary>
-		public static Payment[] GetPayments(int[] payNums) {
-			if(payNums.Length==0) {
-				return new Payment[0];
+		public static List<Payment> GetPayments(List <int> payNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),payNums);
+			}
+			if(payNums.Count==0) {
+				return new List <Payment>();
 			}
 			string command=
 				"SELECT * from payment"
 				+" WHERE";
-			for(int i=0;i<payNums.Length;i++) {
+			for(int i=0;i<payNums.Count;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
 				command+=" PayNum="+payNums[i].ToString();
 			}
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all payments attached to a single deposit.</summary>
-		public static Payment[] GetForDeposit(int depositNum) {
+		public static List <Payment> GetForDeposit(int depositNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),depositNum);
+			}
 			string command=
 				"SELECT * from payment"
 				+" WHERE DepositNum = "+POut.PInt(depositNum);
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all unattached payments for a new deposit slip.  Excludes payments before dateStart.  There is a chance payTypes might be of length 1 or even 0.</summary>
-		public static Payment[] GetForDeposit(DateTime dateStart,int clinicNum,int[] payTypes) {
+		public static List <Payment> GetForDeposit(DateTime dateStart,int clinicNum,List <int> payTypes) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),dateStart,clinicNum,payTypes);
+			}
 			string command=
 				"SELECT * FROM payment "
 				+"WHERE DepositNum = 0 "
@@ -58,7 +73,7 @@ namespace OpenDentBusiness{
 			if(clinicNum!=0){
 				command+="AND ClinicNum="+POut.PInt(clinicNum);
 			}
-			for(int i=0;i<payTypes.Length;i++) {
+			for(int i=0;i<payTypes.Count;i++) {
 				if(i==0) {
 					command+=" AND (";
 				}
@@ -66,18 +81,18 @@ namespace OpenDentBusiness{
 					command+=" OR ";
 				}
 				command+="PayType="+POut.PInt(payTypes[i]);
-				if(i==payTypes.Length-1) {
+				if(i==payTypes.Count-1) {
 					command+=")";
 				}
 			}
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		private static Payment[] RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
-			Payment[] List=new Payment[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new Payment();
+		private static List <Payment> RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			List <Payment> List=new List <Payment> ();
+			for(int i=0;i<table.Rows.Count;i++) {
+				List.Add(new Payment());
 				List[i].PayNum    =PIn.PInt(table.Rows[i][0].ToString());
 				List[i].PayType   =PIn.PInt(table.Rows[i][1].ToString());
 				List[i].PayDate   =PIn.PDate(table.Rows[i][2].ToString());
@@ -97,6 +112,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.</summary>
 		public static void Update(Payment pay){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
+				return;
+			}
 			if(pay.PayDate.Date>DateTime.Today) {
 				throw new ApplicationException(Lan.g("Payments","Date must not be a future date."));
 			}
@@ -148,6 +167,10 @@ namespace OpenDentBusiness{
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
 		public static void Insert(Payment pay){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				pay.PayNum=MiscData.GetKey("payment","PayNum");
 			}
@@ -186,6 +209,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes the payment as well as all splits.  Surround by try catch, because it will throw an exception if trying to delete a payment attached to a deposit.</summary>
 		public static void Delete(Payment pay){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
+				return;
+			}
 			string command="SELECT DepositNum FROM payment WHERE PayNum="+POut.PInt(pay.PayNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -209,6 +236,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called just before Allocate in FormPayment.butOK click.  If true, then it will prompt the user before allocating.</summary>
 		public static bool AllocationRequired(double payAmt, int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),payAmt,patNum);
+			}
 			string command="SELECT EstBalance FROM patient "
 				+"WHERE PatNum = "+POut.PInt(patNum);
 			DataTable table=Db.GetTable(command);
@@ -234,6 +264,9 @@ namespace OpenDentBusiness{
 
 		/// <summary>Only Called only from FormPayment.butOK click.  Only called if the user did not enter any splits.  Usually just adds one split for the current patient.  But if that would take the balance negative, then it loops through all other family members and creates splits for them.  It might still take the current patient negative once all other family members are zeroed out.</summary>
 		public static List<PaySplit> Allocate(Payment pay){//double amtTot,int patNum,Payment payNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PaySplit>>(MethodBase.GetCurrentMethod(),pay);
+			}
 			string command= 
 				"SELECT Guarantor FROM patient "
 				+"WHERE PatNum = "+POut.PInt(pay.PatNum);
@@ -331,6 +364,7 @@ namespace OpenDentBusiness{
 
 		///<summary>This does all the validation before calling AlterLinkedEntries.  It had to be separated like this because of the complexity of saving a payment.  Surround with try-catch.  Will throw an exception if user is trying to change, but not allowed.  Will return false if no synch with accounting is needed.  Use -1 for newAcct to indicate no change.</summary>
 		public static bool ValidateLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct){
+			//No need to check RemotingRole; no call to db.
 			if(!Accounts.PaymentsLinked()){
 				return false;//user has not even set up accounting links, so no need to check any of this.
 			}
@@ -401,6 +435,7 @@ namespace OpenDentBusiness{
 		public static void AlterLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct,DateTime payDate,
 			string patName)
 		{
+			//No need to check RemotingRole; no call to db.
 			if(!Accounts.PaymentsLinked()) {
 				return;//user has not even set up accounting links.
 			}
@@ -517,8 +552,9 @@ namespace OpenDentBusiness{
 		}		
 
 		///<summary>Used for display in ProcEdit. List MUST include the requested payment. Use GetPayments to get the list.</summary>
-		public static Payment GetFromList(int payNum,Payment[] List){
-			for(int i=0;i<List.Length;i++){
+		public static Payment GetFromList(int payNum,List <Payment> List){
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Count;i++){
 				if(List[i].PayNum==payNum){
 					return List[i];
 				}

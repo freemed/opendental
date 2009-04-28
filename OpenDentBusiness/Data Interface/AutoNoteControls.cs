@@ -17,11 +17,11 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 			}
 			string command = "SELECT * FROM autonotecontrol ORDER BY Descript";
-			Listt=RefreshAndFill(command);
+			Listt=RefreshAndFill(Db.GetTable(command));
 		}
 
-		private static List<AutoNoteControl> RefreshAndFill(string command) {
-			DataTable table = Db.GetTable(command);
+		private static List<AutoNoteControl> RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<AutoNoteControl> retVal=new List<AutoNoteControl>();
 			AutoNoteControl noteCont;
 			for (int i=0;i<table.Rows.Count;i++){

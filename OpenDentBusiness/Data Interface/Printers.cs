@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		private static Printer[] list;
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM printer";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Printer";
@@ -21,6 +22,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			list=new Printer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new Printer();
@@ -34,6 +36,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Printer GetOnePrinter(PrintSituation sit,int compNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Printer>(MethodBase.GetCurrentMethod(),sit,compNum);
+			}
 			Printer[] tempList=list;
 			string command="SELECT * FROM printer WHERE "
 				+"PrintSit = '"      +POut.PInt((int)sit)+"' "
@@ -50,6 +55,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(Printer cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				cur.PrinterNum=MiscData.GetKey("printer","PrinterNum");
 			}
@@ -78,6 +87,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Update(Printer cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
+				return;
+			}
 			string command="UPDATE printer SET "
 				+"ComputerNum = '"   +POut.PInt   (cur.ComputerNum)+"' "
 				+",PrintSit = '"     +POut.PInt   ((int)cur.PrintSit)+"' "
@@ -89,12 +102,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Delete(Printer cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
+				return;
+			}
 			string command="DELETE FROM printer "
 				+"WHERE PrinterNum = "+POut.PInt(cur.PrinterNum);
 			Db.NonQ(command);
 		}
 
 		public static bool PrinterIsInstalled(string name){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<PrinterSettings.InstalledPrinters.Count;i++){
 				if(PrinterSettings.InstalledPrinters[i]==name){
 					return true;
@@ -105,6 +123,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the set printer whether or not it is valid.</summary>
 		public static Printer GetForSit(PrintSituation sit){
+			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				RefreshCache();
 			}
@@ -121,6 +140,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Either does an insert or an update to the database if need to create a Printer object.  Or it also deletes a printer object if needed.</summary>
 		public static void PutForSit(PrintSituation sit,string computerName, string printerName,bool displayPrompt){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sit,computerName,printerName,displayPrompt);
+				return;
+			}
 			//Computer[] compList=Computers.Refresh();
 			//Computer compCur=Computers.GetCur();
 			string command="SELECT ComputerNum FROM computer "
@@ -153,6 +176,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from FormPrinterSetup if user selects the easy option.  Since the other options will be hidden, we have to clear them.  User should be sternly warned before this happens.</summary>
 		public static void ClearAll(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			//first, delete all entries
 			string command="DELETE FROM printer";
  			Db.NonQ(command);

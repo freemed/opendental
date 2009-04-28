@@ -8,9 +8,13 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PhoneOverrides{
+
 		public static PhoneOverride GetPhoneOverride(int phoneOverrideNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),phoneOverrideNum);
+			}
 			string command="SELECT * FROM phoneoverride WHERE PhoneOverrideNum="+POut.PInt(phoneOverrideNum);
-			List<PhoneOverride> list=SubmitAndFill(command);
+			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
 			}
@@ -19,18 +23,21 @@ namespace OpenDentBusiness{
 
 		///<summary>Could easily return null.</summary>
 		public static PhoneOverride GetByExtAndEmp(int extension,int employeeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),extension,employeeNum);
+			}
 			string command="SELECT * FROM phoneoverride "
 				+"WHERE Extension="+POut.PInt(extension)+" "
 				+"AND EmpCurrent="+POut.PInt(employeeNum);
-			List<PhoneOverride> list=SubmitAndFill(command);
+			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
 			}
 			return list[0];
 		}
 
-		private static List<PhoneOverride> SubmitAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<PhoneOverride> SubmitAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<PhoneOverride> list=new List<PhoneOverride>();
 			PhoneOverride phoneCur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -47,6 +54,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PhoneOverride phoneCur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
+				return;
+			}
 			string command="INSERT INTO phoneoverride(Extension,EmpCurrent,IsAvailable,Explanation) "
 				+"VALUES("
 				+POut.PInt(phoneCur.Extension)+","
@@ -72,6 +83,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PhoneOverride phoneCur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
+				return;
+			}
 			string command="UPDATE phoneoverride SET "
 				+"Extension="+phoneCur.Extension.ToString()+","
 				+"EmpCurrent="+phoneCur.EmpCurrent.ToString()+","
@@ -96,6 +111,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static void Delete(PhoneOverride phoneCur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
+				return;
+			}
 			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.PInt(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
 			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
@@ -111,6 +130,7 @@ namespace OpenDentBusiness{
 
 		///<summary>If an existing override changes the extension of an employee, then this just changes IsAvailable to true.  But if the existing override has no effect on the extension, then it just gets deleted.</summary>
 		public static void SetAvailable(int extension,int empNum){
+			//No need to check RemotingRole; no call to db.
 			PhoneOverride phoneOR=GetByExtAndEmp(extension,empNum);
 			if(phoneOR==null){
 				return;//no override exists.

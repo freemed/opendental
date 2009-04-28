@@ -12,6 +12,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PerioMeasure Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE periomeasure SET "
 				+ "PerioExamNum = '"+POut.PInt   (Cur.PerioExamNum)+"'"
 				+",SequenceType = '"+POut.PInt   ((int)Cur.SequenceType)+"'"
@@ -29,6 +33,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PerioMeasure Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.PerioMeasureNum=MiscData.GetKey("periomeasure","PerioMeasureNum");
 			}
@@ -63,6 +71,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(PerioMeasure Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "DELETE from periomeasure WHERE PerioMeasureNum = '"
 				+Cur.PerioMeasureNum.ToString()+"'";
 			Db.NonQ(command);
@@ -70,6 +82,10 @@ namespace OpenDentBusiness{
 
 		///<summary>For the current exam, clears existing skipped teeth and resets them to the specified skipped teeth. The ArrayList valid values are 1-32 int.</summary>
 		public static void SetSkipped(int perioExamNum, ArrayList skippedTeeth){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),perioExamNum,skippedTeeth);
+				return;
+			}
 			//for(int i=0;i<skippedTeeth.Count;i++){
 			//MessageBox.Show(skippedTeeth[i].ToString());
 			//}
@@ -98,6 +114,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormPerio.Add_Click. For the specified exam, gets a list of all skipped teeth. The ArrayList valid values are 1-32 int.</summary>
 		public static ArrayList GetSkipped(int perioExamNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),perioExamNum);
+			}
 			string command = "SELECT IntTooth FROM periomeasure WHERE "
 				+"SequenceType = '"+POut.PInt((int)PerioSequenceType.SkipTooth)+"' "
 				+"AND PerioExamNum = '"+perioExamNum.ToString()+"' "

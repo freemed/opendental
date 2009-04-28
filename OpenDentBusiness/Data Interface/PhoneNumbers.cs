@@ -35,6 +35,9 @@ namespace OpenDentBusiness{
 		}*/
 
 		public static List<PhoneNumber> GetPhoneNumbers(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PhoneNumber>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM phonenumber WHERE PatNum="+POut.PInt(patNum);
 			Collection<PhoneNumber> collectState=DataObjectFactory<PhoneNumber>.CreateObjects(command);
 			return new List<PhoneNumber>(collectState);		
@@ -42,6 +45,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(PhoneNumber phoneNumber){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneNumber);
+				return;
+			}
 			DataObjectFactory<PhoneNumber>.WriteObject(phoneNumber);
 		}
 
@@ -65,6 +72,10 @@ namespace OpenDentBusiness{
 		}*/
 
 		public static void DeleteObject(int phoneNumberNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneNumberNum);
+				return;
+			}
 			DataObjectFactory<PhoneNumber>.DeleteObject(phoneNumberNum);
 		}
 

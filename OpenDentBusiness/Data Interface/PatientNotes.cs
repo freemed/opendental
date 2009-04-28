@@ -49,6 +49,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PatientNote Cur, int guarantor){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur,guarantor);
+				return;
+			}
 			string command = "UPDATE patientnote SET "
 				//+ "apptphone = '"   +POut.PString(Cur.ApptPhone)+"'"
 				+ "Medical = '"      +POut.PString(Cur.Medical)+"'"
@@ -69,6 +73,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void InsertRow(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			string command = "INSERT INTO patientnote (patnum"
 				+") VALUES('"+patNum+"')";
 			//MessageBox.Show(command);

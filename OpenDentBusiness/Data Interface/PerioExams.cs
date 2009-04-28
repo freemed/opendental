@@ -12,6 +12,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Most recent date last.  All exams loaded, even if not displayed.</summary>
 		public static void Refresh(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			string command=
 				"SELECT * from perioexam"
 				+" WHERE PatNum = '"+patNum.ToString()+"'"
@@ -30,6 +34,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PerioExam Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE perioexam SET "
 				+ "PatNum = '"     +POut.PInt   (Cur.PatNum)+"'"
 				+",ExamDate = "    +POut.PDate  (Cur.ExamDate)
@@ -40,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PerioExam Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.PerioExamNum=MiscData.GetKey("perioexam","PerioExamNum");
 			}
@@ -66,6 +78,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(PerioExam Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "DELETE from perioexam WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";
 			Db.NonQ(command);
 			command= "DELETE from periomeasure WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";

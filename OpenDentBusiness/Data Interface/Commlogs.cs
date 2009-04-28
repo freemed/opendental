@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				"SELECT * FROM commlog"
 				+" WHERE PatNum = '"+patNum+"'"
 				+" ORDER BY CommDateTime";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets one commlog item from database.</summary>
@@ -27,15 +27,15 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM commlog"
 				+" WHERE CommlogNum = "+POut.PInt(commlogNum);
-			Commlog[] commList=RefreshAndFill(command);
+			Commlog[] commList=RefreshAndFill(Db.GetTable(command));
 			if(commList.Length==0) {
 				return null;
 			}
 			return commList[0];
 		}
 
-		private static Commlog[] RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static Commlog[] RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			Commlog[] List=new Commlog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Commlog();

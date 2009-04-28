@@ -20,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<PatPlan> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			PatPlan patplan;
 			List<PatPlan> retVal=new List<PatPlan>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -38,6 +39,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void Update(PatPlan p){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				return;
+			}
 			string command="UPDATE patplan SET " 
 				+"PatNum = '"       +POut.PInt   (p.PatNum)+"'"
 				+",PlanNum = '"     +POut.PInt   (p.PlanNum)+"'"
@@ -51,6 +56,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PatPlan p){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				p.PatPlanNum=MiscData.GetKey("patplan","PatPlanNum");
 			}
@@ -87,6 +96,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
 		public static int GetPlanNum(List <PatPlan> list,int ordinal){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
 					return list[i].PlanNum;
@@ -97,6 +107,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the relationship of the specified ordinal.  If ordinal not valid, then it returns self (0).</summary>
 		public static Relat GetRelat(List <PatPlan> list,int ordinal){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
 					return list[i].Relationship;
@@ -106,6 +117,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetPatID(List <PatPlan> patPlans,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
 				if(patPlans[p].PlanNum==planNum) {
 					return patPlans[p].PatID;
@@ -116,6 +128,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
 		public static void SetOrdinal(int patPlanNum,int newOrdinal){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
+				return;
+			}
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.PInt(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -150,6 +166,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through the supplied list to find the one patplan needed.</summary>
 		public static PatPlan GetFromList(PatPlan[] patPlans,int patPlanNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlans.Length;i++){
 				if(patPlans[i].PatPlanNum==patPlanNum){
 					return patPlans[i].Copy();
@@ -160,6 +177,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.  Only used once in Claims.cs.</summary>
 		public static int GetPatPlanNum(List <PatPlan> patPlans,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlans.Count;i++) {
 				if(patPlans[i].PlanNum==planNum) {
 					return patPlans[i].PatPlanNum;

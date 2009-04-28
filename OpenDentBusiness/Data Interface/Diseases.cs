@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM disease WHERE PatNum="+POut.PInt(patNum)
 				+" AND DiseaseDefNum="+POut.PInt(diseaseDefNum);
-			Disease[] disList=RefreshAndFill(command);
+			Disease[] disList=RefreshAndFill(Db.GetTable(command));
 			if(disList.Length==0){
 				return null;
 			}
@@ -29,11 +29,11 @@ namespace OpenDentBusiness {
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 				+"AND PatNum="+POut.PInt(patNum)
 				+" ORDER BY diseasedef.ItemOrder";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		private static Disease[] RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static Disease[] RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			Disease[] List=new Disease[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Disease();

@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE PatNum = "+POut.PInt(patNum)+" ORDER BY AdjDate";
-			return RefreshAndFill(command).ToArray();
+			return RefreshAndFill(Db.GetTable(command)).ToArray();
 		}
 
 		///<summary>Gets one adjustment from the db.</summary>
@@ -113,12 +113,11 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM adjustment"
 				+" WHERE AdjNum = "+POut.PInt(adjNum);
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
-		private static List<Adjustment> RefreshAndFill(string command){
+		private static List<Adjustment> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
- 			DataTable table=Db.GetTable(command);
 			List<Adjustment> retVal=new List<Adjustment>();
 			Adjustment adj;
 			for(int i=0;i<table.Rows.Count;i++){

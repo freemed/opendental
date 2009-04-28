@@ -11,6 +11,7 @@ namespace OpenDentBusiness {
 
 		///<summary>A list of all allowable patFields.</summary>
 		public static PatFieldDef[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -23,6 +24,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM patfielddef";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="PatFieldDef";
@@ -32,6 +34,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new PatFieldDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatFieldDef();
@@ -42,6 +45,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Must supply the old field name so that the patient lists can be updated.</summary>
 		public static void Update(PatFieldDef p, string oldFieldName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),p,oldFieldName);
+				return;
+			}
 			string command="UPDATE patfielddef SET " 
 				+"FieldName = '"        +POut.PString(p.FieldName)+"'"
 				+" WHERE PatFieldDefNum  ='"+POut.PInt   (p.PatFieldDefNum)+"'";
@@ -53,6 +60,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(PatFieldDef p) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				return;
+			}
 			string command="INSERT INTO patfielddef (FieldName) VALUES("
 				+"'"+POut.PString(p.FieldName)+"')";
 			p.PatFieldDefNum=Db.NonQ(command,true);
@@ -60,6 +71,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
 		public static void Delete(PatFieldDef p) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
+				return;
+			}
 			string command="SELECT LName,FName FROM patient,patfield WHERE "
 				+"patient.PatNum=patfield.PatNum "
 				+"AND FieldName='"+POut.PString(p.FieldName)+"'";

@@ -15,6 +15,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all MountItemDefs when program first opens.</summary>
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * FROM mountitemdef";
 			DataTable table=Db.GetTable(command);
 			Listt=new List<MountItemDef>();
@@ -33,6 +37,9 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(MountItemDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+			}
 			string command="UPDATE mountitemdef SET " 
 				+"MountDefNum = '"+POut.PInt(def.MountDefNum)+"'"
 				+",Xpos = '"      +POut.PInt(def.Xpos)+"'"
@@ -45,6 +52,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(MountItemDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="INSERT INTO mountitemdef (MountDefNum,Xpos,Ypos,Width,Height"
 				+") VALUES("
 				+"'"+POut.PInt(def.MountDefNum)+"', "
@@ -57,6 +68,10 @@ namespace OpenDentBusiness {
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountItemDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountItemDefNum);
+				return;
+			}
 			string command="DELETE FROM mountitemdef WHERE MountItemDefNum="+POut.PInt(mountItemDefNum);
 			Db.NonQ(command);
 		}

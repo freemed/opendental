@@ -9,33 +9,42 @@ namespace OpenDentBusiness{
 	public class PayPlanCharges {
 		///<summary>Gets all PayPlanCharges for a guarantor or patient, ordered by date.</summary>
 		public static List<PayPlanCharge> Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE Guarantor='"+POut.PInt(patNum)+"' "
 				+"OR PatNum='"+POut.PInt(patNum)+"' "
 				+"ORDER BY ChargeDate";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary></summary>
 		public static List<PayPlanCharge> GetForPayPlan(int payPlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),payPlanNum);
+			}
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanNum="+POut.PInt(payPlanNum)
 				+" ORDER BY ChargeDate";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary></summary>
 		public static PayPlanCharge GetOne(int payPlanChargeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PayPlanCharge>(MethodBase.GetCurrentMethod(),payPlanChargeNum);
+			}
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanChargeNum="+POut.PInt(payPlanChargeNum);
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
-		private static List<PayPlanCharge> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<PayPlanCharge> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
 			PayPlanCharge ppcharge;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,6 +65,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PayPlanCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			string command= "UPDATE payplancharge SET " 
 				+"PayPlanChargeNum = '"+POut.PInt   (charge.PayPlanChargeNum)+"'"
 				+",PayPlanNum = '"     +POut.PInt   (charge.PayPlanNum)+"'"
@@ -72,6 +85,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(PayPlanCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				charge.PayPlanChargeNum=MiscData.GetKey("payplancharge","PayPlanChargeNum");
 			}
@@ -102,45 +119,24 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(PayPlanCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			string command= "DELETE from payplancharge WHERE PayPlanChargeNum = '"
 				+POut.PInt(charge.PayPlanChargeNum)+"'";
  			Db.NonQ(command);
-		}
-
-		
+		}	
 
 		///<summary></summary>
 		public static void DeleteAllInPlan(int payPlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),payPlanNum);
+				return;
+			}
 			string command="DELETE FROM payplancharge WHERE PayPlanNum="+payPlanNum.ToString();
 			Db.NonQ(command);
 		}
-
 	
 	}
-
-	
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

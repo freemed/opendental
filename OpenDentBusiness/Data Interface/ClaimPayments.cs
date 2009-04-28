@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 			if(clinicNum!=0){
 				command+=" AND ClinicNum="+POut.PInt(clinicNum);
 			}
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all claimpayments for one specific deposit.</summary>
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 				+"ClinicNum,DepositNum,CarrierName "
 				+"FROM claimpayment "
 				+"WHERE DepositNum = "+POut.PInt(depositNum);
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets one claimpayment directly from database.</summary>
@@ -88,14 +88,11 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM claimpayment "
 				+"WHERE ClaimPaymentNum = "+POut.PInt(claimPaymentNum);
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
-		private static ClaimPayment[] RefreshAndFill(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),command);
-			}
-			DataTable table=Db.GetTable(command);
+		private static ClaimPayment[] RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ClaimPayment[] List=new ClaimPayment[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ClaimPayment();

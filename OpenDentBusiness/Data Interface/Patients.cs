@@ -37,6 +37,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetFamilySelectCommand(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command= 
 				"SELECT guarantor FROM patient "
 				+"WHERE patnum = '"+POut.PInt(patNum)+"'";
@@ -66,6 +69,9 @@ namespace OpenDentBusiness{
 		public static Patient GetPat(int patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
 			} 
 			if(patNum==0) {
 				return null;
@@ -85,6 +91,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return null if not found.</summary>
 		public static Patient GetPatByChartNumber(string chartNumber) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),chartNumber);
+			}
 			if(chartNumber=="") {
 				return null;
 			}
@@ -103,6 +112,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return null if not found.</summary>
 		public static Patient GetPatBySSN(string ssn) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),ssn);
+			}
 			if(ssn=="") {
 				return null;
 			}
@@ -120,6 +132,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Patient> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
 			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.PDateT(changedSince);
 				//+" LIMIT 1000";
 			DataTable table=Db.GetTable(command);
@@ -130,6 +145,10 @@ namespace OpenDentBusiness{
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
 		public static void Insert(Patient pat, bool includePatNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat,includePatNum);
+				return;
+			}
 			if(!includePatNum && PrefC.RandomKeys) {
 				pat.PatNum=MiscData.GetKey("patient","PatNum");
 			}
@@ -229,6 +248,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply the old Patient object to compare for changes.</summary>
 		public static int Update(Patient pat, Patient CurOld) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat,CurOld);
+			}
 			bool comma=false;
 			string c = "UPDATE patient SET ";
 			if(pat.LName!=CurOld.LName) {
@@ -635,6 +657,10 @@ namespace OpenDentBusiness{
 		//This can never be used anymore, or it will mess up 
 		///<summary>This is only used when entering a new patient and user clicks cancel.  It used to actually delete the patient, but that will mess up UAppoint synch function.  DateTStamp needs to track deleted patients. So now, the PatStatus is simply changed to 4.</summary>
 		public static void Delete(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
 			string command="UPDATE patient SET PatStatus="+POut.PInt((int)PatientStatus.Deleted)+", "
 				+"Guarantor=PatNum "
 				+"WHERE PatNum ="+pat.PatNum.ToString();
@@ -646,6 +672,9 @@ namespace OpenDentBusiness{
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
 			int billingtype,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate,int siteNum)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum);
+			}
 			string billingsnippet=" ";
 			if(billingtype!=0){
 				billingsnippet+="AND BillingType="+POut.PInt(billingtype)+" ";
@@ -778,6 +807,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when filling appointments for an entire day. Gets a list of Pats, multPats, of all the specified patients.  Then, use GetOnePat to pull one patient from this list.  This process requires only one call to the database.</summary>
 		public static Patient[] GetMultPats(int[] patNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient[]>(MethodBase.GetCurrentMethod(),patNums);
+			}
 			//MessageBox.Show(patNums.Length.ToString());
 			string strPatNums="";
 			DataTable table;
@@ -800,6 +832,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Patient> TableToList(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Patient> patList=new List<Patient>();
 			Patient pat;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -880,6 +913,7 @@ namespace OpenDentBusiness{
 
 		///<summary>First call GetMultPats to fill the list of multPats. Then, use this to return one patient from that list.</summary>
 		public static Patient GetOnePat(Patient[] multPats, int patNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<multPats.Length;i++){
 				if(multPats[i].PatNum==patNum){
 					return multPats[i];
@@ -890,6 +924,9 @@ namespace OpenDentBusiness{
 
 		/// <summary>Gets nine of the most useful fields from the db for the given patnum.</summary>
 		public static Patient GetLim(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			if(patNum==0){
 				return new Patient();
 			}
@@ -916,6 +953,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
 		public static DataTable GetPaymentStartingBalances(int guarNum,int excludePayNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),guarNum,excludePayNum);
+			}
 			/*command=@"SELECT (SELECT EstBalance FROM patient WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum) EstBalance, "
 				+"IFNULL((SELECT SUM(ProcFee) FROM procedurelog WHERE PatNum="+POut.PInt(patNum)+" AND ProcStatus=2 GROUP BY PatNum),0)"//complete
 				+"+IFNULL((SELECT SUM(InsPayAmt) FROM claimproc WHERE PatNum="+POut.PInt(patNum)
@@ -1003,6 +1043,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void ChangeGuarantorToCur(Family Fam,Patient Pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Fam,Pat);
+				return;
+			}
 			//Move famfinurgnote to current patient:
 			string command= "UPDATE patient SET "
 				+"FamFinUrgNote = '"+POut.PString(Fam.ListPats[0].FamFinUrgNote)+"' "
@@ -1033,6 +1077,10 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static void CombineGuarantors(Family Fam,Patient Pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Fam,Pat);
+				return;
+			}
 			//concat cur notes with guarantor notes
 			string command= 
 				"UPDATE patient SET "
@@ -1076,6 +1124,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets names for all patients.  Used mostly to show paysplit info.  Also used for reports, FormTrackNext, and FormUnsched.</summary>
 		public static void GetHList(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT patnum,lname,fname,middlei,preferred "
 				+"FROM patient";
 			DataTable table=Db.GetTable(command);
@@ -1099,6 +1151,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void UpdateAddressForFam(Patient pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
 			string command= "UPDATE patient SET " 
 				+"Address = '"    +POut.PString(pat.Address)+"'"
 				+",Address2 = '"   +POut.PString(pat.Address2)+"'"
@@ -1117,6 +1173,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in new patient terminal.  Synchs less fields than the normal synch.</summary>
 		public static void UpdateAddressForFamTerminal(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
 			string command= "UPDATE patient SET " 
 				+"Address = '"    +POut.PString(pat.Address)+"'"
 				+",Address2 = '"   +POut.PString(pat.Address2)+"'"
@@ -1130,6 +1190,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void UpdateNotesForFam(Patient pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				return;
+			}
 			string command= "UPDATE patient SET " 
 				+"addrnote = '"   +POut.PString(pat.AddrNote)+"'"
 				+" WHERE guarantor = '"+POut.PDouble(pat.Guarantor)+"'";
@@ -1138,6 +1202,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used from FormRecallListEdit.  Updates two fields for family if they are already the same for the entire family.  If they start out different for different family members, then it only changes the two fields for the single patient.</summary>
 		public static void UpdatePhoneAndNoteIfNeeded(string newphone, string newnote, int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),newphone,newnote,patNum);
+				return;
+			}
 			string command="SELECT Guarantor,HmPhone,AddrNote FROM patient WHERE Guarantor="
 				+"(SELECT Guarantor FROM patient WHERE PatNum="+POut.PInt(patNum)+")";
 			DataTable table=Db.GetTable(command);
@@ -1174,6 +1242,9 @@ namespace OpenDentBusiness{
 		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr
 			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,bool ignoreInPerson)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,ignoreInPerson);
+			}
 			string command="";
 			if(includeChanged){
 				command+=@"DROP TABLE IF EXISTS templastproc;
@@ -1339,14 +1410,14 @@ namespace OpenDentBusiness{
 				command="DROP TABLE IF EXISTS tempclaimspending";
 				Db.NonQ(command);
 			}
-
-
-
 			return agingList;
 		}
 
 		///<summary>Used only to run finance charges, so it ignores negative balances.</summary>
 		public static PatAging[] GetAgingList(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PatAging[]>(MethodBase.GetCurrentMethod());
+			}
 			string command =
 				"SELECT patnum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,InsEst,LName,FName,MiddleI,PriProv,BillingType "
 				+"FROM patient "//actually only gets guarantors since others are 0.
@@ -1377,6 +1448,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the next available integer chart number.  Will later add a where clause based on preferred format.</summary>
 		public static string GetNextChartNum(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT ChartNumber from patient WHERE"
 				+" ChartNumber REGEXP '^[0-9]+$'"//matches any number of digits
 				+" ORDER BY (chartnumber+0) DESC ";//1/13/05 by Keyush Shaw-added 0.
@@ -1399,6 +1473,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the name(only one) of the patient using this chartnumber.</summary>
 		public static string ChartNumUsedBy(string chartNum,int excludePatNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),chartNum,excludePatNum);
+			}
 			string command="SELECT LName,FName from patient WHERE "
 				+"ChartNumber = '"+chartNum
 				+"' AND PatNum != '"+excludePatNum.ToString()+"'";
@@ -1412,6 +1489,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in the patient select window to determine if a trial version user is over their limit.</summary>
 		public static int GetNumberPatients(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT Count(*) FROM patient";
 			DataTable table=Db.GetTable(command);
 			return PIn.PInt(table.Rows[0][0].ToString());
@@ -1419,6 +1499,7 @@ namespace OpenDentBusiness{
 
 		///<summary>The current patient will already be on the button.  This adds the family members when user clicks dropdown arrow. Can handle null values for pat and fam.  Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
 		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,int patNum,Family fam){
+			//No need to check RemotingRole; no call to db.
 			//fill menu
 			menu.MenuItems.Clear();
 			for(int i=0;i<buttonLastFiveNames.Count;i++){
@@ -1435,6 +1516,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
 		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
+			//No need to check RemotingRole; no call to db.
 			//add current patient
 			if(buttonLastFivePatNums==null) {
 				buttonLastFivePatNums=new ArrayList();
@@ -1461,6 +1543,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>
 		public static int ButtonSelect(ContextMenu menu,object sender,Family fam){
+			//No need to check RemotingRole; no call to db.
 			int index=menu.MenuItems.IndexOf((MenuItem)sender);
 			//Patients.PatIsLoaded=true;
 			if(index<buttonLastFivePatNums.Count){
@@ -1474,6 +1557,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>
 		public static void SetHasIns(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			string command="SELECT patient.HasIns,COUNT(patplan.PatNum) FROM patient "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum"
 				+" WHERE patient.PatNum="+POut.PInt(patNum)
@@ -1492,6 +1579,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable GetBirthdayList(DateTime dateFrom,DateTime dateTo){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo);
+			}
 			string command="SELECT LName,FName,Preferred,Address,Address2,City,State,Zip,Birthdate "
 				+"FROM patient " 
 				+"WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
@@ -1508,6 +1598,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the provider for this patient.  If provNum==0, then it gets the practice default prov.</summary>
 		public static int GetProvNum(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat);
+			}
 			if(pat.PriProv!=0)
 				return pat.PriProv;
 			if(PrefC.GetInt("PracticeDefaultProv")==0) {
@@ -1519,6 +1612,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>
 		public static int[] GetAllPatNums(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<int[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT PatNum From patient";
 			DataTable dt=Db.GetTable(command);
 			int[] patnums=new int[dt.Rows.Count];
@@ -1530,6 +1626,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
 		public static int DateToAge(DateTime date){
+			//No need to check RemotingRole; no call to db.
 			if(date.Year<1880)
 				return 0;
 			if(date.Month < DateTime.Now.Month){//birthday in previous month
@@ -1543,6 +1640,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
 		public static int DateToAge(DateTime birthdate,DateTime asofDate) {
+			//No need to check RemotingRole; no call to db.
 			if(birthdate.Year<1880)
 				return 0;
 			if(birthdate.Month < asofDate.Month) {//birthday in previous month
@@ -1556,17 +1654,14 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string AgeToString(int age){
+			//No need to check RemotingRole; no call to db.
 			if(age==0)
 				return "";
 			else
 				return age.ToString();
 		}
-		
-
 
 	}
-
-	
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>
 	public class PatAging{
@@ -1598,19 +1693,4 @@ namespace OpenDentBusiness{
 		public double PayPlanDue;
 	}
 
-	
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-
