@@ -24,6 +24,10 @@ namespace OpenDentBusiness{
 		///4) PayPlanDue will always include all payment plan charges minus credits, except when in
 		///historical mode where PayPlanDue excludes payment plan charges and payments after AsOfDate.</summary>
 		public static void ComputeAging(int guarantor,DateTime AsOfDate,bool historic){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),guarantor,AsOfDate,historic);
+				return;
+			}
 			//Zero out either entire database or entire family.
 			//Need to zero everything out first to catch former guarantors.
 			string command="UPDATE patient SET "

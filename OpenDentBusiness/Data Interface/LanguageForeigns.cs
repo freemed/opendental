@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static Hashtable hList;
 
 		public static Hashtable HList {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(hList==null) {
 					Refresh(CultureInfo.CurrentCulture);
@@ -24,6 +25,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Called once when the program first starts up.  Then only if user downloads new translations or adds their own.</summary>
 		public static void Refresh(CultureInfo cultureInfo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cultureInfo);
+				return;
+			}
 			HList=new Hashtable();
 			if(cultureInfo.Name=="en-US") {
 				return;
@@ -59,6 +64,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(LanguageForeign lf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
+				return;
+			}
 			string command= "INSERT INTO languageforeign(ClassType,English,Culture"
 				+",Translation,Comments) "
 				+"VALUES("
@@ -72,6 +81,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(LanguageForeign lf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
+				return;
+			}
 			string command="UPDATE languageforeign SET " 
 				+"Translation	= '"+POut.PString(lf.Translation)+"'"
 				+",Comments = '"  +POut.PString(lf.Comments)+"'" 
@@ -83,6 +96,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(LanguageForeign lf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lf);
+				return;
+			}
 			string command= "DELETE from languageforeign "
 				+"WHERE ClassType=BINARY '"+POut.PString(lf.ClassType)+"' "
 				+"AND English=BINARY '"    +POut.PString(lf.English)+"' "
@@ -92,6 +109,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used during export to get a list of all translations for specified culture only.</summary>
 		public static LanguageForeign[] GetListForCulture(CultureInfo cultureInfo){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<LanguageForeign[]>(MethodBase.GetCurrentMethod(),cultureInfo);
+			}
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE Culture='"+CultureInfo.CurrentCulture.Name+"'";
@@ -110,6 +130,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormTranslation to get all translations for all cultures for one classtype</summary>
 		public static LanguageForeign[] GetListForType(string classType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<LanguageForeign[]>(MethodBase.GetCurrentMethod(),classType);
+			}
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE ClassType='"+POut.PString(classType)+"'";
@@ -128,6 +151,7 @@ namespace OpenDentBusiness{
 		
 		///<summary>Used in FormTranslation to get a single entry for the specified culture.  The culture match must be extact.  If no translation entries, then it returns null.</summary>
 		public static LanguageForeign GetForCulture(LanguageForeign[] listForType,string english,string cultureName){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listForType.Length;i++){
 				if(english!=listForType[i].English){
 					continue;
@@ -142,6 +166,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormTranslation to get a single entry with the same language as the specified culture, but only for a different culture.  For instance, if culture is es-PR (Spanish-PuertoRico), then it will return any spanish translation that is NOT from Puerto Rico.  If no other translation entries, then it returns null.</summary>
 		public static LanguageForeign GetOther(LanguageForeign[] listForType,string english,string cultureName){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listForType.Length;i++){
 				if(english!=listForType[i].English){
 					continue;

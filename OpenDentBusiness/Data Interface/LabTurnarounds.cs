@@ -10,6 +10,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<LabTurnaround> GetForLab(int laboratoryNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabTurnaround>>(MethodBase.GetCurrentMethod(),laboratoryNum);
+			}
 			string command="SELECT * FROM labturnaround WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
 			DataTable table=Db.GetTable(command);
 			List<LabTurnaround> retVal=new List<LabTurnaround>();
@@ -28,6 +31,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This is used when saving a laboratory.  All labturnarounds for the lab are deleted and recreated.  So the list that's passed in will not have the correct keys set.  The key columns will be ignored.</summary>
 		public static void SetForLab(int labNum,List<LabTurnaround> lablist){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum,lablist);
+				return;
+			}
 			string command="DELETE FROM labturnaround WHERE LaboratoryNum="+POut.PInt(labNum);
 			Db.NonQ(command);
 			for(int i=0;i<lablist.Count;i++){
@@ -38,6 +45,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(LabTurnaround lab){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				lab.LabTurnaroundNum=MiscData.GetKey("labturnaround","LabTurnaroundNum");
 			}
@@ -64,6 +75,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Calculates the due date by adding the number of business days listed.  Adds an additional day for each office holiday.</summary>
 		public static DateTime ComputeDueDate(DateTime startDate,int days){
+			//No need to check RemotingRole; no call to db.
 			DateTime date=startDate;
 			int counter=0;
 			while(counter<days){

@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		private static Letter[] list;
 
 		public static Letter[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -24,6 +25,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * from letter ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -34,6 +36,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new Letter[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Letter();
@@ -45,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Letter Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="UPDATE letter SET "
 				+ "Description= '" +POut.PString(Cur.Description)+"' "
 				+ ",BodyText= '"   +POut.PString(Cur.BodyText)+"' "
@@ -54,6 +61,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Letter Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.LetterNum=MiscData.GetKey("letter","LetterNum");
 			}
@@ -78,6 +89,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Letter Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="DELETE from letter WHERE LetterNum = '"+Cur.LetterNum.ToString()+"'";
 			Db.NonQ(command);
 		}

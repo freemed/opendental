@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static LetterMergeField[] list;
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * FROM lettermergefield "
 				+"ORDER BY FieldName";
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			list=new LetterMergeField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new LetterMergeField();
@@ -33,6 +35,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts this lettermergefield into database.</summary>
 		public static void Insert(LetterMergeField lmf){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lmf);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				lmf.FieldNum=MiscData.GetKey("lettermergefield","FieldNum");
 			}
@@ -79,6 +85,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The result is a collection of strings representing field names.</summary>
 		public static List<string> GetForLetter(int letterMergeNum){
+			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				RefreshCache();
 			}
@@ -93,6 +100,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all lettermergefields for the given letter.  This is then followed by adding them all back, which is simpler than just updating.</summary>
 		public static void DeleteForLetter(int letterMergeNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),letterMergeNum);
+				return;
+			}
 			string command="DELETE FROM lettermergefield "
 				+"WHERE LetterMergeNum = "+POut.PInt(letterMergeNum);
 			Db.NonQ(command);

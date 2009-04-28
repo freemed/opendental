@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -36,7 +37,7 @@ namespace OpenDental{
 		private TextBox textSum;
 		private CheckBox checkLocked;
 		private Reconcile ReconcileCur;
-		private JournalEntry[] JournalList;
+		private List <JournalEntry> JournalList;
 		private OpenDental.UI.Button butDelete;
 		private TextBox textFindAmount;
 		private Label label6;
@@ -359,7 +360,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			double sum=0;
-			for(int i=0;i<JournalList.Length;i++) {
+			for(int i=0;i<JournalList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(JournalList[i].CheckNumber);
 				row.Cells.Add(JournalList[i].DateDisplayed.ToShortDateString());
@@ -500,7 +501,7 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew){
-				for(int i=0;i<JournalList.Length;i++){
+				for(int i=0;i<JournalList.Count;i++){
 					JournalList[i].ReconcileNum=0;
 				}
 				SaveList();//detaches all journal entries.

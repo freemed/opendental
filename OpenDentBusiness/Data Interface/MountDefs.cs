@@ -12,6 +12,7 @@ namespace OpenDentBusiness {
 		
 		///<summary>Gets a list of all MountDefs when program first opens.  Also refreshes MountItemDefs and attaches all items to the appropriate mounts.</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -21,6 +22,7 @@ namespace OpenDentBusiness {
 		}	
 
 		private static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			MountDefC.Listt=new List<MountDef>();
 			MountDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -37,6 +39,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(MountDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="UPDATE mountdef SET " 
 				+"Description = '"   +POut.PString(def.Description)+"'"
 				+",ItemOrder = '" +POut.PInt(def.ItemOrder)+"'"
@@ -49,6 +55,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(MountDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="INSERT INTO mountdef (Description,ItemOrder,IsRadiograph,Width,Height"
 				+") VALUES("
 				+"'"+POut.PString(def.Description)+"', "
@@ -61,6 +71,10 @@ namespace OpenDentBusiness {
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountDefNum);
+				return;
+			}
 			string command="DELETE FROM mountdef WHERE MountDefNum="+POut.PInt(mountDefNum);
 			Db.NonQ(command);
 			command="DELETE FROM mountitemdef WHERE MountDefNum ="+POut.PInt(mountDefNum);

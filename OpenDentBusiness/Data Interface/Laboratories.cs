@@ -10,18 +10,24 @@ namespace OpenDentBusiness{
 
 		///<summary>Refresh all Laboratories</summary>
 		public static List<Laboratory> Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Laboratory>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM laboratory ORDER BY Description";
-			return FillFromCommand(command);
+			return FillFromTable(Db.GetTable(command));
 		}
 
 		///<summary>Gets one laboratory from database</summary>
 		public static Laboratory GetOne(int laboratoryNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Laboratory>(MethodBase.GetCurrentMethod(),laboratoryNum);
+			}
 			string command="SELECT * FROM laboratory WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
-			return FillFromCommand(command)[0];
+			return FillFromTable(Db.GetTable(command))[0];
 		}
 
-		private static List<Laboratory> FillFromCommand(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<Laboratory> FillFromTable(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Laboratory> ListLabs=new List<Laboratory>();
 			Laboratory lab;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -38,6 +44,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Laboratory lab){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				lab.LaboratoryNum=MiscData.GetKey("laboratory","LaboratoryNum");
 			}
@@ -64,6 +74,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Laboratory lab){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				return;
+			}
 			string command= "UPDATE laboratory SET " 
 				+ "Description = '"    +POut.PString(lab.Description)+"'"
 				+ ",Phone = '"         +POut.PString(lab.Phone)+"'"
@@ -75,6 +89,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(int labNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum);
+				return;
+			}
 			string command;
 			//check lab cases for dependencies
 			command="SELECT LName,FName FROM patient,labcase "

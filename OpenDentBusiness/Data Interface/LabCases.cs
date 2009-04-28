@@ -10,6 +10,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a filtered list of all labcases.</summary>
 		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate,bool showCompleted,bool ShowUnattached) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptStartDate,aptEndDate,showCompleted,ShowUnattached);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -142,6 +145,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when drawing the planned appointment.</summary>
 		public static LabCase GetForPlanned(int aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.PlannedAptNum="+POut.PInt(aptNum);
 			DataTable table=Db.GetTable(command);
@@ -154,6 +160,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one labcase from database.</summary>
 		public static LabCase GetOne(int labCaseNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),labCaseNum);
+			}
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
 			DataTable table=Db.GetTable(command);
 			return FillFromTable(table)[0];
@@ -161,6 +170,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</summary>
 		public static List<LabCase> GetForPat(int patNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<LabCase>>(MethodBase.GetCurrentMethod(),patNum,isPlanned);
+			}
 			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum)+" AND ";
 			if(isPlanned){
 				command+="PlannedAptNum=0 AND AptNum=0";//We only show lab cases that have not been attached to any kind of appt.
@@ -196,6 +208,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(LabCase lab){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				lab.LabCaseNum=MiscData.GetKey("labcase","LabCaseNum");
 			}
@@ -230,6 +246,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(LabCase lab){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
+				return;
+			}
 			string command= "UPDATE labcase SET " 
 				+ "PatNum = '"          +POut.PInt   (lab.PatNum)+"'"
 				+ ",LaboratoryNum = '"  +POut.PInt   (lab.LaboratoryNum)+"'"
@@ -249,6 +269,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(int labCaseNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum);
+				return;
+			}
 			string command;
 			/*
 			//check patients for dependencies
@@ -270,18 +294,27 @@ namespace OpenDentBusiness{
 
 		///<summary>Attaches a labcase to an appointment.</summary>
 		public static void AttachToAppt(int labCaseNum,int aptNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum,aptNum);
+				return;
+			}
 			string command="UPDATE labcase SET AptNum="+POut.PInt(aptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Attaches a labcase to a planned appointment.</summary>
 		public static void AttachToPlannedAppt(int labCaseNum,int plannedAptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum,plannedAptNum);
+				return;
+			}
 			string command="UPDATE labcase SET PlannedAptNum="+POut.PInt(plannedAptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Frequently returns null.</summary>
 		public static LabCase GetOneFromList(List<LabCase> labCaseList,int aptNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<labCaseList.Count;i++){
 				if(labCaseList[i].AptNum==aptNum){
 					return labCaseList[i];

@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(int patNum){
+			//No need to check RemotingRole; no call to db.
 			List<MedicationPat> list=GetList(patNum);
 			List=list.ToArray();
 		}
@@ -38,6 +39,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(MedicationPat Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE medicationpat SET " 
 				+ "patnum = '"        +POut.PInt   (Cur.PatNum)+"'"
 				+ ",medicationnum = '"+POut.PInt   (Cur.MedicationNum)+"'"
@@ -49,6 +54,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(MedicationPat Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.MedicationPatNum=MiscData.GetKey("medicationpat","MedicationPatNum");
 			}
@@ -75,6 +84,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(MedicationPat Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from medicationpat WHERE medicationpatNum = '"
 				+Cur.MedicationPatNum.ToString()+"'";
 			Db.NonQ(command);

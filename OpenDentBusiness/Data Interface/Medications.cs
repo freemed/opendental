@@ -15,6 +15,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
+			//No need to check RemotingRole; no call to db.
 			List<Medication> list=GetList();
 			HList=new Hashtable();
 			List=list.ToArray();
@@ -44,6 +45,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Medication Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE medication SET " 
 				+ "medname = '"      +POut.PString(Cur.MedName)+"'"
 				+ ",genericnum = '"  +POut.PInt   (Cur.GenericNum)+"'"
@@ -55,6 +60,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Medication Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.MedicationNum=MiscData.GetKey("medication","MedicationNum");
 			}
@@ -81,12 +90,19 @@ namespace OpenDentBusiness{
 
 		///<summary>Dependent brands and patients will already be checked.</summary>
 		public static void Delete(Medication Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from medication WHERE medicationNum = '"+Cur.MedicationNum.ToString()+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Returns a list of all patients using this medication.</summary>
 		public static string[] GetPats(int medicationNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),medicationNum);
+			}
 			string command =
 				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM medicationpat,patient "
 				+"WHERE medicationpat.PatNum=patient.PatNum "
@@ -101,6 +117,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of all brands dependend on this generic. Only gets run if this is a generic.</summary>
 		public static string[] GetBrands(int medicationNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),medicationNum);
+			}
 			string command =
 				"SELECT MedName FROM medication "
 				+"WHERE GenericNum="+medicationNum.ToString()
@@ -115,11 +134,13 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Medication GetMedication(int medNum){
+			//No need to check RemotingRole; no call to db.
 			return (Medication)HList[medNum];
 		}
 
 		///<summary>Gets the generic medication for the specified medication Num.</summary>
 		public static Medication GetGeneric(int medNum) {
+			//No need to check RemotingRole; no call to db.
 			return (Medication)HList[((Medication)HList[medNum]).GenericNum];
 		}
 

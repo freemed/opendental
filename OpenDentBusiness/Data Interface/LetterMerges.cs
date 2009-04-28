@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static LetterMerge[] list;
 
 		public static LetterMerge[] Listt {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -27,6 +28,7 @@ namespace OpenDentBusiness{
 
 		///<summary>This is a static reference to a word application.  That way, we can reuse it instead of having to reopen Word each time.</summary>
 		public static Word.Application WordApp {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(wordApp==null) {
 					wordApp=new Word.Application();
@@ -46,6 +48,7 @@ namespace OpenDentBusiness{
 #endif
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * FROM lettermerge ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -56,6 +59,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			Listt=new LetterMerge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				Listt[i]=new LetterMerge();
@@ -70,6 +74,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts this lettermerge into database.</summary>
 		public static void Insert(LetterMerge merge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),merge);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				merge.LetterMergeNum=MiscData.GetKey("lettermerge","LetterMergeNum");
 			}
@@ -98,6 +106,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(LetterMerge merge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),merge);
+				return;
+			}
 			string command="UPDATE lettermerge SET "
 				+"Description = '"   +POut.PString(merge.Description)+"' "
 				+",TemplateName = '" +POut.PString(merge.TemplateName)+"' "
@@ -109,6 +121,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(LetterMerge merge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),merge);
+				return;
+			}
 			string command="DELETE FROM lettermerge "
 				+"WHERE LetterMergeNum = "+POut.PInt(merge.LetterMergeNum);
 			Db.NonQ(command);
@@ -116,6 +132,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply the index of the cat within DefC.Short.</summary>
 		public static List<LetterMerge> GetListForCat(int catIndex){
+			//No need to check RemotingRole; no call to db.
 			List<LetterMerge> retVal=new List<LetterMerge>();
 			for(int i=0;i<Listt.Length;i++){
 				if(Listt[i].Category==DefC.Short[(int)DefCat.LetterMergeCats][catIndex].DefNum){

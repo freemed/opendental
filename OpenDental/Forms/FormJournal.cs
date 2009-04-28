@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Windows.Forms;
@@ -17,7 +18,7 @@ namespace OpenDental{
 		private IContainer components;
 		private Account AccountCur;
 		private ImageList imageListMain;
-		private JournalEntry[] JournalList;
+		private List <JournalEntry> JournalList;
 		private PrintDocument pd2;
 		private bool headingPrinted;
 		private int pagesPrinted;
@@ -398,7 +399,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			double bal=0;
-			for(int i=0;i<JournalList.Length;i++){
+			for(int i=0;i<JournalList.Count;i++){
 				if(JournalList[i].DateDisplayed > dateTo) {
 					break;
 				}
