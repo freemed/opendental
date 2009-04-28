@@ -101,7 +101,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboClinic;
 		private System.Windows.Forms.Label labelClinic;
 		///<summary>List of all payments (not paysplits) that this procedure is attached to.</summary>
-		private Payment[] PaymentsForProc;
+		private List<Payment> PaymentsForProc;
 		//private User user;
 		//private uint m_autoAPIMsg;//ENP
 		private const string APPBAR_AUTOMATION_API_MESSAGE = "EZNotes.AppBarStandalone.Auto.API.Message"; 
@@ -2362,9 +2362,9 @@ namespace OpenDental{
 		private void FillPayments(){
 			PaySplit[] PaySplitList=PaySplits.Refresh(ProcCur.PatNum);
 			PaySplitsForProc=PaySplits.GetForProc(ProcCur.ProcNum,PaySplitList);
-			int[] payNums=new int[PaySplitsForProc.Count];
-			for(int i=0;i<payNums.Length;i++){
-				payNums[i]=((PaySplit)PaySplitsForProc[i]).PayNum;
+			List<int> payNums=new List<int>();//[];
+			for(int i=0;i<PaySplitsForProc.Count;i++) {
+				payNums.Add(((PaySplit)PaySplitsForProc[i]).PayNum);
 			}
 			PaymentsForProc=Payments.GetPayments(payNums);
 			tbPay.ResetRows(PaySplitsForProc.Count);

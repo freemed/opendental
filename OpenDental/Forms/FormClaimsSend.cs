@@ -88,16 +88,16 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelHistory = new System.Windows.Forms.Panel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.labelClinic = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.gridHistory = new OpenDental.UI.ODGrid();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.ToolBarHistory = new OpenDental.UI.ODToolBar();
 			this.butDropTo = new OpenDental.UI.Button();
 			this.butDropFrom = new OpenDental.UI.Button();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.textDateTo = new OpenDental.ValidDate();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.contextMenuEclaims = new System.Windows.Forms.ContextMenu();
 			this.panelHistory.SuspendLayout();
@@ -169,8 +169,8 @@ namespace OpenDental{
 			this.panelSplitter.Name = "panelSplitter";
 			this.panelSplitter.Size = new System.Drawing.Size(961,6);
 			this.panelSplitter.TabIndex = 50;
-			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
+			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
 			// 
 			// panelHistory
@@ -190,47 +190,6 @@ namespace OpenDental{
 			this.panelHistory.Size = new System.Drawing.Size(972,286);
 			this.panelHistory.TabIndex = 51;
 			// 
-			// panel1
-			// 
-			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panel1.Controls.Add(this.ToolBarHistory);
-			this.panel1.Location = new System.Drawing.Point(387,0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(576,27);
-			this.panel1.TabIndex = 44;
-			// 
-			// comboClinic
-			// 
-			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(74,26);
-			this.comboClinic.MaxDropDownItems = 40;
-			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(160,21);
-			this.comboClinic.TabIndex = 53;
-			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Location = new System.Drawing.Point(7,29);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(65,14);
-			this.labelClinic.TabIndex = 52;
-			this.labelClinic.Text = "Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(4,49);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(959,350);
-			this.gridMain.TabIndex = 32;
-			this.gridMain.Title = "Claims Waiting to Send";
-			this.gridMain.TranslationName = "TableQueue";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// gridHistory
 			// 
 			this.gridHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -245,6 +204,15 @@ namespace OpenDental{
 			this.gridHistory.Title = "History";
 			this.gridHistory.TranslationName = "TableClaimHistory";
 			this.gridHistory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridHistory_CellDoubleClick);
+			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.panel1.Controls.Add(this.ToolBarHistory);
+			this.panel1.Location = new System.Drawing.Point(387,0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(576,27);
+			this.panel1.TabIndex = 44;
 			// 
 			// ToolBarHistory
 			// 
@@ -300,6 +268,38 @@ namespace OpenDental{
 			this.textDateTo.Size = new System.Drawing.Size(81,20);
 			this.textDateTo.TabIndex = 37;
 			// 
+			// comboClinic
+			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClinic.Location = new System.Drawing.Point(74,26);
+			this.comboClinic.MaxDropDownItems = 40;
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(160,21);
+			this.comboClinic.TabIndex = 53;
+			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(7,29);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(65,14);
+			this.labelClinic.TabIndex = 52;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(4,49);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(959,350);
+			this.gridMain.TabIndex = 32;
+			this.gridMain.Title = "Claims Waiting to Send";
+			this.gridMain.TranslationName = "TableQueue";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
@@ -328,7 +328,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Send Claims";
-			this.Load += new System.EventHandler(this.FormPendingClaims_Load);
+			this.Load += new System.EventHandler(this.FormClaimsSend_Load);
 			this.panelHistory.ResumeLayout(false);
 			this.panelHistory.PerformLayout();
 			this.panel1.ResumeLayout(false);
@@ -337,7 +337,7 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormPendingClaims_Load(object sender, System.EventArgs e) {
+		private void FormClaimsSend_Load(object sender, System.EventArgs e) {
 			AdjustPanelSplit();
 			contextMenuStatus.MenuItems.Add(Lan.g(this,"Go to Account"),new EventHandler(GotoAccount_Clicked));
 			/*contextMenuStatus.MenuItems.Add("-");

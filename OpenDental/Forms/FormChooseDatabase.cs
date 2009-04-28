@@ -244,7 +244,6 @@ namespace OpenDental{
 			this.textUser2.Name = "textUser2";
 			this.textUser2.Size = new System.Drawing.Size(280,20);
 			this.textUser2.TabIndex = 2;
-			this.textUser2.Text = "Admin";
 			// 
 			// textPassword2
 			// 
@@ -253,7 +252,6 @@ namespace OpenDental{
 			this.textPassword2.PasswordChar = '*';
 			this.textPassword2.Size = new System.Drawing.Size(280,20);
 			this.textPassword2.TabIndex = 3;
-			this.textPassword2.Text = "pass";
 			this.textPassword2.UseSystemPasswordChar = true;
 			// 
 			// label10
@@ -410,6 +408,10 @@ namespace OpenDental{
 			MessageBox.Show("Startup path: "+Application.StartupPath+"\r\n"
 				+"Executable path: "+Application.ExecutablePath+"\r\n"
 				+"Current directory: "+Environment.CurrentDirectory);*/
+			#if DEBUG
+				textUser2.Text="Admin";
+				textPassword2.Text="pass";
+			#endif
 		}
 
 		///<summary>Gets a list of all computer names on the network (this is not easy)</summary>

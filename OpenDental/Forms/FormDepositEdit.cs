@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -40,7 +41,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDateStart;
 		private System.Windows.Forms.Label label5;
 		private OpenDental.UI.Button butRefresh;
-		private Payment[] PatPayList;
+		private List<Payment> PatPayList;
 		private ComboBox comboDepositAccount;
 		private Label labelDepositAccount;
 		private bool changed;
@@ -485,9 +486,9 @@ namespace OpenDental{
 				if(comboClinic.SelectedIndex!=0){
 					clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 				}
-				int[] payTypes=new int[listPayType.SelectedIndices.Count];
-				for(int i=0;i<payTypes.Length;i++){
-					payTypes[i]=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum;
+				List<int> payTypes=new List<int>();//[listPayType.SelectedIndices.Count];
+				for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
+					payTypes.Add(DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum);
 				}
 				PatPayList=Payments.GetForDeposit(dateStart,clinicNum,payTypes);
 				ClaimPayList=ClaimPayments.GetForDeposit(dateStart,clinicNum);
@@ -498,7 +499,7 @@ namespace OpenDental{
 			}
 			//Fill Patient Payment Grid---------------------------------------
 			ArrayList patNumAL=new ArrayList();
-			for(int i=0;i<PatPayList.Length;i++){
+			for(int i=0;i<PatPayList.Count;i++){
 				patNumAL.Add(PatPayList[i].PatNum);
 			}
 			int[] patNums=new int[patNumAL.Count];
@@ -520,7 +521,7 @@ namespace OpenDental{
 			gridPat.Columns.Add(col);
 			gridPat.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
-			for(int i=0;i<PatPayList.Length;i++){
+			for(int i=0;i<PatPayList.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(PatPayList[i].PayDate.ToShortDateString());
 				row.Cells.Add(Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF());
@@ -667,13 +668,13 @@ namespace OpenDental{
 			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
 			DataRow row;
 			ArrayList patNumAL=new ArrayList();
-			for(int i=0;i<PatPayList.Length;i++){
+			for(int i=0;i<PatPayList.Count;i++){
 				patNumAL.Add(PatPayList[i].PatNum);
 			}
 			int[] patNums=new int[patNumAL.Count];
 			patNumAL.CopyTo(patNums);
 			Patient[] pats=Patients.GetMultPats(patNums);
-			for(int i=0;i<PatPayList.Length;i++){
+			for(int i=0;i<PatPayList.Count;i++){
 				row=Queries.TableQ.NewRow();
 				row[0]=PatPayList[i].PayDate.ToShortDateString();
 				row[1]=Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF();
