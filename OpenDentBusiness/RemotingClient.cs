@@ -26,6 +26,17 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static DataTable ProcessGetTableLow(DtoGetTableLow dto) {
+			string result=SendAndReceive(dto);
+			try {
+				return XmlConverter.XmlToTable(result);
+			}
+			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
+		}
+
 		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto) {
 			string result=SendAndReceive(dto);

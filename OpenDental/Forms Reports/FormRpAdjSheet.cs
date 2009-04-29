@@ -231,14 +231,6 @@ namespace OpenDental{
 				return;
 			}
 			//DataTable table=RpAdjSheet.GetTable();
-
-
-
-
-
-
-
-
 			string whereProv="(";
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				if(i>0) {

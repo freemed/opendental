@@ -28,6 +28,21 @@ namespace OpenDentBusiness {
 				return RemotingClient.ProcessGetTable(dto);
 		}
 
+		///<summary>Uses lower sql permissions, making it safe to pass a query.</summary>
+		public static DataTable GetTableLow(string command) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetTableLow may only be used when RemotingRole is ClientWeb.");
+			}
+			DtoGetTableLow dto=new DtoGetTableLow();
+			dto.MethodName="";
+			DtoObject dtoObj=new DtoObject(command);
+			dto.Parameters=new DtoObject[] { dtoObj };
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetTableLow(dto);
+		}
+
 		///<summary></summary>
 		public static DataSet GetDS(MethodBase methodBase,params object[] parameters) {
 			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {

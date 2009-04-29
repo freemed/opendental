@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 			else if(RemotingClient.RemotingRole==RemotingRole.ClientDirect) {
 				retVal=DataCore.GetTable(command);
 			}
-			else {
+			else {//ServerWeb
 				retVal=DataCore.GetTableLow(command);
 			}
 			retVal.TableName="";//this is needed for FormQuery dataGrid

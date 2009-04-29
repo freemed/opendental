@@ -642,8 +642,7 @@ namespace OpenDental{
 			//Queries.SubmitCur();
 		//}
 
-		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.  This overload is deprecated.  Pass in a table instead.</summary>
-		[Obsolete]
+		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
 		public void SubmitReportQuery(){	
 			Queries.SubmitCur();
 			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
@@ -660,6 +659,7 @@ namespace OpenDental{
 			grid2.SetDataBinding(Queries.TableQ,"");//because MakeReadable trashes the TableQ
 		}
 
+		/*
 		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
 		public void SubmitReportQuery(DataTable table) {
 			Queries.TableQ=table;
@@ -675,7 +675,7 @@ namespace OpenDental{
 			grid2.TableStyles.Add(myGridTS);
 			Queries.TableQ=MakeReadable(Queries.TableQ);//?
 			grid2.SetDataBinding(Queries.TableQ,"");//because MakeReadable trashes the TableQ
-		}
+		}*/
 
 		///<summary></summary>
 		public void ResetGrid(){

@@ -92,6 +92,17 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="DataPracticeTitle">
+      <Query>
+        <DataSourceName>DS1</DataSourceName>
+        <CommandText>SELECT ValueString FROM preference WHERE PrefName='PracticeTitle'</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ValueString">
+          <DataField>ValueString</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <Body>
     <ReportItems>

@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 	public abstract class DataTransferObject {
 		///<summary>Always passed with new web service.  Never null.</summary>
 		public Credentials Credentials;
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
+		///<summary>This is the name of the method that we need to call.  "Class.Method" format.  Not used with GetTableLow.</summary>
 		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public DtoObject[] Parameters;
@@ -65,6 +65,11 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class DtoGetTable:DataTransferObject{
 		
+	}
+
+	///<summary></summary>
+	public class DtoGetTableLow:DataTransferObject {
+
 	}
 
 	///<summary>Gets an int.</summary>

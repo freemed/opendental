@@ -24,14 +24,14 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void SubmitCur(){
 			string command = CurReport.Query;
-			DataTable table=Db.GetTableLow(command);
+			DataTable table=Reports.GetTable(command);
 			TableQ=table.Copy();
 		}
 
 		///<summary>Runs the query and fills TableTemp with the result.</summary>
 		public static void SubmitTemp(){
 			string command = CurReport.Query;
-			DataTable table=Db.GetTableLow(command);
+			DataTable table=Reports.GetTable(command);
 			TableTemp=table.Copy();
 		}
 

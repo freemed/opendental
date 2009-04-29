@@ -15,9 +15,7 @@ using OpenDentBusiness;
 //THIS WILL ALLOW US TO UPDATE VERSIONS OF RDL WITHOUT 'BREAKING' THE EXISTING FUNCTIONALITY
 
 namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
+	/// <summary></summary>
 	public class FormReport : System.Windows.Forms.Form{
 		private fyiReporting.RdlViewer.RdlViewer viewer;
 		private OpenDental.UI.ODToolBar ToolBarMain;

@@ -483,13 +483,8 @@ namespace OpenDentBusiness {
 
 		///<summary>This is used in FormQuery.SubmitQuery to allow display of carrier names.</summary>
 		public static Hashtable GetHListAll(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Hashtable>(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT insplan.PlanNum,carrier.CarrierName "
-				+"FROM insplan,carrier "
-				+"WHERE insplan.CarrierNum=carrier.CarrierNum";
-			DataTable table=Db.GetTable(command);
+			//No need to check RemotingRole; no call to db.
+			DataTable table=GetCarrierTable();
 			Hashtable HListAll=new Hashtable(table.Rows.Count);
 			int plannum;
 			string carrierName;
@@ -499,6 +494,16 @@ namespace OpenDentBusiness {
 				HListAll.Add(plannum,carrierName);
 			}
 			return HListAll;
+		}
+
+		public static DataTable GetCarrierTable() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT insplan.PlanNum,carrier.CarrierName "
+				+"FROM insplan,carrier "
+				+"WHERE insplan.CarrierNum=carrier.CarrierNum";
+			return Db.GetTable(command);
 		}
 
 		///<summary>Gets all distinct notes for the planNums supplied.  Supply a planNum to exclude it.  Only called when closing FormInsPlan.  Includes blank notes.</summary>

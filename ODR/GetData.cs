@@ -7,6 +7,7 @@ namespace ODR{
 	///<summary></summary>
 	public class GetData{
 		///<summary></summary>
+		[Obsolete]
 		public static string Pref(string prefName) {
 			string command="SELECT ValueString FROM preference WHERE PrefName='"+POut.PString(prefName)+"'";
 			DataConnection dcon=new DataConnection();
