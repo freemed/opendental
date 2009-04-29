@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -124,80 +125,17 @@ namespace OpenDental{
 
 		private void butReformat_Click(object sender, System.EventArgs e) {
 			if(CultureInfo.CurrentCulture.Name!="en-US"){
-				if(MessageBox.Show(Lan.g(this,"Are your sure?  The phone number formatting is only meant for the United States?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
+				if(MessageBox.Show(Lan.g(this,"Are you sure?  The phone number formatting is only meant for the United States?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 					return;
 				}
 			}
-			Reformat();
+			Patients.ReformatAllPhoneNumbers();
 			//refresh carriers:
 			DataValid.SetInvalid(InvalidType.Carriers);
 			MessageBox.Show(Lan.g(this,"Telephone numbers reformatted."));
 		}
 			
-		///<summary></summary>
-		public static void Reformat(){
-			string oldTel;
-			string newTel;
-			string idNum;
-			Queries.CurReport.Query="select * from patient";
-			Queries.SubmitCur();
-			for(int i=0;i<Queries.TableQ.Rows.Count;i++){
-				idNum=PIn.PString(Queries.TableQ.Rows[i][0].ToString());
-				//home
-				oldTel=PIn.PString(Queries.TableQ.Rows[i][15].ToString());
-				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel){
-					Queries.CurReport.Query="UPDATE patient SET hmphone = '"
-						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
-					
-					Queries.SubmitNonQ();
-				}
-				//wk:
-				oldTel=PIn.PString(Queries.TableQ.Rows[i][16].ToString());
-				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel){
-					Queries.CurReport.Query="UPDATE patient SET wkphone = '"
-						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
-					Queries.SubmitNonQ();
-				}
-				//wireless
-				oldTel=PIn.PString(Queries.TableQ.Rows[i][17].ToString());
-				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel){// Keyush Shah 04/21/04 Bug, was overwriting wireless with work phone here
-					Queries.CurReport.Query="UPDATE patient SET wirelessphone = '"
-						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
-					Queries.SubmitNonQ();
-				}
-			}
-			Queries.CurReport.Query="select * from carrier";
-			Queries.SubmitCur();	
-			for(int i=0;i<Queries.TableQ.Rows.Count;i++){
-				idNum=PIn.PString(Queries.TableQ.Rows[i][0].ToString());
-				//ph
-				oldTel=PIn.PString(Queries.TableQ.Rows[i][7].ToString());
-				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel){
-					Queries.CurReport.Query="UPDATE carrier SET Phone = '"
-						+POut.PString(newTel)+"' WHERE CarrierNum = '"+idNum+"'";
-					Queries.SubmitNonQ();
-				}
-			}
-			//this last part will only be run once during conversion to 2.8. It can be dropped from a future version.
-			/*Queries.CurReport.Query="select * from insplan";
-			Queries.SubmitCur();	
-			for(int i=0;i<Queries.TableQ.Rows.Count;i++){
-				idNum=PIn.PString(Queries.TableQ.Rows[i][0].ToString());
-				//ph
-				oldTel=PIn.PString(Queries.TableQ.Rows[i][5].ToString());
-				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel){
-					Queries.CurReport.Query="UPDATE insplan SET Phone = '"
-						+newTel+"' WHERE PlanNum = '"+idNum+"'";
-					Queries.SubmitNonQ();
-				}
-			}*/
-		}//reformat
-
+		
 		
 
 	}

@@ -1421,7 +1421,7 @@ namespace OpenDental{
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			Lan.Refresh();//automatically skips if current culture is en-US
-			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
+			LanguageForeigns.Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);//automatically skips if current culture is en-US
 			menuItemMergeDatabases.Visible=PrefC.GetBool("RandomPrimaryKeys");
 			return true;
 		}

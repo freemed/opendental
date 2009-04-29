@@ -31,15 +31,10 @@ namespace OpenDental{
 		///<summary>Runs the query and fills TableTemp with the result.</summary>
 		public static void SubmitTemp(){
 			string command = CurReport.Query;
-			DataTable table=Db.GetTable(command);
+			DataTable table=Db.GetTableLow(command);
 			TableTemp=table.Copy();
 		}
 
-		///<summary></summary>
-		public static void SubmitNonQ(){
-			string command = CurReport.Query;
-			Db.NonQ(command);
-		}
 	}
 
 	///<summary>Not a database table.</summary>

@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(hList==null) {
-					Refresh(CultureInfo.CurrentCulture);
+					Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 				}
 				return hList;
 			}
@@ -24,19 +24,20 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Called once when the program first starts up.  Then only if user downloads new translations or adds their own.</summary>
-		public static void Refresh(CultureInfo cultureInfo) {
+		public static void Refresh(string cultureInfoName,string cultureInfoTwoLetterISOLanguageName) {
+			//culture info won't serialize
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cultureInfo);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cultureInfoName,cultureInfoTwoLetterISOLanguageName);
 				return;
 			}
 			HList=new Hashtable();
-			if(cultureInfo.Name=="en-US") {
+			if(cultureInfoName=="en-US") {
 				return;
 			}
 			//load all translations for the current culture, using other culture of same language if no trans avail.
 			string command=
 				"SELECT * FROM languageforeign "
-				+"WHERE Culture LIKE '"+cultureInfo.TwoLetterISOLanguageName+"%' "
+				+"WHERE Culture LIKE '"+cultureInfoTwoLetterISOLanguageName+"%' "
 				+"ORDER BY Culture";
 			DataTable table=Db.GetTable(command);
 			LanguageForeign lf;
@@ -47,7 +48,7 @@ namespace OpenDentBusiness{
 				lf.Culture    = PIn.PString(table.Rows[i][2].ToString());
 				lf.Translation= PIn.PString(table.Rows[i][3].ToString());
 				lf.Comments   = PIn.PString(table.Rows[i][4].ToString());
-				if(lf.Culture==cultureInfo.Name) {//if exact culture match
+				if(lf.Culture==cultureInfoName) {//if exact culture match
 					if(HList.ContainsKey(lf.ClassType+lf.English)) {
 						HList.Remove(lf.ClassType+lf.English);//remove any existing entry
 					}

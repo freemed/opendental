@@ -230,6 +230,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one type must be selected.");
 				return;
 			}
+			//DataTable table=RpAdjSheet.GetTable();
+
+
+
+
+
+
+
+
 			string whereProv="(";
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				if(i>0) {

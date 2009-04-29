@@ -223,7 +223,7 @@ namespace OpenDental{
 				MessageBox.Show("Translations not installed properly.");
 				return;
 			}
-			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);
+			LanguageForeigns.Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 			MessageBox.Show("Done");
 		}
 

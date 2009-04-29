@@ -1661,6 +1661,54 @@ namespace OpenDentBusiness{
 				return age.ToString();
 		}
 
+		public static void ReformatAllPhoneNumbers() {
+			string oldTel;
+			string newTel;
+			string idNum;
+			string command="select * from patient";
+			DataTable table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				idNum=PIn.PString(table.Rows[i][0].ToString());
+				//home
+				oldTel=PIn.PString(table.Rows[i][15].ToString());
+				newTel=TelephoneNumbers.ReFormat(oldTel);
+				if(oldTel!=newTel) {
+					command="UPDATE patient SET hmphone = '"
+						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
+					Db.NonQ(command);
+				}
+				//wk:
+				oldTel=PIn.PString(table.Rows[i][16].ToString());
+				newTel=TelephoneNumbers.ReFormat(oldTel);
+				if(oldTel!=newTel) {
+					command="UPDATE patient SET wkphone = '"
+						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
+					Db.NonQ(command);
+				}
+				//wireless
+				oldTel=PIn.PString(table.Rows[i][17].ToString());
+				newTel=TelephoneNumbers.ReFormat(oldTel);
+				if(oldTel!=newTel) {// Keyush Shah 04/21/04 Bug, was overwriting wireless with work phone here
+					command="UPDATE patient SET wirelessphone = '"
+						+POut.PString(newTel)+"' WHERE patNum = '"+idNum+"'";
+					Db.NonQ(command);
+				}
+			}
+			command="select * from carrier";
+			Db.NonQ(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				idNum=PIn.PString(table.Rows[i][0].ToString());
+				//ph
+				oldTel=PIn.PString(table.Rows[i][7].ToString());
+				newTel=TelephoneNumbers.ReFormat(oldTel);
+				if(oldTel!=newTel) {
+					command="UPDATE carrier SET Phone = '"
+						+POut.PString(newTel)+"' WHERE CarrierNum = '"+idNum+"'";
+					Db.NonQ(command);
+				}
+			}
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>

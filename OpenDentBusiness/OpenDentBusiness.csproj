@@ -348,6 +348,7 @@
     <Compile Include="Logic\PatientLogic.cs" />
     <Compile Include="Logic\ProcedureLogic.cs" />
     <Compile Include="Data Interface\ProcNotes.cs" />
+    <Compile Include="Logic\TelephoneNumbers.cs" />
     <Compile Include="Logic\Tooth.cs" />
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
@@ -369,6 +370,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RemotingClient.cs" />
+    <Compile Include="Reports\RpAdjSheet.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs">
       <SubType>Code</SubType>

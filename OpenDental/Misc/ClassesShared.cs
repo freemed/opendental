@@ -25,40 +25,6 @@ namespace OpenDental{
 		public Shared(){
 			
 		}
-		/*Moved to Patients
-		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
-		public static int DateToAge(DateTime date){
-			if(date.Year<1880)
-				return 0;
-			if(date.Month < DateTime.Now.Month){//birthday in previous month
-				return DateTime.Now.Year-date.Year;
-			}
-			if(date.Month == DateTime.Now.Month && date.Day <= DateTime.Now.Day){//birthday in this month
-				return DateTime.Now.Year-date.Year;
-			}
-			return DateTime.Now.Year-date.Year-1;
-		}
-
-		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
-		public static int DateToAge(DateTime birthdate,DateTime asofDate) {
-			if(birthdate.Year<1880)
-				return 0;
-			if(birthdate.Month < asofDate.Month) {//birthday in previous month
-				return asofDate.Year-birthdate.Year;
-			}
-			if(birthdate.Month == asofDate.Month && birthdate.Day <= asofDate.Day) {//birthday in this month
-				return asofDate.Year-birthdate.Year;
-			}
-			return asofDate.Year-birthdate.Year-1;
-		}
-
-		///<summary></summary>
-		public static string AgeToString(int age){
-			if(age==0)
-				return "";
-			else
-				return age.ToString();
-		}*/
 
 		///<summary>Converts numbers to ordinals.  For example, 120 to 120th, 73 to 73rd.  Probably doesn't work too well with foreign language translations.  Used in the Birthday postcards.</summary>
 		public static string NumberToOrdinal(int number){
@@ -83,23 +49,6 @@ namespace OpenDental{
 			return "";//will never happen
 		}
 
-		/*
-		///<summary>Computes balance for a single patient without making any calls to the database. If the balance doesn't match the stored patient balance, then it makes one update to the database and returns true to trigger calculation of aging.</summary>
-		public static bool ComputeBalances(Procedure[] procList,ClaimProc[] claimProcList,Patient PatCur,PaySplit[] paySplitList,Adjustment[] AdjustmentList,PayPlan[] payPlanList,PayPlanCharge[] payPlanChargeList){
-			double calcBal
-				=Procedures.ComputeBal(procList)
-				+ClaimProcs.ComputeBal(claimProcList)
-				+Adjustments.ComputeBal(AdjustmentList)
-				-PaySplits.ComputeBal(paySplitList)
-				+PayPlans.ComputeBal(PatCur.PatNum,payPlanList,payPlanChargeList);
-			if(calcBal!=PatCur.EstBalance){
-				Patient PatOld=PatCur.Copy();
-				PatCur.EstBalance=calcBal;
-				Patients.Update(PatCur,PatOld);
-				return true;
-			}
-			return false;
-		}*/
 
 	}
 
@@ -291,119 +240,6 @@ namespace OpenDental{
 		}
 	}
 
-	/*=================================Class TelephoneNumbers============================================*/
-
-	///<summary></summary>
-	public class TelephoneNumbers{
-
-		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, and PT Dental bridge.</summary>
-		public static string ReFormat(string phoneNum){
-			if(CultureInfo.CurrentCulture.Name!="en-US" && CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){
-				return phoneNum;
-			}
-			Regex regex;
-			regex=new Regex(@"^\d{10}");//eg. 5033635432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(3,3)+"-"+phoneNum.Substring(6);
-			}
-			regex=new Regex(@"^\d{3}-\d{3}-\d{4}");//eg. 503-363-5432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4);
-			}
-			regex=new Regex(@"^\d-\d{3}-\d{3}-\d{4}");//eg. 1-503-363-5432 to 1(503)363-5432
-			if(regex.IsMatch(phoneNum)){
-				return phoneNum.Substring(0,1)+"("+phoneNum.Substring(2,3)+")"+phoneNum.Substring(6);
-			}
-			regex=new Regex(@"^\d{3} \d{3}-\d{4}");//eg 503 363-5432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4);
-			}
-			//Keyush Shah 04/21/05 Added more formats:
-			regex=new Regex(@"^\d{3} \d{3} \d{4}");//eg 916 363 5432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4,3)+"-"+phoneNum.Substring(8,4);
-			}
-      regex=new Regex(@"^\(\d{3}\) \d{3} \d{4}");//eg (916) 363 5432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10,4);
-			}
-			regex=new Regex(@"^\(\d{3}\) \d{3}-\d{4}");//eg (916) 363-5432
-			if(regex.IsMatch(phoneNum)){
-				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10,4);
-			}
-			regex=new Regex(@"^\d{7}$");//eg 3635432
-			if(regex.IsMatch(phoneNum)){
-				return(phoneNum.Substring(0,3)+"-"+phoneNum.Substring(3));
-			}
-			return phoneNum;   
-		}
-
-		///<summary>reformats initial entry with each keystroke</summary>
-		public static string AutoFormat(string phoneNum){
-			if(CultureInfo.CurrentCulture.Name!="en-US" && 
-				CultureInfo.CurrentCulture.Name.Length>=4 && 
-				CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {
-				return phoneNum;
-			}
-			if(Regex.IsMatch(phoneNum,@"^[2-9]$")){
-				return "("+phoneNum;
-			}
-			if(Regex.IsMatch(phoneNum,@"^1\d$")){
-				return "1("+phoneNum.Substring(1);
-			}
-			if(Regex.IsMatch(phoneNum,@"^\(\d\d\d\d$")){
-				return( phoneNum.Substring(0,4)+")"+phoneNum.Substring(4));
-			}
-			if(Regex.IsMatch(phoneNum,@"^1\(\d\d\d\d$")){
-				return( phoneNum.Substring(0,5)+")"+phoneNum.Substring(5));
-			}
-			if(Regex.IsMatch(phoneNum,@"^\(\d\d\d\)\d\d\d\d$")){
-				return( phoneNum.Substring(0,8)+"-"+phoneNum.Substring(8));
-			}
-			if(Regex.IsMatch(phoneNum,@"^1\(\d\d\d\)\d\d\d\d$")){
-				return( phoneNum.Substring(0,9)+"-"+phoneNum.Substring(9));
-			}
-			return phoneNum;
-		}
-
-		///<Summary>Also truncates if more than two non-numbers in a row.  This is to avoid the notes that can follow phone numbers.</Summary>
-		public static string FormatNumbersOnly(string phoneStr){
-			string retVal="";
-			int nonnumcount=0;
-			for(int i=0;i<phoneStr.Length;i++) {
-				if(nonnumcount==2){
-					return retVal;
-				}
-				if(Char.IsNumber(phoneStr,i)) {
-					retVal+=phoneStr.Substring(i,1);
-					nonnumcount=0;
-				}
-				else{
-					nonnumcount++;
-				}
-			}
-			return retVal;
-		}
-
-		///<summary></summary>
-		public static string FormatNumbersExactTen(string phoneNum){
-			string retVal="";
-			for(int i=0;i<phoneNum.Length;i++){
-				if(Char.IsNumber(phoneNum,i)){
-					if(retVal=="" && phoneNum.Substring(i,1)=="1"){
-						continue;//skip leading 1.
-					}
-					retVal+=phoneNum.Substring(i,1);
-				}
-				if(retVal.Length==10){
-					return retVal;
-				}
-			}
-			//never made it to 10
-			return "";
-		}
-
-	}
 
 	
 

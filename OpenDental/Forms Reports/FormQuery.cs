@@ -642,9 +642,27 @@ namespace OpenDental{
 			//Queries.SubmitCur();
 		//}
 
-		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
+		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.  This overload is deprecated.  Pass in a table instead.</summary>
+		[Obsolete]
 		public void SubmitReportQuery(){	
 			Queries.SubmitCur();
+			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
+			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
+			Queries.CurReport.ColPos[0]=0;
+			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
+			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
+			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			grid2.TableStyles.Clear();
+			grid2.SetDataBinding(Queries.TableQ,"");
+			myGridTS = new DataGridTableStyle();
+			grid2.TableStyles.Add(myGridTS);
+			Queries.TableQ=MakeReadable(Queries.TableQ);//?
+			grid2.SetDataBinding(Queries.TableQ,"");//because MakeReadable trashes the TableQ
+		}
+
+		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
+		public void SubmitReportQuery(DataTable table) {
+			Queries.TableQ=table;
 			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
 			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
 			Queries.CurReport.ColPos[0]=0;

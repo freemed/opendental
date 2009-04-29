@@ -160,7 +160,7 @@ namespace OpenDental{
 		private void FillGrid(){
 			LanList=Lan.GetListForCat(ClassType);
 			ListForType=LanguageForeigns.GetListForType(ClassType);
-			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);
+			LanguageForeigns.Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 			gridLan.BeginUpdate();
 			gridLan.Columns.Clear();
 			ODGridColumn column=new ODGridColumn("English",220);
