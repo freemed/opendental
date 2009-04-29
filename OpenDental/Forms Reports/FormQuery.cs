@@ -616,7 +616,9 @@ namespace OpenDental{
 			grid2.TableStyles.Add(myGridTS);
 			if(radioHuman.Checked){
 				Queries.TableQ=MakeReadable(Queries.TableQ);
+				grid2.TableStyles.Clear();
 				grid2.SetDataBinding(Queries.TableQ,"");
+				grid2.TableStyles.Add(myGridTS);
 			}
 			//if(!IsReport){
 				AutoSizeColumns();
@@ -632,7 +634,10 @@ namespace OpenDental{
 				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				for(int iCol=0;iCol<Queries.TableQ.Columns.Count;iCol++){
 					Queries.CurReport.ColCaption[iCol]=Queries.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
-					myGridTS.GridColumnStyles[iCol].Alignment=Queries.CurReport.ColAlign[iCol];
+					//again, I don't know why this would fail, so here's a check:
+					if(myGridTS.GridColumnStyles.Count >= iCol+1) {
+						myGridTS.GridColumnStyles[iCol].Alignment=Queries.CurReport.ColAlign[iCol];
+					}
 				}
 				Queries.CurReport.Summary=new string[0];
 			//}		
@@ -699,8 +704,13 @@ namespace OpenDental{
 					if(tempWidth>Queries.CurReport.ColWidth[i])
 						Queries.CurReport.ColWidth[i]=tempWidth;
 				}
-				if(Queries.CurReport.ColWidth[i]>400) Queries.CurReport.ColWidth[i]=400;
-				myGridTS.GridColumnStyles[i].Width=Queries.CurReport.ColWidth[i]+12;
+				if(Queries.CurReport.ColWidth[i]>400) {
+					Queries.CurReport.ColWidth[i]=400;
+				}
+				//I have no idea why this is failing, so we'll just do a check:
+				if(myGridTS.GridColumnStyles.Count >= i+1) {
+					myGridTS.GridColumnStyles[i].Width=Queries.CurReport.ColWidth[i]+12;
+				}
 				Queries.CurReport.ColWidth[i]+=6;//so the columns don't touch
 				Queries.CurReport.ColPos[i+1]=Queries.CurReport.ColPos[i]+Queries.CurReport.ColWidth[i];
 			}

@@ -578,38 +578,6 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           </TableGroup>
         </TableGroups>
       </Table>
-      <Textbox Name="Textbox10">
-        <Height>20.25pt</Height>
-        <Width>215.99pt</Width>
-        <Value>Daily Payments</Value>
-        <Left>176.4pt</Left>
-        <Top>4.3pt</Top>
-        <Style>
-          <BorderStyle />
-          <BorderColor />
-          <BorderWidth />
-          <FontWeight>Bold</FontWeight>
-          <FontSize>17pt</FontSize>
-          <TextAlign>Center</TextAlign>
-          <VerticalAlign>Middle</VerticalAlign>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox9">
-        <Height>12.75pt</Height>
-        <Width>279.17pt</Width>
-        <Value>=ODR.GetData.Pref("PracticeTitle")</Value>
-        <Left>144.8pt</Left>
-        <Top>24.9pt</Top>
-        <Style>
-          <BorderStyle />
-          <BorderColor />
-          <BorderWidth />
-          <FontWeight>Bold</FontWeight>
-          <FontSize>10pt</FontSize>
-          <TextAlign>Center</TextAlign>
-          <VerticalAlign>Middle</VerticalAlign>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox22">
         <Height>12.75pt</Height>
         <Width>116.66pt</Width>
@@ -1134,14 +1102,14 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           <BorderStyle />
           <BorderColor />
           <BorderWidth />
-          <FontSize >9pt</FontSize>
-          <FontWeight >Bold</FontWeight>
-          <TextAlign >Right</TextAlign>
-          <VerticalAlign >Middle</VerticalAlign>
-          <Format >c</Format>
+          <FontSize>9pt</FontSize>
+          <FontWeight>Bold</FontWeight>
+          <TextAlign>Right</TextAlign>
+          <VerticalAlign>Middle</VerticalAlign>
+          <Format>c</Format>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox26" >
+      <Textbox Name="Textbox26">
         <Height>12.00pt</Height>
         <Width>96.27pt</Width>
         <Value>Total All Payments</Value>
@@ -1156,6 +1124,50 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
           <VerticalAlign>Middle</VerticalAlign>
         </Style>
       </Textbox>
+      <List Name="List1">
+        <Height>.6in</Height>
+        <Width>5in</Width>
+        <Left>100pt</Left>
+        <Top>0pt</Top>
+        <Style>
+          <BorderStyle />
+          <BorderColor />
+          <BorderWidth />
+        </Style>
+        <DataSetName>DataPracticeTitle</DataSetName>
+        <ReportItems>
+          <Textbox Name="Textbox27">
+            <Height>12pt</Height>
+            <Width>4.8in</Width>
+            <Value>=Fields!ValueString.Value</Value>
+            <Left>7.2pt</Left>
+            <Top>21.6pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+              <TextAlign>Center</TextAlign>
+              <FontWeight>Bold</FontWeight>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox10">
+            <Height>18.00pt</Height>
+            <Width>5in</Width>
+            <Value>Daily Payments</Value>
+            <Left>0pt</Left>
+            <Top>0pt</Top>
+            <Style>
+              <BorderStyle />
+              <BorderColor />
+              <BorderWidth />
+              <FontWeight>Bold</FontWeight>
+              <FontSize>17pt</FontSize>
+              <TextAlign>Center</TextAlign>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+        </ReportItems>
+      </List>
     </ReportItems>
     <Height>203.6pt</Height>
     <Columns>1</Columns>
@@ -1163,7 +1175,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
   <PageFooter>
     <Height>14 pt</Height>
     <ReportItems>
-      <Textbox Name="Textbox8">
+      <Textbox Name="Textbox9">
         <Top>1 pt</Top>
         <Left>10 pt</Left>
         <Height>12 pt</Height>
@@ -1189,12 +1201,9 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
     <DataSource Name="DS1">
       <ConnectionProperties>
         <DataProvider>MySQL.NET</DataProvider>
-        <ConnectString>=ODR.DataConnection.GetODConnStr()</ConnectString>
+        <ConnectString>Server=localhost;Database=development66;User ID=root;Password=;CharSet=utf8</ConnectString>
         <IntegratedSecurity>false</IntegratedSecurity>
       </ConnectionProperties>
     </DataSource>
   </DataSources>
-  <CodeModules>
-    <CodeModule>ODR.dll</CodeModule>
-  </CodeModules>
 </Report>
