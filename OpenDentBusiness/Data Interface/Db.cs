@@ -36,6 +36,10 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		public static DataTable GetTableOld(string command) {
+			throw new ApplicationException("No queries allowed in the UI layer.");
+		}
+
 		///<summary>This is for multiple queries all concatenated together with ;</summary>
 		public static DataSet GetDataSet(string commands) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

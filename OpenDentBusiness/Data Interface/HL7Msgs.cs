@@ -68,6 +68,30 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static string GetHL7FolderOut() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT PropertyValue FROM programproperty,program
+				WHERE programproperty.ProgramNum=program.ProgramNum
+				AND program.ProgName='eClinicalWorks'
+				AND programproperty.PropertyDesc='HL7FolderOut'";
+			DataTable table=Db.GetTable(command);
+			return table.Rows[0][0].ToString();
+		}
+
+		public static string GetHL7FolderIn() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT PropertyValue FROM programproperty,program
+				WHERE programproperty.ProgramNum=program.ProgramNum
+				AND program.ProgName='eClinicalWorks'
+				AND programproperty.PropertyDesc='HL7FolderIn'";
+			DataTable table=Db.GetTable(command);
+			return table.Rows[0][0].ToString();
+		}
+
 		/*
 		///<summary></summary>
 		public static void DeleteObject(int HL7MsgNum){

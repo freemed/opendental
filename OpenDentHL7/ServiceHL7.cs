@@ -61,12 +61,8 @@ namespace OpenDentHL7 {
 
 
 			//start filewatcher
-			string command=@"SELECT PropertyValue FROM programproperty,program
-				WHERE programproperty.ProgramNum=program.ProgramNum
-				AND program.ProgName='eClinicalWorks'
-				AND programproperty.PropertyDesc='HL7FolderOut'";
-			DataTable table=Db.GetTable(command);
-			string hl7folderOut=table.Rows[0][0].ToString();
+
+			string hl7folderOut=HL7Msgs.GetHL7FolderOut();
 			if(!Directory.Exists(hl7folderOut)) {
 				throw new ApplicationException(hl7folderOut+" does not exist.");
 			}
@@ -80,12 +76,7 @@ namespace OpenDentHL7 {
 				ProcessMessage(existingFiles[i]);
 			}
 			//start polling the db for new HL7 messages to send
-			command=@"SELECT PropertyValue FROM programproperty,program
-				WHERE programproperty.ProgramNum=program.ProgramNum
-				AND program.ProgName='eClinicalWorks'
-				AND programproperty.PropertyDesc='HL7FolderIn'";
-			table=Db.GetTable(command);
-			inFolder=table.Rows[0][0].ToString();
+			inFolder=HL7Msgs.GetHL7FolderIn();
 			if(!Directory.Exists(inFolder)) {
 				throw new ApplicationException(inFolder+" does not exist.");
 			}

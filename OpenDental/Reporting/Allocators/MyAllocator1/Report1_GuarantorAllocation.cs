@@ -78,7 +78,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			AddColBalance();// Calculates and Adds the Balance Column to the Query. // Also Adds Providers Abbreviations
 			Queries.CurReport.Title = "Allocation to Guarantor ";
 
-			DataTable dtGuarantorName = Db.GetTable("SELECT CONCAT(LName,' ', FName) FROM Patient WHERE PatNum = " + Guarantor);
+			DataTable dtGuarantorName = Db.GetTableOld("SELECT CONCAT(LName,' ', FName) FROM Patient WHERE PatNum = " + Guarantor);
 			string GuarantorName = dtGuarantorName.Rows[0][0].ToString();
 			Queries.CurReport.SubTitle = new string[1];
 			Queries.CurReport.SubTitle[0] = "Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString();
@@ -107,7 +107,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 					System.Collections.Hashtable htProvs = new System.Collections.Hashtable();
 					try
 					{
-						DataTable dt = Db.GetTable("SELECT ProvNum, Abbr FROM Provider");
+						DataTable dt = Db.GetTableOld("SELECT ProvNum, Abbr FROM Provider");
 
 						if (dt.Rows.Count != 0)
 							foreach (DataRow dr in dt.Rows)
@@ -224,7 +224,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			if (Guarantor == 0)
 				return null;
 			string cmd = "SELECT PatNum, FName, LName FROM Patient WHERE Guarantor = " + Guarantor + " ORDER BY PatNum ";
-			DataTable rawTbl = Db.GetTable(cmd);
+			DataTable rawTbl = Db.GetTableOld(cmd);
 			DataTable TblReturn = new DataTable();
 			DataColumn dc1 = new DataColumn();
 			DataColumn dc2 = new DataColumn();
@@ -589,8 +589,8 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		public static DataTable GenerateSummaryTable(int Guarantor,DateTime dtFrom, DateTime dtTo)
 		{
 			DataTable rValReturnTable = null;
-			DataTable dtProviderBalance = Db.GetTable(ProviderRevenueByGuarantor(Guarantor,dtFrom,dtTo));
-			DataTable dtProvAbbr = Db.GetTable("SELECT ProvNum, Abbr FROM Provider");
+			DataTable dtProviderBalance = Db.GetTableOld(ProviderRevenueByGuarantor(Guarantor,dtFrom,dtTo));
+			DataTable dtProvAbbr = Db.GetTableOld("SELECT ProvNum, Abbr FROM Provider");
 			if (dtProviderBalance != null && dtProviderBalance.Rows.Count != 0)
 			{
 				// Get Provider Abbreviations

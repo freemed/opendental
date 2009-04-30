@@ -126,6 +126,8 @@
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="ConvertDatabases2.cs" />
+    <Compile Include="ConvertDatabases1.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />

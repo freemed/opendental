@@ -15,17 +15,17 @@ using System.IO;
 using System.Net;
 using System.Resources;
 using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
+//using System.Windows.Forms;
+//using OpenDentBusiness;
 using CodeBase;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
-	public partial class ClassConvertDatabase {
-		private System.Version LatestVersion=new Version("6.6.0.0");//This value must be changed when a new conversion is to be triggered.
+	public partial class ConvertDatabases {
+		public static System.Version LatestVersion=new Version("6.6.0.0");//This value must be changed when a new conversion is to be triggered.
 
-		private void To6_2_9() {
+		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
 				string command="ALTER TABLE fee CHANGE FeeSched FeeSched int NOT NULL";
 				Db.NonQ(command);
@@ -35,7 +35,7 @@ namespace OpenDental {
 			To6_3_1();
 		}
 
-		private void To6_3_1() {
+		private static void To6_3_1() {
 			if(FromVersion<new Version("6.3.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -62,7 +62,7 @@ namespace OpenDental {
 			To6_3_3();
 		}
 
-		private void To6_3_3() {
+		private static void To6_3_3() {
 			if(FromVersion<new Version("6.3.3.0")) {
 				string command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('CoPay_FeeSchedule_BlankLikeZero','1','1 to treat blank entries like zero copay.  0 to make patient responsible on blank entries.')";
 				Db.NonQ(command);
@@ -72,7 +72,7 @@ namespace OpenDental {
 			To6_3_4();
 		}
 
-		private void To6_3_4() {
+		private static void To6_3_4() {
 			if(FromVersion<new Version("6.3.4.0")) {
 				string command="ALTER TABLE sheetfielddef CHANGE FieldValue FieldValue text NOT NULL";
 				Db.NonQ(command);
@@ -82,7 +82,7 @@ namespace OpenDental {
 			To6_4_1();
 		}
 
-		private void To6_4_1() {
+		private static void To6_4_1() {
 			if(FromVersion<new Version("6.4.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -162,7 +162,7 @@ namespace OpenDental {
 			To6_4_4();
 		}
 
-		private void To6_4_4() {
+		private static void To6_4_4() {
 			if(FromVersion<new Version("6.4.4.0")) {
 				string command;
 				//Convert comma-delimited autonote controls to carriage-return delimited.
@@ -183,7 +183,7 @@ namespace OpenDental {
 			To6_5_1();
 		}
 
-		private void To6_5_1() {
+		private static void To6_5_1() {
 			if(FromVersion<new Version("6.5.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -264,7 +264,7 @@ namespace OpenDental {
 			To6_6_0();
 		}
 
-		private void To6_6_0() {
+		private static void To6_6_0() {
 			if(FromVersion<new Version("6.6.0.0")) {
 				string command;
 				DataTable table;
