@@ -12,6 +12,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all SupplyOrders for one supplier, ordered by date.</summary>
 		public static List<SupplyOrder> CreateObjects(int supplierNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<SupplyOrder>>(MethodBase.GetCurrentMethod(),supplierNum);
+			}
 			string command="SELECT * FROM supplyorder "
 				+"WHERE SupplierNum="+POut.PInt(supplierNum)
 				+" ORDER BY DatePlaced";
@@ -20,11 +23,19 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(SupplyOrder order){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),order);
+				return;
+			}
 			DataObjectFactory<SupplyOrder>.WriteObject(order);
 		}
 
 		///<summary>No need to surround with try-catch.</summary>
 		public static void DeleteObject(SupplyOrder order){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),order);
+				return;
+			}
 			//validate that not already in use-no
 			//delete associated orderItems
 			string command="DELETE FROM supplyorderitem WHERE SupplyOrderNum="+POut.PInt(order.SupplyOrderNum);

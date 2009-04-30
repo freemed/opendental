@@ -12,6 +12,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void WriteObject(TaskAncestor ancestor){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ancestor);
+				return;
+			}
 			DataObjectFactory<TaskAncestor>.WriteObject(ancestor);
 		}
 
@@ -22,6 +26,10 @@ namespace OpenDentBusiness{
 		}*/
 
 		public static void Synch(Task task){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
+				return;
+			}
 			string command="DELETE FROM taskancestor WHERE TaskNum="+POut.PInt(task.TaskNum);
 			Db.NonQ(command);
 			int taskListNum=0;
@@ -49,6 +57,7 @@ namespace OpenDentBusiness{
 		
 		///<summary>Only run once after the upgrade to version 5.5.</summary>
 		public static void SynchAll(){
+			//No need to check RemotingRole; no call to db.
 			List<Task> listTasks=Tasks.RefreshAll();
 			for(int i=0;i<listTasks.Count;i++){
 				Synch(listTasks[i]);

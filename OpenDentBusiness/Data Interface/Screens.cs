@@ -11,6 +11,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(int screenGroupNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),screenGroupNum);
+				return;
+			}
 			string command =
 				"SELECT * from screen "
 				+"WHERE ScreenGroupNum = '"+POut.PInt(screenGroupNum)+"' "
@@ -46,6 +50,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(OpenDentBusiness.Screen Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.ScreenNum=MiscData.GetKey("screen","ScreenNum");
 			}
@@ -92,6 +100,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(OpenDentBusiness.Screen Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE screen SET "
 				+"ScreenDate     ="    +POut.PDate  (Cur.ScreenDate)
 				+",GradeSchool ='"      +POut.PString(Cur.GradeSchool)+"'"
@@ -120,6 +132,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates all screens for a group with the date,prov, and location info of the current group.</summary>
 		public static void UpdateForGroup(ScreenGroup ScreenGroupCur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ScreenGroupCur);
+				return;
+			}
 			string command = "UPDATE screen SET "
 				+"ScreenDate     ="    +POut.PDate  (ScreenGroupCur.SGDate)
 				+",GradeSchool ='"      +POut.PString(ScreenGroupCur.GradeSchool)+"'"
@@ -133,6 +149,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(OpenDentBusiness.Screen Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from screen WHERE ScreenNum = '"+POut.PInt(Cur.ScreenNum)+"'";
 			Db.NonQ(command);
 		}

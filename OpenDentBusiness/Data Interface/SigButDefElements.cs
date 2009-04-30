@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static SigButDefElement[] list;
 
 		public static SigButDefElement[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -23,6 +24,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all SigButDefElements for all buttons, ordered by type: user,extras, message.</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM sigbutdefelement";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="SigButDefElement";
@@ -32,6 +34,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new SigButDefElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigButDefElement();
@@ -57,6 +60,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(SigButDefElement element){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),element);
+				return;
+			}
 			string command= "INSERT INTO sigbutdefelement (";
 			command+="SigButDefNum,SigElementDefNum"
 				+") VALUES(";
@@ -68,6 +75,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(SigButDefElement element){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),element);
+				return;
+			}
 			string command= "DELETE from sigbutdefelement WHERE ElementNum = '"+POut.PInt(element.ElementNum)+"'";
  			Db.NonQ(command);
 		}
@@ -76,6 +87,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through the SigButDefElement list and pulls out all elements for one specific button.</summary>
 		public static SigButDefElement[] GetForButton(int sigButDefNum){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].SigButDefNum==sigButDefNum){

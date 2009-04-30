@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static QuickPasteNote[] List;
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * from quickpastenote "
 				+"ORDER BY ItemOrder";
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new QuickPasteNote[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteNote();
@@ -35,6 +37,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(QuickPasteNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				note.QuickPasteNoteNum=MiscData.GetKey("quickpastenote","QuickPasteNoteNum");
 			}
@@ -61,6 +67,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(QuickPasteNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
+				return;
+			}
 			string command="UPDATE quickpastenote SET "
 				+"QuickPasteCatNum='" +POut.PInt   (note.QuickPasteCatNum)+"'"
 				+",ItemOrder = '"     +POut.PInt   (note.ItemOrder)+"'"
@@ -72,6 +82,10 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static void Delete(QuickPasteNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
+				return;
+			}
 			string command="DELETE from quickpastenote WHERE QuickPasteNoteNum = '"
 				+POut.PInt(note.QuickPasteNoteNum)+"'";
  			Db.NonQ(command);
@@ -79,6 +93,9 @@ namespace OpenDentBusiness{
 
 		///<summary>When saving an abbrev, this makes sure that the abbreviation is not already in use.</summary>
 		public static bool AbbrAlreadyInUse(QuickPasteNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),note);
+			}
 			string command="SELECT * FROM quickpastenote WHERE "
 				+"Abbreviation='"+POut.PString(note.Abbreviation)+"' "
 				+"AND QuickPasteNoteNum != '"+POut.PInt (note.QuickPasteNoteNum)+"'";
@@ -91,6 +108,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used from FormQuickPaste to get all notes for the selected cat.</summary>
 		public static QuickPasteNote[] GetForCat(int cat){
+			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();
 			}
@@ -109,6 +127,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Called on KeyUp from various textBoxes in the program to look for a ?abbrev and attempt to substitute.  Substitutes the text if found.</summary>
 		public static string Substitute(string text,QuickPasteType type){
+			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();
 			}

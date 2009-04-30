@@ -37,6 +37,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ToothInitial init){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),init);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				init.ToothInitialNum=MiscData.GetKey("toothinitial","ToothInitialNum");
 			}
@@ -65,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ToothInitial init) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),init);
+				return;
+			}
 			string command= "UPDATE toothinitial SET "
 				+"PatNum = '"        +POut.PInt   (init.PatNum)+"', "
 				+"ToothNum= '"       +POut.PString(init.ToothNum)+"', "
@@ -78,17 +86,23 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ToothInitial init) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),init);
+				return;
+			}
 			string command= "DELETE FROM toothinitial WHERE ToothInitialNum = '"+init.ToothInitialNum.ToString()+"'";
 			Db.NonQ(command);
 		}
 		
 		///<summary>Sets teeth missing, or sets primary, or sets movement values.  It first clears the value from the database, then adds a new row to represent that value.  Movements require an amount.  If movement amt is 0, then no row gets added.</summary>
 		public static void SetValue(int patNum,string tooth_id,ToothInitialType initialType) {
+			//No need to check RemotingRole; no call to db.
 			SetValue(patNum,tooth_id,initialType,0);
 		}
 
 		///<summary>Sets teeth missing, or sets primary, or sets movement values.  It first clears the value from the database, then adds a new row to represent that value.  Movements require an amount.  If movement amt is 0, then no row gets added.</summary>
 		public static void SetValue(int patNum,string tooth_id,ToothInitialType initialType,float moveAmt) {
+			//No need to check RemotingRole; no call to db.
 			ClearValue(patNum,tooth_id,initialType);
 			ToothInitial ti=new ToothInitial();
 			ti.PatNum=patNum;
@@ -100,6 +114,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Same as SetValue, but does not clear any values first.  Only use this if you have first run ClearAllValuesForType.</summary>
 		public static void SetValueQuick(int patNum,string tooth_id,ToothInitialType initialType,float moveAmt) {
+			//No need to check RemotingRole; no call to db.
 			ToothInitial ti=new ToothInitial();
 			ti.PatNum=patNum;
 			ti.ToothNum=tooth_id;
@@ -110,6 +125,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used for incremental tooth movements.  Automatically adds a movement to any existing movement.  Supply a list of all toothInitials for the patient.</summary>
 		public static void AddMovement(List<ToothInitial> initialList,int patNum,string tooth_id,ToothInitialType initialType,float moveAmt) {
+			//No need to check RemotingRole; no call to db.
 			ToothInitial ti=null;
 			for(int i=0;i<initialList.Count;i++){
 				if(initialList[i].ToothNum==tooth_id
@@ -133,6 +149,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Sets teeth not missing, or sets to perm, or clears movement values.</summary>
 		public static void ClearValue(int patNum,string tooth_id,ToothInitialType initialType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,tooth_id,initialType);
+				return;
+			}
 			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PInt(patNum)
 				+" AND ToothNum='"+POut.PString(tooth_id)
 				+"' AND InitialType="+POut.PInt((int)initialType);
@@ -141,6 +161,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Sets teeth not missing, or sets to perm, or clears movement values.  Clears all the values of one type for all teeth in the mouth.</summary>
 		public static void ClearAllValuesForType(int patNum,ToothInitialType initialType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,initialType);
+				return;
+			}
 			string command="DELETE FROM toothinitial WHERE PatNum="+POut.PInt(patNum)
 				+" AND InitialType="+POut.PInt((int)initialType);
 			Db.NonQ(command);
@@ -148,6 +172,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of missing teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>
 		public static ArrayList GetMissingOrHiddenTeeth(List<ToothInitial> initialList) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList missing=new ArrayList();
 			for(int i=0;i<initialList.Count;i++) {
 				if((initialList[i].InitialType==ToothInitialType.Missing || initialList[i].InitialType==ToothInitialType.Hidden)
@@ -162,6 +187,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of primary teeth as strings. Includes "1"-"32".</summary>
 		public static ArrayList GetPriTeeth(List<ToothInitial> initialList) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList pri=new ArrayList();
 			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==ToothInitialType.Primary
@@ -177,6 +203,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through supplied initial list to see if the specified tooth is already marked as missing or hidden.</summary>
 		public static bool ToothIsMissingOrHidden(List<ToothInitial> initialList,string toothNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<initialList.Count;i++){
 				if(initialList[i].InitialType!=ToothInitialType.Missing
 					&& initialList[i].InitialType!=ToothInitialType.Hidden)
@@ -193,6 +220,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the current movement value for a single tooth by looping through the supplied list.</summary>
 		public static float GetMovement(List<ToothInitial> initialList,string toothNum,ToothInitialType initialType){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==initialType
 					&& initialList[i].ToothNum==toothNum)
@@ -205,6 +233,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of the hidden teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>
 		public static ArrayList GetHiddenTeeth(List<ToothInitial> initialList) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList hidden=new ArrayList();
 			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==ToothInitialType.Hidden

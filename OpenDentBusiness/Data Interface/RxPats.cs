@@ -31,6 +31,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static RxPat GetRx(int rxNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RxPat>(MethodBase.GetCurrentMethod(),rxNum);
+			}
 			string command="SELECT * FROM rxpat"
 				+" WHERE RxNum = "+POut.PInt(rxNum);
 			DataTable table=Db.GetTable(command);
@@ -51,6 +54,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(RxPat rx) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),rx);
+				return;
+			}
 			string command= "UPDATE rxpat SET " 
 				+ "PatNum = '"      +POut.PInt   (rx.PatNum)+"'"
 				+ ",RxDate = "      +POut.PDate  (rx.RxDate)
@@ -68,6 +75,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(RxPat rx) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),rx);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				rx.RxNum=MiscData.GetKey("rxpat","RxNum");
 			}
@@ -100,6 +111,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(int rxNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),rxNum);
+				return;
+			}
 			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.PInt(rxNum)+"'";
 			Db.NonQ(command);
 		}

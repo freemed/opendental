@@ -9,6 +9,9 @@ namespace OpenDentBusiness {
 	public class Questions {
 		///<summary>Gets a list of all Questions for a given patient.  Sorted by ItemOrder.</summary>
 		public static Question[] Refresh(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Question[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM question WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
@@ -27,6 +30,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(Question quest) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),quest);
+				return;
+			}
 			string command="UPDATE question SET " 
 				+"PatNum = '"      +POut.PInt   (quest.PatNum)+"'"
 				+",ItemOrder = '"  +POut.PInt   (quest.ItemOrder)+"'"
@@ -39,6 +46,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(Question quest) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),quest);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				quest.QuestionNum=MiscData.GetKey("question","QuestionNum");
 			}

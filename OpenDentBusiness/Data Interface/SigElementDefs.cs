@@ -12,6 +12,7 @@ namespace OpenDentBusiness {
 		private static SigElementDef[] list;
 
 		public static SigElementDef[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -25,6 +26,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all SigElementDefs when program first opens.</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM sigelementdef ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="SigElementDef";
@@ -34,6 +36,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new SigElementDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SigElementDef();
@@ -49,6 +52,10 @@ namespace OpenDentBusiness {
 	
 		///<summary></summary>
 		public static void Update(SigElementDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="UPDATE sigelementdef SET " 
 				+"LightRow = '"       +POut.PInt   (def.LightRow)+"'"
 				+",LightColor = '"    +POut.PInt   (def.LightColor.ToArgb())+"'"
@@ -62,6 +69,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(SigElementDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="INSERT INTO sigelementdef (LightRow,LightColor,SigElementType,SigText,Sound,"
 				+"ItemOrder) VALUES("
 				+"'"+POut.PInt   (def.LightRow)+"', "
@@ -75,6 +86,10 @@ namespace OpenDentBusiness {
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.  This routine, deletes references in the SigButDefElement table.  References in the SigElement table are left hanging.  The user interface needs to be able to handle missing elementdefs.</summary>
 		public static void Delete(SigElementDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="DELETE FROM sigbutdefelement WHERE SigElementDefNum="+POut.PInt(def.SigElementDefNum);
 			Db.NonQ(command);
 			command="DELETE FROM sigelementdef WHERE SigElementDefNum ="+POut.PInt(def.SigElementDefNum);
@@ -83,6 +98,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static SigElementDef[] GetSubList(SignalElementType sigElementType){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(sigElementType==List[i].SigElementType){
@@ -96,6 +112,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Moves the selected item up in the supplied sub list.</summary>
 		public static void MoveUp(int selected,SigElementDef[] subList){
+			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
 				throw new ApplicationException(Lan.g("SigElementDefs","Please select an item first."));
 			}
@@ -112,6 +129,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void MoveDown(int selected,SigElementDef[] subList) {
+			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
 				throw new ApplicationException(Lan.g("SigElementDefs","Please select an item first."));
 			}
@@ -128,6 +146,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used by MoveUp and MoveDown.</summary>
 		private static void SetOrder(int mySelNum,int myItemOrder,SigElementDef[] subList) {
+			//No need to check RemotingRole; no call to db.
 			SigElementDef temp=subList[mySelNum];
 			temp.ItemOrder=myItemOrder;
 			Update(temp);
@@ -135,6 +154,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the SigElementDef with the specified num.</summary>
 		public static SigElementDef GetElement(int SigElementDefNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].SigElementDefNum==SigElementDefNum) {
 					return List[i].Copy();

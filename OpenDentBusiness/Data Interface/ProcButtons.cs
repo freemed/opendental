@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		private static ProcButton[] list;
 
 		public static ProcButton[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -23,6 +24,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM procbutton ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ProcButton";
@@ -32,6 +34,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new ProcButton[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButton();
@@ -45,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary>must have already checked procCode for nonduplicate.</summary>
 		public static void Insert(ProcButton but) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),but);
+				return;
+			}
 			string command= "INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES("
 				+"'"+POut.PString(but.Description)+"', "
 				+"'"+POut.PInt   (but.ItemOrder)+"', "
@@ -55,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ProcButton but) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),but);
+				return;
+			}
 			string command="UPDATE procbutton SET " 
 				+ "Description = '" +POut.PString(but.Description)+"'"
 				+ ",ItemOrder = '"  +POut.PInt   (but.ItemOrder)+"'"
@@ -66,6 +77,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ProcButton but) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),but);
+				return;
+			}
 			string command="DELETE FROM procbuttonitem WHERE ProcButtonNum = '"
 				+POut.PInt(but.ProcButtonNum)+"'";
 			Db.NonQ(command);
@@ -76,6 +91,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static ProcButton[] GetForCat(int selectedCat){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].Category==selectedCat){
@@ -94,6 +110,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all current ProcButtons from the Chart module, and then adds the default ProcButtons.  Procedure codes must have already been entered or they cannot be added as a ProcButton.</summary>
 		public static void SetToDefault() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command= @"
 				DELETE FROM procbutton;
 				DELETE FROM procbuttonitem;

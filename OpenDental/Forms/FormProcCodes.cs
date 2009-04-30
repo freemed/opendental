@@ -565,9 +565,9 @@ namespace OpenDental{
 				selected=ProcTable.Rows[gridMain.GetSelectedIndex()][3].ToString();
 			}
 			int scroll=gridMain.ScrollValue;
-			int[] cats=new int[listCategories.SelectedIndices.Count];
-			for(int i=0;i<listCategories.SelectedIndices.Count;i++){
-				cats[i]=CatList[listCategories.SelectedIndices[i]].DefNum;
+			List <int> cats=new List <int> ();
+			for(int i=0;i<listCategories.SelectedIndices.Count;i++) {
+				cats.Add(CatList[listCategories.SelectedIndices[i]].DefNum);
 			}
 			int feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
 			int feeSchedComp1=0;

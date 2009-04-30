@@ -11,6 +11,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all task lists for the trunk of the user tab.</summary>
 		public static List<TaskList> RefreshUserTrunk(int userNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),userNum);
+			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0),"
@@ -24,11 +27,14 @@ namespace OpenDentBusiness{
 				+" AND tasksubscription.TaskListNum!=0 "
 				+"GROUP BY tasklist.TaskListNum "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all task lists for the main trunk.</summary>
 		public static List<TaskList> RefreshMainTrunk() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
@@ -37,11 +43,14 @@ namespace OpenDentBusiness{
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=0 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all task lists for the repeating trunk.</summary>
 		public static List<TaskList> RefreshRepeatingTrunk() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
@@ -50,11 +59,14 @@ namespace OpenDentBusiness{
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
 		public static List<TaskList> RefreshChildren(int parent){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),parent);
+			}
 			string command=
 				"SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
@@ -62,11 +74,14 @@ namespace OpenDentBusiness{
 				+"FROM tasklist "
 				+"WHERE Parent="+POut.PInt(parent)
 				+" ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
 		public static List<TaskList> RefreshRepeating(TaskDateType dateType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),dateType);
+			}
 			string command=
 				"SELECT tasklist.*,"
 				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
@@ -75,11 +90,14 @@ namespace OpenDentBusiness{
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.PInt((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all task lists for one of the 3 dated trunks.</summary>
 		public static List<TaskList> RefreshDatedTrunk(DateTime date,TaskDateType dateType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),date,dateType);
+			}
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
 			if(dateType==TaskDateType.Day) {
@@ -103,16 +121,19 @@ namespace OpenDentBusiness{
 				+" AND DateTL <= "+POut.PDate(dateTo)
 				+" AND DateType="+POut.PInt((int)dateType)
 				+" ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary></summary>
 		public static TaskList GetOne(int taskListNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TaskList>(MethodBase.GetCurrentMethod(),taskListNum);
+			}
 			if(taskListNum==0){
 				return null;
 			}
 			string command="SELECT * FROM tasklist WHERE TaskListNum="+POut.PInt(taskListNum);
-			List<TaskList> list=RefreshAndFill(command);
+			List<TaskList> list=RefreshAndFill(Db.GetTable(command));
 			if(list.Count>0){
 				return list[0];
 			}
@@ -126,8 +147,8 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM tasklist WHERE DateType=0 ";
 		}*/
 
-		private static List<TaskList> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		private static List<TaskList> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<TaskList> retVal=new List<TaskList>();
 			TaskList tasklist;
 			string desc;
@@ -164,6 +185,9 @@ namespace OpenDentBusiness{
 
 		/// <summary>Gets all task lists with the give object type.  Used in TaskListSelect when assigning an object to a task list.</summary>
 		public static TaskList[] GetForObjectType(TaskObjectType oType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TaskList[]>(MethodBase.GetCurrentMethod(),oType);
+			}
 			string command=
 				"SELECT * FROM tasklist "
 				+"WHERE ObjectType="+POut.PInt((int)oType)
@@ -187,6 +211,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Update(TaskList tlist){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
+				return;
+			}
 			string command= "UPDATE tasklist SET " 
 				+"Descript = '"       +POut.PString(tlist.Descript)+"'"
 				+",Parent = '"        +POut.PInt   (tlist.Parent)+"'"
@@ -202,6 +230,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(TaskList tlist){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				tlist.TaskListNum=MiscData.GetKey("tasklist","TaskListNum");
 			}
@@ -239,6 +271,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(TaskList tlist, bool isNew){
+			//No need to check RemotingRole; no call to db.
 			//check for duplicate trunk?
 			if(tlist.IsRepeating && tlist.DateTL.Year>1880){
 				throw new Exception(Lan.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
@@ -259,6 +292,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Throws exception if any child tasklists or tasks.</summary>
 		public static void Delete(TaskList tlist){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
+				return;
+			}
 			string command="SELECT COUNT(*) FROM tasklist WHERE Parent="+POut.PInt(tlist.TaskListNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){

@@ -12,6 +12,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * from providerident";
 			DataTable table=Db.GetTable(command);
 			list=new ProviderIdent[table.Rows.Count];
@@ -27,6 +31,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ProviderIdent pi){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pi);
+				return;
+			}
 			string command= "UPDATE providerident SET "
 				+ "ProvNum = '"   +POut.PInt   (pi.ProvNum)+"'"
 				+",PayorID = '"   +POut.PString(pi.PayorID)+"'"
@@ -38,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ProviderIdent pi){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pi);
+				return;
+			}
 			string command= "INSERT INTO providerident (ProvNum,PayorID,SuppIDType,IDNumber"
 				+") VALUES ("
 				+"'"+POut.PInt   (pi.ProvNum)+"', "
@@ -51,6 +63,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ProviderIdent pi){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pi);
+				return;
+			}
 			string command= "DELETE FROM providerident "
 				+"WHERE ProviderIdentNum = "+POut.PInt(pi.ProviderIdentNum);
  			Db.NonQ(command);
@@ -58,6 +74,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all supplemental identifiers that have been attached to this provider. Used in the provider edit window.</summary>
 		public static ProviderIdent[] GetForProv(int provNum){
+			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				Refresh();
 			}
@@ -76,6 +93,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all supplemental identifiers that have been attached to this provider and for this particular payorID.  Called from X12 when creating a claim file.  Also used now on printed claims.</summary>
 		public static ProviderIdent[] GetForPayor(int provNum,string payorID){
+			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				Refresh();
 			}
@@ -96,12 +114,17 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from FormProvEdit if cancel on a new provider.</summary>
 		public static void DeleteAllForProv(int provNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),provNum);
+				return;
+			}
 			string command= "DELETE from providerident WHERE provnum = '"+POut.PInt(provNum)+"'";
  			Db.NonQ(command);
 		}
 
 		/// <summary></summary>
 		public static bool IdentExists(ProviderSupplementalID type,int provNum,string payorID){
+			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				Refresh();
 			}

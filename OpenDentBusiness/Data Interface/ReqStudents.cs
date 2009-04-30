@@ -9,21 +9,27 @@ namespace OpenDentBusiness{
 	public class ReqStudents{
 
 		public static List<ReqStudent> GetForAppt(int aptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ReqStudent>>(MethodBase.GetCurrentMethod(),aptNum);
+			}
 			string command="SELECT * FROM reqstudent WHERE AptNum="+POut.PInt(aptNum)+" ORDER BY ProvNum,Descript";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		public static ReqStudent GetOne(int ReqStudentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ReqStudent>(MethodBase.GetCurrentMethod(),ReqStudentNum);
+			}
 			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.PInt(ReqStudentNum);
-			List<ReqStudent> reqList=RefreshAndFill(command);
+			List<ReqStudent> reqList=RefreshAndFill(Db.GetTable(command));
 			if(reqList.Count==0) {
 				return null;
 			}
 			return reqList[0];
 		}
 
-		private static List<ReqStudent> RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static List<ReqStudent> RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<ReqStudent> reqList=new List<ReqStudent>();
 			ReqStudent req;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -44,6 +50,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ReqStudent req) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
+				return;
+			}
 			string command = "UPDATE reqstudent SET "
 				+ " ReqNeededNum = '"   +POut.PInt(req.ReqNeededNum)+"'"
 				+ ",Descript = '"       +POut.PString(req.Descript)+"'"
@@ -59,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ReqStudent req) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
 			}
@@ -89,6 +103,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch.</summary>
 		public static void Delete(int reqStudentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqStudentNum);
+				return;
+			}
 			ReqStudent req=GetOne(reqStudentNum);
 			//if a reqneeded exists, then disallow deletion.
 			if(ReqNeededs.GetReq(req.ReqNeededNum)==null) {
@@ -99,6 +117,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshOneStudent(int provNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),provNum);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -142,6 +163,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshManyStudents(int classNum,int courseNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),classNum,courseNum);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -173,6 +197,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Provider> GetStudents(int classNum) {
+			//No need to check RemotingRole; no call to db.
 			List<Provider> retVal=new List<Provider>();
 			for(int i=0;i<ProviderC.List.Length;i++){
 				if(ProviderC.List[i].SchoolClassNum==classNum){
@@ -184,6 +209,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Provider(student) is required.</summary>
 		public static DataTable GetForCourseClass(int schoolCourse,int schoolClass){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolCourse,schoolClass);
+			}
 			string command="SELECT Descript,ReqNeededNum "
 				+"FROM reqneeded ";
 			//if(schoolCourse==0){
@@ -201,6 +229,10 @@ namespace OpenDentBusiness{
 		
 		///<summary>All fields for all reqs will have already been set.  All except for reqstudent.ReqStudentNum if new.  Now, they just have to be persisted to the database.</summary>
 		public static void SynchApt(List<ReqStudent> reqsAttached,int aptNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqsAttached,aptNum);
+				return;
+			}
 			//first, detach all from this appt
 			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
 			Db.NonQ(command);
@@ -219,6 +251,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Before reqneeded.Delete, this checks to make sure that req is not in use by students.  Used to prompt user.</summary>
 		public static string InUseBy(int reqNeededNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),reqNeededNum);
+			}
 			string command="SELECT LName,FName FROM provider,reqstudent "
 				+"WHERE provider.ProvNum=reqstudent.ProvNum "
 				+"AND reqstudent.ReqNeededNum="+POut.PInt(reqNeededNum)

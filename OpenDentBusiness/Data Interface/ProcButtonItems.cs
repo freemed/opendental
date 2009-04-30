@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static ProcButtonItem[] list;
 
 		public static ProcButtonItem[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM procbuttonitem";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ProcButtonItem";
@@ -31,6 +33,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new ProcButtonItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButtonItem();
@@ -44,6 +47,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Must have already checked procCode for nonduplicate.</summary>
 		public static void Insert(ProcButtonItem item) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command="INSERT INTO procbuttonitem (ProcButtonNum,OldCode,AutoCodeNum,CodeNum) VALUES("
 				+"'"+POut.PInt   (item.ProcButtonNum)+"', "
 				+"'"+POut.PString(item.OldCode)+"', "
@@ -54,6 +61,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ProcButtonItem item) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command="UPDATE procbuttonitem SET " 
 				+ "ProcButtonNum='"+POut.PInt   (item.ProcButtonNum)+"'"
 				+ ",OldCode='"     +POut.PString(item.OldCode)+"'"
@@ -65,12 +76,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ProcButtonItem item) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
+				return;
+			}
 			string command="DELETE FROM procbuttonitem WHERE ProcButtonItemNum = '"+POut.PInt(item.ProcButtonItemNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static int[] GetCodeNumListForButton(int procButtonNum){
+			//No need to check RemotingRole; no call to db.
 			ArrayList ALCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcButtonNum==procButtonNum && List[i].AutoCodeNum==0){
@@ -86,6 +102,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static int[] GetAutoListForButton(int procButtonNum) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList ALautoCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcButtonNum==procButtonNum && List[i].AutoCodeNum > 0){
@@ -101,6 +118,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DeleteAllForButton(int procButtonNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procButtonNum);
+				return;
+			}
 			string command= "DELETE from procbuttonitem WHERE procbuttonnum = '"+POut.PInt(procButtonNum)+"'";
 			Db.NonQ(command);
 		}

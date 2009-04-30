@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<AnesthMedSupplier>.CreateObject(SupplierIDNum);
 		}
 
-		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(int[] SupplierIDNums){
+		public static List<AnesthMedSupplier> GetAnesthMedSuppliers(List <int> SupplierIDNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<AnesthMedSupplier>>(MethodBase.GetCurrentMethod(),SupplierIDNums);
 			}

@@ -13,6 +13,7 @@ namespace OpenDentBusiness {
 
 		///<summary>A list of all SigButDefs.</summary>
 		public static SigButDef[] Listt {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(listt==null) {
 					RefreshCache();
@@ -26,6 +27,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all SigButDefs when program first opens.  Also refreshes SigButDefElements and attaches all elements to the appropriate buttons.</summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM sigbutdef ORDER BY ButtonIndex";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="SigButDef";
@@ -35,6 +37,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			SigButDefElements.RefreshCache();
 			Listt=new SigButDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -50,6 +53,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(SigButDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="UPDATE sigbutdef SET " 
 				+"ButtonText = '"   +POut.PString(def.ButtonText)+"'"
 				+",ButtonIndex = '" +POut.PInt(def.ButtonIndex)+"'"
@@ -61,6 +68,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(SigButDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="INSERT INTO sigbutdef (ButtonText,ButtonIndex,SynchIcon,ComputerName"
 				+") VALUES("
 				+"'"+POut.PString(def.ButtonText)+"', "
@@ -72,6 +83,10 @@ namespace OpenDentBusiness {
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(SigButDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PInt(def.SigButDefNum);
 			Db.NonQ(command);
 			command="DELETE FROM sigbutdef WHERE SigButDefNum ="+POut.PInt(def.SigButDefNum);
@@ -80,12 +95,17 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in the Button edit dialog.</summary>
 		public static void DeleteElements(SigButDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="DELETE FROM sigbutdefelement WHERE SigButDefNum="+POut.PInt(def.SigButDefNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Loops through the element list and pulls out one element of a specific type. Used in the button edit window.</summary>
 		public static SigButDefElement GetElement(SigButDef def,SignalElementType elementType) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<def.ElementList.Length;i++) {
 				if(SigElementDefs.GetElement(def.ElementList[i].SigElementDefNum).SigElementType==elementType) {
 					return def.ElementList[i].Copy();
@@ -99,6 +119,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in Setup.  The returned list also includes defaults if not overridden by one with a computername.  The supplied computer name can be blank for the default setup.</summary>
 		public static SigButDef[] GetByComputer(string computerName) {
+			//No need to check RemotingRole; no call to db.
 			//first, get a default list, because we will always need that
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<Listt.Length;i++) {
@@ -135,11 +156,13 @@ namespace OpenDentBusiness {
 		}
 
 		private static int CompareButtonsByIndex(SigButDef x,SigButDef y) {
+			//No need to check RemotingRole; no call to db.
 			return x.ButtonIndex.CompareTo(y.ButtonIndex);
 		}
 
 		///<summary>Moves the selected item up in the supplied sub list.</summary>
 		public static void MoveUp(SigButDef selected,SigButDef[] subList) {
+			//No need to check RemotingRole; no call to db.
 			if(selected.ButtonIndex==0) {//already at top
 				return;
 			}
@@ -161,6 +184,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void MoveDown(SigButDef selected,SigButDef[] subList) {
+			//No need to check RemotingRole; no call to db.
 			if(selected.ButtonIndex==20) {
 				throw new ApplicationException(Lan.g("SigButDefs","Max 20 buttons."));
 			}
@@ -182,6 +206,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the SigButDef with the specified buttonIndex.  Used from the setup page.  The supplied list will already have been filtered by computername.  Supply buttonIndex in 0-based format.</summary>
 		public static SigButDef GetByIndex(int buttonIndex,List<SigButDef> subList) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<subList.Count;i++) {
 				if(subList[i].ButtonIndex==buttonIndex) {
 					return subList[i].Copy();
@@ -192,6 +217,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the SigButDef with the specified buttonIndex.  Used from the setup page.  The supplied list will already have been filtered by computername.  Supply buttonIndex in 0-based format.</summary>
 		public static SigButDef GetByIndex(int buttonIndex,SigButDef[] subList) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<subList.Length;i++) {
 				if(subList[i].ButtonIndex==buttonIndex) {
 					return subList[i].Copy();

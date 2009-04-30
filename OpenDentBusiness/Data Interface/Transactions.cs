@@ -8,15 +8,18 @@ namespace OpenDentBusiness{
 	public class Transactions {
 		///<summary>Since transactions are always viewed individually, this function returns one transaction</summary>
 		public static Transaction GetTrans(int transactionNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),transactionNum);
+			}
 			string command=
 				"SELECT * FROM transaction "
 				+"WHERE TransactionNum="+POut.PInt(transactionNum);
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>For now, all transactions are retrieved singly.  Returns null if no match found.</summary>
-		private static Transaction RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static Transaction RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			if(table.Rows.Count==0) {
 				return null;
 			}
@@ -32,22 +35,32 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one transaction directly from the database which has this deposit attached to it.  If none exist, then returns null.</summary>
 		public static Transaction GetAttachedToDeposit(int depositNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),depositNum);
+			}
 			string command=
 				"SELECT * FROM transaction "
 				+"WHERE DepositNum="+POut.PInt(depositNum);
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets one transaction directly from the database which has this payment attached to it.  If none exist, then returns null.  There should never be more than one, so that's why it doesn't return more than one.</summary>
 		public static Transaction GetAttachedToPayment(int payNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),payNum);
+			}
 			string command=
 				"SELECT * FROM transaction "
 				+"WHERE PayNum="+POut.PInt(payNum);
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary></summary>
 		public static void Insert(Transaction trans) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				trans.TransactionNum=MiscData.GetKey("transaction","TransactionNum");
 			}
@@ -80,6 +93,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Transaction trans) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
+				return;
+			}
 			string command= "UPDATE transaction SET "
 				+"DateTimeEntry = " +POut.PDateT (trans.DateTimeEntry)+" "
 				+",UserNum = '"      +POut.PInt   (trans.UserNum)+"' "
@@ -91,6 +108,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Also deletes all journal entries for the transaction.  Will later throw an error if journal entries attached to any reconciles.  Be sure to surround with try-catch.</summary>
 		public static void Delete(Transaction trans) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
+				return;
+			}
 			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.PInt(trans.TransactionNum);
 			Db.NonQ(command);
 			command= "DELETE FROM transaction WHERE TransactionNum = "+POut.PInt(trans.TransactionNum);
@@ -101,6 +122,9 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static bool IsReconciled(Transaction trans){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),trans);
+			}
 			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum !=0"
 				+" AND TransactionNum="+POut.PInt(trans.TransactionNum);
 			if(Db.GetCount(command)=="0") {

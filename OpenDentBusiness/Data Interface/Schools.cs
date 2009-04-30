@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		public static string[] ListNames;
 
 		public static School[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -26,6 +27,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Refreshes List as needed directly from the database.  List only includes items that will show in dropdown list.</summary>
 		public static void Refresh(string name){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),name);
+				return;
+			}
 			string command =
 				"SELECT * from school "
 				+"WHERE SchoolName LIKE '"+name+"%' "
@@ -42,11 +47,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
+			//No need to check RemotingRole; no call to db.
 			Refresh("");
 		}
 
 		///<summary>Gets an array of strings containing all the schools in alphabetical order.  Used for the screening interface which must be simpler than the usual interface.</summary>
 		public static void GetListNames(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command =
 				"SELECT SchoolName from school "
 				+"ORDER BY SchoolName";
@@ -59,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Need to make sure schoolname not already in db.</summary>
 		public static void Insert(School Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "INSERT INTO school (SchoolName,SchoolCode) "
 				+"VALUES ("
 				+"'"+POut.PString(Cur.SchoolName)+"', "
@@ -69,6 +83,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates the schoolname and code in the school table, and also updates all patients that were using the oldschool name.</summary>
 		public static void Update(School Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE school SET "
 				+"SchoolName ='"  +POut.PString(Cur.SchoolName)+"'"
 				+",SchoolCode ='" +POut.PString(Cur.SchoolCode)+"'"
@@ -83,16 +101,23 @@ namespace OpenDentBusiness{
 
 		///<summary>Must run UsedBy before running this.</summary>
 		public static void Delete(School Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from school WHERE SchoolName = '"+POut.PString(Cur.SchoolName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Use before DeleteCur to determine if this school name is in use. Returns a formatted string that can be used to quickly display the names of all patients using the schoolname.</summary>
 		public static string UsedBy(string schoolName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),schoolName);
+			}
 			string command =
 				"SELECT LName,FName from patient "
 				+"WHERE GradeSchool = '"+POut.PString(schoolName)+"' ";
-			DataTable table=Db.GetTable(command);;
+			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)
 				return "";
 			string retVal="";
@@ -108,6 +133,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Use before InsertCur to determine if this school name already exists. Also used when closing patient edit window to validate that the schoolname exists.</summary>
 		public static bool DoesExist(string schoolName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),schoolName);
+			}
 			string command =
 				"SELECT * from school "
 				+"WHERE SchoolName = '"+POut.PString(schoolName)+"' ";

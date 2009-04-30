@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		public static bool IsSelected;
 
 		public static UserQuery[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -26,12 +27,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command =
 				"SELECT querynum,description,filename,querytext"
 				+" FROM userquery"
 				//+" WHERE hidden != '1'";
 				+" ORDER BY description";
-			DataTable table=Db.GetTable(command);;
+			DataTable table=Db.GetTable(command);
 			List=new UserQuery[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new UserQuery();
@@ -44,6 +49,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(UserQuery Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="INSERT INTO userquery (description,filename,querytext) VALUES("
 				+"'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PString(Cur.FileName)+"', "
@@ -54,12 +63,20 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static void Delete(UserQuery Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from userquery WHERE querynum = '"+POut.PInt(Cur.QueryNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Update(UserQuery Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE userquery SET "
 				+ "description = '" +POut.PString(Cur.Description)+"'"
 				+ ",filename = '"    +POut.PString(Cur.FileName)+"'"

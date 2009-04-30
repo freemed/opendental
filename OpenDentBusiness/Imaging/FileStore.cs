@@ -89,9 +89,9 @@ namespace OpenDental.Imaging {
 			//now find all files in the patient folder that are not in the db and add them
 			DirectoryInfo di = new DirectoryInfo(patFolder);
 			FileInfo[] fiList = di.GetFiles();
-			string[] fileList = new string[fiList.Length];
-			for(int i = 0; i < fileList.Length; i++) {
-				fileList[i] = fiList[i].Name;
+			List <string> fileList = new List <string> ();
+			for(int i = 0; i < fiList.Length; i++) {
+				fileList.Add(fiList[i].Name);
 			}
 			int countAdded = Documents.InsertMissing(Patient, fileList);
 			if(countAdded > 0) {

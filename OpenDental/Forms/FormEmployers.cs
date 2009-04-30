@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -288,9 +289,9 @@ namespace OpenDental{
 				,MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			int[] employerNums=new int[listEmp.SelectedIndices.Count];
-			for(int i=0;i<listEmp.SelectedIndices.Count;i++){
-				employerNums[i]=Employers.List[listEmp.SelectedIndices[i]].EmployerNum;
+			List <int> employerNums=new List <int> ();
+			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
+				employerNums.Add(Employers.List[listEmp.SelectedIndices[i]].EmployerNum);
 			}
 			Employers.Combine(employerNums);
 			FillGrid();

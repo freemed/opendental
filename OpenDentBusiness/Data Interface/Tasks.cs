@@ -27,10 +27,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one Task from database.</summary>
 		public static Task GetOne(int TaskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Task>(MethodBase.GetCurrentMethod(),TaskNum);
+			}
 			string command=
 				"SELECT * FROM task"
 				+" WHERE TaskNum = "+POut.PInt(TaskNum);
-			List<Task> taskList=RefreshAndFill(command);
+			List<Task> taskList=RefreshAndFill(Db.GetTable(command));
 			if(taskList.Count==0) {
 				return null;
 			}
@@ -39,6 +42,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all tasks for the main trunk.</summary>
 		public static List<Task> RefreshMainTrunk(bool showDone,DateTime startDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),showDone,startDate);
+			}
 			//startDate only applies if showing Done tasks.
 			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=0 "
@@ -52,21 +58,27 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all tasks for the repeating trunk.  Always includes "done".</summary>
 		public static List<Task> RefreshRepeatingTrunk() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=0 "
 				+"AND DateTask < '1880-01-01' "
 				+"AND IsRepeating=1 "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
 		public static List<Task> RefreshChildren(int listNum, bool showDone,DateTime startDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),listNum,showDone,startDate);
+			}
 			//startDate only applies if showing Done tasks.
 			string command=
 				"SELECT * FROM task "
@@ -79,21 +91,27 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
 		public static List<Task> RefreshRepeating(TaskDateType dateType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),dateType);
+			}
 			string command=
 				"SELECT * FROM task "
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.PInt((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets all tasks for one of the 3 dated trunks. startDate only applies if showing Done.</summary>
 		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType,bool showDone,DateTime startDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),date,dateType,showDone,startDate);
+			}
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
 			if(dateType==TaskDateType.Day) {
@@ -121,17 +139,20 @@ namespace OpenDentBusiness{
 				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Only used once when first synching all the tasks for taskAncestors.  Then, never used again.</summary>
 		public static List<Task> RefreshAll(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM task WHERE TaskListNum != 0";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		public static List<Task> RefreshAndFill(string command){
-			DataTable table=Db.GetTable(command);
+		public static List<Task> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Task> retVal=new List<Task>();
 			Task task;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -156,6 +177,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Must supply the supposedly unaltered oldTask.  The update will fail if oldTask does not exactly match the database state.  Keeps users from overwriting each other's changes.</summary>
 		public static void Update(Task task,Task oldTask){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),task,oldTask);
+				return;
+			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
 				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
@@ -189,6 +214,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Task task){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
+				return;
+			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
 				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
@@ -234,8 +263,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool WasTaskAltered(Task task){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),task);
+			}
 			string command="SELECT * FROM task WHERE TaskNum="+POut.PInt(task.TaskNum);
-			Task oldtask=RefreshAndFill(command)[0];
+			Task oldtask=RefreshAndFill(Db.GetTable(command))[0];
 			if(oldtask.DateTask!=task.DateTask
 					|| oldtask.DateType!=task.DateType
 					|| oldtask.Descript!=task.Descript
@@ -256,6 +288,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deleting a task never causes a problem, so no dependencies are checked.</summary>
 		public static void Delete(Task task){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
+				return;
+			}
 			string command= "DELETE from task WHERE TaskNum = "+POut.PInt(task.TaskNum);
  			Db.NonQ(command);
 			command="DELETE from taskancestor WHERE TaskNum = "+POut.PInt(task.TaskNum);
@@ -264,6 +300,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
 		public static int UserTasksCount(int userNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
+			}
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "

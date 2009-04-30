@@ -12,17 +12,28 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all Suppliers.</summary>
 		public static List<Supplier> CreateObjects() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Supplier>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM supplier ORDER BY Name";
 			return new List<Supplier>(DataObjectFactory<Supplier>.CreateObjects(command));
 		}
 
 		///<summary></summary>
 		public static void WriteObject(Supplier supp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
+			}
 			DataObjectFactory<Supplier>.WriteObject(supp);
 		}
 
 		///<summary>Surround with try-catch.</summary>
 		public static void DeleteObject(Supplier supp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
+			}
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM supplyorder WHERE SupplierNum="+POut.PInt(supp.SupplierNum);
 			int count=PIn.PInt(Db.GetCount(command));
@@ -38,6 +49,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetName(List<Supplier> listSupplier,int supplierNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listSupplier.Count;i++){
 				if(listSupplier[i].SupplierNum==supplierNum){
 					return listSupplier[i].Name;

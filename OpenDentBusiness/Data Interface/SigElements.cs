@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -8,13 +9,16 @@ namespace OpenDentBusiness{
 	public class SigElements {
 
 		///<summary>Gets all SigElements for a set of Signals, ordered by type: user,extras, message.</summary>
-		public static SigElement[] GetElements(Signal[] signalList) {
-			if(signalList.Length==0) {
+		public static SigElement[] GetElements(List <Signal> signalList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SigElement[]>(MethodBase.GetCurrentMethod(),signalList);
+			}
+			if(signalList.Count==0) {
 				return new SigElement[0];
 			}
 			string command="SELECT sigelement.* FROM sigelement,sigelementdef WHERE "
 				+"sigelement.SigElementDefNum=sigelementdef.SigElementDefNum AND (";
-			for(int i=0;i<signalList.Length;i++) {
+			for(int i=0;i<signalList.Count;i++) {
 				if(i>0) {
 					command+=" OR ";
 				}
@@ -48,6 +52,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(SigElement se){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),se);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				se.SigElementNum=MiscData.GetKey("sigelement","SigElementNum");
 			}
@@ -81,6 +89,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through the supplied sigElement list and pulls out all elements for one specific signal.</summary>
 		public static SigElement[] GetForSig(SigElement[] elementList,int signalNum){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<elementList.Length;i++){
 				if(elementList[i].SignalNum==signalNum){

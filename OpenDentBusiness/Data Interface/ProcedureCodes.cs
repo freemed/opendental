@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class ProcedureCodes {
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="ProcedureCode";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ProcedureCodeC.Listt=TableToList(table);
 			ProcedureCodeC.HList=new Hashtable();
 			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
@@ -31,12 +33,16 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<ProcedureCode> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcedureCode>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
 			string command="SELECT * FROM procedurecode WHERE DateTStamp > "+POut.PDateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
 		}
 
 		public static List<ProcedureCode> TableToList(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ProcedureCode code;
 			List<ProcedureCode> codeList=new List<ProcedureCode>();
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -72,6 +78,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ProcedureCode code){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),code);
+				return;
+			}
 			//must have already checked procCode for nonduplicate.
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,"
@@ -108,6 +118,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ProcedureCode code){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),code);
+				return;
+			}
 			//MessageBox.Show("Updating");
 			string command="UPDATE procedurecode SET " 
 				//+ "ProcCode = '"       +POut.PString(code.ProcCode)+"'"
@@ -139,6 +153,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the ProcedureCode for the supplied procCode.</summary>
 		public static ProcedureCode GetProcCode(string myCode){
+			//No need to check RemotingRole; no call to db.
 			if(myCode==null){
 				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
@@ -153,6 +168,7 @@ namespace OpenDentBusiness{
 
 		///<summary>The new way of getting a procCode. Uses the primary key instead of string code.</summary>
 		public static ProcedureCode GetProcCode(int codeNum) {
+			//No need to check RemotingRole; no call to db.
 			if(codeNum==0) {
 				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
@@ -167,6 +183,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply the human readable proc code such as D####</summary>
 		public static int GetCodeNum(string myCode){
+			//No need to check RemotingRole; no call to db.
 			if(myCode==null || myCode=="") {
 				return 0;
 			}
@@ -181,6 +198,7 @@ namespace OpenDentBusiness{
 
 		///<summary>If a substitute exists for the given proc code, then it will give the CodeNum of that code.  Otherwise, it will return the codeNum for the given procCode.</summary>
 		public static int GetSubstituteCodeNum(string procCode,string toothNum) {
+			//No need to check RemotingRole; no call to db.
 			if(procCode==null || procCode=="") {
 				return 0;
 			}
@@ -203,6 +221,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetStringProcCode(int codeNum) {
+			//No need to check RemotingRole; no call to db.
 			if(codeNum==0) {
 				return "";
 				//throw new ApplicationException("CodeNum cannot be zero.");
@@ -217,6 +236,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool IsValidCode(string myCode){
+			//No need to check RemotingRole; no call to db.
 			if(myCode==null || myCode=="") {
 				return false;
 			}
@@ -230,6 +250,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Grouped by Category.  Used only in FormRpProcCodes.</summary>
 		public static ProcedureCode[] GetProcList(){
+			//No need to check RemotingRole; no call to db.
 			List<ProcedureCode> retVal=new List<ProcedureCode>();
 			for(int j=0;j<DefC.Short[(int)DefCat.ProcCodeCats].Length;j++){
 				for(int k=0;k<ProcedureCodeC.Listt.Count;k++) {
@@ -242,15 +263,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of procedure codes directly from the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
-		public static DataTable GetProcTable(string abbr,string desc,string code,int[] categories,int feeSched,
+		public static DataTable GetProcTable(string abbr,string desc,string code,List <int> categories,int feeSched,
 			int feeSchedComp1,int feeSchedComp2){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),abbr,desc,code,categories,feeSched,feeSchedComp1,feeSchedComp2);
+			}
 			string whereCat;
-			if(categories.Length==0){
+			if(categories.Count==0){
 				whereCat="1";
 			}
 			else{
 				whereCat="(";
-				for(int i=0;i<categories.Length;i++){
+				for(int i=0;i<categories.Count;i++){
 					if(i>0){
 						whereCat+=" OR ";
 					}
@@ -281,6 +305,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
 		public static string GetLaymanTerm(int codeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
 				if(ProcedureCodeC.Listt[i].CodeNum==codeNum) {
 					if(ProcedureCodeC.Listt[i].LaymanTerm !="") {
@@ -294,6 +319,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Used to check whether codes starting with T exist and are in a visible category.  If so, it moves them to the Obsolete category.  If the T code has never been used, then it deletes it.</summary>
 		public static void TcodesClear() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			//first delete any unused T codes
 			string command=@"SELECT CodeNum,ProcCode FROM procedurecode
 				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)
@@ -352,6 +381,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static void ResetApptProcsQuickAdd() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command= "DELETE FROM definition WHERE Category=3";
 			Db.NonQ(command);
 			string[] array=new string[] {
@@ -404,11 +437,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
 		public static void ResetADAdescriptions() {
+			//No need to check RemotingRole; no call to db.
 			ResetADAdescriptions(CDT.Class1.GetADAcodes());
 		}
 
 		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
 		public static void ResetADAdescriptions(List<ProcedureCode> codeList) {
+			//No need to check RemotingRole; no call to db.
 			ProcedureCode code;
 			for(int i=0;i<codeList.Count;i++) {
 				if(!ProcedureCodes.IsValidCode(codeList[i].ProcCode)) {

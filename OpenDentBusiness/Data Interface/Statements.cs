@@ -15,22 +15,36 @@ namespace OpenDentBusiness{
 	public class Statements{
 		///<Summary>Gets one statement from the database.</Summary>
 		public static Statement CreateObject(int statementNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Statement>(MethodBase.GetCurrentMethod(),statementNum);
+			}
 			//string command="SELECT * FROM statement WHERE SupplyNum="+POut.PInt(supplyNum);
 			return DataObjectFactory<Statement>.CreateObject(statementNum);
 		}
 
-		public static List<Statement> GetStatements(int[] statementNums){
+		public static List<Statement> GetStatements(List <int> statementNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Statement>>(MethodBase.GetCurrentMethod(),statementNums);
+			}
 			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(statementNums);
 			return new List<Statement>(collectState);		
 		}
 
 		///<summary></summary>
 		public static void WriteObject(Statement statement){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statement);
+				return;
+			}
 			DataObjectFactory<Statement>.WriteObject(statement);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(Statement statement){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statement);
+				return;
+			}
 			//validate that not already in use.
 			//string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
 			//int count=PIn.PInt(Db.GetCount(command));
@@ -41,11 +55,18 @@ namespace OpenDentBusiness{
 		}
 
 		public static void DeleteObject(int statementNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
+				return;
+			}
 			DataObjectFactory<Statement>.DeleteObject(statementNum);
 		}
 
 		///<summary>Queries the database to determine if there are any unsent statements.</summary>
 		public static bool UnsentStatementsExist(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT COUNT(*) FROM statement WHERE IsSent=0";
 			if(Db.GetCount(command)=="0"){
 				return false;
@@ -54,12 +75,20 @@ namespace OpenDentBusiness{
 		}
 
 		public static void MarkSent(int statementNum,DateTime dateSent) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,dateSent);
+				return;
+			}
 			string command="UPDATE statement SET DateSent="+POut.PDate(dateSent)+", "
 				+"IsSent=1 WHERE StatementNum="+POut.PInt(statementNum);
 			Db.NonQ(command);
 		}
 
 		public static void AttachDoc(int statementNum,int docNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,docNum);
+				return;
+			}
 			string command="UPDATE statement SET DocNum="+POut.PInt(docNum)
 				+" WHERE StatementNum="+POut.PInt(statementNum);
 			Db.NonQ(command);
@@ -67,6 +96,9 @@ namespace OpenDentBusiness{
 
 		///<summary>For orderBy, use 0 for BillingType and 1 for PatientName.</summary>
 		public static DataTable GetBilling(bool isSent,int orderBy,DateTime dateFrom,DateTime dateTo){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),isSent,orderBy,dateFrom,dateTo);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.

@@ -19,6 +19,7 @@ namespace OpenDentBusiness {
 		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM userod ORDER BY UserName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Userod";
@@ -27,6 +28,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			UserodC.Listt=new List<Userod>();//[UserB.RawData.Rows.Count];
 			Userod user;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -47,6 +49,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static Userod GetUser(int userNum) {
+			//No need to check RemotingRole; no call to db.
 			if(UserodC.Listt==null){
 				RefreshCache();
 			}
@@ -60,6 +63,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns null if not found.</summary>
 		public static Userod GetUserByName(string userName) {
+			//No need to check RemotingRole; no call to db.
 			if(UserodC.Listt==null) {
 				RefreshCache();
 			}
@@ -94,6 +98,7 @@ namespace OpenDentBusiness {
 		}		*/
 
 		public static string GetName(int userNum){
+			//No need to check RemotingRole; no call to db.
 			if(userNum==0){
 				return "";
 			}
@@ -107,6 +112,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns a user object if user and password are valid.  Otherwise, returns null.</summary>
 		public static Userod CheckUserAndPassword(string username, string passhash){
+			//No need to check RemotingRole; no call to db.
 			RefreshCache();
 			Userod user=GetUserByName(username);
 			if(user==null){
@@ -120,6 +126,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is use everywhere except in the log on screen.</summary>
 		public static void CheckCredentials(Credentials cred){
+			//No need to check RemotingRole; no call to db.
 			if(cred.Username=="" || cred.PassHash==""){
 				throw new ApplicationException("Invalid username or password.");
 			}
@@ -140,6 +147,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Will throw an exception if it fails for any reason.  This will directly access the config file on the disk, read the values, and set the DataConnection to the new database.  This is only triggered when someone tries to log on.</summary>
 		public static void LoadDatabaseInfoFromFile(string configFilePath){
+			//No need to check RemotingRole; no call to db.
 			if(!File.Exists(configFilePath)){
 				throw new Exception("Could not find "+configFilePath+" on the web server.");
 			}
@@ -207,11 +215,13 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass) {
+			//No need to check RemotingRole; no call to db.
 			return EncryptPassword(inputPass,false);
 		}
 
 		///<summary></summary>
 		public static string EncryptPassword(string inputPass,bool skipECW) {
+			//No need to check RemotingRole; no call to db.
 			if(inputPass=="") {
 				return "";
 			}
@@ -251,6 +261,7 @@ namespace OpenDentBusiness {
 
 		///<summary>The only valid input is a value between 0 and 15.  Text returned will be 1-9 or a-f.</summary>
 		private static string ByteToStr(Byte byteVal) {
+			//No need to check RemotingRole; no call to db.
 			switch(byteVal) {
 				case 10:
 					return "a";
@@ -271,6 +282,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static bool CheckPassword(string inputPass,string hashedPass) {
+			//No need to check RemotingRole; no call to db.
 			string hashedInput=EncryptPassword(inputPass);
 			//MessageBox.Show(
 			//Debug.WriteLine(hashedInput+","+hashedPass);
@@ -279,6 +291,9 @@ namespace OpenDentBusiness {
 
 		///<summary>usertype can be 'all', 'prov', 'emp', or 'other'.</summary>
 		public static DataTable RefreshSecurity(string usertype,int schoolClassNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),usertype,schoolClassNum);
+			}
 			string command;
 			if(usertype=="prov" && schoolClassNum>0){
 				command="SELECT userod.* FROM userod,provider "
@@ -306,6 +321,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		private static void Update(Userod user){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),user);
+				return;
+			}
 			string command= "UPDATE userod SET " 
 				+"UserName = '"      +POut.PString(user.UserName)+"'"
 				+",Password = '"     +POut.PString(user.Password)+"'"
@@ -322,6 +341,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		private static void Insert(Userod user){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),user);
+				return;
+			}
 			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
 				+ "AnesthProvType) VALUES("
 				+"'"+POut.PString(user.UserName)+"', "
@@ -338,6 +361,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Surround with try/catch because it can throw exceptions.</summary>
 		public static void InsertOrUpdate(bool isNew,Userod user){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),isNew,user);
+				return;
+			}
 			//should add a check that employeenum and provnum are not both set.
 			//make sure username is not already taken
 			string command;
@@ -387,6 +414,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Supply 0 or -1 for the excludeUserNum to not exclude any.</summary>
 		public static bool IsUserNameUnique(string username,int excludeUserNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),username,excludeUserNum);
+			}
 			if(username==""){
 				return false;
 			}
@@ -401,6 +431,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormSecurity.FillTreeUsers</summary>
 		public static List<Userod> GetForGroup(int userGroupNum){
+			//No need to check RemotingRole; no call to db.
 			//ArrayList al=new ArrayList();
 			List<Userod> retVal=new List<Userod>();
 			for(int i=0;i<UserodC.Listt.Count;i++){
@@ -415,6 +446,7 @@ namespace OpenDentBusiness {
 
 		///<summary>This always returns one admin user.  There must be one and there is rarely more than one.  Only used on startup to determine if security is being used.</summary>
 		public static Userod GetAdminUser() {
+			//No need to check RemotingRole; no call to db.
 			//just find any permission for security admin.  There has to be one.
 			for(int i=0;i<GroupPermissionC.List.Length;i++) {
 				if(GroupPermissionC.List[i].PermType!=Permissions.SecurityAdmin) {
@@ -431,6 +463,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>Will return 0 if no inbox found for user.</summary>
 		public static int GetInbox(int userNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].UserNum==userNum){
 					return UserodC.Listt[i].TaskListInBox;
@@ -441,6 +474,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static List<Userod> GetNotHidden(){
+			//No need to check RemotingRole; no call to db.
 			List<Userod> retVal=new List<Userod>();
 			for(int i=0;i<UserodC.Listt.Count;i++){
 				if(!UserodC.Listt[i].IsHidden){
@@ -453,6 +487,7 @@ namespace OpenDentBusiness {
 
 		//Return 3, which is non-admin provider type
 		public static int GetAnesthProvType(int anesthProvType) {
+			//No need to check RemotingRole; no call to db.
 			for(int i = 0;i < UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].AnesthProvType == anesthProvType) {
 					return UserodC.Listt[i].AnesthProvType;

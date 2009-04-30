@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static SchoolClass[] list;
 
 		public static SchoolClass[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * FROM schoolclass "
 				+"ORDER BY GradYear,Descript";
@@ -33,6 +35,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new SchoolClass[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new SchoolClass();
@@ -45,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Update(SchoolClass sc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sc);
+				return;
+			}
 			string command= "UPDATE schoolclass SET " 
 				+"SchoolClassNum = '" +POut.PInt   (sc.SchoolClassNum)+"'"
 				+",GradYear = '"      +POut.PInt   (sc.GradYear)+"'"
@@ -55,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(SchoolClass sc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sc);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				sc.SchoolClassNum=MiscData.GetKey("schoolclass","SchoolClassNum");
 			}
@@ -79,6 +90,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(SchoolClass sc, bool isNew){
+			//No need to check RemotingRole; no call to db.
 			//if(IsRepeating && DateTask.Year>1880){
 			//	throw new Exception(Lan.g(this,"Task cannot be tagged repeating and also have a date."));
 			//}
@@ -92,6 +104,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround by a try/catch in case there are dependencies.</summary>
 		public static void Delete(int classNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),classNum);
+				return;
+			}
 			//check for attached providers
 			string  command="SELECT COUNT(*) FROM provider WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";
@@ -112,6 +128,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetDescript(int SchoolClassNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].SchoolClassNum==SchoolClassNum){
 					return GetDescript(List[i]);
@@ -121,6 +138,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetDescript(SchoolClass schoolClass) {
+			//No need to check RemotingRole; no call to db.
 			return schoolClass.GradYear+"-"+schoolClass.Descript;
 		}
 

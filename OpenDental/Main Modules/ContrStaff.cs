@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -1172,8 +1173,8 @@ namespace OpenDental{
 		}
 
 		///<summary>This processes timed messages coming in from the main form.  Buttons are handled in the main form, and then sent here for further display.  The list gets filtered before display.</summary>
-		public void LogMsgs(Signal[] signalList){
-			for(int i=0;i<signalList.Length;i++){
+		public void LogMsgs(List <Signal> signalList){
+			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].AckTime.Year>1880){//if ack
 					//then find the original
 					for(int s=0;s<SignalList.Count;s++){

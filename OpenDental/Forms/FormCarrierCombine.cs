@@ -22,7 +22,7 @@ namespace OpenDental{
 		///<summary>After this window closes, this will be the carrierNum of the selected carrier.</summary>
 		public int PickedCarrierNum;
 		///<summary>Before opening this Form, set the carrierNums to show.</summary>
-		public int[] CarrierNums;
+		public List <int> CarrierNums;
 		private List<Carrier> carrierList;
 
 		///<summary></summary>

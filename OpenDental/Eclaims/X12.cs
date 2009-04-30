@@ -149,9 +149,9 @@ namespace OpenDental.Eclaims
 					+"004010X097A1~");//GS08: Version
 			}
 			//Gets an array with PayorID,ProvBill,Subscriber,PatNum,ClaimNum all in the correct order
-			int[] claimNums=new int[queueItems.Count];
-			for(int i=0;i<queueItems.Count;i++){
-				claimNums[i]=queueItems[i].ClaimNum;
+			List <int> claimNums=new List <int> ();
+			for(int i=0;i<queueItems.Count;i++) {
+				claimNums.Add(queueItems[i].ClaimNum);
 			}
 			object[,] claimAr=Claims.GetX12TransactionInfo(claimNums);
 			bool newTrans;//true if this loop has transaction header

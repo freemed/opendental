@@ -38,6 +38,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Recall> GetList(int patNum){
+			//No need to check RemotingRole; no call to db.
 			List<int> patNums=new List<int>();
 			patNums.Add(patNum);
 			return GetList(patNums);
@@ -45,6 +46,7 @@ namespace OpenDentBusiness{
 
 		/// <summary></summary>
 		public static List<Recall> GetList(List<Patient> patients){
+			//No need to check RemotingRole; no call to db.
 			List<int> patNums=new List<int>();
 			for(int i=0;i<patients.Count;i++){
 				patNums.Add(patients[i].PatNum);
@@ -114,6 +116,9 @@ namespace OpenDentBusiness{
 		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum,int clinicNum,
 			int siteNum,bool sortAlph)
 		{
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortAlph);
+			}
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -380,6 +385,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Recall recall) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				recall.RecallNum=MiscData.GetKey("recall","RecallNum");
 			}
@@ -415,6 +424,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Recall recall) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
+				return;
+			}
 			string command= "UPDATE recall SET "
 				+"PatNum = '"          +POut.PInt   (recall.PatNum)+"'"
 				+",DateDueCalc = "     +POut.PDate  (recall.DateDueCalc)+" "
@@ -432,6 +445,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Recall recall) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
+				return;
+			}
 			string command= "DELETE from recall WHERE RecallNum = "+POut.PInt(recall.RecallNum);
 			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
@@ -453,6 +470,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted except when all triggers are removed.  Otherwise, the dateDueCalc just gets cleared.</summary>
 		public static void Synch(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
 			List<RecallType> typeListActive=RecallTypes.GetActive();
 			List<RecallType> typeList=new List<RecallType>(typeListActive);
 			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
@@ -626,6 +647,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void SynchAllPatients(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			//get all active patients
 			string command="SELECT PatNum "
 				+"FROM patient "
@@ -638,6 +663,9 @@ namespace OpenDentBusiness{
 
 		/// <summary></summary>
 		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily,bool sortAlph){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),recallNums,groupByFamily,sortAlph);
+			}
 			//get maxDateDue for each family.
 			string command=@"DROP TABLE IF EXISTS temprecallmaxdate;
 				CREATE table temprecallmaxdate(
@@ -828,6 +856,10 @@ namespace OpenDentBusiness{
 
 		/// <summary></summary>
 		public static void UpdateStatus(int recallNum,int newStatus){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallNum,newStatus);
+				return;
+			}
 			string command="UPDATE recall SET RecallStatus="+newStatus.ToString()
 				+" WHERE RecallNum="+recallNum.ToString();
 			Db.NonQ(command);

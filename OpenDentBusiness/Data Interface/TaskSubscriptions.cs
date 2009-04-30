@@ -21,6 +21,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void WriteObject(TaskSubscription subsc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),subsc);
+				return;
+			}
 			DataObjectFactory<TaskSubscription>.WriteObject(subsc);
 		}
 
@@ -32,6 +36,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Creates a subscription to a list.</summary>
 		public static void SubscList(int taskListNum,int userNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskListNum,userNum);
+				return;
+			}
 			string command="SELECT COUNT(*) FROM tasksubscription "
 				+"WHERE UserNum="+POut.PInt(userNum)
 				+" AND TaskListNum="+POut.PInt(taskListNum);
@@ -61,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Removes a subscription to a list.</summary>
 		public static void UnsubscList(int taskListNum,int userNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskListNum,userNum);
+				return;
+			}
 			string command="DELETE FROM tasksubscription "
 				+"WHERE UserNum="+POut.PInt(userNum)
 				+" AND TaskListNum="+POut.PInt(taskListNum);

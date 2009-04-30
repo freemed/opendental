@@ -10,6 +10,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all QuestionDefs.</summary>
 		public static QuestionDef[] Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<QuestionDef[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM questiondef ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
 			QuestionDef[] List=new QuestionDef[table.Rows.Count];
@@ -25,6 +28,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(QuestionDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="UPDATE questiondef SET " 
 				+"QuestionDefNum = '"+POut.PInt   (def.QuestionDefNum)+"'"
 				+",Description = '"  +POut.PString(def.Description)+"'"
@@ -36,6 +43,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(QuestionDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="INSERT INTO questiondef (Description,ItemOrder,QuestType) VALUES("
 				+"'"+POut.PString(def.Description)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
@@ -45,6 +56,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Ok to delete whenever, because no patients are tied to this table by any dependencies.</summary>
 		public static void Delete(QuestionDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="DELETE FROM questiondef WHERE QuestionDefNum ="+POut.PInt(def.QuestionDefNum);
 			Db.NonQ(command);
 		}
@@ -53,6 +68,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Moves the selected item up in the list.</summary>
 		public static void MoveUp(int selected,QuestionDef[] List){
+			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
 				throw new ApplicationException(Lan.g("QuestionDefs","Please select an item first."));
 			}
@@ -68,6 +84,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void MoveDown(int selected,QuestionDef[] List) {
+			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
 				throw new ApplicationException(Lan.g("QuestionDefs","Please select an item first."));
 			}
@@ -84,6 +101,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used by MoveUp and MoveDown.</summary>
 		private static void SetOrder(int mySelNum,int myItemOrder,QuestionDef[] List) {
+			//No need to check RemotingRole; no call to db.
 			QuestionDef temp=List[mySelNum];
 			temp.ItemOrder=myItemOrder;
 			QuestionDefs.Update(temp);

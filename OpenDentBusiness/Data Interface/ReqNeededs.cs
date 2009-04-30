@@ -8,6 +8,7 @@ namespace OpenDentBusiness{
 	public class ReqNeededs{
 
 		public static DataTable Refresh(int schoolClass,int schoolCourse){
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.PInt(schoolClass)
 				+" AND SchoolCourseNum="+POut.PInt(schoolCourse)
 				+" ORDER BY Descript";
@@ -15,6 +16,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static ReqNeeded GetReq(int reqNeededNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ReqNeeded>(MethodBase.GetCurrentMethod(),reqNeededNum);
+			}
 			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.PInt(reqNeededNum);
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -31,6 +35,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ReqNeeded req) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
+				return;
+			}
 			string command = "UPDATE reqneeded SET " 
 				+ "Descript = '"        +POut.PString(req.Descript)+"'"
 				+ ",SchoolCourseNum = '"+POut.PInt   (req.SchoolCourseNum)+"'"
@@ -41,6 +49,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ReqNeeded req) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				req.ReqNeededNum=MiscData.GetKey("reqneeded","ReqNeededNum");
 			}
@@ -66,6 +78,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch.</summary>
 		public static void Delete(int reqNeededNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqNeededNum);
+				return;
+			}
 			//still need to validate
 			string command= "DELETE FROM reqneeded "
 				+"WHERE ReqNeededNum = "+POut.PInt(reqNeededNum);

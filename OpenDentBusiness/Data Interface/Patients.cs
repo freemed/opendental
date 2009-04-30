@@ -806,15 +806,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used when filling appointments for an entire day. Gets a list of Pats, multPats, of all the specified patients.  Then, use GetOnePat to pull one patient from this list.  This process requires only one call to the database.</summary>
-		public static Patient[] GetMultPats(int[] patNums){
+		public static Patient[] GetMultPats(List <int> patNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient[]>(MethodBase.GetCurrentMethod(),patNums);
 			}
 			//MessageBox.Show(patNums.Length.ToString());
 			string strPatNums="";
 			DataTable table;
-			if(patNums.Length>0){
-				for(int i=0;i<patNums.Length;i++){
+			if(patNums.Count>0){
+				for(int i=0;i<patNums.Count;i++){
 					if(i>0){
 						strPatNums+="OR ";
 					}

@@ -34,6 +34,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(RefAttach attach){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
+				return;
+			}
 			string command= "UPDATE refattach SET " 
 				+ "ReferralNum = '" +POut.PInt   (attach.ReferralNum)+"'"
 				+ ",PatNum = '"     +POut.PInt   (attach.PatNum)+"'"
@@ -48,6 +52,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(RefAttach attach){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				attach.RefAttachNum=MiscData.GetKey("refattach","RefAttachNum");
 			}
@@ -71,6 +79,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(RefAttach attach){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
+				return;
+			}
 			string command= "DELETE FROM refattach "
 				+"WHERE refattachnum = '"+attach.RefAttachNum+"'";
  			Db.NonQ(command);
@@ -78,6 +90,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool IsReferralAttached(int referralNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),referralNum);
+			}
 			string command =
 				"SELECT * FROM refattach"
 				+" WHERE ReferralNum = '"+referralNum+"'";
@@ -92,6 +107,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of patient names that are attached to this referral. Used to display in the referral edit window.</summary>
 		public static string[] GetPats(int refNum,bool IsFrom){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),refNum,IsFrom);
+			}
 			string command="SELECT CONCAT(CONCAT(patient.LName,', '),patient.FName) "
 				+"FROM patient,refattach,referral " 
 				+"WHERE patient.PatNum=refattach.PatNum "

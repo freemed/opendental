@@ -14,6 +14,9 @@ namespace OpenDentBusiness {
 	public class RegistrationKeys {
 		///<summary>Retrieves all registration keys for a particular customer's family. There can be multiple keys assigned to a single customer, or keys assigned to individual family members, since the customer may have multiple physical locations of business.</summary>
 		public static RegistrationKey[] GetForPatient(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RegistrationKey[]>(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT * FROM registrationkey WHERE ";
 			Family fam=Patients.GetFamily(patNum);
 			for(int i=0;i<fam.ListPats.Length;i++){
@@ -40,6 +43,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Updates the given key data to the database.</summary>
 		public static void Update(RegistrationKey registrationKey){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKey);
+				return;
+			}
 			string command="UPDATE registrationkey SET "
 				+"PatNum='"+POut.PInt(registrationKey.PatNum)+"' "
 				+",RegKey='"+POut.PString(registrationKey.RegKey)+"' "
@@ -54,6 +61,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Inserts a new and unique registration key into the database.</summary>
 		public static void Create(RegistrationKey registrationKey){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKey);
+				return;
+			}
 			do{
 				if(registrationKey.IsForeign){
 					Random rand=new Random();
@@ -90,6 +101,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void Delete(int registrationKeyNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKeyNum);
+				return;
+			}
 			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
 				+POut.PInt(registrationKeyNum)+"'";
 			Db.NonQ(command);
@@ -97,6 +112,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
 		public static bool KeyIsInUse(string regKey) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),regKey);
+			}
 			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.PString(regKey)+"'";
 			DataTable table=Db.GetTable(command);
 			return (table.Rows.Count>0);
@@ -104,6 +122,9 @@ namespace OpenDentBusiness {
 
 		///<Summary></Summary>
 		public static DataTable GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
 			DataTable table=new DataTable();
 			table.Columns.Add("dateStop");
 			table.Columns.Add("family");

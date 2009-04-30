@@ -246,13 +246,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Combines all the given employers into one. Updates patient and insplan. Then deletes all the others.</summary>
-		public static void Combine(int[] employerNums){
+		public static void Combine(List <int> employerNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),employerNums);
 				return;
 			}
 			string newNum=employerNums[0].ToString();
-			for(int i=1;i<employerNums.Length;i++){
+			for(int i=1;i<employerNums.Count;i++){
 				string command="UPDATE patient SET EmployerNum = '"+newNum
 					+"' WHERE EmployerNum = '"+employerNums[i].ToString()+"'";
 				//MessageBox.Show(string command);

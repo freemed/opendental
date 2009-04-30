@@ -139,7 +139,7 @@ namespace OpenDental{
 		///<summary>Keeps track of the currently selected mount object (only when a mount is selected).</summary>
 		Mount selectionMount=new Mount();
 		///<summary>The mount items which correspond to the current selectionMount.</summary>
-		MountItem[] selectionMountItems=null;
+		List <MountItem> selectionMountItems=null;
 		///<summary>Keeps track of the currently selected image within the list of currently loaded images.</summary>
 		int hotDocument=0;
 		///<summary>List of documents currently loaded into the currently selected mount (if any).</summary>
@@ -1098,7 +1098,7 @@ namespace OpenDental{
 				//Delete the mount object.
 				Mount mount=Mounts.GetByNum(mountNum);
 				//Delete the mount items attached to the mount object.
-				MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
+				List <MountItem> mountItems=MountItems.GetItemsForMount(mountNum);
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null){
 					if(verbose) {
 						if(!MsgBox.Show(this,true,"Delete mount xray image?")) {
@@ -1123,7 +1123,7 @@ namespace OpenDental{
 					}
 					docs=mountDocs;
 					Mounts.Delete(mount);
-					for(int i=0;i<mountItems.Length;i++) {
+					for(int i=0;i<mountItems.Count;i++) {
 						MountItems.Delete(mountItems[i]);
 					}
 					SelectTreeNode(null);//Release access to current image so it may be properly deleted.
@@ -2052,7 +2052,7 @@ namespace OpenDental{
 				(location.X-imageTranslation.X)/(imageZoom*zoomFactor)+selectionMount.Width/2,
 				(location.Y-imageTranslation.Y)/(imageZoom*zoomFactor)+selectionMount.Height/2);
 			//Enumerate the image locations.
-			for(int i=0;i<selectionMountItems.Length;i++) {
+			for(int i=0;i<selectionMountItems.Count;i++) {
 				RectangleF itemLocation=new RectangleF(selectionMountItems[i].Xpos,selectionMountItems[i].Ypos,
 					selectionMountItems[i].Width,selectionMountItems[i].Height);
 				if(itemLocation.Contains(relativeLocation)) {
@@ -2079,7 +2079,7 @@ namespace OpenDental{
 					hotDocument=GetDocumentAtMountLocation(MouseDownOrigin);
 					//Assume no item will be selected and enable tools again if an item was actually selected.
 					EnableTreeItemTools(true,true,true,true,false,false,false,true,true,true,false,false,false);
-					for(int j=0;j<selectionMountItems.Length;j++) {
+					for(int j=0;j<selectionMountItems.Count;j++) {
 						if(selectionMountItems[j].OrdinalPos==hotDocument) {
 							if(mountDocs[j]!=null) {
 								selectionDoc=mountDocs[j];
@@ -2491,7 +2491,7 @@ namespace OpenDental{
 
 		///<summary>Renders the hallow rectangles which represent the individual image frames into the given mount image.</summary>
 		[Obsolete("Use ImageHelper.RenderMountFrames instead")]
-		private static void RenderMountFrames(Bitmap mountImage,MountItem[] mountItems,int imageSelected){
+		private static void RenderMountFrames(Bitmap mountImage,List <MountItem> mountItems,int imageSelected){
 			ImageHelper.RenderMountFrames(mountImage, mountItems, imageSelected);
 		}
 
@@ -2503,13 +2503,13 @@ namespace OpenDental{
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
 		[Obsolete("Use ImageHelper.RenderMountImage instead.")]
-		private static void RenderMountImage(Bitmap mountImage,Bitmap[] originalImages,MountItem[] mountItems,Document[] documents,int imageSelected) {
+		private static void RenderMountImage(Bitmap mountImage,Bitmap[] originalImages,List <MountItem> mountItems,Document[] documents,int imageSelected) {
 			ImageHelper.RenderMountImage(mountImage, originalImages, mountItems, documents, imageSelected);
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
 		public Bitmap CreateMountImage(Mount mount){
-			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
+			List <MountItem> mountItems=MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
 			Bitmap[] originalImages=imageStore.RetrieveImage(documents);
 			Bitmap mountImage=new Bitmap(mount.Width,mount.Height);

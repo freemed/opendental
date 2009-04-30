@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static TimeAdjust[] Refresh(int empNum,DateTime fromDate,DateTime toDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TimeAdjust[]>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate);
+			}
 			string command=
 				"SELECT * from timeadjust WHERE"
 				+" EmployeeNum = '"+POut.PInt(empNum)+"'"
@@ -32,6 +35,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void Insert(TimeAdjust adj) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				adj.TimeAdjustNum=MiscData.GetKey("timeadjust","TimeAdjustNum");
 			}
@@ -59,6 +66,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(TimeAdjust adj) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			string command= "UPDATE timeadjust SET "
 				+"EmployeeNum = '"+POut.PInt   (adj.EmployeeNum)+"' "
 				+",TimeEntry = " +POut.PDateT (adj.TimeEntry)+" "
@@ -71,6 +82,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(TimeAdjust adj) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
+				return;
+			}
 			string command= "DELETE FROM timeadjust WHERE TimeAdjustNum = "+POut.PInt(adj.TimeAdjustNum);
 			Db.NonQ(command);
 		}

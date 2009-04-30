@@ -14,6 +14,7 @@ namespace OpenDentBusiness{
 		public static ArrayList ALMatches;
 		
 		public static ZipCode[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -26,6 +27,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static ArrayList ALFrequent {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(aLFrequent==null) {
 					RefreshCache();
@@ -38,6 +40,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 			"SELECT * from zipcode ORDER BY zipcodedigits";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
@@ -48,6 +51,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ALFrequent=new ArrayList();
 			List=new ZipCode[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
@@ -65,6 +69,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ZipCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.ZipCodeNum=MiscData.GetKey("zipcode","ZipCodeNum");
 			}
@@ -91,6 +99,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ZipCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE zipcode SET "
 				+"zipcodedigits ='"+POut.PString(Cur.ZipCodeDigits)+"'"
 				+",city ='"        +POut.PString(Cur.City)+"'"
@@ -102,12 +114,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(ZipCode Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from zipcode WHERE zipcodenum = '"+POut.PInt(Cur.ZipCodeNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void GetALMatches(string zipCodeDigits){
+			//No need to check RemotingRole; no call to db.
 			ALMatches=new ArrayList();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ZipCodeDigits==zipCodeDigits){

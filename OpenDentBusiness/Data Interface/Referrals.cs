@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		//should later add a faster refresh sequence.
 
 		public static Referral[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					Refresh();
@@ -25,6 +26,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Refreshes all referrals for all patients.  Need to rework at some point so less memory is consumed.  Also refreshes dynamically, so no need to invalidate local data.</summary>
 		public static void Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command=
 				"SELECT * FROM referral "
 				+"ORDER BY lname";
@@ -59,6 +64,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Referral refer) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),refer);
+				return;
+			}
 			string command = "UPDATE referral SET " 
 				+ "LName = '"      +POut.PString(refer.LName)+"'"
 				+ ",FName = '"     +POut.PString(refer.FName)+"'"
@@ -87,6 +96,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Referral refer) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),refer);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				refer.ReferralNum=MiscData.GetKey("referral","ReferralNum");
 			}
@@ -132,6 +145,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Referral refer) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),refer);
+				return;
+			}
 			string command= "DELETE FROM referral "
 				+"WHERE referralnum = '"+refer.ReferralNum+"'";
 			Db.NonQ(command);
@@ -139,6 +156,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string GetNameLF(int referralNum) {
+			//No need to check RemotingRole; no call to db.
 			if(referralNum==0)
 				return "";
 			for(int i=0;i<List.Length;i++){
@@ -156,6 +174,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Includes title, such as DMD.</summary>
 		public static string GetNameFL(int referralNum) {
+			//No need to check RemotingRole; no call to db.
 			if(referralNum==0)
 				return "";
 			for(int i=0;i<List.Length;i++) {
@@ -180,6 +199,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string GetPhone(int referralNum) {
+			//No need to check RemotingRole; no call to db.
 			if(referralNum==0)
 				return "";
 			for(int i=0;i<List.Length;i++) {
@@ -195,6 +215,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of Referrals with names similar to the supplied string.  Used in dropdown list from referral field in FormPatientAddAll for faster entry.</summary>
 		public static List<Referral> GetSimilarNames(string referralLName){
+			//No need to check RemotingRole; no call to db.
 			List<Referral> retVal=new List<Referral>();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].LName.ToUpper().IndexOf(referralLName.ToUpper())==0){

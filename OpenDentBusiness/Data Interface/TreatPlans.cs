@@ -36,6 +36,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(TreatPlan tp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tp);
+				return;
+			}
 			string command= "UPDATE treatplan SET "
 				+"PatNum = '"     +POut.PInt   (tp.PatNum)+"'"
 				+",DateTP = "     +POut.PDate  (tp.DateTP)
@@ -50,6 +54,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(TreatPlan tp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tp);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				tp.TreatPlanNum=MiscData.GetKey("treatplan","TreatPlanNum");
 			}
@@ -79,6 +87,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Dependencies checked first and throws an exception if any found. So surround by try catch</summary>
 		public static void Delete(TreatPlan tp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),tp);
+				return;
+			}
 			//check proctp for dependencies
 			string command="SELECT * FROM proctp WHERE TreatPlanNum ="+POut.PInt(tp.TreatPlanNum);
 			DataTable table=Db.GetTable(command);
@@ -91,6 +103,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetHashString(TreatPlan tp,List<ProcTP> proclist) {
+			//No need to check RemotingRole; no call to db.
 			//the key data is a concatenation of the following:
 			//tp: Note, DateTP
 			//each proctp: Descript,PatAmt

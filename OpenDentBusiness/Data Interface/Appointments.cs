@@ -180,7 +180,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
-		public static Appointment[] GetRouting(DateTime date,int[] provNums) {
+		public static Appointment[] GetRouting(DateTime date,List <int> provNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),date,provNums);
 			}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness{
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"' "
 				+"AND (";
-			for(int i=0;i<provNums.Length;i++) {
+			for(int i=0;i<provNums.Count;i++) {
 				if(i>0) {
 					command+=" OR";
 				}
@@ -626,7 +626,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in Confirm list to just get addresses.</summary>
-		public static DataTable GetAddrTable(int[] aptNums){
+		public static DataTable GetAddrTable(List <int> aptNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNums);
 			}
@@ -635,7 +635,7 @@ namespace OpenDentBusiness{
 				+"FROM patient,appointment "
 				+"WHERE patient.PatNum=appointment.PatNum "
 				+"AND (";
-			for(int i=0;i<aptNums.Length;i++){
+			for(int i=0;i<aptNums.Count;i++){
 				if(i>0){
 					command+=" OR ";
 				}

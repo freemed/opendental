@@ -10,14 +10,20 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all TerminalActives.  Used by the terminal monitor window and by the terminal window itself.  Data is retrieved at regular short intervals, so functions as a messaging system.</summary>
 		public static TerminalActive[] Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TerminalActive[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM terminalactive ORDER BY ComputerName";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary></summary>
 		public static TerminalActive GetTerminal(string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<TerminalActive>(MethodBase.GetCurrentMethod(),computerName);
+			}
 			string command="SELECT * FROM terminalactive WHERE ComputerName ='"+POut.PString(computerName)+"'";
-			TerminalActive[] List=RefreshAndFill(command);
+			TerminalActive[] List=RefreshAndFill(Db.GetTable(command));
 			if(List.Length>0) {
 				return List[0];
 			}
@@ -25,8 +31,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of all TerminalActives.  Used by the terminal monitor window and by the terminal window itself.  Data is retrieved at regular short intervals, so functions as a messaging system.</summary>
-		private static TerminalActive[] RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static TerminalActive[] RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			TerminalActive[] List=new TerminalActive[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new TerminalActive();
@@ -40,6 +46,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(TerminalActive te) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),te);
+				return;
+			}
 			string command="UPDATE terminalactive SET " 
 				+"ComputerName = '"   +POut.PString(te.ComputerName)+"'"
 				+",TerminalStatus = '"+POut.PInt   ((int)te.TerminalStatus)+"'"
@@ -50,6 +60,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(TerminalActive te) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),te);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				te.TerminalActiveNum=MiscData.GetKey("terminalactive","TerminalActiveNum");
 			}
@@ -75,6 +89,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(TerminalActive te) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),te);
+				return;
+			}
 			string command="DELETE FROM terminalactive WHERE TerminalActiveNum ="+POut.PInt(te.TerminalActiveNum);
 			Db.NonQ(command);
 		}
@@ -84,12 +102,19 @@ namespace OpenDentBusiness {
 	
 		///<summary>Run when starting up a terminal window to delete any previous entries for this computer that didn't get deleted properly.</summary>
 		public static void DeleteAllForComputer(string computerName){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				return;
+			}
 			string command="DELETE FROM terminalactive WHERE ComputerName ='"+POut.PString(computerName)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Called whenever user wants to edit patient info.  Not allowed to if patient edit window is open at a terminal.  Once patient is done at terminal, then staff allowed back into patient edit window.</summary>
 		public static bool PatIsInUse(int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT COUNT(*) FROM terminalactive WHERE PatNum="+POut.PInt(patNum)
 				+" AND (TerminalStatus="+POut.PInt((int)TerminalStatusEnum.PatientInfo)
 				+" OR TerminalStatus="+POut.PInt((int)TerminalStatusEnum.UpdateOnly)+")";

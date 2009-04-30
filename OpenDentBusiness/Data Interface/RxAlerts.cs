@@ -10,6 +10,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of all RxAlerts for one RxDef.</summary>
 		public static RxAlert[] Refresh(int rxDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RxAlert[]>(MethodBase.GetCurrentMethod(),rxDefNum);
+			}
 			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.PInt(rxDefNum);
 			DataTable table=Db.GetTable(command);
 			RxAlert[] List=new RxAlert[table.Rows.Count];
@@ -25,6 +28,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(RxAlert alert) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
+				return;
+			}
 			string command="UPDATE rxalert SET " 
 				+"RxDefNum = '"      +POut.PInt   (alert.RxDefNum)+"'"
 				+",DiseaseDefNum = '"+POut.PInt   (alert.DiseaseDefNum)+"'"
@@ -34,6 +41,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Insert(RxAlert alert) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
+				return;
+			}
 			string command="INSERT INTO rxalert (RxDefNum,DiseaseDefNum) VALUES("
 				+"'"+POut.PInt   (alert.RxDefNum)+"', "
 				+"'"+POut.PInt   (alert.DiseaseDefNum)+"')";
@@ -42,6 +53,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Delete(RxAlert alert) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
+				return;
+			}
 			string command="DELETE FROM rxalert WHERE RxAlertNum ="+POut.PInt(alert.RxAlertNum);
 			Db.NonQ(command);
 		}

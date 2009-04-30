@@ -476,8 +476,8 @@ namespace OpenDental{
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++){
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
-			DataTable table=Schedules.GetPeriod(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),provNums.ToArray(),
-				empNums.ToArray(),checkPractice.Checked);
+			DataTable table=Schedules.GetPeriod(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text),provNums,
+				empNums,checkPractice.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			int colW;
@@ -634,7 +634,7 @@ namespace OpenDental{
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
-			Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+			Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums,empNums,checkPractice.Checked);
 			FillGrid();
 			changed=true;
 		}
@@ -740,10 +740,10 @@ namespace OpenDental{
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
 			if(checkReplace.Checked){
-				Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+				Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums,empNums,checkPractice.Checked);
 			}
-			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums.ToArray(),
-				empNums.ToArray(),checkPractice.Checked);
+			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums,
+				empNums,checkPractice.Checked);
 			Schedule sched;
 			int weekDelta=0;
 			if(isWeek){
@@ -837,8 +837,8 @@ namespace OpenDental{
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
-			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums.ToArray(),
-				empNums.ToArray(),checkPractice.Checked);
+			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums,
+				empNums,checkPractice.Checked);
 			Schedule sched;
 			int weekDelta=0;
 			TimeSpan span;
@@ -852,11 +852,11 @@ namespace OpenDental{
 				if(checkReplace.Checked) {
 					if(isWeek){
 						Schedules.Clear(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),
-							provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+							provNums,empNums,checkPractice.Checked);
 					}
 					else{
 						Schedules.Clear(dateSelectedStart.AddDays(dayDelta),dateSelectedEnd.AddDays(dayDelta),
-							provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+							provNums,empNums,checkPractice.Checked);
 					}
 				}
 				for(int i=0;i<SchedList.Count;i++) {

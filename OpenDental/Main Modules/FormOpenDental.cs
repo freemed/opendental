@@ -2427,7 +2427,7 @@ namespace OpenDental{
 		}
 
 		///<summary>If this is initial call when opening program, then set sigListButs=null.  This will cause a call to be made to database to get current status of buttons.  Otherwise, it adds the signals passed in to the current state, then paints.</summary>
-		private void FillSignalButtons(Signal[] sigListButs){
+		private void FillSignalButtons(List <Signal> sigListButs){
 			if(sigListButs==null){
 				SigButDefList=SigButDefs.GetByComputer(SystemInformation.ComputerName);
 				lightSignalGrid1.SetButtons(SigButDefList);
@@ -2437,7 +2437,7 @@ namespace OpenDental{
 			SigButDef butDef;
 			int row;
 			Color color;
-			for(int i=0;i<sigListButs.Length;i++){
+			for(int i=0;i<sigListButs.Count;i++){
 				if(sigListButs[i].AckTime.Year>1880){//process ack
 					int rowAck=lightSignalGrid1.ProcessAck(sigListButs[i].SignalNum);
 					if(rowAck!=-1){
@@ -2563,24 +2563,24 @@ namespace OpenDental{
 	
 		///<summary>Called every time timerSignals_Tick fires.  Usually about every 5-10 seconds.</summary>
 		public void ProcessSignals(){
-			Signal[] sigList=Signals.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
-			if(sigList.Length==0){
+			List <Signal> sigList=Signals.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
+			if(sigList.Count==0){
 				return;
 			}
 			if(Security.CurUser==null){
 				return;
 			}
-			if(sigList[sigList.Length-1].AckTime.Year>1880){
-				signalLastRefreshed=sigList[sigList.Length-1].AckTime;
+			if(sigList[sigList.Count-1].AckTime.Year>1880){
+				signalLastRefreshed=sigList[sigList.Count-1].AckTime;
 			}
 			else{
-				signalLastRefreshed=sigList[sigList.Length-1].SigDateTime;
+				signalLastRefreshed=sigList[sigList.Count-1].SigDateTime;
 			}
 			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
 				ContrAppt2.RefreshPeriod();
 			}
 			bool areAnySignalsTasks=false;
-			for(int i=0;i<sigList.Length;i++){
+			for(int i=0;i<sigList.Count;i++){
 				if(sigList[i].ITypes==((int)InvalidType.Task).ToString()
 					|| sigList[i].ITypes==((int)InvalidType.TaskPopup).ToString())
 				{
@@ -2618,7 +2618,7 @@ namespace OpenDental{
 			if(itypes.Count>0){//invalidTypes!=0){
 				RefreshLocalData(itypeArray);
 			}
-			Signal[] sigListButs=Signals.GetButtonSigs(sigList);
+			List <Signal> sigListButs=Signals.GetButtonSigs(sigList);
 			ContrManage2.LogMsgs(sigListButs);
 			FillSignalButtons(sigListButs);
 			//Need to add a test to this: do not play messages that are over 2 minutes old.

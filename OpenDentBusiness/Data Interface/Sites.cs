@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class Sites{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * from site ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="Site";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			SiteC.List=new Site[table.Rows.Count];
 			for(int i=0;i<SiteC.List.Length;i++){
 				SiteC.List[i]=new Site();
@@ -31,21 +33,35 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one Site from the database.</Summary>
 		public static Site CreateObject(int siteNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Site>(MethodBase.GetCurrentMethod(),siteNum);
+			}
 			return DataObjectFactory<Site>.CreateObject(siteNum);
 		}
 
-		public static List<Site> GetSites(int[] siteNums){
+		public static List<Site> GetSites(List <int> siteNums){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Site>>(MethodBase.GetCurrentMethod(),siteNums);
+			}
 			Collection<Site> collectState=DataObjectFactory<Site>.CreateObjects(siteNums);
 			return new List<Site>(collectState);		
 		}
 
 		///<summary></summary>
 		public static void WriteObject(Site site){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),site);
+				return;
+			}
 			DataObjectFactory<Site>.WriteObject(site);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int siteNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),siteNum);
+				return;
+			}
 			//validate that not already in use.
 			string command="SELECT LName,FName FROM patient WHERE SiteNum="+POut.PInt(siteNum);
 			DataTable table=Db.GetTable(command);
@@ -68,6 +84,7 @@ namespace OpenDentBusiness{
 		//}
 
 		public static string GetDescription(int siteNum){
+			//No need to check RemotingRole; no call to db.
 			if(siteNum==0){
 				return "";
 			}
@@ -80,6 +97,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Site> GetListFiltered(string snippet) {
+			//No need to check RemotingRole; no call to db.
 			List<Site> retVal=new List<Site>();
 			if(snippet=="") {
 				return retVal;
@@ -94,6 +112,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return -1 if no match.</summary>
 		public static int FindMatchSiteNum(string description) {
+			//No need to check RemotingRole; no call to db.
 			if(description=="") {
 				return 0;
 			}

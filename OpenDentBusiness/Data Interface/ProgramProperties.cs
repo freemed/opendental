@@ -10,6 +10,7 @@ namespace OpenDentBusiness {
 	public class ProgramProperties{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM programproperty";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ProgramProperty";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness {
 	
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ProgramPropertyC.Listt=new List<ProgramProperty>();
 			ProgramProperty progprop;
 			for (int i=0;i<table.Rows.Count;i++){
@@ -35,6 +37,10 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static void Update(ProgramProperty Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE programproperty SET "
 				+"ProgramNum = '"     +POut.PInt   (Cur.ProgramNum)+"'"
 				+",PropertyDesc  = '" +POut.PString(Cur.PropertyDesc)+"'"
@@ -45,6 +51,10 @@ namespace OpenDentBusiness {
 
 		///<summary>This can only be called from ClassConversions. Users not allowed to add properties so there is no user interface.</summary>
 		public static void Insert(ProgramProperty Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 				+") VALUES("
 				+"'"+POut.PInt   (Cur.ProgramNum)+"', "
@@ -58,12 +68,17 @@ namespace OpenDentBusiness {
 		
 		///<summary>This can only be called from ClassConversions. Users not allowed to delete properties so there is no user interface.</summary>
 		public static void Delete(ProgramProperty Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "DELETE from programproperty WHERE programpropertynum = '"+Cur.ProgramPropertyNum.ToString()+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary>Returns a List of programproperties attached to the specified programNum</summary>
 		public static List<ProgramProperty> GetListForProgram(int programNum){
+			//No need to check RemotingRole; no call to db.
 			List<ProgramProperty> ForProgram=new List<ProgramProperty>();
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum==programNum) {
@@ -75,6 +90,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns an ArrayList of programproperties attached to the specified programNum</summary>
 		public static ArrayList GetForProgram(int programNum){
+			//No need to check RemotingRole; no call to db.
 			ArrayList ForProgram=new ArrayList();
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum==programNum) {
@@ -85,6 +101,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void SetProperty(int programNum,string desc,string propval){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),programNum,desc,propval);
+				return;
+			}
 			string command="UPDATE programproperty SET PropertyValue='"+POut.PString(propval)+"' "
 				+"WHERE ProgramNum="+POut.PInt(programNum)+" "
 				+"AND PropertyDesc='"+POut.PString(desc)+"'";
@@ -93,6 +113,7 @@ namespace OpenDentBusiness {
 
 		///<summary>After GetForProgram has been run, this gets one of those properties.</summary>
 		public static ProgramProperty GetCur(ArrayList ForProgram, string desc){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForProgram.Count;i++){
 				if(((ProgramProperty)ForProgram[i]).PropertyDesc==desc){
 					return (ProgramProperty)ForProgram[i];
@@ -102,6 +123,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static string GetPropVal(int programNum,string desc){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
 					continue;
@@ -115,6 +137,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static string GetPropVal(string progName,string propertyDesc) {
+			//No need to check RemotingRole; no call to db.
 			int programNum=Programs.GetProgramNum(progName);
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
@@ -130,6 +153,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormUAppoint to get frequent and current data.</summary>
 		public static string GetValFromDb(int programNum,string desc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),programNum,desc);
+			}
 			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)
 				+" AND PropertyDesc='"+POut.PString(desc)+"'";
 			DataTable table=Db.GetTable(command);

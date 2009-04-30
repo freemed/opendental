@@ -14,26 +14,30 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public Security(){
-			
+			//No need to check RemotingRole; no call to db.
 		}
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm){
+			//No need to check RemotingRole; no call to db.
 			return IsAuthorized(perm,DateTime.MinValue,false);
 		}
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,DateTime date){
+			//No need to check RemotingRole; no call to db.
 			return IsAuthorized(perm,date,false);
 		}
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,bool suppressMessage){
+			//No need to check RemotingRole; no call to db.
 			return IsAuthorized(perm,DateTime.MinValue,suppressMessage);
 		}
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage){
+			//No need to check RemotingRole; no call to db.
 			if(Security.CurUser==null || !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
 				if(!suppressMessage){
 					MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
@@ -97,6 +101,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static DateTime GetDateLimit(Permissions permType,int userGroupNum){
+			//No need to check RemotingRole; no call to db.
 			DateTime nowDate=MiscData.GetNowDateTime().Date;
 			DateTime retVal=DateTime.MinValue;
 			for(int i=0;i<GroupPermissionC.List.Length;i++){
@@ -119,6 +124,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a module that the user has permission to use.  Tries the suggestedI first.  If a -1 is supplied, it tries to find any authorized module.  If no authorization for any module, it returns a -1, causing no module to be selected.</summary>
 		public static int GetModule(int suggestI){
+			//No need to check RemotingRole; no call to db.
 			if(suggestI!=-1 && IsAuthorized(PermofModule(suggestI),DateTime.MinValue,true)){
 				return suggestI;
 			}
@@ -131,6 +137,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Permissions PermofModule(int i){
+			//No need to check RemotingRole; no call to db.
 			switch(i){
 				case 0:
 					return Permissions.AppointmentsModule;
@@ -173,6 +180,7 @@ namespace OpenDentBusiness{
 
 		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>
 		public static Userod LogInWeb(string oduser,string odpasshash,string configPath) {
+			//No need to check RemotingRole; no call to db.
 			if(configPath != "") {
 				Userods.LoadDatabaseInfoFromFile(ODFileUtils.CombinePaths(configPath,"OpenDentalServerConfig.xml"));
 					//ODFileUtils.CombinePaths(

@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
@@ -476,7 +477,7 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(Dlg.FileName);//includes full path
 			//OverwritePrompt is already set to true
-			DataTable table=ProcedureCodes.GetProcTable("","","",new int[0],SchedNum,0,0);
+			DataTable table=ProcedureCodes.GetProcTable("","","",new List <int> (),SchedNum,0,0);
 			double fee;
 			using(StreamWriter sr=File.CreateText(Dlg.FileName)){
 				for(int i=0;i<table.Rows.Count;i++){

@@ -32,6 +32,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<ProcTP> RefreshAndFill(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<ProcTP> retVal=new List<ProcTP>();
 			ProcTP proc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,6 +59,10 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		private static void Update(ProcTP proc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
+				return;
+			}
 			string command= "UPDATE proctp SET "
 				+"TreatPlanNum = '"+POut.PInt   (proc.TreatPlanNum)+"'"
 				+",PatNum = '"     +POut.PInt   (proc.PatNum)+"'"
@@ -79,6 +84,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Insert(ProcTP proc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				proc.ProcTPNum=MiscData.GetKey("proctp","ProcTPNum");
 			}
@@ -116,6 +125,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(ProcTP proc, bool isNew){
+			//No need to check RemotingRole; no call to db.
 			if(isNew){
 				Insert(proc);
 			}
@@ -126,12 +136,17 @@ namespace OpenDentBusiness{
 
 		///<summary>There are no dependencies.</summary>
 		public static void Delete(ProcTP proc){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
+				return;
+			}
 			string command= "DELETE from proctp WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
  			Db.NonQ(command);
 		}
 
 		///<summary>Gets a list for just one tp.  Used in TP module.  Supply a list of all ProcTPs for pt.</summary>
 		public static ProcTP[] GetListForTP(int treatPlanNum, ProcTP[] listAll){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<listAll.Length;i++){
 				if(listAll[i].TreatPlanNum!=treatPlanNum){
@@ -148,6 +163,10 @@ namespace OpenDentBusiness{
 
 		///<summary>No dependencies to worry about.</summary>
 		public static void DeleteForTP(int treatPlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),treatPlanNum);
+				return;
+			}
 			string command="DELETE FROM proctp "
 				+"WHERE TreatPlanNum="+POut.PInt(treatPlanNum);
 			Db.NonQ(command);

@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class RecallTypes{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM recalltype ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="RecallType";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<RecallType> list=new List<RecallType>();
 			RecallType rtype;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -71,6 +73,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(RecallType recallType){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallType);
+				return;
+			}
 			DataObjectFactory<RecallType>.WriteObject(recallType);
 		}
 
@@ -98,6 +104,7 @@ namespace OpenDentBusiness{
 		//}
 
 		public static string GetDescription(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return "";
 			}
@@ -110,6 +117,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static Interval GetInterval(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return new Interval(0,0,0,0);
 			}
@@ -123,6 +131,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a collection of proccodes (D####).  Count could be zero.</summary>
 		public static List<string> GetProcs(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			List<string> retVal=new List<string>();
 			if(recallTypeNum==0){
 				return retVal;
@@ -142,6 +151,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Also makes sure both types are defined as special types.</summary>
 		public static bool PerioAndProphyBothHaveTriggers(){
+			//No need to check RemotingRole; no call to db.
 			if(RecallTypes.PerioType==0 || RecallTypes.ProphyType==0){
 				return false;
 			}
@@ -155,6 +165,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetTimePattern(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return "";
 			}
@@ -167,6 +178,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetSpecialTypeStr(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
 				return Lan.g("FormRecallTypeEdit","Prophy");
 			}
@@ -181,6 +193,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all active recall types.  Those without triggers are excluded.  Perio and Prophy are both included.  One of them should later be removed from the collection.</summary>
 		public static List<RecallType> GetActive(){
+			//No need to check RemotingRole; no call to db.
 			List<RecallType> retVal=new List<RecallType>();
 			List<RecallTrigger> triggers;
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
@@ -194,6 +207,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all inactive recall types.  Only those without triggers are included.</summary>
 		public static List<RecallType> GetInactive(){
+			//No need to check RemotingRole; no call to db.
 			List<RecallType> retVal=new List<RecallType>();
 			List<RecallTrigger> triggers;
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
@@ -207,6 +221,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the pref table RecallTypeSpecialProphy RecallTypeNum.</summary>
 		public static int ProphyType{
+			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialProphy");
 			}
@@ -214,6 +229,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the pref table RecallTypeSpecialPerio RecallTypeNum.</summary>
 		public static int PerioType{
+			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialPerio");
 			}
@@ -221,6 +237,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the pref table RecallTypeSpecialChildProphy RecallTypeNum.</summary>
 		public static int ChildProphyType{
+			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialChildProphy");
 			}

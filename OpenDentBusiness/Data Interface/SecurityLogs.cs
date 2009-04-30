@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -10,6 +11,9 @@ namespace OpenDentBusiness{
 		///<summary>Used when viewing securityLog from the security admin window.  PermTypes can be length 0 to get all types.</summary>
 		public static SecurityLog[] Refresh(DateTime dateFrom,DateTime dateTo,Permissions permType,int patNum,
 			int userNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,permType,patNum,userNum);
+			}
 			string command="SELECT * FROM securitylog "
 				+"WHERE LogDateTime >= "+POut.PDate(dateFrom)+" "
 				+"AND LogDateTime <= "+POut.PDate(dateTo.AddDays(1));
@@ -80,9 +84,12 @@ namespace OpenDentBusiness{
   
 
 		///<summary>Used when viewing various audit trails of specific types.</summary>
-		public static SecurityLog[] Refresh(int patNum,Permissions[] permTypes){
+		public static SecurityLog[] Refresh(int patNum,List <Permissions> permTypes){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),patNum,permTypes);
+			}
 			string types="";
-			for(int i=0;i<permTypes.Length;i++){
+			for(int i=0;i<permTypes.Count;i++){
 				if(i>0){
 					types+=" OR";
 				}
@@ -107,6 +114,7 @@ namespace OpenDentBusiness{
 
 		///<summary>PatNum can be 0.</summary>
 		public static void MakeLogEntry(Permissions permType,int patNum, string logText){
+			//No need to check RemotingRole; no call to db.
 			SecurityLog securityLog=new SecurityLog();
 			securityLog.PermType=permType;
 			securityLog.UserNum=Security.CurUser.UserNum;

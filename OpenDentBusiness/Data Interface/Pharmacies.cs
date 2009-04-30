@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Pharmacy>.CreateObject(PharmacyNum);
 		}
 
-		public static List<Pharmacy> GetPharmacies(int[] PharmacyNums){
+		public static List<Pharmacy> GetPharmacies(List <int> PharmacyNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Pharmacy>>(MethodBase.GetCurrentMethod(),PharmacyNums);
 			}

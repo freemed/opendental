@@ -63,15 +63,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the list of mount items associated with the given mount key.</summary>
-		public static MountItem[] GetItemsForMount(int mountNum){
+		public static List <MountItem> GetItemsForMount(int mountNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<MountItem[]>(MethodBase.GetCurrentMethod(),mountNum);
+				return Meth.GetObject<List <MountItem>>(MethodBase.GetCurrentMethod(),mountNum);
 			}
 			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"' ORDER BY OrdinalPos";
 			DataTable result=Db.GetTable(command);
-			MountItem[] mountItems=new MountItem[result.Rows.Count];
-			for(int i=0;i<mountItems.Length;i++){
-				mountItems[i]=Fill(result.Rows[i]);
+			List <MountItem> mountItems=new List <MountItem> ();
+			for(int i=0;i<result.Rows.Count;i++) {
+				mountItems.Add(Fill(result.Rows[i]));
 			}
 			return mountItems;
 		}

@@ -11,19 +11,25 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Reconcile[] GetList(int accountNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Reconcile[]>(MethodBase.GetCurrentMethod(),accountNum);
+			}
 			string command="SELECT * FROM reconcile WHERE AccountNum="+POut.PInt(accountNum)
 				+" ORDER BY DateReconcile";
-			return RefreshAndFill(command);
+			return RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>Gets one reconcile directly from the database.  Program will crash if reconcile not found.</summary>
 		public static Reconcile GetOne(int reconcileNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Reconcile>(MethodBase.GetCurrentMethod(),reconcileNum);
+			}
 			string command="SELECT * FROM reconcile WHERE ReconcileNum="+POut.PInt(reconcileNum);
-			return RefreshAndFill(command)[0];
+			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
-		private static Reconcile[] RefreshAndFill(string command) {
-			DataTable table=Db.GetTable(command);
+		private static Reconcile[] RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			Reconcile[] List=new Reconcile[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Reconcile();
@@ -39,6 +45,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Reconcile reconcile) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reconcile);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				reconcile.ReconcileNum=MiscData.GetKey("reconcile","ReconcileNum");
 			}
@@ -66,6 +76,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Reconcile reconcile) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reconcile);
+				return;
+			}
 			string command= "UPDATE reconcile SET "
 				+"AccountNum = '"    +POut.PInt   (reconcile.AccountNum)+"' "
 				+",StartingBal= '"   +POut.PDouble(reconcile.StartingBal)+"' "
@@ -78,6 +92,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Throws exception if Reconcile is in use.</summary>
 		public static void Delete(Reconcile reconcile) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),reconcile);
+				return;
+			}
 			//check to see if any journal entries are attached to this Reconcile
 			string command="SELECT COUNT(*) FROM journalentry WHERE ReconcileNum="+POut.PInt(reconcile.ReconcileNum);
 			if(Db.GetCount(command)!="0"){

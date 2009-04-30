@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class SheetFieldDefs{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM sheetfielddef ORDER BY SheetDefNum";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="sheetfielddef";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			SheetFieldDefC.Listt=new List<SheetFieldDef>();
 			SheetFieldDef sfd;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -43,6 +45,9 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one SheetFieldDef from the database.</Summary>
 		public static SheetFieldDef CreateObject(int sheetFieldDefNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SheetFieldDef>(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
+			}
 			return DataObjectFactory<SheetFieldDef>.CreateObject(sheetFieldDefNum);
 		}
 
@@ -55,11 +60,19 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(SheetFieldDef sheetFieldDef){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldDef);
+				return;
+			}
 			DataObjectFactory<SheetFieldDef>.WriteObject(sheetFieldDef);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int sheetFieldDefNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
+				return;
+			}
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
 			DataTable table=Db.GetTable(command);

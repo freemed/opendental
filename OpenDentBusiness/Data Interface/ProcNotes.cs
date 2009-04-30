@@ -8,6 +8,10 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ProcNotes{
 		public static void Insert(ProcNote procNote){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNote);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				procNote.ProcNoteNum=MiscData.GetKey("procnote","ProcNoteNum");
 			}
@@ -34,8 +38,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool  (procNote.SigIsTopaz)+"', "
 				+"'"+POut.Base64 (procNote.Signature)+"')";
 			//MessageBox.Show(cmd.CommandText);
-			DataConnection dcon=new DataConnection();
-			dcon.NonQ(command);
+			Db.NonQ(command);
 			//Debug.WriteLine("Sig length: "+procNote.Signature.Length.ToString());
 		}
 		

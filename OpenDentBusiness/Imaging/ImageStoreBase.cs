@@ -119,7 +119,7 @@ namespace OpenDental.Imaging {
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
 		public Bitmap GetMountImage(Mount mount) {
-			MountItem[] mountItems = MountItems.GetItemsForMount(mount.MountNum);
+			List <MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents = Documents.GetDocumentsForMountItems(mountItems);
 			Bitmap[] originalImages = RetrieveImage(documents);
 			Bitmap mountImage = new Bitmap(mount.Width, mount.Height);

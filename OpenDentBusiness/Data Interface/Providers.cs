@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Provider";
@@ -21,6 +22,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			ProviderC.ListLong=new Provider[table.Rows.Count];
 			List<Provider> provList=TableToList(table);
@@ -35,6 +37,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static List<Provider> TableToList(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List<Provider> retVal=new List<Provider>();
 			Provider prov;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -71,6 +74,10 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static void Update(Provider prov){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),prov);
+				return;
+			}
 			string command="UPDATE provider SET "
 				+ "Abbr = '"          +POut.PString(prov.Abbr)+"'"
 				+",ItemOrder = '"     +POut.PInt   (prov.ItemOrder)+"'"
@@ -102,6 +109,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Provider prov){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),prov);
+				return;
+			}
 			string command= "INSERT INTO provider (Abbr,ItemOrder,LName,FName,MI,Suffix,"
 				+"FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,"
 				+"UsingTIN,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,"
@@ -137,12 +148,19 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),prov);
+				return;
+			}
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
  			Db.NonQ(command);
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
 		public static DataTable Refresh(int schoolClass,bool isAlph){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolClass,isAlph);
+			}
 			string command="SELECT Abbr,LName,FName,provider.IsHidden,provider.ProvNum,GradYear,Descript,UserName "
 				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum "
 				+"LEFT JOIN userod ON userod.ProvNum=provider.ProvNum ";
@@ -159,6 +177,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Provider> GetUAppoint(DateTime changedSince){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Provider>>(MethodBase.GetCurrentMethod(),changedSince);
+			}
 			string command="SELECT * FROM provider WHERE DateTStamp > "+POut.PDateT(changedSince);
 			DataTable table=Db.GetTable(command);
 			return TableToList(table);
@@ -166,6 +187,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string GetAbbr(int provNum){
+			//No need to check RemotingRole; no call to db.
 			if(ProviderC.ListLong==null){
 				RefreshCache();
 			}
@@ -179,6 +201,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in the HouseCalls bridge</summary>
 		public static string GetLName(int provNum){
+			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -190,6 +213,7 @@ namespace OpenDentBusiness{
 
 		///<summary>First Last, Suffix</summary>
 		public static string GetFormalName(int provNum){
+			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -205,6 +229,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Abbr - LName, FName (hidden).</summary>
 		public static string GetLongDesc(int provNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {
 				if(ProviderC.ListLong[i].ProvNum==provNum) {
 					return ProviderC.ListLong[i].GetLongDesc();
@@ -215,6 +240,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Color GetColor(int provNum){
+			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.White;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -226,6 +252,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static Color GetOutlineColor(int provNum){
+			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.Black;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -237,6 +264,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool GetIsSec(int provNum){
+			//No need to check RemotingRole; no call to db.
 			bool retVal=false;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -248,6 +276,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a provider from the List.  If provnum is not valid, then it returns null.</summary>
 		public static Provider GetProv(int provNum) {
+			//No need to check RemotingRole; no call to db.
 			if(provNum==0){
 				return null;
 			}
@@ -264,6 +293,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a provider from the List.  If abbr is not found, then it returns null.</summary>
 		public static Provider GetProvByAbbr(string abbr) {
+			//No need to check RemotingRole; no call to db.
 			if(abbr=="") {
 				return null;
 			}
@@ -291,6 +321,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static int GetIndexLong(int provNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
 					return i;
@@ -301,6 +332,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static int GetIndex(int provNum){
+			//No need to check RemotingRole; no call to db.
 			//Gets the index of the provider in short list (visible providers)
 			for(int i=0;i<ProviderC.List.Length;i++){
 				if(ProviderC.List[i].ProvNum==provNum){
@@ -312,6 +344,7 @@ namespace OpenDentBusiness{
 
 		///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
 		public static int GetBillingProvNum(int treatProv,bool useClinic,int clinicInsBillingProv){
+			//No need to check RemotingRole; no call to db.
 			if(useClinic){
 				if(clinicInsBillingProv==0) {//default=0
 					return PrefC.GetInt("PracticeDefaultProv");
@@ -338,6 +371,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when adding a provider to get the next available itemOrder.</summary>
 		public static int GetNextItemOrder(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";
 			DataTable table=Db.GetTable(command);
@@ -349,6 +385,9 @@ namespace OpenDentBusiness{
 
 		///<Summary>Used once in the Provider Select window to warn user of duplicate Abbrs.</Summary>
 		public static string GetDuplicateAbbrs(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT Abbr FROM provider p1 WHERE EXISTS"
 				+"(SELECT * FROM provider p2 WHERE p1.ProvNum!=p2.ProvNum AND p1.Abbr=p2.Abbr) GROUP BY Abbr";
 			DataTable table=Db.GetTable(command);

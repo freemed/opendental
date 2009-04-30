@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 		private static List<ProcCodeNote> list;
 
 		public static List<ProcCodeNote> Listt {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -25,6 +26,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM proccodenote";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ProcCodeNote";
@@ -34,6 +36,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			list=new List<ProcCodeNote>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ProcCodeNote note=new ProcCodeNote();
@@ -48,6 +51,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<ProcCodeNote> GetList(int codeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcCodeNote>>(MethodBase.GetCurrentMethod(),codeNum);
+			}
 			List<ProcCodeNote> tempList=list;
 			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.PInt(codeNum);
 			DataTable table=Db.GetTable(command);
@@ -59,6 +65,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ProcCodeNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
+				return;
+			}
 			string command="INSERT INTO proccodenote (CodeNum,ProvNum,Note,ProcTime) VALUES("
 				+"'"+POut.PInt   (note.CodeNum)+"', "
 				+"'"+POut.PInt   (note.ProvNum)+"', "
@@ -69,6 +79,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ProcCodeNote note){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
+				return;
+			}
 			string command="UPDATE proccodenote SET " 
 				+ "CodeNum = '"    +POut.PInt   (note.CodeNum)+"'"
 				+ ",ProvNum = '"   +POut.PInt   (note.ProvNum)+"'"
@@ -79,12 +93,17 @@ namespace OpenDentBusiness{
 		}
 
 		public static void Delete(int procCodeNoteNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procCodeNoteNum);
+				return;
+			}
 			string command="DELETE FROM proccodenote WHERE ProcCodeNoteNum = "+POut.PInt(procCodeNoteNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Gets the note for the given provider, if one exists.  Otherwise, gets the proccode.defaultnote.</summary>
 		public static string GetNote(int provNum,int codeNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++){
 				if(Listt[i].ProvNum!=provNum){
 					continue;
@@ -99,6 +118,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the time pattern for the given provider, if one exists.  Otherwise, gets the proccode.ProcTime.</summary>
 		public static string GetTimePattern(int provNum,int codeNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].ProvNum!=provNum) {
 					continue;

@@ -9,6 +9,10 @@ namespace OpenDentBusiness {
 	public class Procedures {
 		///<summary></summary>
 		public static void Insert(Procedure proc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
+				return;
+			}
 			if(PrefC.RandomKeys) {
 				proc.ProcNum=MiscData.GetKey("procedurelog","ProcNum");
 			}
@@ -89,6 +93,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Updates only the changed columns.</summary>
 		public static int Update(Procedure proc,Procedure oldProc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),proc,oldProc);
+			}
 			bool comma=false;
 			string c = "UPDATE procedurelog SET ";
 			if(proc.PatNum!=oldProc.PatNum) {
@@ -331,6 +338,10 @@ namespace OpenDentBusiness {
 
 		///<summary>Also deletes any claimProcs. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
 		public static void Delete(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum);
+				return;
+			}
 			//Test to see if any payment at all has been received for this proc
 			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PInt(procNum)
 				+" AND InsPayAmt > 0 AND Status != "+POut.PInt((int)ClaimProcStatus.Preauth);
@@ -388,24 +399,40 @@ namespace OpenDentBusiness {
 		}
 
 		public static void UpdateAptNum(int procNum,int newAptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newAptNum);
+				return;
+			}
 			string command="UPDATE procedurelog SET AptNum = "+POut.PInt(newAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			Db.NonQ(command);
 		}
 
 		public static void UpdatePlannedAptNum(int procNum,int newPlannedAptNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPlannedAptNum);
+				return;
+			}
 			string command="UPDATE procedurelog SET PlannedAptNum = "+POut.PInt(newPlannedAptNum)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			Db.NonQ(command);
 		}
 
 		public static void UpdatePriority(int procNum,int newPriority) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPriority);
+				return;
+			}
 			string command="UPDATE procedurelog SET Priority = "+POut.PInt(newPriority)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			Db.NonQ(command);
 		}
 
 		public static void UpdateFee(int procNum,double newFee) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newFee);
+				return;
+			}
 			string command="UPDATE procedurelog SET ProcFee = "+POut.PDouble(newFee)
 				+" WHERE ProcNum = "+POut.PInt(procNum);
 			Db.NonQ(command);
@@ -489,6 +516,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		private static List<Procedure> ConvertToList(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List<Procedure> retVal=new List<Procedure>();
 			Procedure proc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -561,20 +589,21 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
-		public static Procedure[] GetProcsMultApts(int[] myAptNums) {
+		public static Procedure[] GetProcsMultApts(List <int> myAptNums) {
+			//No need to check RemotingRole; no call to db.
 			return GetProcsMultApts(myAptNums,false);
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list or GetProductionOneApt.  This process requires only one call to the database.  "myAptNums" is the list of appointments to get procedures for.  isForNext gets procedures for a list of next appointments rather than regular appointments.</summary>
-		public static Procedure[] GetProcsMultApts(int[] myAptNums,bool isForPlanned) {
+		public static Procedure[] GetProcsMultApts(List <int> myAptNums,bool isForPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Procedure[]>(MethodBase.GetCurrentMethod(),myAptNums,isForPlanned);
 			}
-			if(myAptNums.Length==0) {
+			if(myAptNums.Count==0) {
 				return new Procedure[0];
 			}
 			string strAptNums="";
-			for(int i=0;i<myAptNums.Length;i++) {
+			for(int i=0;i<myAptNums.Count;i++) {
 				if(i>0) {
 					strAptNums+=" OR";
 				}
@@ -592,6 +621,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
 		public static Procedure[] GetProcsOneApt(int myAptNum,Procedure[] procsMultApts) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<procsMultApts.Length;i++) {
 				if(procsMultApts[i].AptNum==myAptNum) {
@@ -605,6 +635,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets the production for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
 		public static double GetProductionOneApt(int myAptNum,Procedure[] procsMultApts,bool isPlanned) {
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<procsMultApts.Length;i++) {
 				if(isPlanned && procsMultApts[i].PlannedAptNum==myAptNum) {
@@ -619,6 +650,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormClaimEdit,FormClaimPrint,FormClaimPayTotal,ContrAccount etc to get description of procedure. Procedure list needs to include the procedure we are looking for.</summary>
 		public static Procedure GetProcFromList(Procedure[] list,int procNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Length;i++) {
 				if(procNum==list[i].ProcNum) {
 					return list[i];
@@ -656,6 +688,10 @@ namespace OpenDentBusiness {
 		///4. Changing an appt date of type IsNewPatient. If no C procs, change visit date.
 		///Old: when setting a procedure complete in the Chart module or the ProcEdit window.  Also when saving an appointment that is marked IsNewPat.</summary>
 		public static void SetDateFirstVisit(DateTime visitDate,int situation,Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),visitDate,situation,pat);
+				return;
+			}
 			if(situation==1) {
 				if(pat.DateFirstVisit.Year>1880) {
 					return;//a date has already been set.
@@ -693,6 +729,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static int GetCodeNum(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),procNum);
+			}
 			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -703,6 +742,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static double GetProcFee(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),procNum);
+			}
 			string command="SELECT ProcFee FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -713,6 +755,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Used twice in FormClaimProc.  Gets value directly from database.</summary>
 		public static string GetToothNum(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),procNum);
+			}
 			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -723,6 +768,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Called from FormApptsOther when creating a new appointment.  Returns true if there are any procedures marked complete for this patient.  The result is that the NewPt box on the appointment won't be checked.</summary>
 		public static bool AreAnyComplete(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum);
+			}
 			string command="SELECT COUNT(*) FROM procedurelog "
 				+"WHERE PatNum="+patNum.ToString()
 				+" AND ProcStatus=2";
@@ -735,6 +783,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Called from AutoCodeItems.  Makes a call to the database to determine whether the specified tooth has been extracted or will be extracted. This could then trigger a pontic code.</summary>
 		public static bool WillBeMissing(string toothNum,int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),toothNum,patNum);
+			}
 			//first, check for missing teeth
 			string command="SELECT COUNT(*) FROM toothinitial "
 				+"WHERE ToothNum='"+toothNum+"' "
@@ -758,12 +809,17 @@ namespace OpenDentBusiness {
 		}
 
 		public static void AttachToApt(int procNum,int aptNum,bool isPlanned) {
+			//No need to check RemotingRole; no call to db.
 			List<int> procNums=new List<int>();
 			procNums.Add(procNum);
 			AttachToApt(procNums,aptNum,isPlanned);
 		}
 
 		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNums,aptNum,isPlanned);
+				return;
+			}
 			if(procNums.Count==0) {
 				return;
 			}
@@ -785,6 +841,10 @@ namespace OpenDentBusiness {
 		}
 
 		public static void DetachFromApt(List<int> procNums,bool isPlanned) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNums,isPlanned);
+				return;
+			}
 			if(procNums.Count==0) {
 				return;
 			}
@@ -824,6 +884,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets total writeoff for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOff(Procedure proc,ClaimProc[] claimProcs) {
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<claimProcs.Length;i++) {
 				if(claimProcs[i].ProcNum==proc.ProcNum) {
@@ -835,6 +896,7 @@ namespace OpenDentBusiness {
 
 		///<summary>WriteOff'Complete'. Only used in main Account module. Gets writeoff for this procedure based on supplied claimprocs. Only includes claimprocs with status of CapComplete,CapClaim,NotReceived,Received,or Supplemental. Used to ONLY include Writeoffs not attached to claims, because those would display on the claim line, but now they show on each procedure instead.  /*In practice, this means only writeoffs with CapComplete status get returned because they are to be subtracted from the patient portion on the proc line*/. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOffC(Procedure proc,ClaimProc[] claimProcs) {
+			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<claimProcs.Length;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
@@ -868,6 +930,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in deciding how to display procedures in Account. The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs at all are attached to this procedure.</summary>
 		public static bool IsCoveredIns(Procedure proc,ClaimProc[] List) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum) {
 					return true;
@@ -878,6 +941,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in deciding how to display procedures in Account. The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are set NoBillIns.</summary>
 		public static bool NoBillIns(Procedure proc,ClaimProc[] List) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum
 					&& List[i].NoBillIns) {
@@ -889,6 +953,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in ContrAccount.CreateClaim when validating selected procedures. Returns true if there is any claimproc for this procedure and plan which is marked NoBillIns.  The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are set NoBillIns.</summary>
 		public static bool NoBillIns(Procedure proc,ClaimProc[] List,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			if(proc==null) {
 				return false;
 			}
@@ -904,6 +969,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in deciding how to display procedures in Account. The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are status estimate, which means they haven't been attached to a claim because their status would have been changed to NotReceived.  And if the patient doesn't have ins, then the estimates would have been deleted.</summary>
 		public static bool IsUnsent(Procedure proc,ClaimProc[] List) {
+			//No need to check RemotingRole; no call to db.
 			//unsent if no claimprocs with claimNums
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum
@@ -919,6 +985,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only called from FormProcEdit to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAttachedToClaim(Procedure proc,ClaimProc[] List) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum
 					&& List[i].ClaimNum>0
@@ -936,6 +1003,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only called from FormProcEditAll to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAttachedToClaim(List<Procedure> procList,ClaimProc[] claimprocList) {
+			//No need to check RemotingRole; no call to db.
 			for(int j=0;j<procList.Count;j++) {
 				if(IsAttachedToClaim(procList[j],claimprocList)) {
 					return true;
@@ -946,6 +1014,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Queries the database to determine if this procedure is attached to a claim already.</summary>
 		public static bool IsAttachedToClaim(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),procNum);
+			}
 			string command="SELECT COUNT(*) FROM claimproc "
 				+"WHERE ProcNum="+POut.PInt(procNum)+" "
 				+"AND ClaimNum>0";
@@ -958,6 +1029,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used in ContrAccount.CreateClaim to validate that procedure is not already attached to a claim for this specific insPlan.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAlreadyAttachedToClaim(Procedure proc,ClaimProc[] List,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum
 					&& List[i].PlanNum==planNum
@@ -971,6 +1043,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this plan that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
 		public static bool NeedsSent(int procNum,ClaimProc[] List,int planNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==procNum
 					&& !List[i].NoBillIns
@@ -984,6 +1057,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only used in ContrAccount.CreateClaim to decide whether a given procedure has an estimate that can be used to attach to a claim for the specified plan.  Returns a valid claimProc if this procedure has an estimate attached that is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. Returns null if there are no claimprocs that would work.</summary>
 		public static ClaimProc GetClaimProcEstimate(int procNum,ClaimProc[] List,InsPlan plan) {
+			//No need to check RemotingRole; no call to db.
 			//bool matchOfWrongType=false;
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==procNum
@@ -1004,6 +1078,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
 		public static string ConvertProcToString(int codeNum,string surf,string toothNum) {
+			//No need to check RemotingRole; no call to db.
 			string strLine="";
 			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
 			switch(code.TreatArea) {
@@ -1034,11 +1109,13 @@ namespace OpenDentBusiness {
 
 		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
 		public static string GetDescription(Procedure proc) {
+			//No need to check RemotingRole; no call to db.
 			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
 		}
 
 		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
 		public static void SetProvidersInAppointment(Appointment apt,List<Procedure> procList) {
+			//No need to check RemotingRole; no call to db.
 			ProcedureCode procCode;
 			Procedure changedProc;
 			for(int i=0;i<procList.Count;i++) {
@@ -1060,6 +1137,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a list of procedures representing extracted teeth.  Status of C,EC,orEO. Includes procs with toothNum "1"-"32".  Will not include procs with unreasonable dates.  Used for Canadian e-claims instead of the usual ToothInitials.GetMissingOrHiddenTeeth, because Canada requires dates on the extracted teeth.  Supply all procedures for the patient.</summary>
 		public static List<Procedure> GetExtractedTeeth(Procedure[] procList) {
+			//No need to check RemotingRole; no call to db.
 			List<Procedure> extracted=new List<Procedure>();
 			ProcedureCode procCode;
 			for(int i=0;i<procList.Length;i++) {
@@ -1092,6 +1170,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Base estimate or override is retrieved from supplied claimprocs. Does not take into consideration annual max or deductible.  If limitToTotal set to true, then it does limit total of pri+sec to not be more than total fee.  The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetEst(Procedure proc,ClaimProc[] claimProcs,PriSecTot pst,List <PatPlan> patPlans,bool limitToTotal) {
+			//No need to check RemotingRole; no call to db.
 			double priBaseEst=0;
 			double secBaseEst=0;
 			double priOverride=-1;
@@ -1136,6 +1215,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
 		public static int GlobalUpdateFees() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
 			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
 				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
 				procedurelog.ProcFee,insplan.PlanType
@@ -1195,6 +1277,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Used from TP to get a list of all TP procs, ordered by priority, toothnum.</summary>
 		public static Procedure[] GetListTP(Procedure[] procList) {
+			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<procList.Length;i++) {
 				if(procList[i].ProcStatus==ProcStat.TP) {

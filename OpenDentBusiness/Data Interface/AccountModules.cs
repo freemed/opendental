@@ -18,7 +18,6 @@ namespace OpenDentBusiness {
 		private static double balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
-		//No need to check RemotingRole; no call to db.
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled);

@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class SheetDefs{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM sheetdef ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="sheetdef";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			SheetDefC.Listt=new List<SheetDef>();
 			SheetDef sheetdef;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -38,6 +40,7 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one SheetDef from the cache.  Also includes the fields and parameters for the sheetdef.</Summary>
 		public static SheetDef GetSheetDef(int sheetDefNum){
+			//No need to check RemotingRole; no call to db.
 			SheetDef sheetdef=null;
 			for(int i=0;i<SheetDefC.Listt.Count;i++){
 				if(SheetDefC.Listt[i].SheetDefNum==sheetDefNum){
@@ -64,6 +67,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Includes all attached fields.  It simply deletes all the old fields and inserts new ones.</summary>
 		public static void WriteObject(SheetDef sheetDef){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetDef);
+				return;
+			}
 			string command;
 			if(!sheetDef.IsNew){
 				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDef.SheetDefNum);
@@ -79,6 +86,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DeleteObject(int sheetDefNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetDefNum);
+				return;
+			}
 			//validate that not already in use by a refferral.
 			string command="SELECT LName,FName FROM referral WHERE Slip="+POut.PInt(sheetDefNum);
 			DataTable table=Db.GetTable(command);
@@ -104,6 +115,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Sheetdefs and sheetfielddefs are archived separately.  So when we need to use a sheetdef, we must run this method to pull all the associated fields from the archive.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(SheetDef sheetdef){
+			//No need to check RemotingRole; no call to db.
 			sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
 			sheetdef.Parameters=SheetParameter.GetForType(sheetdef.SheetType);
 			//images first
@@ -137,6 +149,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all custom sheetdefs(without fields or parameters) for a particular type.</summary>
 		public static List<SheetDef> GetCustomForType(SheetTypeEnum sheettype){
+			//No need to check RemotingRole; no call to db.
 			List<SheetDef> retVal=new List<SheetDef>();
 			for(int i=0;i<SheetDefC.Listt.Count;i++){
 				if(SheetDefC.Listt[i].SheetType==sheettype){

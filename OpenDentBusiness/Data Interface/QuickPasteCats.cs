@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		private static QuickPasteCat[] list;
 
 		public static QuickPasteCat[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command=
 				"SELECT * from quickpastecat "
 				+"ORDER BY ItemOrder";
@@ -33,6 +35,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new QuickPasteCat[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteCat();
@@ -45,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(QuickPasteCat cat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cat);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				cat.QuickPasteCatNum=MiscData.GetKey("quickpastecat","QuickPasteCatNum");
 			}
@@ -71,6 +78,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(QuickPasteCat cat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cat);
+				return;
+			}
 			string command="UPDATE quickpastecat SET "
 				+"Description='"       +POut.PString(cat.Description)+"'"
 				+",ItemOrder = '"      +POut.PInt   (cat.ItemOrder)+"'"
@@ -81,6 +92,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(QuickPasteCat cat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cat);
+				return;
+			}
 			string command="DELETE from quickpastecat WHERE QuickPasteCatNum = '"
 				+POut.PInt(cat.QuickPasteCatNum)+"'";
  			Db.NonQ(command);
@@ -89,6 +104,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from FormQuickPaste and from QuickPasteNotes.Substitute(). Returns the index of the default category for the specified type. If user has entered more than one, only one is returned.</summary>
 		public static int GetDefaultType(QuickPasteType type){
+			//No need to check RemotingRole; no call to db.
 			if(List.Length==0){
 				return -1;
 			}

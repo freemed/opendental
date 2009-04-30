@@ -12,6 +12,7 @@ namespace OpenDentBusiness{
 		public static ArrayList ForProgram;
 
 		public static ToolButItem[] List {
+			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
 					RefreshCache();
@@ -25,6 +26,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * from toolbutitem";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="ToolButItem";
@@ -34,6 +36,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			List=new ToolButItem[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new ToolButItem();
@@ -46,6 +49,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ToolButItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 				+"VALUES ("
 				+"'"+POut.PInt   (Cur.ProgramNum)+"', "
@@ -56,6 +63,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This in not currently being used.</summary>
 		public static void Update(ToolButItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE toolbutitem SET "
 				+"ProgramNum ='" +POut.PInt   (Cur.ProgramNum)+"'"
 				+",ToolBar ='"   +POut.PInt   ((int)Cur.ToolBar)+"'"
@@ -66,6 +77,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This is not currently being used.</summary>
 		public static void Delete(ToolButItem Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "DELETE from toolbutitem WHERE ToolButItemNum = '"
 				+POut.PInt(Cur.ToolButItemNum)+"'";
 			Db.NonQ(command);
@@ -73,6 +88,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all ToolButItems for the Programs.Cur.  This is used regularly when saving a Program link because of the way the user interface works.</summary>
 		public static void DeleteAllForProgram(int programNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),programNum);
+				return;
+			}
 			string command = "DELETE from toolbutitem WHERE ProgramNum = '"
 				+POut.PInt(programNum)+"'";
 			Db.NonQ(command);
@@ -80,6 +99,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
 		public static void GetForProgram(int programNum){
+			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();
 			}
@@ -93,6 +113,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>
 		public static ArrayList GetForToolBar(ToolBarsAvail toolbar) {
+			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();
 			}

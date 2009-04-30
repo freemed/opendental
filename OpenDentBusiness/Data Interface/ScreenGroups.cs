@@ -24,6 +24,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(DateTime fromDate,DateTime toDate){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),fromDate,toDate);
+				return;
+			}
 			string command =
 				"SELECT * from screengroup "
 				+"WHERE SGDate >= "+POut.PDateT(fromDate)+" "
@@ -42,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ScreenGroup Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				Cur.ScreenGroupNum=MiscData.GetKey("screengroup","ScreenGroupNum");
 			}
@@ -66,6 +74,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(ScreenGroup Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command = "UPDATE screengroup SET "
 				+"Description ='"  +POut.PString(Cur.Description)+"'"
 				+",SGDate ="      +POut.PDate  (Cur.SGDate)
@@ -75,6 +87,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This will also delete all screen items, so may need to ask user first.</summary>
 		public static void Delete(ScreenGroup Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command="DELETE from screen WHERE ScreenGroupNum ='"+POut.PInt(Cur.ScreenGroupNum)+"'";
 			Db.NonQ(command);
 			command="DELETE from screengroup WHERE ScreenGroupNum ='"+POut.PInt(Cur.ScreenGroupNum)+"'";

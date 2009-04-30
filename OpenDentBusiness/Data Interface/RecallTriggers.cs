@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 	public class RecallTriggers{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string c="SELECT * FROM recalltrigger";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="RecallTrigger";
@@ -19,6 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			RecallTriggerC.Listt=new List<RecallTrigger>();
 			RecallTrigger trig;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -44,6 +46,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(RecallTrigger trigger){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),trigger);
+				return;
+			}
 			DataObjectFactory<RecallTrigger>.WriteObject(trigger);
 		}
 
@@ -71,6 +77,7 @@ namespace OpenDentBusiness{
 		//}
 
 		public static List<RecallTrigger> GetForType(int recallTypeNum){
+			//No need to check RemotingRole; no call to db.
 			List<RecallTrigger> triggerList=new List<RecallTrigger>();
 			if(recallTypeNum==0){
 				return triggerList;
@@ -84,6 +91,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static void SetForType(int recallTypeNum,List<RecallTrigger> triggerList){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum,triggerList);
+				return;
+			}
 			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.PInt(recallTypeNum);
 			Db.NonQ(command);
 			for(int i=0;i<triggerList.Count;i++){

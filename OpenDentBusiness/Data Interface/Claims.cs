@@ -361,16 +361,18 @@ namespace OpenDentBusiness{
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
 		public static object[,] GetX12TransactionInfo(int claimNum){
 			//No need to check RemotingRole; no call to db.
-			return GetX12TransactionInfo(new int[1] {claimNum});
+			List <int> claimNums=new List <int> ();
+			claimNums.Add(claimNum);
+			return GetX12TransactionInfo(claimNums);
 		}
 
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(int[] claimNums){//ArrayList queueItemss){
+		public static object[,] GetX12TransactionInfo(List <int> claimNums){//ArrayList queueItemss){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<object[,]>(MethodBase.GetCurrentMethod(),claimNums);
 			}
 			StringBuilder str=new StringBuilder();
-			for(int i=0;i<claimNums.Length;i++){
+			for(int i=0;i<claimNums.Count;i++){
 				if(i>0){
 					str.Append(" OR");
 				}

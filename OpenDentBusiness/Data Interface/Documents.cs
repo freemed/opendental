@@ -328,15 +328,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the documents which correspond to the given mountitems.</summary>
-		public static Document[] GetDocumentsForMountItems(MountItem[] mountItems) {
+		public static Document[] GetDocumentsForMountItems(List <MountItem> mountItems) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),mountItems);
 			}
-			if(mountItems==null || mountItems.Length<1){
+			if(mountItems==null || mountItems.Count<1){
 				return new Document[0];
 			}
-			Document[] documents=new Document[mountItems.Length];
-			for(int i=0;i<mountItems.Length;i++){
+			Document[] documents=new Document[mountItems.Count];
+			for(int i=0;i<mountItems.Count;i++){
 				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count<1){
@@ -349,14 +349,14 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
-		public static int InsertMissing(Patient patient,string[] fileList){
+		public static int InsertMissing(Patient patient,List <string> fileList){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patient,fileList);
 			}
 			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
 			DataTable table=Db.GetTable(command);
-			for(int j=0;j<fileList.Length;j++){
+			for(int j=0;j<fileList.Count;j++){
 				if(!IsAcceptableFileName(fileList[j])){
 					continue;
 				}

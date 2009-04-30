@@ -8,15 +8,23 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Signals {
 		///<summary>Gets all Signals and Acks Since a given DateTime.  If it can't connect to the database, then it no longer throws an error, but instead returns a list of length 0.  Remeber that the supplied dateTime is server time.  This has to be accounted for.</summary>
-		public static Signal[] RefreshTimed(DateTime sinceDateT) {
+		public static List <Signal> RefreshTimed(DateTime sinceDateT) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
+			}
 			string command="SELECT * FROM signal "
 				+"WHERE SigDateTime>"+POut.PDateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.PDateT(sinceDateT)+" "
 				+"ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
-			Signal[] sigList=RefreshAndFill(command);
+			List<Signal> sigList=new List<Signal>();
+			try {
+				RefreshAndFill(Db.GetTable(command));
+			} catch {
+				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
+			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
-			for(int i=0;i<sigList.Length;i++) {
+			for(int i=0;i<sigList.Count;i++) {
 				sigList[i].ElementList=SigElements.GetForSig(sigElementsAll,sigList[i].SignalNum);
 			}
 			return sigList;
@@ -24,6 +32,9 @@ namespace OpenDentBusiness{
 
 		///<summary>This excludes all Invalids.  It is only concerned with text and button messages.  It includes all messages, whether acked or not.  It's up to the UI to filter out acked if necessary.  Also includes all unacked messages regardless of date.</summary>
 		public static ArrayList RefreshFullText(DateTime sinceDateT) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),sinceDateT);
+			}
 			string command="SELECT * FROM signal "
 				+"WHERE (SigDateTime>"+POut.PDateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.PDateT(sinceDateT)+" "
@@ -31,9 +42,14 @@ namespace OpenDentBusiness{
 				+"AND SigType="+POut.PInt((int)SignalType.Button)
 				+" ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
-			Signal[] sigList=RefreshAndFill(command);
+			List<Signal> sigList=new List<Signal>();
+			try {
+				RefreshAndFill(Db.GetTable(command));
+			} catch {
+				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
+			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
-			for(int i=0;i<sigList.Length;i++) {
+			for(int i=0;i<sigList.Count;i++) {
 				sigList[i].ElementList=SigElements.GetForSig(sigElementsAll,sigList[i].SignalNum);
 			}
 			ArrayList retVal=new ArrayList(sigList);
@@ -41,32 +57,32 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used when starting up to get the current button state.  Only gets unacked messages.  There may well be extra and useless messages included.  But only the lights will be used anyway, so it doesn't matter.</summary>
-		public static Signal[] RefreshCurrentButState() {
+		public static List <Signal> RefreshCurrentButState() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM signal "
 				+"WHERE SigType=0 "//buttons only
 				+"AND AckTime<'1880-01-01' "
 				+"ORDER BY SigDateTime";
-			Signal[] sigList=RefreshAndFill(command);
+			List <Signal> sigList=new List<Signal> ();
+			try {
+				RefreshAndFill(Db.GetTable(command));
+			} catch {
+				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
+			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
-			for(int i=0;i<sigList.Length;i++) {
+			for(int i=0;i<sigList.Count;i++) {
 				sigList[i].ElementList=SigElements.GetForSig(sigElementsAll,sigList[i].SignalNum);
 			}
 			return sigList;
 		}
 
-		private static Signal[] RefreshAndFill(string command) {
-			//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
-			DataTable table=null;
-			try {
-				table=Db.GetTable(command);
-			}
-			catch{
-				//MessageBox.Show(e.Message);
-				return new Signal[0];
-			}
-			Signal[] List=new Signal[table.Rows.Count];
+		private static List <Signal> RefreshAndFill(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			List <Signal> List=new List <Signal> ();
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Signal();
+				List.Add(new Signal());
 				List[i].SignalNum  = PIn.PInt(table.Rows[i][0].ToString());
 				List[i].FromUser   = PIn.PString(table.Rows[i][1].ToString());
 				List[i].ITypes     = PIn.PString(table.Rows[i][2].ToString());
@@ -78,12 +94,16 @@ namespace OpenDentBusiness{
 				List[i].AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
 				List[i].TaskNum    = PIn.PInt  (table.Rows[i][9].ToString());
 			}
-			Array.Sort(List);
+			List.Sort();
 			return List;
 		}
 	
 		///<summary></summary>
 		public static void Update(Signal sig){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sig);
+				return;
+			}
 			string command= "UPDATE signal SET " 
 				+"FromUser = '"    +POut.PString(sig.FromUser)+"'"
 				+",ITypes = '"     +POut.PString(sig.ITypes)+"'"
@@ -147,9 +167,10 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>After a refresh, this is used to determine whether the Appt Module needs to be refreshed.  Must supply the current date showing as well as the recently retrieved signal list.</summary>
-		public static bool ApptNeedsRefresh(Signal[] signalList,DateTime dateTimeShowing){
+		public static bool ApptNeedsRefresh(List <Signal> signalList,DateTime dateTimeShowing){
+			//No need to check RemotingRole; no call to db.
 			List<string> iTypeList;
-			for(int i=0;i<signalList.Length;i++){
+			for(int i=0;i<signalList.Count;i++){
 				iTypeList=new List<string>(signalList[i].ITypes.Split(','));
 				if(iTypeList.Contains(((int)InvalidType.Date).ToString()) && signalList[i].DateViewing.Date==dateTimeShowing){
 					return true;
@@ -159,9 +180,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  This will be called twice, once with isPopup=true and once with isPopup=false.</summary>
-		public static List<Task> GetNewTaskPopupsThisUser(Signal[] signalList,int userNum){
+		public static List<Task> GetNewTaskPopupsThisUser(List <Signal> signalList,int userNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),signalList,userNum);
+			}
 			List<Signal> sigListFiltered=new List<Signal>();
-			for(int i=0;i<signalList.Length;i++){
+			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
 					sigListFiltered.Add(signalList[i]);
 				}
@@ -182,14 +206,15 @@ namespace OpenDentBusiness{
 				command+="task.TaskNum= "+POut.PInt(sigListFiltered[i].TaskNum);
 			}
 			command+=")";
-			return Tasks.RefreshAndFill(command);
+			return Tasks.RefreshAndFill(Db.GetTable(command));
 		}
 
 		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>
-		public static List<int> GetInvalidTypes(Signal[] signalList){
+		public static List<int> GetInvalidTypes(List <Signal> signalList){
+			//No need to check RemotingRole; no call to db.
 			List<int> retVal=new List<int>();
 			string[] strArray;
-			for(int i=0;i<signalList.Length;i++){
+			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].SigType!=SignalType.Invalid){
 					continue;
 				}
@@ -214,22 +239,25 @@ namespace OpenDentBusiness{
 
 
 		///<summary>After a refresh, this gets a list of only the button signals.</summary>
-		public static Signal[] GetButtonSigs(Signal[] signalList){
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<signalList.Length;i++){
+		public static List <Signal> GetButtonSigs(List <Signal> signalList){
+			//No need to check RemotingRole; no call to db.
+			List <Signal> list=new List <Signal> ();
+			for(int i=0;i<signalList.Count;i++){
 				if(signalList[i].SigType!=SignalType.Button){
 					continue;
 				}
-				AL.Add(signalList[i]);
+				list.Add(signalList[i]);
 			}
-			Signal[] retVal=new Signal[AL.Count];
-			AL.CopyTo(retVal);
-			return retVal;
+			return list;
 		}
 
 		///<summary>When user clicks on a colored light, they intend to ack it to turn it off.  This acks all signals with the specified index.  This is in case multiple signals have been created from different workstations.  This acks them all in one shot.  Must specify a time because you only want to ack signals earlier than the last time this workstation was refreshed.  A newer signal would not get acked.
 		///If this seems slow, then I will need to check to make sure all these tables are properly indexed.</summary>
 		public static void AckButton(int buttonIndex,DateTime time){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),buttonIndex,time);
+				return;
+			}
 			//FIXME:UPDATE-MULTIPLE-TABLES
 			/*string command= "UPDATE signal,sigelement,sigelementdef "
 				+"SET signal.AckTime = ";

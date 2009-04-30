@@ -116,6 +116,10 @@ namespace OpenDentBusiness.DataAccess {
 			return CreateObjects(queryBuilder.ToString());
 		}
 
+		public static Collection<T> CreateObjects(List <int> id) {
+			return CreateObjects(id.ToArray());
+		}
+
 		/// <summary>
 		/// Retrieves the object of type <typeparamref name="T"/> whose Id match the id specified
 		/// from the database.

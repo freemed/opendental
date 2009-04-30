@@ -1845,9 +1845,9 @@ namespace OpenDental{
 			aptCur.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
 			if(AppointmentRuleC.List.Length>0){
 				//this is crude and temporary:
-				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+				List <int> aptNums=new List <int> ();
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				Procedure[] procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
@@ -2488,9 +2488,9 @@ namespace OpenDental{
 			Procedure[] procsMultApts=null;
 			Procedure[] procsForOne=null;
 			if(AppointmentRuleC.List.Length>0) {
-				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
+				List <int> aptNums=new List <int> ();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			}

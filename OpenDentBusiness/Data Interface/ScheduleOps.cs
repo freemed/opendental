@@ -9,6 +9,10 @@ namespace OpenDentBusiness{
 	public class ScheduleOps {
 		///<summary></summary>
 		public static void Insert(ScheduleOp op){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				op.ScheduleOpNum=MiscData.GetKey("scheduleop","ScheduleOpNum");
 			}

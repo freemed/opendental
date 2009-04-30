@@ -12,11 +12,18 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one SheetField from the database.</Summary>
 		public static SheetField CreateObject(int sheetFieldNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SheetField>(MethodBase.GetCurrentMethod(),sheetFieldNum);
+			}
 			return DataObjectFactory<SheetField>.CreateObject(sheetFieldNum);
 		}
 
 		///<summary>When we need to use a sheet, we must run this method to pull all the associated fields and parameters from the database.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(Sheet sheet){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
+				return;
+			}
 			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheet.SheetNum)
 				+" ORDER BY SheetFieldNum";//the ordering is CRITICAL because the signature key is based on order.
 			sheet.SheetFields=new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
@@ -35,11 +42,19 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(SheetField sheetField){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetField);
+				return;
+			}
 			DataObjectFactory<SheetField>.WriteObject(sheetField);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int sheetFieldNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldNum);
+				return;
+			}
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
 			DataTable table=Db.GetTable(command);
@@ -59,6 +74,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes all existing drawing fields for a sheet from the database and then adds back the list supplied.</summary>
 		public static void SetDrawings(List<SheetField> drawingList,int sheetNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),drawingList,sheetNum);
+				return;
+			}
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum)
 				+" AND FieldType="+POut.PInt((int)SheetFieldType.Drawing);
 			Db.NonQ(command);

@@ -33,11 +33,15 @@ namespace OpenDentBusiness{
 
 		///<Summary>Gets one Sheet from the database.</Summary>
 		public static Sheet CreateObject(int sheetNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),sheetNum);
+			}
 			return DataObjectFactory<Sheet>.CreateObject(sheetNum);
 		}
 
 		///<summary>Gets a single sheet from the database.  Then, gets all the fields and parameters for it.  So it returns a fully functional sheet.</summary>
 		public static Sheet GetSheet(int sheetNum){
+			//No need to check RemotingRole; no call to db.
 			Sheet sheet=CreateObject(sheetNum);
 			SheetFields.GetFieldsAndParameters(sheet);
 			return sheet;
@@ -45,6 +49,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
 		public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum,referralNum);
+			}
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.PInt(patNum)
 				+" AND EXISTS(SELECT * FROM sheetfield "
 				+"WHERE sheet.SheetNum=sheetfield.SheetNum "
@@ -60,6 +67,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Used in FormRxEdit to view an existing rx.  Will return null if none exist.</summary>
 		public static Sheet GetRx(int patNum,int rxNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,rxNum);
+			}
 			string command="SELECT sheet.* FROM sheet,sheetfield "
 				+"WHERE sheet.PatNum="+POut.PInt(patNum)
 				+" AND sheet.SheetType="+POut.PInt((int)SheetTypeEnum.Rx)
@@ -75,11 +85,19 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void WriteObject(Sheet sheet){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
+				return;
+			}
 			DataObjectFactory<Sheet>.WriteObject(sheet);
 		}
 
 		///<summary></summary>
 		public static void DeleteObject(int sheetNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetNum);
+				return;
+			}
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
 			DataTable table=Db.GetTable(command);
@@ -105,6 +123,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts parameters into sheetfield objects, and then saves those objects in the database.  The parameters will never again enjoy full parameter status, but will just be read-only fields from here on out.  It ignores PatNum parameters, since those are already part of the sheet itself.</summary>
 		public static void SaveParameters(Sheet sheet){
+			//No need to check RemotingRole; no call to db
 			SheetField field;
 			for(int i=0;i<sheet.Parameters.Count;i++){
 				if(sheet.Parameters[i].ParamName=="PatNum"){
@@ -130,6 +149,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through all the fields in the sheet and appends together all the FieldValues.  It obviously excludes all SigBox fieldtypes.  It does include Drawing fieldtypes, so any change at all to any drawing will invalidate the signature.  It does include Image fieldtypes, although that's just a filename and does not really have any meaningful data about the image itself.  The order is absolutely critical.</summary>
 		public static string GetSignatureKey(Sheet sheet){
+			//No need to check RemotingRole; no call to db
 			StringBuilder strBuild=new StringBuilder();
 			for(int i=0;i<sheet.SheetFields.Count;i++){
 				if(sheet.SheetFields[i].FieldValue==""){

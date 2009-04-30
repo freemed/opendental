@@ -33,6 +33,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(RepeatCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			string command="UPDATE repeatcharge SET " 
 				+"PatNum = '"    +POut.PInt   (charge.PatNum)+"'"
 				+",ProcCode = '" +POut.PString(charge.ProcCode)+"'"
@@ -46,6 +50,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(RepeatCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			if(PrefC.RandomKeys){
 				charge.RepeatChargeNum=MiscData.GetKey("repeatcharge","RepeatChargeNum");
 			}
@@ -74,16 +82,19 @@ namespace OpenDentBusiness{
 
 		///<summary>Called from FormRepeatCharge.</summary>
 		public static void Delete(RepeatCharge charge){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
+				return;
+			}
 			string command="DELETE FROM repeatcharge WHERE RepeatChargeNum ="+POut.PInt(charge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
 
-
-
-	
-
 		///<summary>Used in FormRepeatChargesUpdate to get a list of the dates of procedures that have the proccode and patnum specified.</summary>
 		public static ArrayList GetDates(int codeNum,int patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),codeNum,patNum);
+			}
 			ArrayList retVal=new ArrayList();
 			string command="SELECT ProcDate FROM procedurelog "
 				+"WHERE PatNum="+POut.PInt(patNum)

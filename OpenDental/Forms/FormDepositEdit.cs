@@ -498,12 +498,10 @@ namespace OpenDental{
 				ClaimPayList=ClaimPayments.GetForDeposit(DepositCur.DepositNum);
 			}
 			//Fill Patient Payment Grid---------------------------------------
-			ArrayList patNumAL=new ArrayList();
+			List <int> patNums=new List <int> ();
 			for(int i=0;i<PatPayList.Count;i++){
-				patNumAL.Add(PatPayList[i].PatNum);
+				patNums.Add(PatPayList[i].PatNum);
 			}
-			int[] patNums=new int[patNumAL.Count];
-			patNumAL.CopyTo(patNums);
 			Patient[] pats=Patients.GetMultPats(patNums);
 			gridPat.BeginUpdate();
 			gridPat.Columns.Clear();
@@ -667,12 +665,10 @@ namespace OpenDental{
 			Queries.CurReport=new ReportOld();
 			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
 			DataRow row;
-			ArrayList patNumAL=new ArrayList();
+			List <int> patNums=new List <int> ();
 			for(int i=0;i<PatPayList.Count;i++){
-				patNumAL.Add(PatPayList[i].PatNum);
+				patNums.Add(PatPayList[i].PatNum);
 			}
-			int[] patNums=new int[patNumAL.Count];
-			patNumAL.CopyTo(patNums);
 			Patient[] pats=Patients.GetMultPats(patNums);
 			for(int i=0;i<PatPayList.Count;i++){
 				row=Queries.TableQ.NewRow();

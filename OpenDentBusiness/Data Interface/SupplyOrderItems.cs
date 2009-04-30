@@ -12,6 +12,9 @@ namespace OpenDentBusiness{
 	public class SupplyOrderItems {
 
 		public static DataTable GetItemsForOrder(int orderNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),orderNum);
+			}
 			string command="SELECT CatalogNumber,Descript,Qty,supplyorderitem.Price,SupplyOrderItemNum,supplyorderitem.SupplyNum "
 				+"FROM supplyorderitem,definition,supply "
 				+"WHERE definition.DefNum=supply.Category "
@@ -22,17 +25,28 @@ namespace OpenDentBusiness{
 		}
 
 		public static SupplyOrderItem CreateObject(int supplyOrderItemNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SupplyOrderItem>(MethodBase.GetCurrentMethod(),supplyOrderItemNum);
+			}
 			string command="SELECT * FROM supplyorderitem WHERE SupplyOrderItemNum="+POut.PInt(supplyOrderItemNum);
 			return DataObjectFactory<SupplyOrderItem>.CreateObject(command);
 		}
 
 		///<summary></summary>
 		public static void WriteObject(SupplyOrderItem supp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
+			}
 			DataObjectFactory<SupplyOrderItem>.WriteObject(supp);
 		}
 
 		///<summary>Surround with try-catch.</summary>
 		public static void DeleteObject(SupplyOrderItem supp){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
+				return;
+			}
 			//validate that not already in use.
 
 			DataObjectFactory<SupplyOrderItem>.DeleteObject(supp);

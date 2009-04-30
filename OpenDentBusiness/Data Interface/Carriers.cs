@@ -164,6 +164,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Surround with try/catch.</summary>
 		public static void Update(Carrier Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command;
 			DataTable table;
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {//en-CA or fr-CA
@@ -436,17 +440,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch Combines all the given carriers into one. The carrier that will be used as the basis of the combination is specified in the pickedCarrier argument. Updates insplan, then deletes all the other carriers.</summary>
-		public static void Combine(int[] carrierNums,int pickedCarrierNum){
+		public static void Combine(List <int> carrierNums,int pickedCarrierNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),carrierNums,pickedCarrierNum);
 				return;
 			}
-			if(carrierNums.Length==1){
+			if(carrierNums.Count==1){
 				return;//nothing to do
 			}
 			//remove pickedCarrierNum from the carrierNums list to make the queries easier to construct.
 			List<int> carrierNumList=new List<int>();
-			for(int i=0;i<carrierNums.Length;i++){
+			for(int i=0;i<carrierNums.Count;i++){
 				if(carrierNums[i]==pickedCarrierNum)
 					continue;
 				carrierNumList.Add(carrierNums[i]);
@@ -468,7 +472,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lan.g("Carriers","Not allowed to combine carriers because some are in use in the etrans table.  Number of entries involved: ")+ecount);
 			}
 			//Now, do the actual combining----------------------------------------------------------------------------------
-			for(int i=0;i<carrierNums.Length;i++){
+			for(int i=0;i<carrierNums.Count;i++){
 				if(carrierNums[i]==pickedCarrierNum)
 					continue;
 				command="UPDATE insplan SET CarrierNum = '"+POut.PInt(pickedCarrierNum)
@@ -481,11 +485,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in the FormCarrierCombine window.</summary>
-		public static List<Carrier> GetCarriers(int[] carrierNums){
+		public static List<Carrier> GetCarriers(List <int> carrierNums){
 			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
 			for(int i=0;i<List.Length;i++){
-				for(int j=0;j<carrierNums.Length;j++){
+				for(int j=0;j<carrierNums.Count;j++){
 					if(List[i].CarrierNum==carrierNums[j]){
 						retVal.Add(List[i]);
 						break;

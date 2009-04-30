@@ -10,12 +10,12 @@ using System.Drawing.Drawing2D;
 namespace OpenDentBusiness.Imaging {
 	public static class ImageHelper {
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
-		public static void RenderMountImage(Bitmap mountImage, Bitmap[] originalImages, MountItem[] mountItems, Document[] documents, int imageSelected) {
+		public static void RenderMountImage(Bitmap mountImage, Bitmap[] originalImages, List <MountItem> mountItems, Document[] documents, int imageSelected) {
 			using (Graphics g = Graphics.FromImage(mountImage)) {
 				//Draw mount encapsulating background rectangle.
 				g.Clear(Pens.SlateGray.Color);
 				RenderMountFrames(mountImage, mountItems, imageSelected);
-				for (int i = 0; i < mountItems.Length; i++) {
+				for (int i = 0; i < mountItems.Count; i++) {
 					g.FillRectangle(Brushes.Black, mountItems[i].Xpos, mountItems[i].Ypos,
 						mountItems[i].Width, mountItems[i].Height);//draw box behind image
 					RenderImageIntoMount(mountImage, mountItems[i], originalImages[i], documents[i]);
@@ -24,10 +24,10 @@ namespace OpenDentBusiness.Imaging {
 		}
 
 		///<summary>Renders the hallow rectangles which represent the individual image frames into the given mount image.</summary>
-		public static void RenderMountFrames(Bitmap mountImage, MountItem[] mountItems, int imageSelected) {
+		public static void RenderMountFrames(Bitmap mountImage, List <MountItem> mountItems, int imageSelected) {
 			using (Graphics g = Graphics.FromImage(mountImage)) {
 				//Draw image encapsulating background rectangles.
-				for (int i = 0; i < mountItems.Length; i++) {
+				for (int i = 0; i < mountItems.Count; i++) {
 					Pen highlight;
 					if (i == imageSelected) {
 						highlight = (Pen)Pens.Yellow.Clone();//highlight desired image.

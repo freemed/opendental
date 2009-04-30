@@ -13,6 +13,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
 			string command="SELECT * FROM program ORDER BY ProgDesc";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Program";
@@ -22,6 +23,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			ProgramC.HList=new Hashtable();
 			Program prog = new Program();
 			ProgramC.Listt=new List<Program>();
@@ -43,6 +45,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Program Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "UPDATE program SET "
 				+"ProgName = '"     +POut.PString(Cur.ProgName)+"'"
 				+",ProgDesc  = '"   +POut.PString(Cur.ProgDesc)+"'"
@@ -56,6 +62,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(Program Cur){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				return;
+			}
 			string command= "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 				+") VALUES("
 				+"'"+POut.PString(Cur.ProgName)+"', "
@@ -70,6 +80,10 @@ namespace OpenDentBusiness{
 
 		///<summary>This can only be called by the user if it is a program link that they created. Included program links cannot be deleted.  If calling this from ClassConversion, must delete any dependent ProgramProperties first.  It will delete ToolButItems for you.</summary>
 		public static void Delete(Program prog){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),prog);
+				return;
+			}
 			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.PInt(prog.ProgramNum);
 			Db.NonQ(command);
 			command = "DELETE from program WHERE ProgramNum = '"+prog.ProgramNum.ToString()+"'";
@@ -78,6 +92,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a Program link with the given name or number exists and is enabled.</summary>
 		public static bool IsEnabled(string progName){
+			//No need to check RemotingRole; no call to db.
 			if(ProgramC.HList==null) {
 				Programs.RefreshCache();
 			}
@@ -89,6 +104,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static bool IsEnabled(int programNum){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
 				if(ProgramC.Listt[i].ProgramNum==programNum && ProgramC.Listt[i].Enabled) {
 					return true;
@@ -99,6 +115,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply a valid program Name, and this will set Cur to be the corresponding Program object.</summary>
 		public static Program GetCur(string progName){
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
 				if(ProgramC.Listt[i].ProgName==progName) {
 					return ProgramC.Listt[i];
@@ -109,6 +126,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Supply a valid program Name.  Will return 0 if not found.</summary>
 		public static int GetProgramNum(string progName) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
 				if(ProgramC.Listt[i].ProgName==progName) {
 					return ProgramC.Listt[i].ProgramNum;

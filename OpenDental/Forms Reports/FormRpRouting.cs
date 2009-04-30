@@ -268,9 +268,9 @@ namespace OpenDental
 				MessageBox.Show(Lan.g(this,"You must select at least one provider."));
 				return;
 			}
-			int[] provNums=new int[listProv.SelectedIndices.Count];
-			for(int i=0;i<provNums.Length;i++){
-				provNums[i]=ProviderC.List[listProv.SelectedIndices[i]].ProvNum;
+			List <int> provNums=new List <int> ();
+			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			Appts=Appointments.GetRouting(date,provNums);
 			if(Appts.Length==0){

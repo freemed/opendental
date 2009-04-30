@@ -3,6 +3,7 @@ Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -546,9 +547,9 @@ namespace OpenDental{
 					grid.SetSelected(i,true);
 				}
 			}
-      int[] aptNums=new int[grid.SelectedIndices.Length];
-      for(int i=0;i<aptNums.Length;i++){
-        aptNums[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+      List <int> aptNums=new List <int> ();
+			for(int i=0;i<grid.SelectedIndices.Length;i++) {
+        aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;
@@ -572,9 +573,9 @@ namespace OpenDental{
 					grid.SetSelected(i,true);
 				}
 			}
-      int[] aptNums=new int[grid.SelectedIndices.Length];
-      for(int i=0;i<aptNums.Length;i++){
-        aptNums[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+      List <int> aptNums=new List <int> ();
+			for(int i=0;i<grid.SelectedIndices.Length;i++) {
+        aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;

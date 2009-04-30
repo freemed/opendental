@@ -9,6 +9,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static RxDef[] Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RxDef[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT * FROM rxdef ORDER BY Drug";
 			DataTable table=Db.GetTable(command);
 			RxDef[] List=new RxDef[table.Rows.Count];
@@ -28,6 +31,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(RxDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command= "UPDATE rxdef SET " 
 				+"Drug = '"       +POut.PString(def.Drug)+"'"
 				+",Sig = '"       +POut.PString(def.Sig)+"'"
@@ -41,6 +48,10 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(RxDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command= "INSERT INTO rxdef (Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES("
 				+"'"+POut.PString(def.Drug)+"', "
 				+"'"+POut.PString(def.Sig)+"', "
@@ -53,6 +64,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Also deletes all RxAlerts that were attached.</summary>
 		public static void Delete(RxDef def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
+				return;
+			}
 			string command="DELETE FROM rxalert WHERE RxDefNum="+POut.PInt(def.RxDefNum);
 			Db.NonQ(command);
 			command= "DELETE FROM rxdef WHERE RxDefNum = "+POut.PInt(def.RxDefNum);
