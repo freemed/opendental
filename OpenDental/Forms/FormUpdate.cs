@@ -778,15 +778,13 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns true if the download at the specified remoteUri with the given registration code should be downloaded and installed as an update, and false is returned otherwise. Also, information about the decision making process is stored in the updateInfoMajor and updateInfoMinor strings, but only holds significance to a human user.</summary>
-		public static bool ShouldDownloadUpdate(string remoteUri,string registrationCode,
-			out string updateInfoMajor,out string updateInfoMinor) 
-		{
+		public static bool ShouldDownloadUpdate(string remoteUri,string updateCode,out string updateInfoMajor,out string updateInfoMinor){
 			updateInfoMajor="";
 			updateInfoMinor="";
 			bool shouldDownload=false;
 			string fileName="Manifest.txt";
 			WebClient myWebClient=new WebClient();
-			string myStringWebResource=remoteUri+registrationCode+"/"+fileName;
+			string myStringWebResource=remoteUri+updateCode+"/"+fileName;
 			Version versionNewBuild=null;
 			string strNewVersion="";
 			string newBuild="";

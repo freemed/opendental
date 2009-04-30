@@ -72,19 +72,21 @@ namespace OpenDental {
 						FormUpdate FormU=new FormUpdate();
 						FormU.ShowDialog();
 					}
-				}else{//Not using image path.
+				}
+				else{//Not using image path.
+					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
 					//perform program update automatically.
 					string patchName="Setup.exe";
 					string updateUri=PrefC.GetString("UpdateWebsitePath");
-					string registrationCode=PrefC.GetString("RegistrationNumber");
+					string updateCode=PrefC.GetString("UpdateCode");
 					string updateInfoMajor="";
 					string updateInfoMinor="";
-					if(FormUpdate.ShouldDownloadUpdate(updateUri,registrationCode,out updateInfoMajor,out updateInfoMinor)){
+					if(FormUpdate.ShouldDownloadUpdate(updateUri,updateCode,out updateInfoMajor,out updateInfoMinor)){
 						if(MessageBox.Show(updateInfoMajor+Lan.g("Prefs","Perform program update now?"),"",
 							MessageBoxButtons.YesNo)==DialogResult.Yes)
 						{
 							string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);//Resort to a more common temp file name.
-							FormUpdate.DownloadInstallPatchFromURI(updateUri+registrationCode+"/"+patchName,//Source URI
+							FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
 								tempFile);//Local destination file.
 							File.Delete(tempFile);//Cleanup install file.
 						}
