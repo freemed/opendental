@@ -70,6 +70,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				MsgBox.Show(this,"Web client cannot convert database.  Must be using a direct connection.");
+				return false;
+			}
 			if(FromVersion < ConvertDatabases.LatestVersion){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
