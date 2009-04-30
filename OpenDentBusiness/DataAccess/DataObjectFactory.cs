@@ -100,6 +100,9 @@ namespace OpenDentBusiness.DataAccess {
 			if (id == null){
 				throw new ArgumentNullException("id");
 			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("DataObjectFactory not allowed to Create Objects if ClientWeb.");
+			}
 			// Specific case. Create a list of objects, base on IDs.
 			// Construct the query
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
@@ -444,6 +447,9 @@ namespace OpenDentBusiness.DataAccess {
 		///  To prevent the code (or database) from auto-assigning a new key, this parameter should be set.
 		/// </param>
 		public static void WriteObject(T value, bool overrideAutoNumber) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("DataObjectFactory not allowed to Write Object if ClientWeb.");
+			}
 			if (value == null){
 				throw new ArgumentNullException("value");
 			}
@@ -649,8 +655,9 @@ namespace OpenDentBusiness.DataAccess {
 
 		public static void DeleteObject(int id) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, default(T), new object[] { id });
-				return;
+				throw new ApplicationException("DataObjectFactory not allowed to Create Objects if ClientWeb.");
+				//FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, default(T), new object[] { id });
+				//return;
 			}
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
 			string tableName = DataObjectInfo<T>.GetTableName();
@@ -687,9 +694,10 @@ namespace OpenDentBusiness.DataAccess {
 				throw new InvalidOperationException(Resources.ObjectNotSaved);
 			}
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, value, new object[] {});
-				value.OnDeleted(EventArgs.Empty);
-				return;
+				throw new ApplicationException("DataObjectFactory not allowed to Delete Object if ClientWeb.");
+				//FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, value, new object[] {});
+				//value.OnDeleted(EventArgs.Empty);
+				//return;
 			}
 			Collection<DataFieldInfo> identityFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.PrimaryKey);
 			using (IDbConnection connection = DataSettings.GetConnection())
