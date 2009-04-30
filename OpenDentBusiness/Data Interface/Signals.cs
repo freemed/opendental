@@ -272,7 +272,26 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-	
+		/// <summary>Won't work with InvalidType.Date, InvalidType.Task, or InvalidType.TaskPopup  yet.</summary>
+		public static void SetInvalid(params InvalidType[] itypes) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),itypes);
+				return;
+			}
+			string itypeString="";
+			for(int i=0;i<itypes.Length;i++) {
+				if(i>0) {
+					itypeString+=",";
+				}
+				itypeString+=((int)itypes[i]).ToString();
+			}
+			Signal sig=new Signal();
+			sig.ITypes=itypeString;
+			sig.DateViewing=DateTime.MinValue;
+			sig.SigType=SignalType.Invalid;
+			sig.TaskNum=0;
+			Insert(sig);
+		}
 	}
 
 	

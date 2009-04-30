@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bindComboQueries.cs" />
+    <Compile Include="Misc\bindComboQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />
@@ -126,8 +126,8 @@
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
-    <Compile Include="ConvertDatabases2.cs" />
-    <Compile Include="ConvertDatabases1.cs" />
+    <Compile Include="Misc\ConvertDatabases2.cs" />
+    <Compile Include="Misc\ConvertDatabases1.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
@@ -355,6 +355,7 @@
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Meth.cs" />
+    <Compile Include="Misc\DatabaseMaintenance.cs" />
     <Compile Include="ODDataSet\ODDataRow.cs" />
     <Compile Include="ODDataSet\ODDataSet.cs" />
     <Compile Include="ODDataSet\ODDataTable.cs" />

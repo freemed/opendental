@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>Replaces old "General" class.  Used to send queries.  This will soon be an internal class, since it is no longer acceptable for the UI to be sending queries.</summary>
+	///<summary>Replaces old "General" class.  Used to send queries.  The methods will soon be internal since it is no longer acceptable for the UI to be sending queries.</summary>
 	public class Db {
 		///<summary>This method now also throws an exception instead of a messagebox if it fails.  So it's identical to GetTableEx.</summary>
 		public static DataTable GetTable(string command) {

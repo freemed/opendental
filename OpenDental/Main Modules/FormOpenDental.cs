@@ -158,7 +158,6 @@ namespace OpenDental{
 		private MenuItem menuItemRequirementsNeeded;
 		private MenuItem menuItemReqStudents;
 		private MenuItem menuItemAutoNotes;
-		private MenuItem menuItemReallocate;
 		private MenuItem menuItemMergeDatabases;
 		private MenuItem menuItemDisplayFields;
 		private Panel panelSplitter;
@@ -376,7 +375,6 @@ namespace OpenDental{
 			this.menuTelephone = new System.Windows.Forms.MenuItem();
 			this.menuItemPatientImport = new System.Windows.Forms.MenuItem();
 			this.menuItemCreateAtoZFolders = new System.Windows.Forms.MenuItem();
-			this.menuItemReallocate = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
 			this.menuItemDatabaseMaintenance = new System.Windows.Forms.MenuItem();
@@ -948,8 +946,7 @@ namespace OpenDental{
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuTelephone,
             this.menuItemPatientImport,
-            this.menuItemCreateAtoZFolders,
-            this.menuItemReallocate});
+            this.menuItemCreateAtoZFolders});
 			this.menuItem1.Text = "Misc Tools";
 			// 
 			// menuTelephone
@@ -969,12 +966,6 @@ namespace OpenDental{
 			this.menuItemCreateAtoZFolders.Index = 2;
 			this.menuItemCreateAtoZFolders.Text = "Create A to Z Folders";
 			this.menuItemCreateAtoZFolders.Click += new System.EventHandler(this.menuItemCreateAtoZFolders_Click);
-			// 
-			// menuItemReallocate
-			// 
-			this.menuItemReallocate.Index = 3;
-			this.menuItemReallocate.Text = "Reallocate Family Balances";
-			this.menuItemReallocate.Click += new System.EventHandler(this.menuItemReallocate_Click);
 			// 
 			// menuItem9
 			// 
@@ -3641,27 +3632,6 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Created AtoZ Folder");
 			}
 		}
-
-		private void menuItemReallocate_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
-			FormAllocate FormA=new FormAllocate();
-			FormA.ShowDialog();
-			if(FormA.DialogResult==DialogResult.OK) {
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Reallocated Family Balances");
-			}
-		}
-
-		/*
-		private void menuItemPaymentPlans_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
-			FormPayPlanUpdate FormPPU=new FormPayPlanUpdate();
-			FormPPU.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,"Payment Plan Update");
-		}*/
 
 		private void menuItemAuditTrail_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
