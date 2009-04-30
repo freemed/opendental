@@ -632,12 +632,33 @@ namespace OpenDental{
 					return;
 				#endif
 			}
-			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
-			if(gridMain.SelectedIndices.Length==0){
+			if(gridMain.SelectedIndices.Length==0){//if none are selected
 				for(int i=0;i<listQueue.Length;i++){
 					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text==""){//no Missing Info
-						gridMain.SetSelected(i,true);
+						if(clearinghouseNum==0) {
+							//If clearinghouse is zero because they just pushed the button instead of using the dropdown list,
+							//then don't check the clearinghouse of each claim.  Just select them if they are electronic.
+							gridMain.SetSelected(i,true);
+						}
+						else{//if they used the dropdown list,
+							//then first, try to only select items in the list that match the clearinghouse.
+							if(listQueue[i].ClearinghouseNum==clearinghouseNum) {
+								gridMain.SetSelected(i,true);
+							}
+						}
 					}	
+				}
+				//If they used the dropdown list, and there still aren't any valid ones,
+				//then ask user if they want to send all of the electronic ones through this clearinghouse.
+				if(clearinghouseNum !=0 && gridMain.SelectedIndices.Length==0) {
+					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send all e-claims through selected clearinghouse?")) {
+						return;
+					}
+					for(int i=0;i<listQueue.Length;i++) {
+						if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text=="") {//no Missing Info
+							gridMain.SetSelected(i,true);
+						}
+					}
 				}
 				if(gridMain.SelectedIndices.Length==0){
 					MsgBox.Show(this,"No claims to send.");
@@ -651,7 +672,7 @@ namespace OpenDental{
 					gridMain.Invalidate();
 				}
 				if(!MsgBox.Show(this,true,"Send all selected e-claims?")){
-					FillGrid();
+					FillGrid();//this changes back any clearinghouse descriptions that we changed manually.
 					return;
 				}
 			}
@@ -665,6 +686,7 @@ namespace OpenDental{
 					return;
 				}
 			}
+			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			ClaimSendQueueItem queueitem;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				queueitem=listQueue[gridMain.SelectedIndices[i]].Copy();
