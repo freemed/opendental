@@ -200,16 +200,14 @@ namespace OpenDental {
 			strB.Append('-',90);
 			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
 			Application.DoEvents();
-			bool corruptionFound=false;
-			textLog.Text+=DatabaseMaintenance.MySQLTables(out corruptionFound,verbose);
-			if(corruptionFound) {
+			textLog.Text+=DatabaseMaintenance.MySQLTables(verbose);
+			if(!DatabaseMaintenance.success) {
 				Cursor=Cursors.Default;
 				return;
 			}
 			Application.DoEvents();
-			bool oracleSuccess=true;
-			textLog.Text+=DatabaseMaintenance.OracleSequences(out oracleSuccess,verbose);
-			if(!oracleSuccess) {
+			textLog.Text+=DatabaseMaintenance.OracleSequences(verbose);
+			if(!DatabaseMaintenance.success) {
 				Cursor=Cursors.Default;
 				return;
 			}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
@@ -10,10 +11,14 @@ namespace OpenDentBusiness {
 		//public static string textLog;
 		private static DataTable table;
 		private static string command;
+		public static bool success=false;
 
-		public static string MySQLTables(out bool corruptionFound,bool verbose) {
+		public static string MySQLTables(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
-			corruptionFound=false;
+			success=true;
 			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return "";
 			}
@@ -52,13 +57,16 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				corruptionFound=true;//no other checks should be done until we can successfully get past this.
+				success=false;//no other checks should be done until we can successfully get past this.
 				log+=Lan.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n";
 			}
 			return log;
 		}
 
-		public static string OracleSequences(out bool success,bool verbose) {
+		public static string OracleSequences(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			success=true;
 			string log="";
 			if(DataConnection.DBtype!=DatabaseType.Oracle) {
@@ -300,6 +308,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string DatesNoZeros(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";//This check is not valid for Oracle, because each of the following fields are defined as non-null,
@@ -346,6 +357,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string DecimalValues(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//Holds columns to be checked. Strings are in pairs in the following order: table-name,column-name
 			string[] decimalCols=new string[] {
@@ -369,6 +383,9 @@ namespace OpenDentBusiness {
 		//Methods that apply to specific tables----------------------------------------------------------------------------------
 
 		public static string AppointmentsNoPattern(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
 			table=Db.GetTable(command);
@@ -389,6 +406,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string AppointmentsNoDateOrProcs(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM appointment "
 				+"WHERE AptStatus=1 "//scheduled 
@@ -402,6 +422,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string AutoCodesDeleteWithNoItems(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"DELETE FROM autocode WHERE NOT EXISTS(
 				SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
@@ -416,6 +439,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimPlanNum2NotValid(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//This fixes a slight database inconsistency that might cause an error when trying to open the send claims window. 
 			command="UPDATE claim SET PlanNum2=0 WHERE PlanNum2 !=0 AND NOT EXISTS( SELECT * FROM insplan "
@@ -428,6 +454,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimDeleteWithInvalidPlanNums(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"SELECT ClaimNum,PatNum FROM claim
 				LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum
@@ -449,6 +478,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimDeleteWithNoClaimProcs(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"DELETE FROM claim WHERE NOT EXISTS(
 				SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
@@ -460,6 +492,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimWriteoffSum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//Sums for each claim---------------------------------------------------------------------
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -486,6 +521,9 @@ namespace OpenDentBusiness {
 
 		///<Summary>also fixes resulting deposit misbalances.</Summary>
 		public static string ClaimPaymentCheckAmt(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
 			int numberFixed=0;
@@ -609,6 +647,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimPaymentDeleteWithNoSplits(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM claimpayment WHERE NOT EXISTS("
 				+"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
@@ -620,6 +661,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcDateNotMatchCapComplete(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7 AND DateCP != ProcDate";
 			int numberFixed=Db.NonQ(command);
@@ -630,6 +674,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcDateNotMatchPayment(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
 				+"WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
@@ -650,6 +697,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM claimproc WHERE claimproc.ClaimNum!=0 "
 				+"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum)";
@@ -661,6 +711,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcDeleteWithInvalidPlanNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"SELECT ClaimProcNum,PatNum FROM claimproc
 				LEFT JOIN insplan ON claimproc.PlanNum=insplan.PlanNum
@@ -682,6 +735,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcDeleteWithInvalidProcNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//These seem to pop up quite regularly due to the program forgetting to delete them
 			command="DELETE FROM claimproc WHERE ProcNum>0 AND NOT EXISTS(SELECT * FROM procedurelog "
@@ -694,6 +750,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcEstNoBillIns(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE claimproc SET InsPayEst=0 WHERE NoBillIns=1 AND InsPayEst !=0";
 			int numberFixed=Db.NonQ(command);
@@ -704,6 +763,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcProvNumMissing(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE claimproc SET ProvNum="+PrefC.GetString("PracticeDefaultProv")+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ(command);
@@ -714,6 +776,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcPreauthNotMatchClaim(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"SELECT claimproc.ClaimProcNum 
 				FROM claimproc,claim 
@@ -739,6 +804,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcStatusNotMatchClaim(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
@@ -756,6 +824,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(
 				SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
@@ -767,6 +838,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClaimProcWriteOffNegative(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"UPDATE claimproc SET WriteOff = -WriteOff WHERE WriteOff < 0";
 			int numberFixed=Db.NonQ(command);
@@ -777,6 +851,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ClockEventInFuture(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > NOW()";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -791,6 +868,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string DocumentWithNoCategory(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=Db.GetTable(command);
@@ -807,6 +887,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string InsPlanCheckNoCarrier(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//Gets a list of insurance plans that do not have a carrier attached. The list should be blank. If not, then you need to go to the plan listed and add a carrier. Missing carriers will cause the send claims function to give an error.
 			command="SELECT PlanNum FROM insplan WHERE CarrierNum=0";
@@ -827,6 +910,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string InsPlanNoClaimForm(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE insplan SET ClaimFormNum="+POut.PInt(PrefC.GetInt("DefaultClaimForm"))
 				+" WHERE ClaimFormNum=0";
@@ -838,6 +924,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string MedicationPatDeleteWithInvalidMedNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
 				+"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
@@ -849,6 +938,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PatientBadGuarantor(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT p.PatNum FROM patient p LEFT JOIN patient p2 ON p.Guarantor = p2.PatNum WHERE p2.PatNum IS NULL";
 			table=Db.GetTable(command);
@@ -864,6 +956,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PatientPriProvMissing(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//previous versions of the program just dealt gracefully with missing provnum.
 			//From now on, we can assum priprov is not missing, making coding easier.
@@ -876,6 +971,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PatientUnDeleteWithBalance(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT PatNum FROM patient	WHERE PatStatus=4 "
 				+"AND (Bal_0_30 !=0	OR Bal_31_60 !=0 OR Bal_61_90 !=0	OR BalOver90 !=0 OR InsEst !=0 OR BalTotal !=0)";
@@ -899,6 +997,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PatPlanOrdinalTwoToOne(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT PatPlanNum FROM patplan patplan1 WHERE Ordinal=2 AND NOT EXISTS("
 				+"SELECT * FROM patplan patplan2 WHERE patplan1.PatNum=patplan2.PatNum AND patplan2.Ordinal=1)";
@@ -915,6 +1016,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PayPlanChargeGuarantorMatch(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
@@ -936,6 +1040,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PayPlanChargeProvNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//I would rather set the provnum to that of the patient, but it's more complex.
 			command="UPDATE payplancharge SET ProvNum="+POut.PInt(PrefC.GetInt("PracticeDefaultProv"))
@@ -949,6 +1056,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PayPlanSetGuarantorToPatForIns(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE payplan SET Guarantor=PatNum WHERE PlanNum>0 AND Guarantor != PatNum";
 			int numberFixed=Db.NonQ(command);
@@ -960,6 +1070,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PaySplitAttachedToPayPlan(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT SplitNum,payplan.Guarantor FROM paysplit,payplan "
 				+"WHERE paysplit.PayPlanNum=payplan.PayPlanNum "
@@ -978,6 +1091,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PaySplitDeleteWithInvalidPayNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM paysplit WHERE NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
 			int numberFixed=Db.NonQ(command);
@@ -988,6 +1104,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PreferenceDateDepositsStarted(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
 			DateTime date=PrefC.GetDate("DateDepositsStarted");
@@ -1005,6 +1124,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PreferencePracticeBillingType(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT valuestring FROM preference WHERE prefname = 'PracticeDefaultBillType'";
 			table=Db.GetTable(command);
@@ -1024,6 +1146,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string PreferencePracticeProv(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT valuestring FROM preference WHERE prefname = 'PracticeDefaultProv'";
 			table=Db.GetTable(command);
@@ -1048,6 +1173,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
 				SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
@@ -1062,6 +1190,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogAttachedToWrongAppts(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
@@ -1076,6 +1207,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogBaseUnitsZero(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			//procedurelog.BaseUnits must match procedurecode.BaseUnits because there is no UI for procs.
 			//For speed, we will use two different strategies
@@ -1098,6 +1232,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogCodeNumZero(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM procedurelog WHERE CodeNum=0";
 			int numberFixed=Db.NonQ(command);
@@ -1108,6 +1245,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogProvNumMissing(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="UPDATE procedurelog SET ProvNum="+PrefC.GetString("PracticeDefaultProv")+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ(command);
@@ -1118,6 +1258,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogToothNums(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			Patient Lim=null;
 			string toothNum;
@@ -1159,6 +1302,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogTpAttachedToClaim(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
 				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
@@ -1180,6 +1326,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogUndeleteAttachedToClaim(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return "";
@@ -1197,6 +1346,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProcedurelogUnitQtyZero(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"UPDATE procedurelog        
 				SET UnitQty=1
@@ -1209,6 +1361,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string ProviderHiddenWithClaimPayments(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"SELECT MAX(claimproc.ProcDate),provider.ProvNum
 				FROM claimproc,provider
@@ -1235,6 +1390,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string RecallTriggerDeleteBadCodeNum(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"DELETE FROM recalltrigger
 				WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
@@ -1278,6 +1436,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		public static string SchedulesDeleteShort(bool verbose) {
+			//No need to check RemotingRole; no call to db.
 			string log="";
 			int numberFixed=0;
 			Schedule[] schedList=Schedules.RefreshAll();
@@ -1298,6 +1457,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string SchedulesDeleteProvClosed(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
 			int numberFixed=Db.NonQ(command);
@@ -1308,6 +1470,9 @@ namespace OpenDentBusiness {
 		}
 
 		public static string SignalInFuture(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
 			string log="";
 			command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
