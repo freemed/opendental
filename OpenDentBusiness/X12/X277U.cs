@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace OpenDental.Eclaims
+namespace OpenDentBusiness
 {
 	///<summary>X12 277 Unsolicited Claim Status Notification</summary>
 	public class X277U{

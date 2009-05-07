@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This is used for queries written by the user.  If using direct connection, it gets a table in the ordinary way.  If ServerWeb, it uses the user with lower privileges to prevent injection attack.</summary>
-		public static DataTable GetTableLow(string command) {
+		internal static DataTable GetTableLow(string command) {
 			DataTable retVal;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Rewrite the calling class to pass this query off to the server:\r\n"+command);
@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This is for multiple queries all concatenated together with ;</summary>
-		public static DataSet GetDataSet(string commands) {
+		internal static DataSet GetDataSet(string commands) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+commands);
 			}
@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Use this for count(*) queries.  They are always guaranteed to return one and only one value.  Not any faster, just handier.  Can also be used when retrieving prefs manually, since they will also return exactly one value.</summary>
-		public static string GetCount(string command) {
+		internal static string GetCount(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}

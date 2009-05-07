@@ -230,7 +230,6 @@
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />
     <Compile Include="Eclaims\CanadianOutput.cs" />
-    <Compile Include="Eclaims\X837.cs" />
     <Compile Include="Eclaims\Tesia.cs" />
     <Compile Include="Eclaims\DocumentGenerator.cs" />
     <Compile Include="Eclaims\CCDerror.cs" />
@@ -253,9 +252,6 @@
     <Compile Include="Eclaims\WebClaim.cs" />
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
-    <Compile Include="Eclaims\X12object.cs" />
-    <Compile Include="Eclaims\X277U.cs" />
-    <Compile Include="Eclaims\X997.cs" />
     <Compile Include="Forms Reports\FormRpAccountingBalanceSheet.cs">
       <SubType>Form</SubType>
     </Compile>

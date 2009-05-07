@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using OpenDentBusiness;
 
-namespace OpenDental.Eclaims
+namespace OpenDentBusiness
 {
 	///<summary></summary>
 	public class X837:X12object{

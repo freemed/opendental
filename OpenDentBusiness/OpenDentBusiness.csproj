@@ -356,6 +356,9 @@
     <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Meth.cs" />
     <Compile Include="Misc\DatabaseMaintenance.cs" />
+    <Compile Include="X12\X277U.cs" />
+    <Compile Include="X12\X837.cs" />
+    <Compile Include="X12\X997.cs" />
     <Compile Include="ODDataSet\ODDataRow.cs" />
     <Compile Include="ODDataSet\ODDataSet.cs" />
     <Compile Include="ODDataSet\ODDataTable.cs" />
@@ -562,6 +565,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="X12\X12object.cs" />
     <Compile Include="XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>
