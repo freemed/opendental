@@ -248,7 +248,16 @@ namespace OpenDentBusiness{
 					"WHERE ps.PayPlanNum<>0 "+//only payments attached to payment plans.
 						(guarantor==0?"":(" AND ps.PatNum IN "+familyPatNums+" "))+
 						(historic?(" AND ps.ProcDate<=DATE("+asOfDate+") "):"")+
-					"GROUP BY ps.PatNum) p "+
+					"GROUP BY ps.PatNum "+
+					"UNION "+
+					//We have to include patients which have not made payments and represent
+					//them with zero amounts so that the join below between tables a,c, and p
+					//will work properly.
+					"SELECT DISTINCT ppc2.PatNum,0 "+
+					"FROM payplancharge ppc2 "+
+					"LEFT JOIN paysplit ps2 ON ps2.PatNum=ppc2.patnum "+
+					"WHERE ISNULL(ps2.PatNum) "+
+					") p "+
 				//Now using the tables tempaging, c and p, update the payment plan remaining
 				//amount to be paid within the tempaging table for each patient.
 				"SET a.PayPlanDue=IFNULL(c.PayPlanCharges-p.PayPlanPayments,0) "+
