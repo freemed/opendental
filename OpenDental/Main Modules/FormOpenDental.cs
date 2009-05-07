@@ -119,7 +119,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemRemote;
 		private System.Windows.Forms.MenuItem menuItemSchoolClass;
 		private System.Windows.Forms.MenuItem menuItemSchoolCourses;
-		private System.Windows.Forms.MenuItem menuItemPatientImport;
 		private System.Windows.Forms.MenuItem menuItemSecurity;
 		private System.Windows.Forms.MenuItem menuItemLogOff;
 		private System.Windows.Forms.MenuItem menuItemInsPlans;
@@ -373,7 +372,6 @@ namespace OpenDental{
 			this.menuItemPrintScreen = new System.Windows.Forms.MenuItem();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuTelephone = new System.Windows.Forms.MenuItem();
-			this.menuItemPatientImport = new System.Windows.Forms.MenuItem();
 			this.menuItemCreateAtoZFolders = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
@@ -945,7 +943,6 @@ namespace OpenDental{
 			this.menuItem1.Index = 1;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuTelephone,
-            this.menuItemPatientImport,
             this.menuItemCreateAtoZFolders});
 			this.menuItem1.Text = "Misc Tools";
 			// 
@@ -955,15 +952,9 @@ namespace OpenDental{
 			this.menuTelephone.Text = "Telephone Numbers";
 			this.menuTelephone.Click += new System.EventHandler(this.menuTelephone_Click);
 			// 
-			// menuItemPatientImport
-			// 
-			this.menuItemPatientImport.Index = 1;
-			this.menuItemPatientImport.Text = "Import Patient From Text File";
-			this.menuItemPatientImport.Click += new System.EventHandler(this.menuItemPatientImport_Click);
-			// 
 			// menuItemCreateAtoZFolders
 			// 
-			this.menuItemCreateAtoZFolders.Index = 2;
+			this.menuItemCreateAtoZFolders.Index = 1;
 			this.menuItemCreateAtoZFolders.Text = "Create A to Z Folders";
 			this.menuItemCreateAtoZFolders.Click += new System.EventHandler(this.menuItemCreateAtoZFolders_Click);
 			// 
@@ -3613,6 +3604,7 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Telephone");
 		}
 
+		/*
 		private void menuItemPatientImport_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin)){
 				return;
@@ -3620,7 +3612,7 @@ namespace OpenDental{
 			FormImport FormI=new FormImport();
 			FormI.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Patient Import Tool");
-		}
+		}*/
 
 		private void menuItemCreateAtoZFolders_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
