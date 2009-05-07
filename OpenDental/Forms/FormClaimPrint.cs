@@ -3138,7 +3138,7 @@ namespace OpenDental{
 
 		private void butPrint_Click(object sender, System.EventArgs e){
 			if(PrintClaim()){
-				EtransL.SetClaimSentOrPrinted(ThisClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,"",0);
+				Etranss.SetClaimSentOrPrinted(ThisClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,"",0);
 				//Claims.UpdateStatus(ThisClaimNum,"P");
 				DialogResult=DialogResult.OK;
 			}

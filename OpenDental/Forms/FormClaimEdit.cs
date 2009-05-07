@@ -3779,7 +3779,7 @@ namespace OpenDental{
 				return;
 			}
 			//also changes claimstatus to sent, and date:
-			EtransL.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,"",0);
+			Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,"",0);
 			//ClaimCur.ClaimStatus="S";
 			//ClaimCur.DateSent=DateTime.Today;
 			//Claims.Update(ClaimCur);
