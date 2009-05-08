@@ -295,7 +295,9 @@ namespace OpenDentBusiness{
 		///<summary>39</summary>
 		ProcButtons,
 		///<summary>40</summary>
-		Diseases
+		Diseases,
+		///<summary>41</summary>
+		Languages
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

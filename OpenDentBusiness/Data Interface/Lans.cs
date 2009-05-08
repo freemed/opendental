@@ -2,12 +2,47 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDentBusiness {
 	///<summary>Handles database commands for the language table in the database.</summary>
 	public class Lans {
+		///<summary>key=ClassType+English.  Value =Language object.</summary>
+		public static Dictionary<string,Language> HList;
+		///<summary>Used by g to keep track of whether any language items were inserted into db. If so a refresh gets done.</summary>
+		private static bool itemInserted;
+
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM language";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Language";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary>Refreshed automatically to always be kept current with all phrases, regardless of whether there are any entries in LanguageForeign table.</summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			HList=new Dictionary<string,Language>();
+			if(CultureInfo.CurrentCulture.Name=="en-US") {
+				return;
+			}
+			Language langTemp;
+			for(int i=0;i<table.Rows.Count;i++) {
+				langTemp=new Language();
+				//List[i].EnglishCommentsOld= PIn.PString(table.Rows[i][0].ToString());
+				langTemp.ClassType      = PIn.PString(table.Rows[i][1].ToString());
+				langTemp.English        = PIn.PString(table.Rows[i][2].ToString());
+				langTemp.IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
+				if(!HList.ContainsKey(langTemp.ClassType+langTemp.English)) {
+					HList.Add(langTemp.ClassType+langTemp.English,langTemp);
+				}
+			}
+		}
+
 		///<summary>stub</summary>
 		internal static string g(string sender,string text){
 			return text;
@@ -24,34 +59,6 @@ namespace OpenDentBusiness {
 			else{
 				return CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
 			}
-		}
-
-		///<summary>key=ClassType+English.  Value =Language object.</summary>
-		private static Dictionary<string,Language> HList;
-		///<summary>Used by g to keep track of whether any language items were inserted into db. If so a refresh gets done.</summary>
-		private static bool itemInserted;
-
-		///<summary>Refreshed automatically to always be kept current with all phrases, regardless of whether there are any entries in LanguageForeign table.</summary>
-		public static void Refresh() {
-			HList=new Dictionary<string,Language>();
-			if(CultureInfo.CurrentCulture.Name=="en-US") {
-				return;
-			}
-			string command="SELECT * FROM language";
-			DataTable table=Db.GetTable(command);
-			Language langTemp;
-			//list=new Language[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				langTemp=new Language();
-				//List[i].EnglishCommentsOld= PIn.PString(table.Rows[i][0].ToString());
-				langTemp.ClassType      = PIn.PString(table.Rows[i][1].ToString());
-				langTemp.English        = PIn.PString(table.Rows[i][2].ToString());
-				langTemp.IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
-				if(!HList.ContainsKey(langTemp.ClassType+langTemp.English)) {
-					HList.Add(langTemp.ClassType+langTemp.English,langTemp);
-				}
-			}
-			//MessageBox.Show(List.Length.ToString());
 		}
 
 		///<summary>Tries to insert, but ignores the insert if this row already exists. This prevents the previous frequent crashes.</summary>

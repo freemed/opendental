@@ -17,7 +17,7 @@ namespace OpenDental{
 		public static string g(string classType,string text) {
 			string retVal=Lans.ConvertString(classType,text);
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 			return retVal;
 		}
@@ -26,7 +26,7 @@ namespace OpenDental{
 		public static string g(System.Object sender,string text) {
 			string retVal=Lans.ConvertString(sender.GetType().Name,text);
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 			return retVal;
 		}
@@ -36,7 +36,7 @@ namespace OpenDental{
 		public static void C(string classType,System.Windows.Forms.MenuItem mi) {
 			mi.Text=Lans.ConvertString(classType,mi.Text);
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 		}
 
@@ -44,7 +44,7 @@ namespace OpenDental{
 		public static void C(System.Windows.Forms.Control sender,System.Windows.Forms.MenuItem mi) {
 			mi.Text=Lans.ConvertString(sender.GetType().Name,mi.Text);
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace OpenDental{
 				contr[i].Text=Lans.ConvertString(classType,contr[i].Text);
 			}
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace OpenDental{
 				contr[i].Text=Lans.ConvertString(sender.GetType().Name,contr[i].Text);
 			}
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDental{
 			//then launch the recursive function for all child controls
 			Fchildren(sender,sender,exclusions);
 			if(itemInserted) {
-				Lans.Refresh();
+				Lans.RefreshCache();
 			}
 		}
 
