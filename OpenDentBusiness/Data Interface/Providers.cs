@@ -404,6 +404,16 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		public static DataTable GetDefaultPracticeProvider(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT FName,LName,Suffix,StateLicense
+				FROM provider
+        WHERE provnum="+PrefC.GetString("PracticeDefaultProv");
+			return Db.GetTable(command);
+		}
+
 
 	}
 	

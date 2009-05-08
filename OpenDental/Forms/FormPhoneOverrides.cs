@@ -21,9 +21,8 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void FillGrid(){
-			string command="SELECT * FROM phoneoverride";
-			table=Db.GetTable(command);
+		private void FillGrid(){			
+			table=PhoneOverrides.GetAll();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Ext",35);

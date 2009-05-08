@@ -1709,6 +1709,30 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static DataTable GetGuarantorInfo(int PatientID) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
+			}
+			string command=@"SELECT FName,MiddleI,LName,Guarantor,Address,
+								Address2,City,State,Zip,Email,EstBalance,
+								BalTotal,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90
+						FROM Patient Where Patnum="+PatientID+
+				" AND patnum=guarantor";
+			return Db.GetTable(command);
+		}
+
+		public static DataTable GetPatientByNameAndBirthday(Patient pat){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),pat);
+			}
+			string command="SELECT PatNum FROM patient WHERE "
+				+"LName='"+POut.PString(pat.LName)+"' "
+				+"AND FName='"+POut.PString(pat.FName)+"' "
+				+"AND Birthdate="+POut.PDate(pat.Birthdate)+" "
+				+"AND PatStatus!=4";//not deleted
+			return Db.GetTable(command);
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>

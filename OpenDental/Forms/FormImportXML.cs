@@ -302,14 +302,8 @@ namespace OpenDental{
 			}
 			
 			//Patient-------------------------------------------------------------------------------------
-			string command;
 			DataTable table;
-			command="SELECT PatNum FROM patient WHERE "
-				+"LName='"+POut.PString(pat.LName)+"' "
-				+"AND FName='"+POut.PString(pat.FName)+"' "
-				+"AND Birthdate="+POut.PDate(pat.Birthdate)+" "
-				+"AND PatStatus!=4";//not deleted
-			table=Db.GetTable(command);
+			table=Patients.GetPatientByNameAndBirthday(pat);
 			Patient existingPat=null;
 			existingPatOld=null;//we will need this to do an update.
 			if(table.Rows.Count>0){//a patient already exists, so only add missing fields
@@ -382,12 +376,7 @@ namespace OpenDental{
 				else{
 					//if guarRelat is not self, and name and birthdate not supplied, a warning was issued, and relat was changed to self.
 					//add guarantor or attach to an existing guarantor
-					command="SELECT PatNum FROM patient WHERE "
-						+"LName='"+POut.PString(guar.LName)+"' "
-						+"AND FName='"+POut.PString(guar.FName)+"' "
-						+"AND Birthdate="+POut.PDate(guar.Birthdate)+" "
-						+"AND PatStatus!=4";//not deleted
-					table=Db.GetTable(command);
+					table=Patients.GetPatientByNameAndBirthday(pat);
 					if(table.Rows.Count>0){//a guar already exists, so simply attach. Make no other changes
 						existingPatOld=pat.Copy();
 						pat.Guarantor=PIn.PInt(table.Rows[0][0].ToString());
@@ -423,12 +412,7 @@ namespace OpenDental{
 				plan.Subscriber=pat.PatNum;
 			}
 			else{//we need to find or add the subscriber
-				command="SELECT PatNum FROM patient WHERE "
-					+"LName='"+POut.PString(subsc.LName)+"' "
-					+"AND FName='"+POut.PString(subsc.FName)+"' "
-					+"AND Birthdate="+POut.PDate(subsc.Birthdate)+" "
-					+"AND PatStatus!=4";//not deleted
-				table=Db.GetTable(command);
+				table=Patients.GetPatientByNameAndBirthday(subsc);
 				if(table.Rows.Count>0){//a subsc already exists, so simply attach. Make no other changes
 					plan.Subscriber=PIn.PInt(table.Rows[0][0].ToString());
 				}

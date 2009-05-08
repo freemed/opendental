@@ -158,6 +158,14 @@ namespace OpenDentBusiness{
 			Update(phoneOR);
 		}
 
+		public static DataTable GetAll(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM phoneoverride";
+			return Db.GetTable(command);
+		}
+
 
 	}
 

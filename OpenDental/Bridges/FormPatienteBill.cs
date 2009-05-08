@@ -22,7 +22,6 @@ namespace OpenDental {
 	public partial class FormPatienteBill:Form {
 		ArrayList PatientList = new ArrayList();
 		XmlDocument Doc = new XmlDocument();
-		string command;
 		string AuthenticationID = string.Empty;
 		string fileName;
 		string PatienteBillServerAddress;
@@ -65,17 +64,14 @@ namespace OpenDental {
 
 			Progress("Extract Login Credentials..");
 			// Read LoginID & Password
-			DataTable table;
 			string loginID;
 			string passWord;
-			string command;
 
 			// Get Login / Password
-			command = @"select loginid,password from clearinghouse where isDefault=1";
-			table = Db.GetTable(command);
-			if(table.Rows.Count != 0) {
-				loginID = PIn.PString(table.Rows[0][0].ToString());
-				passWord = PIn.PString(table.Rows[0][1].ToString());
+			Clearinghouse dch=Clearinghouses.GetDefault();
+			if(dch!=null) {
+				loginID = dch.LoginID;
+				passWord = dch.Password;
 			}
 			else {
 				loginID = "";
@@ -406,12 +402,8 @@ namespace OpenDental {
 		private void PreapreRendringProvider(XmlNode Practice) {
 			string RPName;
 			string RPLicense;
-
-			if(PrefC.GetString("PracticeDefaultProv").Length > 0) {
-				command = @"SELECT FName,LName,Suffix,StateLicense
-                            FROM provider
-                            WHERE provnum=" + PrefC.GetString("PracticeDefaultProv");
-				DataTable RenderingTable = Db.GetTable(command);
+			if(PrefC.GetString("PracticeDefaultProv").Length > 0) {				
+				DataTable RenderingTable = Providers.GetDefaultPracticeProvider();
 				if(RenderingTable.Rows.Count > 0) {
 					RPName = RenderingTable.Rows[0]["FName"].ToString() + " " + RenderingTable.Rows[0]["LName"].ToString() + " " + RenderingTable.Rows[0]["Suffix"].ToString();
 					RPLicense = RenderingTable.Rows[0]["StateLicense"].ToString();
@@ -457,14 +449,7 @@ namespace OpenDental {
 			Progress("Process Patient Information..");
 			for(int i = 0;i < PatientList.Count;i++) {
 				PatientID = (int)PatientList[i];
-
-				command = @"SELECT FName,MiddleI,LName,Guarantor,Address,
-                                Address2,City,State,Zip,Email,EstBalance,
-                                BalTotal,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90
-                            FROM Patient Where Patnum=" + PatientID +
-                            " AND patnum=guarantor";
-				DataTable PatientTable = Db.GetTable(command);
-
+				DataTable PatientTable = Patients.GetGuarantorInfo(PatientID);
 				if(PatientTable.Rows.Count > 0) {
 					FName = PatientTable.Rows[0]["FName"].ToString();
 					MiddleI = PatientTable.Rows[0]["MiddleI"].ToString();
@@ -671,8 +656,7 @@ namespace OpenDental {
 		/// </summary>
 		private void PrepareNotes(int PatientID,XmlNode EisStatementPatient) {
 			string note = string.Empty;
-			command = @"SELECT Note FROM Statement Where Patnum=" + PatientID;
-			DataTable NoteTable = Db.GetTable(command);
+			DataTable NoteTable = Statements.GetStatementNotes(PatientID);
 
 			if(NoteTable.Rows.Count > 0) {
 				note = NoteTable.Rows[0]["Note"].ToString();
@@ -698,10 +682,7 @@ namespace OpenDental {
 			XmlNode PatientDetailItems = Doc.CreateNode(XmlNodeType.Element,"DetailItems","");
 			EisStatementPatient.AppendChild(PatientDetailItems);
 
-			command = @"Select SinglePatient,DateRangeFrom,DateRangeTo,Intermingled
-                        FROM statement WHERE PatNum = " + PatientID;
-
-			DataTable StmtTable = Db.GetTable(command);
+			DataTable StmtTable = Statements.GetStatementInfo(PatientID);
 			bool Singlepatient,Intermingled;
 			DateTime DateRangeFrom,DateRangeTo;
 			if(StmtTable.Rows.Count > 0) {

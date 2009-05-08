@@ -195,6 +195,23 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		public static DataTable GetStatementNotes(int PatientID){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
+			}
+			string command=@"SELECT Note FROM Statement Where Patnum="+PatientID;
+			return Db.GetTable(command);
+		}
+
+		public static DataTable GetStatementInfo(int PatientID){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
+			}
+			string command=@"Select SinglePatient,DateRangeFrom,DateRangeTo,Intermingled
+                        FROM statement WHERE PatNum = "+PatientID;
+			return Db.GetTable(command);
+		}
+
 
 	}
 
