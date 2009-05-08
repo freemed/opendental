@@ -3275,16 +3275,13 @@ namespace OpenDental{
 				= new OpenDental.com.dentalxchange.webservices.Credentials();
 			OpenDental.com.dentalxchange.webservices.Request DCIRequest = new OpenDental.com.dentalxchange.webservices.Request();
 			OpenDental.com.dentalxchange.webservices.Response DCIResponse = new OpenDental.com.dentalxchange.webservices.Response();
-			DataTable table;
 			string loginID;
 			string passWord;
-			string command;
 			// Get Login / Password
-			command = @"select loginid,password from clearinghouse where isDefault=1";
-			table = Db.GetTable(command);
-			if(table.Rows.Count != 0) {
-				loginID = PIn.PString(table.Rows[0][0].ToString());
-				passWord = PIn.PString(table.Rows[0][1].ToString());
+			Clearinghouse dch=Clearinghouses.GetDefault();
+			if(dch!=null) {
+				loginID = dch.LoginID;
+				passWord = dch.Password;
 			}
 			else {
 				loginID = "";
@@ -3317,7 +3314,6 @@ namespace OpenDental{
 		}
 
 		private string PrepareEligibilityRequestDentalXchange(string loginID,string passWord) {
-			string command;
 			DataTable table;
 			string infoReceiverLastName;
 			string infoReceiverFirstName;
@@ -3366,8 +3362,7 @@ namespace OpenDental{
 			XmlNode InfoAddressFirstName = doc.CreateNode(XmlNodeType.Element,"FirstName","");
 			XmlNode InfoAddressLastName = doc.CreateNode(XmlNodeType.Element,"LastName","");
 			// Get Provider Information
-			command = @"SELECT FName,LName,Specialty FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
-			table =Db.GetTable(command);
+			table = Providers.GetDefaultPracticeProvider2();
 			if(table.Rows.Count != 0) {
 				infoReceiverFirstName = PIn.PString(table.Rows[0][0].ToString());
 				infoReceiverLastName = PIn.PString(table.Rows[0][1].ToString());
@@ -3455,8 +3450,7 @@ namespace OpenDental{
 			//SPK / AAD 8/13/08 Add NPI -- Begin
 			XmlNode InfoReceiverProviderNPI = doc.CreateNode(XmlNodeType.Element,"NPI","");
 			//Get Provider NPI #
-			command = @"SELECT NationalProvID FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
-			table = Db.GetTable(command);
+			table = Providers.GetDefaultPracticeProvider3();
 			if(table.Rows.Count != 0) {
 				InfoReceiverProviderNPI.InnerText = PIn.PString(table.Rows[0][0].ToString());
 			};
@@ -3491,9 +3485,7 @@ namespace OpenDental{
 			XmlNode PatientRelationship = doc.CreateNode(XmlNodeType.Element,"RelationshipCode","");
 			XmlNode PatientGender = doc.CreateNode(XmlNodeType.Element,"Gender","");
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
-			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				FROM patient WHERE patient.PatNum=" + PatPlanCur.PatNum;
-			table = Db.GetTable(command);
+			table = Patients.GetPartialPatientData(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
 				PatientFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
 				PatientLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
@@ -3549,10 +3541,7 @@ namespace OpenDental{
 			XmlNode SubscriberRelationship = doc.CreateNode(XmlNodeType.Element,"RelationshipCode","");
 			XmlNode SubscriberGender = doc.CreateNode(XmlNodeType.Element,"Gender","");
 			// Read Subscriber FName,LName,DOB, and Gender from Patient Table
-			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				        FROM patient WHERE PatNum In (SELECT Guarantor FROM 
-                            PATIENT WHERE patnum = " + PatPlanCur.PatNum + ")";
-			table = Db.GetTable(command);
+			table=Patients.GetPartialPatientData2(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
 				SubscriberFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
 				SubscriberLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
@@ -3594,10 +3583,7 @@ namespace OpenDental{
 			XmlNode RenderingAddressLastName = doc.CreateNode(XmlNodeType.Element,"LastName","");
 			// Get Rendering Provider first and lastname
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
-			command = @"SELECT Fname,Lname from provider
-                        WHERE provnum in (select priprov from 
-                        patient where patnum = " + PatPlanCur.PatNum + ")";
-			table = Db.GetTable(command);
+			table=Providers.GetPrimaryProviders(PatPlanCur.PatNum);
 			if(table.Rows.Count != 0) {
 				renderingProviderFirstName = PIn.PString(table.Rows[0][0].ToString());
 				renderingProviderLastName = PIn.PString(table.Rows[0][1].ToString());

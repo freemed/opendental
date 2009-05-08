@@ -414,6 +414,42 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
+		///<summary>We should merge these results with GetDefaultPracticeProvider(), but
+		///that would require restructuring indexes in different places in the code and this is
+		///faster to do as we are just moving the queries down in to the business layer for now.</summary>
+		public static DataTable GetDefaultPracticeProvider2() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT FName,LName,Specialty "+
+				"FROM provider WHERE provnum="+
+				Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+			return Db.GetTable(command);
+		}
+
+		///<summary>We should merge these results with GetDefaultPracticeProvider(), but
+		///that would require restructuring indexes in different places in the code and this is
+		///faster to do as we are just moving the queries down in to the business layer for now.</summary>
+		public static DataTable GetDefaultPracticeProvider3() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT NationalProvID "+
+				"FROM provider WHERE provnum="+
+				Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
+			return Db.GetTable(command);
+		}
+
+		public static DataTable GetPrimaryProviders(int PatNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
+			}
+			string command=@"SELECT Fname,Lname from provider
+                        WHERE provnum in (select priprov from 
+                        patient where patnum = "+PatNum+")";
+			return Db.GetTable(command);
+		}
+
 
 	}
 	

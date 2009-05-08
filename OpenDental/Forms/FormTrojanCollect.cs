@@ -504,10 +504,7 @@ namespace OpenDental{
 				labelEmpPhone.Text=empCur.Phone;
 			}
 			labelPatient.Text=patCur.GetNameFL();
-			string command=@"SELECT MAX(ProcDate) FROM procedurelog,patient
-				WHERE patient.PatNum=procedurelog.PatNum
-				AND patient.Guarantor="+POut.PInt(guarCur.PatNum);
-			DataTable table=Db.GetTable(command);
+			DataTable table=TrojanQueries.GetMaxProcedureDate(guarCur.PatNum);
 			DateTime lastProcDate;
 			if(table.Rows.Count==0){
 				lastProcDate=DateTime.MinValue;//this should never happen
@@ -515,10 +512,7 @@ namespace OpenDental{
 			else{
 				lastProcDate=PIn.PDate(table.Rows[0][0].ToString());
 			}
-			command=@"SELECT MAX(DatePay) FROM paysplit,patient
-				WHERE patient.PatNum=paysplit.PatNum
-				AND patient.Guarantor="+POut.PInt(guarCur.PatNum);
-			table=Db.GetTable(command);
+			table=TrojanQueries.GetMaxPaymentDate(guarCur.PatNum);
 			DateTime lastPayDate;
 			if(table.Rows.Count==0) {
 				lastPayDate=DateTime.MinValue;
@@ -645,20 +639,7 @@ namespace OpenDental{
 			str.Append(dateDelinquency.ToString("MM/dd/yyyy")+"*");//validated
 			str.Append(textPassword.Text+"*");//validated
 			str.Append(Clip(Security.CurUser.UserName,25)+"\r\n");//There is always a logged in user
-			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
-			DataTable table=Db.GetTable(command);
-			int previousNum=PIn.PInt(table.Rows[0][0].ToString());
-			int thisNum=previousNum+1;
-			command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
-				+" AND ValueString='"+POut.PInt(previousNum)+"'";
-			int result=Db.NonQ(command);
-			while(result!=1){//someone else sent one at the same time
-				previousNum++;
-				thisNum++;
-				command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
-					+" AND ValueString='"+POut.PInt(previousNum)+"'";
-				result=Db.NonQ(command);
-			}
+			int thisNum=TrojanQueries.GetUniqueFileNum();
 			string outputFile="CT"+thisNum.ToString().PadLeft(6,'0')+".TRO";
 			File.AppendAllText(folderPath+outputFile,str.ToString());
 			watcher=new FileSystemWatcher(folderPath,outputFile);
@@ -668,8 +649,7 @@ namespace OpenDental{
 				MessageBox.Show("Warning!! Request was not sent to Trojan within the 10 second limit.");
 				return;
 			}
-			command="UPDATE patient SET BillingType="+POut.PInt(billingType)+" WHERE Guarantor="+POut.PInt(patCur.Guarantor);
-			Db.NonQ(command);
+			Patients.UpdateFamilyBillingType(billingType,patCur.Guarantor);
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
 		}

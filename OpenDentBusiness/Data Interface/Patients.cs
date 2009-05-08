@@ -1733,6 +1733,35 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
+		public static void UpdateFamilyBillingType(int billingType,int Guarantor){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),billingType,Guarantor);
+				return;
+			}
+			string command="UPDATE patient SET BillingType="+POut.PInt(billingType)+
+				" WHERE Guarantor="+POut.PInt(Guarantor);
+			Db.NonQ(command);
+		}
+
+		public static DataTable GetPartialPatientData(int PatNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
+			}
+			string command=@"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
+				FROM patient WHERE patient.PatNum="+PatNum;
+			return Db.GetTable(command);
+		}
+
+		public static DataTable GetPartialPatientData2(int PatNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
+			}
+			string command=@"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
+				        FROM patient WHERE PatNum In (SELECT Guarantor FROM 
+                            PATIENT WHERE patnum = "+PatNum+")";
+			return Db.GetTable(command);
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>
