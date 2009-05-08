@@ -182,16 +182,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
+				throw new Exception(Lans.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
 			if(task.IsRepeating && task.TaskStatus!=TaskStatusEnum.New) {//and any status but new
-				throw new Exception(Lan.g("Tasks","Tasks that are repeating must have a status of New."));
+				throw new Exception(Lans.g("Tasks","Tasks that are repeating must have a status of New."));
 			}
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
-				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
+				throw new Exception(Lans.g("Tasks","In repeating tasks, only the main parents can have a task status."));
 			}
 			if(WasTaskAltered(oldTask)){
-				throw new Exception(Lan.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
+				throw new Exception(Lans.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
 			}
 			string command= "UPDATE task SET " 
 				+"TaskListNum = '"    +POut.PInt   (task.TaskListNum)+"'"
@@ -219,13 +219,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
+				throw new Exception(Lans.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
 			if(task.IsRepeating && task.TaskStatus!=TaskStatusEnum.New) {//and any status but new
-				throw new Exception(Lan.g("Tasks","Tasks that are repeating must have a status of New."));
+				throw new Exception(Lans.g("Tasks","Tasks that are repeating must have a status of New."));
 			}
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
-				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
+				throw new Exception(Lans.g("Tasks","In repeating tasks, only the main parents can have a task status."));
 			}
 			if(PrefC.RandomKeys){
 				task.TaskNum=MiscData.GetKey("task","TaskNum");

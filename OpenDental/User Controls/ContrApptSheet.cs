@@ -567,7 +567,7 @@ namespace OpenDental{
 			g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			DateTime hour;
 			CultureInfo ci=(CultureInfo)CultureInfo.CurrentCulture.Clone();
-			string hFormat=Lan.GetShortTimeFormat(ci);
+			string hFormat=Lans.GetShortTimeFormat(ci);
 			string sTime;
 			for(int i=0;i<24;i++){
 				hour=new DateTime(2000,1,1,i,0,0);//hour is the only important part of this time.

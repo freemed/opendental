@@ -104,8 +104,8 @@ namespace OpenDentBusiness {
 				+"AND disease.DiseaseDefNum='"+POut.PInt(def.DiseaseDefNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
-				string s=Lan.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
-					+" "+Lan.g("DiseaseDef","patients, including")+" \r\n";
+				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
+					+" "+Lans.g("DiseaseDef","patients, including")+" \r\n";
 				for(int i=0;i<table.Rows.Count;i++){
 					if(i>5){
 						break;
@@ -122,13 +122,13 @@ namespace OpenDentBusiness {
 		public static void MoveUp(int selected){
 			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
-				throw new ApplicationException(Lan.g("DiseaseDefs","Please select an item first."));
+				throw new ApplicationException(Lans.g("DiseaseDefs","Please select an item first."));
 			}
 			if(selected==0) {//already at top
 				return;
 			}
 			if(selected>ListLong.Length-1){
-				throw new ApplicationException(Lan.g("DiseaseDefs","Invalid selection."));
+				throw new ApplicationException(Lans.g("DiseaseDefs","Invalid selection."));
 			}
 			SetOrder(selected-1,ListLong[selected].ItemOrder);
 			SetOrder(selected,ListLong[selected].ItemOrder-1);
@@ -139,13 +139,13 @@ namespace OpenDentBusiness {
 		public static void MoveDown(int selected) {
 			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
-				throw new ApplicationException(Lan.g("DiseaseDefs","Please select an item first."));
+				throw new ApplicationException(Lans.g("DiseaseDefs","Please select an item first."));
 			}
 			if(selected==ListLong.Length-1){//already at bottom
 				return;
 			}
 			if(selected>ListLong.Length-1) {
-				throw new ApplicationException(Lan.g("DiseaseDefs","Invalid selection."));
+				throw new ApplicationException(Lans.g("DiseaseDefs","Invalid selection."));
 			}
 			SetOrder(selected+1,ListLong[selected].ItemOrder);
 			SetOrder(selected,ListLong[selected].ItemOrder+1);

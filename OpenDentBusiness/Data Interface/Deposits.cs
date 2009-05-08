@@ -106,13 +106,13 @@ namespace OpenDentBusiness{
 			if(dep.DepositNum !=0){
 				command="SELECT COUNT(*) FROM transaction WHERE DepositNum ="+POut.PInt(dep.DepositNum);
 				if(PIn.PInt(Db.GetCount(command))>0) {
-					throw new ApplicationException(Lan.g("Deposits","Cannot delete deposit because it is attached to a transaction."));
+					throw new ApplicationException(Lans.g("Deposits","Cannot delete deposit because it is attached to a transaction."));
 				}
 			}
 			/*/check claimpayment 
 			command="SELECT COUNT(*) FROM claimpayment WHERE DepositNum ="+POut.PInt(DepositNum);
 			if(PIn.PInt(Db.GetCount(command))>0){
-				throw new InvalidProgramException(Lan.g("Deposits","Cannot delete deposit because it has payments attached"));
+				throw new InvalidProgramException(Lans.g("Deposits","Cannot delete deposit because it has payments attached"));
 			}*/
 			//ready to delete
 			command="UPDATE payment SET DepositNum=0 WHERE DepositNum="+POut.PInt(dep.DepositNum);

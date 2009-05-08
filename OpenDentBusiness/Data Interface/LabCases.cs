@@ -59,20 +59,20 @@ namespace OpenDentBusiness{
 				row["ProcDescript"]=raw.Rows[i]["ProcDescript"].ToString();
 				date=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
 				if(date.Year>1880) {
-					row["status"]=Lan.g("FormLabCases","Quality Checked");
+					row["status"]=Lans.g("FormLabCases","Quality Checked");
 				}
 				else {
 					date=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
 					if(date.Year>1880) {
-						row["status"]=Lan.g("FormLabCases","Received");
+						row["status"]=Lans.g("FormLabCases","Received");
 					}
 					else {
 						date=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
 						if(date.Year>1880) {
-							row["status"]=Lan.g("FormLabCases","Sent");//sent but not received
+							row["status"]=Lans.g("FormLabCases","Sent");//sent but not received
 						}
 						else {
-							row["status"]=Lan.g("FormLabCases","Not Sent");
+							row["status"]=Lans.g("FormLabCases","Not Sent");
 						}
 					}
 				}
@@ -101,20 +101,20 @@ namespace OpenDentBusiness{
 					row["status"]="";
 					date=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
 					if(date.Year>1880) {
-						row["status"]=Lan.g("FormLabCases","Quality Checked");
+						row["status"]=Lans.g("FormLabCases","Quality Checked");
 					}
 					else {
 						date=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
 						if(date.Year>1880) {
-							row["status"]=Lan.g("FormLabCases","Received");
+							row["status"]=Lans.g("FormLabCases","Received");
 						}
 						else {
 							date=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
 							if(date.Year>1880) {
-								row["status"]=Lan.g("FormLabCases","Sent");//sent but not received
+								row["status"]=Lans.g("FormLabCases","Sent");//sent but not received
 							}
 							else {
-								row["status"]=Lan.g("FormLabCases","Not Sent");
+								row["status"]=Lans.g("FormLabCases","Not Sent");
 							}
 						}
 					}
@@ -285,7 +285,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("LabCases","Cannot delete LabCase because ")+pats);
+				throw new Exception(Lans.g("LabCases","Cannot delete LabCase because ")+pats);
 			}*/
 			//delete
 			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.PInt(labCaseNum);

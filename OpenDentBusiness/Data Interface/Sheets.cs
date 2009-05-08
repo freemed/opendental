@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
 			}
 			if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
+				throw new ApplicationException(Lans.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
 			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum);
 			Db.NonQ(command);

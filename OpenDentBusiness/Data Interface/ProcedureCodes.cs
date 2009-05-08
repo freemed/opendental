@@ -155,7 +155,7 @@ namespace OpenDentBusiness{
 		public static ProcedureCode GetProcCode(string myCode){
 			//No need to check RemotingRole; no call to db.
 			if(myCode==null){
-				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+				//MessageBox.Show(Lans.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
 			if(ProcedureCodeC.HList.Contains(myCode)) {
@@ -170,7 +170,7 @@ namespace OpenDentBusiness{
 		public static ProcedureCode GetProcCode(int codeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(codeNum==0) {
-				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+				//MessageBox.Show(Lans.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
 			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {

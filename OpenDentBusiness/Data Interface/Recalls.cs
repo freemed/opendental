@@ -265,7 +265,7 @@ namespace OpenDentBusiness{
 							row["contactMethod"]=rawtable.Rows[i]["_guarEmail"].ToString();
 						}
 						else{
-							row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 						}
 					}
 					else{
@@ -273,18 +273,18 @@ namespace OpenDentBusiness{
 							row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
 						}
 						else{
-							row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+							row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 						}
 					}
 				}
 				if(contmeth==ContactMethod.HmPhone){
-					row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.WkPhone) {
-					row["contactMethod"]=Lan.g("FormRecallList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormRecallList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.WirelessPh) {
-					row["contactMethod"]=Lan.g("FormRecallList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormRecallList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.Email) {
 					if(groupByFamilies) {
@@ -296,10 +296,10 @@ namespace OpenDentBusiness{
 					}
 				}
 				if(contmeth==ContactMethod.Mail) {
-					row["contactMethod"]=Lan.g("FormRecallList","Mail");
+					row["contactMethod"]=Lans.g("FormRecallList","Mail");
 				}
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
-					row["contactMethod"]=Lan.g("enumContactMethod",contmeth.ToString());
+					row["contactMethod"]=Lans.g("enumContactMethod",contmeth.ToString());
 				}
 				if(dateRemind.Year<1880) {
 					row["dateLastReminder"]="";

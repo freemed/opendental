@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because it is in use by the following patients:")+pats);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because it is in use by the following patients:")+pats);
 			}
 			//check payments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,payment "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because the following patients have payments using it:")+pats);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have payments using it:")+pats);
 			}
 			//check claimpayments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,claimproc,claimpayment "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because the following patients have claim payments using it:")+pats);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have claim payments using it:")+pats);
 			}
 			//check appointments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,appointment "
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because the following patients have appointments using it:")+pats);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have appointments using it:")+pats);
 			}
 			//check procedures for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,procedurelog "
@@ -159,7 +159,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because the following patients have procedures using it:")+pats);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have procedures using it:")+pats);
 			}
 			//check operatories for dependencies
 			command="SELECT OpName FROM operatory "
@@ -171,7 +171,7 @@ namespace OpenDentBusiness{
 					ops+="\r";
 					ops+=table.Rows[i][0].ToString();
 				}
-				throw new Exception(Lan.g("Clinics","Cannot delete clinic because the following operatories are using it:")+ops);
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following operatories are using it:")+ops);
 			}
 			//delete
 			command= "DELETE FROM clinic" 

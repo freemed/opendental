@@ -346,7 +346,7 @@ namespace OpenDentBusiness {
 			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PInt(procNum)
 				+" AND InsPayAmt > 0 AND Status != "+POut.PInt((int)ClaimProcStatus.Preauth);
 			if(Db.GetCount(command)!="0") {
-				throw new Exception(Lan.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
+				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
 			}
 			//delete adjustments
 			command="DELETE FROM adjustment WHERE ProcNum='"+POut.PInt(procNum)+"'";
@@ -462,7 +462,7 @@ namespace OpenDentBusiness {
 			DataTable table=Db.GetTable(command);
 			List<Procedure> procList=ConvertToList(table);
 			if(procList.Count==0) {
-				//MessageBox.Show(Lan.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
+				//MessageBox.Show(Lans.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
 				return new Procedure();
 			}
 			Procedure proc=procList[0];

@@ -117,10 +117,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(pay.PayDate.Date>DateTime.Today) {
-				throw new ApplicationException(Lan.g("Payments","Date must not be a future date."));
+				throw new ApplicationException(Lans.g("Payments","Date must not be a future date."));
 			}
 			if(pay.PayDate.Year<1880) {
-				throw new ApplicationException(Lan.g("Payments","Invalid date"));
+				throw new ApplicationException(Lans.g("Payments","Invalid date"));
 			}
 			//the functionality below needs to be taken care of before calling the function:
 			/*string command="SELECT DepositNum,PayAmt FROM payment "
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 			}
 			if(table.Rows[0][0].ToString()!="0"//if payment is already attached to a deposit
 					&& PIn.PDouble(table.Rows[0][1].ToString())!=PayAmt) {//and PayAmt changes
-				throw new ApplicationException(Lan.g("Payments","Not allowed to change the amount on payments attached to deposits."));
+				throw new ApplicationException(Lans.g("Payments","Not allowed to change the amount on payments attached to deposits."));
 			}*/
 			string command="UPDATE payment SET " 
 				+ "paytype = '"      +POut.PInt   (pay.PayType)+"'"
@@ -220,7 +220,7 @@ namespace OpenDentBusiness{
 			}
 			if(table.Rows[0][0].ToString()!="0"){//if payment is already attached to a deposit
 				#if !DEBUG
-				throw new ApplicationException(Lan.g("Payments","Not allowed to delete a payment attached to a deposit."));
+				throw new ApplicationException(Lans.g("Payments","Not allowed to delete a payment attached to a deposit."));
 				#endif
 			}
 			command= "DELETE from payment WHERE payNum = '"+pay.PayNum.ToString()+"'";
@@ -382,10 +382,10 @@ namespace OpenDentBusiness{
 			//at this point, we have established that there is a previous transaction.
 			//If payment is attached to a transaction which is more than 48 hours old, then not allowed to change.
 			if(amtChanged && trans.DateTimeEntry < MiscData.GetNowDateTime().AddDays(-2)) {
-				throw new ApplicationException(Lan.g("Payments","Not allowed to change amount that is more than 48 hours old.  This payment is already attached to an accounting transaction.  You will need to detach it from within the accounting section of the program."));
+				throw new ApplicationException(Lans.g("Payments","Not allowed to change amount that is more than 48 hours old.  This payment is already attached to an accounting transaction.  You will need to detach it from within the accounting section of the program."));
 			}
 			if(amtChanged && Transactions.IsReconciled(trans)) {
-				throw new ApplicationException(Lan.g("Payments","Not allowed to change amount.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program."));
+				throw new ApplicationException(Lans.g("Payments","Not allowed to change amount.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program."));
 			}
 			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
 			int oldAcct=0;
@@ -408,10 +408,10 @@ namespace OpenDentBusiness{
 				}
 			}
 			if(jeCredit==null || jeDebit==null) {
-				throw new ApplicationException(Lan.g("Payments","Not able to automatically make changes in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
+				throw new ApplicationException(Lans.g("Payments","Not able to automatically make changes in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
 			}
 			if(oldAcct==0){//something must have gone wrong.  But this should never happen
-				throw new ApplicationException(Lan.g("Payments","Could not locate linked transaction.  You will need to detach it manually from within the accounting section of the program."));
+				throw new ApplicationException(Lans.g("Payments","Could not locate linked transaction.  You will need to detach it manually from within the accounting section of the program."));
 			}
 			if(newAcct==0){//detaching it from a linked transaction.
 				//We will delete the transaction
@@ -425,7 +425,7 @@ namespace OpenDentBusiness{
 				return false;//no changes being made to amount or account, so no synch required.
 			}
 			if(jeAL.Count!=2) {
-				throw new ApplicationException(Lan.g("Payments","Not able to automatically change the amount in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
+				throw new ApplicationException(Lans.g("Payments","Not able to automatically change the amount in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
 			}
 			//Amount or account changed on an existing linked transaction.
 			return true;
@@ -458,7 +458,7 @@ namespace OpenDentBusiness{
 				//first the deposit entry
 				JournalEntry je=new JournalEntry();
 				je.AccountNum=newAcct;//DepositAccounts[comboDepositAccount.SelectedIndex];
-				je.CheckNumber=Lan.g("Payments","DEP");
+				je.CheckNumber=Lans.g("Payments","DEP");
 				je.DateDisplayed=payDate;//it would be nice to add security here.
 				if(absNew==newAmt){//amount is positive
 					je.DebitAmt=newAmt;
@@ -466,7 +466,7 @@ namespace OpenDentBusiness{
 				else{
 					je.CreditAmt=absNew;
 				}
-				je.Memo=Lan.g("Payments","Payment -")+" "+patName;
+				je.Memo=Lans.g("Payments","Payment -")+" "+patName;
 				je.Splits=AccountC.GetDescript(PrefC.GetInt("AccountingCashIncomeAccount"));
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
@@ -481,7 +481,7 @@ namespace OpenDentBusiness{
 				else {
 					je.DebitAmt=absNew;
 				}
-				je.Memo=Lan.g("Payments","Payment -")+" "+patName;
+				je.Memo=Lans.g("Payments","Payment -")+" "+patName;
 				je.Splits=AccountC.GetDescript(newAcct);
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
@@ -571,7 +571,7 @@ namespace OpenDentBusiness{
 			if(Cur.IsSplit) retStr=retStr
 				+"  "+Cur.PayAmt.ToString("c")
 				+"  "+Cur.PayDate.ToString("d")
-				+" "+Lan.g("Payments","split between patients");
+				+" "+Lans.g("Payments","split between patients");
 			return retStr;
 		}*/
 

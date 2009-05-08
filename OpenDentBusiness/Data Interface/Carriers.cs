@@ -173,10 +173,10 @@ namespace OpenDentBusiness{
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {//en-CA or fr-CA
 				if(Cur.IsCDA) {
 					if(Cur.ElectID=="") {
-						throw new ApplicationException(Lan.g("Carriers","EDI Code required."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
 					}
 					if(!Regex.IsMatch(Cur.ElectID,"^[0-9]{6}$")) {
-						throw new ApplicationException(Lan.g("Carriers","EDI Code must be exactly 6 numbers."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 						+"AND CarrierNum != "+POut.PInt(Cur.CarrierNum);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {//if there already exists a Canadian carrier with that ElectID
-						throw new ApplicationException(Lan.g("Carriers","EDI Code already in use."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code already in use."));
 					}
 				}
 				//so the edited carrier looks good, but now we need to make sure that the original was allowed to be changed.
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.PInt(Cur.CarrierNum)
 						+" OR CarrierNum2="+POut.PInt(Cur.CarrierNum);
 					if(Db.GetCount(command)!="0"){
-						throw new ApplicationException(Lan.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
+						throw new ApplicationException(Lans.g("Carriers","Not allowed to change EDI Code because it's in use in the claim history."));
 					}
 				}
 			}
@@ -230,17 +230,17 @@ namespace OpenDentBusiness{
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(Cur.IsCDA){
 					if(Cur.ElectID==""){
-						throw new ApplicationException(Lan.g("Carriers","EDI Code required."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code required."));
 					}
 					if(!Regex.IsMatch(Cur.ElectID,"^[0-9]{6}$")) {
-						throw new ApplicationException(Lan.g("Carriers","EDI Code must be exactly 6 numbers."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code must be exactly 6 numbers."));
 					}
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
 						+"AND IsCDA=1";
 					DataTable table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
-						throw new ApplicationException(Lan.g("Carriers","EDI Code already in use."));
+						throw new ApplicationException(Lans.g("Carriers","EDI Code already in use."));
 					}
 				}
 			}
@@ -300,7 +300,7 @@ namespace OpenDentBusiness{
 					}
 					strInUse+=PIn.PString(table.Rows[i][0].ToString());
 				}
-				throw new ApplicationException(Lan.g("Carriers","Not allowed to delete carrier because it is in use.  Subscribers using this carrier include ")+strInUse);
+				throw new ApplicationException(Lans.g("Carriers","Not allowed to delete carrier because it is in use.  Subscribers using this carrier include ")+strInUse);
 			}
 			//look for dependencies in etrans table.
 			command="SELECT DateTimeTrans FROM etrans WHERE CarrierNum="+POut.PInt(Cur.CarrierNum)
@@ -314,7 +314,7 @@ namespace OpenDentBusiness{
 					}
 					strInUse+=PIn.PDateT(table.Rows[i][0].ToString()).ToShortDateString();
 				}
-				throw new ApplicationException(Lan.g("Carriers","Not allowed to delete carrier because it is in use in the etrans table.  Dates of claim sent history include ")+strInUse);
+				throw new ApplicationException(Lans.g("Carriers","Not allowed to delete carrier because it is in use in the etrans table.  Dates of claim sent history include ")+strInUse);
 			}
 			command="DELETE from carrier WHERE CarrierNum = "+POut.PInt(Cur.CarrierNum);
 			Db.NonQ(command);
@@ -412,7 +412,7 @@ namespace OpenDentBusiness{
 						Cur.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
 						//set Cur.CarrierNum to the carrier found (all other carrier fields will still be wrong)
 						throw new ApplicationException
-							(Lan.g("Carriers","The carrier information was changed based on the EDI Code provided."));
+							(Lans.g("Carriers","The carrier information was changed based on the EDI Code provided."));
 					}
 				}
 				//Notice that if inserting a carrier, it's never possible to create a canadian carrier.
@@ -469,7 +469,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			string ecount=table.Rows[0][0].ToString();
 			if(ecount!="0"){
-				throw new ApplicationException(Lan.g("Carriers","Not allowed to combine carriers because some are in use in the etrans table.  Number of entries involved: ")+ecount);
+				throw new ApplicationException(Lans.g("Carriers","Not allowed to combine carriers because some are in use in the etrans table.  Number of entries involved: ")+ecount);
 			}
 			//Now, do the actual combining----------------------------------------------------------------------------------
 			for(int i=0;i<carrierNums.Count;i++){

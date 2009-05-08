@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
-				throw new Exception(Lan.g("Laboratories","Cannot delete Laboratory because cases exist for")+pats);
+				throw new Exception(Lans.g("Laboratories","Cannot delete Laboratory because cases exist for")+pats);
 			}
 			//delete
 			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.PInt(labNum);

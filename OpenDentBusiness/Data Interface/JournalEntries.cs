@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(je.DebitAmt<0 || je.CreditAmt<0){
-				throw new ApplicationException(Lan.g("JournalEntries","Error. Credit and debit must both be positive."));
+				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
 			if(PrefC.RandomKeys) {
 				je.JournalEntryNum=MiscData.GetKey("journalentry","JournalEntryNum");
@@ -120,7 +120,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(je.DebitAmt<0 || je.CreditAmt<0) {
-				throw new ApplicationException(Lan.g("JournalEntries","Error. Credit and debit must both be positive."));
+				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
 			string command= "UPDATE journalentry SET "
 				+"TransactionNum = '"+POut.PInt   (je.TransactionNum)+"' "
@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<newJournalList.Count;i++){
 				if(((JournalEntry)newJournalList[i]).DebitAmt<0 || ((JournalEntry)newJournalList[i]).CreditAmt<0){
-					throw new ApplicationException(Lan.g("JournalEntries","Error. Credit and debit must both be positive."));
+					throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 				}
 			}
 			JournalEntry newJournalEntry;

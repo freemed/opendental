@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 			ReqStudent req=GetOne(reqStudentNum);
 			//if a reqneeded exists, then disallow deletion.
 			if(ReqNeededs.GetReq(req.ReqNeededNum)==null) {
-				throw new Exception(Lan.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
+				throw new Exception(Lans.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
 			}
 			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PInt(reqStudentNum);
 			Db.NonQ(command);

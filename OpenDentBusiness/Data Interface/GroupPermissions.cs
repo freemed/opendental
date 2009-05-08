@@ -67,11 +67,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(gp.NewerDate.Year>1880 && gp.NewerDays>0){
-				throw new Exception(Lan.g("GroupPermissions","Date or days can be set, but not both."));
+				throw new Exception(Lans.g("GroupPermissions","Date or days can be set, but not both."));
 			}
 			if(!GroupPermissions.PermTakesDates(gp.PermType)){
 				if(gp.NewerDate.Year>1880 || gp.NewerDays>0){
-					throw new Exception(Lan.g("GroupPermissions","This type of permission may not have a date or days set."));
+					throw new Exception(Lans.g("GroupPermissions","This type of permission may not have a date or days set."));
 				}
 			}
 			if(isNew){
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				command="SELECT COUNT(*) FROM grouppermission WHERE PermType='"+POut.PInt((int)permType)+"'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows[0][0].ToString()=="1"){//only one, so this would delete the last one.
-					throw new Exception(Lan.g("FormSecurity","At least one group must have Security Admin permission."));
+					throw new Exception(Lans.g("FormSecurity","At least one group must have Security Admin permission."));
 				}
 			}
 			command="DELETE from grouppermission WHERE UserGroupNum='"+POut.PInt(groupNum)+"' "
@@ -130,77 +130,77 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			switch(perm){
 				case Permissions.Accounting:
-					return Lan.g("enumPermissions","Accounting");
+					return Lans.g("enumPermissions","Accounting");
 				case Permissions.AccountingCreate:
-					return Lan.g("enumPermissions","Accounting Create Entry");
+					return Lans.g("enumPermissions","Accounting Create Entry");
 				case Permissions.AccountingEdit:
-					return Lan.g("enumPermissions","Accounting Edit Entry");
+					return Lans.g("enumPermissions","Accounting Edit Entry");
 				case Permissions.AccountModule:
-					return Lan.g("enumPermissions","Account Module");
+					return Lans.g("enumPermissions","Account Module");
 				case Permissions.AdjustmentCreate:
-					return Lan.g("enumPermissions","Adjustment Create");
+					return Lans.g("enumPermissions","Adjustment Create");
 				case Permissions.AdjustmentEdit:
-					return Lan.g("enumPermissions","Adjustment Edit");
+					return Lans.g("enumPermissions","Adjustment Edit");
 				case Permissions.AppointmentCreate:
-					return Lan.g("enumPermissions","Appointment Create");
+					return Lans.g("enumPermissions","Appointment Create");
 				case Permissions.AppointmentEdit:
-					return Lan.g("enumPermissions","Appointment Edit");
+					return Lans.g("enumPermissions","Appointment Edit");
 				case Permissions.AppointmentMove:
-					return Lan.g("enumPermissions","Appointment Move");
+					return Lans.g("enumPermissions","Appointment Move");
 				case Permissions.AppointmentsModule:
-					return Lan.g("enumPermissions","Appointments Module");
+					return Lans.g("enumPermissions","Appointments Module");
 				case Permissions.Backup:
-					return Lan.g("enumPermissions","Backup");
+					return Lans.g("enumPermissions","Backup");
 				case Permissions.Blockouts:
-					return Lan.g("enumPermissions","Blockouts");
+					return Lans.g("enumPermissions","Blockouts");
 				case Permissions.ChartModule:
-					return Lan.g("enumPermissions","Chart Module");
+					return Lans.g("enumPermissions","Chart Module");
 				case Permissions.ChooseDatabase:
-					return Lan.g("enumPermissions","Choose Database");
+					return Lans.g("enumPermissions","Choose Database");
 				case Permissions.ClaimSentEdit:
-					return Lan.g("enumPermissions","Claim Sent Edit");
+					return Lans.g("enumPermissions","Claim Sent Edit");
 				case Permissions.DepositSlips:
-					return Lan.g("enumPermissions","Deposit Slips");
+					return Lans.g("enumPermissions","Deposit Slips");
 				case Permissions.FamilyModule:
-					return Lan.g("enumPermissions","Family Module");
+					return Lans.g("enumPermissions","Family Module");
 				case Permissions.ImagesModule:
-					return Lan.g("enumPermissions","Images Module");
+					return Lans.g("enumPermissions","Images Module");
 				case Permissions.InsPayCreate:
-					return Lan.g("enumPermissions","Insurance Payment Create");
+					return Lans.g("enumPermissions","Insurance Payment Create");
 				case Permissions.InsPayEdit:
-					return Lan.g("enumPermissions","Insurance Payment Edit");
+					return Lans.g("enumPermissions","Insurance Payment Edit");
 				case Permissions.ManageModule:
-					return Lan.g("enumPermissions","Manage Module");
+					return Lans.g("enumPermissions","Manage Module");
 				case Permissions.None:
 					return "";
 				case Permissions.PaymentCreate:
-					return Lan.g("enumPermissions","Payment Create");
+					return Lans.g("enumPermissions","Payment Create");
 				case Permissions.PaymentEdit:
-					return Lan.g("enumPermissions","Payment Edit");
+					return Lans.g("enumPermissions","Payment Edit");
 				case Permissions.ProcComplCreate:
-					return Lan.g("enumPermissions","Create Completed Procedure (or set complete)");
+					return Lans.g("enumPermissions","Create Completed Procedure (or set complete)");
 				case Permissions.ProcComplEdit:
-					return Lan.g("enumPermissions","Edit Completed Procedure");
+					return Lans.g("enumPermissions","Edit Completed Procedure");
 				case Permissions.Reports:
-					return Lan.g("enumPermissions","Reports");
+					return Lans.g("enumPermissions","Reports");
 				case Permissions.RxCreate:
-					return Lan.g("enumPermissions","Rx Create");
+					return Lans.g("enumPermissions","Rx Create");
 				case Permissions.AnesthesiaIntakeMeds:
-					return Lan.g("enumPermissions", "Intake Anesthetic Medications into Inventory");
+					return Lans.g("enumPermissions", "Intake Anesthetic Medications into Inventory");
 				case Permissions.AnesthesiaControlMeds:
-					return Lan.g("enumPermissions", "Edit Anesthetic Records; Edit/Adjust Inventory Counts");
+					return Lans.g("enumPermissions", "Edit Anesthetic Records; Edit/Adjust Inventory Counts");
 				case Permissions.Schedules:
-					return Lan.g("enumPermissions","Schedules - Practice and Provider");
+					return Lans.g("enumPermissions","Schedules - Practice and Provider");
 				case Permissions.SecurityAdmin:
-					return Lan.g("enumPermissions","Security Admin");
+					return Lans.g("enumPermissions","Security Admin");
 				case Permissions.Setup:
-					return Lan.g("enumPermissions","Setup - Covers a wide variety of setup functions");
+					return Lans.g("enumPermissions","Setup - Covers a wide variety of setup functions");
 				case Permissions.TimecardsEditAll:
-					return Lan.g("enumPermissions","Edit All Timecards");
+					return Lans.g("enumPermissions","Edit All Timecards");
 				case Permissions.TPModule:
-					return Lan.g("enumPermissions","TreatmentPlan Module");
+					return Lans.g("enumPermissions","TreatmentPlan Module");
 				case Permissions.UserQuery:
-					return Lan.g("enumPermissions","User Query");
+					return Lans.g("enumPermissions","User Query");
 			}
 			return "";//should never happen
 		}

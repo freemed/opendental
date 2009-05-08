@@ -376,7 +376,7 @@ namespace OpenDentBusiness {
 				excludeUserNum=user.UserNum;//it's ok if the name matches the current username
 			}
 			if(!IsUserNameUnique(user.UserName,excludeUserNum)){
-				throw new Exception(Lan.g("Userods","UserName already in use."));
+				throw new Exception(Lans.g("Userods","UserName already in use."));
 			}
 			//make sure that there would still be at least one user with security admin permissions
 			if(!isNew){
@@ -391,7 +391,7 @@ namespace OpenDentBusiness {
 						+" AND userod.IsHidden =0"
 						+" AND userod.UserNum != "+POut.PInt(user.UserNum);
 					if(Db.GetCount(command)=="0"){//there are no other users with this permission
-						throw new Exception(Lan.g("Users","At least one user must have Security Admin permission."));
+						throw new Exception(Lans.g("Users","At least one user must have Security Admin permission."));
 					}
 				}
 			}
@@ -402,7 +402,7 @@ namespace OpenDentBusiness {
 			if(Db.GetCount(command)!="0"//if this user is admin
 				&& user.IsHidden)//and hidden
 			{
-				throw new Exception(Lan.g("Userods","Admins cannot be hidden."));
+				throw new Exception(Lans.g("Userods","Admins cannot be hidden."));
 			}
 			if(isNew){
 				Insert(user);

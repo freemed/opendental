@@ -114,13 +114,13 @@ namespace OpenDentBusiness {
 		public static void MoveUp(int selected,SigElementDef[] subList){
 			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
-				throw new ApplicationException(Lan.g("SigElementDefs","Please select an item first."));
+				throw new ApplicationException(Lans.g("SigElementDefs","Please select an item first."));
 			}
 			if(selected==0) {//already at top
 				return;
 			}
 			if(selected>subList.Length-1){
-				throw new ApplicationException(Lan.g("SigElementDefs","Invalid selection."));
+				throw new ApplicationException(Lans.g("SigElementDefs","Invalid selection."));
 			}
 			SetOrder(selected-1,subList[selected].ItemOrder,subList);
 			SetOrder(selected,subList[selected].ItemOrder-1,subList);
@@ -131,13 +131,13 @@ namespace OpenDentBusiness {
 		public static void MoveDown(int selected,SigElementDef[] subList) {
 			//No need to check RemotingRole; no call to db.
 			if(selected<0) {
-				throw new ApplicationException(Lan.g("SigElementDefs","Please select an item first."));
+				throw new ApplicationException(Lans.g("SigElementDefs","Please select an item first."));
 			}
 			if(selected==subList.Length-1){//already at bottom
 				return;
 			}
 			if(selected>subList.Length-1) {
-				throw new ApplicationException(Lan.g("SigElementDefs","Invalid selection."));
+				throw new ApplicationException(Lans.g("SigElementDefs","Invalid selection."));
 			}
 			SetOrder(selected+1,subList[selected].ItemOrder,subList);
 			SetOrder(selected,subList[selected].ItemOrder+1,subList);

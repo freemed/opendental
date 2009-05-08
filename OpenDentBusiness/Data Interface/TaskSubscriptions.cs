@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 				+"WHERE UserNum="+POut.PInt(userNum)
 				+" AND TaskListNum="+POut.PInt(taskListNum);
 			if(Db.GetCount(command)!="0"){
-				throw new ApplicationException(Lan.g("TaskSubscriptions","User already subscribed."));
+				throw new ApplicationException(Lans.g("TaskSubscriptions","User already subscribed."));
 			}
 			TaskSubscription subsc=new TaskSubscription();
 			subsc.UserNum=userNum;
@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				+"WHERE UserNum="+POut.PInt(userNum)
 				+" AND TaskNum="+POut.PInt(taskNum);
 			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lan.g("TaskSubscriptions","User already subscribed."));
+				throw new ApplicationException(Lans.g("TaskSubscriptions","User already subscribed."));
 			}
 			TaskSubscription subsc=new TaskSubscription();
 			subsc.UserNum=userNum;

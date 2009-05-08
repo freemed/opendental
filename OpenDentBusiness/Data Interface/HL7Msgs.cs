@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
 			}
 			if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("HL7Msgs","HL7Msg is already in use by patient(s). Not allowed to delete. ")+pats);
+				throw new ApplicationException(Lans.g("HL7Msgs","HL7Msg is already in use by patient(s). Not allowed to delete. ")+pats);
 			}
 			DataObjectFactory<HL7Msg>.DeleteObject(HL7MsgNum);
 		}

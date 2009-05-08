@@ -201,13 +201,13 @@ namespace OpenDental {
 			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.MySQLTables(verbose);
-			if(!DatabaseMaintenance.success) {
+			if(!DatabaseMaintenance.GetSuccess()) {
 				Cursor=Cursors.Default;
 				return;
 			}
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.OracleSequences(verbose);
-			if(!DatabaseMaintenance.success) {
+			if(!DatabaseMaintenance.GetSuccess()) {
 				Cursor=Cursors.Default;
 				return;
 			}

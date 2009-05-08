@@ -124,7 +124,7 @@ namespace OpenDentBusiness{
 			string command="SELECT COUNT(*) FROM paysplit WHERE PayPlanNum="+plan.PayPlanNum.ToString();
 			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException
-					(Lan.g("PayPlans","You cannot delete a payment plan with payments attached.  Unattach the payments first."));
+					(Lans.g("PayPlans","You cannot delete a payment plan with payments attached.  Unattach the payments first."));
 			}
 			command="DELETE FROM payplancharge WHERE PayPlanNum="+plan.PayPlanNum.ToString();
 			Db.NonQ(command);

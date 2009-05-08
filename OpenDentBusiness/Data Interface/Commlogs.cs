@@ -146,16 +146,16 @@ namespace OpenDentBusiness{
 			com.SentOrReceived=CommSentOrReceived.Sent;
 			com.Note="";
 			if(numberOfReminders==0){
-				com.Note=Lan.g("FormRecallList","Sent recall notice.");
+				com.Note=Lans.g("FormRecallList","Sent recall notice.");
 			}
 			else if(numberOfReminders==1) {
-				com.Note=Lan.g("FormRecallList","Sent second recall notice.");
+				com.Note=Lans.g("FormRecallList","Sent second recall notice.");
 			}
 			else if(numberOfReminders==2) {
-				com.Note=Lan.g("FormRecallList","Sent third recall notice.");
+				com.Note=Lans.g("FormRecallList","Sent third recall notice.");
 			}
 			else {
-				com.Note=Lan.g("FormRecallList","Sent recall notice:")+" "+(numberOfReminders+1).ToString();
+				com.Note=Lans.g("FormRecallList","Sent recall notice:")+" "+(numberOfReminders+1).ToString();
 			}
 			com.UserNum=Security.CurUser.UserNum;
 			Insert(com);

@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
 			}
 			if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("plannedAppts","plannedAppt is already in use by patient(s). Not allowed to delete. ")+pats);
+				throw new ApplicationException(Lans.g("plannedAppts","plannedAppt is already in use by patient(s). Not allowed to delete. ")+pats);
 			}
 			DataObjectFactory<plannedAppt>.DeleteObject(plannedApptNum);
 		}*/

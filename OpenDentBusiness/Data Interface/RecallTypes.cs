@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
 			}
 			if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("RecallTypes","RecallType is already in use by patient(s). Not allowed to delete. ")+pats);
+				throw new ApplicationException(Lans.g("RecallTypes","RecallType is already in use by patient(s). Not allowed to delete. ")+pats);
 			}
 			DataObjectFactory<RecallType>.DeleteObject(RecallTypeNum);
 		}*/
@@ -180,13 +180,13 @@ namespace OpenDentBusiness{
 		public static string GetSpecialTypeStr(int recallTypeNum){
 			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
-				return Lan.g("FormRecallTypeEdit","Prophy");
+				return Lans.g("FormRecallTypeEdit","Prophy");
 			}
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")){
-				return Lan.g("FormRecallTypeEdit","ChildProphy");
+				return Lans.g("FormRecallTypeEdit","ChildProphy");
 			}
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")){
-				return Lan.g("FormRecallTypeEdit","Perio");
+				return Lans.g("FormRecallTypeEdit","Perio");
 			}
 			return "";
 		}

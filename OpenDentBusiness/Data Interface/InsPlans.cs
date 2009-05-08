@@ -166,7 +166,7 @@ namespace OpenDentBusiness {
 				retPlan=Refresh(planNum);//retPlan will now be null if not found
 			}
 			if(retPlan==null) {
-				//MessageBox.Show(Lan.g("InsPlans","Database is inconsistent.  Please run the database maintenance tool."));
+				//MessageBox.Show(Lans.g("InsPlans","Database is inconsistent.  Please run the database maintenance tool."));
 				return new InsPlan();
 			}
 			if(retPlan==null) {

@@ -69,7 +69,7 @@ namespace OpenDental.Imaging {
 					ImageStore.UpdatePatient(Patient, PatOld);
 				}
 				catch {
-					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
+					throw new Exception(Lans.g("ContrDocs", "Error.  Could not create folder for patient. "));
 				}
 			}
 			else {//patient folder already created once
@@ -83,7 +83,7 @@ namespace OpenDental.Imaging {
 					Directory.CreateDirectory(patFolder);
 				}
 				catch {
-					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
+					throw new Exception(Lans.g("ContrDocs", "Error.  Could not create folder for patient. "));
 				}
 			}
 			//now find all files in the patient folder that are not in the db and add them
@@ -170,7 +170,7 @@ namespace OpenDental.Imaging {
 				File.Delete(srcFile);
 			}
 			else if(verbose) {
-				Debug.WriteLine(Lan.g("ContrDocs", "File could not be found. It may have already been deleted."));
+				Debug.WriteLine(Lans.g("ContrDocs", "File could not be found. It may have already been deleted."));
 			}
 		}
 		#endregion

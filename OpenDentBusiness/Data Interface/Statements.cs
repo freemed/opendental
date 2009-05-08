@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			//string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
 			//int count=PIn.PInt(Db.GetCount(command));
 			//if(count>0){
-			//	throw new ApplicationException(Lan.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
+			//	throw new ApplicationException(Lans.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			//}
 			DataObjectFactory<Statement>.DeleteObject(statement);
 		}
@@ -172,7 +172,7 @@ namespace OpenDentBusiness{
 					row["lastStatement"]=lastStatement.ToShortDateString();
 				}
 				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
-				row["mode"]=Lan.g("enumStatementMode",mode.ToString());
+				row["mode"]=Lans.g("enumStatementMode",mode.ToString());
 				pat=new Patient();
 				pat.LName=rawTable.Rows[i]["LName"].ToString();
 				pat.FName=rawTable.Rows[i]["FName"].ToString();

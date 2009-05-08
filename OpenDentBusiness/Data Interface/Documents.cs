@@ -298,7 +298,7 @@ namespace OpenDentBusiness {
 					Directory.CreateDirectory(thumbPath);
 				}
 				catch {
-					throw new ImageStoreCreationException(Lan.g("Documents","Error.  Could not create thumbnails folder. "));
+					throw new ImageStoreCreationException(Lans.g("Documents","Error.  Could not create thumbnails folder. "));
 				}
 			}
 			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName });

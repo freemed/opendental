@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 		public static void InsertOrUpdate(Operatory op, bool IsNew){
 			//No need to check RemotingRole; no call to db.
 			//if(){
-				//throw new ApplicationException(Lan.g(this,""));
+				//throw new ApplicationException(Lans.g(this,""));
 			//}
 			if(IsNew){
 				Insert(op);

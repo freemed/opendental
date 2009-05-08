@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		public string GetLongDesc(){
 			string retval=Abbr+" - "+LName+", "+FName;
 			if(IsHidden){
-				retval+=" "+Lan.g("Providers","(hidden)");
+				retval+=" "+Lans.g("Providers","(hidden)");
 			}
 			return retval;
 		}

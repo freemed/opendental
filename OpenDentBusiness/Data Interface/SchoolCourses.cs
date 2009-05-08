@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 		public static void InsertOrUpdate(SchoolCourse sc, bool isNew){
 			//No need to check RemotingRole; no call to db.
 			//if(IsRepeating && DateTask.Year>1880){
-			//	throw new Exception(Lan.g(this,"Task cannot be tagged repeating and also have a date."));
+			//	throw new Exception(Lans.g(this,"Task cannot be tagged repeating and also have a date."));
 			//}
 			if(isNew){
 				Insert(sc);
@@ -112,14 +112,14 @@ namespace OpenDentBusiness{
 				+POut.PInt(courseNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
-				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'requirements needed' table."));
+				throw new Exception(Lans.g("SchoolCourses","Course already in use by 'requirements needed' table."));
 			}
 			//check for attached reqstudents--------------------------------------------------------------------------
 			command="SELECT COUNT(*) FROM reqstudent WHERE SchoolCourseNum = '"
 				+POut.PInt(courseNum)+"'";
 			table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
-				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'student requirements' table."));
+				throw new Exception(Lans.g("SchoolCourses","Course already in use by 'student requirements' table."));
 			}
 			//delete---------------------------------------------------------------------------------------------
 			command= "DELETE from schoolcourse WHERE SchoolCourseNum = '"

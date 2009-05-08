@@ -286,10 +286,10 @@ namespace OpenDentBusiness{
 					rangebegin=toothArray[i].Split('-')[0];
 					rangeend=toothArray[i].Split('-')[1];
 					if(!IsValidEntry(rangebegin)) {
-						throw new ApplicationException(rangebegin+" "+Lan.g("Tooth","is not a valid tooth number."));
+						throw new ApplicationException(rangebegin+" "+Lans.g("Tooth","is not a valid tooth number."));
 					}
 					if(!IsValidEntry(rangeend)) {
-						throw new ApplicationException(rangeend+" "+Lan.g("Tooth","is not a valid tooth number."));
+						throw new ApplicationException(rangeend+" "+Lans.g("Tooth","is not a valid tooth number."));
 					}
 					beginint=Tooth.ToOrdinal(GetToothId(rangebegin));
 					endint=Tooth.ToInt(GetToothId(rangeend));
@@ -303,7 +303,7 @@ namespace OpenDentBusiness{
 				}
 				else{
 					if(!IsValidEntry(toothArray[i])){
-						throw new ApplicationException(toothArray[i]+" "+Lan.g("Tooth","is not a valid tooth number."));
+						throw new ApplicationException(toothArray[i]+" "+Lans.g("Tooth","is not a valid tooth number."));
 					}
 					toothList.Add(Tooth.GetToothId(toothArray[i]));
 				}

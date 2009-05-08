@@ -158,7 +158,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			LanList=Lan.GetListForCat(ClassType);
+			LanList=Lans.GetListForCat(ClassType);
 			ListForType=LanguageForeigns.GetListForType(ClassType);
 			LanguageForeigns.Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 			gridLan.BeginUpdate();
@@ -228,7 +228,7 @@ namespace OpenDental{
 			for(int i=0;i<gridLan.SelectedIndices.Length;i++){
 				strList.Add(LanList[gridLan.SelectedIndices[i]].English);
 			}
-			Lan.DeleteItems(ClassType,strList.ToArray());
+			Lans.DeleteItems(ClassType,strList);
 			FillGrid();
 		}
 
@@ -247,7 +247,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"All unused rows have already been deleted.");
 				return;
 			}
-			Lan.DeleteItems(ClassType,strList.ToArray());
+			Lans.DeleteItems(ClassType,strList);
 			FillGrid();
 		}
 

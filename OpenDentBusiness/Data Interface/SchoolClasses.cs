@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 		public static void InsertOrUpdate(SchoolClass sc, bool isNew){
 			//No need to check RemotingRole; no call to db.
 			//if(IsRepeating && DateTask.Year>1880){
-			//	throw new Exception(Lan.g(this,"Task cannot be tagged repeating and also have a date."));
+			//	throw new Exception(Lans.g(this,"Task cannot be tagged repeating and also have a date."));
 			//}
 			if(isNew){
 				Insert(sc);
@@ -113,14 +113,14 @@ namespace OpenDentBusiness{
 				+POut.PInt(classNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0"){
-				throw new Exception(Lan.g("SchoolClasses","Class already in use by providers."));
+				throw new Exception(Lans.g("SchoolClasses","Class already in use by providers."));
 			}
 			//check for attached reqneededs.
 			command="SELECT COUNT(*) FROM reqneeded WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";
 			table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
-				throw new Exception(Lan.g("SchoolClasses","Class already in use by 'requirements needed' table."));
+				throw new Exception(Lans.g("SchoolClasses","Class already in use by 'requirements needed' table."));
 			}
 			command= "DELETE from schoolclass WHERE SchoolClassNum = '"
 				+POut.PInt(classNum)+"'";

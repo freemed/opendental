@@ -237,15 +237,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			if(sched.StartTime.TimeOfDay > sched.StopTime.TimeOfDay){
-				throw new Exception(Lan.g("Schedule","Stop time must be later than start time."));
+				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 			}
 			if(sched.StartTime.TimeOfDay+TimeSpan.FromMinutes(5) > sched.StopTime.TimeOfDay
 				&& sched.Status==SchedStatus.Open)
 			{
-				throw new Exception(Lan.g("Schedule","Stop time cannot be the same as the start time."));
+				throw new Exception(Lans.g("Schedule","Stop time cannot be the same as the start time."));
 			}
 			if(Overlaps(sched)){
-				throw new Exception(Lan.g("Schedule","Cannot overlap another time block."));
+				throw new Exception(Lans.g("Schedule","Cannot overlap another time block."));
 			}
 			if(isNew){
 				Insert(sched);
@@ -523,7 +523,7 @@ namespace OpenDentBusiness{
 						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2") {//if holiday
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday:");
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lans.g("Schedules","Holiday:");
 						}
 					}
 					else{
@@ -536,7 +536,7 @@ namespace OpenDentBusiness{
 						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2"){//if holiday
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday:");//+raw.Rows[i]["Note"].ToString();
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lans.g("Schedules","Holiday:");//+raw.Rows[i]["Note"].ToString();
 						}
 						else{//note
 							if(raw.Rows[i]["Abbr"].ToString()!=""){
@@ -595,7 +595,7 @@ namespace OpenDentBusiness{
 			}
 			for(int i=0;i<SchedList.Count;i++){
 				if(SchedList[i].StartTime.TimeOfDay > SchedList[i].StopTime.TimeOfDay) {
-					throw new Exception(Lan.g("Schedule","Stop time must be later than start time."));
+					throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 				}
 			}
 			//make deleted entries for synch purposes:

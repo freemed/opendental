@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 				row["OfficeSequenceNumber"]=table.Rows[i]["OfficeSequenceNumber"].ToString();
 				row["CarrierTransCounter"]=table.Rows[i]["CarrierTransCounter"].ToString();
 				row["Etype"]=table.Rows[i]["Etype"].ToString();
-				etype=Lan.g("enumEtransType",((EtransType)PIn.PInt(table.Rows[i]["Etype"].ToString())).ToString());
+				etype=Lans.g("enumEtransType",((EtransType)PIn.PInt(table.Rows[i]["Etype"].ToString())).ToString());
 				if(etype.EndsWith("_CA")){
 					etype=etype.Substring(0,etype.Length-3);
 				}
@@ -64,10 +64,10 @@ namespace OpenDentBusiness{
 				row["ClaimNum"]=table.Rows[i]["ClaimNum"].ToString();
 				row["EtransNum"]=table.Rows[i]["EtransNum"].ToString();
 				if(table.Rows[i]["AckCode"].ToString()=="A"){
-					row["ack"]=Lan.g("Etrans","Accepted");
+					row["ack"]=Lans.g("Etrans","Accepted");
 				}
 				else if(table.Rows[i]["AckCode"].ToString()=="R") {
-					row["ack"]=Lan.g("Etrans","Rejected");
+					row["ack"]=Lans.g("Etrans","Rejected");
 				}
 				row["Note"]=table.Rows[i]["Note"].ToString();
 				tHist.Rows.Add(row);

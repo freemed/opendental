@@ -340,7 +340,7 @@
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Imaging\SqlStore.cs" />
-    <Compile Include="Lan.cs" />
+    <Compile Include="Data Interface\Lans.cs" />
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />

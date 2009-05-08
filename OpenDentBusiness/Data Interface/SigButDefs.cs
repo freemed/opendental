@@ -186,7 +186,7 @@ namespace OpenDentBusiness {
 		public static void MoveDown(SigButDef selected,SigButDef[] subList) {
 			//No need to check RemotingRole; no call to db.
 			if(selected.ButtonIndex==20) {
-				throw new ApplicationException(Lan.g("SigButDefs","Max 20 buttons."));
+				throw new ApplicationException(Lans.g("SigButDefs","Max 20 buttons."));
 			}
 			SigButDef occupied=null;
 			for(int i=0;i<subList.Length;i++) {

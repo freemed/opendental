@@ -134,17 +134,17 @@ namespace OpenDentBusiness{
 			//schedule.EmployeeNum will not block deletion
 			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum);
 			if(Db.GetCount(command)!="0"){
-				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached clock events."));
 			}
 			command="SELECT COUNT(*) FROM timeadjust WHERE EmployeeNum="+POut.PInt(employeeNum);
 			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached time adjustments."));
 			}
 			command="SELECT COUNT(*) FROM userod WHERE EmployeeNum="+POut.PInt(employeeNum);
 			if(Db.GetCount(command)!="0") {
-				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached user."));
 			}
 			command="UPDATE appointment SET Assistant=0 WHERE Assistant="+POut.PInt(employeeNum);

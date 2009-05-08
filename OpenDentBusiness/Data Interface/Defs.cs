@@ -126,7 +126,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT COUNT(*) FROM supply WHERE Category="+POut.PInt(def.DefNum);
 			if(Db.GetCount(command)!="0"){
-				throw new ApplicationException(Lan.g("Defs","Def is in use.  Not allowed to delete."));
+				throw new ApplicationException(Lans.g("Defs","Def is in use.  Not allowed to delete."));
 			}
 			command="DELETE FROM definition WHERE DefNum="+POut.PInt(def.DefNum);
 			Db.NonQ(command);

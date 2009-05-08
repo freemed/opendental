@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				names+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
 			}
 			if(table.Rows.Count>0){
-				throw new ApplicationException(Lan.g("sheetDefs","SheetDef is already in use by referrals(s). Not allowed to delete. ")+names);
+				throw new ApplicationException(Lans.g("sheetDefs","SheetDef is already in use by referrals(s). Not allowed to delete. ")+names);
 			}
 			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDefNum);
 			Db.NonQ(command);

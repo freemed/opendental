@@ -274,13 +274,13 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			//check for duplicate trunk?
 			if(tlist.IsRepeating && tlist.DateTL.Year>1880){
-				throw new Exception(Lan.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
+				throw new Exception(Lans.g("TaskLists","TaskList cannot be tagged repeating and also have a date."));
 			}
 			if(tlist.Parent==0 && tlist.DateTL.Year>1880 && tlist.DateType==TaskDateType.None){//it would not show anywhere, so it would be 'lost'
-				throw new Exception(Lan.g("TaskLists","A TaskList with a date must also have a type selected."));
+				throw new Exception(Lans.g("TaskLists","A TaskList with a date must also have a type selected."));
 			}
 			if(tlist.IsRepeating && tlist.Parent!=0 && tlist.DateType!=TaskDateType.None){//In repeating, children not allowed to repeat.
-				throw new Exception(Lan.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
+				throw new Exception(Lans.g("TaskLists","In repeating tasklists, only the main parents can have a task status."));
 			}
 			if(isNew){
 				Insert(tlist);
@@ -299,17 +299,17 @@ namespace OpenDentBusiness{
 			string command="SELECT COUNT(*) FROM tasklist WHERE Parent="+POut.PInt(tlist.TaskListNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
-				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it still has child lists attached."));
+				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it still has child lists attached."));
 			}
 			command="SELECT COUNT(*) FROM task WHERE TaskListNum="+POut.PInt(tlist.TaskListNum);
 			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
-				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it still has child tasks attached."));
+				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it still has child tasks attached."));
 			}
 			command="SELECT COUNT(*) FROM userod WHERE TaskListInBox="+POut.PInt(tlist.TaskListNum);
 			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
-				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it is attached to a user inbox."));
+				throw new Exception(Lans.g("TaskLists","Not allowed to delete task list because it is attached to a user inbox."));
 			}
 			command= "DELETE from tasklist WHERE TaskListNum = '"
 				+POut.PInt(tlist.TaskListNum)+"'";

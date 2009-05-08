@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 		public static void SetParameter(Sheet sheet,string paramName,object paramValue){
 			SheetParameter param=GetParamByName(sheet.Parameters,paramName);
 			if(param==null){
-				throw new ApplicationException(Lan.g("Sheet","Parameter not found: ")+paramName);
+				throw new ApplicationException(Lans.g("Sheet","Parameter not found: ")+paramName);
 			}
 			param.ParamValue=paramValue;
 		}

@@ -160,7 +160,7 @@ namespace OpenDentBusiness{
 			if(table.Rows[0][0].ToString()!="0"//if claimpayment is already attached to a deposit
 				&& PIn.PDouble(table.Rows[0][1].ToString())!=cp.CheckAmt)//and checkAmt changes
 			{
-				throw new ApplicationException(Lan.g("ClaimPayments","Not allowed to change the amount on checks attached to deposits."));
+				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to change the amount on checks attached to deposits."));
 			}
 			command="UPDATE claimpayment SET "
 				+"checkdate = "   +POut.PDate  (cp.CheckDate)+" "
@@ -190,7 +190,7 @@ namespace OpenDentBusiness{
 			}
 			if(table.Rows[0][0].ToString()!="0"){//if claimpayment is already attached to a deposit
 				#if !DEBUG
-				throw new ApplicationException(Lan.g("ClaimPayments","Not allowed to delete a payment attached to a deposit."));
+				throw new ApplicationException(Lans.g("ClaimPayments","Not allowed to delete a payment attached to a deposit."));
 				#endif
 			}
 			command= "UPDATE claimproc SET "

@@ -66,7 +66,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void InsertOrUpdate(Instructor instr, bool isNew){
 			//if(IsRepeating && DateTask.Year>1880){
-			//	throw new Exception(Lan.g(this,"Task cannot be tagged repeating and also have a date."));
+			//	throw new Exception(Lans.g(this,"Task cannot be tagged repeating and also have a date."));
 			//}
 			if(isNew){
 				Insert(instr);

@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//this should never happen
-				throw new InvalidProgramException(Lan.g("TreatPlans","Cannot delete treatment plan because it has ProcTP's attached"));
+				throw new InvalidProgramException(Lans.g("TreatPlans","Cannot delete treatment plan because it has ProcTP's attached"));
 			}
 			command= "DELETE from treatplan WHERE TreatPlanNum = '"+POut.PInt(tp.TreatPlanNum)+"'";
  			Db.NonQ(command);

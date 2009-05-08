@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void InsertOrUpdate(Appointment appt,Appointment oldApt,bool IsNew) {
 			//if(){
-			//throw new Exception(Lan.g(this,""));
+			//throw new Exception(Lans.g(this,""));
 			//}
 			if(IsNew) {
 				Insert(appt);
@@ -575,24 +575,24 @@ namespace OpenDentBusiness{
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PInt(rawtable.Rows[i]["Confirmed"].ToString()));
 				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
 				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormConfirmList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.WkPhone) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormConfirmList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.WirelessPh) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
+					row["contactMethod"]=Lans.g("FormConfirmList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
 				}
 				if(contmeth==ContactMethod.Email) {
 					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
 				}
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
-					row["contactMethod"]=Lan.g("enumContactMethod",contmeth.ToString());
+					row["contactMethod"]=Lans.g("enumContactMethod",contmeth.ToString());
 				}
 				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
 				row["medNotes"]="";
 				if(rawtable.Rows[i]["Premed"].ToString()=="1"){
-					row["medNotes"]=Lan.g("FormConfirmList","Premedicate");
+					row["medNotes"]=Lans.g("FormConfirmList","Premedicate");
 				}
 				if(rawtable.Rows[i]["MedUrgNote"].ToString()!=""){
 					if(row["medNotes"].ToString()!="") {
@@ -916,12 +916,12 @@ namespace OpenDentBusiness{
 				row=table.NewRow();
 				row["addrNote"]="";
 				if(raw.Rows[i]["AddrNote"].ToString()!=""){
-					row["addrNote"]=Lan.g("Appointments","AddrNote: ")+raw.Rows[i]["AddrNote"].ToString();
+					row["addrNote"]=Lans.g("Appointments","AddrNote: ")+raw.Rows[i]["AddrNote"].ToString();
 				}
 				aptDate=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
 				row["AptDateTime"]=aptDate;
 				birthdate=PIn.PDate(raw.Rows[i]["Birthdate"].ToString());
-				row["age"]=Lan.g("Appointments","Age: ");
+				row["age"]=Lans.g("Appointments","Age: ");
 				if(birthdate.Year>1880){
 					row["age"]+=PatientLogic.DateToAgeString(birthdate);
 				}
@@ -930,7 +930,7 @@ namespace OpenDentBusiness{
 				}
 				row["apptModNote"]="";
 				if(raw.Rows[i]["ApptModNote"].ToString()!="") {
-					row["apptModNote"]=Lan.g("Appointments","ApptModNote: ")+raw.Rows[i]["ApptModNote"].ToString();
+					row["apptModNote"]=Lans.g("Appointments","ApptModNote: ")+raw.Rows[i]["ApptModNote"].ToString();
 				}
 				row["aptDate"]=aptDate.ToShortDateString();
 				row["aptDay"]=aptDate.ToString("dddd");
@@ -938,15 +938,15 @@ namespace OpenDentBusiness{
 				hours=span.Hours;
 				minutes=span.Minutes;
 				if(hours==0){
-					row["aptLength"]=minutes.ToString()+Lan.g("Appointments"," Min");
+					row["aptLength"]=minutes.ToString()+Lans.g("Appointments"," Min");
 				}
 				else if(hours==1){
-					row["aptLength"]=hours.ToString()+Lan.g("Appointments"," Hr, ")
-						+minutes.ToString()+Lan.g("Appointments"," Min");
+					row["aptLength"]=hours.ToString()+Lans.g("Appointments"," Hr, ")
+						+minutes.ToString()+Lans.g("Appointments"," Min");
 				}
 				else{
-					row["aptLength"]=hours.ToString()+Lan.g("Appointments"," Hrs, ")
-						+minutes.ToString()+Lan.g("Appointments"," Min");
+					row["aptLength"]=hours.ToString()+Lans.g("Appointments"," Hrs, ")
+						+minutes.ToString()+Lans.g("Appointments"," Min");
 				}
 				row["aptTime"]=aptDate.ToShortTimeString();
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
@@ -965,21 +965,21 @@ namespace OpenDentBusiness{
 				row["Confirmed"]=raw.Rows[i]["Confirmed"].ToString();
 				row["contactMethods"]="";
 				if(raw.Rows[i]["PreferConfirmMethod"].ToString()!="0"){
-					row["contactMethods"]+=Lan.g("Appointments","Confirm Method: ")
+					row["contactMethods"]+=Lans.g("Appointments","Confirm Method: ")
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferConfirmMethod"].ToString())).ToString();
 				}
 				if(raw.Rows[i]["PreferContactMethod"].ToString()!="0"){
 					if(row["contactMethods"].ToString()!="") {
 						row["contactMethods"]+="\r\n";
 					}
-					row["contactMethods"]+=Lan.g("Appointments","Contact Method: ")
+					row["contactMethods"]+=Lans.g("Appointments","Contact Method: ")
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferContactMethod"].ToString())).ToString();
 				}
 				if(raw.Rows[i]["PreferRecallMethod"].ToString()!="0"){
 					if(row["contactMethods"].ToString()!="") {
 						row["contactMethods"]+="\r\n";
 					}
-					row["contactMethods"]+=Lan.g("Appointments","Recall Method: ")
+					row["contactMethods"]+=Lans.g("Appointments","Recall Method: ")
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
 				bool InsToSend=false;
@@ -1004,37 +1004,37 @@ namespace OpenDentBusiness{
 				}
 				row["famFinUrgNote"]="";
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
-					row["famFinUrgNote"]=Lan.g("Appointments","FamFinUrgNote: ")+raw.Rows[i]["FamFinUrgNote"].ToString();
+					row["famFinUrgNote"]=Lans.g("Appointments","FamFinUrgNote: ")+raw.Rows[i]["FamFinUrgNote"].ToString();
 				}
-				row["hmPhone"]=Lan.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
+				row["hmPhone"]=Lans.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
 				row["insurance"]="";
 				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
-					row["insurance"]=Lan.g("Appointments","Insured");
+					row["insurance"]=Lans.g("Appointments","Insured");
 				}
 				row["IsHygiene"]=raw.Rows[i]["IsHygiene"].ToString();
 				row["lab"]="";
 				if(raw.Rows[i]["LabCaseNum"].ToString()!=""){
 					labDate=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
 					if(labDate.Year>1880) {
-						row["lab"]=Lan.g("Appointments","Lab Quality Checked");
+						row["lab"]=Lans.g("Appointments","Lab Quality Checked");
 					}
 					else {
 						labDate=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
 						if(labDate.Year>1880) {
-							row["lab"]=Lan.g("Appointments","Lab Received");
+							row["lab"]=Lans.g("Appointments","Lab Received");
 						}
 						else {
 							labDate=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
 							if(labDate.Year>1880) {
-								row["lab"]=Lan.g("Appointments","Lab Sent");//sent but not received
+								row["lab"]=Lans.g("Appointments","Lab Sent");//sent but not received
 							}
 							else {
-								row["lab"]=Lan.g("Appointments","Lab Not Sent");
+								row["lab"]=Lans.g("Appointments","Lab Not Sent");
 							}
 							labDueDate=PIn.PDateT(raw.Rows[i]["DateTimeDue"].ToString());
 							if(labDueDate.Year>1880) {
-								row["lab"]+=", "+Lan.g("Appointments","Due: ")//+dateDue.ToString("ddd")+" "
+								row["lab"]+=", "+Lans.g("Appointments","Due: ")//+dateDue.ToString("ddd")+" "
 									+labDueDate.ToShortDateString();//+" "+dateDue.ToShortTimeString();
 							}
 						}
@@ -1061,7 +1061,7 @@ namespace OpenDentBusiness{
 				row["Pattern"]=raw.Rows[i]["Pattern"].ToString();
 				row["preMedFlag"]="";
 				if(raw.Rows[i]["Premed"].ToString()=="1"){
-					row["preMedFlag"]=Lan.g("Appointments","Premedicate");
+					row["preMedFlag"]=Lans.g("Appointments","Premedicate");
 				}
 				row["procs"]="";
 				for(int p=0;p<rawProc.Rows.Count;p++){
@@ -1115,8 +1115,8 @@ namespace OpenDentBusiness{
 				}
 				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
 				row["ProvHyg"]=raw.Rows[i]["ProvHyg"].ToString();
-				row["wirelessPhone"]=Lan.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
-				row["wkPhone"]=Lan.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
+				row["wirelessPhone"]=Lans.g("Appointments","Cell: ")+raw.Rows[i]["WirelessPhone"].ToString();
+				row["wkPhone"]=Lans.g("Appointments","Wk: ")+raw.Rows[i]["WkPhone"].ToString();
 				table.Rows.Add(row);
 			}
 			return table;
@@ -1308,59 +1308,59 @@ namespace OpenDentBusiness{
 			DataRow row;
 			//Patient Name--------------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Name");
+			row["field"]=Lans.g("FormApptEdit","Name");
 			row["value"]=PatientLogic.GetNameLF(rawPat.Rows[0]["LName"].ToString(),rawPat.Rows[0]["FName"].ToString(),
 				rawPat.Rows[0]["Preferred"].ToString(),rawPat.Rows[0]["MiddleI"].ToString());
 			table.Rows.Add(row);
 			//Patient First Name--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","First Name");
+			row["field"]=Lans.g("FormApptEdit","First Name");
 			row["value"]=rawPat.Rows[0]["FName"];
 			table.Rows.Add(row);
 			//Patient Last name---------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Last Name");
+			row["field"]=Lans.g("FormApptEdit","Last Name");
 			row["value"]=rawPat.Rows[0]["LName"];
 			table.Rows.Add(row);
 			//Patient middle initial----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Middle Initial");
+			row["field"]=Lans.g("FormApptEdit","Middle Initial");
 			row["value"]=rawPat.Rows[0]["MiddleI"];
 			table.Rows.Add(row);
 			//Patient home phone--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Home Phone");
+			row["field"]=Lans.g("FormApptEdit","Home Phone");
 			row["value"]=rawPat.Rows[0]["HmPhone"];
 			table.Rows.Add(row);
 			//Patient work phone--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Work Phone");
+			row["field"]=Lans.g("FormApptEdit","Work Phone");
 			row["value"]=rawPat.Rows[0]["WkPhone"];
 			table.Rows.Add(row);
 			//Patient wireless phone----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Wireless Phone");
+			row["field"]=Lans.g("FormApptEdit","Wireless Phone");
 			row["value"]=rawPat.Rows[0]["WirelessPhone"];
 			table.Rows.Add(row);
 			//Patient credit type-------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Credit Type");
+			row["field"]=Lans.g("FormApptEdit","Credit Type");
 			row["value"]=rawPat.Rows[0]["CreditType"];
 			table.Rows.Add(row);
 			//Patient billing type------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Billing Type");
+			row["field"]=Lans.g("FormApptEdit","Billing Type");
 			row["value"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(rawPat.Rows[0]["BillingType"].ToString()));
 			table.Rows.Add(row);
 			//Patient total balance-----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Total Balance");
+			row["field"]=Lans.g("FormApptEdit","Total Balance");
 			double totalBalance=PIn.PDouble(rawPat.Rows[0]["EstBalance"].ToString());
 			row["value"]=totalBalance.ToString("F");
 			table.Rows.Add(row);
 			//Patient address and phone notes-------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Address and Phone Notes");
+			row["field"]=Lans.g("FormApptEdit","Address and Phone Notes");
 			row["value"]=rawPat.Rows[0]["AddrNote"];
 			table.Rows.Add(row);
 			//Patient family balance----------------------------------------------------------------
@@ -1368,7 +1368,7 @@ namespace OpenDentBusiness{
 				+rawPat.Rows[0]["Guarantor"].ToString()+"'";
 			DataTable familyBalance=Db.GetTable(command);
 			row=table.NewRow();
-			row["field"]=Lan.g("FormApptEdit","Family Balance");
+			row["field"]=Lans.g("FormApptEdit","Family Balance");
 			double balance=PIn.PDouble(familyBalance.Rows[0]["BalTotal"].ToString())
 				-PIn.PDouble(familyBalance.Rows[0]["InsEst"].ToString());
 			row["value"]=balance.ToString("F");
@@ -1376,7 +1376,7 @@ namespace OpenDentBusiness{
 			//Site----------------------------------------------------------------------------------
 			if(!PrefC.GetBool("EasyHidePublicHealth")){
 				row=table.NewRow();
-				row["field"]=Lan.g("FormApptEdit","Site");
+				row["field"]=Lans.g("FormApptEdit","Site");
 				row["value"]=Sites.GetDescription(PIn.PInt(rawPat.Rows[0]["SiteNum"].ToString()));
 				table.Rows.Add(row);
 			}
@@ -1444,7 +1444,7 @@ namespace OpenDentBusiness{
 				row["CodeNum"]=rawProc.Rows[i]["CodeNum"].ToString();
 				row["descript"]="";
 				if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {
-					row["descript"]=Lan.g("FormApptEdit","(other appt)");
+					row["descript"]=Lans.g("FormApptEdit","(other appt)");
 				}
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()==""){
 					row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
@@ -1546,24 +1546,24 @@ namespace OpenDentBusiness{
 				row["labDescript"]=raw.Rows[0]["Description"].ToString();
 				date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
 				if(date.Year>1880){
-					row["labDescript"]+=", "+Lan.g("FormApptEdit","Quality Checked");
+					row["labDescript"]+=", "+Lans.g("FormApptEdit","Quality Checked");
 				}
 				else{
 					date=PIn.PDateT(raw.Rows[0]["DateTimeRecd"].ToString());
 					if(date.Year>1880){
-						row["labDescript"]+=", "+Lan.g("FormApptEdit","Received");
+						row["labDescript"]+=", "+Lans.g("FormApptEdit","Received");
 					}
 					else{
 						date=PIn.PDateT(raw.Rows[0]["DateTimeSent"].ToString());
 						if(date.Year>1880){
-							row["labDescript"]+=", "+Lan.g("FormApptEdit","Sent");//sent but not received
+							row["labDescript"]+=", "+Lans.g("FormApptEdit","Sent");//sent but not received
 						}
 						else{
-							row["labDescript"]+=", "+Lan.g("FormApptEdit","Not Sent");
+							row["labDescript"]+=", "+Lans.g("FormApptEdit","Not Sent");
 						}
 						dateDue=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
 						if(dateDue.Year>1880) {
-							row["labDescript"]+=", "+Lan.g("FormAppEdit","Due: ")+dateDue.ToString("ddd")+" "
+							row["labDescript"]+=", "+Lans.g("FormAppEdit","Due: ")+dateDue.ToString("ddd")+" "
 								+dateDue.ToShortDateString()+" "+dateDue.ToShortTimeString();
 						}
 					}

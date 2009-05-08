@@ -40,14 +40,14 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			if(Security.CurUser==null || !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
 				if(!suppressMessage){
-					MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
+					MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
 				}
 				return false;
 			}
 			if(perm==Permissions.AccountingCreate || perm==Permissions.AccountingEdit){
 				if(date <= PrefC.GetDate("AccountingLockDate")){
 					if(!suppressMessage) {
-						MessageBox.Show(Lan.g("Security","Locked by Administrator."));
+						MessageBox.Show(Lans.g("Security","Locked by Administrator."));
 					}
 					return false;	
 				}
@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 						|| !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,Permissions.SecurityAdmin))//or is not an admin
 					{
 						if(!suppressMessage) {
-							MessageBox.Show(Lan.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
+							MessageBox.Show(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
 						}
 						return false;	
 					}
@@ -94,8 +94,8 @@ namespace OpenDentBusiness{
 				}
 			}
 			if(!suppressMessage){
-				MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"
-					+GroupPermissions.GetDesc(perm)+"\r\n"+Lan.g("Security","Date limitation"));
+				MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"
+					+GroupPermissions.GetDesc(perm)+"\r\n"+Lans.g("Security","Date limitation"));
 			}
 			return false;		
 		}

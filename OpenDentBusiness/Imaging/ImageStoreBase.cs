@@ -83,7 +83,7 @@ namespace OpenDental.Imaging {
 			}
 			catch {
 				//This is a terrible place for this.  Also, it causes an error when loading non-image types. 
-				//MessageBox.Show(Lan.g("ContrDocs", "File not found") + document.FileName);
+				//MessageBox.Show(Lans.g("ContrDocs", "File not found") + document.FileName);
 				return null;
 			}
 		}
@@ -228,7 +228,7 @@ namespace OpenDental.Imaging {
 			string fileName = ODFileUtils.CombinePaths(new string[] {FileStoreSettings.GetPreferredImagePath,
 				"Forms",form});
 			if(!File.Exists(fileName)) {
-				throw new Exception(Lan.g("ContrDocs", "Could not find file: ") + fileName);
+				throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + fileName);
 			}
 			Document doc = new Document();
 			doc.FileName = Path.GetExtension(fileName);
@@ -342,7 +342,7 @@ namespace OpenDental.Imaging {
 				}
 				catch {
 					if(verbose) {
-						Debug.WriteLine(Lan.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
+						Debug.WriteLine(Lans.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
 					}
 				}
 				Documents.Delete(documents[i]);

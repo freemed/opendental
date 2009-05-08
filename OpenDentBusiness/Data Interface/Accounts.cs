@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 			//check to see if account has any journal entries
 			string command="SELECT COUNT(*) FROM journalentry WHERE AccountNum="+POut.PInt(acct.AccountNum);
 			if(Db.GetCount(command)!="0"){
-				throw new ApplicationException(Lan.g("FormAccountEdit",
+				throw new ApplicationException(Lans.g("FormAccountEdit",
 					"Not allowed to delete an account with existing journal entries."));
 			}
 			//Check various preference entries
@@ -107,25 +107,25 @@ namespace OpenDentBusiness{
 			string[] strArray=result.Split(new char[] {','});
 			for(int i=0;i<strArray.Length;i++){
 				if(strArray[i]==acct.AccountNum.ToString()){
-					throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
+					throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
 				}
 			}
 			command="SELECT ValueString FROM preference WHERE PrefName='AccountingIncomeAccount'";
 			result=Db.GetCount(command);
 			if(result==acct.AccountNum.ToString()) {
-				throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
+				throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
 			}
 			command="SELECT ValueString FROM preference WHERE PrefName='AccountingCashIncomeAccount'";
 			result=Db.GetCount(command);
 			if(result==acct.AccountNum.ToString()) {
-				throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
+				throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
 			}
 			//check AccountingAutoPay entries
 			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
 				strArray=((AccountingAutoPay)AccountingAutoPayC.AList[i]).PickList.Split(new char[] { ',' });
 				for(int s=0;s<strArray.Length;s++){
 					if(strArray[s]==acct.AccountNum.ToString()){
-						throw new ApplicationException(Lan.g("FormAccountEdit","Account is in use in the setup section."));
+						throw new ApplicationException(Lans.g("FormAccountEdit","Account is in use in the setup section."));
 					}
 				}
 			}
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
 				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
-				row["type"]=Lan.g("enumAccountType",aType.ToString());
+				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
 				debit=PIn.PDouble(rawTable.Rows[i]["SumDebit"].ToString());
 				credit=PIn.PDouble(rawTable.Rows[i]["SumCredit"].ToString());
@@ -295,8 +295,8 @@ namespace OpenDentBusiness{
 				balance+=credit-debit;
 			}
 			row=table.NewRow();
-			row["type"]=Lan.g("enumAccountType",AccountType.Equity.ToString());
-			row["Description"]=Lan.g("Accounts","Retained Earnings (auto)");
+			row["type"]=Lans.g("enumAccountType",AccountType.Equity.ToString());
+			row["Description"]=Lans.g("Accounts","Retained Earnings (auto)");
 			row["balance"]=balance.ToString("N");
 			row["BankNumber"]="";
 			row["color"]=Color.White.ToArgb();
@@ -319,7 +319,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<rawTable.Rows.Count;i++) {
 				row=table.NewRow();
 				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
-				row["type"]=Lan.g("enumAccountType",aType.ToString());
+				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
 				debit=PIn.PDouble(rawTable.Rows[i]["SumDebit"].ToString());
 				credit=PIn.PDouble(rawTable.Rows[i]["SumCredit"].ToString());

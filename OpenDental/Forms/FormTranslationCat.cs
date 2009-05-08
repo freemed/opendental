@@ -181,7 +181,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			LanList=Lan.GetListCat();
+			LanList=Lans.GetListCat();
 			FillList();
 		}
 

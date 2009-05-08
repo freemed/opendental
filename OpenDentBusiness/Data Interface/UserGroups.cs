@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 				+POut.PInt(group.UserGroupNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
-				throw new Exception(Lan.g("UserGroups","Must move users to another group first."));
+				throw new Exception(Lans.g("UserGroups","Must move users to another group first."));
 			}
 			command= "DELETE FROM usergroup WHERE UserGroupNum='"
 				+POut.PInt(group.UserGroupNum)+"'";

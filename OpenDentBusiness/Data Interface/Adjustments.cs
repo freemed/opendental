@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void InsertOrUpdate(Adjustment adj, bool IsNew){
 			//if(){
-				//throw new Exception(Lan.g(this,""));
+				//throw new Exception(Lans.g(this,""));
 			//}
 			if(IsNew){
 				Insert(adj);

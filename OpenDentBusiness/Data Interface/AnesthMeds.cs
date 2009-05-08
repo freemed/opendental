@@ -49,7 +49,7 @@ namespace OpenDentBusiness
 			int count=PIn.PInt(Db.GetCount(command));
 			if (count > 0)
 			{
-				MessageBox.Show(Lan.g("AnesthMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
+				MessageBox.Show(Lans.g("AnesthMeds", "Anesthetic Medication is already in use. Not allowed to delete."));
 			}
 
 			else
