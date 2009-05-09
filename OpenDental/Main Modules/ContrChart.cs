@@ -4649,7 +4649,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -4767,7 +4767,7 @@ namespace OpenDental{
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
 			Recalls.Synch(PatCur.PatNum);
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
 		}
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
@@ -6418,7 +6418,7 @@ namespace OpenDental{
 				//Tried to move it to the business layer, but too complex for now.
 				//Procedures.SetComplete(
 				//	((Procedure)gridProg.Rows[gridProg.SelectedIndices[i]].Tag).ProcNum,PIn.PDate(textDate.Text));
-				ProcedureL.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			}
 			Recalls.Synch(PatCur.PatNum);
 			//if(skipped>0){

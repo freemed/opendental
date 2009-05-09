@@ -2345,10 +2345,10 @@ namespace OpenDental{
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
 			if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
-				ClaimProcL.ComputeBaseEst(cp,ProcCur,PriSecTot.Pri,PlanList,PatPlanList,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur,PriSecTot.Pri,PlanList,PatPlanList,benList);
 			}
 			else if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,2)){
-				ClaimProcL.ComputeBaseEst(cp,ProcCur,PriSecTot.Sec,PlanList,PatPlanList,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur,PriSecTot.Sec,PlanList,PatPlanList,benList);
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
@@ -2443,7 +2443,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcCur.ProcFee=procFee;
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -2521,7 +2521,7 @@ namespace OpenDental{
 					radioU.Checked=true;
 					break;
 			}
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
       SetControls();
 		}
@@ -2704,7 +2704,7 @@ namespace OpenDental{
 			}
 			//next line is needed to recalc BaseEst, etc, for claimprocs that are no longer NoBillIns
 			//also, if they are NoBillIns, then it clears out the other values.
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -3307,7 +3307,7 @@ namespace OpenDental{
 				{
 					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
 				}
-				ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
 				return;
 			}
 			if(IsNew){//if cancelling on a new procedure

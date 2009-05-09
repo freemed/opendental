@@ -3080,7 +3080,7 @@ namespace OpenDental{
 
 		private void butDrop_Click(object sender,System.EventArgs e) {
 			//should we save the plan info first?  Probably not.
-			PatPlanL.Delete(PatPlanCur.PatPlanNum);//Estimates recomputed within Delete()
+			PatPlans.Delete(PatPlanCur.PatPlanNum);//Estimates recomputed within Delete()
 			//PlanCur.ComputeEstimatesForCur();
 			DialogResult=DialogResult.OK;
 		}
@@ -3881,7 +3881,7 @@ namespace OpenDental{
 				InsPlanL.Delete(PlanCur);//also drops
 			}
 			else if(IsNewPatPlan){//but plan is not new
-				PatPlanL.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
+				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
 		}
 

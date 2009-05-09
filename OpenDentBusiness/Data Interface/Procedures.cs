@@ -1293,6 +1293,180 @@ namespace OpenDentBusiness {
 			AL.CopyTo(retVal);
 			return retVal;
 		}
+
+		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set isInitialEntry true from Chart module; this is for cap procs.</summary>
+		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList) {
+			//No need to check RemotingRole; no call to db.
+			bool doCreate=true;
+			if(proc.ProcDate<DateTime.Today&&proc.ProcStatus==ProcStat.C) {
+				//don't automatically create an estimate for completed procedures
+				//especially if they are older than today
+				//Very important after a conversion from another software.
+				//This may need to be relaxed a little for offices that enter treatment a few days after it's done.
+				doCreate=false;
+			}
+			//first test to see if each estimate matches an existing patPlan (current coverage),
+			//delete any other estimates
+			for(int i=0;i<claimProcs.Count;i++) {
+				if(claimProcs[i].ProcNum!=proc.ProcNum) {
+					continue;
+				}
+				if(claimProcs[i].PlanNum==0) {
+					continue;
+				}
+				if(claimProcs[i].Status==ClaimProcStatus.CapClaim
+					||claimProcs[i].Status==ClaimProcStatus.Preauth
+					||claimProcs[i].Status==ClaimProcStatus.Supplemental) {
+					continue;
+					//ignored: adjustment
+					//included: capComplete,CapEstimate,Estimate,NotReceived,Received
+				}
+				if(claimProcs[i].Status!=ClaimProcStatus.Estimate&&claimProcs[i].Status!=ClaimProcStatus.CapEstimate) {
+					continue;
+				}
+				bool planIsCurrent=false;
+				for(int p=0;p<patPlans.Count;p++) {
+					if(patPlans[p].PlanNum==claimProcs[i].PlanNum) {
+						planIsCurrent=true;
+						break;
+					}
+				}
+				//If claimProc estimate is for a plan that is not current, delete it
+				if(!planIsCurrent) {
+					ClaimProcs.Delete(claimProcs[i]);
+				}
+			}
+			InsPlan PlanCur;
+			bool estExists;
+			bool cpAdded=false;
+			//loop through all patPlans (current coverage), and add any missing estimates
+			for(int p=0;p<patPlans.Count;p++) {//typically, loop will only have length of 1 or 2
+				if(!doCreate) {
+					break;
+				}
+				//test to see if estimate exists
+				estExists=false;
+				for(int i=0;i<claimProcs.Count;i++) {
+					if(claimProcs[i].ProcNum!=proc.ProcNum) {
+						continue;
+					}
+					if(claimProcs[i].PlanNum==0) {
+						continue;
+					}
+					if(claimProcs[i].Status==ClaimProcStatus.CapClaim
+						||claimProcs[i].Status==ClaimProcStatus.Preauth
+						||claimProcs[i].Status==ClaimProcStatus.Supplemental) {
+						continue;
+						//ignored: adjustment
+						//included: capComplete,CapEstimate,Estimate,NotReceived,Received
+					}
+					if(patPlans[p].PlanNum!=claimProcs[i].PlanNum) {
+						continue;
+					}
+					estExists=true;
+					break;
+				}
+				if(estExists) {
+					continue;
+				}
+				//estimate is missing, so add it.
+				ClaimProc cp=new ClaimProc();
+				cp.ProcNum=proc.ProcNum;
+				cp.PatNum=patNum;
+				cp.ProvNum=proc.ProvNum;
+				PlanCur=InsPlans.GetPlan(patPlans[p].PlanNum,PlanList);
+				if(PlanCur==null) {
+					continue;//??
+				}
+				if(PlanCur.PlanType=="c") {
+					if(proc.ProcStatus==ProcStat.C) {
+						cp.Status=ClaimProcStatus.CapComplete;
+					}
+					else {
+						cp.Status=ClaimProcStatus.CapEstimate;//this may be changed below
+					}
+				}
+				else {
+					cp.Status=ClaimProcStatus.Estimate;
+				}
+				cp.PlanNum=PlanCur.PlanNum;
+				cp.DateCP=proc.ProcDate;
+				cp.AllowedOverride=-1;
+				cp.PercentOverride=-1;
+				cp.OverrideInsEst=-1;
+				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.CodeNum).NoBillIns;
+				cp.OverAnnualMax=-1;
+				cp.PaidOtherIns=-1;
+				cp.CopayOverride=-1;
+				cp.ProcDate=proc.ProcDate;
+				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
+				ClaimProcs.Insert(cp);
+				cpAdded=true;
+			}
+			//if any were added, refresh the list
+			if(cpAdded) {
+				claimProcs=ClaimProcs.Refresh(patNum);
+			}
+			for(int i=0;i<claimProcs.Count;i++) {
+				if(claimProcs[i].ProcNum!=proc.ProcNum) {
+					continue;
+				}
+				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
+				//claimProcs[i].DateCP=proc.ProcDate;
+				claimProcs[i].ProcDate=proc.ProcDate;
+				//capitation estimates are always forced to follow the status of the procedure
+				PlanCur=InsPlans.GetPlan(claimProcs[i].PlanNum,PlanList);
+				if(PlanCur!=null
+					&&PlanCur.PlanType=="c"
+					&&(claimProcs[i].Status==ClaimProcStatus.CapComplete
+					||claimProcs[i].Status==ClaimProcStatus.CapEstimate)) {
+					if(isInitialEntry) {
+						//this will be switched to CapComplete further down if applicable.
+						//This makes ComputeBaseEst work properly on new cap procs w status Complete
+						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
+					}
+					else if(proc.ProcStatus==ProcStat.C) {
+						claimProcs[i].Status=ClaimProcStatus.CapComplete;
+					}
+					else {
+						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
+					}
+				}
+				//ignored: adjustment
+				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
+				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
+				if(claimProcs[i].PlanNum>0&&PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Pri,PlanList,patPlans,benefitList);
+				}
+				if(claimProcs[i].PlanNum>0&&PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Sec,PlanList,patPlans,benefitList);
+				}
+				if(isInitialEntry
+					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate
+					&&proc.ProcStatus==ProcStat.C) {
+					claimProcs[i].Status=ClaimProcStatus.CapComplete;
+				}
+				//prov only updated if still an estimate
+				if(claimProcs[i].Status==ClaimProcStatus.Estimate
+					||claimProcs[i].Status==ClaimProcStatus.CapEstimate) {
+					claimProcs[i].ProvNum=proc.ProvNum;
+				}
+				ClaimProcs.Update(claimProcs[i]);
+			}
+		}
+
+		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
+		public static void ComputeEstimatesForAll(int patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<procs.Count;i++) {
+				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList);
+			}
+		}
+
+
+
+
+
 	}
 
 	/*================================================================================================================

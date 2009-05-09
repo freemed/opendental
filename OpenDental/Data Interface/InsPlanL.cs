@@ -42,7 +42,7 @@ namespace OpenDental {
 			table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
 				//benefits with this PatPlanNum are also deleted here
-				PatPlanL.Delete(PIn.PInt(table.Rows[i][0].ToString()));
+				PatPlans.Delete(PIn.PInt(table.Rows[i][0].ToString()));
 			}
 			command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(plan.PlanNum);
 			Db.NonQ(command);
@@ -67,7 +67,7 @@ namespace OpenDental {
 				List <InsPlan> plans=InsPlans.Refresh(fam);
 				List <PatPlan> patPlans=PatPlans.Refresh(patNum);
 				List <Benefit> benefitList=Benefits.Refresh(patPlans);
-				ProcedureL.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList);
+				Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,plans,patPlans,benefitList);
 				Patients.SetHasIns(patNum);
 			}
 		}

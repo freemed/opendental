@@ -166,7 +166,7 @@ namespace OpenDental.Bridges {
 							InsPlans.Update(insplans[j]);
 							PatPlan[] patplans=PatPlans.GetByPlanNum(insplans[j].PlanNum);
 							for(int k=0;k<patplans.Length;k++) {
-								PatPlanL.Delete(patplans[k].PatPlanNum);
+								PatPlans.Delete(patplans[k].PatPlanNum);
 							}
 						}
 					} catch(ApplicationException ex) {

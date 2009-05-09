@@ -98,11 +98,11 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].DedApplied=dedRem;
 				}
 				if(claimCur.ClaimType=="P") {//primary
-					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,planList,patPlans,benefitList);//handles dedBeforePerc
+					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,planList,patPlans,benefitList);//handles dedBeforePerc
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Pri,patPlans,true);	
 				}
 				else if(claimCur.ClaimType=="S") {//secondary
-					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,planList,patPlans,benefitList);
+					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,planList,patPlans,benefitList);
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Sec,patPlans,true);
 				}
 				if(claimCur.ClaimType=="P" || claimCur.ClaimType=="S") {

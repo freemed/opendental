@@ -1043,7 +1043,7 @@ namespace OpenDental{
 								if(insRem<0) {
 									insRem=0;
 								}
-								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
+								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
 								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
 								if(claimproc.DedBeforePerc) {
 									int percent=100;
@@ -1116,7 +1116,7 @@ namespace OpenDental{
 								}
 								//next line is supposed to handle dedBeforePerc, but it will get confused with sec ins.
 								//There is no easy solution
-								ClaimProcL.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
+								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
 								secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
 								//this math is done here instead of in GetEst to ensure accuracy:
 								if(fee-priIns-secIns < 0) {
@@ -2332,7 +2332,7 @@ namespace OpenDental{
 				else {
 					procCur.ProcFee=insfee;
 				}
-				ProcedureL.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
       }
