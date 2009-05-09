@@ -43,9 +43,9 @@ namespace OpenDental{
 		private int totalPages;
 		//<summary>Set to true if using this class just to generate strings for the Renaissance link.</summary>
 		//private bool IsRenaissance;
-		private ClaimProc[] ClaimProcsForClaim;
+		private List<ClaimProc> ClaimProcsForClaim;
 		///<summary>All procedures for the patient.</summary>
-		private Procedure[] ProcList;
+		private List<Procedure> ProcList;
 		///<summary>This is set externally for Renaissance and generic e-claims.  If it was not set ahead of time, it will set in FillDisplayStrings according to the insPlan.</summary>
 		public ClaimForm ClaimFormCur;
 		private List <InsPlan> PlanList;
@@ -479,11 +479,11 @@ namespace OpenDental{
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
-      ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+      List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
       ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum); 
 			claimprocs=new List<ClaimProc>();
 			bool includeThis;
-			for(int i=0;i<ClaimProcsForClaim.Length;i++){//fill the arraylist
+			for(int i=0;i<ClaimProcsForClaim.Count;i++){//fill the arraylist
 				if(ClaimProcsForClaim[i].ProcNum==0){
 					continue;//skip payments
 				}
@@ -2642,9 +2642,9 @@ namespace OpenDental{
 				if(tempInsPlan.IsMedical)
 					MedPlanArrayList.Add(tempInsPlan);
 			}
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(ThisPatNum); //get all claimprocs for patient
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ThisPatNum); //get all claimprocs for patient
 			ArrayList tmpPlansBilled = new ArrayList();
-			for(int i=0;i<ClaimProcList.Length;i++){ //compare each claimproc on this claim to all claimprocs
+			for(int i=0;i<ClaimProcList.Count;i++){ //compare each claimproc on this claim to all claimprocs
 				for(int j=0;j<claimprocs.Count;j++){
 					if((claimprocs[j].ProcNum==ClaimProcList[i].ProcNum) && (ClaimProcList[i].Status==ClaimProcStatus.Received)){
 						bool inList = true;

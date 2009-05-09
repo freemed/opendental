@@ -36,10 +36,6 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static DataTable GetTableOld(string command) {
-			throw new ApplicationException("No queries allowed in the UI layer.");
-		}
-
 		///<summary>This is for multiple queries all concatenated together with ;</summary>
 		internal static DataSet GetDataSet(string commands) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -65,7 +61,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>We need to get away from this due to poor support from databases.  For now, each command will be sent entirely separately.  This never returns number of rows affected.</summary>
-		public static int NonQ(string[] commands) {
+		internal static int NonQ(string[] commands) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+commands[0]);
 			}
@@ -85,6 +81,16 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		
+		#region old
+		public static DataTable GetTableOld(string command) {
+			throw new ApplicationException("No queries allowed in the UI layer.");
+		}
+
+		public static int NonQOld(string[] commands) {
+			throw new ApplicationException("No queries allowed in the UI layer.");
+		}
+		#endregion old
+
+
 	}
 }

@@ -744,7 +744,7 @@ namespace OpenDental{
 			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Patient pat=fam.GetPatient(SelectedPatNum);
-			Procedure[] procList;
+			List<Procedure> procList;
 			//List<Recall> recallList;
 			List <InsPlan> planList;
 			Appointment apt=null;
@@ -786,7 +786,7 @@ namespace OpenDental{
 			}
 			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
-			Procedure[] procList;
+			List<Procedure> procList;
 			List <InsPlan> planList;
 			Appointment apt;
 			List<int> patNums;

@@ -34,8 +34,8 @@ namespace OpenDental {
 			}
 			Family fam=Patients.GetFamily(patNum);
 			Patient pat=fam.GetPatient(patNum);
-			ClaimProc[] claimProcs=ClaimProcs.Refresh(patNum);
-			Procedure[] procs=Procedures.Refresh(patNum);
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
+			List<Procedure> procs=Procedures.Refresh(patNum);
 			patPlans=PatPlans.Refresh(patNum);
 			List <InsPlan> planList=InsPlans.Refresh(fam);
 			List <Benefit> benList=Benefits.Refresh(patPlans);

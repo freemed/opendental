@@ -40,9 +40,9 @@ namespace OpenDental.Eclaims {
 			List <PatPlan> patPlansForPatient;
 			Patient patient;
 			Patient subscriber;
-			ClaimProc[] claimProcList;//all claimProcs for a patient.
-			ClaimProc[] claimProcsClaim;
-			Procedure[] procListAll;
+			List<ClaimProc> claimProcList;//all claimProcs for a patient.
+			List<ClaimProc> claimProcsClaim;
+			List<Procedure> procListAll;
 			//List<Procedure> extracted;
 			Patient subscriber2=null;
 			Procedure proc;
@@ -99,7 +99,7 @@ namespace OpenDental.Eclaims {
 				}
 				len+=44;//for the F section after the secondary coverage section
 				len+=10*missingListDates.Count;
-				len+=56*claimProcsClaim.Length;
+				len+=56*claimProcsClaim.Count;
 				//if(C19 is used, Plan Record){
 					//len+=30;
 				//}
@@ -207,7 +207,7 @@ namespace OpenDental.Eclaims {
 				}
 				//F06 number of procedures performed 1 N. Must be between 1 and 7.
 	//todo User interface incomplete.  Must not allow attaching more than 7 procs to a claim
-				txt+=TidyN(claimProcsClaim.Length,1);//number validated
+				txt+=TidyN(claimProcsClaim.Count,1);//number validated
 				//F22 extracted teeth count 2 N
 				txt+=TidyN(missingListDates.Count,2);//validated against matching prosthesis
 				//Secondary carrier fields (E19 to E07) ONLY included if E20=1----------------------------------------------------
@@ -326,7 +326,7 @@ namespace OpenDental.Eclaims {
 					txt+=missingListDates[t].DateExtraction.ToString("yyyyMMdd");//validated
 				}
 				//Procedures: Repeat for number of times specified by F06.----------------------------------------------------------
-				for(int p=0;p<claimProcsClaim.Length;p++){
+				for(int p=0;p<claimProcsClaim.Count;p++) {
 					proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					//F07 proc line number 1 N
@@ -777,9 +777,9 @@ namespace OpenDental.Eclaims {
 			}
 			Patient patient=Patients.GetPat(claim.PatNum);
 			Patient subscriber=Patients.GetPat(insPlan.Subscriber);
-			ClaimProc[] claimProcList=ClaimProcs.Refresh(patient.PatNum);//all claimProcs for a patient.
-			ClaimProc[] claimProcsClaim=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
-			Procedure[] procListAll=Procedures.Refresh(claim.PatNum);
+			List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);//all claimProcs for a patient.
+			List<ClaimProc> claimProcsClaim=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
+			List<Procedure> procListAll=Procedures.Refresh(claim.PatNum);
 			Procedure proc;
 			ProcedureCode procCode;
 			List<CanadianExtract> missingListAll=CanadianExtracts.GetForClaim(claim.ClaimNum);
@@ -880,7 +880,7 @@ namespace OpenDental.Eclaims {
 					retVal+=", ";
 				retVal+="Subscriber Postalcode";
 			}
-			if(claimProcsClaim.Length>7){//user interface enforces prevention of claim with 0 procs.
+			if(claimProcsClaim.Count>7) {//user interface enforces prevention of claim with 0 procs.
 				if(retVal!="")
 					retVal+=", ";
 				retVal+="Over 7 procs";
@@ -1078,7 +1078,7 @@ namespace OpenDental.Eclaims {
 					retVal+="Accident date";
 				}
 			}
-			for(int i=0;i<claimProcsClaim.Length;i++){
+			for(int i=0;i<claimProcsClaim.Count;i++) {
 				proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 				if(claimProcsClaim[i].ProcDate.Year<1970 || claimProcsClaim[i].ProcDate>DateTime.Today){

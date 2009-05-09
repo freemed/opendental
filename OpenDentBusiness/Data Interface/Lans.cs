@@ -9,10 +9,28 @@ using System.Windows.Forms;
 namespace OpenDentBusiness {
 	///<summary>Handles database commands for the language table in the database.</summary>
 	public class Lans {
+		
+		private static Dictionary<string,Language> hList;
+		//<summary>Used by g to keep track of whether any language items were inserted into db. If so, a refresh gets done.</summary>
+		//public static bool ItemInserted;
+
 		///<summary>key=ClassType+English.  Value =Language object.</summary>
-		public static Dictionary<string,Language> HList;
-		///<summary>Used by g to keep track of whether any language items were inserted into db. If so a refresh gets done.</summary>
-		private static bool itemInserted;
+		public static Dictionary<string,Language> HList {
+			//No need to check RemotingRole; no call to db.
+			get {
+				if(hList==null) {
+					if(CultureInfo.CurrentCulture.Name=="en-US") {
+						hList=new Dictionary<string,Language>();
+						return hList;
+					}
+					RefreshCache();
+				}
+				return hList;
+			}
+			set {
+				hList=value;
+			}
+		}
 
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
@@ -26,7 +44,7 @@ namespace OpenDentBusiness {
 		///<summary>Refreshed automatically to always be kept current with all phrases, regardless of whether there are any entries in LanguageForeign table.</summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			HList=new Dictionary<string,Language>();
+			hList=new Dictionary<string,Language>();
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				return;
 			}
@@ -37,32 +55,72 @@ namespace OpenDentBusiness {
 				langTemp.ClassType      = PIn.PString(table.Rows[i][1].ToString());
 				langTemp.English        = PIn.PString(table.Rows[i][2].ToString());
 				langTemp.IsObsolete     = PIn.PBool(table.Rows[i][3].ToString());
-				if(!HList.ContainsKey(langTemp.ClassType+langTemp.English)) {
-					HList.Add(langTemp.ClassType+langTemp.English,langTemp);
+				if(!hList.ContainsKey(langTemp.ClassType+langTemp.English)) {
+					hList.Add(langTemp.ClassType+langTemp.English,langTemp);
 				}
 			}
 		}
 
-		///<summary>stub</summary>
-		internal static string g(string sender,string text){
-			return text;
+		///<summary>Converts a string to the current language.</summary>
+		public static string g(string classType,string text) {
+			//No need to check RemotingRole; no call to db.
+			string retVal=Lans.ConvertString(classType,text);
+			//if(ItemInserted) {
+			//	RefreshCache();
+			//}
+			return retVal;
 		}
 
-		///<summary>This had to be added because SilverLight does not allow globally setting the current culture format.</summary>
-		public static string GetShortDateTimeFormat(){
-			if(CultureInfo.CurrentCulture.Name=="en-US"){
-				//DateTimeFormatInfo formatinfo=(DateTimeFormatInfo)CultureInfo.CurrentCulture.DateTimeFormat.Clone();
-				//formatinfo.ShortDatePattern="MM/dd/yyyy";
-				//return formatinfo;
-				return "MM/dd/yyyy";
+		///<summary>Converts a string to the current language.</summary>
+		public static string g(System.Object sender,string text) {
+			//No need to check RemotingRole; no call to db.
+			string retVal=Lans.ConvertString(sender.GetType().Name,text);
+			//if(ItemInserted) {
+			//	RefreshCache();
+			//}
+			return retVal;
+		}
+
+		///<summary>This is where all the action happens.  This method is used by all the others.  This is always run on the client rather than the server, unless, of course, it's being called from the server.  If it inserts an item into the db table, it will also add it to the local cache, but will not trigger a refresh on both ends.</summary>
+		public static string ConvertString(string classType,string text) {
+			//No need to check RemotingRole; no call to db.
+			if(CultureInfo.CurrentCulture.Name=="en-US") {
+				return text;
 			}
-			else{
-				return CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+			if(text=="") {
+				return "";
+			}
+			if(hList==null) {
+				return text;
+			}
+			//ItemInserted=false;
+			if(!hList.ContainsKey(classType+text)) {
+				Language mylan=new Language();
+				mylan.ClassType=classType;
+				mylan.English=text;
+				Insert(mylan);
+				HList.Add(classType+text,mylan);
+				//ItemInserted=true;
+				return text;
+			}
+			if(LanguageForeigns.HList.Contains(classType+text)) {
+				if(((LanguageForeign)LanguageForeigns.HList[classType+text]).Translation=="") {
+					//if translation is empty
+					return text;//return the English version
+				}
+				return ((LanguageForeign)LanguageForeigns.HList[classType+text]).Translation;
+			}
+			else {
+				return text;
 			}
 		}
 
 		///<summary>Tries to insert, but ignores the insert if this row already exists. This prevents the previous frequent crashes.</summary>
-		public static void Insert(Language Cur) {
+		public static void Insert(Language mylan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),mylan);
+				return;
+			}
 			//In Oracle, one must specify logging options for logging to occur, otherwise logging is not used.
 			string ignoreClause="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -70,9 +128,8 @@ namespace OpenDentBusiness {
 			}
 			string command = "INSERT "+ignoreClause+" INTO language (ClassType,English,EnglishComments,IsObsolete) "
 				+"VALUES("
-				+"'"+POut.PString(Cur.ClassType)+"', "
-				+"'"+POut.PString(Cur.English)+"','',0)";
-			//MessageBox.Show(command);
+				+"'"+POut.PString(mylan.ClassType)+"', "
+				+"'"+POut.PString(mylan.English)+"','',0)";
 			Db.NonQ(command);
 		}
 
@@ -87,8 +144,31 @@ namespace OpenDentBusiness {
 			NonQ(false);
 		}*/
 
+		///<summary>No need to refresh after this.</summary>
+		public static void DeleteItems(string classType,List<string> englishList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),classType,englishList);
+				return;
+			}
+			string command="DELETE FROM language WHERE ClassType='"+POut.PString(classType)+"' AND (";
+			for(int i=0;i<englishList.Count;i++) {
+				if(i>0) {
+					command+="OR ";
+				}
+				command+="English='"+POut.PString(englishList[i])+"' ";
+				if(HList.ContainsKey(classType+englishList[i])) {
+					HList.Remove(classType+englishList[i]);
+				}
+			}
+			command+=")";
+			Db.NonQ(command);
+		}
+
 		///<summary></summary>
 		public static string[] GetListCat() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod());
+			}
 			string command="SELECT Distinct ClassType FROM language ORDER BY ClassType ";
 			DataTable table=Db.GetTable(command);
 			string[] ListCat=new string[table.Rows.Count];
@@ -100,6 +180,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Only used in translation tool to get list for one category</summary>
 		public static Language[] GetListForCat(string classType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Language[]>(MethodBase.GetCurrentMethod(),classType);
+			}
 			string command="SELECT * FROM language "
 				+"WHERE ClassType = BINARY '"+POut.PString(classType)+"' ORDER BY English";
 			DataTable table=Db.GetTable(command);
@@ -114,35 +197,17 @@ namespace OpenDentBusiness {
 			return ListForCat;
 		}
 
-		public static string ConvertString(string classType,string text) {
+		///<summary>This had to be added because SilverLight does not allow globally setting the current culture format.</summary>
+		public static string GetShortDateTimeFormat() {
+			//No need to check RemotingRole; no call to db.
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
-				return text;
-			}
-			if(text=="") {
-				return "";
-			}
-			if(HList==null) {
-				return text;
-			}
-			itemInserted=false;
-			if(!HList.ContainsKey(classType+text)) {
-				Language Cur=new Language();
-				Cur.ClassType=classType;
-				Cur.English=text;
-				HList.Add(Cur.ClassType+Cur.English,Cur);
-				Insert(Cur);
-				itemInserted=true;
-				return text;
-			}
-			if(LanguageForeigns.HList.Contains(classType+text)) {
-				if(((LanguageForeign)LanguageForeigns.HList[classType+text]).Translation=="") {
-					//if translation is empty
-					return text;//return the English version
-				}
-				return ((LanguageForeign)LanguageForeigns.HList[classType+text]).Translation;
+				//DateTimeFormatInfo formatinfo=(DateTimeFormatInfo)CultureInfo.CurrentCulture.DateTimeFormat.Clone();
+				//formatinfo.ShortDatePattern="MM/dd/yyyy";
+				//return formatinfo;
+				return "MM/dd/yyyy";
 			}
 			else {
-				return text;
+				return CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
 			}
 		}
 
@@ -174,20 +239,6 @@ namespace OpenDentBusiness {
 			return hFormat;
 		}
 
-		///<summary>No need to refresh after this.</summary>
-		public static void DeleteItems(string classType,List<string> englishList) {
-			string command="DELETE FROM language WHERE ClassType='"+POut.PString(classType)+"' AND (";
-			for(int i=0;i<englishList.Count;i++) {
-				if(i>0) {
-					command+="OR ";
-				}
-				command+="English='"+POut.PString(englishList[i])+"' ";
-				if(HList.ContainsKey(classType+englishList[i])) {
-					HList.Remove(classType+englishList[i]);
-				}
-			}
-			command+=")";
-			Db.NonQ(command);
-		}
+		
 	}
 }

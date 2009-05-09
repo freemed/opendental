@@ -7,27 +7,27 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	///<summary>Handles database commands for the language table in the database.</summary>
+	///<summary>Lan is short for language.  Used to translate text to another language.</summary>
 	public class Lan{
-		///<summary>stub</summary>
-		private static bool itemInserted;
+		//<summary>stub</summary>
+		//private static bool itemInserted;
 
 		//strings-----------------------------------------------
 		///<summary>Converts a string to the current language.</summary>
 		public static string g(string classType,string text) {
 			string retVal=Lans.ConvertString(classType,text);
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 			return retVal;
 		}
 
 		///<summary>Converts a string to the current language.</summary>
 		public static string g(System.Object sender,string text) {
 			string retVal=Lans.ConvertString(sender.GetType().Name,text);
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 			return retVal;
 		}
 
@@ -35,17 +35,17 @@ namespace OpenDental{
 		///<summary>C is for control. Translates the text of this control to another language.</summary>
 		public static void C(string classType,System.Windows.Forms.MenuItem mi) {
 			mi.Text=Lans.ConvertString(classType,mi.Text);
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 		}
 
 		///<summary></summary>
 		public static void C(System.Windows.Forms.Control sender,System.Windows.Forms.MenuItem mi) {
 			mi.Text=Lans.ConvertString(sender.GetType().Name,mi.Text);
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 		}
 
 		//controls-----------------------------------------------
@@ -54,9 +54,9 @@ namespace OpenDental{
 			for(int i=0;i<contr.Length;i++) {
 				contr[i].Text=Lans.ConvertString(classType,contr[i].Text);
 			}
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 		}
 
 		///<summary></summary>
@@ -71,9 +71,9 @@ namespace OpenDental{
 				}
 				contr[i].Text=Lans.ConvertString(sender.GetType().Name,contr[i].Text);
 			}
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 		}
 
 		//forms----------------------------------------------------------------------------------------
@@ -93,9 +93,9 @@ namespace OpenDental{
 			}
 			//then launch the recursive function for all child controls
 			Fchildren(sender,sender,exclusions);
-			if(itemInserted) {
-				Lans.RefreshCache();
-			}
+			//if(itemInserted) {
+			//	Lans.RefreshCache();
+			//}
 		}
 
 		///<summary>Returns true if the contrToFind exists in the supplied contrArray. Used to check the exclusion list of F.</summary>

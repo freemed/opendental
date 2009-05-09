@@ -74,7 +74,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddEstimate;
 		private Procedure ProcCur;
 		private Procedure ProcOld;
-		private ClaimProc[] ClaimProcList;
+		private List<ClaimProc> ClaimProcList;
 		private OpenDental.ValidDouble textProcFee;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
 		private OpenDental.ODtextBox textNotes;
@@ -85,7 +85,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listProsth;
 		private OpenDental.ValidDate textDateOriginalProsth;
 		private OpenDental.ODtextBox textClaimNote;
-		private ClaimProc[] ClaimProcsForProc;
+		private List<ClaimProc> ClaimProcsForProc;
 		//private Adjustment[] AdjForProc;
 		private ArrayList PaySplitsForProc;
 		private ArrayList AdjustmentsForProc;
@@ -2204,11 +2204,11 @@ namespace OpenDental{
 				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			}
 			ClaimProcsForProc=ClaimProcs.GetForProc(ClaimProcList,ProcCur.ProcNum);
-			tbIns.ResetRows(ClaimProcsForProc.Length);
+			tbIns.ResetRows(ClaimProcsForProc.Count);
 			checkNoBillIns.CheckState=CheckState.Unchecked;
 			bool allNoBillIns=true;
 			InsPlan plan;
-			for(int i=0;i<ClaimProcsForProc.Length;i++){
+			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				if(ClaimProcsForProc[i].NoBillIns){
 					checkNoBillIns.CheckState=CheckState.Indeterminate;
 				}
@@ -2317,7 +2317,7 @@ namespace OpenDental{
 					tbIns.Cell[11,i]="";//writeoff
 				}
 			}
-			if(ClaimProcsForProc.Length==0)
+			if(ClaimProcsForProc.Count==0)
 				checkNoBillIns.CheckState=CheckState.Unchecked;
 			else if(allNoBillIns){
 				checkNoBillIns.CheckState=CheckState.Checked;
@@ -2687,7 +2687,7 @@ namespace OpenDental{
 				//not allowed to set to indeterminate, so move on
 				checkNoBillIns.CheckState=CheckState.Unchecked;
 			}
-			for(int i=0;i<ClaimProcsForProc.Length;i++){
+			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				//ignore CapClaim,NotReceived,PreAuth,Recieved,Supplemental
 				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate
 					|| ClaimProcsForProc[i].Status==ClaimProcStatus.CapComplete
@@ -3312,7 +3312,7 @@ namespace OpenDental{
 			}
 			if(IsNew){//if cancelling on a new procedure
 				//delete any newly created claimprocs
-				for(int i=0;i<ClaimProcList.Length;i++){
+				for(int i=0;i<ClaimProcList.Count;i++) {
 					if(ClaimProcList[i].ProcNum==ProcCur.ProcNum){
 						ClaimProcs.Delete(ClaimProcList[i]);
 					}

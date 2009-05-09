@@ -79,13 +79,13 @@ namespace OpenDental{
 		private OpenDental.UI.ODToolBar ToolBarMain;
     private ArrayList ALPreAuth;
 		///<summary>This is a list of all procedures for the patient.</summary>
-		private Procedure[] ProcList;
+		private List<Procedure> ProcList;
 		///<summary>This is a filtered list containing only TP procedures.  It's also already sorted by priority and tooth number.</summary>
 		private Procedure[] ProcListTP;
 		private System.Windows.Forms.CheckBox checkShowCompleted;
 		private System.Windows.Forms.GroupBox groupShow;
 		private System.Windows.Forms.CheckBox checkShowIns;
-		private ClaimProc[] ClaimProcList;
+		private List<ClaimProc> ClaimProcList;
 		private Family FamCur;
 		private Patient PatCur;
 		private System.Windows.Forms.CheckBox checkShowFees;
@@ -944,7 +944,7 @@ namespace OpenDental{
 				InsPlan	PriPlanCur=null;
 				bool isFamMax=false;
 				bool isFamDed=false;
-				ClaimProc[] claimProcsFam=null;			
+				List<ClaimProc> claimProcsFam=null;			
 				if(PatPlanList.Count>0) {//primary
 					PriPlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 					isFamMax=Benefits.GetIsFamMax(BenefitList,PriPlanCur.PlanNum);
@@ -1461,7 +1461,7 @@ namespace OpenDental{
 				else{
 					labelFamily.Visible=false;
 				}
-				ClaimProc[] claimProcsFam=null;
+				List<ClaimProc> claimProcsFam=null;
 				if(isFamMax || isFamDed){
 					claimProcsFam=ClaimProcs.RefreshFam(PlanCur.PlanNum);
 					pend=InsPlans.GetPending
@@ -2108,7 +2108,7 @@ namespace OpenDental{
 		private void ComputeProcAL() {
 			ProcAL=new ArrayList();
 			//first, add all completed work. C,EC,EO, and Referred
-			for(int i=0;i<ProcList.Length;i++) {
+			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i].ProcStatus==ProcStat.C
 					|| ProcList[i].ProcStatus==ProcStat.EC
 					|| ProcList[i].ProcStatus==ProcStat.EO)
@@ -2132,7 +2132,7 @@ namespace OpenDental{
 				for(int i=0;i<ProcTPSelectList.Length;i++) {
 					procDummy=new Procedure();
 					//this next loop is a way to get missing fields like tooth range.  Could be improved.
-					for(int j=0;j<ProcList.Length;j++) {
+					for(int j=0;j<ProcList.Count;j++) {
 						if(ProcList[j].ProcNum==ProcTPSelectList[i].ProcNumOrig) {
 							//but remember that even if the procedure is found, Status might have been altered
 							procDummy=ProcList[j].Copy();
@@ -2562,7 +2562,7 @@ namespace OpenDental{
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
-				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
@@ -2592,14 +2592,14 @@ namespace OpenDental{
 			}
 			gridMain.SetSelected(false);
 			Claim ClaimCur=(Claim)ALPreAuth[e.Row];
-			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
+			List<ClaimProc> ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			Procedure proc;
 			for(int i=0;i<gridMain.Rows.Count;i++){//ProcListTP.Length;i++){
 				if(gridMain.Rows[i].Tag==null){
 					continue;//must be a subtotal row
 				}
 				proc=(Procedure)gridMain.Rows[i].Tag;
-				for(int j=0;j<ClaimProcsForClaim.Length;j++){
+				for(int j=0;j<ClaimProcsForClaim.Count;j++){
 					if(proc.ProcNum==ClaimProcsForClaim[j].ProcNum){
 						gridMain.SetSelected(i,true);
 					}

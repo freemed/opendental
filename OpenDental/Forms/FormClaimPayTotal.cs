@@ -33,7 +33,7 @@ namespace OpenDental
 		private System.Windows.Forms.Label label4;
 		///<summary></summary>
 		public ClaimProc[] ClaimProcsToEdit;
-		private Procedure[] ProcList;
+		private List<Procedure> ProcList;
 		private Patient PatCur;
 		private Family FamCur;
 		private OpenDental.UI.ODGrid gridMain;
@@ -541,7 +541,7 @@ namespace OpenDental
 			}
 			//fix later: does not take into account other payments.
 			double unpaidAmt=0;
-			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> ProcList=Procedures.Refresh(PatCur.PatNum);
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){
 				unpaidAmt=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum).ProcFee
 					//((Procedure)Procedures.HList[ClaimProcsToEdit[i].ProcNum]).ProcFee
@@ -590,7 +590,7 @@ namespace OpenDental
 			}
 			Fee FeeCur=null;
 			int codeNum;
-			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> ProcList=Procedures.Refresh(PatCur.PatNum);
 			Procedure proc;
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){
 				//this gives error message if proc not found:

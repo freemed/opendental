@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -8,9 +9,9 @@ namespace OpenDentBusiness{
 	public class ClaimProcs{
 
 		///<summary></summary>
-		public static ClaimProc[] Refresh(int patNum){
+		public static List<ClaimProc> Refresh(int patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ClaimProc[]>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command=
 				"SELECT * from claimproc "
@@ -20,9 +21,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>When using family deduct or max, this gets all claimprocs for the given plan.  This info is needed to compute used and pending insurance.</summary>
-		public static ClaimProc[] RefreshFam(int planNum) {
+		public static List<ClaimProc> RefreshFam(int planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ClaimProc[]>(MethodBase.GetCurrentMethod(),planNum);
+				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),planNum);
 			}
 			string command=
 				"SELECT * FROM claimproc "
@@ -32,43 +33,45 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(table);
 		}
 
-		private static ClaimProc[] RefreshAndFill(DataTable table){
+		private static List<ClaimProc> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			ClaimProc[] List=new ClaimProc[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new ClaimProc();
-				List[i].ClaimProcNum   = PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].ProcNum        = PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].ClaimNum       = PIn.PInt   (table.Rows[i][2].ToString());	
-				List[i].PatNum         = PIn.PInt   (table.Rows[i][3].ToString());
-				List[i].ProvNum        = PIn.PInt   (table.Rows[i][4].ToString());
-				List[i].FeeBilled      = PIn.PDouble(table.Rows[i][5].ToString());
-				List[i].InsPayEst      = PIn.PDouble(table.Rows[i][6].ToString());
-				List[i].DedApplied     = PIn.PDouble(table.Rows[i][7].ToString());
-				List[i].Status         = (ClaimProcStatus)PIn.PInt(table.Rows[i][8].ToString());
-				List[i].InsPayAmt      = PIn.PDouble(table.Rows[i][9].ToString());
-				List[i].Remarks        = PIn.PString(table.Rows[i][10].ToString());
-				List[i].ClaimPaymentNum= PIn.PInt   (table.Rows[i][11].ToString());
-				List[i].PlanNum        = PIn.PInt   (table.Rows[i][12].ToString());
-				List[i].DateCP         = PIn.PDate  (table.Rows[i][13].ToString());
-				List[i].WriteOff       = PIn.PDouble(table.Rows[i][14].ToString());
-				List[i].CodeSent       = PIn.PString(table.Rows[i][15].ToString());
-				List[i].AllowedOverride= PIn.PDouble(table.Rows[i][16].ToString());
-				List[i].Percentage     = PIn.PInt   (table.Rows[i][17].ToString());
-				List[i].PercentOverride= PIn.PInt   (table.Rows[i][18].ToString());
-				List[i].CopayAmt       = PIn.PDouble(table.Rows[i][19].ToString());
-				List[i].OverrideInsEst = PIn.PDouble(table.Rows[i][20].ToString());
-				List[i].NoBillIns      = PIn.PBool  (table.Rows[i][21].ToString());
-				List[i].DedBeforePerc  = PIn.PBool  (table.Rows[i][22].ToString());
-				List[i].OverAnnualMax  = PIn.PDouble(table.Rows[i][23].ToString());
-				List[i].PaidOtherIns   = PIn.PDouble(table.Rows[i][24].ToString());
-				List[i].BaseEst        = PIn.PDouble(table.Rows[i][25].ToString());
-				List[i].CopayOverride  = PIn.PDouble(table.Rows[i][26].ToString());
-				List[i].ProcDate       = PIn.PDate  (table.Rows[i][27].ToString());
-				List[i].DateEntry      = PIn.PDate  (table.Rows[i][28].ToString());
-				List[i].LineNumber     = PIn.PInt   (table.Rows[i][29].ToString());
+			List<ClaimProc> retVal=new List<ClaimProc>();
+			ClaimProc cp;
+			for(int i=0;i<table.Rows.Count;i++){
+				cp=new ClaimProc();
+				cp.ClaimProcNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				cp.ProcNum        = PIn.PInt   (table.Rows[i][1].ToString());
+				cp.ClaimNum       = PIn.PInt   (table.Rows[i][2].ToString());	
+				cp.PatNum         = PIn.PInt   (table.Rows[i][3].ToString());
+				cp.ProvNum        = PIn.PInt   (table.Rows[i][4].ToString());
+				cp.FeeBilled      = PIn.PDouble(table.Rows[i][5].ToString());
+				cp.InsPayEst      = PIn.PDouble(table.Rows[i][6].ToString());
+				cp.DedApplied     = PIn.PDouble(table.Rows[i][7].ToString());
+				cp.Status         = (ClaimProcStatus)PIn.PInt(table.Rows[i][8].ToString());
+				cp.InsPayAmt      = PIn.PDouble(table.Rows[i][9].ToString());
+				cp.Remarks        = PIn.PString(table.Rows[i][10].ToString());
+				cp.ClaimPaymentNum= PIn.PInt   (table.Rows[i][11].ToString());
+				cp.PlanNum        = PIn.PInt   (table.Rows[i][12].ToString());
+				cp.DateCP         = PIn.PDate  (table.Rows[i][13].ToString());
+				cp.WriteOff       = PIn.PDouble(table.Rows[i][14].ToString());
+				cp.CodeSent       = PIn.PString(table.Rows[i][15].ToString());
+				cp.AllowedOverride= PIn.PDouble(table.Rows[i][16].ToString());
+				cp.Percentage     = PIn.PInt   (table.Rows[i][17].ToString());
+				cp.PercentOverride= PIn.PInt   (table.Rows[i][18].ToString());
+				cp.CopayAmt       = PIn.PDouble(table.Rows[i][19].ToString());
+				cp.OverrideInsEst = PIn.PDouble(table.Rows[i][20].ToString());
+				cp.NoBillIns      = PIn.PBool  (table.Rows[i][21].ToString());
+				cp.DedBeforePerc  = PIn.PBool  (table.Rows[i][22].ToString());
+				cp.OverAnnualMax  = PIn.PDouble(table.Rows[i][23].ToString());
+				cp.PaidOtherIns   = PIn.PDouble(table.Rows[i][24].ToString());
+				cp.BaseEst        = PIn.PDouble(table.Rows[i][25].ToString());
+				cp.CopayOverride  = PIn.PDouble(table.Rows[i][26].ToString());
+				cp.ProcDate       = PIn.PDate  (table.Rows[i][27].ToString());
+				cp.DateEntry      = PIn.PDate  (table.Rows[i][28].ToString());
+				cp.LineNumber     = PIn.PInt   (table.Rows[i][29].ToString());
+				retVal.Add(cp);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary></summary>
@@ -223,59 +226,52 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Converts the supplied list into a list of ClaimProcs for one claim.</summary>
-		public static ClaimProc[] GetForClaim(ClaimProc[] List,int claimNum){
+		public static List<ClaimProc> GetForClaim(List<ClaimProc> list,int claimNum){
 			//No need to check RemotingRole; no call to db.
-			//MessageBox.Show(List.Length.ToString());
-			ArrayList ALForClaim=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ClaimNum==claimNum){
-					ALForClaim.Add(List[i]);  
+			List<ClaimProc> retVal=new List<ClaimProc>();
+			for(int i=0;i<list.Count;i++){
+				if(list[i].ClaimNum==claimNum){
+					retVal.Add(list[i]);  
 				}
 			}
-			ClaimProc[] ForClaim=new ClaimProc[ALForClaim.Count];
-			for(int i=0;i<ALForClaim.Count;i++){
-				ForClaim[i]=(ClaimProc)ALForClaim[i];
-			}
-			return ForClaim;
+			return retVal;
 		}
 
 		///<summary>When sending or printing a claim, this converts the supplied list into a list of ClaimProcs that need to be sent.</summary>
-		public static ClaimProc[] GetForSendClaim(ClaimProc[] List,int claimNum){
+		public static List<ClaimProc> GetForSendClaim(List<ClaimProc> claimProcList,int claimNum){
 			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
-			ArrayList ALForClaim=new ArrayList();
+			List<ClaimProc> retVal=new List<ClaimProc>();
 			bool includeThis;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ClaimNum!=claimNum){
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ClaimNum!=claimNum) {
 					continue;
 				}
-				if(List[i].ProcNum==0){
+				if(claimProcList[i].ProcNum==0) {
 					continue;//skip payments
 				}
 				includeThis=true;
-				for(int j=0;j<ALForClaim.Count;j++){//loop through existing claimprocs
-					if(((ClaimProc)ALForClaim[j]).ProcNum==List[i].ProcNum){
+				for(int j=0;j<retVal.Count;j++){//loop through existing claimprocs
+					if(retVal[j].ProcNum==claimProcList[i].ProcNum) {
 						includeThis=false;//skip duplicate procedures
 					}
 				}
-				if(includeThis)
-					ALForClaim.Add(List[i]);
+				if(includeThis) {
+					retVal.Add(claimProcList[i]);
+				}
 			}
-			ClaimProc[] ForClaim=new ClaimProc[ALForClaim.Count];
-			for(int i=0;i<ALForClaim.Count;i++){
-				ForClaim[i]=(ClaimProc)ALForClaim[i];
-			}
-			return ForClaim;
+			return retVal;
 		}
 
 		///<summary>Gets all ClaimProcs for the current Procedure. The List must be all ClaimProcs for this patient.</summary>
-		public static ClaimProc[] GetForProc(ClaimProc[] List,int procNum){
+		public static List<ClaimProc> GetForProc(List<ClaimProc> claimProcList,int procNum){
 			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
-			ArrayList ALForProc=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcNum==procNum){
-					ALForProc.Add(List[i]);  
+			//ArrayList ALForProc=new ArrayList();
+			List<ClaimProc> retVal=new List<ClaimProc>();
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum) {
+					retVal.Add(claimProcList[i]);  
 				}
 			}
 			//need to sort by pri, sec, etc.  BUT,
@@ -283,22 +279,23 @@ namespace OpenDentBusiness{
 			//Then a sorter could be built.  Otherwise, we don't know which order to put them in.
 			//Maybe supply PatPlanList to this function, because it's ordered.
 			//But, then if patient changes ins, it will 'forget' which is pri and which is sec.
-			ClaimProc[] ForProc=new ClaimProc[ALForProc.Count];
-			for(int i=0;i<ALForProc.Count;i++){
-				ForProc[i]=(ClaimProc)ALForProc[i];
-			}
-			return ForProc;
+			//ClaimProc[] ForProc=new ClaimProc[ALForProc.Count];
+			//for(int i=0;i<ALForProc.Count;i++){
+			//	ForProc[i]=(ClaimProc)ALForProc[i];
+			//}
+			//return ForProc;
+			return retVal;
 		}
 
 		///<summary>Used in TP module to get one estimate. The List must be all ClaimProcs for this patient. If estimate can't be found, then return null.  The procedure is always status TP, so there shouldn't be more than one estimate for one plan.</summary>
-		public static ClaimProc GetEstimate(ClaimProc[] List,int procNum,int planNum) {
+		public static ClaimProc GetEstimate(List<ClaimProc> claimProcList,int procNum,int planNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].Status==ClaimProcStatus.Preauth){
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].Status==ClaimProcStatus.Preauth) {
 					continue;
 				}
-				if(List[i].ProcNum==procNum && List[i].PlanNum==planNum) {
-					return List[i];
+				if(claimProcList[i].ProcNum==procNum && claimProcList[i].PlanNum==planNum) {
+					return claimProcList[i];
 				}
 			}
 			return null;
@@ -323,66 +320,66 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in Account and in PaySplitEdit. The insurance estimate based on all claimprocs with this procNum, but only for those claimprocs that are not received yet. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcEstNotReceived(ClaimProc[] List,int procNum){
+		public static double ProcEstNotReceived(List<ClaimProc> claimProcList,int procNum) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcNum==procNum
-					&& List[i].Status==ClaimProcStatus.NotReceived
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum
+					&& claimProcList[i].Status==ClaimProcStatus.NotReceived
 					){
-					retVal+=List[i].InsPayEst;
+					retVal+=claimProcList[i].InsPayEst;
 				}
 			}
 			return retVal;
 		}
 		
 		///<summary>Used in Account and in PaySplitEdit. The insurance amount paid based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcInsPay(ClaimProc[] List,int procNum){
+		public static double ProcInsPay(List<ClaimProc> claimProcList,int procNum) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcNum==procNum
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum
 					//&& List[i].InsPayAmt > 0//ins paid
-					&& List[i].Status!=ClaimProcStatus.Preauth
-					&& List[i].Status!=ClaimProcStatus.CapEstimate
-					&& List[i].Status!=ClaimProcStatus.CapComplete
-					&& List[i].Status!=ClaimProcStatus.Estimate){
-					retVal+=List[i].InsPayAmt;
+					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
+					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
+					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
+					&& claimProcList[i].Status!=ClaimProcStatus.Estimate) {
+					retVal+=claimProcList[i].InsPayAmt;
 				}
 			}
 			return retVal;
 		}
 
 		///<summary>Used in PaySplitEdit. The insurance writeoff based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcWriteoff(ClaimProc[] List,int procNum){
+		public static double ProcWriteoff(List<ClaimProc> claimProcList,int procNum){
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcNum==procNum
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum
 					//&& List[i].InsPayAmt > 0//ins paid
-					&& List[i].Status!=ClaimProcStatus.Preauth
-					&& List[i].Status!=ClaimProcStatus.CapEstimate
-					&& List[i].Status!=ClaimProcStatus.CapComplete
-					&& List[i].Status!=ClaimProcStatus.Estimate){
-					retVal+=List[i].WriteOff;
+					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
+					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
+					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
+					&& claimProcList[i].Status!=ClaimProcStatus.Estimate) {
+					retVal+=claimProcList[i].WriteOff;
 				}
 			}
 			return retVal;
 		}
 
 		///<summary>Used in E-claims to get the amount paid by primary. The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
-		public static double ProcInsPayPri(ClaimProc[] List,int procNum,int planNum){
+		public static double ProcInsPayPri(List<ClaimProc> claimProcList,int procNum,int planNum){
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcNum==procNum
-					&& List[i].PlanNum==planNum
-					&& List[i].Status!=ClaimProcStatus.Preauth
-					&& List[i].Status!=ClaimProcStatus.CapEstimate
-					&& List[i].Status!=ClaimProcStatus.CapComplete
-					&& List[i].Status!=ClaimProcStatus.Estimate)
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum
+					&& claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
+					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
+					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
+					&& claimProcList[i].Status!=ClaimProcStatus.Estimate)
 				{
-					retVal+=List[i].InsPayAmt;
+					retVal+=claimProcList[i].InsPayAmt;
 				}
 			}
 			return retVal;
@@ -469,9 +466,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After entering estimates from a preauth, this routine is called for each proc to override the ins est.</summary>
-		public static void OverrideInsEst(int procNum,int planNum,double insPayEst,ClaimProc[] claimProcList){
+		public static void OverrideInsEst(int procNum,int planNum,double insPayEst,List<ClaimProc> claimProcList){
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<claimProcList.Length;i++) {
+			for(int i=0;i<claimProcList.Count;i++) {
 				if(procNum!=claimProcList[i].ProcNum) {
 					continue;
 				}

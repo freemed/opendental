@@ -1769,9 +1769,9 @@ namespace OpenDental{
 		}
 
 		private void FillPatientAdjustments() {
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatPlanCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatPlanCur.PatNum);
 			AdjAL=new ArrayList();//move selected claimprocs into ALAdj
-			for(int i=0;i<ClaimProcList.Length;i++) {
+			for(int i=0;i<ClaimProcList.Count;i++) {
 				if(ClaimProcList[i].PlanNum==PlanCur.PlanNum
 					&& ClaimProcList[i].Status==ClaimProcStatus.Adjustment) {
 					AdjAL.Add(ClaimProcList[i]);

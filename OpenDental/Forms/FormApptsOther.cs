@@ -565,7 +565,7 @@ namespace OpenDental{
 		}
 
 		private void butRecall_Click(object sender, System.EventArgs e) {
-			Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procList=Procedures.Refresh(PatCur.PatNum);
 			//List<Recall> recallList=Recalls.GetList(PatCur.PatNum);//get the recall for this pt
 			//if(recallList.Count==0){
 			//	MsgBox.Show(this,"This patient does not have any recall due.");
@@ -594,7 +594,7 @@ namespace OpenDental{
 		}
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
-			Procedure[] procList;
+			List<Procedure> procList;
 			//List<Recall> recallList;
 			List <InsPlan> planList;
 			Appointment apt=null;

@@ -348,7 +348,7 @@ namespace OpenDental {
                       "AND procedurelog.DateTP >= '" + procDate + "' " + whereProc + whereProv;
 
 			// "AND procedurelog.PatNum = claimproc.PatNum " + Removed SPK     
-			PatientTreatmentTable = Db.GetTable(command);
+			PatientTreatmentTable = Reports.GetTable(command);
 			for(int i = 0;i <= PatientTreatmentTable.Rows.Count - 1;i++) {
 				row = new OpenDental.UI.ODGridRow();
 				if(i == 0) {
@@ -392,7 +392,7 @@ namespace OpenDental {
 			List<PatPlan> PatPlanList;
 			List<InsPlan> InsPlanList;
 			List<Benefit> BenefitList;
-			ClaimProc[] ClaimProcList;
+			List<ClaimProc> ClaimProcList;
 			Family FamCur;
 
 			double max = 0;

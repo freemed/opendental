@@ -44,7 +44,7 @@ namespace OpenDental {
 					butEditAnyway.Enabled=false;
 				}
 			}
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(ProcList[0].PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ProcList[0].PatNum);
 			if(Procedures.IsAttachedToClaim(ProcList,ClaimProcList)){
 				//StartedAttachedToClaim=true;
 				//however, this doesn't stop someone from creating a claim while this window is open,

@@ -79,7 +79,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 							+ MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use + "','0')");
 					}
 					if(commands.Count != 0) {
-						Db.NonQ(commands.ToArray());
+						Db.NonQOld(commands.ToArray());
 						Cache.Refresh(InvalidType.Prefs);
 					}
 					Prefs.UpdateBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun,true);

@@ -26,19 +26,19 @@ namespace OpenDental{
 			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMedName.Items.Clear();
 			this.comboAnesthMedName.Items.Insert(0, "");
-			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
+			int noOfRows = AnestheticQueries.bindAMedName().Tables[0].Rows.Count;
 			for (int i = 0; i <= noOfRows - 1; i++)
 			{
-				this.comboAnesthMedName.Items.Add(bindComboQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
+				this.comboAnesthMedName.Items.Add(AnestheticQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
 				this.comboAnesthMedName.SelectedIndex = 0;
 			}
 			//Binds the combobox comboBoxSupplier with Medication names from the database.
 			this.comboSupplierName.Items.Clear();
 			this.comboSupplierName.Items.Insert(0, "");
-			int noOfRows2 = bindComboQueries.bindSuppliers().Tables[0].Rows.Count;
+			int noOfRows2 = AnestheticQueries.bindSuppliers().Tables[0].Rows.Count;
 			for (int i = 0; i <= noOfRows2 - 1; i++)
 			{
-				this.comboSupplierName.Items.Add(bindComboQueries.bindSuppliers().Tables[0].Rows[i][0].ToString());
+				this.comboSupplierName.Items.Add(AnestheticQueries.bindSuppliers().Tables[0].Rows[i][0].ToString());
 				this.comboSupplierName.SelectedIndex = 0;
 			}
 			Lan.F(this);
@@ -75,10 +75,10 @@ namespace OpenDental{
 			{
 				this.comboSupplierName.Items.Clear();
 				this.comboSupplierName.Items.Insert(0, "");
-				int noOfRows2 = bindComboQueries.bindSuppliers().Tables[0].Rows.Count;
+				int noOfRows2 = AnestheticQueries.bindSuppliers().Tables[0].Rows.Count;
 				for (int i = 0; i <= noOfRows2 - 1; i++)
 				{
-					this.comboSupplierName.Items.Add(bindComboQueries.bindSuppliers().Tables[0].Rows[i][0].ToString());
+					this.comboSupplierName.Items.Add(AnestheticQueries.bindSuppliers().Tables[0].Rows[i][0].ToString());
 					this.comboSupplierName.SelectedIndex = 0;
 				}
 				Lan.F(this);

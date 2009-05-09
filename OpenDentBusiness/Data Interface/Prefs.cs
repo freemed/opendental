@@ -46,6 +46,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateInt(string prefName,int newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
@@ -58,7 +59,8 @@ namespace OpenDentBusiness{
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
-			}else{
+			}
+			else{
 				Db.NonQ(command);
 			}
 			Pref pref=new Pref();
@@ -70,6 +72,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateDouble(string prefName,double newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
@@ -82,7 +85,8 @@ namespace OpenDentBusiness{
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
-			}else{
+			}
+			else{
 				Db.NonQ(command);
 			}
 			return retVal;
@@ -96,6 +100,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateBool(string prefName,bool newValue,bool isForced) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
@@ -108,7 +113,8 @@ namespace OpenDentBusiness{
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue,isForced);
-			}else{			
+			}
+			else{			
 				Db.NonQ(command);
 			}
 			return retVal;
@@ -128,9 +134,7 @@ namespace OpenDentBusiness{
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				//Result of Meth is ignored.
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
-				//doesn't exit out of this method here.
 			}
 			else {
 				Db.NonQ(command);
@@ -144,6 +148,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateDateT(string prefName,DateTime newValue) {
+			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");
 			}
@@ -156,7 +161,8 @@ namespace OpenDentBusiness{
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				retVal=Meth.GetBool(MethodBase.GetCurrentMethod(),prefName,newValue);
-			}else{
+			}
+			else{
 				Db.NonQ(command);
 			}
 			Pref pref=new Pref();
@@ -166,7 +172,47 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-
+		///<summary>Only run from PrefL.CheckMySqlVersion41().</summary>
+		public static void ConvertToMySqlVersion41() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="SHOW TABLES";
+			DataTable table=Db.GetTable(command);
+			string[] tableNames=new string[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				tableNames[i]=table.Rows[i][0].ToString();
+			}
+			for(int i=0;i<tableNames.Length;i++) {
+				if(tableNames[i]!="procedurecode") {
+					command="ALTER TABLE "+tableNames[i]+" CONVERT TO CHARACTER SET utf8";
+					Db.NonQ(command);
+				}
+			}
+			string[] commands=new string[]
+				{
+					//"ALTER TABLE procedurecode CHANGE OldCode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE procedurecode DEFAULT character set utf8"
+					"ALTER TABLE procedurecode MODIFY Descript varchar(255) character set utf8 NOT NULL"
+					,"ALTER TABLE procedurecode MODIFY AbbrDesc varchar(50) character set utf8 NOT NULL"
+					,"ALTER TABLE procedurecode MODIFY ProcTime varchar(24) character set utf8 NOT NULL"
+					,"ALTER TABLE procedurecode MODIFY DefaultNote text character set utf8 NOT NULL"
+					,"ALTER TABLE procedurecode MODIFY AlternateCode1 varchar(15) character set utf8 NOT NULL"
+					//,"ALTER TABLE procedurelog MODIFY OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE autocodeitem MODIFY OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE procbuttonitem MODIFY OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE covspan MODIFY FromCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE covspan MODIFY ToCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+					//,"ALTER TABLE fee MODIFY OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL"
+				};
+			Db.NonQ(commands);
+			//and set the default too
+			command="ALTER DATABASE CHARACTER SET utf8";
+			Db.NonQ(command);
+			command="INSERT INTO preference VALUES('DatabaseConvertedForMySql41','1')";
+			Db.NonQ(command);
+		}
 		
 
 	}

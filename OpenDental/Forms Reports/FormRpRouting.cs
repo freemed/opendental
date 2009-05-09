@@ -338,7 +338,7 @@ namespace OpenDental
 			str=Lan.g(this,"Procedures:");
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
-			Procedure[] procsAll=Procedures.Refresh(pat.PatNum);
+			List<Procedure> procsAll=Procedures.Refresh(pat.PatNum);
 			Procedure[] procsApt=Procedures.GetProcsOneApt(Appts[pagesPrinted].AptNum,procsAll);
 			for(int i=0;i<procsApt.Length;i++) {
 				str="   "+Procedures.GetDescription(procsApt[i]);
@@ -412,7 +412,7 @@ namespace OpenDental
 			y+=18;
 			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
 			List <InsPlan> plans=InsPlans.Refresh(fam);
-			ClaimProc[] claimProcList=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
 			List <Benefit> benefits=Benefits.Refresh(patPlanList);
 			InsPlan plan;
 			Carrier carrier;
@@ -479,7 +479,7 @@ namespace OpenDental
 				double pend=0;
 				double used=0;
 				if(isFamMax || isFamDed){
-					ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(plan.PlanNum);
+					List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(plan.PlanNum);
 					used=InsPlans.GetInsUsed(claimProcsFam,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits);
 					pend=InsPlans.GetPending(claimProcsFam,date,plan,patPlanList[i].PatPlanNum,-1,benefits);
 				}
@@ -527,7 +527,7 @@ namespace OpenDental
 			str=Lan.g(this,"Treatment Plan");
 			g.DrawString(str,fontHeading,brush,x,y);
 			y+=18;
-			for(int i=0;i<procsAll.Length;i++){
+			for(int i=0;i<procsAll.Count;i++){
 				if(procsAll[i].ProcStatus!=ProcStat.TP){
 					continue;
 				}

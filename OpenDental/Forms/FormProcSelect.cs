@@ -140,9 +140,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcSelect_Load(object sender, System.EventArgs e) {
-			Procedure[] entireList=Procedures.Refresh(PatNum);
+			List<Procedure> entireList=Procedures.Refresh(PatNum);
 			ProcList=new List<Procedure>();
-			for(int i=0;i<entireList.Length;i++){
+			for(int i=0;i<entireList.Count;i++){
 				if(entireList[i].ProcStatus==ProcStat.C){
 					ProcList.Add(entireList[i]);
 				}

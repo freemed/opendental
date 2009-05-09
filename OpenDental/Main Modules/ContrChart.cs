@@ -4649,7 +4649,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -4767,7 +4767,7 @@ namespace OpenDental{
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
 			Recalls.Synch(PatCur.PatNum);
-			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
+			ProcedureL.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList);
 		}
 
 		private void butAddProc_Click(object sender, System.EventArgs e){
@@ -5783,9 +5783,9 @@ namespace OpenDental{
 				FillPlanned();
 				return;
 			}
-			Procedure[] myProcList=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> myProcList=Procedures.Refresh(PatCur.PatNum);
 			bool allProcsHyg=true;
-			for(int i=0;i<myProcList.Length;i++){
+			for(int i=0;i<myProcList.Count;i++){
 				if(myProcList[i].PlannedAptNum!=AptCur.AptNum)
 					continue;//only concerned with procs on this plannedAppt
 				if(!ProcedureCodes.GetProcCode(myProcList[i].CodeNum).IsHygiene){
@@ -6353,7 +6353,7 @@ namespace OpenDental{
 			Procedure procCur;
 			Procedure procOld;
 			ProcedureCode procCode;
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			//this loop is just for security:
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;

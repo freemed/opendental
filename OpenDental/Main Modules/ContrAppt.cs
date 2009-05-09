@@ -1849,7 +1849,7 @@ namespace OpenDental{
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
-				Procedure[] procsMultApts=Procedures.GetProcsMultApts(aptNums);
+				List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=new ArrayList();
 					AppointmentL.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
@@ -1952,9 +1952,9 @@ namespace OpenDental{
 					PatCurName+", "
 					+aptCur.AptDateTime.ToString()+", "
 					+aptCur.ProcDescript);
-				Procedure[] ProcList=Procedures.Refresh(PatCurNum);
+				List<Procedure> ProcList=Procedures.Refresh(PatCurNum);
 				bool procAlreadyAttached=false;
-				for(int i=0;i<ProcList.Length;i++){
+				for(int i=0;i<ProcList.Count;i++){
 					if(ProcList[i].PlannedAptNum==plannedAptNum){//if on the planned apt
 						if(ProcList[i].AptNum>0){//already attached to another appt
 							procAlreadyAttached=true;
@@ -2485,7 +2485,7 @@ namespace OpenDental{
 				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
 			}
 			apt.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
-			Procedure[] procsMultApts=null;
+			List<Procedure> procsMultApts=null;
 			Procedure[] procsForOne=null;
 			if(AppointmentRuleC.List.Length>0) {
 				List <int> aptNums=new List <int> ();

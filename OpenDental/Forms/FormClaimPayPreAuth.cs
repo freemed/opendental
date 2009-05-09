@@ -24,7 +24,7 @@ namespace OpenDental
 		private OpenDental.UI.Button butCancel;
 		///<summary></summary>
 		public List<ClaimProc> ClaimProcsToEdit;
-		private Procedure[] ProcList;
+		private List<Procedure> ProcList;
 		private Patient PatCur;
 		private Family FamCur;
 		private OpenDental.UI.ODGrid gridMain;

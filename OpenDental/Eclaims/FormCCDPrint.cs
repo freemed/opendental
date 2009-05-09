@@ -89,7 +89,7 @@ namespace OpenDental.Eclaims {
 		Provider provBill;
 		InsPlan insplan;
 		InsPlan insplan2;
-		ClaimProc[] claimprocs;
+		List<ClaimProc> claimprocs;
 		List<PatPlan> patPlansForPatient;
 		List<CanadianExtract> missingListAll;
 		List<CanadianExtract> missingListDates;
@@ -158,7 +158,7 @@ namespace OpenDental.Eclaims {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
 					}
 				}
-				ClaimProc[] claimprocall=ClaimProcs.Refresh(patient.PatNum);
+				List<ClaimProc> claimprocall=ClaimProcs.Refresh(patient.PatNum);
 				claimprocs=ClaimProcs.GetForClaim(claimprocall,claim.ClaimNum);
 				patPlansForPatient=PatPlans.Refresh(claim.PatNum);
 				subscriber=Patients.GetPat(insplan.Subscriber);
@@ -1374,7 +1374,7 @@ namespace OpenDental.Eclaims {
 				//The following code assumes that procedures and associated labs were sent out in the
 				//same order that they were returned from the query.
 				//Print info for procedure i if it exists.
-				for(int k=0,n=0;k<claimprocs.Length;k++){
+				for(int k=0,n=0;k<claimprocs.Count;k++){
 					Procedure proc;
 					ClaimProc claimproc=claimprocs[k];
 					if(claimproc.ProcNum!=0){//Is this a valid claim procedure?
@@ -1392,7 +1392,7 @@ namespace OpenDental.Eclaims {
 								doc.DrawString(g,text,feeCol,0);
 								totalFee+=proc.ProcFee;
 								//Find the lab fee associated with the above procedure.
-								for(int m=0;m<claimprocs.Length;m++) {
+								for(int m=0;m<claimprocs.Count;m++) {
 									ClaimProc claimlab=claimprocs[m];
 									if(claimlab.ProcNum!=0){//Is this a valid claim procedure/lab fee?
 										Procedure lab=Procedures.GetOneProc(claimlab.ProcNum,true);
@@ -1620,7 +1620,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			//TODO: Ensure that the ordering of the procedures meets the Canadian standard.
 			Procedure proc;
-			for(int i=0;i<this.claimprocs.Length;i++){
+			for(int i=0;i<this.claimprocs.Count;i++){
 				ClaimProc claimproc=claimprocs[i];
 				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
@@ -1797,7 +1797,7 @@ namespace OpenDental.Eclaims {
 			doc.DrawString(g,"NOTES",procedureNotesCol,0);
 			//TODO: Finish implementing when procedure number (different than code) is available.
 			Procedure proc;
-			for(int i=0;i<this.claimprocs.Length;i++) {
+			for(int i=0;i<this.claimprocs.Count;i++) {
 				ClaimProc claimproc=claimprocs[i];
 				if(claimproc.ProcNum!=0) {//Is this a valid procedure?
 					x=doc.StartElement();

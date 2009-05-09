@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Misc\bindComboQueries.cs" />
+    <Compile Include="Misc\AnestheticQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />

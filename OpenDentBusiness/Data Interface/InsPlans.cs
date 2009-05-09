@@ -342,11 +342,11 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
-		public static double GetInsRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		public static double GetInsRem(List<ClaimProc> claimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
-			double insUsed=GetInsUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,planList,benList);
+			double insUsed=GetInsUsed(claimProcList,date,planNum,patPlanNum,excludeClaim,planList,benList);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
-			double insPending=GetPending(ClaimProcList,date,plan,patPlanNum,excludeClaim,benList);
+			double insPending=GetPending(claimProcList,date,plan,patPlanNum,excludeClaim,benList);
 			double annualMax=Benefits.GetAnnualMax(benList,planNum,patPlanNum);
 			if(annualMax<0) {
 				return 999999;
@@ -358,7 +358,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Get insurance benefits used for one benefit year.  Returns actual insurance used based on ClaimProc data. Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetInsUsed(ClaimProc[] ClaimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		public static double GetInsUsed(List<ClaimProc> claimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -379,17 +379,17 @@ namespace OpenDentBusiness {
 				stopDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
 			}*/
 			double retVal=0;
-			for(int i=0;i<ClaimProcList.Length;i++) {
-				if(ClaimProcList[i].PlanNum==planNum
-					&& ClaimProcList[i].ClaimNum != excludeClaim
-					&& ClaimProcList[i].ProcDate < stopDate
-					&& ClaimProcList[i].ProcDate >= renewDate
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].ClaimNum != excludeClaim
+					&& claimProcList[i].ProcDate < stopDate
+					&& claimProcList[i].ProcDate >= renewDate
 					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& ClaimProcList[i].Status!=ClaimProcStatus.Preauth) {
-					if(ClaimProcList[i].Status==ClaimProcStatus.Received 
-						|| ClaimProcList[i].Status==ClaimProcStatus.Adjustment
-						|| ClaimProcList[i].Status==ClaimProcStatus.Supplemental) {
-						retVal+=ClaimProcList[i].InsPayAmt;
+					&& claimProcList[i].Status!=ClaimProcStatus.Preauth) {
+					if(claimProcList[i].Status==ClaimProcStatus.Received 
+						|| claimProcList[i].Status==ClaimProcStatus.Adjustment
+						|| claimProcList[i].Status==ClaimProcStatus.Supplemental) {
+						retVal+=claimProcList[i].InsPayAmt;
 					}
 					else {//NotReceived
 						//retVal-=ClaimProcList[i].InsPayEst;
@@ -400,7 +400,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get insurance deductible used for one benefit year.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetDedUsed(ClaimProc[] ClaimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		public static double GetDedUsed(List<ClaimProc> claimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -419,26 +419,26 @@ namespace OpenDentBusiness {
 				stopDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
 			}*/
 			double retVal=0;
-			for(int i=0;i<ClaimProcList.Length;i++) {
-				if(ClaimProcList[i].PlanNum==planNum
-					&& ClaimProcList[i].ClaimNum != excludeClaim
-					&& ClaimProcList[i].ProcDate < stopDate
-					&& ClaimProcList[i].ProcDate >= renewDate
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].ClaimNum != excludeClaim
+					&& claimProcList[i].ProcDate < stopDate
+					&& claimProcList[i].ProcDate >= renewDate
 					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& (ClaimProcList[i].Status==ClaimProcStatus.Adjustment
-					|| ClaimProcList[i].Status==ClaimProcStatus.NotReceived
-					|| ClaimProcList[i].Status==ClaimProcStatus.Received
-					|| ClaimProcList[i].Status==ClaimProcStatus.Supplemental)
+					&& (claimProcList[i].Status==ClaimProcStatus.Adjustment
+					|| claimProcList[i].Status==ClaimProcStatus.NotReceived
+					|| claimProcList[i].Status==ClaimProcStatus.Received
+					|| claimProcList[i].Status==ClaimProcStatus.Supplemental)
 					)
 				{
-					retVal+=ClaimProcList[i].DedApplied;
+					retVal+=claimProcList[i].DedApplied;
 				}
 			}
 			return retVal;
 		}
 
 		///<summary>Get pending insurance for a given plan for one benefit year. Include a ClaimProcList which is all claimProcs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The insplan.PlanNum is the plan to get value for.</summary>
-		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
+		public static double GetPending(List<ClaimProc> claimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
 			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
@@ -448,26 +448,26 @@ namespace OpenDentBusiness {
 			DateTime renewDate=Benefits.GetRenewDate(benList,curPlan.PlanNum,patPlanNum,curPlan.DateEffective,asofDate);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
-			for(int i=0;i<ClaimProcList.Length;i++) {
-				if(ClaimProcList[i].PlanNum==curPlan.PlanNum
-					&& ClaimProcList[i].ClaimNum != excludeClaim
-					&& ClaimProcList[i].ProcDate < stopDate
-					&& ClaimProcList[i].ProcDate >= renewDate
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].PlanNum==curPlan.PlanNum
+					&& claimProcList[i].ClaimNum != excludeClaim
+					&& claimProcList[i].ProcDate < stopDate
+					&& claimProcList[i].ProcDate >= renewDate
 					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& ClaimProcList[i].Status==ClaimProcStatus.NotReceived)
+					&& claimProcList[i].Status==ClaimProcStatus.NotReceived)
 				//Status Adjustment has no insPayEst, so can ignore it here.
 				{
-					retVal+=ClaimProcList[i].InsPayEst;
+					retVal+=claimProcList[i].InsPayEst;
 				}
 			}
 			return retVal;
 		}
 
 		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied procCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
-		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List <InsPlan> PlanList,List <Benefit> benList,string procCode){
+		public static double GetDedRem(List<ClaimProc> claimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> PlanList,List<Benefit> benList,string procCode) {
 			//No need to check RemotingRole; no call to db.
 			double dedTot=Benefits.GetDeductibleByCode(benList,planNum,patPlanNum,procCode);
-			double dedUsed=GetDedUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
+			double dedUsed=GetDedUsed(claimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
 			if(dedTot-dedUsed<0){
 				return 0;
 			}

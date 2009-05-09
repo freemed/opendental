@@ -168,9 +168,9 @@ namespace OpenDental.Eclaims
 			Patient otherSubsc=new Patient();
 			Carrier carrier;
 			Carrier otherCarrier=new Carrier();
-			ClaimProc[] claimProcList;//all claimProcs for a patient.
-			ClaimProc[] claimProcs;
-			Procedure[] procList;
+			List<ClaimProc> claimProcList;//all claimProcs for a patient.
+			List<ClaimProc> claimProcs;
+			List<Procedure> procList;
 			List<ToothInitial> initialList;
 			Procedure proc;
 			ProcedureCode procCode;
@@ -749,7 +749,7 @@ namespace OpenDental.Eclaims
 						//if the missing tooth is missing because of an extraction being billed here, then exclude it
 						//still needed, even though missing teeth are not based on procedures any longer
 						doSkip=false;
-						for(int p=0;p<claimProcs.Length;p++){
+						for(int p=0;p<claimProcs.Count;p++){
 							proc=Procedures.GetProcFromList(procList,claimProcs[p].ProcNum);
 							procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 							if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]){
@@ -880,7 +880,7 @@ namespace OpenDental.Eclaims
 				//2300 CRC: (medical) About 3 irrelevant segments
 				ArrayList diagnoses=new ArrayList();//princDiag will always be the first element.
 				if(isMedical){
-					for(int j=0;j<claimProcs.Length;j++){
+					for(int j=0;j<claimProcs.Count;j++){
 						proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 						if(proc.DiagnosticCode==""){
 							continue;
@@ -1010,7 +1010,7 @@ namespace OpenDental.Eclaims
 				//2320 AMT: COB Payer paid amount
 					if(claim.ClaimType!="P"){
 						double paidOtherIns=0;
-						for(int j=0;j<claimProcs.Length;j++){
+						for(int j=0;j<claimProcs.Count;j++) {
 							paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
 						}
 						seg++;
@@ -1111,7 +1111,7 @@ namespace OpenDental.Eclaims
 				#endregion
 				#region Line Items
 				//2400 Service Lines
-				for(int j=0;j<claimProcs.Length;j++){
+				for(int j=0;j<claimProcs.Count;j++){
 					proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					//2400 LX: Line Counter. or (medical) Service Line Number
@@ -1988,13 +1988,13 @@ namespace OpenDental.Eclaims
 					warning+=",";
 				warning+="Attachment ID missing";
 			}
-			ClaimProc[] claimProcList=ClaimProcs.Refresh(patient.PatNum);
-			ClaimProc[] claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
-			Procedure[] procList=Procedures.Refresh(claim.PatNum);
+			List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);
+			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
+			List<Procedure> procList=Procedures.Refresh(claim.PatNum);
 			Procedure proc;
 			ProcedureCode procCode;
 			bool princDiagExists=false;
-			for(int i=0;i<claimProcs.Length;i++){
+			for(int i=0;i<claimProcs.Count;i++){
 				proc=Procedures.GetProcFromList(procList,claimProcs[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);		
 				if(procCode.TreatArea==TreatmentArea.Arch && proc.Surf==""){

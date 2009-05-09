@@ -2252,10 +2252,10 @@ namespace OpenDental
 			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMed.Items.Clear();
 			this.comboAnesthMed.Items.Insert(0, "");
-			int noOfRows = bindComboQueries.bindAMedName().Tables[0].Rows.Count;
+			int noOfRows = AnestheticQueries.bindAMedName().Tables[0].Rows.Count;
 			for (int i = 0; i <= noOfRows - 1; i++)
 			{
-				this.comboAnesthMed.Items.Add(bindComboQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
+				this.comboAnesthMed.Items.Add(AnestheticQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
 				this.comboAnesthMed.SelectedIndex = 0;
 			}
 		}

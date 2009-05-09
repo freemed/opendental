@@ -10,33 +10,33 @@ namespace OpenDental{
 	public class ClaimL{
 
 		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient (or for this plan if fam max or ded).  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
-		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,List <InsPlan> PlanList,Claim ClaimCur,List <PatPlan> patPlans,List <Benefit> benefitList){
-			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
+		public static void CalculateAndUpdate(List<ClaimProc> claimProcList,List<Procedure> procList,List <InsPlan> planList,Claim claimCur,List <PatPlan> patPlans,List <Benefit> benefitList){
+			List<ClaimProc> ClaimProcsForClaim=ClaimProcs.GetForClaim(claimProcList,claimCur.ClaimNum);
 			double claimFee=0;
 			double dedApplied=0;
 			double insPayEst=0;
 			double insPayAmt=0;
 			double writeoff=0;
-			InsPlan PlanCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
+			InsPlan PlanCur=InsPlans.GetPlan(claimCur.PlanNum,planList);
 			if(PlanCur==null){
 				return;
 			}
 			int provNum;
 			double dedRem;
-			int patPlanNum=PatPlans.GetPatPlanNum(patPlans,ClaimCur.PlanNum);
+			int patPlanNum=PatPlans.GetPatPlanNum(patPlans,claimCur.PlanNum);
 			//this next line has to be done outside the loop.  Takes annual max into consideration 
 			double insRem;//no changes get made to insRem in the loop.
 			if(patPlanNum==0){//patient does not have current coverage
 				insRem=0;
 			} else if(ClaimProcsForClaim[0].ProcDate.Year<1880) {
-				insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,ClaimCur.PlanNum,
-						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
+				insRem=InsPlans.GetInsRem(claimProcList,DateTime.Today,claimCur.PlanNum,
+						patPlanNum,claimCur.ClaimNum,planList,benefitList);
 			} else {
-				insRem=InsPlans.GetInsRem(ClaimProcList,ClaimProcsForClaim[0].ProcDate,ClaimCur.PlanNum,
-						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
+				insRem=InsPlans.GetInsRem(claimProcList,ClaimProcsForClaim[0].ProcDate,claimCur.PlanNum,
+						patPlanNum,claimCur.ClaimNum,planList,benefitList);
 			}
 			//first loop handles totals for received items.
-			for(int i=0;i<ClaimProcsForClaim.Length;i++){
+			for(int i=0;i<ClaimProcsForClaim.Count;i++){
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.Received){
 					continue;//disregard any status except Receieved.
 				}
@@ -48,7 +48,7 @@ namespace OpenDental{
 			//loop again only for procs not received.
 			//And for preauth.
 			Procedure ProcCur;
-			for(int i=0;i<ClaimProcsForClaim.Length;i++){
+			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.NotReceived
 					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
 					continue;
@@ -74,7 +74,7 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 				}
 				claimFee+=ClaimProcsForClaim[i].FeeBilled;
-				if(ClaimCur.ClaimType=="PreAuth" || ClaimCur.ClaimType=="Other"){
+				if(claimCur.ClaimType=="PreAuth" || claimCur.ClaimType=="Other") {
 					//only the fee gets calculated, the rest does not
 					ClaimProcs.Update(ClaimProcsForClaim[i]);
 					continue;
@@ -84,8 +84,8 @@ namespace OpenDental{
 					dedRem=0;
 				}
 				else{
-					dedRem=InsPlans.GetDedRem(ClaimProcList,ClaimProcsForClaim[i].ProcDate,ClaimCur.PlanNum,patPlanNum,
-						ClaimCur.ClaimNum,PlanList,benefitList,ProcedureCodes.GetStringProcCode(ProcCur.CodeNum))
+					dedRem=InsPlans.GetDedRem(claimProcList,ClaimProcsForClaim[i].ProcDate,claimCur.PlanNum,patPlanNum,
+						claimCur.ClaimNum,planList,benefitList,ProcedureCodes.GetStringProcCode(ProcCur.CodeNum))
 						-dedApplied;//subtracts deductible amounts already applied on this claim
 					if(dedRem<0) {
 						dedRem=0;
@@ -97,15 +97,15 @@ namespace OpenDental{
 				else{
 					ClaimProcsForClaim[i].DedApplied=dedRem;
 				}
-				if(ClaimCur.ClaimType=="P"){//primary
-					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,PlanList,patPlans,benefitList);//handles dedBeforePerc
-					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Pri,patPlans,true);	
+				if(claimCur.ClaimType=="P") {//primary
+					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,planList,patPlans,benefitList);//handles dedBeforePerc
+					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Pri,patPlans,true);	
 				}
-				else if(ClaimCur.ClaimType=="S"){//secondary
-					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,PlanList,patPlans,benefitList);
-					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Sec,patPlans,true);
+				else if(claimCur.ClaimType=="S") {//secondary
+					ClaimProcL.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,planList,patPlans,benefitList);
+					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Sec,patPlans,true);
 				}
-				if(ClaimCur.ClaimType=="P" || ClaimCur.ClaimType=="S"){
+				if(claimCur.ClaimType=="P" || claimCur.ClaimType=="S") {
 					if(ClaimProcsForClaim[i].DedBeforePerc) {
 						int percent=100;
 						if(ClaimProcsForClaim[i].Percentage!=-1) {
@@ -135,7 +135,7 @@ namespace OpenDental{
 				}
 				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
 					ClaimProcsForClaim[i].WriteOff=0;
-					if(ClaimCur.ClaimType=="P" && PlanCur.PlanType=="p"){//Primary && PPO
+					if(claimCur.ClaimType=="P" && PlanCur.PlanType=="p") {//Primary && PPO
 						double insplanAllowed=Fees.GetAmount(ProcCur.CodeNum,PlanCur.FeeSched);
 						if(insplanAllowed!=-1) {
 							ClaimProcsForClaim[i].WriteOff=ProcCur.ProcFee-insplanAllowed;
@@ -151,13 +151,13 @@ namespace OpenDental{
 				ClaimProcs.Update(ClaimProcsForClaim[i]);
 				//but notice that the ClaimProcs lists are not refreshed until the loop is finished.
 			}//for claimprocs.forclaim
-			ClaimCur.ClaimFee=claimFee;
-			ClaimCur.DedApplied=dedApplied;
-			ClaimCur.InsPayEst=insPayEst;
-			ClaimCur.InsPayAmt=insPayAmt;
-			ClaimCur.WriteOff=writeoff;
+			claimCur.ClaimFee=claimFee;
+			claimCur.DedApplied=dedApplied;
+			claimCur.InsPayEst=insPayEst;
+			claimCur.InsPayAmt=insPayAmt;
+			claimCur.WriteOff=writeoff;
 			//Cur=ClaimCur;
-			Claims.Update(ClaimCur);
+			Claims.Update(claimCur);
 		}
 	}//end class Claims
 

@@ -1352,7 +1352,7 @@ namespace OpenDental{
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
-			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,PlanList,patPlanList,benefitList);
+			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -1564,7 +1564,7 @@ namespace OpenDental{
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
 			List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
 				if(!ProcedureCodeC.HList.ContainsKey(codes[i])){

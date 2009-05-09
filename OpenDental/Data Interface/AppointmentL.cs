@@ -153,7 +153,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
-		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,List <InsPlan> planList){
+		public static Appointment CreateRecallApt(Patient patCur,List<Procedure> procList,List<InsPlan> planList){
 			List<Recall> recallList=Recalls.GetList(patCur.PatNum);
 			Recall recallCur=null;
 			for(int i=0;i<recallList.Count;i++){
@@ -289,13 +289,13 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits = ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//no recall synch required
-				ProcedureL.ComputeEstimates(ProcCur,patCur.PatNum,new ClaimProc[0],false,planList,patPlanList,benefitList);
+				ProcedureL.ComputeEstimates(ProcCur,patCur.PatNum,new List<ClaimProc>(),false,planList,patPlanList,benefitList);
 			}
 			return AptCur;
 		}
 
 		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of codes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>
-		public static ArrayList GetDoubleBookedCodes(Appointment apt,DataTable dayTable,Procedure[] procsMultApts,Procedure[] procsForOne) {
+		public static ArrayList GetDoubleBookedCodes(Appointment apt,DataTable dayTable,List<Procedure> procsMultApts,Procedure[] procsForOne) {
 			ArrayList retVal=new ArrayList();//codes
 			//figure out which provider we are testing for
 			int provNum;

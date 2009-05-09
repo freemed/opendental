@@ -2170,11 +2170,11 @@ namespace OpenDental {
 			gridComm.ScrollToEnd();
 		}
 
-		private void FillInsInfo(){
-			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+		private void FillInsInfo() {
+			List<InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
+			List<PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			textPriMax.Text = "";
 			textPriDed.Text = "";
 			textPriDedRem.Text = "";
@@ -2188,7 +2188,7 @@ namespace OpenDental {
 			textSecPend.Text = "";
 			textSecRem.Text = "";
 			labelFamily.Visible = false;
-			if(PatCur == null){
+			if(PatCur == null) {
 				return;
 			}
 			double max = 0;
@@ -2198,27 +2198,25 @@ namespace OpenDental {
 			double pend = 0;
 			double used = 0;
 			InsPlan PlanCur;//=new InsPlan();
-			if(PatPlanList.Count > 0){
+			if(PatPlanList.Count > 0) {
 				PlanCur = InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
 				bool isFamMax = Benefits.GetIsFamMax(BenefitList,PlanCur.PlanNum);
 				bool isFamDed = Benefits.GetIsFamDed(BenefitList,PlanCur.PlanNum);
-				if(isFamMax || isFamDed)
-				{
+				if(isFamMax || isFamDed) {
 					labelFamily.Visible = true;
-				} else
-				{
+				}
+				else {
 					labelFamily.Visible = false;
 				}
-				ClaimProc[] claimProcsFam = null;
-				if(isFamMax || isFamDed)
-				{
+				List<ClaimProc> claimProcsFam = null;
+				if(isFamMax || isFamDed) {
 					claimProcsFam = ClaimProcs.RefreshFam(PlanCur.PlanNum);
 					pend = InsPlans.GetPending
 						(claimProcsFam,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,BenefitList);
 					used = InsPlans.GetInsUsed
 						(claimProcsFam,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
-				} else
-				{
+				}
+				else {
 					pend = InsPlans.GetPending
 						(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,BenefitList);
 					used = InsPlans.GetInsUsed
@@ -2226,41 +2224,35 @@ namespace OpenDental {
 				}
 				textPriPend.Text = pend.ToString("F");
 				textPriUsed.Text = used.ToString("F");
-
 				max = Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
-				if(max == -1)
-				{//if annual max is blank
+				if(max == -1) {//if annual max is blank
 					textPriMax.Text = "";
 					textPriRem.Text = "";
-				} else
-				{
+				}
+				else {
 					remain = max - used - pend;
-					if(remain < 0)
-					{
+					if(remain < 0) {
 						remain = 0;
 					}
 					textPriMax.Text = max.ToString("F");
 					textPriRem.Text = remain.ToString("F");
-
 				}
 				//deductible:
 				ded = Benefits.GetDeductible(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
-				if(ded != -1)
-				{
+				if(ded != -1) {
 					textPriDed.Text = ded.ToString("F");
-					if(isFamMax || isFamDed)
-					{//claimProcsFam was already filled
+					if(isFamMax || isFamDed) {//claimProcsFam was already filled
 						dedUsed = InsPlans.GetDedUsed
 							(claimProcsFam,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
-					} else
-					{
+					}
+					else {
 						dedUsed = InsPlans.GetDedUsed
 							(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
 					}
 					textPriDedRem.Text = (ded - dedUsed).ToString("F");
 				}
 			}
-			if(PatPlanList.Count > 1){
+			if(PatPlanList.Count > 1) {
 				PlanCur = InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				pend = InsPlans.GetPending
 					(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,BenefitList);
@@ -2269,23 +2261,20 @@ namespace OpenDental {
 					(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
 				textSecUsed.Text = used.ToString("F");
 				max = Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
-				if(max == -1)
-				{
+				if(max == -1) {
 					textSecMax.Text = "";
 					textSecRem.Text = "";
-				} else
-				{
+				}
+				else {
 					remain = max - used - pend;
-					if(remain < 0)
-					{
+					if(remain < 0) {
 						remain = 0;
 					}
 					textSecMax.Text = max.ToString("F");
 					textSecRem.Text = remain.ToString("F");
 				}
 				ded = Benefits.GetDeductible(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
-				if(ded != -1)
-				{
+				if(ded != -1) {
 					textSecDed.Text = ded.ToString("F");
 					dedUsed = InsPlans.GetDedUsed
 						(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
@@ -2294,13 +2283,12 @@ namespace OpenDental {
 			}
 			//**only different line from tx pl routine fillsummary
 			//**only different line from tx pl routine fillsummary
-			if (PatPlanList.Count == 0)
-			{
-				labelInsLeft.Text = Lan.g(this, "No Ins.");
+			if(PatPlanList.Count == 0) {
+				labelInsLeft.Text = Lan.g(this,"No Ins.");
 				labelInsLeftAmt.Text = "";
-			} else
-			{
-				labelInsLeft.Text = Lan.g(this, "Ins. Left");
+			}
+			else {
+				labelInsLeft.Text = Lan.g(this,"Ins. Left");
 				labelInsLeftAmt.Text = textPriRem.Text;
 			}
 		}
@@ -2590,9 +2578,9 @@ namespace OpenDental {
 		private void OnIns_Click() {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count==0){
 				MsgBox.Show(this,"Patient does not have insurance.");
 				return;
@@ -2648,7 +2636,7 @@ namespace OpenDental {
 			ClaimCur.DateSent=DateTime.Today;
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			ClaimProc[] claimProcsFam=null;			
+			List<ClaimProc> claimProcsFam=null;			
 			if(isFamMax || isFamDed){
 				claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
@@ -2691,7 +2679,7 @@ namespace OpenDental {
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
-		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> InsPlanList,ClaimProc[] ClaimProcList,Procedure[] procsForPat){
+		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> InsPlanList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat){
 			int claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
@@ -2895,9 +2883,9 @@ namespace OpenDental {
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count==0){
 				MessageBox.Show(Lan.g(this,"Patient does not have insurance."));
 				return;
@@ -2932,7 +2920,7 @@ namespace OpenDental {
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
-				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
@@ -2946,9 +2934,9 @@ namespace OpenDental {
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count<2){
 				MessageBox.Show(Lan.g(this,"Patient does not have secondary insurance."));
 				return;
@@ -2980,7 +2968,7 @@ namespace OpenDental {
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
-				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
@@ -2995,9 +2983,9 @@ namespace OpenDental {
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			int medPlanNum=0;
 			for(int i=0;i<PatPlanList.Count;i++){
 				if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
@@ -3054,7 +3042,7 @@ namespace OpenDental {
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
-				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
@@ -3071,9 +3059,9 @@ namespace OpenDental {
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
-			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(gridAccount.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));
 				return;
@@ -3099,7 +3087,7 @@ namespace OpenDental {
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
-				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
 				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {

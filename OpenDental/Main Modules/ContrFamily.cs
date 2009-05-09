@@ -831,22 +831,22 @@ namespace OpenDental{
 			//this doesn't actually delete the patient, just changes their status
 			//and they will never show again in the patient selection list.
 			//check for plans, appointments, procedures, etc.
-			Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
+			List<Procedure> procList=Procedures.Refresh(PatCur.PatNum);
 			List<Claim> claimList=Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
 			PaySplit[] PaySplitList=PaySplits.Refresh(PatCur.PatNum);//
-			ClaimProc[] claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			List<ClaimProc> claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			Commlog[] commlogList=Commlogs.Refresh(PatCur.PatNum);
 			PayPlan[] payPlanList=PayPlans.Refresh(PatCur.Guarantor,PatCur.PatNum);
 			List <InsPlan> planList=InsPlans.Refresh(FamCur);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
 			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
-			bool hasProcs=procList.Length>0;
+			bool hasProcs=procList.Count>0;
 			bool hasClaims=claimList.Count>0;
 			bool hasAdj=AdjustmentList.Length>0;
 			bool hasPay=PaySplitList.Length>0;
-			bool hasClaimProcs=claimProcList.Length>0;
+			bool hasClaimProcs=claimProcList.Count>0;
 			bool hasComm=commlogList.Length>0;
 			bool hasPayPlans=payPlanList.Length>0;
 			bool hasInsPlans=false;

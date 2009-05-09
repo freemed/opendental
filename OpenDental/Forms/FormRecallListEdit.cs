@@ -44,7 +44,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListView listFamily;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private Procedure[] ProcList;
+		private List<Procedure> ProcList;
 		private System.Windows.Forms.ComboBox comboStatus;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label3;

@@ -13,8 +13,8 @@ namespace OpenDental{
 	public class ProcedureL{
 		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
 		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,int siteNum) {
-			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
+			List<Procedure> ProcList=Procedures.Refresh(apt.PatNum);
+			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
 			List <Benefit> benefitList=Benefits.Refresh(patPlans);
 			//this query could be improved slightly to only get notes of interest.
 			string command="SELECT * FROM procnote WHERE PatNum="+POut.PInt(apt.PatNum)+" ORDER BY EntryDateTime";
@@ -27,7 +27,7 @@ namespace OpenDental{
 			//if(!PrefC.GetBool("EasyHidePublicHealth")){
 			//	siteNum=Patients.GetPat(apt.PatNum).SiteNum;
 			//}
-			for(int i=0;i<ProcList.Length;i++) {
+			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i].AptNum!=apt.AptNum) {
 					continue;
 				}
@@ -81,8 +81,8 @@ namespace OpenDental{
 			Reporting.Allocators.AllocatorCollection.CallAll_Allocators(pt.Guarantor);
 		}
 
-		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc array can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set IsInitialEntry true from Chart module; this is for cap procs.</summary>
-		public static void ComputeEstimates(Procedure proc,int patNum,ClaimProc[] claimProcs,bool IsInitialEntry,List <InsPlan> PlanList,List <PatPlan> patPlans,List <Benefit> benefitList) {
+		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set isInitialEntry true from Chart module; this is for cap procs.</summary>
+		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList) {
 			bool doCreate=true;
 			if(proc.ProcDate<DateTime.Today&&proc.ProcStatus==ProcStat.C) {
 				//don't automatically create an estimate for completed procedures
@@ -93,7 +93,7 @@ namespace OpenDental{
 			}
 			//first test to see if each estimate matches an existing patPlan (current coverage),
 			//delete any other estimates
-			for(int i=0;i<claimProcs.Length;i++) {
+			for(int i=0;i<claimProcs.Count;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
 				}
@@ -132,7 +132,7 @@ namespace OpenDental{
 				}
 				//test to see if estimate exists
 				estExists=false;
-				for(int i=0;i<claimProcs.Length;i++) {
+				for(int i=0;i<claimProcs.Count;i++) {
 					if(claimProcs[i].ProcNum!=proc.ProcNum) {
 						continue;
 					}
@@ -191,7 +191,7 @@ namespace OpenDental{
 			if(cpAdded) {
 				claimProcs=ClaimProcs.Refresh(patNum);
 			}
-			for(int i=0;i<claimProcs.Length;i++) {
+			for(int i=0;i<claimProcs.Count;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
 				}
@@ -204,7 +204,7 @@ namespace OpenDental{
 					&&PlanCur.PlanType=="c"
 					&&(claimProcs[i].Status==ClaimProcStatus.CapComplete
 					||claimProcs[i].Status==ClaimProcStatus.CapEstimate)) {
-					if(IsInitialEntry) {
+					if(isInitialEntry) {
 						//this will be switched to CapComplete further down if applicable.
 						//This makes ComputeBaseEst work properly on new cap procs w status Complete
 						claimProcs[i].Status=ClaimProcStatus.CapEstimate;
@@ -223,7 +223,7 @@ namespace OpenDental{
 				if(claimProcs[i].PlanNum>0&&PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
 					ClaimProcL.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Sec,PlanList,patPlans,benefitList);
 				}
-				if(IsInitialEntry
+				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate
 					&&proc.ProcStatus==ProcStat.C) {
 					claimProcs[i].Status=ClaimProcStatus.CapComplete;
@@ -238,8 +238,8 @@ namespace OpenDental{
 		}
 
 		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
-		public static void ComputeEstimatesForAll(int patNum,ClaimProc[] claimProcs,Procedure[] procs,List <InsPlan> PlanList,List <PatPlan> patPlans,List <Benefit> benefitList) {
-			for(int i=0;i<procs.Length;i++) {
+		public static void ComputeEstimatesForAll(int patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List <InsPlan> PlanList,List <PatPlan> patPlans,List<Benefit> benefitList) {
+			for(int i=0;i<procs.Count;i++) {
 				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList);
 			}
 		}

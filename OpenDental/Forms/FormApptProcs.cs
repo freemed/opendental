@@ -28,11 +28,11 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
-			Procedure[] entireList=Procedures.Refresh(AptCur.PatNum);
+			List<Procedure> entireList=Procedures.Refresh(AptCur.PatNum);
 			ProcList=new List<Procedure>();
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			ApptStatus apptStatus=AptCur.AptStatus;
-			for(int i=0;i<entireList.Length;i++){
+			for(int i=0;i<entireList.Count;i++){
 				//We want all unattached completed procs with same date as appt.
 				//but only if one of these types
 				if(apptStatus==ApptStatus.Scheduled || apptStatus==ApptStatus.Complete || apptStatus==ApptStatus.ASAP || apptStatus==ApptStatus.Broken){
@@ -171,7 +171,7 @@ namespace OpenDental {
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
-			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new ClaimProc[0],true,planList,patPlanList,benefitList);
+			ProcedureL.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,planList,patPlanList,benefitList);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();

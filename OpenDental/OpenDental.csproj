@@ -209,7 +209,6 @@
     <Compile Include="Data Interface\ClearinghouseL.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
-    <Compile Include="Data Interface\EtransL.cs" />
     <Compile Include="Data Interface\FeeL.cs" />
     <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\Lan.cs">
