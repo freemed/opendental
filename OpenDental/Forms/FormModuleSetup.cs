@@ -1001,14 +1001,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Change all insurance plans right now?")){
 				return;
 			}
-			string command="UPDATE insplan SET DedBeforePerc=";
-			if(checkDeductibleBeforePercent.Checked){
-				command+="1";
-			}
-			else{
-				command+="0";
-			}
-			int result=Db.NonQ(command);
+			int result=InsPlans.SetDeductBeforePercentAll(checkDeductibleBeforePercent.Checked);
 			MessageBox.Show(Lan.g(this,"Plans changed: ")+result.ToString());
 		}
 

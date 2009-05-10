@@ -201,6 +201,10 @@ namespace OpenDental{
 		}
 
 		private void butDownload_Click(object sender, System.EventArgs e) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				MessageBox.Show("Not allowed when using client web.");
+				return;
+			}
 			string remoteUri = "http://www.open-dent.com/cultures/";
 			string fileName = CultureInfo.CurrentCulture.Name+".sql";//eg. en-US.sql
 			string myStringWebResource = null;
@@ -217,7 +221,7 @@ namespace OpenDental{
 			try{
 				//ConvertDB.ExecuteFile(fileName);
 				string content = File.ReadAllText(fileName).Trim();
-				Db.NonQ(content);
+				Lans.LoadTranslationsFromTextFile(content);
 			}
 			catch{
 				MessageBox.Show("Translations not installed properly.");

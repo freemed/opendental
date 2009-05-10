@@ -1055,5 +1055,20 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		public static int SetDeductBeforePercentAll(bool checkDeductibleBeforePercentChecked) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),checkDeductibleBeforePercentChecked);
+			}
+			string command="UPDATE insplan SET DedBeforePerc=";
+			if(checkDeductibleBeforePercentChecked) {
+				command+="1";
+			}
+			else {
+				command+="0";
+			}
+			int result=Db.NonQ(command);
+			return result;
+		}
+
 	}
 }

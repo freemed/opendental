@@ -835,13 +835,14 @@ namespace OpenDental{
 			Close();
 		}
 
+		/*
 		private void FillTableWithData(StringBuilder tableData,string tempFile,string tableName){
 			using(StreamWriter sw=new StreamWriter(tempFile,false)){//new file each time
 				sw.Write(tableData.ToString());
 			}
 			string command="LOAD DATA INFILE '"+tempFile.Replace("\\","/")+"' INTO TABLE "+tableName;
 			Db.NonQ(command);
-		}
+		}*/
 
 		private void butSave_Click(object sender, System.EventArgs e) {
 			//test for trailing slashes

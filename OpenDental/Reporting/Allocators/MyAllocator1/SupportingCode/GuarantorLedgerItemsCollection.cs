@@ -377,7 +377,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 						if(i < keys2Delete.Count - 1)
 							dropUnusedCommand += "\nOR ";
 					}
-					Db.NonQ(dropUnusedCommand);
+					Db.NonQOld(dropUnusedCommand);
 				}
 			}
 			catch(Exception exc) {
@@ -397,7 +397,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 						if(i < SplitsToDrop.Count - 1)
 							cmd += "\nOR ";
 					}
-					Db.NonQ(cmd);
+					Db.NonQOld(cmd);
 				}
 				// Add Spilt to AllocationTable
 				if(SplitsToWrite.Count != 0) {
@@ -425,7 +425,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 						if(i < SplitsToWrite.Count - 1 && SplitsToWrite[i].PAYMENT_SPLITS.Count != 0)
 							cmd += " , \n  ";
 					}
-					Db.NonQ(cmd);
+					Db.NonQOld(cmd);
 				}
 
 			}

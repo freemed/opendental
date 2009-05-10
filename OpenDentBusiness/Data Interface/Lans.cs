@@ -239,6 +239,14 @@ namespace OpenDentBusiness {
 			return hFormat;
 		}
 
+		///<summary>This is one rare situation where queries can be passed.  But it will always fail for client web and server web.</summary>
+		public static void LoadTranslationsFromTextFile(string content) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientDirect) {
+				throw new ApplicationException("Not allowed.");
+			}
+			Db.NonQ(content);
+		}
+
 		
 	}
 }
