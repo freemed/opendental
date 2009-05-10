@@ -190,17 +190,7 @@ namespace OpenDental {
 		}
 
 		private void displayPatientName() {
-			string command;
-			DataTable table;
-			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				FROM patient WHERE patient.PatNum=" + PatID;
-			table = Db.GetTable(command);
-			if(table.Rows.Count != 0) {
-				this.LblPatientName.Text= PIn.PString(table.Rows[0][1].ToString()) + ", "+ PIn.PString(table.Rows[0][0].ToString()) + " is Eligible";
-			}
-			else {
-				this.LblPatientName.Text= "Patient(???) is Eligible";
-			}
+			this.LblPatientName.Text=Patients.GetEligibilityDisplayName(PatID);
 		}
 
 		private void prepareDataSetAndTable() {

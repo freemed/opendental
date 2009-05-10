@@ -87,6 +87,18 @@ namespace OpenDentBusiness{
 			command= "DELETE from periomeasure WHERE PerioExamNum = '"+Cur.PerioExamNum.ToString()+"'";
 			Db.NonQ(command);
 		}
+
+		///<summary>Used by PerioMeasures when refreshing to organize array.</summary>
+		public static int GetExamIndex(int perioExamNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].PerioExamNum==perioExamNum) {
+					return i;
+				}
+			}
+			//MessageBox.Show("Error. PerioExamNum not in list: "+perioExamNum.ToString());
+			return 0;
+		}
 	
 	}
 }

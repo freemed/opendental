@@ -1762,6 +1762,19 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
+		public static string GetEligibilityDisplayName(int patId) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),patId);
+			}
+			string command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
+				FROM patient WHERE patient.PatNum=" + POut.PInt(patId);
+			DataTable table = Db.GetTable(command);
+			if(table.Rows.Count == 0) {
+				return "Patient(???) is Eligible";
+			}
+			return PIn.PString(table.Rows[0][1].ToString()) + ", "+ PIn.PString(table.Rows[0][0].ToString()) + " is Eligible";
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>

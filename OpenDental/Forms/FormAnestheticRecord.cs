@@ -18,9 +18,8 @@ using OpenDental.UI;
 using CodeBase;
 using System.IO;
 
-namespace OpenDental
-{
-	public class FormAnestheticRecord : System.Windows.Forms.Form{
+namespace OpenDental {
+	public class FormAnestheticRecord:System.Windows.Forms.Form {
 		public static Userod CurUser;
 		private bool IsStartingUp;
 		private bool IsUpdate;
@@ -196,7 +195,7 @@ namespace OpenDental
 		public HorizontalAlignment textAlign;
 		//public PrintWindow printPage; //****disabled for now
 
-		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur){
+		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur) {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -208,13 +207,11 @@ namespace OpenDental
 			Lan.F(this);
 			allowTopaz = (Environment.OSVersion.Platform != PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			sigBox.SetTabletState(1);
-			if (!allowTopaz)
-			{
+			if(!allowTopaz) {
 				butSignTopaz.Visible = false;
 				sigBox.Visible = true;
 			}
-			else
-			{
+			else {
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz = CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location = sigBox.Location;//this puts both boxes in the same spot.
@@ -230,18 +227,16 @@ namespace OpenDental
 		}
 
 		/// <summary>Clean up any resources being used.</summary>
-		protected override void Dispose(bool disposing){
-			if (disposing)
-			{
-				if (components != null)
-				{
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
 					components.Dispose();
 				}
 			}
 			base.Dispose(disposing);
 		}
 
-		private void InitializeComponent(){
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.labelVSM = new System.Windows.Forms.Label();
 			this.labelVSMSerNum = new System.Windows.Forms.Label();
@@ -2184,18 +2179,16 @@ namespace OpenDental
 		public AnesthMedsGivens medCur;
 		public Anes_hl7data hl7Cur;
 
-		private void FormAnestheticRecord_Load(object sender, EventArgs e){	
-			this.Text = "Anesthetic Record - Patient:" + Patients.GetPat(PatCur.PatNum).GetNameLF( ) + " - " + PatCur.PatNum;
+		private void FormAnestheticRecord_Load(object sender,EventArgs e) {
+			this.Text = "Anesthetic Record - Patient:" + Patients.GetPat(PatCur.PatNum).GetNameLF() + " - " + PatCur.PatNum;
 			RefreshListAnesthetics();
 			//necessary because we want the newest record at the top of the list selected and no records generates an exception
-			try 
-				{
-					 listAnesthetics.SelectedIndex = 0;
-				}
-			catch 
-				{
-					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
-				}
+			try {
+				listAnesthetics.SelectedIndex = 0;
+			}
+			catch {
+				listAnesthetics.SelectedIndex = AnestheticRecords.List.Length -1;
+			}
 			IsStartingUp = true;
 			//display Patient name
 			textPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
@@ -2203,116 +2196,101 @@ namespace OpenDental
 			textPatID.Text = PatCur.PatNum.ToString();
 			RefreshProvComboBoxes();
 			RefreshAnesthMedComboBoxes();
-				if (listAnesthetics.SelectedIndex == -1)
-				{
-					//prevents user from generating an exception when no record exists yet
-					butDoseEnter.Enabled = false;
-					//prevents exception if user tries to save to db when no record exists yet
-					butOK.Enabled = false;
-					butClose.Enabled = false;
-				}
-				else
-				{
-					butDoseEnter.Enabled = true;
-					butOK.Enabled = true;
-					butClose.Enabled = true;
-				}
-			try
-			{
-			//this will be an empty string if there are no records yet, and will throw an exception
-			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-			int anestheticRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-			
+			if(listAnesthetics.SelectedIndex == -1) {
+				//prevents user from generating an exception when no record exists yet
+				butDoseEnter.Enabled = false;
+				//prevents exception if user tries to save to db when no record exists yet
+				butOK.Enabled = false;
+				butClose.Enabled = false;
 			}
-			catch
-			{
+			else {
+				butDoseEnter.Enabled = true;
+				butOK.Enabled = true;
+				butClose.Enabled = true;
+			}
+			try {
+				//this will be an empty string if there are no records yet, and will throw an exception
+				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				int anestheticRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
+
+			}
+			catch {
 				return;
 			}
 			this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 			IsStartingUp = true;
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
-			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			IsStartingUp = false;
 
 		}
 
-		private void RefreshListAnesthetics(){
+		private void RefreshListAnesthetics() {
 			//most recent date at the top
 			AnestheticRecords.Refresh(PatCur.PatNum);
 			listAnesthetics.Items.Clear();
-			for (int i = 0; i < AnestheticRecords.List.Length; i++)
-			{
+			for(int i = 0;i < AnestheticRecords.List.Length;i++) {
 				listAnesthetics.Items.Add(AnestheticRecords.List[i].AnestheticDate);
 				anestheticRecordCur = AnestheticRecords.List[i].AnestheticRecordNum;
 			}
 		}
 
-		private void RefreshAnesthMedComboBoxes(){
+		private void RefreshAnesthMedComboBoxes() {
 			//Binds the combobox comboBoxAnesthMed with Medication names from the database.
 			this.comboAnesthMed.Items.Clear();
-			this.comboAnesthMed.Items.Insert(0, "");
+			this.comboAnesthMed.Items.Insert(0,"");
 			int noOfRows = AnestheticQueries.bindAMedName().Tables[0].Rows.Count;
-			for (int i = 0; i <= noOfRows - 1; i++)
-			{
+			for(int i = 0;i <= noOfRows - 1;i++) {
 				this.comboAnesthMed.Items.Add(AnestheticQueries.bindAMedName().Tables[0].Rows[i][0].ToString());
 				this.comboAnesthMed.SelectedIndex = 0;
 			}
 		}
 
-		private void RefreshProvComboBoxes(){
-				//Anesthetist comboBox
-				this.comboAnesthetist.Items.Clear();
-				comboAnesthetist.Items.Add(Lan.g(this, ""));
-				for (int i = 0; i < ProviderC.List.Length; i++)
-				{
-					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1)
-					{
-						comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-					}
+		private void RefreshProvComboBoxes() {
+			//Anesthetist comboBox
+			this.comboAnesthetist.Items.Clear();
+			comboAnesthetist.Items.Add(Lan.g(this,""));
+			for(int i = 0;i < ProviderC.List.Length;i++) {
+				if(AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum)== 1) {
+					comboAnesthetist.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 				}
-				
-				//Surgeon comboBox
-				this.comboSurgeon.Items.Clear();
-				comboSurgeon.Items.Add(Lan.g(this, ""));
-				for (int i = 0; i < ProviderC.List.Length; i++)
-				{
-					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 1)
-					{
-						comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-					}
+			}
+
+			//Surgeon comboBox
+			this.comboSurgeon.Items.Clear();
+			comboSurgeon.Items.Add(Lan.g(this,""));
+			for(int i = 0;i < ProviderC.List.Length;i++) {
+				if(AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 1) {
+					comboSurgeon.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
+				}
+			}
+
+			//Surgical assistant comboBox
+			this.comboAsst.Items.Clear();
+			comboAsst.Items.Add(Lan.g(this,""));
+			for(int i = 0;i < ProviderC.List.Length;i++) {
+				if(AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2) {
+					comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 				}
 
-				//Surgical assistant comboBox
-				this.comboAsst.Items.Clear();
-				comboAsst.Items.Add(Lan.g(this, ""));
-				for (int i = 0; i < ProviderC.List.Length; i++)
-				{
-					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2)
-					{
-						comboAsst.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-					}
-				
+			}
+
+			//Circulator comboBox
+			this.comboCirc.Items.Clear();
+			comboCirc.Items.Add(Lan.g(this,""));
+			for(int i = 0;i < ProviderC.List.Length;i++) {
+				if(AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2) {
+					comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
 				}
 
-				//Circulator comboBox
-				this.comboCirc.Items.Clear();
-				comboCirc.Items.Add(Lan.g(this, ""));
-				for (int i = 0; i < ProviderC.List.Length; i++)
-				{
-					if (AnestheticRecords.GetAnesthProvType(ProviderC.List[i].ProvNum) == 2)
-					{
-						comboCirc.Items.Add(ProviderC.List[i].LName + "," + ProviderC.List[i].FName);
-					}	
-				
-				}
+			}
 
-}
+		}
 
 		/// <summary> Load saved data into form for selected Anesthetic Record/// </summary>
-		private void FillControls(int PatNum, int anestheticRecordCur){
-			if (listAnesthetics.SelectedIndex == -1)
-			{	
+		private void FillControls(int PatNum,int anestheticRecordCur) {
+			if(listAnesthetics.SelectedIndex == -1) {
 				//prevents user from generating an exception when no record exists yet
 				butDoseEnter.Enabled = false;
 				//prevents exception if user tries to save to db with no items in list
@@ -2321,21 +2299,16 @@ namespace OpenDental
 				butSignTopaz.Enabled = false;
 				butClearSig.Enabled = false;
 			}
-			else
-			{
+			else {
 				butDoseEnter.Enabled = true;
 				butOK.Enabled = true;
 				butClose.Enabled = true;
 				butSignTopaz.Enabled = true;
 				butClearSig.Enabled = true;
 			}
-			string command ="SELECT * "                   
-			+ " FROM anestheticdata"					
-			+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
-			DataTable table = Db.GetTable(command);
+			DataTable table = AnestheticQueries.GetAnestheticData(anestheticRecordCur);
 			AnestheticData Cur;
-			for (int i = 0; i < table.Rows.Count; i++)
-			{
+			for(int i = 0;i < table.Rows.Count;i++) {
 				Cur = new AnestheticData();
 				AnesthDataCur = Cur;
 				Cur.AnestheticDataNum = PIn.PInt(table.Rows[i][0].ToString());
@@ -2403,77 +2376,63 @@ namespace OpenDental
 				//comboCirc
 				comboCirc.SelectedItem = Cur.Circulator.ToString();
 				//VSM, set to "" if no networked monitor has written its name to the db
-				if (Cur.VSMName == null)
-				{
+				if(Cur.VSMName == null) {
 					textVSMName.Text = "";
 				}
-				else
-				{
+				else {
 					textVSMName.Text = Cur.VSMName;
 				}
 				//VSMSerNum, set to "" if no networked monitor has written its serial number to the db
-				if (Cur.VSMSerNum == null)
-				{
+				if(Cur.VSMSerNum == null) {
 					textVSMSerNum.Text = "";
 				}
-				else
-				{
+				else {
 					textVSMSerNum.Text = Cur.VSMSerNum;
 				}
 				//load comboASA
 				comboASA.SelectedItem = Cur.ASA;
 				//load comboASA_EModifier
-					if (Cur.ASA_EModifier == "E")
-					{
-						comboASA_EModifier.SelectedIndex = 1;
-					}
+				if(Cur.ASA_EModifier == "E") {
+					comboASA_EModifier.SelectedIndex = 1;
+				}
 				//comboO2LMin
-					comboO2LMin.SelectedItem = Cur.O2LMin.ToString();
+				comboO2LMin.SelectedItem = Cur.O2LMin.ToString();
 				//comboN2OLMin
-					comboN2OLMin.SelectedItem = Cur.N2OLMin.ToString();
+				comboN2OLMin.SelectedItem = Cur.N2OLMin.ToString();
 				//radRteNasCan
-				if (Cur.RteNasCan == true)
-					{
-						radRteNasCan.Checked = true;
-					}
+				if(Cur.RteNasCan == true) {
+					radRteNasCan.Checked = true;
+				}
 				//radNasHood
-				if (Cur.RteNasHood == true)
-				{
+				if(Cur.RteNasHood == true) {
 					radRteNasHood.Checked = true;
 				}
 				//radRteETT
-				if (Cur.RteETT == true)
-				{
+				if(Cur.RteETT == true) {
 					radRteETT.Checked = true;
 				}
 				//radMedRouteIVCath
-				if (Cur.MedRouteIVCath == true)
-				{
+				if(Cur.MedRouteIVCath == true) {
 					radMedRouteIVCath.Checked = true;
 				}
 				//radMedRouteIVButtFly
-				if (Cur.MedRouteIVButtFly == true)
-				{
+				if(Cur.MedRouteIVButtFly == true) {
 					radMedRouteIVButtFly.Checked = true;
 				}
 				//radMedRouteIM
-				if (Cur.MedRouteIM == true)
-				{
+				if(Cur.MedRouteIM == true) {
 					radMedRouteIM.Checked = true;
 				}
 				//radMedRoutePO
-				if (Cur.MedRoutePO == true)
-				{
+				if(Cur.MedRoutePO == true) {
 					radMedRoutePO.Checked = true;
 				}
 				//radMedRouteNasal
-				if (Cur.MedRouteNasal == true)
-				{
+				if(Cur.MedRouteNasal == true) {
 					radMedRouteNasal.Checked = true;
 				}
 				//radMedRouteRectal
-				if (Cur.MedRouteRectal == true)
-				{
+				if(Cur.MedRouteRectal == true) {
 					radMedRouteRectal.Checked = true;
 				}
 				//comboIVSite
@@ -2481,13 +2440,11 @@ namespace OpenDental
 				//combIVGauge
 				comboIVGauge.SelectedItem = Cur.IVGauge.ToString();
 				//radIVSideR
-				if (Cur.IVSideR == true)
-				{
+				if(Cur.IVSideR == true) {
 					radIVSideR.Checked = true;
 				}
 				//radIVSideL
-				if (Cur.IVSideL == true)
-				{
+				if(Cur.IVSideL == true) {
 					radIVSideL.Checked = true;
 				}
 				//comboIVAtt
@@ -2497,33 +2454,27 @@ namespace OpenDental
 				//textIVFVol
 				textIVFVol.Text = Cur.IVFVol.ToString();
 				//checkMonBP
-				if (Cur.MonBP == true)
-				{
+				if(Cur.MonBP == true) {
 					checkMonBP.Checked = true;
 				}
 				//checkMonSpO2
-				if (Cur.MonSpO2 == true)
-				{
+				if(Cur.MonSpO2 == true) {
 					checkMonSpO2.Checked = true;
 				}
 				//checkMonEtCO2
-				if (Cur.MonEtCO2 == true)
-				{
+				if(Cur.MonEtCO2 == true) {
 					checkMonEtCO2.Checked = true;
 				}
 				//checkMonTemp
-				if (Cur.MonTemp == true)
-				{
+				if(Cur.MonTemp == true) {
 					checkMonTemp.Checked = true;
 				}
 				//checkMonPrecordial
-				if (Cur.MonPrecordial == true)
-				{
+				if(Cur.MonPrecordial == true) {
 					checkMonPrecordial.Checked = true;
 				}
 				//checkMonEKG
-				if (Cur.MonEKG == true)
-				{
+				if(Cur.MonEKG == true) {
 					checkMonEKG.Checked = true;
 				}
 				//notes
@@ -2531,19 +2482,16 @@ namespace OpenDental
 				//PatWgt
 				textPatWgt.Text = Cur.PatWgt.ToString();
 				//radWgtUnitsLbs
-				if (Cur.WgtUnitsLbs == true)
-				{
+				if(Cur.WgtUnitsLbs == true) {
 					radWgtUnitsLbs.Checked = true;
 				}
 				//comboWgtUnitsKgs
-				if (Cur.WgtUnitsKgs == true)
-				{
+				if(Cur.WgtUnitsKgs == true) {
 					radWgtUnitsKgs.Checked = true;
 				}
 				textPatHgt.Text = Cur.PatHgt.ToString();
 				//radHgtUnitsIn
-				if (Cur.HgtUnitsIn == true)
-				{
+				if(Cur.HgtUnitsIn == true) {
 					radHgtUnitsIn.Checked = true;
 				}
 				//radHgtUnitsCm
@@ -2553,49 +2501,41 @@ namespace OpenDental
 				//comboNPOTime
 				comboNPOTime.SelectedItem = Cur.NPOTime.ToString();
 				//labelAnesthScore
-				try
-				{
+				try {
 					anesthScore = AnestheticRecords.GetAnesthScore(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 					AnesthScore = Convert.ToString(anesthScore);
 				}
-				catch
-				{
+				catch {
 					AnesthScore = "0";
 				}
 				this.labelAnesthScore.Text = Convert.ToString(AnesthScore);
 			}
 			labelInvalidSig.Visible = false;
 			sigBox.Visible = true;
-			if (listAnesthetics.SelectedIndex != -1) //catches exception when no Anesthetic Records saved yet
+			if(listAnesthetics.SelectedIndex != -1) //catches exception when no Anesthetic Records saved yet
 			{
-				if (AnesthDataCur.SigIsTopaz)
-				{
-					if (AnesthDataCur.Signature != "")
-					{
-						if (allowTopaz)
-						{
+				if(AnesthDataCur.SigIsTopaz) {
+					if(AnesthDataCur.Signature != "") {
+						if(allowTopaz) {
 							sigBox.Visible = false;
 							sigBoxTopaz.Visible = true;
 							CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
-							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
-							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
-							CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
-							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
-							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);//high encryption
-							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);//high compression
-							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz, AnesthDataCur.Signature);
-							sigBoxTopaz.Refresh(); 
-							if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
-							{
+							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+							CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
+							CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
+							CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+							CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+							CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,AnesthDataCur.Signature);
+							sigBoxTopaz.Refresh();
+							if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0) {
 								labelInvalidSig.Visible = true;
 							}
 						}
 					}
 				}
-				else
-				{
-					if (AnesthDataCur.Signature != null && AnesthDataCur.Signature != "")
-					{
+				else {
+					if(AnesthDataCur.Signature != null && AnesthDataCur.Signature != "") {
 						sigBox.Visible = true;
 						sigBoxTopaz.Visible = false;
 						sigBox.ClearTablet();
@@ -2606,23 +2546,22 @@ namespace OpenDental
 						//sigBox.SetEncryptionMode(2);//high encryption
 						//sigBox.SetSigCompressionMode(2);//high compression
 						sigBox.SetSigString(AnesthDataCur.Signature);
-						if (sigBox.NumberOfTabletPoints() == 0)
-						{
+						if(sigBox.NumberOfTabletPoints() == 0) {
 							labelInvalidSig.Visible = true;
 						}
 						sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
 					}
 				}
 			}
-			
+
 		}
 
-		private void listAnesthetics_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+		private void listAnesthetics_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+			FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		}
 
-		private void butAddAnesthetic_Click(object sender, EventArgs e){
+		private void butAddAnesthetic_Click(object sender,EventArgs e) {
 			IsUpdate = false;
 			AnestheticRecordCur = new AnestheticRecord();
 			AnestheticRecordCur.PatNum = PatCur.PatNum;
@@ -2637,37 +2576,30 @@ namespace OpenDental
 		}
 
 		/// <summary> D eletes an Anesthetic Record from the list of saved Anesthetic Records</summary>
-		private void butDelAnesthetic_Click(object sender, System.EventArgs e){
+		private void butDelAnesthetic_Click(object sender,System.EventArgs e) {
 			string anestheticRecordNum = "";
-			try
-			{
-			anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			try {
+				anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 			}
-			catch
-			{
+			catch {
 				MessageBox.Show(Lan.g(this,"No records to delete"));
 				return;
 			}
 
-			if (MessageBox.Show(Lan.g(this,"Delete Anesthetic?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
-			{
+			if(MessageBox.Show(Lan.g(this,"Delete Anesthetic?"),"",MessageBoxButtons.OKCancel) != DialogResult.OK) {
 				return;
 			}
 			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
+			if(GroupPermissions.HasPermission(curUser.UserGroupNum,Permissions.AnesthesiaControlMeds)) {
 				AnestheticRecords.Delete(AnestheticRecords.List[listAnesthetics.SelectedIndex]);
 				RefreshListAnesthetics();
-				try
-				{
+				try {
 					listAnesthetics.SelectedIndex = 0;
 				}
-				catch
-				{
+				catch {
 					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
 				}
-				if (listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1)
-				{
+				if(listAnesthetics.SelectedIndex == AnestheticRecords.List.Length - 1) {
 					//prevents user from generating an exception when no record exists yet
 					butDoseEnter.Enabled = false;
 					//prevents exception if user tries to save to db with no items in list
@@ -2676,66 +2608,60 @@ namespace OpenDental
 					//deletes any Anesthetic Meds that may have already been entered on an Anesthetic Record and then returns the quantities back into Inventory
 					int AnestheticRecordNum = Convert.ToInt32(anestheticRecordNum);
 					listAnesthMedsGiven=AnesthMedsGivens.CreateObjects(AnestheticRecordNum);
-					for (int i = 0; i < listAnesthMedsGiven.Count; i++)
-						{ 
-							AnesthMeds.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName, Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven), Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted), Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp), Convert.ToInt32(anestheticRecordNum));
-						}
+					for(int i = 0;i < listAnesthMedsGiven.Count;i++) {
+						AnesthMeds.DeleteAnesthMedsGiven(listAnesthMedsGiven[i].AnesthMedName,Convert.ToDouble(listAnesthMedsGiven[i].QtyGiven),Convert.ToDouble(listAnesthMedsGiven[i].QtyWasted),Convert.ToString(listAnesthMedsGiven[i].DoseTimeStamp),Convert.ToInt32(anestheticRecordNum));
+					}
 					//properly resets the selected anesthetic record to the most recent and refreshes the anesthetic meds grid accordingly
-					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1; 
+					listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;
 					try//will generate an exception if deletion is done with only one anesthetic record in the list, because now there are no more records
 						{
-							anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-						}
-					catch
-						{
-						}
+						anestheticRecordNum = Convert.ToString(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+					}
+					catch {
+					}
 					FillGridAnesthMeds(Convert.ToInt32(anestheticRecordNum));
 				}
-				else
-				{
+				else {
 					butDoseEnter.Enabled = true;
 					butOK.Enabled = true;
 					butClose.Enabled = true;
 				}
 				try //will be null and generate an exception if the Anesthetic Record has just been deleted, and it's the only one on the list
 					{
-						FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-					}
-				catch
-					{
+					FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				}
+				catch {
 					return;
-					}
+				}
 				return;
 			}
-			else
-			{
+			else {
 				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
 
-		private void butCancel_Click(object sender, EventArgs e){
+		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult = DialogResult.Cancel;
 		}
 
-		private void FillGridAnesthMeds(int anestheticRecordNum){
+		private void FillGridAnesthMeds(int anestheticRecordNum) {
 			listAnesthMedsGiven = AnesthMedsGivens.CreateObjects(anestheticRecordNum);
 			AnesthMedsGivens.RefreshCache(anestheticRecordNum);
 			gridAnesthMeds.BeginUpdate();
 			gridAnesthMeds.Columns.Clear();
 			textAlign=HorizontalAlignment.Center;
-			ODGridColumn col = new ODGridColumn(Lan.g(this, "Medication"),130,textAlign);
+			ODGridColumn col = new ODGridColumn(Lan.g(this,"Medication"),130,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Dose"),60,textAlign);
+			col = new ODGridColumn(Lan.g(this,"Dose"),60,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Waste"),60,textAlign);
+			col = new ODGridColumn(Lan.g(this,"Waste"),60,textAlign);
 			gridAnesthMeds.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "TimeStamp"),50,textAlign);
+			col = new ODGridColumn(Lan.g(this,"TimeStamp"),50,textAlign);
 			gridAnesthMeds.Columns.Add(col);
 			gridAnesthMeds.Rows.Clear();
 			ODGridRow row;
-			for (int i = 0; i < AnestheticMedsGivenC.Listt.Count; i++)
-			{
+			for(int i = 0;i < AnestheticMedsGivenC.Listt.Count;i++) {
 				row = new ODGridRow();
 				row.Cells.Add(AnestheticMedsGivenC.Listt[i].AnesthMedName);
 				row.Cells.Add(AnestheticMedsGivenC.Listt[i].QtyGiven);
@@ -2750,30 +2676,27 @@ namespace OpenDental
 		/// Fills the Anesth Vital Signs table
 		/// </summary>
 		/// <param name="anestheticRecordNum"></param>
-		private void FillGridVSData(int anestheticRecordNum){
+		private void FillGridVSData(int anestheticRecordNum) {
 			DateTime anesthDT = Convert.ToDateTime(listAnesthetics.SelectedItem);
 			string anesthDateTime = anesthDT.ToString("yyyyMMddHHmmss");
 			int AnestheticRecordNum =AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-			try
-			{
+			try {
 				listAnes_hl7data = Anes_HL7Datas.CreateObjects(AnestheticRecordNum);
-				for (int i = 0; i < listAnes_hl7data.Count; i++)
-						{ 
-							Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum, PatCur.PatNum, Convert.ToString(listAnes_hl7data[i].HL7Message), Convert.ToString(listAnes_hl7data[i].MessageID), anesthDateTime, textAnesthOpen.Text, textAnesthClose.Text);//if db has been set up with HL7 schema
-						}
-				Anes_HL7Datas.RefreshCache();
-			}							
-			catch
-				{
-					
+				for(int i = 0;i < listAnes_hl7data.Count;i++) {
+					Anes_HL7Datas.ParseHL7Messages(AnestheticRecordNum,PatCur.PatNum,Convert.ToString(listAnes_hl7data[i].HL7Message),Convert.ToString(listAnes_hl7data[i].MessageID),anesthDateTime,textAnesthOpen.Text,textAnesthClose.Text);//if db has been set up with HL7 schema
 				}
-			
+				Anes_HL7Datas.RefreshCache();
+			}
+			catch {
+
+			}
+
 			listAnesthVSData = AnesthVSDatas.CreateObjects(anestheticRecordNum);
 			AnesthVSDatas.RefreshCache(anestheticRecordNum);
 			gridVSData.BeginUpdate();
 			gridVSData.Columns.Clear();
 			textAlign=HorizontalAlignment.Center;
-			ODGridColumn col = new ODGridColumn(Lan.g(this, "Time Stamp"),130,textAlign);
+			ODGridColumn col = new ODGridColumn(Lan.g(this,"Time Stamp"),130,textAlign);
 			gridVSData.Columns.Add(col);
 			col = new ODGridColumn(Lan.g(this,"BP"),60,textAlign);
 			gridVSData.Columns.Add(col);
@@ -2789,153 +2712,143 @@ namespace OpenDental
 			gridVSData.Columns.Add(col);
 			gridVSData.Rows.Clear();
 			ODGridRow row;
-			for (int i = 0; i < AnesthVSDataC.Listt.Count; i++)
-			{
+			for(int i = 0;i < AnesthVSDataC.Listt.Count;i++) {
 				Double vSTimeStamp = Convert.ToDouble(AnesthVSDataC.Listt[i].VSTimeStamp);
 				string vsts = String.Format("{0:0000-00-00 00:00:00}",vSTimeStamp);
 				DateTime VSTS = Convert.ToDateTime(vsts);
 				string VSTStamp = VSTS.ToString("hh:mm:ss tt");
-				
+
 				row = new ODGridRow();
 				row.Cells.Add(VSTStamp); //(AnesthVSDataC.Listt[i].VSTimeStamp);
 				//because "---" look better than "0's" for blank values...
-				if (AnesthVSDataC.Listt[i].BPSys == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].BPSys == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].BPSys + "/" + AnesthVSDataC.Listt[i].BPDias);
-				if (AnesthVSDataC.Listt[i].BPMAP == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].BPMAP == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].BPMAP);
-				if (AnesthVSDataC.Listt[i].HR == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].HR == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].HR);
-				if (AnesthVSDataC.Listt[i].SpO2 == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].SpO2 == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].SpO2);
-				if (AnesthVSDataC.Listt[i].EtCO2 == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].EtCO2 == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].EtCO2);
-				if (AnesthVSDataC.Listt[i].Temp == "0")
-					{row.Cells.Add("---");}
+				if(AnesthVSDataC.Listt[i].Temp == "0") { row.Cells.Add("---"); }
 				else row.Cells.Add(AnesthVSDataC.Listt[i].Temp);
 				gridVSData.Rows.Add(row);
 			}
 			gridVSData.EndUpdate();
-		
+
 		}
 
-		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox5_SelectedIndexChanged(object sender,EventArgs e) {
 		}
 
-		private void checkBox7_CheckedChanged(object sender, EventArgs e){
+		private void checkBox7_CheckedChanged(object sender,EventArgs e) {
 		}
 
-		private void label26_Click(object sender, EventArgs e){
+		private void label26_Click(object sender,EventArgs e) {
 		}
 
-		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox8_SelectedIndexChanged(object sender,EventArgs e) {
 		}
 
-		private void listAnesthetics_SelectedIndexChanged(object sender, EventArgs e){
-				FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+		private void listAnesthetics_SelectedIndexChanged(object sender,EventArgs e) {
+			FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillGridVSData(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		}
 
-		private void sigBox_Click(object sender, EventArgs e){
+		private void sigBox_Click(object sender,EventArgs e) {
 		}
 
-		private void button20_Click(object sender, EventArgs e){
+		private void button20_Click(object sender,EventArgs e) {
 		}
 
-		private void textBoxSurgOpen_TextChanged(object sender, EventArgs e){
+		private void textBoxSurgOpen_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void textBoxAnesthClose_TextChanged(object sender, EventArgs e){
+		private void textBoxAnesthClose_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void textBoxSurgClose_TextChanged(object sender, EventArgs e){
+		private void textBoxSurgClose_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void butAnesthOpen_Click(object sender, EventArgs e){
+		private void butAnesthOpen_Click(object sender,EventArgs e) {
 			textAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows "AM/PM", change to "HH:mm:ss" for military time
 		}
 
-		private void butSurgOpen_Click(object sender, EventArgs e){
+		private void butSurgOpen_Click(object sender,EventArgs e) {
 			textSurgOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 		}
 
-		private void butSurgClose_Click(object sender, EventArgs e){	
+		private void butSurgClose_Click(object sender,EventArgs e) {
 			textSurgClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 		}
 
-		private void butAnesthClose_Click(object sender, EventArgs e){	
+		private void butAnesthClose_Click(object sender,EventArgs e) {
 			textAnesthClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 			butAnesthScore.Focus();
 		}
 
-		private void butDelAnesthMeds_Click(object sender, EventArgs e){
+		private void butDelAnesthMeds_Click(object sender,EventArgs e) {
 			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
+			if(GroupPermissions.HasPermission(curUser.UserGroupNum,Permissions.AnesthesiaControlMeds)) {
 				return;
 			}
-			else
-			{
+			else {
 				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
 
-		private void label3_Click(object sender, EventArgs e){
+		private void label3_Click(object sender,EventArgs e) {
 		}
 
-		private void groupBox5_Enter(object sender, EventArgs e){
+		private void groupBox5_Enter(object sender,EventArgs e) {
 		}
 
-		private void textBoxPatHgt_TextChanged(object sender, EventArgs e){
+		private void textBoxPatHgt_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void textBoxPatWgt_TextChanged(object sender, EventArgs e){
+		private void textBoxPatWgt_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void groupBoxHgtWgt_Enter(object sender, EventArgs e){
+		private void groupBoxHgtWgt_Enter(object sender,EventArgs e) {
 		}
 
-		private void groupBox1_Enter(object sender, EventArgs e){
+		private void groupBox1_Enter(object sender,EventArgs e) {
 		}
 
-		private void comboAnesthMed_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboAnesthMed_SelectedIndexChanged(object sender,EventArgs e) {
 			textAnesthDose.Enabled = true;
 			textAnesthDose.ReadOnly = false;
 		}
 
-		private void textBoxPatient_TextChanged(object sender, EventArgs e){
+		private void textBoxPatient_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void textBoxPatID_TextChanged(object sender, EventArgs e){
+		private void textBoxPatID_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void labelAnesthetist_Click(object sender, EventArgs e){
+		private void labelAnesthetist_Click(object sender,EventArgs e) {
 		}
 
-		private void butSignTopaz_Click(object sender, EventArgs e){
+		private void butSignTopaz_Click(object sender,EventArgs e) {
 			sigBox.Visible = false;
-			sigBoxTopaz.Refresh(); 
+			sigBoxTopaz.Refresh();
 			sigBoxTopaz.Visible = true;
-			sigBoxTopaz.Refresh(); 
-			if (allowTopaz)
-			{
-				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz, 1);
+			sigBoxTopaz.Refresh();
+			if(allowTopaz) {
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
-			sigBoxTopaz.Refresh(); 
+			sigBoxTopaz.Refresh();
 			SigChanged = true;
 			labelInvalidSig.Visible = false;
 			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
 		}
 
-		private void sigBox_MouseUp(object sender, MouseEventArgs e){
+		private void sigBox_MouseUp(object sender,MouseEventArgs e) {
 			//this is done on mouse up so that the initial pen capture won't be delayed.
-			if (sigBox.GetTabletState() == 1//if accepting input.
+			if(sigBox.GetTabletState() == 1//if accepting input.
 				&& !SigChanged)//and sig not changed yet
 			{
 				//sigBox handles its own pen input.
@@ -2944,11 +2857,10 @@ namespace OpenDental
 			}
 		}
 
-		private void butClearSig_Click(object sender, EventArgs e){
+		private void butClearSig_Click(object sender,EventArgs e) {
 			sigBox.ClearTablet();
 			sigBox.Visible = true;
-			if (allowTopaz)
-			{
+			if(allowTopaz) {
 				CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				sigBoxTopaz.Visible = false;//until user explicitly starts it.
 			}
@@ -2958,139 +2870,126 @@ namespace OpenDental
 			AnestheticRecordCur.ProvNum = Security.CurUser.UserNum;
 		}
 
-		private void butDoseDecPoint_Click(object sender, EventArgs e){//Adds a decimal point to a dose
-			if (textAnesthDose.Text.Contains("."))
-			{
+		private void butDoseDecPoint_Click(object sender,EventArgs e) {//Adds a decimal point to a dose
+			if(textAnesthDose.Text.Contains(".")) {
 				hasDecimal = true;
 			}
-			else
-			{
+			else {
 				hasDecimal = false;
 			}
-			if (inputStatus)
-			{
-				if (!hasDecimal)
-				{
-					if (textAnesthDose.Text.Length != 0 && (!textAnesthDose.ReadOnly))
-					{
+			if(inputStatus) {
+				if(!hasDecimal) {
+					if(textAnesthDose.Text.Length != 0 && (!textAnesthDose.ReadOnly)) {
 						textAnesthDose.Text += butDoseDecPoint.Text;
 						hasDecimal = true;
 					}
-					else
-					{
+					else {
 						textAnesthDose.Text = "0.";
 					}
 				}
 			}
 		}
-		
-		private void butDose0_Click(object sender, EventArgs e){//Append '0' to textAnesthDose
-			if ((!textAnesthDose.ReadOnly))
+
+		private void butDose0_Click(object sender,EventArgs e) {//Append '0' to textAnesthDose
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose0.Text;
 		}
 		//Append '1' to textAnesthDose
-		private void butDose1_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose1_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose1.Text;
 		}
 		//Append '2' to textAnesthDose
-		private void butDose2_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose2_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose2.Text;
 		}
 		//Append '3' to textAnesthDose
-		private void butDose3_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose3_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose3.Text;
 		}
 		//Append '4' to textAnesthDose		
-		private void butDose4_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose4_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose4.Text;
 		}
 		//Append '5' to textAnesthDose
-		private void butDose5_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose5_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose5.Text;
 		}
 		//Append '6' to textAnesthDose
-		private void butDose6_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose6_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose6.Text;
 		}
 		//Append '7' to textAnesthDose
-		private void butDose7_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose7_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose7.Text;
 		}
 		//Append '8' to textAnesthDose
-		private void butDose8_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose8_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose8.Text;
 		}
 		//Append '9' to textAnesthDose
-		private void butDose9_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose9_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose9.Text;
 		}
 		//Append '10' to textAnesthDose		
-		private void butDose10_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose10_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose10.Text;
 		}
 		//Append '20' to textAnesthDose		
-		private void butDose20_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly))
+		private void butDose20_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly))
 				textAnesthDose.Text += butDose20.Text;
 		}
 		//Append '.25' to textAnesthDose
-		private void butDose25_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals(""))/*determines if this dose is less than 1*/)
-				{
+		private void butDose25_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals(""))/*determines if this dose is less than 1*/) {
 				textAnesthDose.Text += butDose25.Text;
-				}
-			else if (textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
+			}
+			else if(textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
 				{
-					textAnesthDose.Text += 0.25;
-				}
+				textAnesthDose.Text += 0.25;
+			}
 		}
 
 		//Append '.50' to textAnesthDose
-		private void butDose50_Click(object sender, EventArgs e){
-			if ((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals("")) /*determines if this dose is less than 1*/ )
-				{
-					textAnesthDose.Text += butDose50.Text;
-				}
-			else if (textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
+		private void butDose50_Click(object sender,EventArgs e) {
+			if((!textAnesthDose.ReadOnly) && (!textAnesthDose.Text.Contains(".")) && (!textAnesthDose.Text.Equals("")) /*determines if this dose is less than 1*/ ) {
+				textAnesthDose.Text += butDose50.Text;
+			}
+			else if(textAnesthDose.Text == "") //Appends a "0" to the dose if it's less than 1 so the Regex check works
 			{
 				textAnesthDose.Text += 0.50;
 			}
 		}
 
-		private void butDoseEnter_Click(object sender, EventArgs e){
+		private void butDoseEnter_Click(object sender,EventArgs e) {
 			patNum = PatCur.PatNum;
-			 if (textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0)
-			{
+			if(textAnesthDose.Text != "" && comboAnesthMed.SelectedIndex != 0) {
 				double amtWasted = 0;
-				AnesthMeds.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(), AnesthMeds.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()), Convert.ToDouble(textAnesthDose.Text), Convert.ToDouble(amtWasted), 0, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()), AnesthMeds.GetAnesthMedNum(comboAnesthMed.SelectedItem.ToString()));
+				AnesthMeds.InsertAMedDose(comboAnesthMed.SelectedItem.ToString(),AnesthMeds.GetQtyOnHand(comboAnesthMed.SelectedItem.ToString()),Convert.ToDouble(textAnesthDose.Text),Convert.ToDouble(amtWasted),0,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()),AnesthMeds.GetAnesthMedNum(comboAnesthMed.SelectedItem.ToString()));
 			}
-			else
-			{
-				if (textAnesthDose.Text == "")
-					{
-						MessageBox.Show(Lan.g(this,"Dose Field Can Not Be Empty"));
-						textAnesthDose.Focus();
-					}
-				else if (comboAnesthMed.SelectedIndex == 0)
-				{
+			else {
+				if(textAnesthDose.Text == "") {
+					MessageBox.Show(Lan.g(this,"Dose Field Can Not Be Empty"));
+					textAnesthDose.Focus();
+				}
+				else if(comboAnesthMed.SelectedIndex == 0) {
 					MessageBox.Show(Lan.g(this,"Please select an Anesthetic Medication"));
 					comboAnesthMed.Focus();
 				}
 			}
 			//Regular Expression to validate the format of the entered value in the textAnesthDose
 			Regex regex = new Regex("^\\d{1,4}(\\.\\d{1,2})?$");
-			if (!(regex.IsMatch(textAnesthDose.Text)) && textAnesthDose.Text != "")
-			{
+			if(!(regex.IsMatch(textAnesthDose.Text)) && textAnesthDose.Text != "") {
 				MessageBox.Show(Lan.g(this,"Dose should be xxxx.xx format"));
 				textAnesthDose.Focus();
 			}
@@ -3099,46 +2998,44 @@ namespace OpenDental
 			comboAnesthMed.SelectedIndex = 0;
 		}
 
-		private void FormAnestheticRecord_FormClosing(object sender, System.ComponentModel.CancelEventArgs e){
-			if (allowTopaz)
-			{
+		private void FormAnestheticRecord_FormClosing(object sender,System.ComponentModel.CancelEventArgs e) {
+			if(allowTopaz) {
 				sigBoxTopaz.Dispose();
 			}
 		}
 
-		private void textBoxAnesthOpen_TextChanged(object sender, EventArgs e){
+		private void textBoxAnesthOpen_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void labelRoute_Click(object sender, EventArgs e){
+		private void labelRoute_Click(object sender,EventArgs e) {
 		}
 
-		private void butAnesthScore_Click(object sender, EventArgs e){
+		private void butAnesthScore_Click(object sender,EventArgs e) {
 			SaveData();
 			int anestheticRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-			FormAnesthesiaScore FormAS = new FormAnesthesiaScore(PatCur, anestheticRecordNum);
+			FormAnesthesiaScore FormAS = new FormAnesthesiaScore(PatCur,anestheticRecordNum);
 			FormAS.ShowDialog();
-			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+			FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 		}
 
-		private void comboBoxO2LMin_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBoxO2LMin_SelectedIndexChanged(object sender,EventArgs e) {
 		}
 
-		private void textEscortName_TextChanged(object sender, EventArgs e){
+		private void textEscortName_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void textEscortCellNum_TextChanged(object sender, EventArgs e){
+		private void textEscortCellNum_TextChanged(object sender,EventArgs e) {
 			int cursor = textEscortCellNum.SelectionStart;
 			int length = textEscortCellNum.Text.Length;
 			textEscortCellNum.Text = TelephoneNumbers.AutoFormat(textEscortCellNum.Text);
-			if (textEscortCellNum.Text.Length > length)
+			if(textEscortCellNum.Text.Length > length)
 				cursor++;
 			textEscortCellNum.SelectionStart = cursor;
 		}
 
-		private void gridAnesthMeds_CellDoubleClick(object sender, ODGridClickEventArgs e){
+		private void gridAnesthMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
+			if(GroupPermissions.HasPermission(curUser.UserGroupNum,Permissions.AnesthesiaControlMeds)) {
 				AnestheticMedsGiven med = new AnestheticMedsGiven();
 				med.IsNew = false;
 				FormAnesthMedDelDose FormD = new FormAnesthMedDelDose();
@@ -3147,46 +3044,40 @@ namespace OpenDental
 				FillGridAnesthMeds(AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				return;
 			}
-			else
-			{
+			else {
 				MessageBox.Show(Lan.g(this,"You must be an administrator to unlock this action"));
 				return;
 			}
 		}
 
-		private void gridAnesthMeds_CellContentClick(object sender, ODGridClickEventArgs e){
+		private void gridAnesthMeds_CellContentClick(object sender,ODGridClickEventArgs e) {
 		}
 
-		private void gridVitalSigns_CellDoubleClick(object sender, ODGridClickEventArgs e){
+		private void gridVitalSigns_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 		}
 
-		private void checkBP_CheckedChanged(object sender, EventArgs e){
+		private void checkBP_CheckedChanged(object sender,EventArgs e) {
 		}
 
-		private void SaveSignature(AnestheticData AnesthDataCur){
-			if (SigChanged)
-			{
+		private void SaveSignature(AnestheticData AnesthDataCur) {
+			if(SigChanged) {
 				//Topaz boxes are written in Windows native code.
-				if (allowTopaz && sigBoxTopaz.Visible)
-				{
+				if(allowTopaz && sigBoxTopaz.Visible) {
 					AnesthDataCur.SigIsTopaz = true;
-					if (CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0)
-					{
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz) == 0) {
 						AnesthDataCur.Signature = "";
 					}
-					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 0);
-					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 0);
-					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz, "0000000000000000");
-					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz, AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
-					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz, 2);
-					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz, 2);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
+					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,AnesthDataCur.Notes + AnestheticRecordCur.ProvNum.ToString());
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);
 					AnesthDataCur.Signature = CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
 				}
-				else
-				{
+				else {
 					AnesthDataCur.SigIsTopaz = false;
-					if (sigBox.NumberOfTabletPoints() == 0)
-					{
+					if(sigBox.NumberOfTabletPoints() == 0) {
 						AnesthDataCur.Signature = "";
 						return;
 					}
@@ -3201,7 +3092,7 @@ namespace OpenDental
 			}
 		}
 
-		private void butClose_Click(object sender, EventArgs e){
+		private void butClose_Click(object sender,EventArgs e) {
 			AnesthDataCur.Notes = this.richTextNotes.Text;
 			SaveSignature(AnesthDataCur);
 			SaveData();
@@ -3209,176 +3100,150 @@ namespace OpenDental
 		}
 
 		//Saves Data to db if either "Save" or "Save and Close" buttons are clicked
-		private void SaveData(){
+		private void SaveData() {
 			Regex regexHgt = new Regex("^^\\d{1,2}?$");
-			if (!regexHgt.IsMatch(textPatHgt.Text) && textPatHgt.Text != "")
-			{
+			if(!regexHgt.IsMatch(textPatHgt.Text) && textPatHgt.Text != "") {
 				MessageBox.Show(Lan.g(this,"The height field should be a two digit integer"));
 				textPatHgt.Focus();
 			}
-			else
-			{
+			else {
 				Regex regexWgt = new Regex("^^\\d{1,3}?$");
-				if (!regexWgt.IsMatch(textPatWgt.Text) && textPatWgt.Text != "")
-				{
+				if(!regexWgt.IsMatch(textPatWgt.Text) && textPatWgt.Text != "") {
 					MessageBox.Show(Lan.g(this,"The weight field should be a 1-3 digit integer"));
 					textPatWgt.Focus();
 				}
-				else
-				{
-					if (textPatID.Text != null ) //&& comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
+				else {
+					if(textPatID.Text != null) //&& comboAnesthetist.SelectedIndex != 0 && comboSurgeon.SelectedIndex != 0 && comboAsst.SelectedIndex != 0 && comboCirc.SelectedIndex != 0)
 					{
-						int comO2LMin = 0, comN2OLMin = 0, comIVAtt = 0, comIVGauge = 0, radCan = 0, radHood = 0, radEtt = 0, radIVCath = 0, radIVButtfly = 0,
-							radPO = 0, radIM = 0, radRectal = 0, radNasal = 0, IVSideR = 0, IVSideL = 0, MonBP = 0, MonSpO2 = 0, MonEKG = 0, MonEtCO2 = 0, MonPrecordial = 0, MonTemp = 0, wgtUnitsLbs = 0, wgtUnitsKgs = 0, hgtUnitsIn = 0, hgtUnitsCm = 0;
-						string comASA = "", comIVSite = "", comIVF = "", comNPOTime = "", sig = AnesthDataCur.Signature;
+						int comO2LMin = 0,comN2OLMin = 0,comIVAtt = 0,comIVGauge = 0,radCan = 0,radHood = 0,radEtt = 0,radIVCath = 0,radIVButtfly = 0,
+							radPO = 0,radIM = 0,radRectal = 0,radNasal = 0,IVSideR = 0,IVSideL = 0,MonBP = 0,MonSpO2 = 0,MonEKG = 0,MonEtCO2 = 0,MonPrecordial = 0,MonTemp = 0,wgtUnitsLbs = 0,wgtUnitsKgs = 0,hgtUnitsIn = 0,hgtUnitsCm = 0;
+						string comASA = "",comIVSite = "",comIVF = "",comNPOTime = "",sig = AnesthDataCur.Signature;
 						bool sigistopaz =AnesthDataCur.SigIsTopaz;
-						if (radRteNasCan.Checked)
+						if(radRteNasCan.Checked)
 							radCan = 1;
-						if (radRteNasHood.Checked)
+						if(radRteNasHood.Checked)
 							radHood = 1;
-						if (radRteETT.Checked)
+						if(radRteETT.Checked)
 							radEtt = 1;
-						if (radMedRouteIVCath.Checked)
+						if(radMedRouteIVCath.Checked)
 							radIVCath = 1;
-						if (radMedRouteIVButtFly.Checked)
+						if(radMedRouteIVButtFly.Checked)
 							radIVButtfly = 1;
-						if (radMedRouteIM.Checked)
+						if(radMedRouteIM.Checked)
 							radIM = 1;
-						if (radMedRouteNasal.Checked)
+						if(radMedRouteNasal.Checked)
 							radNasal = 1;
-						if (radMedRoutePO.Checked)
+						if(radMedRoutePO.Checked)
 							radPO = 1;
-						if (radMedRouteRectal.Checked)
+						if(radMedRouteRectal.Checked)
 							radRectal = 1;
-						if (radIVSideR.Checked)
+						if(radIVSideR.Checked)
 							IVSideR = 1;
-						if (radIVSideL.Checked)
+						if(radIVSideL.Checked)
 							IVSideL = 1;
-						if (checkMonBP.Checked)
+						if(checkMonBP.Checked)
 							MonBP = 1;
-						if (checkMonEKG.Checked)
+						if(checkMonEKG.Checked)
 							MonEKG = 1;
-						if (checkMonEtCO2.Checked)
+						if(checkMonEtCO2.Checked)
 							MonEtCO2 = 1;
-						if (checkMonPrecordial.Checked)
+						if(checkMonPrecordial.Checked)
 							MonPrecordial = 1;
-						if (checkMonSpO2.Checked)
+						if(checkMonSpO2.Checked)
 							MonSpO2 = 1;
-						if (checkMonTemp.Checked)
+						if(checkMonTemp.Checked)
 							MonTemp = 1;
-						if (radWgtUnitsLbs.Checked)
+						if(radWgtUnitsLbs.Checked)
 							wgtUnitsLbs = 1;
-						if (radWgtUnitsKgs.Checked)
+						if(radWgtUnitsKgs.Checked)
 							wgtUnitsKgs = 1;
-						if (radHgtUnitsIn.Checked)
+						if(radHgtUnitsIn.Checked)
 							hgtUnitsIn = 1;
-						if (radHgtUnitsCm.Checked)
+						if(radHgtUnitsCm.Checked)
 							hgtUnitsCm = 1;
 						//Shouldn't always have a value since it denotes emergencies
-						if (comboASA_EModifier.SelectedIndex == 1)
-						{
+						if(comboASA_EModifier.SelectedIndex == 1) {
 							comboASA_EModifier.SelectedItem = "E";
 						}
-						else if (comboASA_EModifier.SelectedItem == null)
-						{
+						else if(comboASA_EModifier.SelectedItem == null) {
 							comboASA_EModifier.SelectedItem = "";
 						}
 						//Shouldn't necessarily have a value
-						if (comboO2LMin.SelectedIndex == -1)
-						{
+						if(comboO2LMin.SelectedIndex == -1) {
 							comO2LMin = 0;
 						}
-						else if (comboO2LMin.SelectedIndex == 0)
-						{
+						else if(comboO2LMin.SelectedIndex == 0) {
 							comO2LMin = 0;
 						}
 						else comO2LMin = Convert.ToInt32(comboO2LMin.SelectedItem);
 						//Shouldn't always have a value, as it may not be used during a case
-						if (comboN2OLMin.SelectedIndex == -1)
-							{
-								comN2OLMin = 0;
-							}
-						else if (comboN2OLMin.SelectedIndex == 0)
-							{
-								comN2OLMin = 0;
-							}
+						if(comboN2OLMin.SelectedIndex == -1) {
+							comN2OLMin = 0;
+						}
+						else if(comboN2OLMin.SelectedIndex == 0) {
+							comN2OLMin = 0;
+						}
 						else comN2OLMin = Convert.ToInt32(comboN2OLMin.SelectedItem);
 						//ASA should be selected
-						if (comboASA.SelectedIndex == -1)
-						{
+						if(comboASA.SelectedIndex == -1) {
 							MessageBox.Show(Lan.g(this,"Please select an ASA rating"));
 							comASA = "";
 						}
-						else if (comboASA.SelectedIndex != -1)
-						{
+						else if(comboASA.SelectedIndex != -1) {
 							comboASA.SelectedItem = comboASA.SelectedItem.ToString();
 							comASA = comboASA.SelectedItem.ToString();
 						}
 						//IV Site, IV Attempts, IVF and IV gauge don't necessarily need to be selected, eg., if route is IM
-						if (comboIVSite.SelectedIndex == -1)
-						{
+						if(comboIVSite.SelectedIndex == -1) {
 							comIVSite = "";
 						}
-						else if (comboIVSite.SelectedIndex != -1)
-						{
+						else if(comboIVSite.SelectedIndex != -1) {
 							comboIVSite.SelectedItem = comboIVSite.SelectedItem.ToString();
 							comIVSite = comboIVSite.SelectedItem.ToString();
 						}
-						if (comboIVF.SelectedIndex == -1)
-						{
+						if(comboIVF.SelectedIndex == -1) {
 							comIVF = "";
 						}
-						else if (comboIVF.SelectedIndex != -1)
-						{
+						else if(comboIVF.SelectedIndex != -1) {
 							comboIVF.SelectedItem = comboIVF.SelectedItem.ToString();
 							comIVF = comboIVF.SelectedItem.ToString();
 						}
-						if (comboIVAtt.SelectedIndex == -1)
-						{
+						if(comboIVAtt.SelectedIndex == -1) {
 							comIVAtt = 0;
 						}
-						else if (comboIVAtt.SelectedIndex != -1)
-						{
+						else if(comboIVAtt.SelectedIndex != -1) {
 							comboIVAtt.SelectedItem = Convert.ToInt32(comboIVAtt.SelectedItem.ToString());
 							comIVAtt = Convert.ToInt32(comboIVAtt.SelectedItem);
 						}
-						if (comboIVGauge.SelectedIndex == -1)
-						{
+						if(comboIVGauge.SelectedIndex == -1) {
 							comIVGauge = 0;
 						}
-						else if (comboIVGauge.SelectedIndex != -1)
-						{
+						else if(comboIVGauge.SelectedIndex != -1) {
 							comboIVGauge.SelectedItem = Convert.ToInt32(comboIVGauge.SelectedItem.ToString());
 							comIVGauge = Convert.ToInt32(comboIVGauge.SelectedItem);
 						}
 						//NPO time should be selected
-						if (comboNPOTime.SelectedIndex == -1)
-						{
+						if(comboNPOTime.SelectedIndex == -1) {
 							MessageBox.Show(Lan.g(this,"Please select an NPO time"));
 							comNPOTime = "";
 						}
-						else if (comboNPOTime.SelectedIndex != -1)
-						{
+						else if(comboNPOTime.SelectedIndex != -1) {
 							comboNPOTime.SelectedItem = comboNPOTime.SelectedItem.ToString();
 							comNPOTime = comboNPOTime.SelectedItem.ToString();
 						}
-						if (IsUpdate == false)
-						{
+						if(IsUpdate == false) {
 							int anesthRecordNum = AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString());
-							int value2 = AnesthMeds.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(), comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
+							int value2 = AnesthMeds.UpdateAnesth_Data(Convert.ToInt32(anesthRecordNum),textAnesthOpen.Text.Trim(),textAnesthClose.Text.Trim(),textSurgOpen.Text.Trim(),textSurgClose.Text.Trim(),comboAnesthetist.SelectedItem.ToString(),comboSurgeon.SelectedItem.ToString(),comboAsst.SelectedItem.ToString(),comboCirc.SelectedItem.ToString(),textVSMName.Text,textVSMSerNum.Text,comASA.ToString(),comboASA_EModifier.SelectedItem.ToString(),comO2LMin,comN2OLMin,radCan,Convert.ToInt32(radHood),radEtt,radIVCath,radIVButtfly,radIM,radPO,radNasal,radRectal,comIVSite.ToString(),Convert.ToInt32(comIVGauge),IVSideR,IVSideL,Convert.ToInt32(comIVAtt),comIVF.ToString(),Convert.ToInt32(textIVFVol.Text.Trim()),MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,richTextNotes.Text,Convert.ToInt32(textPatWgt.Text),wgtUnitsLbs,wgtUnitsKgs,Convert.ToInt32(textPatHgt.Text),textEscortName.Text.Trim(),textEscortCellNum.Text.Trim(),textEscortRel.Text,comNPOTime.ToString(),hgtUnitsIn,hgtUnitsCm,sig,sigistopaz);
 						}
-						else
-						{
-							int value = AnesthMeds.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()), textAnesthOpen.Text.Trim(), textAnesthClose.Text.Trim(), textSurgOpen.Text.Trim(), textSurgClose.Text.Trim(), comboAnesthetist.SelectedItem.ToString(), comboSurgeon.SelectedItem.ToString(), comboAsst.SelectedItem.ToString(), comboCirc.SelectedItem.ToString(), textVSMName.Text, textVSMSerNum.Text, comASA.ToString(), comboASA_EModifier.SelectedItem.ToString(),comO2LMin, comN2OLMin, radCan, Convert.ToInt32(radHood), radEtt, radIVCath, radIVButtfly, radIM, radPO, radNasal, radRectal, comIVSite.ToString(), Convert.ToInt32(comIVGauge), IVSideR, IVSideL, Convert.ToInt32(comIVAtt), comIVF.ToString(), Convert.ToInt32(textIVFVol.Text.Trim()), MonBP, MonSpO2, MonEtCO2, MonTemp, MonPrecordial, MonEKG, richTextNotes.Text, Convert.ToInt32(textPatWgt.Text), wgtUnitsLbs, wgtUnitsKgs, Convert.ToInt32(textPatHgt.Text), textEscortName.Text.Trim(), textEscortCellNum.Text.Trim(), textEscortRel.Text, comNPOTime.ToString(), hgtUnitsIn, hgtUnitsCm, sig, sigistopaz);
+						else {
+							int value = AnesthMeds.InsertAnesth_Data(Convert.ToInt32(textPatID.Text.Trim()),textAnesthOpen.Text.Trim(),textAnesthClose.Text.Trim(),textSurgOpen.Text.Trim(),textSurgClose.Text.Trim(),comboAnesthetist.SelectedItem.ToString(),comboSurgeon.SelectedItem.ToString(),comboAsst.SelectedItem.ToString(),comboCirc.SelectedItem.ToString(),textVSMName.Text,textVSMSerNum.Text,comASA.ToString(),comboASA_EModifier.SelectedItem.ToString(),comO2LMin,comN2OLMin,radCan,Convert.ToInt32(radHood),radEtt,radIVCath,radIVButtfly,radIM,radPO,radNasal,radRectal,comIVSite.ToString(),Convert.ToInt32(comIVGauge),IVSideR,IVSideL,Convert.ToInt32(comIVAtt),comIVF.ToString(),Convert.ToInt32(textIVFVol.Text.Trim()),MonBP,MonSpO2,MonEtCO2,MonTemp,MonPrecordial,MonEKG,richTextNotes.Text,Convert.ToInt32(textPatWgt.Text),wgtUnitsLbs,wgtUnitsKgs,Convert.ToInt32(textPatHgt.Text),textEscortName.Text.Trim(),textEscortCellNum.Text.Trim(),textEscortRel.Text,comNPOTime.ToString(),hgtUnitsIn,hgtUnitsCm,sig,sigistopaz);
 
-							if (value != 0)
-							{
-								FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));	
+							if(value != 0) {
+								FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 							}
 						}
 						//SaveSignature(AnesthDataCur);
-						if (allowTopaz)
-						{
+						if(allowTopaz) {
 							sigBoxTopaz.Dispose();
 						}
 					}
@@ -3386,43 +3251,40 @@ namespace OpenDental
 			}//end RegexWgt field check
 		}
 
-		private void labelInvalidSig_Click(object sender, EventArgs e){
+		private void labelInvalidSig_Click(object sender,EventArgs e) {
 		}
 
-		private void radPatWgtKgs_CheckedChanged(object sender, EventArgs e){
+		private void radPatWgtKgs_CheckedChanged(object sender,EventArgs e) {
 		}
 
-		private void groupBox1_Enter_1(object sender, EventArgs e){
+		private void groupBox1_Enter_1(object sender,EventArgs e) {
 		}
 
-		private void radPatWgtLbs_CheckedChanged(object sender, EventArgs e){
+		private void radPatWgtLbs_CheckedChanged(object sender,EventArgs e) {
 		}
 
-		private void radHgtCm_CheckedChanged(object sender, EventArgs e){
+		private void radHgtCm_CheckedChanged(object sender,EventArgs e) {
 		}
 
-		private void textPatHgt_TextChanged(object sender, EventArgs e){
+		private void textPatHgt_TextChanged(object sender,EventArgs e) {
 		}
 
-		private void comboAnesthetist_SelectedIndexChanged(object sender, EventArgs e){
-		}	
-
-		private void textIVFVol_TextChanged(object sender, EventArgs e){
+		private void comboAnesthetist_SelectedIndexChanged(object sender,EventArgs e) {
 		}
 
-		private void butOK_Click(object sender, EventArgs e){
+		private void textIVFVol_TextChanged(object sender,EventArgs e) {
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
 			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
+			if(GroupPermissions.HasPermission(curUser.UserGroupNum,Permissions.AnesthesiaControlMeds)) {
 				AnesthDataCur.Notes = this.richTextNotes.Text;
 				SaveSignature(AnesthDataCur);
 				SaveData();
-			try
-				{	//will be null and generate an exception if user hits 'OK' button with no Anesthetic Record saved
-					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				try {	//will be null and generate an exception if user hits 'OK' button with no Anesthetic Record saved
+					FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
-			catch
-				{
+				catch {
 					MessageBox.Show(Lan.g(this,"You need to create an Anesthetic Record first"));
 					return;
 				}
@@ -3430,21 +3292,20 @@ namespace OpenDental
 			MessageBox.Show(Lan.g(this,"Data has been saved to the database"));
 		}
 
-		private void comboIVSite_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboIVSite_SelectedIndexChanged(object sender,EventArgs e) {
 		}
 
-		private void labelAnesthScore_Click(object sender, EventArgs e){
+		private void labelAnesthScore_Click(object sender,EventArgs e) {
 		}
 
-		private void richTextNotes_TextChanged(object sender, EventArgs e){
+		private void richTextNotes_TextChanged(object sender,EventArgs e) {
 			SigChanged = false;
 			//CheckForCompleteNote();
-			if (!IsStartingUp//so this happens only if user changes the note
+			if(!IsStartingUp//so this happens only if user changes the note
 				&& !SigChanged)//and the original signature is still showing.
 			{
 				sigBox.ClearTablet();
-				if (allowTopaz)
-				{
+				if(allowTopaz) {
 					CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 					sigBoxTopaz.Visible = false;//until user explicitly starts it.
 				}
@@ -3455,80 +3316,74 @@ namespace OpenDental
 			}
 		}
 
-		private void addEditSuppliersToolStripMenuItem_Click(object sender, EventArgs e){
+		private void addEditSuppliersToolStripMenuItem_Click(object sender,EventArgs e) {
 			FormAnesthMedSuppliers FormMS = new FormAnesthMedSuppliers();
 			FormMS.ShowDialog();
 		}
 
-		private void checkInventoryToolStripMenuItem_Click(object sender, EventArgs e){
+		private void checkInventoryToolStripMenuItem_Click(object sender,EventArgs e) {
 			FormAnestheticMedsInventory FormMI = new FormAnestheticMedsInventory();
 			FormMI.ShowDialog();
 			RefreshAnesthMedComboBoxes();
 			FormMI.DialogResult = DialogResult.OK;
 		}
 
-		private void exitToolStripMenuItem2_Click(object sender, EventArgs e){
+		private void exitToolStripMenuItem2_Click(object sender,EventArgs e) {
 			Close();
 		}
 
-		private void printToolStripMenuItem_Click(object sender, EventArgs e){
+		private void printToolStripMenuItem_Click(object sender,EventArgs e) {
 			//printPage = new PrintWindow();
 			//printPage.Print(this.Handle);   //****Printing disabled for now
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
-		public void selectPatientToolStripMenuItem_Click(object sender, EventArgs e){
+		public void selectPatientToolStripMenuItem_Click(object sender,EventArgs e) {
 			FormPatientSelect FormPS = new FormPatientSelect();
 			FormPS.ShowDialog();
-			if (FormPS.DialogResult == DialogResult.OK)
-			{
+			if(FormPS.DialogResult == DialogResult.OK) {
 				this.Hide();
 				CurPatNum = FormPS.SelectedPatNum;
 				pat = Patients.GetPat(CurPatNum);
 				Patient PatNum = Patients.GetPat(CurPatNum);
 				AnestheticData AnestheticDataCur;
 				AnestheticDataCur = new AnestheticData();
-				FormAnestheticRecord FormAR = new FormAnestheticRecord(pat, AnestheticDataCur);
+				FormAnestheticRecord FormAR = new FormAnestheticRecord(pat,AnestheticDataCur);
 				FormAR.ShowDialog();
 				//Catches exception: If patient we are switching from has no saved aneshetics, FillControls will generate a null ref exception 
-				try
-				{
-					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+				try {
+					FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
 				}
-				catch
-				{
+				catch {
 				}
 				//changes the patient in the underlying module to the newly selected patient
 				PatCur.PatNum = CurPatNum;
 			}
 		}
 
-		private void filesToolStripMenuItem_Click(object sender, EventArgs e){
+		private void filesToolStripMenuItem_Click(object sender,EventArgs e) {
 		}
 
-		private void saveToolStripMenuItem2_Click(object sender, EventArgs e){
+		private void saveToolStripMenuItem2_Click(object sender,EventArgs e) {
 			{
-			Userod curUser = Security.CurUser;
-			if (GroupPermissions.HasPermission(curUser.UserGroupNum, Permissions.AnesthesiaControlMeds))
-			{
-				AnesthDataCur.Notes = this.richTextNotes.Text;
-				SaveSignature(AnesthDataCur);
-				SaveData();
-				try
-				{	//will be null and generate an exception if user hits 'OK' button with no Anesthetic Record saved
-					FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-				}
-				catch
-				{
-					MessageBox.Show(Lan.g(this,"You need to create an Anesthetic Record first"));
-					return;
-				}
-			} //this is done only to give the user some visual feedback that the data has in fact been saved to the db
-			MessageBox.Show(Lan.g(this,"Data has been saved to the database"));
+				Userod curUser = Security.CurUser;
+				if(GroupPermissions.HasPermission(curUser.UserGroupNum,Permissions.AnesthesiaControlMeds)) {
+					AnesthDataCur.Notes = this.richTextNotes.Text;
+					SaveSignature(AnesthDataCur);
+					SaveData();
+					try {	//will be null and generate an exception if user hits 'OK' button with no Anesthetic Record saved
+						FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+					}
+					catch {
+						MessageBox.Show(Lan.g(this,"You need to create an Anesthetic Record first"));
+						return;
+					}
+				} //this is done only to give the user some visual feedback that the data has in fact been saved to the db
+				MessageBox.Show(Lan.g(this,"Data has been saved to the database"));
+			}
 		}
-}
 
-		private void saveAndCloseToolStripMenuItem1_Click_1(object sender, EventArgs e){
+		private void saveAndCloseToolStripMenuItem1_Click_1(object sender,EventArgs e) {
 			AnesthDataCur.Notes = this.richTextNotes.Text;
 			SaveSignature(AnesthDataCur);
 			SaveData();
@@ -3537,12 +3392,12 @@ namespace OpenDental
 
 		}
 
-		private void providersToolStripMenuItem_Click(object sender, EventArgs e){
+		private void providersToolStripMenuItem_Click(object sender,EventArgs e) {
 			FormProviderSelect FormPS = new FormProviderSelect();
 			FormPS.ShowDialog();
 			RefreshProvComboBoxes();
-			FillControls(CurPatNum, AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
-	
+			FillControls(CurPatNum,AnestheticRecords.GetRecordNumByDate(listAnesthetics.SelectedItem.ToString()));
+
 		}
 
 		private void textVSMName_TextChanged(object sender,EventArgs e) {

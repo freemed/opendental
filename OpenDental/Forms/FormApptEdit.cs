@@ -1821,7 +1821,7 @@ namespace OpenDental{
 						return false;
 					}
 					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					ProcedureL.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
+					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}

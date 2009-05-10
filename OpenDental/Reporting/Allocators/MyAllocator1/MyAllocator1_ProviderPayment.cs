@@ -309,7 +309,7 @@ namespace OpenDental.Reporting.Allocators
 		{
 			bool rvalExists = false;
 			string cmd = "SHOW TABLES LIKE '" + tblName + "'";
-			DataTable dt = Db.GetTable(cmd);
+			DataTable dt = Db.GetTableOld(cmd);
 			if (dt != null && dt.Rows.Count != 0 && dt.Columns.Count != 0)
 			{
 				if (dt.Rows[0][0].ToString() == tblName)
@@ -376,7 +376,7 @@ namespace OpenDental.Reporting.Allocators
 				#region Handle Incomplete Proccessed Guarantors
 			string cmd2 = "SELECT tempIndex, Guarantor, AllocStatus FROM " + TempTableName
 					+ " WHERE AllocStatus = " + ((int)ProcessingState.Started_and_Incomplete).ToString();
-				DataTable dt = Db.GetTable(cmd2);
+			DataTable dt = Db.GetTableOld(cmd2);
 
 				if (dt.Rows.Count != 0)
 				{
@@ -402,8 +402,8 @@ namespace OpenDental.Reporting.Allocators
 				#region Generate a list of unprocessed guarantors
 				string ProccessedGuarantors_command = "SELECT Guarantor FROM " + TABLENAME + "_temp WHERE AllocStatus = "
 					+ ((int)ProcessingState.Complete);
-				DataTable dt3 = Db.GetTable(ProccessedGuarantors_command);
-				DataTable dtODGuarantors = Db.GetTable("SELECT DISTINCT(Guarantor) FROM Patient");
+				DataTable dt3 = Db.GetTableOld(ProccessedGuarantors_command);
+				DataTable dtODGuarantors = Db.GetTableOld("SELECT DISTINCT(Guarantor) FROM Patient");
 				for (int i = 0; i < dtODGuarantors.Rows.Count; i++)
 					OD_Guarantors.Add(Int32.Parse(dtODGuarantors.Rows[i][0].ToString()));
 				if (dt3.Rows.Count != 0)

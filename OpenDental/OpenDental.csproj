@@ -205,23 +205,17 @@
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\ClaimL.cs" />
-    <Compile Include="Data Interface\ClaimProcL.cs" />
     <Compile Include="Data Interface\ClearinghouseL.cs" />
     <Compile Include="Data Interface\AppointmentL.cs" />
     <Compile Include="Data Interface\ApptViewItemL.cs" />
     <Compile Include="Data Interface\FeeL.cs" />
-    <Compile Include="Data Interface\InsPlanL.cs" />
     <Compile Include="Data Interface\Lan.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\PatPlanL.cs" />
-    <Compile Include="Data Interface\PerioExamL.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
-    <Compile Include="Data Interface\PerioMeasureL.cs" />
     <Compile Include="Data Interface\PrefL.cs" />
     <Compile Include="Data Interface\PrinterL.cs" />
     <Compile Include="Data Interface\DefL.cs" />
-    <Compile Include="Data Interface\ProcedureL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\RefAttachL.cs" />
     <Compile Include="Data Interface\ReferralL.cs" />

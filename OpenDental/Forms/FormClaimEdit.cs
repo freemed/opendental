@@ -3600,7 +3600,7 @@ namespace OpenDental{
 			gridP.BackColor = System.Drawing.SystemColors.Window;
 			gridP.Size = new System.Drawing.Size(595,665);
 			PerioExams.Refresh(PatCur.PatNum);
-			PerioMeasureL.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum);
 			gridP.SelectedExam=PerioExams.List.Length-1;
 			gridP.LoadData();
 			Bitmap bitmap=new Bitmap(595,665);

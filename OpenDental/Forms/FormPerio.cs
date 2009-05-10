@@ -1101,7 +1101,7 @@ namespace OpenDental{
 		private void RefreshListExams(){
 			//most recent date at the bottom
 			PerioExams.Refresh(PatCur.PatNum);
-			PerioMeasureL.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum);
 			listExams.Items.Clear();
 			for(int i=0;i<PerioExams.List.Length;i++){
 				listExams.Items.Add(PerioExams.List[i].ExamDate.ToShortDateString()+"   "
@@ -1129,7 +1129,7 @@ namespace OpenDental{
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			//no need to RefreshListExams because it has not changed
 			PerioExams.Refresh(PatCur.PatNum);//refresh instead
-			PerioMeasureL.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum);
 			FillGrid();
 		}
 
@@ -1141,7 +1141,7 @@ namespace OpenDental{
 			//a PerioExam.Cur will always have been set through mousedown(or similar),then FillGrid
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			PerioExams.Refresh(PatCur.PatNum);//list will not change
-			PerioMeasureL.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum);
 			FormPerioEdit FormPE=new FormPerioEdit();
 			FormPE.PerioExamCur=PerioExamCur;
 			FormPE.ShowDialog();

@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	///<summary>Replaces old "General" class.  Used to send queries.  The methods will soon be internal since it is no longer acceptable for the UI to be sending queries.</summary>
 	public class Db {
 		///<summary></summary>
-		public static DataTable GetTable(string command) {
+		internal static DataTable GetTable(string command) {
 			DataTable retVal;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("No longer allowed to send sql directly.  For user sql, use GetTableLow.  Othewise, rewrite the calling class to not use this query:\r\n"+command);

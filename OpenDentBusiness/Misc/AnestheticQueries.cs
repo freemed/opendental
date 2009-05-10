@@ -7,8 +7,8 @@ using MySql.Data.MySqlClient;
 namespace OpenDentBusiness {
 	/// <summary>Handles database commands to bind the comboboxes comboAnesthMed,comboBoxAnesthetist,comboBoxSurgeon,comboBoxAsst,comboBoxCirc</summary>
 	public class AnestheticQueries {
-		public static DataSet ds = new DataSet();
-		public static string cmd;
+		//private static DataSet ds = new DataSet();
+		//private static string cmd;
 
 		/// <summary>
 		/// Gets the AnestheticMed from anesthmedsinventory table.
@@ -17,13 +17,13 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod());
 			}
-			cmd = "SELECT AnesthMedName FROM anesthmedsinventory ORDER BY AnesthMedName";
-			ds=Db.GetDataSet(cmd);
-			if(ds != null) {
-				ds.Dispose();
-				return ds;
-			}
-			return null;
+			string cmd = "SELECT AnesthMedName FROM anesthmedsinventory ORDER BY AnesthMedName";
+			DataSet ds=Db.GetDataSet(cmd);
+			//if(ds != null) {
+			//	ds.Dispose();
+			return ds;
+			//}
+			//return null;
 		}
 
 		/// <summary>
@@ -33,13 +33,13 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod());
 			}
-			cmd = "SELECT UserName FROM userod where IsHidden = 0";
-			ds = Db.GetDataSet(cmd);
-			if(ds != null) {
-				ds.Dispose();
-				return ds;
-			}
-			return null;
+			string cmd = "SELECT UserName FROM userod where IsHidden = 0";
+			DataSet ds = Db.GetDataSet(cmd);
+			//if(ds != null) {
+			//	ds.Dispose();
+			return ds;
+			//}
+			//return null;
 		}
 
 		/// <summary>
@@ -49,13 +49,24 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod());
 			}
-			cmd = "SELECT SupplierName FROM anesthmedsuppliers ORDER BY SupplierName";
-			ds = Db.GetDataSet(cmd);
-			if(ds != null) {
-				ds.Dispose();
-				return ds;
+			string cmd = "SELECT SupplierName FROM anesthmedsuppliers ORDER BY SupplierName";
+			DataSet ds = Db.GetDataSet(cmd);
+			//if(ds != null) {
+			//	ds.Dispose();
+			return ds;
+			//}
+			//return null;
+		}
+
+		public static DataTable GetAnestheticData(int anestheticRecordCur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),anestheticRecordCur);
 			}
-			return null;
+			string command ="SELECT * "                   
+				+ " FROM anestheticdata"					
+				+ " WHERE AnestheticRecordNum = " + anestheticRecordCur;
+			DataTable table = Db.GetTable(command);
+			return table;
 		}
 
 

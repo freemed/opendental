@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
 
-namespace OpenDental.Reporting.Allocators
-{
+namespace OpenDental.Reporting.Allocators {
 	/// <summary>
 	/// <seealso cref="IAllocator"/>
 	/// Here is the model.
@@ -16,10 +15,14 @@ namespace OpenDental.Reporting.Allocators
 	/// The Allocators in the AllocatorCollection will be called.  The allocators must be created by
 	/// a programmer and added to the static list that is creted in the private method CreateAllocators.
 	/// </summary>
-	public class AllocatorCollection
-	{
+	public class AllocatorCollection {
 		private static List<Allocator> _AllocatorList = null;
+
 		/// <summary>
+		/// jsparks-NOT GETTING CALLED.
+		/// The only place that it was being used was in ProcedureL.SetCompleteInAppt().  But once that method was moved into the business layer,
+		/// it was no longer possible to make a call into OpenDental UI layer.
+		/// So for this to work, it will all need to be moved into the business layer.
 		/// Calls all of the allocators created for this patient.
 		/// Determines the guarantor form this patient first
 		/// 
@@ -36,48 +39,39 @@ namespace OpenDental.Reporting.Allocators
 		///		
 		/// Points of Entry That Need Atttention to
 		/// </summary>
-		/// <param name="uiPatient"></param>
-		public static void CallAll_Allocators(int iPatient)
-		{
+		public static void CallAll_Allocators(int iPatient) {
 			// Find Guarantor first
 			int iGuarantor = GetGuarantor(iPatient);
-			if (_AllocatorList == null)
-			{
+			if(_AllocatorList == null) {
 				CreateAllocators();// <--- Add your allocator to this list.  
 			}
-			if (iGuarantor != 0) // cannot allocate for no patient
-				foreach (Allocator alc in _AllocatorList) //<--- if your allocator is not based on guarantor then you will need to make sure it is not part of this list that is called but make your own.
+			if(iGuarantor != 0) // cannot allocate for no patient
+				foreach(Allocator alc in _AllocatorList) //<--- if your allocator is not based on guarantor then you will need to make sure it is not part of this list that is called but make your own.
 					alc.Allocate(iGuarantor);
 		}
-		public static void CallAll_UnAllocators(int iPatient)
-		{
+
+		public static void CallAll_UnAllocators(int iPatient) {
 			// Find Guarantor first
 			int iGuarantor = GetGuarantor(iPatient);
-			if (_AllocatorList == null)
-			{
+			if(_AllocatorList == null) {
 				CreateAllocators();
 			}
-			if (iGuarantor != 0) // cannot allocate for no patient
-				foreach (Allocator alc in _AllocatorList)
+			if(iGuarantor != 0) // cannot allocate for no patient
+				foreach(Allocator alc in _AllocatorList)
 					alc.DeAllocate(iGuarantor);
 		}
 		/// <summary>
 		/// Only calle from with in AllocatorCollection so 
 		/// don't have to worry about opendental calling this.
 		/// </summary>
-		private static void CreateAllocators()
-		{
+		private static void CreateAllocators() {
 			_AllocatorList = new List<Allocator>();
 			_AllocatorList.Add(new OpenDental.Reporting.Allocators.MyAllocator1_ProviderPayment());
-
-
 		}
 
-		private static int GetGuarantor(int Patient)
-		{
+		private static int GetGuarantor(int Patient) {
 			int rVal = 0;
-			try
-			{
+			try {
 				rVal = int.Parse(Db.GetTableOld("SELECT guarantor FROM patient WHERE patnum= " + Patient.ToString()).Rows[0][0].ToString());
 			}
 			catch { }
@@ -85,5 +79,5 @@ namespace OpenDental.Reporting.Allocators
 		}
 	}
 
-	
+
 }
