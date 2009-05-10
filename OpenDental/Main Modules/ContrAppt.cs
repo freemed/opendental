@@ -1061,7 +1061,7 @@ namespace OpenDental{
 			panelOps.Controls.Clear();
 			for(int i=0;i<ContrApptSheet.ProvCount;i++){
 				Panel panProv=new Panel();
-				panProv.BackColor=ProviderC.List[ApptViewItems.VisProvs[i]].ProvColor;
+				panProv.BackColor=ProviderC.List[ApptViewItemL.VisProvs[i]].ProvColor;
 				panProv.Location=new Point(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*i,0);
 				panProv.Width=ContrApptSheet.ProvWidth;
 				if(i==0){//just looks a little nicer:
@@ -1072,7 +1072,7 @@ namespace OpenDental{
 				panProv.BorderStyle=BorderStyle.Fixed3D;
 				panProv.ForeColor=Color.DarkGray;
 				panelOps.Controls.Add(panProv);
-				toolTip1.SetToolTip(panProv,ProviderC.List[ApptViewItems.VisProvs[i]].Abbr);
+				toolTip1.SetToolTip(panProv,ProviderC.List[ApptViewItemL.VisProvs[i]].Abbr);
 			}
 			Operatory curOp;
 			if(ContrApptSheet.IsWeeklyView){
@@ -1104,7 +1104,7 @@ namespace OpenDental{
 				for(int i=0;i<ContrApptSheet.ColCount;i++){
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
-					curOp=OperatoryC.ListShort[ApptViewItems.VisOps[i]];
+					curOp=OperatoryC.ListShort[ApptViewItemL.VisOps[i]];
 					labOpName.Text=curOp.OpName;
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
 						panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
@@ -1152,7 +1152,7 @@ namespace OpenDental{
 			else{
 				dayI=(int)((Label)sender).Tag;
 			}
-			Appointments.DateSelected=WeekStartDate.AddDays(dayI);
+			AppointmentL.DateSelected=WeekStartDate.AddDays(dayI);
 			SetWeeklyView(false);
 		}
 
@@ -1287,7 +1287,7 @@ namespace OpenDental{
 			LayoutPanels();
 			//}
 			ContrApptSheet.RowsPerIncr=1;
-			Appointments.DateSelected=DateTime.Now;
+			AppointmentL.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
 			RefreshPeriod();
 			FillViews();
@@ -1412,17 +1412,17 @@ namespace OpenDental{
 
 		///<summary>Sets appointment data invalid on all other computers, causing them to refresh.  Does NOT refresh the data for this computer which must be done separately.</summary>
 		private void SetInvalid(){
-			DataValid.SetInvalid(Appointments.DateSelected);
+			DataValid.SetInvalid(AppointmentL.DateSelected);
 		}
 
-		///<summary>Switches between weekly view and daily view.  Appointments.DateSelected needs to be set first.  Calculates WeekStartDate and WeekEndDate based on Appointments.DateSelected.  Then calls either RefreshPeriod or ModuleSelected.</summary>
+		///<summary>Switches between weekly view and daily view.  AppointmentL.DateSelected needs to be set first.  Calculates WeekStartDate and WeekEndDate based on AppointmentL.DateSelected.  Then calls either RefreshPeriod or ModuleSelected.</summary>
 		private void SetWeeklyView(bool isWeeklyView) {
 			//if the weekly view doesn't change, then just RefreshPeriod
 			bool weeklyViewChanged=false;
 			if(isWeeklyView!=ContrApptSheet.IsWeeklyView){
 				weeklyViewChanged=true;
 			}
-			WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek).Date;
+			WeekStartDate=AppointmentL.DateSelected.AddDays(1-(int)AppointmentL.DateSelected.DayOfWeek).Date;
 			if(isWeeklyView) {
 				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1).Date;
 			}
@@ -1445,8 +1445,8 @@ namespace OpenDental{
 				endDate=WeekEndDate;
 			}
 			else {
-				startDate=Appointments.DateSelected;
-				endDate=Appointments.DateSelected;
+				startDate=AppointmentL.DateSelected;
+				endDate=AppointmentL.DateSelected;
 			}
 			if(startDate.Year<1880 || endDate.Year<1880) {
 				return;
@@ -1459,8 +1459,8 @@ namespace OpenDental{
 			DS=Appointments.RefreshPeriod(startDate,endDate);
 			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
 			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);
-			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
-			for(int i=0;i<ApptViewItems.VisProvs.Length;i++){
+			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Length][];
+			for(int i=0;i<ApptViewItemL.VisProvs.Length;i++){
 				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
 			}
 			if(ContrApptSingle3!=null){//I think this is not needed.
@@ -1493,10 +1493,10 @@ namespace OpenDental{
 					//copy time pattern to provBar[]:
 					indexProv=-1;
 					if(row["IsHygiene"].ToString()=="1"){
-						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
 					}
 					else{
-						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()){
 						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
@@ -1557,8 +1557,8 @@ namespace OpenDental{
 		///<summary>Fills the production summary for the day.</summary>
 		private void FillProduction(){
 			bool showProduction=false;
-			for(int i=0;i<ApptViewItems.ApptRows.Length;i++){
-				if(ApptViewItems.ApptRows[i].ElementDesc=="Production"){
+			for(int i=0;i<ApptViewItemL.ApptRows.Length;i++){
+				if(ApptViewItemL.ApptRows[i].ElementDesc=="Production"){
 					showProduction=true;
 				}
 			}
@@ -1572,14 +1572,14 @@ namespace OpenDental{
 					indexProv=-1;
 					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
 						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//set ishyg, but no hyg prov set.
-							indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 						}
 						else {
-							indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 						}
 					}
 					else{
-						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
 					if(indexProv==-1){
 						continue;
@@ -1662,7 +1662,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Schedules)) {
 				return;
 			}
-			FormScheduleDayEdit FormS=new FormScheduleDayEdit(Appointments.DateSelected);
+			FormScheduleDayEdit FormS=new FormScheduleDayEdit(AppointmentL.DateSelected);
 			FormS.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
 			SetWeeklyView(false);//to refresh
@@ -1830,14 +1830,14 @@ namespace OpenDental{
 			Appointment aptCur=Appointments.GetOneApt(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
 			Appointment aptOld=aptCur.Copy();
 			Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
-			if(aptCur.IsNewPatient && Appointments.DateSelected!=aptCur.AptDateTime){
-				Procedures.SetDateFirstVisit(Appointments.DateSelected,4,pat);
+			if(aptCur.IsNewPatient && AppointmentL.DateSelected!=aptCur.AptDateTime){
+				Procedures.SetDateFirstVisit(AppointmentL.DateSelected,4,pat);
 			}
 			int tHr=ContrApptSheet2.ConvertToHour
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 			int tMin=ContrApptSheet2.ConvertToMin
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-			DateTime tDate=Appointments.DateSelected;
+			DateTime tDate=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView) {
 				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
 			}
@@ -1864,14 +1864,14 @@ namespace OpenDental{
 					}
 				}
 			}
-			Operatory curOp=OperatoryC.ListShort[ApptViewItems.VisOps
+			Operatory curOp=OperatoryC.ListShort[ApptViewItemL.VisOps
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
-				int startingOp=ApptViewItems.GetIndexOp(aptCur.Op);
+				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
-					aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+				for(int i=startingOp;i<ApptViewItemL.VisOps.Length;i++){
+					aptCur.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(aptCur)){
 						stillOverlaps=false;
 						break;
@@ -1879,7 +1879,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps){
 					for(int i=startingOp;i>=0;i--){
-						aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+						aptCur.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 						if(!DoesOverlap(aptCur)){
 							stillOverlaps=false;
 							break;
@@ -1997,9 +1997,9 @@ namespace OpenDental{
 			RefreshModulePatient(PatCurNum);
 			RefreshPeriod();//date moving to for this computer
 			SetInvalid();//date moving to for other computers
-			Appointments.DateSelected=fromDate;
+			AppointmentL.DateSelected=fromDate;
 			SetInvalid();//for date moved from for other computers.
-			Appointments.DateSelected=aptCur.AptDateTime;
+			AppointmentL.DateSelected=aptCur.AptDateTime;
 			mouseIsDown = false;
 			boolAptMoved=false;
 		}
@@ -2046,51 +2046,51 @@ namespace OpenDental{
 
 		///<summary>Clicked today.</summary>
 		private void butToday_Click(object sender, System.EventArgs e) {
-			Appointments.DateSelected=DateTime.Now;
+			AppointmentL.DateSelected=DateTime.Now;
 			SetWeeklyView(false);
 		}
 
 		///<summary>Clicked back one day.</summary>
 		private void butBack_Click(object sender, System.EventArgs e) {
-			Appointments.DateSelected=Appointments.DateSelected.AddDays(-1);
+			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(-1);
 			SetWeeklyView(false);
 		}
 
 		///<summary>Clicked forward one day.</summary>
 		private void butFwd_Click(object sender, System.EventArgs e) {
-			Appointments.DateSelected=Appointments.DateSelected.AddDays(1);
+			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(1);
 			SetWeeklyView(false);
 		}
 
 		///<summary>Now clicking the button turns on the weekly view based on selected date.
 		///Old behavior: Clicked week button, setting the date to the current week, but not necessarily to today.</summary>
 		private void butTodayWk_Click(object sender, System.EventArgs e) {
-			//int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
-			//Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
+			//int dayChange = AppointmentL.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
+			//AppointmentL.DateSelected=DateTime.Now.AddDays(dayChange);
 			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked back one week.</summary>
 		private void butBackWk_Click(object sender, System.EventArgs e) {
-			Appointments.DateSelected=Appointments.DateSelected.AddDays(-7);
+			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(-7);
 			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked forward one week.</summary>
 		private void butFwdWk_Click(object sender, System.EventArgs e) {
-			Appointments.DateSelected=Appointments.DateSelected.AddDays(7);
+			AppointmentL.DateSelected=AppointmentL.DateSelected.AddDays(7);
 			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked a date on the calendar.</summary>
 		private void Calendar2_DateSelected(object sender, System.Windows.Forms.DateRangeEventArgs e) {
-			Appointments.DateSelected=Calendar2.SelectionStart;
+			AppointmentL.DateSelected=Calendar2.SelectionStart;
 			SetWeeklyView(false);
 		}
 
 		///<summary>Returns the apptNum of the appointment at these coordinates, or 0 if none.  This is new code which is going to replace some of the outdated code on this page.</summary>
 		private int HitTestAppt(Point point){
-			if(ApptViewItems.VisOps.Length==0){//no ops visible.
+			if(ApptViewItemL.VisOps.Length==0){//no ops visible.
 				return 0;
 			}
 			int day=ContrApptSheet.XPosToDay(point.X);
@@ -2104,7 +2104,7 @@ namespace OpenDental{
 				}
 			}
 			//if operatories were just hidden and VisOps is mismatched with ListShort
-			int xOp=ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)];
+			int xOp=ApptViewItemL.VisOps[ContrApptSheet.XPosToOp(point.X)];
 			if(xOp>OperatoryC.ListShort.Count-1){
 				return 0;
 			}
@@ -2159,7 +2159,7 @@ namespace OpenDental{
 			if(infoBubble.Visible) {
 				infoBubble.Visible=false;
 			}
-			if(ApptViewItems.VisOps.Length==0){//no ops visible.
+			if(ApptViewItemL.VisOps.Length==0){//no ops visible.
 				return;
 			}
 			if(mouseIsDown){//if user clicks right mouse button while dragging
@@ -2170,10 +2170,10 @@ namespace OpenDental{
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
 			TimeSpan sheetClickedOnTime=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
 			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);
-			SheetClickedonOp=OperatoryC.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
+			SheetClickedonOp=OperatoryC.ListShort[ApptViewItemL.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
 			SheetClickedonDay=ContrApptSheet.XPosToDay(e.X);
 			if(!ContrApptSheet.IsWeeklyView) {
-				SheetClickedonDay=((int)Appointments.DateSelected.DayOfWeek)-1;
+				SheetClickedonDay=((int)AppointmentL.DateSelected.DayOfWeek)-1;
 			}
 			Graphics grfx=ContrApptSheet2.CreateGraphics();
 			//if clicked on an appt-----------------------------------------------------------------------------------------------
@@ -2514,13 +2514,13 @@ namespace OpenDental{
 				}
 			}
 			Operatory curOp=OperatoryC.ListShort
-				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
+				[ApptViewItemL.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
 			if(DoesOverlap(apt)) {
-				int startingOp=ApptViewItems.GetIndexOp(apt.Op);
+				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
-					apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+				for(int i=startingOp;i<ApptViewItemL.VisOps.Length;i++) {
+					apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(apt)) {
 						stillOverlaps=false;
 						break;
@@ -2528,7 +2528,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps) {
 					for(int i=startingOp;i>=0;i--) {
-						apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+						apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 						if(!DoesOverlap(apt)) {
 							stillOverlaps=false;
 							break;
@@ -2869,7 +2869,7 @@ namespace OpenDental{
 					apt.ProvHyg=pat.SecProv;
 					apt.ClinicNum=pat.ClinicNum;
 					apt.AptStatus=ApptStatus.Scheduled;
-					DateTime d=Appointments.DateSelected;
+					DateTime d=AppointmentL.DateSelected;
 					if(ContrApptSheet.IsWeeklyView){
 						d=WeekStartDate.AddDays(SheetClickedonDay);
 					}
@@ -2946,7 +2946,7 @@ namespace OpenDental{
 					break;
 				case OtherResult.GoTo:
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
-					Appointments.DateSelected=PIn.PDate(FormAO.DateJumpToString);
+					AppointmentL.DateSelected=PIn.PDate(FormAO.DateJumpToString);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
@@ -3117,14 +3117,14 @@ namespace OpenDental{
 			}
 			else {
 				title=Lan.g(this,"Daily Appointments");
-				date=Appointments.DateSelected.DayOfWeek.ToString()+"   "+Appointments.DateSelected.ToShortDateString();
+				date=AppointmentL.DateSelected.DayOfWeek.ToString()+"   "+AppointmentL.DateSelected.ToShortDateString();
 			}
 			Font titleFont=new Font("Arial",14,FontStyle.Bold);
 			float xTitle = (float)(400-((e.Graphics.MeasureString(title,titleFont).Width/2)));
 			e.Graphics.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
 			//Print Date
- 			//string date = Appointments.DateSelected.DayOfWeek.ToString()+"   "
-			//	+Appointments.DateSelected.ToShortDateString();
+ 			//string date = AppointmentL.DateSelected.DayOfWeek.ToString()+"   "
+			//	+AppointmentL.DateSelected.ToShortDateString();
 			Font dateFont=new Font("Arial",10,FontStyle.Regular);
 			float xDate = (float)(400-((e.Graphics.MeasureString(date,dateFont).Width/2)));
 			yPos+=25;
@@ -3168,22 +3168,22 @@ namespace OpenDental{
 				}
       }
       else{//office is closed
-				StartTime=new DateTime(Appointments.DateSelected.Year,Appointments.DateSelected.Month
-					,Appointments.DateSelected.Day
+				StartTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+					,AppointmentL.DateSelected.Day
 					,ContrApptSheet2.ConvertToHour(-ContrApptSheet2.Location.Y)
 					,ContrApptSheet2.ConvertToMin(-ContrApptSheet2.Location.Y)
 					,0);
 				if(ContrApptSheet2.ConvertToHour(-ContrApptSheet2.Location.Y)+12<23){
 					//we will be adding an extra hour later
-					StopTime=new DateTime(Appointments.DateSelected.Year,Appointments.DateSelected.Month
-						,Appointments.DateSelected.Day
+					StopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+						,AppointmentL.DateSelected.Day
 						,ContrApptSheet2.ConvertToHour(-ContrApptSheet2.Location.Y)+12//add 12 hours
 						,ContrApptSheet2.ConvertToMin(-ContrApptSheet2.Location.Y)
 						,0);
 				}
 				else{
-					StopTime=new DateTime(Appointments.DateSelected.Year,Appointments.DateSelected.Month
-						,Appointments.DateSelected.Day
+					StopTime=new DateTime(AppointmentL.DateSelected.Year,AppointmentL.DateSelected.Month
+						,AppointmentL.DateSelected.Day
 						,22
 						,ContrApptSheet2.ConvertToMin(-ContrApptSheet2.Location.Y)
 						,0);
@@ -3217,7 +3217,7 @@ namespace OpenDental{
       xPos+=(int)(ContrApptSheet.TimeWidth+(ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount)*(100/imageTemp.HorizontalResolution));  // x position
 			int xCenter=0;
 			for(int i=0;i<ContrApptSheet.ColCount;i++){
-				headers[i]=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OpName;	
+				headers[i]=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OpName;	
 				xCenter=(int)((ContrApptSheet.ColWidth/2)-(e.Graphics.MeasureString(headers[i],headerFont).Width/2));
 			  e.Graphics.DrawString(headers[i],headerFont,Brushes.Black,(int)((xPos+xCenter)*(100/imageTemp.HorizontalResolution)),yPos);
         xPos+=ContrApptSheet.ColWidth;
@@ -3634,7 +3634,7 @@ namespace OpenDental{
 			Schedule sched=BlockoutClipboard.Copy();
 			sched.Ops=new List<int>();
 			sched.Ops.Add(SheetClickedonOp);
-			sched.SchedDate=Appointments.DateSelected;
+			sched.SchedDate=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView){
 				sched.SchedDate=WeekStartDate.AddDays(SheetClickedonDay);
 			}
@@ -3675,8 +3675,8 @@ namespace OpenDental{
 				endDate=WeekEndDate;
 			}
 			else {
-				startDate=Appointments.DateSelected;
-				endDate=Appointments.DateSelected;
+				startDate=AppointmentL.DateSelected;
+				endDate=AppointmentL.DateSelected;
 			}
 			//no need to do this since schedule is refreshed in RefreshPeriod().
 			//SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
@@ -3721,7 +3721,7 @@ namespace OpenDental{
 				return;
 			}
       Schedule SchedCur=new Schedule();
-      SchedCur.SchedDate=Appointments.DateSelected;
+      SchedCur.SchedDate=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView) {
 				SchedCur.SchedDate=WeekStartDate.AddDays(SheetClickedonDay);
 			}
@@ -3738,7 +3738,7 @@ namespace OpenDental{
 				return;
 			}
 			FormBlockoutCutCopyPaste FormB=new FormBlockoutCutCopyPaste();
-			FormB.DateSelected=Appointments.DateSelected;
+			FormB.DateSelected=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView) {
 				FormB.DateSelected=WeekStartDate.AddDays(SheetClickedonDay);
 			}
@@ -3764,7 +3764,7 @@ namespace OpenDental{
 				Schedules.ClearBlockoutsForDay(WeekStartDate.AddDays(SheetClickedonDay));
 			}
 			else{
-				Schedules.ClearBlockoutsForDay(Appointments.DateSelected);
+				Schedules.ClearBlockoutsForDay(AppointmentL.DateSelected);
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Blockout clear.");
 			RefreshPeriod();
@@ -3921,7 +3921,7 @@ namespace OpenDental{
 			}
 			if(listSearchResults.Items.Count>0){
 				listSearchResults.SetSelected(0,true);
-				Appointments.DateSelected=SearchResults[0];
+				AppointmentL.DateSelected=SearchResults[0];
 			}
 			SetWeeklyView(false);//jump to that day.
 			Cursor=Cursors.Default;
@@ -3943,7 +3943,7 @@ namespace OpenDental{
 			if(clickedI==-1){
 				return;
 			}
-			Appointments.DateSelected=SearchResults[clickedI];
+			AppointmentL.DateSelected=SearchResults[clickedI];
 			SetWeeklyView(false);
 		}
 
@@ -3993,8 +3993,8 @@ namespace OpenDental{
 					endDate=WeekEndDate;
 				}
 				else {
-					startDate=Appointments.DateSelected;
-					endDate=Appointments.DateSelected;
+					startDate=AppointmentL.DateSelected;
+					endDate=AppointmentL.DateSelected;
 				}
 				if(PrefC.GetBool("ApptModuleRefreshesEveryMinute")){
 					RefreshPeriod();

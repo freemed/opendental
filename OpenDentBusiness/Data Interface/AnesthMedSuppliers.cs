@@ -10,7 +10,7 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary>A list of Anesthetic Medication Suppliers (Vendors) </summary>
 	public class AnesthMedSuppliers{
-		public bool IsNew;
+		//public bool IsNew;
 
 		///<summary></summary> 
 		public static DataTable RefreshCache() {
@@ -98,7 +98,6 @@ namespace OpenDentBusiness{
 		//}
 
 		public static string GetSupplierName(int AnesthMedSupplierNum){
-
 			//No need to check RemotingRole; no call to db.
 			if(AnesthMedSupplierNum==0){
 				return "";

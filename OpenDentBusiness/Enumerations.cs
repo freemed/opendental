@@ -218,7 +218,7 @@ namespace OpenDentBusiness{
 		None,
 		///<summary>1 Not used with any other flags</summary>
 		Date,
-		///<summary>2 All flags combined except Date and Tasks.</summary>
+		///<summary>2 Deprecated.  Inefficient.  All flags combined except Date and Tasks.</summary>
 		AllLocal,
 		///<summary>3 Not used with any other flags.  Used to just indicate added tasks, but now it indicates any change at all except those where a popup is needed.  If we also want a popup, then use TaskPopup.</summary>
 		Task,
@@ -297,7 +297,9 @@ namespace OpenDentBusiness{
 		///<summary>40</summary>
 		Diseases,
 		///<summary>41</summary>
-		Languages
+		Languages,
+		///<summary>42</summary>
+		AutoNotes
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

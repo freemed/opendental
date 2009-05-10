@@ -15,8 +15,8 @@ namespace OpenDentBusiness{
 
 		///<summary>This data adapter is used for all queries to the database.</summary>
 		private MySqlDataAdapter da;
-		///<summary>Stores the string of the command that will be sent to the database.</summary>
-		public MySqlCommand cmd;
+		//<summary>Stores the string of the command that will be sent to the database.</summary>
+		//public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
 

@@ -9,16 +9,7 @@ using OpenDentBusiness;
 namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the apptviewitem table in the database.</summary>
 	public class ApptViewItems{
-		///<summary>A list of the ApptViewItems for the current view.</summary>
-		public static ApptViewItem[] ForCurView;
-		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
-		///<summary>Visible providers in appt module.  List of indices to ProviderC.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
-		public static int[] VisProvs;
-		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.</summary>
-		public static int[] VisOps;
-		///<summary>Subset of ForCurView. Just items for rowElements. If no view is selected, then the elements are filled with default info.</summary>
-		public static ApptViewItem[] ApptRows;
-
+		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
@@ -103,36 +94,6 @@ namespace OpenDentBusiness{
 			Db.NonQ(c);
 		}
 
-		///<summary>Returns the index of the provNum within VisProvs.</summary>
-		public static int GetIndexProv(int provNum){
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<VisProvs.Length;i++){
-				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
-					return i;
-			}		
-			return -1;
-		}
-
-		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
-		public static bool OpIsInView(int opNum){
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ForCurView.Length;i++){
-				if(ForCurView[i].OpNum==opNum)
-					return true;
-			}
-			return false;
-		}
-
-		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
-		public static bool ProvIsInView(int provNum){
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<ForCurView.Length;i++){
-				if(ForCurView[i].ProvNum==provNum)
-					return true;
-			}
-			return false;
-		}
-
 		public static List<int> GetOpsForView(int apptViewNum){
 			//No need to check RemotingRole; no call to db.
 			//ArrayList AL=new ArrayList();
@@ -146,15 +107,7 @@ namespace OpenDentBusiness{
 			return retVal;//(int[])AL.ToArray(typeof(int));
 		}
 
-		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
-		public static int GetIndexOp(int opNum) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<VisOps.Length;i++) {
-				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)
-					return i;
-			}
-			return -1;
-		}
+		
 
 	}
 

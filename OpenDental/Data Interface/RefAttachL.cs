@@ -5,7 +5,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	///<summary></summary>
-	public class RefAttacheL{
+	public class RefAttachL{
 
 		///<summary>Pass in all the refattaches for the patient.  This funtion finds the first referral from a Dr and returns that Dr's name.  Used in specialty practices.  Function is only used right now in the Dr. Ceph bridge.</summary>
 		public static string GetReferringDr(RefAttach[] attachList){
@@ -15,7 +15,7 @@ namespace OpenDental{
 			if(!attachList[0].IsFrom){
 				return "";
 			}
-			Referral referral=ReferralL.GetReferral(attachList[0].ReferralNum);
+			Referral referral=Referrals.GetReferral(attachList[0].ReferralNum);
 			if(referral.PatNum!=0){
 				return "";
 			}

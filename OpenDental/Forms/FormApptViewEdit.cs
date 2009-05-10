@@ -381,14 +381,14 @@ namespace OpenDental{
 			ApptViewItemL.GetForCurView(ApptViewCur);
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
-				if(ApptViewItems.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
+				if(ApptViewItemL.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
 					listOps.SetSelected(i,true);
 				}
 			}
 			for(int i=0;i<ProviderC.List.Length;i++){
 				listProv.Items.Add
 					(ProviderC.List[i].GetLongDesc());
-				if(ApptViewItems.ProvIsInView(ProviderC.List[i].ProvNum)){
+				if(ApptViewItemL.ProvIsInView(ProviderC.List[i].ProvNum)){
 					listProv.SetSelected(i,true);
 				}
 			}
@@ -413,8 +413,8 @@ namespace OpenDental{
 			allElements.Add("WirelessPhone");
 			allElements.Add("WkPhone");
 			displayedElements=new ArrayList();
-			for(int i=0;i<ApptViewItems.ApptRows.Length;i++){
-				displayedElements.Add(ApptViewItems.ApptRows[i]);
+			for(int i=0;i<ApptViewItemL.ApptRows.Length;i++){
+				displayedElements.Add(ApptViewItemL.ApptRows[i]);
 			}
 			FillElements();
 		}

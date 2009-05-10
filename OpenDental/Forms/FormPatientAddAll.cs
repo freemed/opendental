@@ -531,7 +531,7 @@ namespace OpenDental {
 		#region Referral
 		///<summary>Fills the referral fields based on the specified referralNum.</summary>
 		private void FillReferral(int referralNum) {
-			selectedReferral=ReferralL.GetReferral(referralNum);
+			selectedReferral=Referrals.GetReferral(referralNum);
 			textReferral.Text=selectedReferral.LName;
 			textReferralFName.Text=selectedReferral.FName;
 		}

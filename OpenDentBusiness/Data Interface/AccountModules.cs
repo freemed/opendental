@@ -9,6 +9,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class AccountModules {
+		//These static variables are only used on either client or server.  Should work fine as written.
 		private static DataSet retVal;
 		private static Family fam;
 		private static Patient pat;

@@ -32,7 +32,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void FillGrid() {
-			AutoNoteControls.Refresh();
+			AutoNoteControls.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("",100);

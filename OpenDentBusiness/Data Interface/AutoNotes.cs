@@ -8,18 +8,21 @@ using System.Reflection;
 
 namespace OpenDentBusiness {
 	public class AutoNotes {
-		///<summary>A list of all Auto Notes.  This is not intelligently cached locally.  It is instead refreshed right before use.</summary>
+		///<summary>A list of all Auto Notes.  Caching could be handled better for fewer refreshes.</summary>
 		public static List<AutoNote> Listt;
-		/// <summary>This is what is used to store the output of the Auto Note</summary>
-		public string autoNoteOutput;
 
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
-			DataTable table = Db.GetTable(command);
+		///<summary></summary>
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			string command="SELECT * FROM autonote ORDER BY AutoNoteName";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="AutoNote";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			Listt=new List<AutoNote>();
 			AutoNote note;
 			for(int i=0;i<table.Rows.Count;i++){

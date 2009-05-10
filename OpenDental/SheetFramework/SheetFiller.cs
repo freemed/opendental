@@ -25,12 +25,12 @@ namespace OpenDental{
 					FillFieldsForLabelCarrier(sheet,carrier);
 					break;
 				case SheetTypeEnum.LabelReferral:
-					refer=ReferralL.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForLabelReferral(sheet,refer);
 					break;
 				case SheetTypeEnum.ReferralSlip:
 					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
-					refer=ReferralL.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralSlip(sheet,pat,refer);
 					break;
 				case SheetTypeEnum.LabelAppointment:
@@ -54,7 +54,7 @@ namespace OpenDental{
 					break;
 				case SheetTypeEnum.ReferralLetter:
 					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
-					refer=ReferralL.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralLetter(sheet,pat,refer);
 					break;
 			}

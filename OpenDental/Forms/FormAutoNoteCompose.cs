@@ -18,8 +18,8 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNoteCompose_Load(object sender,EventArgs e) {
-			AutoNotes.Refresh();
-			AutoNoteControls.Refresh();
+			AutoNotes.RefreshCache();
+			AutoNoteControls.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<AutoNotes.Listt.Count;i++) {
 				listMain.Items.Add(AutoNotes.Listt[i].AutoNoteName);

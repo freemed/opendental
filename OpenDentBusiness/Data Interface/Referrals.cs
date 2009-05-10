@@ -225,5 +225,39 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Gets Referral info from memory. Does not make a call to the database unless needed.</summary>
+		public static Referral GetReferral(int referralNum) {
+			//No need to check RemotingRole; no call to db.
+			if(referralNum==0) {
+				return null;
+			}
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i].Copy();
+				}
+			}
+			Refresh();//must be outdated
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i].Copy();
+				}
+			}
+			throw new ApplicationException("Error.  Referral not found: "+referralNum.ToString());
+		}
+
+		///<summary>Gets the first referral "from" for the given patient.  Will return null if no "from" found for patient.</summary>
+		public static Referral GetReferralForPat(int patNum) {
+			//No need to check RemotingRole; no call to db.
+			RefAttach[] RefAttachList=RefAttaches.Refresh(patNum);
+			for(int i=0;i<RefAttachList.Length;i++) {
+				if(RefAttachList[i].IsFrom) {
+					return GetReferral(RefAttachList[i].ReferralNum);
+				}
+			}
+			return null;
+		}
+
+
+
 	}
 }

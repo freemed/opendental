@@ -28,7 +28,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
-			AutoNoteControls.Refresh();
+			AutoNoteControls.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormAutoNoteControls","Description"),100);

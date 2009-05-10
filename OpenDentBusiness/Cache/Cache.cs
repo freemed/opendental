@@ -55,6 +55,10 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(AutoCodeItems.RefreshCache());
 				ds.Tables.Add(AutoCodeConds.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.AutoNotes) || isAll) {
+				ds.Tables.Add(AutoNotes.RefreshCache());
+				ds.Tables.Add(AutoNoteControls.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Carriers) || isAll){
 				ds.Tables.Add(Carriers.RefreshCache());//run on startup, after telephone reformat, after list edit.
 			}
@@ -190,6 +194,10 @@ namespace OpenDentBusiness {
 				AutoCodes.FillCache(ds.Tables["AutoCode"]);
 				AutoCodeItems.FillCache(ds.Tables["AutoCodeItem"]);
 				AutoCodeConds.FillCache(ds.Tables["AutoCodeCond"]);
+			}
+			if(itypes.Contains((int)InvalidType.AutoNotes) || isAll) {
+				AutoNotes.FillCache(ds.Tables["AutoNote"]);
+				AutoNoteControls.FillCache(ds.Tables["AutoNoteControl"]);
 			}
 			if(itypes.Contains((int)InvalidType.Carriers) || isAll) {
 				Carriers.FillCache(ds.Tables["Carrier"]);//run on startup, after telephone reformat, after list edit.

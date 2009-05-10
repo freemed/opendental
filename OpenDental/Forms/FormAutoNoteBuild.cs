@@ -24,7 +24,7 @@ namespace OpenDental {
 
 		private void FillList() {
 			listBoxAutoNotes.Items.Clear();
-			AutoNotes.Refresh();
+			AutoNotes.RefreshCache();
 			for (int i=0; i<AutoNotes.Listt.Count; i++) {
 				listBoxAutoNotes.Items.Add(AutoNotes.Listt[i].AutoNoteName);
 			}

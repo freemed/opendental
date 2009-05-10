@@ -1842,7 +1842,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
-			Text=Patients2.GetMainTitle(patName,patNum,chartNumber,siteNum);
+			Text=PatientL.GetMainTitle(patName,patNum,chartNumber,siteNum);
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
@@ -1903,7 +1903,7 @@ namespace OpenDental{
 			Referral refer;
 			string str;
 			for(int i=0;i<refAttaches.Length;i++) {
-				refer=ReferralL.GetReferral(refAttaches[i].ReferralNum);
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom) {
 					str=Lan.g(this,"From ");
 				}
@@ -2007,7 +2007,7 @@ namespace OpenDental{
 			Referral refer;
 			string str;
 			for(int i=0;i<refAttaches.Length;i++) {
-				refer=ReferralL.GetReferral(refAttaches[i].ReferralNum);
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom) {
 					str=Lan.g(this,"From ");
 				}
@@ -2119,7 +2119,7 @@ namespace OpenDental{
 			Referral refer;
 			string str;
 			for(int i=0;i<refAttaches.Length;i++){
-				refer=ReferralL.GetReferral(refAttaches[i].ReferralNum);
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
 				if(refAttaches[i].IsFrom){
 					str=Lan.g(this,"From ");
 				}
@@ -2389,7 +2389,7 @@ namespace OpenDental{
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
 			if(e.DateSelected.Year>1880){
-				Appointments.DateSelected=e.DateSelected;
+				AppointmentL.DateSelected=e.DateSelected;
 			}
 			if(e.SelectedAptNum>0){
 				ContrApptSingle.SelectedAptNum=e.SelectedAptNum;
@@ -2567,7 +2567,7 @@ namespace OpenDental{
 			else{
 				signalLastRefreshed=sigList[sigList.Count-1].SigDateTime;
 			}
-			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
+			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,AppointmentL.DateSelected.Date)){
 				ContrAppt2.RefreshPeriod();
 			}
 			bool areAnySignalsTasks=false;
@@ -2973,11 +2973,11 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			SetModuleSelected();
 			if(CurPatNum==0){
-				Text=Patients2.GetMainTitle("",0,"",0);
+				Text=PatientL.GetMainTitle("",0,"",0);
 			}
 			else{
 				Patient pat=Patients.GetPat(CurPatNum);
-				Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
 			}
 			if(userControlTasks1.Visible) {
 				userControlTasks1.InitializeOnStartup();
@@ -3973,11 +3973,11 @@ namespace OpenDental{
 				myOutlookBar.Invalidate();
 				SetModuleSelected();
 				if(CurPatNum==0) {
-					Text=Patients2.GetMainTitle("",0,"",0);
+					Text=PatientL.GetMainTitle("",0,"",0);
 				}
 				else {
 					Patient pat=Patients.GetPat(CurPatNum);
-					Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
+					Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
 				}
 				if(userControlTasks1.Visible) {
 					userControlTasks1.InitializeOnStartup();

@@ -924,7 +924,7 @@ namespace OpenDental{
             //referralnum             
             case "referralnum":
 							if(PIn.PInt(tableOut.Rows[i][j].ToString())!=0){
-								Referral referral=ReferralL.GetReferral
+								Referral referral=Referrals.GetReferral
 									(PIn.PInt(tableOut.Rows[i][j].ToString()));
 								tableOut.Rows[i][j]
 									=referral.LName+", "+referral.FName+" "+referral.MName;

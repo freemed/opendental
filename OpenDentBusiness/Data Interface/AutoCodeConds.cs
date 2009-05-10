@@ -1,16 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
 namespace OpenDentBusiness{
   ///<summary></summary>
 	public class AutoCodeConds{
-		///<summary></summary>
-		public static AutoCodeCond[] ListForItem;
-		private static ArrayList ALlist;
-		//public static Hashtable HList; 
-
+		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
@@ -23,14 +20,12 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			//HList=new Hashtable();
 			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){
 				AutoCodeCondC.List[i]=new AutoCodeCond();
 				AutoCodeCondC.List[i].AutoCodeCondNum= PIn.PInt        (table.Rows[i][0].ToString());
 				AutoCodeCondC.List[i].AutoCodeItemNum= PIn.PInt        (table.Rows[i][1].ToString());
 				AutoCodeCondC.List[i].Cond=(AutoCondition)PIn.PInt(table.Rows[i][2].ToString());	
-				//HList.Add(List[i].AutoCodeItemNum,List[i]);
 			}
 		}
 
@@ -44,7 +39,6 @@ namespace OpenDentBusiness{
 				+"VALUES ("
 				+"'"+POut.PInt(Cur.AutoCodeItemNum)+"', "
 				+"'"+POut.PInt((int)Cur.Cond)+"')";
-			//MessageBox.Show(string command);
 			Cur.AutoCodeCondNum=Db.NonQ(command,true);
 		}
 
@@ -83,18 +77,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void GetListForItem(int autoCodeItemNum){
+		public static List<AutoCodeCond> GetListForItem(int autoCodeItemNum){
 			//No need to check RemotingRole; no call to db.
-			ALlist=new ArrayList();
+			List<AutoCodeCond> retVal=new List<AutoCodeCond>();
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){
 				if(AutoCodeCondC.List[i].AutoCodeItemNum==autoCodeItemNum){
-					ALlist.Add(AutoCodeCondC.List[i]);
+					retVal.Add(AutoCodeCondC.List[i]);
 				} 
 			}
-			ListForItem=new AutoCodeCond[ALlist.Count];
-			if(ALlist.Count > 0){			
-				ALlist.CopyTo(ListForItem);
-			}     
+			return retVal;   
 		}
 
 		///<summary></summary>

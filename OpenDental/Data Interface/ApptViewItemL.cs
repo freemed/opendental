@@ -8,6 +8,15 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class ApptViewItemL{
+		///<summary>A list of the ApptViewItems for the current view.</summary>
+		public static ApptViewItem[] ForCurView;
+		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
+		///<summary>Visible providers in appt module.  List of indices to ProviderC.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
+		public static int[] VisProvs;
+		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.</summary>
+		public static int[] VisOps;
+		///<summary>Subset of ForCurView. Just items for rowElements. If no view is selected, then the elements are filled with default info.</summary>
+		public static ApptViewItem[] ApptRows;
 
 		public static void GetForCurView(int indexInList){
 			if(indexInList<0){//might be -1 or -2
@@ -68,25 +77,67 @@ namespace OpenDental{
 				}
 				ContrApptSheet.RowsPerIncr=ApptViewCur.RowsPerIncr;
 			}
-			ApptViewItems.ForCurView=new ApptViewItem[tempAL.Count];
+			ApptViewItemL.ForCurView=new ApptViewItem[tempAL.Count];
 			for(int i=0;i<tempAL.Count;i++){
-				ApptViewItems.ForCurView[i]=(ApptViewItem)tempAL[i];
+				ApptViewItemL.ForCurView[i]=(ApptViewItem)tempAL[i];
 			}
-			ApptViewItems.VisOps=new int[ALops.Count];
+			ApptViewItemL.VisOps=new int[ALops.Count];
 			for(int i=0;i<ALops.Count;i++){
-				ApptViewItems.VisOps[i]=(int)ALops[i];
+				ApptViewItemL.VisOps[i]=(int)ALops[i];
 			}
-			Array.Sort(ApptViewItems.VisOps);
-			ApptViewItems.VisProvs=new int[ALprov.Count];
+			Array.Sort(ApptViewItemL.VisOps);
+			ApptViewItemL.VisProvs=new int[ALprov.Count];
 			for(int i=0;i<ALprov.Count;i++){
-				ApptViewItems.VisProvs[i]=(int)ALprov[i];
+				ApptViewItemL.VisProvs[i]=(int)ALprov[i];
 			}
-			Array.Sort(ApptViewItems.VisProvs);
-			ApptViewItems.ApptRows=new ApptViewItem[ALelements.Count];
+			Array.Sort(ApptViewItemL.VisProvs);
+			ApptViewItemL.ApptRows=new ApptViewItem[ALelements.Count];
 			for(int i=0;i<ALelements.Count;i++){
-				ApptViewItems.ApptRows[i]=(ApptViewItem)ALelements[i];
+				ApptViewItemL.ApptRows[i]=(ApptViewItem)ALelements[i];
 			}
 		}
+
+		///<summary>Returns the index of the provNum within VisProvs.</summary>
+		public static int GetIndexProv(int provNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<VisProvs.Length;i++) {
+				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
+					return i;
+			}
+			return -1;
+		}
+
+		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
+		public static bool OpIsInView(int opNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ForCurView.Length;i++) {
+				if(ForCurView[i].OpNum==opNum)
+					return true;
+			}
+			return false;
+		}
+
+		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
+		public static bool ProvIsInView(int provNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ForCurView.Length;i++) {
+				if(ForCurView[i].ProvNum==provNum)
+					return true;
+			}
+			return false;
+		}
+
+		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
+		public static int GetIndexOp(int opNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<VisOps.Length;i++) {
+				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)
+					return i;
+			}
+			return -1;
+		}
+
+
 
 	}
 }

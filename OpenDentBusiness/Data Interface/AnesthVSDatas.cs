@@ -15,10 +15,6 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class AnesthVSDatas {
 
-		public MySqlCommand cmd;
-		//<summary>This is the connection that is used by the data adapter for all queries.  js-not allowed</summary>
-		//private static MySqlConnection con;
-
 		///<summary>Gets those vital signs tied to a unique AnestheticRecordNum from the database</summary>
 		public static List<AnestheticVSData> CreateObjects(int anestheticRecordNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

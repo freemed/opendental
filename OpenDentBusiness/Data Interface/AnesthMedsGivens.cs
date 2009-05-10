@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AnesthMedsGivens {
 
-		public MySqlCommand cmd;
+		//public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
 

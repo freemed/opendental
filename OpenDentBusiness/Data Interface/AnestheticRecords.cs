@@ -15,8 +15,6 @@ namespace OpenDentBusiness {
 		///<summary>List of all anesthetic records for the current patient.</summary>
 		public static AnestheticRecord[] List;
 
-		///<summary>Stores the string of the command that will be sent to the database.</summary>
-		public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
 

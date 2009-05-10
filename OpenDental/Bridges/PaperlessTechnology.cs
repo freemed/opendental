@@ -505,7 +505,7 @@ namespace OpenDental.Bridges{
 				sw.Write(Tidy(emp.State)+",");//PAT_EMPST
 				sw.Write(Tidy(emp.State)+",");//PAT_EMPZIP
 				sw.Write(TelephoneNumbers.FormatNumbersOnly(emp.Phone)+",");//PAT_EMPPHN*/
-				Referral referral=ReferralL.GetReferralForPat(pat.PatNum);//could be null
+				Referral referral=Referrals.GetReferralForPat(pat.PatNum);//could be null
 				if(referral==null){
 					sw.Write(",");//PAT_REFLNM
 					sw.Write(",");//PAT_REFFNM

@@ -159,6 +159,8 @@ namespace OpenDental{
 			//Cur=ClaimCur;
 			Claims.Update(claimCur);
 		}
-	}//end class Claims
 
+
+
+	}
 }

@@ -121,7 +121,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){			
-			AutoNotes.Refresh();
+			AutoNotes.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<AutoNotes.Listt.Count;i++) {
 				listMain.Items.Add(AutoNotes.Listt[i].AutoNoteName);

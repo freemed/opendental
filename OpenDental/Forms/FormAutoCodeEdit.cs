@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -24,6 +25,7 @@ namespace OpenDental{
     public bool IsNew;
 		///<summary>Set this before opening the form.</summary>
 		public AutoCode AutoCodeCur;
+		List<AutoCodeItem> listForCode;
 
 		///<summary></summary>
 		public FormAutoCodeEdit(){
@@ -237,16 +239,16 @@ namespace OpenDental{
       int count=0;
 			AutoCodeItems.RefreshCache();
 			AutoCodeConds.RefreshCache();
-      AutoCodeItems.GetListForCode(AutoCodeCur.AutoCodeNum);
- 			tbAutoItem.ResetRows(AutoCodeItems.ListForCode.Length);
+			listForCode=AutoCodeItems.GetListForCode(AutoCodeCur.AutoCodeNum);
+			tbAutoItem.ResetRows(listForCode.Count);
 			tbAutoItem.SetGridColor(Color.Gray);
-			tbAutoItem.SetBackGColor(Color.White);      
-			for(int i=0;i<AutoCodeItems.ListForCode.Length;i++){
-        tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).ProcCode;
-				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).Descript;
+			tbAutoItem.SetBackGColor(Color.White);
+			for(int i=0;i<listForCode.Count;i++) {
+        tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(listForCode[i].CodeNum).ProcCode;
+				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(listForCode[i].CodeNum).Descript;
         count=0;
         for(int j=0;j<AutoCodeCondC.List.Length;j++){
-          if(AutoCodeCondC.List[j].AutoCodeItemNum==AutoCodeItems.ListForCode[i].AutoCodeItemNum){
+          if(AutoCodeCondC.List[j].AutoCodeItemNum==listForCode[i].AutoCodeItemNum){
 						if(count!=0){
 							tbAutoItem.Cell[2,i]+=", ";
 						}
@@ -259,7 +261,7 @@ namespace OpenDental{
     }
 
     private void tbAutoItem_CellDoubleClicked(object sender, CellEventArgs e){
-      AutoCodeItem AutoCodeItemCur=AutoCodeItems.ListForCode[tbAutoItem.SelectedRow];
+      AutoCodeItem AutoCodeItemCur=listForCode[tbAutoItem.SelectedRow];
       FormAutoItemEdit FormAIE=new FormAutoItemEdit();
 			FormAIE.AutoCodeItemCur=AutoCodeItemCur;
       FormAIE.ShowDialog();
@@ -280,7 +282,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select an item first."));
         return;
 			}
-			AutoCodeItem AutoCodeItemCur=AutoCodeItems.ListForCode[tbAutoItem.SelectedRow];
+			AutoCodeItem AutoCodeItemCur=listForCode[tbAutoItem.SelectedRow];
       AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
       AutoCodeItems.Delete(AutoCodeItemCur);
 			FillTable();
@@ -291,7 +293,7 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"The Description cannot be blank"));
         return;
       }
-			if(AutoCodeItems.ListForCode.Length==0){
+			if(listForCode.Count==0){
 				MsgBox.Show(this,"Must have at least one item in the list.");
 				//This is not actually rigorous enough since items will already be deleted.
 				return;
@@ -311,8 +313,8 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNew){
-        for(int i=0;i<AutoCodeItems.ListForCode.Length;i++){
-          AutoCodeItem AutoCodeItemCur=AutoCodeItems.ListForCode[i];
+        for(int i=0;i<listForCode.Count;i++){
+          AutoCodeItem AutoCodeItemCur=listForCode[i];
           AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
           AutoCodeItems.Delete(AutoCodeItemCur);
         }

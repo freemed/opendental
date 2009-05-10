@@ -3551,7 +3551,11 @@ namespace OpenDental{
 
 		private void butReferralEdit_Click(object sender,EventArgs e) {
 			//only enabled if ClaimCur.ReferringProv!=0
-			Referral refer=ReferralL.GetReferral(ClaimCur.ReferringProv);
+			Referral refer=null;
+			try {
+				refer=Referrals.GetReferral(ClaimCur.ReferringProv);
+			}
+			catch { }
 			if(refer==null){
 				MsgBox.Show(this,"Referral not found.");
 				textRefProv.Text="";

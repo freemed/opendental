@@ -244,7 +244,7 @@ namespace OpenDental
 		}
 
 		private void butDisplayed_Click(object sender, System.EventArgs e) {
-			textDate.Text=Appointments.DateSelected.ToShortDateString();
+			textDate.Text=AppointmentL.DateSelected.ToShortDateString();
 		}
 
 		private void butAll_Click(object sender, System.EventArgs e){
@@ -297,7 +297,7 @@ namespace OpenDental
 		///<summary>raised for each page to be printed.  One page per appointment.</summary>
 		private void pd_PrintPage(object sender,PrintPageEventArgs ev) {
 			if(ApptNum!=0) {//just for one appointment
-				date=Appointments.DateSelected;
+				date=AppointmentL.DateSelected;
 			}
 			Graphics g=ev.Graphics;
 			float y=50;

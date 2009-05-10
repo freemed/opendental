@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
@@ -7,8 +8,6 @@ using System.Windows.Forms;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AutoCodeItems{
-		///<summary></summary>
-		public static AutoCodeItem[] ListForCode;//all items for a specific AutoCode
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
@@ -88,19 +87,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void GetListForCode(int autoCodeNum){
+		public static List<AutoCodeItem> GetListForCode(int autoCodeNum){
 			//No need to check RemotingRole; no call to db.
 			//loop through AutoCodeItems.List to fill ListForCode
-			ArrayList ALtemp=new ArrayList();
+			List<AutoCodeItem> retVal=new List<AutoCodeItem>();
 			for(int i=0;i<AutoCodeItemC.List.Length;i++){
 				if(AutoCodeItemC.List[i].AutoCodeNum==autoCodeNum){
-					ALtemp.Add(AutoCodeItemC.List[i]);
+					retVal.Add(AutoCodeItemC.List[i]);
 				} 
 			}
-			ListForCode=new AutoCodeItem[ALtemp.Count];
-			if(ALtemp.Count>0){
-				ALtemp.CopyTo(ListForCode);
-			}     
+			return retVal;    
 		}
 
 		//-----
@@ -109,25 +105,25 @@ namespace OpenDentBusiness{
 		public static int GetCodeNum(int autoCodeNum,string toothNum,string surf,bool isAdditional,int patNum,int age) {
 			//No need to check RemotingRole; no call to db.
 			bool allCondsMet;
-			AutoCodeItems.GetListForCode(autoCodeNum);
-			if(AutoCodeItems.ListForCode.Length==0) {
+			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode(autoCodeNum);
+			if(listForCode.Count==0) {
 				return 0;
 			}
 			bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);
-			for(int i=0;i<AutoCodeItems.ListForCode.Length;i++) {
-				AutoCodeConds.GetListForItem(AutoCodeItems.ListForCode[i].AutoCodeItemNum);
+			List<AutoCodeCond> condList;
+			for(int i=0;i<listForCode.Count;i++) {
+				condList=AutoCodeConds.GetListForItem(listForCode[i].AutoCodeItemNum);
 				allCondsMet=true;
-				for(int j=0;j<AutoCodeConds.ListForItem.Length;j++) {
-					if(!AutoCodeConds.ConditionIsMet
-						(AutoCodeConds.ListForItem[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
+				for(int j=0;j<condList.Count;j++) {
+					if(!AutoCodeConds.ConditionIsMet(condList[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
 						allCondsMet=false;
 					}
 				}
 				if(allCondsMet) {
-					return AutoCodeItems.ListForCode[i].CodeNum;
+					return listForCode[i].CodeNum;
 				}
 			}
-			return AutoCodeItems.ListForCode[0].CodeNum;//if couldn't find a better match
+			return listForCode[0].CodeNum;//if couldn't find a better match
 		}
 
 		///<summary>Only called when closing the procedure edit window. Usually returns the supplied CodeNum, unless a better match is found.</summary>
@@ -147,18 +143,18 @@ namespace OpenDentBusiness{
 				return codeNum;
 			}
 			bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);
-			AutoCodeItems.GetListForCode((int)AutoCodeItemC.HList[codeNum]);
-			for(int i=0;i<AutoCodeItems.ListForCode.Length;i++) {
-				AutoCodeConds.GetListForItem(AutoCodeItems.ListForCode[i].AutoCodeItemNum);
+			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode((int)AutoCodeItemC.HList[codeNum]);
+			List<AutoCodeCond> condList;
+			for(int i=0;i<listForCode.Count;i++) {
+				condList=AutoCodeConds.GetListForItem(listForCode[i].AutoCodeItemNum);
 				allCondsMet=true;
-				for(int j=0;j<AutoCodeConds.ListForItem.Length;j++) {
-					if(!AutoCodeConds.ConditionIsMet
-						(AutoCodeConds.ListForItem[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
+				for(int j=0;j<condList.Count;j++) {
+					if(!AutoCodeConds.ConditionIsMet(condList[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
 						allCondsMet=false;
 					}
 				}
 				if(allCondsMet) {
-					return AutoCodeItems.ListForCode[i].CodeNum;
+					return listForCode[i].CodeNum;
 				}
 			}
 			return codeNum;//if couldn't find a better match

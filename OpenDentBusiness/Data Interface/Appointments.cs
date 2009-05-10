@@ -7,9 +7,7 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	public class Appointments {
-		///<summary>The date currently selected in the appointment module.</summary>
-		public static DateTime DateSelected;
-
+		
 		///<summary>Gets a list of appointments for a period of time in the schedule, whether hidden or not.</summary>
 		public static Appointment[] GetForPeriod(DateTime startDate,DateTime endDate){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

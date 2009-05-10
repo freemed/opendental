@@ -64,7 +64,7 @@ namespace OpenDental.Bridges{
 				}
 				VBbridges.DrCephNew.Launch(patID,pat.FName,pat.MiddleI,pat.LName,pat.Address,pat.Address2,pat.City,
 					pat.State,pat.Zip,pat.HmPhone,pat.SSN,pat.Gender.ToString(),pat.Race.ToString(),"",pat.Birthdate.ToString(),
-					DateTime.Today.ToShortDateString(),RefAttacheL.GetReferringDr(referalList),provName,
+					DateTime.Today.ToShortDateString(),RefAttachL.GetReferringDr(referalList),provName,
 					guar.GetNameFL(),guar.Address,guar.Address2,guar.City,guar.State,guar.Zip,guar.HmPhone,relat);
 			}
 			catch{

@@ -179,7 +179,7 @@ namespace OpenDental{
 				int adjustedX=newX-TimeWidth-deltaDay;
 				retVal=(int)Math.Round((double)(adjustedX)/ColAptWidth);
 				//when there are multiple days, special situation where x is within the last op for the day, so it goes to next day.
-				if(retVal>ApptViewItems.VisOps.Length-1 && dayI<NumOfWeekDaysToDisplay-1){
+				if(retVal>ApptViewItemL.VisOps.Length-1 && dayI<NumOfWeekDaysToDisplay-1){
 					retVal=0;
 				}
 			}
@@ -187,8 +187,8 @@ namespace OpenDental{
 				retVal=(int)Math.Round((double)(newX-TimeWidth-ProvWidth*ProvCount)/ColWidth);
 			}
 			//make sure it's not outside bounds of array:
-			if(retVal > ApptViewItems.VisOps.Length-1)
-				retVal=ApptViewItems.VisOps.Length-1;
+			if(retVal > ApptViewItemL.VisOps.Length-1)
+				retVal=ApptViewItemL.VisOps.Length-1;
 			if(retVal<0)
 				retVal=0;
 			return retVal;
@@ -324,7 +324,7 @@ namespace OpenDental{
 						dayofweek=(DayOfWeek)(d+1);
 					}
 					for(int j=0;j<ColCount;j++) {
-						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
+						schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,dayofweek,OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
 						for(int i=0;i<schedsForOp.Count;i++) {
 							g.FillRectangle(openBrush
 								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
@@ -353,7 +353,7 @@ namespace OpenDental{
 					g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
 				}
 				for(int j=0;j<ColCount;j++) {
-					schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,OperatoryC.ListShort[ApptViewItems.VisOps[j]]);
+					schedsForOp=Schedules.GetSchedsForOp(SchedListPeriod,OperatoryC.ListShort[ApptViewItemL.VisOps[j]]);
 					//first, do all the backgrounds
 					for(int i=0;i<schedsForOp.Count;i++) {
 						g.FillRectangle(openBrush
@@ -406,7 +406,7 @@ namespace OpenDental{
 				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++){	
 					if(IsWeeklyView){
-						if(ApptViewItems.GetIndexOp(schedForType[i].Ops[o])==-1) {
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1) {
 							continue;//don't display if op not visible
 						}
 						//this is a workaround because we start on Monday:
@@ -416,7 +416,7 @@ namespace OpenDental{
 						}
 						rect=new RectangleF(
 							TimeWidth+1+(dayofweek)*ColDayWidth
-							+ColAptWidth*ApptViewItems.GetIndexOp(schedForType[i].Ops[o])+1
+							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColAptWidth-1
@@ -424,12 +424,12 @@ namespace OpenDental{
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
 					else{
-						if(ApptViewItems.GetIndexOp(schedForType[i].Ops[o])==-1){
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])==-1){
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
-							+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Ops[o])+1
+							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Ops[o])+1
 							+ProvWidth*2//so they don't overlap prov bars
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
@@ -455,8 +455,8 @@ namespace OpenDental{
 			Provider provCur;
 			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
-			for(int j=0;j<ApptViewItems.VisProvs.Length;j++){
-				provCur=ProviderC.List[ApptViewItems.VisProvs[j]];
+			for(int j=0;j<ApptViewItemL.VisProvs.Length;j++){
+				provCur=ProviderC.List[ApptViewItemL.VisProvs[j]];
 				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++){	
 					g.FillRectangle(openBrush
@@ -480,7 +480,7 @@ namespace OpenDental{
 							break;
 						case 1:
 							try{
-								g.FillRectangle(new SolidBrush(ProviderC.List[ApptViewItems.VisProvs[j]].ProvColor)
+								g.FillRectangle(new SolidBrush(ProviderC.List[ApptViewItemL.VisProvs[j]].ProvColor)
 									,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							}
 							catch{//design-time
@@ -490,7 +490,7 @@ namespace OpenDental{
 							break;
 						case 2:
 							g.FillRectangle(new HatchBrush(HatchStyle.DarkUpwardDiagonal
-								,Color.Black,ProviderC.List[ApptViewItems.VisProvs[j]].ProvColor)
+								,Color.Black,ProviderC.List[ApptViewItemL.VisProvs[j]].ProvColor)
 								,TimeWidth+ProvWidth*j+1,(i*Lh)+1,ProvWidth-1,Lh-1);
 							break;
 						default://more than 2
@@ -626,19 +626,19 @@ namespace OpenDental{
 
 		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed.</summary>
 		public void ComputeColWidth(int totalWidth){
-			if(ApptViewItems.VisOps==null || ApptViewItems.VisProvs==null){
+			if(ApptViewItemL.VisOps==null || ApptViewItemL.VisProvs==null){
 				return;
 			}
 			try{
 				if(RowsPerIncr==0)
 					RowsPerIncr=1;
-				ColCount=ApptViewItems.VisOps.Length;
+				ColCount=ApptViewItemL.VisOps.Length;
 				if(IsWeeklyView){
 					//ColCount=NumOfWeekDaysToDisplay;
 					ProvCount=0;
 				}
 				else{
-					ProvCount=ApptViewItems.VisProvs.Length;
+					ProvCount=ApptViewItemL.VisProvs.Length;
 				}
 				if(ColCount==0) {
 					ColWidth=0;

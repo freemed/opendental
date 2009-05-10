@@ -8,21 +8,22 @@ using System.Reflection;
 
 namespace OpenDentBusiness {
 	public class AutoNoteControls {
-		/// <summary>A list of all the Prompts</summary>
+		/// <summary>A list of all the Prompts.  Caching could be handled better for fewer refreshes.</summary>
 		public static List<AutoNoteControl> Listt;
 
-		/// <summary>A list with all the control settings</summary>
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-			}
-			string command = "SELECT * FROM autonotecontrol ORDER BY Descript";
-			Listt=RefreshAndFill(Db.GetTable(command));
+		///<summary></summary>
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			string command="SELECT * FROM autonotecontrol ORDER BY Descript";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="AutoNoteControl";
+			FillCache(table);
+			return table;
 		}
 
-		private static List<AutoNoteControl> RefreshAndFill(DataTable table) {
+		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			List<AutoNoteControl> retVal=new List<AutoNoteControl>();
+			Listt=new List<AutoNoteControl>();
 			AutoNoteControl noteCont;
 			for (int i=0;i<table.Rows.Count;i++){
 				noteCont = new AutoNoteControl();
@@ -31,9 +32,8 @@ namespace OpenDentBusiness {
 				noteCont.ControlType = PIn.PString(table.Rows[i]["ControlType"].ToString());
 				noteCont.ControlLabel =PIn.PString(table.Rows[i]["ControlLabel"].ToString());
 				noteCont.ControlOptions = PIn.PString(table.Rows[i]["ControlOptions"].ToString());
-				retVal.Add(noteCont);
+				Listt.Add(noteCont);
 			}
-			return retVal;
 		}
 
 		public static void Insert(AutoNoteControl autonotecontrol) {

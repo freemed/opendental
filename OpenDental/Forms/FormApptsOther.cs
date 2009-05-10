@@ -658,7 +658,7 @@ namespace OpenDental{
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
 				}
 				else {
-					d=Appointments.DateSelected;
+					d=AppointmentL.DateSelected;
 				}
 				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)
 					*ContrApptSheet.MinPerIncr;
@@ -717,7 +717,7 @@ namespace OpenDental{
 					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
 				}
 				else{
-					d=Appointments.DateSelected;
+					d=AppointmentL.DateSelected;
 				}
 				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day

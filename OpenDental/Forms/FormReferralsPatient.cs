@@ -242,7 +242,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a referral first");
 				return;
 			}
-			Referral referral=ReferralL.GetReferral(RefAttachList[idx].ReferralNum);
+			Referral referral=Referrals.GetReferral(RefAttachList[idx].ReferralNum);
 			SheetDef sheetDef;
 			if(referral.Slip==0){
 				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
