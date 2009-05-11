@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -34,6 +35,7 @@ namespace OpenDental{
 		private Label labelSite;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
+		private Dictionary<int,string> patientNames;
 
 		///<summary></summary>
 		public FormUnsched(){
@@ -215,7 +217,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUnsched_Load(object sender, System.EventArgs e) {
-			Patients.GetHList();
+			patientNames=Patients.GetAllPatientNames();
 			comboOrder.Items.Add(Lan.g(this,"Status"));
 			comboOrder.Items.Add(Lan.g(this,"Alphabetical"));
 			comboOrder.Items.Add(Lan.g(this,"Date"));
@@ -281,7 +283,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<ListUn.Length;i++) {
 				row=new ODGridRow();
-				row.Cells.Add((string)Patients.HList[ListUn[i].PatNum]);
+				row.Cells.Add(patientNames[ListUn[i].PatNum]);
 				if(ListUn[i].AptDateTime.Year < 1880)
 					row.Cells.Add("");
 				else
@@ -387,7 +389,7 @@ namespace OpenDental{
 		}
 
 		private void FormUnsched_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			Patients.HList=null;
+			//Patients.HList=null;
 		}
 
 		private void FormUnsched_FormClosing(object sender,FormClosingEventArgs e) {

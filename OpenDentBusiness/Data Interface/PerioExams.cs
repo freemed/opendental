@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Reflection;
@@ -7,29 +8,37 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PerioExams{
-		///<summary>List of all perio exams for the current patient.</summary>
-		public static PerioExam[] List;
+		///<summary>This is public static because it would be hard to pass it into ContrPerio.  Only used by UI.</summary>
+		public static List<PerioExam> ListExams;
 
 		///<summary>Most recent date last.  All exams loaded, even if not displayed.</summary>
 		public static void Refresh(int patNum){
+			//No need to check RemotingRole; no call to db.
+			DataTable table=GetExamsTable(patNum);
+			ListExams=new List<PerioExam>();
+			PerioExam exam;
+			for(int i=0;i<table.Rows.Count;i++){
+				exam=new PerioExam();
+				exam.PerioExamNum= PIn.PInt   (table.Rows[i][0].ToString());
+				exam.PatNum      = PIn.PInt(table.Rows[i][1].ToString());
+				exam.ExamDate    = PIn.PDate(table.Rows[i][2].ToString());
+				exam.ProvNum     = PIn.PInt(table.Rows[i][3].ToString());
+				ListExams.Add(exam);
+			}
+			//return list;
+			//PerioMeasures.Refresh(patNum);
+		}
+
+		public static DataTable GetExamsTable(int patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
-				return;
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command=
 				"SELECT * from perioexam"
 				+" WHERE PatNum = '"+patNum.ToString()+"'"
 				+" ORDER BY perioexam.ExamDate";
 			DataTable table=Db.GetTable(command);
-			List=new PerioExam[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new PerioExam();
-				List[i].PerioExamNum= PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PatNum      = PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].ExamDate    = PIn.PDate  (table.Rows[i][2].ToString());
-				List[i].ProvNum     = PIn.PInt   (table.Rows[i][3].ToString());
-			}
-			//PerioMeasures.Refresh(patNum);
+			return table;
 		}
 
 		///<summary></summary>
@@ -89,10 +98,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used by PerioMeasures when refreshing to organize array.</summary>
-		public static int GetExamIndex(int perioExamNum) {
+		public static int GetExamIndex(List<PerioExam> list,int perioExamNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].PerioExamNum==perioExamNum) {
+			for(int i=0;i<list.Count;i++) {
+				if(list[i].PerioExamNum==perioExamNum) {
 					return i;
 				}
 			}

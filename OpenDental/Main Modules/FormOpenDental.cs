@@ -1746,7 +1746,7 @@ namespace OpenDental{
 				return;
 			}
 			Family fam=Patients.GetFamily(CurPatNum);
-			Patients.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
+			PatientL.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
@@ -1794,7 +1794,7 @@ namespace OpenDental{
 
 		private void menuPatient_Click(object sender,System.EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
-			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
+			CurPatNum=PatientL.ButtonSelect(menuPatient,sender,fam);
 			//new family now
 			Patient pat=Patients.GetPat(CurPatNum);
 			RefreshCurrentModule();
@@ -1814,7 +1814,7 @@ namespace OpenDental{
 
 		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
 		private void FillPatientButton(int patNum,string patName,bool hasEmail,string chartNumber,int siteNum) {
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
+			PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
 				return;
 			}

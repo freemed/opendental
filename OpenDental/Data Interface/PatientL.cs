@@ -13,30 +13,68 @@ namespace OpenDental{
 	
 	///<summary></summary>
 	public class PatientL{
-		//<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
-		//private static ArrayList buttonLastFiveNames;
-		//<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
-		//private static ArrayList buttonLastFivePatNums;
-		/*
-		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
-		public static string GetMainTitle(Patient PatCur){
-			string retVal=PrefC.GetString("MainWindowTitle");
-			if(Security.CurUser!=null) {
-				retVal+=" {"+Security.CurUser.UserName+"}";
+		///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
+		private static List<string> buttonLastFiveNames;
+		///<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
+		private static List<int> buttonLastFivePatNums;
+
+		///<summary>The current patient will already be on the button.  This adds the family members when user clicks dropdown arrow. Can handle null values for pat and fam.  Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
+		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,int patNum,Family fam) {
+			//No need to check RemotingRole; no call to db.
+			//fill menu
+			menu.MenuItems.Clear();
+			for(int i=0;i<buttonLastFiveNames.Count;i++) {
+				menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
 			}
-			if(PatCur==null){
-				return retVal;
+			menu.MenuItems.Add("-");
+			menu.MenuItems.Add("FAMILY");
+			if(patNum!=0 && fam!=null) {
+				for(int i=0;i<fam.ListPats.Length;i++) {
+					menu.MenuItems.Add(fam.ListPats[i].GetNameLF(),onClick);
+				}
 			}
-			retVal+=" - "+PatCur.GetNameLF();
-			//if(PrefC.GetInt("ShowIDinTitleBar")==0){//no action
-			if(PrefC.GetInt("ShowIDinTitleBar")==1){
-				retVal+=" - "+PatCur.PatNum.ToString();
+		}
+
+		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
+		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
+			//No need to check RemotingRole; no call to db.
+			//add current patient
+			if(buttonLastFivePatNums==null) {
+				buttonLastFivePatNums=new List<int>();
 			}
-			else if(PrefC.GetInt("ShowIDinTitleBar")==2) {
-				retVal+=" - "+PatCur.ChartNumber;
+			if(buttonLastFiveNames==null) {
+				buttonLastFiveNames=new List<string>();
 			}
-			return retVal;
-		}*/
+			if(patNum!=0) {
+				if(buttonLastFivePatNums.Count==0	|| patNum!=buttonLastFivePatNums[0]) {//different patient selected
+					buttonLastFivePatNums.Insert(0,patNum);
+					buttonLastFiveNames.Insert(0,nameLF);
+					if(buttonLastFivePatNums.Count>5) {
+						buttonLastFivePatNums.RemoveAt(5);
+						buttonLastFiveNames.RemoveAt(5);
+					}
+				}
+			}
+			//fill menu
+			//menu.MenuItems.Clear();
+			//for(int i=0;i<buttonLastFiveNames.Count;i++) {
+			//	menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
+			//}
+		}
+
+		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>
+		public static int ButtonSelect(ContextMenu menu,object sender,Family fam) {
+			//No need to check RemotingRole; no call to db.
+			int index=menu.MenuItems.IndexOf((MenuItem)sender);
+			//Patients.PatIsLoaded=true;
+			if(index<buttonLastFivePatNums.Count) {
+				return (int)buttonLastFivePatNums[index];
+			}
+			if(fam==null) {
+				return 0;//will never happen
+			}
+			return fam.ListPats[index-buttonLastFivePatNums.Count-2].PatNum;
+		}
 
 		///<summary>A simpler version which does not require as much data.</summary>
 		public static string GetMainTitle(string nameLF,int patNum,string chartNumber,int siteNum) {

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness{
-	///<summary>Employers are not refreshed with cache refresh, but are refreshed as needed. A full refresh is frequently triggered if an employerNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
+	///<summary>Employers are refreshed as needed. A full refresh is frequently triggered if an employerNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 	public class Employers{
 		private static Employer[] list;
 		private static Hashtable hList;
@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(hList==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return hList;
 			}
@@ -38,15 +38,19 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>The functions that use this are smart enought to refresh as needed.  So no need to invalidate local data for little stuff.</summary>
-		public static void Refresh(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * from employer ORDER BY EmpName";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Employer";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			HList=new Hashtable();
-			string command= "SELECT * from employer ORDER BY EmpName";
-			DataTable table=Db.GetTable(command);
 			List=new Employer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Employer();
@@ -185,7 +189,7 @@ namespace OpenDentBusiness{
 				return ((Employer)HList[employerNum]).EmpName;
 			}
 			//if the employerNum could not be found:
-			Refresh();
+			RefreshCache();
 			if(HList.ContainsKey(employerNum)){
 				return ((Employer)HList[employerNum]).EmpName;
 			}
@@ -203,7 +207,7 @@ namespace OpenDentBusiness{
 				return (Employer)HList[employerNum];
 			}
 			//if the employerNum could not be found:
-			Refresh();
+			RefreshCache();
 			if(HList.ContainsKey(employerNum)){
 				return (Employer)HList[employerNum];
 			}

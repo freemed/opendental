@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Reflection;
@@ -7,7 +8,7 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PerioMeasures{
-		///<summary>List of all perio measures for the current patient. Dim 1 is exams. Dim 2 is Sequences. Dim 3 is Measurements, always 33 per sequence(0 is not used).</summary>
+		///<summary>List of all perio measures for the current patient. Dim 1 is exams. Dim 2 is Sequences. Dim 3 is Measurements, always 33 per sequence(0 is not used).  This public static variable is only used by the UI.  It's here because it would be complicated to put it in ContrPerio.</summary>
 		public static PerioMeasure[,,] List;
 
 		///<summary></summary>
@@ -130,19 +131,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all measurements for the current patient, then organizes them by exam and sequence.</summary>
-		public static void Refresh(int patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
-				return;
-			}
-			string command =
-				"SELECT periomeasure.*,perioexam.ExamDate"
-				+" FROM periomeasure,perioexam"
-				+" WHERE periomeasure.PerioExamNum = perioexam.PerioExamNum"
-				+" AND perioexam.PatNum = '"+patNum.ToString()+"'"
-				+" ORDER BY perioexam.ExamDate";
-			DataTable table=Db.GetTable(command);
-			PerioMeasures.List=new PerioMeasure[PerioExams.List.Length,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
+		public static void Refresh(int patNum,List<PerioExam> listPerioExams) {
+			//No need to check RemotingRole; no call to db.
+			DataTable table=GetMeasurementTable(patNum,listPerioExams);
+			List=new PerioMeasure[listPerioExams.Count,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
 			int curExamI=0;
 			PerioMeasure Cur;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -163,11 +155,27 @@ namespace OpenDentBusiness{
 				if(i==0//if this is the first row
 					|| table.Rows[i][1].ToString() != table.Rows[i-1][1].ToString())//or examNum has changed
 				{
-					curExamI=PerioExams.GetExamIndex(PIn.PInt(table.Rows[i][1].ToString()));
+					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PInt(table.Rows[i][1].ToString()));
 				}
-				PerioMeasures.List[curExamI,(int)Cur.SequenceType,Cur.IntTooth]=Cur;
+				List[curExamI,(int)Cur.SequenceType,Cur.IntTooth]=Cur;
 			}
 		}
+
+		public static DataTable GetMeasurementTable(int patNum,List<PerioExam> listPerioExams) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,listPerioExams);
+			}
+			string command =
+				"SELECT periomeasure.*,perioexam.ExamDate"
+				+" FROM periomeasure,perioexam"
+				+" WHERE periomeasure.PerioExamNum = perioexam.PerioExamNum"
+				+" AND perioexam.PatNum = '"+patNum.ToString()+"'"
+				+" ORDER BY perioexam.ExamDate";
+			DataTable table=Db.GetTable(command);
+			return table;
+		}
+			
+		
 
 	
 	}

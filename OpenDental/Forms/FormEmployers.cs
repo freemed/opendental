@@ -204,7 +204,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Employers.Refresh();
+			Employers.RefreshCache();
 			listEmp.Items.Clear();
 			for(int i=0;i<Employers.List.Length;i++){
 				listEmp.Items.Add(Employers.List[i].EmpName);

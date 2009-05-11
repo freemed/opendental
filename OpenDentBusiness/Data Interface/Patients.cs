@@ -13,13 +13,7 @@ namespace OpenDentBusiness{
 	
 	///<summary></summary>
 	public class Patients{
-		///<summary>A list of all patient names. Key=patNum, value=formatted name.  Fill with GetHList.  Used in FormQuery, FormTrackNext, and FormUnsched.</summary>
-		public static Hashtable HList;
-		///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
-		private static ArrayList buttonLastFiveNames;
-		///<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
-		private static ArrayList buttonLastFivePatNums;
-
+		
 		///<summary>Returns a Family object for the supplied patNum.  Use Family.GetPatient to extract the desired patient from the family.</summary>
 		public static Family GetFamily(int patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1122,16 +1116,15 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Gets names for all patients.  Used mostly to show paysplit info.  Also used for reports, FormTrackNext, and FormUnsched.</summary>
-		public static void GetHList(){
+		///<summary>Key=patNum, value=formatted name.  Used for reports, FormASAP, FormTrackNext, and FormUnsched.</summary>
+		public static Dictionary<int,string> GetAllPatientNames(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
+				return Meth.GetObject<Dictionary<int,string>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT patnum,lname,fname,middlei,preferred "
 				+"FROM patient";
 			DataTable table=Db.GetTable(command);
-			HList=new Hashtable(table.Rows.Count);
+			Dictionary<int,string> dict=new Dictionary<int,string>();
 			int patnum;
 			string lname,fname,middlei,preferred;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -1141,12 +1134,13 @@ namespace OpenDentBusiness{
 				middlei=PIn.PString(table.Rows[i][3].ToString());
 				preferred=PIn.PString(table.Rows[i][4].ToString());
 				if(preferred==""){
-					HList.Add(patnum,lname+", "+fname+" "+middlei);
+					dict.Add(patnum,lname+", "+fname+" "+middlei);
 				}
 				else{
-					HList.Add(patnum,lname+", '"+preferred+"' "+fname+" "+middlei);
+					dict.Add(patnum,lname+", '"+preferred+"' "+fname+" "+middlei);
 				}
 			}
+			return dict;
 		}
 
 		///<summary></summary>
@@ -1495,64 +1489,6 @@ namespace OpenDentBusiness{
 			string command="SELECT Count(*) FROM patient";
 			DataTable table=Db.GetTable(command);
 			return PIn.PInt(table.Rows[0][0].ToString());
-		}
-
-		///<summary>The current patient will already be on the button.  This adds the family members when user clicks dropdown arrow. Can handle null values for pat and fam.  Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
-		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,int patNum,Family fam){
-			//No need to check RemotingRole; no call to db.
-			//fill menu
-			menu.MenuItems.Clear();
-			for(int i=0;i<buttonLastFiveNames.Count;i++){
-				menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
-			}
-			menu.MenuItems.Add("-");
-			menu.MenuItems.Add("FAMILY");
-			if(patNum!=0 && fam!=null){
-				for(int i=0;i<fam.ListPats.Length;i++){
-					menu.MenuItems.Add(fam.ListPats[i].GetNameLF(),onClick);
-				}
-			}
-		}
-
-		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
-		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
-			//No need to check RemotingRole; no call to db.
-			//add current patient
-			if(buttonLastFivePatNums==null) {
-				buttonLastFivePatNums=new ArrayList();
-			}
-			if(buttonLastFiveNames==null) {
-				buttonLastFiveNames=new ArrayList();
-			}
-			if(patNum!=0) {
-				if(buttonLastFivePatNums.Count==0	|| patNum!=(int)buttonLastFivePatNums[0]) {//different patient selected
-					buttonLastFivePatNums.Insert(0,patNum);
-					buttonLastFiveNames.Insert(0,nameLF);
-					if(buttonLastFivePatNums.Count>5) {
-						buttonLastFivePatNums.RemoveAt(5);
-						buttonLastFiveNames.RemoveAt(5);
-					}
-				}
-			}
-			//fill menu
-			//menu.MenuItems.Clear();
-			//for(int i=0;i<buttonLastFiveNames.Count;i++) {
-			//	menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
-			//}
-		}
-
-		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>
-		public static int ButtonSelect(ContextMenu menu,object sender,Family fam){
-			//No need to check RemotingRole; no call to db.
-			int index=menu.MenuItems.IndexOf((MenuItem)sender);
-			//Patients.PatIsLoaded=true;
-			if(index<buttonLastFivePatNums.Count){
-				return (int)buttonLastFivePatNums[index];
-			}
-			if(fam==null){
-				return 0;//will never happen
-			}
-			return fam.ListPats[index-buttonLastFivePatNums.Count-2].PatNum;
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>

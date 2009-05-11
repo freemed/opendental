@@ -10,6 +10,7 @@ using OpenDentBusiness;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class MountItemDefs {
+		/*
 		///<summary>A list of all MountItemDefs.</summary>
 		public static List<MountItemDef> Listt;
 
@@ -33,7 +34,7 @@ namespace OpenDentBusiness {
 				mount.Height         =PIn.PInt   (table.Rows[i][5].ToString());
 				Listt.Add(mount);
 			}
-		}	
+		}*/
 
 		///<summary></summary>
 		public static void Update(MountItemDef def) {

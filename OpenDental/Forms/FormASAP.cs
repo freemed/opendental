@@ -33,6 +33,7 @@ namespace OpenDental{
 		private Label labelSite;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
+		private Dictionary<int,string> patientNames;
 
 		///<summary></summary>
 		public FormASAP() {
@@ -191,7 +192,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormASAP_Load(object sender, System.EventArgs e) {
-			Patients.GetHList();
+			patientNames=Patients.GetAllPatientNames();
 			/*comboOrder.Items.Add(Lan.g(this,"Status"));
 			comboOrder.Items.Add(Lan.g(this,"Alphabetical"));
 			comboOrder.Items.Add(Lan.g(this,"Date"));
@@ -257,7 +258,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<ListASAP.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add((string)Patients.HList[ListASAP[i].PatNum]);
+				row.Cells.Add(patientNames[ListASAP[i].PatNum]);
 				if(ListASAP[i].AptDateTime.Year < 1880){//shouldn't be possible.
 					row.Cells.Add("");
 				}
@@ -370,7 +371,7 @@ namespace OpenDental{
 		//}
 
 		private void FormASAP_FormClosing(object sender,FormClosingEventArgs e) {
-			Patients.HList=null;
+			//Patients.HList=null;
 			if(grid.SelectedIndices.Length==1) {
 				SelectedPatNum=ListASAP[grid.SelectedIndices[0]].PatNum;
 			}

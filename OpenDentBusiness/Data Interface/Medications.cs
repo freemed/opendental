@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public class Medications{
-		///<summary>All medications.  Not refreshed with local data.  Only refreshed as needed.</summary>
+		///<summary>All medications.  Not refreshed with local data.  Only refreshed as needed.  Only used in UI layer.</summary>
 		public static Medication[] List;
 		///<summary></summary>
 		private static Hashtable HList;

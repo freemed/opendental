@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -66,6 +67,7 @@ namespace OpenDental{
 		private int totalPages=0;
 		private static Hashtable hListPlans;
 		private UserQuery UserQueryCur;//never gets used.  It's a holdover.
+		private static Dictionary<int,string> patientNames;
 
 		///<summary></summary>
 		public FormQuery(){
@@ -574,7 +576,7 @@ namespace OpenDental{
 
 		///<summary>This is used internally instead of SubmitReportQuery.  Can also be called externally if we want to automate a userquery.  Column names will be handled automatically.</summary>
 		public void SubmitQuery(){
-			Patients.GetHList();
+			patientNames=Patients.GetAllPatientNames();
       //hListPlans=InsPlans.GetHListAll();
 			try{
 				Queries.SubmitCur();
@@ -905,9 +907,9 @@ namespace OpenDental{
 						case "secpatnum":
 						case "subscriber":
             case "withpat":
-							if(Patients.HList.ContainsKey(PIn.PInt(tableOut.Rows[i][j].ToString()))){
+							if(patientNames.ContainsKey(PIn.PInt(tableOut.Rows[i][j].ToString()))) {
 								//MessageBox.Show((string)Patients.HList[PIn.PInt(tableOut.Rows[i][j].ToString())]);
-								tableOut.Rows[i][j]=Patients.HList[PIn.PInt(tableOut.Rows[i][j].ToString())];
+								tableOut.Rows[i][j]=patientNames[PIn.PInt(tableOut.Rows[i][j].ToString())];
 							}
 							else
 								tableOut.Rows[i][j]="";

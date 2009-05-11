@@ -185,7 +185,6 @@
     <Compile Include="Data Interface\HL7Msgs.cs" />
     <Compile Include="Data Interface\FeeScheds.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
-    <Compile Include="Data Interface\Instructors.cs" />
     <Compile Include="Data Interface\JournalEntries.cs" />
     <Compile Include="Data Interface\LabCases.cs" />
     <Compile Include="Data Interface\Laboratories.cs" />

@@ -899,7 +899,7 @@ namespace OpenDental
 					if(tableRow==-1)
 						continue;
 					DataArray[0,tableRow].Text
-						=PerioExams.List[examI].ExamDate.ToShortDateString();
+						=PerioExams.ListExams[examI].ExamDate.ToShortDateString();
 						//=PerioExams.List[examI+ProbingOffset].ExamDate.ToShortDateString();
 				}
 			}

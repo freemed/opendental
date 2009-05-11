@@ -36,6 +36,7 @@ namespace OpenDental{
 		private ComboBox comboSite;
 		private Label labelSite;
 		private int headingPrintH;
+		private Dictionary<int,string> patientNames;
 
 		///<summary></summary>
 		public FormTrackNext(){
@@ -222,7 +223,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTrackNext_Load(object sender, System.EventArgs e) {
-			Patients.GetHList();
+			patientNames=Patients.GetAllPatientNames();
 			comboOrder.Items.Add(Lan.g(this,"Status"));
 			comboOrder.Items.Add(Lan.g(this,"Alphabetical"));
 			comboOrder.Items.Add(Lan.g(this,"Date"));
@@ -287,7 +288,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<AptList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add((string)Patients.HList[AptList[i].PatNum]);
+				row.Cells.Add(patientNames[AptList[i].PatNum]);
 				if(AptList[i].AptDateTime.Year<1880){
 					row.Cells.Add("");
 				}
@@ -396,7 +397,7 @@ namespace OpenDental{
 		}
 
 		private void FormTrackNext_FormClosing(object sender,FormClosingEventArgs e) {
-			Patients.HList=null;
+			//Patients.HList=null;
 			if(gridMain.GetSelectedIndex()!=-1) {
 				SelectedPatNum=AptList[gridMain.GetSelectedIndex()].PatNum;
 			}

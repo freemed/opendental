@@ -96,6 +96,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Employees.RefreshCache());
 				ds.Tables.Add(PayPeriods.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.Employers) || isAll) {
+				ds.Tables.Add(Employers.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll){
 				ds.Tables.Add(Fees.RefreshCache());
 			}
@@ -238,6 +241,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Employees) || isAll) {
 				Employees.FillCache(ds.Tables["Employee"]);
 				PayPeriods.FillCache(ds.Tables["PayPeriod"]);
+			}
+			if(itypes.Contains((int)InvalidType.Employers) || isAll) {
+				Employers.FillCache(ds.Tables["Employers"]);
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll) {
 				Fees.FillCache(ds.Tables["Fee"]);

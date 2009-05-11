@@ -23,23 +23,26 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Called once when the program first starts up.  Then only if user downloads new translations or adds their own.</summary>
-		public static void Refresh(string cultureInfoName,string cultureInfoTwoLetterISOLanguageName) {
+		///<summary>Haven't moved this over to the cache pattern because of the parameters.  But when called, it behaves exactly like the cache pattern, refreshing on both client and server.</summary>
+		public static DataTable Refresh(string cultureInfoName,string cultureInfoTwoLetterISOLanguageName) {
+			//Very unusual.  RemotingRole checked a little further down due to complex situation.
 			//culture info won't serialize
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cultureInfoName,cultureInfoTwoLetterISOLanguageName);
-				return;
-			}
-			HList=new Hashtable();
 			if(cultureInfoName=="en-US") {
-				return;
+				return null;//since DataTable is ignored anyway if on the client, this won't crash.
 			}
 			//load all translations for the current culture, using other culture of same language if no trans avail.
 			string command=
 				"SELECT * FROM languageforeign "
 				+"WHERE Culture LIKE '"+cultureInfoTwoLetterISOLanguageName+"%' "
 				+"ORDER BY Culture";
-			DataTable table=Db.GetTable(command);
+			DataTable table;
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				table=Meth.GetTable(MethodBase.GetCurrentMethod(),cultureInfoName,cultureInfoTwoLetterISOLanguageName);
+			}
+			else {
+				table=Db.GetTable(command);
+			}
+			hList=new Hashtable();
 			LanguageForeign lf;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lf=new LanguageForeign();
@@ -49,18 +52,19 @@ namespace OpenDentBusiness{
 				lf.Translation= PIn.PString(table.Rows[i][3].ToString());
 				lf.Comments   = PIn.PString(table.Rows[i][4].ToString());
 				if(lf.Culture==cultureInfoName) {//if exact culture match
-					if(HList.ContainsKey(lf.ClassType+lf.English)) {
-						HList.Remove(lf.ClassType+lf.English);//remove any existing entry
+					if(hList.ContainsKey(lf.ClassType+lf.English)) {
+						hList.Remove(lf.ClassType+lf.English);//remove any existing entry
 					}
-					HList.Add(lf.ClassType+lf.English,lf);
+					hList.Add(lf.ClassType+lf.English,lf);
 				}
 				else {//or if any other culture of same language
-					if(!HList.ContainsKey(lf.ClassType+lf.English)) {
+					if(!hList.ContainsKey(lf.ClassType+lf.English)) {
 						//only add if not already in HList
-						HList.Add(lf.ClassType+lf.English,lf);
+						hList.Add(lf.ClassType+lf.English,lf);
 					}
 				}
 			}
+			return table;
 		}
 
 		///<summary></summary>

@@ -1192,7 +1192,7 @@ namespace OpenDental{
 				hasEmail=pat.Email!="";
 				chartNumber=pat.ChartNumber;
 				//family can wait until user clicks on downarrow.
-				Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCurName,PatCurNum);
+				PatientL.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCurName,PatCurNum);
 				butOther.Enabled=true;
 			}
 			butUnsched.Enabled=butOther.Enabled;
@@ -1234,7 +1234,7 @@ namespace OpenDental{
 
 		///<summary>Activated anytime a Patient menu item is clicked.</summary>
 		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,null);
+			int newPatNum=PatientL.ButtonSelect(menuPatient,sender,null);
 			ModuleSelected(newPatNum);
 		}
 

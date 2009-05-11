@@ -1093,7 +1093,7 @@ namespace OpenDental{
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
 			MissingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 			RefreshListExams();
-			listExams.SelectedIndex=PerioExams.List.Length-1;//this works even if no items.
+			listExams.SelectedIndex=PerioExams.ListExams.Count-1;//this works even if no items.
 			FillGrid();
 		}
 
@@ -1101,18 +1101,18 @@ namespace OpenDental{
 		private void RefreshListExams(){
 			//most recent date at the bottom
 			PerioExams.Refresh(PatCur.PatNum);
-			PerioMeasures.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
 			listExams.Items.Clear();
-			for(int i=0;i<PerioExams.List.Length;i++){
-				listExams.Items.Add(PerioExams.List[i].ExamDate.ToShortDateString()+"   "
-					+Providers.GetAbbr(PerioExams.List[i].ProvNum));
+			for(int i=0;i<PerioExams.ListExams.Count;i++) {
+				listExams.Items.Add(PerioExams.ListExams[i].ExamDate.ToShortDateString()+"   "
+					+Providers.GetAbbr(PerioExams.ListExams[i].ProvNum));
 			}
 		}
 
 		///<summary>Usually set the selected index first</summary>
 		private void FillGrid(){
 			if(listExams.SelectedIndex!=-1){
-				PerioExamCur=PerioExams.List[listExams.SelectedIndex];
+				PerioExamCur=PerioExams.ListExams[listExams.SelectedIndex];
 			}
 			gridP.SelectedExam=listExams.SelectedIndex;
 			gridP.LoadData();
@@ -1129,7 +1129,7 @@ namespace OpenDental{
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			//no need to RefreshListExams because it has not changed
 			PerioExams.Refresh(PatCur.PatNum);//refresh instead
-			PerioMeasures.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
 			FillGrid();
 		}
 
@@ -1141,7 +1141,7 @@ namespace OpenDental{
 			//a PerioExam.Cur will always have been set through mousedown(or similar),then FillGrid
 			gridP.SaveCurExam(PerioExamCur.PerioExamNum);
 			PerioExams.Refresh(PatCur.PatNum);//list will not change
-			PerioMeasures.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum,PerioExams.ListExams);
 			FormPerioEdit FormPE=new FormPerioEdit();
 			FormPE.PerioExamCur=PerioExamCur;
 			FormPE.ShowDialog();
@@ -1161,7 +1161,7 @@ namespace OpenDental{
 			PerioExamCur.ProvNum=PatCur.PriProv;
 			PerioExams.Insert(PerioExamCur);
 			ArrayList skippedTeeth=new ArrayList();//int 1-32
-			if(PerioExams.List.Length==0){
+			if(PerioExams.ListExams.Count==0){
 				for(int i=0;i<MissingTeeth.Count;i++){
 					if(((string)MissingTeeth[i]).CompareTo("A")<0//if a number
 						|| ((string)MissingTeeth[i]).CompareTo("Z")>0)
@@ -1173,11 +1173,11 @@ namespace OpenDental{
 			else{
 				//set skipped teeth based on the last exam in the list: 
 				skippedTeeth=PerioMeasures.GetSkipped
-					(PerioExams.List[PerioExams.List.Length-1].PerioExamNum);
+					(PerioExams.ListExams[PerioExams.ListExams.Count-1].PerioExamNum);
 			}
 			PerioMeasures.SetSkipped(PerioExamCur.PerioExamNum,skippedTeeth);
 			RefreshListExams();
-			listExams.SelectedIndex=PerioExams.List.Length-1;
+			listExams.SelectedIndex=PerioExams.ListExams.Count-1;
 			FillGrid();
 		}
 
@@ -1195,7 +1195,7 @@ namespace OpenDental{
 			if(curselected < listExams.Items.Count)
 				listExams.SelectedIndex=curselected;
 			else
-				listExams.SelectedIndex=PerioExams.List.Length-1;
+				listExams.SelectedIndex=PerioExams.ListExams.Count-1;
 			FillGrid();
 		}
 		
