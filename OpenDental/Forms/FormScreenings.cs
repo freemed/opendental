@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -23,6 +24,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private List<ScreenGroup> ScreenGroupList;
 
 		///<summary></summary>
 		public FormScreenings()
@@ -194,12 +196,12 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			ScreenGroups.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text));
-			ListViewItem[] items=new ListViewItem[ScreenGroups.List.Length];
+			ScreenGroupList= ScreenGroups.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text));
+			ListViewItem[] items=new ListViewItem[ScreenGroupList.Count];
 			for(int i=0;i<items.Length;i++){
 				items[i]=new ListViewItem();
-				items[i].Text=ScreenGroups.List[i].SGDate.ToShortDateString();
-				items[i].SubItems.Add(ScreenGroups.List[i].Description);
+				items[i].Text=ScreenGroupList[i].SGDate.ToShortDateString();
+				items[i].SubItems.Add(ScreenGroupList[i].Description);
 			}
 			listMain.Items.Clear();
 			listMain.Items.AddRange(items);
@@ -207,7 +209,7 @@ namespace OpenDental{
 
 		private void listMain_DoubleClick(object sender, System.EventArgs e) {
 			FormScreenGroup FormSG=new FormScreenGroup();
-			FormSG.ScreenGroupCur=ScreenGroups.List[listMain.SelectedIndices[0]];
+			FormSG.ScreenGroupCur=ScreenGroupList[listMain.SelectedIndices[0]];
 			FormSG.ShowDialog();
 			//if(FormSG.DialogResult!=DialogResult.OK){
 			//	return;
@@ -247,11 +249,11 @@ namespace OpenDental{
 			FormScreenGroup FormSG=new FormScreenGroup();
 			FormSG.IsNew=true;
 			//ScreenGroups.Cur=new ScreenGroup();
-			if(ScreenGroups.List.Length==0){
+			if(ScreenGroupList.Count==0){
 				FormSG.ScreenGroupCur=new ScreenGroup();
 			}
 			else{
-				FormSG.ScreenGroupCur=ScreenGroups.List[ScreenGroups.List.Length-1];//'remembers' the last entry
+				FormSG.ScreenGroupCur=ScreenGroupList[ScreenGroupList.Count-1];//'remembers' the last entry
 			}
 			FormSG.ScreenGroupCur.SGDate=DateTime.Today;//except date will be today
 			FormSG.ShowDialog();
@@ -266,7 +268,7 @@ namespace OpenDental{
 				MessageBox.Show("Please select one item first.");
 				return;
 			}
-			ScreenGroup ScreenGroupCur=ScreenGroups.List[listMain.SelectedIndices[0]];
+			ScreenGroup ScreenGroupCur=ScreenGroupList[listMain.SelectedIndices[0]];
 			Screens.Refresh(ScreenGroupCur.ScreenGroupNum);
 			if(Screens.List.Length>0){
 				MessageBox.Show("Not allowed to delete a screening group with items in it.");

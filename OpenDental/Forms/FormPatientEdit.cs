@@ -2585,7 +2585,7 @@ namespace OpenDental{
 					Referrals.List[i].Telephone=TelephoneNumbers.FormatNumbersExactTen(PatCur.HmPhone);
 					Referrals.List[i].EMail=PatCur.Email;
 					Referrals.Update(Referrals.List[i]);
-					Referrals.Refresh();
+					Referrals.RefreshCache();
 					break;
 				}
 			}

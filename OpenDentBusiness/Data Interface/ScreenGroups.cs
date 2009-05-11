@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
 namespace OpenDentBusiness{
   ///<summary></summary>
 	public class ScreenGroups{
-		///<summary></summary>
-		public static ScreenGroup[] List;
+		//<summary></summary>
+		//public static ScreenGroup[] List;
 
 		/*This doesn't seem to work because we need a date range.
 		public static ScreenGroup[] List {
@@ -23,10 +24,9 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void Refresh(DateTime fromDate,DateTime toDate){
+		public static List<ScreenGroup> Refresh(DateTime fromDate,DateTime toDate){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),fromDate,toDate);
-				return;
+				return Meth.GetObject<List<ScreenGroup>>(MethodBase.GetCurrentMethod(),fromDate,toDate);
 			}
 			string command =
 				"SELECT * from screengroup "
@@ -35,13 +35,16 @@ namespace OpenDentBusiness{
 				//added one day since it's calculated based on midnight.
 				+"ORDER BY SGDate,ScreenGroupNum";
 			DataTable table=Db.GetTable(command);;
-			List=new ScreenGroup[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new ScreenGroup();
-				List[i].ScreenGroupNum =                  PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].Description    =                  PIn.PString(table.Rows[i][1].ToString());
-				List[i].SGDate         =                  PIn.PDate  (table.Rows[i][2].ToString());
+			List<ScreenGroup> list=new List<ScreenGroup>();
+			ScreenGroup sg;
+			for(int i=0;i<table.Rows.Count;i++){
+				sg=new ScreenGroup();
+				sg.ScreenGroupNum =                  PIn.PInt(table.Rows[i][0].ToString());
+				sg.Description    =                  PIn.PString(table.Rows[i][1].ToString());
+				sg.SGDate         =                  PIn.PDate(table.Rows[i][2].ToString());
+				list.Add(sg);
 			}
+			return list;
 		}
 
 		///<summary></summary>

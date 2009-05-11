@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -20,6 +21,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private List<School> SchoolsList;
 
 		///<summary></summary>
 		public FormSchools()
@@ -173,13 +175,13 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Schools.Refresh();
+			SchoolsList=Schools.Refresh();
 			listSchools.Items.Clear();
 			string s="";
-			for(int i=0;i<Schools.List.Length;i++){
-				s=Schools.List[i].SchoolName;
-				if(Schools.List[i].SchoolCode != ""){
-					s+=", "+Schools.List[i].SchoolCode;
+			for(int i=0;i<SchoolsList.Count;i++){
+				s=SchoolsList[i].SchoolName;
+				if(SchoolsList[i].SchoolCode != ""){
+					s+=", "+SchoolsList[i].SchoolCode;
 				}
 				listSchools.Items.Add(s);
 			}
@@ -190,7 +192,7 @@ namespace OpenDental{
 				return;
 			}
 			FormSchoolEdit FormSE=new FormSchoolEdit();
-			FormSE.SchoolCur=Schools.List[listSchools.SelectedIndex];
+			FormSE.SchoolCur=SchoolsList[listSchools.SelectedIndex];
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK){
 				return;
@@ -214,7 +216,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select an item first."));
 				return;
 			}
-			School SchoolCur=Schools.List[listSchools.SelectedIndex];
+			School SchoolCur=SchoolsList[listSchools.SelectedIndex];
 			string usedBy=Schools.UsedBy(SchoolCur.SchoolName);
 			if(usedBy != ""){
 				MessageBox.Show(Lan.g(this,"Cannot delete site because it is already in use by the following patients: \r")+usedBy);

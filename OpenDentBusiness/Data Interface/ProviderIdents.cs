@@ -11,13 +11,18 @@ namespace OpenDentBusiness{
 		private static ProviderIdent[] list;
 
 		///<summary></summary>
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command="SELECT * from providerident";
-			DataTable table=Db.GetTable(command);
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM providerident";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ProviderIdent";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			list=new ProviderIdent[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new ProviderIdent();
@@ -76,7 +81,7 @@ namespace OpenDentBusiness{
 		public static ProviderIdent[] GetForProv(int provNum){
 			//No need to check RemotingRole; no call to db.
 			if(list==null) {
-				Refresh();
+				RefreshCache();
 			}
 			ArrayList arrayL=new ArrayList();
 			for(int i=0;i<list.Length;i++) {
@@ -95,7 +100,7 @@ namespace OpenDentBusiness{
 		public static ProviderIdent[] GetForPayor(int provNum,string payorID){
 			//No need to check RemotingRole; no call to db.
 			if(list==null) {
-				Refresh();
+				RefreshCache();
 			}
 			ArrayList arrayL=new ArrayList();
 			for(int i=0;i<list.Length;i++) {
@@ -126,7 +131,7 @@ namespace OpenDentBusiness{
 		public static bool IdentExists(ProviderSupplementalID type,int provNum,string payorID){
 			//No need to check RemotingRole; no call to db.
 			if(list==null) {
-				Refresh();
+				RefreshCache();
 			}
 			for(int i=0;i<list.Length;i++) {
 				if(list[i].ProvNum==provNum

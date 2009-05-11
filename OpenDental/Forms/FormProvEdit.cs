@@ -824,7 +824,7 @@ namespace OpenDental{
 		}
 
 		private void FillProvIdent(){
-			ProviderIdents.Refresh();
+			ProviderIdents.RefreshCache();
 			ListProvIdent=ProviderIdents.GetForProv(ProvCur.ProvNum);
 			tbProvIdent.ResetRows(ListProvIdent.Length);
 			tbProvIdent.SetGridColor(Color.Gray);

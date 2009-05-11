@@ -301,7 +301,8 @@ namespace OpenDentBusiness{
 		///<summary>42</summary>
 		AutoNotes,
 		ElectIDs,
-		Employers
+		Employers,
+		ProviderIdents
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

@@ -195,7 +195,7 @@ namespace OpenDental{
 		}		
 
     private void FillTable(){
-      Referrals.Refresh();
+			Referrals.RefreshCache();
       AList=new ArrayList();
       if(!checkHidden.Checked){
         for(int i=0;i<Referrals.List.Length;i++){

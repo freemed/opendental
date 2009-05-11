@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 
 	///<summary>Handles all the business logic for printers.  Used heavily by the UI.  Every single function that makes changes to the database must be completely autonomous and do ALL validation itself.</summary>
 	public class Printers{
-		///<summary>List of all printers.</summary>
+		///<summary>List of all printers.  Because of cache refresh, this gets properly refreshed on both ends.</summary>
 		private static Printer[] list;
 
 		public static DataTable RefreshCache() {

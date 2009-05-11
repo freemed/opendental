@@ -143,6 +143,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Programs.RefreshCache());
 				ds.Tables.Add(ProgramProperties.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.ProviderIdents) || isAll) {
+				ds.Tables.Add(ProviderIdents.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll){
 				ds.Tables.Add(Providers.RefreshCache());
 			}
@@ -288,6 +291,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Programs) || isAll) {
 				Programs.FillCache(ds.Tables["Program"]);
 				ProgramProperties.FillCache(ds.Tables["ProgramProperty"]);
+			}
+			if(itypes.Contains((int)InvalidType.ProviderIdents) || isAll) {
+				ProviderIdents.FillCache(ds.Tables["ProviderIdent"]);
 			}
 			if(itypes.Contains((int)InvalidType.Providers) || isAll) {
 				Providers.FillCache(ds.Tables["Provider"]);

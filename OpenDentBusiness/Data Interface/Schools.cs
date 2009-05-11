@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -7,10 +8,12 @@ namespace OpenDentBusiness{
 
   ///<summary></summary>
 	public class Schools{
+		///<summary>Used in screening window. Simpler interface.  Only used in UI.</summary>
+		public static string[] ListNames;
+		/*
 		///<summary>This list is only refreshed as needed rather than being part of the local data.</summary>
 		private static School[] list;
-		///<summary>Used in screening window. Simpler interface.</summary>
-		public static string[] ListNames;
+		
 
 		public static School[] List {
 			//No need to check RemotingRole; no call to db.
@@ -23,46 +26,48 @@ namespace OpenDentBusiness{
 			set {
 				list=value;
 			}
-		}
+		}*/
 
 		///<summary>Refreshes List as needed directly from the database.  List only includes items that will show in dropdown list.</summary>
-		public static void Refresh(string name){
+		public static List<School> Refresh(string name){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),name);
-				return;
+				return Meth.GetObject<List<School>>(MethodBase.GetCurrentMethod(),name);
 			}
 			string command =
 				"SELECT * from school "
 				+"WHERE SchoolName LIKE '"+name+"%' "
 				+"ORDER BY SchoolName";
 			DataTable table=Db.GetTable(command);;
-			List=new School[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new School();
-				List[i].SchoolName =PIn.PString(table.Rows[i][0].ToString());
-				List[i].SchoolCode =PIn.PString(table.Rows[i][1].ToString());
-				List[i].OldSchoolName =PIn.PString(table.Rows[i][0].ToString());
+			List<School> retVal=new List<School>();
+			School school;
+			for(int i=0;i<table.Rows.Count;i++){
+				school=new School();
+				school.SchoolName =PIn.PString(table.Rows[i][0].ToString());
+				school.SchoolCode =PIn.PString(table.Rows[i][1].ToString());
+				school.OldSchoolName =PIn.PString(table.Rows[i][0].ToString());
+				retVal.Add(school);
 			}
+			return retVal;
 		}
 
 		///<summary></summary>
-		public static void Refresh(){
+		public static List<School> Refresh() {
 			//No need to check RemotingRole; no call to db.
-			Refresh("");
+			return Refresh("");
 		}
 
 		///<summary>Gets an array of strings containing all the schools in alphabetical order.  Used for the screening interface which must be simpler than the usual interface.</summary>
 		public static void GetListNames(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
+				return; 
 			}
 			string command =
 				"SELECT SchoolName from school "
 				+"ORDER BY SchoolName";
 			DataTable table=Db.GetTable(command);;
 			ListNames=new string[table.Rows.Count];
-			for(int i=0;i<ListNames.Length;i++){
+			for(int i=0;i<table.Rows.Count;i++){
 				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
 			}
 		}

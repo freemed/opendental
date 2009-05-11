@@ -7,15 +7,14 @@ using System.Reflection;
 namespace OpenDentBusiness{
 ///<summary></summary>
 	public class Referrals{
-		///<summary>All referrals for all patients.  Not part of cache refresh.  Just as needed.</summary>
+		///<summary>All referrals for all patients.  Just as needed.  Cache refresh could be more intelligent and faster.</summary>
 		private static Referral[] list;
-		//should later add a faster refresh sequence.
 
 		public static Referral[] List {
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -25,40 +24,42 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Refreshes all referrals for all patients.  Need to rework at some point so less memory is consumed.  Also refreshes dynamically, so no need to invalidate local data.</summary>
-		public static void Refresh(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command=
-				"SELECT * FROM referral "
-				+"ORDER BY lname";
- 			DataTable table=Db.GetTable(command);
-			List=new Referral[table.Rows.Count];
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM referral ORDER BY lname";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Referral";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
+			list=new Referral[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Referral();
-				List[i].ReferralNum= PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].LName      = PIn.PString(table.Rows[i][1].ToString());
-				List[i].FName      = PIn.PString(table.Rows[i][2].ToString());
-				List[i].MName      = PIn.PString(table.Rows[i][3].ToString());
-				List[i].SSN        = PIn.PString(table.Rows[i][4].ToString());
-				List[i].UsingTIN   = PIn.PBool  (table.Rows[i][5].ToString());
-				List[i].Specialty  = (DentalSpecialty)PIn.PInt(table.Rows[i][6].ToString());
-				List[i].ST         = PIn.PString(table.Rows[i][7].ToString());
-				List[i].Telephone  = PIn.PString(table.Rows[i][8].ToString());
-				List[i].Address    = PIn.PString(table.Rows[i][9].ToString());
-				List[i].Address2   = PIn.PString(table.Rows[i][10].ToString());
-				List[i].City       = PIn.PString(table.Rows[i][11].ToString());
-				List[i].Zip        = PIn.PString(table.Rows[i][12].ToString());
-				List[i].Note       = PIn.PString(table.Rows[i][13].ToString());
-				List[i].Phone2     = PIn.PString(table.Rows[i][14].ToString());
-				List[i].IsHidden   = PIn.PBool  (table.Rows[i][15].ToString());
-				List[i].NotPerson  = PIn.PBool  (table.Rows[i][16].ToString());
-				List[i].Title      = PIn.PString(table.Rows[i][17].ToString());
-				List[i].EMail      = PIn.PString(table.Rows[i][18].ToString());
-				List[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
-				List[i].NationalProvID     = PIn.PString   (table.Rows[i][20].ToString());
-				List[i].Slip       = PIn.PInt   (table.Rows[i][21].ToString());
+				list[i]=new Referral();
+				list[i].ReferralNum= PIn.PInt   (table.Rows[i][0].ToString());
+				list[i].LName      = PIn.PString(table.Rows[i][1].ToString());
+				list[i].FName      = PIn.PString(table.Rows[i][2].ToString());
+				list[i].MName      = PIn.PString(table.Rows[i][3].ToString());
+				list[i].SSN        = PIn.PString(table.Rows[i][4].ToString());
+				list[i].UsingTIN   = PIn.PBool  (table.Rows[i][5].ToString());
+				list[i].Specialty  = (DentalSpecialty)PIn.PInt(table.Rows[i][6].ToString());
+				list[i].ST         = PIn.PString(table.Rows[i][7].ToString());
+				list[i].Telephone  = PIn.PString(table.Rows[i][8].ToString());
+				list[i].Address    = PIn.PString(table.Rows[i][9].ToString());
+				list[i].Address2   = PIn.PString(table.Rows[i][10].ToString());
+				list[i].City       = PIn.PString(table.Rows[i][11].ToString());
+				list[i].Zip        = PIn.PString(table.Rows[i][12].ToString());
+				list[i].Note       = PIn.PString(table.Rows[i][13].ToString());
+				list[i].Phone2     = PIn.PString(table.Rows[i][14].ToString());
+				list[i].IsHidden   = PIn.PBool  (table.Rows[i][15].ToString());
+				list[i].NotPerson  = PIn.PBool  (table.Rows[i][16].ToString());
+				list[i].Title      = PIn.PString(table.Rows[i][17].ToString());
+				list[i].EMail      = PIn.PString(table.Rows[i][18].ToString());
+				list[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
+				list[i].NationalProvID     = PIn.PString   (table.Rows[i][20].ToString());
+				list[i].Slip       = PIn.PInt   (table.Rows[i][21].ToString());
 			}
 		}
 
@@ -236,7 +237,7 @@ namespace OpenDentBusiness{
 					return List[i].Copy();
 				}
 			}
-			Refresh();//must be outdated
+			RefreshCache();//must be outdated
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ReferralNum==referralNum) {
 					return List[i].Copy();

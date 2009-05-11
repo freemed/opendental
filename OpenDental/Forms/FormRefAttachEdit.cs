@@ -433,7 +433,7 @@ namespace OpenDental{
 			Referral referral=Referrals.GetReferral(RefAttachCur.ReferralNum);
 			FormReferralEdit FormRE=new FormReferralEdit(referral);
 			FormRE.ShowDialog();
-			Referrals.Refresh();
+			Referrals.RefreshCache();
 			FillData();
 		}
 

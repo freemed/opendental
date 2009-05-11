@@ -3566,7 +3566,7 @@ namespace OpenDental{
 			FormR.ShowDialog();
 			if(FormR.DialogResult==DialogResult.OK){
 				//it's impossible to delete referral from that window.
-				Referrals.Refresh();
+				Referrals.RefreshCache();
 				textRefProv.Text=Referrals.GetNameLF(refer.ReferralNum);
 			}
 		}

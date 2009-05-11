@@ -954,7 +954,7 @@ namespace OpenDental{
 				Referrals.Update(RefCur);
 			}
 			//
-			Referrals.Refresh();
+			Referrals.RefreshCache();
 			//MessageBox.Show(RefCur.ReferralNum.ToString());
 			DialogResult=DialogResult.OK;
 		}

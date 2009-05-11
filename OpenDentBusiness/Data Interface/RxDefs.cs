@@ -27,7 +27,6 @@ namespace OpenDentBusiness{
 			}
 			return List;
 		}
-	
 
 		///<summary></summary>
 		public static void Update(RxDef def) {
