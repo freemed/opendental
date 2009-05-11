@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			EnsureComputerInDB(Environment.MachineName);
 			string command="SELECT * FROM computer ORDER BY CompName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);

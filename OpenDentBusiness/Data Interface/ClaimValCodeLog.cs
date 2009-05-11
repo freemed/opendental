@@ -7,7 +7,6 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class ClaimValCodeLog {
-		public static ArrayList List;
 
 		public static double GetValAmountTotal(Claim Cur, string Code){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -28,7 +27,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM claimvalcodelog WHERE ClaimNum='" + Cur.ClaimNum + "'";
 			DataTable table=Db.GetTable(command);
-			List=new ArrayList();
+			ArrayList List=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
 				ClaimValCode vc = new ClaimValCode();
 				vc.ClaimValCodeLogNum=PIn.PInt(table.Rows[i][0].ToString());

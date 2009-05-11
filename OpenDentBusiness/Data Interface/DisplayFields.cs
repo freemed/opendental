@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 	public class DisplayFields {
 
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DisplayField";

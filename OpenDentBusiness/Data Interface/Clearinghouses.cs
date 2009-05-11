@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get{
 				if(list==null){
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -24,15 +24,18 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM clearinghouse";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="Clearinghouse";
+			FillCache(table);
+			return table;
+		}
+
 		///<summary></summary>
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command=
-				"SELECT * FROM clearinghouse";
-			DataTable table=Db.GetTable(command);
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
 			list=new Clearinghouse[table.Rows.Count];
 			HList=new Hashtable();
 			string[] payors;
@@ -180,7 +183,7 @@ namespace OpenDentBusiness{
 			//	return ElectronicClaimFormat.None;
 			//}
 			if(HList==null) {
-				Refresh();
+				RefreshCache();
 			}
 			if(payorID!="" && HList.ContainsKey(payorID)){
 				return (int)HList[payorID];

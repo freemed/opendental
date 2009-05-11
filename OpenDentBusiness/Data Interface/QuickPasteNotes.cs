@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		private static QuickPasteNote[] List;
 
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command=
 				"SELECT * from quickpastenote "
 				+"ORDER BY ItemOrder";

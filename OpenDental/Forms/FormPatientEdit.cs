@@ -107,6 +107,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDateFirstVisit;
 		private System.Windows.Forms.Label label36;
 		private bool mouseIsInListCounties;
+		private County[] CountiesList;
 		private OpenDental.ODtextBox textAddrNotes;
 		private System.Windows.Forms.Label label37;
 		private System.Windows.Forms.ListBox listEmps;//displayed from within code, not designer
@@ -2125,10 +2126,10 @@ namespace OpenDental{
 			Counties.Refresh(textCounty.Text);
 			//similarSchools=
 				//Carriers.GetSimilarNames(textCounty.Text);
-			for(int i=0;i<Counties.List.Length;i++){
-				listCounties.Items.Add(Counties.List[i].CountyName);
+			for(int i=0;i<CountiesList.Length;i++){
+				listCounties.Items.Add(CountiesList[i].CountyName);
 			}
-			int h=13*Counties.List.Length+5;
+			int h=13*CountiesList.Length+5;
 			if(h > ClientSize.Height-listCounties.Top)
 				h=ClientSize.Height-listCounties.Top;
 			listCounties.Size=new Size(textCounty.Width,h);
@@ -2141,13 +2142,13 @@ namespace OpenDental{
 			}
 			//or if user clicked on a different text box.
 			if(listCounties.SelectedIndex!=-1){
-				textCounty.Text=Counties.List[listCounties.SelectedIndex].CountyName;
+				textCounty.Text=CountiesList[listCounties.SelectedIndex].CountyName;
 			}
 			listCounties.Visible=false;
 		}
 
 		private void listCounties_Click(object sender, System.EventArgs e){
-			textCounty.Text=Counties.List[listCounties.SelectedIndex].CountyName;
+			textCounty.Text=CountiesList[listCounties.SelectedIndex].CountyName;
 			textCounty.Focus();
 			textCounty.SelectionStart=textCounty.Text.Length;
 			listCounties.Visible=false;

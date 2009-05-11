@@ -20,6 +20,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private County[] CountiesList;
 
 		///<summary></summary>
 		public FormCounties()
@@ -168,13 +169,13 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Counties.Refresh();
+			CountiesList=Counties.Refresh();
 			listCounties.Items.Clear();
 			string s="";
-			for(int i=0;i<Counties.List.Length;i++){
-				s=Counties.List[i].CountyName;
-				if(Counties.List[i].CountyCode != ""){
-					s+=", "+Counties.List[i].CountyCode;
+			for(int i=0;i<CountiesList.Length;i++){
+				s=CountiesList[i].CountyName;
+				if(CountiesList[i].CountyCode != ""){
+					s+=", "+CountiesList[i].CountyCode;
 				}
 				listCounties.Items.Add(s);
 			}
@@ -185,7 +186,7 @@ namespace OpenDental{
 				return;
 			}
 			FormCountyEdit FormSE=new FormCountyEdit();
-			FormSE.CountyCur=Counties.List[listCounties.SelectedIndex];
+			FormSE.CountyCur=CountiesList[listCounties.SelectedIndex];
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK){
 				return;
@@ -209,7 +210,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select an item first."));
 				return;
 			}
-			County CountyCur=Counties.List[listCounties.SelectedIndex];
+			County CountyCur=CountiesList[listCounties.SelectedIndex];
 			string usedBy=Counties.UsedBy(CountyCur.CountyName);
 			if(usedBy != ""){
 				MessageBox.Show(Lan.g(this,"Cannot delete County because it is already in use by the following patients: \r")+usedBy);

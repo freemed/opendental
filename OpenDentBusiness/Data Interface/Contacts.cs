@@ -6,19 +6,18 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Contacts{
-		///<summary></summary>
-		public static Contact[] List;//for one category only. Not refreshed with local data
+		//<summary></summary>
+		//public static Contact[] List;//for one category only. Not refreshed with local data
 
 		///<summary></summary>
-		public static void Refresh(int category){
+		public static Contact[] Refresh(int category){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),category);
-				return;
+				return Meth.GetObject<Contact[]>(MethodBase.GetCurrentMethod(),category);
 			}
 			string command="SELECT * from contact WHERE category = '"+category+"'"
 				+" ORDER BY LName";
 			DataTable table=Db.GetTable(command);
-			List = new Contact[table.Rows.Count];
+			Contact[] List = new Contact[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new Contact();
 				List[i].ContactNum = PIn.PInt   (table.Rows[i][0].ToString());
@@ -29,6 +28,7 @@ namespace OpenDentBusiness{
 				List[i].Category   = PIn.PInt   (table.Rows[i][5].ToString());
 				List[i].Notes      = PIn.PString(table.Rows[i][6].ToString());
 			}
+			return List;
 		}
 
 		///<summary></summary>

@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command=
 			"SELECT * from zipcode ORDER BY zipcodedigits";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);

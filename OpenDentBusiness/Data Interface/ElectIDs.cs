@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace OpenDentBusiness{
 
-	///<summary>Not part of cache refresh.  Just as needed.</summary>
+	///<summary>Since users not allowed to edit, Refresh only gets run the first time it's needed.</summary>
 	public class ElectIDs{
 		private static ElectID[] list;
 
@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -24,15 +24,17 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Since users not allowed to edit, this only gets run on startup.</summary>
-		public static void Refresh(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command="SELECT * from electid "
-				+"ORDER BY CarrierName";
- 			DataTable table=Db.GetTable(command);
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command = "SELECT * from electid ORDER BY CarrierName";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="ElectID";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
 			List=new ElectID[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new ElectID();

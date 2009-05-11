@@ -7,7 +7,6 @@ using System.Reflection;
 
 namespace OpenDentBusiness {
 	public class ClaimCondCodeLogs {
-		public static ClaimCondCodeLog CurCondCodeLog;
 
 		public static ClaimCondCodeLog GetOne(int ClaimNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -15,7 +14,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT * FROM claimcondcodelog WHERE ClaimNum='" + ClaimNum + "'";
 			DataTable table=Db.GetTable(command);
-			CurCondCodeLog = new ClaimCondCodeLog();
+			ClaimCondCodeLog CurCondCodeLog = new ClaimCondCodeLog();
 			if(table.Rows.Count>0){
 			//for(int i=0;i<table.Rows.Count;i++){
 				CurCondCodeLog.ClaimCondCodeNum=PIn.PInt(table.Rows[0][0].ToString());

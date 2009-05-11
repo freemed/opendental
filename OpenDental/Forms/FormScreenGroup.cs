@@ -473,7 +473,8 @@ namespace OpenDental{
 					comboProv.SelectedIndex=i;
 				}
 			}
-			comboCounty.Items.AddRange(Counties.ListNames);
+			string[] CountiesListNames=Counties.GetListNames();
+			comboCounty.Items.AddRange(CountiesListNames);
 			if(ScreenGroupCur.County==null)
 				ScreenGroupCur.County="";//prevents the next line from crashing
 			comboCounty.SelectedIndex=comboCounty.Items.IndexOf(ScreenGroupCur.County);//"" etc OK

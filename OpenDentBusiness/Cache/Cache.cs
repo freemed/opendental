@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(ClaimForms.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll){
-				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
+				ds.Tables.Add(Clearinghouses.RefreshCache());//kh wants to add an EasyHideClearHouses to disable this
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll){
 				ds.Tables.Add(Computers.RefreshCache());
@@ -85,6 +85,9 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				ds.Tables.Add(DisplayFields.RefreshCache());
+			}
+			if(itypes.Contains((int)InvalidType.ElectIDs) || isAll) {
+				ds.Tables.Add(ElectIDs.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll){
 				ds.Tables.Add(EmailTemplates.RefreshCache());
@@ -207,7 +210,7 @@ namespace OpenDentBusiness {
 				ClaimForms.FillCache(ds.Tables["ClaimForm"]);
 			}
 			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll) {
-				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
+				Clearinghouses.FillCache(ds.Tables["Clearinghouse"]);//kh wants to add an EasyHideClearHouses to disable this
 			}
 			if(itypes.Contains((int)InvalidType.Computers) || isAll) {
 				Computers.FillCache(ds.Tables["Computer"]);
@@ -225,6 +228,9 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				DisplayFields.FillCache(ds.Tables["DisplayField"]);
+			}
+			if(itypes.Contains((int)InvalidType.ElectIDs) || isAll) {
+				ElectIDs.FillCache(ds.Tables["ElectID"]);
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll) {
 				EmailTemplates.FillCache(ds.Tables["EmailTemplate"]);

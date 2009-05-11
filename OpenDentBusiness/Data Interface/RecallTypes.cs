@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class RecallTypes{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string c="SELECT * FROM recalltype ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="RecallType";

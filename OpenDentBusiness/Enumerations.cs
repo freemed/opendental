@@ -299,7 +299,8 @@ namespace OpenDentBusiness{
 		///<summary>41</summary>
 		Languages,
 		///<summary>42</summary>
-		AutoNotes
+		AutoNotes,
+		ElectIDs
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

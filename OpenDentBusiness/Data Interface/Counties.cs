@@ -6,51 +6,47 @@ using System.Reflection;
 namespace OpenDentBusiness{
   ///<summary></summary>
 	public class Counties{
-		///<summary>This list is only refreshed as needed rather than being part of the local data.</summary>
-		public static County[] List;
-		///<summary>Used in screening window. Simpler interface.</summary>
-		public static string[] ListNames;
 
-		///<summary></summary>
-		public static void Refresh(string name){
+		///<summary>Gets county names similar to the one provided.</summary>
+		public static County[] Refresh(string name){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),name);
-				return;
+				return Meth.GetObject<County[]>(MethodBase.GetCurrentMethod(),name);
 			}
 			string command=
 				"SELECT * from county "
 				+"WHERE CountyName LIKE '"+name+"%' "
 				+"ORDER BY CountyName";
 			DataTable table=Db.GetTable(command);
-			List=new County[table.Rows.Count];
+			County[] List=new County[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new County();
 				List[i].CountyName    =PIn.PString(table.Rows[i][0].ToString());
 				List[i].CountyCode    =PIn.PString(table.Rows[i][1].ToString());
 				List[i].OldCountyName =PIn.PString(table.Rows[i][0].ToString());
 			}
+			return List;
 		}
 
 		///<summary></summary>
-		public static void Refresh(){
+		public static County[] Refresh() {
 			//No need to check RemotingRole; no call to db.
-			Refresh("");
+			return Refresh("");
 		}
 
 		///<summary>Gets an array of strings containing all the counties in alphabetical order.  Used for the screening interface which must be simpler than the usual interface.</summary>
-		public static void GetListNames(){
+		public static string[] GetListNames(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod());
 			}
 			string command =
 				"SELECT CountyName from county "
 				+"ORDER BY CountyName";
 			DataTable table=Db.GetTable(command);
-			ListNames=new string[table.Rows.Count];
+			string[] ListNames=new string[table.Rows.Count];
 			for(int i=0;i<ListNames.Length;i++){
 				ListNames[i]=PIn.PString(table.Rows[i][0].ToString());
 			}
+			return ListNames;
 		}
 
 		///<summary>Need to make sure Countyname not already in db.</summary>

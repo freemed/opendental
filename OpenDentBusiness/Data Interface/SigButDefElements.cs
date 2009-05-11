@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all SigButDefElements for all buttons, ordered by type: user,extras, message.</summary>
 		public static DataTable RefreshCache() {
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM sigbutdefelement";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="SigButDefElement";

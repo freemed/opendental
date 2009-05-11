@@ -8,8 +8,6 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Claims{
-		//<summary></summary>
-		//public static Hashtable HList;
 		
 		///<summary></summary>
 		public static List<ClaimPaySplit> RefreshByCheck(int claimPaymentNum, bool showUnattached){

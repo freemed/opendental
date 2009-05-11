@@ -9,13 +9,25 @@ namespace OpenDentBusiness {
 	public class Defs {
 		///<summary>If using remoting, then the calling program is responsible for filling the arrays on the client since the automated part only happens on the server.  So there are TWO sets of arrays in a server situation, but only one in a small office that connects directly to the database.</summary>
 		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Def";
 			FillCache(table);
 			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			//No need to check RemotingRole; no call to db.
+			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
+			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
+				DefC.Long[j]=GetForCategory(j,true,table);
+			}
+			DefC.Short=new Def[Enum.GetValues(typeof(DefCat)).Length][];
+			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
+				DefC.Short[j]=GetForCategory(j,false,table);
+			}
 		}
 
 		///<summary>Used by the refresh method above.</summary>
@@ -43,18 +55,6 @@ namespace OpenDentBusiness {
 				list.Add(def);
 			}
 			return list.ToArray();
-		}
-
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
-			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
-				DefC.Long[j]=GetForCategory(j,true,table);
-			}
-			DefC.Short=new Def[Enum.GetValues(typeof(DefCat)).Length][];
-			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
-				DefC.Short[j]=GetForCategory(j,false,table);
-			}
 		}
 
 		///<summary>Only used in FormDefinitions</summary>

@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodInfo.GetCurrentMethod(),command);

@@ -146,7 +146,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Clearinghouses.Refresh();
+			Clearinghouses.RefreshCache();
 			gridMain.ResetRows(Clearinghouses.List.Length);
 			gridMain.SetGridColor(Color.Gray);
 			gridMain.SetBackGColor(Color.White);

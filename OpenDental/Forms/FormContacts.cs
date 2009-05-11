@@ -19,6 +19,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private Contact[] ContactList;
 
 		///<summary></summary>
 		public FormContacts()
@@ -155,23 +156,23 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Contacts.Refresh(DefC.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum);
-			tbContacts.ResetRows(Contacts.List.Length);
+			ContactList=Contacts.Refresh(DefC.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum);
+			tbContacts.ResetRows(ContactList.Length);
 			tbContacts.SetGridColor(Color.Gray);
 			tbContacts.SetBackGColor(Color.White);      
-			for(int i=0;i<Contacts.List.Length;i++){
-				tbContacts.Cell[0,i]=Contacts.List[i].LName;
-				tbContacts.Cell[1,i]=Contacts.List[i].FName;  
-				tbContacts.Cell[2,i]=Contacts.List[i].WkPhone;   
-				tbContacts.Cell[3,i]=Contacts.List[i].Fax;   
-				tbContacts.Cell[4,i]=Contacts.List[i].Notes;   
+			for(int i=0;i<ContactList.Length;i++){
+				tbContacts.Cell[0,i]=ContactList[i].LName;
+				tbContacts.Cell[1,i]=ContactList[i].FName;  
+				tbContacts.Cell[2,i]=ContactList[i].WkPhone;   
+				tbContacts.Cell[3,i]=ContactList[i].Fax;   
+				tbContacts.Cell[4,i]=ContactList[i].Notes;   
 			}
 			tbContacts.LayoutTables();  
 		}
 
 		private void tbContacts_CellDoubleClicked(object sender, CellEventArgs e){
 			FormContactEdit FormCE=new FormContactEdit();
-			FormCE.ContactCur=Contacts.List[e.Row];
+			FormCE.ContactCur=ContactList[e.Row];
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult==DialogResult.OK)
 				FillGrid();

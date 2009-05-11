@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class ReqNeededs{
 
 		public static DataTable Refresh(int schoolClass,int schoolCourse){
-			//No need to check RemotingRole; Calls GetTableRemovelyIfNeeded().
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.PInt(schoolClass)
 				+" AND SchoolCourseNum="+POut.PInt(schoolCourse)
 				+" ORDER BY Descript";

@@ -11,6 +11,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns the computer preferences for the computer which this instance of Open Dental is running on.</summary>
 		public static ComputerPref GetForLocalComputer(){
+			//No need to check RemotingRole; no call to db.
 			string computerName=Dns.GetHostName();//local computer name
 			ComputerPref computerPref=new ComputerPref();
 			//OpenGL tooth chart not supported on Unix systems.
