@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentHL7", "OpenDentHL7\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager", "ServiceManager\ServiceManager.csproj", "{791A5D15-7B14-4A12-BA78-34604CC10D7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateFileCopier", "UpdateFileCopier\UpdateFileCopier.csproj", "{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,12 @@ Global
 		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{791A5D15-7B14-4A12-BA78-34604CC10D7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814E9B5F-DBFA-4506-BAF2-B47112F3FC81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
