@@ -2590,6 +2590,7 @@ namespace OpenDental{
 					killThread.Start();
 					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(Lan.g(this,"This program will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data."));
 					msgbox.Size=new Size(300,300);
+					msgbox.TopMost=true;
 					msgbox.ShowDialog();
 					return;
 				}
