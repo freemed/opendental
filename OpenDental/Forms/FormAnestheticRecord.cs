@@ -3334,7 +3334,7 @@ namespace OpenDental {
 
 		private void printToolStripMenuItem_Click(object sender,EventArgs e) {
 			printPage = new AnestheticRecords();
-			printPage.PrintWindow(this.Handle);
+			//printPage.PrintWindow(this.Handle);
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown

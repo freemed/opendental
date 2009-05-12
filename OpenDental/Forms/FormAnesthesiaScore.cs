@@ -335,7 +335,7 @@ namespace OpenDental {
 
 		public void butPrint_Click(object sender,EventArgs e) {
 			printWindow = new AnestheticRecords();
-			printWindow.PrintWindow(this.Handle);
+			//printWindow.PrintWindow(this.Handle);
 		}
 
 	}
