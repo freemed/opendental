@@ -216,6 +216,7 @@
     <Compile Include="Data Interface\PrefL.cs" />
     <Compile Include="Data Interface\PrinterL.cs" />
     <Compile Include="Data Interface\DefL.cs" />
+    <Compile Include="Data Interface\PrintWindowL.cs" />
     <Compile Include="Data Interface\ProgramL.cs" />
     <Compile Include="Data Interface\RefAttachL.cs" />
     <Compile Include="Eclaims\AOS.cs" />

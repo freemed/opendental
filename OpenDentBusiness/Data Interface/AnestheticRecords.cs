@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-//using OpenDental;
 
 namespace OpenDentBusiness {
 
@@ -17,7 +16,6 @@ namespace OpenDentBusiness {
 
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
-
 
 		///<summary>Most recent date *first*. </summary>
 		public static void Refresh(int patNum) {

@@ -45,7 +45,7 @@ namespace OpenDental {
 		public int DischCondUnstable;
 		public int AnestheticRecordNum;
 		public string AnesthClose;
-		public AnestheticRecords printWindow;
+		public PrintWindowL printWindow;
 
 		public FormAnesthesiaScore(Patient patCur,int anestheticRecordNum) {
 			InitializeComponent();
@@ -334,8 +334,8 @@ namespace OpenDental {
 		}
 
 		public void butPrint_Click(object sender,EventArgs e) {
-			printWindow = new AnestheticRecords();
-			//printWindow.PrintWindow(this.Handle);
+			printWindow = new PrintWindowL();
+			printWindow.Print(this.Handle);
 		}
 
 	}
