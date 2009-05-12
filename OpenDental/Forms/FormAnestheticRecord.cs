@@ -193,7 +193,7 @@ namespace OpenDental {
 		public Patient pat;
 		public int PatNum;
 		public HorizontalAlignment textAlign;
-		//public PrintWindow printPage; //****disabled for now
+		public AnestheticRecords printPage;
 
 		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur) {
 			//
@@ -3333,8 +3333,8 @@ namespace OpenDental {
 		}
 
 		private void printToolStripMenuItem_Click(object sender,EventArgs e) {
-			//printPage = new PrintWindow();
-			//printPage.Print(this.Handle);   //****Printing disabled for now
+			printPage = new AnestheticRecords();
+			printPage.PrintWindow(this.Handle);
 		}
 
 		//Allows user to change to a different patient by clicking 'Select Patient' in the File menu dropdown
