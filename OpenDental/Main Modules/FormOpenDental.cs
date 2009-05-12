@@ -1393,6 +1393,7 @@ namespace OpenDental{
 			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
+
 			if(!PrefL.ConvertDB()){
 				return false;
 			}

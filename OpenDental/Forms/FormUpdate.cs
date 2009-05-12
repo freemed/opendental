@@ -870,7 +870,8 @@ namespace OpenDental{
 			try{
 				Process.Start(destinationPath);
 				Application.Exit();
-			}catch{
+			}
+			catch{
 				MsgBox.Show(FormP,"Could not launch setup");
 			}
 		}
@@ -908,8 +909,6 @@ namespace OpenDental{
 			}
 			//myWebClient.DownloadFile(downloadUri,ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe"));
 		}
-
-		
 
 		private void SavePrefs(){
 			bool changed=false;
