@@ -50,6 +50,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ColumnHeader columnHeader13;
 		private System.Windows.Forms.ComboBox comboGradeSchool;
 		public ScreenGroup ScreenGroupCur;
+		private OpenDentBusiness.Screen[] ScreenList;
 
 		///<summary></summary>
 		public FormScreenGroup()
@@ -455,8 +456,8 @@ namespace OpenDental{
 				ScreenGroups.Insert(ScreenGroupCur);
 			}
 			FillGrid();
-			if(Screens.List.Length>0){
-				OpenDentBusiness.Screen ScreenCur=Screens.List[0];
+			if(ScreenList.Length>0){
+				OpenDentBusiness.Screen ScreenCur=ScreenList[0];
 				ScreenGroupCur.SGDate=ScreenCur.ScreenDate;
 				ScreenGroupCur.ProvName=ScreenCur.ProvName;
 				ScreenGroupCur.ProvNum=ScreenCur.ProvNum;
@@ -487,25 +488,25 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Screens.Refresh(ScreenGroupCur.ScreenGroupNum);
-			ListViewItem[] items=new ListViewItem[Screens.List.Length];
+			ScreenList=Screens.Refresh(ScreenGroupCur.ScreenGroupNum);
+			ListViewItem[] items=new ListViewItem[ScreenList.Length];
 			for(int i=0;i<items.Length;i++){
-				items[i]=new ListViewItem(Screens.List[i].ScreenGroupOrder.ToString());
-				items[i].SubItems.Add(Screens.List[i].GradeLevel.ToString());
-				if(Screens.List[i].Age==0)
+				items[i]=new ListViewItem(ScreenList[i].ScreenGroupOrder.ToString());
+				items[i].SubItems.Add(ScreenList[i].GradeLevel.ToString());
+				if(ScreenList[i].Age==0)
 					items[i].SubItems.Add("");
 				else
-					items[i].SubItems.Add(Screens.List[i].Age.ToString());
-				items[i].SubItems.Add(Screens.List[i].Race.ToString());
-				items[i].SubItems.Add(Screens.List[i].Gender.ToString());
-				items[i].SubItems.Add(Screens.List[i].Urgency.ToString());
-				items[i].SubItems.Add(getX(Screens.List[i].HasCaries));
-				items[i].SubItems.Add(getX(Screens.List[i].EarlyChildCaries));
-				items[i].SubItems.Add(getX(Screens.List[i].CariesExperience));
-				items[i].SubItems.Add(getX(Screens.List[i].ExistingSealants));
-				items[i].SubItems.Add(getX(Screens.List[i].NeedsSealants));
-				items[i].SubItems.Add(getX(Screens.List[i].MissingAllTeeth));				
-				items[i].SubItems.Add(Screens.List[i].Comments);
+					items[i].SubItems.Add(ScreenList[i].Age.ToString());
+				items[i].SubItems.Add(ScreenList[i].Race.ToString());
+				items[i].SubItems.Add(ScreenList[i].Gender.ToString());
+				items[i].SubItems.Add(ScreenList[i].Urgency.ToString());
+				items[i].SubItems.Add(getX(ScreenList[i].HasCaries));
+				items[i].SubItems.Add(getX(ScreenList[i].EarlyChildCaries));
+				items[i].SubItems.Add(getX(ScreenList[i].CariesExperience));
+				items[i].SubItems.Add(getX(ScreenList[i].ExistingSealants));
+				items[i].SubItems.Add(getX(ScreenList[i].NeedsSealants));
+				items[i].SubItems.Add(getX(ScreenList[i].MissingAllTeeth));				
+				items[i].SubItems.Add(ScreenList[i].Comments);
 			}
 			listMain.Items.Clear();
 			listMain.Items.AddRange(items);
@@ -519,7 +520,7 @@ namespace OpenDental{
 
 		private void listMain_DoubleClick(object sender, System.EventArgs e) {
 			FormScreenEdit FormSE=new FormScreenEdit();
-			FormSE.ScreenCur=Screens.List[listMain.SelectedIndices[0]];
+			FormSE.ScreenCur=ScreenList[listMain.SelectedIndices[0]];
 			FormSE.ScreenGroupCur=ScreenGroupCur;
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK){
@@ -594,12 +595,12 @@ namespace OpenDental{
 			FormScreenEdit FormSE=new FormScreenEdit();
 			FormSE.ScreenGroupCur=ScreenGroupCur;
 			FormSE.IsNew=true;
-			if(Screens.List.Length==0){
+			if(ScreenList.Length==0){
 				FormSE.ScreenCur=new OpenDentBusiness.Screen();
 				FormSE.ScreenCur.ScreenGroupOrder=1;
 			}
 			else{
-				FormSE.ScreenCur=Screens.List[Screens.List.Length-1];//'remembers' the last entry
+				FormSE.ScreenCur=ScreenList[ScreenList.Length-1];//'remembers' the last entry
 				FormSE.ScreenCur.ScreenGroupOrder=FormSE.ScreenCur.ScreenGroupOrder+1;//increments for next
 			}
 			while(true){
@@ -617,13 +618,13 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<listMain.SelectedIndices.Count;i++){
-				Screens.Delete(Screens.List[listMain.SelectedIndices[i]]);
+				Screens.Delete(ScreenList[listMain.SelectedIndices[i]]);
 			}
 			FillGrid();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(Screens.List.Length==0){
+			if(ScreenList.Length==0){
 				if(MessageBox.Show("Since you have no items in the list, the screener and location information cannot be saved. Continue?","",MessageBoxButtons.OKCancel)==DialogResult.Cancel){
 					return;
 				}

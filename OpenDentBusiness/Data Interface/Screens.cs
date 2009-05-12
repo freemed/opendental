@@ -6,21 +6,18 @@ using System.Reflection;
 namespace OpenDentBusiness{
   ///<summary></summary>
 	public class Screens{
+	
 		///<summary></summary>
-		public static OpenDentBusiness.Screen[] List;
-
-		///<summary></summary>
-		public static void Refresh(int screenGroupNum){
+		public static Screen[] Refresh(int screenGroupNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),screenGroupNum);
-				return;
+				return Meth.GetObject<Screen[]>(MethodBase.GetCurrentMethod(),screenGroupNum);
 			}
 			string command =
 				"SELECT * from screen "
 				+"WHERE ScreenGroupNum = '"+POut.PInt(screenGroupNum)+"' "
 				+"ORDER BY ScreenGroupOrder";
 			DataTable table=Db.GetTable(command);
-			List=new OpenDentBusiness.Screen[table.Rows.Count];
+			Screen[] List=new OpenDentBusiness.Screen[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new OpenDentBusiness.Screen();
 				List[i].ScreenNum       =                  PIn.PInt   (table.Rows[i][0].ToString());
@@ -46,6 +43,7 @@ namespace OpenDentBusiness{
 				List[i].ScreenGroupOrder=                  PIn.PInt   (table.Rows[i][20].ToString());
 				List[i].Comments        =                  PIn.PString(table.Rows[i][21].ToString());
 			}
+			return List;
 		}
 
 		///<summary></summary>

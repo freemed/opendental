@@ -35,12 +35,12 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new SigButDefElement[table.Rows.Count];
+			list=new SigButDefElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new SigButDefElement();
-				List[i].ElementNum      = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].SigButDefNum    = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].SigElementDefNum= PIn.PInt(table.Rows[i][2].ToString());
+				list[i]=new SigButDefElement();
+				list[i].ElementNum      = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].SigButDefNum    = PIn.PInt(table.Rows[i][1].ToString());
+				list[i].SigElementDefNum= PIn.PInt(table.Rows[i][2].ToString());
 			}
 			//Array.Sort(List);
 		}

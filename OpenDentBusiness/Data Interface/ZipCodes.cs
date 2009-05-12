@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		private static ZipCode[] list;
 		///<summary></summary>
 		private static ArrayList aLFrequent;
-		///<summary></summary>
+		///<summary>Only used from UI.</summary>
 		public static ArrayList ALMatches;
 		
 		public static ZipCode[] List {
@@ -52,17 +52,17 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			ALFrequent=new ArrayList();
-			List=new ZipCode[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new ZipCode();
-				List[i].ZipCodeNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].ZipCodeDigits=PIn.PString(table.Rows[i][1].ToString());
-				List[i].City=PIn.PString(table.Rows[i][2].ToString());
-				List[i].State=PIn.PString(table.Rows[i][3].ToString());
-				List[i].IsFrequent=PIn.PBool(table.Rows[i][4].ToString());
-				if(List[i].IsFrequent) {
-					ALFrequent.Add(List[i]);
+			aLFrequent=new ArrayList();
+			list=new ZipCode[table.Rows.Count];
+			for(int i=0;i<list.Length;i++) {
+				list[i]=new ZipCode();
+				list[i].ZipCodeNum=PIn.PInt(table.Rows[i][0].ToString());
+				list[i].ZipCodeDigits=PIn.PString(table.Rows[i][1].ToString());
+				list[i].City=PIn.PString(table.Rows[i][2].ToString());
+				list[i].State=PIn.PString(table.Rows[i][3].ToString());
+				list[i].IsFrequent=PIn.PBool(table.Rows[i][4].ToString());
+				if(list[i].IsFrequent) {
+					aLFrequent.Add(list[i]);
 				}
 			}
 		}

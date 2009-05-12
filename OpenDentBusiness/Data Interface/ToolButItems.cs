@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -8,8 +9,8 @@ namespace OpenDentBusiness{
 	public class ToolButItems{
 		///<summary></summary>
 		private static ToolButItem[] list;
-		///<summary></summary>
-		public static ArrayList ForProgram;
+		//<summary></summary>
+		//public static ArrayList ForProgram;
 
 		public static ToolButItem[] List {
 			//No need to check RemotingRole; no call to db.
@@ -37,13 +38,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new ToolButItem[table.Rows.Count];
+			list=new ToolButItem[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
-				List[i]=new ToolButItem();
-				List[i].ToolButItemNum  =PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].ProgramNum      =PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].ToolBar         =(ToolBarsAvail)PIn.PInt(table.Rows[i][2].ToString());
-				List[i].ButtonText      =PIn.PString(table.Rows[i][3].ToString());
+				list[i]=new ToolButItem();
+				list[i].ToolButItemNum  =PIn.PInt   (table.Rows[i][0].ToString());
+				list[i].ProgramNum      =PIn.PInt   (table.Rows[i][1].ToString());
+				list[i].ToolBar         =(ToolBarsAvail)PIn.PInt(table.Rows[i][2].ToString());
+				list[i].ButtonText      =PIn.PString(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -98,17 +99,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
-		public static void GetForProgram(int programNum){
+		public static List<ToolButItem> GetForProgram(int programNum){
 			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();
 			}
-			ForProgram=new ArrayList();
+			List<ToolButItem> ForProgram=new List<ToolButItem>();
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProgramNum==programNum){
 					ForProgram.Add(List[i]);
 				}
 			}
+			return ForProgram;
 		}
 
 		///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>

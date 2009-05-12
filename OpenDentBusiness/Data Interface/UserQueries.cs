@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 
 ///<summary></summary>
 	public class UserQueries{
-		///<summary></summary>
+		///<summary>Only used in UI.</summary>
 		private static UserQuery[] list;
-		///<summary></summary>
-		public static bool IsSelected;
+		//<summary></summary>
+		//public static bool IsSelected;
 
 		public static UserQuery[] List {
 			//No need to check RemotingRole; no call to db.
@@ -27,9 +27,21 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Refresh(){
+			//No need to check RemotingRole; no call to db.
+			DataTable table=GetAllUserQueries();
+			list=new UserQuery[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++){
+				list[i]=new UserQuery();
+				list[i].QueryNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				list[i].Description = PIn.PString(table.Rows[i][1].ToString());
+				list[i].FileName    = PIn.PString(table.Rows[i][2].ToString());
+				list[i].QueryText   = PIn.PString(table.Rows[i][3].ToString());
+			}
+		}
+
+		public static DataTable GetAllUserQueries() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
 			string command =
 				"SELECT querynum,description,filename,querytext"
@@ -37,14 +49,7 @@ namespace OpenDentBusiness{
 				//+" WHERE hidden != '1'";
 				+" ORDER BY description";
 			DataTable table=Db.GetTable(command);
-			List=new UserQuery[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new UserQuery();
-				List[i].QueryNum    = PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				List[i].FileName    = PIn.PString(table.Rows[i][2].ToString());
-				List[i].QueryText   = PIn.PString(table.Rows[i][3].ToString());
-			}
+			return table;
 		}
 
 		///<summary></summary>

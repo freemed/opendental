@@ -122,7 +122,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			UserGroups.Refresh();
+			UserGroups.RefreshCache();
 			listGroups.Items.Clear();
 			for(int i=0;i<UserGroups.List.Length;i++){
 				listGroups.Items.Add(UserGroups.List[i].Description);

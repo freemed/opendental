@@ -10,7 +10,22 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Security{
 		///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
-		public static Userod CurUser;
+		private static Userod curUser;
+
+		public static Userod CurUser {
+			get {
+				if(RemotingClient.RemotingRole==RemotingRole.ServerWeb) {
+					throw new ApplicationException("Security.Userod not accessible from RemotingRole.ServerWeb.");
+				}
+				return curUser;
+			}
+			set {
+				if(RemotingClient.RemotingRole==RemotingRole.ServerWeb) {
+					throw new ApplicationException("Security.Userod not accessible from RemotingRole.ServerWeb.");
+				}
+				curUser=value;
+			}
+		}
 
 		///<summary></summary>
 		public Security(){

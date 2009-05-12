@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -344,16 +345,16 @@ namespace OpenDental{
 			textPath.Text=ProgramCur.Path;
 			textCommandLine.Text=ProgramCur.CommandLine;
 			textNote.Text=ProgramCur.Note;
-			ToolButItems.GetForProgram(ProgramCur.ProgramNum);
+			List<ToolButItem> itemsForProgram=ToolButItems.GetForProgram(ProgramCur.ProgramNum);
 			listToolBars.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(ToolBarsAvail)).Length;i++){
 				listToolBars.Items.Add(Enum.GetNames(typeof(ToolBarsAvail))[i]);
 			}
-			for(int i=0;i<ToolButItems.ForProgram.Count;i++){
-				listToolBars.SetSelected((int)((ToolButItem)ToolButItems.ForProgram[i]).ToolBar,true);
+			for(int i=0;i<itemsForProgram.Count;i++) {
+				listToolBars.SetSelected((int)itemsForProgram[i].ToolBar,true);
 			}
-			if(ToolButItems.ForProgram.Count>0){//the text on all buttons will be the same for now
-				textButtonText.Text=((ToolButItem)ToolButItems.ForProgram[0]).ButtonText;
+			if(itemsForProgram.Count>0){//the text on all buttons will be the same for now
+				textButtonText.Text=itemsForProgram[0].ButtonText;
 			}
 			FillGrid();
 		}

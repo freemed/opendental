@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -23,18 +23,23 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * from usergroup ORDER BY Description";
-			DataTable table=Db.GetTable(command);
-			List=new UserGroup[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new UserGroup();
-				List[i].UserGroupNum  = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description   = PIn.PString(table.Rows[i][1].ToString());
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="UserGroup";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			list=new UserGroup[table.Rows.Count];
+			for(int i=0;i<list.Length;i++) {
+				list[i]=new UserGroup();
+				list[i].UserGroupNum  = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].Description   = PIn.PString(table.Rows[i][1].ToString());
 			}
 		}
 

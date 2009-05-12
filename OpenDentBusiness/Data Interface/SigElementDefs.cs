@@ -37,16 +37,16 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List=new SigElementDef[table.Rows.Count];
+			list=new SigElementDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new SigElementDef();
-				List[i].SigElementDefNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].LightRow        = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].LightColor      = Color.FromArgb(PIn.PInt(table.Rows[i][2].ToString()));
-				List[i].SigElementType  = (SignalElementType)PIn.PInt(table.Rows[i][3].ToString());
-				List[i].SigText         = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Sound           = PIn.PString(table.Rows[i][5].ToString());
-				List[i].ItemOrder       = PIn.PInt(table.Rows[i][6].ToString());
+				list[i]=new SigElementDef();
+				list[i].SigElementDefNum= PIn.PInt(table.Rows[i][0].ToString());
+				list[i].LightRow        = PIn.PInt(table.Rows[i][1].ToString());
+				list[i].LightColor      = Color.FromArgb(PIn.PInt(table.Rows[i][2].ToString()));
+				list[i].SigElementType  = (SignalElementType)PIn.PInt(table.Rows[i][3].ToString());
+				list[i].SigText         = PIn.PString(table.Rows[i][4].ToString());
+				list[i].Sound           = PIn.PString(table.Rows[i][5].ToString());
+				list[i].ItemOrder       = PIn.PInt(table.Rows[i][6].ToString());
 			}
 		}
 	

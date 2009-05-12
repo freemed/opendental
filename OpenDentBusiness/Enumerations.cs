@@ -252,7 +252,7 @@ namespace OpenDentBusiness{
 		Letters,
 		///<summary></summary>
 		QuickPaste,
-		///<summary>Userod</summary>
+		///<summary>Userod and UserGroup</summary>
 		Security,
 		///<summary></summary>
 		Programs,

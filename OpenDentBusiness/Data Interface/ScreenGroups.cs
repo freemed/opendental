@@ -7,21 +7,6 @@ using System.Reflection;
 namespace OpenDentBusiness{
   ///<summary></summary>
 	public class ScreenGroups{
-		//<summary></summary>
-		//public static ScreenGroup[] List;
-
-		/*This doesn't seem to work because we need a date range.
-		public static ScreenGroup[] List {
-			get {
-				if(list==null) {
-					Refresh();
-				}
-				return list;
-			}
-			set {
-				list=value;
-			}
-		}*/
 
 		///<summary></summary>
 		public static List<ScreenGroup> Refresh(DateTime fromDate,DateTime toDate){

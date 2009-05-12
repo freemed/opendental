@@ -7,11 +7,11 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary>Not part of cache refresh.</summary>
 	public class Tasks {
-		///<summary></summary>
+		///<summary>Only used from UI.</summary>
 		public static ArrayList LastOpenList;
-		///<summary></summary>
+		///<summary>Only used from UI.</summary>
 		public static int LastOpenGroup;
-		///<summary></summary>
+		///<summary>Only used from UI.</summary>
 		public static DateTime LastOpenDate;
 
 		/*

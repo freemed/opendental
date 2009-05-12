@@ -159,6 +159,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				ds.Tables.Add(Userods.RefreshCache());
+				ds.Tables.Add(UserGroups.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Sheets) || isAll){
 				ds.Tables.Add(SheetDefs.RefreshCache());
@@ -304,6 +305,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll) {
 				Userods.FillCache(ds.Tables["Userod"]);
+				UserGroups.FillCache(ds.Tables["UserGroup"]);
 			}
 			if(itypes.Contains((int)InvalidType.Sheets) || isAll) {
 				SheetDefs.FillCache(ds.Tables["SheetDef"]);

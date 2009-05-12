@@ -39,15 +39,15 @@ namespace OpenDentBusiness {
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			SigButDefElements.RefreshCache();
-			Listt=new SigButDef[table.Rows.Count];
+			listt=new SigButDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				Listt[i]=new SigButDef();
-				Listt[i].SigButDefNum= PIn.PInt(table.Rows[i][0].ToString());
-				Listt[i].ButtonText  = PIn.PString(table.Rows[i][1].ToString());
-				Listt[i].ButtonIndex = PIn.PInt(table.Rows[i][2].ToString());
-				Listt[i].SynchIcon   = PIn.PInt(table.Rows[i][3].ToString());
-				Listt[i].ComputerName= PIn.PString(table.Rows[i][4].ToString());
-				Listt[i].ElementList=SigButDefElements.GetForButton(Listt[i].SigButDefNum);
+				listt[i]=new SigButDef();
+				listt[i].SigButDefNum= PIn.PInt(table.Rows[i][0].ToString());
+				listt[i].ButtonText  = PIn.PString(table.Rows[i][1].ToString());
+				listt[i].ButtonIndex = PIn.PInt(table.Rows[i][2].ToString());
+				listt[i].SynchIcon   = PIn.PInt(table.Rows[i][3].ToString());
+				listt[i].ComputerName= PIn.PString(table.Rows[i][4].ToString());
+				listt[i].ElementList=SigButDefElements.GetForButton(listt[i].SigButDefNum);
 			}
 		}
 
