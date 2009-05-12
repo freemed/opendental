@@ -205,6 +205,8 @@ namespace OpenDental{
 		private ContrDocs ContrDocs2;
 		private ContrStaff ContrManage2;
 		private OutlookBar myOutlookBar;
+		private MenuItem menuItemShutdown;
+		private System.Windows.Forms.Timer timerHeartBeat;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 
 		///<summary></summary>
@@ -373,6 +375,7 @@ namespace OpenDental{
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuTelephone = new System.Windows.Forms.MenuItem();
 			this.menuItemCreateAtoZFolders = new System.Windows.Forms.MenuItem();
+			this.menuItemShutdown = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
 			this.menuItemDatabaseMaintenance = new System.Windows.Forms.MenuItem();
@@ -409,6 +412,7 @@ namespace OpenDental{
 			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -943,7 +947,8 @@ namespace OpenDental{
 			this.menuItem1.Index = 1;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuTelephone,
-            this.menuItemCreateAtoZFolders});
+            this.menuItemCreateAtoZFolders,
+            this.menuItemShutdown});
 			this.menuItem1.Text = "Misc Tools";
 			// 
 			// menuTelephone
@@ -957,6 +962,12 @@ namespace OpenDental{
 			this.menuItemCreateAtoZFolders.Index = 1;
 			this.menuItemCreateAtoZFolders.Text = "Create A to Z Folders";
 			this.menuItemCreateAtoZFolders.Click += new System.EventHandler(this.menuItemCreateAtoZFolders_Click);
+			// 
+			// menuItemShutdown
+			// 
+			this.menuItemShutdown.Index = 2;
+			this.menuItemShutdown.Text = "Shutdown All Workstations";
+			this.menuItemShutdown.Click += new System.EventHandler(this.menuItemShutdown_Click);
 			// 
 			// menuItem9
 			// 
@@ -1188,6 +1199,12 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
+			// timerHeartBeat
+			// 
+			this.timerHeartBeat.Enabled = true;
+			this.timerHeartBeat.Interval = 180000;
+			this.timerHeartBeat.Tick += new System.EventHandler(this.timerHeartBeat_Tick);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,626);
@@ -1201,7 +1218,7 @@ namespace OpenDental{
 			this.Text = "Open Dental";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormOpenDental_Load);
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormOpenDental_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormOpenDental_FormClosing);
 			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormOpenDental_KeyDown);
 			this.ResumeLayout(false);
@@ -1364,6 +1381,10 @@ namespace OpenDental{
 			if(CommandLineArgs.Length>0) {
 				ProcessCommandLine(CommandLineArgs);
 			}
+			try {
+				Computers.UpdateHeartBeat(Environment.MachineName);
+			}
+			catch { }
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
@@ -2832,6 +2853,7 @@ namespace OpenDental{
 		}
 
 		private void timerTimeIndic_Tick(object sender, System.EventArgs e){
+			//every minute:
 			if(WindowState!=FormWindowState.Minimized
 				&& ContrAppt2.Visible){
 				ContrAppt2.TickRefresh();
@@ -2839,14 +2861,24 @@ namespace OpenDental{
 		}
 
 		private void timerSignals_Tick(object sender, System.EventArgs e) {
+			//typically every 4 seconds:
 			ProcessSignals();
 		}
 
 		private void timerDisabledKey_Tick(object sender,EventArgs e) {
+			//every 10 minutes:
 			if(PrefC.GetBoolSilent("RegistrationKeyIsDisabled",false)) {
 				MessageBox.Show("Registration key has been disabled.  You are using an unauthorized version of this program.","Warning",
 					MessageBoxButtons.OK,MessageBoxIcon.Warning);
 			}
+		}
+
+		private void timerHeartBeat_Tick(object sender,EventArgs e) {
+			//every 3 minutes:
+			try {
+				Computers.UpdateHeartBeat(Environment.MachineName);
+			}
+			catch { }
 		}
 
 		///<summary>Gets the encrypted connection string for the Oracle database from a config file.</summary>
@@ -3604,16 +3636,6 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Telephone");
 		}
 
-		/*
-		private void menuItemPatientImport_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin)){
-				return;
-			}
-			FormImport FormI=new FormImport();
-			FormI.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Patient Import Tool");
-		}*/
-
 		private void menuItemCreateAtoZFolders_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
@@ -3622,6 +3644,17 @@ namespace OpenDental{
 			FormA.ShowDialog();
 			if(FormA.DialogResult==DialogResult.OK){
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Created AtoZ Folder");
+			}
+		}
+
+		private void menuItemShutdown_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormShutdown FormS=new FormShutdown();
+			FormS.ShowDialog();
+			if(FormS.DialogResult==DialogResult.OK) {
+				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
 			}
 		}
 
@@ -3804,14 +3837,6 @@ namespace OpenDental{
 		}*/
 
 		#endregion
-
-		private void FormOpenDental_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
-			FormUAppoint.AbortThread();
-			//ICat.AbortThread
-			if(ThreadCommandLine!=null) {
-				ThreadCommandLine.Abort();
-			}
-		}
 
 		private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
 			if (InvokeRequired) {
@@ -4027,6 +4052,23 @@ namespace OpenDental{
 			
 
 		}
+
+		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
+			try {
+				Computers.ClearHeartBeat(Environment.MachineName);
+			}
+			catch { }
+			FormUAppoint.AbortThread();
+			//ICat.AbortThread
+			//earlier, this wasn't working.  But I haven't tested it since moving it from Closing to FormClosing.
+			if(ThreadCommandLine!=null) {
+				ThreadCommandLine.Abort();
+			}
+		}
+
+		
+
+		
 
 
 

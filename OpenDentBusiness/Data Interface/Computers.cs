@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -119,7 +120,39 @@ namespace OpenDentBusiness{
 				}
 			}
 			return null;//this will never happen
-		}	
+		}
+
+		public static List<string> GetRunningComputers() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			//heartbeat is every three minutes.  We'll allow four to be generous.
+			string command="SELECT CompName FROM computer WHERE LastHeartBeat > SUBTIME(NOW(),'00:04:00')";
+			DataTable table=Db.GetTable(command);
+			List<string> retVal=new List<string>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal.Add(table.Rows[i][0].ToString());
+			}
+			return retVal;
+		}
+
+		public static void UpdateHeartBeat(string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				return;
+			}
+			string command= "UPDATE computer SET LastHeartBeat=NOW() WHERE CompName = '"+POut.PString(computerName)+"'";
+			Db.NonQ(command);
+		}
+
+		public static void ClearHeartBeat(string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				return;
+			}
+			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' WHERE CompName = '"+POut.PString(computerName)+"'";
+			Db.NonQ(command);
+		}
 
 	}
 }

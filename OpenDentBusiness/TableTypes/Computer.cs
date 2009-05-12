@@ -9,8 +9,8 @@ namespace OpenDentBusiness{
 		public int ComputerNum;
 		///<summary>Name of the computer.</summary>
 		public string CompName;
-		///<summary>No longer used. Moved to printer table.  Used to hold default printer for each computer</summary>
-		public string PrinterName;
+		///<summary>Allows use to tell which computers are running.  All workstations record a heartbeat here at an interval of 3 minutes.  And when they shut down, they set this value to min.  So if the heartbeat is fairly fresh, then that's an accurate indicator of whether the computer is running.</summary>
+		public DateTime LastHeartBeat;
 
 
 	}

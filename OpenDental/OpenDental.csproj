@@ -295,6 +295,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormShutdown.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormShutdown.designer.cs">
+      <DependentUpon>FormShutdown.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEClinicalWorks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3629,6 +3635,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormShutdown.resx">
+      <DependentUpon>FormShutdown.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEClinicalWorks.resx">

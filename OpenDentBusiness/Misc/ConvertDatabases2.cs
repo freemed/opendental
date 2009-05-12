@@ -326,12 +326,16 @@ namespace OpenDentBusiness {
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'iCat')";
 					Db.NonQ(command);
+					//end of iCat Bridge
 					string[] commands = new string[]{
-					"ALTER TABLE anesthvsdata ADD MessageID varchar(50)"
-					,"ALTER TABLE anesthvsdata ADD HL7Message longtext"
+						"ALTER TABLE anesthvsdata ADD MessageID varchar(50)",
+						"ALTER TABLE anesthvsdata ADD HL7Message longtext"
 					};
 					Db.NonQ(commands);
-
+					command="ALTER TABLE computer DROP PrinterName";
+					Db.NonQ(command);
+					command="ALTER TABLE computer ADD LastHeartBeat datetime NOT NULL default '0001-01-01'";
+					Db.NonQ(command);
 
 
 

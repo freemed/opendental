@@ -99,7 +99,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(294,23);
 			this.label2.TabIndex = 45;
-			this.label2.Text = "ComputerName (&& Default Printer)";
+			this.label2.Text = "ComputerName";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormComputers
@@ -120,8 +120,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Computers";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormComputers_Closing);
 			this.Load += new System.EventHandler(this.FormComputers_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormComputers_Closing);
 			this.ResumeLayout(false);
 
 		}
@@ -136,8 +136,8 @@ namespace OpenDental{
 			listComputer.Items.Clear();
 			string itemName="";
 			for(int i=0;i<Computers.List.Length;i++){
-				itemName=Computers.List[i].CompName
-					+" ("+Computers.List[i].PrinterName+")";
+				itemName=Computers.List[i].CompName;
+					//+" ("+Computers.List[i].PrinterName+")";
 				listComputer.Items.Add(itemName);
 			}
 		}
