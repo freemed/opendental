@@ -261,6 +261,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DocumentWithNoCategory(verbose);
 			Application.DoEvents();
+			textLog.Text+=EtransRemoveOldReceivedClaimTransactions(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanCheckNoCarrier(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose);

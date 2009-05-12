@@ -893,6 +893,32 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string EtransRemoveOldReceivedClaimTransactions(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			//Set the etrans entries to blank where the associated claim has been
+			//received for at least a month.
+			command="UPDATE etrans e,claim c "+
+				"SET e.messagetext='' "+
+				"WHERE e.ClaimNum=c.ClaimNum AND "+
+				"UPPER(c.ClaimStatus)='R' AND "+
+				"DATE(c.DateReceived)<=ADDDATE(CURDATE(),INTERVAL -1 MONTH) AND "+
+				"YEAR(c.DateReceived)>1";
+			int rowsCleared=Db.NonQ(command);
+			//Now, alter the etrans table messagetext column to force MySQL to delete
+			//the dead space still in the file which is no longer needed. By default,
+			//MySQL will leave dead space when you shrink the contents of a string
+			//within a row, I presume this is for speed efficiency.
+			command="ALTER TABLE etrans CHANGE messagetext messagetext text NULL";
+			Db.NonQ(command);
+			if(rowsCleared>0 && verbose){
+				return Lans.g("FormDatabaseMaintenance","Number of old/received etrans entries cleared: ")+
+					rowsCleared.ToString()+"\r\n";
+			}
+			return "";
+		}
+
 		public static string InsPlanCheckNoCarrier(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
