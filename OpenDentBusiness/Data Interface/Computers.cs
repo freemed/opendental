@@ -154,5 +154,14 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static void ClearAllHeartBeats() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command= "UPDATE computer SET LastHeartBeat='0001-01-01'";
+			Db.NonQ(command);
+		}
+
 	}
 }

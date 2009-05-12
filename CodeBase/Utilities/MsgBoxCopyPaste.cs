@@ -104,6 +104,7 @@ namespace CodeBase{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.OK;
+			Close();//have to have this also because sometimes this box is non-modal.
 		}
 
 		

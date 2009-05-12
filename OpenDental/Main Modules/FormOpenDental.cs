@@ -2274,7 +2274,6 @@ namespace OpenDental{
 				phonePanel.Visible=false;
 				panelSplitter.Visible=false;
 			}
-			
 			ContrAccount2.Location=position;
 			ContrAccount2.Width=width;
 			ContrAccount2.Height=height;
@@ -2582,6 +2581,19 @@ namespace OpenDental{
 			if(Security.CurUser==null){
 				return;
 			}
+			//look for shutdown signal
+			for(int i=0;i<sigList.Count;i++) {
+				if(sigList[i].ITypes==((int)InvalidType.ShutDownNow).ToString()) {
+					timerSignals.Enabled=false;//quit receiving signals.
+					//start the thread that will kill the application
+					Thread killThread=new Thread(new ThreadStart(KillThread));
+					killThread.Start();
+					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(Lan.g(this,"This program will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data."));
+					msgbox.Size=new Size(300,300);
+					msgbox.ShowDialog();
+					return;
+				}
+			}
 			if(sigList[sigList.Count-1].AckTime.Year>1880){
 				signalLastRefreshed=sigList[sigList.Count-1].AckTime;
 			}
@@ -2630,7 +2642,7 @@ namespace OpenDental{
 			if(itypes.Count>0){//invalidTypes!=0){
 				RefreshLocalData(itypeArray);
 			}
-			List <Signal> sigListButs=Signals.GetButtonSigs(sigList);
+			List<Signal> sigListButs=Signals.GetButtonSigs(sigList);
 			ContrManage2.LogMsgs(sigListButs);
 			FillSignalButtons(sigListButs);
 			//Need to add a test to this: do not play messages that are over 2 minutes old.
@@ -2638,14 +2650,24 @@ namespace OpenDental{
 			newThread.Start(sigListButs);
 		}
 
+		private void KillThread() {
+			//Application.DoEvents();
+			DateTime now=DateTime.Now;
+			while(DateTime.Now < now.AddSeconds(15)) {
+				Application.DoEvents();
+			}
+			//Thread.Sleep(30000);//30 sec
+			Application.Exit();
+		}
+
 		private void PlaySounds(Object objSignalList){
-			Signal[] signalList=(Signal[])objSignalList;
+			List<Signal> signalList=(List<Signal>)objSignalList;
 			string strSound;
 			byte[] rawData;
 			MemoryStream stream;
 			SoundPlayer simpleSound;
 			//loop through each signal
-			for(int s=0;s<signalList.Length;s++){
+			for(int s=0;s<signalList.Count;s++){
 				if(signalList[s].AckTime.Year>1880){
 					continue;//don't play any sounds for acks.
 				}
@@ -3653,9 +3675,18 @@ namespace OpenDental{
 			}
 			FormShutdown FormS=new FormShutdown();
 			FormS.ShowDialog();
-			if(FormS.DialogResult==DialogResult.OK) {
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
 			}
+			timerSignals.Enabled=false;//so that this workstation doesn't shut down
+			Signal sig=new Signal();
+			sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
+			sig.SigType=SignalType.Invalid;
+			Signals.Insert(sig);
+			Computers.ClearAllHeartBeats();//always assume success
+			signalLastRefreshed=MiscData.GetNowDateTime();
+			timerSignals.Enabled=true;
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
 		}
 
 		private void menuItemAuditTrail_Click(object sender,EventArgs e) {

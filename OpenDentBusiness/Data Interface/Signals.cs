@@ -19,8 +19,9 @@ namespace OpenDentBusiness{
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
 			try {
-				RefreshAndFill(Db.GetTable(command));
-			} catch {
+				sigList=RefreshAndFill(Db.GetTable(command));
+			} 
+			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
 			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
@@ -44,8 +45,9 @@ namespace OpenDentBusiness{
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
 			try {
-				RefreshAndFill(Db.GetTable(command));
-			} catch {
+				sigList=RefreshAndFill(Db.GetTable(command));
+			} 
+			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
 			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
@@ -67,8 +69,9 @@ namespace OpenDentBusiness{
 				+"ORDER BY SigDateTime";
 			List <Signal> sigList=new List<Signal> ();
 			try {
-				RefreshAndFill(Db.GetTable(command));
-			} catch {
+				sigList=RefreshAndFill(Db.GetTable(command));
+			} 
+			catch {
 				//we don't want an error message to show, because that can cause a cascade of a large number of error messages.
 			}
 			SigElement[] sigElementsAll=SigElements.GetElements(sigList);
@@ -78,24 +81,26 @@ namespace OpenDentBusiness{
 			return sigList;
 		}
 
-		private static List <Signal> RefreshAndFill(DataTable table) {
+		private static List<Signal> RefreshAndFill(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List <Signal> List=new List <Signal> ();
+			List<Signal> retVal=new List<Signal>();
+			Signal sig;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List.Add(new Signal());
-				List[i].SignalNum  = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].FromUser   = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ITypes     = PIn.PString(table.Rows[i][2].ToString());
-				List[i].DateViewing= PIn.PDate(table.Rows[i][3].ToString());
-				List[i].SigType    = (SignalType)PIn.PInt(table.Rows[i][4].ToString());
-				List[i].SigText    = PIn.PString(table.Rows[i][5].ToString());
-				List[i].SigDateTime= PIn.PDateT(table.Rows[i][6].ToString());
-				List[i].ToUser     = PIn.PString(table.Rows[i][7].ToString());
-				List[i].AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
-				List[i].TaskNum    = PIn.PInt  (table.Rows[i][9].ToString());
+				sig=new Signal();
+				sig.SignalNum  = PIn.PInt(table.Rows[i][0].ToString());
+				sig.FromUser   = PIn.PString(table.Rows[i][1].ToString());
+				sig.ITypes     = PIn.PString(table.Rows[i][2].ToString());
+				sig.DateViewing= PIn.PDate(table.Rows[i][3].ToString());
+				sig.SigType    = (SignalType)PIn.PInt(table.Rows[i][4].ToString());
+				sig.SigText    = PIn.PString(table.Rows[i][5].ToString());
+				sig.SigDateTime= PIn.PDateT(table.Rows[i][6].ToString());
+				sig.ToUser     = PIn.PString(table.Rows[i][7].ToString());
+				sig.AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
+				sig.TaskNum    = PIn.PInt(table.Rows[i][9].ToString());
+				retVal.Add(sig);
 			}
-			List.Sort();
-			return List;
+			retVal.Sort();
+			return retVal;
 		}
 	
 		///<summary></summary>

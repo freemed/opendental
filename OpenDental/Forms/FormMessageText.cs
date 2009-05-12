@@ -14,7 +14,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.ComponentModel.IContainer components;
 
-		///<summary></summary>
+		///<summary>Not used anywhere.</summary>
 		public FormMessageText(){
 			InitializeComponent();
 			Lan.F(this);
@@ -91,6 +91,7 @@ namespace OpenDental{
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormMessageText
 			// 
@@ -125,6 +126,10 @@ namespace OpenDental{
 		}
 
 		private void timer2_Tick(object sender, System.EventArgs e) {
+			Close();
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
 			Close();
 		}
 

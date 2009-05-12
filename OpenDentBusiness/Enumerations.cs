@@ -300,9 +300,14 @@ namespace OpenDentBusiness{
 		Languages,
 		///<summary>42</summary>
 		AutoNotes,
+		///<summary>43</summary>
 		ElectIDs,
+		///<summary>44</summary>
 		Employers,
-		ProviderIdents
+		///<summary>45</summary>
+		ProviderIdents,
+		///<summary>46</summary>
+		ShutDownNow
 	}
 	//<summary></summary>
 	/*public enum ButtonType{
