@@ -31,6 +31,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(302,202);
 			this.Name = "FormMain";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Update File Copier";
 			this.Load += new System.EventHandler(this.FormMain_Load);
 			this.ResumeLayout(false);

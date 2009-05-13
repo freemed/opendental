@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using OpenDentBusiness;
 using System.Windows.Forms;
 using CodeBase;
@@ -70,22 +71,32 @@ namespace OpenDental {
 					string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
 					//look at the manifest to see if it's the version we need
 					string manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
-					if(manifestVersion==currentVersion.ToString(3)) {
+					if(manifestVersion==storedVersion.ToString(3)) {
 						//manifest version matches
-						if(MessageBox.Show(Lan.g("Prefs","Workstation version will now be updated to ")+manifestVersion,"",MessageBoxButtons.OKCancel)
-							!=DialogResult.OK) {//they don't want to update for some reason.
+						if(MessageBox.Show(Lan.g("Prefs","Files will now be copied.")+"\r\n"
+							+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)+"\r\n"
+							+Lan.g("Prefs","to ")+storedVersion.ToString(3),
+							"",MessageBoxButtons.OKCancel)
+							!=DialogResult.OK)//they don't want to update for some reason.
+						{
 							Application.Exit();
 							return false;
 						}
 						//copy UpdateFileCopier.exe to this directory
-
-
+						File.Copy(ODFileUtils.CombinePaths(folderUpdate,"UpdateFileCopier.exe"),//source
+							ODFileUtils.CombinePaths(Application.StartupPath,"UpdateFileCopier.exe"),//dest
+							true);//overwrite
+						//wait a moment to make sure the file was copied
+						//FileInfo fi=new FileInfo("");
+						//fi.Length
+						Thread.Sleep(1000);
 						//launch UpdateFileCopier to copy the remaining files to here.
+						Process.Start("UpdateFileCopier.exe");
 					}
 					else {//manifest version is wrong
 						//No point trying the Setup.exe because that's probably wrong too.
 						//Just go straight to downloading and running the Setup.exe.
-						DownloadAndRunSetup();
+						DownloadAndRunSetup(storedVersion,currentVersion);
 					}
 					/*
 					if(File.Exists(setupBinPath)) {
@@ -121,7 +132,7 @@ namespace OpenDental {
 				else{//Not using image path.
 					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
 					//perform program update automatically.
-					DownloadAndRunSetup();
+					DownloadAndRunSetup(storedVersion,currentVersion);
 				}
 				Application.Exit();//always exits, whether launch of setup worked or not
 				return false;
@@ -130,17 +141,23 @@ namespace OpenDental {
 		}
 
 		///<summary>If AtoZ.manifest was wrong, or if user is not using AtoZ, then just download again.  Will use temp dir.  If an appropriate download is not available, it will fail and inform user.</summary>
-		private static void DownloadAndRunSetup() {
+		private static void DownloadAndRunSetup(Version storedVersion,Version currentVersion) {
 			string patchName="Setup.exe";
 			string updateUri=PrefC.GetString("UpdateWebsitePath");
 			string updateCode=PrefC.GetString("UpdateCode");
 			string updateInfoMajor="";
 			string updateInfoMinor="";
 			if(!FormUpdate.ShouldDownloadUpdate(updateUri,updateCode,out updateInfoMajor,out updateInfoMinor)){
-				if(MessageBox.Show(Lan.g("Prefs","Workstation version will now be updated to ")+PrefC.GetString("ProgramVersion"),"",MessageBoxButtons.OKCancel)
-					!=DialogResult.OK) {//they don't want to update for some reason.
-					return;
-				}
+				return;
+			}
+			if(MessageBox.Show(
+				Lan.g("Prefs","Setup file will now be downloaded.")+"\r\n"
+				+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)+"\r\n"
+				+Lan.g("Prefs","to ")+storedVersion.ToString(3),
+				"",MessageBoxButtons.OKCancel)
+				!=DialogResult.OK)//they don't want to update for some reason.
+			{
+				return;
 			}
 			string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
 			FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
