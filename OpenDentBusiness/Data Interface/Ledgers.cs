@@ -221,7 +221,7 @@ namespace OpenDentBusiness{
 						"FROM claimproc cp "+
 						"WHERE cp.PatNum<>0 "+
 						(historic?(" AND ((cp.Status=0 AND cp.ProcDate<=DATE("+asOfDate+")) OR "+
-							"(cp.Status=1 AND cp.DateCP>DATE("+asOfDate+"))) AND cp.DateEntry<=DATE("+asOfDate+") "):" AND cp.Status=0 ")+
+							"(cp.Status=1 AND cp.DateCP>DATE("+asOfDate+"))) AND cp.ProcDate<=DATE("+asOfDate+") "):" AND cp.Status=0 ")+
 							(guarantor==0?"":(" AND cp.PatNum IN "+familyPatNums+" "))+
 						"GROUP BY cp.PatNum) t "+//not received claims.
 				//Update the tempaging table with the insurance estimates for each patient.
