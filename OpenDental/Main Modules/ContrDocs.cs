@@ -1267,9 +1267,9 @@ namespace OpenDental{
 			Document doc = null;
 			try{//Create corresponding image file.
 				doc = imageStore.Import(scannedImage, GetCurrentCategory(), imgType);
-			}catch{
+			}catch(Exception ex){
 				saved=false;
-				MessageBox.Show(Lan.g(this,"Unable to save document."));
+				MessageBox.Show(Lan.g(this,"Unable to save document")+": "+ex.Message);
 			}
 			if(saved){
 				FillDocList(false);//Reload and keep new document selected.
