@@ -203,7 +203,9 @@ namespace OpenDentBusiness{
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
 				+"AND (appointment.AptStatus=1 "//Scheduled
-				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
+				+"OR appointment.AptStatus=4) "//ASAP
+				+"AND appointment.AptDateTime > CURDATE() "//early this morning
+				+") "//end of NOT EXISTS
 				+"AND recall.DateDue >= "+POut.PDate(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
 				+"AND recall.IsDisabled = 0 ";
