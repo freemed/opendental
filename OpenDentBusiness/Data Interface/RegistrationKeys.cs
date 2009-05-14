@@ -37,6 +37,9 @@ namespace OpenDentBusiness {
 				keys[i].DateDisabled				=PIn.PDate(table.Rows[i][5].ToString());
 				keys[i].DateEnded   				=PIn.PDate(table.Rows[i][6].ToString());
 				keys[i].IsForeign   				=PIn.PBool(table.Rows[i][7].ToString());
+				keys[i].UsesServerVersion		=PIn.PBool(table.Rows[i][8].ToString());
+				keys[i].IsFreeVersion		    =PIn.PBool(table.Rows[i][9].ToString());
+				keys[i].IsOnlyForTesting		=PIn.PBool(table.Rows[i][10].ToString());
 			}
 			return keys;
 		}
@@ -55,6 +58,9 @@ namespace OpenDentBusiness {
 				+",DateDisabled="+POut.PDate(registrationKey.DateDisabled)+" "
 				+",DateEnded="+POut.PDate(registrationKey.DateEnded)+" "
 				+",IsForeign='"+POut.PBool(registrationKey.IsForeign)+"' "
+				+",UsesServerVersion='"+POut.PBool(registrationKey.UsesServerVersion)+"' "
+				+",IsFreeVersion='"+POut.PBool(registrationKey.IsFreeVersion)+"' "
+				+",IsOnlyForTesting='"+POut.PBool(registrationKey.IsOnlyForTesting)+"' "
 				+" WHERE RegistrationKeyNum='"+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
@@ -89,14 +95,17 @@ namespace OpenDentBusiness {
 				}
 			} while(KeyIsInUse(registrationKey.RegKey));
 			string command="INSERT INTO registrationkey (PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
-				+"IsForeign) VALUES ("
+				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting) VALUES ("
 				+"'"+POut.PInt(registrationKey.PatNum)+"',"
 				+"'"+POut.PString(registrationKey.RegKey)+"',"
 				+"'"+POut.PString(registrationKey.Note)+"',"
 				+POut.PDate(registrationKey.DateStarted)+","
 				+POut.PDate(registrationKey.DateDisabled)+","
 				+POut.PDate(registrationKey.DateEnded)+","
-				+"'"+POut.PBool(registrationKey.IsForeign)+"')";
+				+"'"+POut.PBool(registrationKey.IsForeign)+"',"
+				+"'"+POut.PBool(registrationKey.UsesServerVersion)+"',"
+				+"'"+POut.PBool(registrationKey.IsFreeVersion)+"',"
+				+"'"+POut.PBool(registrationKey.IsOnlyForTesting)+"')";
 			Db.NonQ(command);
 		}
 
@@ -121,7 +130,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary></Summary>
-		public static DataTable GetAll() {
+		public static DataTable GetAllWithoutCharges() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
@@ -146,7 +155,9 @@ namespace OpenDentBusiness {
 				FROM registrationkey
 				LEFT JOIN patient ON registrationkey.PatNum=patient.PatNum
 				WHERE DateDisabled='0001-01-01'
-				AND DateEnded='0001-01-01';
+				AND DateEnded='0001-01-01'
+				AND IsFreeVersion=0 
+				AND IsOnlyForTesting=0;
 				/*Set indicators on keys with missing repeatcharges*/
 				UPDATE tempRegKeys
 				SET IsMissing=1

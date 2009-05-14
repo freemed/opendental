@@ -338,6 +338,11 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE registrationkey ADD UsesServerVersion tinyint NOT NULL";
 					Db.NonQ(command);
+					command="ALTER TABLE registrationkey ADD IsFreeVersion tinyint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE registrationkey ADD IsOnlyForTesting tinyint NOT NULL";
+					Db.NonQ(command);
+
 
 
 

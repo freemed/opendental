@@ -21,6 +21,12 @@ namespace OpenDentBusiness {
 		public DateTime DateEnded;
 		///<summary>This is assigned automatically based on whether the registration key is a US version vs. a foreign version.  The foreign version is not able to unlock the procedure codes.  There are muliple layers of safeguards in place.</summary>
 		public bool IsForeign;
+		///<summary>True if this customer uses the server version of OD.  They will end up with a different download.</summary>
+		public bool UsesServerVersion;
+		///<summary>We have given this customer a free version.  Typically in India.</summary>
+		public bool IsFreeVersion;
+		///<summary>This customer is not using the software with live patient data, but only for testing and development purposes.</summary>
+		public bool IsOnlyForTesting;
 
 		public RegistrationKey Copy(){
 			return (RegistrationKey)this.MemberwiseClone();

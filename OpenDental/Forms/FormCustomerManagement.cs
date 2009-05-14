@@ -123,7 +123,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			table=RegistrationKeys.GetAll();
+			table=RegistrationKeys.GetAllWithoutCharges();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Family",160);
