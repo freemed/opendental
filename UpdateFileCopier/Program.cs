@@ -9,10 +9,15 @@ namespace UpdateFileCopier {
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main() {
+		static void Main(string[] arguments) {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FormMain());
+			if(arguments.Length==2) {
+				Application.Run(new FormMain(arguments[0],arguments[1]));
+			}
+			else {//just for rare debugging situations
+				Application.Run(new FormMain(@"C:\OpenDentImages\UpdateFiles","0"));
+			}
 		}
 	}
 }

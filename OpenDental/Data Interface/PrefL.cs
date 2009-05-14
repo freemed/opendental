@@ -74,8 +74,8 @@ namespace OpenDental {
 					if(manifestVersion==storedVersion.ToString(3)) {
 						//manifest version matches
 						if(MessageBox.Show(Lan.g("Prefs","Files will now be copied.")+"\r\n"
-							+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)+"\r\n"
-							+Lan.g("Prefs","to ")+storedVersion.ToString(3),
+							+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)
+							+Lan.g("Prefs"," to ")+storedVersion.ToString(3),
 							"",MessageBoxButtons.OKCancel)
 							!=DialogResult.OK)//they don't want to update for some reason.
 						{
@@ -91,7 +91,12 @@ namespace OpenDental {
 						//fi.Length
 						Thread.Sleep(1000);
 						//launch UpdateFileCopier to copy the remaining files to here.
-						Process.Start("UpdateFileCopier.exe");
+						int processId=Process.GetCurrentProcess().Id;
+						//MessageBox.Show("processId: "+processId.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
+						//bool hasExited=Process.GetProcessById(processId).HasExited;
+						//MessageBox.Show("hasExited: "+hasExited.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
+						Process.Start("UpdateFileCopier.exe","\""+folderUpdate+"\""//pass the source directory to the file copier.
+							+" "+processId.ToString());//and the processId of Open Dental.
 					}
 					else {//manifest version is wrong
 						//No point trying the Setup.exe because that's probably wrong too.
@@ -152,8 +157,8 @@ namespace OpenDental {
 			}
 			if(MessageBox.Show(
 				Lan.g("Prefs","Setup file will now be downloaded.")+"\r\n"
-				+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)+"\r\n"
-				+Lan.g("Prefs","to ")+storedVersion.ToString(3),
+				+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)
+				+Lan.g("Prefs"," to ")+storedVersion.ToString(3),
 				"",MessageBoxButtons.OKCancel)
 				!=DialogResult.OK)//they don't want to update for some reason.
 			{
