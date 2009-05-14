@@ -336,8 +336,8 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE computer ADD LastHeartBeat datetime NOT NULL default '0001-01-01'";
 					Db.NonQ(command);
-
-
+					command="ALTER TABLE registrationkey ADD UsesServerVersion tinyint NOT NULL";
+					Db.NonQ(command);
 
 
 
