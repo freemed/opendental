@@ -934,7 +934,7 @@ namespace OpenDental{
 				}
 			}
 			else {//not on a fee: Edit code instead
-				FormProcCodeEdit FormPCE=new FormProcCodeEdit(ProcedureCodes.GetProcCode(codeNum));
+				FormProcCodeEdit FormPCE=new FormProcCodeEdit(ProcedureCodes.GetProcCodeFromDb(codeNum));
 				FormPCE.IsNew=false;
 				FormPCE.ShowDialog();
 				if(FormPCE.DialogResult==DialogResult.OK) {

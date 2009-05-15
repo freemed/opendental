@@ -181,6 +181,22 @@ namespace OpenDentBusiness{
 			return new ProcedureCode();
 		}
 
+		///<summary>Gets code from db to avoid having to constantly refresh in FormProcCodes</summary>
+		public static ProcedureCode GetProcCodeFromDb(int codeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ProcedureCode>(MethodBase.GetCurrentMethod(),codeNum);
+			}
+			if(codeNum==0) {
+				return new ProcedureCode();
+			}
+			string command="SELECT * FROM procedurecode WHERE CodeNum='"+POut.PInt(codeNum)+"'";
+			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				return new ProcedureCode();
+			}
+			return TableToList(table)[0];
+		}
+
 		///<summary>Supply the human readable proc code such as D####</summary>
 		public static int GetCodeNum(string myCode){
 			//No need to check RemotingRole; no call to db.
