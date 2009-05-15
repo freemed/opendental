@@ -533,6 +533,7 @@ namespace OpenDentBusiness{
 			Recall matchingRecall;
 			Recall recallNew;
 			DateTime prevDateProphy=DateTime.MinValue;
+			DateTime dateProphyTesting;
 			for(int i=0;i<typeListActive.Count;i++) {
 				if(PrefC.GetInt("RecallTypeSpecialProphy")!=typeListActive[i].RecallTypeNum
 					&& PrefC.GetInt("RecallTypeSpecialPerio")!=typeListActive[i].RecallTypeNum) 
@@ -541,7 +542,12 @@ namespace OpenDentBusiness{
 				}
 				for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
 					if(tableDates.Rows[d]["RecallTypeNum"].ToString()==typeListActive[i].RecallTypeNum.ToString()) {
-						prevDateProphy=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
+						dateProphyTesting=PIn.PDate(tableDates.Rows[d]["_procDate"].ToString());
+						//but patient could have both perio and prophy.
+						//So must test to see if the date is newer
+						if(dateProphyTesting>prevDateProphy) {
+							prevDateProphy=dateProphyTesting;
+						}
 						break;
 					}
 				}
