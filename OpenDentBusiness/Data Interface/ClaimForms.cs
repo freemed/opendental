@@ -181,6 +181,19 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		///<summary>Returns the claim form specified by the given claimFormNum</summary>
+		public static ClaimForm GetClaimFormByUniqueId(string uniqueId) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].UniqueID==uniqueId) {
+					return ListLong[i];
+				}
+			}
+			//MessageBox.Show("Error. Could not locate Claim Form.");
+			return null;
+		}
+
+
 		///<summary>Returns number of insplans affected.</summary>
 		public static int Reassign(int oldClaimFormNum, int newClaimFormNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

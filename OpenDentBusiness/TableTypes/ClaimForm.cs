@@ -6,12 +6,12 @@ namespace OpenDentBusiness{
 	///<summary>Stores the information for printing different types of claim forms.  Each claimform has many claimformitems attached to it, one for each field on the claimform.  This table has nothing to do with the actual claims.  It just describes how to print them.</summary>
 	public class ClaimForm{
 		///<summary>Primary key.</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
 		public int ClaimFormNum;
 		///<summary>eg. ADA2002 or CA Medicaid</summary>
 		public string Description;
 		///<summary>If true, then it will not be displayed in various claim form lists as a choice.</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
 		public bool IsHidden;
 		///<summary>Valid font name for all text on the form.</summary>
 		public string FontName="";
@@ -22,10 +22,10 @@ namespace OpenDentBusiness{
 		///<summary>Set to false to not print images.  This removes the background for printing on premade forms.</summary>
 		public bool PrintImages;
 		///<summary>Shifts all items by x/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
 		public int OffsetX;
 		///<summary>Shifts all items by y/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
-		[XmlIgnore]
+		//[XmlIgnore]
 		public int OffsetY;
 		///<summary>This is not a database column.  It is an array of all claimformItems that are attached to this ClaimForm.</summary>
 		public ClaimFormItem[] Items;
