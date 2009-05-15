@@ -1422,6 +1422,41 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string RecallDuplicatesWarn(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			if(RecallTypes.PerioType<1 || RecallTypes.ProphyType<1) {
+				log+=Lans.g("FormDatabaseMaintenance","Warning!  Recall types not set up properly.")+"\r\n";
+				return log;
+			}
+			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
+				+"AND (recall.RecallTypeNum="+POut.PInt(RecallTypes.PerioType)+" "
+				+"OR recall.RecallTypeNum="+POut.PInt(RecallTypes.ProphyType)+") "
+				+"GROUP BY patient.PatNum HAVING countDups>1";
+			table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Recalls checked for duplicates.")+"\r\n";
+				}
+				return log;
+			}
+			string patNames="";
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(i>15) {
+					break;
+				}
+				if(i>0) {
+					patNames+=", ";
+				}
+				patNames+=table.Rows[i][0].ToString()+" "+table.Rows[i][1].ToString();
+			}
+			log+=Lans.g("FormDatabaseMaintenance","Warning!  Number of patients with duplicate recalls: ")+table.Rows.Count.ToString()+".  "
+				+Lans.g("FormDatabaseMaintenance","including: ")+patNames+"\r\n";
+			return log;
+		}
+
 		public static string RecallTriggerDeleteBadCodeNum(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);

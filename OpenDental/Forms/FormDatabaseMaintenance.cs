@@ -313,6 +313,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProviderHiddenWithClaimPayments(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.RecallDuplicatesWarn(verbose);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.RecallTriggerDeleteBadCodeNum(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.SchedulesDeleteShort(verbose);
