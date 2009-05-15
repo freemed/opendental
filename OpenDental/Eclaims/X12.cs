@@ -494,7 +494,7 @@ namespace OpenDental.Eclaims
 						+"*"//NM106: not used
 						+"*"//NM107: suffix. Not present in Open Dental yet.
 						+"MI*"//NM108: MI=MemberID
-						+Sout(insPlan.SubscriberID,80)+"~");//NM109: Subscriber ID
+						+Sout(insPlan.SubscriberID.Replace("-",""),80)+"~");//NM109: Subscriber ID
 					//At the request of WebMD, we are including N3,N4,and DMG even if patient is not subscriber.
 					//This does not make the transaction non-compliant, and they find it useful.
 					//if(claimAr[3,i].ToString()==claimAr[2,i].ToString()){//if patient is the subscriber
@@ -609,7 +609,7 @@ namespace OpenDental.Eclaims
 					List <PatPlan> patPlans=PatPlans.Refresh(patient.PatNum);
 					for(int p=0;p<patPlans.Count;p++){
 						if(patPlans[p].PlanNum==claim.PlanNum){
-							patID=patPlans[p].PatID;
+							patID=patPlans[p].PatID.Replace("-","");
 						}
 					}
 					if(isMedical){
