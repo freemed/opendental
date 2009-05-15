@@ -374,25 +374,26 @@ namespace OpenDental{
 			}
 			Queries.CurReport=new ReportOld();
 			Queries.CurReport.Query=@"SET @pos=0;
-SELECT @pos:=@pos+1 patCount,DateFirstVisit,patient.LName,patient.FName,
+SELECT @pos:=@pos+1 patCount,dateFirstProc,patient.LName,patient.FName,
 CONCAT(referral.LName,IF(referral.FName='','',','),referral.FName) refname,SUM(procedurelog.ProcFee) $HowMuch";
 			if(checkAddress.Checked){
 				Queries.CurReport.Query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip";
 			}
-			Queries.CurReport.Query+=@" FROM patient
-LEFT JOIN procedurelog ON patient.PatNum=procedurelog.PatNum
-AND procedurelog.ProcStatus=2
-LEFT JOIN refattach ON patient.PatNum=refattach.PatNum
-AND refattach.IsFrom=1
-LEFT JOIN referral ON referral.ReferralNum=refattach.ReferralNum
-WHERE DateFirstVisit >= "+POut.PDate(dateFrom)+" "
-				+"AND DateFirstVisit <= "+POut.PDate(dateTo)+" "
+			Queries.CurReport.Query+=@" FROM
+				(SELECT PatNum, MIN(ProcDate) dateFirstProc FROM procedurelog
+				WHERE ProcStatus=2 GROUP BY PatNum
+				HAVING dateFirstProc >= "+POut.PDate(dateFrom)+" "
+				+"AND dateFirstProc <= "+POut.PDate(dateTo)+" ) table1 "
+				+@"INNER JOIN patient ON table1.PatNum=patient.PatNum 
+				LEFT JOIN procedurelog ON patient.PatNum=procedurelog.PatNum AND procedurelog.ProcStatus=2
+				LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1
+				LEFT JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
 				+whereProv;
 			Queries.CurReport.Query+="GROUP BY patient.PatNum ";
 			if(checkProd.Checked){
 				Queries.CurReport.Query+="HAVING $HowMuch > 0 ";
 			}
-			Queries.CurReport.Query+="ORDER BY DateFirstVisit,patient.LName,patient.FName";
+			Queries.CurReport.Query+="ORDER BY dateFirstProc,patient.LName,patient.FName";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
