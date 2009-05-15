@@ -660,17 +660,16 @@ namespace OpenDental{
         }
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			#if !DEBUG
-			if(RecallCur.DatePrevious.Year>1880){
-				MsgBox.Show(this,"This recall can not be deleted because the Previous Date has a value.  You should use the Disabled checkBox instead.");
-				return;
-			}
-			#endif
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete this recall?")){
+			if(RecallCur.DatePrevious.Year>1880){
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This recall should not normally be deleted because the Previous Date has a value.  You should use the Disabled checkBox instead.  But if you are just deleting a duplicate, it's ok to continue.  Continue?")) {
+					return;
+				}
+			}
+			else if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this recall?")) {
 				return;
 			}
 			Recalls.Delete(RecallCur);
@@ -691,10 +690,6 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			//if(IsNew && textDateDue.Text==""){
-			//	MsgBox.Show(this,"Please enter a due date.");
-			//	return;
-			//}
 			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
 			RecallCur.DateDue=PIn.PDate(textDateDue.Text);

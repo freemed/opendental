@@ -105,6 +105,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Recalls for Patient";
 			this.Load += new System.EventHandler(this.FormRecallsPat_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRecallsPat_FormClosing);
 			this.ResumeLayout(false);
 
 		}

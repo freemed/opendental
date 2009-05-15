@@ -162,8 +162,26 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void butClose_Click(object sender,EventArgs e) {
+		private void butClose_Click(object sender,EventArgs e) {	
 			Close();
+		}
+
+		private void FormRecallsPat_FormClosing(object sender,FormClosingEventArgs e) {
+			//check for duplicates that might cause a malfunction.
+			int prophyCount=0;
+			for(int i=0;i<RecallList.Count;i++) {
+				if(RecallTypes.ProphyType==RecallList[i].RecallTypeNum) {
+					prophyCount++;
+				}
+				if(RecallTypes.PerioType==RecallList[i].RecallTypeNum) {
+					prophyCount++;
+				}
+			}
+			if(prophyCount>1) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Multiple prophy and/or perio recalls detected.  A patient should have only one prophy or perio recall, and the calculations will not work correctly otherwise.  Continue anyway?")){
+					e.Cancel=true;
+				}
+			}
 		}
 
 		
