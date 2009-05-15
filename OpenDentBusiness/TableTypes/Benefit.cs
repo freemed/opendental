@@ -6,13 +6,13 @@ namespace OpenDentBusiness{
 	/// Here are examples of typical usage which parallel X12 usage.<br/>
 	/// Example fields shown in this order:<br/>
 	/// CovCat, ProcCode(- indicates blank), BenefitType, Percent, MonetaryAmt, TimePeriod, QuantityQualifier, Quantity<br/>
-	/// Annual Max $1000: Db,-,Limitations,0,1000,CalendarYear,None,0<br/>
+	/// Annual Max $1000: General,-,Limitations,0,1000,CalendarYear,None,0<br/>
 	/// Restorative 80%: Restorative,-,Percentage,80,0,CalendarYear,None,0<br/>
-	/// $50 deductible: Db,-,Deductible,0,50,CalendarYear,None,0<br/>
+	/// $50 deductible: General,-,Deductible,0,50,CalendarYear,None,0<br/>
 	/// Deductible waived on preventive: Preventive,-,Deductible,0,0,CalendarYear,None,0<br/>
-	/// 1 pano every 5 years: Db(ignored),D0330,Limitations,0,0,Years,Years,5<br/>
+	/// 1 pano every 5 years: General(ignored),D0330,Limitations,0,0,Years,Years,5<br/>
 	/// 2 exams per year: Preventive(or Diagnostic),-,Limitations,0,0,BenefitYear,NumberOfServices,2<br/>
-	/// Fluoride limit 18yo: Db(ignored), D1204, Limitations, 0, 0, CalendarYear(or None), AgeLimit, 18 (might require a second identical entry for D1205)<br/>
+	/// Fluoride limit 18yo: General(ignored), D1204, Limitations, 0, 0, CalendarYear(or None), AgeLimit, 18 (might require a second identical entry for D1205)<br/>
 	/// 4BW every 6 months: Db(ignored), D0274, Limitations, 0, 0, None, Months, 6.
 	/// The text above might be difficult to read.  We are trying to improve the white spacing.</summary>
 	public class Benefit:IComparable {

@@ -162,7 +162,6 @@ SELECT benefit.PlanNum, benefit.MonetaryAmt
 FROM benefit, covcat
 WHERE covcat.CovCatNum = benefit.CovCatNum
 AND benefit.BenefitType = 5 /* limitation */
-AND benefit.TimePeriod = 2 /* calendar year */
 AND covcat.EbenefitCat=1
 AND benefit.MonetaryAmt <> 0
 GROUP BY benefit.PlanNum
