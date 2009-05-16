@@ -78,8 +78,10 @@ namespace OpenDentBusiness{
 			}
 			//Create a temporary table to calculate aging into temporarily, so that the patient table is 
 			//not being changed by multiple threads if more than one user is calculating aging.
-			//Since we are recreating a temporary table with the same name as last time aging was run,
-			//the old temporary table gets wiped out.
+			//Since a temporary table is dropped automatically only when the connection is closed,
+			//and since we use connection pooling, drop them before using.
+			command="DROP TEMPORARY TABLE IF EXISTS tempaging, tempodagingtrans";
+			Db.NonQ(command);
 			command="CREATE TEMPORARY TABLE tempaging ("+
 				"PatNum INT DEFAULT 0,"+
 				"Guarantor INT DEFAULT 0,"+
