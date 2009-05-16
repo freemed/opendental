@@ -314,7 +314,7 @@ namespace OpenDental{
 			this.listType.FormattingEnabled = true;
 			this.listType.Location = new System.Drawing.Point(364,312);
 			this.listType.Name = "listType";
-			this.listType.Size = new System.Drawing.Size(99,30);
+			this.listType.Size = new System.Drawing.Size(99,17);
 			this.listType.TabIndex = 20;
 			// 
 			// label8
@@ -399,7 +399,7 @@ namespace OpenDental{
 
 		private void FormConfig_Load(object sender, System.EventArgs e) {
 			listType.Items.Add("MySql");
-			listType.Items.Add("Oracle");
+			//listType.Items.Add("Oracle");
 			listType.SelectedIndex=0;
 			GetConfig();
 			FillCombosComputerNames();
@@ -582,7 +582,7 @@ namespace OpenDental{
 					listType.SelectedIndex=0;
 				}
 				DataConnection.DBtype=DatabaseType.MySql;	
-				if(nav!=null && nav.Value=="Oracle" && listType.Items.Count>0){
+				if(nav!=null && nav.Value=="Oracle" && listType.Items.Count>1){
 					listType.SelectedIndex=1;
 					DataConnection.DBtype=DatabaseType.Oracle;
 				}
@@ -679,7 +679,7 @@ namespace OpenDental{
 				try {
 					DataConnection.DBtype=DatabaseType.MySql;
 					if(listType.SelectedIndex==1) {
-						DataConnection.DBtype=DatabaseType.Oracle;
+						//DataConnection.DBtype=DatabaseType.Oracle;
 					}
 					DataSettings.DbType = DataConnection.DBtype;
 					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
