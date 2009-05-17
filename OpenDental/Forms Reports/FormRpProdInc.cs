@@ -704,24 +704,24 @@ namespace OpenDental{
 			}
 			Queries.CurReport.Query+="SELECT "
 				+"paysplit.DatePay,"
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+				+"GROUP_CONCAT(DISTINCT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI)),"
 				+"definition.ItemName,"
-				+"provider.Abbr,"
+				+"GROUP_CONCAT(DISTINCT provider.Abbr),"
 				+"'0',"
 				+"'0',"
 				+"'0',"
 				+"SUM(paysplit.SplitAmt),"
 				+"'0',"
 				+"payment.PayNum "
-				+"FROM payment,patient,provider,paysplit,definition "
-				+"WHERE payment.PayNum=paysplit.PayNum "
-				+"AND patient.PatNum=paysplit.PatNum "
+				+"FROM paysplit "//can't do cartesian join because provider income transfers would be excluded
+				+"LEFT JOIN payment ON payment.PayNum=paysplit.PayNum "
+				+"LEFT JOIN patient ON patient.PatNum=paysplit.PatNum "
+				+"LEFT JOIN provider ON provider.ProvNum=paysplit.ProvNum "
+				+"LEFT JOIN definition ON payment.PayType=definition.DefNum "
 				//notice that patient and prov are accurate, but if more than one, then only one shows
-				+"AND provider.ProvNum=paysplit.ProvNum "
-				+"AND payment.PayType=definition.DefNum "
-				+whereProv
-				+"AND payment.PayDate >= "+POut.PDate(dateFrom)+" "
+				+"WHERE payment.PayDate >= "+POut.PDate(dateFrom)+" "
 				+"AND payment.PayDate <= "+POut.PDate(dateTo)+" "
+				+whereProv
 				+"GROUP BY payment.PayNum"
 				+") UNION (";
 			//Insurance Income----------------------------------------------------------------------------
