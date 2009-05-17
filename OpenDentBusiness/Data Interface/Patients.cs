@@ -1307,7 +1307,7 @@ namespace OpenDentBusiness{
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
 			}
-			command+="(BalTotal - InsEst > '"+excludeLessThan.ToString()+"'"
+			command+="(BalTotal - InsEst > '"+(excludeLessThan+.005).ToString()+"'"//add half a penny for rounding error
 				+" OR PayPlanDue > 0";
 			if(!excludeNeg){
 				command+=" OR BalTotal - InsEst < '0')";
