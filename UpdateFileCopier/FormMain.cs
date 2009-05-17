@@ -42,6 +42,9 @@ namespace UpdateFileCopier {
 				if(appfiles[i].Name=="UpdateFileCopier.exe") {
 					continue;//skip this one.
 				}
+				if(appfiles[i].Name=="OpenDentalServerConfig.xml") {
+					continue;//skip also
+				}
 				File.Copy(appfiles[i].FullName,Path.Combine(startupFolder,appfiles[i].Name),true);
 			}
 			label1.Text="brief pause";
