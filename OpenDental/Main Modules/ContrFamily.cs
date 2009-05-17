@@ -1025,7 +1025,11 @@ namespace OpenDental{
 			ODGridCell cell;
 			for(int i=0;i<recallListPat.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(RecallTypes.GetDescription(recallListPat[i].RecallTypeNum));
+				string cellStr=RecallTypes.GetDescription(recallListPat[i].RecallTypeNum);
+				if(recallListPat[i].IsDisabled) {
+					cellStr+=" - "+Lan.g(this,"disabled");
+				}
+				row.Cells.Add(cellStr);
 				if(recallListPat[i].DatePrevious.Year<1880){
 					row.Cells.Add("");
 				}
