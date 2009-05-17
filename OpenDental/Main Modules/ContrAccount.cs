@@ -3173,17 +3173,14 @@ namespace OpenDental {
 			stmt.SinglePatient=false;
 			stmt.Intermingled=false;
 			stmt.DateRangeFrom=DateTime.MinValue;
-			if (PrefC.GetBool("IntermingleFamilyDefault"))
-			{
+			if (PrefC.GetBool("IntermingleFamilyDefault")){
 				stmt.Intermingled = true;
 			}
-			if (PrefC.GetBool("FuchsOptionsOn"))
-			{
+			if (PrefC.GetBool("FuchsOptionsOn")){
 				stmt.DateRangeFrom = PIn.PDate(DateTime.Today.AddDays(-45).ToShortDateString());
 				stmt.DateRangeTo = PIn.PDate(DateTime.Today.ToShortDateString());
 			} 
-			else
-			{
+			else{
 				if (textDateStart.errorProvider1.GetError(textDateStart) == "") {
 					if (textDateStart.Text != "") {
 						stmt.DateRangeFrom = PIn.PDate(textDateStart.Text);
@@ -3330,6 +3327,10 @@ namespace OpenDental {
 				#if DEBUG
 					//don't bother to check valid path because it's just debug.
 					string imgPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
+					DateTime now=DateTime.Now;
+					while(DateTime.Now<now.AddSeconds(5) && !File.Exists(imgPath)) {//wait up to 5 seconds.
+						Application.DoEvents();
+					}
 					Process.Start(imgPath);
 				#else
 					FormST.PrintStatement(stmt,false,dataSet,FamCur,PatCur);

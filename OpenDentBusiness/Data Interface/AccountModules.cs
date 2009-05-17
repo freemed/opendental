@@ -1315,7 +1315,7 @@ namespace OpenDentBusiness {
 			}
 			else{
 				for(int p=0;p<rowsByPat.Length;p++){
-					if(p>0 && isForStatement && fam.ListPats[p].PatStatus==PatientStatus.Deceased && fam.ListPats[p].EstBalance==0){
+					if(p>0 && isForStatement && fam.ListPats[p].PatStatus!=PatientStatus.Patient && fam.ListPats[p].EstBalance==0 ){
 						continue;
 					}
 					DataTable tablep=new DataTable("account"+fam.ListPats[p].PatNum.ToString());
