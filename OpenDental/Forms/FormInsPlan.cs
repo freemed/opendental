@@ -1671,6 +1671,7 @@ namespace OpenDental{
 			textGroupName.Text=PlanCur.GroupName;
 			textGroupNum.Text=PlanCur.GroupNum;
 			textDivisionNo.Text=PlanCur.DivisionNo;//only visible in Canada
+			textTrojanID.Text=PlanCur.TrojanID;
 			comboPlanType.Items.Clear();
 			comboPlanType.Items.Add(Lan.g(this,"Category Percentage"));
 			if(PlanCur.PlanType=="")
@@ -1923,6 +1924,7 @@ namespace OpenDental{
 			PlanCur.ClaimFormNum   =FormIP.SelectedPlan.ClaimFormNum;
 			PlanCur.AllowedFeeSched=FormIP.SelectedPlan.AllowedFeeSched;
 			PlanCur.TrojanID       =FormIP.SelectedPlan.TrojanID;
+			PlanCur.FilingCode     =FormIP.SelectedPlan.FilingCode;
 			PlanCur.PlanNote       =FormIP.SelectedPlan.PlanNote;
 			//PlanCur.Update();//updates to the db so that the synch info will show correctly
 			FillFormWithPlanCur();
