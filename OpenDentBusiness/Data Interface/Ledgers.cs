@@ -12,6 +12,21 @@ namespace OpenDentBusiness{
 	///<summary>This does not correspond to any table in the database.  It works with a variety of tables to calculate aging.</summary>
 	public class Ledgers{
 
+		///<summary>This runs aging for all patients.  If using monthly aging, it always just runs the aging as of the last date again.  If using daily aging, it runs it as of today.  This logic used to be in FormAging, but is now centralized.</summary>
+		public static void RunAging() {
+			//No need to check RemotingRole; no call to db.
+			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")) {
+				ComputeAging(0,PrefC.GetDate("DateLastAging"),false);
+			}
+			else {
+				ComputeAging(0,DateTime.Today,false);
+				if(PrefC.GetDate("DateLastAging") != DateTime.Today) {
+					Prefs.UpdateString("DateLastAging",POut.PDate(DateTime.Today,false));
+					//Since this is always called from UI, the above line works fine to keep the prefs cache current.
+				}
+			}
+		}
+
 		///<summary>Computes aging for the family specified. Specify guarantor=0 in order to calculate aging for all families.  
 		///Gets all info from database. 
 		///The aging calculation will use the following rules within each family: 

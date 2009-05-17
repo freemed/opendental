@@ -577,12 +577,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormBillingOptions_Load(object sender, System.EventArgs e) {
-			if(PIn.PDate(PrefC.GetString("DateLastAging")) < DateTime.Today){
-				if(MessageBox.Show(Lan.g(this,"Update aging first?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
-					FormAging FormA=new FormAging();
-					FormA.ShowDialog();
-				}
-			}
 			textLastStatement.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			checkIncludeChanged.Checked=PrefC.GetBool("BillingIncludeChanged");
 			comboAge.Items.Add(Lan.g(this,"Any Balance"));
@@ -805,6 +799,12 @@ namespace OpenDental{
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
+			}
+			Ledgers.RunAging();
+			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily") && PrefC.GetDate("DateLastAging") < DateTime.Today.AddDays(-15)) {
+				MsgBox.Show(this,"Last aging date seems old, so you will now be given a chance to update it.  The billing process will continue whether or not aging gets updated.");
+				FormAging FormA=new FormAging();
+				FormA.ShowDialog();
 			}
 			DateTime lastStatement=PIn.PDate(textLastStatement.Text);
 			string getAge="";

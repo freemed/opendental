@@ -392,16 +392,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(PIn.PDate(PrefC.GetString("DateLastAging")) < DateTime.Today){
-				if(MsgBox.Show(this,true,"You must update aging first.")){//OK
-					FormAging FormA=new FormAging();
-					FormA.ShowDialog();
-				}
-				else{
-					DialogResult=DialogResult.Cancel;
-					return;
-				}
-			}
+			Ledgers.RunAging();
 			if(DefC.Short[(int)DefCat.BillingTypes].Length==0){//highly unlikely that this would happen
 				MsgBox.Show(this,"No billing types have been set up or are visible.");
 				DialogResult=DialogResult.Cancel;
@@ -455,9 +446,7 @@ namespace OpenDental{
 				}
 				int rowsAffected=Adjustments.UndoFinanceCharges(PIn.PDate(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Finance charge adjustments deleted: ")+rowsAffected.ToString());
-				FormAging FormA=new FormAging();
-				FormA.SupressSameDateWarning=true;
-				FormA.ShowDialog();
+				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Finance Charges undo. Date "+textDateUndo.Text);
 				DialogResult=DialogResult.OK;
 			} 
@@ -468,9 +457,7 @@ namespace OpenDental{
 				}
 				int rowsAffected=Adjustments.UndoBillingCharges(PIn.PDate(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Billing charge adjustments deleted: ")+rowsAffected.ToString());
-				FormAging FormA=new FormAging();
-				FormA.SupressSameDateWarning=true;
-				FormA.ShowDialog();
+				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing Charges undo. Date "+textDateUndo.Text);
 				DialogResult=DialogResult.OK;
 			}
@@ -550,9 +537,7 @@ namespace OpenDental{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				MessageBox.Show(Lan.g(this,"Finance Charges Added: ") + rowsAffected.ToString());
-				FormAging FormA = new FormAging();
-				FormA.SupressSameDateWarning = true;
-				FormA.ShowDialog();
+				Ledgers.RunAging();
 				DialogResult = DialogResult.OK;
 			}
 			else if(radioBillingCharge.Checked) {
@@ -565,9 +550,7 @@ namespace OpenDental{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				MessageBox.Show(Lan.g(this,"Billing Charges Added: ") + rowsAffected.ToString());
-				FormAging FormA = new FormAging();
-				FormA.SupressSameDateWarning = true;
-				FormA.ShowDialog();
+				Ledgers.RunAging();
 				DialogResult = DialogResult.OK;
 			}
 		}

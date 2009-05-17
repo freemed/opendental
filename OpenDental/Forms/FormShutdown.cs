@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void butShutdown_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Shutdown this program on all workstations except this one?  Users will be given a 10 second warning to save data.")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Shutdown this program on all workstations except this one?  Users will be given a 15 second warning to save data.")) {
 				return;
 			}
 			//happens outside this form

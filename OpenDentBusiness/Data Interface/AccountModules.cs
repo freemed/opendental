@@ -461,7 +461,7 @@ namespace OpenDentBusiness {
 			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
-			//run aging.  This need serious optimization-------------------------------------------------------
+			//run aging.-------------------------------------------------------
 			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
 				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")),false);
 			}

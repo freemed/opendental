@@ -16,7 +16,6 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDateCalc;
 		private System.Windows.Forms.Label label2;
 		private System.ComponentModel.Container components = null;
-		public bool SupressSameDateWarning;
 
 		///<summary></summary>
 		public FormAging(){
@@ -51,7 +50,7 @@ namespace OpenDental{
 			// 
 			// textDateLast
 			// 
-			this.textDateLast.Location = new System.Drawing.Point(171,136);
+			this.textDateLast.Location = new System.Drawing.Point(173,79);
 			this.textDateLast.Name = "textDateLast";
 			this.textDateLast.ReadOnly = true;
 			this.textDateLast.Size = new System.Drawing.Size(94,20);
@@ -59,7 +58,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(21,140);
+			this.label1.Location = new System.Drawing.Point(23,83);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(146,16);
 			this.label1.TabIndex = 13;
@@ -75,7 +74,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(440,211);
+			this.butCancel.Location = new System.Drawing.Point(440,135);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
@@ -89,7 +88,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(440,177);
+			this.butOK.Location = new System.Drawing.Point(440,101);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -103,20 +102,20 @@ namespace OpenDental{
 			this.textBox1.Location = new System.Drawing.Point(25,12);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(476,114);
+			this.textBox1.Size = new System.Drawing.Size(476,62);
 			this.textBox1.TabIndex = 16;
 			this.textBox1.Text = resources.GetString("textBox1.Text");
 			// 
 			// textDateCalc
 			// 
-			this.textDateCalc.Location = new System.Drawing.Point(171,168);
+			this.textDateCalc.Location = new System.Drawing.Point(173,111);
 			this.textDateCalc.Name = "textDateCalc";
 			this.textDateCalc.Size = new System.Drawing.Size(94,20);
 			this.textDateCalc.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(21,172);
+			this.label2.Location = new System.Drawing.Point(23,115);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(146,16);
 			this.label2.TabIndex = 18;
@@ -127,7 +126,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(532,253);
+			this.ClientSize = new System.Drawing.Size(532,177);
 			this.Controls.Add(this.textDateCalc);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textBox1);
@@ -158,7 +157,12 @@ namespace OpenDental{
 				textDateLast.Text=dateLastAging.ToShortDateString();
 			}
 			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-				textDateCalc.Text=dateLastAging.ToShortDateString();
+				if(dateLastAging < DateTime.Today.AddDays(-15)) {
+					textDateCalc.Text=dateLastAging.AddMonths(1).ToShortDateString();
+				}
+				else {
+					textDateCalc.Text=dateLastAging.ToShortDateString();
+				}
 			}
 			else{
 				textDateCalc.Text=DateTime.Today.ToShortDateString();
@@ -170,11 +174,6 @@ namespace OpenDental{
 				){
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
-			}
-			if(!SupressSameDateWarning && textDateCalc.Text==textDateLast.Text){
-				if(!MsgBox.Show(this,true,"Date is same as previous date.  Continue anyway?")){
-					return;
-				}
 			}
 			Cursor=Cursors.WaitCursor;
 			Ledgers.ComputeAging(0,PIn.PDate(textDateCalc.Text),false);

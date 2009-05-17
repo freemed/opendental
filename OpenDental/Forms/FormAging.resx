@@ -118,11 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>This tool recalculates aging for all patients. 
-
-Depending on the size of your database, it could take up to ten minutes.   It's faster if you run it from your server instead of a workstation.
-
-The results can be viewed in various reports.  Be aware that if you later open a patient's account, the aging for that account will be immediately recalculated.</value>
+    <value>This tool recalculates aging for all patients.  It should not take long.  The results can be viewed in various reports.  Be aware that if you later open a patient's account, the aging for that account will be immediately recalculated.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
