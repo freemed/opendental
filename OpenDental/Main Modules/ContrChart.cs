@@ -265,7 +265,7 @@ namespace OpenDental{
 		private RadioButton radioEntryCn;
 		private CheckBox checkShowCn;
 		private int Chartscrollval;
-		private bool InitializedOnStartup;
+		//private bool InitializedOnStartup;
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -2916,9 +2916,9 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
-			if(InitializedOnStartup) {
-				return;
-			}
+			//if(InitializedOnStartup) {
+			//	return;
+			//}
 			newStatus=ProcStat.TP;
 			//ApptPlanned=new ContrApptSingle();
 			//ApptPlanned.Location=new Point(1,3);

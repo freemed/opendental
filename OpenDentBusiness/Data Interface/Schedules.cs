@@ -413,7 +413,7 @@ namespace OpenDentBusiness{
 			else{
 				return op.ProvDentist;
 			}
-			return 0;//none
+			//return 0;//none
 		}
 
 		///<summary>Clears all blockouts for day.  But then defaults would show.  So adds a "closed" blockout.</summary>

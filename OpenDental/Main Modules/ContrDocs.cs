@@ -151,7 +151,7 @@ namespace OpenDental{
 		DateTime treeDocumentMouseMoveTime=new DateTime(1,1,1);
 		///<summary></summary>
 		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
-		private bool InitializedOnStartup;
+		//private bool InitializedOnStartup;
 		#endregion ManuallyCreatedVariables
 
 		///<summary></summary>
@@ -621,9 +621,9 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
-			if(InitializedOnStartup) {
-				return;
-			}
+			//if(InitializedOnStartup) {
+			//	return;
+			//}
 			MouseDownOrigin=new Point();
 			Lan.C(this, new System.Windows.Forms.Control[] {
 				//this.button1,

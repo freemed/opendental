@@ -136,7 +136,7 @@ namespace OpenDental {
 		private Panel panel2;
 		private Panel panel1;
 		private ToolTip toolTip1;
-		private bool InitializedOnStartup;
+		//private bool InitializedOnStartup;
 
 		#region UserVariables
 		///<summary>This holds nearly all of the data needed for display.  It is retrieved in one call to the database.</summary>
@@ -1586,9 +1586,9 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void InitializeOnStartup() {
-			if(InitializedOnStartup && !ViewingInRecall) {
-				return;
-			}
+			//if(InitializedOnStartup && !ViewingInRecall) {
+			//	return;
+			//}
 			//can't use Lan.F(this);
 			Lan.C(this,new Control[]
 				{

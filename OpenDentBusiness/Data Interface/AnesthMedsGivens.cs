@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 	public class AnesthMedsGivens {
 
 		//public MySqlCommand cmd;
-		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
+		//<summary>This is the connection that is used by the data adapter for all queries.</summary>
 		private static MySqlConnection con;
 
 		///<summary>Gets those Anesthetic Medications tied to a unique AnestheticRecordNum from the database</summary>
@@ -94,12 +94,13 @@ namespace OpenDentBusiness{
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patnum);
 			}
 			MySqlCommand command2 = new MySqlCommand();
+			con=new MySqlConnection();
 			con.Open();
 			command2.CommandText = "SELECT Max(AnestheticRecordNum)  FROM opendental_test.anestheticrecord a,opendental_test.Patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
 			command2.Connection = con;
 			int supplierID = Convert.ToInt32(command2.ExecuteScalar());
 			return supplierID;
-			con.Close();
+			//con.Close();
 		}
 
 		public static DataTable RefreshCache(int anestheticRecordNum) {

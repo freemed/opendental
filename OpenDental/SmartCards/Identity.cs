@@ -5,17 +5,17 @@ using System.Drawing;
 
 namespace OpenDental.SmartCards {
 	public class Identity {
-		private string firstName;
+		private string firstName="";
 		public string FirstName {
 			get { return firstName; }
 		}
 
-		private string lastName;
+		private string lastName="";
 		public string LastName {
 			get { return lastName; }
 		}
 
-		private Image picture;
+		private Image picture=null;
 		public Image Picture {
 			get { return picture; }
 		}

@@ -138,7 +138,7 @@ namespace OpenDental{
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
 		//private ContrApptSingle PinApptSingle;
-		private bool InitializedOnStartup;
+		//private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -1279,9 +1279,9 @@ namespace OpenDental{
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
-			if(InitializedOnStartup) {
-				return;
-			}
+			//if(InitializedOnStartup) {
+			//	return;
+			//}
 			//if(DefC.DefShortIsNull) {
 			//	Defs.RefreshCache();//So that when RefreshPeriod, LayoutPanels, ComputeColWidth gets called.
 			LayoutPanels();

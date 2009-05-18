@@ -196,6 +196,7 @@ namespace OpenDental {
 		public PrintWindowL printWindow;
 
 		public FormAnestheticRecord(Patient patCur,AnestheticData AnestheticDataCur) {
+			components=new System.ComponentModel.Container();
 			//
 			// Required for Windows Form Designer support
 			//

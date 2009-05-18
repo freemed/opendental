@@ -27,7 +27,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private bool localChanged;
+		//private bool localChanged;
 		private System.Drawing.Printing.PrintDocument pd2;
 		//private bool bodyChanged;
 		private OpenDental.UI.Button butPrint;
@@ -688,9 +688,9 @@ namespace OpenDental{
 		}
 
 		private void FormLetters_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(localChanged){
-				DataValid.SetInvalid(InvalidType.Letters);
-			}
+			//if(localChanged){
+			//	DataValid.SetInvalid(InvalidType.Letters);
+			//}
 		}
 
 		

@@ -2123,7 +2123,7 @@ namespace OpenDental{
 			}
 			countyOriginal=textCounty.Text;//the original text is preserved when using up and down arrows
 			listCounties.Items.Clear();
-			Counties.Refresh(textCounty.Text);
+			CountiesList=Counties.Refresh(textCounty.Text);
 			//similarSchools=
 				//Carriers.GetSimilarNames(textCounty.Text);
 			for(int i=0;i<CountiesList.Length;i++){

@@ -13,8 +13,8 @@ namespace OpenDentBusiness{
 		///<summary>List of all anesthetic records for the current patient.</summary>
 		public static AnesthMedsInventoryAdj[] List;
 
-		///<summary>This data adapter is used for all queries to the database.</summary>
-		private MySqlDataAdapter da;
+		//<summary>This data adapter is used for all queries to the database.</summary>
+		//private MySqlDataAdapter da;
 		//<summary>Stores the string of the command that will be sent to the database.</summary>
 		//public MySqlCommand cmd;
 		///<summary>This is the connection that is used by the data adapter for all queries.</summary>
@@ -111,12 +111,13 @@ namespace OpenDentBusiness{
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticMedNum);
 			}
 			MySqlCommand command2 = new MySqlCommand();
+			con=new MySqlConnection();
 			con.Open();
 			command2.CommandText = "SELECT AdjustNum from anesthmedsinventoryadj WHERE AnestheticMedNum = '" + anestheticMedNum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
 			command2.Connection = con;
 			int adjustNum = Convert.ToInt32(command2.ExecuteScalar());
 			return adjustNum;
-			con.Close();
+			//con.Close();
 		}
 
 

@@ -39,6 +39,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public FormEClinicalWorks() {
+			components=new System.ComponentModel.Container();
 			//
 			// Required for Windows Form Designer support
 			//

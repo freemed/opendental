@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 			#endif
 				DtoGetTable dto=new DtoGetTable();
 				dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-				dto.Parameters=DtoObject.ConstructArray(parameters);
+				dto.Params=DtoObject.ConstructArray(parameters);
 				dto.Credentials=new Credentials();
 				dto.Credentials.Username=Security.CurUser.UserName;
 				dto.Credentials.PassHash=Security.CurUser.Password;
@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 			DtoGetTableLow dto=new DtoGetTableLow();
 			dto.MethodName="";
 			DtoObject dtoObj=new DtoObject(command);
-			dto.Parameters=new DtoObject[] { dtoObj };
+			dto.Params=new DtoObject[] { dtoObj };
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 			#endif
 			DtoGetDS dto=new DtoGetDS();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 			#endif
 			DtoGetInt dto=new DtoGetInt();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 			#endif
 			DtoGetVoid dto=new DtoGetVoid();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -121,7 +121,7 @@ namespace OpenDentBusiness {
 				dto.ObjectType=typeof(T).FullName;
 			}
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -142,7 +142,7 @@ namespace OpenDentBusiness {
 			#endif
 			DtoGetString dto=new DtoGetString();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;
@@ -163,7 +163,7 @@ namespace OpenDentBusiness {
 			#endif
 			DtoGetBool dto=new DtoGetBool();
 			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
-			dto.Parameters=DtoObject.ConstructArray(parameters);
+			dto.Params=DtoObject.ConstructArray(parameters);
 			dto.Credentials=new Credentials();
 			dto.Credentials.Username=Security.CurUser.UserName;
 			dto.Credentials.PassHash=Security.CurUser.Password;

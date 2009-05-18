@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>This is the name of the method that we need to call.  "Class.Method" format.  Not used with GetTableLow.</summary>
 		public string MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
-		public DtoObject[] Parameters;
+		public DtoObject[] Params;
 		
 		public string Serialize(){
 			StringBuilder strBuild=new StringBuilder();

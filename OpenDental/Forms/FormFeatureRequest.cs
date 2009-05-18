@@ -37,6 +37,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormFeatureRequest()
 		{
+			components=new System.ComponentModel.Container();
 			//
 			// Required for Windows Form Designer support
 			//

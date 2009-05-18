@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 			//because we will have an explicit parameter list instead.
 			sheet.Parameters=new List<SheetParameter>();
 			SheetParameter param;
-			int paramVal;
+			//int paramVal;
 			for(int i=0;i<sheet.SheetFields.Count;i++){
 				if(sheet.SheetFields[i].FieldType==SheetFieldType.Parameter){
 					param=new SheetParameter(true,sheet.SheetFields[i].FieldName,sheet.SheetFields[i].FieldValue);

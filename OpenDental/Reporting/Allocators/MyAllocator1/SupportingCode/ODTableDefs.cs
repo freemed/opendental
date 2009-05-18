@@ -9,9 +9,9 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	}
 	class ODTable
 	{
-		public readonly string [] columns;
-		public readonly Type [] columntypes;
-		public readonly string name;
+		public readonly string [] columns=null;
+		public readonly Type [] columntypes=null;
+		public readonly string name="";
 		/// <summary>
 		/// Just Throws an exception if setup is bad.  Call only from a constructor.
 		/// </summary>

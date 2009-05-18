@@ -48,6 +48,7 @@ namespace OpenDental {
 		public PrintWindowL printWindow;
 
 		public FormAnesthesiaScore(Patient patCur,int anestheticRecordNum) {
+			this.components = new System.ComponentModel.Container();
 			InitializeComponent();
 			Lan.F(this);
 			PatCur = patCur;

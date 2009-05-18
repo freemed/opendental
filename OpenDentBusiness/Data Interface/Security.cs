@@ -224,7 +224,7 @@ namespace OpenDentBusiness{
 				dto.MethodName="Security.LogInWeb";
 				dto.ObjectType=typeof(Userod).FullName;
 				object[] parameters=new object[] { oduser,odpasshash,configPath };
-				dto.Parameters=DtoObject.ConstructArray(parameters);
+				dto.Params=DtoObject.ConstructArray(parameters);
 				return RemotingClient.ProcessGetObject<Userod>(dto);//can throw exception
 			}
 		}
