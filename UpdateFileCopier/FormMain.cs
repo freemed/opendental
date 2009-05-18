@@ -23,10 +23,11 @@ namespace UpdateFileCopier {
 
 		private void FormMain_Load(object sender,EventArgs e) {
 			//label1.Text="SourceDir: "+SourceDirectory;
+			DateTime now;
 			if(OpenDentProcessId!=0){//it could be zero for debugging
 				try {
 					Process process=Process.GetProcessById(OpenDentProcessId);
-					DateTime now=DateTime.Now;
+					now=DateTime.Now;
 					while(!process.HasExited) {
 						Application.DoEvents();
 					}
@@ -34,6 +35,11 @@ namespace UpdateFileCopier {
 					//MessageBox.Show("Time waited to exit: "+span.ToString());//~.07 seconds
 				}
 				catch { }//sometimes, it happens so fast that it would fail to get the processById.
+			}
+			//wait for a moment to make sure it has really exited.
+			now=DateTime.Now;
+			while(DateTime.Now < now.AddSeconds(1.5)) {
+				Application.DoEvents();
 			}
 			DirectoryInfo dirInfo=new DirectoryInfo(SourceDirectory);
 			string startupFolder=Application.StartupPath;

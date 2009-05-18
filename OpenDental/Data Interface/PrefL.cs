@@ -68,7 +68,7 @@ namespace OpenDental {
 			}
 			if(storedVersion>currentVersion) {
 				if(PrefC.UsingAtoZfolder){
-					string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
+					//string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
 					string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
 					//look at the manifest to see if it's the version we need
 					string manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
