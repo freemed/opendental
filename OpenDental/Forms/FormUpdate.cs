@@ -593,6 +593,12 @@ namespace OpenDental{
 		}
 
 		private void butCheck2_Click(object sender,EventArgs e) {
+			if(PrefC.GetString("WebServiceServerName") != "" //using web service
+				&& PrefC.GetString("WebServiceServerName") != Environment.MachineName)//and not on web server 
+			{
+				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString("WebServiceServerName"));
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			groupBuild.Visible=false;
 			groupStable.Visible=false;

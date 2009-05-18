@@ -37,6 +37,8 @@ namespace OpenDental{
 		private Label label17;
 		private GroupBox groupBox6;
 		private CheckBox checkTitleBarShowSite;
+		private TextBox textWebServiceServerName;
+		private Label label2;
 		private Label label1;
 		//private List<Def> posAdjTypes;
 
@@ -87,6 +89,8 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textWebServiceServerName = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -266,7 +270,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.groupBoxTaskDefaults);
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
 			this.groupBox2.Controls.Add(this.checkTasksCheckOnStartup);
-			this.groupBox2.Location = new System.Drawing.Point(12,244);
+			this.groupBox2.Location = new System.Drawing.Point(12,277);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(346,166);
 			this.groupBox2.TabIndex = 188;
@@ -374,7 +378,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(480,385);
+			this.butCancel.Location = new System.Drawing.Point(480,436);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -389,17 +393,35 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(480,347);
+			this.butOK.Location = new System.Drawing.Point(480,398);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textWebServiceServerName
+			// 
+			this.textWebServiceServerName.Location = new System.Drawing.Point(284,234);
+			this.textWebServiceServerName.Name = "textWebServiceServerName";
+			this.textWebServiceServerName.Size = new System.Drawing.Size(165,20);
+			this.textWebServiceServerName.TabIndex = 197;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(4,235);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(279,17);
+			this.label2.TabIndex = 198;
+			this.label2.Text = "Web Service: Server Name";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(602,435);
+			this.ClientSize = new System.Drawing.Size(602,486);
+			this.Controls.Add(this.textWebServiceServerName);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox2);
@@ -465,6 +487,7 @@ namespace OpenDental{
 			validNumX.Text=computerPref.TaskX.ToString();
 			validNumY.Text=computerPref.TaskY.ToString();
 			checkTitleBarShowSite.Checked=PrefC.GetBool("TitleBarShowSite");
+			textWebServiceServerName.Text=PrefC.GetString("WebServiceServerName");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -532,6 +555,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)
 				| Prefs.UpdateBool("TitleBarShowSite", checkTitleBarShowSite.Checked)
+				| Prefs.UpdateString("WebServiceServerName",textWebServiceServerName.Text)
 				)
 			{
 				changed=true;
