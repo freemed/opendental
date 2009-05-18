@@ -63,6 +63,7 @@ namespace OpenDental {
 					File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),currentVersion.ToString(3));
 				}//else if not used AtoZ, then no place to stash the files.
 				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
+				Prefs.UpdateString("UpdateInProgressOnComputerName","");//now, other workstations will be allowed to update.
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {

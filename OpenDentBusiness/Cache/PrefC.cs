@@ -77,6 +77,17 @@ namespace OpenDentBusiness {
 			return ((Pref)HList[prefName]).ValueString;
 		}
 
+		///<summary>Gets a pref of type string.  Will not throw an exception if null or not found.</summary>
+		public static string GetStringSilent(string prefName) {
+			if(HList==null) {
+				return "";
+			}
+			if(!HList.ContainsKey(prefName)) {
+				return "";
+			}
+			return ((Pref)HList[prefName]).ValueString;
+		}
+
 		///<summary>Gets a pref of type date.</summary>
 		public static DateTime GetDate(string prefName) {
 			if(HList==null){

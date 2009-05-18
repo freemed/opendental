@@ -360,6 +360,17 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '6.6.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_6_3();
+		}
+
+		private static void To6_6_3() {
+			if(FromVersion<new Version("6.6.3.0")) {
+				string command;
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('UpdateInProgressOnComputerName','','Will be blank if update is complete.  If in the middle of an update, the named workstation is the only one allowed to startup OD.')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.6.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_7_0();
 		}
 

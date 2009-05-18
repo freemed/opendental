@@ -871,8 +871,13 @@ namespace OpenDental{
 				workerThread.Abort();
 				return;
 			}
-			MsgBox.Show(FormP,"Download succeeded.  Setup program will now begin."+
-				"When done, restart the program on this computer, then on the other computers.");
+			if(!MsgBox.Show(FormP,MsgBoxButtons.OKCancel,"Download succeeded.  Setup program will now begin.  When done, restart the program on this computer, then on the other computers.")) 
+			{
+				//clicking cancel gives the user one last chance to avoid starting the update process.
+				return;
+			}
+			//no other workstation will be able to start up until this value is reset.
+			Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
 			try{
 				Process.Start(destinationPath);
 				Application.Exit();

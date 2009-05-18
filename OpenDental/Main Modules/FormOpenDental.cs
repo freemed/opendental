@@ -1393,7 +1393,11 @@ namespace OpenDental{
 			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
-
+			string updateComputerName=PrefC.GetStringSilent("UpdateInProgressOnComputerName");
+			if(updateComputerName != "" && Environment.MachineName != updateComputerName) {
+				MessageBox.Show("An update is in progress on "+updateComputerName+".  Not allowed to start up until that update is complete.");
+				return false;
+			}
 			if(!PrefL.ConvertDB()){
 				return false;
 			}
