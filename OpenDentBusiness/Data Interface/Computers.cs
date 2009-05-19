@@ -154,12 +154,13 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static void ClearAllHeartBeats() {
+		public static void ClearAllHeartBeats(string machineNameException) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command= "UPDATE computer SET LastHeartBeat='0001-01-01'";
+			string command= "UPDATE computer SET LastHeartBeat='0001-01-01' "
+				+"WHERE CompName != '"+POut.PString(machineNameException)+"'";
 			Db.NonQ(command);
 		}
 

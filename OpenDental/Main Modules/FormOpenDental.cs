@@ -3684,14 +3684,13 @@ namespace OpenDental{
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			timerSignals.Enabled=false;//so that this workstation doesn't shut down
+			//turn off signal reception for 5 seconds so this workstation will not shut down.
+			signalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
 			Signal sig=new Signal();
 			sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
 			sig.SigType=SignalType.Invalid;
 			Signals.Insert(sig);
-			Computers.ClearAllHeartBeats();//always assume success
-			signalLastRefreshed=MiscData.GetNowDateTime();
-			timerSignals.Enabled=true;
+			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
 		}
 

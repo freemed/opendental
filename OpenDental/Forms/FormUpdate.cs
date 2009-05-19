@@ -117,22 +117,22 @@ namespace OpenDental{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.panelClassic = new System.Windows.Forms.Panel();
+			this.butCheck = new OpenDental.UI.Button();
+			this.butDownload = new OpenDental.UI.Button();
 			this.textConnectionMessage = new System.Windows.Forms.TextBox();
 			this.groupBuild = new System.Windows.Forms.GroupBox();
 			this.textBuild = new System.Windows.Forms.TextBox();
+			this.butInstallBuild = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBeta = new System.Windows.Forms.GroupBox();
 			this.textBeta = new System.Windows.Forms.TextBox();
+			this.butInstallBeta = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupStable = new System.Windows.Forms.GroupBox();
 			this.textStable = new System.Windows.Forms.TextBox();
-			this.label11 = new System.Windows.Forms.Label();
-			this.butCheck = new OpenDental.UI.Button();
-			this.butDownload = new OpenDental.UI.Button();
-			this.butCheck2 = new OpenDental.UI.Button();
 			this.butInstallStable = new OpenDental.UI.Button();
-			this.butInstallBeta = new OpenDental.UI.Button();
-			this.butInstallBuild = new OpenDental.UI.Button();
+			this.label11 = new System.Windows.Forms.Label();
+			this.butCheck2 = new OpenDental.UI.Button();
 			this.butLicense = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.panelClassic.SuspendLayout();
@@ -294,6 +294,34 @@ namespace OpenDental{
 			this.panelClassic.TabIndex = 48;
 			this.panelClassic.Visible = false;
 			// 
+			// butCheck
+			// 
+			this.butCheck.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCheck.Autosize = true;
+			this.butCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheck.CornerRadius = 4F;
+			this.butCheck.Location = new System.Drawing.Point(129,125);
+			this.butCheck.Name = "butCheck";
+			this.butCheck.Size = new System.Drawing.Size(117,25);
+			this.butCheck.TabIndex = 21;
+			this.butCheck.Text = "Check for Updates";
+			this.butCheck.Click += new System.EventHandler(this.butCheck_Click);
+			// 
+			// butDownload
+			// 
+			this.butDownload.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDownload.Autosize = true;
+			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownload.CornerRadius = 4F;
+			this.butDownload.Location = new System.Drawing.Point(129,251);
+			this.butDownload.Name = "butDownload";
+			this.butDownload.Size = new System.Drawing.Size(83,25);
+			this.butDownload.TabIndex = 20;
+			this.butDownload.Text = "Download";
+			this.butDownload.Click += new System.EventHandler(this.butDownload_Click);
+			// 
 			// textConnectionMessage
 			// 
 			this.textConnectionMessage.AcceptsReturn = true;
@@ -328,6 +356,21 @@ namespace OpenDental{
 			this.textBuild.Size = new System.Drawing.Size(376,20);
 			this.textBuild.TabIndex = 51;
 			// 
+			// butInstallBuild
+			// 
+			this.butInstallBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInstallBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInstallBuild.Autosize = true;
+			this.butInstallBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInstallBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInstallBuild.CornerRadius = 4F;
+			this.butInstallBuild.Location = new System.Drawing.Point(309,80);
+			this.butInstallBuild.Name = "butInstallBuild";
+			this.butInstallBuild.Size = new System.Drawing.Size(73,25);
+			this.butInstallBuild.TabIndex = 28;
+			this.butInstallBuild.Text = "Install";
+			this.butInstallBuild.Click += new System.EventHandler(this.butInstallBuild_Click);
+			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(6,22);
@@ -360,6 +403,21 @@ namespace OpenDental{
 			this.textBeta.ReadOnly = true;
 			this.textBeta.Size = new System.Drawing.Size(376,20);
 			this.textBeta.TabIndex = 51;
+			// 
+			// butInstallBeta
+			// 
+			this.butInstallBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInstallBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInstallBeta.Autosize = true;
+			this.butInstallBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInstallBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInstallBeta.CornerRadius = 4F;
+			this.butInstallBeta.Location = new System.Drawing.Point(309,88);
+			this.butInstallBeta.Name = "butInstallBeta";
+			this.butInstallBeta.Size = new System.Drawing.Size(73,25);
+			this.butInstallBeta.TabIndex = 28;
+			this.butInstallBeta.Text = "Install";
+			this.butInstallBeta.Click += new System.EventHandler(this.butInstallBeta_Click);
 			// 
 			// label5
 			// 
@@ -394,58 +452,6 @@ namespace OpenDental{
 			this.textStable.Size = new System.Drawing.Size(376,20);
 			this.textStable.TabIndex = 51;
 			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(6,22);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(374,29);
-			this.label11.TabIndex = 27;
-			this.label11.Text = "Will have nearly zero bugs.  Will provide many useful enhanced features.";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butCheck
-			// 
-			this.butCheck.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCheck.Autosize = true;
-			this.butCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCheck.CornerRadius = 4F;
-			this.butCheck.Location = new System.Drawing.Point(129,125);
-			this.butCheck.Name = "butCheck";
-			this.butCheck.Size = new System.Drawing.Size(117,25);
-			this.butCheck.TabIndex = 21;
-			this.butCheck.Text = "Check for Updates";
-			this.butCheck.Click += new System.EventHandler(this.butCheck_Click);
-			// 
-			// butDownload
-			// 
-			this.butDownload.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDownload.Autosize = true;
-			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDownload.CornerRadius = 4F;
-			this.butDownload.Location = new System.Drawing.Point(129,251);
-			this.butDownload.Name = "butDownload";
-			this.butDownload.Size = new System.Drawing.Size(83,25);
-			this.butDownload.TabIndex = 20;
-			this.butDownload.Text = "Download";
-			this.butDownload.Click += new System.EventHandler(this.butDownload_Click);
-			// 
-			// butCheck2
-			// 
-			this.butCheck2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCheck2.Autosize = true;
-			this.butCheck2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheck2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCheck2.CornerRadius = 4F;
-			this.butCheck2.Location = new System.Drawing.Point(77,31);
-			this.butCheck2.Name = "butCheck2";
-			this.butCheck2.Size = new System.Drawing.Size(117,25);
-			this.butCheck2.TabIndex = 54;
-			this.butCheck2.Text = "Check for Updates";
-			this.butCheck2.Visible = false;
-			this.butCheck2.Click += new System.EventHandler(this.butCheck2_Click);
-			// 
 			// butInstallStable
 			// 
 			this.butInstallStable.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -461,35 +467,29 @@ namespace OpenDental{
 			this.butInstallStable.Text = "Install";
 			this.butInstallStable.Click += new System.EventHandler(this.butInstallStable_Click);
 			// 
-			// butInstallBeta
+			// label11
 			// 
-			this.butInstallBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butInstallBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butInstallBeta.Autosize = true;
-			this.butInstallBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInstallBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butInstallBeta.CornerRadius = 4F;
-			this.butInstallBeta.Location = new System.Drawing.Point(309,88);
-			this.butInstallBeta.Name = "butInstallBeta";
-			this.butInstallBeta.Size = new System.Drawing.Size(73,25);
-			this.butInstallBeta.TabIndex = 28;
-			this.butInstallBeta.Text = "Install";
-			this.butInstallBeta.Click += new System.EventHandler(this.butInstallBeta_Click);
+			this.label11.Location = new System.Drawing.Point(6,22);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(374,29);
+			this.label11.TabIndex = 27;
+			this.label11.Text = "Will have nearly zero bugs.  Will provide many useful enhanced features.";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butInstallBuild
+			// butCheck2
 			// 
-			this.butInstallBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butInstallBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butInstallBuild.Autosize = true;
-			this.butInstallBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInstallBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butInstallBuild.CornerRadius = 4F;
-			this.butInstallBuild.Location = new System.Drawing.Point(309,80);
-			this.butInstallBuild.Name = "butInstallBuild";
-			this.butInstallBuild.Size = new System.Drawing.Size(73,25);
-			this.butInstallBuild.TabIndex = 28;
-			this.butInstallBuild.Text = "Install";
-			this.butInstallBuild.Click += new System.EventHandler(this.butInstallBuild_Click);
+			this.butCheck2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCheck2.Autosize = true;
+			this.butCheck2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCheck2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheck2.CornerRadius = 4F;
+			this.butCheck2.Location = new System.Drawing.Point(77,31);
+			this.butCheck2.Name = "butCheck2";
+			this.butCheck2.Size = new System.Drawing.Size(117,25);
+			this.butCheck2.TabIndex = 54;
+			this.butCheck2.Text = "Check for Updates";
+			this.butCheck2.Visible = false;
+			this.butCheck2.Click += new System.EventHandler(this.butCheck2_Click);
 			// 
 			// butLicense
 			// 
@@ -801,7 +801,7 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+buildAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
@@ -811,7 +811,7 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+stableAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
@@ -821,7 +821,7 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+betaAvailableCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,true);//Local destination file.
 		}
 
 		private void butCheck_Click(object sender, System.EventArgs e) {
@@ -912,11 +912,26 @@ namespace OpenDental{
 				destDir=Path.GetTempPath();
 			}
 			DownloadInstallPatchFromURI(textWebsitePath.Text+textUpdateCode.Text+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true);//Local destination file.
+				ODFileUtils.CombinePaths(destDir,patchName),true,false);//Local destination file.
 		}
 
-		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool doInstall){
-			File.Delete(destinationPath);//fixes a minor bug
+		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool runSetupAfterDownload,bool showShutdownWindow){
+			if(showShutdownWindow) {
+				FormShutdown FormSD=new FormShutdown();
+				FormSD.ShowDialog();
+				if(FormSD.DialogResult==DialogResult.OK) {
+					//turn off signal reception for 5 seconds so this workstation will not shut down.
+					FormOpenDental.signalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
+					Signal sig=new Signal();
+					sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
+					sig.SigType=SignalType.Invalid;
+					Signals.Insert(sig);
+					Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
+					SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
+				}
+				//continue on even if user clicked cancel
+			}
+			File.Delete(destinationPath);
 			WebRequest wr=WebRequest.Create(downloadUri);
 			WebResponse webResp=wr.GetResponse();
 			int fileSize=(int)webResp.ContentLength/1024;
@@ -936,7 +951,7 @@ namespace OpenDental{
 				workerThread.Abort();
 				return;
 			}
-			if(!doInstall) {
+			if(!runSetupAfterDownload) {
 				return;
 			}
 			if(!MsgBox.Show(FormP,MsgBoxButtons.OKCancel,"Download succeeded.  Setup program will now begin.  When done, restart the program on this computer, then on the other computers.")) 

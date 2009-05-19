@@ -55,21 +55,7 @@ namespace OpenDental {
 						if(updateCode != "") {
 							Prefs.UpdateString("UpdateCode",updateCode);
 							FormUpdate.DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+updateCode+"/"+"Setup.exe",//Source URI
-								ODFileUtils.CombinePaths(destDir,"Setup.exe"),false);//download, but don't run
-							FormShutdown FormSD=new FormShutdown();
-							FormSD.ShowDialog();
-							if(FormSD.DialogResult==DialogResult.OK) {
-								//can't really change the timer from here.  So we have a small risk of the program on this workstation shutting down.
-								//FormOpenDental.timerSignals.Enabled=false;//so that this workstation doesn't shut down
-								Signal sig=new Signal();
-								sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
-								sig.SigType=SignalType.Invalid;
-								Signals.Insert(sig);
-								FormOpenDental.signalLastRefreshed=MiscData.GetNowDateTime();
-								Computers.ClearAllHeartBeats();//always assume success
-								//FormOpenDental.timerSignals.Enabled=true;
-								SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
-							}
+								ODFileUtils.CombinePaths(destDir,"Setup.exe"),false,true);//download, but don't run
 						}
 						//and don't exit.
 					}
@@ -204,7 +190,7 @@ namespace OpenDental {
 			}
 			string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
 			FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
-				tempFile,true);//Local destination file.
+				tempFile,true,false);//Local destination file.
 			File.Delete(tempFile);//Cleanup install file.
 		}
 
