@@ -927,7 +927,7 @@ namespace OpenDental{
 					sig.SigType=SignalType.Invalid;
 					Signals.Insert(sig);
 					Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
-					SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
+					//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
 				}
 				//continue on even if user clicked cancel
 			}

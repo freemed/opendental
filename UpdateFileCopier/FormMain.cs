@@ -22,6 +22,7 @@ namespace UpdateFileCopier {
 		}
 
 		private void FormMain_Load(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			//label1.Text="SourceDir: "+SourceDirectory;
 			DateTime now;
 			if(OpenDentProcessId!=0){//it could be zero for debugging
@@ -38,7 +39,7 @@ namespace UpdateFileCopier {
 			}
 			//wait for a moment to make sure it has really exited.
 			now=DateTime.Now;
-			while(DateTime.Now < now.AddSeconds(1.5)) {
+			while(DateTime.Now < now.AddSeconds(1)) {
 				Application.DoEvents();
 			}
 			DirectoryInfo dirInfo=new DirectoryInfo(SourceDirectory);
@@ -57,6 +58,7 @@ namespace UpdateFileCopier {
 			Application.DoEvents();
 			Thread.Sleep(500);
 			Process.Start("OpenDental.exe");
+			Cursor=Cursors.Default;
 			Application.Exit();
 		}
 	}
