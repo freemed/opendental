@@ -113,21 +113,24 @@ namespace OpenDental {
 							Application.Exit();
 							return false;
 						}
-						//copy UpdateFileCopier.exe to this directory
+						string tempDir=Path.GetTempPath();
+						//copy UpdateFileCopier.exe to the temp directory
 						File.Copy(ODFileUtils.CombinePaths(folderUpdate,"UpdateFileCopier.exe"),//source
-							ODFileUtils.CombinePaths(Application.StartupPath,"UpdateFileCopier.exe"),//dest
+							ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),//dest
 							true);//overwrite
 						//wait a moment to make sure the file was copied
 						//FileInfo fi=new FileInfo("");
 						//fi.Length
 						Thread.Sleep(1000);
-						//launch UpdateFileCopier to copy the remaining files to here.
+						//launch UpdateFileCopier to copy all files to here.
 						int processId=Process.GetCurrentProcess().Id;
+						string appDir=Application.StartupPath;
 						//MessageBox.Show("processId: "+processId.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
 						//bool hasExited=Process.GetProcessById(processId).HasExited;
 						//MessageBox.Show("hasExited: "+hasExited.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
 						Process.Start("UpdateFileCopier.exe","\""+folderUpdate+"\""//pass the source directory to the file copier.
-							+" "+processId.ToString());//and the processId of Open Dental.
+							+" "+processId.ToString()//and the processId of Open Dental.
+							+" \""+appDir+"\"");//and the directory where OD is running
 					}
 					else {//manifest version is wrong
 						//No point trying the Setup.exe because that's probably wrong too.

@@ -13,11 +13,13 @@ using System.Windows.Forms;
 namespace UpdateFileCopier {
 	public partial class FormMain:Form {
 		private string SourceDirectory;
+		private string DestDirectory;
 		private int OpenDentProcessId;
 
-		public FormMain(string sourceDirectory,string openDentProcessId) {
+		public FormMain(string sourceDirectory,string openDentProcessId,string destDirectory) {
 			InitializeComponent();
 			SourceDirectory=sourceDirectory;
+			DestDirectory=destDirectory;
 			OpenDentProcessId=Int32.Parse(openDentProcessId);
 		}
 
@@ -42,20 +44,24 @@ namespace UpdateFileCopier {
 			while(DateTime.Now < now.AddSeconds(1)) {
 				Application.DoEvents();
 			}
-			DirectoryInfo dirInfo=new DirectoryInfo(SourceDirectory);
-			string startupFolder=Application.StartupPath;
-			FileInfo[] appfiles=dirInfo.GetFiles();
+			DirectoryInfo dirInfoSource=new DirectoryInfo(SourceDirectory);
+			DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
+			FileInfo[] appfiles=dirInfoSource.GetFiles();
 			for(int i=0;i<appfiles.Length;i++) {
-				if(appfiles[i].Name=="UpdateFileCopier.exe") {
-					continue;//skip this one.
-				}
-				//any other file exclusions will have happened when originally copying files into the AtoZ folder.
-				File.Copy(appfiles[i].FullName,Path.Combine(startupFolder,appfiles[i].Name),true);
+				//if(appfiles[i].Name=="UpdateFileCopier.exe") {
+				//	continue;//skip this one.
+				//}
+				//any file exclusions will have happened when originally copying files into the AtoZ folder.
+				File.Copy(appfiles[i].FullName,Path.Combine(DestDirectory,appfiles[i].Name),true);
 			}
 			label1.Text="brief pause";
-			Application.DoEvents();
-			Thread.Sleep(500);
-			Process.Start("OpenDental.exe");
+			//I wonder how long we should wait here for the files to be copied over.
+			//I wonder if there's any way to test the last altered time of a variety of files.  A lot of work.
+			now=DateTime.Now;
+			while(DateTime.Now < now.AddSeconds(3)) {
+				Application.DoEvents();
+			}
+			Process.Start(Path.Combine(DestDirectory,"OpenDental.exe"));
 			Cursor=Cursors.Default;
 			Application.Exit();
 		}
