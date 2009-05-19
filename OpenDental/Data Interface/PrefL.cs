@@ -38,6 +38,43 @@ namespace OpenDental {
 				database=MiscData.GetCurrentDatabase();
 			}
 			if(storedVersion<currentVersion) {
+				//There are two different situations where this might happen.
+				if(PrefC.GetString("UpdateInProgressOnComputerName")==""){//1. Just performed an update from this workstation on another database.
+					//setup file needs to be downloaded again because it's in a different AtoZ folder.
+					if(PrefC.UsingAtoZfolder) {
+						string destDir=FormPath.GetPreferredImagePath();
+						string updateCode="";
+						try {
+							updateCode=FormUpdate.GetUpdateCodeForThisVersion();
+						}
+						catch(Exception ex) {
+							MessageBox.Show(ex.Message);
+							//but keep going.
+						}
+						Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
+						if(updateCode != "") {
+							Prefs.UpdateString("UpdateCode",updateCode);
+							FormUpdate.DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+updateCode+"/"+"Setup.exe",//Source URI
+								ODFileUtils.CombinePaths(destDir,"Setup.exe"),false);//download, but don't run
+							FormShutdown FormSD=new FormShutdown();
+							FormSD.ShowDialog();
+							if(FormSD.DialogResult==DialogResult.OK) {
+								//can't really change the timer from here.  So we have a small risk of the program on this workstation shutting down.
+								//FormOpenDental.timerSignals.Enabled=false;//so that this workstation doesn't shut down
+								Signal sig=new Signal();
+								sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
+								sig.SigType=SignalType.Invalid;
+								Signals.Insert(sig);
+								FormOpenDental.signalLastRefreshed=MiscData.GetNowDateTime();
+								Computers.ClearAllHeartBeats();//always assume success
+								//FormOpenDental.timerSignals.Enabled=true;
+								SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");
+							}
+						}
+						//and don't exit.
+					}
+				}
+				//and 2. Just performed an update from this workstation on this database.  We already downloaded Setup file.
 				//if this computer just performed an update, and none of the other computers has updated yet.
 				//then attempt to stash all files that are in the Application directory.
 				if(PrefC.UsingAtoZfolder) {
@@ -167,7 +204,7 @@ namespace OpenDental {
 			}
 			string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
 			FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
-				tempFile);//Local destination file.
+				tempFile,true);//Local destination file.
 			File.Delete(tempFile);//Cleanup install file.
 		}
 

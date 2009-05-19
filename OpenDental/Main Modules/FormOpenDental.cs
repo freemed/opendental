@@ -142,7 +142,7 @@ namespace OpenDental{
 		private OpenDental.UI.LightSignalGrid lightSignalGrid1;
 		private MenuItem menuItemMessagingButs;
 		///<summary>This is not the actual date/time last refreshed.  It is really the date/time of the last item in the database retrieved on previous refreshes.  That way, the local workstation time is irrelevant.</summary>
-		private DateTime signalLastRefreshed;
+		public static DateTime signalLastRefreshed;
 		private FormSplash Splash;
 		private Bitmap bitmapIcon;
 		private MenuItem menuItemCreateAtoZFolders;
