@@ -80,6 +80,13 @@ namespace OpenDental {
 						if(appfiles[i].Name=="FreeDentalConfig.xml") {
 							continue;//skip this one.
 						}
+						if(appfiles[i].Name=="OpenDentalServerConfig.xml") {
+							continue;//skip also
+						}
+						if(appfiles[i].Name.StartsWith("openlog")) {
+							continue;//these can be big and are irrelevant
+						}
+						//include UpdateFileCopier
 						File.Copy(appfiles[i].FullName,ODFileUtils.CombinePaths(folderUpdate,appfiles[i].Name));
 					}
 					//Create a simple manifest file so that we know what version the files are for.

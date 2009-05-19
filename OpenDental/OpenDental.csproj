@@ -1620,6 +1620,7 @@
     <Compile Include="Misc\DataConnectionOld.cs" />
     <Compile Include="Misc\EZTwain.cs" />
     <Compile Include="Misc\MigraDocHelper.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\GraphicsHelper.cs" />
     <Compile Include="SheetFramework\LabelSingle.cs" />
     <Compile Include="Misc\ObjectDateComparer.cs" />
