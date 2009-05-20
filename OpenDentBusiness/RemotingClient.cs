@@ -117,11 +117,10 @@ namespace OpenDentBusiness {
 			throw new Exception(exception.Message);
 		}
 
-	
-
 		internal static string SendAndReceive(DataTransferObject dto){
 			string dtoString=dto.Serialize();
 			OpenDentalServer.ServiceMain service=new OpenDentBusiness.OpenDentalServer.ServiceMain();
+			service.Url=ServerURI;
 			string result=service.ProcessRequest(dtoString);
 			return result;
 		}

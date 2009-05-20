@@ -409,6 +409,7 @@ namespace OpenDental{
 				+"Executable path: "+Application.ExecutablePath+"\r\n"
 				+"Current directory: "+Environment.CurrentDirectory);*/
 			#if DEBUG
+				//textURI.Text="http://localhost/OpenDentalServer/ServiceMain.asmx";
 				textUser2.Text="Admin";
 				textPassword2.Text="pass";
 			#endif

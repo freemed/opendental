@@ -53,6 +53,12 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Get one single value.</summary>
+		public static string GetScalar(string command) {
+			DataConnection dcon=new DataConnection();
+			return dcon.GetScalar(command);
+		}
+
 
 
 

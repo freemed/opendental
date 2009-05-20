@@ -462,5 +462,15 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Get one value.</summary>
+		public string GetScalar(string command) {
+			string retVal="";
+			cmd.CommandText=command;
+			con.Open();
+			retVal=cmd.ExecuteScalar().ToString();
+			con.Close();
+			return retVal;
+		}
+
 	}
 }

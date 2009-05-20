@@ -81,6 +81,16 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>Use this only for queries that return one value.</summary>
+		internal static string GetScalar(string command) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
+			}
+			else {
+				return DataCore.GetScalar(command);
+			}
+		}
+
 		#region old
 		public static DataTable GetTableOld(string command) {
 			throw new ApplicationException("No queries allowed in the UI layer.");

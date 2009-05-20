@@ -195,21 +195,28 @@ namespace OpenDentBusiness{
 
 		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>
 		public static Userod LogInWeb(string oduser,string odpasshash,string configPath) {
-			//No need to check RemotingRole; no call to db.
-			if(configPath != "") {
+			//Very unusual method.  Remoting role can't be checked, but is implied by the presence of a value in configPath.
+			if(configPath != "") {//RemotingRole.ServerWeb
 				Userods.LoadDatabaseInfoFromFile(ODFileUtils.CombinePaths(configPath,"OpenDentalServerConfig.xml"));
-					//ODFileUtils.CombinePaths(
-					//  ,"OpenDentalServerConfig.xml"));
-					//Path.GetDirectoryName(Application.ExecutablePath),"OpenDentalServerConfig.xml"));
-					//Application.StartupPath,"OpenDentalServerConfig.xml"));
-					//Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"OpenDentalServerConfig.xml"));
-					//Environment.CurrentDirectory,"OpenDentalServerConfig.xml"));
+				//ODFileUtils.CombinePaths(
+				//  ,"OpenDentalServerConfig.xml"));
+				//Path.GetDirectoryName(Application.ExecutablePath),"OpenDentalServerConfig.xml"));
+				//Application.StartupPath,"OpenDentalServerConfig.xml"));
+				//Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"OpenDentalServerConfig.xml"));
+				//Environment.CurrentDirectory,"OpenDentalServerConfig.xml"));
 				//Then, check username and password
 				Userod user=Userods.CheckUserAndPassword(oduser,odpasshash);
 				if(user==null) {
 					throw new Exception("Invalid username or password.");
 				}
-				Security.CurUser=user;
+				string command="SELECT ValueString FROM preference WHERE PrefName='ProgramVersion'";
+				string dbVersion=Db.GetScalar(command);
+				//string appVersion=Application.ProductVersion) {//this just gives the version for IIS
+				string appVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(4);
+				if(dbVersion!=appVersion){
+					throw new Exception("Version mismatch.  Server:"+Application.ProductVersion+"  Database:"+dbVersion);
+				}
+				//Security.CurUser=user;//we're on the server, so this is meaningless
 				return user;
 				//return 0;//meaningless
 			}
