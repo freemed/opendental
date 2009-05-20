@@ -1314,10 +1314,10 @@ namespace OpenDental{
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
-			#if !DEBUG
+			//#if !DEBUG
 				//only visible in debug mode.  It's only usefulness is after a conversion, so no need for user to see it.
-				menuItemReallocate.Visible=false;
-			#endif
+			//	menuItemReallocate.Visible=false;
+			//#endif
 			if(!PrefC.GetBool("ADAdescriptionsReset")) {
 				ProcedureCodes.ResetADAdescriptions();
 				Prefs.UpdateBool("ADAdescriptionsReset",true);
