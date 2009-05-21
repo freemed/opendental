@@ -1260,8 +1260,15 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Permanently delete all selected procedure(s)?")){
 				return;
 			}
+			int skipped=0;
 			try{
 				for(int i=0;i<gridProc.SelectedIndices.Length;i++){
+					if(!Security.IsAuthorized(Permissions.ProcComplEdit,AptCur.AptDateTime.Date,true)) {
+						if(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcStatus"].ToString()==((int)ProcStat.C).ToString()) {
+							skipped++;
+							continue;
+						}
+					}
 					//also deletes the claimProcs and adjustments. Might throw exception.
 					Procedures.Delete(PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString()));
 				}
@@ -1279,6 +1286,9 @@ namespace OpenDental{
 			FillProcedures();
 			CalculateTime();
 			FillTime();
+			if(skipped>0) {
+				MessageBox.Show(Lan.g(this,"Procedures skipped due to lack of permission to edit completed procedures: ")+skipped.ToString());
+			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
