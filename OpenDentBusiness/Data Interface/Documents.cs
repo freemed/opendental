@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -46,26 +47,27 @@ namespace OpenDentBusiness {
 				return null;
 			}
 			Document doc=new Document();
-			doc.DocNum        =PIn.PInt(document[0].ToString());
-			doc.Description   =PIn.PString(document[1].ToString());
-			doc.DateCreated   =PIn.PDate(document[2].ToString());
-			doc.DocCategory   =PIn.PInt(document[3].ToString());
-			doc.PatNum        =PIn.PInt(document[4].ToString());
-			doc.FileName      =PIn.PString(document[5].ToString());
-			doc.ImgType       =(ImageType)PIn.PInt(document[6].ToString());
-			doc.IsFlipped     =PIn.PBool(document[7].ToString());
-			doc.DegreesRotated=PIn.PShort(document[8].ToString());
-			doc.ToothNumbers  =PIn.PString(document[9].ToString());
-			doc.Note          =PIn.PString(document[10].ToString());
-			doc.SigIsTopaz    =PIn.PBool(document[11].ToString());
-			doc.Signature     =PIn.PString(document[12].ToString());
-			doc.CropX			    =PIn.PInt(document[13].ToString());
-			doc.CropY         =PIn.PInt(document[14].ToString());
-			doc.CropW         =PIn.PInt(document[15].ToString());
-			doc.CropH         =PIn.PInt(document[16].ToString());
-			doc.WindowingMin  =PIn.PInt(document[17].ToString());
-			doc.WindowingMax  =PIn.PInt(document[18].ToString());
-			doc.MountItemNum  =PIn.PInt(document[19].ToString());
+			doc.DocNum					=PIn.PInt(document[0].ToString());
+			doc.Description			=PIn.PString(document[1].ToString());
+			doc.DateCreated			=PIn.PDate(document[2].ToString());
+			doc.DocCategory			=PIn.PInt(document[3].ToString());
+			doc.PatNum					=PIn.PInt(document[4].ToString());
+			doc.FileName				=PIn.PString(document[5].ToString());
+			doc.ImgType					=(ImageType)PIn.PInt(document[6].ToString());
+			doc.IsFlipped				=PIn.PBool(document[7].ToString());
+			doc.DegreesRotated	=PIn.PShort(document[8].ToString());
+			doc.ToothNumbers		=PIn.PString(document[9].ToString());
+			doc.Note						=PIn.PString(document[10].ToString());
+			doc.SigIsTopaz			=PIn.PBool(document[11].ToString());
+			doc.Signature				=PIn.PString(document[12].ToString());
+			doc.CropX						=PIn.PInt(document[13].ToString());
+			doc.CropY						=PIn.PInt(document[14].ToString());
+			doc.CropW						=PIn.PInt(document[15].ToString());
+			doc.CropH						=PIn.PInt(document[16].ToString());
+			doc.WindowingMin		=PIn.PInt(document[17].ToString());
+			doc.WindowingMax		=PIn.PInt(document[18].ToString());
+			doc.MountItemNum		=PIn.PInt(document[19].ToString());
+			doc.LastAltered			=PIn.PDateT(document[20].ToString());
 			return doc;
 		}
 
@@ -102,7 +104,7 @@ namespace OpenDentBusiness {
 			}
 			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
 				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
-				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
+				+"WindowingMin,WindowingMax,MountItemNum,LastAltered) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(doc.DocNum)+"', ";
 			}
@@ -125,9 +127,9 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(doc.CropH)+"',"
 				+"'"+POut.PInt(doc.WindowingMin)+"',"
 				+"'"+POut.PInt(doc.WindowingMax)+"',"
-				+"'"+POut.PInt(doc.MountItemNum)+"')";
-			/*+"'"+POut.PDate  (LastAltered)+"', "//will later be used in backups
-					+"'"+POut.PBool  (IsDeleted)+"')";//ditto*/
+				+"'"+POut.PInt(doc.MountItemNum)+"',"
+				+"NOW())";//LastAltered: will later be used in backups
+				//	+"'"+POut.PBool  (IsDeleted)+"')";//ditto
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -171,26 +173,27 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE document SET " 
-				+ "Description = '"      +POut.PString(doc.Description)+"'"
-				+ ",DateCreated = "     +POut.PDate(doc.DateCreated)
-				+ ",DocCategory = '"     +POut.PInt(doc.DocCategory)+"'"
-				+ ",PatNum = '"         +POut.PInt(doc.PatNum)+"'"
-				+ ",FileName    = '"     +POut.PString(doc.FileName)+"'"
-				+ ",ImgType    = '"      +POut.PInt((int)doc.ImgType)+"'"
-				+ ",IsFlipped   = '"     +POut.PBool(doc.IsFlipped)+"'"
-				+ ",DegreesRotated   = '"+POut.PInt(doc.DegreesRotated)+"'"
-				+ ",ToothNumbers   = '"  +POut.PString(doc.ToothNumbers)+"'"
-				+ ",Note   = '"          +POut.PString(doc.Note)+"'"
-				+ ",SigIsTopaz    = '"   +POut.PBool(doc.SigIsTopaz)+"'"
-				+ ",Signature   = '"     +POut.PString(doc.Signature)+"'"
-				+ ",CropX       ='"			 +POut.PInt(doc.CropX)+"'"
-				+ ",CropY       ='"			 +POut.PInt(doc.CropY)+"'"
-				+ ",CropW       ='"			 +POut.PInt(doc.CropW)+"'"
-				+ ",CropH       ='"			 +POut.PInt(doc.CropH)+"'"
-				+ ",WindowingMin ='"		 +POut.PInt(doc.WindowingMin)+"'"
-				+ ",WindowingMax ='"		 +POut.PInt(doc.WindowingMax)+"'"
-				+ ",MountItemNum ='"		 +POut.PInt(doc.MountItemNum)+"'"
-				+" WHERE DocNum = '"     +POut.PInt(doc.DocNum)+"'";
+				+ "Description = '"				+POut.PString(doc.Description)+"'"
+				+ ",DateCreated = "				+POut.PDate(doc.DateCreated)
+				+ ",DocCategory = '"			+POut.PInt(doc.DocCategory)+"'"
+				+ ",PatNum = '"						+POut.PInt(doc.PatNum)+"'"
+				+ ",FileName    = '"			+POut.PString(doc.FileName)+"'"
+				+ ",ImgType    = '"				+POut.PInt((int)doc.ImgType)+"'"
+				+ ",IsFlipped   = '"			+POut.PBool(doc.IsFlipped)+"'"
+				+ ",DegreesRotated   = '"	+POut.PInt(doc.DegreesRotated)+"'"
+				+ ",ToothNumbers   = '"		+POut.PString(doc.ToothNumbers)+"'"
+				+ ",Note   = '"						+POut.PString(doc.Note)+"'"
+				+ ",SigIsTopaz    = '"		+POut.PBool(doc.SigIsTopaz)+"'"
+				+ ",Signature   = '"			+POut.PString(doc.Signature)+"'"
+				+ ",CropX       ='"				+POut.PInt(doc.CropX)+"'"
+				+ ",CropY       ='"				+POut.PInt(doc.CropY)+"'"
+				+ ",CropW       ='"				+POut.PInt(doc.CropW)+"'"
+				+ ",CropH       ='"				+POut.PInt(doc.CropH)+"'"
+				+ ",WindowingMin ='"			+POut.PInt(doc.WindowingMin)+"'"
+				+ ",WindowingMax ='"			+POut.PInt(doc.WindowingMax)+"'"
+				+ ",MountItemNum ='"			+POut.PInt(doc.MountItemNum)+"'"
+				+ ",LastAltered = NOW()"
+				+" WHERE DocNum = '"			+POut.PInt(doc.DocNum)+"'";
 			//MessageBox.Show(cmd.CommandText);
 			Db.NonQ(command);
 		}
@@ -281,50 +284,75 @@ namespace OpenDentBusiness {
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
 		//[Obsolete("This method now throws an exception!")]
 		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
-			patientPict=null;
 			Document pictureDoc=GetPatPictFromDb(patNum);
-			string shortFileName=pictureDoc.FileName;
-			if(shortFileName.Length<1){
-				return false;
+			patientPict=GetThumbnail(pictureDoc,patFolder,100);
+			return (patientPict!=null);
+		}
+
+		///<summary>Gets the corresponding thumbnail image for the given document object. The document is expected to be of type photo, and a 'not available' image is returned if the document is not a photo. The thumbnail for every document is in a folder named 'thumbnails' within the same directly level.</summary>
+		public static Bitmap GetThumbnail(Document doc,string patFolder,int size){
+			string shortFileName=doc.FileName;
+			//If no file name associated with the document, then there cannot be a thumbnail,
+			//because thumbnails have the same name as the original image document.
+			if(shortFileName.Length<1) {
+				return NoAvailablePhoto(size);
 			}
 			string fullName=ODFileUtils.CombinePaths(patFolder,shortFileName);
+			//If the document no longer exists, then there is no corresponding thumbnail image.
 			if(!File.Exists(fullName)) {
-				return false;
+				return NoAvailablePhoto(size);
 			}
-			//create Thumbnails folder
+			//If the specified document is not an image return null.
+			if(!ImageHelper.HasImageExtension(fullName)) {
+				return NoAvailablePhoto(size);
+			}
+			//Create Thumbnails folder if it does not already exist for this patient folder.
 			string thumbPath=ODFileUtils.CombinePaths(patFolder,"Thumbnails");
 			if(!Directory.Exists(thumbPath)) {
 				try {
 					Directory.CreateDirectory(thumbPath);
+				} catch {
+					throw new ImageStoreCreationException(Lans.g("Documents","Error: Could not create "+
+						"'Thumbnails' folder for patient."));
 				}
-				catch {
-					throw new ImageStoreCreationException(Lans.g("Documents","Error.  Could not create thumbnails folder. "));
+			}
+			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName+"_"+size} );
+			//Use the existing thumbnail if it already exists and it was created after the last document modification.
+			if(File.Exists(thumbFileName)) {
+				DateTime thumbCreationTime=File.GetCreationTime(thumbFileName);
+				if(thumbCreationTime>doc.LastAltered){
+					return (Bitmap)Bitmap.FromFile(thumbFileName);
 				}
 			}
-			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName });
-			if(!ImageHelper.HasImageExtension(thumbFileName)){
-				return false;
-			}
-			if(File.Exists(thumbFileName)) {//use existing thumbnail
-				patientPict=(Bitmap)Bitmap.FromFile(thumbFileName);
-				return true;
-			}
-			//add thumbnail
+			//Add thumbnail
 			Bitmap thumbBitmap;
 			//Gets the cropped/flipped/rotated image with any color filtering applied.
 			Bitmap sourceImage=new Bitmap(fullName);
-			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(pictureDoc,sourceImage,ApplySettings.ALL);
+			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(doc,sourceImage,ApplySettings.ALL);
 			sourceImage.Dispose();
-			thumbBitmap=ImageHelper.GetThumbnail(fullImage,100);
+			thumbBitmap=ImageHelper.GetThumbnail(fullImage,size);
 			fullImage.Dispose();
 			try {
 				thumbBitmap.Save(thumbFileName);
-			}
-			catch {
+			} catch {
 				//Oh well, we can regenerate it next time if we have to!
 			}
-			patientPict=thumbBitmap;
-			return true;
+			return thumbBitmap;
+		}
+
+		public static Bitmap NoAvailablePhoto(int size){
+			Bitmap bitmap=new Bitmap(size,size);
+			Graphics g=Graphics.FromImage(bitmap);
+			g.InterpolationMode=InterpolationMode.High;
+			g.FillRectangle(Brushes.Gray,0,0,bitmap.Width,bitmap.Height);
+			StringFormat notAvailFormat=new StringFormat();
+			notAvailFormat.Alignment=StringAlignment.Center;
+			notAvailFormat.LineAlignment=StringAlignment.Center;
+			Font font=new Font("Courier New",8.25F,FontStyle.Regular,GraphicsUnit.Point,((byte)(0)));
+			g.DrawString("Thumbnail not available",font,Brushes.Black,
+				new RectangleF(0,0,size,size),notAvailFormat);
+			g.Dispose();
+			return bitmap;
 		}
 
 		///<summary>Returns the documents which correspond to the given mountitems.</summary>

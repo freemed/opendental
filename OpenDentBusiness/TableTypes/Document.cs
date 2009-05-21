@@ -276,6 +276,19 @@ namespace OpenDentBusiness{
 			get { return mountItemNumChanged; }
 		}
 
+		///<summary>Date last altered.</summary>
+		[DataField("LastAltered")]
+		private DateTime lastAltered;
+		/// <summary>Date last altered.</summary>
+		public DateTime LastAltered {
+			get { return lastAltered; }
+			set { lastAltered=value; MarkDirty(); lastAlteredChanged=true; }
+		}
+		bool lastAlteredChanged;
+		public bool LastAlteredChanged {
+			get { return lastAlteredChanged; }
+		}
+
 
 		///<summary>Returns a copy of this Document.</summary>
 		public Document Copy() {

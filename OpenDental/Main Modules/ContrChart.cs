@@ -4265,20 +4265,6 @@ namespace OpenDental{
 			if(!panelImages.Visible){
 				return;
 			}
-			//create Thumbnails folder
-			string thumbPath=ODFileUtils.CombinePaths(patFolder,"Thumbnails");
-			if(!Directory.Exists(thumbPath)){
-				try{
-					Directory.CreateDirectory(thumbPath);
-				}
-				catch{
-					MessageBox.Show(Lan.g(this,"Error.  Could not create thumbnails folder. "));
-					return;
-				}
-			}
-			StringFormat notAvailFormat=new StringFormat();
-			notAvailFormat.Alignment=StringAlignment.Center;
-			notAvailFormat.LineAlignment=StringAlignment.Center;
 			for(int i=0;i<DocumentList.Length;i++){
 				if(!visImageCats.Contains(DefC.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory))){
 					continue;//if category not visible, continue
@@ -4291,39 +4277,8 @@ namespace OpenDental{
 					}
 				}
 				//Documents.Cur=DocumentList[i];
-				string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",DocumentList[i].FileName });
-				//Thumbs.db has nothing to do with Open Dental. It is a hidden Windows file.
-				if(File.Exists(thumbFileName) && ImageHelper.HasImageExtension(thumbFileName))
-				{//use existing thumbnail
-					imageListThumbnails.Images.Add(Bitmap.FromFile(thumbFileName));
-				}else{//add thumbnail or create generic "not available"
-					int thumbSize=imageListThumbnails.ImageSize.Width;//All thumbnails are square.
-					Bitmap thumbBitmap;
-					string sourceImagePath=ODFileUtils.CombinePaths(patFolder,DocumentList[i].FileName);
-					if(File.Exists(sourceImagePath) && ImageHelper.HasImageExtension(sourceImagePath)){//create and save thumbnail?
-						//Gets the cropped/flipped/rotated image with any color filtering applied.
-						Bitmap sourceImage=new Bitmap(sourceImagePath);
-						Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(DocumentList[i],sourceImage,ApplySettings.ALL);
-						sourceImage.Dispose();
-						thumbBitmap=ImageHelper.GetThumbnail(fullImage,thumbSize);
-						fullImage.Dispose();
-						try{
-							thumbBitmap.Save(thumbFileName);
-						}catch{
-							//Oh well, we can regenerate it next time if we have to!
-						}
-					}//if File.Exists(original image)
-					else{//original image not even present, or is not a supported image type, so show default thumbnail
-						thumbBitmap=new Bitmap(thumbSize,thumbSize);
-						Graphics g=Graphics.FromImage(thumbBitmap);
-						g.InterpolationMode=InterpolationMode.High;
-						g.FillRectangle(Brushes.Gray,0,0,thumbBitmap.Width,thumbBitmap.Height);
-						g.DrawString("Thumbnail not available",Font,Brushes.Black,
-							new RectangleF(0,0,thumbSize,thumbSize),notAvailFormat);
-						g.Dispose();
-					}
-					imageListThumbnails.Images.Add(thumbBitmap);
-				}//else add thumbnail
+				imageListThumbnails.Images.Add(Documents.GetThumbnail(DocumentList[i],patFolder,
+					imageListThumbnails.ImageSize.Width));
 				visImages.Add(i);
 				ListViewItem item=new ListViewItem(DocumentList[i].DateCreated.ToShortDateString()+": "
 					+DocumentList[i].Description,imageListThumbnails.Images.Count-1);
