@@ -28,17 +28,16 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
 			}
-			string command="SELECT * FROM appointment ";
-			if(orderby=="alph" || siteNum>0) {
-				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
-			}
-			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
+			string command="SELECT * FROM appointment "
+				+"LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
 			if(provNum>0) {
 				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
 			}
 			if(siteNum>0) {
 				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
 			}
+			command+="HAVING patient.PatStatus= "+POut.PInt((int)PatientStatus.Patient)+" ";			
 			if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
 			}
