@@ -1579,7 +1579,11 @@ ORDER BY adjdate DESC
 			else if(radioMonthly.Checked){
 				RunMonthly();
 			}
-			else{
+			else{//annual
+				if(dateFrom.AddYears(1) <= dateTo) {
+					MsgBox.Show(this,"Date range for annual report cannot be greater than one year.");
+					return;
+				}
 				RunAnnual();
 			}
 			DialogResult=DialogResult.OK;	
