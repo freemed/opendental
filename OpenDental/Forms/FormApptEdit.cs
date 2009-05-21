@@ -1863,9 +1863,11 @@ namespace OpenDental{
 		}
 
 		private void butAudit_Click(object sender,EventArgs e) {
-			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,
-				new Permissions[] { Permissions.AppointmentCreate,Permissions.AppointmentEdit,Permissions.AppointmentMove },
-				Lan.g(this,"All Appointments for")+pat.GetNameFL());
+			List<Permissions> perms=new List<Permissions>();
+			perms.Add(Permissions.AppointmentCreate);
+			perms.Add(Permissions.AppointmentEdit);
+			perms.Add(Permissions.AppointmentMove);
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"All Appointments for")+pat.GetNameFL());
 			FormA.ShowDialog();
 		}
 

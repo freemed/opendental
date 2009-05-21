@@ -17,8 +17,7 @@ namespace OpenDental{
 		private List <Permissions> PermTypes;
 
 		///<summary>Supply the patient, types, and title.</summary>
-		public FormAuditOneType(int patNum,Permissions[] permTypes,string title)
-		{
+		public FormAuditOneType(int patNum,List<Permissions> permTypes,string title){
 			//
 			// Required for Windows Form Designer support
 			//
@@ -26,7 +25,7 @@ namespace OpenDental{
 			Lan.F(this);
 			Text=title;
 			PatNum=patNum;
-			PermTypes=(List <Permissions>)permTypes.Clone();
+			PermTypes=new List<Permissions>(permTypes);
 		}
 
 		#region Windows Form Designer generated code
