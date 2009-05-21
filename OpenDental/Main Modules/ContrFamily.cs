@@ -43,7 +43,7 @@ namespace OpenDental{
 		private ODGrid gridFamily;
 		private ODGrid gridRecall;
 		private PatField[] PatFieldList;
-		//private bool InitializedOnStartup;
+		private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrFamily(){
@@ -282,9 +282,10 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
-			//if(InitializedOnStartup) {
-			//	return;
-			//}
+			if(InitializedOnStartup) {
+				return;
+			}
+			InitializedOnStartup=true;
 			//tbFamily.InstantClasses();
 			//cannot use Lan.F(this);
 			Lan.C(this,new Control[]

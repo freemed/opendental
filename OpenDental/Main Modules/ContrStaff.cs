@@ -646,6 +646,7 @@ namespace OpenDental{
 			//if(InitializedOnStartup) {
 			//	return;
 			//}
+			//InitializedOnStartup=true;
 			//can't use Lan.F
 			Lan.C(this,new Control[]
 				{

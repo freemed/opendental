@@ -138,7 +138,7 @@ namespace OpenDental{
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
 		//private ContrApptSingle PinApptSingle;
-		//private bool InitializedOnStartup;
+		private bool InitializedOnStartup;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -1279,9 +1279,14 @@ namespace OpenDental{
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
-			//if(InitializedOnStartup) {
-			//	return;
-			//}
+			//jsparks-
+			//This method is inefficient and can cause 4 refreshes: RefreshPeriod, FillViews->comboView_SelectedIndexChanged, SetView?, SetWeeklyView. 
+			//This is especially inefficient, because after calling this method, FormOD refreshes this module anyway.  So about 5 refreshes on startup.
+			//But it's not critical.
+			if(InitializedOnStartup) {
+				return;
+			}
+			InitializedOnStartup=true;
 			//if(DefC.DefShortIsNull) {
 			//	Defs.RefreshCache();//So that when RefreshPeriod, LayoutPanels, ComputeColWidth gets called.
 			LayoutPanels();
