@@ -113,7 +113,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(19,15);
+			this.label1.Location = new System.Drawing.Point(11,15);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(582,38);
 			this.label1.TabIndex = 0;
@@ -124,14 +124,14 @@ namespace OpenDental{
 			// 
 			// textPassword
 			// 
-			this.textPassword.Location = new System.Drawing.Point(21,181);
+			this.textPassword.Location = new System.Drawing.Point(13,181);
 			this.textPassword.Name = "textPassword";
 			this.textPassword.Size = new System.Drawing.Size(280,20);
 			this.textPassword.TabIndex = 1;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(19,162);
+			this.label2.Location = new System.Drawing.Point(11,162);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(509,18);
 			this.label2.TabIndex = 2;
@@ -141,14 +141,14 @@ namespace OpenDental{
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(21,140);
+			this.textUser.Location = new System.Drawing.Point(13,140);
 			this.textUser.Name = "textUser";
 			this.textUser.Size = new System.Drawing.Size(280,20);
 			this.textUser.TabIndex = 0;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(19,121);
+			this.label3.Location = new System.Drawing.Point(11,121);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(480,18);
 			this.label3.TabIndex = 4;
@@ -158,7 +158,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(19,79);
+			this.label4.Location = new System.Drawing.Point(11,79);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(582,18);
 			this.label4.TabIndex = 6;
@@ -187,7 +187,7 @@ namespace OpenDental{
 			// 
 			// comboDatabase
 			// 
-			this.comboDatabase.Location = new System.Drawing.Point(21,98);
+			this.comboDatabase.Location = new System.Drawing.Point(13,98);
 			this.comboDatabase.MaxDropDownItems = 100;
 			this.comboDatabase.Name = "comboDatabase";
 			this.comboDatabase.Size = new System.Drawing.Size(280,21);
@@ -198,7 +198,7 @@ namespace OpenDental{
 			// 
 			this.checkNoShow.AutoSize = true;
 			this.checkNoShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNoShow.Location = new System.Drawing.Point(21,211);
+			this.checkNoShow.Location = new System.Drawing.Point(13,211);
 			this.checkNoShow.Name = "checkNoShow";
 			this.checkNoShow.Size = new System.Drawing.Size(294,18);
 			this.checkNoShow.TabIndex = 2;
@@ -207,7 +207,7 @@ namespace OpenDental{
 			// 
 			// comboComputerName
 			// 
-			this.comboComputerName.Location = new System.Drawing.Point(21,56);
+			this.comboComputerName.Location = new System.Drawing.Point(13,56);
 			this.comboComputerName.MaxDropDownItems = 100;
 			this.comboComputerName.Name = "comboComputerName";
 			this.comboComputerName.Size = new System.Drawing.Size(280,21);
@@ -226,37 +226,37 @@ namespace OpenDental{
 			this.groupServer.Controls.Add(this.label6);
 			this.groupServer.Location = new System.Drawing.Point(16,305);
 			this.groupServer.Name = "groupServer";
-			this.groupServer.Size = new System.Drawing.Size(328,200);
+			this.groupServer.Size = new System.Drawing.Size(336,200);
 			this.groupServer.TabIndex = 2;
 			this.groupServer.TabStop = false;
-			this.groupServer.Text = "Connect to Web Server - Only for advanced users";
+			this.groupServer.Text = "Connect to Web Service - Only for advanced users";
 			// 
 			// textURI
 			// 
-			this.textURI.Location = new System.Drawing.Point(23,71);
+			this.textURI.Location = new System.Drawing.Point(13,73);
 			this.textURI.Name = "textURI";
-			this.textURI.Size = new System.Drawing.Size(280,20);
+			this.textURI.Size = new System.Drawing.Size(309,20);
 			this.textURI.TabIndex = 15;
 			// 
 			// textUser2
 			// 
-			this.textUser2.Location = new System.Drawing.Point(23,114);
+			this.textUser2.Location = new System.Drawing.Point(13,116);
 			this.textUser2.Name = "textUser2";
-			this.textUser2.Size = new System.Drawing.Size(280,20);
+			this.textUser2.Size = new System.Drawing.Size(309,20);
 			this.textUser2.TabIndex = 2;
 			// 
 			// textPassword2
 			// 
-			this.textPassword2.Location = new System.Drawing.Point(23,155);
+			this.textPassword2.Location = new System.Drawing.Point(13,157);
 			this.textPassword2.Name = "textPassword2";
 			this.textPassword2.PasswordChar = '*';
-			this.textPassword2.Size = new System.Drawing.Size(280,20);
+			this.textPassword2.Size = new System.Drawing.Size(309,20);
 			this.textPassword2.TabIndex = 3;
 			this.textPassword2.UseSystemPasswordChar = true;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(21,136);
+			this.label10.Location = new System.Drawing.Point(11,138);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(281,18);
 			this.label10.TabIndex = 11;
@@ -265,7 +265,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(21,95);
+			this.label11.Location = new System.Drawing.Point(11,97);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(295,18);
 			this.label11.TabIndex = 14;
@@ -274,7 +274,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(20,50);
+			this.label9.Location = new System.Drawing.Point(10,52);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(283,18);
 			this.label9.TabIndex = 9;
@@ -283,11 +283,11 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(19,23);
+			this.label6.Location = new System.Drawing.Point(9,25);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(297,32);
 			this.label6.TabIndex = 0;
-			this.label6.Text = "Read the manual to learn how to install the web server.";
+			this.label6.Text = "Read the manual to learn how to install the web service.";
 			// 
 			// checkConnectServer
 			// 
@@ -296,7 +296,7 @@ namespace OpenDental{
 			this.checkConnectServer.Name = "checkConnectServer";
 			this.checkConnectServer.Size = new System.Drawing.Size(328,18);
 			this.checkConnectServer.TabIndex = 1;
-			this.checkConnectServer.Text = "Connect to Web Server instead";
+			this.checkConnectServer.Text = "Connect to Web Service instead";
 			this.checkConnectServer.UseVisualStyleBackColor = true;
 			this.checkConnectServer.Click += new System.EventHandler(this.checkConnectServer_Click);
 			// 

@@ -128,7 +128,8 @@ namespace OpenDental {
 						//MessageBox.Show("processId: "+processId.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
 						//bool hasExited=Process.GetProcessById(processId).HasExited;
 						//MessageBox.Show("hasExited: "+hasExited.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
-						Process.Start("UpdateFileCopier.exe","\""+folderUpdate+"\""//pass the source directory to the file copier.
+						Process.Start(ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),
+							"\""+folderUpdate+"\""//pass the source directory to the file copier.
 							+" "+processId.ToString()//and the processId of Open Dental.
 							+" \""+appDir+"\"");//and the directory where OD is running
 					}
