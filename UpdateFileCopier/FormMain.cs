@@ -25,8 +25,13 @@ namespace UpdateFileCopier {
 
 		private void FormMain_Load(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			//label1.Text="SourceDir: "+SourceDirectory;
-			DateTime now;
+			//kill all processes named OpenDental.
+			//If the software has been rebranded, this won't do anything, but the original exe will still be correctly closed.
+			Process[] processes=Process.GetProcessesByName("OpenDental");
+			for(int i=0;i<processes.Length;i++) {
+				processes[i].Kill();//CloseMainWindow and Close were ineffective if a dialog was open.
+			}
+			/* Don't bother with this anymore.  It always happens very quickly anyway.
 			if(OpenDentProcessId!=0){//it could be zero for debugging
 				try {
 					Process process=Process.GetProcessById(OpenDentProcessId);
@@ -38,9 +43,9 @@ namespace UpdateFileCopier {
 					//MessageBox.Show("Time waited to exit: "+span.ToString());//~.07 seconds
 				}
 				catch { }//sometimes, it happens so fast that it would fail to get the processById.
-			}
-			//wait for a moment to make sure it has really exited.
-			now=DateTime.Now;
+			}*/
+			//wait for a moment to make sure they have really exited.
+			DateTime now=DateTime.Now;
 			while(DateTime.Now < now.AddSeconds(1)) {
 				Application.DoEvents();
 			}
@@ -61,6 +66,8 @@ namespace UpdateFileCopier {
 			while(DateTime.Now < now.AddSeconds(3)) {
 				Application.DoEvents();
 			}
+			//Not sure what to do about this line in rebranding situations:
+			//I guess it will have to be hard coded.
 			Process.Start(Path.Combine(DestDirectory,"OpenDental.exe"));
 			Cursor=Cursors.Default;
 			Application.Exit();
