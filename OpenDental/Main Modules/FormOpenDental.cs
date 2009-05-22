@@ -2593,7 +2593,15 @@ namespace OpenDental{
 					//start the thread that will kill the application
 					Thread killThread=new Thread(new ThreadStart(KillThread));
 					killThread.Start();
-					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(Lan.g(this,"This program will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data."));
+					string msg="";
+					if(Process.GetCurrentProcess().ProcessName=="OpenDental") {
+						msg+="All copies of Open Dental ";
+					}
+					else {
+						msg+=Process.GetCurrentProcess().ProcessName+" ";
+					}
+					msg+=Lan.g(this,"will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data.");
+					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(msg);
 					msgbox.Size=new Size(300,300);
 					msgbox.TopMost=true;
 					msgbox.ShowDialog();
