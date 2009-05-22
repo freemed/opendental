@@ -74,7 +74,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(440,135);
+			this.butCancel.Location = new System.Drawing.Point(440,138);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
@@ -88,7 +88,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(440,101);
+			this.butOK.Location = new System.Drawing.Point(440,104);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -104,7 +104,9 @@ namespace OpenDental{
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(476,62);
 			this.textBox1.TabIndex = 16;
-			this.textBox1.Text = resources.GetString("textBox1.Text");
+			this.textBox1.Text = "If you use monthly billing instead of daily, then this is where you change the ag" +
+    "ing date every month.  Otherwise, it\'s not necessary to manually run aging.  It\'" +
+    "s all handled automatically.";
 			// 
 			// textDateCalc
 			// 
@@ -126,7 +128,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(532,177);
+			this.ClientSize = new System.Drawing.Size(532,180);
 			this.Controls.Add(this.textDateCalc);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textBox1);
