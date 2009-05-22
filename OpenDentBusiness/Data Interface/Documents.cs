@@ -316,11 +316,14 @@ namespace OpenDentBusiness {
 						"'Thumbnails' folder for patient."));
 				}
 			}
-			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName+"_"+size} );
+			string thumbFileExt=Path.GetExtension(shortFileName);
+			string thumbCoreFileName=shortFileName.Substring(0,shortFileName.Length-thumbFileExt.Length);
+			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",
+				thumbCoreFileName+"_"+size+thumbFileExt} );
 			//Use the existing thumbnail if it already exists and it was created after the last document modification.
 			if(File.Exists(thumbFileName)) {
-				DateTime thumbCreationTime=File.GetCreationTime(thumbFileName);
-				if(thumbCreationTime>doc.LastAltered){
+				DateTime thumbModifiedTime=File.GetLastWriteTime(thumbFileName);
+				if(thumbModifiedTime>doc.LastAltered){
 					return (Bitmap)Bitmap.FromFile(thumbFileName);
 				}
 			}
