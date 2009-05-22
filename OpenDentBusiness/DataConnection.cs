@@ -248,19 +248,11 @@ namespace OpenDentBusiness{
 			if(connectStr.Length<1) {
 				connectStr=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
 			}
-			if(DBtype==DatabaseType.Oracle){
-				conOr=new OracleConnection(connectStr);
-				//drOr=null;
-				cmdOr=new OracleCommand();
-				cmdOr.Connection=conOr;
-				//table=new DataTable();
-			}else if(DBtype==DatabaseType.MySql){
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-				//table=new DataTable();
-			}
+			con=new MySqlConnection(connectStr);
+			//dr = null;
+			cmd = new MySqlCommand();
+			cmd.Connection=con;
+			//table=new DataTable();
 		}
 
 		///<summary>Only used to fill the list of databases in the ChooseDatabase window.</summary>

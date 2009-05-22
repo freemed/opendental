@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Reflection;
@@ -167,6 +168,51 @@ namespace OpenDentBusiness {
 			string command="SELECT @@version";
 			DataTable table=Db.GetTable(command);
 			return PIn.PString(table.Rows[0][0].ToString());
+		}
+
+		///<summary>Returns a collection of unique AtoZ folders for the array of dbnames passed in.  It will not include the current AtoZ folder for this database, even if shared by another db.</summary>
+		public static List<string> GetAtoZforDb(string[] dbNames) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("MiscData.GetAtoZforDb failed.  Updates not allowed from ClientWeb.");
+			}
+			List<string> retval=new List<string>();
+			DataConnection dcon=null;
+			string atozName;
+			string atozThisDb=PrefC.GetString("DocPath");
+			for(int i=0;i<dbNames.Length;i++) {
+				try {
+					dcon=new DataConnection(dbNames[i]);
+					string command="SELECT ValueString FROM preference WHERE PrefName='DocPath'";
+					atozName=dcon.GetScalar(command);
+					if(retval.Contains(atozName)) {
+						continue;
+					}
+					if(atozName==atozThisDb) {
+						continue;
+					}
+					retval.Add(atozName);
+				}
+				catch {
+					//don't add it to the list
+				}
+			}
+			return retval;
+		}
+
+		public static void LockWorkstationsForDbs(string[] dbNames) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("MiscData.GetAtoZforDb failed.  Updates not allowed from ClientWeb.");
+			}
+			DataConnection dcon=null;
+			for(int i=0;i<dbNames.Length;i++) {
+				try {
+					dcon=new DataConnection(dbNames[i]);
+					string command="UPDATE preference SET ValueString ='"+POut.PString(Environment.MachineName)
+						+"' WHERE PrefName='DocPath'";
+					dcon.NonQ(command);
+				}
+				catch { }
+			}
 		}
 
 

@@ -371,6 +371,17 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '6.6.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_6_8();
+		}
+
+		private static void To6_6_8() {
+			if(FromVersion<new Version("6.6.8.0")) {
+				string command;
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('UpdateMultipleDatabases','','Comma delimited')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.6.8.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_7_0();
 		}
 

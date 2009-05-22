@@ -97,83 +97,47 @@ namespace OpenDental {
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {
-				if(PrefC.UsingAtoZfolder){
-					//string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
-					string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
-					//look at the manifest to see if it's the version we need
-					string manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
-					if(manifestVersion==storedVersion.ToString(3)) {
-						//manifest version matches
-						if(MessageBox.Show(Lan.g("Prefs","Files will now be copied.")+"\r\n"
-							+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)
-							+Lan.g("Prefs"," to ")+storedVersion.ToString(3),
-							"",MessageBoxButtons.OKCancel)
-							!=DialogResult.OK)//they don't want to update for some reason.
-						{
-							Application.Exit();
-							return false;
-						}
-						string tempDir=Path.GetTempPath();
-						//copy UpdateFileCopier.exe to the temp directory
-						File.Copy(ODFileUtils.CombinePaths(folderUpdate,"UpdateFileCopier.exe"),//source
-							ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),//dest
-							true);//overwrite
-						//wait a moment to make sure the file was copied
-						//FileInfo fi=new FileInfo("");
-						//fi.Length
-						Thread.Sleep(1000);
-						//launch UpdateFileCopier to copy all files to here.
-						int processId=Process.GetCurrentProcess().Id;
-						string appDir=Application.StartupPath;
-						//MessageBox.Show("processId: "+processId.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
-						//bool hasExited=Process.GetProcessById(processId).HasExited;
-						//MessageBox.Show("hasExited: "+hasExited.ToString(),"",MessageBoxButtons.OK,MessageBoxIcon.None);
-						Process.Start(ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),
-							"\""+folderUpdate+"\""//pass the source directory to the file copier.
-							+" "+processId.ToString()//and the processId of Open Dental.
-							+" \""+appDir+"\"");//and the directory where OD is running
-					}
-					else {//manifest version is wrong
-						//No point trying the Setup.exe because that's probably wrong too.
-						//Just go straight to downloading and running the Setup.exe.
-						DownloadAndRunSetup(storedVersion,currentVersion);
-					}
-					/*
-					if(File.Exists(setupBinPath)) {
-						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
-							+"But the database "+database+"\r\n"
-							+"is already using version "+storedVersion.ToString(3)+".\r\n"
-							+"A newer version must have already been installed on at least one computer.\r\n"  
-							+"The setup program stored in your A to Z folder will now be launched.\r\n"
-							+"Or, if you hit Cancel, then you will have the option to download again."
-							,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
-							if(MessageBox.Show("Download again?","",MessageBoxButtons.OKCancel)
-								==DialogResult.OK) {
-								FormUpdate FormU=new FormUpdate();
-								FormU.ShowDialog();
-							}
-							Application.Exit();
-							return false;
-						}
-						try {
-							Process.Start(setupBinPath);
-						}
-						catch {
-							MessageBox.Show("Could not launch Setup.exe");
-						}
-					}
-					else if(MessageBox.Show("A newer version has been installed on at least one computer,"+
-							"but Setup.exe could not be found in any of the following paths: "+
-							FormPath.GetPreferredImagePath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
-						FormUpdate FormU=new FormUpdate();
-						FormU.ShowDialog();
-					}*/
-				}
-				else{//Not using image path.
+				if(!PrefC.UsingAtoZfolder){//Not using image path.
 					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
 					//perform program update automatically.
 					DownloadAndRunSetup(storedVersion,currentVersion);
+					Application.Exit();
+					return false;
 				}
+				string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
+				//look at the manifest to see if it's the version we need
+				string manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
+				if(manifestVersion!=storedVersion.ToString(3)) {//manifest version is wrong
+					//No point trying the Setup.exe because that's probably wrong too.
+					//Just go straight to downloading and running the Setup.exe.
+					DownloadAndRunSetup(storedVersion,currentVersion);
+					Application.Exit();
+					return false;
+				}
+				//manifest version matches
+				if(MessageBox.Show(Lan.g("Prefs","Files will now be copied.")+"\r\n"
+					+Lan.g("Prefs","Workstation version will be updated from ")+currentVersion.ToString(3)
+					+Lan.g("Prefs"," to ")+storedVersion.ToString(3),
+					"",MessageBoxButtons.OKCancel)
+					!=DialogResult.OK)//they don't want to update for some reason.
+				{
+					Application.Exit();
+					return false;
+				}
+				string tempDir=Path.GetTempPath();
+				//copy UpdateFileCopier.exe to the temp directory
+				File.Copy(ODFileUtils.CombinePaths(folderUpdate,"UpdateFileCopier.exe"),//source
+					ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),//dest
+					true);//overwrite
+				//wait a moment to make sure the file was copied
+				Thread.Sleep(1000);
+				//launch UpdateFileCopier to copy all files to here.
+				int processId=Process.GetCurrentProcess().Id;
+				string appDir=Application.StartupPath;
+				Process.Start(ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),
+					"\""+folderUpdate+"\""//pass the source directory to the file copier.
+					+" "+processId.ToString()//and the processId of Open Dental.
+					+" \""+appDir+"\"");//and the directory where OD is running
 				Application.Exit();//always exits, whether launch of setup worked or not
 				return false;
 			}

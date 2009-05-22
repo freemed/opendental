@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
@@ -596,6 +597,10 @@ namespace OpenDental{
 		}
 
 		private void butCheck2_Click(object sender,EventArgs e) {
+			if(RemotingClient.RemotingRole==RemotingRole.ServerWeb) {
+				MsgBox.Show(this,"Updates are only allowed from the web server");
+				return;
+			}
 			if(PrefC.GetString("WebServiceServerName") != "" //using web service
 				&& PrefC.GetString("WebServiceServerName") != Environment.MachineName)//and not on web server 
 			{
@@ -916,7 +921,9 @@ namespace OpenDental{
 		}
 
 		public static void DownloadInstallPatchFromURI(string downloadUri,string destinationPath,bool runSetupAfterDownload,bool showShutdownWindow){
+			string[] dblist=PrefC.GetString("UpdateMultipleDatabases").Split(new string[] {","},StringSplitOptions.RemoveEmptyEntries);
 			if(showShutdownWindow) {
+				//Even if updating multiple databases, extra shutdown signals are not needed.
 				FormShutdown FormSD=new FormShutdown();
 				FormSD.ShowDialog();
 				if(FormSD.DialogResult==DialogResult.OK) {
@@ -930,7 +937,10 @@ namespace OpenDental{
 					//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
 				}
 				//continue on even if user clicked cancel
+				//no other workstation will be able to start up until this value is reset.
+				Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
 			}
+			MiscData.LockWorkstationsForDbs(dblist);//lock workstations for other db's.
 			File.Delete(destinationPath);
 			WebRequest wr=WebRequest.Create(downloadUri);
 			WebResponse webResp=wr.GetResponse();
@@ -949,23 +959,36 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
+				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
 				return;
+			}
+			//copy the Setup.exe to the AtoZ folders for the other db's.
+			List<string> atozNameList=MiscData.GetAtoZforDb(dblist);
+			for(int i=0;i<atozNameList.Count;i++) {
+				if(Directory.Exists(atozNameList[i])) {
+					File.Copy(destinationPath,//copy the Setup.exe that was just downloaded to this AtoZ folder
+						Path.Combine(atozNameList[i],"Setup.exe"),//to the other atozFolder
+						true);//overwrite
+				}
 			}
 			if(!runSetupAfterDownload) {
 				return;
 			}
-			if(!MsgBox.Show(FormP,MsgBoxButtons.OKCancel,"Download succeeded.  Setup program will now begin.  When done, restart the program on this computer, then on the other computers.")) 
-			{
-				//clicking cancel gives the user one last chance to avoid starting the update process.
+			string msg=Lan.g("FormUpdate","Download succeeded.  Setup program will now begin.  When done, restart the program on this computer, then on the other computers.");
+			if(dblist.Length > 0){
+				msg="Download succeeded.  Setup file probably copied to other AtoZ folders as well.  Setup program will now begin.  When done, restart the program for each database on this computer, then on the other computers.";
+			}
+			if(MessageBox.Show(msg,"",MessageBoxButtons.OKCancel) !=DialogResult.OK){
+				//Clicking cancel gives the user a chance to avoid running the setup program,
+				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
 				return;
 			}
-			//no other workstation will be able to start up until this value is reset.
-			Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
 			try{
 				Process.Start(destinationPath);
 				Application.Exit();
 			}
 			catch{
+				Prefs.UpdateString("UpdateInProgressOnComputerName","");//unlock workstations, since nothing was actually done.
 				MsgBox.Show(FormP,"Could not launch setup");
 			}
 		}
