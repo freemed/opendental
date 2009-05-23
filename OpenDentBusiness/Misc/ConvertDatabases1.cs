@@ -4309,7 +4309,7 @@ namespace OpenDentBusiness{
 		///<summary>This conversion converts all medium ints in the database to simple signed ints, because the medium int size restriction is causing some key duplication in random primary key generations, and because we want the integers in the database to be complatible with c# ints. Also, using the syntax with regular ints works for both MySQL and Oracle, whereas the mediumint keyword is invalid in Oracle.</summary>
 		private static void To4_8_9() {
 			if(FromVersion<new Version("4.8.9.0")) {
-				///<summary>The table and column names to change, plus a bool to decide weather to specify the NOT NULL condition and a bool to specify if the column is autoincrement. Table format is in groups (table name, column name, auto increment (a or yes, space for no))</summary>
+				//The table and column names to change, plus a bool to decide weather to specify the NOT NULL condition and a bool to specify if the column is autoincrement. Table format is in groups (table name, column name, auto increment (a or yes, space for no))
 				string[] columns=new string[] {
 					//TABLE NAME											COLUMN NAME															AUTO-INCREMENT
 					@"account",												@"AccountNum",													@"a",

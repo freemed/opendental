@@ -449,7 +449,7 @@ namespace OpenDentBusiness {
 			return qtyOnHand;
 		}
 
-		/// <summary>Returns AnesthMedNum. Used to check a unique med num in table anesthmedsgiven vs. those in anesthmedsinventory. 
+		/// <summary>Returns AnesthMedNum. Used to check a unique med num in table anesthmedsgiven vs. those in anesthmedsinventory.</summary>
 		public static int GetAnesthMedNum(string aMed) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),aMed);

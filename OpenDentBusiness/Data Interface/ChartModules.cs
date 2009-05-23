@@ -751,7 +751,7 @@ namespace OpenDentBusiness {
 				dateSched=PIn.PDate(rawPlannedAppts.Rows[i]["AptDateTime"].ToString());
 				//Colors----------------------------------------------------------------------------
 				aptStatus=(ApptStatus)PIn.PInt(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
-				///change color if completed, broken, or unscheduled no matter the date
+				//change color if completed, broken, or unscheduled no matter the date
 				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.UnschedList){
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString();

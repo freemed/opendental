@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace OpenDentBusiness.DataAccess {
 	/// <summary>
-	/// The <see cref="TimeSpan"/> class cannot be serialized using the standard <see cref="XmlSerializer"/> class,
+	/// The <see cref="TimeSpan"/> class cannot be serialized using the standard XmlSerializer class,
 	/// see for example <see href="http://www.google.com/search?q=TimeSpan+XmlSerializer"/>. Therefore, we implement
 	/// our own XML Serializer for the <see cref="TimeSpan"/> class.
 	/// </summary>
