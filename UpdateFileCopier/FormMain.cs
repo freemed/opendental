@@ -20,10 +20,14 @@ namespace UpdateFileCopier {
 			InitializeComponent();
 			SourceDirectory=sourceDirectory;
 			DestDirectory=destDirectory;
-			OpenDentProcessId=Int32.Parse(openDentProcessId);
+			OpenDentProcessId=Int32.Parse(openDentProcessId);//deprecated, but we'll just leave it here.
 		}
 
 		private void FormMain_Load(object sender,EventArgs e) {
+			
+		}
+
+		private void FormMain_Shown(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			//kill all processes named OpenDental.
 			//If the software has been rebranded, this won't do anything, but the original exe will still be correctly closed.
@@ -46,11 +50,11 @@ namespace UpdateFileCopier {
 			}*/
 			//wait for a moment to make sure they have really exited.
 			DateTime now=DateTime.Now;
-			while(DateTime.Now < now.AddSeconds(1)) {
+			while(DateTime.Now < now.AddSeconds(.3)) {
 				Application.DoEvents();
 			}
 			DirectoryInfo dirInfoSource=new DirectoryInfo(SourceDirectory);
-			DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
+			//DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
 			FileInfo[] appfiles=dirInfoSource.GetFiles();
 			for(int i=0;i<appfiles.Length;i++) {
 				//if(appfiles[i].Name=="UpdateFileCopier.exe") {
@@ -59,11 +63,12 @@ namespace UpdateFileCopier {
 				//any file exclusions will have happened when originally copying files into the AtoZ folder.
 				File.Copy(appfiles[i].FullName,Path.Combine(DestDirectory,appfiles[i].Name),true);
 			}
-			label1.Text="brief pause";
-			//I wonder how long we should wait here for the files to be copied over.
-			//I wonder if there's any way to test the last altered time of a variety of files.  A lot of work.
+			//DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
+			//MessageBox.Show(dirInfoDest.GetFiles().Length.ToString());
+			//The above test shows that by the time it gets to this point,
+			//the files have already been copied over, so short wait.
 			now=DateTime.Now;
-			while(DateTime.Now < now.AddSeconds(3)) {
+			while(DateTime.Now < now.AddSeconds(.3)) {
 				Application.DoEvents();
 			}
 			//Not sure what to do about this line in rebranding situations:

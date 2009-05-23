@@ -57,12 +57,14 @@ namespace OpenDental {
 							FormUpdate.DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+updateCode+"/"+"Setup.exe",//Source URI
 								ODFileUtils.CombinePaths(destDir,"Setup.exe"),false,true);//download, but don't run
 						}
-						//and don't exit.
+						//and don't exit.  Continue with step 2.
 					}
 				}
-				//and 2. Just performed an update from this workstation on this database.  We already downloaded Setup file.
-				//if this computer just performed an update, and none of the other computers has updated yet.
-				//then attempt to stash all files that are in the Application directory.
+				//and 2a. Just performed an update from this workstation on this database.  
+				//or 2b. Just performed an update from this workstation for multiple databases.
+				//In both 2a and 2b, we already downloaded Setup file to correct location for this db, so skip 1 above.
+				//This computer just performed an update, but none of the other computers has updated yet.
+				//So attempt to stash all files that are in the Application directory.
 				if(PrefC.UsingAtoZfolder) {
 					string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
 					if(Directory.Exists(folderUpdate)) {
