@@ -99,6 +99,7 @@ namespace OpenDental {
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {
+				//This is the update sequence for both a direct workstation, and for a ClientWeb workstation.
 				if(!PrefC.UsingAtoZfolder){//Not using image path.
 					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
 					//perform program update automatically.
@@ -132,7 +133,7 @@ namespace OpenDental {
 					ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),//dest
 					true);//overwrite
 				//wait a moment to make sure the file was copied
-				Thread.Sleep(1000);
+				Thread.Sleep(500);
 				//launch UpdateFileCopier to copy all files to here.
 				int processId=Process.GetCurrentProcess().Id;
 				string appDir=Application.StartupPath;

@@ -48,9 +48,9 @@ using SparksToothChart;
 using OpenDental.SmartCards;
 using OpenDental.UI;
 
-#if(ORA_DB)
-using OD_CRYPTO;
-#endif
+//#if(ORA_DB)
+//using OD_CRYPTO;
+//#endif
 
 namespace OpenDental{
 	///<summary></summary>
@@ -1229,31 +1229,22 @@ namespace OpenDental{
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
 			allNeutral();
-			if(GetOraConfig()){  //Oracle config file exists
-				if(!TryWithConnStr()){  //connection failed
-					Application.Exit();
-					return;
-				}
-			}
-			else{
-				FormChooseDatabase formChooseDb=new FormChooseDatabase();
-				formChooseDb.GetConfig();
-				if(formChooseDb.NoShow) {
-					//DataClass.SetConnection();
-					if(!formChooseDb.TryToConnect()) {
-						formChooseDb.ShowDialog();
-						if(formChooseDb.DialogResult==DialogResult.Cancel) {
-							Application.Exit();
-							return;
-						}
-					}
-				}
-				else {
+			FormChooseDatabase formChooseDb=new FormChooseDatabase();
+			formChooseDb.GetConfig();
+			if(formChooseDb.NoShow) {
+				if(!formChooseDb.TryToConnect()) {
 					formChooseDb.ShowDialog();
 					if(formChooseDb.DialogResult==DialogResult.Cancel) {
 						Application.Exit();
 						return;
 					}
+				}
+			}
+			else {
+				formChooseDb.ShowDialog();
+				if(formChooseDb.DialogResult==DialogResult.Cancel) {
+					Application.Exit();
+					return;
 				}
 			}
 			Cursor=Cursors.WaitCursor;
@@ -1398,6 +1389,8 @@ namespace OpenDental{
 				MessageBox.Show("An update is in progress on "+updateComputerName+".  Not allowed to start up until that update is complete.");
 				return false;
 			}
+			//if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
+			//ClientWeb version can be older than this version, but that will be caught in a moment.
 			if(!PrefL.ConvertDB()){
 				return false;
 			}

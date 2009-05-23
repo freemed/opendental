@@ -53,16 +53,34 @@ namespace OpenDentBusiness{
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage){
 			//No need to check RemotingRole; no call to db.
-			if(Security.CurUser==null || !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
-				if(!suppressMessage){
+			if(Security.CurUser==null) {
+				if(!suppressMessage) {
 					MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
+				}
+				return false;
+			}
+			try {
+				return IsAuthorized(perm,date,suppressMessage,curUser.UserGroupNum);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return false;
+			}
+		}
+
+		///<summary>Will throw an error if not authorized and message not suppressed.</summary>
+		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage,int userGroupNum) {
+			//No need to check RemotingRole; no call to db.
+			if(!GroupPermissions.HasPermission(userGroupNum,perm)){
+				if(!suppressMessage){
+					throw new Exception(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
 				}
 				return false;
 			}
 			if(perm==Permissions.AccountingCreate || perm==Permissions.AccountingEdit){
 				if(date <= PrefC.GetDate("AccountingLockDate")){
 					if(!suppressMessage) {
-						MessageBox.Show(Lans.g("Security","Locked by Administrator."));
+						throw new Exception(Lans.g("Security","Locked by Administrator."));
 					}
 					return false;	
 				}
@@ -83,10 +101,10 @@ namespace OpenDentBusiness{
 					&& date <= PrefC.GetDate("SecurityLockDate"))//and that date is earlier than the lock
 				{
 					if(PrefC.GetBool("SecurityLockIncludesAdmin")//if admins are locked out too
-						|| !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,Permissions.SecurityAdmin))//or is not an admin
+						|| !GroupPermissions.HasPermission(userGroupNum,Permissions.SecurityAdmin))//or is not an admin
 					{
 						if(!suppressMessage) {
-							MessageBox.Show(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
+							throw new Exception(Lans.g("Security","Locked by Administrator before ")+PrefC.GetDate("SecurityLockDate").ToShortDateString());
 						}
 						return false;	
 					}
@@ -95,7 +113,7 @@ namespace OpenDentBusiness{
 			if(!GroupPermissions.PermTakesDates(perm)){
 				return true;
 			}
-			DateTime dateLimit=GetDateLimit(perm,Security.CurUser.UserGroupNum);
+			DateTime dateLimit=GetDateLimit(perm,userGroupNum);
 			if(date>dateLimit){//authorized
 				return true;
 			}
@@ -109,7 +127,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			if(!suppressMessage){
-				MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"
+				throw new Exception(Lans.g("Security","Not authorized for")+"\r\n"
 					+GroupPermissions.GetDesc(perm)+"\r\n"+Lans.g("Security","Date limitation"));
 			}
 			return false;		
@@ -194,7 +212,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>RemotingRole has not yet been set to ClientWeb, but it will if this succeeds.  Will throw an exception if server cannot validate username and password.  configPath will be empty from a workstation and filled from the server.</summary>
-		public static Userod LogInWeb(string oduser,string odpasshash,string configPath) {
+		public static Userod LogInWeb(string oduser,string odpasshash,string configPath,string clientVersionStr) {
 			//Very unusual method.  Remoting role can't be checked, but is implied by the presence of a value in configPath.
 			if(configPath != "") {//RemotingRole.ServerWeb
 				Userods.LoadDatabaseInfoFromFile(ODFileUtils.CombinePaths(configPath,"OpenDentalServerConfig.xml"));
@@ -210,12 +228,18 @@ namespace OpenDentBusiness{
 					throw new Exception("Invalid username or password.");
 				}
 				string command="SELECT ValueString FROM preference WHERE PrefName='ProgramVersion'";
-				string dbVersion=Db.GetScalar(command);
-				//string appVersion=Application.ProductVersion) {//this just gives the version for IIS
-				string appVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(4);
-				if(dbVersion!=appVersion){
-					throw new Exception("Version mismatch.  Server:"+Application.ProductVersion+"  Database:"+dbVersion);
+				string dbVersionStr=Db.GetScalar(command);
+				string serverVersionStr=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(4);
+				if(dbVersionStr!=serverVersionStr) {
+					throw new Exception("Version mismatch.  Server:"+serverVersionStr+"  Database:"+dbVersionStr);
 				}
+				Version clientVersion=new Version(clientVersionStr);
+				Version serverVersion=new Version(serverVersionStr);
+				if(clientVersion > serverVersion){
+					throw new Exception("Version mismatch.  Client:"+clientVersionStr+"  Server:"+serverVersionStr);
+				}
+				//if clientVersion == serverVersion, than we need do nothing.
+				//if clientVersion < serverVersion, than an update will later be triggered.
 				//Security.CurUser=user;//we're on the server, so this is meaningless
 				return user;
 				//return 0;//meaningless
@@ -230,12 +254,13 @@ namespace OpenDentBusiness{
 				dto.Credentials.PassHash=odpasshash;//Userods.EncryptPassword(password);
 				dto.MethodName="Security.LogInWeb";
 				dto.ObjectType=typeof(Userod).FullName;
-				object[] parameters=new object[] { oduser,odpasshash,configPath };
+				object[] parameters=new object[] { oduser,odpasshash,configPath,clientVersionStr };
 				dto.Params=DtoObject.ConstructArray(parameters);
 				return RemotingClient.ProcessGetObject<Userod>(dto);//can throw exception
 			}
 		}
 
+		
 	}
 }
 

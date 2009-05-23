@@ -110,7 +110,7 @@ namespace OpenDentBusiness {
 		}
 
 
-		///<summary>Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns a user object if user and password are valid.  Otherwise, returns null.</summary>
+		///<summary>Only used in one place on the server when first attempting to log on.  Must pass in a hash of the actual password since we don't want to be moving the real password around.  It will be checked against the one in the database.  Passhash should be empty string if user does not have a password.  Returns a user object if user and password are valid.  Otherwise, returns null.</summary>
 		public static Userod CheckUserAndPassword(string username, string passhash){
 			//No need to check RemotingRole; no call to db.
 			RefreshCache();
@@ -124,7 +124,7 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
-		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is use everywhere except in the log on screen.</summary>
+		///<summary>Used by Server.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is used everywhere except in the log on screen.</summary>
 		public static void CheckCredentials(Credentials cred){
 			//No need to check RemotingRole; no call to db.
 			if(cred.Username=="" || cred.PassHash==""){
