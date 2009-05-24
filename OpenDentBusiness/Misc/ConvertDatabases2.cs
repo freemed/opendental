@@ -390,6 +390,8 @@ namespace OpenDentBusiness {
 				string command;
 				command="ALTER TABLE document ADD DateTStamp TimeStamp";
 				Db.NonQ(command);
+				command="UPDATE document SET DateTStamp=NOW()";
+				Db.NonQ(command);
 
 
 
