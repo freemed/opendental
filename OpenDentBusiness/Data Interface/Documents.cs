@@ -41,33 +41,33 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static Document Fill(DataRow document){
+		public static Document Fill(DataRow row){
 			//No need to check RemotingRole; no call to db.
-			if(document==null){
+			if(row==null) {
 				return null;
 			}
 			Document doc=new Document();
-			doc.DocNum					=PIn.PInt(document[0].ToString());
-			doc.Description			=PIn.PString(document[1].ToString());
-			doc.DateCreated			=PIn.PDate(document[2].ToString());
-			doc.DocCategory			=PIn.PInt(document[3].ToString());
-			doc.PatNum					=PIn.PInt(document[4].ToString());
-			doc.FileName				=PIn.PString(document[5].ToString());
-			doc.ImgType					=(ImageType)PIn.PInt(document[6].ToString());
-			doc.IsFlipped				=PIn.PBool(document[7].ToString());
-			doc.DegreesRotated	=PIn.PShort(document[8].ToString());
-			doc.ToothNumbers		=PIn.PString(document[9].ToString());
-			doc.Note						=PIn.PString(document[10].ToString());
-			doc.SigIsTopaz			=PIn.PBool(document[11].ToString());
-			doc.Signature				=PIn.PString(document[12].ToString());
-			doc.CropX						=PIn.PInt(document[13].ToString());
-			doc.CropY						=PIn.PInt(document[14].ToString());
-			doc.CropW						=PIn.PInt(document[15].ToString());
-			doc.CropH						=PIn.PInt(document[16].ToString());
-			doc.WindowingMin		=PIn.PInt(document[17].ToString());
-			doc.WindowingMax		=PIn.PInt(document[18].ToString());
-			doc.MountItemNum		=PIn.PInt(document[19].ToString());
-			doc.LastAltered			=PIn.PDateT(document[20].ToString());
+			doc.DocNum          =PIn.PInt   (row[0].ToString());
+			doc.Description     =PIn.PString(row[1].ToString());
+			doc.DateCreated     =PIn.PDate  (row[2].ToString());
+			doc.DocCategory     =PIn.PInt   (row[3].ToString());
+			doc.PatNum          =PIn.PInt   (row[4].ToString());
+			doc.FileName        =PIn.PString(row[5].ToString());
+			doc.ImgType         =(ImageType)PIn.PInt(row[6].ToString());
+			doc.IsFlipped       =PIn.PBool  (row[7].ToString());
+			doc.DegreesRotated  =PIn.PShort (row[8].ToString());
+			doc.ToothNumbers    =PIn.PString(row[9].ToString());
+			doc.Note            =PIn.PString(row[10].ToString());
+			doc.SigIsTopaz      =PIn.PBool  (row[11].ToString());
+			doc.Signature       =PIn.PString(row[12].ToString());
+			doc.CropX           =PIn.PInt   (row[13].ToString());
+			doc.CropY           =PIn.PInt   (row[14].ToString());
+			doc.CropW           =PIn.PInt   (row[15].ToString());
+			doc.CropH           =PIn.PInt   (row[16].ToString());
+			doc.WindowingMin    =PIn.PInt   (row[17].ToString());
+			doc.WindowingMax    =PIn.PInt   (row[18].ToString());
+			doc.MountItemNum    =PIn.PInt   (row[19].ToString());
+			doc.DateTStamp      =PIn.PDateT (row[20].ToString());
 			return doc;
 		}
 
@@ -104,7 +104,7 @@ namespace OpenDentBusiness {
 			}
 			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
 				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
-				+"WindowingMin,WindowingMax,MountItemNum,LastAltered) VALUES(";
+				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(doc.DocNum)+"', ";
 			}
@@ -127,9 +127,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(doc.CropH)+"',"
 				+"'"+POut.PInt(doc.WindowingMin)+"',"
 				+"'"+POut.PInt(doc.WindowingMax)+"',"
-				+"'"+POut.PInt(doc.MountItemNum)+"',"
-				+"NOW())";//LastAltered: will later be used in backups
-				//	+"'"+POut.PBool  (IsDeleted)+"')";//ditto
+				+"'"+POut.PInt(doc.MountItemNum)+"')";
+				//DateTStamp
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -192,7 +191,7 @@ namespace OpenDentBusiness {
 				+ ",WindowingMin ='"			+POut.PInt(doc.WindowingMin)+"'"
 				+ ",WindowingMax ='"			+POut.PInt(doc.WindowingMax)+"'"
 				+ ",MountItemNum ='"			+POut.PInt(doc.MountItemNum)+"'"
-				+ ",LastAltered = NOW()"
+				//DateTStamp
 				+" WHERE DocNum = '"			+POut.PInt(doc.DocNum)+"'";
 			//MessageBox.Show(cmd.CommandText);
 			Db.NonQ(command);
@@ -323,7 +322,7 @@ namespace OpenDentBusiness {
 			//Use the existing thumbnail if it already exists and it was created after the last document modification.
 			if(File.Exists(thumbFileName)) {
 				DateTime thumbModifiedTime=File.GetLastWriteTime(thumbFileName);
-				if(thumbModifiedTime>doc.LastAltered){
+				if(thumbModifiedTime>doc.DateTStamp){
 					return (Bitmap)Bitmap.FromFile(thumbFileName);
 				}
 			}

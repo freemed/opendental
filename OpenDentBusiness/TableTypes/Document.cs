@@ -276,17 +276,17 @@ namespace OpenDentBusiness{
 			get { return mountItemNumChanged; }
 		}
 
-		///<summary>Date last altered.</summary>
-		[DataField("LastAltered")]
-		private DateTime lastAltered;
-		/// <summary>Date last altered.</summary>
-		public DateTime LastAltered {
-			get { return lastAltered; }
-			set { lastAltered=value; MarkDirty(); lastAlteredChanged=true; }
+		///<summary>Date/time last altered.  User not allowed to alter.</summary>
+		[DataField("DateTStamp")]
+		private DateTime dateTStamp;
+		/// <summary>Date/time last altered.</summary>
+		public DateTime DateTStamp {
+			get { return dateTStamp; }
+			set { dateTStamp=value; MarkDirty(); dateTStampChanged=true; }
 		}
-		bool lastAlteredChanged;
-		public bool LastAlteredChanged {
-			get { return lastAlteredChanged; }
+		bool dateTStampChanged;
+		public bool DateTStampChanged {
+			get { return dateTStampChanged; }
 		}
 
 

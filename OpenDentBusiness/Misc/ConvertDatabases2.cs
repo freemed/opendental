@@ -388,7 +388,7 @@ namespace OpenDentBusiness {
 		private static void To6_7_0() {
 			if(FromVersion<new Version("6.7.0.0")) {
 				string command;
-				command="ALTER TABLE document ADD LastAltered DATETIME DEFAULT '0001-01-01'";
+				command="ALTER TABLE document ADD DateTStamp TimeStamp";
 				Db.NonQ(command);
 
 
