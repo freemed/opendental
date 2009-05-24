@@ -40,25 +40,11 @@ namespace OpenDental {
 			if(storedVersion<currentVersion) {
 				//There are two different situations where this might happen.
 				if(PrefC.GetString("UpdateInProgressOnComputerName")==""){//1. Just performed an update from this workstation on another database.
-					//setup file needs to be downloaded again because it's in a different AtoZ folder.
-					if(PrefC.UsingAtoZfolder) {
-						string destDir=FormPath.GetPreferredImagePath();
-						string updateCode="";
-						try {
-							updateCode=FormUpdate.GetUpdateCodeForThisVersion();
-						}
-						catch(Exception ex) {
-							MessageBox.Show(ex.Message);
-							//but keep going.
-						}
-						Prefs.UpdateString("UpdateInProgressOnComputerName",Environment.MachineName);
-						if(updateCode != "") {
-							Prefs.UpdateString("UpdateCode",updateCode);
-							FormUpdate.DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+updateCode+"/"+"Setup.exe",//Source URI
-								ODFileUtils.CombinePaths(destDir,"Setup.exe"),false,true);//download, but don't run
-						}
-						//and don't exit.  Continue with step 2.
-					}
+					//This is very common for admins when viewing slighly older databases.
+					//There should be no annoying behavior here.  So do nothing.
+					Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
+					Cache.Refresh(InvalidType.Prefs);
+					return true;
 				}
 				//and 2a. Just performed an update from this workstation on this database.  
 				//or 2b. Just performed an update from this workstation for multiple databases.
