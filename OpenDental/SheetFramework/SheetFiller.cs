@@ -132,12 +132,44 @@ namespace OpenDental{
 				}
 				recallInterval=recall.RecallInterval.ToString();
 			}
-			List<Appointment> apptList=Appointments.GetFutureSchedApts(pat.PatNum);
+			List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
 			string nextSchedApptDateT="";
-			if(apptList.Count>0){
-				nextSchedApptDateT=apptList[0].AptDateTime.ToShortDateString()+"  "+apptList[0].AptDateTime.ToShortTimeString();
+			string dateTimeLastAppt="";
+			for(int i=0;i<apptList.Count;i++) {
+				if(apptList[i].AptStatus != ApptStatus.Scheduled
+					&& apptList[i].AptStatus != ApptStatus.Complete
+					&& apptList[i].AptStatus != ApptStatus.None
+					&& apptList[i].AptStatus != ApptStatus.ASAP) 
+				{
+					continue;
+				}
+				if(apptList[i].AptDateTime < DateTime.Now) {
+					//this will happen repeatedly up until the most recent.
+					dateTimeLastAppt=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+				}
+				else {//after now
+					if(nextSchedApptDateT=="") {//only the first one found
+						nextSchedApptDateT=apptList[i].AptDateTime.ToShortDateString()+"  "+apptList[i].AptDateTime.ToShortTimeString();
+						break;//we're done with the list now.
+					}
+				}
 			}
 			Provider priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+			Clinic clinic=new Clinic();
+			string clinicAddress="";
+			string clinicPhone="";
+			if(pat.ClinicNum != 0){
+				clinic=Clinics.GetClinic(pat.ClinicNum);
+				clinicAddress=clinic.Address;
+				if(clinic.Address2!=""){
+					clinicAddress+=", "+clinic.Address2;
+				}
+				if(clinic.Phone.Length==10){
+					clinicPhone="("+clinic.Phone.Substring(0,3)+")"
+						+clinic.Phone.Substring(3,3)+"-"
+						+clinic.Phone.Substring(6);
+				}
+			}
 			foreach(SheetField field in sheet.SheetFields) {
 				if(field.FieldType!=SheetFieldType.StaticText) {
 					continue;
@@ -150,11 +182,19 @@ namespace OpenDental{
 				fldval=fldval.Replace("[carrierAddress]",carrierAddress);
 				fldval=fldval.Replace("[carrierCityStZip]",carrierCityStZip);
 				fldval=fldval.Replace("[cityStateZip]",pat.City+", "+pat.State+"  "+pat.Zip);
+				fldval=fldval.Replace("[clinicDescription]",clinic.Description);
+				fldval=fldval.Replace("[clinicAddress]",clinicAddress);
+				fldval=fldval.Replace("[clinicCityStZip]",clinic.City+", "+clinic.State+"  "+clinic.Zip);
+				fldval=fldval.Replace("[clinicPhone]",clinicPhone);
 				fldval=fldval.Replace("[dateOfLastSavedTP]",dateOfLastSavedTP);
 				fldval=fldval.Replace("[dateRecallDue]",dateRecallDue);
+				fldval=fldval.Replace("[dateTimeLastAppt]",dateTimeLastAppt);
+				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[Email]",pat.Email);
 				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
 				fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
+				fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
+				fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
 				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
 				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());
 				fldval=fldval.Replace("[priProvNameFormal]",priProv.GetFormalName());
@@ -316,6 +356,9 @@ namespace OpenDental{
 								+refer.Telephone.Substring(3,3)+"-"
 								+refer.Telephone.Substring(6);
 						}
+						break;
+					case "referral.phone2":
+						field.FieldValue=refer.Phone2;
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFL();

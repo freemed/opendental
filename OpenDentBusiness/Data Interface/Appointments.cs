@@ -125,6 +125,18 @@ namespace OpenDentBusiness{
 			return TableToObjects(table).ToArray();
 		}
 
+		public static List<Appointment> GetListForPat(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command=
+				"SELECT * FROM appointment "
+				+"WHERE patnum = '"+patNum.ToString()+"' "
+				+"ORDER BY AptDateTime";
+			DataTable table=Db.GetTable(command);
+			return TableToObjects(table);
+		}
+
 		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
 		public static Appointment GetOneApt(int aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
