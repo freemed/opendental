@@ -208,7 +208,7 @@ namespace OpenDentBusiness {
 				try {
 					dcon=new DataConnection(dbNames[i]);
 					string command="UPDATE preference SET ValueString ='"+POut.PString(Environment.MachineName)
-						+"' WHERE PrefName='DocPath'";
+						+"' WHERE PrefName='UpdateInProgressOnComputerName'";
 					dcon.NonQ(command);
 				}
 				catch { }
