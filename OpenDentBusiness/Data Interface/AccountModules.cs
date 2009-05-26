@@ -995,7 +995,8 @@ namespace OpenDentBusiness {
 					extraDetail+=rawState.Rows[i]["Note"].ToString();
 				}
 				if(extraDetail!="" && showNotes) {
-					row["description"]+="\r\n"+extraDetail;
+					//row["description"]+="\r\n"+extraDetail;
+					//I don't think anyone wants to see this clutter.
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawState.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawState.Rows[i]["PatNum"].ToString();

@@ -392,7 +392,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="UPDATE document SET DateTStamp=NOW()";
 				Db.NonQ(command);
-				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('StatementShowNotes','0','Payment, adjustment, and statement notes.')";
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('StatementShowNotes','0','Payments and adjustments.')";
 				Db.NonQ(command);
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('StatementShowProcBreakdown','0','')";
 				Db.NonQ(command);
