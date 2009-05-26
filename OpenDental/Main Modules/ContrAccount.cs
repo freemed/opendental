@@ -1149,7 +1149,7 @@ namespace OpenDental {
 			this.checkShowDetail.Name = "checkShowDetail";
 			this.checkShowDetail.Size = new System.Drawing.Size(164,18);
 			this.checkShowDetail.TabIndex = 219;
-			this.checkShowDetail.Text = "Show Extra Detail";
+			this.checkShowDetail.Text = "Show Proc Breakdowns";
 			this.checkShowDetail.UseVisualStyleBackColor = true;
 			this.checkShowDetail.Click += new System.EventHandler(this.checkShowDetail_Click);
 			// 
@@ -1781,7 +1781,7 @@ namespace OpenDental {
 				panelTotalOwes.Top=-38;
 				viewingInRecall=true;
 			}
-			DataSetMain=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
+			DataSetMain=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily,checkShowDetail.Checked,true);
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
@@ -2343,9 +2343,9 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
 				row.Cells.Add(table.Rows[i]["tth"].ToString());
 				description=table.Rows[i]["description"].ToString();
-				if(checkShowDetail.Checked){
-					description+="\r\n"+table.Rows[i]["extraDetail"].ToString();
-				}
+				//if(checkShowDetail.Checked){
+				//	description+="\r\n"+table.Rows[i]["extraDetail"].ToString();
+				//}
 				row.Cells.Add(description);
 				row.Cells.Add(table.Rows[i]["charges"].ToString());
 				row.Cells.Add(table.Rows[i]["credits"].ToString());

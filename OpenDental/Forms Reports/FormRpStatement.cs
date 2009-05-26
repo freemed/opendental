@@ -992,10 +992,12 @@ namespace OpenDental{
 					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
 						if(tableAccount.Rows[p]["prov"].ToString().Trim()!=""){
 							grow.Cells.Add(tableAccount.Rows[p]["prov"].ToString()+" - "+tableAccount.Rows[p]["description"].ToString());
-						}else{//No provider on this account row item, so don't put the extra leading characters.
+						}
+						else{//No provider on this account row item, so don't put the extra leading characters.
 							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 						}
-					}else{//Assume English (United States)
+					}
+					else{//Assume English (United States)
 						grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 					}
 					grow.Cells.Add(tableAccount.Rows[p]["charges"].ToString());
