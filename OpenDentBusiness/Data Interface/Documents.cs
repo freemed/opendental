@@ -281,15 +281,20 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		//[Obsolete("This method now throws an exception!")]
 		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
+			//No need to check RemotingRole; no call to db.
 			Document pictureDoc=GetPatPictFromDb(patNum);
+			if(pictureDoc==null) {
+				patientPict=null;
+				return false;
+			}
 			patientPict=GetThumbnail(pictureDoc,patFolder,100);
 			return (patientPict!=null);
 		}
 
-		///<summary>Gets the corresponding thumbnail image for the given document object. The document is expected to be of type photo, and a 'not available' image is returned if the document is not a photo. The thumbnail for every document is in a folder named 'thumbnails' within the same directly level.</summary>
+		///<summary>Gets the corresponding thumbnail image for the given document object. The document is expected to be an image, and a 'not available' image is returned if the document is not an image. The thumbnail for every document is in a folder named 'thumbnails' within the same directly level.</summary>
 		public static Bitmap GetThumbnail(Document doc,string patFolder,int size){
+			//No need to check RemotingRole; no call to db.
 			string shortFileName=doc.FileName;
 			//If no file name associated with the document, then there cannot be a thumbnail,
 			//because thumbnails have the same name as the original image document.
@@ -301,7 +306,7 @@ namespace OpenDentBusiness {
 			if(!File.Exists(fullName)) {
 				return NoAvailablePhoto(size);
 			}
-			//If the specified document is not an image return null.
+			//If the specified document is not an image return 'not available'.
 			if(!ImageHelper.HasImageExtension(fullName)) {
 				return NoAvailablePhoto(size);
 			}
@@ -310,7 +315,8 @@ namespace OpenDentBusiness {
 			if(!Directory.Exists(thumbPath)) {
 				try {
 					Directory.CreateDirectory(thumbPath);
-				} catch {
+				} 
+				catch {
 					throw new ImageStoreCreationException(Lans.g("Documents","Error: Could not create "+
 						"'Thumbnails' folder for patient."));
 				}
@@ -343,6 +349,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static Bitmap NoAvailablePhoto(int size){
+			//No need to check RemotingRole; no call to db.
 			Bitmap bitmap=new Bitmap(size,size);
 			Graphics g=Graphics.FromImage(bitmap);
 			g.InterpolationMode=InterpolationMode.High;
