@@ -39,13 +39,12 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static int WriteObject(Anes_hl7data hl7) {
+		public static void WriteObject(Anes_hl7data hl7) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				hl7.ArchiveID=Meth.GetInt(MethodBase.GetCurrentMethod(),hl7);
-				return hl7.ArchiveID;
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hl7);
+				return;
 			}
 			DataObjectFactory<Anes_hl7data>.WriteObject(hl7);
-			return hl7.ArchiveID;
 		}
 
 		public static DataTable RefreshCache() {
