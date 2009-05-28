@@ -123,11 +123,11 @@ namespace OpenDentBusiness{
 			etrans.CarrierNum          =PIn.PInt   (table.Rows[0][8].ToString());
 			etrans.CarrierNum2         =PIn.PInt   (table.Rows[0][9].ToString());
 			etrans.PatNum              =PIn.PInt   (table.Rows[0][10].ToString());
-			etrans.MessageText         =PIn.PString(table.Rows[0][11].ToString());
-			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][12].ToString());
-			etrans.AckCode             =PIn.PString(table.Rows[0][13].ToString());
-			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][14].ToString());
-			etrans.Note                =PIn.PString(table.Rows[0][15].ToString());
+			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][11].ToString());
+			etrans.AckCode             =PIn.PString(table.Rows[0][12].ToString());
+			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][13].ToString());
+			etrans.Note                =PIn.PString(table.Rows[0][14].ToString());
+			etrans.EtransMessageTextNum=PIn.PInt   (table.Rows[0][15].ToString());
 			return etrans;
 		}
 
@@ -145,7 +145,7 @@ namespace OpenDentBusiness{
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode,TransSetNum,Note) VALUES(";
+				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
@@ -170,11 +170,11 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (etrans.CarrierNum)+"', "
 				+"'"+POut.PInt   (etrans.CarrierNum2)+"', "
 				+"'"+POut.PInt   (etrans.PatNum)+"', "
-				+"'"+POut.PString(etrans.MessageText)+"', "
 				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
 				+"'"+POut.PString(etrans.AckCode)+"', "
 				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
-				+"'"+POut.PString(etrans.Note)+"')";
+				+"'"+POut.PString(etrans.Note)+"', "
+				+"'"+POut.PInt   (etrans.EtransMessageTextNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -199,11 +199,11 @@ namespace OpenDentBusiness{
 				+"CarrierNum= '"          +POut.PInt   (etrans.CarrierNum)+"', "
 				+"CarrierNum2= '"         +POut.PInt   (etrans.CarrierNum2)+"', "
 				+"PatNum= '"              +POut.PInt   (etrans.PatNum)+"', "
-				+"MessageText= '"         +POut.PString(etrans.MessageText)+"', "
 				+"BatchNumber= '"         +POut.PInt   (etrans.BatchNumber)+"', "
 				+"AckCode= '"             +POut.PString(etrans.AckCode)+"', "
 				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
-				+"Note= '"                +POut.PString(etrans.Note)+"' "
+				+"Note= '"                +POut.PString(etrans.Note)+"', "
+				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"' "
 				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
 			Db.NonQ(command);
 		}
@@ -287,12 +287,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used by Canadian code right now.</summary>
-		public static void SetMessage(int etransNum, string msg) {
+		public static void SetMessage(int etransNum, string messageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum,msg);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum,messageText);
 				return;
 			}
-			string command= "UPDATE etrans SET MessageText='"+POut.PString(msg)+"' "
+			EtransMessageText msg=new EtransMessageText();
+			msg.MessageText=messageText;
+			EtransMessageTexts.Insert(msg);
+			//string command=
+			string command= "UPDATE etrans SET EtransMessageTextNum="+POut.PInt(msg.EtransMessageTextNum)+" "
 				+"WHERE EtransNum = '"+POut.PInt(etransNum)+"'";
 			Db.NonQ(command);
 		}
@@ -362,7 +366,6 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			etrans.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
 			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
-			etrans.MessageText=messageText;
 			etrans.BatchNumber=batchNumber;
 			if(X837.IsX12(messageText)) {
 				X837 x837=new X837(messageText);
@@ -432,6 +435,10 @@ namespace OpenDentBusiness{
 					etrans.CarrierTransCounter2++;
 				}
 			}
+			EtransMessageText etransMessageText=new EtransMessageText();
+			etransMessageText.MessageText=messageText;
+			EtransMessageTexts.Insert(etransMessageText);
+			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans);
 			return etrans;
 		}
@@ -445,7 +452,6 @@ namespace OpenDentBusiness{
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=dateTimeTrans;
 			etrans.ClearinghouseNum=clearinghouseNum;
-			etrans.MessageText=messageText;
 			string command;
 			if(X12object.IsX12(messageText)) {
 				X12object Xobj=new X12object(messageText);
@@ -489,6 +495,10 @@ namespace OpenDentBusiness{
 			else {//not X12
 				etrans.Etype=EtransType.TextReport;
 			}
+			EtransMessageText etransMessageText=new EtransMessageText();
+			etransMessageText.MessageText=messageText;
+			EtransMessageTexts.Insert(etransMessageText);
+			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans);
 		}
 

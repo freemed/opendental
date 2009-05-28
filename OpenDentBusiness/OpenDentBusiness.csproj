@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Misc\AnestheticQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
@@ -359,6 +360,7 @@
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\ReplicationQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
+    <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="X12\X277U.cs" />
     <Compile Include="X12\X837.cs" />
     <Compile Include="X12\X997.cs" />

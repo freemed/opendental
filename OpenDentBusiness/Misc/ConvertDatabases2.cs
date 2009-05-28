@@ -396,6 +396,26 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('StatementShowProcBreakdown','0','')";
 				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD EtransMessageTextNum INT NOT NULL";
+				Db.NonQ(command);
+				command="DROP TABLE IF EXISTS etransmessagetext";
+				Db.NonQ(command);
+				command=@"CREATE TABLE etransmessagetext (
+					EtransMessageTextNum int NOT NULL auto_increment,
+					MessageText text NOT NULL,
+					PRIMARY KEY (EtransMessageTextNum)
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				command="INSERT INTO etransmessagetext (MessageText) "
+					+"SELECT DISTINCT MessageText FROM etrans "
+					+"WHERE etrans.MessageText != ''";
+				Db.NonQ(command);
+				command="UPDATE etrans,etransmessagetext "
+					+"SET etrans.EtransMessageTextNum=etransmessagetext.EtransMessageTextNum "
+					+"WHERE etrans.MessageText=etransmessagetext.MessageText";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans DROP MessageText";
+				Db.NonQ(command);
 
 
 

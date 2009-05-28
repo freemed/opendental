@@ -214,8 +214,8 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(ex.Message);
 			}
 			Etranss.SetMessage(etrans.EtransNum,txt);
-			etrans.MessageText=txt;
-			FormCCDPrint FormP=new FormCCDPrint(etrans);//Print the form.
+			//etrans.MessageText=txt;
+			FormCCDPrint FormP=new FormCCDPrint(etrans,txt);//Print the form.
 			FormP.ShowDialog();
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.

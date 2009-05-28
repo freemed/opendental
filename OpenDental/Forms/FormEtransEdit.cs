@@ -44,6 +44,7 @@ namespace OpenDental{
 		//private bool headingPrinted;
 		private CheckBox checkAttachments;
 		private int linesPrinted;
+		private string MessageText;
 
 		///<summary></summary>
 		public FormEtransEdit()
@@ -374,7 +375,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormEtransEdit_Load(object sender,EventArgs e) {
-			textMessageText.Text=EtransCur.MessageText;
+			MessageText=EtransMessageTexts.GetMessageText(EtransCur.EtransMessageTextNum);
+			textMessageText.Text=MessageText;
 			textDateTimeTrans.Text=EtransCur.DateTimeTrans.ToString();
 			textClaimNum.Text=EtransCur.ClaimNum.ToString();
 			textBatchNumber.Text=EtransCur.BatchNumber.ToString();
@@ -382,13 +384,13 @@ namespace OpenDental{
 			textAckCode.Text=EtransCur.AckCode;
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
-				if(X837.IsX12(EtransCur.MessageText)) {
-					X837 x837=new X837(EtransCur.MessageText);
+				if(X837.IsX12(MessageText)) {
+					X837 x837=new X837(MessageText);
 					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
 				}
 				AckCur=Etranss.GetAckForTrans(EtransCur.EtransNum);
 				if(AckCur!=null){
-					textAckMessage.Text=AckCur.MessageText;
+					textAckMessage.Text=EtransMessageTexts.GetMessageText(AckCur.EtransMessageTextNum);
 					textAckDateTime.Text=AckCur.DateTimeTrans.ToString();
 				}
 			}

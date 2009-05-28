@@ -93,6 +93,7 @@ namespace OpenDental.Eclaims {
 		List<PatPlan> patPlansForPatient;
 		List<CanadianExtract> missingListAll;
 		List<CanadianExtract> missingListDates;
+		private string MessageText;
 
 		#endregion
 
@@ -117,25 +118,28 @@ namespace OpenDental.Eclaims {
 		#region Constructors and System Print Handlers
 
 		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null. This constructor is used to print embedded transactions of an etrans message text. Set assigned to true in the case of assigned claims.</summary>
-		protected FormCCDPrint(Etrans pEtrans,bool pEmbedded,bool pAssigned){
+		protected FormCCDPrint(Etrans pEtrans,bool pEmbedded,bool pAssigned,string messageText){
 			etrans=pEtrans;
 			embedded=pEmbedded;
 			assigned=pAssigned;
+			MessageText=messageText;
 			patientCopy=!pAssigned;
 			Init();
 		}
 
 		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null. Set assigned to true in the case of assigned claims.</summary>
-		public FormCCDPrint(Etrans pEtrans,bool pAssigned) {
+		public FormCCDPrint(Etrans pEtrans,bool pAssigned,string messageText) {
 			etrans=pEtrans;
 			assigned=pAssigned;
+			MessageText=messageText;
 			patientCopy=!pAssigned;
 			Init();
 		}
 
 		///<summary>Accepts an etrans entry for Canadian claims only. After the constructor completes, only the secondary insurance db structures can be null.</summary>
-		public FormCCDPrint(Etrans pEtrans){
+		public FormCCDPrint(Etrans pEtrans,string messageText) {
 			etrans=pEtrans;
+			MessageText=messageText;
 			Init();
 		}
 
@@ -183,10 +187,11 @@ namespace OpenDental.Eclaims {
 		///<summary>This is the function that must be called to properly print the form.</summary>
 		public void Print(){
 			try{
-				if(etrans.MessageText==null || etrans.MessageText.Length<23) {
-					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+etrans.MessageText);
+				//string msgText=EtransMessageTexts.GetMessageText(etrans.EtransMessageTextNum);
+				if(MessageText==null || MessageText.Length<23) {
+					throw new Exception((embedded?"Embedded":"")+"CCD message format too short: "+MessageText);
 				}
-				formData=new CCDFieldInputter(etrans.MessageText);//Input the fields of the given message.
+				formData=new CCDFieldInputter(MessageText);//Input the fields of the given message.
 				formId=formData.GetFieldById("G42");
 				CCDField transactionCode=formData.GetFieldById("A04");
 				msgType=((transactionCode==null || transactionCode.valuestr==null)?"00":transactionCode.valuestr);
@@ -199,7 +204,7 @@ namespace OpenDental.Eclaims {
 				while(numCopies>0){
 					if(!patientCopy){//A dentist copy is to be printed.
 						//We cannot simply print two copies of this form, because the dentist and patient forms are slightly different.
-						FormCCDPrint patientForm=new FormCCDPrint(etrans.Copy());//Print out a patient copy seperately.
+						FormCCDPrint patientForm=new FormCCDPrint(etrans.Copy(),MessageText);//Print out a patient copy seperately.
 						patientForm.Print();
 					}
 					//Always print a patient copy, but only print dentist copies for those forms to which it applies.
@@ -210,8 +215,7 @@ namespace OpenDental.Eclaims {
 							CCDField embeddedTransaction=formData.GetFieldById("G40");
 							if(embeddedTransaction!=null){
 								Etrans embTrans=etrans.Copy();
-								embTrans.MessageText=embeddedTransaction.valuestr;
-								FormCCDPrint embeddedForm=new FormCCDPrint(embTrans,assigned);
+								FormCCDPrint embeddedForm=new FormCCDPrint(embTrans,assigned,embeddedTransaction.valuestr);
 								embeddedForm.Print();
 							}
 						}
