@@ -99,10 +99,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(Def def) {
+		public static int Insert(Def def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.DefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.DefNum;
 			}
 			string command= "INSERT INTO definition (Category,ItemOrder,"
 				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES("
@@ -113,6 +113,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(def.ItemColor.ToArgb())+"', "
 				+"'"+POut.PBool(def.IsHidden)+"')";
 			def.DefNum=Db.NonQ(command,true);//used in conversion
+			return def.DefNum;
 		}
 
 		///<summary>CAUTION.  This does not perform all validations.  It only properly validates for one def type right now.</summary>

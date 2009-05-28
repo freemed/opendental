@@ -46,10 +46,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(EmailTemplate template){
+		public static int Insert(EmailTemplate template){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),template);
-				return;
+				template.EmailTemplateNum=Meth.GetInt(MethodBase.GetCurrentMethod(),template);
+				return template.EmailTemplateNum;
 			}
 			if(PrefC.RandomKeys){
 				template.EmailTemplateNum=MiscData.GetKey("emailtemplate","EmailTemplateNum");
@@ -73,6 +73,7 @@ namespace OpenDentBusiness{
 			else{
  				template.EmailTemplateNum=Db.NonQ(command,true);
 			}
+			return template.EmailTemplateNum;
 		}
 
 		///<summary></summary>

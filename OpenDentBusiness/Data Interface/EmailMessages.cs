@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(EmailMessage message){
+		public static int Insert(EmailMessage message){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),message);
-				return;
+				message.EmailMessageNum=Meth.GetInt(MethodBase.GetCurrentMethod(),message);
+				return message.EmailMessageNum;
 			}
 			if(PrefC.RandomKeys) {
 				message.EmailMessageNum=MiscData.GetKey("emailmessage","EmailMessageNum");
@@ -104,6 +104,7 @@ namespace OpenDentBusiness{
 				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;
 				EmailAttaches.Insert(message.Attachments[i]);
 			}
+			return message.EmailMessageNum;
 		}
 
 		///<summary></summary>

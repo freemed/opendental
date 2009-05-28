@@ -308,10 +308,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
-		public static void Insert(Appointment appt,bool includeAptNum) {
+		public static int Insert(Appointment appt,bool includeAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),appt,includeAptNum);
-				return;
+				appt.AptNum=Meth.GetInt(MethodBase.GetCurrentMethod(),appt,includeAptNum);
+				return appt.AptNum;
 			}
 			//make sure all fields are properly filled:
 			if(appt.Confirmed==0){
@@ -369,6 +369,7 @@ namespace OpenDentBusiness{
 			else{
 				appt.AptNum=Db.NonQ(command,true);
 			}
+			return appt.AptNum;
 		}
 
 		//public static void SaveData(Appointment apt) {

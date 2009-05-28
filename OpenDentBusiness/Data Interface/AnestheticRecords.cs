@@ -58,10 +58,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Creates a new AnestheticRecord in the db</summary>
-		public static void Insert(AnestheticRecord Cur) {
+		public static int Insert(AnestheticRecord Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.AnestheticRecordNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.AnestheticRecordNum;
 			}
 			if(PrefC.RandomKeys) {
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord","AnestheticRecordNum");
@@ -85,6 +85,7 @@ namespace OpenDentBusiness {
 			else {
 				Cur.AnestheticRecordNum = Db.NonQ(command,true);
 			}
+			return Cur.AnestheticRecordNum;
 		}
 
 		///<summary>Creates a corresponding AnestheticData record in the db</summary>

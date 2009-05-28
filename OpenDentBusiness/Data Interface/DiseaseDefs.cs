@@ -81,16 +81,17 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(DiseaseDef def) {
+		public static int Insert(DiseaseDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.DiseaseDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.DiseaseDefNum;
 			}
 			string command="INSERT INTO diseasedef (DiseaseName,ItemOrder,IsHidden) VALUES("
 				+"'"+POut.PString(def.DiseaseName)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PBool  (def.IsHidden)+"')";
 			def.DiseaseDefNum=Db.NonQ(command,true);
+			return def.DiseaseDefNum;
 		}
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>

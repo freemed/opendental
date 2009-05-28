@@ -221,10 +221,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
-		public static void Insert(Carrier Cur){
+		public static int Insert(Carrier Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.CarrierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.CarrierNum;
 			}
 			string command;
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
@@ -277,6 +277,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.CarrierNum=Db.NonQ(command,true);
 			}
+			return Cur.CarrierNum;
 		}
 
 		///<summary>Surround with try/catch.  If there are any dependencies, then this will throw an exception.  This is currently only called from FormCarrierEdit.</summary>

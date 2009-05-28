@@ -75,10 +75,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(JournalEntry je) {
+		public static int Insert(JournalEntry je) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),je);
-				return;
+				je.JournalEntryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),je);
+				return je.JournalEntryNum;
 			}
 			if(je.DebitAmt<0 || je.CreditAmt<0){
 				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
@@ -111,6 +111,7 @@ namespace OpenDentBusiness{
 			else {
 				je.JournalEntryNum=Db.NonQ(command,true);
 			}
+			return je.JournalEntryNum;
 		}
 
 		///<summary></summary>

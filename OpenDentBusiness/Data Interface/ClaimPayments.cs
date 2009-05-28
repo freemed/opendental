@@ -111,10 +111,10 @@ namespace OpenDentBusiness{
 
 
 		///<summary></summary>
-		public static void Insert(ClaimPayment cp){
+		public static int Insert(ClaimPayment cp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
-				return;
+				cp.ClaimPaymentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cp);
+				return cp.ClaimPaymentNum;
 			}
 			if(PrefC.RandomKeys){
 				cp.ClaimPaymentNum=MiscData.GetKey("claimpayment","ClaimPaymentNum");
@@ -143,6 +143,7 @@ namespace OpenDentBusiness{
 			else{
  				cp.ClaimPaymentNum=Db.NonQ(command,true);
 			}
+			return cp.ClaimPaymentNum;
 		}
 
 		///<summary>If trying to change the amount and attached to a deposit, it will throw an error, so surround with try catch.</summary>

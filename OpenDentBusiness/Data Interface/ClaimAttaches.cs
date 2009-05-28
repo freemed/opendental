@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClaimAttaches{
 
-		public static void Insert(ClaimAttach attach) {
+		public static int Insert(ClaimAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
-				return;
+				attach.ClaimAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				return attach.ClaimAttachNum;
 			}
 			if(PrefC.RandomKeys) {
 				attach.ClaimAttachNum=MiscData.GetKey("claimattach","ClaimAttachNum");
@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 			else {
 				attach.ClaimAttachNum=Db.NonQ(command,true);
 			}
+			return attach.ClaimAttachNum;
 		}
 
 

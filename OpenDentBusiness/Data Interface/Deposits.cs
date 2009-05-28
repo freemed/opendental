@@ -67,10 +67,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Deposit dep){
+		public static int Insert(Deposit dep){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),dep);
-				return;
+				dep.DepositNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dep);
+				return dep.DepositNum;
 			}
 			if(PrefC.RandomKeys){
 				dep.DepositNum=MiscData.GetKey("deposit","DepositNum");
@@ -93,6 +93,7 @@ namespace OpenDentBusiness{
 			else{
  				dep.DepositNum=Db.NonQ(command,true);
 			}
+			return dep.DepositNum;
 		}
 
 		///<summary>Also handles detaching all payments and claimpayments.  Throws exception if deposit is attached as a source document to a transaction.  The program should have detached the deposit from the transaction ahead of time, so I would never expect the program to throw this exception unless there was a bug.</summary>

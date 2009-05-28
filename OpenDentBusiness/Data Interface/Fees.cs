@@ -66,10 +66,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Fee fee){
+		public static int Insert(Fee fee){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
-				return;
+				fee.FeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),fee);
+				return fee.FeeNum;
 			}
 			string command= "INSERT INTO fee (amount,OldCode,"
 				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES("
@@ -80,6 +80,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (fee.UseDefaultCov)+"', "
 				+"'"+POut.PInt   (fee.CodeNum)+"')";
  			fee.FeeNum=Db.NonQ(command,true);
+			return fee.FeeNum;
 		}
 
 		///<summary></summary>

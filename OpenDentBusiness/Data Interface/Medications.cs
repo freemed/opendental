@@ -59,10 +59,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Medication Cur){
+		public static int Insert(Medication Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.MedicationNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.MedicationNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.MedicationNum=MiscData.GetKey("medication","MedicationNum");
@@ -86,6 +86,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.MedicationNum=Db.NonQ(command,true);
 			}
+			return Cur.MedicationNum;
 		}
 
 		///<summary>Dependent brands and patients will already be checked.</summary>

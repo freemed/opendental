@@ -60,10 +60,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Letter Cur){
+		public static int Insert(Letter Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.LetterNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.LetterNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.LetterNum=MiscData.GetKey("letter","LetterNum");
@@ -85,6 +85,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.LetterNum=Db.NonQ(command,true);
 			}
+			return Cur.LetterNum;
 		}
 
 		///<summary></summary>

@@ -61,10 +61,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(Disease disease) {
+		public static int Insert(Disease disease) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
-				return;
+				disease.DiseaseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),disease);
+				return disease.DiseaseNum;
 			}
 			if(PrefC.RandomKeys) {
 				disease.DiseaseNum=MiscData.GetKey("disease","DiseaseNum");
@@ -87,6 +87,7 @@ namespace OpenDentBusiness {
 			else {
 				disease.DiseaseNum=Db.NonQ(command,true);
 			}
+			return disease.DiseaseNum;
 		}
 
 		///<summary></summary>

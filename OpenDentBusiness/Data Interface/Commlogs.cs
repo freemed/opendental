@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Commlog comm){
+		public static int Insert(Commlog comm){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),comm);
-				return;
+				comm.CommlogNum=Meth.GetInt(MethodBase.GetCurrentMethod(),comm);
+				return comm.CommlogNum;
 			}
 			if(PrefC.RandomKeys) {
 				comm.CommlogNum=MiscData.GetKey("commlog","CommlogNum");
@@ -84,6 +84,7 @@ namespace OpenDentBusiness{
 			else {
 				comm.CommlogNum=Db.NonQ(command,true);
 			}
+			return comm.CommlogNum;
 		}
 
 		///<summary></summary>

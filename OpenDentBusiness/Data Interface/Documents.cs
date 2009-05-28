@@ -90,10 +90,10 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
-		public static void Insert(Document doc,Patient pat){
+		public static int Insert(Document doc,Patient pat){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),doc,pat);
-				return;
+				doc.DocNum=Meth.GetInt(MethodBase.GetCurrentMethod(),doc,pat);
+				return doc.DocNum;
 			}
 			if(PrefC.RandomKeys) {
 				doc.DocNum=MiscData.GetKey("document","DocNum");
@@ -163,6 +163,7 @@ namespace OpenDentBusiness {
 				}*/
 				Update(doc);
 			}
+			return doc.DocNum;
 		}
 
 		///<summary></summary>

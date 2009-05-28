@@ -10,10 +10,10 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class InsPlans {
 		///<summary>Also fills PlanNum from db.</summary>
-		public static void Insert(InsPlan plan) {
+		public static int Insert(InsPlan plan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
-				return;
+				plan.PlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
+				return plan.PlanNum;
 			}
 			if(PrefC.RandomKeys) {
 				plan.PlanNum=MiscData.GetKey("insplan","PlanNum");
@@ -67,6 +67,7 @@ namespace OpenDentBusiness {
 			else {
 				plan.PlanNum=Db.NonQ(command,true);
 			}
+			return plan.PlanNum;
 		}
 
 		///<summary></summary>

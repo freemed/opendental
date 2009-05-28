@@ -63,10 +63,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(CanadianExtract cur) {
+		private static int Insert(CanadianExtract cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
-				return;
+				cur.CanadianExtractNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cur);
+				return cur.CanadianExtractNum;
 			}
 			if(PrefC.RandomKeys) {
 				cur.CanadianExtractNum=MiscData.GetKey("canadianextract","CanadianExtractNum");
@@ -89,6 +89,7 @@ namespace OpenDentBusiness{
 			else {
 				cur.CanadianExtractNum=Db.NonQ(command,true);
 			}
+			return cur.CanadianExtractNum;
 		}
 
 /*update never used*/

@@ -52,10 +52,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(Operatory op){
+		private static int Insert(Operatory op){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
-				return;
+				op.OperatoryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),op);
+				return op.OperatoryNum;
 			}
 			string command= "INSERT INTO operatory (OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
 				+"IsHygiene,ClinicNum"//DateTStamp
@@ -69,6 +69,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (op.IsHygiene)+"', "
 				+"'"+POut.PInt   (op.ClinicNum)+"')";
  			op.OperatoryNum=Db.NonQ(command,true);
+			return op.OperatoryNum;
 		}
 
 		///<summary></summary>

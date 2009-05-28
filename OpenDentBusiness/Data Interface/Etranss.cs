@@ -132,10 +132,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
-		public static void Insert(Etrans etrans) {
+		public static int Insert(Etrans etrans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),etrans);
-				return;
+				etrans.EtransNum=Meth.GetInt(MethodBase.GetCurrentMethod(),etrans);
+				return etrans.EtransNum;
 			}
 			if(PrefC.RandomKeys) {
 				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
@@ -181,6 +181,7 @@ namespace OpenDentBusiness{
 			else {
 				etrans.EtransNum=Db.NonQ(command,true);
 			}
+			return etrans.EtransNum;
 		}
 
 		///<summary></summary>

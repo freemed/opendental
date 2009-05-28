@@ -10,10 +10,10 @@ namespace OpenDentBusiness{
 	public class FormPats{
 
 		///<summary></summary>
-		public static void Insert(FormPat Cur) {
+		public static int Insert(FormPat Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.FormPatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.FormPatNum;
 			}
 			if(PrefC.RandomKeys) {
 				Cur.FormPatNum=MiscData.GetKey("formpat","FormPatNum");
@@ -35,6 +35,7 @@ namespace OpenDentBusiness{
 			else {
 				Cur.FormPatNum=Db.NonQ(command,true);
 			}
+			return Cur.FormPatNum;
 		}
 
 		public static FormPat GetOne(int formPatNum){

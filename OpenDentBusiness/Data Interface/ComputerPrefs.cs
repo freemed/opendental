@@ -77,10 +77,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
-		public static void Insert(ComputerPref computerPref){
+		public static int Insert(ComputerPref computerPref){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerPref);
-				return;
+				computerPref.ComputerPrefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
+				return computerPref.ComputerPrefNum;
 			}
 			if(PrefC.RandomKeys) {
 				computerPref.ComputerPrefNum=MiscData.GetKey("computerpref","ComputerPrefNum");
@@ -114,6 +114,7 @@ namespace OpenDentBusiness {
 			}else{
 				computerPref.ComputerPrefNum=Db.NonQ(command,true);
 			}
+			return computerPref.ComputerPrefNum;
 		}
 
 		public static int Update(ComputerPref computerPref){

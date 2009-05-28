@@ -107,10 +107,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Employee Cur){
+		public static int Insert(Employee Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.EmployeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.EmployeeNum;
 			}
 			string command = "INSERT INTO employee (lname,fname,middlei,ishidden"
 				+",ClockStatus,PhoneExt) "
@@ -122,6 +122,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.ClockStatus)+"', "
 				+"'"+POut.PInt   (Cur.PhoneExt)+"')";
 			Cur.EmployeeNum=Db.NonQ(command,true);
+			return Cur.EmployeeNum;
 		}
 
 		///<summary>Surround with try-catch</summary>

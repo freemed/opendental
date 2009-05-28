@@ -75,10 +75,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ClaimProc cp) {
+		public static int Insert(ClaimProc cp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
-				return;
+				cp.ClaimProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cp);
+				return cp.ClaimProcNum;
 			}
 			if(PrefC.RandomKeys) {
 				cp.ClaimProcNum=MiscData.GetKey("claimproc","ClaimProcNum");
@@ -136,6 +136,7 @@ namespace OpenDentBusiness{
 			else {
 				cp.ClaimProcNum=Db.NonQ(command,true);
 			}
+			return cp.ClaimProcNum;
 		}
 
 		///<summary></summary>

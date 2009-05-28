@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(LabTurnaround lab){
+		public static int Insert(LabTurnaround lab){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
-				return;
+				lab.LabTurnaroundNum=Meth.GetInt(MethodBase.GetCurrentMethod(),lab);
+				return lab.LabTurnaroundNum;
 			}
 			if(PrefC.RandomKeys) {
 				lab.LabTurnaroundNum=MiscData.GetKey("labturnaround","LabTurnaroundNum");
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 			else {
 				lab.LabTurnaroundNum=Db.NonQ(command,true);
 			}
+			return lab.LabTurnaroundNum;
 		}
 
 		///<summary>Calculates the due date by adding the number of business days listed.  Adds an additional day for each office holiday.</summary>

@@ -40,10 +40,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(CanadianNetwork network) {
+		public static int Insert(CanadianNetwork network) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),network);
-				return;
+				network.CanadianNetworkNum=Meth.GetInt(MethodBase.GetCurrentMethod(),network);
+				return network.CanadianNetworkNum;
 			}
 			if(PrefC.RandomKeys) {
 				network.CanadianNetworkNum=MiscData.GetKey("canadiannetwork","CanadianNetworkNum");
@@ -65,6 +65,7 @@ namespace OpenDentBusiness{
 			else {
 				network.CanadianNetworkNum=Db.NonQ(command,true);
 			}
+			return network.CanadianNetworkNum;
 		}
 
 		///<summary></summary>

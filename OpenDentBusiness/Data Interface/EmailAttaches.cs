@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EmailAttaches{
 
-		public static void Insert(EmailAttach attach) {
+		public static int Insert(EmailAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
-				return;
+				attach.EmailAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				return attach.EmailAttachNum;
 			}
 			if(PrefC.RandomKeys) {
 				attach.EmailAttachNum=MiscData.GetKey("emailattach","EmailAttachNum");
@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 			else{
 				attach.EmailAttachNum=Db.NonQ(command,true);
 			}
+			return attach.EmailAttachNum;
 		}
 
 

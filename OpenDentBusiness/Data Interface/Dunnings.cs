@@ -29,10 +29,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Dunning dun){
+		public static int Insert(Dunning dun){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),dun);
-				return;
+				dun.DunningNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dun);
+				return dun.DunningNum;
 			}
 			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending,"
 				+"MessageBold) VALUES("
@@ -42,6 +42,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)dun.InsIsPending)+"', "
 				+"'"+POut.PString(dun.MessageBold)+"')";
  			dun.DunningNum=Db.NonQ(command,true);
+			return dun.DunningNum;
 		}
 
 		///<summary></summary>

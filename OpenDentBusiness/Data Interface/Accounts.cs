@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Account acct) {
+		public static int Insert(Account acct) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),acct);
-				return;
+				acct.AccountNum=Meth.GetInt(MethodBase.GetCurrentMethod(),acct);
+				return acct.AccountNum;
 			}
 			if(PrefC.RandomKeys) {
 				acct.AccountNum=MiscData.GetKey("account","AccountNum");
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 			else {
 				acct.AccountNum=Db.NonQ(command,true);
 			}
+			return acct.AccountNum;
 		}
 
 		///<summary></summary>

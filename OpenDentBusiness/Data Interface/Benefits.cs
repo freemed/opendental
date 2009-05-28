@@ -187,10 +187,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(Benefit ben) {
+		public static int Insert(Benefit ben) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ben);
-				return;
+				ben.BenefitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ben);
+				return ben.BenefitNum;
 			}
 			if(PrefC.RandomKeys) {
 				ben.BenefitNum=MiscData.GetKey("benefit","BenefitNum");
@@ -223,6 +223,7 @@ namespace OpenDentBusiness {
 			else {
 				ben.BenefitNum=Db.NonQ(command,true);
 			}
+			return ben.BenefitNum;
 		}
 
 		///<summary></summary>

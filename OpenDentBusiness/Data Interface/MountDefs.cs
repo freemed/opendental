@@ -54,10 +54,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(MountDef def) {
+		public static int Insert(MountDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.MountDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.MountDefNum;
 			}
 			string command="INSERT INTO mountdef (Description,ItemOrder,IsRadiograph,Width,Height"
 				+") VALUES("
@@ -67,6 +67,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
 			def.MountDefNum=Db.NonQ(command,true);
+			return def.MountDefNum;
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>

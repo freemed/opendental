@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Laboratory lab){
+		public static int Insert(Laboratory lab){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),lab);
-				return;
+				lab.LaboratoryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),lab);
+				return lab.LaboratoryNum;
 			}
 			if(PrefC.RandomKeys) {
 				lab.LaboratoryNum=MiscData.GetKey("laboratory","LaboratoryNum");
@@ -70,6 +70,7 @@ namespace OpenDentBusiness{
 			else {
 				lab.LaboratoryNum=Db.NonQ(command,true);
 			}
+			return lab.LaboratoryNum;
 		}
 
 		///<summary></summary>

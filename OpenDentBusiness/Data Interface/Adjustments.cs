@@ -29,10 +29,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Adjustment adj){
+		public static int Insert(Adjustment adj){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
-				return;
+				adj.AdjNum=Meth.GetInt(MethodBase.GetCurrentMethod(),adj);
+				return adj.AdjNum;
 			}
 			if(PrefC.RandomKeys){
 				adj.AdjNum=MiscData.GetKey("adjustment","AdjNum");
@@ -67,6 +67,7 @@ namespace OpenDentBusiness{
 			else{
  				adj.AdjNum=Db.NonQ(command,true);
 			}
+			return adj.AdjNum;
 		}
 
 		/*

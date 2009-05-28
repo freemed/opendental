@@ -61,10 +61,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(AnesthMedsInventoryAdj Cur){
+		public static int Insert(AnesthMedsInventoryAdj Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.AdjustNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.AdjustNum;
 			}
 			if (PrefC.RandomKeys){
 				Cur.AdjustNum = MiscData.GetKey("anesthmedsinventoryadj", "AdjustNum");
@@ -90,6 +90,7 @@ namespace OpenDentBusiness{
 			else{
 				Cur.AdjustNum = Db.NonQ(command, true);
 			}
+			return Cur.AdjustNum;
 		}
 
 		///<summary></summary>

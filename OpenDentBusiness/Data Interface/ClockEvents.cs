@@ -40,10 +40,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ClockEvent ce) {
+		public static int Insert(ClockEvent ce) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
-				return;
+				ce.ClockEventNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ce);
+				return ce.ClockEventNum;
 			}
 			DateTime serverTime=MiscData.GetNowDateTime();
 			if(PrefC.RandomKeys) {
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 			else {
 				ce.ClockEventNum=Db.NonQ(command,true);
 			}
+			return ce.ClockEventNum;
 		}
 
 		///<summary></summary>

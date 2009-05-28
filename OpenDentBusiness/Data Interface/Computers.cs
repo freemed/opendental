@@ -61,10 +61,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>ONLY use this if compname is not already present</summary>
-		public static void Insert(Computer comp){
+		public static int Insert(Computer comp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),comp);
-				return;
+				comp.ComputerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),comp);
+				return comp.ComputerNum;
 			}
 			if(PrefC.RandomKeys){
 				comp.ComputerNum=MiscData.GetKey("computer","ComputerNum");
@@ -87,6 +87,7 @@ namespace OpenDentBusiness{
 			else{
  				comp.ComputerNum=Db.NonQ(command,true);
 			}
+			return comp.ComputerNum;
 		}
 
 		/*

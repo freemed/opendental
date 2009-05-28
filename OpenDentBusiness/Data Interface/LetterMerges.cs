@@ -73,10 +73,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts this lettermerge into database.</summary>
-		public static void Insert(LetterMerge merge){
+		public static int Insert(LetterMerge merge){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),merge);
-				return;
+				merge.LetterMergeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),merge);
+				return merge.LetterMergeNum;
 			}
 			if(PrefC.RandomKeys){
 				merge.LetterMergeNum=MiscData.GetKey("lettermerge","LetterMergeNum");
@@ -102,6 +102,7 @@ namespace OpenDentBusiness{
 			else{
  				merge.LetterMergeNum=Db.NonQ(command,true);
 			}
+			return merge.LetterMergeNum;
 		}
 
 		///<summary></summary>

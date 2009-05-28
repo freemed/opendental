@@ -100,10 +100,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Employer Cur){
+		public static int Insert(Employer Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.EmployerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.EmployerNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.EmployerNum=MiscData.GetKey("employer","EmployerNum");
@@ -130,6 +130,7 @@ namespace OpenDentBusiness{
 			else{
 				Cur.EmployerNum=Db.NonQ(command,true);
 			}
+			return Cur.EmployerNum;
 		}
 
 		///<summary>There MUST not be any dependencies before calling this or there will be invalid foreign keys.  This is only called from FormEmployers after proper validation.</summary>

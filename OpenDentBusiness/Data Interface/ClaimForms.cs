@@ -76,10 +76,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts this claimform into database and retrieves the new primary key.</summary>
-		public static void Insert(ClaimForm cf){
+		public static int Insert(ClaimForm cf){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cf);
-				return;
+				cf.ClaimFormNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cf);
+				return cf.ClaimFormNum;
 			}
 			string command="INSERT INTO claimform (Description,IsHidden,FontName,FontSize"
 				+",UniqueId,PrintImages,OffsetX,OffsetY) VALUES("
@@ -93,6 +93,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (cf.OffsetY)+"')";
 			//MessageBox.Show(string command);
  			cf.ClaimFormNum=Db.NonQ(command,true);
+			return cf.ClaimFormNum;
 		}
 
 		///<summary></summary>
