@@ -140,7 +140,6 @@ namespace OpenDental{
 		private CheckBox checkApplyAll;
 		private ODtextBox textPlanNote;
 		private Label label18;
-		private OpenDental.UI.Button butEditBenefits;
 		///<summary>Set to true if called from the list of insurance templates.  In this case, the planNum will be 0.  There will be no subscriber.  Benefits will be 'typical' rather than from one specific plan.  Upon saving, all similar plans will be set to be exactly the same as PlanCur.</summary>
 		public bool IsForAll;
 		///<summary>Set to true from FormInsPlansMerge.  In this case, the insplan is read only, because it's much more complicated to allow user to change.</summary>
@@ -157,10 +156,11 @@ namespace OpenDental{
 		private ValidNumber textDentaide;
 		private OpenDental.UI.Button butCanadaEligibility;
 		private Label labelCanadaEligibility;
-		private OpenDental.UI.Button butEligibility;
+		private OpenDental.UI.Button butGetElectronic;
 		private CheckBox checkShowBaseUnits;
 		private CheckBox checkDedBeforePerc;
 		private CheckBox checkCodeSubst;
+		private OpenDental.UI.Button butHistoryElect;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -237,114 +237,114 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			this.components=new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormInsPlan));
-			this.label5=new System.Windows.Forms.Label();
-			this.label6=new System.Windows.Forms.Label();
-			this.label7=new System.Windows.Forms.Label();
-			this.label8=new System.Windows.Forms.Label();
-			this.labelGroupNum=new System.Windows.Forms.Label();
-			this.label10=new System.Windows.Forms.Label();
-			this.labelCitySTZip=new System.Windows.Forms.Label();
-			this.labelElectronicID=new System.Windows.Forms.Label();
-			this.label28=new System.Windows.Forms.Label();
-			this.textCarrier=new System.Windows.Forms.TextBox();
-			this.textPhone=new System.Windows.Forms.TextBox();
-			this.textGroupName=new System.Windows.Forms.TextBox();
-			this.textGroupNum=new System.Windows.Forms.TextBox();
-			this.textAddress=new System.Windows.Forms.TextBox();
-			this.textCity=new System.Windows.Forms.TextBox();
-			this.textState=new System.Windows.Forms.TextBox();
-			this.textZip=new System.Windows.Forms.TextBox();
-			this.textElectID=new System.Windows.Forms.TextBox();
-			this.textEmployer=new System.Windows.Forms.TextBox();
-			this.label16=new System.Windows.Forms.Label();
-			this.textAddress2=new System.Windows.Forms.TextBox();
-			this.label21=new System.Windows.Forms.Label();
-			this.label1=new System.Windows.Forms.Label();
-			this.checkAssign=new System.Windows.Forms.CheckBox();
-			this.checkRelease=new System.Windows.Forms.CheckBox();
-			this.checkNoSendElect=new System.Windows.Forms.CheckBox();
-			this.label23=new System.Windows.Forms.Label();
-			this.checkAlternateCode=new System.Windows.Forms.CheckBox();
-			this.checkClaimsUseUCR=new System.Windows.Forms.CheckBox();
-			this.label14=new System.Windows.Forms.Label();
-			this.textSubscriber=new System.Windows.Forms.TextBox();
-			this.groupSubscriber=new System.Windows.Forms.GroupBox();
-			this.butEligibility=new OpenDental.UI.Button();
-			this.label25=new System.Windows.Forms.Label();
-			this.textSubscriberID=new System.Windows.Forms.TextBox();
-			this.label2=new System.Windows.Forms.Label();
-			this.textDateEffect=new OpenDental.ValidDate();
-			this.textDateTerm=new OpenDental.ValidDate();
-			this.textSubscNote=new OpenDental.ODtextBox();
-			this.comboLinked=new System.Windows.Forms.ComboBox();
-			this.textLinkedNum=new System.Windows.Forms.TextBox();
-			this.label4=new System.Windows.Forms.Label();
-			this.comboPlanType=new System.Windows.Forms.ComboBox();
-			this.checkIsMedical=new System.Windows.Forms.CheckBox();
-			this.textDivisionNo=new System.Windows.Forms.TextBox();
-			this.labelDivisionDash=new System.Windows.Forms.Label();
-			this.comboClaimForm=new System.Windows.Forms.ComboBox();
-			this.comboFeeSched=new System.Windows.Forms.ComboBox();
-			this.groupCoPay=new System.Windows.Forms.GroupBox();
-			this.label12=new System.Windows.Forms.Label();
-			this.comboAllowedFeeSched=new System.Windows.Forms.ComboBox();
-			this.label11=new System.Windows.Forms.Label();
-			this.label3=new System.Windows.Forms.Label();
-			this.comboCopay=new System.Windows.Forms.ComboBox();
-			this.comboElectIDdescript=new System.Windows.Forms.ComboBox();
-			this.toolTip1=new System.Windows.Forms.ToolTip(this.components);
-			this.butCanadaEligibility=new OpenDental.UI.Button();
-			this.butBenefitNotes=new OpenDental.UI.Button();
-			this.butIapFind=new OpenDental.UI.Button();
-			this.butImportTrojan=new OpenDental.UI.Button();
-			this.labelDrop=new System.Windows.Forms.Label();
-			this.groupRequestBen=new System.Windows.Forms.GroupBox();
-			this.labelCanadaEligibility=new System.Windows.Forms.Label();
-			this.labelTrojan=new System.Windows.Forms.Label();
-			this.labelIAP=new System.Windows.Forms.Label();
-			this.labelTrojanID=new System.Windows.Forms.Label();
-			this.textTrojanID=new System.Windows.Forms.TextBox();
-			this.label26=new System.Windows.Forms.Label();
-			this.panel1=new System.Windows.Forms.Panel();
-			this.comboRelationship=new System.Windows.Forms.ComboBox();
-			this.label31=new System.Windows.Forms.Label();
-			this.checkIsPending=new System.Windows.Forms.CheckBox();
-			this.label32=new System.Windows.Forms.Label();
-			this.label33=new System.Windows.Forms.Label();
-			this.listAdj=new System.Windows.Forms.ListBox();
-			this.label35=new System.Windows.Forms.Label();
-			this.textPatID=new System.Windows.Forms.TextBox();
-			this.label36=new System.Windows.Forms.Label();
-			this.panelPat=new System.Windows.Forms.Panel();
-			this.textOrdinal=new OpenDental.ValidNumber();
-			this.butAdjAdd=new OpenDental.UI.Button();
-			this.butDrop=new OpenDental.UI.Button();
-			this.textPlanNum=new System.Windows.Forms.TextBox();
-			this.label17=new System.Windows.Forms.Label();
-			this.checkApplyAll=new System.Windows.Forms.CheckBox();
-			this.label18=new System.Windows.Forms.Label();
-			this.groupPlan=new System.Windows.Forms.GroupBox();
-			this.groupCarrier=new System.Windows.Forms.GroupBox();
-			this.butSearch=new OpenDental.UI.Button();
-			this.panelPlan=new System.Windows.Forms.Panel();
-			this.checkIsHidden=new System.Windows.Forms.CheckBox();
-			this.checkCodeSubst=new System.Windows.Forms.CheckBox();
-			this.checkDedBeforePerc=new System.Windows.Forms.CheckBox();
-			this.checkShowBaseUnits=new System.Windows.Forms.CheckBox();
-			this.textDentaide=new OpenDental.ValidNumber();
-			this.labelDentaide=new System.Windows.Forms.Label();
-			this.comboFilingCode=new System.Windows.Forms.ComboBox();
-			this.label13=new System.Windows.Forms.Label();
-			this.butPick=new OpenDental.UI.Button();
-			this.butEditBenefits=new OpenDental.UI.Button();
-			this.textPlanNote=new OpenDental.ODtextBox();
-			this.butOK=new OpenDental.UI.Button();
-			this.gridBenefits=new OpenDental.UI.ODGrid();
-			this.butLabel=new OpenDental.UI.Button();
-			this.butDelete=new OpenDental.UI.Button();
-			this.butCancel=new OpenDental.UI.Button();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInsPlan));
+			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.labelGroupNum = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.labelCitySTZip = new System.Windows.Forms.Label();
+			this.labelElectronicID = new System.Windows.Forms.Label();
+			this.label28 = new System.Windows.Forms.Label();
+			this.textCarrier = new System.Windows.Forms.TextBox();
+			this.textPhone = new System.Windows.Forms.TextBox();
+			this.textGroupName = new System.Windows.Forms.TextBox();
+			this.textGroupNum = new System.Windows.Forms.TextBox();
+			this.textAddress = new System.Windows.Forms.TextBox();
+			this.textCity = new System.Windows.Forms.TextBox();
+			this.textState = new System.Windows.Forms.TextBox();
+			this.textZip = new System.Windows.Forms.TextBox();
+			this.textElectID = new System.Windows.Forms.TextBox();
+			this.textEmployer = new System.Windows.Forms.TextBox();
+			this.label16 = new System.Windows.Forms.Label();
+			this.textAddress2 = new System.Windows.Forms.TextBox();
+			this.label21 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.checkAssign = new System.Windows.Forms.CheckBox();
+			this.checkRelease = new System.Windows.Forms.CheckBox();
+			this.checkNoSendElect = new System.Windows.Forms.CheckBox();
+			this.label23 = new System.Windows.Forms.Label();
+			this.checkAlternateCode = new System.Windows.Forms.CheckBox();
+			this.checkClaimsUseUCR = new System.Windows.Forms.CheckBox();
+			this.label14 = new System.Windows.Forms.Label();
+			this.textSubscriber = new System.Windows.Forms.TextBox();
+			this.groupSubscriber = new System.Windows.Forms.GroupBox();
+			this.label25 = new System.Windows.Forms.Label();
+			this.textSubscriberID = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textDateEffect = new OpenDental.ValidDate();
+			this.textDateTerm = new OpenDental.ValidDate();
+			this.textSubscNote = new OpenDental.ODtextBox();
+			this.butGetElectronic = new OpenDental.UI.Button();
+			this.comboLinked = new System.Windows.Forms.ComboBox();
+			this.textLinkedNum = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.comboPlanType = new System.Windows.Forms.ComboBox();
+			this.checkIsMedical = new System.Windows.Forms.CheckBox();
+			this.textDivisionNo = new System.Windows.Forms.TextBox();
+			this.labelDivisionDash = new System.Windows.Forms.Label();
+			this.comboClaimForm = new System.Windows.Forms.ComboBox();
+			this.comboFeeSched = new System.Windows.Forms.ComboBox();
+			this.groupCoPay = new System.Windows.Forms.GroupBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.comboAllowedFeeSched = new System.Windows.Forms.ComboBox();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.comboCopay = new System.Windows.Forms.ComboBox();
+			this.comboElectIDdescript = new System.Windows.Forms.ComboBox();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.butCanadaEligibility = new OpenDental.UI.Button();
+			this.butBenefitNotes = new OpenDental.UI.Button();
+			this.butIapFind = new OpenDental.UI.Button();
+			this.butImportTrojan = new OpenDental.UI.Button();
+			this.butHistoryElect = new OpenDental.UI.Button();
+			this.labelDrop = new System.Windows.Forms.Label();
+			this.groupRequestBen = new System.Windows.Forms.GroupBox();
+			this.labelCanadaEligibility = new System.Windows.Forms.Label();
+			this.labelTrojan = new System.Windows.Forms.Label();
+			this.labelIAP = new System.Windows.Forms.Label();
+			this.labelTrojanID = new System.Windows.Forms.Label();
+			this.textTrojanID = new System.Windows.Forms.TextBox();
+			this.label26 = new System.Windows.Forms.Label();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.comboRelationship = new System.Windows.Forms.ComboBox();
+			this.label31 = new System.Windows.Forms.Label();
+			this.checkIsPending = new System.Windows.Forms.CheckBox();
+			this.label32 = new System.Windows.Forms.Label();
+			this.label33 = new System.Windows.Forms.Label();
+			this.listAdj = new System.Windows.Forms.ListBox();
+			this.label35 = new System.Windows.Forms.Label();
+			this.textPatID = new System.Windows.Forms.TextBox();
+			this.label36 = new System.Windows.Forms.Label();
+			this.panelPat = new System.Windows.Forms.Panel();
+			this.textOrdinal = new OpenDental.ValidNumber();
+			this.butAdjAdd = new OpenDental.UI.Button();
+			this.butDrop = new OpenDental.UI.Button();
+			this.textPlanNum = new System.Windows.Forms.TextBox();
+			this.label17 = new System.Windows.Forms.Label();
+			this.checkApplyAll = new System.Windows.Forms.CheckBox();
+			this.label18 = new System.Windows.Forms.Label();
+			this.groupPlan = new System.Windows.Forms.GroupBox();
+			this.groupCarrier = new System.Windows.Forms.GroupBox();
+			this.butSearch = new OpenDental.UI.Button();
+			this.panelPlan = new System.Windows.Forms.Panel();
+			this.checkIsHidden = new System.Windows.Forms.CheckBox();
+			this.checkCodeSubst = new System.Windows.Forms.CheckBox();
+			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
+			this.checkShowBaseUnits = new System.Windows.Forms.CheckBox();
+			this.textDentaide = new OpenDental.ValidNumber();
+			this.labelDentaide = new System.Windows.Forms.Label();
+			this.comboFilingCode = new System.Windows.Forms.ComboBox();
+			this.label13 = new System.Windows.Forms.Label();
+			this.butPick = new OpenDental.UI.Button();
+			this.textPlanNote = new OpenDental.ODtextBox();
+			this.butOK = new OpenDental.UI.Button();
+			this.gridBenefits = new OpenDental.UI.ODGrid();
+			this.butLabel = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -356,286 +356,285 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location=new System.Drawing.Point(7,53);
-			this.label5.Name="label5";
-			this.label5.Size=new System.Drawing.Size(100,15);
-			this.label5.TabIndex=5;
-			this.label5.Text="Effective Dates";
-			this.label5.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label5.Location = new System.Drawing.Point(7,53);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(100,15);
+			this.label5.TabIndex = 5;
+			this.label5.Text = "Effective Dates";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label6
 			// 
-			this.label6.Location=new System.Drawing.Point(187,53);
-			this.label6.Name="label6";
-			this.label6.Size=new System.Drawing.Size(36,15);
-			this.label6.TabIndex=6;
-			this.label6.Text="To";
-			this.label6.TextAlign=System.Drawing.ContentAlignment.MiddleCenter;
+			this.label6.Location = new System.Drawing.Point(187,53);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(36,15);
+			this.label6.TabIndex = 6;
+			this.label6.Text = "To";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label7
 			// 
-			this.label7.Location=new System.Drawing.Point(5,34);
-			this.label7.Name="label7";
-			this.label7.Size=new System.Drawing.Size(95,15);
-			this.label7.TabIndex=7;
-			this.label7.Text="Phone";
-			this.label7.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label7.Location = new System.Drawing.Point(5,34);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(95,15);
+			this.label7.TabIndex = 7;
+			this.label7.Text = "Phone";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label8
 			// 
-			this.label8.Location=new System.Drawing.Point(16,203);
-			this.label8.Name="label8";
-			this.label8.Size=new System.Drawing.Size(95,15);
-			this.label8.TabIndex=8;
-			this.label8.Text="Group Name";
-			this.label8.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label8.Location = new System.Drawing.Point(16,203);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(95,15);
+			this.label8.TabIndex = 8;
+			this.label8.Text = "Group Name";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelGroupNum
 			// 
-			this.labelGroupNum.Location=new System.Drawing.Point(16,223);
-			this.labelGroupNum.Name="labelGroupNum";
-			this.labelGroupNum.Size=new System.Drawing.Size(95,15);
-			this.labelGroupNum.TabIndex=9;
-			this.labelGroupNum.Text="Group Num";
-			this.labelGroupNum.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelGroupNum.Location = new System.Drawing.Point(16,223);
+			this.labelGroupNum.Name = "labelGroupNum";
+			this.labelGroupNum.Size = new System.Drawing.Size(95,15);
+			this.labelGroupNum.TabIndex = 9;
+			this.labelGroupNum.Text = "Group Num";
+			this.labelGroupNum.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label10
 			// 
-			this.label10.Location=new System.Drawing.Point(5,53);
-			this.label10.Name="label10";
-			this.label10.Size=new System.Drawing.Size(95,15);
-			this.label10.TabIndex=10;
-			this.label10.Text="Address";
-			this.label10.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label10.Location = new System.Drawing.Point(5,53);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(95,15);
+			this.label10.TabIndex = 10;
+			this.label10.Text = "Address";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelCitySTZip
 			// 
-			this.labelCitySTZip.Location=new System.Drawing.Point(5,93);
-			this.labelCitySTZip.Name="labelCitySTZip";
-			this.labelCitySTZip.Size=new System.Drawing.Size(95,15);
-			this.labelCitySTZip.TabIndex=11;
-			this.labelCitySTZip.Text="City,ST,Zip";
-			this.labelCitySTZip.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelCitySTZip.Location = new System.Drawing.Point(5,93);
+			this.labelCitySTZip.Name = "labelCitySTZip";
+			this.labelCitySTZip.Size = new System.Drawing.Size(95,15);
+			this.labelCitySTZip.TabIndex = 11;
+			this.labelCitySTZip.Text = "City,ST,Zip";
+			this.labelCitySTZip.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelElectronicID
 			// 
-			this.labelElectronicID.Location=new System.Drawing.Point(4,113);
-			this.labelElectronicID.Name="labelElectronicID";
-			this.labelElectronicID.Size=new System.Drawing.Size(95,15);
-			this.labelElectronicID.TabIndex=15;
-			this.labelElectronicID.Text="Electronic ID";
-			this.labelElectronicID.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelElectronicID.Location = new System.Drawing.Point(4,113);
+			this.labelElectronicID.Name = "labelElectronicID";
+			this.labelElectronicID.Size = new System.Drawing.Size(95,15);
+			this.labelElectronicID.TabIndex = 15;
+			this.labelElectronicID.Text = "Electronic ID";
+			this.labelElectronicID.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label28
 			// 
-			this.label28.Location=new System.Drawing.Point(2,74);
-			this.label28.Name="label28";
-			this.label28.Size=new System.Drawing.Size(55,41);
-			this.label28.TabIndex=28;
-			this.label28.Text="Note";
-			this.label28.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label28.Location = new System.Drawing.Point(2,74);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(55,41);
+			this.label28.TabIndex = 28;
+			this.label28.Text = "Note";
+			this.label28.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textCarrier
 			// 
-			this.textCarrier.Font=new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textCarrier.Location=new System.Drawing.Point(102,11);
-			this.textCarrier.MaxLength=50;
-			this.textCarrier.Multiline=true;
-			this.textCarrier.Name="textCarrier";
-			this.textCarrier.Size=new System.Drawing.Size(291,20);
-			this.textCarrier.TabIndex=0;
-			this.textCarrier.Leave+=new System.EventHandler(this.textCarrier_Leave);
-			this.textCarrier.KeyUp+=new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
+			this.textCarrier.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textCarrier.Location = new System.Drawing.Point(102,11);
+			this.textCarrier.MaxLength = 50;
+			this.textCarrier.Multiline = true;
+			this.textCarrier.Name = "textCarrier";
+			this.textCarrier.Size = new System.Drawing.Size(291,20);
+			this.textCarrier.TabIndex = 0;
+			this.textCarrier.Leave += new System.EventHandler(this.textCarrier_Leave);
+			this.textCarrier.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
 			// 
 			// textPhone
 			// 
-			this.textPhone.Location=new System.Drawing.Point(102,31);
-			this.textPhone.MaxLength=30;
-			this.textPhone.Name="textPhone";
-			this.textPhone.Size=new System.Drawing.Size(157,20);
-			this.textPhone.TabIndex=0;
-			this.textPhone.TextChanged+=new System.EventHandler(this.textPhone_TextChanged);
+			this.textPhone.Location = new System.Drawing.Point(102,31);
+			this.textPhone.MaxLength = 30;
+			this.textPhone.Name = "textPhone";
+			this.textPhone.Size = new System.Drawing.Size(157,20);
+			this.textPhone.TabIndex = 0;
+			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
 			// 
 			// textGroupName
 			// 
-			this.textGroupName.Location=new System.Drawing.Point(112,200);
-			this.textGroupName.MaxLength=50;
-			this.textGroupName.Name="textGroupName";
-			this.textGroupName.Size=new System.Drawing.Size(193,20);
-			this.textGroupName.TabIndex=1;
+			this.textGroupName.Location = new System.Drawing.Point(112,200);
+			this.textGroupName.MaxLength = 50;
+			this.textGroupName.Name = "textGroupName";
+			this.textGroupName.Size = new System.Drawing.Size(193,20);
+			this.textGroupName.TabIndex = 1;
 			// 
 			// textGroupNum
 			// 
-			this.textGroupNum.Location=new System.Drawing.Point(112,220);
-			this.textGroupNum.MaxLength=20;
-			this.textGroupNum.Name="textGroupNum";
-			this.textGroupNum.Size=new System.Drawing.Size(129,20);
-			this.textGroupNum.TabIndex=2;
+			this.textGroupNum.Location = new System.Drawing.Point(112,220);
+			this.textGroupNum.MaxLength = 20;
+			this.textGroupNum.Name = "textGroupNum";
+			this.textGroupNum.Size = new System.Drawing.Size(129,20);
+			this.textGroupNum.TabIndex = 2;
 			// 
 			// textAddress
 			// 
-			this.textAddress.Location=new System.Drawing.Point(102,51);
-			this.textAddress.MaxLength=60;
-			this.textAddress.Name="textAddress";
-			this.textAddress.Size=new System.Drawing.Size(291,20);
-			this.textAddress.TabIndex=1;
-			this.textAddress.TextChanged+=new System.EventHandler(this.textAddress_TextChanged);
+			this.textAddress.Location = new System.Drawing.Point(102,51);
+			this.textAddress.MaxLength = 60;
+			this.textAddress.Name = "textAddress";
+			this.textAddress.Size = new System.Drawing.Size(291,20);
+			this.textAddress.TabIndex = 1;
+			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
 			// 
 			// textCity
 			// 
-			this.textCity.Location=new System.Drawing.Point(102,91);
-			this.textCity.MaxLength=40;
-			this.textCity.Name="textCity";
-			this.textCity.Size=new System.Drawing.Size(155,20);
-			this.textCity.TabIndex=3;
-			this.textCity.TextChanged+=new System.EventHandler(this.textCity_TextChanged);
+			this.textCity.Location = new System.Drawing.Point(102,91);
+			this.textCity.MaxLength = 40;
+			this.textCity.Name = "textCity";
+			this.textCity.Size = new System.Drawing.Size(155,20);
+			this.textCity.TabIndex = 3;
+			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
 			// 
 			// textState
 			// 
-			this.textState.Location=new System.Drawing.Point(257,91);
-			this.textState.MaxLength=2;
-			this.textState.Name="textState";
-			this.textState.Size=new System.Drawing.Size(65,20);
-			this.textState.TabIndex=4;
-			this.textState.TextChanged+=new System.EventHandler(this.textState_TextChanged);
+			this.textState.Location = new System.Drawing.Point(257,91);
+			this.textState.MaxLength = 2;
+			this.textState.Name = "textState";
+			this.textState.Size = new System.Drawing.Size(65,20);
+			this.textState.TabIndex = 4;
+			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
 			// 
 			// textZip
 			// 
-			this.textZip.Location=new System.Drawing.Point(322,91);
-			this.textZip.MaxLength=10;
-			this.textZip.Name="textZip";
-			this.textZip.Size=new System.Drawing.Size(71,20);
-			this.textZip.TabIndex=5;
+			this.textZip.Location = new System.Drawing.Point(322,91);
+			this.textZip.MaxLength = 10;
+			this.textZip.Name = "textZip";
+			this.textZip.Size = new System.Drawing.Size(71,20);
+			this.textZip.TabIndex = 5;
 			// 
 			// textElectID
 			// 
-			this.textElectID.Location=new System.Drawing.Point(102,111);
-			this.textElectID.MaxLength=20;
-			this.textElectID.Name="textElectID";
-			this.textElectID.Size=new System.Drawing.Size(54,20);
-			this.textElectID.TabIndex=7;
-			this.textElectID.Validating+=new System.ComponentModel.CancelEventHandler(this.textElectID_Validating);
+			this.textElectID.Location = new System.Drawing.Point(102,111);
+			this.textElectID.MaxLength = 20;
+			this.textElectID.Name = "textElectID";
+			this.textElectID.Size = new System.Drawing.Size(54,20);
+			this.textElectID.TabIndex = 7;
+			this.textElectID.Validating += new System.ComponentModel.CancelEventHandler(this.textElectID_Validating);
 			// 
 			// textEmployer
 			// 
-			this.textEmployer.Location=new System.Drawing.Point(112,26);
-			this.textEmployer.MaxLength=40;
-			this.textEmployer.Name="textEmployer";
-			this.textEmployer.Size=new System.Drawing.Size(291,20);
-			this.textEmployer.TabIndex=4;
-			this.textEmployer.Leave+=new System.EventHandler(this.textEmployer_Leave);
-			this.textEmployer.KeyUp+=new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
+			this.textEmployer.Location = new System.Drawing.Point(112,26);
+			this.textEmployer.MaxLength = 40;
+			this.textEmployer.Name = "textEmployer";
+			this.textEmployer.Size = new System.Drawing.Size(291,20);
+			this.textEmployer.TabIndex = 4;
+			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
+			this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
 			// 
 			// label16
 			// 
-			this.label16.Location=new System.Drawing.Point(33,28);
-			this.label16.Name="label16";
-			this.label16.Size=new System.Drawing.Size(78,15);
-			this.label16.TabIndex=73;
-			this.label16.Text="Employer";
-			this.label16.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label16.Location = new System.Drawing.Point(33,28);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(78,15);
+			this.label16.TabIndex = 73;
+			this.label16.Text = "Employer";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textAddress2
 			// 
-			this.textAddress2.Location=new System.Drawing.Point(102,71);
-			this.textAddress2.MaxLength=60;
-			this.textAddress2.Name="textAddress2";
-			this.textAddress2.Size=new System.Drawing.Size(291,20);
-			this.textAddress2.TabIndex=2;
-			this.textAddress2.TextChanged+=new System.EventHandler(this.textAddress2_TextChanged);
+			this.textAddress2.Location = new System.Drawing.Point(102,71);
+			this.textAddress2.MaxLength = 60;
+			this.textAddress2.Name = "textAddress2";
+			this.textAddress2.Size = new System.Drawing.Size(291,20);
+			this.textAddress2.TabIndex = 2;
+			this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
 			// 
 			// label21
 			// 
-			this.label21.Location=new System.Drawing.Point(5,74);
-			this.label21.Name="label21";
-			this.label21.Size=new System.Drawing.Size(95,15);
-			this.label21.TabIndex=79;
-			this.label21.Text="Address 2";
-			this.label21.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label21.Location = new System.Drawing.Point(5,74);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(95,15);
+			this.label21.TabIndex = 79;
+			this.label21.Text = "Address 2";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label1
 			// 
-			this.label1.Location=new System.Drawing.Point(15,376);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(96,16);
-			this.label1.TabIndex=91;
-			this.label1.Text="Fee Schedule";
-			this.label1.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label1.Location = new System.Drawing.Point(15,376);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(96,16);
+			this.label1.TabIndex = 91;
+			this.label1.Text = "Fee Schedule";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkAssign
 			// 
-			this.checkAssign.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkAssign.Location=new System.Drawing.Point(320,50);
-			this.checkAssign.Name="checkAssign";
-			this.checkAssign.Size=new System.Drawing.Size(177,20);
-			this.checkAssign.TabIndex=4;
-			this.checkAssign.Text="Assignment of Benefits";
+			this.checkAssign.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAssign.Location = new System.Drawing.Point(320,50);
+			this.checkAssign.Name = "checkAssign";
+			this.checkAssign.Size = new System.Drawing.Size(177,20);
+			this.checkAssign.TabIndex = 4;
+			this.checkAssign.Text = "Assignment of Benefits";
 			// 
 			// checkRelease
 			// 
-			this.checkRelease.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkRelease.Location=new System.Drawing.Point(320,32);
-			this.checkRelease.Name="checkRelease";
-			this.checkRelease.Size=new System.Drawing.Size(177,20);
-			this.checkRelease.TabIndex=3;
-			this.checkRelease.Text="Release of Information";
+			this.checkRelease.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRelease.Location = new System.Drawing.Point(320,32);
+			this.checkRelease.Name = "checkRelease";
+			this.checkRelease.Size = new System.Drawing.Size(177,20);
+			this.checkRelease.TabIndex = 3;
+			this.checkRelease.Text = "Release of Information";
 			// 
 			// checkNoSendElect
 			// 
-			this.checkNoSendElect.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkNoSendElect.Location=new System.Drawing.Point(178,133);
-			this.checkNoSendElect.Name="checkNoSendElect";
-			this.checkNoSendElect.Size=new System.Drawing.Size(213,17);
-			this.checkNoSendElect.TabIndex=8;
-			this.checkNoSendElect.Text="Don\'t Usually Send Electronically";
+			this.checkNoSendElect.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkNoSendElect.Location = new System.Drawing.Point(178,133);
+			this.checkNoSendElect.Name = "checkNoSendElect";
+			this.checkNoSendElect.Size = new System.Drawing.Size(213,17);
+			this.checkNoSendElect.TabIndex = 8;
+			this.checkNoSendElect.Text = "Don\'t Usually Send Electronically";
 			// 
 			// label23
 			// 
-			this.label23.Location=new System.Drawing.Point(14,400);
-			this.label23.Name="label23";
-			this.label23.Size=new System.Drawing.Size(95,15);
-			this.label23.TabIndex=96;
-			this.label23.Text="Claim Form";
-			this.label23.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label23.Location = new System.Drawing.Point(14,400);
+			this.label23.Name = "label23";
+			this.label23.Size = new System.Drawing.Size(95,15);
+			this.label23.TabIndex = 96;
+			this.label23.Text = "Claim Form";
+			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkAlternateCode
 			// 
-			this.checkAlternateCode.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkAlternateCode.Location=new System.Drawing.Point(112,293);
-			this.checkAlternateCode.Name="checkAlternateCode";
-			this.checkAlternateCode.Size=new System.Drawing.Size(275,16);
-			this.checkAlternateCode.TabIndex=3;
-			this.checkAlternateCode.Text="Use Alternate Code (for some Medicaid plans)";
+			this.checkAlternateCode.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAlternateCode.Location = new System.Drawing.Point(112,293);
+			this.checkAlternateCode.Name = "checkAlternateCode";
+			this.checkAlternateCode.Size = new System.Drawing.Size(275,16);
+			this.checkAlternateCode.TabIndex = 3;
+			this.checkAlternateCode.Text = "Use Alternate Code (for some Medicaid plans)";
 			// 
 			// checkClaimsUseUCR
 			// 
-			this.checkClaimsUseUCR.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkClaimsUseUCR.Location=new System.Drawing.Point(112,325);
-			this.checkClaimsUseUCR.Name="checkClaimsUseUCR";
-			this.checkClaimsUseUCR.Size=new System.Drawing.Size(275,16);
-			this.checkClaimsUseUCR.TabIndex=4;
-			this.checkClaimsUseUCR.Text="Claims show UCR fee, not billed fee";
+			this.checkClaimsUseUCR.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkClaimsUseUCR.Location = new System.Drawing.Point(112,325);
+			this.checkClaimsUseUCR.Name = "checkClaimsUseUCR";
+			this.checkClaimsUseUCR.Size = new System.Drawing.Size(275,16);
+			this.checkClaimsUseUCR.TabIndex = 4;
+			this.checkClaimsUseUCR.Text = "Claims show UCR fee, not billed fee";
 			// 
 			// label14
 			// 
-			this.label14.Location=new System.Drawing.Point(17,271);
-			this.label14.Name="label14";
-			this.label14.Size=new System.Drawing.Size(95,16);
-			this.label14.TabIndex=104;
-			this.label14.Text="Plan Type";
-			this.label14.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label14.Location = new System.Drawing.Point(17,271);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(95,16);
+			this.label14.TabIndex = 104;
+			this.label14.Text = "Plan Type";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textSubscriber
 			// 
-			this.textSubscriber.Location=new System.Drawing.Point(109,10);
-			this.textSubscriber.Name="textSubscriber";
-			this.textSubscriber.ReadOnly=true;
-			this.textSubscriber.Size=new System.Drawing.Size(278,20);
-			this.textSubscriber.TabIndex=109;
+			this.textSubscriber.Location = new System.Drawing.Point(109,10);
+			this.textSubscriber.Name = "textSubscriber";
+			this.textSubscriber.ReadOnly = true;
+			this.textSubscriber.Size = new System.Drawing.Size(278,20);
+			this.textSubscriber.TabIndex = 109;
 			// 
 			// groupSubscriber
 			// 
-			this.groupSubscriber.Controls.Add(this.butEligibility);
 			this.groupSubscriber.Controls.Add(this.checkAssign);
 			this.groupSubscriber.Controls.Add(this.label25);
 			this.groupSubscriber.Controls.Add(this.checkRelease);
@@ -648,161 +647,161 @@ namespace OpenDental{
 			this.groupSubscriber.Controls.Add(this.label6);
 			this.groupSubscriber.Controls.Add(this.textSubscNote);
 			this.groupSubscriber.Controls.Add(this.label28);
-			this.groupSubscriber.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.groupSubscriber.Location=new System.Drawing.Point(468,93);
-			this.groupSubscriber.Name="groupSubscriber";
-			this.groupSubscriber.Size=new System.Drawing.Size(502,175);
-			this.groupSubscriber.TabIndex=9;
-			this.groupSubscriber.TabStop=false;
-			this.groupSubscriber.Text="Subscriber";
-			// 
-			// butEligibility
-			// 
-			this.butEligibility.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butEligibility.Autosize=true;
-			this.butEligibility.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEligibility.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEligibility.CornerRadius=4F;
-			this.butEligibility.Location=new System.Drawing.Point(393,10);
-			this.butEligibility.Name="butEligibility";
-			this.butEligibility.Size=new System.Drawing.Size(89,21);
-			this.butEligibility.TabIndex=116;
-			this.butEligibility.Text="Check Eligibility";
-			this.toolTip1.SetToolTip(this.butEligibility,"Edit all the similar plans at once");
-			this.butEligibility.Click+=new System.EventHandler(this.butEligibility_Click);
+			this.groupSubscriber.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupSubscriber.Location = new System.Drawing.Point(468,93);
+			this.groupSubscriber.Name = "groupSubscriber";
+			this.groupSubscriber.Size = new System.Drawing.Size(502,175);
+			this.groupSubscriber.TabIndex = 9;
+			this.groupSubscriber.TabStop = false;
+			this.groupSubscriber.Text = "Subscriber";
 			// 
 			// label25
 			// 
-			this.label25.Location=new System.Drawing.Point(8,14);
-			this.label25.Name="label25";
-			this.label25.Size=new System.Drawing.Size(99,15);
-			this.label25.TabIndex=115;
-			this.label25.Text="Name";
-			this.label25.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label25.Location = new System.Drawing.Point(8,14);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(99,15);
+			this.label25.TabIndex = 115;
+			this.label25.Text = "Name";
+			this.label25.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textSubscriberID
 			// 
-			this.textSubscriberID.Location=new System.Drawing.Point(109,30);
-			this.textSubscriberID.MaxLength=20;
-			this.textSubscriberID.Name="textSubscriberID";
-			this.textSubscriberID.Size=new System.Drawing.Size(129,20);
-			this.textSubscriberID.TabIndex=0;
+			this.textSubscriberID.Location = new System.Drawing.Point(109,30);
+			this.textSubscriberID.MaxLength = 20;
+			this.textSubscriberID.Name = "textSubscriberID";
+			this.textSubscriberID.Size = new System.Drawing.Size(129,20);
+			this.textSubscriberID.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location=new System.Drawing.Point(8,32);
-			this.label2.Name="label2";
-			this.label2.Size=new System.Drawing.Size(99,15);
-			this.label2.TabIndex=114;
-			this.label2.Text="Subscriber ID";
-			this.label2.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label2.Location = new System.Drawing.Point(8,32);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(99,15);
+			this.label2.TabIndex = 114;
+			this.label2.Text = "Subscriber ID";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDateEffect
 			// 
-			this.textDateEffect.Location=new System.Drawing.Point(109,50);
-			this.textDateEffect.Name="textDateEffect";
-			this.textDateEffect.Size=new System.Drawing.Size(72,20);
-			this.textDateEffect.TabIndex=1;
+			this.textDateEffect.Location = new System.Drawing.Point(109,50);
+			this.textDateEffect.Name = "textDateEffect";
+			this.textDateEffect.Size = new System.Drawing.Size(72,20);
+			this.textDateEffect.TabIndex = 1;
 			// 
 			// textDateTerm
 			// 
-			this.textDateTerm.Location=new System.Drawing.Point(227,50);
-			this.textDateTerm.Name="textDateTerm";
-			this.textDateTerm.Size=new System.Drawing.Size(72,20);
-			this.textDateTerm.TabIndex=2;
+			this.textDateTerm.Location = new System.Drawing.Point(227,50);
+			this.textDateTerm.Name = "textDateTerm";
+			this.textDateTerm.Size = new System.Drawing.Size(72,20);
+			this.textDateTerm.TabIndex = 2;
 			// 
 			// textSubscNote
 			// 
-			this.textSubscNote.AcceptsReturn=true;
-			this.textSubscNote.Location=new System.Drawing.Point(57,71);
-			this.textSubscNote.Multiline=true;
-			this.textSubscNote.Name="textSubscNote";
-			this.textSubscNote.QuickPasteType=OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textSubscNote.ScrollBars=System.Windows.Forms.ScrollBars.Vertical;
-			this.textSubscNote.Size=new System.Drawing.Size(439,98);
-			this.textSubscNote.TabIndex=5;
-			this.textSubscNote.Text="1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l"+
-					"ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
+			this.textSubscNote.AcceptsReturn = true;
+			this.textSubscNote.Location = new System.Drawing.Point(57,71);
+			this.textSubscNote.Multiline = true;
+			this.textSubscNote.Name = "textSubscNote";
+			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textSubscNote.Size = new System.Drawing.Size(439,98);
+			this.textSubscNote.TabIndex = 5;
+			this.textSubscNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 lines in 85 vert\r\n7 lines in 98";
+			// 
+			// butGetElectronic
+			// 
+			this.butGetElectronic.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGetElectronic.Autosize = true;
+			this.butGetElectronic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGetElectronic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGetElectronic.CornerRadius = 4F;
+			this.butGetElectronic.Location = new System.Drawing.Point(6,15);
+			this.butGetElectronic.Name = "butGetElectronic";
+			this.butGetElectronic.Size = new System.Drawing.Size(67,21);
+			this.butGetElectronic.TabIndex = 116;
+			this.butGetElectronic.Text = "Get";
+			this.toolTip1.SetToolTip(this.butGetElectronic,"Edit all the similar plans at once");
+			this.butGetElectronic.Click += new System.EventHandler(this.butGetElectronic_Click);
 			// 
 			// comboLinked
 			// 
-			this.comboLinked.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLinked.Location=new System.Drawing.Point(150,240);
-			this.comboLinked.MaxDropDownItems=30;
-			this.comboLinked.Name="comboLinked";
-			this.comboLinked.Size=new System.Drawing.Size(253,21);
-			this.comboLinked.TabIndex=68;
+			this.comboLinked.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboLinked.Location = new System.Drawing.Point(150,240);
+			this.comboLinked.MaxDropDownItems = 30;
+			this.comboLinked.Name = "comboLinked";
+			this.comboLinked.Size = new System.Drawing.Size(253,21);
+			this.comboLinked.TabIndex = 68;
 			// 
 			// textLinkedNum
 			// 
-			this.textLinkedNum.BackColor=System.Drawing.Color.White;
-			this.textLinkedNum.Location=new System.Drawing.Point(112,240);
-			this.textLinkedNum.Multiline=true;
-			this.textLinkedNum.Name="textLinkedNum";
-			this.textLinkedNum.ReadOnly=true;
-			this.textLinkedNum.Size=new System.Drawing.Size(37,21);
-			this.textLinkedNum.TabIndex=67;
+			this.textLinkedNum.BackColor = System.Drawing.Color.White;
+			this.textLinkedNum.Location = new System.Drawing.Point(112,240);
+			this.textLinkedNum.Multiline = true;
+			this.textLinkedNum.Name = "textLinkedNum";
+			this.textLinkedNum.ReadOnly = true;
+			this.textLinkedNum.Size = new System.Drawing.Size(37,21);
+			this.textLinkedNum.TabIndex = 67;
 			// 
 			// label4
 			// 
-			this.label4.Location=new System.Drawing.Point(6,242);
-			this.label4.Name="label4";
-			this.label4.Size=new System.Drawing.Size(104,17);
-			this.label4.TabIndex=66;
-			this.label4.Text="Identical Plans";
-			this.label4.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label4.Location = new System.Drawing.Point(6,242);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(104,17);
+			this.label4.TabIndex = 66;
+			this.label4.Text = "Identical Plans";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboPlanType
 			// 
-			this.comboPlanType.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPlanType.Location=new System.Drawing.Point(112,270);
-			this.comboPlanType.Name="comboPlanType";
-			this.comboPlanType.Size=new System.Drawing.Size(212,21);
-			this.comboPlanType.TabIndex=2;
-			this.comboPlanType.SelectionChangeCommitted+=new System.EventHandler(this.comboPlanType_SelectionChangeCommitted);
+			this.comboPlanType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPlanType.Location = new System.Drawing.Point(112,270);
+			this.comboPlanType.Name = "comboPlanType";
+			this.comboPlanType.Size = new System.Drawing.Size(212,21);
+			this.comboPlanType.TabIndex = 2;
+			this.comboPlanType.SelectionChangeCommitted += new System.EventHandler(this.comboPlanType_SelectionChangeCommitted);
 			// 
 			// checkIsMedical
 			// 
-			this.checkIsMedical.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkIsMedical.Location=new System.Drawing.Point(112,9);
-			this.checkIsMedical.Name="checkIsMedical";
-			this.checkIsMedical.Size=new System.Drawing.Size(202,17);
-			this.checkIsMedical.TabIndex=113;
-			this.checkIsMedical.Text="Medical Insurance";
+			this.checkIsMedical.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsMedical.Location = new System.Drawing.Point(112,9);
+			this.checkIsMedical.Name = "checkIsMedical";
+			this.checkIsMedical.Size = new System.Drawing.Size(202,17);
+			this.checkIsMedical.TabIndex = 113;
+			this.checkIsMedical.Text = "Medical Insurance";
 			// 
 			// textDivisionNo
 			// 
-			this.textDivisionNo.Location=new System.Drawing.Point(259,220);
-			this.textDivisionNo.MaxLength=20;
-			this.textDivisionNo.Name="textDivisionNo";
-			this.textDivisionNo.Size=new System.Drawing.Size(107,20);
-			this.textDivisionNo.TabIndex=3;
+			this.textDivisionNo.Location = new System.Drawing.Point(259,220);
+			this.textDivisionNo.MaxLength = 20;
+			this.textDivisionNo.Name = "textDivisionNo";
+			this.textDivisionNo.Size = new System.Drawing.Size(107,20);
+			this.textDivisionNo.TabIndex = 3;
 			// 
 			// labelDivisionDash
 			// 
-			this.labelDivisionDash.Location=new System.Drawing.Point(244,224);
-			this.labelDivisionDash.Name="labelDivisionDash";
-			this.labelDivisionDash.Size=new System.Drawing.Size(31,16);
-			this.labelDivisionDash.TabIndex=111;
-			this.labelDivisionDash.Text="--";
+			this.labelDivisionDash.Location = new System.Drawing.Point(244,224);
+			this.labelDivisionDash.Name = "labelDivisionDash";
+			this.labelDivisionDash.Size = new System.Drawing.Size(31,16);
+			this.labelDivisionDash.TabIndex = 111;
+			this.labelDivisionDash.Text = "--";
 			// 
 			// comboClaimForm
 			// 
-			this.comboClaimForm.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClaimForm.Location=new System.Drawing.Point(112,397);
-			this.comboClaimForm.MaxDropDownItems=30;
-			this.comboClaimForm.Name="comboClaimForm";
-			this.comboClaimForm.Size=new System.Drawing.Size(212,21);
-			this.comboClaimForm.TabIndex=6;
+			this.comboClaimForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClaimForm.Location = new System.Drawing.Point(112,397);
+			this.comboClaimForm.MaxDropDownItems = 30;
+			this.comboClaimForm.Name = "comboClaimForm";
+			this.comboClaimForm.Size = new System.Drawing.Size(212,21);
+			this.comboClaimForm.TabIndex = 6;
 			// 
 			// comboFeeSched
 			// 
-			this.comboFeeSched.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFeeSched.Location=new System.Drawing.Point(112,375);
-			this.comboFeeSched.MaxDropDownItems=30;
-			this.comboFeeSched.Name="comboFeeSched";
-			this.comboFeeSched.Size=new System.Drawing.Size(212,21);
-			this.comboFeeSched.TabIndex=5;
+			this.comboFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFeeSched.Location = new System.Drawing.Point(112,375);
+			this.comboFeeSched.MaxDropDownItems = 30;
+			this.comboFeeSched.Name = "comboFeeSched";
+			this.comboFeeSched.Size = new System.Drawing.Size(212,21);
+			this.comboFeeSched.TabIndex = 5;
 			// 
 			// groupCoPay
 			// 
@@ -811,308 +810,325 @@ namespace OpenDental{
 			this.groupCoPay.Controls.Add(this.label11);
 			this.groupCoPay.Controls.Add(this.label3);
 			this.groupCoPay.Controls.Add(this.comboCopay);
-			this.groupCoPay.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.groupCoPay.Location=new System.Drawing.Point(5,420);
-			this.groupCoPay.Name="groupCoPay";
-			this.groupCoPay.Size=new System.Drawing.Size(404,99);
-			this.groupCoPay.TabIndex=7;
-			this.groupCoPay.TabStop=false;
-			this.groupCoPay.Text="Other Fee Schedules";
+			this.groupCoPay.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupCoPay.Location = new System.Drawing.Point(5,420);
+			this.groupCoPay.Name = "groupCoPay";
+			this.groupCoPay.Size = new System.Drawing.Size(404,99);
+			this.groupCoPay.TabIndex = 7;
+			this.groupCoPay.TabStop = false;
+			this.groupCoPay.Text = "Other Fee Schedules";
 			// 
 			// label12
 			// 
-			this.label12.Location=new System.Drawing.Point(1,67);
-			this.label12.Name="label12";
-			this.label12.Size=new System.Drawing.Size(105,27);
-			this.label12.TabIndex=111;
-			this.label12.Text="Carrier Allowed Amounts";
-			this.label12.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label12.Location = new System.Drawing.Point(1,67);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(105,27);
+			this.label12.TabIndex = 111;
+			this.label12.Text = "Carrier Allowed Amounts";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// comboAllowedFeeSched
 			// 
-			this.comboAllowedFeeSched.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboAllowedFeeSched.Location=new System.Drawing.Point(107,67);
-			this.comboAllowedFeeSched.MaxDropDownItems=30;
-			this.comboAllowedFeeSched.Name="comboAllowedFeeSched";
-			this.comboAllowedFeeSched.Size=new System.Drawing.Size(212,21);
-			this.comboAllowedFeeSched.TabIndex=1;
+			this.comboAllowedFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboAllowedFeeSched.Location = new System.Drawing.Point(107,67);
+			this.comboAllowedFeeSched.MaxDropDownItems = 30;
+			this.comboAllowedFeeSched.Name = "comboAllowedFeeSched";
+			this.comboAllowedFeeSched.Size = new System.Drawing.Size(212,21);
+			this.comboAllowedFeeSched.TabIndex = 1;
 			// 
 			// label11
 			// 
-			this.label11.Location=new System.Drawing.Point(1,36);
-			this.label11.Name="label11";
-			this.label11.Size=new System.Drawing.Size(105,26);
-			this.label11.TabIndex=109;
-			this.label11.Text="Patient Co-pay Amounts";
-			this.label11.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label11.Location = new System.Drawing.Point(1,36);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(105,26);
+			this.label11.TabIndex = 109;
+			this.label11.Text = "Patient Co-pay Amounts";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label3
 			// 
-			this.label3.Location=new System.Drawing.Point(1,19);
-			this.label3.Name="label3";
-			this.label3.Size=new System.Drawing.Size(390,17);
-			this.label3.TabIndex=106;
-			this.label3.Text="Don\'t use these unless you understand how they will affect your estimates";
+			this.label3.Location = new System.Drawing.Point(1,19);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(390,17);
+			this.label3.TabIndex = 106;
+			this.label3.Text = "Don\'t use these unless you understand how they will affect your estimates";
 			// 
 			// comboCopay
 			// 
-			this.comboCopay.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCopay.Location=new System.Drawing.Point(107,37);
-			this.comboCopay.MaxDropDownItems=30;
-			this.comboCopay.Name="comboCopay";
-			this.comboCopay.Size=new System.Drawing.Size(212,21);
-			this.comboCopay.TabIndex=0;
+			this.comboCopay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCopay.Location = new System.Drawing.Point(107,37);
+			this.comboCopay.MaxDropDownItems = 30;
+			this.comboCopay.Name = "comboCopay";
+			this.comboCopay.Size = new System.Drawing.Size(212,21);
+			this.comboCopay.TabIndex = 0;
 			// 
 			// comboElectIDdescript
 			// 
-			this.comboElectIDdescript.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboElectIDdescript.Location=new System.Drawing.Point(156,111);
-			this.comboElectIDdescript.MaxDropDownItems=30;
-			this.comboElectIDdescript.Name="comboElectIDdescript";
-			this.comboElectIDdescript.Size=new System.Drawing.Size(237,21);
-			this.comboElectIDdescript.TabIndex=125;
-			this.comboElectIDdescript.SelectedIndexChanged+=new System.EventHandler(this.comboElectIDdescript_SelectedIndexChanged);
+			this.comboElectIDdescript.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboElectIDdescript.Location = new System.Drawing.Point(156,111);
+			this.comboElectIDdescript.MaxDropDownItems = 30;
+			this.comboElectIDdescript.Name = "comboElectIDdescript";
+			this.comboElectIDdescript.Size = new System.Drawing.Size(237,21);
+			this.comboElectIDdescript.TabIndex = 125;
+			this.comboElectIDdescript.SelectedIndexChanged += new System.EventHandler(this.comboElectIDdescript_SelectedIndexChanged);
 			// 
 			// butCanadaEligibility
 			// 
-			this.butCanadaEligibility.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butCanadaEligibility.Autosize=true;
-			this.butCanadaEligibility.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCanadaEligibility.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCanadaEligibility.CornerRadius=4F;
-			this.butCanadaEligibility.Location=new System.Drawing.Point(271,33);
-			this.butCanadaEligibility.Name="butCanadaEligibility";
-			this.butCanadaEligibility.Size=new System.Drawing.Size(79,21);
-			this.butCanadaEligibility.TabIndex=76;
-			this.butCanadaEligibility.Text="Eligibility";
+			this.butCanadaEligibility.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCanadaEligibility.Autosize = true;
+			this.butCanadaEligibility.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCanadaEligibility.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCanadaEligibility.CornerRadius = 4F;
+			this.butCanadaEligibility.Location = new System.Drawing.Point(131,15);
+			this.butCanadaEligibility.Name = "butCanadaEligibility";
+			this.butCanadaEligibility.Size = new System.Drawing.Size(79,21);
+			this.butCanadaEligibility.TabIndex = 76;
+			this.butCanadaEligibility.Text = "Eligibility";
 			this.toolTip1.SetToolTip(this.butCanadaEligibility,"Edit all the similar plans at once");
-			this.butCanadaEligibility.Click+=new System.EventHandler(this.butCanadaEligibility_Click);
+			this.butCanadaEligibility.Click += new System.EventHandler(this.butCanadaEligibility_Click);
 			// 
 			// butBenefitNotes
 			// 
-			this.butBenefitNotes.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBenefitNotes.Autosize=true;
-			this.butBenefitNotes.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBenefitNotes.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBenefitNotes.CornerRadius=4F;
-			this.butBenefitNotes.Location=new System.Drawing.Point(378,22);
-			this.butBenefitNotes.Name="butBenefitNotes";
-			this.butBenefitNotes.Size=new System.Drawing.Size(82,21);
-			this.butBenefitNotes.TabIndex=2;
-			this.butBenefitNotes.Text="View Benefits";
+			this.butBenefitNotes.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBenefitNotes.Autosize = true;
+			this.butBenefitNotes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBenefitNotes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBenefitNotes.CornerRadius = 4F;
+			this.butBenefitNotes.Location = new System.Drawing.Point(387,38);
+			this.butBenefitNotes.Name = "butBenefitNotes";
+			this.butBenefitNotes.Size = new System.Drawing.Size(98,21);
+			this.butBenefitNotes.TabIndex = 2;
+			this.butBenefitNotes.Text = "Trojan/IAP Note";
 			this.toolTip1.SetToolTip(this.butBenefitNotes,"Edit all the similar plans at once");
-			this.butBenefitNotes.Click+=new System.EventHandler(this.butBenefitNotes_Click);
+			this.butBenefitNotes.Click += new System.EventHandler(this.butBenefitNotes_Click);
 			// 
 			// butIapFind
 			// 
-			this.butIapFind.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butIapFind.Autosize=true;
-			this.butIapFind.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butIapFind.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butIapFind.CornerRadius=4F;
-			this.butIapFind.Location=new System.Drawing.Point(132,33);
-			this.butIapFind.Name="butIapFind";
-			this.butIapFind.Size=new System.Drawing.Size(82,21);
-			this.butIapFind.TabIndex=1;
-			this.butIapFind.Text="Find Plan";
+			this.butIapFind.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butIapFind.Autosize = true;
+			this.butIapFind.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butIapFind.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butIapFind.CornerRadius = 4F;
+			this.butIapFind.Location = new System.Drawing.Point(294,38);
+			this.butIapFind.Name = "butIapFind";
+			this.butIapFind.Size = new System.Drawing.Size(69,21);
+			this.butIapFind.TabIndex = 1;
+			this.butIapFind.Text = "Find Plan";
 			this.toolTip1.SetToolTip(this.butIapFind,"Edit all the similar plans at once");
-			this.butIapFind.Click+=new System.EventHandler(this.butIapFind_Click);
+			this.butIapFind.Click += new System.EventHandler(this.butIapFind_Click);
 			// 
 			// butImportTrojan
 			// 
-			this.butImportTrojan.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butImportTrojan.Autosize=true;
-			this.butImportTrojan.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImportTrojan.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImportTrojan.CornerRadius=4F;
-			this.butImportTrojan.Location=new System.Drawing.Point(132,10);
-			this.butImportTrojan.Name="butImportTrojan";
-			this.butImportTrojan.Size=new System.Drawing.Size(82,21);
-			this.butImportTrojan.TabIndex=0;
-			this.butImportTrojan.Text="Import";
+			this.butImportTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImportTrojan.Autosize = true;
+			this.butImportTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImportTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImportTrojan.CornerRadius = 4F;
+			this.butImportTrojan.Location = new System.Drawing.Point(294,15);
+			this.butImportTrojan.Name = "butImportTrojan";
+			this.butImportTrojan.Size = new System.Drawing.Size(69,21);
+			this.butImportTrojan.TabIndex = 0;
+			this.butImportTrojan.Text = "Import";
 			this.toolTip1.SetToolTip(this.butImportTrojan,"Edit all the similar plans at once");
-			this.butImportTrojan.Click+=new System.EventHandler(this.butImportTrojan_Click);
+			this.butImportTrojan.Click += new System.EventHandler(this.butImportTrojan_Click);
+			// 
+			// butHistoryElect
+			// 
+			this.butHistoryElect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHistoryElect.Autosize = true;
+			this.butHistoryElect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHistoryElect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHistoryElect.CornerRadius = 4F;
+			this.butHistoryElect.Location = new System.Drawing.Point(6,38);
+			this.butHistoryElect.Name = "butHistoryElect";
+			this.butHistoryElect.Size = new System.Drawing.Size(67,21);
+			this.butHistoryElect.TabIndex = 117;
+			this.butHistoryElect.Text = "History";
+			this.toolTip1.SetToolTip(this.butHistoryElect,"Edit all the similar plans at once");
+			this.butHistoryElect.Click += new System.EventHandler(this.butHistoryElect_Click);
 			// 
 			// labelDrop
 			// 
-			this.labelDrop.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Left)));
-			this.labelDrop.Location=new System.Drawing.Point(101,72);
-			this.labelDrop.Name="labelDrop";
-			this.labelDrop.Size=new System.Drawing.Size(554,15);
-			this.labelDrop.TabIndex=124;
-			this.labelDrop.Text="Drop a plan when a patient changes carriers or is no longer covered.  This does n"+
-					"ot delete the plan.";
-			this.labelDrop.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.labelDrop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelDrop.Location = new System.Drawing.Point(101,72);
+			this.labelDrop.Name = "labelDrop";
+			this.labelDrop.Size = new System.Drawing.Size(554,15);
+			this.labelDrop.TabIndex = 124;
+			this.labelDrop.Text = "Drop a plan when a patient changes carriers or is no longer covered.  This does n" +
+    "ot delete the plan.";
+			this.labelDrop.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// groupRequestBen
 			// 
+			this.groupRequestBen.Controls.Add(this.butHistoryElect);
+			this.groupRequestBen.Controls.Add(this.butImportTrojan);
+			this.groupRequestBen.Controls.Add(this.butGetElectronic);
+			this.groupRequestBen.Controls.Add(this.butBenefitNotes);
 			this.groupRequestBen.Controls.Add(this.labelCanadaEligibility);
 			this.groupRequestBen.Controls.Add(this.butCanadaEligibility);
-			this.groupRequestBen.Controls.Add(this.butBenefitNotes);
 			this.groupRequestBen.Controls.Add(this.labelTrojan);
 			this.groupRequestBen.Controls.Add(this.butIapFind);
 			this.groupRequestBen.Controls.Add(this.labelIAP);
-			this.groupRequestBen.Controls.Add(this.butImportTrojan);
 			this.groupRequestBen.Controls.Add(this.labelTrojanID);
 			this.groupRequestBen.Controls.Add(this.textTrojanID);
-			this.groupRequestBen.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.groupRequestBen.Location=new System.Drawing.Point(468,271);
-			this.groupRequestBen.Name="groupRequestBen";
-			this.groupRequestBen.Size=new System.Drawing.Size(502,59);
-			this.groupRequestBen.TabIndex=10;
-			this.groupRequestBen.TabStop=false;
-			this.groupRequestBen.Text="Request Benefits";
+			this.groupRequestBen.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupRequestBen.Location = new System.Drawing.Point(468,271);
+			this.groupRequestBen.Name = "groupRequestBen";
+			this.groupRequestBen.Size = new System.Drawing.Size(502,63);
+			this.groupRequestBen.TabIndex = 10;
+			this.groupRequestBen.TabStop = false;
+			this.groupRequestBen.Text = "Request Electronic Benefits";
 			// 
 			// labelCanadaEligibility
 			// 
-			this.labelCanadaEligibility.Location=new System.Drawing.Point(225,38);
-			this.labelCanadaEligibility.Name="labelCanadaEligibility";
-			this.labelCanadaEligibility.Size=new System.Drawing.Size(45,15);
-			this.labelCanadaEligibility.TabIndex=77;
-			this.labelCanadaEligibility.Text="CDAnet";
-			this.labelCanadaEligibility.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelCanadaEligibility.Location = new System.Drawing.Point(85,20);
+			this.labelCanadaEligibility.Name = "labelCanadaEligibility";
+			this.labelCanadaEligibility.Size = new System.Drawing.Size(45,15);
+			this.labelCanadaEligibility.TabIndex = 77;
+			this.labelCanadaEligibility.Text = "CDAnet";
+			this.labelCanadaEligibility.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelTrojan
 			// 
-			this.labelTrojan.Location=new System.Drawing.Point(59,15);
-			this.labelTrojan.Name="labelTrojan";
-			this.labelTrojan.Size=new System.Drawing.Size(71,15);
-			this.labelTrojan.TabIndex=75;
-			this.labelTrojan.Text="Trojan:";
-			this.labelTrojan.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelTrojan.Location = new System.Drawing.Point(224,20);
+			this.labelTrojan.Name = "labelTrojan";
+			this.labelTrojan.Size = new System.Drawing.Size(71,15);
+			this.labelTrojan.TabIndex = 75;
+			this.labelTrojan.Text = "Trojan:";
+			this.labelTrojan.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelIAP
 			// 
-			this.labelIAP.Location=new System.Drawing.Point(2,36);
-			this.labelIAP.Name="labelIAP";
-			this.labelIAP.Size=new System.Drawing.Size(128,15);
-			this.labelIAP.TabIndex=73;
-			this.labelIAP.Text="Insurance Answers Plus:";
-			this.labelIAP.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelIAP.Location = new System.Drawing.Point(198,42);
+			this.labelIAP.Name = "labelIAP";
+			this.labelIAP.Size = new System.Drawing.Size(97,15);
+			this.labelIAP.TabIndex = 73;
+			this.labelIAP.Text = "Ins Answers Plus:";
+			this.labelIAP.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelTrojanID
 			// 
-			this.labelTrojanID.Location=new System.Drawing.Point(218,14);
-			this.labelTrojanID.Name="labelTrojanID";
-			this.labelTrojanID.Size=new System.Drawing.Size(23,15);
-			this.labelTrojanID.TabIndex=9;
-			this.labelTrojanID.Text="ID";
-			this.labelTrojanID.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelTrojanID.Location = new System.Drawing.Point(360,18);
+			this.labelTrojanID.Name = "labelTrojanID";
+			this.labelTrojanID.Size = new System.Drawing.Size(23,15);
+			this.labelTrojanID.TabIndex = 9;
+			this.labelTrojanID.Text = "ID";
+			this.labelTrojanID.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textTrojanID
 			// 
-			this.textTrojanID.Location=new System.Drawing.Point(245,10);
-			this.textTrojanID.MaxLength=30;
-			this.textTrojanID.Name="textTrojanID";
-			this.textTrojanID.Size=new System.Drawing.Size(109,20);
-			this.textTrojanID.TabIndex=8;
+			this.textTrojanID.Location = new System.Drawing.Point(387,14);
+			this.textTrojanID.MaxLength = 30;
+			this.textTrojanID.Name = "textTrojanID";
+			this.textTrojanID.Size = new System.Drawing.Size(109,20);
+			this.textTrojanID.TabIndex = 8;
 			// 
 			// label26
 			// 
-			this.label26.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label26.Location=new System.Drawing.Point(20,22);
-			this.label26.Name="label26";
-			this.label26.Size=new System.Drawing.Size(148,14);
-			this.label26.TabIndex=127;
-			this.label26.Text="Relationship to Subscriber";
-			this.label26.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label26.Location = new System.Drawing.Point(20,22);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(148,14);
+			this.label26.TabIndex = 127;
+			this.label26.Text = "Relationship to Subscriber";
+			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// panel1
 			// 
-			this.panel1.BackColor=System.Drawing.SystemColors.ControlText;
-			this.panel1.Location=new System.Drawing.Point(0,90);
-			this.panel1.Name="panel1";
-			this.panel1.Size=new System.Drawing.Size(988,2);
-			this.panel1.TabIndex=128;
+			this.panel1.BackColor = System.Drawing.SystemColors.ControlText;
+			this.panel1.Location = new System.Drawing.Point(0,90);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(988,2);
+			this.panel1.TabIndex = 128;
 			// 
 			// comboRelationship
 			// 
-			this.comboRelationship.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboRelationship.Location=new System.Drawing.Point(170,18);
-			this.comboRelationship.MaxDropDownItems=30;
-			this.comboRelationship.Name="comboRelationship";
-			this.comboRelationship.Size=new System.Drawing.Size(151,21);
-			this.comboRelationship.TabIndex=0;
+			this.comboRelationship.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboRelationship.Location = new System.Drawing.Point(170,18);
+			this.comboRelationship.MaxDropDownItems = 30;
+			this.comboRelationship.Name = "comboRelationship";
+			this.comboRelationship.Size = new System.Drawing.Size(151,21);
+			this.comboRelationship.TabIndex = 0;
 			// 
 			// label31
 			// 
-			this.label31.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label31.Location=new System.Drawing.Point(396,23);
-			this.label31.Name="label31";
-			this.label31.Size=new System.Drawing.Size(109,14);
-			this.label31.TabIndex=130;
-			this.label31.Text="Order";
-			this.label31.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label31.Location = new System.Drawing.Point(396,23);
+			this.label31.Name = "label31";
+			this.label31.Size = new System.Drawing.Size(109,14);
+			this.label31.TabIndex = 130;
+			this.label31.Text = "Order";
+			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkIsPending
 			// 
-			this.checkIsPending.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsPending.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkIsPending.Location=new System.Drawing.Point(396,42);
-			this.checkIsPending.Name="checkIsPending";
-			this.checkIsPending.Size=new System.Drawing.Size(125,16);
-			this.checkIsPending.TabIndex=3;
-			this.checkIsPending.Text="Pending";
-			this.checkIsPending.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsPending.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsPending.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsPending.Location = new System.Drawing.Point(396,42);
+			this.checkIsPending.Name = "checkIsPending";
+			this.checkIsPending.Size = new System.Drawing.Size(125,16);
+			this.checkIsPending.TabIndex = 3;
+			this.checkIsPending.Text = "Pending";
+			this.checkIsPending.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label32
 			// 
-			this.label32.Font=new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label32.Location=new System.Drawing.Point(5,94);
-			this.label32.Name="label32";
-			this.label32.Size=new System.Drawing.Size(304,19);
-			this.label32.TabIndex=134;
-			this.label32.Text="Insurance Plan Information";
+			this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label32.Location = new System.Drawing.Point(5,94);
+			this.label32.Name = "label32";
+			this.label32.Size = new System.Drawing.Size(304,19);
+			this.label32.TabIndex = 134;
+			this.label32.Text = "Insurance Plan Information";
 			// 
 			// label33
 			// 
-			this.label33.Font=new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label33.Location=new System.Drawing.Point(5,0);
-			this.label33.Name="label33";
-			this.label33.Size=new System.Drawing.Size(188,19);
-			this.label33.TabIndex=135;
-			this.label33.Text="Patient Information";
+			this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label33.Location = new System.Drawing.Point(5,0);
+			this.label33.Name = "label33";
+			this.label33.Size = new System.Drawing.Size(188,19);
+			this.label33.TabIndex = 135;
+			this.label33.Text = "Patient Information";
 			// 
 			// listAdj
 			// 
-			this.listAdj.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.listAdj.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.listAdj.Items.AddRange(new object[] {
             "03/05/2001       Ins Used:  $124.00       Ded Used:  $50.00",
             "03/05/2002       Ins Used:  $0.00       Ded Used:  $50.00"});
-			this.listAdj.Location=new System.Drawing.Point(613,28);
-			this.listAdj.Name="listAdj";
-			this.listAdj.Size=new System.Drawing.Size(341,56);
-			this.listAdj.TabIndex=137;
-			this.listAdj.DoubleClick+=new System.EventHandler(this.listAdj_DoubleClick);
+			this.listAdj.Location = new System.Drawing.Point(613,28);
+			this.listAdj.Name = "listAdj";
+			this.listAdj.Size = new System.Drawing.Size(341,56);
+			this.listAdj.TabIndex = 137;
+			this.listAdj.DoubleClick += new System.EventHandler(this.listAdj_DoubleClick);
 			// 
 			// label35
 			// 
-			this.label35.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label35.Location=new System.Drawing.Point(613,8);
-			this.label35.Name="label35";
-			this.label35.Size=new System.Drawing.Size(218,17);
-			this.label35.TabIndex=138;
-			this.label35.Text="Adjustments to Insurance Benefits: ";
-			this.label35.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label35.Location = new System.Drawing.Point(613,8);
+			this.label35.Name = "label35";
+			this.label35.Size = new System.Drawing.Size(218,17);
+			this.label35.TabIndex = 138;
+			this.label35.Text = "Adjustments to Insurance Benefits: ";
+			this.label35.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textPatID
 			// 
-			this.textPatID.Font=new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textPatID.Location=new System.Drawing.Point(170,40);
-			this.textPatID.MaxLength=100;
-			this.textPatID.Name="textPatID";
-			this.textPatID.Size=new System.Drawing.Size(151,20);
-			this.textPatID.TabIndex=1;
+			this.textPatID.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textPatID.Location = new System.Drawing.Point(170,40);
+			this.textPatID.MaxLength = 100;
+			this.textPatID.Name = "textPatID";
+			this.textPatID.Size = new System.Drawing.Size(151,20);
+			this.textPatID.TabIndex = 1;
 			// 
 			// label36
 			// 
-			this.label36.Font=new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label36.Location=new System.Drawing.Point(30,42);
-			this.label36.Name="label36";
-			this.label36.Size=new System.Drawing.Size(138,16);
-			this.label36.TabIndex=143;
-			this.label36.Text="Optional Patient ID";
-			this.label36.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label36.Location = new System.Drawing.Point(30,42);
+			this.label36.Name = "label36";
+			this.label36.Size = new System.Drawing.Size(138,16);
+			this.label36.TabIndex = 143;
+			this.label36.Text = "Optional Patient ID";
+			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// panelPat
 			// 
@@ -1129,88 +1145,88 @@ namespace OpenDental{
 			this.panelPat.Controls.Add(this.label26);
 			this.panelPat.Controls.Add(this.label31);
 			this.panelPat.Controls.Add(this.checkIsPending);
-			this.panelPat.Location=new System.Drawing.Point(0,0);
-			this.panelPat.Name="panelPat";
-			this.panelPat.Size=new System.Drawing.Size(982,90);
-			this.panelPat.TabIndex=15;
+			this.panelPat.Location = new System.Drawing.Point(0,0);
+			this.panelPat.Name = "panelPat";
+			this.panelPat.Size = new System.Drawing.Size(982,90);
+			this.panelPat.TabIndex = 15;
 			// 
 			// textOrdinal
 			// 
-			this.textOrdinal.Location=new System.Drawing.Point(508,22);
-			this.textOrdinal.MaxVal=10;
-			this.textOrdinal.MinVal=1;
-			this.textOrdinal.Name="textOrdinal";
-			this.textOrdinal.Size=new System.Drawing.Size(45,20);
-			this.textOrdinal.TabIndex=2;
+			this.textOrdinal.Location = new System.Drawing.Point(508,22);
+			this.textOrdinal.MaxVal = 10;
+			this.textOrdinal.MinVal = 1;
+			this.textOrdinal.Name = "textOrdinal";
+			this.textOrdinal.Size = new System.Drawing.Size(45,20);
+			this.textOrdinal.TabIndex = 2;
 			// 
 			// butAdjAdd
 			// 
-			this.butAdjAdd.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butAdjAdd.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top|System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdjAdd.Autosize=true;
-			this.butAdjAdd.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdjAdd.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdjAdd.CornerRadius=4F;
-			this.butAdjAdd.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butAdjAdd.Location=new System.Drawing.Point(895,6);
-			this.butAdjAdd.Name="butAdjAdd";
-			this.butAdjAdd.Size=new System.Drawing.Size(59,21);
-			this.butAdjAdd.TabIndex=4;
-			this.butAdjAdd.Text="Add";
-			this.butAdjAdd.Click+=new System.EventHandler(this.butAdjAdd_Click);
+			this.butAdjAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdjAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdjAdd.Autosize = true;
+			this.butAdjAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdjAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdjAdd.CornerRadius = 4F;
+			this.butAdjAdd.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butAdjAdd.Location = new System.Drawing.Point(895,6);
+			this.butAdjAdd.Name = "butAdjAdd";
+			this.butAdjAdd.Size = new System.Drawing.Size(59,21);
+			this.butAdjAdd.TabIndex = 4;
+			this.butAdjAdd.Text = "Add";
+			this.butAdjAdd.Click += new System.EventHandler(this.butAdjAdd_Click);
 			// 
 			// butDrop
 			// 
-			this.butDrop.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butDrop.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Left)));
-			this.butDrop.Autosize=true;
-			this.butDrop.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDrop.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDrop.CornerRadius=4F;
-			this.butDrop.Location=new System.Drawing.Point(7,67);
-			this.butDrop.Name="butDrop";
-			this.butDrop.Size=new System.Drawing.Size(72,21);
-			this.butDrop.TabIndex=5;
-			this.butDrop.Text="Drop";
-			this.butDrop.Click+=new System.EventHandler(this.butDrop_Click);
+			this.butDrop.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDrop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDrop.Autosize = true;
+			this.butDrop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDrop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDrop.CornerRadius = 4F;
+			this.butDrop.Location = new System.Drawing.Point(7,67);
+			this.butDrop.Name = "butDrop";
+			this.butDrop.Size = new System.Drawing.Size(72,21);
+			this.butDrop.TabIndex = 5;
+			this.butDrop.Text = "Drop";
+			this.butDrop.Click += new System.EventHandler(this.butDrop_Click);
 			// 
 			// textPlanNum
 			// 
-			this.textPlanNum.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Left)));
-			this.textPlanNum.Location=new System.Drawing.Point(310,676);
-			this.textPlanNum.Name="textPlanNum";
-			this.textPlanNum.Size=new System.Drawing.Size(100,20);
-			this.textPlanNum.TabIndex=148;
+			this.textPlanNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textPlanNum.Location = new System.Drawing.Point(310,676);
+			this.textPlanNum.Name = "textPlanNum";
+			this.textPlanNum.Size = new System.Drawing.Size(100,20);
+			this.textPlanNum.TabIndex = 148;
 			// 
 			// label17
 			// 
-			this.label17.Location=new System.Drawing.Point(7,13);
-			this.label17.Name="label17";
-			this.label17.Size=new System.Drawing.Size(94,15);
-			this.label17.TabIndex=152;
-			this.label17.Text="Carrier";
-			this.label17.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.label17.Location = new System.Drawing.Point(7,13);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(94,15);
+			this.label17.TabIndex = 152;
+			this.label17.Text = "Carrier";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkApplyAll
 			// 
-			this.checkApplyAll.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkApplyAll.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkApplyAll.Location=new System.Drawing.Point(468,679);
-			this.checkApplyAll.Name="checkApplyAll";
-			this.checkApplyAll.Size=new System.Drawing.Size(323,21);
-			this.checkApplyAll.TabIndex=12;
-			this.checkApplyAll.Text="Apply changes to all identical insurance plans";
-			this.checkApplyAll.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
-			this.checkApplyAll.UseVisualStyleBackColor=true;
+			this.checkApplyAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApplyAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkApplyAll.Location = new System.Drawing.Point(468,679);
+			this.checkApplyAll.Name = "checkApplyAll";
+			this.checkApplyAll.Size = new System.Drawing.Size(323,21);
+			this.checkApplyAll.TabIndex = 12;
+			this.checkApplyAll.Text = "Apply changes to all identical insurance plans";
+			this.checkApplyAll.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApplyAll.UseVisualStyleBackColor = true;
 			// 
 			// label18
 			// 
-			this.label18.Location=new System.Drawing.Point(5,563);
-			this.label18.Name="label18";
-			this.label18.Size=new System.Drawing.Size(399,15);
-			this.label18.TabIndex=156;
-			this.label18.Text="Plan Note.  Always applies to all similar plans, not just this one.";
-			this.label18.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label18.Location = new System.Drawing.Point(5,563);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(399,15);
+			this.label18.TabIndex = 156;
+			this.label18.Text = "Plan Note.  Always applies to all similar plans, not just this one.";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// groupPlan
 			// 
@@ -1227,12 +1243,12 @@ namespace OpenDental{
 			this.groupPlan.Controls.Add(this.label16);
 			this.groupPlan.Controls.Add(this.label4);
 			this.groupPlan.Controls.Add(this.labelDivisionDash);
-			this.groupPlan.Location=new System.Drawing.Point(0,2);
-			this.groupPlan.Name="groupPlan";
-			this.groupPlan.Size=new System.Drawing.Size(425,264);
-			this.groupPlan.TabIndex=0;
-			this.groupPlan.TabStop=false;
-			this.groupPlan.Text="Plan";
+			this.groupPlan.Location = new System.Drawing.Point(0,2);
+			this.groupPlan.Name = "groupPlan";
+			this.groupPlan.Size = new System.Drawing.Size(425,264);
+			this.groupPlan.TabIndex = 0;
+			this.groupPlan.TabStop = false;
+			this.groupPlan.Text = "Plan";
 			// 
 			// groupCarrier
 			// 
@@ -1253,32 +1269,32 @@ namespace OpenDental{
 			this.groupCarrier.Controls.Add(this.label17);
 			this.groupCarrier.Controls.Add(this.textState);
 			this.groupCarrier.Controls.Add(this.labelCitySTZip);
-			this.groupCarrier.Location=new System.Drawing.Point(10,44);
-			this.groupCarrier.Name="groupCarrier";
-			this.groupCarrier.Size=new System.Drawing.Size(399,155);
-			this.groupCarrier.TabIndex=154;
-			this.groupCarrier.TabStop=false;
-			this.groupCarrier.Text="Carrier";
+			this.groupCarrier.Location = new System.Drawing.Point(10,44);
+			this.groupCarrier.Name = "groupCarrier";
+			this.groupCarrier.Size = new System.Drawing.Size(399,155);
+			this.groupCarrier.TabIndex = 154;
+			this.groupCarrier.TabStop = false;
+			this.groupCarrier.Text = "Carrier";
 			// 
 			// butSearch
 			// 
-			this.butSearch.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butSearch.Autosize=true;
-			this.butSearch.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSearch.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSearch.CornerRadius=4F;
-			this.butSearch.Location=new System.Drawing.Point(86,132);
-			this.butSearch.Name="butSearch";
-			this.butSearch.Size=new System.Drawing.Size(84,20);
-			this.butSearch.TabIndex=124;
-			this.butSearch.Text="Search IDs";
-			this.butSearch.Click+=new System.EventHandler(this.butSearch_Click);
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.Location = new System.Drawing.Point(86,132);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(84,20);
+			this.butSearch.TabIndex = 124;
+			this.butSearch.Text = "Search IDs";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
 			// panelPlan
 			// 
-			this.panelPlan.AutoScroll=true;
-			this.panelPlan.AutoScrollMargin=new System.Drawing.Size(0,10);
-			this.panelPlan.BackColor=System.Drawing.SystemColors.Control;
+			this.panelPlan.AutoScroll = true;
+			this.panelPlan.AutoScrollMargin = new System.Drawing.Size(0,10);
+			this.panelPlan.BackColor = System.Drawing.SystemColors.Control;
 			this.panelPlan.Controls.Add(this.checkIsHidden);
 			this.panelPlan.Controls.Add(this.checkCodeSubst);
 			this.panelPlan.Controls.Add(this.checkDedBeforePerc);
@@ -1297,209 +1313,195 @@ namespace OpenDental{
 			this.panelPlan.Controls.Add(this.label23);
 			this.panelPlan.Controls.Add(this.checkAlternateCode);
 			this.panelPlan.Controls.Add(this.checkClaimsUseUCR);
-			this.panelPlan.Location=new System.Drawing.Point(8,116);
-			this.panelPlan.Name="panelPlan";
-			this.panelPlan.Size=new System.Drawing.Size(454,438);
-			this.panelPlan.TabIndex=157;
+			this.panelPlan.Location = new System.Drawing.Point(8,116);
+			this.panelPlan.Name = "panelPlan";
+			this.panelPlan.Size = new System.Drawing.Size(454,438);
+			this.panelPlan.TabIndex = 157;
 			// 
 			// checkIsHidden
 			// 
-			this.checkIsHidden.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkIsHidden.Location=new System.Drawing.Point(112,357);
-			this.checkIsHidden.Name="checkIsHidden";
-			this.checkIsHidden.Size=new System.Drawing.Size(275,16);
-			this.checkIsHidden.TabIndex=165;
-			this.checkIsHidden.Text="Hidden";
+			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsHidden.Location = new System.Drawing.Point(112,357);
+			this.checkIsHidden.Name = "checkIsHidden";
+			this.checkIsHidden.Size = new System.Drawing.Size(275,16);
+			this.checkIsHidden.TabIndex = 165;
+			this.checkIsHidden.Text = "Hidden";
 			// 
 			// checkCodeSubst
 			// 
-			this.checkCodeSubst.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkCodeSubst.Location=new System.Drawing.Point(112,309);
-			this.checkCodeSubst.Name="checkCodeSubst";
-			this.checkCodeSubst.Size=new System.Drawing.Size(275,16);
-			this.checkCodeSubst.TabIndex=164;
-			this.checkCodeSubst.Text="Don\'t Substitute Codes (e.g. posterior composites)";
+			this.checkCodeSubst.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkCodeSubst.Location = new System.Drawing.Point(112,309);
+			this.checkCodeSubst.Name = "checkCodeSubst";
+			this.checkCodeSubst.Size = new System.Drawing.Size(275,16);
+			this.checkCodeSubst.TabIndex = 164;
+			this.checkCodeSubst.Text = "Don\'t Substitute Codes (e.g. posterior composites)";
 			// 
 			// checkDedBeforePerc
 			// 
-			this.checkDedBeforePerc.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.checkDedBeforePerc.Location=new System.Drawing.Point(112,341);
-			this.checkDedBeforePerc.Name="checkDedBeforePerc";
-			this.checkDedBeforePerc.Size=new System.Drawing.Size(275,16);
-			this.checkDedBeforePerc.TabIndex=163;
-			this.checkDedBeforePerc.Text="Apply deductible before percentage";
+			this.checkDedBeforePerc.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDedBeforePerc.Location = new System.Drawing.Point(112,341);
+			this.checkDedBeforePerc.Name = "checkDedBeforePerc";
+			this.checkDedBeforePerc.Size = new System.Drawing.Size(275,16);
+			this.checkDedBeforePerc.TabIndex = 163;
+			this.checkDedBeforePerc.Text = "Apply deductible before percentage";
 			// 
 			// checkShowBaseUnits
 			// 
-			this.checkShowBaseUnits.Location=new System.Drawing.Point(112,569);
-			this.checkShowBaseUnits.Name="checkShowBaseUnits";
-			this.checkShowBaseUnits.Size=new System.Drawing.Size(289,17);
-			this.checkShowBaseUnits.TabIndex=162;
-			this.checkShowBaseUnits.Text="Claims show base units (Does not affect billed amount)";
-			this.checkShowBaseUnits.UseVisualStyleBackColor=true;
+			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,569);
+			this.checkShowBaseUnits.Name = "checkShowBaseUnits";
+			this.checkShowBaseUnits.Size = new System.Drawing.Size(289,17);
+			this.checkShowBaseUnits.TabIndex = 162;
+			this.checkShowBaseUnits.Text = "Claims show base units (Does not affect billed amount)";
+			this.checkShowBaseUnits.UseVisualStyleBackColor = true;
 			// 
 			// textDentaide
 			// 
-			this.textDentaide.Location=new System.Drawing.Point(158,548);
-			this.textDentaide.MaxVal=255;
-			this.textDentaide.MinVal=0;
-			this.textDentaide.Name="textDentaide";
-			this.textDentaide.Size=new System.Drawing.Size(55,20);
-			this.textDentaide.TabIndex=161;
+			this.textDentaide.Location = new System.Drawing.Point(158,548);
+			this.textDentaide.MaxVal = 255;
+			this.textDentaide.MinVal = 0;
+			this.textDentaide.Name = "textDentaide";
+			this.textDentaide.Size = new System.Drawing.Size(55,20);
+			this.textDentaide.TabIndex = 161;
 			// 
 			// labelDentaide
 			// 
-			this.labelDentaide.Location=new System.Drawing.Point(12,551);
-			this.labelDentaide.Name="labelDentaide";
-			this.labelDentaide.Size=new System.Drawing.Size(140,19);
-			this.labelDentaide.TabIndex=160;
-			this.labelDentaide.Text="Dentaide Card Sequence";
-			this.labelDentaide.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.labelDentaide.Location = new System.Drawing.Point(12,551);
+			this.labelDentaide.Name = "labelDentaide";
+			this.labelDentaide.Size = new System.Drawing.Size(140,19);
+			this.labelDentaide.TabIndex = 160;
+			this.labelDentaide.Text = "Dentaide Card Sequence";
+			this.labelDentaide.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// comboFilingCode
 			// 
-			this.comboFilingCode.DropDownStyle=System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFilingCode.Location=new System.Drawing.Point(112,524);
-			this.comboFilingCode.MaxDropDownItems=30;
-			this.comboFilingCode.Name="comboFilingCode";
-			this.comboFilingCode.Size=new System.Drawing.Size(212,21);
-			this.comboFilingCode.TabIndex=159;
+			this.comboFilingCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFilingCode.Location = new System.Drawing.Point(112,524);
+			this.comboFilingCode.MaxDropDownItems = 30;
+			this.comboFilingCode.Name = "comboFilingCode";
+			this.comboFilingCode.Size = new System.Drawing.Size(212,21);
+			this.comboFilingCode.TabIndex = 159;
 			// 
 			// label13
 			// 
-			this.label13.Location=new System.Drawing.Point(10,526);
-			this.label13.Name="label13";
-			this.label13.Size=new System.Drawing.Size(100,19);
-			this.label13.TabIndex=158;
-			this.label13.Text="Filing Code";
-			this.label13.TextAlign=System.Drawing.ContentAlignment.TopRight;
+			this.label13.Location = new System.Drawing.Point(10,526);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(100,19);
+			this.label13.TabIndex = 158;
+			this.label13.Text = "Filing Code";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butPick
 			// 
-			this.butPick.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butPick.Autosize=true;
-			this.butPick.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPick.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPick.CornerRadius=4F;
-			this.butPick.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPick.Location=new System.Drawing.Point(327,93);
-			this.butPick.Name="butPick";
-			this.butPick.Size=new System.Drawing.Size(90,23);
-			this.butPick.TabIndex=153;
-			this.butPick.Text="Pick From List";
-			this.butPick.Click+=new System.EventHandler(this.butPick_Click);
-			// 
-			// butEditBenefits
-			// 
-			this.butEditBenefits.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butEditBenefits.Autosize=true;
-			this.butEditBenefits.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditBenefits.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditBenefits.CornerRadius=4F;
-			this.butEditBenefits.Location=new System.Drawing.Point(468,649);
-			this.butEditBenefits.Name="butEditBenefits";
-			this.butEditBenefits.Size=new System.Drawing.Size(90,24);
-			this.butEditBenefits.TabIndex=11;
-			this.butEditBenefits.Text="Edit Benefits";
-			this.butEditBenefits.Click+=new System.EventHandler(this.butEditBenefits_Click);
+			this.butPick.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPick.Autosize = true;
+			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPick.CornerRadius = 4F;
+			this.butPick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPick.Location = new System.Drawing.Point(327,93);
+			this.butPick.Name = "butPick";
+			this.butPick.Size = new System.Drawing.Size(90,23);
+			this.butPick.TabIndex = 153;
+			this.butPick.Text = "Pick From List";
+			this.butPick.Click += new System.EventHandler(this.butPick_Click);
 			// 
 			// textPlanNote
 			// 
-			this.textPlanNote.AcceptsReturn=true;
-			this.textPlanNote.Location=new System.Drawing.Point(14,581);
-			this.textPlanNote.Multiline=true;
-			this.textPlanNote.Name="textPlanNote";
-			this.textPlanNote.QuickPasteType=OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textPlanNote.ScrollBars=System.Windows.Forms.ScrollBars.Vertical;
-			this.textPlanNote.Size=new System.Drawing.Size(395,85);
-			this.textPlanNote.TabIndex=8;
-			this.textPlanNote.Text="1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l"+
-					"ines in 72 vert\r\n6 in 85";
+			this.textPlanNote.AcceptsReturn = true;
+			this.textPlanNote.Location = new System.Drawing.Point(14,581);
+			this.textPlanNote.Multiline = true;
+			this.textPlanNote.Name = "textPlanNote";
+			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPlanNote.Size = new System.Drawing.Size(395,85);
+			this.textPlanNote.TabIndex = 8;
+			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 in 85";
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butOK.Autosize=true;
-			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(801,671);
-			this.butOK.Name="butOK";
-			this.butOK.Size=new System.Drawing.Size(75,26);
-			this.butOK.TabIndex=13;
-			this.butOK.Text="&OK";
-			this.butOK.Click+=new System.EventHandler(this.butOK_Click);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(801,671);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 13;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// gridBenefits
 			// 
-			this.gridBenefits.HScrollVisible=false;
-			this.gridBenefits.Location=new System.Drawing.Point(468,334);
-			this.gridBenefits.Name="gridBenefits";
-			this.gridBenefits.ScrollValue=0;
-			this.gridBenefits.SelectionMode=OpenDental.UI.GridSelectionMode.None;
-			this.gridBenefits.Size=new System.Drawing.Size(502,314);
-			this.gridBenefits.TabIndex=146;
-			this.gridBenefits.Title="Benefit Information";
-			this.gridBenefits.TranslationName="TableBenefits";
+			this.gridBenefits.HScrollVisible = false;
+			this.gridBenefits.Location = new System.Drawing.Point(468,336);
+			this.gridBenefits.Name = "gridBenefits";
+			this.gridBenefits.ScrollValue = 0;
+			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.None;
+			this.gridBenefits.Size = new System.Drawing.Size(502,332);
+			this.gridBenefits.TabIndex = 146;
+			this.gridBenefits.Title = "Benefit Information";
+			this.gridBenefits.TranslationName = "TableBenefits";
+			this.gridBenefits.DoubleClick += new System.EventHandler(this.gridBenefits_DoubleClick);
 			// 
 			// butLabel
 			// 
-			this.butLabel.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butLabel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Left)));
-			this.butLabel.Autosize=true;
-			this.butLabel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLabel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLabel.CornerRadius=4F;
-			this.butLabel.Enabled=false;
-			this.butLabel.Image=global::OpenDental.Properties.Resources.butLabel;
-			this.butLabel.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location=new System.Drawing.Point(131,671);
-			this.butLabel.Name="butLabel";
-			this.butLabel.Size=new System.Drawing.Size(81,26);
-			this.butLabel.TabIndex=125;
-			this.butLabel.Text="Label";
-			this.butLabel.Click+=new System.EventHandler(this.butLabel_Click);
+			this.butLabel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butLabel.Autosize = true;
+			this.butLabel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLabel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLabel.CornerRadius = 4F;
+			this.butLabel.Enabled = false;
+			this.butLabel.Image = global::OpenDental.Properties.Resources.butLabel;
+			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLabel.Location = new System.Drawing.Point(131,671);
+			this.butLabel.Name = "butLabel";
+			this.butLabel.Size = new System.Drawing.Size(81,26);
+			this.butLabel.TabIndex = 125;
+			this.butLabel.Text = "Label";
+			this.butLabel.Click += new System.EventHandler(this.butLabel_Click);
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butDelete.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize=true;
-			this.butDelete.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius=4F;
-			this.butDelete.Image=global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location=new System.Drawing.Point(13,671);
-			this.butDelete.Name="butDelete";
-			this.butDelete.Size=new System.Drawing.Size(81,26);
-			this.butDelete.TabIndex=112;
-			this.butDelete.Text="&Delete";
-			this.butDelete.Click+=new System.EventHandler(this.butDelete_Click);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(13,671);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(81,26);
+			this.butDelete.TabIndex = 112;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butCancel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize=true;
-			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius=4F;
-			this.butCancel.DialogResult=System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location=new System.Drawing.Point(896,671);
-			this.butCancel.Name="butCancel";
-			this.butCancel.Size=new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex=14;
-			this.butCancel.Text="&Cancel";
-			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(896,671);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 14;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormInsPlan
 			// 
-			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(982,700);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(982,700);
 			this.Controls.Add(this.panelPlan);
 			this.Controls.Add(this.butPick);
-			this.Controls.Add(this.butEditBenefits);
 			this.Controls.Add(this.textPlanNote);
 			this.Controls.Add(this.label18);
 			this.Controls.Add(this.panel1);
@@ -1514,15 +1516,15 @@ namespace OpenDental{
 			this.Controls.Add(this.label32);
 			this.Controls.Add(this.groupRequestBen);
 			this.Controls.Add(this.groupSubscriber);
-			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox=false;
-			this.MinimizeBox=false;
-			this.Name="FormInsPlan";
-			this.ShowInTaskbar=false;
-			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text="Edit Insurance Plan";
-			this.Load+=new System.EventHandler(this.FormInsPlan_Load);
-			this.Closing+=new System.ComponentModel.CancelEventHandler(this.FormInsPlan_Closing);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FormInsPlan";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Edit Insurance Plan";
+			this.Load += new System.EventHandler(this.FormInsPlan_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormInsPlan_Closing);
 			this.groupSubscriber.ResumeLayout(false);
 			this.groupSubscriber.PerformLayout();
 			this.groupCoPay.ResumeLayout(false);
@@ -1655,10 +1657,10 @@ namespace OpenDental{
 			FeeSchedsStandard=FeeScheds.GetListForType(FeeScheduleType.Normal,false);
 			FeeSchedsCopay=FeeScheds.GetListForType(FeeScheduleType.CoPay,false);
 			FeeSchedsAllowed=FeeScheds.GetListForType(FeeScheduleType.Allowed,false);
-			Clearinghouse clearhouse=Clearinghouses.GetDefault();
-			if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
-				butEligibility.Visible=false;
-			}
+			//Clearinghouse clearhouse=Clearinghouses.GetDefault();
+			//if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
+			//	butEligibility.Visible=false;
+			//}
 			FillFormWithPlanCur();
 			FillBenefits();
 			Cursor=Cursors.Default;
@@ -3032,7 +3034,7 @@ namespace OpenDental{
 			butBenefitNotes.Enabled=true;
 		}
 
-		///<summary>This button is always active.</summary>
+		///<summary>This button is only visible if Trojan or IAP is enabled.  Always active.</summary>
 		private void butBenefitNotes_Click(object sender,System.EventArgs e) {
 			string otherBenNote="";
 			if(PlanCur.BenefitNotes=="") {
@@ -3041,7 +3043,7 @@ namespace OpenDental{
 					textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,PlanCur.PlanNum,false);
 				otherBenNote=InsPlans.GetBenefitNotes(samePlans);
 				if(otherBenNote=="") {
-					MsgBox.Show(this,"No benefit note found.  Benefit notes are created when electronically requesting benefit information.  Store your own benefit notes in the subscriber note instead.");
+					MsgBox.Show(this,"No benefit note found.  Benefit notes are created when importing Trojan or IAP benefit information and are frequently read-only.  Store your own notes in the subscriber note instead.");
 					return;
 				}
 				MsgBox.Show(this,"This plan does not have a benefit note, but a note was found for an identical plan.  You will be able to view this note, but not change it.");
@@ -3212,7 +3214,7 @@ namespace OpenDental{
 			}*/
 		}
 
-		private void butEditBenefits_Click(object sender,EventArgs e) {
+		private void gridBenefits_DoubleClick(object sender,EventArgs e) {
 			int patPlanNum=0;
 			if(PatPlanCur!=null) {
 				patPlanNum=PatPlanCur.PatPlanNum;
@@ -3249,26 +3251,32 @@ namespace OpenDental{
 			}
 		}
 
-		private void butEligibility_Click(object sender,EventArgs e) {
+		private void butGetElectronic_Click(object sender,EventArgs e) {
+			//Visible for everyone.  Only works with ClaimConnect so far.
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null){
 				MsgBox.Show(this,"No clearinghouse is set as default.");
 				return;
 			}
 			if(clearhouse.CommBridge==EclaimsCommBridge.ClaimConnect){
-				EligibilityCheckDentalXchange();
+				//EligibilityCheckDentalXchange();
+				Eclaims.ClaimConnect.Benefits270(clearhouse);
 				return;
 			}
-			if(clearhouse.CommBridge==EclaimsCommBridge.Tesia) {
-				Eclaims.Tesia.Eligibility270();
-				return;
-			}
-			MsgBox.Show(this,"We do not have eligibility checks functional with your default clearinghouse.");
+			//if(clearhouse.CommBridge==EclaimsCommBridge.Tesia) {
+			//	Eclaims.Tesia.Eligibility270();
+			//	return;
+			//}
+			MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect.");
+		}
+
+		private void butHistoryElect_Click(object sender,EventArgs e) {
+			MessageBox.Show("Under development");
 		}
 
 		#region EligibilityCheckDentalXchange
 		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
-		//PraciceWeb seems to have a partnership agreement with this clearinghouse, but we do not yet.
+		//PraciceWeb functionality deprecated.
 		private void EligibilityCheckDentalXchange() {
 			Cursor = Cursors.WaitCursor;
 			OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 
@@ -3886,6 +3894,10 @@ namespace OpenDental{
 				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
 		}
+
+	
+
+		
 
 		
 

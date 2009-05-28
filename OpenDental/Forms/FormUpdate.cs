@@ -760,6 +760,9 @@ namespace OpenDental{
 			}
 			#if DEBUG
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			//IWebProxy proxy = new WebProxy("http://proxyserver:80",true);
+			//ICredentials cred=new NetworkCredential(
+			//updateService.Proxy.Credentials
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 				updateService.Url=PrefC.GetString("UpdateServerAddress");

@@ -1308,7 +1308,11 @@ namespace OpenDentBusiness{
 		///<summary>22 X12-277. Unsolicited claim status notification.</summary>
 		StatusNotify_277,
 		///<summary>23 Text report from clearinghouse in human readable format.</summary>
-		TextReport
+		TextReport,
+		///<summary>24 X12-270.</summary>
+		BenefitInquiry270,
+		///<summary></summary>
+		BenefitResponse271
 	}
 
 	///<summary></summary>

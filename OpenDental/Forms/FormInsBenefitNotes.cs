@@ -91,11 +91,11 @@ namespace OpenDental{
 			// 
 			this.textBenefitNotes.AcceptsReturn = true;
 			this.textBenefitNotes.AcceptsTab = true;
-			this.textBenefitNotes.Location = new System.Drawing.Point(10,8);
+			this.textBenefitNotes.Location = new System.Drawing.Point(10,12);
 			this.textBenefitNotes.Multiline = true;
 			this.textBenefitNotes.Name = "textBenefitNotes";
 			this.textBenefitNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBenefitNotes.Size = new System.Drawing.Size(450,636);
+			this.textBenefitNotes.Size = new System.Drawing.Size(450,632);
 			this.textBenefitNotes.TabIndex = 2;
 			// 
 			// FormInsBenefitNotes

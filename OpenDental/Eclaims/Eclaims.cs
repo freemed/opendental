@@ -82,7 +82,7 @@ namespace OpenDental.Eclaims
 					AttemptLaunch(Clearinghouses.List[i],batchNum);
 				}
 				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.ClaimConnect){
-					if(!WebClaim.Launch(Clearinghouses.List[i],batchNum)){
+					if(!ClaimConnect.Launch(Clearinghouses.List[i],batchNum)){
 						MessageBox.Show(Lan.g("Eclaims","Error sending."));
 						continue;
 					}

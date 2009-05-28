@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	
-	/// <summary>One electronic transaction.  Typically, one claim or response.  Will later be expanded to include many other types of transactions with clearinghouses, such as eligibility, reports, etc.  Also stores printing of paper claims.  Sometimes stores a copy of what was sent.</summary>
+	/// <summary>One electronic transaction.  Typically, one claim or response.  Or one benefit request or response.  Is constantly being expanded to include more types of transactions with clearinghouses.  Also stores printing of paper claims.  Sometimes stores a copy of what was sent.</summary>
 	public class Etrans{
 		///<summary>Primary key.</summary>
 		public int EtransNum;

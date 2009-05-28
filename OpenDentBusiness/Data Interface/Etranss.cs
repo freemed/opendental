@@ -20,17 +20,19 @@ namespace OpenDentBusiness{
 				+"FROM etrans "
 				+"LEFT JOIN carrier ON etrans.CarrierNum=carrier.CarrierNum "
 				+"LEFT JOIN patient ON patient.PatNum=etrans.PatNum "
-				+"LEFT JOIN clearinghouse ON clearinghouse.ClearinghouseNum=etrans.ClearinghouseNum WHERE ";
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+="TO_";
-				}
-				command+="DATE(DateTimeTrans) >= "+POut.PDate(dateFrom)+" AND ";
-				if(DataConnection.DBtype==DatabaseType.Oracle){
-					command+="TO_";
-				}
-				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
-					+"AND Etype!=21 "
-					+"ORDER BY DateTimeTrans";
+				+"LEFT JOIN clearinghouse ON clearinghouse.ClearinghouseNum=etrans.ClearinghouseNum WHERE "
+				//if(DataConnection.DBtype==DatabaseType.Oracle){
+				//	command+="TO_";
+				//}
+				+"DATE(DateTimeTrans) >= "+POut.PDate(dateFrom)+" AND "
+				//if(DataConnection.DBtype==DatabaseType.Oracle){
+				//	command+="TO_";
+				//}
+				+"DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
+				+"AND Etype!="+POut.PInt((int)EtransType.Acknowledge_997)+" "
+				+"AND Etype!="+POut.PInt((int)EtransType.BenefitInquiry270)+" "
+				+"AND Etype!="+POut.PInt((int)EtransType.BenefitResponse271)+" "
+				+"ORDER BY DateTimeTrans";
 			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");
 			tHist.Columns.Add("patName");

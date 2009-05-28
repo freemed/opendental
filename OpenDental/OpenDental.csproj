@@ -242,7 +242,7 @@
     <Compile Include="Eclaims\RECS.cs" />
     <Compile Include="Eclaims\Renaissance.cs" />
     <Compile Include="Eclaims\Rs232.cs" />
-    <Compile Include="Eclaims\WebClaim.cs" />
+    <Compile Include="Eclaims\ClaimConnect.cs" />
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Forms Reports\FormRpAccountingBalanceSheet.cs">

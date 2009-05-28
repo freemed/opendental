@@ -9,11 +9,11 @@ using OpenDentBusiness;
 namespace OpenDental.Eclaims
 {
 	/// <summary>
-	/// Summary description for WebMD.
+	/// aka ClaimConnect.
 	/// </summary>
-	public class WebClaim{
+	public class ClaimConnect{
 		///<summary></summary>
-		public WebClaim()
+		public ClaimConnect()
 		{
 			
 		}
@@ -214,6 +214,10 @@ namespace OpenDental.Eclaims
 				return "";
 			}
 			return pair[1];
+		}
+
+		public static void Benefits270(Clearinghouse clearhouse) {
+			MessageBox.Show("This feature is under development.");
 		}
 
 
