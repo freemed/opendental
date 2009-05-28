@@ -388,7 +388,7 @@ namespace OpenDental{
 					X837 x837=new X837(MessageText);
 					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
 				}
-				AckCur=Etranss.GetAckForTrans(EtransCur.EtransNum);
+				AckCur=Etranss.GetEtrans(EtransCur.AckEtransNum);
 				if(AckCur!=null){
 					textAckMessage.Text=EtransMessageTexts.GetMessageText(AckCur.EtransMessageTextNum);
 					textAckDateTime.Text=AckCur.DateTimeTrans.ToString();

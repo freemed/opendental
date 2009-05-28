@@ -37,6 +37,8 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>FK to etransmessagetext.EtransMessageTextNum.  Can be 0 if there is no message text.  Multiple Etrans objects can refer to the same message text, very common in a batch.</summary>
 		public int EtransMessageTextNum;
+		///<summary>FK to etrans.EtransNum.  Only has a non-zero value if there exists an ack etrans, like a 997 or a 271.  There can be only one ack for any given etrans, but one ack can apply to multiple etran's that were sent as one batch.</summary>
+		public int AckEtransNum;
 
 
 		///<summary></summary>

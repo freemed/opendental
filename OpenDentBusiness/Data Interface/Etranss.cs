@@ -87,6 +87,7 @@ namespace OpenDentBusiness{
 			return SubmitAndFill(table);
 		}
 
+		/*
 		///<summary></summary>
 		public static Etrans GetAckForTrans(int etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -104,7 +105,7 @@ namespace OpenDentBusiness{
 				+" AND DateTimeTrans > "+POut.PDateT(etrans.DateTimeTrans.AddDays(-1));//and no more than one day before claim
 			table=Db.GetTable(command);
 			return SubmitAndFill(table);
-		}
+		}*/
 
 		private static Etrans SubmitAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
@@ -128,6 +129,7 @@ namespace OpenDentBusiness{
 			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][13].ToString());
 			etrans.Note                =PIn.PString(table.Rows[0][14].ToString());
 			etrans.EtransMessageTextNum=PIn.PInt   (table.Rows[0][15].ToString());
+			etrans.AckEtransNum        =PIn.PInt   (table.Rows[0][16].ToString());
 			return etrans;
 		}
 
@@ -145,7 +147,8 @@ namespace OpenDentBusiness{
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum) VALUES(";
+				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum,"
+				+"AckEtransNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
@@ -174,7 +177,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(etrans.AckCode)+"', "
 				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
 				+"'"+POut.PString(etrans.Note)+"', "
-				+"'"+POut.PInt   (etrans.EtransMessageTextNum)+"')";
+				+"'"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
+				+"'"+POut.PInt   (etrans.AckEtransNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -204,7 +208,8 @@ namespace OpenDentBusiness{
 				+"AckCode= '"             +POut.PString(etrans.AckCode)+"', "
 				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
 				+"Note= '"                +POut.PString(etrans.Note)+"', "
-				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"' "
+				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
+				+"AckEtranNum= '"         +POut.PInt   (etrans.AckEtransNum)+"' "
 				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
 			Db.NonQ(command);
 		}
@@ -332,9 +337,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//see if there's a message
-			string command="SELECT MessageText FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			string command="SELECT EtransMessageTextNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			DataTable table=Db.GetTable(command);
-			if(table.Rows[0][0].ToString()!=""){//this throws exception if 0 rows.
+			if(table.Rows[0][0].ToString()!="0"){//this throws exception if 0 rows.
 				throw new ApplicationException("Error. Etrans must not have messagetext attached yet.");
 			}
 			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
@@ -453,6 +458,10 @@ namespace OpenDentBusiness{
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=dateTimeTrans;
 			etrans.ClearinghouseNum=clearinghouseNum;
+			EtransMessageText etransMessageText=new EtransMessageText();
+			etransMessageText.MessageText=messageText;
+			EtransMessageTexts.Insert(etransMessageText);
+			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			string command;
 			if(X12object.IsX12(messageText)) {
 				X12object Xobj=new X12object(messageText);
@@ -460,9 +469,12 @@ namespace OpenDentBusiness{
 					X997 x997=new X997(messageText);
 					etrans.Etype=EtransType.Acknowledge_997;
 					etrans.BatchNumber=x997.GetBatchNumber();
+					Etranss.Insert(etrans);
 					string batchack=x997.GetBatchAckCode();
 					if(batchack=="A"||batchack=="R") {//accepted or rejected
-						command="UPDATE etrans SET AckCode='"+batchack+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
+						command="UPDATE etrans SET AckCode='"+batchack+"', "
+							+"AckEtransNum="+POut.PInt(etrans.EtransNum)
+							+" WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
 							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
@@ -474,7 +486,9 @@ namespace OpenDentBusiness{
 						for(int i=0;i<transNums.Count;i++) {
 							ack=x997.GetAckForTrans(transNums[i]);
 							if(ack=="A"||ack=="R") {//accepted or rejected
-								command="UPDATE etrans SET AckCode='"+ack+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
+								command="UPDATE etrans SET AckCode='"+ack+"' "
+									+"AckEtransNum="+POut.PInt(etrans.EtransNum)
+									+"WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
 									+" AND TransSetNum="+POut.PInt(transNums[i])
 									+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 									+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
@@ -488,19 +502,17 @@ namespace OpenDentBusiness{
 				else if(X277U.Is277U(Xobj)) {
 					etrans.Etype=EtransType.StatusNotify_277;
 					//later: analyze to figure out which e-claim is being referenced.
+					Etranss.Insert(etrans);
 				}
 				else {//unknown type of X12 report.
 					etrans.Etype=EtransType.TextReport;
+					Etranss.Insert(etrans);
 				}
 			}
 			else {//not X12
 				etrans.Etype=EtransType.TextReport;
+				Etranss.Insert(etrans);
 			}
-			EtransMessageText etransMessageText=new EtransMessageText();
-			etransMessageText.MessageText=messageText;
-			EtransMessageTexts.Insert(etransMessageText);
-			etrans.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
-			Etranss.Insert(etrans);
 		}
 
 

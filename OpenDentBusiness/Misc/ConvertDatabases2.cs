@@ -416,6 +416,30 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="ALTER TABLE etrans DROP MessageText";
 				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD AckEtransNum INT NOT NULL";
+				Db.NonQ(command);
+				//Fill the AckEtransNum values for existing claims.
+				command=@"DROP TABLE IF EXISTS etack;
+CREATE TABLE etack (                                             
+EtransNum int(11) NOT NULL auto_increment,                      
+DateTimeTrans datetime NOT NULL,  
+ClearinghouseNum int(11) NOT NULL,                                                               
+BatchNumber int(11) NOT NULL,                                                                  
+PRIMARY KEY  (`EtransNum`)                               
+)  
+SELECT * FROM etrans
+WHERE Etype=21;
+UPDATE etrans etorig, etack
+SET etorig.AckEtransNum=etack.EtransNum 
+WHERE etorig.EtransNum != etack.EtransNum
+AND etorig.BatchNumber=etack.BatchNumber
+AND etorig.ClearinghouseNum=etack.ClearinghouseNum
+AND etorig.DateTimeTrans > DATE_SUB(etack.DateTimeTrans,INTERVAL 14 DAY)
+AND etorig.DateTimeTrans < DATE_ADD(etack.DateTimeTrans,INTERVAL 1 DAY);
+DROP TABLE IF EXISTS etAck";
+				Db.NonQ(command);
+
+
 
 
 
