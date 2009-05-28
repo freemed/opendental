@@ -45,10 +45,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(Question quest) {
+		public static int Insert(Question quest) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),quest);
-				return;
+				quest.QuestionNum=Meth.GetInt(MethodBase.GetCurrentMethod(),quest);
+				return quest.QuestionNum;
 			}
 			if(PrefC.RandomKeys) {
 				quest.QuestionNum=MiscData.GetKey("question","QuestionNum");
@@ -73,6 +73,7 @@ namespace OpenDentBusiness {
 			else {
 				quest.QuestionNum=Db.NonQ(command,true);
 			}
+			return quest.QuestionNum;
 		}
 
 		//<summary>I can't see how this could ever be used.</summary>

@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PhoneOverride phoneCur){
+		public static int Insert(PhoneOverride phoneCur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
-				return;
+				phoneCur.PhoneOverrideNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneCur);
+				return phoneCur.PhoneOverrideNum;
 			}
 			string command="INSERT INTO phoneoverride(Extension,EmpCurrent,IsAvailable,Explanation) "
 				+"VALUES("
@@ -79,6 +79,7 @@ namespace OpenDentBusiness{
 			else{
 				Employees.SetPhoneStatus("Unavailable",phoneCur.Extension);
 			}
+			return phoneCur.PhoneOverrideNum;
 		}
 
 		///<summary></summary>

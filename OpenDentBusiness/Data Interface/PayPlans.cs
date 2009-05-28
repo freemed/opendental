@@ -83,10 +83,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PayPlan plan){
+		public static int Insert(PayPlan plan){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
-				return;
+				plan.PayPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
+				return plan.PayPlanNum;
 			}
 			if(PrefC.RandomKeys){
 				plan.PayPlanNum=MiscData.GetKey("payplan","PayPlanNum");
@@ -113,6 +113,7 @@ namespace OpenDentBusiness{
 			else{
  				plan.PayPlanNum=Db.NonQ(command,true);
 			}
+			return plan.PayPlanNum;
 		}
 
 		///<summary>Called from FormPayPlan.  Also deletes all attached payplancharges.  Throws exception if there are any paysplits attached.</summary>

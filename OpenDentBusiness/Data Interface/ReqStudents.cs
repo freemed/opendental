@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ReqStudent req) {
+		public static int Insert(ReqStudent req) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
-				return;
+				req.ReqStudentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),req);
+				return req.ReqStudentNum;
 			}
 			if(PrefC.RandomKeys) {
 				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
@@ -99,6 +99,7 @@ namespace OpenDentBusiness{
 			else {
 				req.ReqStudentNum=Db.NonQ(command,true);
 			}
+			return req.ReqStudentNum;
 		}
 
 		///<summary>Surround with try/catch.</summary>

@@ -59,10 +59,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(TerminalActive te) {
+		public static int Insert(TerminalActive te) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),te);
-				return;
+				te.TerminalActiveNum=Meth.GetInt(MethodBase.GetCurrentMethod(),te);
+				return te.TerminalActiveNum;
 			}
 			if(PrefC.RandomKeys) {
 				te.TerminalActiveNum=MiscData.GetKey("terminalactive","TerminalActiveNum");
@@ -85,6 +85,7 @@ namespace OpenDentBusiness {
 			else {
 				te.TerminalActiveNum=Db.NonQ(command,true);
 			}
+			return te.TerminalActiveNum;
 		}
 
 		///<summary></summary>

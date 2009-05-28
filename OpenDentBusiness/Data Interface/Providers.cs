@@ -108,10 +108,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Provider prov){
+		public static int Insert(Provider prov){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),prov);
-				return;
+				prov.ProvNum=Meth.GetInt(MethodBase.GetCurrentMethod(),prov);
+				return prov.ProvNum;
 			}
 			string command= "INSERT INTO provider (Abbr,ItemOrder,LName,FName,MI,Suffix,"
 				+"FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,"
@@ -144,6 +144,7 @@ namespace OpenDentBusiness{
 				+ "'"+POut.PInt(prov.AnesthProvType)+"')";
 			//MessageBox.Show(string command);
  			prov.ProvNum=Db.NonQ(command,true);
+			return prov.ProvNum;
 		}
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>

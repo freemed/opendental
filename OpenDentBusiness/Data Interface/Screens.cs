@@ -47,10 +47,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(OpenDentBusiness.Screen Cur){
+		public static int Insert(OpenDentBusiness.Screen Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ScreenNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ScreenNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.ScreenNum=MiscData.GetKey("screen","ScreenNum");
@@ -94,6 +94,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.ScreenNum=Db.NonQ(command,true);
 			}
+			return Cur.ScreenNum;
 		}
 
 		///<summary></summary>

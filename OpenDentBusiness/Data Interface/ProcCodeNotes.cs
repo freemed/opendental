@@ -64,10 +64,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ProcCodeNote note){
+		public static int Insert(ProcCodeNote note){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),note);
-				return;
+				note.ProcCodeNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),note);
+				return note.ProcCodeNoteNum;
 			}
 			string command="INSERT INTO proccodenote (CodeNum,ProvNum,Note,ProcTime) VALUES("
 				+"'"+POut.PInt   (note.CodeNum)+"', "
@@ -75,6 +75,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(note.Note)+"', "
 				+"'"+POut.PString(note.ProcTime)+"')";
 			note.ProcCodeNoteNum=Db.NonQ(command,true);
+			return note.ProcCodeNoteNum;
 		}
 
 		///<summary></summary>

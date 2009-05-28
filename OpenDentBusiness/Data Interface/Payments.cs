@@ -166,10 +166,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
-		public static void Insert(Payment pay){
+		public static int Insert(Payment pay){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
-				return;
+				pay.PayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
+				return pay.PayNum;
 			}
 			if(PrefC.RandomKeys){
 				pay.PayNum=MiscData.GetKey("payment","PayNum");
@@ -205,6 +205,7 @@ namespace OpenDentBusiness{
 			else{
  				pay.PayNum=Db.NonQ(command,true);
 			}
+			return pay.PayNum;
 		}
 
 		///<summary>Deletes the payment as well as all splits.  Surround by try catch, because it will throw an exception if trying to delete a payment attached to a deposit.</summary>

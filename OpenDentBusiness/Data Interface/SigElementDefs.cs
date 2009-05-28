@@ -68,10 +68,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(SigElementDef def) {
+		public static int Insert(SigElementDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.SigElementDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.SigElementDefNum;
 			}
 			string command="INSERT INTO sigelementdef (LightRow,LightColor,SigElementType,SigText,Sound,"
 				+"ItemOrder) VALUES("
@@ -82,6 +82,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(def.Sound)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"')";
 			def.SigElementDefNum=Db.NonQ(command,true);
+			return def.SigElementDefNum;
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.  This routine, deletes references in the SigButDefElement table.  References in the SigElement table are left hanging.  The user interface needs to be able to handle missing elementdefs.</summary>

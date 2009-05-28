@@ -34,10 +34,10 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary></summary>
-		public static void Insert(TimeAdjust adj) {
+		public static int Insert(TimeAdjust adj) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
-				return;
+				adj.TimeAdjustNum=Meth.GetInt(MethodBase.GetCurrentMethod(),adj);
+				return adj.TimeAdjustNum;
 			}
 			if(PrefC.RandomKeys) {
 				adj.TimeAdjustNum=MiscData.GetKey("timeadjust","TimeAdjustNum");
@@ -62,6 +62,7 @@ namespace OpenDentBusiness{
 			else {
 				adj.TimeAdjustNum=Db.NonQ(command,true);
 			}
+			return adj.TimeAdjustNum;
 		}
 
 		///<summary></summary>

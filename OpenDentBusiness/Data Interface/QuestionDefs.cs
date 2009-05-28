@@ -42,16 +42,17 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(QuestionDef def) {
+		public static int Insert(QuestionDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.QuestionDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.QuestionDefNum;
 			}
 			string command="INSERT INTO questiondef (Description,ItemOrder,QuestType) VALUES("
 				+"'"+POut.PString(def.Description)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PInt   ((int)def.QuestType)+"')";
 			def.QuestionDefNum=Db.NonQ(command,true);
+			return def.QuestionDefNum;
 		}
 
 		///<summary>Ok to delete whenever, because no patients are tied to this table by any dependencies.</summary>

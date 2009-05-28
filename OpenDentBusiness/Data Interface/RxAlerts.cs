@@ -40,15 +40,16 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(RxAlert alert) {
+		public static int Insert(RxAlert alert) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
-				return;
+				alert.RxAlertNum=Meth.GetInt(MethodBase.GetCurrentMethod(),alert);
+				return alert.RxAlertNum;
 			}
 			string command="INSERT INTO rxalert (RxDefNum,DiseaseDefNum) VALUES("
 				+"'"+POut.PInt   (alert.RxDefNum)+"', "
 				+"'"+POut.PInt   (alert.DiseaseDefNum)+"')";
 			alert.RxAlertNum=Db.NonQ(command,true);
+			return alert.RxAlertNum;
 		}
 
 		///<summary></summary>

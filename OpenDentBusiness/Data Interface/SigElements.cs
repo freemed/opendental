@@ -51,10 +51,10 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void Insert(SigElement se){
+		public static int Insert(SigElement se){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),se);
-				return;
+				se.SigElementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),se);
+				return se.SigElementNum;
 			}
 			if(PrefC.RandomKeys){
 				se.SigElementNum=MiscData.GetKey("sigelement","SigElementNum");
@@ -77,6 +77,7 @@ namespace OpenDentBusiness{
 			else{
  				se.SigElementNum=Db.NonQ(command,true);
 			}
+			return se.SigElementNum;
 		}
 
 		//<summary>There's no such thing as deleting a SigElement</summary>

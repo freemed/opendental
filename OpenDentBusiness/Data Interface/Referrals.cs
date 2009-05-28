@@ -96,10 +96,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Referral refer) {
+		public static int Insert(Referral refer) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),refer);
-				return;
+				refer.ReferralNum=Meth.GetInt(MethodBase.GetCurrentMethod(),refer);
+				return refer.ReferralNum;
 			}
 			if(PrefC.RandomKeys) {
 				refer.ReferralNum=MiscData.GetKey("referral","ReferralNum");
@@ -142,6 +142,7 @@ namespace OpenDentBusiness{
 			else {
 				refer.ReferralNum=Db.NonQ(command,true);
 			}
+			return refer.ReferralNum;
 		}
 
 		///<summary></summary>

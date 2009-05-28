@@ -45,10 +45,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PayPeriod pp) {
+		public static int Insert(PayPeriod pp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
-				return;
+				pp.PayPeriodNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pp);
+				return pp.PayPeriodNum;
 			}
 			if(PrefC.RandomKeys) {
 				pp.PayPeriodNum=MiscData.GetKey("payperiod","PayPeriodNum");
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 			else {
 				pp.PayPeriodNum=Db.NonQ(command,true);
 			}
+			return pp.PayPeriodNum;
 		}
 
 		///<summary></summary>

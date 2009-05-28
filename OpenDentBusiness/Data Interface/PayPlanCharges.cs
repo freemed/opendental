@@ -84,10 +84,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PayPlanCharge charge){
+		public static int Insert(PayPlanCharge charge){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
-				return;
+				charge.PayPlanChargeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),charge);
+				return charge.PayPlanChargeNum;
 			}
 			if(PrefC.RandomKeys){
 				charge.PayPlanChargeNum=MiscData.GetKey("payplancharge","PayPlanChargeNum");
@@ -115,6 +115,7 @@ namespace OpenDentBusiness{
 			else{
  				charge.PayPlanChargeNum=Db.NonQ(command,true);
 			}
+			return charge.PayPlanChargeNum;
 		}
 
 		///<summary></summary>

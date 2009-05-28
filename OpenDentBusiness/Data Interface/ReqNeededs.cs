@@ -48,10 +48,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ReqNeeded req) {
+		public static int Insert(ReqNeeded req) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),req);
-				return;
+				req.ReqNeededNum=Meth.GetInt(MethodBase.GetCurrentMethod(),req);
+				return req.ReqNeededNum;
 			}
 			if(PrefC.RandomKeys) {
 				req.ReqNeededNum=MiscData.GetKey("reqneeded","ReqNeededNum");
@@ -74,6 +74,7 @@ namespace OpenDentBusiness{
 			else {
 				req.ReqNeededNum=Db.NonQ(command,true);
 			}
+			return req.ReqNeededNum;
 		}
 
 		///<summary>Surround with try/catch.</summary>

@@ -41,10 +41,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(AutoCode Cur){
+		public static int Insert(AutoCode Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.AutoCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.AutoCodeNum;
 			}
 			string command= "INSERT INTO autocode (Description,IsHidden,LessIntrusive) "
 				+"VALUES ("
@@ -53,6 +53,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (Cur.LessIntrusive)+"')";
 			//MessageBox.Show(string command);
 			Cur.AutoCodeNum=Db.NonQ(command,true);
+			return Cur.AutoCodeNum;
 		}
 
 		///<summary></summary>

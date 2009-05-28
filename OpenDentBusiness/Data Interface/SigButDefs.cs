@@ -67,10 +67,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(SigButDef def) {
+		public static int Insert(SigButDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.SigButDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.SigButDefNum;
 			}
 			string command="INSERT INTO sigbutdef (ButtonText,ButtonIndex,SynchIcon,ComputerName"
 				+") VALUES("
@@ -79,6 +79,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(def.SynchIcon)+"', "
 				+"'"+POut.PString(def.ComputerName)+"')";
 			def.SigButDefNum=Db.NonQ(command,true);
+			return def.SigButDefNum;
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>

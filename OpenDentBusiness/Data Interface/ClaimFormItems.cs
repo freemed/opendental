@@ -36,10 +36,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ClaimFormItem item){
+		public static int Insert(ClaimFormItem item){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
-				return;
+				item.ClaimFormItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),item);
+				return item.ClaimFormItemNum;
 			}
 			string command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
 				+",XPos,YPos,Width,Height) VALUES("
@@ -53,6 +53,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PFloat (item.Height)+"')";
 			//MessageBox.Show(string command);
  			item.ClaimFormItemNum=Db.NonQ(command,true);
+			return item.ClaimFormItemNum;
 		}
 
 		///<summary></summary>

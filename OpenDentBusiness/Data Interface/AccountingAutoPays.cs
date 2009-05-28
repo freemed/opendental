@@ -33,15 +33,16 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary></summary>
-		public static void Insert(AccountingAutoPay pay){
+		public static int Insert(AccountingAutoPay pay){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
-				return;
+				pay.AccountingAutoPayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
+				return pay.AccountingAutoPayNum;
 			}
 			string command= "INSERT INTO accountingautopay (PayType,PickList) VALUES("
 				+"'"+POut.PInt   (pay.PayType)+"', "
 				+"'"+POut.PString(pay.PickList)+"')";
 			pay.AccountingAutoPayNum=Db.NonQ(command,true);
+			return pay.AccountingAutoPayNum;
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into full descriptions separated by carriage returns.</summary>

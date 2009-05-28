@@ -49,10 +49,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(RepeatCharge charge){
+		public static int Insert(RepeatCharge charge){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
-				return;
+				charge.RepeatChargeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),charge);
+				return charge.RepeatChargeNum;
 			}
 			if(PrefC.RandomKeys){
 				charge.RepeatChargeNum=MiscData.GetKey("repeatcharge","RepeatChargeNum");
@@ -78,6 +78,7 @@ namespace OpenDentBusiness{
 			else{
  				charge.RepeatChargeNum=Db.NonQ(command,true);
 			}
+			return charge.RepeatChargeNum;
 		}
 
 		///<summary>Called from FormRepeatCharge.</summary>

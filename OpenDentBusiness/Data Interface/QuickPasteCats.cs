@@ -47,10 +47,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(QuickPasteCat cat){
+		public static int Insert(QuickPasteCat cat){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cat);
-				return;
+				cat.QuickPasteCatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cat);
+				return cat.QuickPasteCatNum;
 			}
 			if(PrefC.RandomKeys){
 				cat.QuickPasteCatNum=MiscData.GetKey("quickpastecat","QuickPasteCatNum");
@@ -74,6 +74,7 @@ namespace OpenDentBusiness{
 			else{
  				cat.QuickPasteCatNum=Db.NonQ(command,true);
 			}
+			return cat.QuickPasteCatNum;
 		}
 
 		///<summary></summary>

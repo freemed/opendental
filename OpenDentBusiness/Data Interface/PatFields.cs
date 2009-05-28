@@ -40,10 +40,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(PatField pf) {
+		public static int Insert(PatField pf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
-				return;
+				pf.PatFieldNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pf);
+				return pf.PatFieldNum;
 			}
 			if(PrefC.RandomKeys) {
 				pf.PatFieldNum=MiscData.GetKey("patfield","PatFieldNum");
@@ -66,6 +66,7 @@ namespace OpenDentBusiness {
 			else {
 				pf.PatFieldNum=Db.NonQ(command,true);
 			}
+			return pf.PatFieldNum;
 		}
 
 		///<summary></summary>

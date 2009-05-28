@@ -75,10 +75,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PaySplit split){
+		public static int Insert(PaySplit split){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),split);
-				return;
+				split.SplitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),split);
+				return split.SplitNum;
 			}
 			if(PrefC.RandomKeys){
 				split.SplitNum=MiscData.GetKey("paysplit","SplitNum");
@@ -115,6 +115,7 @@ namespace OpenDentBusiness{
 			else{
  				split.SplitNum=Db.NonQ(command,true);
 			}
+			return split.SplitNum;
 		}
 
 		///<summary>Deletes the paysplit.</summary>

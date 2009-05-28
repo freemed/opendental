@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ScheduleOps {
 		///<summary></summary>
-		public static void Insert(ScheduleOp op){
+		public static int Insert(ScheduleOp op){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),op);
-				return;
+				op.ScheduleOpNum=Meth.GetInt(MethodBase.GetCurrentMethod(),op);
+				return op.ScheduleOpNum;
 			}
 			if(PrefC.RandomKeys){
 				op.ScheduleOpNum=MiscData.GetKey("scheduleop","ScheduleOpNum");
@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 			else {
 				op.ScheduleOpNum=Db.NonQ(command,true);
 			}
+			return op.ScheduleOpNum;
 		}
 
 		

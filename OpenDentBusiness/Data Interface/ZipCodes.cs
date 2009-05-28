@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ZipCode Cur){
+		public static int Insert(ZipCode Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ZipCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ZipCodeNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.ZipCodeNum=MiscData.GetKey("zipcode","ZipCodeNum");
@@ -95,6 +95,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.ZipCodeNum=Db.NonQ(command,true);
 			}
+			return Cur.ZipCodeNum;
 		}
 
 		///<summary></summary>

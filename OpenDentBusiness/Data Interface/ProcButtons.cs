@@ -47,10 +47,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>must have already checked procCode for nonduplicate.</summary>
-		public static void Insert(ProcButton but) {
+		public static int Insert(ProcButton but) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),but);
-				return;
+				but.ProcButtonNum=Meth.GetInt(MethodBase.GetCurrentMethod(),but);
+				return but.ProcButtonNum;
 			}
 			string command= "INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES("
 				+"'"+POut.PString(but.Description)+"', "
@@ -58,6 +58,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (but.Category)+"', "
 				+"'"+POut.PBitmap(but.ButtonImage)+"')";
 			but.ProcButtonNum=Db.NonQ(command,true);
+			return but.ProcButtonNum;
 		}
 
 		///<summary></summary>

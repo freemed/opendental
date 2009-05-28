@@ -340,10 +340,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		private static void Insert(Userod user){
+		private static int Insert(Userod user){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),user);
-				return;
+				user.UserNum=Meth.GetInt(MethodBase.GetCurrentMethod(),user);
+				return user.UserNum;
 			}
 			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
 				+ "AnesthProvType) VALUES("
@@ -357,6 +357,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt   (user.TaskListInBox)+"', "
                 + "'"+POut.PInt  (user.AnesthProvType)+"')";
  			user.UserNum=Db.NonQ(command,true);
+			return user.UserNum;
 		}
 
 		///<summary>Surround with try/catch because it can throw exceptions.</summary>

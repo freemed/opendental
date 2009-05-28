@@ -60,10 +60,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(SchoolCourse sc){
+		private static int Insert(SchoolCourse sc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sc);
-				return;
+				sc.SchoolCourseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sc);
+				return sc.SchoolCourseNum;
 			}
 			if(PrefC.RandomKeys){
 				sc.SchoolCourseNum=MiscData.GetKey("schoolcourse","SchoolCourseNum");
@@ -85,6 +85,7 @@ namespace OpenDentBusiness{
 			else{
  				sc.SchoolCourseNum=Db.NonQ(command,true);
 			}
+			return sc.SchoolCourseNum;
 		}
 
 		///<summary></summary>

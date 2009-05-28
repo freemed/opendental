@@ -229,10 +229,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(TaskList tlist){
+		private static int Insert(TaskList tlist){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),tlist);
-				return;
+				tlist.TaskListNum=Meth.GetInt(MethodBase.GetCurrentMethod(),tlist);
+				return tlist.TaskListNum;
 			}
 			if(PrefC.RandomKeys){
 				tlist.TaskListNum=MiscData.GetKey("tasklist","TaskListNum");
@@ -267,6 +267,7 @@ namespace OpenDentBusiness{
 			else{
  				tlist.TaskListNum=Db.NonQ(command,true);
 			}
+			return tlist.TaskListNum;
 		}
 
 		///<summary></summary>

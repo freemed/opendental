@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(Printer cur){
+		private static int Insert(Printer cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),cur);
-				return;
+				cur.PrinterNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cur);
+				return cur.PrinterNum;
 			}
 			if(PrefC.RandomKeys){
 				cur.PrinterNum=MiscData.GetKey("printer","PrinterNum");
@@ -83,6 +83,7 @@ namespace OpenDentBusiness{
 			else{
  				cur.PrinterNum=Db.NonQ(command,true);
 			}
+			return cur.PrinterNum;
 		}
 
 		///<summary></summary>

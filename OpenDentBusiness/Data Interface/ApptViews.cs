@@ -30,10 +30,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ApptView Cur){
+		public static int Insert(ApptView Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ApptViewNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ApptViewNum;
 			}
 			string command = "INSERT INTO apptview (Description,ItemOrder,RowsPerIncr) "
 				+"VALUES ("
@@ -42,6 +42,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.RowsPerIncr)+"')";
 			//MessageBox.Show(string command);
 			Cur.ApptViewNum=Db.NonQ(command,true);
+			return Cur.ApptViewNum;
 		}
 
 		///<summary></summary>

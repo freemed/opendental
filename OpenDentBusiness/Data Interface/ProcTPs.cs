@@ -83,10 +83,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(ProcTP proc){
+		private static int Insert(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
-				return;
+				proc.ProcTPNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
+				return proc.ProcTPNum;
 			}
 			if(PrefC.RandomKeys){
 				proc.ProcTPNum=MiscData.GetKey("proctp","ProcTPNum");
@@ -121,6 +121,7 @@ namespace OpenDentBusiness{
 			else{
  				proc.ProcTPNum=Db.NonQ(command,true);
 			}
+			return proc.ProcTPNum;
 		}
 
 		///<summary></summary>

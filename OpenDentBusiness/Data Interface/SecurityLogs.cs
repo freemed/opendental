@@ -41,10 +41,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(SecurityLog log){
+		public static int Insert(SecurityLog log){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),log);
-				return;
+				log.SecurityLogNum=Meth.GetInt(MethodBase.GetCurrentMethod(),log);
+				return log.SecurityLogNum;
 			}
 			if(PrefC.RandomKeys){
 				log.SecurityLogNum=MiscData.GetKey("securitylog","SecurityLogNum");
@@ -74,6 +74,7 @@ namespace OpenDentBusiness{
 			else{
  				log.SecurityLogNum=Db.NonQ(command,true);
 			}
+			return log.SecurityLogNum;
 		}
 
 		//there are no methods for deleting or changing log entries because that will never be allowed.

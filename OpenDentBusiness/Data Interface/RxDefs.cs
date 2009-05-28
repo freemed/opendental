@@ -46,10 +46,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(RxDef def) {
+		public static int Insert(RxDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
-				return;
+				def.RxDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
+				return def.RxDefNum;
 			}
 			string command= "INSERT INTO rxdef (Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES("
 				+"'"+POut.PString(def.Drug)+"', "
@@ -59,6 +59,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(def.Notes)+"', "
 				+"'"+POut.PBool(def.IsControlled)+"')";
 			def.RxDefNum=Db.NonQ(command,true);
+			return def.RxDefNum;
 		}
 
 		///<summary>Also deletes all RxAlerts that were attached.</summary>

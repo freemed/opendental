@@ -188,10 +188,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
-		public static void Insert(Schedule sched){
+		public static int Insert(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sched);
-				return;
+				sched.ScheduleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sched);
+				return sched.ScheduleNum;
 			}
 			if(PrefC.RandomKeys){
 				sched.ScheduleNum=MiscData.GetKey("schedule","ScheduleNum");
@@ -228,6 +228,7 @@ namespace OpenDentBusiness{
 				op.OperatoryNum=sched.Ops[i];
 				ScheduleOps.Insert(op);
 			}
+			return sched.ScheduleNum;
 		}
 
 		///<summary></summary>

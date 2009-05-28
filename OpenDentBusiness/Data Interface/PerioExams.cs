@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PerioExam Cur){
+		public static int Insert(PerioExam Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.PerioExamNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.PerioExamNum;
 			}
 			if(PrefC.RandomKeys){
 				Cur.PerioExamNum=MiscData.GetKey("perioexam","PerioExamNum");
@@ -83,6 +83,7 @@ namespace OpenDentBusiness{
 			else{
  				Cur.PerioExamNum=Db.NonQ(command,true);
 			}
+			return Cur.PerioExamNum;
 		}
 
 		///<summary></summary>

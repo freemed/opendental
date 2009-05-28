@@ -124,10 +124,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Signal sig){
+		public static int Insert(Signal sig){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sig);
-				return;
+				sig.SignalNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sig);
+				return sig.SignalNum;
 			}
 			//we need to explicitly get the server time in advance rather than using NOW(),
 			//because we need to update the signal object soon after creation.
@@ -161,6 +161,7 @@ namespace OpenDentBusiness{
 			else{
  				sig.SignalNum=Db.NonQ(command,true);
 			}
+			return sig.SignalNum;
 		}
 
 		//<summary>There's no such thing as deleting a signal</summary>

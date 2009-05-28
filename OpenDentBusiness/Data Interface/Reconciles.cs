@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}	
 
 		///<summary></summary>
-		public static void Insert(Reconcile reconcile) {
+		public static int Insert(Reconcile reconcile) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),reconcile);
-				return;
+				reconcile.ReconcileNum=Meth.GetInt(MethodBase.GetCurrentMethod(),reconcile);
+				return reconcile.ReconcileNum;
 			}
 			if(PrefC.RandomKeys) {
 				reconcile.ReconcileNum=MiscData.GetKey("reconcile","ReconcileNum");
@@ -72,6 +72,7 @@ namespace OpenDentBusiness{
 			else {
 				reconcile.ReconcileNum=Db.NonQ(command,true);
 			}
+			return reconcile.ReconcileNum;
 		}
 
 		///<summary></summary>

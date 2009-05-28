@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Transaction trans) {
+		public static int Insert(Transaction trans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
-				return;
+				trans.TransactionNum=Meth.GetInt(MethodBase.GetCurrentMethod(),trans);
+				return trans.TransactionNum;
 			}
 			if(PrefC.RandomKeys) {
 				trans.TransactionNum=MiscData.GetKey("transaction","TransactionNum");
@@ -89,6 +89,7 @@ namespace OpenDentBusiness{
 			else {
 				trans.TransactionNum=Db.NonQ(command,true);
 			}
+			return trans.TransactionNum;
 		}
 
 		///<summary></summary>

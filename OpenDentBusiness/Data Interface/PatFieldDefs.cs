@@ -59,14 +59,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(PatFieldDef p) {
+		public static int Insert(PatFieldDef p) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
-				return;
+				p.PatFieldDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),p);
+				return p.PatFieldDefNum;
 			}
 			string command="INSERT INTO patfielddef (FieldName) VALUES("
 				+"'"+POut.PString(p.FieldName)+"')";
 			p.PatFieldDefNum=Db.NonQ(command,true);
+			return p.PatFieldDefNum;
 		}
 
 		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>

@@ -30,16 +30,17 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(AutoCodeCond Cur){
+		public static int Insert(AutoCodeCond Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.AutoCodeCondNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.AutoCodeCondNum;
 			}
 			string command= "INSERT INTO autocodecond (AutoCodeItemNum,Cond) "
 				+"VALUES ("
 				+"'"+POut.PInt(Cur.AutoCodeItemNum)+"', "
 				+"'"+POut.PInt((int)Cur.Cond)+"')";
 			Cur.AutoCodeCondNum=Db.NonQ(command,true);
+			return Cur.AutoCodeCondNum;
 		}
 
 		///<summary></summary>

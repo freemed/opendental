@@ -138,10 +138,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
-		public static void Insert(Patient pat, bool includePatNum) {
+		public static int Insert(Patient pat, bool includePatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat,includePatNum);
-				return;
+				pat.PatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pat,includePatNum);
+				return pat.PatNum;
 			}
 			if(!includePatNum && PrefC.RandomKeys) {
 				pat.PatNum=MiscData.GetKey("patient","PatNum");
@@ -238,6 +238,7 @@ namespace OpenDentBusiness{
 			else {
 				pat.PatNum=Db.NonQ(command,true);
 			}
+			return pat.PatNum;
 		}
 
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply the old Patient object to compare for changes.</summary>

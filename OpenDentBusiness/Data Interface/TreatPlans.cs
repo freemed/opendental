@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(TreatPlan tp){
+		public static int Insert(TreatPlan tp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),tp);
-				return;
+				tp.TreatPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),tp);
+				return tp.TreatPlanNum;
 			}
 			if(PrefC.RandomKeys){
 				tp.TreatPlanNum=MiscData.GetKey("treatplan","TreatPlanNum");
@@ -83,6 +83,7 @@ namespace OpenDentBusiness{
 			else{
  				tp.TreatPlanNum=Db.NonQ(command,true);
 			}
+			return tp.TreatPlanNum;
 		}
 
 		///<summary>Dependencies checked first and throws an exception if any found. So surround by try catch</summary>

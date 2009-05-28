@@ -36,10 +36,10 @@ namespace OpenDentBusiness{
 	
 
 		///<summary></summary>
-		public static void Insert(ToothInitial init){
+		public static int Insert(ToothInitial init){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),init);
-				return;
+				init.ToothInitialNum=Meth.GetInt(MethodBase.GetCurrentMethod(),init);
+				return init.ToothInitialNum;
 			}
 			if(PrefC.RandomKeys) {
 				init.ToothInitialNum=MiscData.GetKey("toothinitial","ToothInitialNum");
@@ -65,6 +65,7 @@ namespace OpenDentBusiness{
 			else {
 				init.ToothInitialNum=Db.NonQ(command,true);
 			}
+			return init.ToothInitialNum;
 		}
 
 		///<summary></summary>

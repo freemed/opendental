@@ -59,10 +59,10 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void Insert(SigButDefElement element){
+		public static int Insert(SigButDefElement element){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),element);
-				return;
+				element.ElementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),element);
+				return element.ElementNum;
 			}
 			string command= "INSERT INTO sigbutdefelement (";
 			command+="SigButDefNum,SigElementDefNum"
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt   (element.SigButDefNum)+"', "
 				+"'"+POut.PInt   (element.SigElementDefNum)+"')";
  			element.ElementNum=Db.NonQ(command,true);
+			return element.ElementNum;
 		}
 
 		///<summary></summary>

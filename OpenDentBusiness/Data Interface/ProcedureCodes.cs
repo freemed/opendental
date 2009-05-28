@@ -77,10 +77,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ProcedureCode code){
+		public static int Insert(ProcedureCode code){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),code);
-				return;
+				code.CodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),code);
+				return code.CodeNum;
 			}
 			//must have already checked procCode for nonduplicate.
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
@@ -114,6 +114,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
 				//DateTStamp
 			code.CodeNum=Db.NonQ(command,true);
+			return code.CodeNum;
 		}
 
 		///<summary></summary>

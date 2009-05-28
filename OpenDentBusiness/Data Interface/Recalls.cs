@@ -386,10 +386,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Recall recall) {
+		public static int Insert(Recall recall) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
-				return;
+				recall.RecallNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recall);
+				return recall.RecallNum;
 			}
 			if(PrefC.RandomKeys) {
 				recall.RecallNum=MiscData.GetKey("recall","RecallNum");
@@ -422,6 +422,7 @@ namespace OpenDentBusiness{
 			else {
 				recall.RecallNum=Db.NonQ(command,true);
 			}
+			return recall.RecallNum;
 		}
 
 		///<summary></summary>

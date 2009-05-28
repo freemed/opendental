@@ -61,10 +61,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Program Cur){
+		public static int Insert(Program Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ProgramNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ProgramNum;
 			}
 			string command= "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 				+") VALUES("
@@ -76,6 +76,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.Note)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			Cur.ProgramNum=Db.NonQ(command, true);
+			return Cur.ProgramNum;
 		}
 
 		///<summary>This can only be called by the user if it is a program link that they created. Included program links cannot be deleted.  If calling this from ClassConversion, must delete any dependent ProgramProperties first.  It will delete ToolButItems for you.</summary>

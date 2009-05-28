@@ -56,14 +56,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(UserGroup group){
+		public static int Insert(UserGroup group){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),group);
-				return;
+				group.UserGroupNum=Meth.GetInt(MethodBase.GetCurrentMethod(),group);
+				return group.UserGroupNum;
 			}
 			string command= "INSERT INTO usergroup (Description) VALUES("
 				+"'"+POut.PString(group.Description)+"')";
  			group.UserGroupNum=Db.NonQ(command,true);
+			return group.UserGroupNum;
 		}
 
 		///<summary>Checks for dependencies first</summary>

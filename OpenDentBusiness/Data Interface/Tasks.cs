@@ -213,10 +213,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Task task){
+		public static int Insert(Task task){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
-				return;
+				task.TaskNum=Meth.GetInt(MethodBase.GetCurrentMethod(),task);
+				return task.TaskNum;
 			}
 			if(task.IsRepeating && task.DateTask.Year>1880) {
 				throw new Exception(Lans.g("Tasks","Task cannot be tagged repeating and also have a date."));
@@ -259,6 +259,7 @@ namespace OpenDentBusiness{
  				task.TaskNum=Db.NonQ(command,true);
 			}
 			TaskAncestors.Synch(task);
+			return task.TaskNum;
 		}
 
 		///<summary></summary>

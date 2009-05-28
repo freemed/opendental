@@ -51,10 +51,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(RefAttach attach){
+		public static int Insert(RefAttach attach){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),attach);
-				return;
+				attach.RefAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
+				return attach.RefAttachNum;
 			}
 			if(PrefC.RandomKeys){
 				attach.RefAttachNum=MiscData.GetKey("refattach","RefAttachNum");
@@ -75,6 +75,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt ((int)attach.RefToStatus)+"', "
 				+"'"+POut.PString(attach.Note)+"')";
  			attach.RefAttachNum=Db.NonQ(command,true);
+			return attach.RefAttachNum;
 		}
 
 		///<summary></summary>

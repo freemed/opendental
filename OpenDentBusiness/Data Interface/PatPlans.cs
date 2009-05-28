@@ -55,10 +55,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(PatPlan p){
+		public static int Insert(PatPlan p){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),p);
-				return;
+				p.PatPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),p);
+				return p.PatPlanNum;
 			}
 			if(PrefC.RandomKeys){
 				p.PatPlanNum=MiscData.GetKey("patplan","PatPlanNum");
@@ -84,6 +84,7 @@ namespace OpenDentBusiness{
 			else{
  				p.PatPlanNum=Db.NonQ(command,true);
 			}
+			return p.PatPlanNum;
 		}
 
 		/*  Do NOT use this.  Use PatPlans.Delete() instead.

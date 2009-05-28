@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(AppointmentRule rule){
+		public static int Insert(AppointmentRule rule){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),rule);
-				return;
+				rule.AppointmentRuleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),rule);
+				return rule.AppointmentRuleNum;
 			}
 			string command= "INSERT INTO appointmentrule (RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES("
 				+"'"+POut.PString(rule.RuleDesc)+"', "
@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(rule.CodeEnd)+"', "
 				+"'"+POut.PBool  (rule.IsEnabled)+"')";
  			rule.AppointmentRuleNum=Db.NonQ(command,true);
+			return rule.AppointmentRuleNum;
 		}
 
 		///<summary></summary>

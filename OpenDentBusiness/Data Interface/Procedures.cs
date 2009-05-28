@@ -8,10 +8,10 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class Procedures {
 		///<summary></summary>
-		public static void Insert(Procedure proc) {
+		public static int Insert(Procedure proc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
-				return;
+				proc.ProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
+				return proc.ProcNum;
 			}
 			if(PrefC.RandomKeys) {
 				proc.ProcNum=MiscData.GetKey("procedurelog","ProcNum");
@@ -89,6 +89,7 @@ namespace OpenDentBusiness {
 				note.Note=proc.Note;
 				ProcNotes.Insert(note);
 			}
+			return proc.ProcNum;
 		}
 
 		///<summary>Updates only the changed columns.</summary>
