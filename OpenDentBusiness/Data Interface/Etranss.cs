@@ -477,7 +477,8 @@ namespace OpenDentBusiness{
 							+" WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
 							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
-							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
+							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1))
+							+" AND AckEtransNum=0";
 						Db.NonQ(command);
 					}
 					else {//partially accepted
@@ -492,7 +493,8 @@ namespace OpenDentBusiness{
 									+" AND TransSetNum="+POut.PInt(transNums[i])
 									+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 									+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
-									+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
+									+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1))
+									+" AND AckEtransNum=0";
 								Db.NonQ(command);
 							}
 						}

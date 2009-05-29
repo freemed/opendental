@@ -104,9 +104,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelDivisionDash;
 		private System.Windows.Forms.TextBox textDivisionNo;
 		private System.Windows.Forms.Label labelElectronicID;
-		private System.Windows.Forms.Label labelIAP;
 		private OpenDental.UI.Button butIapFind;
-		private System.Windows.Forms.Label labelTrojan;
 		private OpenDental.UI.Button butBenefitNotes;
 		private System.Windows.Forms.CheckBox checkIsMedical;
 		private System.Windows.Forms.CheckBox checkAlternateCode;
@@ -155,11 +153,12 @@ namespace OpenDental{
 		private Label labelDentaide;
 		private ValidNumber textDentaide;
 		private OpenDental.UI.Button butCanadaEligibility;
-		private Label labelCanadaEligibility;
 		private OpenDental.UI.Button butGetElectronic;
 		private CheckBox checkShowBaseUnits;
 		private CheckBox checkDedBeforePerc;
 		private CheckBox checkCodeSubst;
+		private TextBox textBox1;
+		private Label label9;
 		private OpenDental.UI.Button butHistoryElect;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
@@ -209,7 +208,7 @@ namespace OpenDental{
 				textDivisionNo.Visible=false;
 				labelDentaide.Visible=false;
 				textDentaide.Visible=false;
-				labelCanadaEligibility.Visible=false;
+				//labelCanadaEligibility.Visible=false;
 				butCanadaEligibility.Visible=false;
 			}
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
@@ -299,12 +298,10 @@ namespace OpenDental{
 			this.butBenefitNotes = new OpenDental.UI.Button();
 			this.butIapFind = new OpenDental.UI.Button();
 			this.butImportTrojan = new OpenDental.UI.Button();
-			this.butHistoryElect = new OpenDental.UI.Button();
 			this.labelDrop = new System.Windows.Forms.Label();
 			this.groupRequestBen = new System.Windows.Forms.GroupBox();
-			this.labelCanadaEligibility = new System.Windows.Forms.Label();
-			this.labelTrojan = new System.Windows.Forms.Label();
-			this.labelIAP = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.labelTrojanID = new System.Windows.Forms.Label();
 			this.textTrojanID = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
@@ -339,12 +336,13 @@ namespace OpenDental{
 			this.comboFilingCode = new System.Windows.Forms.ComboBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.butPick = new OpenDental.UI.Button();
-			this.textPlanNote = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.gridBenefits = new OpenDental.UI.ODGrid();
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textPlanNote = new OpenDental.ODtextBox();
+			this.butHistoryElect = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -715,11 +713,11 @@ namespace OpenDental{
 			this.butGetElectronic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGetElectronic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGetElectronic.CornerRadius = 4F;
-			this.butGetElectronic.Location = new System.Drawing.Point(6,15);
+			this.butGetElectronic.Location = new System.Drawing.Point(11,38);
 			this.butGetElectronic.Name = "butGetElectronic";
-			this.butGetElectronic.Size = new System.Drawing.Size(67,21);
+			this.butGetElectronic.Size = new System.Drawing.Size(73,21);
 			this.butGetElectronic.TabIndex = 116;
-			this.butGetElectronic.Text = "Get";
+			this.butGetElectronic.Text = "Request";
 			this.toolTip1.SetToolTip(this.butGetElectronic,"Edit all the similar plans at once");
 			this.butGetElectronic.Click += new System.EventHandler(this.butGetElectronic_Click);
 			// 
@@ -879,11 +877,11 @@ namespace OpenDental{
 			this.butCanadaEligibility.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCanadaEligibility.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCanadaEligibility.CornerRadius = 4F;
-			this.butCanadaEligibility.Location = new System.Drawing.Point(131,15);
+			this.butCanadaEligibility.Location = new System.Drawing.Point(190,17);
 			this.butCanadaEligibility.Name = "butCanadaEligibility";
 			this.butCanadaEligibility.Size = new System.Drawing.Size(79,21);
 			this.butCanadaEligibility.TabIndex = 76;
-			this.butCanadaEligibility.Text = "Eligibility";
+			this.butCanadaEligibility.Text = "CDAnet";
 			this.toolTip1.SetToolTip(this.butCanadaEligibility,"Edit all the similar plans at once");
 			this.butCanadaEligibility.Click += new System.EventHandler(this.butCanadaEligibility_Click);
 			// 
@@ -913,7 +911,7 @@ namespace OpenDental{
 			this.butIapFind.Name = "butIapFind";
 			this.butIapFind.Size = new System.Drawing.Size(69,21);
 			this.butIapFind.TabIndex = 1;
-			this.butIapFind.Text = "Find Plan";
+			this.butIapFind.Text = "IAP";
 			this.toolTip1.SetToolTip(this.butIapFind,"Edit all the similar plans at once");
 			this.butIapFind.Click += new System.EventHandler(this.butIapFind_Click);
 			// 
@@ -928,24 +926,9 @@ namespace OpenDental{
 			this.butImportTrojan.Name = "butImportTrojan";
 			this.butImportTrojan.Size = new System.Drawing.Size(69,21);
 			this.butImportTrojan.TabIndex = 0;
-			this.butImportTrojan.Text = "Import";
+			this.butImportTrojan.Text = "Trojan";
 			this.toolTip1.SetToolTip(this.butImportTrojan,"Edit all the similar plans at once");
 			this.butImportTrojan.Click += new System.EventHandler(this.butImportTrojan_Click);
-			// 
-			// butHistoryElect
-			// 
-			this.butHistoryElect.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butHistoryElect.Autosize = true;
-			this.butHistoryElect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHistoryElect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butHistoryElect.CornerRadius = 4F;
-			this.butHistoryElect.Location = new System.Drawing.Point(6,38);
-			this.butHistoryElect.Name = "butHistoryElect";
-			this.butHistoryElect.Size = new System.Drawing.Size(67,21);
-			this.butHistoryElect.TabIndex = 117;
-			this.butHistoryElect.Text = "History";
-			this.toolTip1.SetToolTip(this.butHistoryElect,"Edit all the similar plans at once");
-			this.butHistoryElect.Click += new System.EventHandler(this.butHistoryElect_Click);
 			// 
 			// labelDrop
 			// 
@@ -961,14 +944,13 @@ namespace OpenDental{
 			// groupRequestBen
 			// 
 			this.groupRequestBen.Controls.Add(this.butHistoryElect);
+			this.groupRequestBen.Controls.Add(this.label9);
+			this.groupRequestBen.Controls.Add(this.textBox1);
 			this.groupRequestBen.Controls.Add(this.butImportTrojan);
 			this.groupRequestBen.Controls.Add(this.butGetElectronic);
 			this.groupRequestBen.Controls.Add(this.butBenefitNotes);
-			this.groupRequestBen.Controls.Add(this.labelCanadaEligibility);
 			this.groupRequestBen.Controls.Add(this.butCanadaEligibility);
-			this.groupRequestBen.Controls.Add(this.labelTrojan);
 			this.groupRequestBen.Controls.Add(this.butIapFind);
-			this.groupRequestBen.Controls.Add(this.labelIAP);
 			this.groupRequestBen.Controls.Add(this.labelTrojanID);
 			this.groupRequestBen.Controls.Add(this.textTrojanID);
 			this.groupRequestBen.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -979,32 +961,22 @@ namespace OpenDental{
 			this.groupRequestBen.TabStop = false;
 			this.groupRequestBen.Text = "Request Electronic Benefits";
 			// 
-			// labelCanadaEligibility
+			// label9
 			// 
-			this.labelCanadaEligibility.Location = new System.Drawing.Point(85,20);
-			this.labelCanadaEligibility.Name = "labelCanadaEligibility";
-			this.labelCanadaEligibility.Size = new System.Drawing.Size(45,15);
-			this.labelCanadaEligibility.TabIndex = 77;
-			this.labelCanadaEligibility.Text = "CDAnet";
-			this.labelCanadaEligibility.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label9.Location = new System.Drawing.Point(3,19);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(84,15);
+			this.label9.TabIndex = 119;
+			this.label9.Text = "Last Request";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// labelTrojan
+			// textBox1
 			// 
-			this.labelTrojan.Location = new System.Drawing.Point(224,20);
-			this.labelTrojan.Name = "labelTrojan";
-			this.labelTrojan.Size = new System.Drawing.Size(71,15);
-			this.labelTrojan.TabIndex = 75;
-			this.labelTrojan.Text = "Trojan:";
-			this.labelTrojan.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelIAP
-			// 
-			this.labelIAP.Location = new System.Drawing.Point(198,42);
-			this.labelIAP.Name = "labelIAP";
-			this.labelIAP.Size = new System.Drawing.Size(97,15);
-			this.labelIAP.TabIndex = 73;
-			this.labelIAP.Text = "Ins Answers Plus:";
-			this.labelIAP.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.textBox1.Location = new System.Drawing.Point(89,17);
+			this.textBox1.MaxLength = 30;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(73,20);
+			this.textBox1.TabIndex = 118;
 			// 
 			// labelTrojanID
 			// 
@@ -1405,19 +1377,6 @@ namespace OpenDental{
 			this.butPick.Text = "Pick From List";
 			this.butPick.Click += new System.EventHandler(this.butPick_Click);
 			// 
-			// textPlanNote
-			// 
-			this.textPlanNote.AcceptsReturn = true;
-			this.textPlanNote.Location = new System.Drawing.Point(14,581);
-			this.textPlanNote.Multiline = true;
-			this.textPlanNote.Name = "textPlanNote";
-			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textPlanNote.Size = new System.Drawing.Size(395,85);
-			this.textPlanNote.TabIndex = 8;
-			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
-    "ines in 72 vert\r\n6 in 85";
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1435,11 +1394,11 @@ namespace OpenDental{
 			// gridBenefits
 			// 
 			this.gridBenefits.HScrollVisible = false;
-			this.gridBenefits.Location = new System.Drawing.Point(468,336);
+			this.gridBenefits.Location = new System.Drawing.Point(468,335);
 			this.gridBenefits.Name = "gridBenefits";
 			this.gridBenefits.ScrollValue = 0;
 			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridBenefits.Size = new System.Drawing.Size(502,332);
+			this.gridBenefits.Size = new System.Drawing.Size(502,333);
 			this.gridBenefits.TabIndex = 146;
 			this.gridBenefits.Title = "Benefit Information";
 			this.gridBenefits.TranslationName = "TableBenefits";
@@ -1495,6 +1454,34 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// textPlanNote
+			// 
+			this.textPlanNote.AcceptsReturn = true;
+			this.textPlanNote.Location = new System.Drawing.Point(14,581);
+			this.textPlanNote.Multiline = true;
+			this.textPlanNote.Name = "textPlanNote";
+			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
+			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPlanNote.Size = new System.Drawing.Size(395,85);
+			this.textPlanNote.TabIndex = 8;
+			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
+    "ines in 72 vert\r\n6 in 85";
+			// 
+			// butHistoryElect
+			// 
+			this.butHistoryElect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHistoryElect.Autosize = true;
+			this.butHistoryElect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHistoryElect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHistoryElect.CornerRadius = 4F;
+			this.butHistoryElect.Location = new System.Drawing.Point(89,38);
+			this.butHistoryElect.Name = "butHistoryElect";
+			this.butHistoryElect.Size = new System.Drawing.Size(73,21);
+			this.butHistoryElect.TabIndex = 120;
+			this.butHistoryElect.Text = "History";
+			this.toolTip1.SetToolTip(this.butHistoryElect,"Edit all the similar plans at once");
+			this.butHistoryElect.Click += new System.EventHandler(this.butHistoryElect_Click);
 			// 
 			// FormInsPlan
 			// 
@@ -1556,11 +1543,11 @@ namespace OpenDental{
 				//groupRequestBen.Visible=false;//might try to make this functional later, but not now.
 				//groupRequestBen:---------------------------------------------
 				butImportTrojan.Visible=false;
-				labelIAP.Visible=false;
+				//labelIAP.Visible=false;
 				butIapFind.Visible=false;
 				textTrojanID.Enabled=false;//view only
 				butBenefitNotes.Visible=false;
-				labelCanadaEligibility.Visible=false;
+				//labelCanadaEligibility.Visible=false;
 				butCanadaEligibility.Visible=false;
 				//end of groupRequestBen
 				groupSubscriber.Visible=false;
@@ -1612,14 +1599,14 @@ namespace OpenDental{
 				textTrojanID.Text=PlanCur.TrojanID;
 			}
 			else {
-				labelTrojan.Visible=false;
+				//labelTrojan.Visible=false;
 				labelTrojanID.Visible=false;
 				butImportTrojan.Visible=false;
 				textTrojanID.Visible=false;
 			}
 			ProgramCur=Programs.GetCur("IAP");
 			if(ProgramCur==null || !ProgramCur.Enabled) {
-				labelIAP.Visible=false;
+				//labelIAP.Visible=false;
 				butIapFind.Visible=false;
 			}
 			if(!butIapFind.Visible && !butImportTrojan.Visible) {
@@ -3271,7 +3258,7 @@ namespace OpenDental{
 		}
 
 		private void butHistoryElect_Click(object sender,EventArgs e) {
-			MessageBox.Show("Under development");
+			MessageBox.Show("This feature is under development");
 		}
 
 		#region EligibilityCheckDentalXchange
