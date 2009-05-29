@@ -63,12 +63,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(AnesthMedSupplier AnesthMedSupplier){
+		public static int WriteObject(AnesthMedSupplier AnesthMedSupplier){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),AnesthMedSupplier);
-				return;
+				AnesthMedSupplier.SupplierIDNum=Meth.GetInt(MethodBase.GetCurrentMethod(),AnesthMedSupplier);
+				return AnesthMedSupplier.SupplierIDNum;
 			}
 			DataObjectFactory<AnesthMedSupplier>.WriteObject(AnesthMedSupplier);
+			return AnesthMedSupplier.SupplierIDNum;
 		}
 
 		///<summary></summary>

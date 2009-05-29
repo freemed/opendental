@@ -51,12 +51,13 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void WriteObject(FeeSched feeSched){
+		public static int WriteObject(FeeSched feeSched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),feeSched);
-				return;
+				feeSched.FeeSchedNum=Meth.GetInt(MethodBase.GetCurrentMethod(),feeSched);
+				return feeSched.FeeSchedNum;
 			}
 			DataObjectFactory<FeeSched>.WriteObject(feeSched);
+			return feeSched.FeeSchedNum;
 		}
 
 		/*//<summary></summary>

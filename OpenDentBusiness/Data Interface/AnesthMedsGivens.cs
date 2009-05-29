@@ -28,12 +28,13 @@ namespace OpenDentBusiness{
 			return new List<AnestheticMedsGiven>(DataObjectFactory<AnestheticMedsGiven>.CreateObjects(command));
 		}
 
-		public static void WriteObject(AnestheticMedsGiven med){
+		public static int WriteObject(AnestheticMedsGiven med){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),med);
-				return;
+				med.AnestheticMedNum=Meth.GetInt(MethodBase.GetCurrentMethod(),med);
+				return med.AnestheticMedNum;
 			}
 			DataObjectFactory<AnestheticMedsGiven>.WriteObject(med);
+			return med.AnestheticMedNum;
 		}
 
 		///<summary>Surround with try-catch.</summary>

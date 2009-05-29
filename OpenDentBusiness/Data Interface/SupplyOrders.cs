@@ -22,12 +22,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(SupplyOrder order){
+		public static int WriteObject(SupplyOrder order){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),order);
-				return;
+				order.SupplyOrderNum=Meth.GetInt(MethodBase.GetCurrentMethod(),order);
+				return order.SupplyOrderNum;
 			}
 			DataObjectFactory<SupplyOrder>.WriteObject(order);
+			return order.SupplyOrderNum;
 		}
 
 		///<summary>No need to surround with try-catch.</summary>

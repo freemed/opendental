@@ -44,12 +44,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(PhoneNumber phoneNumber){
+		public static int WriteObject(PhoneNumber phoneNumber){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneNumber);
-				return;
+				phoneNumber.PhoneNumberNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneNumber);
+				return phoneNumber.PhoneNumberNum;
 			}
 			DataObjectFactory<PhoneNumber>.WriteObject(phoneNumber);
+			return phoneNumber.PhoneNumberNum;
 		}
 
 		/*//<summary></summary>

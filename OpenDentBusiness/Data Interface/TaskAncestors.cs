@@ -11,12 +11,13 @@ namespace OpenDentBusiness{
 	public class TaskAncestors {
 	
 		///<summary></summary>
-		public static void WriteObject(TaskAncestor ancestor){
+		public static int WriteObject(TaskAncestor ancestor){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ancestor);
-				return;
+				ancestor.TaskAncestorNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ancestor);
+				return ancestor.TaskAncestorNum;
 			}
 			DataObjectFactory<TaskAncestor>.WriteObject(ancestor);
+			return ancestor.TaskAncestorNum;
 		}
 
 		/*

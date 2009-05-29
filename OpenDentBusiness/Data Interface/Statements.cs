@@ -31,12 +31,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(Statement statement){
+		public static int WriteObject(Statement statement){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),statement);
-				return;
+				statement.StatementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),statement);
+				return statement.StatementNum;
 			}
 			DataObjectFactory<Statement>.WriteObject(statement);
+			return statement.StatementNum;
 		}
 
 		///<summary></summary>

@@ -45,12 +45,13 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void WriteObject(RecallTrigger trigger){
+		public static int WriteObject(RecallTrigger trigger){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),trigger);
-				return;
+				trigger.RecallTriggerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),trigger);
+				return trigger.RecallTriggerNum;
 			}
 			DataObjectFactory<RecallTrigger>.WriteObject(trigger);
+			return trigger.RecallTriggerNum;
 		}
 
 		/*//<summary></summary>

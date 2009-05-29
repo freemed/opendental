@@ -58,12 +58,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(Pharmacy Pharmacy){
+		public static int WriteObject(Pharmacy Pharmacy){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Pharmacy);
-				return;
+				Pharmacy.PharmacyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Pharmacy);
+				return Pharmacy.PharmacyNum;
 			}
 			DataObjectFactory<Pharmacy>.WriteObject(Pharmacy);
+			return Pharmacy.PharmacyNum;
 		}
 
 		///<summary></summary>

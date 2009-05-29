@@ -20,12 +20,13 @@ namespace OpenDentBusiness{
 		}*/
 	
 		///<summary></summary>
-		public static void WriteObject(TaskSubscription subsc){
+		public static int WriteObject(TaskSubscription subsc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),subsc);
-				return;
+				subsc.TaskSubscriptionNum=Meth.GetInt(MethodBase.GetCurrentMethod(),subsc);
+				return subsc.TaskSubscriptionNum;
 			}
 			DataObjectFactory<TaskSubscription>.WriteObject(subsc);
+			return subsc.TaskSubscriptionNum;
 		}
 
 		/*

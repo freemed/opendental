@@ -72,12 +72,13 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void WriteObject(RecallType recallType){
+		public static int WriteObject(RecallType recallType){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallType);
-				return;
+				recallType.RecallTypeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recallType);
+				return recallType.RecallTypeNum;
 			}
 			DataObjectFactory<RecallType>.WriteObject(recallType);
+			return recallType.RecallTypeNum;
 		}
 
 		/*//<summary></summary>

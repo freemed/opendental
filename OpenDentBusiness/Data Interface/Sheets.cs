@@ -84,12 +84,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(Sheet sheet){
+		public static int WriteObject(Sheet sheet){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheet);
-				return;
+				sheet.SheetNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sheet);
+				return sheet.SheetNum;
 			}
 			DataObjectFactory<Sheet>.WriteObject(sheet);
+			return sheet.SheetNum;
 		}
 
 		///<summary></summary>

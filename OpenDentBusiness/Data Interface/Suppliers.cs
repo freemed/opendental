@@ -20,12 +20,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(Supplier supp){
+		public static int WriteObject(Supplier supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
-				return;
+				supp.SupplierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
+				return supp.SupplierNum;
 			}
 			DataObjectFactory<Supplier>.WriteObject(supp);
+			return supp.SupplierNum;
 		}
 
 		///<summary>Surround with try-catch.</summary>

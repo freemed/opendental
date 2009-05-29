@@ -29,12 +29,13 @@ namespace OpenDentBusiness {
 			return new List<AnesthMedsInventory>(DataObjectFactory<AnesthMedsInventory>.CreateObjects(command));
 		}
 
-		public static void WriteObject(AnesthMedsInventory med) {
+		public static int WriteObject(AnesthMedsInventory med) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),med);
-				return;
+				med.AnestheticMedNum=Meth.GetInt(MethodBase.GetCurrentMethod(),med);
+				return med.AnestheticMedNum;
 			}
 			DataObjectFactory<AnesthMedsInventory>.WriteObject(med);
+			return med.AnestheticMedNum;
 		}
 
 		///<summary>Deletes and Anesthetic Medication from inventory if it has never been given to a patient</summary>
