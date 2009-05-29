@@ -21,6 +21,13 @@ namespace OpenDental{
 		private TextBox textMultiple;
 		private Label label5;
 		private Label label6;
+		private GroupBox groupBox1;
+		private TextBox textWebProxyPassword;
+		private Label label9;
+		private TextBox textWebProxyUserName;
+		private Label label8;
+		private TextBox textWebProxyAddress;
+		private Label label7;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -71,6 +78,14 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.textWebProxyAddress = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textWebProxyUserName = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.textWebProxyPassword = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textWebsitePath
@@ -92,7 +107,7 @@ namespace OpenDental{
 			// textRegKey
 			// 
 			this.textRegKey.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textRegKey.Location = new System.Drawing.Point(192,107);
+			this.textRegKey.Location = new System.Drawing.Point(192,211);
 			this.textRegKey.Name = "textRegKey";
 			this.textRegKey.Size = new System.Drawing.Size(193,20);
 			this.textRegKey.TabIndex = 40;
@@ -101,7 +116,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12,108);
+			this.label2.Location = new System.Drawing.Point(12,212);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(180,19);
 			this.label2.TabIndex = 41;
@@ -110,7 +125,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(391,107);
+			this.label4.Location = new System.Drawing.Point(391,211);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(265,19);
 			this.label4.TabIndex = 42;
@@ -136,7 +151,7 @@ namespace OpenDental{
 			// textMultiple
 			// 
 			this.textMultiple.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textMultiple.Location = new System.Drawing.Point(192,144);
+			this.textMultiple.Location = new System.Drawing.Point(192,248);
 			this.textMultiple.Multiline = true;
 			this.textMultiple.Name = "textMultiple";
 			this.textMultiple.Size = new System.Drawing.Size(266,41);
@@ -144,7 +159,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(12,145);
+			this.label5.Location = new System.Drawing.Point(12,249);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(180,40);
 			this.label5.TabIndex = 46;
@@ -153,7 +168,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(464,144);
+			this.label6.Location = new System.Drawing.Point(464,248);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(210,41);
 			this.label6.TabIndex = 47;
@@ -167,7 +182,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(553,226);
+			this.butOK.Location = new System.Drawing.Point(553,341);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -182,17 +197,85 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(553,267);
+			this.butCancel.Location = new System.Drawing.Point(553,382);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.textWebProxyPassword);
+			this.groupBox1.Controls.Add(this.label9);
+			this.groupBox1.Controls.Add(this.textWebProxyUserName);
+			this.groupBox1.Controls.Add(this.label8);
+			this.groupBox1.Controls.Add(this.textWebProxyAddress);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Location = new System.Drawing.Point(12,105);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(614,100);
+			this.groupBox1.TabIndex = 48;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Web Proxy (most users will ignore this section)";
+			// 
+			// textWebProxyAddress
+			// 
+			this.textWebProxyAddress.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textWebProxyAddress.Location = new System.Drawing.Point(180,19);
+			this.textWebProxyAddress.Name = "textWebProxyAddress";
+			this.textWebProxyAddress.Size = new System.Drawing.Size(363,20);
+			this.textWebProxyAddress.TabIndex = 42;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(25,20);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(155,19);
+			this.label7.TabIndex = 43;
+			this.label7.Text = "Address";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textWebProxyUserName
+			// 
+			this.textWebProxyUserName.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textWebProxyUserName.Location = new System.Drawing.Point(180,45);
+			this.textWebProxyUserName.Name = "textWebProxyUserName";
+			this.textWebProxyUserName.Size = new System.Drawing.Size(127,20);
+			this.textWebProxyUserName.TabIndex = 44;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(25,46);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(155,19);
+			this.label8.TabIndex = 45;
+			this.label8.Text = "UserName";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textWebProxyPassword
+			// 
+			this.textWebProxyPassword.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textWebProxyPassword.Location = new System.Drawing.Point(180,71);
+			this.textWebProxyPassword.Name = "textWebProxyPassword";
+			this.textWebProxyPassword.PasswordChar = '*';
+			this.textWebProxyPassword.Size = new System.Drawing.Size(127,20);
+			this.textWebProxyPassword.TabIndex = 46;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(25,72);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(155,19);
+			this.label9.TabIndex = 47;
+			this.label9.Text = "Password";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormUpdateSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(680,318);
+			this.ClientSize = new System.Drawing.Size(680,433);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textMultiple);
 			this.Controls.Add(this.label5);
@@ -213,6 +296,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Update Setup";
 			this.Load += new System.EventHandler(this.FormUpdateSetup_Load);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -222,6 +307,9 @@ namespace OpenDental{
 		private void FormUpdateSetup_Load(object sender,EventArgs e) {
 			textUpdateServerAddress.Text=PrefC.GetString("UpdateServerAddress");
 			textWebsitePath.Text=PrefC.GetString("UpdateWebsitePath");
+			textWebProxyAddress.Text=PrefC.GetString("UpdateWebProxyAddress");
+			textWebProxyUserName.Text=PrefC.GetString("UpdateWebProxyUserName");
+			textWebProxyPassword.Text=PrefC.GetString("UpdateWebProxyPassword");
 			string regkey=PrefC.GetString("RegistrationKey");
 			if(regkey.Length==16){
 				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
@@ -279,6 +367,9 @@ namespace OpenDental{
 			}
 			if( Prefs.UpdateString("UpdateServerAddress",textUpdateServerAddress.Text)
 				| Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)
+				| Prefs.UpdateString("UpdateWebProxyAddress",textWebProxyAddress.Text)
+				| Prefs.UpdateString("UpdateWebProxyUserName",textWebProxyUserName.Text)
+				| Prefs.UpdateString("UpdateWebProxyPassword",textWebProxyPassword.Text)
 				| Prefs.UpdateString("RegistrationKey",regkey)
 				| Prefs.UpdateString("UpdateMultipleDatabases",textMultiple.Text))
 			{
