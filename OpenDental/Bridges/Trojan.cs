@@ -586,7 +586,7 @@ namespace OpenDental.Bridges {
 				return 0;
 			}
 			//Carriers.Cur=carrier;
-			Carriers.GetCurSame(carrier);
+			carrier=Carriers.GetIndentical(carrier);
 			//set calendar vs serviceyear
 			if(usesAnnivers){
 				for(int i=0;i<benefitList.Count;i++) {

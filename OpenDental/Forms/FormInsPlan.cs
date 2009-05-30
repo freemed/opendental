@@ -138,7 +138,7 @@ namespace OpenDental{
 		private CheckBox checkApplyAll;
 		private ODtextBox textPlanNote;
 		private Label label18;
-		///<summary>Set to true if called from the list of insurance templates.  In this case, the planNum will be 0.  There will be no subscriber.  Benefits will be 'typical' rather than from one specific plan.  Upon saving, all similar plans will be set to be exactly the same as PlanCur.</summary>
+		///<summary>Set to true if called from the list of insurance plans.  In this case, the planNum will be 0.  There will be no subscriber.  Benefits will be 'typical' rather than from one specific plan.  Upon saving, all similar plans will be set to be exactly the same as PlanCur.</summary>
 		public bool IsForAll;
 		///<summary>Set to true from FormInsPlansMerge.  In this case, the insplan is read only, because it's much more complicated to allow user to change.</summary>
 		public bool IsReadOnly;
@@ -298,6 +298,7 @@ namespace OpenDental{
 			this.butBenefitNotes = new OpenDental.UI.Button();
 			this.butIapFind = new OpenDental.UI.Button();
 			this.butImportTrojan = new OpenDental.UI.Button();
+			this.butHistoryElect = new OpenDental.UI.Button();
 			this.labelDrop = new System.Windows.Forms.Label();
 			this.groupRequestBen = new System.Windows.Forms.GroupBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -342,7 +343,6 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.textPlanNote = new OpenDental.ODtextBox();
-			this.butHistoryElect = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -930,6 +930,21 @@ namespace OpenDental{
 			this.toolTip1.SetToolTip(this.butImportTrojan,"Edit all the similar plans at once");
 			this.butImportTrojan.Click += new System.EventHandler(this.butImportTrojan_Click);
 			// 
+			// butHistoryElect
+			// 
+			this.butHistoryElect.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHistoryElect.Autosize = true;
+			this.butHistoryElect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHistoryElect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHistoryElect.CornerRadius = 4F;
+			this.butHistoryElect.Location = new System.Drawing.Point(89,38);
+			this.butHistoryElect.Name = "butHistoryElect";
+			this.butHistoryElect.Size = new System.Drawing.Size(73,21);
+			this.butHistoryElect.TabIndex = 120;
+			this.butHistoryElect.Text = "History";
+			this.toolTip1.SetToolTip(this.butHistoryElect,"Edit all the similar plans at once");
+			this.butHistoryElect.Click += new System.EventHandler(this.butHistoryElect_Click);
+			// 
 			// labelDrop
 			// 
 			this.labelDrop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1183,9 +1198,9 @@ namespace OpenDental{
 			// 
 			this.checkApplyAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApplyAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApplyAll.Location = new System.Drawing.Point(468,679);
+			this.checkApplyAll.Location = new System.Drawing.Point(508,679);
 			this.checkApplyAll.Name = "checkApplyAll";
-			this.checkApplyAll.Size = new System.Drawing.Size(323,21);
+			this.checkApplyAll.Size = new System.Drawing.Size(283,21);
 			this.checkApplyAll.TabIndex = 12;
 			this.checkApplyAll.Text = "Apply changes to all identical insurance plans";
 			this.checkApplyAll.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1384,9 +1399,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(801,671);
+			this.butOK.Location = new System.Drawing.Point(801,673);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -1398,7 +1413,7 @@ namespace OpenDental{
 			this.gridBenefits.Name = "gridBenefits";
 			this.gridBenefits.ScrollValue = 0;
 			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridBenefits.Size = new System.Drawing.Size(502,333);
+			this.gridBenefits.Size = new System.Drawing.Size(502,336);
 			this.gridBenefits.TabIndex = 146;
 			this.gridBenefits.Title = "Benefit Information";
 			this.gridBenefits.TranslationName = "TableBenefits";
@@ -1448,9 +1463,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(896,671);
+			this.butCancel.Location = new System.Drawing.Point(896,673);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -1467,21 +1482,6 @@ namespace OpenDental{
 			this.textPlanNote.TabIndex = 8;
 			this.textPlanNote.Text = "1\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 vert.\r\n5 l" +
     "ines in 72 vert\r\n6 in 85";
-			// 
-			// butHistoryElect
-			// 
-			this.butHistoryElect.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butHistoryElect.Autosize = true;
-			this.butHistoryElect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHistoryElect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butHistoryElect.CornerRadius = 4F;
-			this.butHistoryElect.Location = new System.Drawing.Point(89,38);
-			this.butHistoryElect.Name = "butHistoryElect";
-			this.butHistoryElect.Size = new System.Drawing.Size(73,21);
-			this.butHistoryElect.TabIndex = 120;
-			this.butHistoryElect.Text = "History";
-			this.toolTip1.SetToolTip(this.butHistoryElect,"Edit all the similar plans at once");
-			this.butHistoryElect.Click += new System.EventHandler(this.butHistoryElect_Click);
 			// 
 			// FormInsPlan
 			// 
@@ -3245,20 +3245,16 @@ namespace OpenDental{
 				MsgBox.Show(this,"No clearinghouse is set as default.");
 				return;
 			}
-			if(clearhouse.CommBridge==EclaimsCommBridge.ClaimConnect){
-				//EligibilityCheckDentalXchange();
-				Eclaims.ClaimConnect.Benefits270(clearhouse);
+			if(clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
+				MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect.");
 				return;
 			}
-			//if(clearhouse.CommBridge==EclaimsCommBridge.Tesia) {
-			//	Eclaims.Tesia.Eligibility270();
-			//	return;
-			//}
-			MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect.");
+			Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur.PlanNum);
 		}
 
 		private void butHistoryElect_Click(object sender,EventArgs e) {
-			MessageBox.Show("This feature is under development");
+			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum);
+			formB.ShowDialog();
 		}
 
 		#region EligibilityCheckDentalXchange
@@ -3705,7 +3701,7 @@ namespace OpenDental{
 			CarrierCur.ElectID=textElectID.Text;
 			CarrierCur.NoSendElect=checkNoSendElect.Checked;
 			try{
-				Carriers.GetCurSame(CarrierCur);
+				CarrierCur=Carriers.GetIndentical(CarrierCur);
 			}
 			catch(ApplicationException ex){
 				//the catch is just to display a message to the user.  It doesn't affect the success of the function.

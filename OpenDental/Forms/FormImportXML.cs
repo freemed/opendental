@@ -427,7 +427,7 @@ namespace OpenDental{
 			}
 			//carrier-------------------------------------------------------------------------------------------------
 			//Carriers.Cur=carrier;
-			Carriers.GetCurSame(carrier);//this automatically finds or creates a carrier
+			carrier=Carriers.GetIndentical(carrier);//this automatically finds or creates a carrier
 			//plan------------------------------------------------------------------------------------------------------			
 			plan.EmployerNum=Employers.GetEmployerNum(InsEmp);
 			plan.CarrierNum=carrier.CarrierNum;

@@ -84,6 +84,20 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			DataTable table=Db.GetTable(command);
+			List<Etrans> list=SubmitAndFill(table);
+			if(list.Count==0) {
+				return null;
+			}
+			return list[0];
+		}
+
+		///<summary>Gets a list of all 270's for this plan.</summary>
+		public static List<Etrans> GetList270ForPlan(int planNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),planNum);
+			}
+			string command="SELECT * FROM etrans WHERE PlanNum="+POut.PInt(planNum);
+			DataTable table=Db.GetTable(command);
 			return SubmitAndFill(table);
 		}
 
@@ -107,30 +121,36 @@ namespace OpenDentBusiness{
 			return SubmitAndFill(table);
 		}*/
 
-		private static Etrans SubmitAndFill(DataTable table){
+		private static List<Etrans> SubmitAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			if(table.Rows.Count==0){
-				return null;
+			//if(table.Rows.Count==0){
+			//	return null;
+			//}
+			List<Etrans> retVal=new List<Etrans>();
+			Etrans etrans;
+			for(int i=0;i<table.Rows.Count;i++) {
+				etrans=new Etrans();
+				etrans.EtransNum           =PIn.PInt(table.Rows[i][0].ToString());
+				etrans.DateTimeTrans       =PIn.PDateT(table.Rows[i][1].ToString());
+				etrans.ClearinghouseNum    =PIn.PInt(table.Rows[i][2].ToString());
+				etrans.Etype               =(EtransType)PIn.PInt(table.Rows[i][3].ToString());
+				etrans.ClaimNum            =PIn.PInt(table.Rows[i][4].ToString());
+				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[i][5].ToString());
+				etrans.CarrierTransCounter =PIn.PInt(table.Rows[i][6].ToString());
+				etrans.CarrierTransCounter2=PIn.PInt(table.Rows[i][7].ToString());
+				etrans.CarrierNum          =PIn.PInt(table.Rows[i][8].ToString());
+				etrans.CarrierNum2         =PIn.PInt(table.Rows[i][9].ToString());
+				etrans.PatNum              =PIn.PInt(table.Rows[i][10].ToString());
+				etrans.BatchNumber         =PIn.PInt(table.Rows[i][11].ToString());
+				etrans.AckCode             =PIn.PString(table.Rows[i][12].ToString());
+				etrans.TransSetNum         =PIn.PInt(table.Rows[i][13].ToString());
+				etrans.Note                =PIn.PString(table.Rows[i][14].ToString());
+				etrans.EtransMessageTextNum=PIn.PInt(table.Rows[i][15].ToString());
+				etrans.AckEtransNum        =PIn.PInt(table.Rows[i][16].ToString());
+				etrans.PlanNum             =PIn.PInt(table.Rows[i][17].ToString());
+				retVal.Add(etrans);
 			}
-			Etrans etrans=new Etrans();
-			etrans.EtransNum           =PIn.PInt   (table.Rows[0][0].ToString());
-			etrans.DateTimeTrans       =PIn.PDateT (table.Rows[0][1].ToString());
-			etrans.ClearinghouseNum    =PIn.PInt   (table.Rows[0][2].ToString());
-			etrans.Etype               =(EtransType)PIn.PInt(table.Rows[0][3].ToString());
-			etrans.ClaimNum            =PIn.PInt   (table.Rows[0][4].ToString());
-			etrans.OfficeSequenceNumber=PIn.PInt   (table.Rows[0][5].ToString());
-			etrans.CarrierTransCounter =PIn.PInt   (table.Rows[0][6].ToString());
-			etrans.CarrierTransCounter2=PIn.PInt   (table.Rows[0][7].ToString());
-			etrans.CarrierNum          =PIn.PInt   (table.Rows[0][8].ToString());
-			etrans.CarrierNum2         =PIn.PInt   (table.Rows[0][9].ToString());
-			etrans.PatNum              =PIn.PInt   (table.Rows[0][10].ToString());
-			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][11].ToString());
-			etrans.AckCode             =PIn.PString(table.Rows[0][12].ToString());
-			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][13].ToString());
-			etrans.Note                =PIn.PString(table.Rows[0][14].ToString());
-			etrans.EtransMessageTextNum=PIn.PInt   (table.Rows[0][15].ToString());
-			etrans.AckEtransNum        =PIn.PInt   (table.Rows[0][16].ToString());
-			return etrans;
+			return retVal;
 		}
 
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
@@ -148,7 +168,7 @@ namespace OpenDentBusiness{
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
 				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum,"
-				+"AckEtransNum) VALUES(";
+				+"AckEtransNum,PlanNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
@@ -178,7 +198,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
 				+"'"+POut.PString(etrans.Note)+"', "
 				+"'"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
-				+"'"+POut.PInt   (etrans.AckEtransNum)+"')";
+				+"'"+POut.PInt   (etrans.AckEtransNum)+"', "
+				+"'"+POut.PInt   (etrans.PlanNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -210,6 +231,7 @@ namespace OpenDentBusiness{
 				+"Note= '"                +POut.PString(etrans.Note)+"', "
 				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
 				+"AckEtranNum= '"         +POut.PInt   (etrans.AckEtransNum)+"' "
+				+"PlanNum= '"             +POut.PInt   (etrans.PlanNum)+"' "
 				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
 			Db.NonQ(command);
 		}

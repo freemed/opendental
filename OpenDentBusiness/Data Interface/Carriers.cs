@@ -375,50 +375,51 @@ namespace OpenDentBusiness{
 			return retVall;
 		}
 
-		///<summary>Primarily used when user clicks OK from the InsPlan window.  Gets a carrierNum from the database based on the other supplied carrier data.  Sets Cur.CarrierNum accordingly. If there is no matching carrier, then a new carrier is created.  The end result is that Cur will now always have a valid carrierNum to use.</summary>
-		public static void GetCurSame(Carrier Cur){
+		///<summary>Primarily used when user clicks OK from the InsPlan window.  Gets a carrierNum from the database based on the other supplied carrier data.  Sets the CarrierNum accordingly. If there is no matching carrier, then a new carrier is created.  The end result is a valid carrierNum to use.</summary>
+		public static Carrier GetIndentical(Carrier carrier){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				return Meth.GetObject<Carrier>(MethodBase.GetCurrentMethod(),carrier);
 			}
-			if(Cur.CarrierName==""){
-				Cur=new Carrier();//should probably be null instead
-				return;
+			if(carrier.CarrierName=="") {
+				return new Carrier();//should probably be null instead
 			}
+			Carrier retVal=carrier.Copy();
 			string command="SELECT CarrierNum FROM carrier WHERE " 
-				+"CarrierName = '"   +POut.PString(Cur.CarrierName)+"' "
-				+"AND Address = '"    +POut.PString(Cur.Address)+"' "
-				+"AND Address2 = '"   +POut.PString(Cur.Address2)+"' "
-				+"AND City = '"       +POut.PString(Cur.City)+"' "
-				+"AND State = '"      +POut.PString(Cur.State)+"' "
-				+"AND Zip = '"        +POut.PString(Cur.Zip)+"' "
-				+"AND Phone = '"      +POut.PString(Cur.Phone)+"' "
-				+"AND ElectID = '"    +POut.PString(Cur.ElectID)+"' "
-				+"AND NoSendElect = '"+POut.PBool  (Cur.NoSendElect)+"'";
+				+"CarrierName = '"    +POut.PString(carrier.CarrierName)+"' "
+				+"AND Address = '"    +POut.PString(carrier.Address)+"' "
+				+"AND Address2 = '"   +POut.PString(carrier.Address2)+"' "
+				+"AND City = '"       +POut.PString(carrier.City)+"' "
+				+"AND State = '"      +POut.PString(carrier.State)+"' "
+				+"AND Zip = '"        +POut.PString(carrier.Zip)+"' "
+				+"AND Phone = '"      +POut.PString(carrier.Phone)+"' "
+				+"AND ElectID = '"    +POut.PString(carrier.ElectID)+"' "
+				+"AND NoSendElect = '"+POut.PBool  (carrier.NoSendElect)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				//A matching carrier was found in the database, so we will use it.
-				Cur.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
-				return;
+				retVal.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
+				return retVal;
 			}
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
 			//Canada:
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
-				if(Cur.ElectID!=""){
+				if(carrier.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "
-						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "
+						+"ElectID = '"+POut.PString(carrier.ElectID)+"' "
 						+"AND IsCDA=1";
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0){//if there already exists a Canadian carrier with that ElectID
-						Cur.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
-						//set Cur.CarrierNum to the carrier found (all other carrier fields will still be wrong)
-						throw new ApplicationException
-							(Lans.g("Carriers","The carrier information was changed based on the EDI Code provided."));
+						retVal.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
+						//set carrier.CarrierNum to the carrier found (all other carrier fields will still be wrong)
+						//throw new ApplicationException(Lans.g("Carriers","The carrier information was changed based on the EDI Code provided."));
+						return retVal;
 					}
 				}
 				//Notice that if inserting a carrier, it's never possible to create a canadian carrier.
 			}
-			Insert(Cur);
+			Insert(carrier);
+			retVal.CarrierNum=carrier.CarrierNum;
+			return retVal;
 		}
 
 		///<summary>Returns an arraylist of Carriers with names similar to the supplied string.  Used in dropdown list from carrier field for faster entry.  There is a small chance that the list will not be completely refreshed when this is run, but it won't really matter if one carrier doesn't show in dropdown.</summary>

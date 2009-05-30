@@ -31,7 +31,7 @@ namespace OpenDentBusiness
 
 		}
 
-		///<summary>Takes raw text and converts it into an X12Object.  Pass it in as a string array.</summary>
+		///<summary>Takes raw text and converts it into an X12Object.</summary>
 		public X12object(string messageText){
 			messageText=messageText.Replace("\r","");
 			messageText=messageText.Replace("\n","");

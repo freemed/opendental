@@ -444,7 +444,10 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('UpdateWebProxyPassword','','')";
 				Db.NonQ(command);
-
+				command="ALTER TABLE etrans ADD PlanNum INT NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD INDEX (PlanNum)";
+				Db.NonQ(command);
 
 
 

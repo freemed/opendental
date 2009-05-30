@@ -39,6 +39,8 @@ namespace OpenDentBusiness{
 		public int EtransMessageTextNum;
 		///<summary>FK to etrans.EtransNum.  Only has a non-zero value if there exists an ack etrans, like a 997 or a 271.  There can be only one ack for any given etrans, but one ack can apply to multiple etran's that were sent as one batch.</summary>
 		public int AckEtransNum;
+		///<summary>FK to insplan.PlanNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271.</summary>
+		public int PlanNum;
 
 
 		///<summary></summary>

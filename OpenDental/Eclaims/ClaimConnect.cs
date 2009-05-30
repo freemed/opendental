@@ -217,7 +217,8 @@ namespace OpenDental.Eclaims
 		}
 
 		public static void Benefits270(Clearinghouse clearhouse) {
-			MessageBox.Show("This feature is under development.");
+			
+
 		}
 
 
