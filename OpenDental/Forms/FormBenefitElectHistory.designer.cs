@@ -23,24 +23,9 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.button1 = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(270,289);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75,24);
-			this.button1.TabIndex = 4;
-			this.button1.Text = "Import";
 			// 
 			// gridMain
 			// 
@@ -55,6 +40,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Electronic Benefit Request History";
 			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butClose
 			// 
@@ -75,7 +61,6 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(506,325);
-			this.Controls.Add(this.button1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormBenefitElectHistory";
@@ -90,6 +75,5 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.ODGrid gridMain;
-		private OpenDental.UI.Button button1;
 	}
 }

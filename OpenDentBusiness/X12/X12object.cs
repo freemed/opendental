@@ -91,6 +91,13 @@ namespace OpenDentBusiness
 			return false;
 		}
 
+		public bool Is271() {
+			if(this.FunctGroups[0].Transactions[0].Header.Get(1)=="271") {
+				return true;
+			}
+			return false;
+		}
+
 		private X12FunctionalGroup LastGroup(){
 			return (X12FunctionalGroup)FunctGroups[FunctGroups.Count-1];
 		}

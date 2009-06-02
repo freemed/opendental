@@ -29,7 +29,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Type"),100);
+			col=new ODGridColumn(Lan.g(this,"Response"),100);
 			gridMain.Columns.Add(col);
 			 
 			gridMain.Rows.Clear();
@@ -37,13 +37,19 @@ namespace OpenDental {
 			for(int i=0;i<list.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(list[i].DateTimeTrans.ToShortDateString());
-				row.Cells.Add(list[i].Etype.ToString());
+				row.Cells.Add(list[i].Note);
 			  
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 		}
 
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormEtrans270Edit formE=new FormEtrans270Edit();
+			formE.EtransCur=list[e.Row];
+			formE.ShowDialog();
+			FillGrid();
+		}
 
 		//private void butOK_Click(object sender,EventArgs e) {
 		//	DialogResult=DialogResult.OK;
@@ -52,6 +58,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 	}

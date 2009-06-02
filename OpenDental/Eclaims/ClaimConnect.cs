@@ -3,7 +3,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Web;
+using System.Web.Services;
+using System.Web.Services.Protocols;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 using OpenDentBusiness;
 
 namespace OpenDental.Eclaims
@@ -216,11 +222,131 @@ namespace OpenDental.Eclaims
 			return pair[1];
 		}
 
-		public static void Benefits270(Clearinghouse clearhouse) {
-			
+		public static string Benefits270(Clearinghouse clearhouse,string x12message) {
+			//We could create a SoapHttpClientProtocol class, but it might be hard to set it to generate exactly the text we want.
+			//And using XML tools to extract the result is really really easy.  Extracting the result from a Soap class wrapper would be harder.
+			//So...
+			string soapMsg=@"<?xml version=""1.0\"" encoding=""UTF-8""?>
+<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:xsi=""http://www.w3.org/1999/XMLSchema-instance"" xmlns:SOAP-ENC=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:SOAP-ENV=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/1999/XMLSchema"">
+<SOAP-ENV:Body>
+<namesp2:lookupEligibility xmlns:namesp2=""dciservice"">
+<credentials>
+<serviceID xsi:type=""xsd:string"">DCI Web Service ID: 002778</serviceID>
+<username xsi:type=""xsd:string"">"+clearhouse.LoginID+@"</username>
+<password xsi:type=""xsd:string"">"+clearhouse.Password+@"</password>
+<client xsi:type=""xsd:string"">OpenDental</client>
+<version xsi:type=""xsd:string"">"+Application.ProductVersion+@"</version>
+</credentials>
+<request>
+<content xsi:type=""xsd:string""><![CDATA["+x12message+@"]]></content>
+</request>
+</namesp2:lookupEligibility>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>";
 
+			string strRawResponse="";
+			string strRawResponseNormal=@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+	<soapenv:Body>
+		<ns1:lookupEligibilityResponse soapenv:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:ns1=""dciservice"">
+			<lookupEligibilityReturn xsi:type=""xsd:string""><![CDATA[ISA*00*          *00*          *30*330989922      *29*AA0989922      *030606*0936*U*00401*000013966*0*T*:~GS*HB*330989922*AA0989922*20030606*0936*13966*X*004010X092~ST*271*0001~BHT*0022*11*ASX012145WEB*20030606*0936~HL*1**20*1~NM1*PR*2*ACME INC*****PI*12345~HL*2*1*21*1~NM1*1P*1*PROVLAST*PROVFIRST****SV*5558006~HL*3*2*22*0~TRN*2*100*1330989922~NM1*IL*1*SMITH*JOHN*B***MI*123456789~REF*6P*XYZ123*GROUPNAME~REF*18*2484568*TEST PLAN NAME~N3*29 FREMONT ST*~N4*PEACE*NY*10023~DMG*D8*19570515*M~DTP*307*RD8*19910712-19920525~EB*1*FAM*30~SE*17*0001~GE*1*13966~IEA*1*000013966~]]></lookupEligibilityReturn>
+		</ns1:lookupEligibilityResponse>
+	</soapenv:Body>
+</soapenv:Envelope>";
+			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+	<soapenv:Body>
+		<soapenv:Fault>
+			<faultcode>soapenv:Server.userException</faultcode>
+			<faultstring>Authentication failed.</faultstring>
+			<faultactor/>
+			<detail>
+				<string>Authentication failed.</string>
+			</detail>
+		</soapenv:Fault>
+	</soapenv:Body>
+</soapenv:Envelope>";
+			string strRawResponseFailure997=@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+	<soapenv:Body>
+		<soapenv:Fault>
+			<faultcode>soapenv:Server.userException</faultcode>
+			<faultstring>Malformed document sent. Please insure that the format is correct and all required data is present.</faultstring>
+			<faultactor/>
+			<detail>
+				<string>ISA*00*          *00*          *30*330989922      *30*BB0989922      *030606*1351*U*00401*000014066*0*T*:~GS*FA*330989922**20030606*1351*14066*X*004010~ST*997*0001~AK1*HR*100~AK2*276*0001~AK3*DMG*10**8~AK4*2**8*20041210~AK5*R*5~AK9*R*0*0*0*3~SE*8*0001~GE*1*14066~IEA*1*000014066~</string>
+			</detail>
+		</soapenv:Fault>
+	</soapenv:Body>
+</soapenv:Envelope>";
+			/*
+			//only use one of the following:
+			string hostName="https://prelive2.dentalxchange.com/dws/services/dciservice.svl";//testing
+			//string hostName="https://webservices.dentalxchange.com/dws/services/dciservice.svl";//production
+			HttpWebRequest request=(HttpWebRequest)WebRequest.Create(hostName);
+			request.Method="POST";
+			Stream stream=request.GetRequestStream();
+			StreamWriter writer=new StreamWriter(stream);
+			writer.Write(soapMsg);
+			writer.Close();
+			stream.Close();
+			WebResponse response=request.GetResponse();
+			Stream streamResponse=response.GetResponseStream();
+			StreamReader reader=new StreamReader(streamResponse);
+			string strRawResponse=reader.ReadToEnd();
+			reader.Close();
+			streamResponse.Close();
+			return strRawResponse;*/
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(strRawResponseNormal);
+			//StringReader strReader=new StringReader(strRawResponseNormal);
+			//XmlReader xmlReader=XmlReader.Create(strReader);
+			//xmlReader...MoveToElement(
+			XmlNode node=doc.SelectSingleNode("//lookupEligibilityReturn");
+			if(node!=null) {
+				return node.InnerText;//271
+			}
+			node=doc.SelectSingleNode("//detail/string");
+			if(node==null) {
+				throw new ApplicationException("Returned data not in expected format: "+strRawResponse);
+			}
+			if(node.InnerText=="Authentication failed.") {
+				throw new ApplicationException("Authentication failed.");
+			}
+			return node.InnerText;//997
 		}
 
 
 	}
+
+	/*
+	[System.Web.Services.WebServiceBindingAttribute(Name="MyMathSoap",Namespace="http://www.contoso.com/")]
+	public class MyMath:System.Web.Services.Protocols.SoapHttpClientProtocol {
+		
+		[System.Diagnostics.DebuggerStepThroughAttribute()]
+		public MyMath() {
+			this.Url = "http://www.contoso.com/math.asmx";
+		}
+
+		[System.Diagnostics.DebuggerStepThroughAttribute()]
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://www.contoso.com/Add",RequestNamespace="http://www.contoso.com/",ResponseNamespace="http://www.contoso.com/",Use=System.Web.Services.Description.SoapBindingUse.Literal,ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public int Add(int num1,int num2) {
+			object[] results = this.Invoke("Add",new object[] {num1,
+                        num2});
+			return ((int)(results[0]));
+		}
+
+		[System.Diagnostics.DebuggerStepThroughAttribute()]
+		public System.IAsyncResult BeginAdd(int num1,int num2,System.AsyncCallback callback,object asyncState) {
+			return this.BeginInvoke("Add",new object[] {num1,
+                        num2},callback,asyncState);
+		}
+
+		[System.Diagnostics.DebuggerStepThroughAttribute()]
+		public int EndAdd(System.IAsyncResult asyncResult) {
+			object[] results = this.EndInvoke(asyncResult);
+			return ((int)(results[0]));
+		}
+	}*/
+
 }

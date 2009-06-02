@@ -96,7 +96,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),planNum);
 			}
-			string command="SELECT * FROM etrans WHERE PlanNum="+POut.PInt(planNum);
+			string command="SELECT * FROM etrans WHERE PlanNum="+POut.PInt(planNum)
+				+" AND Etype="+POut.PInt((int)EtransType.BenefitInquiry270);
 			DataTable table=Db.GetTable(command);
 			return SubmitAndFill(table);
 		}
@@ -230,7 +231,7 @@ namespace OpenDentBusiness{
 				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
 				+"Note= '"                +POut.PString(etrans.Note)+"', "
 				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
-				+"AckEtranNum= '"         +POut.PInt   (etrans.AckEtransNum)+"' "
+				+"AckEtransNum= '"         +POut.PInt   (etrans.AckEtransNum)+"', "
 				+"PlanNum= '"             +POut.PInt   (etrans.PlanNum)+"' "
 				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
 			Db.NonQ(command);
@@ -352,18 +353,18 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Deletes the etrans entry.  Only used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will throw exception if there's a message attached to the etrans or if the etrans does not exist.</summary>
+		///<summary>Deletes the etrans entry.  Mostly used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will not delete the message associated with the etrans.  That must be done separately.  Will throw exception if the etrans does not exist.</summary>
 		public static void Delete(int etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum);
 				return;
 			}
 			//see if there's a message
-			string command="SELECT EtransMessageTextNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows[0][0].ToString()!="0"){//this throws exception if 0 rows.
-				throw new ApplicationException("Error. Etrans must not have messagetext attached yet.");
-			}
+			string command;//="SELECT EtransMessageTextNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			//DataTable table=Db.GetTable(command);
+			//if(table.Rows[0][0].ToString()!="0"){//this throws exception if 0 rows.
+			//	throw new ApplicationException("Error. Etrans must not have messagetext attached yet.");
+			//}
 			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			Db.NonQ(command);
 		}
@@ -539,6 +540,15 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static DateTime GetLastDate270(int planNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod(),planNum);
+			}
+			string command="SELECT MAX(DateTimeTrans) FROM etrans "
+				+"WHERE Etype="+POut.PInt((int)EtransType.BenefitInquiry270)
+				+" AND PlanNum="+POut.PInt(planNum);
+			return PIn.PDate(Db.GetScalar(command));
+		}
 
 
 

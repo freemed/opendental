@@ -242,7 +242,8 @@
     <Compile Include="Eclaims\RECS.cs" />
     <Compile Include="Eclaims\Renaissance.cs" />
     <Compile Include="Eclaims\Rs232.cs" />
-    <Compile Include="Eclaims\ClaimConnect.cs" />
+    <Compile Include="Eclaims\ClaimConnect.cs">
+    </Compile>
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\X12.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
@@ -296,6 +297,12 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEtrans270Edit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEtrans270Edit.designer.cs">
+      <DependentUpon>FormEtrans270Edit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormBenefitElectHistory.cs">
       <SubType>Form</SubType>
@@ -3644,6 +3651,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEtrans270Edit.resx">
+      <DependentUpon>FormEtrans270Edit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBenefitElectHistory.resx">

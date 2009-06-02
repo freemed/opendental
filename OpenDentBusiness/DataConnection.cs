@@ -337,58 +337,17 @@ namespace OpenDentBusiness{
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
 		public int NonQ(string commands,bool getInsertID){
 			int rowsChanged=0;
-			if(DBtype==DatabaseType.Oracle){
-				conOr.Open();
-				PrepOracleConnection();
-				string[] commandArray=new string[] {commands};
-				if(splitStrings){
-					commandArray=commands.Split(new char[] {';'},StringSplitOptions.RemoveEmptyEntries);
+			cmd.CommandText=commands;
+			con.Open();
+			rowsChanged=cmd.ExecuteNonQuery();
+			if(getInsertID) {
+				cmd.CommandText="SELECT LAST_INSERT_ID()";
+				dr=(MySqlDataReader)cmd.ExecuteReader();
+				if(dr.Read()) {
+					InsertID=Convert.ToInt32(dr[0].ToString());
 				}
-				//Can't do batch queries in Oracle, so we have to split them up and run them individually.
-				try{
-					if(getInsertID){
-						cmdOr.CommandText="LOCK TABLE preference IN EXCLUSIVE MODE";
-						cmdOr.ExecuteNonQuery();//Lock the preference table, because we need exclusive access to the OracleInsertId.
-					}
-					for(int i=0;i<commandArray.Length;i++){
-						cmdOr.CommandText=commandArray[i];
-						rowsChanged=cmdOr.ExecuteNonQuery();
-					}
-				}
-				catch(System.Exception e){
-					Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),Logger.Severity.ERROR);
-					throw;//continue to pass the exception one level up.
-				}
-				finally{
-					if(getInsertID){
-						try{
-							cmdOr.CommandText="SELECT ValueString FROM preference WHERE PrefName='OracleInsertId'";
-							daOr=new OracleDataAdapter(cmdOr);
-							DataTable table=new DataTable();
-							daOr.Fill(table);//Will always return a result, unless a critical error, in which case we will catch.
-							this.InsertID=Convert.ToInt32((table.Rows[0][0]).ToString());
-							cmdOr.CommandText="commit";
-							cmdOr.ExecuteNonQuery();//Release the exlusive lock we attaned above.
-						}catch(Exception e){
-							Logger.openlog.LogMB("Oracle SQL Error: "+cmdOr.CommandText+"\r\n"+"Exception: "+e.ToString(),
-								Logger.Severity.ERROR);
-							throw e;//continue to pass the exception one level up.
-						}
-					}
-				}
-				conOr.Close();
-			}else if(DBtype==DatabaseType.MySql){
-				cmd.CommandText=commands;
-				con.Open();
-				rowsChanged=cmd.ExecuteNonQuery();
-				if(getInsertID) {
-					cmd.CommandText="SELECT LAST_INSERT_ID()";
-					dr=(MySqlDataReader)cmd.ExecuteReader();
-					if(dr.Read())
-						InsertID=Convert.ToInt32(dr[0].ToString());
-				}
-				con.Close();
 			}
+			con.Close();
 			return rowsChanged;
 		}
 		

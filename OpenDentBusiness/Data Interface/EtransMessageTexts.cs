@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using OpenDentBusiness;
 
 namespace OpenDentBusiness{
@@ -36,6 +37,7 @@ namespace OpenDentBusiness{
 			return etransMessageText.EtransMessageTextNum;
 		}
 
+		///<summary>If the message text is X12, then it always normalizes it to include carriage returns for better readability.</summary>
 		public static string GetMessageText(int etransMessageTextNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),etransMessageTextNum);
@@ -44,7 +46,25 @@ namespace OpenDentBusiness{
 				return "";
 			}
 			string command="SELECT MessageText FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PInt(etransMessageTextNum);
-			return Db.GetScalar(command);
+			string msgText=Db.GetScalar(command);
+			if(!X12object.IsX12(msgText)) {
+				return msgText;
+			}
+			Match match=Regex.Match(msgText,"~[^(\n)(\r)]");
+			while(match.Success){
+				msgText=msgText.Substring(0,match.Index)+"~\r\n"+msgText.Substring(match.Index+1);
+				match=Regex.Match(msgText,"~[^(\n)(\r)]");
+			}
+			return msgText;
+
+			//MatchCollection matches=Regex.Matches(msgText,"~[^(\n)(\r)]");
+			//for(int i=0;i<matches.Count;i++) {
+				//Regex.
+			//	matches[i].
+			//}
+			//msgText=Regex.Replace(msgText,"~[^(\r\n)(\n)(\r)]","~\r\n");
+			
+			
 		}
 
 		/*
@@ -62,23 +82,21 @@ namespace OpenDentBusiness{
 				+"WHERE EtransMessageTextNum = "+POut.PInt(EtransMessageText.EtransMessageTextNum);
 			Db.NonQ(command);
 		}
+*/
 
-		///<summary>Deletes the EtransMessageText entry.  Only used when the EtransMessageText entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will throw exception if there's a message attached to the EtransMessageText or if the EtransMessageText does not exist.</summary>
-		public static void Delete(int EtransMessageTextNum) {
+		///<summary></summary>
+		public static void Delete(int etransMessageTextNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),EtransMessageTextNum);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransMessageTextNum);
 				return;
 			}
-			//see if there's a message
-			string command="SELECT MessageText FROM EtransMessageText WHERE EtransMessageTextNum="+POut.PInt(EtransMessageTextNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows[0][0].ToString()!=""){//this throws exception if 0 rows.
-				throw new ApplicationException("Error. EtransMessageText must not have messagetext attached yet.");
+			if(etransMessageTextNum==0) {
+				return;
 			}
-			command="DELETE FROM EtransMessageText WHERE EtransMessageTextNum="+POut.PInt(EtransMessageTextNum);
+			string command;
+			command="DELETE FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PInt(etransMessageTextNum);
 			Db.NonQ(command);
-		}*/
-
+		}
 		
 
 
