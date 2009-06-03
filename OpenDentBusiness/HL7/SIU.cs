@@ -22,8 +22,10 @@ namespace OpenDentBusiness.HL7 {
 			}
 			SegmentPID.ProcessPID(pat,seg);
 			//PV1-patient visit---------------------------
-			seg=message.GetSegment(SegmentName.PV1,true);
-			SegmentPID.ProcessPV1(pat,seg);
+			seg=message.GetSegment(SegmentName.PV1,false);
+			if(seg!=null) {
+				SegmentPID.ProcessPV1(pat,seg);
+			}
 			//SCH- Schedule Activity Information
 			seg=message.GetSegment(SegmentName.SCH,true);
 			int aptNum=PIn.PInt(seg.GetFieldFullText(1));
@@ -52,11 +54,19 @@ namespace OpenDentBusiness.HL7 {
 			apt.ProvNum=pat.PriProv;//just in case there's not AIG segment.
 			//AIG is optional, but looks like the only way to get provider for the appt-----------
 			seg=message.GetSegment(SegmentName.AIG,false);
-			int provNum=SegmentPID.ProvProcess(seg.GetField(3));
-			if(provNum!=0) {
-				apt.ProvNum=provNum;
+			if(seg!=null) {
+				int provNum=SegmentPID.ProvProcess(seg.GetField(3));
+				if(provNum!=0) {
+					apt.ProvNum=provNum;
+				}
 			}
 			//AIL,AIP seem to be optional, and I'm going to ignore them for now.
+			if(isNewPat) {
+				Patients.Insert(pat,true);
+			}
+			else {
+				Patients.Update(pat,patOld);
+			}	
 			if(isNewApt){
 				Appointments.Insert(apt,true);
 			}

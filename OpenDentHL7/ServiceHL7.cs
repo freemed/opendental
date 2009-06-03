@@ -87,38 +87,43 @@ namespace OpenDentHL7 {
 			//timer.Interval=1800;//just under 2 seconds.
 		}
 
-		private static void OnCreated(object source,FileSystemEventArgs e) {
-			int i=0;
-			while(i<5) {
-				try {
-					ProcessMessage(e.FullPath);
-					break;
-				}
-				catch { }
-				i++;
-			}
+		private void OnCreated(object source,FileSystemEventArgs e) {
+			ProcessMessage(e.FullPath);
 		}
 
-		private static void OnRenamed(object source,RenamedEventArgs e) {
+		private void OnRenamed(object source,RenamedEventArgs e) {
+			ProcessMessage(e.FullPath);
+		}
+		
+		private void ProcessMessage(string fullPath) {
+			string msgtext="";
 			int i=0;
 			while(i<5) {
 				try {
-					ProcessMessage(e.FullPath);
+					msgtext=File.ReadAllText(fullPath);
 					break;
 				}
-				catch { }
+				catch {
+				}
+				Thread.Sleep(200);
 				i++;
+				if(i==5) {
+					EventLog.WriteEntry("Could not read text from file due to file locking issues.",EventLogEntryType.Error);
+					return;
+				}
 			}
-		}
-		
-		private static void ProcessMessage(string fullPath) {
-			string msgtext=File.ReadAllText(fullPath);
-			MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
-			if(msg.MsgType==MessageType.ADT) {
-				ADT.ProcessMessage(msg);
+			try {
+				MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
+				if(msg.MsgType==MessageType.ADT) {
+					ADT.ProcessMessage(msg);
+				}
+				else if(msg.MsgType==MessageType.SIU) {
+					SIU.ProcessMessage(msg);
+				}
 			}
-			else if(msg.MsgType==MessageType.SIU) {
-				SIU.ProcessMessage(msg);
+			catch(Exception ex) {
+				EventLog.WriteEntry(ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
+				return;
 			}
 			//we won't be processing DFT messages.
 			//else if(msg.MsgType==MessageType.DFT) {
