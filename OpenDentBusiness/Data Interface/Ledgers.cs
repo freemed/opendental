@@ -337,6 +337,10 @@ namespace OpenDentBusiness{
 					"p.PayPlanDue=f.PayPlanDue "+
 				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
 			Db.NonQ(command);
+			command="DROP TEMPORARY TABLE IF EXISTS tempaging, tempodagingtrans";
+			Db.NonQ(command);
+			command="DROP TABLE IF EXISTS tempaging, tempodagingtrans";
+			Db.NonQ(command);
 		}
 	}
 
