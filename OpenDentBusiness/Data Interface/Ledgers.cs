@@ -97,6 +97,8 @@ namespace OpenDentBusiness{
 			//and since we use connection pooling, drop them before using.
 			command="DROP TEMPORARY TABLE IF EXISTS tempaging, tempodagingtrans";
 			Db.NonQ(command);
+			command="DROP TABLE IF EXISTS tempaging, tempodagingtrans";
+			Db.NonQ(command);
 			command="CREATE TEMPORARY TABLE tempaging ("+
 				"PatNum INT DEFAULT 0,"+
 				"Guarantor INT DEFAULT 0,"+
