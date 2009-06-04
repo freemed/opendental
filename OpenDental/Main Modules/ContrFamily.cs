@@ -1142,7 +1142,7 @@ namespace OpenDental{
 						continue;
 					}
 					ben=new Benefit();
-					ben.BenefitType=InsBenefitType.Percentage;
+					ben.BenefitType=InsBenefitType.CoInsurance;
 					ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
 					ben.PlanNum=plan.PlanNum;
 					ben.Percent=CovCatC.ListShort[i].DefaultPercent;
@@ -1315,7 +1315,7 @@ namespace OpenDental{
 					if(benMatrix[x,y].CoverageLevel==BenefitCoverageLevel.Family) {
 						desc+=Lan.g(this,"Fam")+" ";
 					}
-					if(benMatrix[x,y].BenefitType==InsBenefitType.Percentage){
+					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance){
 						desc+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" % ";
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Deductible) {
@@ -1372,7 +1372,7 @@ namespace OpenDental{
 						row.Cells.Add("");
 						continue;
 					}
-					if(benMatrix[x,y].BenefitType==InsBenefitType.Percentage) {
+					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance) {
 						val+=benMatrix[x,y].Percent.ToString()+" ";
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Deductible

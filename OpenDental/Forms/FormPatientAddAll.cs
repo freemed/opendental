@@ -1557,7 +1557,7 @@ namespace OpenDental {
 							continue;
 						}
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
 						ben.PlanNum=selectedPlan1.PlanNum;
 						ben.Percent=CovCatC.ListShort[i].DefaultPercent;
@@ -1615,7 +1615,7 @@ namespace OpenDental {
 							continue;
 						}
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
 						ben.PlanNum=selectedPlan2.PlanNum;
 						ben.Percent=CovCatC.ListShort[i].DefaultPercent;

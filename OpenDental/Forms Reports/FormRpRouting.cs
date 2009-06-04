@@ -464,7 +464,7 @@ namespace OpenDental
 					if(benefits[j].PlanNum != plan.PlanNum){
 						continue;
 					}
-					if(benefits[j].BenefitType != InsBenefitType.Percentage) {
+					if(benefits[j].BenefitType != InsBenefitType.CoInsurance) {
 						continue;
 					}
 					if(str!=""){

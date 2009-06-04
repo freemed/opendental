@@ -51,10 +51,18 @@ namespace OpenDental.Eclaims {
 					x271=new X271(x12response);
 				}
 			}
-			List<Benefit> listBenefits=new List<Benefit>();
-			Benefit ben;
+			//In realtime mode, X12 limits the request to one patient.  We will always use the subscriber.
+			//So all EB segments are for the subscriber.
+			List<EB271> listEB=new List<EB271>();
+			EB271 eb;
 			if(x271 != null) {
-				
+				for(int i=0;i<x271.Segments.Count;i++) {
+					if(x271.Segments[i].SegmentID != "EB") {
+						continue;
+					}
+					eb=new EB271(x271.Segments[i]);
+					listEB.Add(eb);
+				}
 			}
 			//create an etrans for the 271------------------------------------------------------
 			etransMessageText=new EtransMessageText();
@@ -78,7 +86,7 @@ namespace OpenDental.Eclaims {
 			etrans.AckEtransNum=etrans271.EtransNum;
 			etrans.Note="Normal 271 response.";//change this later to be explanatory of content.
 			if(etrans271.Etype==EtransType.Acknowledge_997) {
-				etrans.Note="Malformed document sent.";
+				etrans.Note="Malformed document sent.  997 error returned.";
 			}
 			Etranss.Update(etrans);
 			//show the user a list of benefits to pick from for import--------------------------

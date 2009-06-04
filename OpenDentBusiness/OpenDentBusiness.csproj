@@ -361,7 +361,9 @@
     <Compile Include="Misc\ReplicationQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
+    <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
+    <Compile Include="X12\X12Parse.cs" />
     <Compile Include="X12\X271.cs" />
     <Compile Include="X12\X270.cs" />
     <Compile Include="X12\X277U.cs" />

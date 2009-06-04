@@ -426,7 +426,7 @@ namespace OpenDental{
 				}
 				return;
 			}*/
-			if(listType.SelectedIndex==(int)InsBenefitType.Percentage){
+			if(listType.SelectedIndex==(int)InsBenefitType.CoInsurance){
 				labelPercent.Visible=true;
 				textPercent.Visible=true;
 				labelAmount.Visible=false;
@@ -479,7 +479,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to check the Pat box because no patient is available.");
 				return;
 			}
-			if(listType.SelectedIndex != (int)InsBenefitType.Percentage && PIn.PInt(textPercent.Text)!=0){
+			if(listType.SelectedIndex != (int)InsBenefitType.CoInsurance && PIn.PInt(textPercent.Text)!=0){
 				MsgBox.Show(this,"Not allowed to enter a percentage unless type is Percentage.");
 				return;
 			}

@@ -524,7 +524,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -541,19 +541,19 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Restorative).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 						benefitList.Add(ben.Copy());
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 						benefitList.Add(ben.Copy());
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -570,7 +570,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						ben=new Benefit();
-						ben.BenefitType=InsBenefitType.Percentage;
+						ben.BenefitType=InsBenefitType.CoInsurance;
 						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum;
 						ben.Percent=percent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;

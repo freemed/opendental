@@ -1028,8 +1028,8 @@ namespace OpenDentBusiness{
 	public enum InsBenefitType{
 		///<summary>0- Not usually used.  Would only be used if you are just indicating that the patient is covered, but without any specifics.</summary>
 		ActiveCoverage,
-		///<summary>1- This corresponds to the X12 Co-Insurance type.  Except it's the opposite because it's the insurance coverage percentage, whereas X12 sends the percentage as the patient's responsibility portion.</summary>
-		Percentage,
+		///<summary>1- Used for percentages to indicate portion that insurance will cover.</summary>
+		CoInsurance,
 		///<summary>2- The deductible amount.  Might be two entries if, for instance, deductible is waived on preventive.</summary>
 		Deductible,
 		///<summary>3- A dollar amount.</summary>

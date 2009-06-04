@@ -406,7 +406,7 @@ namespace OpenDentBusiness {
 				if(benList[i].PatPlanNum!=0 && patPlan.PatPlanNum!=benList[i].PatPlanNum){
 					continue;
 				}
-				if(benList[i].BenefitType!=InsBenefitType.Percentage){
+				if(benList[i].BenefitType!=InsBenefitType.CoInsurance){
 					continue;
 				}
 				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);

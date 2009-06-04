@@ -244,6 +244,7 @@ namespace OpenDental.Eclaims
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>";
 
+
 			string strRawResponse="";
 			string strRawResponseNormal=@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
@@ -253,7 +254,7 @@ namespace OpenDental.Eclaims
 		</ns1:lookupEligibilityResponse>
 	</soapenv:Body>
 </soapenv:Envelope>";
-			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
+/*			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<soapenv:Body>
 		<soapenv:Fault>
@@ -278,7 +279,7 @@ namespace OpenDental.Eclaims
 			</detail>
 		</soapenv:Fault>
 	</soapenv:Body>
-</soapenv:Envelope>";
+</soapenv:Envelope>";*/
 			/*
 			//only use one of the following:
 			string hostName="https://prelive2.dentalxchange.com/dws/services/dciservice.svl";//testing
@@ -295,8 +296,7 @@ namespace OpenDental.Eclaims
 			StreamReader reader=new StreamReader(streamResponse);
 			string strRawResponse=reader.ReadToEnd();
 			reader.Close();
-			streamResponse.Close();
-			return strRawResponse;*/
+			streamResponse.Close();*/
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(strRawResponseNormal);
 			//StringReader strReader=new StringReader(strRawResponseNormal);
@@ -308,7 +308,7 @@ namespace OpenDental.Eclaims
 			}
 			node=doc.SelectSingleNode("//detail/string");
 			if(node==null) {
-				throw new ApplicationException("Returned data not in expected format: "+strRawResponse);
+				throw new ApplicationException("Returned data not in expected format: "+strRawResponseNormal);
 			}
 			if(node.InnerText=="Authentication failed.") {
 				throw new ApplicationException("Authentication failed.");

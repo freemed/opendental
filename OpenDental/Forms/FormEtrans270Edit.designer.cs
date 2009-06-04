@@ -23,50 +23,18 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.label1 = new System.Windows.Forms.Label();
-			this.textMessageText = new System.Windows.Forms.RichTextBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
-			this.groupResponse = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textAckMessage = new System.Windows.Forms.RichTextBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1.SuspendLayout();
-			this.groupResponse.SuspendLayout();
+			this.butShowRequest = new OpenDental.UI.Button();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.butShowResponse = new OpenDental.UI.Button();
+			this.gridDates = new OpenDental.UI.ODGrid();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(6,16);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(218,17);
-			this.label1.TabIndex = 5;
-			this.label1.Text = "Raw Message Text";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textMessageText
-			// 
-			this.textMessageText.BackColor = System.Drawing.SystemColors.Window;
-			this.textMessageText.Location = new System.Drawing.Point(6,36);
-			this.textMessageText.Name = "textMessageText";
-			this.textMessageText.ReadOnly = true;
-			this.textMessageText.Size = new System.Drawing.Size(416,343);
-			this.textMessageText.TabIndex = 4;
-			this.textMessageText.Text = "";
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.textMessageText);
-			this.groupBox1.Location = new System.Drawing.Point(9,12);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(429,420);
-			this.groupBox1.TabIndex = 6;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Benefit Request (270)";
 			// 
 			// label6
 			// 
@@ -85,35 +53,16 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(355,40);
 			this.textNote.TabIndex = 14;
 			// 
-			// groupResponse
+			// gridMain
 			// 
-			this.groupResponse.Controls.Add(this.label2);
-			this.groupResponse.Controls.Add(this.textAckMessage);
-			this.groupResponse.Location = new System.Drawing.Point(444,12);
-			this.groupResponse.Name = "groupResponse";
-			this.groupResponse.Size = new System.Drawing.Size(429,420);
-			this.groupResponse.TabIndex = 7;
-			this.groupResponse.TabStop = false;
-			this.groupResponse.Text = "Response (271)";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(6,16);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(218,17);
-			this.label2.TabIndex = 5;
-			this.label2.Text = "Raw Message Text";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textAckMessage
-			// 
-			this.textAckMessage.BackColor = System.Drawing.SystemColors.Window;
-			this.textAckMessage.Location = new System.Drawing.Point(6,36);
-			this.textAckMessage.Name = "textAckMessage";
-			this.textAckMessage.ReadOnly = true;
-			this.textAckMessage.Size = new System.Drawing.Size(416,343);
-			this.textAckMessage.TabIndex = 4;
-			this.textAckMessage.Text = "";
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(9,137);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(864,314);
+			this.gridMain.TabIndex = 114;
+			this.gridMain.Title = "Response Benefit Information";
+			this.gridMain.TranslationName = "FormEtrans270Edit";
 			// 
 			// butDelete
 			// 
@@ -162,15 +111,66 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butShowRequest
+			// 
+			this.butShowRequest.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowRequest.Autosize = true;
+			this.butShowRequest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowRequest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowRequest.CornerRadius = 4F;
+			this.butShowRequest.Location = new System.Drawing.Point(6,19);
+			this.butShowRequest.Name = "butShowRequest";
+			this.butShowRequest.Size = new System.Drawing.Size(75,24);
+			this.butShowRequest.TabIndex = 115;
+			this.butShowRequest.Text = "Request";
+			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.butShowResponse);
+			this.groupBox2.Controls.Add(this.butShowRequest);
+			this.groupBox2.Location = new System.Drawing.Point(391,571);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(168,49);
+			this.groupBox2.TabIndex = 116;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Show Raw Message of...";
+			// 
+			// butShowResponse
+			// 
+			this.butShowResponse.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowResponse.Autosize = true;
+			this.butShowResponse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowResponse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowResponse.CornerRadius = 4F;
+			this.butShowResponse.Location = new System.Drawing.Point(87,19);
+			this.butShowResponse.Name = "butShowResponse";
+			this.butShowResponse.Size = new System.Drawing.Size(75,24);
+			this.butShowResponse.TabIndex = 116;
+			this.butShowResponse.Text = "Response";
+			this.butShowResponse.Click += new System.EventHandler(this.butShowResponse_Click);
+			// 
+			// gridDates
+			// 
+			this.gridDates.HScrollVisible = false;
+			this.gridDates.Location = new System.Drawing.Point(9,12);
+			this.gridDates.Name = "gridDates";
+			this.gridDates.ScrollValue = 0;
+			this.gridDates.Size = new System.Drawing.Size(407,119);
+			this.gridDates.TabIndex = 117;
+			this.gridDates.Title = "Dates";
+			this.gridDates.TranslationName = "FormEtrans270Edit";
+			// 
 			// FormEtrans270Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(882,674);
+			this.Controls.Add(this.gridDates);
+			this.Controls.Add(this.groupBox2);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textNote);
-			this.Controls.Add(this.groupResponse);
-			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEtrans270Edit";
@@ -178,8 +178,7 @@ namespace OpenDental{
 			this.Text = "Edit Electronic Benefit Request";
 			this.Load += new System.EventHandler(this.FormEtrans270Edit_Load);
 			this.Shown += new System.EventHandler(this.FormEtrans270Edit_Shown);
-			this.groupBox1.ResumeLayout(false);
-			this.groupResponse.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -189,14 +188,13 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.RichTextBox textMessageText;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.GroupBox groupResponse;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.RichTextBox textAckMessage;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.TextBox textNote;
 		private OpenDental.UI.Button butDelete;
+		private OpenDental.UI.ODGrid gridMain;
+		private OpenDental.UI.Button butShowRequest;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private OpenDental.UI.Button butShowResponse;
+		private OpenDental.UI.ODGrid gridDates;
 	}
 }
