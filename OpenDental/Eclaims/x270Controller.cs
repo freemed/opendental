@@ -43,7 +43,7 @@ namespace OpenDental.Eclaims {
 				Etranss.Delete(etrans.EtransNum);
 				throw ex;
 			}
-			//process the 271 to create a list of benefits--------------------------------------
+			//start to process the 271----------------------------------------------------------
 			X271 x271=null;
 			if(X12object.IsX12(x12response)) {
 				X12object x12obj=new X12object(x12response);
@@ -51,7 +51,9 @@ namespace OpenDental.Eclaims {
 					x271=new X271(x12response);
 				}
 			}
-			//In realtime mode, X12 limits the request to one patient.  We will always use the subscriber.
+			/*
+			//In realtime mode, X12 limits the request to one patient.
+			//We will always use the subscriber.
 			//So all EB segments are for the subscriber.
 			List<EB271> listEB=new List<EB271>();
 			EB271 eb;
@@ -63,7 +65,7 @@ namespace OpenDental.Eclaims {
 					eb=new EB271(x271.Segments[i]);
 					listEB.Add(eb);
 				}
-			}
+			}*/
 			//create an etrans for the 271------------------------------------------------------
 			etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText=x12response;

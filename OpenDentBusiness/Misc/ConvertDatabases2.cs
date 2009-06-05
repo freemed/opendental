@@ -448,9 +448,21 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE etrans ADD INDEX (PlanNum)";
 				Db.NonQ(command);
-
-
-
+				//Added new enum value of 0=None to CoverageLevel.
+				command="UPDATE benefit SET CoverageLevel=CoverageLevel+1 WHERE BenefitType=2 OR BenefitType=5";//Deductible, Limitations
+				Db.NonQ(command);
+				command="ALTER TABLE benefit CHANGE Percent Percent tinyint NOT NULL";//So that we can store -1.
+				Db.NonQ(command);
+				command="UPDATE benefit SET Percent=-1 WHERE BenefitType != 1";//set Percent empty where not CoInsurance
+				Db.NonQ(command);
+				command="ALTER TABLE benefit DROP OldCode";
+				Db.NonQ(command);
+				//set MonetaryAmt empty when ActiveCoverage,CoInsurance,Exclusion
+				command="UPDATE benefit SET MonetaryAmt=-1 WHERE BenefitType=0 OR BenefitType=1 OR BenefitType=4";
+				Db.NonQ(command);
+				//set MonetaryAmt empty when Limitation and a quantity is entered
+				command="UPDATE benefit SET MonetaryAmt=-1 WHERE BenefitType=5 AND Quantity != 0";
+				Db.NonQ(command);
 
 
 				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";

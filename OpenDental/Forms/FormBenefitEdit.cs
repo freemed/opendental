@@ -31,7 +31,6 @@ namespace OpenDental{
 		private ListBox listType;
 		private Label labelType;
 		private Label labelPercent;
-		private ValidNum textPercent;
 		private ListBox listTimePeriod;
 		private Label label4;
 		private ValidNum textQuantity;
@@ -42,6 +41,7 @@ namespace OpenDental{
 		private int PlanNum;
 		private ListBox listCoverageLevel;
 		private Label label1;
+		private ValidNumber textPercent;
 		private int PatPlanNum;
 
 		///<summary></summary>
@@ -81,24 +81,24 @@ namespace OpenDental{
 			this.listQuantityQualifier = new System.Windows.Forms.ListBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.groupQuantity = new System.Windows.Forms.GroupBox();
+			this.listCoverageLevel = new System.Windows.Forms.ListBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.textQuantity = new OpenDental.ValidNum();
-			this.textPercent = new OpenDental.ValidNum();
 			this.textAmount = new OpenDental.ValidDouble();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.listCoverageLevel = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.textPercent = new OpenDental.ValidNumber();
 			this.groupQuantity.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelCode
 			// 
-			this.labelCode.Location = new System.Drawing.Point(21,201);
+			this.labelCode.Location = new System.Drawing.Point(21,215);
 			this.labelCode.Name = "labelCode";
 			this.labelCode.Size = new System.Drawing.Size(104,16);
 			this.labelCode.TabIndex = 0;
-			this.labelCode.Text = "or Code";
+			this.labelCode.Text = "or Proc Code";
 			this.labelCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelAmount
@@ -123,7 +123,7 @@ namespace OpenDental{
 			// 
 			this.listCategory.Location = new System.Drawing.Point(126,36);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(100,160);
+			this.listCategory.Size = new System.Drawing.Size(100,173);
 			this.listCategory.TabIndex = 5;
 			// 
 			// checkPat
@@ -138,14 +138,14 @@ namespace OpenDental{
 			// 
 			// textProcCode
 			// 
-			this.textProcCode.Location = new System.Drawing.Point(126,197);
+			this.textProcCode.Location = new System.Drawing.Point(126,211);
 			this.textProcCode.Name = "textProcCode";
 			this.textProcCode.Size = new System.Drawing.Size(100,20);
 			this.textProcCode.TabIndex = 6;
 			// 
 			// listType
 			// 
-			this.listType.Location = new System.Drawing.Point(126,235);
+			this.listType.Location = new System.Drawing.Point(126,251);
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(100,82);
 			this.listType.TabIndex = 7;
@@ -153,7 +153,7 @@ namespace OpenDental{
 			// 
 			// labelType
 			// 
-			this.labelType.Location = new System.Drawing.Point(24,235);
+			this.labelType.Location = new System.Drawing.Point(24,251);
 			this.labelType.Name = "labelType";
 			this.labelType.Size = new System.Drawing.Size(100,16);
 			this.labelType.TabIndex = 26;
@@ -206,12 +206,28 @@ namespace OpenDental{
 			this.groupQuantity.Controls.Add(this.textQuantity);
 			this.groupQuantity.Controls.Add(this.listQuantityQualifier);
 			this.groupQuantity.Controls.Add(this.label8);
-			this.groupQuantity.Location = new System.Drawing.Point(301,152);
+			this.groupQuantity.Location = new System.Drawing.Point(301,151);
 			this.groupQuantity.Name = "groupQuantity";
 			this.groupQuantity.Size = new System.Drawing.Size(180,135);
 			this.groupQuantity.TabIndex = 3;
 			this.groupQuantity.TabStop = false;
 			this.groupQuantity.Text = "Quantity";
+			// 
+			// listCoverageLevel
+			// 
+			this.listCoverageLevel.Location = new System.Drawing.Point(368,290);
+			this.listCoverageLevel.Name = "listCoverageLevel";
+			this.listCoverageLevel.Size = new System.Drawing.Size(100,43);
+			this.listCoverageLevel.TabIndex = 31;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(255,290);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(111,16);
+			this.label1.TabIndex = 32;
+			this.label1.Text = "Coverage Level";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textQuantity
 			// 
@@ -221,15 +237,6 @@ namespace OpenDental{
 			this.textQuantity.Name = "textQuantity";
 			this.textQuantity.Size = new System.Drawing.Size(68,20);
 			this.textQuantity.TabIndex = 0;
-			// 
-			// textPercent
-			// 
-			this.textPercent.Location = new System.Drawing.Point(368,36);
-			this.textPercent.MaxVal = 100;
-			this.textPercent.MinVal = 0;
-			this.textPercent.Name = "textPercent";
-			this.textPercent.Size = new System.Drawing.Size(68,20);
-			this.textPercent.TabIndex = 0;
 			// 
 			// textAmount
 			// 
@@ -286,32 +293,25 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// listCoverageLevel
+			// textPercent
 			// 
-			this.listCoverageLevel.Location = new System.Drawing.Point(368,293);
-			this.listCoverageLevel.Name = "listCoverageLevel";
-			this.listCoverageLevel.Size = new System.Drawing.Size(100,30);
-			this.listCoverageLevel.TabIndex = 31;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(255,293);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(111,16);
-			this.label1.TabIndex = 32;
-			this.label1.Text = "Coverage Level";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.textPercent.Location = new System.Drawing.Point(368,36);
+			this.textPercent.MaxVal = 255;
+			this.textPercent.MinVal = 0;
+			this.textPercent.Name = "textPercent";
+			this.textPercent.Size = new System.Drawing.Size(68,20);
+			this.textPercent.TabIndex = 33;
 			// 
 			// FormBenefitEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(642,416);
+			this.Controls.Add(this.textPercent);
+			this.Controls.Add(this.listTimePeriod);
 			this.Controls.Add(this.listCoverageLevel);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupQuantity);
-			this.Controls.Add(this.listTimePeriod);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.textPercent);
 			this.Controls.Add(this.labelPercent);
 			this.Controls.Add(this.listType);
 			this.Controls.Add(this.labelType);
@@ -352,14 +352,13 @@ namespace OpenDental{
 				checkPat.Checked=true;
 			}
 			listCategory.Items.Clear();
+			listCategory.Items.Add(Lan.g(this,"None"));
+			listCategory.SelectedIndex=0;
 			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				listCategory.Items.Add(CovCatC.ListShort[i].Description);
 				if(CovCatC.ListShort[i].CovCatNum==BenCur.CovCatNum){
-					listCategory.SelectedIndex=i;
+					listCategory.SelectedIndex=i+1;
 				}
-			}
-			if(listCategory.SelectedIndex==-1 && CovCatC.ListShort.Count>0){
-				listCategory.SelectedIndex=0;
 			}
 			textProcCode.Text=ProcedureCodes.GetStringProcCode(BenCur.CodeNum);
 			listType.Items.Clear();
@@ -369,7 +368,12 @@ namespace OpenDental{
 					listType.SelectedIndex=i;
 				}
 			}
-			textPercent.Text=BenCur.Percent.ToString();
+			if(BenCur.Percent==-1) {
+				textPercent.Text="";
+			}
+			else {
+				textPercent.Text=BenCur.Percent.ToString();
+			}
 			textAmount.Text=BenCur.MonetaryAmt.ToString("n");
 			listTimePeriod.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(BenefitTimePeriod)).Length;i++) {
@@ -425,7 +429,7 @@ namespace OpenDental{
 					listTimePeriod.SelectedIndex=1;
 				}
 				return;
-			}*/
+			}
 			if(listType.SelectedIndex==(int)InsBenefitType.CoInsurance){
 				labelPercent.Visible=true;
 				textPercent.Visible=true;
@@ -453,12 +457,12 @@ namespace OpenDental{
 				textAmount.Visible=true;
 				groupQuantity.Visible=true;
 				textPercent.Text="0";
-			}
+			}*/
 		}
 
 		private void listType_Click(object sender,EventArgs e) {
 			//selected index will already have changed
-			SetVisibilities();
+			//SetVisibilities();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -469,9 +473,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(listCategory.SelectedIndex==-1){
-				//this can only happen if hidden categories changed
-				MsgBox.Show(this,"Please select a category first.");
+			if(textProcCode.Text != "" && listCategory.SelectedIndex != 0){
+				MsgBox.Show(this,"If a procedure code is entered, category must be None.");
 				return;
 			}
 			//not allowed to set to pat if editing plan only, and no patplanNum is available
@@ -495,7 +498,12 @@ namespace OpenDental{
 				BenCur.PatPlanNum=0;
 				BenCur.PlanNum=PlanNum;
 			}
-			BenCur.CovCatNum=CovCatC.ListShort[listCategory.SelectedIndex].CovCatNum;
+			if(listCategory.SelectedIndex==0) {
+				BenCur.CovCatNum=0;
+			}
+			else {
+				BenCur.CovCatNum=CovCatC.ListShort[listCategory.SelectedIndex-1].CovCatNum;
+			}
 			BenCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 			BenCur.BenefitType=(InsBenefitType)listType.SelectedIndex;
 			BenCur.Percent=PIn.PInt(textPercent.Text);

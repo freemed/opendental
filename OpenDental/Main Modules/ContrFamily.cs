@@ -1315,7 +1315,7 @@ namespace OpenDental{
 					if(benMatrix[x,y].CoverageLevel==BenefitCoverageLevel.Family) {
 						desc+=Lan.g(this,"Fam")+" ";
 					}
-					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance){
+					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance && benMatrix[x,y].Percent != -1) {
 						desc+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" % ";
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Deductible) {

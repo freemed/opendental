@@ -16,13 +16,25 @@ namespace OpenDentBusiness
 		private static Dictionary<string,string> EB09;
 
 		public EB271(X12Segment segment)  {
-			Segment=segment;
-		}
-
-		public string GetDescription() {
 			if(eb01==null) {
 				FillDictionaries();
 			}
+			Segment=segment;
+			//start pattern matching to generate closest Benefit
+			EB01 eb01val=eb01.Find(EB01HasCode);
+			EB02 eb02val=eb02.Find(EB02HasCode);
+			if(!eb01val.IsSupported
+				|| !eb02val.IsSupported) 
+			{
+				Benefitt=null;
+				return;
+			}
+			Benefitt=new Benefit();
+			Benefitt.BenefitType=eb01val.BenefitType;
+			Benefitt.CoverageLevel=eb02val.CoverageLevel;
+		}
+
+		public string GetDescription() {
 			string retVal="";
 			retVal+=eb01.Find(EB01HasCode).Descript;//Eligibility or benefit information. Required
 			if(Segment.Get(2) !="") {
@@ -44,7 +56,7 @@ namespace OpenDentBusiness
 				retVal+=", "+PIn.PDouble(Segment.Get(7)).ToString("c");//Monetary amount. Situational
 			}
 			if(Segment.Get(8) !="") {
-				retVal+=", "+(PIn.PDouble(Segment.Get(8))*100).ToString()+"%";//Monetary amount. Situational
+				retVal+=", "+(PIn.PDouble(Segment.Get(8))*100).ToString()+"%";//Percent. Situational
 			}
 			if(Segment.Get(9) !="") {
 				retVal+=", "+EB09[Segment.Get(9)];//Quantity qualifier. Situational

@@ -38,15 +38,14 @@ namespace OpenDentBusiness {
 				ben.PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-				ben.OldCode          = PIn.PString(table.Rows[i][4].ToString());
-				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
-				ben.Percent          = PIn.PInt(table.Rows[i][6].ToString());
-				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
-				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
-				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
-				ben.Quantity         = PIn.PInt(table.Rows[i][10].ToString());
-				ben.CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
-				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
+				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
+				ben.Percent          = PIn.PInt(table.Rows[i][5].ToString());
+				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
+				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
+				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
+				ben.Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+				ben.CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
+				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				list.Add(ben);
 			}
 			list.Sort();
@@ -74,15 +73,14 @@ namespace OpenDentBusiness {
 				ben.PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-				ben.OldCode          = PIn.PString(table.Rows[i][4].ToString());
-				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
-				ben.Percent          = PIn.PInt(table.Rows[i][6].ToString());
-				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
-				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
-				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
-				ben.Quantity         = PIn.PInt(table.Rows[i][10].ToString());
-				ben.CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
-				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
+				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
+				ben.Percent          = PIn.PInt(table.Rows[i][5].ToString());
+				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
+				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
+				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
+				ben.Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+				ben.CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
+				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				retVal.Add(ben);
 			}
 			return retVal;
@@ -126,15 +124,14 @@ namespace OpenDentBusiness {
 					benList[i].PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 					benList[i].PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 					benList[i].CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-					benList[i].OldCode          = PIn.PString(table.Rows[i][4].ToString());
-					benList[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
-					benList[i].Percent          = PIn.PInt(table.Rows[i][6].ToString());
-					benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
-					benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
-					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
-					benList[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
-					benList[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
-					benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
+					benList[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
+					benList[i].Percent          = PIn.PInt(table.Rows[i][5].ToString());
+					benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
+					benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
+					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
+					benList[i].Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+					benList[i].CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
+					benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				}
 			}
 			List<Benefit> retVal=new List<Benefit>();
@@ -173,7 +170,6 @@ namespace OpenDentBusiness {
 				+"PlanNum = '"          +POut.PInt   (ben.PlanNum)+"'"
 				+",PatPlanNum = '"      +POut.PInt   (ben.PatPlanNum)+"'"
 				+",CovCatNum = '"       +POut.PInt   (ben.CovCatNum)+"'"
-				+",OldCode = '"         +POut.PString(ben.OldCode)+"'"
 				+",BenefitType = '"     +POut.PInt   ((int)ben.BenefitType)+"'"
 				+",Percent = '"         +POut.PInt   (ben.Percent)+"'"
 				+",MonetaryAmt = '"     +POut.PDouble(ben.MonetaryAmt)+"'"
@@ -199,7 +195,7 @@ namespace OpenDentBusiness {
 			if(PrefC.RandomKeys) {
 				command+="BenefitNum,";
 			}
-			command+="PlanNum,PatPlanNum,CovCatNum,OldCode,BenefitType,Percent,MonetaryAmt,TimePeriod,"
+			command+="PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod,"
 				+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(ben.BenefitNum)+"', ";
@@ -208,7 +204,6 @@ namespace OpenDentBusiness {
 				 "'"+POut.PInt(ben.PlanNum)+"', "
 				+"'"+POut.PInt(ben.PatPlanNum)+"', "
 				+"'"+POut.PInt(ben.CovCatNum)+"', "
-				+"'"+POut.PString(ben.OldCode)+"', "
 				+"'"+POut.PInt((int)ben.BenefitType)+"', "
 				+"'"+POut.PInt(ben.Percent)+"', "
 				+"'"+POut.PDouble(ben.MonetaryAmt)+"', "
@@ -443,7 +438,6 @@ namespace OpenDentBusiness {
 				if(  newBenefit.PlanNum != oldBenefitList[i].PlanNum
 					|| newBenefit.PatPlanNum != oldBenefitList[i].PatPlanNum
 					|| newBenefit.CovCatNum != oldBenefitList[i].CovCatNum
-					//|| newBenefit.OldCode != oldBenefitList[i].OldCode
 					|| newBenefit.BenefitType != oldBenefitList[i].BenefitType
 					|| newBenefit.Percent != oldBenefitList[i].Percent
 					|| newBenefit.MonetaryAmt != oldBenefitList[i].MonetaryAmt
@@ -503,7 +497,6 @@ namespace OpenDentBusiness {
 					if(newBenefit.PlanNum             != oldBenefitList[i].PlanNum
 						|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
 						|| newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
-						//|| newBenefit.OldCode           != oldBenefitList[i].OldCode
 						|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
 						|| newBenefit.Percent           != oldBenefitList[i].Percent
 						|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt

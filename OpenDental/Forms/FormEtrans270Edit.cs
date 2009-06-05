@@ -73,8 +73,6 @@ namespace OpenDental {
 				gridDates.Rows.Add(row);
 			}
 			gridDates.EndUpdate();
-
-
 		}
 
 		private void FillGrid(){
@@ -94,7 +92,7 @@ namespace OpenDental {
 			for(int i=0;i<listEB.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listEB[i].GetDescription());
-				row.Cells.Add("");
+				row.Cells.Add(listEB[i].Benefitt.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

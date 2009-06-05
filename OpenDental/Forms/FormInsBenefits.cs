@@ -1170,7 +1170,7 @@ namespace OpenDental{
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
-					&& ben.Percent==0
+					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
 						|| ben.QuantityQualifier==BenefitQuantity.Years
 						|| ben.QuantityQualifier==BenefitQuantity.NumberOfServices))
@@ -1193,7 +1193,7 @@ namespace OpenDental{
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
-					&& ben.Percent==0
+					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
 						|| ben.QuantityQualifier==BenefitQuantity.Years
 						|| ben.QuantityQualifier==BenefitQuantity.NumberOfServices))
@@ -1216,7 +1216,7 @@ namespace OpenDental{
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
 					&& ben.MonetaryAmt==0
 					&& ben.PatPlanNum==0
-					&& ben.Percent==0
+					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
 						|| ben.QuantityQualifier==BenefitQuantity.Years
 						|| ben.QuantityQualifier==BenefitQuantity.NumberOfServices))
@@ -1482,35 +1482,36 @@ namespace OpenDental{
 				else {
 					row.Cells.Add("X");
 				}
-				if(benefitList[i].CoverageLevel==BenefitCoverageLevel.Individual){
+				if(benefitList[i].CoverageLevel==BenefitCoverageLevel.None){
 					row.Cells.Add("");
 				}
 				else{
 					row.Cells.Add(Lan.g("enumBenefitCoverageLevel",benefitList[i].CoverageLevel.ToString()));
 				}
-				if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.CoInsurance) {
+				if(benefitList[i].BenefitType==InsBenefitType.CoInsurance && benefitList[i].Percent != -1) {
 					row.Cells.Add("%");
 				}
-				else if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Limitations
-					&& (((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.ServiceYear
-					|| ((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.CalendarYear)
-					&& ((Benefit)benefitList[i]).QuantityQualifier==BenefitQuantity.None) {//annual max
-					row.Cells.Add(Lan.g(this,"Annual Max"));
-				}
+				//else if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Limitations
+				//	&& (((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.ServiceYear
+				//	|| ((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.CalendarYear)
+				//	&& ((Benefit)benefitList[i]).QuantityQualifier==BenefitQuantity.None) {//annual max
+				//	row.Cells.Add(Lan.g(this,"Annual Max"));
+				//}
 				else {
-					row.Cells.Add(Lan.g("enumInsBenefitType",((Benefit)benefitList[i]).BenefitType.ToString()));
+					row.Cells.Add(Lan.g("enumInsBenefitType",benefitList[i].BenefitType.ToString()));
 				}
 				if(((Benefit)benefitList[i]).CodeNum==0) {
 					row.Cells.Add(CovCats.GetDesc(((Benefit)benefitList[i]).CovCatNum));
 				}
 				else {
-					row.Cells.Add(ProcedureCodes.GetProcCode(((Benefit)benefitList[i]).CodeNum).AbbrDesc);
+					ProcedureCode proccode=ProcedureCodes.GetProcCode(benefitList[i].CodeNum);
+					row.Cells.Add(proccode.ProcCode+"-"+proccode.AbbrDesc);
 				}
-				if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.CoInsurance) {
-					row.Cells.Add(((Benefit)benefitList[i]).Percent.ToString());
-				}
-				else {
+				if(benefitList[i].Percent == -1) {
 					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(benefitList[i].Percent.ToString());
 				}
 				if(((Benefit)benefitList[i]).MonetaryAmt==0) {
 					if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Deductible) {
@@ -1551,11 +1552,14 @@ namespace OpenDental{
 		}
 
 		private void gridBenefits_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e){
+			int benefitListI=benefitList.IndexOf(benefitList[e.Row]);
+			int benefitListAllI=benefitListAll.IndexOf(benefitList[e.Row]);
 			FormBenefitEdit FormB=new FormBenefitEdit(PatPlanNum,PlanNum);
-			FormB.BenCur=(Benefit)benefitList[e.Row];
+			FormB.BenCur=benefitList[e.Row];
 			FormB.ShowDialog();
 			if(FormB.BenCur==null){//user deleted
-				benefitList.RemoveAt(e.Row);
+				benefitList.RemoveAt(benefitListI);
+				benefitListAll.RemoveAt(benefitListAllI);
 			}
 			FillGrid();
 		}
@@ -1598,13 +1602,18 @@ namespace OpenDental{
 			FormB.BenCur=ben;
 			FormB.ShowDialog();
 			if(FormB.DialogResult==DialogResult.OK){
-				benefitList.Add(FormB.BenCur);	
+				benefitList.Add(FormB.BenCur);
+				benefitListAll.Add(FormB.BenCur);
 			}
 			FillGrid();
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
-			benefitList=new List<Benefit>();
+			List<Benefit> listToClear=new List<Benefit>(benefitList);
+			for(int i=0;i<listToClear.Count;i++) {
+				benefitList.Remove(listToClear[i]);
+				benefitListAll.Remove(listToClear[i]);
+			}
 			FillGrid();
 		}
 

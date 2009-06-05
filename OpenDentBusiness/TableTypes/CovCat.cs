@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 
 	///<summary>Insurance coverage categories.  They need to look like in the manual for the American calculations to work properly.</summary>
 	public class CovCat {
-		///<summary>Primary key.</summary>
+		///<summary>Primary key.  Only used in Benefit and CovSpan tables.</summary>
 		public int CovCatNum;
 		///<summary>Description of this category.</summary>
 		public string Description;

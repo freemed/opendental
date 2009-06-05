@@ -1070,18 +1070,21 @@ namespace OpenDentBusiness{
 		Months
 	}
 
-	///<summary>Used in the benefit table </summary>
+	///<summary>Used in the benefit table.</summary>
 	public enum BenefitCoverageLevel{
-		///<summary>0- Most common, and assumed if not supplied.</summary>
+		///<summary>0- Since this is a situational X12 field, we can also have none.  Typical for percentages and copayments.</summary>
+		None,
+		///<summary>1- The default for deductibles and maximums.</summary>
 		Individual,
-		///<summary>1- For example, family deductible or family maximum.</summary>
+		///<summary>2- For example, family deductible or family maximum.</summary>
 		Family
+		
 	}
 	
 
 	///<summary>The X12 benefit categories.  Used to link the user-defined CovCats to the corresponding X12 category.</summary>
 	public enum EbenefitCategory{
-		///<summary>0- Default</summary>
+		///<summary>0- Default.</summary>
 		None,
 		///<summary>1- X12: 30 and 35. All ADA codes.</summary>
 		General,

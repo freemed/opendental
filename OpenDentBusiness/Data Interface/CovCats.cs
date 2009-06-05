@@ -172,6 +172,16 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
+		///<summary>If none assigned, it will return None.</summary>
+		public static EbenefitCategory GetEbenCat(int covCatNum) {
+			for(int i=0;i<CovCatC.ListShort.Count;i++) {
+				if(covCatNum==CovCatC.ListShort[i].CovCatNum) {
+					return CovCatC.ListShort[i].EbenefitCat;
+				}
+			}
+			return EbenefitCategory.None;
+		}
+
 		
 
 	}
