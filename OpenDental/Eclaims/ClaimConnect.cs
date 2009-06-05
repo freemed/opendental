@@ -245,7 +245,7 @@ namespace OpenDental.Eclaims
 </SOAP-ENV:Envelope>";
 
 
-			string strRawResponse="";
+/*			string strRawResponse="";
 			string strRawResponseNormal=@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<soapenv:Body>
@@ -254,7 +254,7 @@ namespace OpenDental.Eclaims
 		</ns1:lookupEligibilityResponse>
 	</soapenv:Body>
 </soapenv:Envelope>";
-/*			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
+			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<soapenv:Body>
 		<soapenv:Fault>
@@ -280,12 +280,14 @@ namespace OpenDental.Eclaims
 		</soapenv:Fault>
 	</soapenv:Body>
 </soapenv:Envelope>";*/
-			/*
+			
 			//only use one of the following:
 			string hostName="https://prelive2.dentalxchange.com/dws/services/dciservice.svl";//testing
 			//string hostName="https://webservices.dentalxchange.com/dws/services/dciservice.svl";//production
 			HttpWebRequest request=(HttpWebRequest)WebRequest.Create(hostName);
 			request.Method="POST";
+			request.ContentType="text/xml";
+			request.Headers.Add("SOAPAction: \"lookupEligibility\"");//
 			Stream stream=request.GetRequestStream();
 			StreamWriter writer=new StreamWriter(stream);
 			writer.Write(soapMsg);
@@ -296,9 +298,9 @@ namespace OpenDental.Eclaims
 			StreamReader reader=new StreamReader(streamResponse);
 			string strRawResponse=reader.ReadToEnd();
 			reader.Close();
-			streamResponse.Close();*/
+			streamResponse.Close();
 			XmlDocument doc=new XmlDocument();
-			doc.LoadXml(strRawResponseNormal);
+			doc.LoadXml(strRawResponse);
 			//StringReader strReader=new StringReader(strRawResponseNormal);
 			//XmlReader xmlReader=XmlReader.Create(strReader);
 			//xmlReader...MoveToElement(
@@ -308,7 +310,7 @@ namespace OpenDental.Eclaims
 			}
 			node=doc.SelectSingleNode("//detail/string");
 			if(node==null) {
-				throw new ApplicationException("Returned data not in expected format: "+strRawResponseNormal);
+				throw new ApplicationException("Returned data not in expected format: "+strRawResponse);
 			}
 			if(node.InnerText=="Authentication failed.") {
 				throw new ApplicationException("Authentication failed.");

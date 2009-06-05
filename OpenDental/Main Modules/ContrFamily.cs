@@ -1304,7 +1304,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				desc="";
 				//some of the columns might be null, but at least one will not be.  Find it.
-				for(int x=0;x<benMatrix.GetLength(1);x++){//columns
+				for(int x=0;x<benMatrix.GetLength(0);x++){//columns
 					if(benMatrix[x,y]==null){
 						continue;
 					}
@@ -1315,8 +1315,17 @@ namespace OpenDental{
 					if(benMatrix[x,y].CoverageLevel==BenefitCoverageLevel.Family) {
 						desc+=Lan.g(this,"Fam")+" ";
 					}
+					ProcedureCode proccode=null;
+					if(benMatrix[x,y].CodeNum!=0) {
+						proccode=ProcedureCodes.GetProcCode(benMatrix[x,y].CodeNum);
+					}
 					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance && benMatrix[x,y].Percent != -1) {
-						desc+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" % ";
+						if(benMatrix[x,y].CodeNum==0) {
+							desc+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" % ";
+						}
+						else {
+							desc+=proccode.ProcCode+"-"+proccode.AbbrDesc+" % ";
+						}
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Deductible) {
 						desc+=Lan.g(this,"Deductible")+" "+CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" ";
@@ -1372,6 +1381,13 @@ namespace OpenDental{
 						row.Cells.Add("");
 						continue;
 					}
+					if(benMatrix[x,y].Percent != -1) {
+						val+=benMatrix[x,y].Percent.ToString()+"% ";
+					}
+					if(benMatrix[x,y].MonetaryAmt != -1) {
+						val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
+					}
+					/*
 					if(benMatrix[x,y].BenefitType==InsBenefitType.CoInsurance) {
 						val+=benMatrix[x,y].Percent.ToString()+" ";
 					}
@@ -1387,13 +1403,13 @@ namespace OpenDental{
 						&& benMatrix[x,y].MonetaryAmt==0)
 					{//annual max 0
 						val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
-					}
+					}*/
 					if(benMatrix[x,y].QuantityQualifier==BenefitQuantity.NumberOfServices){//eg 2 times per CalendarYear
 						val+=benMatrix[x,y].Quantity.ToString()+" "+Lan.g(this,"times per")+" "
 							+Lan.g("enumBenefitQuantity",benMatrix[x,y].TimePeriod.ToString())+" ";
 					}
 					else if(benMatrix[x,y].QuantityQualifier==BenefitQuantity.Months) {//eg Every 2 months
-						val+="Every "+benMatrix[x,y].Quantity.ToString()+" month";
+						val+=Lan.g(this,"Every ")+benMatrix[x,y].Quantity.ToString()+" month";
 						if(benMatrix[x,y].Quantity>1){
 							val+="s";
 						}
@@ -1412,9 +1428,9 @@ namespace OpenDental{
 							val+=benMatrix[x,y].Quantity.ToString()+" ";
 						}
 					}
-					if(benMatrix[x,y].MonetaryAmt!=0){
-						val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
-					}
+					//if(benMatrix[x,y].MonetaryAmt!=0){
+					//	val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
+					//}
 					if(val==""){
 						val="val";
 					}

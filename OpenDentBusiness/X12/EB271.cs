@@ -10,7 +10,7 @@ namespace OpenDentBusiness
 		public Benefit Benefitt;
 		private static List<EB01> eb01;
 		private static List<EB02> eb02;
-		private static Dictionary<string,string> EB03;
+		private static List<EB03> eb03;
 		private static Dictionary<string,string> EB04;
 		private static Dictionary<string,string> EB06;
 		private static Dictionary<string,string> EB09;
@@ -23,15 +23,26 @@ namespace OpenDentBusiness
 			//start pattern matching to generate closest Benefit
 			EB01 eb01val=eb01.Find(EB01HasCode);
 			EB02 eb02val=eb02.Find(EB02HasCode);
+			EB03 eb03val=eb03.Find(EB03HasCode);
 			if(!eb01val.IsSupported
-				|| !eb02val.IsSupported) 
+				|| (eb02val!=null && !eb02val.IsSupported)
+				|| (eb03val!=null && !eb03val.IsSupported)) 
 			{
+				Benefitt=null;
+				return;
+			}
+			if(eb01val.BenefitType==InsBenefitType.ActiveCoverage	&& Segment.Get(3)=="30") {
 				Benefitt=null;
 				return;
 			}
 			Benefitt=new Benefit();
 			Benefitt.BenefitType=eb01val.BenefitType;
-			Benefitt.CoverageLevel=eb02val.CoverageLevel;
+			if(eb02val!=null) {
+				Benefitt.CoverageLevel=eb02val.CoverageLevel;
+			}
+			if(eb03val!=null) {
+				Benefitt.CovCatNum=CovCats.GetForEbenCat(eb03val.ServiceType).CovCatNum;
+			}
 		}
 
 		public string GetDescription() {
@@ -41,7 +52,7 @@ namespace OpenDentBusiness
 				retVal+=", "+eb02.Find(EB02HasCode).Descript;//Coverage level code. Situational
 			}
 			if(Segment.Get(3) !="") {
-				retVal+=", "+EB03[Segment.Get(3)];//Service type code. Situational
+				retVal+=", "+eb03.Find(EB03HasCode).Descript;//Service type code. Situational
 			}
 			if(Segment.Get(4) !="") {
 				retVal+=", "+EB04[Segment.Get(4)];//Insurance type code. Situational
@@ -87,6 +98,14 @@ namespace OpenDentBusiness
 		/// <summary>Search predicate returns true if code matches.</summary>
 		private bool EB02HasCode(EB02 eb02val) {
 			if(Segment.Get(2)==eb02val.Code) {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Search predicate returns true if code matches.</summary>
+		private bool EB03HasCode(EB03 eb03val) {
+			if(Segment.Get(3)==eb03val.Code) {
 				return true;
 			}
 			return false;
@@ -140,149 +159,149 @@ namespace OpenDentBusiness
 			eb02.Add(new EB02("SPC","Spouse and Children"));
 			eb02.Add(new EB02("SPO","Spouse Only"));
 			//------------------------------------------------------------------------------------------------------
-			EB03=new Dictionary<string,string>();
-			EB03.Add("1","Medical Care");
-			EB03.Add("2","Surgical");
-			EB03.Add("3","Consultation");
-			EB03.Add("4","Diagnostic X-Ray");
-			EB03.Add("5","Diagnostic Lab");
-			EB03.Add("6","Radiation Therapy");
-			EB03.Add("7","Anesthesia");
-			EB03.Add("8","Surgical Assistance");
-			EB03.Add("9","Other Medical");
-			EB03.Add("10","Blood Charges");
-			EB03.Add("11","Used Durable Medical Equipment");
-			EB03.Add("12","Durable Medical Equipment Purchase");
-			EB03.Add("13","Ambulatory Service Center Facility");
-			EB03.Add("14","Renal Supplies in the Home");
-			EB03.Add("15","Alternate Method Dialysis");
-			EB03.Add("16","Chronic Renal Disease (CRD) Equipment");
-			EB03.Add("17","Pre-Admission Testing");
-			EB03.Add("18","Durable Medical Equipment Rental");
-			EB03.Add("19","Pneumonia Vaccine");
-			EB03.Add("20","Second Surgical Opinion");
-			EB03.Add("21","Third Surgical Opinion");
-			EB03.Add("22","Social Work");
-			EB03.Add("23","Diagnostic Dental");
-			EB03.Add("24","Periodontics");
-			EB03.Add("25","Restorative");
-			EB03.Add("26","Endodontics");
-			EB03.Add("27","Maxillofacial Prosthetics");
-			EB03.Add("28","Adjunctive Dental Services");
-			EB03.Add("30","Health Benefit Plan Coverage");
-			EB03.Add("32","Plan Waiting Period");
-			EB03.Add("33","Chiropractic");
-			EB03.Add("34","Chiropractic Office Visits");
-			EB03.Add("35","Dental Care");
-			EB03.Add("36","Dental Crowns");
-			EB03.Add("37","Dental Accident");
-			EB03.Add("38","Orthodontics");
-			EB03.Add("39","Prosthodontics");
-			EB03.Add("40","Oral Surgery");
-			EB03.Add("41","Routine (Preventive) Dental");
-			EB03.Add("42","Home Health Care");
-			EB03.Add("43","Home Health Prescriptions");
-			EB03.Add("44","Home Health Visits");
-			EB03.Add("45","Hospice");
-			EB03.Add("46","Respite Care");
-			EB03.Add("47","Hospital");
-			EB03.Add("48","Hospital - Inpatient");
-			EB03.Add("49","Hospital - Room and Board");
-			EB03.Add("50","Hospital - Outpatient");
-			EB03.Add("51","Hospital - Emergency Accident");
-			EB03.Add("52","Hospital - Emergency Medical");
-			EB03.Add("53","Hospital - Ambulatory Surgical");
-			EB03.Add("54","Long Term Care");
-			EB03.Add("55","Major Medical");
-			EB03.Add("56","Medically Related Transportation");
-			EB03.Add("57","Air Transportation");
-			EB03.Add("58","Cabulance");
-			EB03.Add("59","Licensed Ambulance");
-			EB03.Add("60","General Benefits");
-			EB03.Add("61","In-vitro Fertilization");
-			EB03.Add("62","MRI/CAT Scan");
-			EB03.Add("63","Donor Procedures");
-			EB03.Add("64","Acupuncture");
-			EB03.Add("65","Newborn Care");
-			EB03.Add("66","Pathology");
-			EB03.Add("67","Smoking Cessation");
-			EB03.Add("68","Well Baby Care");
-			EB03.Add("69","Maternity");
-			EB03.Add("70","Transplants");
-			EB03.Add("71","Audiology Exam");
-			EB03.Add("72","Inhalation Therapy");
-			EB03.Add("73","Diagnostic Medical");
-			EB03.Add("74","Private Duty Nursing");
-			EB03.Add("75","Prosthetic Device");
-			EB03.Add("76","Dialysis");
-			EB03.Add("77","Otological Exam");
-			EB03.Add("78","Chemotherapy");
-			EB03.Add("79","Allergy Testing");
-			EB03.Add("80","Immunizations");
-			EB03.Add("81","Routine Physical");
-			EB03.Add("82","Family Planning");
-			EB03.Add("83","Infertility");
-			EB03.Add("84","Abortion");
-			EB03.Add("85","AIDS");
-			EB03.Add("86","Emergency Services");
-			EB03.Add("87","Cancer");
-			EB03.Add("88","Pharmacy");
-			EB03.Add("89","Free Standing Prescription Drug");
-			EB03.Add("90","Mail Order Prescription Drug");
-			EB03.Add("91","Brand Name Prescription Drug");
-			EB03.Add("92","Generic Prescription Drug");
-			EB03.Add("93","Podiatry");
-			EB03.Add("94","Podiatry - Office Visits");
-			EB03.Add("95","Podiatry - Nursing Home Visits");
-			EB03.Add("96","Professional (Physician)");
-			EB03.Add("97","Anesthesiologist");
-			EB03.Add("98","Professional (Physician) Visit - Office");
-			EB03.Add("99","Professional (Physician) Visit - Inpatient");
-			EB03.Add("A0","Professional (Physician) Visit - Outpatient");
-			EB03.Add("A1","Professional (Physician) Visit - Nursing Home");
-			EB03.Add("A2","Professional (Physician) Visit - Skilled Nursing Facility");
-			EB03.Add("A3","Professional (Physician) Visit - Home");
-			EB03.Add("A4","Psychiatric");
-			EB03.Add("A5","Psychiatric - Room and Board");
-			EB03.Add("A6","Psychotherapy");
-			EB03.Add("A7","Psychiatric - Inpatient");
-			EB03.Add("A8","Psychiatric - Outpatient");
-			EB03.Add("A9","Rehabilitation");
-			EB03.Add("AA","Rehabilitation - Room and Board");
-			EB03.Add("AB","Rehabilitation - Inpatient");
-			EB03.Add("AC","Rehabilitation - Outpatient");
-			EB03.Add("AD","Occupational Therapy");
-			EB03.Add("AE","Physical Medicine");
-			EB03.Add("AF","Speech Therapy");
-			EB03.Add("AG","Skilled Nursing Care");
-			EB03.Add("AH","Skilled Nursing Care - Room and Board");
-			EB03.Add("AI","Substance Abuse");
-			EB03.Add("AJ","Alcoholism");
-			EB03.Add("AK","Drug Addiction");
-			EB03.Add("AL","Vision (Optometry)");
-			EB03.Add("AM","Frames");
-			EB03.Add("AN","Routine Exam");
-			EB03.Add("AO","Lenses");
-			EB03.Add("AQ","Nonmedically Necessary Physical");
-			EB03.Add("AR","Experimental Drug Therapy");
-			EB03.Add("BA","Independent Medical Evaluation");
-			EB03.Add("BB","Partial Hospitalization (Psychiatric)");
-			EB03.Add("BC","Day Care (Psychiatric)");
-			EB03.Add("BD","Cognitive Therapy");
-			EB03.Add("BE","Massage Therapy");
-			EB03.Add("BF","Pulmonary Rehabilitation");
-			EB03.Add("BG","Cardiac Rehabilitation");
-			EB03.Add("BH","Pediatric");
-			EB03.Add("BI","Nursery");
-			EB03.Add("BJ","Skin");
-			EB03.Add("BK","Orthopedic");
-			EB03.Add("BL","Cardiac");
-			EB03.Add("BM","Lymphatic");
-			EB03.Add("BN","Gastrointestinal");
-			EB03.Add("BP","Endocrine");
-			EB03.Add("BQ","Neurology");
-			EB03.Add("BR","Eye");
-			EB03.Add("BS","Invasive Procedures");
+			eb03=new List<EB03>();
+			eb03.Add(new EB03("1","Medical Care"));
+			eb03.Add(new EB03("2","Surgical"));
+			eb03.Add(new EB03("3","Consultation"));
+			eb03.Add(new EB03("4","Diagnostic X-Ray"));
+			eb03.Add(new EB03("5","Diagnostic Lab"));
+			eb03.Add(new EB03("6","Radiation Therapy"));
+			eb03.Add(new EB03("7","Anesthesia"));
+			eb03.Add(new EB03("8","Surgical Assistance"));
+			eb03.Add(new EB03("9","Other Medical"));
+			eb03.Add(new EB03("10","Blood Charges"));
+			eb03.Add(new EB03("11","Used Durable Medical Equipment"));
+			eb03.Add(new EB03("12","Durable Medical Equipment Purchase"));
+			eb03.Add(new EB03("13","Ambulatory Service Center Facility"));
+			eb03.Add(new EB03("14","Renal Supplies in the Home"));
+			eb03.Add(new EB03("15","Alternate Method Dialysis"));
+			eb03.Add(new EB03("16","Chronic Renal Disease (CRD) Equipment"));
+			eb03.Add(new EB03("17","Pre-Admission Testing"));
+			eb03.Add(new EB03("18","Durable Medical Equipment Rental"));
+			eb03.Add(new EB03("19","Pneumonia Vaccine"));
+			eb03.Add(new EB03("20","Second Surgical Opinion"));
+			eb03.Add(new EB03("21","Third Surgical Opinion"));
+			eb03.Add(new EB03("22","Social Work"));
+			eb03.Add(new EB03("23","Diagnostic Dental"));
+			eb03.Add(new EB03("24","Periodontics"));
+			eb03.Add(new EB03("25","Restorative"));
+			eb03.Add(new EB03("26","Endodontics"));
+			eb03.Add(new EB03("27","Maxillofacial Prosthetics"));
+			eb03.Add(new EB03("28","Adjunctive Dental Services"));
+			eb03.Add(new EB03("30","Health Benefit Plan Coverage"));
+			eb03.Add(new EB03("32","Plan Waiting Period"));
+			eb03.Add(new EB03("33","Chiropractic"));
+			eb03.Add(new EB03("34","Chiropractic Office Visits"));
+			eb03.Add(new EB03("35","Dental Care"));
+			eb03.Add(new EB03("36","Dental Crowns"));
+			eb03.Add(new EB03("37","Dental Accident"));
+			eb03.Add(new EB03("38","Orthodontics"));
+			eb03.Add(new EB03("39","Prosthodontics"));
+			eb03.Add(new EB03("40","Oral Surgery"));
+			eb03.Add(new EB03("41","Routine (Preventive) Dental"));
+			eb03.Add(new EB03("42","Home Health Care"));
+			eb03.Add(new EB03("43","Home Health Prescriptions"));
+			eb03.Add(new EB03("44","Home Health Visits"));
+			eb03.Add(new EB03("45","Hospice"));
+			eb03.Add(new EB03("46","Respite Care"));
+			eb03.Add(new EB03("47","Hospital"));
+			eb03.Add(new EB03("48","Hospital - Inpatient"));
+			eb03.Add(new EB03("49","Hospital - Room and Board"));
+			eb03.Add(new EB03("50","Hospital - Outpatient"));
+			eb03.Add(new EB03("51","Hospital - Emergency Accident"));
+			eb03.Add(new EB03("52","Hospital - Emergency Medical"));
+			eb03.Add(new EB03("53","Hospital - Ambulatory Surgical"));
+			eb03.Add(new EB03("54","Long Term Care"));
+			eb03.Add(new EB03("55","Major Medical"));
+			eb03.Add(new EB03("56","Medically Related Transportation"));
+			eb03.Add(new EB03("57","Air Transportation"));
+			eb03.Add(new EB03("58","Cabulance"));
+			eb03.Add(new EB03("59","Licensed Ambulance"));
+			eb03.Add(new EB03("60","General Benefits"));
+			eb03.Add(new EB03("61","In-vitro Fertilization"));
+			eb03.Add(new EB03("62","MRI/CAT Scan"));
+			eb03.Add(new EB03("63","Donor Procedures"));
+			eb03.Add(new EB03("64","Acupuncture"));
+			eb03.Add(new EB03("65","Newborn Care"));
+			eb03.Add(new EB03("66","Pathology"));
+			eb03.Add(new EB03("67","Smoking Cessation"));
+			eb03.Add(new EB03("68","Well Baby Care"));
+			eb03.Add(new EB03("69","Maternity"));
+			eb03.Add(new EB03("70","Transplants"));
+			eb03.Add(new EB03("71","Audiology Exam"));
+			eb03.Add(new EB03("72","Inhalation Therapy"));
+			eb03.Add(new EB03("73","Diagnostic Medical"));
+			eb03.Add(new EB03("74","Private Duty Nursing"));
+			eb03.Add(new EB03("75","Prosthetic Device"));
+			eb03.Add(new EB03("76","Dialysis"));
+			eb03.Add(new EB03("77","Otological Exam"));
+			eb03.Add(new EB03("78","Chemotherapy"));
+			eb03.Add(new EB03("79","Allergy Testing"));
+			eb03.Add(new EB03("80","Immunizations"));
+			eb03.Add(new EB03("81","Routine Physical"));
+			eb03.Add(new EB03("82","Family Planning"));
+			eb03.Add(new EB03("83","Infertility"));
+			eb03.Add(new EB03("84","Abortion"));
+			eb03.Add(new EB03("85","AIDS"));
+			eb03.Add(new EB03("86","Emergency Services"));
+			eb03.Add(new EB03("87","Cancer"));
+			eb03.Add(new EB03("88","Pharmacy"));
+			eb03.Add(new EB03("89","Free Standing Prescription Drug"));
+			eb03.Add(new EB03("90","Mail Order Prescription Drug"));
+			eb03.Add(new EB03("91","Brand Name Prescription Drug"));
+			eb03.Add(new EB03("92","Generic Prescription Drug"));
+			eb03.Add(new EB03("93","Podiatry"));
+			eb03.Add(new EB03("94","Podiatry - Office Visits"));
+			eb03.Add(new EB03("95","Podiatry - Nursing Home Visits"));
+			eb03.Add(new EB03("96","Professional (Physician)"));
+			eb03.Add(new EB03("97","Anesthesiologist"));
+			eb03.Add(new EB03("98","Professional (Physician) Visit - Office"));
+			eb03.Add(new EB03("99","Professional (Physician) Visit - Inpatient"));
+			eb03.Add(new EB03("A0","Professional (Physician) Visit - Outpatient"));
+			eb03.Add(new EB03("A1","Professional (Physician) Visit - Nursing Home"));
+			eb03.Add(new EB03("A2","Professional (Physician) Visit - Skilled Nursing Facility"));
+			eb03.Add(new EB03("A3","Professional (Physician) Visit - Home"));
+			eb03.Add(new EB03("A4","Psychiatric"));
+			eb03.Add(new EB03("A5","Psychiatric - Room and Board"));
+			eb03.Add(new EB03("A6","Psychotherapy"));
+			eb03.Add(new EB03("A7","Psychiatric - Inpatient"));
+			eb03.Add(new EB03("A8","Psychiatric - Outpatient"));
+			eb03.Add(new EB03("A9","Rehabilitation"));
+			eb03.Add(new EB03("AA","Rehabilitation - Room and Board"));
+			eb03.Add(new EB03("AB","Rehabilitation - Inpatient"));
+			eb03.Add(new EB03("AC","Rehabilitation - Outpatient"));
+			eb03.Add(new EB03("AD","Occupational Therapy"));
+			eb03.Add(new EB03("AE","Physical Medicine"));
+			eb03.Add(new EB03("AF","Speech Therapy"));
+			eb03.Add(new EB03("AG","Skilled Nursing Care"));
+			eb03.Add(new EB03("AH","Skilled Nursing Care - Room and Board"));
+			eb03.Add(new EB03("AI","Substance Abuse"));
+			eb03.Add(new EB03("AJ","Alcoholism"));
+			eb03.Add(new EB03("AK","Drug Addiction"));
+			eb03.Add(new EB03("AL","Vision (Optometry)"));
+			eb03.Add(new EB03("AM","Frames"));
+			eb03.Add(new EB03("AN","Routine Exam"));
+			eb03.Add(new EB03("AO","Lenses"));
+			eb03.Add(new EB03("AQ","Nonmedically Necessary Physical"));
+			eb03.Add(new EB03("AR","Experimental Drug Therapy"));
+			eb03.Add(new EB03("BA","Independent Medical Evaluation"));
+			eb03.Add(new EB03("BB","Partial Hospitalization (Psychiatric)"));
+			eb03.Add(new EB03("BC","Day Care (Psychiatric)"));
+			eb03.Add(new EB03("BD","Cognitive Therapy"));
+			eb03.Add(new EB03("BE","Massage Therapy"));
+			eb03.Add(new EB03("BF","Pulmonary Rehabilitation"));
+			eb03.Add(new EB03("BG","Cardiac Rehabilitation"));
+			eb03.Add(new EB03("BH","Pediatric"));
+			eb03.Add(new EB03("BI","Nursery"));
+			eb03.Add(new EB03("BJ","Skin"));
+			eb03.Add(new EB03("BK","Orthopedic"));
+			eb03.Add(new EB03("BL","Cardiac"));
+			eb03.Add(new EB03("BM","Lymphatic"));
+			eb03.Add(new EB03("BN","Gastrointestinal"));
+			eb03.Add(new EB03("BP","Endocrine"));
+			eb03.Add(new EB03("BQ","Neurology"));
+			eb03.Add(new EB03("BR","Eye"));
+			eb03.Add(new EB03("BS","Invasive Procedures"));
 			//------------------------------------------------------------------------------------------------------
 			EB04=new Dictionary<string,string>();
 			EB04.Add("12","Medicare Secondary Working Aged Beneficiary or Spouse with Employer Group Health Plan");
@@ -439,6 +458,47 @@ namespace OpenDentBusiness
 		public BenefitCoverageLevel CoverageLevel {
 			get { return coverageLevel; }
 			set { coverageLevel = value; }
+		}
+
+		public string Code {
+			get { return code; }
+			set { code = value; }
+		}
+
+		public string Descript {
+			get { return descript; }
+			set { descript = value; }
+		}
+
+		public bool IsSupported {
+			get { return isSupported; }
+			set { isSupported = value; }
+		}
+	}
+
+	public class EB03 {
+		private string code;
+		private string descript;
+		private EbenefitCategory serviceType;
+		private bool isSupported;
+
+		public EB03(string code,string descript,EbenefitCategory serviceType) {
+			this.code=code;
+			this.descript=descript;
+			this.serviceType=serviceType;
+			this.isSupported=true;
+		}
+
+		public EB03(string code,string descript) {
+			this.code=code;
+			this.descript=descript;
+			this.serviceType=EbenefitCategory.None;//ignored
+			this.isSupported=false;
+		}
+
+		public EbenefitCategory ServiceType {
+			get { return serviceType; }
+			set { serviceType = value; }
 		}
 
 		public string Code {

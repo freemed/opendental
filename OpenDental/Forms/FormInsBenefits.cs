@@ -979,6 +979,7 @@ namespace OpenDental{
 				|| CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.Restorative)==null
 				|| CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)==null
+				|| CovCats.GetForEbenCat(EbenefitCategory.DiagnosticXRay)==null
 				)
 			{
 				dontAllowSimplified=true;
@@ -1063,7 +1064,8 @@ namespace OpenDental{
 				//annual max individual
 				if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Limitations
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
+					&& (ben.CovCatNum==0
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum)
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1078,7 +1080,8 @@ namespace OpenDental{
 				//annual max family
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Limitations
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
+					&& (ben.CovCatNum==0
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum)
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1093,7 +1096,8 @@ namespace OpenDental{
 				//deductible individual
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Deductible
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
+					&& (ben.CovCatNum==0
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum)
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1108,7 +1112,8 @@ namespace OpenDental{
 				//deductible family
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Deductible
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
+					&& (ben.CovCatNum==0
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum)
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1156,9 +1161,9 @@ namespace OpenDental{
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D1204"
 					&& ben.BenefitType==InsBenefitType.Limitations
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
-					&& ben.Percent==0
+					&& ben.Percent==-1
 					&& ben.QuantityQualifier==BenefitQuantity.AgeLimit)
 					//&& ben.TimePeriod might be none or calYear, or ServiceYear.
 				{
@@ -1168,7 +1173,7 @@ namespace OpenDental{
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D0274"//4BW
 					&& ben.BenefitType==InsBenefitType.Limitations
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
@@ -1191,7 +1196,7 @@ namespace OpenDental{
 				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D0330"//Pano
 					&& ben.BenefitType==InsBenefitType.Limitations
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
@@ -1214,7 +1219,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Limitations
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Percent==-1
 					&& (ben.QuantityQualifier==BenefitQuantity.Months 
@@ -1238,7 +1243,7 @@ namespace OpenDental{
 					&& ben.BenefitType==InsBenefitType.Limitations
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum
 					&& ben.PatPlanNum==0
-					&& ben.Percent==0
+					&& ben.Percent==-1
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
 					&& ben.TimePeriod==BenefitTimePeriod.Lifetime)
@@ -1249,7 +1254,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1267,7 +1272,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1282,7 +1287,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1297,7 +1302,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Restorative).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1312,7 +1317,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1327,7 +1332,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1341,7 +1346,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1355,7 +1360,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Crowns).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1369,7 +1374,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1383,7 +1388,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.MaxillofacialProsth).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1397,7 +1402,7 @@ namespace OpenDental{
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.CoInsurance
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Accident).CovCatNum
-					&& ben.MonetaryAmt==0
+					&& ben.MonetaryAmt==-1
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
@@ -1469,14 +1474,14 @@ namespace OpenDental{
 			bool allCalendarYear=true;
 			bool allServiceYear=true;
 			for(int i=0;i<benefitList.Count;i++) {
-				if(((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.CalendarYear) {
+				if(benefitList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
 					allServiceYear=false;
 				}
-				if(((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.ServiceYear) {
+				if(benefitList[i].TimePeriod==BenefitTimePeriod.ServiceYear) {
 					allCalendarYear=false;
 				}
 				row=new ODGridRow();
-				if(((Benefit)benefitList[i]).PatPlanNum==0) {//attached to plan
+				if(benefitList[i].PatPlanNum==0) {//attached to plan
 					row.Cells.Add("");
 				}
 				else {
@@ -1500,8 +1505,8 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(Lan.g("enumInsBenefitType",benefitList[i].BenefitType.ToString()));
 				}
-				if(((Benefit)benefitList[i]).CodeNum==0) {
-					row.Cells.Add(CovCats.GetDesc(((Benefit)benefitList[i]).CovCatNum));
+				if(benefitList[i].CodeNum==0) {
+					row.Cells.Add(CovCats.GetDesc(benefitList[i].CovCatNum));
 				}
 				else {
 					ProcedureCode proccode=ProcedureCodes.GetProcCode(benefitList[i].CodeNum);
@@ -1513,26 +1518,29 @@ namespace OpenDental{
 				else{
 					row.Cells.Add(benefitList[i].Percent.ToString());
 				}
-				if(((Benefit)benefitList[i]).MonetaryAmt==0) {
-					if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Deductible) {
-						row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
-					}
-					else {
-						row.Cells.Add("");
-					}
+				if(benefitList[i].MonetaryAmt==-1) {
+					row.Cells.Add("");
 				}
+				//else{
+				//	if(benefitList[i].BenefitType==InsBenefitType.Deductible) {
+				//		row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
+				//	}
+				//	else {
+				//		
+				//	}
+				//}
 				else {
-					row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
+					row.Cells.Add(benefitList[i].MonetaryAmt.ToString("n0"));
 				}
-				if(((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.None) {
+				if(benefitList[i].TimePeriod==BenefitTimePeriod.None) {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(Lan.g("enumBenefitTimePeriod",((Benefit)benefitList[i]).TimePeriod.ToString()));
+					row.Cells.Add(Lan.g("enumBenefitTimePeriod",benefitList[i].TimePeriod.ToString()));
 				}
-				if(((Benefit)benefitList[i]).Quantity>0) {
-					row.Cells.Add(((Benefit)benefitList[i]).Quantity.ToString()+" "
-						+Lan.g("enumBenefitQuantity",((Benefit)benefitList[i]).QuantityQualifier.ToString()));
+				if(benefitList[i].Quantity>0) {
+					row.Cells.Add(benefitList[i].Quantity.ToString()+" "
+						+Lan.g("enumBenefitQuantity",benefitList[i].QuantityQualifier.ToString()));
 				}
 				else {
 					row.Cells.Add("");
@@ -1648,7 +1656,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			bool hasIndivid=false;
+			/*bool hasIndivid=false;
 			if(textAnnualMax.Text != "" || textDeductible.Text != "" || textDeductPrev.Text != "") {
 				hasIndivid=true;
 			}
@@ -1659,7 +1667,7 @@ namespace OpenDental{
 			if(hasIndivid && hasFam) {
 				MsgBox.Show(this,"You can enter either Individual or Family benefits, but not both.");
 				return false;
-			}
+			}*/
 			benefitListAll=new List<Benefit>(benefitList);
 			Benefit ben;
 			//annual max individual
@@ -1667,7 +1675,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(checkCalYearMain.Checked){
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -1684,7 +1692,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(checkCalYearMain.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -1701,7 +1709,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.Deductible;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(checkCalYearMain.Checked){
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -1718,7 +1726,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=0;
 				ben.BenefitType=InsBenefitType.Deductible;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(checkCalYearMain.Checked) {
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
@@ -1801,7 +1809,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=ProcedureCodes.GetCodeNum("D1204");
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;//ignored
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				ben.QuantityQualifier=BenefitQuantity.AgeLimit;
 				ben.Quantity=PIn.PInt(textFlo.Text);
@@ -1812,7 +1820,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=ProcedureCodes.GetCodeNum("D0274");//4BW
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;//ignored
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(comboBW.SelectedIndex==0){
 					ben.QuantityQualifier=BenefitQuantity.Years;
@@ -1838,7 +1846,7 @@ namespace OpenDental{
 				ben=new Benefit();
 				ben.CodeNum=ProcedureCodes.GetCodeNum("D0330");//Pano
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;//ignored
+				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;
 				if(comboPano.SelectedIndex==0) {
 					ben.QuantityQualifier=BenefitQuantity.Years;

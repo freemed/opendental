@@ -1084,32 +1084,34 @@ namespace OpenDentBusiness{
 
 	///<summary>The X12 benefit categories.  Used to link the user-defined CovCats to the corresponding X12 category.</summary>
 	public enum EbenefitCategory{
-		///<summary>0- Default.</summary>
+		///<summary>0- Default.  Applies to all codes.</summary>
 		None,
 		///<summary>1- X12: 30 and 35. All ADA codes.</summary>
 		General,
-		///<summary>2- X12: 23. ADA D0000-D0999</summary>
+		///<summary>2- X12: 23. ADA D0000-D0999.  This includes DiagnosticXray.</summary>
 		Diagnostic,
 		///<summary>3- X12: 24. ADA D4000</summary>
 		Periodontics,
-		///<summary>4- X12: 25. ADA D2000</summary>
+		///<summary>4- X12: 25. ADA D2000-D2699, and D2800-D2999.</summary>
 		Restorative,
 		///<summary>5- X12: 26. ADA D3000</summary>
 		Endodontics,
 		///<summary>6- X12: 27. ADA D5900-D5999</summary>
 		MaxillofacialProsth,
-		///<summary>7- X12: 36. Subcategory of restorative.</summary>
+		///<summary>7- X12: 36. Exclusive subcategory of restorative.  D2700-D2799</summary>
 		Crowns,
 		///<summary>8- X12: 37. ADA range?</summary>
 		Accident,
 		///<summary>9- X12: 38. ADA D8000</summary>
 		Orthodontics,
-		///<summary>10- X12: 39. ADA D5000-D5899 (removable), and D6200-D6900 (fixed)</summary>
+		///<summary>10- X12: 39. ADA D5000-D5899 (removable), and D6200-D6899 (fixed)</summary>
 		Prosthodontics,
 		///<summary>11- X12: 40. ADA D7000</summary>
 		OralSurgery,
 		///<summary>12- X12: 41. ADA D1000</summary>
-		RoutinePreventive
+		RoutinePreventive,
+		///<summary>13- X12: 4. ADA D0200-D0399.  So this is like an optional category which is otherwise considered to be diagnosic.</summary>
+		DiagnosticXRay
 	}
 
 	///<summary>Used in accounting for chart of accounts.</summary>

@@ -374,7 +374,12 @@ namespace OpenDental{
 			else {
 				textPercent.Text=BenCur.Percent.ToString();
 			}
-			textAmount.Text=BenCur.MonetaryAmt.ToString("n");
+			if(BenCur.MonetaryAmt==-1) {
+				textAmount.Text="";
+			}
+			else {
+				textAmount.Text=BenCur.MonetaryAmt.ToString("n");
+			}
 			listTimePeriod.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(BenefitTimePeriod)).Length;i++) {
 				listTimePeriod.Items.Add(Lan.g("enumBenefitTimePeriod",Enum.GetNames(typeof(BenefitTimePeriod))[i]));
@@ -506,8 +511,18 @@ namespace OpenDental{
 			}
 			BenCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 			BenCur.BenefitType=(InsBenefitType)listType.SelectedIndex;
-			BenCur.Percent=PIn.PInt(textPercent.Text);
-			BenCur.MonetaryAmt=PIn.PDouble(textAmount.Text);
+			if(textPercent.Text=="") {
+				BenCur.Percent=-1;
+			}
+			else {
+				BenCur.Percent=PIn.PInt(textPercent.Text);
+			}
+			if(textAmount.Text=="") {
+				BenCur.MonetaryAmt=-1;
+			}
+			else {
+				BenCur.MonetaryAmt=PIn.PDouble(textAmount.Text);
+			}
 			/*if(isAnnualMax){
 				if(listTimePeriod.SelectedIndex==0){
 					BenCur.TimePeriod=BenefitTimePeriod.ServiceYear;

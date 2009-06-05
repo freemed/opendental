@@ -12,11 +12,14 @@ namespace OpenDental {
 	public partial class FormBenefitElectHistory:Form {
 		private List<Etrans> list;
 		private int PlanNum;
+		private int PatPlanNum;
+		public List<Benefit> BenList;
 
-		public FormBenefitElectHistory(int planNum) {
+		public FormBenefitElectHistory(int planNum,int patPlanNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PlanNum=planNum;
+			PatPlanNum=patPlanNum;
 		}
 
 		private void FormBenefitElectHistory_Load(object sender,EventArgs e) {
@@ -45,8 +48,9 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEtrans270Edit formE=new FormEtrans270Edit();
+			FormEtrans270Edit formE=new FormEtrans270Edit(PatPlanNum,PlanNum);
 			formE.EtransCur=list[e.Row];
+			formE.benList=BenList;
 			formE.ShowDialog();
 			FillGrid();
 		}

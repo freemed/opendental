@@ -10,7 +10,7 @@ namespace OpenDental.Eclaims {
 	public class x270Controller {
 
 		///<summary>The insplan that's passed in need not be properly updated to the database first.</summary>
-		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,int patNum,Carrier carrier) {
+		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,int patNum,Carrier carrier,List<Benefit> benList,int patPlanNum) {
 			//throw exception if missing info
 			Patient pat=Patients.GetPat(patNum);
 			Patient subsc=Patients.GetPat(plan.Subscriber);
@@ -92,9 +92,10 @@ namespace OpenDental.Eclaims {
 			}
 			Etranss.Update(etrans);
 			//show the user a list of benefits to pick from for import--------------------------
-			FormEtrans270Edit formE=new FormEtrans270Edit();
+			FormEtrans270Edit formE=new FormEtrans270Edit(patPlanNum,plan.PlanNum);
 			formE.EtransCur=etrans;
 			formE.IsInitialResponse=true;
+			formE.benList=benList;
 			formE.ShowDialog();
 		}
 

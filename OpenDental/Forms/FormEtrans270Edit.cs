@@ -21,10 +21,15 @@ namespace OpenDental {
 		private List<EB271> listEB;
 		private List<DTP271> listDTP;
 		private X271 x271;
+		public List<Benefit> benList;
+		private int PatPlanNum;
+		private int PlanNum;
 
-		public FormEtrans270Edit() {
+		public FormEtrans270Edit(int patPlanNum,int planNum) {
 			InitializeComponent();
 			Lan.F(this);
+			PatPlanNum=patPlanNum;
+			PlanNum=planNum;
 		}
 
 		private void FormEtrans270Edit_Load(object sender,EventArgs e) {
@@ -42,7 +47,14 @@ namespace OpenDental {
 			}
 			FillGridDates();
 			FillGrid();
-			
+			FillGridBen();
+			if(IsInitialResponse) {
+				for(int i=0;i<listEB.Count;i++) {
+					if(listEB[i].Benefitt !=null) {
+						gridMain.SetSelected(i,true);
+					}
+				}
+			}
 		}
 
 		private void FormEtrans270Edit_Shown(object sender,EventArgs e) {
@@ -92,10 +104,54 @@ namespace OpenDental {
 			for(int i=0;i<listEB.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listEB[i].GetDescription());
-				row.Cells.Add(listEB[i].Benefitt.ToString());
+				if(listEB[i].Benefitt==null) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(listEB[i].Benefitt.ToString());
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void FillGridBen() {
+			gridBen.BeginUpdate();
+			gridBen.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("",420);
+			gridBen.Columns.Add(col);
+			gridBen.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<benList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(benList[i].ToString());
+				gridBen.Rows.Add(row);
+			}
+			gridBen.EndUpdate();
+		}
+
+		private void gridBen_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			int benefitListI=benList.IndexOf(benList[e.Row]);
+			FormBenefitEdit FormB=new FormBenefitEdit(0,PlanNum);
+			FormB.BenCur=benList[e.Row];
+			FormB.ShowDialog();
+			if(FormB.BenCur==null) {//user deleted
+				benList.RemoveAt(benefitListI);
+			}
+			FillGridBen();
+		}
+
+		private void butImport_Click(object sender,EventArgs e) {
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				if(listEB[gridMain.SelectedIndices[i]].Benefitt==null){
+					MsgBox.Show(this,"All selected rows must contain benefits to import.");
+					return;
+				}
+			}
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				benList.Add(listEB[gridMain.SelectedIndices[i]].Benefitt);
+			}
+			FillGridBen();
 		}
 
 		private void butShowRequest_Click(object sender,EventArgs e) {
@@ -135,6 +191,10 @@ namespace OpenDental {
 			//}
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

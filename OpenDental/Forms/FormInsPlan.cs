@@ -3165,26 +3165,34 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(benefitList[i].Percent.ToString());
 				}
-				if(((Benefit)benefitList[i]).MonetaryAmt==0) {
-					if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Deductible) {
-						row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
-					}
-					else {
-						row.Cells.Add("");
-					}
+				if(benefitList[i].MonetaryAmt == -1) {
+					//if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Deductible) {
+					//	row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
+					//}
+					//else {
+					row.Cells.Add("");
+					//}
 				}
 				else {
-					row.Cells.Add(((Benefit)benefitList[i]).MonetaryAmt.ToString("n0"));
+					row.Cells.Add(benefitList[i].MonetaryAmt.ToString("n0"));
 				}
-				if(((Benefit)benefitList[i]).TimePeriod==BenefitTimePeriod.None) {
+				if(benefitList[i].TimePeriod==BenefitTimePeriod.None) {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(Lan.g("enumBenefitTimePeriod",((Benefit)benefitList[i]).TimePeriod.ToString()));
+					row.Cells.Add(Lan.g("enumBenefitTimePeriod",benefitList[i].TimePeriod.ToString()));
 				}
-				if(((Benefit)benefitList[i]).Quantity>0) {
-					row.Cells.Add(((Benefit)benefitList[i]).Quantity.ToString()+" "
-						+Lan.g("enumBenefitQuantity",((Benefit)benefitList[i]).QuantityQualifier.ToString()));
+				if(benefitList[i].Quantity>0) {
+					if(benefitList[i].QuantityQualifier==BenefitQuantity.NumberOfServices
+						&&(benefitList[i].TimePeriod==BenefitTimePeriod.ServiceYear
+						|| benefitList[i].TimePeriod==BenefitTimePeriod.CalendarYear))
+					{
+						row.Cells.Add(benefitList[i].Quantity.ToString()+" "+Lan.g(this,"times per year")+" ");
+					}
+					else {
+						row.Cells.Add(benefitList[i].Quantity.ToString()+" "
+							+Lan.g("enumBenefitQuantity",benefitList[i].QuantityQualifier.ToString()));
+					}
 				}
 				else {
 					row.Cells.Add("");
@@ -3255,18 +3263,21 @@ namespace OpenDental{
 				return;
 			}
 			try {
-				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur);
+				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur,benefitList,PatPlanCur.PatPlanNum);
 			}
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
 				MessageBox.Show(ex.Message);
 			}
 			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
+			FillBenefits();
 		}
 
 		private void butHistoryElect_Click(object sender,EventArgs e) {
-			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum);
+			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum,PatPlanCur.PatPlanNum);
+			formB.BenList=benefitList;
 			formB.ShowDialog();
 			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
+			FillBenefits();
 		}
 
 		#region EligibilityCheckDentalXchange

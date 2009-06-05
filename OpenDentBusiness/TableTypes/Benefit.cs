@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 
 		public Benefit() {
 			Percent=-1;
+			MonetaryAmt=-1;
 		}
 
 		public override string ToString() {
