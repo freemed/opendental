@@ -174,6 +174,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If none assigned, it will return None.</summary>
 		public static EbenefitCategory GetEbenCat(int covCatNum) {
+			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<CovCatC.ListShort.Count;i++) {
 				if(covCatNum==CovCatC.ListShort[i].CovCatNum) {
 					return CovCatC.ListShort[i].EbenefitCat;
@@ -182,7 +183,156 @@ namespace OpenDentBusiness {
 			return EbenefitCategory.None;
 		}
 
-		
+		public static int CountForEbenCat(EbenefitCategory eben) {
+			//No need to check RemotingRole; no call to db.
+			int retVal=0;
+			for(int i=0;i<CovCatC.ListShort.Count;i++) {
+				if(CovCatC.ListShort[i].EbenefitCat == eben) {
+					retVal++;
+				}
+			}
+			return retVal;
+		}
+
+		public static void SetOrdersToDefault() {
+			//This can only be run if the validation checks have been run first.
+			//No need to check RemotingRole; no call to db.
+			SetOrder(GetForEbenCat(EbenefitCategory.General),0);
+			SetOrder(GetForEbenCat(EbenefitCategory.Diagnostic),1);
+			SetOrder(GetForEbenCat(EbenefitCategory.DiagnosticXRay),2);
+			SetOrder(GetForEbenCat(EbenefitCategory.RoutinePreventive),3);
+			SetOrder(GetForEbenCat(EbenefitCategory.Restorative),4);
+			SetOrder(GetForEbenCat(EbenefitCategory.Endodontics),5);
+			SetOrder(GetForEbenCat(EbenefitCategory.Periodontics),6);
+			SetOrder(GetForEbenCat(EbenefitCategory.OralSurgery),7);
+			SetOrder(GetForEbenCat(EbenefitCategory.Crowns),8);
+			SetOrder(GetForEbenCat(EbenefitCategory.Prosthodontics),9);
+			SetOrder(GetForEbenCat(EbenefitCategory.MaxillofacialProsth),10);
+			SetOrder(GetForEbenCat(EbenefitCategory.Accident),11);
+			SetOrder(GetForEbenCat(EbenefitCategory.Orthodontics),12);
+			//now set the remaining categories to come after the ebens.
+			int idx=14;
+			for(int i=0;i<CovCatC.ListShort.Count;i++) {
+				if(CovCatC.ListShort[i].EbenefitCat !=EbenefitCategory.None) {
+					continue;
+				}
+				SetOrder(CovCatC.ListShort[i],idx);
+				idx++;
+			}
+			//finally, the hidden categories
+			for(int i=0;i<CovCatC.Listt.Count;i++) {
+				if(!CovCatC.Listt[i].IsHidden) {
+					continue;
+				}
+				SetOrder(CovCatC.Listt[i],idx);
+				idx++;
+			}
+		}
+
+		public static void SetSpansToDefault() {
+			//This can only be run if the validation checks have been run first.
+			//No need to check RemotingRole; no call to db.
+			int covCatNum;
+			CovSpan span;
+			covCatNum=GetForEbenCat(EbenefitCategory.General).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D0000";
+			span.ToCode="D9999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D0000";
+			span.ToCode="D0999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.DiagnosticXRay).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D0200";
+			span.ToCode="D0399";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D1000";
+			span.ToCode="D1999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Restorative).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D2000";
+			span.ToCode="D2699";
+			CovSpans.Insert(span);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D2800";
+			span.ToCode="D2999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Endodontics).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D3000";
+			span.ToCode="D3999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Periodontics).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D4000";
+			span.ToCode="D4999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.OralSurgery).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D7000";
+			span.ToCode="D7999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Crowns).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D2700";
+			span.ToCode="D2799";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Prosthodontics).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D5000";
+			span.ToCode="D5899";
+			CovSpans.Insert(span);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D6200";
+			span.ToCode="D6899";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.MaxillofacialProsth).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D5900";
+			span.ToCode="D5999";
+			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Accident).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			covCatNum=GetForEbenCat(EbenefitCategory.Orthodontics).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D8000";
+			span.ToCode="D8999";
+			CovSpans.Insert(span);
+		}
+
+
 
 	}
 

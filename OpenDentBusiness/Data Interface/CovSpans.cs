@@ -33,11 +33,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Update(CovSpan span) {
+		public static void Update(CovSpan span) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),span);
 				return;
 			}
+			Validate(span);
 			string command="UPDATE covspan SET "
 				+"CovCatNum = '"+POut.PInt   (span.CovCatNum)+"'"
 				+",FromCode = '"+POut.PString(span.FromCode)+"'"
@@ -47,11 +48,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(CovSpan span) {
+		public static void Insert(CovSpan span) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),span);
 				return;
 			}
+			Validate(span);
 			string command="INSERT INTO covspan (CovCatNum,"
 				+"FromCode,ToCode) VALUES("
 				+"'"+POut.PInt   (span.CovCatNum)+"', "
@@ -61,19 +63,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void InsertOrUpdate(CovSpan span, bool IsNew){
+		private static void Validate(CovSpan span){
 			//No need to check RemotingRole; no call to db.
 			if(span.FromCode=="" || span.ToCode=="") {
 				throw new ApplicationException(Lans.g("FormInsSpanEdit","Codes not allowed to be blank."));
 			}
 			if(String.Compare(span.ToCode,span.FromCode)<0){
 				throw new ApplicationException(Lans.g("FormInsSpanEdit","From Code must be less than To Code.  Remember that the comparison is alphabetical, not numeric.  For instance, 100 would come before 2, but after 02."));
-			}
-			if(IsNew){
-				Insert(span);
-			}
-			else{
-				Update(span);
 			}
 		}
 
@@ -85,6 +81,16 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE FROM covspan"
 				+" WHERE CovSpanNum = '"+POut.PInt(span.CovSpanNum)+"'";
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static void DeleteForCat(int covCatNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),covCatNum);
+				return;
+			}
+			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.PInt(covCatNum);
 			Db.NonQ(command);
 		}
 

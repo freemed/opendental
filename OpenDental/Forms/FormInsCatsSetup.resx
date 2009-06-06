@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>The categories toward the top are more general, while the categories toward the bottom override the general categories higher up.  It is strongly recommended to make the list look very similar to the example in the manual.  This will allow you to eventually use electronic elegibility and benefit processing.  While this is not yet a feature of our software, you need to start planning for it now.</value>
+    <value>The categories toward the top are more general, while the categories toward the bottom override the general categories higher up.  If you are in the United States, it is strongly recommended to use the Set to Defaults button.  This will allow you to use electronic eligibility and benefit processing.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

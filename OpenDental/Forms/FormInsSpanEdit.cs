@@ -175,7 +175,12 @@ namespace OpenDental{
 			CovSpanCur.FromCode=textFrom.Text;
 			CovSpanCur.ToCode=textTo.Text;
 			try{
-				CovSpans.InsertOrUpdate(CovSpanCur,IsNew);
+				if(IsNew) {
+					CovSpans.Insert(CovSpanCur);
+				}
+				else {
+					CovSpans.Update(CovSpanCur);
+				}
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);

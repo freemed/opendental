@@ -473,6 +473,8 @@ DROP TABLE IF EXISTS etAck";
 
 
 
+
+
 				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
