@@ -177,7 +177,7 @@ namespace OpenDental {
 			this.butDefaultsReset.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDefaultsReset.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDefaultsReset.CornerRadius = 4F;
-			this.butDefaultsReset.Location = new System.Drawing.Point(512,451);
+			this.butDefaultsReset.Location = new System.Drawing.Point(512,430);
 			this.butDefaultsReset.Name = "butDefaultsReset";
 			this.butDefaultsReset.Size = new System.Drawing.Size(86,24);
 			this.butDefaultsReset.TabIndex = 18;
@@ -186,7 +186,7 @@ namespace OpenDental {
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(511,479);
+			this.label1.Location = new System.Drawing.Point(511,458);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(148,51);
 			this.label1.TabIndex = 20;
