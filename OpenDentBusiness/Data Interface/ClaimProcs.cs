@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				cp.Percentage     = PIn.PInt   (table.Rows[i][17].ToString());
 				cp.PercentOverride= PIn.PInt   (table.Rows[i][18].ToString());
 				cp.CopayAmt       = PIn.PDouble(table.Rows[i][19].ToString());
-				cp.OverrideInsEst = PIn.PDouble(table.Rows[i][20].ToString());
+				cp.BaseEstOverride= PIn.PDouble(table.Rows[i][20].ToString());
 				cp.NoBillIns      = PIn.PBool  (table.Rows[i][21].ToString());
 				cp.DedBeforePerc  = PIn.PBool  (table.Rows[i][22].ToString());
 				cp.OverAnnualMax  = PIn.PDouble(table.Rows[i][23].ToString());
@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 			command+="ProcNum,ClaimNum,PatNum,ProvNum"
 				+",FeeBilled,InsPayEst,DedApplied,Status,InsPayAmt,Remarks,ClaimPaymentNum"
 				+",PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride"
-				+",CopayAmt,OverrideInsEst,NoBillIns,DedBeforePerc,OverAnnualMax"
+				+",CopayAmt,BaseEstOverride,NoBillIns,DedBeforePerc,OverAnnualMax"
 				+",PaidOtherIns,BaseEst,CopayOverride,ProcDate,DateEntry,LineNumber) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(cp.ClaimProcNum)+"', ";
@@ -115,20 +115,16 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(cp.Percentage)+"', "
 				+"'"+POut.PInt(cp.PercentOverride)+"', "
 				+"'"+POut.PDouble(cp.CopayAmt)+"', "
-				+"'"+POut.PDouble(cp.OverrideInsEst)+"', "
+				+"'"+POut.PDouble(cp.BaseEstOverride)+"', "
 				+"'"+POut.PBool(cp.NoBillIns)+"', "
 				+"'"+POut.PBool(cp.DedBeforePerc)+"', "
 				+"'"+POut.PDouble(cp.OverAnnualMax)+"', "
 				+"'"+POut.PDouble(cp.PaidOtherIns)+"', "
 				+"'"+POut.PDouble(cp.BaseEst)+"', "
 				+"'"+POut.PDouble(cp.CopayOverride)+"', "
-				+POut.PDate(cp.ProcDate)+", ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
-				command+="NOW()";
-			}
-			command+=", '"+POut.PInt(cp.LineNumber)+"')";
+				+POut.PDate(cp.ProcDate)+", "
+				+"NOW(), "
+				+"'"+POut.PInt(cp.LineNumber)+"')";
 			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -158,22 +154,22 @@ namespace OpenDentBusiness{
 				+",Remarks = '"       +POut.PString(cp.Remarks)+"'"
 				+",ClaimPaymentNum= '"+POut.PInt(cp.ClaimPaymentNum)+"'"
 				+",PlanNum= '"        +POut.PInt(cp.PlanNum)+"'"
-				+",DateCP= "         +POut.PDate(cp.DateCP)
+				+",DateCP= "          +POut.PDate(cp.DateCP)
 				+",WriteOff= '"       +POut.PDouble(cp.WriteOff)+"'"
 				+",CodeSent= '"       +POut.PString(cp.CodeSent)+"'"
 				+",AllowedOverride= '"+POut.PDouble(cp.AllowedOverride)+"'"
 				+",Percentage= '"     +POut.PInt(cp.Percentage)+"'"
 				+",PercentOverride= '"+POut.PInt(cp.PercentOverride)+"'"
 				+",CopayAmt= '"       +POut.PDouble(cp.CopayAmt)+"'"
-				+",OverrideInsEst= '" +POut.PDouble(cp.OverrideInsEst)+"'"
+				+",BaseEstOverride= '"+POut.PDouble(cp.BaseEstOverride)+"'"
 				+",NoBillIns= '"      +POut.PBool(cp.NoBillIns)+"'"
 				+",DedBeforePerc= '"  +POut.PBool(cp.DedBeforePerc)+"'"
 				+",OverAnnualMax= '"  +POut.PDouble(cp.OverAnnualMax)+"'"
 				+",PaidOtherIns= '"   +POut.PDouble(cp.PaidOtherIns)+"'"
 				+",BaseEst= '"        +POut.PDouble(cp.BaseEst)+"'"
 				+",CopayOverride= '"  +POut.PDouble(cp.CopayOverride)+"'"
-				+",ProcDate= "       +POut.PDate(cp.ProcDate)
-				+",DateEntry= "      +POut.PDate(cp.DateEntry)
+				+",ProcDate= "        +POut.PDate(cp.ProcDate)
+				+",DateEntry= "       +POut.PDate(cp.DateEntry)
 				+",LineNumber= '"     +POut.PInt(cp.LineNumber)+"'"
 				+" WHERE claimprocnum = '"+POut.PInt(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
@@ -215,7 +211,7 @@ namespace OpenDentBusiness{
 			cp.Percentage=-1;
 			cp.PercentOverride=-1;
 			cp.CopayAmt=-1;
-			cp.OverrideInsEst=-1;
+			cp.BaseEstOverride=-1;
 			cp.NoBillIns=false;
 			cp.OverAnnualMax=-1;
 			cp.PaidOtherIns=-1;
@@ -467,7 +463,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After entering estimates from a preauth, this routine is called for each proc to override the ins est.</summary>
-		public static void OverrideInsEst(int procNum,int planNum,double insPayEst,List<ClaimProc> claimProcList){
+		public static void SetBaseEstOverride(int procNum,int planNum,double insPayEst,List<ClaimProc> claimProcList){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(procNum!=claimProcList[i].ProcNum) {
@@ -479,7 +475,7 @@ namespace OpenDentBusiness{
 				if(claimProcList[i].Status!=ClaimProcStatus.Estimate) {
 					continue;
 				}
-				claimProcList[i].OverrideInsEst=insPayEst;
+				claimProcList[i].BaseEstOverride=insPayEst;
 				Update(claimProcList[i]);
 			}
 		}

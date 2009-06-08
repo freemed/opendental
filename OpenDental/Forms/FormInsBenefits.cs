@@ -2089,49 +2089,56 @@ namespace OpenDental{
 				benefitListAll.Add(ben);
 			}
 			//deductible xray family
-
+			if(textDeductXrayFam.Text !="") {
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.DiagnosticXRay).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductXrayFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
+				benefitListAll.Add(ben);
+			}
 			//deductible preventive individual
-			//preventive
-			ben=new Benefit();
-			ben.CodeNum=0;
-			ben.BenefitType=InsBenefitType.Deductible;
-			ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-			ben.PlanNum=PlanNum;
-			if(checkCalYearMain.Checked) {
-				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			if(textDeductPrevent.Text !="") {
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductPrevent.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
+				benefitListAll.Add(ben);
 			}
-			else {
-				ben.TimePeriod=BenefitTimePeriod.ServiceYear;
-			}
-			ben.MonetaryAmt=PIn.PDouble(textDeductPrev.Text);
-			ben.CoverageLevel=BenefitCoverageLevel.Individual;
-			benefitListAll.Add(ben);
 			//deductible preventive family
-			//preventive
-			ben=new Benefit();
-			ben.CodeNum=0;
-			ben.BenefitType=InsBenefitType.Deductible;
-			ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
-			ben.PlanNum=PlanNum;
-			if(checkCalYearMain.Checked) {
-				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+			if(textDeductPreventFam.Text !="") {
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductPreventFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
+				benefitListAll.Add(ben);
 			}
-			else {
-				ben.TimePeriod=BenefitTimePeriod.ServiceYear;
-			}
-			ben.MonetaryAmt=PIn.PDouble(textDeductPrevFam.Text);
-			ben.CoverageLevel=BenefitCoverageLevel.Family;
-			benefitListAll.Add(ben);
-
-
-
-
-
-
-
-
-
-
 			//Diagnostic
 			if(textDiagnostic.Text !="") {
 				ben=new Benefit();

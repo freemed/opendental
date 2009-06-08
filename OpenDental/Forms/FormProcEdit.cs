@@ -2290,8 +2290,8 @@ namespace OpenDental{
 					tbIns.Cell[5,i]=ClaimProcsForProc[i].CopayAmt.ToString("n");
 				}
 				tbIns.Cell[6,i]=ClaimProcsForProc[i].BaseEst.ToString("n");
-				if(ClaimProcsForProc[i].OverrideInsEst!=-1){
-					tbIns.Cell[7,i]=ClaimProcsForProc[i].OverrideInsEst.ToString("n");
+				if(ClaimProcsForProc[i].BaseEstOverride!=-1){
+					tbIns.Cell[7,i]=ClaimProcsForProc[i].BaseEstOverride.ToString("n");
 					tbIns.FontBold[7,i]=true;
 				}
 				else{

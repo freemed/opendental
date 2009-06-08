@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public int ProvNum;
 		///<summary>Fee billed to insurance. Might not be the same as the actual fee.  The fee billed can be different than the actual procedure.  For instance, if you have set the insurance plan to bill insurance using UCR fees, then this field will contain the UCR fee instead of the fee that the patient was charged.</summary>
 		public double FeeBilled;
-		///<summary>Actual amount this carrier is expected to pay, after taking everything else into account. Considers annual max, override, percentAmt, copayAmt, deductible, etc. This estimate is computed automatically in TP module, and gets overwritten when sent to ins.</summary>
+		///<summary>Only if attached to a claim.  Actual amount this carrier is expected to pay, after taking everything else into account. Considers annual max, override, percentAmt, copayAmt, deductible, etc. This estimate is computed automatically when sent to ins.</summary>
 		public double InsPayEst;
 		///<summary>Deductible applied to this procedure only. If not sent to ins yet, then this will be set to an estimated amount based on the order in the TP.  Will be overwritten when actually sent to ins.</summary>
 		public double DedApplied;
@@ -43,15 +43,15 @@ namespace OpenDentBusiness{
 		public int Percentage;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  Can only be changed by user.</summary>
 		public int PercentOverride;
-		///<summary>-1 if blank. Calculated automatically. User can not edit but can use CopayOverride instead.  Opposite of InsEst, because this is the patient portion estimate.  Two different uses: 1. For capitation, this automates calculation of writeoff. 2. For any other insurance, it gets deducted during calculation as shown in the edit window. Neither use directly affects patient balance.</summary>
+		///<summary>-1 if blank. Calculated automatically. User cannot edit but can use CopayOverride instead.  Opposite of InsEst, because this is the patient portion estimate.  Two different uses: 1. For capitation, this automates calculation of writeoff. 2. For any other insurance, it gets deducted during calculation as shown in the edit window. Neither use directly affects patient balance.</summary>
 		public double CopayAmt;
-		///<summary>-1 if blank. Lets user override the percentAmt. This field is not updated when recalculating and is only changed by user.</summary>
-		public double OverrideInsEst;
+		///<summary>Was formerly called OverrideInsEst.  -1 if blank. Lets user override the base estimate. This field is not updated when recalculating and is only changed by user.</summary>
+		public double BaseEstOverride;
 		///<summary>Set to true to not bill to this insurance plan.</summary>
 		public bool NoBillIns;
-		///<summary>Set true to apply the deductible before the percentage instead of the usual way of applying it after.</summary>
+		///<summary>Set true to apply the deductible before the percentage instead of the usual way of applying it after.  Now handled at the InsPlan level and copied here.</summary>
 		public bool DedBeforePerc;
-		///<summary>-1 if blank. The amount to subtract during estimating because annual benefits have maxed out.</summary>
+		///<summary>-1 if blank. The amount to subtract during estimating because annual benefits have maxed out.  User cannot edit, but can use the insurance estimate override instead.</summary>
 		public double OverAnnualMax;
 		///<summary>-1 if blank. The amount paid by another insurance. This amount is then subtracted from what the current insurance would pay. So, always blank for primary claims.</summary>
 		public double PaidOtherIns;
@@ -65,6 +65,15 @@ namespace OpenDentBusiness{
 		public DateTime DateEntry;
 		///<summary>Assigned when claim is created as a way to order the procs showing on a claim.  Really only used in Canadian claims for now as F07.</summary>
 		public int LineNumber;
+		///<summary>-1 if blank.  Calculated automatically.  User cannot edit, but can use DedEstOverride instead.</summary>
+		public double DedEst;
+		///<summary>-1 if blank.  Overrides the DedEst value.</summary>
+		public double DedEstOverride;
+		///<summary>Always has a value.  BaseEst-(DedEst or DedEstOverride)-PaidOtherIns-OverAnnualMax.  User cannot edit, but can instead use InsEstTotalOverride.</summary>
+		public double InsEstTotal;
+		///<summary>-1 if blank.  Overrides the InsEstTotal value.</summary>
+		public double InsEstTotalOverride;
+
 
 		///<summary>Returns a copy of this ClaimProc.</summary>
 		public ClaimProc Copy(){

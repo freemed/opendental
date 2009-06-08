@@ -347,6 +347,9 @@ namespace OpenDentBusiness {
 				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear && benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
 					continue;
 				}
+				if(benList[i].CovCatNum==0) {
+					return benList[i].MonetaryAmt;
+				}
 				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
 				for(int j=0;j<spansForCat.Length;j++){
 					if(String.Compare(code,spansForCat[j].FromCode)>=0

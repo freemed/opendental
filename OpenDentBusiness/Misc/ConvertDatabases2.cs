@@ -469,6 +469,16 @@ DROP TABLE IF EXISTS etAck";
 				int covCatNum=Db.NonQ(command,true);
 				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0200','D0399')";
 				Db.NonQ(command);
+				command="ALTER TABLE claimproc CHANGE OverrideInsEst BaseEstOverride double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD DedEst double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD DedEstOverride double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD InsEstTotal double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD InsEstTotalOverride double NOT NULL";
+				Db.NonQ(command);
 
 
 

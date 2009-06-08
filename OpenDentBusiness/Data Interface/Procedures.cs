@@ -1190,10 +1190,10 @@ namespace OpenDentBusiness {
 					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
 						//if this is a Cap, then this will still work. Est comes out 0.
 						priBaseEst=claimProcs[i].BaseEst;
-						priOverride=claimProcs[i].OverrideInsEst;
+						priOverride=claimProcs[i].BaseEstOverride;
 					} else if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
 						secBaseEst=claimProcs[i].BaseEst;
-						secOverride=claimProcs[i].OverrideInsEst;
+						secOverride=claimProcs[i].BaseEstOverride;
 					}
 				}
 			}
@@ -1394,7 +1394,7 @@ namespace OpenDentBusiness {
 				cp.DateCP=proc.ProcDate;
 				cp.AllowedOverride=-1;
 				cp.PercentOverride=-1;
-				cp.OverrideInsEst=-1;
+				cp.BaseEstOverride=-1;
 				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.CodeNum).NoBillIns;
 				cp.OverAnnualMax=-1;
 				cp.PaidOtherIns=-1;

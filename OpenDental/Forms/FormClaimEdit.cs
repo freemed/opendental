@@ -3373,7 +3373,7 @@ namespace OpenDental{
 				//save changes now
 				for(int i=0;i<FormCPP.ClaimProcsToEdit.Count;i++) {
 					ClaimProcs.Update(FormCPP.ClaimProcsToEdit[i]);
-					ClaimProcs.OverrideInsEst(FormCPP.ClaimProcsToEdit[i].ProcNum,FormCPP.ClaimProcsToEdit[i].PlanNum,
+					ClaimProcs.SetBaseEstOverride(FormCPP.ClaimProcsToEdit[i].ProcNum,FormCPP.ClaimProcsToEdit[i].PlanNum,
 						FormCPP.ClaimProcsToEdit[i].InsPayEst,ClaimProcList);
 				}
 			}
