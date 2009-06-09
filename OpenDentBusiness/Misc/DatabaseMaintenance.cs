@@ -1554,9 +1554,18 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-
-
-
+		public static string StatementDateRangeMax(bool verbose) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
+			}
+			string log="";
+			command="UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
+			int numberFixed=Db.NonQ(command);
+			if(numberFixed>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Statement DateRangeTo max fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+			return log;
+		}
 
 
 

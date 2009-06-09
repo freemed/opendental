@@ -323,6 +323,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.SignalInFuture(verbose);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.StatementDateRangeMax(verbose);
+			Application.DoEvents();
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
 			SaveLogToFile();
 			//textLog.ScrollToCaret
