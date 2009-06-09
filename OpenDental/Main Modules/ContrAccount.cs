@@ -3240,7 +3240,7 @@ namespace OpenDental {
 					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
 			}
-			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			stmt.DateRangeTo=new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
 					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
