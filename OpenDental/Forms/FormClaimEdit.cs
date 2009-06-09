@@ -3856,6 +3856,7 @@ namespace OpenDental{
 			}
 			else{//all other claim types use original estimate claimproc.
 				List <Benefit> benList=Benefits.Refresh(PatPlanList);
+				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				for(int i=0;i<ClaimProcsForClaim.Count;i++){
 					//ClaimProcs.Cur=ClaimProcs.ForClaim[i];
 					if(ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental//supplementals are duplicate
@@ -3869,10 +3870,10 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].ClaimNum=0;
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Pri,PlanList,PatPlanList,benList);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Sec,PlanList,PatPlanList,benList);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList);
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

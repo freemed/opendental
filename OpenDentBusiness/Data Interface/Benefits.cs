@@ -387,21 +387,21 @@ namespace OpenDentBusiness {
 			return new DateTime(DateTime.Now.Year,1,1);
 		}
 
-		///<summary>Only use pri or sec, not tot.  Used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
-		public static int GetPercent(string myCode,InsPlan insPlan,PatPlan patPlan,List <Benefit> benList){
+		///<summary>Only use pri or sec, not tot.  Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
+		public static int GetPercent(string procCodeStr,string planType,int planNum,int patPlanNum,List <Benefit> benList){
 			//No need to check RemotingRole; no call to db.
-			if(insPlan.PlanType=="f" || insPlan.PlanType=="c"){
+			if(planType=="f" || planType=="c"){
 				return 100;//flat and cap are always covered 100%
 			}
 			CovSpan[] spansForCat;
 			//loop through benefits starting at bottom (most specific)
 			for(int i=benList.Count-1;i>=0;i--){
 				//if plan benefit, but no match
-				if(benList[i].PlanNum!=0 && insPlan.PlanNum!=benList[i].PlanNum){
+				if(benList[i].PlanNum!=0 && planNum!=benList[i].PlanNum){
 					continue;
 				}
 				//if patplan benefit, but no match
-				if(benList[i].PatPlanNum!=0 && patPlan.PatPlanNum!=benList[i].PatPlanNum){
+				if(benList[i].PatPlanNum!=0 && patPlanNum!=benList[i].PatPlanNum){
 					continue;
 				}
 				if(benList[i].BenefitType!=InsBenefitType.CoInsurance){
@@ -409,7 +409,7 @@ namespace OpenDentBusiness {
 				}
 				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
 				for(int j=0;j<spansForCat.Length;j++){
-					if(String.Compare(myCode,spansForCat[j].FromCode)>=0 && String.Compare(myCode,spansForCat[j].ToCode)<=0){
+					if(String.Compare(procCodeStr,spansForCat[j].FromCode)>=0 && String.Compare(procCodeStr,spansForCat[j].ToCode)<=0) {
 						return benList[i].Percent;
 					}
 				}

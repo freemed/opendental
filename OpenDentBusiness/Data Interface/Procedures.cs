@@ -1436,11 +1436,11 @@ namespace OpenDentBusiness {
 				//ignored: adjustment
 				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
 				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
-				if(claimProcs[i].PlanNum>0&&PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Pri,PlanList,patPlans,benefitList);
+				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlans[0].PatPlanNum,benefitList);
 				}
-				if(claimProcs[i].PlanNum>0&&PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc,PriSecTot.Sec,PlanList,patPlans,benefitList);
+				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlans[1].PatPlanNum,benefitList);
 				}
 				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate

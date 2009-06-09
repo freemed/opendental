@@ -479,6 +479,15 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc ADD InsEstTotalOverride double NOT NULL";
 				Db.NonQ(command);
+				command="UPDATE claimproc SET DedApplied=-1 WHERE ClaimNum=0";//if not attached to a claim, clear this value
+				Db.NonQ(command);
+				command="UPDATE claimproc SET DedEstOverride=-1";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET InsEstTotal=BaseEst";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET InsEstTotalOverride=-1";
+				Db.NonQ(command);
+
 
 
 

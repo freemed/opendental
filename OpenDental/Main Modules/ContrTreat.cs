@@ -1044,7 +1044,7 @@ namespace OpenDental{
 								if(insRem<0) {
 									insRem=0;
 								}
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
+								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i].ProcFee,ProcListTP[i].ToothNum,ProcListTP[i].CodeNum,PriPlanCur,PatPlanList[0].PatPlanNum,BenefitList);//handles dedBeforePerc
 								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
 								if(claimproc.DedBeforePerc) {
 									int percent=100;
@@ -1117,7 +1117,7 @@ namespace OpenDental{
 								}
 								//next line is supposed to handle dedBeforePerc, but it will get confused with sec ins.
 								//There is no easy solution
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Sec,InsPlanList,PatPlanList,BenefitList);
+								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i].ProcFee,ProcListTP[i].ToothNum,ProcListTP[i].CodeNum,SecPlanCur,PatPlanList[1].PatPlanNum,BenefitList);
 								secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
 								//this math is done here instead of in GetEst to ensure accuracy:
 								if(fee-priIns-secIns < 0) {
@@ -1165,7 +1165,12 @@ namespace OpenDental{
 					if(PriPlanCur!=null && PriPlanCur.PlanType=="p"){//PPO
 						double insplanAllowed=Fees.GetAmount(ProcListTP[i].CodeNum,PriPlanCur.FeeSched);
 						if(insplanAllowed!=-1){
-							discount=fee-insplanAllowed;
+							if(insplanAllowed > fee) {
+								discount=0;
+							}
+							else {
+								discount=fee-insplanAllowed;
+							}
 						}
 						//else, if -1 fee not found, then do not show a discount. User can override estimate if they disagree.
 					}

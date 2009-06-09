@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 		public DateTime DateEntry;
 		///<summary>Assigned when claim is created as a way to order the procs showing on a claim.  Really only used in Canadian claims for now as F07.</summary>
 		public int LineNumber;
-		///<summary>-1 if blank.  Calculated automatically.  User cannot edit, but can use DedEstOverride instead.</summary>
+		///<summary>-1 if blank.  Not sure why we need to allow -1.  Calculated automatically.  User cannot edit, but can use DedEstOverride instead.</summary>
 		public double DedEst;
 		///<summary>-1 if blank.  Overrides the DedEst value.</summary>
 		public double DedEstOverride;

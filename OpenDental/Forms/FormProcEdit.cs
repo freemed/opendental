@@ -2297,8 +2297,28 @@ namespace OpenDental{
 				else{
 					tbIns.FontBold[6,i]=true;
 				}
-				tbIns.Cell[8,i]=ClaimProcsForProc[i].DedApplied.ToString("n");
-				tbIns.Cell[9,i]=ClaimProcsForProc[i].InsPayEst.ToString("n");
+				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
+					if(ClaimProcsForProc[i].DedEstOverride != -1) {
+						tbIns.Cell[8,i]=ClaimProcsForProc[i].DedEstOverride.ToString("n");
+					}
+					else if(ClaimProcsForProc[i].DedEst > 0){
+						tbIns.Cell[8,i]=ClaimProcsForProc[i].DedEst.ToString("n");
+					}
+				}
+				else {
+					tbIns.Cell[8,i]=ClaimProcsForProc[i].DedApplied.ToString("n");
+				}
+				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
+					if(ClaimProcsForProc[i].InsEstTotalOverride != -1) {
+						tbIns.Cell[9,i]=ClaimProcsForProc[i].InsEstTotalOverride.ToString("n");
+					}
+					else {//show even if zero
+						tbIns.Cell[9,i]=ClaimProcsForProc[i].InsEstTotal.ToString("n");
+					}
+				}
+				else{
+					tbIns.Cell[9,i]=ClaimProcsForProc[i].InsPayEst.ToString("n");
+				}
 				tbIns.Cell[10,i]=ClaimProcsForProc[i].InsPayAmt.ToString("n");
 				tbIns.Cell[11,i]=ClaimProcsForProc[i].WriteOff.ToString("n");
 				tbIns.Cell[12,i]=ClaimProcsForProc[i].Remarks;
@@ -2317,9 +2337,10 @@ namespace OpenDental{
 					tbIns.Cell[11,i]="";//writeoff
 				}
 			}
-			if(ClaimProcsForProc.Count==0)
+			if(ClaimProcsForProc.Count==0) {
 				checkNoBillIns.CheckState=CheckState.Unchecked;
-			else if(allNoBillIns){
+			}
+			else if(allNoBillIns) {
 				checkNoBillIns.CheckState=CheckState.Checked;
 			}
 			tbIns.SetGridColor(Color.LightGray);
@@ -2345,10 +2366,10 @@ namespace OpenDental{
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
 			if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur,PriSecTot.Pri,PlanList,PatPlanList,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[0].PatPlanNum,benList);
 			}
 			else if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,2)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur,PriSecTot.Sec,PlanList,PatPlanList,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[1].PatPlanNum,benList);
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled

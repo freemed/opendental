@@ -39,36 +39,40 @@ namespace OpenDentBusiness{
 			ClaimProc cp;
 			for(int i=0;i<table.Rows.Count;i++){
 				cp=new ClaimProc();
-				cp.ClaimProcNum   = PIn.PInt   (table.Rows[i][0].ToString());
-				cp.ProcNum        = PIn.PInt   (table.Rows[i][1].ToString());
-				cp.ClaimNum       = PIn.PInt   (table.Rows[i][2].ToString());	
-				cp.PatNum         = PIn.PInt   (table.Rows[i][3].ToString());
-				cp.ProvNum        = PIn.PInt   (table.Rows[i][4].ToString());
-				cp.FeeBilled      = PIn.PDouble(table.Rows[i][5].ToString());
-				cp.InsPayEst      = PIn.PDouble(table.Rows[i][6].ToString());
-				cp.DedApplied     = PIn.PDouble(table.Rows[i][7].ToString());
-				cp.Status         = (ClaimProcStatus)PIn.PInt(table.Rows[i][8].ToString());
-				cp.InsPayAmt      = PIn.PDouble(table.Rows[i][9].ToString());
-				cp.Remarks        = PIn.PString(table.Rows[i][10].ToString());
-				cp.ClaimPaymentNum= PIn.PInt   (table.Rows[i][11].ToString());
-				cp.PlanNum        = PIn.PInt   (table.Rows[i][12].ToString());
-				cp.DateCP         = PIn.PDate  (table.Rows[i][13].ToString());
-				cp.WriteOff       = PIn.PDouble(table.Rows[i][14].ToString());
-				cp.CodeSent       = PIn.PString(table.Rows[i][15].ToString());
-				cp.AllowedOverride= PIn.PDouble(table.Rows[i][16].ToString());
-				cp.Percentage     = PIn.PInt   (table.Rows[i][17].ToString());
-				cp.PercentOverride= PIn.PInt   (table.Rows[i][18].ToString());
-				cp.CopayAmt       = PIn.PDouble(table.Rows[i][19].ToString());
-				cp.BaseEstOverride= PIn.PDouble(table.Rows[i][20].ToString());
-				cp.NoBillIns      = PIn.PBool  (table.Rows[i][21].ToString());
-				cp.DedBeforePerc  = PIn.PBool  (table.Rows[i][22].ToString());
-				cp.OverAnnualMax  = PIn.PDouble(table.Rows[i][23].ToString());
-				cp.PaidOtherIns   = PIn.PDouble(table.Rows[i][24].ToString());
-				cp.BaseEst        = PIn.PDouble(table.Rows[i][25].ToString());
-				cp.CopayOverride  = PIn.PDouble(table.Rows[i][26].ToString());
-				cp.ProcDate       = PIn.PDate  (table.Rows[i][27].ToString());
-				cp.DateEntry      = PIn.PDate  (table.Rows[i][28].ToString());
-				cp.LineNumber     = PIn.PInt   (table.Rows[i][29].ToString());
+				cp.ClaimProcNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				cp.ProcNum         = PIn.PInt   (table.Rows[i][1].ToString());
+				cp.ClaimNum        = PIn.PInt   (table.Rows[i][2].ToString());	
+				cp.PatNum          = PIn.PInt   (table.Rows[i][3].ToString());
+				cp.ProvNum         = PIn.PInt   (table.Rows[i][4].ToString());
+				cp.FeeBilled       = PIn.PDouble(table.Rows[i][5].ToString());
+				cp.InsPayEst       = PIn.PDouble(table.Rows[i][6].ToString());
+				cp.DedApplied      = PIn.PDouble(table.Rows[i][7].ToString());
+				cp.Status          = (ClaimProcStatus)PIn.PInt(table.Rows[i][8].ToString());
+				cp.InsPayAmt       = PIn.PDouble(table.Rows[i][9].ToString());
+				cp.Remarks         = PIn.PString(table.Rows[i][10].ToString());
+				cp.ClaimPaymentNum = PIn.PInt   (table.Rows[i][11].ToString());
+				cp.PlanNum         = PIn.PInt   (table.Rows[i][12].ToString());
+				cp.DateCP          = PIn.PDate  (table.Rows[i][13].ToString());
+				cp.WriteOff        = PIn.PDouble(table.Rows[i][14].ToString());
+				cp.CodeSent        = PIn.PString(table.Rows[i][15].ToString());
+				cp.AllowedOverride = PIn.PDouble(table.Rows[i][16].ToString());
+				cp.Percentage      = PIn.PInt   (table.Rows[i][17].ToString());
+				cp.PercentOverride = PIn.PInt   (table.Rows[i][18].ToString());
+				cp.CopayAmt        = PIn.PDouble(table.Rows[i][19].ToString());
+				cp.BaseEstOverride = PIn.PDouble(table.Rows[i][20].ToString());
+				cp.NoBillIns       = PIn.PBool  (table.Rows[i][21].ToString());
+				cp.DedBeforePerc   = PIn.PBool  (table.Rows[i][22].ToString());
+				cp.OverAnnualMax   = PIn.PDouble(table.Rows[i][23].ToString());
+				cp.PaidOtherIns    = PIn.PDouble(table.Rows[i][24].ToString());
+				cp.BaseEst         = PIn.PDouble(table.Rows[i][25].ToString());
+				cp.CopayOverride   = PIn.PDouble(table.Rows[i][26].ToString());
+				cp.ProcDate        = PIn.PDate  (table.Rows[i][27].ToString());
+				cp.DateEntry       = PIn.PDate  (table.Rows[i][28].ToString());
+				cp.LineNumber      = PIn.PInt   (table.Rows[i][29].ToString());
+				cp.DedEst          = PIn.PDouble(table.Rows[i][30].ToString());
+				cp.DedEstOverride  = PIn.PDouble(table.Rows[i][31].ToString());
+				cp.InsEstTotal     = PIn.PDouble(table.Rows[i][32].ToString());
+				cp.InsEstTotalOverride= PIn.PDouble(table.Rows[i][33].ToString());
 				retVal.Add(cp);
 			}
 			return retVal;
@@ -87,11 +91,12 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="ClaimProcNum,";
 			}
-			command+="ProcNum,ClaimNum,PatNum,ProvNum"
-				+",FeeBilled,InsPayEst,DedApplied,Status,InsPayAmt,Remarks,ClaimPaymentNum"
-				+",PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride"
-				+",CopayAmt,BaseEstOverride,NoBillIns,DedBeforePerc,OverAnnualMax"
-				+",PaidOtherIns,BaseEst,CopayOverride,ProcDate,DateEntry,LineNumber) VALUES(";
+			command+="ProcNum,ClaimNum,PatNum,ProvNum,"
+				+"FeeBilled,InsPayEst,DedApplied,Status,InsPayAmt,Remarks,ClaimPaymentNum,"
+				+"PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride,"
+				+"CopayAmt,BaseEstOverride,NoBillIns,DedBeforePerc,OverAnnualMax,"
+				+"PaidOtherIns,BaseEst,CopayOverride,ProcDate,DateEntry,LineNumber,DedEst,"
+				+"DedEstOverride,InsEstTotal,InsEstTotalOverride) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(cp.ClaimProcNum)+"', ";
 			}
@@ -124,7 +129,11 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.CopayOverride)+"', "
 				+POut.PDate(cp.ProcDate)+", "
 				+"NOW(), "
-				+"'"+POut.PInt(cp.LineNumber)+"')";
+				+"'"+POut.PInt(cp.LineNumber)+"', "
+				+"'"+POut.PDouble(cp.DedEst)+"', "
+				+"'"+POut.PDouble(cp.DedEstOverride)+"', "
+				+"'"+POut.PDouble(cp.InsEstTotal)+"', "
+				+"'"+POut.PDouble(cp.InsEstTotalOverride)+"')";
 			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -171,6 +180,10 @@ namespace OpenDentBusiness{
 				+",ProcDate= "        +POut.PDate(cp.ProcDate)
 				+",DateEntry= "       +POut.PDate(cp.DateEntry)
 				+",LineNumber= '"     +POut.PInt(cp.LineNumber)+"'"
+				+",DedEst= '"         +POut.PDouble(cp.DedEst)+"'"
+				+",DedEstOverride= '" +POut.PDouble(cp.DedEstOverride)+"'"
+				+",InsEstTotal= '"    +POut.PDouble(cp.InsEstTotal)+"'"
+				+",InsEstTotalOverride= '"+POut.PDouble(cp.InsEstTotalOverride)+"'"
 				+" WHERE claimprocnum = '"+POut.PInt(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
@@ -216,6 +229,10 @@ namespace OpenDentBusiness{
 			cp.OverAnnualMax=-1;
 			cp.PaidOtherIns=-1;
 			cp.BaseEst=0;
+			cp.DedEst=-1;
+			cp.DedEstOverride=-1;
+			cp.InsEstTotal=0;
+			cp.InsEstTotalOverride=-1;
 			cp.CopayOverride=-1;
 			cp.ProcDate=proc.ProcDate;
 			Insert(cp);
@@ -330,7 +347,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 		
-		///<summary>Used in Account and in PaySplitEdit. The insurance amount paid based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
+		///<summary>Used in PaySplitEdit. The insurance amount paid based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
 		public static double ProcInsPay(List<ClaimProc> claimProcList,int procNum) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
@@ -432,6 +449,7 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
+		/*
 		///<summary></summary>
 		public static double ComputeBal(ClaimProc[] List){
 			//No need to check RemotingRole; no call to db.
@@ -460,7 +478,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>After entering estimates from a preauth, this routine is called for each proc to override the ins est.</summary>
 		public static void SetBaseEstOverride(int procNum,int planNum,double insPayEst,List<ClaimProc> claimProcList){
@@ -481,7 +499,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.</summary>
-		public static void ComputeBaseEst(ClaimProc cp,Procedure proc,PriSecTot pst,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benList) {//,bool resetValues){ 
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList) {//,bool resetValues){ 
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -508,20 +526,20 @@ namespace OpenDentBusiness{
 			}
 			//This function is called every time a ProcFee is changed,
 			//so the BaseEst does reflect the new ProcFee.
-			cp.BaseEst=proc.ProcFee;
+			cp.BaseEst=procFee;
 			//if(resetAll){
 			//AllowedOverride=-1;
 			//actually, this is a bad place for altering AllowedOverride.
 			//Best to set it at the same time as the fee.
 			//Actually, AllowedOverride should almost never be altered by the program, only by the user.
 			//}
-			InsPlan plan=null;
-			if(pst==PriSecTot.Pri) {
-				plan=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
-			}
-			else if(pst==PriSecTot.Sec) {
-				plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
-			}
+			//InsPlan plan=null;
+			//if(pst==PriSecTot.Pri) {
+			//	plan=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
+			//}
+			//else if(pst==PriSecTot.Sec) {
+			//	plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
+			//}
 			//if(cp.AllowedOverride==-1) {//If allowedOverride is blank
 			//wrong:
 			//	cp.AllowedOverride=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
@@ -530,10 +548,15 @@ namespace OpenDentBusiness{
 				cp.BaseEst=cp.AllowedOverride;
 			}
 			else {
-				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList,
-					proc.ToothNum,cp.ProvNum);
+				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanNum,plan.AllowedFeeSched,
+					plan.CodeSubstNone,plan.PlanType,toothNum,cp.ProvNum);
 				if(carrierAllowed!=-1) {
-					cp.BaseEst=carrierAllowed;
+					if(carrierAllowed > procFee) {
+						cp.BaseEst=procFee;
+					}
+					else {
+						cp.BaseEst=carrierAllowed;
+					}
 				}
 			}
 			cp.DedBeforePerc=plan.DedBeforePerc;
@@ -547,17 +570,14 @@ namespace OpenDentBusiness{
 			//copayAmt
 			//copayOverride never recalculated
 			if(resetAll) {
-				if(pst==PriSecTot.Pri) {
-					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
-				}
-				else if(pst==PriSecTot.Sec) {
-					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
-				}
-				else {//pst.Other
-					cp.CopayAmt=-1;
-				}
-				if(cp.CopayAmt>proc.ProcFee) {
-					cp.CopayAmt=proc.ProcFee;
+				//if(pst==PriSecTot.Pri || pst==PriSecTot.Sec) {
+				cp.CopayAmt=InsPlans.GetCopay(codeNum,plan.FeeSched,plan.CopayFeeSched);
+				//}
+				//else {//pst.Other
+				//	cp.CopayAmt=-1;
+				//}
+				if(cp.CopayAmt>procFee) {
+					cp.CopayAmt=procFee;
 				}
 				if(cp.Status==ClaimProcStatus.CapEstimate) {
 					//this does automate the Writeoff. If user does not want writeoff automated,
@@ -566,10 +586,10 @@ namespace OpenDentBusiness{
 						cp.CopayAmt=0;
 					}
 					if(cp.CopayOverride!=-1) {//override the copay
-						cp.WriteOff=proc.ProcFee-cp.CopayOverride;
+						cp.WriteOff=procFee-cp.CopayOverride;
 					}
 					else if(cp.CopayAmt!=-1) {//use the calculated copay
-						cp.WriteOff=proc.ProcFee-cp.CopayAmt;
+						cp.WriteOff=procFee-cp.CopayAmt;
 					}
 					//else{//no copay at all
 					//	WriteOff=proc.ProcFee;
@@ -593,12 +613,12 @@ namespace OpenDentBusiness{
 			}
 			//percentage
 			//percentoverride never recalculated
-			if(pst==PriSecTot.Pri) {
-				cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan,patPlans[0],benList);//will never =-1
-			}
-			else if(pst==PriSecTot.Sec) {
-				cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan,patPlans[1],benList);
-			}
+			//if(pst==PriSecTot.Pri) {
+				cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanType,plan.PlanNum,patPlanNum,benList);//will never =-1
+			//}
+			//else if(pst==PriSecTot.Sec) {
+				//cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanType,plan.PlanNum,patPlans[1].PatPlanNum,benList);
+			//}
 			if(cp.PercentOverride==-1) {//no override, so use calculated Percentage
 				cp.BaseEst=cp.BaseEst*(double)cp.Percentage/100;
 			}

@@ -938,7 +938,8 @@ namespace OpenDentBusiness {
 			if(retVal==-1) {//blank co-pay
 				if(PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero")) {
 					return -1;//will act like zero.  No patient co-pay.
-				} else {
+				} 
+				else {
 					//The amount from the regular fee schedule
 					//In other words, the patient is responsible for procs that are not specified in a managed care fee schedule.
 					return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
@@ -947,29 +948,48 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
-		public static double GetAllowed(string procCode,int planNum,List <InsPlan> PlanList,string toothNum,int
-			provNum) {
+		///<summary>Returns -1 if no copay feeschedule.  Can return -1 if copay amount is blank.</summary>
+		public static double GetCopay(int codeNum,int feeSched,int copayFeeSched) {
 			//No need to check RemotingRole; no call to db.
-			if(planNum==0) {
+			if(copayFeeSched==0) {
 				return -1;
 			}
-			InsPlan plan=InsPlans.GetPlan(planNum,PlanList);
-			if(plan==null) {
-				return -1;
+			double retVal=Fees.GetAmount(codeNum,copayFeeSched);
+			if(retVal==-1) {//blank co-pay
+				if(PrefC.GetBool("CoPay_FeeSchedule_BlankLikeZero")) {
+					return -1;//will act like zero.  No patient co-pay.
+				}
+				else {
+					//The amount from the regular fee schedule
+					//In other words, the patient is responsible for procs that are not specified in a managed care fee schedule.
+					return Fees.GetAmount(codeNum,feeSched);
+				}
 			}
-			int codeNum=ProcedureCodes.GetCodeNum(procCode);
+			return retVal;
+		}
+
+		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
+		public static double GetAllowed(string procCodeStr,int feeSched,int allowedFeeSched,bool codeSubstNone,string planType,string toothNum,int provNum) {
+			//No need to check RemotingRole; no call to db.
+			//if(planNum==0) {
+			//	return -1;
+			//}
+			//InsPlan plan=InsPlans.GetPlan(planNum,PlanList);
+			//if(plan==null) {
+			//	return -1;
+			//}
+			int codeNum=ProcedureCodes.GetCodeNum(procCodeStr);
 			int substCodeNum=codeNum;
-			if(!plan.CodeSubstNone) {
-				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
+			if(!codeSubstNone) {
+				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCodeStr,toothNum);//for posterior composites
 			}
 			//PPO always returns the PPO fee for the code or substituted code.
-			if(plan.PlanType=="p") {
-				return Fees.GetAmount(substCodeNum,plan.FeeSched);
+			if(planType=="p") {
+				return Fees.GetAmount(substCodeNum,feeSched);
 			}
 			//or, if not PPO, and an allowed fee schedule exists, then we use that.
-			if(plan.AllowedFeeSched!=0) {
-				return Fees.GetAmount(substCodeNum,plan.AllowedFeeSched);//whether post composite or not
+			if(allowedFeeSched!=0) {
+				return Fees.GetAmount(substCodeNum,allowedFeeSched);//whether post composite or not
 			}
 			//must be an ordinary fee schedule, so if no substitution code, then no allowed override
 			if(codeNum==substCodeNum) {
@@ -977,10 +997,10 @@ namespace OpenDentBusiness {
 			}
 			//must be posterior composite with an ordinary fee schedule
 			//Although it won't happen very often, it's possible that there is no fee schedule assigned to the plan.
-			if(plan.FeeSched==0) {
+			if(feeSched==0) {
 				return Fees.GetAmount(substCodeNum,Providers.GetProv(provNum).FeeSched);
 			}
-			return Fees.GetAmount(substCodeNum,plan.FeeSched);
+			return Fees.GetAmount(substCodeNum,feeSched);
 		}
 
 		///<summary>Used when closing the edit plan window to find all patients using this plan and to update all claimProcs for each patient.  This keeps estimates correct.</summary>

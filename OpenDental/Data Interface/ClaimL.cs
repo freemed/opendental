@@ -28,10 +28,12 @@ namespace OpenDental{
 			double insRem;//no changes get made to insRem in the loop.
 			if(patPlanNum==0){//patient does not have current coverage
 				insRem=0;
-			} else if(ClaimProcsForClaim[0].ProcDate.Year<1880) {
+			} 
+			else if(ClaimProcsForClaim[0].ProcDate.Year<1880) {
 				insRem=InsPlans.GetInsRem(claimProcList,DateTime.Today,claimCur.PlanNum,
 						patPlanNum,claimCur.ClaimNum,planList,benefitList);
-			} else {
+			} 
+			else {
 				insRem=InsPlans.GetInsRem(claimProcList,ClaimProcsForClaim[0].ProcDate,claimCur.PlanNum,
 						patPlanNum,claimCur.ClaimNum,planList,benefitList);
 			}
@@ -48,6 +50,7 @@ namespace OpenDental{
 			//loop again only for procs not received.
 			//And for preauth.
 			Procedure ProcCur;
+			InsPlan plan=InsPlans.GetPlan(claimCur.PlanNum,planList);
 			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.NotReceived
 					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
@@ -97,12 +100,11 @@ namespace OpenDental{
 				else{
 					ClaimProcsForClaim[i].DedApplied=dedRem;
 				}
+				ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benefitList);//handles dedBeforePerc
 				if(claimCur.ClaimType=="P") {//primary
-					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,planList,patPlans,benefitList);//handles dedBeforePerc
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Pri,patPlans,true);	
 				}
 				else if(claimCur.ClaimType=="S") {//secondary
-					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,planList,patPlans,benefitList);
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Sec,patPlans,true);
 				}
 				if(claimCur.ClaimType=="P" || claimCur.ClaimType=="S") {
