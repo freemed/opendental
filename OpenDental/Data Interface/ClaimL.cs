@@ -108,7 +108,7 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Sec,patPlans,true);
 				}
 				if(claimCur.ClaimType=="P" || claimCur.ClaimType=="S") {
-					if(ClaimProcsForClaim[i].DedBeforePerc) {
+					/*if(ClaimProcsForClaim[i].DedBeforePerc) {
 						int percent=100;
 						if(ClaimProcsForClaim[i].Percentage!=-1) {
 							percent=ClaimProcsForClaim[i].Percentage;
@@ -118,9 +118,9 @@ namespace OpenDental{
 						}
 						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied*(double)percent/100d;
 					}
-					else {
+					else {*/
 						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
-					}
+					//}
 				}
 				//claimtypes other than P and S only changed manually
 				if(ClaimProcsForClaim[i].InsPayEst < 0){

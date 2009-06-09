@@ -1046,7 +1046,7 @@ namespace OpenDental{
 								}
 								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i].ProcFee,ProcListTP[i].ToothNum,ProcListTP[i].CodeNum,PriPlanCur,PatPlanList[0].PatPlanNum,BenefitList);//handles dedBeforePerc
 								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
-								if(claimproc.DedBeforePerc) {
+								/*if(claimproc.DedBeforePerc) {
 									int percent=100;
 									if(claimproc.Percentage!=-1){
 										percent=claimproc.Percentage;
@@ -1059,9 +1059,9 @@ namespace OpenDental{
 										claimproc.DedApplied=0;//then no deductible should be applied.
 									}
 								}
-								else{
+								else{*/
 									claimproc.InsPayEst-=claimproc.DedApplied;
-								}
+								//}
 								if(claimproc.InsPayEst<0) {
 									//example: if inspayest = 19 - 50(ded) for total of -31.
 									claimproc.DedApplied+=claimproc.InsPayEst;//eg. 50+(-31)=19
@@ -1076,7 +1076,7 @@ namespace OpenDental{
 										row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Annual Max Met.");
 									}
 									hasMaxedPri=true;
-									claimproc.OverAnnualMax=claimproc.InsPayEst-insRem;
+									claimproc.IsOverAnnualMax=true;//claimproc.InsPayEst-insRem;
 									claimproc.InsPayEst=insRem;
 								}
 								dedAppliedPri+=claimproc.DedApplied;
@@ -1123,9 +1123,9 @@ namespace OpenDental{
 								if(fee-priIns-secIns < 0) {
 									secIns=fee-priIns;
 								}
-								if(!claimproc.DedBeforePerc) {
-									secIns-=claimproc.DedApplied;
-								}
+								//if(!claimproc.DedBeforePerc) {
+								//	secIns-=claimproc.DedApplied;
+								//}
 								if(secIns<0) {
 									//example: if secins = 19 - 50(ded) for total of -31.
 									claimproc.DedApplied+=secIns;//eg. 50+(-31)=19

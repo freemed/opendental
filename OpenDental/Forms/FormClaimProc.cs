@@ -25,16 +25,11 @@ namespace OpenDental
 		private OpenDental.ValidDouble textInsPayEst;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textInsPlan;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
-		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.TextBox textPercentage;
 		private OpenDental.ValidDouble textCopayAmt;
-		private OpenDental.ValidDouble textBaseEstOverride;
 		private OpenDental.ValidNumber textPercentOverride;
-		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Label label28;
 		private System.Windows.Forms.Label label29;
 		private System.Windows.Forms.TextBox textDescription;
@@ -42,30 +37,13 @@ namespace OpenDental
 		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.TextBox textCodeSent;
 		private OpenDental.ValidDouble textFeeBilled;
-		private System.Windows.Forms.CheckBox checkDedBeforePerc;
 		private OpenDental.ValidDouble textDedApplied;
 		private System.Windows.Forms.RadioButton radioEstimate;
 		private System.Windows.Forms.RadioButton radioClaim;
 		private OpenDental.ValidDate textDateCP;
 		private OpenDental.ValidDouble textAllowedOverride;
-		private OpenDental.ValidDouble textOverAnnualMax;
 		private OpenDental.ValidDouble textPaidOtherIns;
-		private System.Windows.Forms.Label labelInsFee;
-		private System.Windows.Forms.Label labelPatWriteOff;
-		private System.Windows.Forms.Label labelPatInsPayEst;
-		private System.Windows.Forms.Label labelInsPercentage;
 		private System.Windows.Forms.TextBox textFee;
-		private System.Windows.Forms.Label labelPatFee;
-		private System.Windows.Forms.Label labelInsOverAnnualMax;
-		private System.Windows.Forms.Label labelPatTotalClaim;
-		private System.Windows.Forms.Label labelInsDedApplied;
-		private System.Windows.Forms.Label labelInsPaidOtherIns;
-		private System.Windows.Forms.Label labelInsCopay;
-		private System.Windows.Forms.Label labelInsPercentOverride;
-		private System.Windows.Forms.Label labelInsAllowedOverride;
-		private System.Windows.Forms.Label labelInsInsPayEst;
-		private System.Windows.Forms.Label labelPatInsPayAmt;
-		private System.Windows.Forms.Label labelInsInsPayAmt;
 		//public bool IsNew;
 		///<summary>Set to true if this claimProc is accessed from within a claim or from within FormClaimPayTotal. This changes the behavior of the form, allowing more freedom with fields that are also totalled for entire claim.  This freedom is normally restricted so that claim totals will stay synchronized with individual claimprocs.  If true, it will still save changes to db, even though this is duplicated effort in FormClaimPayTotal.</summary>
 		public bool IsInClaim;
@@ -74,16 +52,11 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelNotInClaim;
 		private System.Windows.Forms.Label labelAttachedToCheck;
 		private System.Windows.Forms.GroupBox groupClaimInfo;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox textBaseEst;
 		private System.Windows.Forms.Label labelInsPayAmt;
 		private System.Windows.Forms.Label labelInsPayEst;
-		private System.Windows.Forms.Label labelOverAnnualMax;
 		private System.Windows.Forms.Label labelPaidOtherIns;
-		private System.Windows.Forms.Label labelPatPortion;
 		private System.Windows.Forms.Label labelCopayAmt;
 		private System.Windows.Forms.Label labelWriteOff;
-		private System.Windows.Forms.Panel panelClaimBar;
 		private System.Windows.Forms.Label labelFee;
 		private System.Windows.Forms.Label labelCodeSent;
 		private System.Windows.Forms.Label labelFeeBilled;
@@ -95,9 +68,7 @@ namespace OpenDental
 		private ClaimProc ClaimProcCur;
 		///<summary>If user hits cancel, then the claimproc is reset using this.</summary>
 		private ClaimProc ClaimProcOld;
-		private System.Windows.Forms.Label labelInsCopayOverride;
 		private OpenDental.ValidDouble textCopayOverride;
-		private System.Windows.Forms.Label labelCopayOverride;
 		private System.Windows.Forms.Panel panelClaimExtras;
 		///<summary>The procedure to which this claimproc is attached.</summary>
 		private Procedure proc;
@@ -118,7 +89,6 @@ namespace OpenDental
 		public bool NoPermissionProc;
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label labelDateEntry;
-		private Label labelInsCarrierAllowed;
 		private ToolTip toolTip1;
 		private Label labelFeeSched;
 		private Label label2;
@@ -130,23 +100,18 @@ namespace OpenDental
 		private Label label8;
 		private GroupBox groupAllowed;
 		private Label label10;
-		private Label labelInsDedEstOverride;
 		private ValidDouble textDedEstOverride;
-		private Label label16;
-		private Label labelInsDedEst;
 		private ValidDouble textDedEst;
 		private Label label11;
 		private ValidDouble textInsEstTotal;
 		private Label label17;
-		private Label labelInsInsEstTotal;
-		private GroupBox groupBox1;
 		private ValidDouble textInsEstTotalOverride;
-		private Label label19;
-		private Label labelInsInsEstTotalOverride;
-		private Label labelPatInsEstTotal;
-		private Label labelPatInsEstTotalOverride;
-		private Label labelPatTotal;
-		private Panel panelPatBar;
+		private ValidNumber textPaidOtherInsOverride;
+		private CheckBox checkIsOverAnnualMax;
+		private ValidDouble textPatPortion1;
+		private Label labelPatPortion1;
+		private ValidDouble textPatPortion2;
+		private Label labelPatPortion2;
 		private double CarrierAllowedAmount;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
@@ -176,22 +141,12 @@ namespace OpenDental
 					this.labelRemarks,
 					this.labelNotInClaim,
 					this.checkNoBillIns,
-					this.label14,
-					this.labelPatPortion,
 					this.labelFee,
-					this.label3,
-					this.checkDedBeforePerc,
-					//this.labelDedBeforePerc,
 					this.labelCopayAmt,
-					this.labelCopayOverride,
 					this.label4,
-					this.label13,
-					this.label5,
-					this.label12,
 					this.groupClaimInfo,
 					this.labelDedApplied,
 					this.labelPaidOtherIns,
-					this.labelOverAnnualMax,
 					this.labelInsPayEst,
 					this.labelInsPayAmt,
 					this.labelWriteOff,
@@ -239,25 +194,12 @@ namespace OpenDental
 			this.labelNotInClaim = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textInsPlan = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textPercentage = new System.Windows.Forms.TextBox();
 			this.labelCopayAmt = new System.Windows.Forms.Label();
-			this.label12 = new System.Windows.Forms.Label();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
-			this.label13 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
-			this.labelInsFee = new System.Windows.Forms.Label();
-			this.labelPatWriteOff = new System.Windows.Forms.Label();
-			this.labelPatInsPayEst = new System.Windows.Forms.Label();
-			this.labelInsPercentage = new System.Windows.Forms.Label();
-			this.labelPatPortion = new System.Windows.Forms.Label();
 			this.labelFee = new System.Windows.Forms.Label();
 			this.textFee = new System.Windows.Forms.TextBox();
-			this.labelPatFee = new System.Windows.Forms.Label();
-			this.labelOverAnnualMax = new System.Windows.Forms.Label();
-			this.labelInsOverAnnualMax = new System.Windows.Forms.Label();
-			this.labelPatTotalClaim = new System.Windows.Forms.Label();
 			this.label28 = new System.Windows.Forms.Label();
 			this.label29 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
@@ -266,39 +208,21 @@ namespace OpenDental
 			this.labelCodeSent = new System.Windows.Forms.Label();
 			this.textCodeSent = new System.Windows.Forms.TextBox();
 			this.labelFeeBilled = new System.Windows.Forms.Label();
-			this.labelInsDedApplied = new System.Windows.Forms.Label();
 			this.labelDedApplied = new System.Windows.Forms.Label();
-			this.labelInsPaidOtherIns = new System.Windows.Forms.Label();
 			this.labelPaidOtherIns = new System.Windows.Forms.Label();
-			this.labelInsCopay = new System.Windows.Forms.Label();
-			this.labelInsPercentOverride = new System.Windows.Forms.Label();
-			this.labelInsAllowedOverride = new System.Windows.Forms.Label();
-			this.labelInsInsPayEst = new System.Windows.Forms.Label();
-			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
-			this.labelPatInsPayAmt = new System.Windows.Forms.Label();
-			this.panelClaimBar = new System.Windows.Forms.Panel();
-			this.labelInsInsPayAmt = new System.Windows.Forms.Label();
 			this.groupClaim = new System.Windows.Forms.GroupBox();
 			this.labelAttachedToCheck = new System.Windows.Forms.Label();
 			this.radioClaim = new System.Windows.Forms.RadioButton();
 			this.radioEstimate = new System.Windows.Forms.RadioButton();
 			this.panelClaimExtras = new System.Windows.Forms.Panel();
 			this.panelEstimateInfo = new System.Windows.Forms.Panel();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.labelInsInsEstTotalOverride = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
-			this.labelInsInsEstTotal = new System.Windows.Forms.Label();
-			this.labelInsDedEstOverride = new System.Windows.Forms.Label();
-			this.labelInsDedEst = new System.Windows.Forms.Label();
-			this.label16 = new System.Windows.Forms.Label();
 			this.groupAllowed = new System.Windows.Forms.GroupBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textAllowedFeeSched = new System.Windows.Forms.TextBox();
 			this.textSubstCode = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.labelInsCarrierAllowed = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.labelCarrierAllowed = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -306,21 +230,17 @@ namespace OpenDental
 			this.textPPOFeeSched = new System.Windows.Forms.TextBox();
 			this.textFeeSched = new System.Windows.Forms.TextBox();
 			this.labelFeeSched = new System.Windows.Forms.Label();
-			this.labelInsCopayOverride = new System.Windows.Forms.Label();
-			this.labelCopayOverride = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textBaseEst = new System.Windows.Forms.TextBox();
 			this.groupClaimInfo = new System.Windows.Forms.GroupBox();
 			this.labelProcDate = new System.Windows.Forms.Label();
 			this.labelDateEntry = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.labelPatInsEstTotal = new System.Windows.Forms.Label();
-			this.labelPatInsEstTotalOverride = new System.Windows.Forms.Label();
-			this.labelPatTotal = new System.Windows.Forms.Label();
-			this.panelPatBar = new System.Windows.Forms.Panel();
+			this.checkIsOverAnnualMax = new System.Windows.Forms.CheckBox();
+			this.labelPatPortion1 = new System.Windows.Forms.Label();
+			this.labelPatPortion2 = new System.Windows.Forms.Label();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.textProcDate = new OpenDental.ValidDate();
 			this.textFeeBilled = new OpenDental.ValidDouble();
+			this.textPatPortion2 = new OpenDental.ValidDouble();
 			this.textWriteOff = new OpenDental.ValidDouble();
 			this.textInsPayEst = new OpenDental.ValidDouble();
 			this.textInsPayAmt = new OpenDental.ValidDouble();
@@ -329,34 +249,33 @@ namespace OpenDental
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textOverAnnualMax = new OpenDental.ValidDouble();
-			this.textDedEst = new OpenDental.ValidDouble();
+			this.textPatPortion1 = new OpenDental.ValidDouble();
+			this.textPaidOtherInsOverride = new OpenDental.ValidNumber();
 			this.textInsEstTotalOverride = new OpenDental.ValidDouble();
-			this.textPaidOtherIns = new OpenDental.ValidDouble();
 			this.textInsEstTotal = new OpenDental.ValidDouble();
-			this.textDedEstOverride = new OpenDental.ValidDouble();
 			this.textAllowedOverride = new OpenDental.ValidDouble();
 			this.butUpdateAllowed = new OpenDental.UI.Button();
+			this.textDedEst = new OpenDental.ValidDouble();
+			this.textPaidOtherIns = new OpenDental.ValidDouble();
 			this.textCopayOverride = new OpenDental.ValidDouble();
 			this.textCopayAmt = new OpenDental.ValidDouble();
-			this.textBaseEstOverride = new OpenDental.ValidDouble();
+			this.textDedEstOverride = new OpenDental.ValidDouble();
 			this.textPercentOverride = new OpenDental.ValidNumber();
 			this.groupClaim.SuspendLayout();
 			this.panelClaimExtras.SuspendLayout();
 			this.panelEstimateInfo.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.groupAllowed.SuspendLayout();
 			this.groupClaimInfo.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelInsPayAmt
 			// 
-			this.labelInsPayAmt.Location = new System.Drawing.Point(34,55);
+			this.labelInsPayAmt.Location = new System.Drawing.Point(31,66);
 			this.labelInsPayAmt.Name = "labelInsPayAmt";
-			this.labelInsPayAmt.Size = new System.Drawing.Size(126,17);
+			this.labelInsPayAmt.Size = new System.Drawing.Size(129,17);
 			this.labelInsPayAmt.TabIndex = 13;
 			this.labelInsPayAmt.Text = "Insurance Paid";
-			this.labelInsPayAmt.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelInsPayAmt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelRemarks
 			// 
@@ -395,21 +314,21 @@ namespace OpenDental
 			// 
 			// labelWriteOff
 			// 
-			this.labelWriteOff.Location = new System.Drawing.Point(39,74);
+			this.labelWriteOff.Location = new System.Drawing.Point(31,89);
 			this.labelWriteOff.Name = "labelWriteOff";
-			this.labelWriteOff.Size = new System.Drawing.Size(120,17);
+			this.labelWriteOff.Size = new System.Drawing.Size(129,17);
 			this.labelWriteOff.TabIndex = 19;
 			this.labelWriteOff.Text = "Write Off";
-			this.labelWriteOff.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelWriteOff.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelInsPayEst
 			// 
-			this.labelInsPayEst.Location = new System.Drawing.Point(32,35);
+			this.labelInsPayEst.Location = new System.Drawing.Point(31,44);
 			this.labelInsPayEst.Name = "labelInsPayEst";
 			this.labelInsPayEst.Size = new System.Drawing.Size(129,17);
 			this.labelInsPayEst.TabIndex = 21;
 			this.labelInsPayEst.Text = "Insurance Estimate";
-			this.labelInsPayEst.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelInsPayEst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelNotInClaim
 			// 
@@ -439,50 +358,32 @@ namespace OpenDental
 			this.textInsPlan.TabIndex = 29;
 			this.textInsPlan.Text = "An insurance plan";
 			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(33,125);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(128,17);
-			this.label3.TabIndex = 31;
-			this.label3.Text = "Allowed Override";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(59,255);
+			this.label4.Location = new System.Drawing.Point(28,236);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(107,14);
+			this.label4.Size = new System.Drawing.Size(138,17);
 			this.label4.TabIndex = 32;
-			this.label4.Text = "Percentage";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label4.Text = "Percentage %";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPercentage
 			// 
-			this.textPercentage.Location = new System.Drawing.Point(197,253);
+			this.textPercentage.Location = new System.Drawing.Point(168,235);
 			this.textPercentage.Name = "textPercentage";
 			this.textPercentage.ReadOnly = true;
-			this.textPercentage.Size = new System.Drawing.Size(48,20);
+			this.textPercentage.Size = new System.Drawing.Size(70,20);
 			this.textPercentage.TabIndex = 33;
 			this.textPercentage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// labelCopayAmt
 			// 
-			this.labelCopayAmt.Location = new System.Drawing.Point(33,216);
+			this.labelCopayAmt.Location = new System.Drawing.Point(28,192);
 			this.labelCopayAmt.Name = "labelCopayAmt";
-			this.labelCopayAmt.Size = new System.Drawing.Size(133,17);
+			this.labelCopayAmt.Size = new System.Drawing.Size(138,17);
 			this.labelCopayAmt.TabIndex = 37;
 			this.labelCopayAmt.Text = "Patient Copay";
-			this.labelCopayAmt.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(12,312);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(154,17);
-			this.label12.TabIndex = 39;
-			this.label12.Text = "Base Estimate Override";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelCopayAmt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkNoBillIns
 			// 
@@ -494,74 +395,9 @@ namespace OpenDental
 			this.checkNoBillIns.Text = "Do Not Bill to This Insurance";
 			this.checkNoBillIns.Click += new System.EventHandler(this.checkNoBillIns_Click);
 			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(34,274);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(132,14);
-			this.label13.TabIndex = 44;
-			this.label13.Text = "Percentage Override";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label14
-			// 
-			this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label14.Location = new System.Drawing.Point(239,1);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(74,27);
-			this.label14.TabIndex = 48;
-			this.label14.Text = "Insurance Portion:";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
-			// labelInsFee
-			// 
-			this.labelInsFee.Location = new System.Drawing.Point(246,33);
-			this.labelInsFee.Name = "labelInsFee";
-			this.labelInsFee.Size = new System.Drawing.Size(67,16);
-			this.labelInsFee.TabIndex = 49;
-			this.labelInsFee.Text = "$520.00";
-			this.labelInsFee.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelPatWriteOff
-			// 
-			this.labelPatWriteOff.Location = new System.Drawing.Point(313,77);
-			this.labelPatWriteOff.Name = "labelPatWriteOff";
-			this.labelPatWriteOff.Size = new System.Drawing.Size(67,16);
-			this.labelPatWriteOff.TabIndex = 50;
-			this.labelPatWriteOff.Text = "-$20.00";
-			this.labelPatWriteOff.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelPatInsPayEst
-			// 
-			this.labelPatInsPayEst.Location = new System.Drawing.Point(313,35);
-			this.labelPatInsPayEst.Name = "labelPatInsPayEst";
-			this.labelPatInsPayEst.Size = new System.Drawing.Size(67,16);
-			this.labelPatInsPayEst.TabIndex = 51;
-			this.labelPatInsPayEst.Text = "-$200.00";
-			this.labelPatInsPayEst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsPercentage
-			// 
-			this.labelInsPercentage.Location = new System.Drawing.Point(246,254);
-			this.labelInsPercentage.Name = "labelInsPercentage";
-			this.labelInsPercentage.Size = new System.Drawing.Size(67,16);
-			this.labelInsPercentage.TabIndex = 54;
-			this.labelInsPercentage.Text = "x  80%";
-			this.labelInsPercentage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelPatPortion
-			// 
-			this.labelPatPortion.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelPatPortion.Location = new System.Drawing.Point(318,1);
-			this.labelPatPortion.Name = "labelPatPortion";
-			this.labelPatPortion.Size = new System.Drawing.Size(69,27);
-			this.labelPatPortion.TabIndex = 55;
-			this.labelPatPortion.Text = "Patient Portion:";
-			this.labelPatPortion.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
 			// labelFee
 			// 
-			this.labelFee.Location = new System.Drawing.Point(59,34);
+			this.labelFee.Location = new System.Drawing.Point(59,20);
 			this.labelFee.Name = "labelFee";
 			this.labelFee.Size = new System.Drawing.Size(107,14);
 			this.labelFee.TabIndex = 58;
@@ -571,49 +407,13 @@ namespace OpenDental
 			// textFee
 			// 
 			this.textFee.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textFee.Location = new System.Drawing.Point(181,35);
+			this.textFee.Location = new System.Drawing.Point(169,21);
 			this.textFee.Name = "textFee";
 			this.textFee.ReadOnly = true;
-			this.textFee.Size = new System.Drawing.Size(61,13);
+			this.textFee.Size = new System.Drawing.Size(58,13);
 			this.textFee.TabIndex = 59;
 			this.textFee.Text = "520.00";
 			this.textFee.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// labelPatFee
-			// 
-			this.labelPatFee.Location = new System.Drawing.Point(320,33);
-			this.labelPatFee.Name = "labelPatFee";
-			this.labelPatFee.Size = new System.Drawing.Size(67,16);
-			this.labelPatFee.TabIndex = 60;
-			this.labelPatFee.Text = "$520.00";
-			this.labelPatFee.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelOverAnnualMax
-			// 
-			this.labelOverAnnualMax.Location = new System.Drawing.Point(31,94);
-			this.labelOverAnnualMax.Name = "labelOverAnnualMax";
-			this.labelOverAnnualMax.Size = new System.Drawing.Size(129,17);
-			this.labelOverAnnualMax.TabIndex = 62;
-			this.labelOverAnnualMax.Text = "Over Max";
-			this.labelOverAnnualMax.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelInsOverAnnualMax
-			// 
-			this.labelInsOverAnnualMax.Location = new System.Drawing.Point(239,95);
-			this.labelInsOverAnnualMax.Name = "labelInsOverAnnualMax";
-			this.labelInsOverAnnualMax.Size = new System.Drawing.Size(67,16);
-			this.labelInsOverAnnualMax.TabIndex = 63;
-			this.labelInsOverAnnualMax.Text = "-$70.00";
-			this.labelInsOverAnnualMax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelPatTotalClaim
-			// 
-			this.labelPatTotalClaim.Location = new System.Drawing.Point(313,96);
-			this.labelPatTotalClaim.Name = "labelPatTotalClaim";
-			this.labelPatTotalClaim.Size = new System.Drawing.Size(67,16);
-			this.labelPatTotalClaim.TabIndex = 64;
-			this.labelPatTotalClaim.Text = "= $300.00";
-			this.labelPatTotalClaim.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label28
 			// 
@@ -682,116 +482,23 @@ namespace OpenDental
 			this.labelFeeBilled.Text = "Fee Billed to Ins";
 			this.labelFeeBilled.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// labelInsDedApplied
-			// 
-			this.labelInsDedApplied.Location = new System.Drawing.Point(243,17);
-			this.labelInsDedApplied.Name = "labelInsDedApplied";
-			this.labelInsDedApplied.Size = new System.Drawing.Size(63,16);
-			this.labelInsDedApplied.TabIndex = 77;
-			this.labelInsDedApplied.Text = "-$50.00";
-			this.labelInsDedApplied.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// labelDedApplied
 			// 
-			this.labelDedApplied.Location = new System.Drawing.Point(30,17);
+			this.labelDedApplied.Location = new System.Drawing.Point(31,21);
 			this.labelDedApplied.Name = "labelDedApplied";
 			this.labelDedApplied.Size = new System.Drawing.Size(129,17);
 			this.labelDedApplied.TabIndex = 76;
 			this.labelDedApplied.Text = "Deductible";
-			this.labelDedApplied.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelInsPaidOtherIns
-			// 
-			this.labelInsPaidOtherIns.Location = new System.Drawing.Point(241,76);
-			this.labelInsPaidOtherIns.Name = "labelInsPaidOtherIns";
-			this.labelInsPaidOtherIns.Size = new System.Drawing.Size(65,16);
-			this.labelInsPaidOtherIns.TabIndex = 80;
-			this.labelInsPaidOtherIns.Text = "-$88.00";
-			this.labelInsPaidOtherIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelDedApplied.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelPaidOtherIns
 			// 
-			this.labelPaidOtherIns.Location = new System.Drawing.Point(31,76);
+			this.labelPaidOtherIns.Location = new System.Drawing.Point(28,259);
 			this.labelPaidOtherIns.Name = "labelPaidOtherIns";
-			this.labelPaidOtherIns.Size = new System.Drawing.Size(129,17);
+			this.labelPaidOtherIns.Size = new System.Drawing.Size(138,17);
 			this.labelPaidOtherIns.TabIndex = 79;
 			this.labelPaidOtherIns.Text = "Paid By Other Ins";
-			this.labelPaidOtherIns.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelInsCopay
-			// 
-			this.labelInsCopay.Location = new System.Drawing.Point(246,217);
-			this.labelInsCopay.Name = "labelInsCopay";
-			this.labelInsCopay.Size = new System.Drawing.Size(67,16);
-			this.labelInsCopay.TabIndex = 81;
-			this.labelInsCopay.Text = "-$10.00";
-			this.labelInsCopay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsPercentOverride
-			// 
-			this.labelInsPercentOverride.Location = new System.Drawing.Point(246,272);
-			this.labelInsPercentOverride.Name = "labelInsPercentOverride";
-			this.labelInsPercentOverride.Size = new System.Drawing.Size(67,16);
-			this.labelInsPercentOverride.TabIndex = 82;
-			this.labelInsPercentOverride.Text = "x  80%";
-			this.labelInsPercentOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsAllowedOverride
-			// 
-			this.labelInsAllowedOverride.Location = new System.Drawing.Point(241,124);
-			this.labelInsAllowedOverride.Name = "labelInsAllowedOverride";
-			this.labelInsAllowedOverride.Size = new System.Drawing.Size(67,16);
-			this.labelInsAllowedOverride.TabIndex = 83;
-			this.labelInsAllowedOverride.Text = "$500.00";
-			this.labelInsAllowedOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsInsPayEst
-			// 
-			this.labelInsInsPayEst.Location = new System.Drawing.Point(241,35);
-			this.labelInsInsPayEst.Name = "labelInsInsPayEst";
-			this.labelInsInsPayEst.Size = new System.Drawing.Size(65,16);
-			this.labelInsInsPayEst.TabIndex = 85;
-			this.labelInsInsPayEst.Text = "= $200.00";
-			this.labelInsInsPayEst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkDedBeforePerc
-			// 
-			this.checkDedBeforePerc.AutoCheck = false;
-			this.checkDedBeforePerc.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDedBeforePerc.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDedBeforePerc.Location = new System.Drawing.Point(48,15);
-			this.checkDedBeforePerc.Name = "checkDedBeforePerc";
-			this.checkDedBeforePerc.Size = new System.Drawing.Size(192,18);
-			this.checkDedBeforePerc.TabIndex = 86;
-			this.checkDedBeforePerc.Text = "Apply deductible before %";
-			this.checkDedBeforePerc.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDedBeforePerc.Click += new System.EventHandler(this.checkDedBeforePerc_Click);
-			// 
-			// labelPatInsPayAmt
-			// 
-			this.labelPatInsPayAmt.Location = new System.Drawing.Point(313,56);
-			this.labelPatInsPayAmt.Name = "labelPatInsPayAmt";
-			this.labelPatInsPayAmt.Size = new System.Drawing.Size(67,16);
-			this.labelPatInsPayAmt.TabIndex = 87;
-			this.labelPatInsPayAmt.Text = "-$200.00";
-			this.labelPatInsPayAmt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// panelClaimBar
-			// 
-			this.panelClaimBar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelClaimBar.Location = new System.Drawing.Point(320,94);
-			this.panelClaimBar.Name = "panelClaimBar";
-			this.panelClaimBar.Size = new System.Drawing.Size(65,1);
-			this.panelClaimBar.TabIndex = 88;
-			// 
-			// labelInsInsPayAmt
-			// 
-			this.labelInsInsPayAmt.Location = new System.Drawing.Point(239,56);
-			this.labelInsInsPayAmt.Name = "labelInsInsPayAmt";
-			this.labelInsInsPayAmt.Size = new System.Drawing.Size(67,16);
-			this.labelInsInsPayAmt.TabIndex = 89;
-			this.labelInsInsPayAmt.Text = "$200.00";
-			this.labelInsInsPayAmt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelPaidOtherIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupClaim
 			// 
@@ -853,140 +560,51 @@ namespace OpenDental
 			// 
 			// panelEstimateInfo
 			// 
-			this.panelEstimateInfo.Controls.Add(this.labelPatTotal);
-			this.panelEstimateInfo.Controls.Add(this.panelPatBar);
-			this.panelEstimateInfo.Controls.Add(this.groupBox1);
+			this.panelEstimateInfo.Controls.Add(this.textPatPortion1);
+			this.panelEstimateInfo.Controls.Add(this.checkIsOverAnnualMax);
+			this.panelEstimateInfo.Controls.Add(this.labelPatPortion1);
+			this.panelEstimateInfo.Controls.Add(this.textPaidOtherInsOverride);
+			this.panelEstimateInfo.Controls.Add(this.textInsEstTotalOverride);
+			this.panelEstimateInfo.Controls.Add(this.textInsEstTotal);
+			this.panelEstimateInfo.Controls.Add(this.label17);
 			this.panelEstimateInfo.Controls.Add(this.groupAllowed);
+			this.panelEstimateInfo.Controls.Add(this.textDedEst);
+			this.panelEstimateInfo.Controls.Add(this.textPaidOtherIns);
 			this.panelEstimateInfo.Controls.Add(this.textFeeSched);
 			this.panelEstimateInfo.Controls.Add(this.labelFeeSched);
-			this.panelEstimateInfo.Controls.Add(this.labelInsCopayOverride);
+			this.panelEstimateInfo.Controls.Add(this.labelPaidOtherIns);
 			this.panelEstimateInfo.Controls.Add(this.textCopayOverride);
-			this.panelEstimateInfo.Controls.Add(this.labelCopayOverride);
-			this.panelEstimateInfo.Controls.Add(this.label5);
-			this.panelEstimateInfo.Controls.Add(this.textBaseEst);
-			this.panelEstimateInfo.Controls.Add(this.labelInsCopay);
-			this.panelEstimateInfo.Controls.Add(this.labelPatPortion);
+			this.panelEstimateInfo.Controls.Add(this.label11);
 			this.panelEstimateInfo.Controls.Add(this.labelFee);
-			this.panelEstimateInfo.Controls.Add(this.labelPatFee);
 			this.panelEstimateInfo.Controls.Add(this.label4);
 			this.panelEstimateInfo.Controls.Add(this.textPercentage);
 			this.panelEstimateInfo.Controls.Add(this.textCopayAmt);
-			this.panelEstimateInfo.Controls.Add(this.labelInsPercentage);
 			this.panelEstimateInfo.Controls.Add(this.labelCopayAmt);
-			this.panelEstimateInfo.Controls.Add(this.textBaseEstOverride);
-			this.panelEstimateInfo.Controls.Add(this.labelInsPercentOverride);
+			this.panelEstimateInfo.Controls.Add(this.textDedEstOverride);
 			this.panelEstimateInfo.Controls.Add(this.textFee);
-			this.panelEstimateInfo.Controls.Add(this.label12);
-			this.panelEstimateInfo.Controls.Add(this.label13);
 			this.panelEstimateInfo.Controls.Add(this.textPercentOverride);
-			this.panelEstimateInfo.Controls.Add(this.label14);
-			this.panelEstimateInfo.Controls.Add(this.labelInsFee);
 			this.panelEstimateInfo.Location = new System.Drawing.Point(476,25);
 			this.panelEstimateInfo.Name = "panelEstimateInfo";
-			this.panelEstimateInfo.Size = new System.Drawing.Size(411,530);
+			this.panelEstimateInfo.Size = new System.Drawing.Size(411,368);
 			this.panelEstimateInfo.TabIndex = 94;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.labelPatInsEstTotalOverride);
-			this.groupBox1.Controls.Add(this.labelPatInsEstTotal);
-			this.groupBox1.Controls.Add(this.textOverAnnualMax);
-			this.groupBox1.Controls.Add(this.textDedEst);
-			this.groupBox1.Controls.Add(this.textInsEstTotalOverride);
-			this.groupBox1.Controls.Add(this.textPaidOtherIns);
-			this.groupBox1.Controls.Add(this.label19);
-			this.groupBox1.Controls.Add(this.labelInsPaidOtherIns);
-			this.groupBox1.Controls.Add(this.labelInsInsEstTotalOverride);
-			this.groupBox1.Controls.Add(this.labelPaidOtherIns);
-			this.groupBox1.Controls.Add(this.textInsEstTotal);
-			this.groupBox1.Controls.Add(this.label11);
-			this.groupBox1.Controls.Add(this.label17);
-			this.groupBox1.Controls.Add(this.labelInsOverAnnualMax);
-			this.groupBox1.Controls.Add(this.labelInsInsEstTotal);
-			this.groupBox1.Controls.Add(this.labelOverAnnualMax);
-			this.groupBox1.Controls.Add(this.labelInsDedEstOverride);
-			this.groupBox1.Controls.Add(this.labelInsDedEst);
-			this.groupBox1.Controls.Add(this.textDedEstOverride);
-			this.groupBox1.Controls.Add(this.label16);
-			this.groupBox1.Controls.Add(this.checkDedBeforePerc);
-			this.groupBox1.Location = new System.Drawing.Point(5,335);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(388,154);
-			this.groupBox1.TabIndex = 125;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Deductible or Not Payable";
-			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(4,133);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(156,17);
-			this.label19.TabIndex = 123;
-			this.label19.Text = "Insurance Estimate Override";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelInsInsEstTotalOverride
-			// 
-			this.labelInsInsEstTotalOverride.Location = new System.Drawing.Point(239,134);
-			this.labelInsInsEstTotalOverride.Name = "labelInsInsEstTotalOverride";
-			this.labelInsInsEstTotalOverride.Size = new System.Drawing.Size(67,16);
-			this.labelInsInsEstTotalOverride.TabIndex = 124;
-			this.labelInsInsEstTotalOverride.Text = "=$200.00";
-			this.labelInsInsEstTotalOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(31,38);
+			this.label11.Location = new System.Drawing.Point(28,214);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(129,17);
+			this.label11.Size = new System.Drawing.Size(138,17);
 			this.label11.TabIndex = 114;
 			this.label11.Text = "Deductible";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(4,113);
+			this.label17.Location = new System.Drawing.Point(28,304);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(156,17);
+			this.label17.Size = new System.Drawing.Size(138,17);
 			this.label17.TabIndex = 120;
 			this.label17.Text = "Insurance Estimate";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelInsInsEstTotal
-			// 
-			this.labelInsInsEstTotal.Location = new System.Drawing.Point(239,114);
-			this.labelInsInsEstTotal.Name = "labelInsInsEstTotal";
-			this.labelInsInsEstTotal.Size = new System.Drawing.Size(67,16);
-			this.labelInsInsEstTotal.TabIndex = 121;
-			this.labelInsInsEstTotal.Text = "=$200.00";
-			this.labelInsInsEstTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsDedEstOverride
-			// 
-			this.labelInsDedEstOverride.Location = new System.Drawing.Point(243,57);
-			this.labelInsDedEstOverride.Name = "labelInsDedEstOverride";
-			this.labelInsDedEstOverride.Size = new System.Drawing.Size(63,16);
-			this.labelInsDedEstOverride.TabIndex = 118;
-			this.labelInsDedEstOverride.Text = "-$50.00";
-			this.labelInsDedEstOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelInsDedEst
-			// 
-			this.labelInsDedEst.Location = new System.Drawing.Point(243,38);
-			this.labelInsDedEst.Name = "labelInsDedEst";
-			this.labelInsDedEst.Size = new System.Drawing.Size(63,16);
-			this.labelInsDedEst.TabIndex = 115;
-			this.labelInsDedEst.Text = "-$50.00";
-			this.labelInsDedEst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label16
-			// 
-			this.label16.Location = new System.Drawing.Point(31,57);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(129,17);
-			this.label16.TabIndex = 117;
-			this.label16.Text = "Deductible Override";
-			this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// groupAllowed
 			// 
@@ -994,34 +612,31 @@ namespace OpenDental
 			this.groupAllowed.Controls.Add(this.label10);
 			this.groupAllowed.Controls.Add(this.textAllowedFeeSched);
 			this.groupAllowed.Controls.Add(this.textSubstCode);
-			this.groupAllowed.Controls.Add(this.butUpdateAllowed);
 			this.groupAllowed.Controls.Add(this.label7);
-			this.groupAllowed.Controls.Add(this.labelInsCarrierAllowed);
 			this.groupAllowed.Controls.Add(this.label8);
+			this.groupAllowed.Controls.Add(this.butUpdateAllowed);
 			this.groupAllowed.Controls.Add(this.labelCarrierAllowed);
 			this.groupAllowed.Controls.Add(this.label2);
 			this.groupAllowed.Controls.Add(this.textCarrierAllowed);
 			this.groupAllowed.Controls.Add(this.textPPOFeeSched);
-			this.groupAllowed.Controls.Add(this.label3);
-			this.groupAllowed.Controls.Add(this.labelInsAllowedOverride);
-			this.groupAllowed.Location = new System.Drawing.Point(5,70);
+			this.groupAllowed.Location = new System.Drawing.Point(5,56);
 			this.groupAllowed.Name = "groupAllowed";
-			this.groupAllowed.Size = new System.Drawing.Size(388,145);
+			this.groupAllowed.Size = new System.Drawing.Size(388,132);
 			this.groupAllowed.TabIndex = 112;
 			this.groupAllowed.TabStop = false;
 			this.groupAllowed.Text = "Carrier Allowed Amount";
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(130,94);
+			this.label10.Location = new System.Drawing.Point(123,85);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(241,30);
+			this.label10.Size = new System.Drawing.Size(254,16);
 			this.label10.TabIndex = 112;
-			this.label10.Text = "This will let you edit the allowed fee schedule for this code.";
+			this.label10.Text = "Edit the allowed fee schedule for this code.";
 			// 
 			// textAllowedFeeSched
 			// 
-			this.textAllowedFeeSched.Location = new System.Drawing.Point(163,53);
+			this.textAllowedFeeSched.Location = new System.Drawing.Point(163,58);
 			this.textAllowedFeeSched.Name = "textAllowedFeeSched";
 			this.textAllowedFeeSched.ReadOnly = true;
 			this.textAllowedFeeSched.Size = new System.Drawing.Size(219,20);
@@ -1037,25 +652,16 @@ namespace OpenDental
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(34,38);
+			this.label7.Location = new System.Drawing.Point(34,40);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(127,14);
 			this.label7.TabIndex = 108;
 			this.label7.Text = "PPO Fee Schedule";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// labelInsCarrierAllowed
-			// 
-			this.labelInsCarrierAllowed.Location = new System.Drawing.Point(241,75);
-			this.labelInsCarrierAllowed.Name = "labelInsCarrierAllowed";
-			this.labelInsCarrierAllowed.Size = new System.Drawing.Size(67,16);
-			this.labelInsCarrierAllowed.TabIndex = 103;
-			this.labelInsCarrierAllowed.Text = "$500.00";
-			this.labelInsCarrierAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(34,57);
+			this.label8.Location = new System.Drawing.Point(34,62);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(127,14);
 			this.label8.TabIndex = 110;
@@ -1064,11 +670,11 @@ namespace OpenDental
 			// 
 			// labelCarrierAllowed
 			// 
-			this.labelCarrierAllowed.Location = new System.Drawing.Point(34,75);
+			this.labelCarrierAllowed.Location = new System.Drawing.Point(34,110);
 			this.labelCarrierAllowed.Name = "labelCarrierAllowed";
 			this.labelCarrierAllowed.Size = new System.Drawing.Size(127,14);
 			this.labelCarrierAllowed.TabIndex = 101;
-			this.labelCarrierAllowed.Text = "Calculated Allowed Amt";
+			this.labelCarrierAllowed.Text = "Allowed Amt";
 			this.labelCarrierAllowed.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label2
@@ -1082,16 +688,16 @@ namespace OpenDental
 			// 
 			// textCarrierAllowed
 			// 
-			this.textCarrierAllowed.Location = new System.Drawing.Point(163,72);
+			this.textCarrierAllowed.Location = new System.Drawing.Point(163,107);
 			this.textCarrierAllowed.Name = "textCarrierAllowed";
 			this.textCarrierAllowed.ReadOnly = true;
-			this.textCarrierAllowed.Size = new System.Drawing.Size(77,20);
+			this.textCarrierAllowed.Size = new System.Drawing.Size(70,20);
 			this.textCarrierAllowed.TabIndex = 102;
 			this.textCarrierAllowed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textPPOFeeSched
 			// 
-			this.textPPOFeeSched.Location = new System.Drawing.Point(163,34);
+			this.textPPOFeeSched.Location = new System.Drawing.Point(163,36);
 			this.textPPOFeeSched.Name = "textPPOFeeSched";
 			this.textPPOFeeSched.ReadOnly = true;
 			this.textPPOFeeSched.Size = new System.Drawing.Size(219,20);
@@ -1099,7 +705,7 @@ namespace OpenDental
 			// 
 			// textFeeSched
 			// 
-			this.textFeeSched.Location = new System.Drawing.Point(168,50);
+			this.textFeeSched.Location = new System.Drawing.Point(168,36);
 			this.textFeeSched.Name = "textFeeSched";
 			this.textFeeSched.ReadOnly = true;
 			this.textFeeSched.Size = new System.Drawing.Size(219,20);
@@ -1107,71 +713,29 @@ namespace OpenDental
 			// 
 			// labelFeeSched
 			// 
-			this.labelFeeSched.Location = new System.Drawing.Point(39,53);
+			this.labelFeeSched.Location = new System.Drawing.Point(39,39);
 			this.labelFeeSched.Name = "labelFeeSched";
 			this.labelFeeSched.Size = new System.Drawing.Size(127,14);
 			this.labelFeeSched.TabIndex = 105;
 			this.labelFeeSched.Text = "Fee Schedule";
 			this.labelFeeSched.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// labelInsCopayOverride
-			// 
-			this.labelInsCopayOverride.Location = new System.Drawing.Point(246,236);
-			this.labelInsCopayOverride.Name = "labelInsCopayOverride";
-			this.labelInsCopayOverride.Size = new System.Drawing.Size(67,16);
-			this.labelInsCopayOverride.TabIndex = 100;
-			this.labelInsCopayOverride.Text = "-$10.00";
-			this.labelInsCopayOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelCopayOverride
-			// 
-			this.labelCopayOverride.Location = new System.Drawing.Point(33,235);
-			this.labelCopayOverride.Name = "labelCopayOverride";
-			this.labelCopayOverride.Size = new System.Drawing.Size(133,17);
-			this.labelCopayOverride.TabIndex = 99;
-			this.labelCopayOverride.Text = "Patient Copay Override";
-			this.labelCopayOverride.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(59,293);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(107,14);
-			this.label5.TabIndex = 94;
-			this.label5.Text = "Base Estimate";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBaseEst
-			// 
-			this.textBaseEst.Location = new System.Drawing.Point(168,291);
-			this.textBaseEst.Name = "textBaseEst";
-			this.textBaseEst.ReadOnly = true;
-			this.textBaseEst.Size = new System.Drawing.Size(77,20);
-			this.textBaseEst.TabIndex = 95;
-			this.textBaseEst.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
 			// groupClaimInfo
 			// 
+			this.groupClaimInfo.Controls.Add(this.textPatPortion2);
+			this.groupClaimInfo.Controls.Add(this.labelPatPortion2);
 			this.groupClaimInfo.Controls.Add(this.textWriteOff);
-			this.groupClaimInfo.Controls.Add(this.labelPatInsPayAmt);
-			this.groupClaimInfo.Controls.Add(this.labelInsInsPayEst);
 			this.groupClaimInfo.Controls.Add(this.textInsPayEst);
-			this.groupClaimInfo.Controls.Add(this.labelPatTotalClaim);
 			this.groupClaimInfo.Controls.Add(this.labelInsPayEst);
 			this.groupClaimInfo.Controls.Add(this.labelInsPayAmt);
 			this.groupClaimInfo.Controls.Add(this.textInsPayAmt);
-			this.groupClaimInfo.Controls.Add(this.labelInsDedApplied);
-			this.groupClaimInfo.Controls.Add(this.labelInsInsPayAmt);
 			this.groupClaimInfo.Controls.Add(this.textDedApplied);
-			this.groupClaimInfo.Controls.Add(this.panelClaimBar);
 			this.groupClaimInfo.Controls.Add(this.labelDedApplied);
 			this.groupClaimInfo.Controls.Add(this.labelWriteOff);
-			this.groupClaimInfo.Controls.Add(this.labelPatWriteOff);
-			this.groupClaimInfo.Controls.Add(this.labelPatInsPayEst);
 			this.groupClaimInfo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupClaimInfo.Location = new System.Drawing.Point(481,528);
+			this.groupClaimInfo.Location = new System.Drawing.Point(481,399);
 			this.groupClaimInfo.Name = "groupClaimInfo";
-			this.groupClaimInfo.Size = new System.Drawing.Size(388,116);
+			this.groupClaimInfo.Size = new System.Drawing.Size(388,150);
 			this.groupClaimInfo.TabIndex = 0;
 			this.groupClaimInfo.TabStop = false;
 			this.groupClaimInfo.Text = "Claim Info";
@@ -1194,40 +758,34 @@ namespace OpenDental
 			this.labelDateEntry.Text = "Pay Entry Date";
 			this.labelDateEntry.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// labelPatInsEstTotal
+			// checkIsOverAnnualMax
 			// 
-			this.labelPatInsEstTotal.Location = new System.Drawing.Point(313,114);
-			this.labelPatInsEstTotal.Name = "labelPatInsEstTotal";
-			this.labelPatInsEstTotal.Size = new System.Drawing.Size(67,16);
-			this.labelPatInsEstTotal.TabIndex = 125;
-			this.labelPatInsEstTotal.Text = "-$200.00";
-			this.labelPatInsEstTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsOverAnnualMax.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsOverAnnualMax.Location = new System.Drawing.Point(19,280);
+			this.checkIsOverAnnualMax.Name = "checkIsOverAnnualMax";
+			this.checkIsOverAnnualMax.Size = new System.Drawing.Size(163,18);
+			this.checkIsOverAnnualMax.TabIndex = 101;
+			this.checkIsOverAnnualMax.Text = "Over Annual Max";
+			this.checkIsOverAnnualMax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsOverAnnualMax.UseVisualStyleBackColor = true;
 			// 
-			// labelPatInsEstTotalOverride
+			// labelPatPortion1
 			// 
-			this.labelPatInsEstTotalOverride.Location = new System.Drawing.Point(313,134);
-			this.labelPatInsEstTotalOverride.Name = "labelPatInsEstTotalOverride";
-			this.labelPatInsEstTotalOverride.Size = new System.Drawing.Size(67,16);
-			this.labelPatInsEstTotalOverride.TabIndex = 126;
-			this.labelPatInsEstTotalOverride.Text = "-$200.00";
-			this.labelPatInsEstTotalOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelPatPortion1.Location = new System.Drawing.Point(28,325);
+			this.labelPatPortion1.Name = "labelPatPortion1";
+			this.labelPatPortion1.Size = new System.Drawing.Size(138,17);
+			this.labelPatPortion1.TabIndex = 129;
+			this.labelPatPortion1.Text = "Estimated Patient Portion";
+			this.labelPatPortion1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// labelPatTotal
+			// labelPatPortion2
 			// 
-			this.labelPatTotal.Location = new System.Drawing.Point(318,491);
-			this.labelPatTotal.Name = "labelPatTotal";
-			this.labelPatTotal.Size = new System.Drawing.Size(67,16);
-			this.labelPatTotal.TabIndex = 126;
-			this.labelPatTotal.Text = "= $320.00";
-			this.labelPatTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// panelPatBar
-			// 
-			this.panelPatBar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelPatBar.Location = new System.Drawing.Point(325,490);
-			this.panelPatBar.Name = "panelPatBar";
-			this.panelPatBar.Size = new System.Drawing.Size(65,1);
-			this.panelPatBar.TabIndex = 127;
+			this.labelPatPortion2.Location = new System.Drawing.Point(23,112);
+			this.labelPatPortion2.Name = "labelPatPortion2";
+			this.labelPatPortion2.Size = new System.Drawing.Size(138,17);
+			this.labelPatPortion2.TabIndex = 131;
+			this.labelPatPortion2.Text = "Estimated Patient Portion";
+			this.labelPatPortion2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDateEntry
 			// 
@@ -1251,38 +809,47 @@ namespace OpenDental
 			this.textFeeBilled.Size = new System.Drawing.Size(77,20);
 			this.textFeeBilled.TabIndex = 72;
 			// 
+			// textPatPortion2
+			// 
+			this.textPatPortion2.Location = new System.Drawing.Point(163,110);
+			this.textPatPortion2.Name = "textPatPortion2";
+			this.textPatPortion2.ReadOnly = true;
+			this.textPatPortion2.Size = new System.Drawing.Size(70,20);
+			this.textPatPortion2.TabIndex = 132;
+			this.textPatPortion2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// textWriteOff
 			// 
-			this.textWriteOff.Location = new System.Drawing.Point(163,72);
+			this.textWriteOff.Location = new System.Drawing.Point(163,87);
 			this.textWriteOff.Name = "textWriteOff";
-			this.textWriteOff.Size = new System.Drawing.Size(77,20);
+			this.textWriteOff.Size = new System.Drawing.Size(70,20);
 			this.textWriteOff.TabIndex = 18;
 			this.textWriteOff.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textWriteOff.Leave += new System.EventHandler(this.textWriteOff_Leave);
 			// 
 			// textInsPayEst
 			// 
-			this.textInsPayEst.Location = new System.Drawing.Point(163,33);
+			this.textInsPayEst.Location = new System.Drawing.Point(163,41);
 			this.textInsPayEst.Name = "textInsPayEst";
-			this.textInsPayEst.Size = new System.Drawing.Size(77,20);
+			this.textInsPayEst.Size = new System.Drawing.Size(70,20);
 			this.textInsPayEst.TabIndex = 20;
 			this.textInsPayEst.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textInsPayEst.Leave += new System.EventHandler(this.textInsPayEst_Leave);
 			// 
 			// textInsPayAmt
 			// 
-			this.textInsPayAmt.Location = new System.Drawing.Point(163,53);
+			this.textInsPayAmt.Location = new System.Drawing.Point(163,64);
 			this.textInsPayAmt.Name = "textInsPayAmt";
-			this.textInsPayAmt.Size = new System.Drawing.Size(77,20);
+			this.textInsPayAmt.Size = new System.Drawing.Size(70,20);
 			this.textInsPayAmt.TabIndex = 0;
 			this.textInsPayAmt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textInsPayAmt.Leave += new System.EventHandler(this.textInsPayAmt_Leave);
 			// 
 			// textDedApplied
 			// 
-			this.textDedApplied.Location = new System.Drawing.Point(163,14);
+			this.textDedApplied.Location = new System.Drawing.Point(163,18);
 			this.textDedApplied.Name = "textDedApplied";
-			this.textDedApplied.Size = new System.Drawing.Size(77,20);
+			this.textDedApplied.Size = new System.Drawing.Size(70,20);
 			this.textDedApplied.TabIndex = 75;
 			this.textDedApplied.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textDedApplied.Leave += new System.EventHandler(this.textDedApplied_Leave);
@@ -1304,7 +871,7 @@ namespace OpenDental
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(18,647);
+			this.butDelete.Location = new System.Drawing.Point(18,569);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(80,24);
 			this.butDelete.TabIndex = 3;
@@ -1320,7 +887,7 @@ namespace OpenDental
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(802,647);
+			this.butCancel.Location = new System.Drawing.Point(802,569);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -1335,74 +902,55 @@ namespace OpenDental
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(702,647);
+			this.butOK.Location = new System.Drawing.Point(702,569);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textOverAnnualMax
+			// textPatPortion1
 			// 
-			this.textOverAnnualMax.Location = new System.Drawing.Point(163,92);
-			this.textOverAnnualMax.Name = "textOverAnnualMax";
-			this.textOverAnnualMax.ReadOnly = true;
-			this.textOverAnnualMax.Size = new System.Drawing.Size(77,20);
-			this.textOverAnnualMax.TabIndex = 61;
-			this.textOverAnnualMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textOverAnnualMax.Leave += new System.EventHandler(this.textOverAnnualMax_Leave);
+			this.textPatPortion1.Location = new System.Drawing.Point(168,323);
+			this.textPatPortion1.Name = "textPatPortion1";
+			this.textPatPortion1.ReadOnly = true;
+			this.textPatPortion1.Size = new System.Drawing.Size(70,20);
+			this.textPatPortion1.TabIndex = 130;
+			this.textPatPortion1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// textDedEst
+			// textPaidOtherInsOverride
 			// 
-			this.textDedEst.Location = new System.Drawing.Point(163,35);
-			this.textDedEst.Name = "textDedEst";
-			this.textDedEst.ReadOnly = true;
-			this.textDedEst.Size = new System.Drawing.Size(77,20);
-			this.textDedEst.TabIndex = 113;
-			this.textDedEst.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textPaidOtherInsOverride.Location = new System.Drawing.Point(240,257);
+			this.textPaidOtherInsOverride.MaxVal = 255;
+			this.textPaidOtherInsOverride.MinVal = 0;
+			this.textPaidOtherInsOverride.Name = "textPaidOtherInsOverride";
+			this.textPaidOtherInsOverride.Size = new System.Drawing.Size(70,20);
+			this.textPaidOtherInsOverride.TabIndex = 128;
+			this.textPaidOtherInsOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textInsEstTotalOverride
 			// 
-			this.textInsEstTotalOverride.Location = new System.Drawing.Point(163,131);
+			this.textInsEstTotalOverride.Location = new System.Drawing.Point(240,301);
 			this.textInsEstTotalOverride.Name = "textInsEstTotalOverride";
-			this.textInsEstTotalOverride.Size = new System.Drawing.Size(77,20);
+			this.textInsEstTotalOverride.Size = new System.Drawing.Size(70,20);
 			this.textInsEstTotalOverride.TabIndex = 122;
 			this.textInsEstTotalOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textInsEstTotalOverride.Leave += new System.EventHandler(this.textInsEstTotalOverride_Leave);
 			// 
-			// textPaidOtherIns
-			// 
-			this.textPaidOtherIns.Location = new System.Drawing.Point(163,73);
-			this.textPaidOtherIns.Name = "textPaidOtherIns";
-			this.textPaidOtherIns.ReadOnly = true;
-			this.textPaidOtherIns.Size = new System.Drawing.Size(77,20);
-			this.textPaidOtherIns.TabIndex = 78;
-			this.textPaidOtherIns.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textPaidOtherIns.Leave += new System.EventHandler(this.textPaidOtherIns_Leave);
-			// 
 			// textInsEstTotal
 			// 
-			this.textInsEstTotal.Location = new System.Drawing.Point(163,111);
+			this.textInsEstTotal.Location = new System.Drawing.Point(168,301);
 			this.textInsEstTotal.Name = "textInsEstTotal";
 			this.textInsEstTotal.ReadOnly = true;
-			this.textInsEstTotal.Size = new System.Drawing.Size(77,20);
+			this.textInsEstTotal.Size = new System.Drawing.Size(70,20);
 			this.textInsEstTotal.TabIndex = 119;
 			this.textInsEstTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// textDedEstOverride
-			// 
-			this.textDedEstOverride.Location = new System.Drawing.Point(163,54);
-			this.textDedEstOverride.Name = "textDedEstOverride";
-			this.textDedEstOverride.Size = new System.Drawing.Size(77,20);
-			this.textDedEstOverride.TabIndex = 116;
-			this.textDedEstOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textDedEstOverride.Leave += new System.EventHandler(this.textDedEstOverride_Leave);
-			// 
 			// textAllowedOverride
 			// 
-			this.textAllowedOverride.Location = new System.Drawing.Point(163,122);
+			this.textAllowedOverride.Location = new System.Drawing.Point(235,107);
 			this.textAllowedOverride.Name = "textAllowedOverride";
-			this.textAllowedOverride.Size = new System.Drawing.Size(77,20);
+			this.textAllowedOverride.Size = new System.Drawing.Size(70,20);
 			this.textAllowedOverride.TabIndex = 30;
 			this.textAllowedOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textAllowedOverride.Leave += new System.EventHandler(this.textAllowedOverride_Leave);
@@ -1414,7 +962,7 @@ namespace OpenDental
 			this.butUpdateAllowed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butUpdateAllowed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butUpdateAllowed.CornerRadius = 4F;
-			this.butUpdateAllowed.Location = new System.Drawing.Point(23,95);
+			this.butUpdateAllowed.Location = new System.Drawing.Point(13,81);
 			this.butUpdateAllowed.Name = "butUpdateAllowed";
 			this.butUpdateAllowed.Size = new System.Drawing.Size(101,22);
 			this.butUpdateAllowed.TabIndex = 98;
@@ -1422,11 +970,30 @@ namespace OpenDental
 			this.toolTip1.SetToolTip(this.butUpdateAllowed,"Edit the fee schedule that holds the fee showing in the Carrier Allowed Amt box.");
 			this.butUpdateAllowed.Click += new System.EventHandler(this.butUpdateAllowed_Click);
 			// 
+			// textDedEst
+			// 
+			this.textDedEst.Location = new System.Drawing.Point(168,213);
+			this.textDedEst.Name = "textDedEst";
+			this.textDedEst.ReadOnly = true;
+			this.textDedEst.Size = new System.Drawing.Size(70,20);
+			this.textDedEst.TabIndex = 113;
+			this.textDedEst.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textPaidOtherIns
+			// 
+			this.textPaidOtherIns.Location = new System.Drawing.Point(168,257);
+			this.textPaidOtherIns.Name = "textPaidOtherIns";
+			this.textPaidOtherIns.ReadOnly = true;
+			this.textPaidOtherIns.Size = new System.Drawing.Size(70,20);
+			this.textPaidOtherIns.TabIndex = 78;
+			this.textPaidOtherIns.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textPaidOtherIns.Leave += new System.EventHandler(this.textPaidOtherIns_Leave);
+			// 
 			// textCopayOverride
 			// 
-			this.textCopayOverride.Location = new System.Drawing.Point(168,234);
+			this.textCopayOverride.Location = new System.Drawing.Point(240,191);
 			this.textCopayOverride.Name = "textCopayOverride";
-			this.textCopayOverride.Size = new System.Drawing.Size(77,20);
+			this.textCopayOverride.Size = new System.Drawing.Size(70,20);
 			this.textCopayOverride.TabIndex = 98;
 			this.textCopayOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textCopayOverride.Leave += new System.EventHandler(this.textCopayOverride_Leave);
@@ -1434,29 +1001,29 @@ namespace OpenDental
 			// 
 			// textCopayAmt
 			// 
-			this.textCopayAmt.Location = new System.Drawing.Point(168,215);
+			this.textCopayAmt.Location = new System.Drawing.Point(168,191);
 			this.textCopayAmt.Name = "textCopayAmt";
 			this.textCopayAmt.ReadOnly = true;
-			this.textCopayAmt.Size = new System.Drawing.Size(77,20);
+			this.textCopayAmt.Size = new System.Drawing.Size(70,20);
 			this.textCopayAmt.TabIndex = 36;
 			this.textCopayAmt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// textBaseEstOverride
+			// textDedEstOverride
 			// 
-			this.textBaseEstOverride.Location = new System.Drawing.Point(168,310);
-			this.textBaseEstOverride.Name = "textBaseEstOverride";
-			this.textBaseEstOverride.Size = new System.Drawing.Size(77,20);
-			this.textBaseEstOverride.TabIndex = 38;
-			this.textBaseEstOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBaseEstOverride.Leave += new System.EventHandler(this.textBaseEstOverride_Leave);
+			this.textDedEstOverride.Location = new System.Drawing.Point(240,213);
+			this.textDedEstOverride.Name = "textDedEstOverride";
+			this.textDedEstOverride.Size = new System.Drawing.Size(70,20);
+			this.textDedEstOverride.TabIndex = 116;
+			this.textDedEstOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textDedEstOverride.Leave += new System.EventHandler(this.textDedEstOverride_Leave);
 			// 
 			// textPercentOverride
 			// 
-			this.textPercentOverride.Location = new System.Drawing.Point(197,272);
+			this.textPercentOverride.Location = new System.Drawing.Point(240,235);
 			this.textPercentOverride.MaxVal = 255;
 			this.textPercentOverride.MinVal = 0;
 			this.textPercentOverride.Name = "textPercentOverride";
-			this.textPercentOverride.Size = new System.Drawing.Size(48,20);
+			this.textPercentOverride.Size = new System.Drawing.Size(70,20);
 			this.textPercentOverride.TabIndex = 45;
 			this.textPercentOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textPercentOverride.Leave += new System.EventHandler(this.textPercentOverride_Leave);
@@ -1464,7 +1031,7 @@ namespace OpenDental
 			// FormClaimProc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(889,680);
+			this.ClientSize = new System.Drawing.Size(889,602);
 			this.Controls.Add(this.textDateEntry);
 			this.Controls.Add(this.labelDateEntry);
 			this.Controls.Add(this.textProcDate);
@@ -1500,8 +1067,6 @@ namespace OpenDental
 			this.panelClaimExtras.PerformLayout();
 			this.panelEstimateInfo.ResumeLayout(false);
 			this.panelEstimateInfo.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
 			this.groupAllowed.ResumeLayout(false);
 			this.groupAllowed.PerformLayout();
 			this.groupClaimInfo.ResumeLayout(false);
@@ -1571,16 +1136,7 @@ namespace OpenDental
 				groupClaimInfo.Visible=true;
 				if(ClaimProcCur.ProcNum==0){//if a total entry rather than by proc
 					panelEstimateInfo.Visible=false;
-					labelInsDedApplied.Visible=false;
-					//labelInsPaidOtherIns.Visible=false;
-					//labelInsOverAnnualMax.Visible=false;
-					labelInsInsPayEst.Visible=false;
-					labelInsInsPayAmt.Visible=false;
-					labelPatInsPayEst.Visible=false;
-					labelPatInsPayAmt.Visible=false;
-					labelPatWriteOff.Visible=false;
-					panelClaimBar.Visible=false;
-					labelPatTotal.Visible=false;
+					//labelPatTotal.Visible=false;
 					labelInsPayAmt.Font=new Font(labelInsPayAmt.Font,FontStyle.Bold);
 					labelProcDate.Visible=false;
 					textProcDate.Visible=false;
@@ -1611,17 +1167,12 @@ namespace OpenDental
 				groupClaimInfo.Text="";
 				labelFee.Visible=true;
 				textFee.Visible=true;
-				labelPatPortion.Visible=true;
-				labelPatFee.Visible=true;
 				labelCopayAmt.Visible=true;
 				textCopayAmt.Visible=true;
-				labelCopayOverride.Visible=true;
 				textCopayOverride.Visible=true;
 				labelWriteOff.Visible=true;
 				textWriteOff.Visible=true;
-				labelPatWriteOff.Visible=true;
-				panelClaimBar.Visible=true;
-				labelPatTotal.Visible=true;
+				//labelPatTotal.Visible=true;
 				groupClaim.Visible=false;
 				labelNotInClaim.Visible=false;
 			}
@@ -1777,11 +1328,11 @@ namespace OpenDental
 			if(ClaimProcCur.PercentOverride!=-1){
 				textPercentOverride.Text=ClaimProcCur.PercentOverride.ToString();
 			}
-			textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
-			if(ClaimProcCur.BaseEstOverride!=-1){
-				textBaseEstOverride.Text=ClaimProcCur.BaseEstOverride.ToString("f");
-			}
-			checkDedBeforePerc.Checked=ClaimProcCur.DedBeforePerc;
+			//textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
+			//if(ClaimProcCur.BaseEstOverride!=-1){
+			//	textBaseEstOverride.Text=ClaimProcCur.BaseEstOverride.ToString("f");
+			//}
+			//checkDedBeforePerc.Checked=ClaimProcCur.DedBeforePerc;
 			if(ClaimProcCur.DedEst > 0) {
 				textDedEst.Text=ClaimProcCur.DedEst.ToString("f");
 			}
@@ -1791,9 +1342,9 @@ namespace OpenDental
 			if(ClaimProcCur.PaidOtherIns!=-1){
 				textPaidOtherIns.Text=ClaimProcCur.PaidOtherIns.ToString("f");
 			}
-			if(ClaimProcCur.OverAnnualMax!=-1){
-				textOverAnnualMax.Text=ClaimProcCur.OverAnnualMax.ToString("f");
-			}
+			//if(ClaimProcCur.OverAnnualMax!=-1){
+			//	textOverAnnualMax.Text=ClaimProcCur.OverAnnualMax.ToString("f");
+			//}
 			if(ClaimProcCur.InsEstTotal!=-1) {
 				textInsEstTotal.Text=ClaimProcCur.InsEstTotal.ToString("f");
 			}
@@ -1905,41 +1456,26 @@ namespace OpenDental
 			//all labels must have a value set.
 			double baseEst=0;
 			double insEstTotal=0;
-			if(IsProc){
-				labelPatFee.Text=ProcFee.ToString("c");
-			}
-			else{
-				labelPatFee.Text="";
-			}
 			if(textAllowedOverride.Text!=""){//Allowed Override takes priority
 				double allowedOverride=PIn.PDouble(textAllowedOverride.Text);
-				labelInsFee.Text="";
-				labelInsCarrierAllowed.Text="";
-				labelInsAllowedOverride.Text=allowedOverride.ToString("c");
 				baseEst=allowedOverride;
 				insEstTotal=allowedOverride;
 			}
 			else if(textCarrierAllowed.Text!=""){//Carrier Allowed takes priority
 				double allowedCarrier=PIn.PDouble(textCarrierAllowed.Text);
-				labelInsFee.Text="";
-				labelInsCarrierAllowed.Text=allowedCarrier.ToString("c");
-				labelInsAllowedOverride.Text="";
 				baseEst=allowedCarrier;
 				insEstTotal=allowedCarrier;
 			}
 			else{
-				labelInsFee.Text=ProcFee.ToString("c");
-				labelInsCarrierAllowed.Text="";
-				labelInsAllowedOverride.Text="";
 				baseEst=ProcFee;
 				insEstTotal=ProcFee;
 			}
+			/*
 			double copay=0;//never gets set to -1
 			if(textCopayOverride.Text==""){//no override, so only show copayAmt
 				if(ClaimProcCur.CopayAmt!=-1){
 					copay=ClaimProcCur.CopayAmt;
 				}
-				labelInsCopayOverride.Text="";
 				if(copay==0) {
 					labelInsCopay.Text="";
 				}
@@ -2120,7 +1656,7 @@ namespace OpenDental
 			else{
 				patTotal=ProcFee-insPayAmt-writeOff;
 			}
-			labelPatTotal.Text="= "+patTotal.ToString("c");
+			labelPatTotal.Text="= "+patTotal.ToString("c");*/
 		}
 
 		private void listStatus_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -2213,8 +1749,6 @@ namespace OpenDental
 				writeoff=0;
 			}
 			textWriteOff.Text=writeoff.ToString("n");
-			labelPatWriteOff.Text="- "+writeoff.ToString("c");
-			labelPatTotal.Text="= "+(ProcFee-writeoff).ToString("c");
 		}
 
 		private void textPercentOverride_Leave(object sender, System.EventArgs e) {
@@ -2272,7 +1806,7 @@ namespace OpenDental
 				|| textAllowedOverride.errorProvider1.GetError(textAllowedOverride)!=""
 				|| textCopayOverride.errorProvider1.GetError(textCopayAmt)!=""
 				|| textPercentOverride.errorProvider1.GetError(textPercentOverride)!=""
-				|| textBaseEstOverride.errorProvider1.GetError(textBaseEstOverride)!=""
+				//|| textBaseEstOverride.errorProvider1.GetError(textBaseEstOverride)!=""
 				|| textDedEstOverride.errorProvider1.GetError(textDedEstOverride)!=""
 				|| textInsEstTotalOverride.errorProvider1.GetError(textInsEstTotalOverride)!=""
 				|| textDedApplied.errorProvider1.GetError(textDedApplied)!=""
@@ -2325,19 +1859,19 @@ namespace OpenDental
 			else{
 				ClaimProcCur.PercentOverride=PIn.PInt(textPercentOverride.Text);
 			}
-			ClaimProcCur.BaseEst=PIn.PDouble(textBaseEst.Text);
-			if(textBaseEstOverride.Text==""){
-				ClaimProcCur.BaseEstOverride=-1;
-			}
-			else{
-				ClaimProcCur.BaseEstOverride=PIn.PDouble(textBaseEstOverride.Text);
-			}
-			if(checkDedBeforePerc.Checked) {
-				ClaimProcCur.DedBeforePerc=true;
-			}
-			else {
-				ClaimProcCur.DedBeforePerc=false;
-			}
+			//ClaimProcCur.BaseEst=PIn.PDouble(textBaseEst.Text);
+			//if(textBaseEstOverride.Text==""){
+			//	ClaimProcCur.BaseEstOverride=-1;
+			//}
+			//else{
+			//	ClaimProcCur.BaseEstOverride=PIn.PDouble(textBaseEstOverride.Text);
+			//}
+			//if(checkDedBeforePerc.Checked) {
+			//	ClaimProcCur.DedBeforePerc=true;
+			//}
+			//else {
+			//	ClaimProcCur.DedBeforePerc=false;
+			//}
 			if(textDedEstOverride.Text=="") {
 				ClaimProcCur.DedEstOverride=-1;
 			}

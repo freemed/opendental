@@ -2289,14 +2289,14 @@ namespace OpenDental{
 				else if(ClaimProcsForProc[i].CopayAmt!=-1){
 					tbIns.Cell[5,i]=ClaimProcsForProc[i].CopayAmt.ToString("n");
 				}
-				tbIns.Cell[6,i]=ClaimProcsForProc[i].BaseEst.ToString("n");
-				if(ClaimProcsForProc[i].BaseEstOverride!=-1){
-					tbIns.Cell[7,i]=ClaimProcsForProc[i].BaseEstOverride.ToString("n");
-					tbIns.FontBold[7,i]=true;
-				}
-				else{
-					tbIns.FontBold[6,i]=true;
-				}
+				//tbIns.Cell[6,i]=ClaimProcsForProc[i].BaseEst.ToString("n");
+				//if(ClaimProcsForProc[i].BaseEstOverride!=-1){
+				//	tbIns.Cell[7,i]=ClaimProcsForProc[i].BaseEstOverride.ToString("n");
+				//	tbIns.FontBold[7,i]=true;
+				//}
+				//else{
+				//	tbIns.FontBold[6,i]=true;
+				//}
 				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
 					if(ClaimProcsForProc[i].DedEstOverride != -1) {
 						tbIns.Cell[8,i]=ClaimProcsForProc[i].DedEstOverride.ToString("n");
