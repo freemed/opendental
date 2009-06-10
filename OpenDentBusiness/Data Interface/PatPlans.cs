@@ -187,6 +187,15 @@ namespace OpenDentBusiness{
 			return 0;
 		}
 
+		///<summary>Gets one patPlanNum directly from database.  Only used once in FormClaimProc.</summary>
+		public static int GetPatPlanNum(int patNum,int planNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum,planNum);
+			}
+			string command="SELECT PatPlanNum FROM patplan WHERE PatNum="+POut.PInt(patNum)+" AND PlanNum="+POut.PInt(planNum);
+			return PIn.PInt(Db.GetScalar(command));
+		}
+
 		public static PatPlan[] GetByPlanNum(int planNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);

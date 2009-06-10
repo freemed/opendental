@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 			return list;
 		}
 
-		///<summary>Used in the Plan edit window to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>
+		///<summary>Used in the PlanEdit and FormClaimProc to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>
 		public static List<Benefit> RefreshForPlan(int planNum,int patPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),planNum,patPlanNum);

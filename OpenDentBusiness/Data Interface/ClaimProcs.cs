@@ -60,8 +60,8 @@ namespace OpenDentBusiness{
 				cp.PercentOverride = PIn.PInt   (table.Rows[i][18].ToString());
 				cp.CopayAmt        = PIn.PDouble(table.Rows[i][19].ToString());
 				cp.NoBillIns       = PIn.PBool  (table.Rows[i][20].ToString());
-				cp.IsOverAnnualMax = PIn.PBool  (table.Rows[i][21].ToString());
-				cp.PaidOtherIns    = PIn.PDouble(table.Rows[i][22].ToString());
+				cp.PaidOtherIns    = PIn.PDouble(table.Rows[i][21].ToString());
+				cp.BaseEst         = PIn.PDouble(table.Rows[i][22].ToString());
 				cp.CopayOverride   = PIn.PDouble(table.Rows[i][23].ToString());
 				cp.ProcDate        = PIn.PDate  (table.Rows[i][24].ToString());
 				cp.DateEntry       = PIn.PDate  (table.Rows[i][25].ToString());
@@ -71,6 +71,7 @@ namespace OpenDentBusiness{
 				cp.InsEstTotal     = PIn.PDouble(table.Rows[i][29].ToString());
 				cp.InsEstTotalOverride= PIn.PDouble(table.Rows[i][30].ToString());
 				cp.PaidOtherInsOverride=PIn.PDouble(table.Rows[i][31].ToString());
+				cp.EstimateNote    =PIn.PString(table.Rows[i][32].ToString());
 				retVal.Add(cp);
 			}
 			return retVal;
@@ -92,9 +93,9 @@ namespace OpenDentBusiness{
 			command+="ProcNum,ClaimNum,PatNum,ProvNum,"
 				+"FeeBilled,InsPayEst,DedApplied,Status,InsPayAmt,Remarks,ClaimPaymentNum,"
 				+"PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride,"
-				+"CopayAmt,NoBillIns,IsOverAnnualMax,"
-				+"PaidOtherIns,CopayOverride,ProcDate,DateEntry,LineNumber,DedEst,"
-				+"DedEstOverride,InsEstTotal,InsEstTotalOverride,PaidOtherInsOverride) VALUES(";
+				+"CopayAmt,NoBillIns,PaidOtherIns,BaseEst,CopayOverride,"
+				+"ProcDate,DateEntry,LineNumber,DedEst,DedEstOverride,InsEstTotal,"
+				+"InsEstTotalOverride,PaidOtherInsOverride,EstimateNote) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(cp.ClaimProcNum)+"', ";
 			}
@@ -119,8 +120,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(cp.PercentOverride)+"', "
 				+"'"+POut.PDouble(cp.CopayAmt)+"', "
 				+"'"+POut.PBool(cp.NoBillIns)+"', "
-				+"'"+POut.PBool  (cp.IsOverAnnualMax)+"', "
 				+"'"+POut.PDouble(cp.PaidOtherIns)+"', "
+				+"'"+POut.PDouble(cp.BaseEst)+"', "
 				+"'"+POut.PDouble(cp.CopayOverride)+"', "
 				+POut.PDate(cp.ProcDate)+", "
 				+"NOW(), "
@@ -129,7 +130,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.DedEstOverride)+"', "
 				+"'"+POut.PDouble(cp.InsEstTotal)+"', "
 				+"'"+POut.PDouble(cp.InsEstTotalOverride)+"', "
-				+"'"+POut.PDouble(cp.PaidOtherInsOverride)+"')";
+				+"'"+POut.PDouble(cp.PaidOtherInsOverride)+"',"
+				+"'"+POut.PString(cp.EstimateNote)+"')";
 			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -167,8 +169,8 @@ namespace OpenDentBusiness{
 				+",PercentOverride= '"+POut.PInt(cp.PercentOverride)+"'"
 				+",CopayAmt= '"       +POut.PDouble(cp.CopayAmt)+"'"
 				+",NoBillIns= '"      +POut.PBool(cp.NoBillIns)+"'"
-				+",IsOverAnnualMax= '"  +POut.PBool  (cp.IsOverAnnualMax)+"'"
 				+",PaidOtherIns= '"   +POut.PDouble(cp.PaidOtherIns)+"'"
+				+",BaseEst= '"        +POut.PDouble(cp.BaseEst)+"'"
 				+",CopayOverride= '"  +POut.PDouble(cp.CopayOverride)+"'"
 				+",ProcDate= "        +POut.PDate(cp.ProcDate)
 				+",DateEntry= "       +POut.PDate(cp.DateEntry)
@@ -178,6 +180,7 @@ namespace OpenDentBusiness{
 				+",InsEstTotal= '"    +POut.PDouble(cp.InsEstTotal)+"'"
 				+",InsEstTotalOverride= '"+POut.PDouble(cp.InsEstTotalOverride)+"'"
 				+",PaidOtherInsOverride= '"+POut.PDouble(cp.PaidOtherInsOverride)+"'"
+				+",EstimateNote= '"   +POut.PString(cp.EstimateNote)+"'"
 				+" WHERE claimprocnum = '"+POut.PInt(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
@@ -219,8 +222,8 @@ namespace OpenDentBusiness{
 			cp.PercentOverride=-1;
 			cp.CopayAmt=-1;
 			cp.NoBillIns=false;
-			cp.IsOverAnnualMax=false;
 			cp.PaidOtherIns=-1;
+			cp.BaseEst=0;
 			cp.DedEst=-1;
 			cp.DedEstOverride=-1;
 			cp.InsEstTotal=0;
@@ -511,24 +514,26 @@ namespace OpenDentBusiness{
 				cp.DedEst=-1;
 				cp.DedEstOverride=-1;
 				cp.PaidOtherIns=-1;
-				cp.IsOverAnnualMax=false;
+				cp.BaseEst=0;
 				cp.InsEstTotal=0;
 				cp.InsEstTotalOverride=-1;
 				cp.WriteOff=0;
 				cp.PaidOtherInsOverride=-1;
 				return;
 			}
-			/*
+			cp.EstimateNote="test";
 			//This function is called every time a ProcFee is changed,
 			//so the BaseEst does reflect the new ProcFee.
 			//ProcFee----------------------------------------------------------------------------------------------
 			cp.BaseEst=procFee;
 			cp.InsEstTotal=procFee;
 			//Allowed----------------------------------------------------------------------------------------------
+			double allowed=procFee;//could be fee, or could be a little less.  Used further down in paidOtherIns.
 			if(cp.AllowedOverride!=-1) {
 				if(cp.AllowedOverride > procFee){
 					cp.AllowedOverride=procFee;
 				}
+				allowed=cp.AllowedOverride;
 				cp.BaseEst=cp.AllowedOverride;
 				cp.InsEstTotal=cp.AllowedOverride;
 			}
@@ -536,12 +541,14 @@ namespace OpenDentBusiness{
 				//no point in wasting time calculating this unless it's needed.
 				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanNum,plan.AllowedFeeSched,
 					plan.CodeSubstNone,plan.PlanType,toothNum,cp.ProvNum);
-				if(carrierAllowed!=-1) {
+				if(carrierAllowed != -1) {
 					if(carrierAllowed > procFee) {
+						allowed=procFee;
 						cp.BaseEst=procFee;
 						cp.InsEstTotal=procFee;
 					}
 					else {
+						allowed=carrierAllowed;
 						cp.BaseEst=carrierAllowed;
 						cp.InsEstTotal=carrierAllowed;
 					}
@@ -549,11 +556,11 @@ namespace OpenDentBusiness{
 			}
 			//Copay----------------------------------------------------------------------------------------------
 			cp.CopayAmt=InsPlans.GetCopay(codeNum,plan.FeeSched,plan.CopayFeeSched);
-			if(cp.CopayAmt > cp.BaseEst) {//if the copay is greater than the allowed fee calculated above
-				cp.CopayAmt=cp.BaseEst;//reduce the copay
+			if(cp.CopayAmt > allowed) {//if the copay is greater than the allowed fee calculated above
+				cp.CopayAmt=allowed;//reduce the copay
 			}
-			if(cp.CopayOverride > cp.BaseEst) {//or if the copay override is greater than the allowed fee calculated above
-				cp.CopayOverride=cp.BaseEst;//reduce the override
+			if(cp.CopayOverride > allowed) {//or if the copay override is greater than the allowed fee calculated above
+				cp.CopayOverride=allowed;//reduce the override
 			}
 			if(cp.CopayOverride != -1) {//subtract copay if override
 				cp.BaseEst-=cp.CopayOverride;
@@ -587,26 +594,22 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//Deductible----------------------------------------------------------------------------------------
-			cp.DedBeforePerc=plan.DedBeforePerc;
 //todo: calculate deductible.  Partially based on benefit list.  Partially based on proc history.  Partially based on proc loop history.
 //for now, we'll say it's $50.
 //Remember to include handling of only partial usage of available deductible. 
 //For now, the code below handles that.  It will probably stay that way.
 			cp.DedEst=50;
-			//double dedEst=0;//the number we will use here for calculations
-			if(cp.DedBeforePerc){
-				if(cp.DedEst > cp.InsEstTotal){//if the deductible is more than the fee
-					cp.DedEst=cp.InsEstTotal;//reduce the deductible
-				}
-				if(cp.DedEstOverride > cp.InsEstTotal) {//if the deductible override is more than the fee
-					cp.DedEstOverride=cp.InsEstTotal;//reduce the override.
-				}
-				if(cp.DedEstOverride != -1) {//use the override
-					cp.InsEstTotal-=cp.DedEstOverride;//subtract
-				}
-				else if(cp.DedEst != -1){//use the calculated deductible
-					cp.InsEstTotal-=cp.DedEst;
-				}
+			if(cp.DedEst > cp.InsEstTotal){//if the deductible is more than the fee
+				cp.DedEst=cp.InsEstTotal;//reduce the deductible
+			}
+			if(cp.DedEstOverride > cp.InsEstTotal) {//if the deductible override is more than the fee
+				cp.DedEstOverride=cp.InsEstTotal;//reduce the override.
+			}
+			if(cp.DedEstOverride != -1) {//use the override
+				cp.InsEstTotal-=cp.DedEstOverride;//subtract
+			}
+			else if(cp.DedEst != -1){//use the calculated deductible
+				cp.InsEstTotal-=cp.DedEst;
 			}
 			//Percentage----------------------------------------------------------------------------------------
 //todo: overhaul the percentage subroutine.
@@ -619,18 +622,26 @@ namespace OpenDentBusiness{
 				cp.BaseEst=cp.BaseEst*(double)cp.Percentage/100d;
 				cp.InsEstTotal=cp.InsEstTotal*(double)cp.Percentage/100d;
 			}
-			//base estimate override----------------------------------------------------------------------------
-			if(cp.BaseEstOverride != -1) {
-
-			}
-
-
 			//base estimate is now done and will not be altered further.  From here out, we are only altering insEstTotal
-			
-			
-				*/
-				
-			
+//todo: calculate PaidOtherIns
+//for now, assume it's $40.
+			cp.PaidOtherIns=40;
+			double paidOtherIns=cp.PaidOtherIns;
+			if(cp.PaidOtherInsOverride != -1) {//use the override
+				paidOtherIns=cp.PaidOtherInsOverride;
+			}
+			if(paidOtherIns != -1) {
+				double maxPossibleToPay=allowed-paidOtherIns;
+				if(maxPossibleToPay >= 0 && cp.InsEstTotal > maxPossibleToPay) {
+					cp.InsEstTotal=maxPossibleToPay;//reduce the estimate
+				}
+			}
+			//annual max-------------------------------------------------------------------------------------------
+//todo: calculate annual max (or any other similar limitaion
+//just for testing, here's one
+			double limitation=34;
+			cp.InsEstTotal-=limitation;
+			cp.EstimateNote+="\r\nOver annual max: $34";
 			
 			
 			

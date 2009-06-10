@@ -469,8 +469,6 @@ DROP TABLE IF EXISTS etAck";
 				int covCatNum=Db.NonQ(command,true);
 				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0200','D0399')";
 				Db.NonQ(command);
-				//omit:
-				//command="ALTER TABLE claimproc CHANGE OverrideInsEst BaseEstOverride double NOT NULL";
 				command="ALTER TABLE claimproc ADD DedEst double NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc ADD DedEstOverride double NOT NULL";
@@ -485,29 +483,20 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="UPDATE claimproc SET InsEstTotal=BaseEst";
 				Db.NonQ(command);
-				//omit:
-				//command="UPDATE claimproc SET InsEstTotalOverride=-1";
 				command="UPDATE claimproc SET InsEstTotalOverride=OverrideInsEst";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc DROP OverrideInsEst";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc DROP DedBeforePerc";
 				Db.NonQ(command);
-				//change this field to a bool
-				command="UPDATE claimproc SET OverAnnualMax=1 WHERE OverAnnualMax != -1";
-				Db.NonQ(command);
-				command="UPDATE claimproc SET OverAnnualMax=0 WHERE OverAnnualMax = -1";
-				Db.NonQ(command);
-				command="ALTER TABLE claimproc CHANGE OverAnnualMax IsOverAnnualMax tinyint NOT NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE claimproc DROP BaseEst";
+				command="ALTER TABLE claimproc DROP OverAnnualMax";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc ADD PaidOtherInsOverride double NOT NULL";
 				Db.NonQ(command);
 				command="UPDATE claimproc SET PaidOtherInsOverride=PaidOtherIns";
 				Db.NonQ(command);
-
-
+				command="ALTER TABLE claimproc ADD EstimateNote varchar(255) NOT NULL";
+				Db.NonQ(command);
 
 
 

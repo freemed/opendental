@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public double FeeBilled;
 		///<summary>Only if attached to a claim.  Actual amount this carrier is expected to pay, after taking everything else into account. Considers annual max, override, percentAmt, copayAmt, deductible, etc. This estimate is computed automatically when sent to ins.</summary>
 		public double InsPayEst;
-		///<summary>Deductible applied to this procedure only. If not sent to ins yet, then this will be set to an estimated amount based on the order in the TP.  Will be overwritten when actually sent to ins.</summary>
+		///<summary>0 if blank.  Deductible applied to this procedure only. Only for procedures attached to claims.  Otherwise, the DedEst and DedEstOverride are used.</summary>
 		public double DedApplied;
 		///<summary>Enum:ClaimProcStatus .</summary>
 		public ClaimProcStatus Status;
@@ -47,10 +47,10 @@ namespace OpenDentBusiness{
 		public double CopayAmt;
 		///<summary>Set to true to not bill to this insurance plan.</summary>
 		public bool NoBillIns;
-		///<summary>True(1) if over annual max. If it's an estimate, the user cannot edit.  But if it's attached to a claim, then the user has total control and it will not be altered automatically.</summary>
-		public bool IsOverAnnualMax;
 		///<summary>-1 if blank. The amount paid by another insurance. This amount is then subtracted from what the current insurance would pay. So, always blank for primary claims (for now).  User cannot edit, but can use PaidOtherInsOverride.</summary>
 		public double PaidOtherIns;
+		///<summary>Always has a value. Used in TP, etc. The base estimate is the ((fee or allowedOverride)-Copay) x (percentage or percentOverride). Does not include all the extras like ded, annualMax,and paidOtherIns that InsEstTotal holds.  BaseEst cannot be overridden by the user.  Instead, the following fields can be manipulated: allowedOverride, CopayOverride, PercentOverride.</summary>
+		public double BaseEst;
 		///<summary>-1 if blank.  See description of CopayAmt.  This lets the user set a copay that will never be overwritten by automatic calculations.</summary>
 		public double CopayOverride;
 		///<summary>Date of the procedure.  Currently only used for tracking annual insurance benefits remaining. Important in Adjustments to benefits.  For total claim payments, MUST be the date of the procedures to correctly figure benefits.  Will eventually transition to use this field to actually calculate aging.  See the note under Ledgers.ComputePayments.</summary>
@@ -69,6 +69,8 @@ namespace OpenDentBusiness{
 		public double InsEstTotalOverride;
 		///<summary>-1 if blank.  Overrides the PaidOtherIns value.  Used estimate calculations, but not any important calculations.</summary>
 		public double PaidOtherInsOverride;
+		///<summary>An automatically generated note that displays information about over max, exclusions, and other limitations for which there are no fields.  Only applies to estimate.  Once it's attached to a claim, similar information can go in the remarks field.</summary>
+		public string EstimateNote;
 
 
 		///<summary>Returns a copy of this ClaimProc.</summary>

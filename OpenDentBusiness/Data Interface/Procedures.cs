@@ -728,45 +728,6 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
-		public static int GetCodeNum(int procNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),procNum);
-			}
-			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				return 0;
-			}
-			return PIn.PInt(table.Rows[0][0].ToString());
-		}
-
-		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
-		public static double GetProcFee(int procNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),procNum);
-			}
-			string command="SELECT ProcFee FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				return 0;
-			}
-			return PIn.PDouble(table.Rows[0][0].ToString());
-		}
-
-		///<summary>Used twice in FormClaimProc.  Gets value directly from database.</summary>
-		public static string GetToothNum(int procNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),procNum);
-			}
-			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				return "";
-			}
-			return PIn.PString(table.Rows[0][0].ToString());
-		}
-
 		///<summary>Called from FormApptsOther when creating a new appointment.  Returns true if there are any procedures marked complete for this patient.  The result is that the NewPt box on the appointment won't be checked.</summary>
 		public static bool AreAnyComplete(int patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

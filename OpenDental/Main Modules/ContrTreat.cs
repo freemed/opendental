@@ -1076,7 +1076,7 @@ namespace OpenDental{
 										row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Annual Max Met.");
 									}
 									hasMaxedPri=true;
-									claimproc.IsOverAnnualMax=true;//claimproc.InsPayEst-insRem;
+									//claimproc.IsOverAnnualMax=true;//claimproc.InsPayEst-insRem;
 									claimproc.InsPayEst=insRem;
 								}
 								dedAppliedPri+=claimproc.DedApplied;
