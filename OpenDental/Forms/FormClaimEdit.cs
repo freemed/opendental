@@ -2974,6 +2974,8 @@ namespace OpenDental{
 		}
 
 		private void butRecalc_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Under construction for version 6.7.");
+			/*
 			if(!ClaimIsValid()){
 				return;
 			}
@@ -2988,7 +2990,7 @@ namespace OpenDental{
 				ClaimL.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
 			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			FillGrids();
+			FillGrids();*/
 		}
 
 		private void FillGrids(){
@@ -3165,6 +3167,8 @@ namespace OpenDental{
 		}
 		
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			//ClaimProcs.Cur=(ClaimProc)ClaimProcs.ForClaim[e.Row];
 			if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.\r\nThen, don't forget to finish by creating the check using the button below this section.\r\nYou should probably click cancel unless you are just editing estimates.\r\nContinue anyway?")){
 				return;
@@ -3176,7 +3180,7 @@ namespace OpenDental{
 				return;
 			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			FillGrids();
+			FillGrids();*/
 		}
 
 		private void gridPay_CellClick(object sender,ODGridClickEventArgs e) {
@@ -3272,7 +3276,8 @@ namespace OpenDental{
 			ClaimProcCur.ProcDate=ClaimCur.DateService;
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcs.Insert(ClaimProcCur);
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList);
+			List<ClaimProcHist> loopList=null;
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -3815,6 +3820,8 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Underconstruction for version 6.7");
+			/*
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
 				return;
@@ -3883,7 +3890,7 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
 				Lan.g(this,"Delete Claim")+", "+PatCur.GetNameLF()+""
 				+Lan.g(this,"Date of service: ")+ClaimCur.DateService.ToShortDateString());
-      DialogResult=DialogResult.OK;
+      DialogResult=DialogResult.OK;*/
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

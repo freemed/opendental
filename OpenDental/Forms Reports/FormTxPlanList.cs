@@ -389,6 +389,7 @@ namespace OpenDental {
 				ref double PriDed,ref double PriDedRemain,ref double PriRemain,
 				ref double SecMax,ref double SecPend,ref double SecUsed,
 				ref double SecDed,ref double SecDedRemain,ref double SecRemain) {
+			/*
 			List<PatPlan> PatPlanList;
 			List<InsPlan> InsPlanList;
 			List<Benefit> BenefitList;
@@ -467,7 +468,7 @@ namespace OpenDental {
 							(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
 					SecDedRemain = ded - dedUsed;
 				}
-			}
+			}*/
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

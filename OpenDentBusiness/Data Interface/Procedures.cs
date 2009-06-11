@@ -1257,11 +1257,15 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set isInitialEntry true from Chart module; this is for cap procs.</summary>
 		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList) {
+			ComputeEstimates(proc,patNum,claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null);
+		}
+
+		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set isInitialEntry true from Chart module; this is for cap procs.</summary>
+		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList) {
 			//No need to check RemotingRole; no call to db.
 			bool doCreate=true;
-			if(proc.ProcDate<DateTime.Today&&proc.ProcStatus==ProcStat.C) {
+			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
 				//don't automatically create an estimate for completed procedures
 				//especially if they are older than today
 				//Very important after a conversion from another software.
@@ -1284,7 +1288,7 @@ namespace OpenDentBusiness {
 					//ignored: adjustment
 					//included: capComplete,CapEstimate,Estimate,NotReceived,Received
 				}
-				if(claimProcs[i].Status!=ClaimProcStatus.Estimate&&claimProcs[i].Status!=ClaimProcStatus.CapEstimate) {
+				if(claimProcs[i].Status!=ClaimProcStatus.Estimate && claimProcs[i].Status!=ClaimProcStatus.CapEstimate) {
 					continue;
 				}
 				bool planIsCurrent=false;
@@ -1396,11 +1400,17 @@ namespace OpenDentBusiness {
 				//ignored: adjustment
 				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
 				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
-				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlans[0].PatPlanNum,benefitList);
-				}
-				if(claimProcs[i].PlanNum>0 && PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlans[1].PatPlanNum,benefitList);
+				if(claimProcs[i].PlanNum>0) {
+					int patPlanNum=0;
+					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
+						patPlanNum=patPlans[0].PatPlanNum;
+					}
+					if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
+						patPlanNum=patPlans[1].PatPlanNum;
+					}
+					if(patPlanNum != 0) {
+						ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlanNum,benefitList,histList,loopList);
+					}
 				}
 				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate

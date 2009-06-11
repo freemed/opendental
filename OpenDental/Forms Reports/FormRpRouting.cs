@@ -437,6 +437,7 @@ namespace OpenDental
 				str=Lan.g(this,"Subscriber:")+" "+subscriber;
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
+				/*
 				bool isFamMax=Benefits.GetIsFamMax(benefits,plan.PlanNum);
 				str="";
 				if(isFamMax){
@@ -458,7 +459,7 @@ namespace OpenDental
 					str+=deduct.ToString("n0");
 				}
 				g.DrawString(str,font,brush,x,y);
-				y+=15;
+				y+=15;*/
 				str="";
 				for(int j=0;j<benefits.Count;j++){
 					if(benefits[j].PlanNum != plan.PlanNum){
@@ -476,6 +477,7 @@ namespace OpenDental
 					g.DrawString(str,font,brush,x,y);
 					y+=15;
 				}
+				/*
 				double pend=0;
 				double used=0;
 				if(isFamMax || isFamDed){
@@ -492,7 +494,7 @@ namespace OpenDental
 				y+=15;
 				str=Lan.g(this,"Ins Pending:")+" "+pend.ToString("n");
 				g.DrawString(str,font,brush,x,y);
-				y+=15;
+				y+=15;*/
 			}
 			y+=10;
 			//Account Info---------------------------------------------------------------------------------------------------

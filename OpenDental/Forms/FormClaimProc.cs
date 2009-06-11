@@ -115,15 +115,19 @@ namespace OpenDental
 		private InsPlan Plan;
 		private int PatPlanNum;
 		private List<Benefit> BenefitList;
+		private List<ClaimProcHist> HistList;
+		private List<ClaimProcHist> LoopList;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
-		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList){
+		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList){
 			ClaimProcCur=claimProcCur;
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
 			FamCur=famCur;
 			PatCur=patCur;
 			PlanList=planList;
+			HistList=histList;
+			LoopList=loopList;
 			InitializeComponent();// Required for Windows Form Designer support
 			//can't use Lan.F because of complexity of label use
 			Lan.C(this, new System.Windows.Forms.Control[]
@@ -1506,7 +1510,7 @@ namespace OpenDental
 			else {
 				ClaimProcCur.InsEstTotalOverride=PIn.PDouble(textInsEstTotalOverride.Text);
 			}
-			ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList);
+			ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,HistList,LoopList);
 			if(ClaimProcCur.CopayAmt == -1) {
 				textCopayAmt.Text="";
 			}

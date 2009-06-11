@@ -54,7 +54,6 @@ namespace OpenDental{
 		private Label label12;
 		private List<Laboratory> ListLabs;
 		private TextBox textWeekday;
-		private OpenDental.UI.Button buttonEmail;
 		private List<LabTurnaround> turnaroundList;
 
 		///<summary></summary>
@@ -125,7 +124,6 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.buttonEmail = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -145,7 +143,6 @@ namespace OpenDental{
 			this.textPatient.ReadOnly = true;
 			this.textPatient.Size = new System.Drawing.Size(319,20);
 			this.textPatient.TabIndex = 0;
-			this.textPatient.TextChanged += new System.EventHandler(this.textPatient_TextChanged);
 			// 
 			// textInstructions
 			// 
@@ -223,7 +220,6 @@ namespace OpenDental{
 			this.textDateCreated.Name = "textDateCreated";
 			this.textDateCreated.Size = new System.Drawing.Size(147,20);
 			this.textDateCreated.TabIndex = 111;
-			this.textDateCreated.TextChanged += new System.EventHandler(this.textDateCreated_TextChanged);
 			// 
 			// textDateSent
 			// 
@@ -299,7 +295,6 @@ namespace OpenDental{
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(158,21);
 			this.comboProv.TabIndex = 121;
-			this.comboProv.SelectedIndexChanged += new System.EventHandler(this.comboProv_SelectedIndexChanged);
 			// 
 			// label11
 			// 
@@ -498,25 +493,10 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// buttonEmail
-			// 
-			this.buttonEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonEmail.Autosize = true;
-			this.buttonEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonEmail.CornerRadius = 4F;
-			this.buttonEmail.Location = new System.Drawing.Point(523,388);
-			this.buttonEmail.Name = "buttonEmail";
-			this.buttonEmail.Size = new System.Drawing.Size(75,24);
-			this.buttonEmail.TabIndex = 127;
-			this.buttonEmail.Text = "E-Mail";
-			this.buttonEmail.Click += new System.EventHandler(this.buttonEmail_Click);
-			// 
 			// FormLabCaseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(878,487);
-			this.Controls.Add(this.buttonEmail);
 			this.Controls.Add(this.textWeekday);
 			this.Controls.Add(this.listTurnaround);
 			this.Controls.Add(this.label12);
@@ -663,6 +643,20 @@ namespace OpenDental{
 			textDateChecked.Text=MiscData.GetNowDateTime().ToString();
 		}
 
+		/*private void buttonEmail_Click(object sender,EventArgs e) {
+			int CurPatNum=CaseCur.PatNum;
+			EmailMessage message=new EmailMessage();
+			message.PatNum=CurPatNum;
+			Patient pat=Patients.GetPat(CurPatNum);
+			message.ToAddress="";//pat.Email;
+			message.FromAddress=PrefC.GetString("EmailSenderAddress");
+			message.Subject=Lan.g(this,"RE: ")+pat.GetNameFL();
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+
+		}*/
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;
@@ -788,34 +782,9 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void textPatient_TextChanged(object sender, EventArgs e)
-		{
+		
 
-		}
-
-		private void comboProv_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void textDateCreated_TextChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void buttonEmail_Click(object sender,EventArgs e) {
-			int CurPatNum=CaseCur.PatNum;
-			EmailMessage message=new EmailMessage();
-			message.PatNum=CurPatNum;
-			Patient pat=Patients.GetPat(CurPatNum);
-			message.ToAddress="";//pat.Email;
-			message.FromAddress=PrefC.GetString("EmailSenderAddress");
-			message.Subject=Lan.g(this,"RE: ")+pat.GetNameFL();
-			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-			FormE.IsNew=true;
-			FormE.ShowDialog();
-
-		}
+		
 
 		
 

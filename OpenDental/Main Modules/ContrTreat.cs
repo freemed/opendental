@@ -891,10 +891,6 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTP","Description"),235);
 			gridMain.Columns.Add(col);
-			//if(checkShowStandard.Checked){
-			//	col=new ODGridColumn(Lan.g("TableTP","Standard"),55,HorizontalAlignment.Right);
-			//	gridMain.Columns.Add(col);
-			//}
 			//caution: If you change the names of the columns here,
 			//also be sure to change them in OnCreate_Click()
 			if(checkShowFees.Checked){
@@ -920,19 +916,16 @@ namespace OpenDental{
 				gridMain.EndUpdate();
 				return;
 			}
-			//double standard;
 			double fee;
 			double priIns;
 			double secIns;
 			double discount;
 			double pat;
-			//double substandard=0;
 			double subfee=0;
 			double subpriIns=0;
 			double subsecIns=0;
 			double subdiscount=0;
 			double subpat=0;
-			//double totStandard=0;
 			double totFee=0;
 			double totPriIns=0;
 			double totSecIns=0;
@@ -943,32 +936,20 @@ namespace OpenDental{
 			#region currentTP
 			if(gridPlans.SelectedIndices[0]==0){//current treatplan selected
 				InsPlan	PriPlanCur=null;
-				bool isFamMax=false;
-				bool isFamDed=false;
-				List<ClaimProc> claimProcsFam=null;			
 				if(PatPlanList.Count>0) {//primary
 					PriPlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
-					isFamMax=Benefits.GetIsFamMax(BenefitList,PriPlanCur.PlanNum);
-					isFamDed=Benefits.GetIsFamDed(BenefitList,PriPlanCur.PlanNum);
-					if(isFamMax || isFamDed) {
-						claimProcsFam=ClaimProcs.RefreshFam(PriPlanCur.PlanNum);
-					}
 				}
 				InsPlan SecPlanCur=null;
 				if(PatPlanList.Count>1) {//secondary
 					SecPlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
 				}
-				double dedAppliedPri=0;//cumulative per plan
-				double insPayEstPri=0;//cumulative per plan
-				double dedAppliedSec=0;
-				double insPayEstSec=0;
-				double dedRem;
-				double insRem;
-				bool hasMaxedPri=false;//this tracks exactly which row max happens on so that note can be placed.
-				bool hasMaxedSec=false;
 				ClaimProc claimproc;//holds the estimate.
 				string descript;
 				for(int i=0;i<ProcListTP.Length;i++){
+					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
+				}
+				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+				for(int i=0;i<ProcListTP.Length;i++) {
 					row=new ODGridRow();
 					row.Cells.Add("");//never done
 					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
@@ -980,111 +961,24 @@ namespace OpenDental{
 						descript+=" #"+Tooth.FormatRangeForDisplay(ProcListTP[i].ToothRange);
 					}
 					row.Cells.Add(descript);
-					//if(checkShowStandard.Checked){
-					//	standard=Fees.GetAmount0(ProcListTP[i].CodeNum,feeSched);
-					//	substandard+=standard;
-					//	totStandard+=standard;
-					//	row.Cells.Add(standard.ToString("F"));//standard
-					//}
-					fee = ProcListTP[i].ProcFee;
+					fee=ProcListTP[i].ProcFee;
 					int qty=ProcListTP[i].BaseUnits + ProcListTP[i].UnitQty;
-					if(qty>0)
+					if(qty>0){
 						fee*=qty;
+					}
 					subfee+=fee;
 					totFee+=fee;
 					#region ShowMaxDed
 					if(checkShowMaxDed.Checked){//whether visible or not
-						//math sequence and logic based on ClaimL.CalculateAndUpdate(). It's really complicated.
-						//We will skip Procedure.ComputeEstimates(), and assume that all estimates have been created properly.
 						if(PatPlanList.Count>0){//Primary
 							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
 							if(claimproc==null){
 								priIns=0;
 							}
 							else{
-								//deduct:
-								if(isFamMax || isFamDed) {
-									dedRem=InsPlans.GetDedRem(claimProcsFam,DateTime.Today,PriPlanCur.PlanNum,PatPlanList[0].PatPlanNum,
-										-1,InsPlanList,BenefitList,ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode)
-										-dedAppliedPri;//subtracts deductible amounts already applied on this TP
-								}
-								else{
-									dedRem=InsPlans.GetDedRem(ClaimProcList,DateTime.Today,PriPlanCur.PlanNum,PatPlanList[0].PatPlanNum,
-										-1,InsPlanList,BenefitList,ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode)
-										-dedAppliedPri;//subtracts deductible amounts already applied on this TP
-								}
-								if(dedRem<0) {
-									dedRem=0;
-								}
-								if(claimproc.NoBillIns){
-									claimproc.DedApplied=0;
-								}
-								else if(dedRem > fee) {//if deductible is more than cost of procedure
-									claimproc.DedApplied=fee;
-								}
-								else {
-									claimproc.DedApplied=dedRem;
-								}
-								//This was moved down for situations where percentages are 0, so it won't show a deductible applied when it shouldn't.
-								//Don't know if this will cause other problems.
-								//if(claimproc.DedApplied>0){
-								//	row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+claimproc.DedApplied.ToString("F");
-								//}
-								//insest:
-								if(isFamMax || isFamDed) {
-									insRem=InsPlans.GetInsRem(claimProcsFam,DateTime.Today,PriPlanCur.PlanNum,
-										PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList)
-										-insPayEstPri;//subtracts insest amounts already applied on this TP
-								}
-								else {
-									insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,PriPlanCur.PlanNum,
-										PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList)
-										-insPayEstPri;//subtracts insest amounts already applied on this TP
-								}
-								if(insRem<0) {
-									insRem=0;
-								}
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i].ProcFee,ProcListTP[i].ToothNum,ProcListTP[i].CodeNum,PriPlanCur,PatPlanList[0].PatPlanNum,BenefitList);//handles dedBeforePerc
-								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
-								/*if(claimproc.DedBeforePerc) {
-									int percent=100;
-									if(claimproc.Percentage!=-1){
-										percent=claimproc.Percentage;
-									}
-									if(claimproc.PercentOverride!=-1) {
-										percent=claimproc.PercentOverride;
-									}
-									claimproc.InsPayEst-=claimproc.DedApplied*(double)percent/100d;
-									if(percent==0){//if percentage is zero,
-										claimproc.DedApplied=0;//then no deductible should be applied.
-									}
-								}
-								else{*/
-									claimproc.InsPayEst-=claimproc.DedApplied;
-								//}
-								if(claimproc.InsPayEst<0) {
-									//example: if inspayest = 19 - 50(ded) for total of -31.
-									claimproc.DedApplied+=claimproc.InsPayEst;//eg. 50+(-31)=19
-									claimproc.InsPayEst=0;
-									//so only 19 of deductible gets applied, and inspayest is 0
-								}
-								if(claimproc.DedApplied>0) {
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+claimproc.DedApplied.ToString("F");
-								}
-								if(claimproc.InsPayEst>insRem) {//if ins has maxed out
-									if(!hasMaxedPri){
-										row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Annual Max Met.");
-									}
-									hasMaxedPri=true;
-									//claimproc.IsOverAnnualMax=true;//claimproc.InsPayEst-insRem;
-									claimproc.InsPayEst=insRem;
-								}
-								dedAppliedPri+=claimproc.DedApplied;
-								insPayEstPri+=claimproc.InsPayEst;
-								ClaimProcs.Update(claimproc);
-								priIns=claimproc.InsPayEst;
+								priIns=ClaimProcs.GetEstTotal(claimproc);
 							}
-						}//primary
+						}
 						else{//no primary ins
 							priIns=0;
 						}
@@ -1094,58 +988,7 @@ namespace OpenDental{
 								secIns=0;
 							}
 							else{
-								//deduct:
-								dedRem=InsPlans.GetDedRem(ClaimProcList,DateTime.Today,SecPlanCur.PlanNum,PatPlanList[1].PatPlanNum,
-									-1,InsPlanList,BenefitList,ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode)
-									-dedAppliedSec;//subtracts deductible amounts already applied on this TP
-								if(dedRem<0){
-									dedRem=0;
-								}
-								if(dedRem>fee-priIns){//if deductible is more than cost of procedure
-									claimproc.DedApplied=fee-priIns;
-								}
-								else{
-									claimproc.DedApplied=dedRem;
-								}
-								claimproc.PaidOtherIns=priIns;
-								//insest:
-								insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,SecPlanCur.PlanNum,
-									PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList)
-									-insPayEstSec;//subtracts insest amounts already applied on this TP
-								if(insRem<0) {
-									insRem=0;
-								}
-								//next line is supposed to handle dedBeforePerc, but it will get confused with sec ins.
-								//There is no easy solution
-								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i].ProcFee,ProcListTP[i].ToothNum,ProcListTP[i].CodeNum,SecPlanCur,PatPlanList[1].PatPlanNum,BenefitList);
-								secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,false);
-								//this math is done here instead of in GetEst to ensure accuracy:
-								if(fee-priIns-secIns < 0) {
-									secIns=fee-priIns;
-								}
-								//if(!claimproc.DedBeforePerc) {
-								//	secIns-=claimproc.DedApplied;
-								//}
-								if(secIns<0) {
-									//example: if secins = 19 - 50(ded) for total of -31.
-									claimproc.DedApplied+=secIns;//eg. 50+(-31)=19
-									secIns=0;
-									//so only 19 of deductible gets applied, and secins is 0
-								}
-								if(claimproc.DedApplied>0) {
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+claimproc.DedApplied.ToString("F");
-								}
-								if(secIns>insRem) {//if ins has maxed out
-									if(!hasMaxedSec) {
-										row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Annual Max Met.");
-									}
-									hasMaxedSec=true;
-									secIns=insRem;
-								}
-								claimproc.InsPayEst=secIns;
-								dedAppliedSec+=claimproc.DedApplied;
-								insPayEstSec+=secIns;
-								ClaimProcs.Update(claimproc);
+								secIns=claimproc.InsPayEst;
 							}
 						}//secondary
 						else{//no secondary ins
@@ -1255,9 +1098,6 @@ namespace OpenDental{
 						row.Cells.Add("");//surf
 						row.Cells.Add("");//proccode
 						row.Cells.Add(Lan.g(this,"Subtotal"));//descript
-						//if(checkShowStandard.Checked){
-						//	row.Cells.Add(substandard.ToString("F"));//standard
-						//}
 						if(checkShowFees.Checked){
 							row.Cells.Add(subfee.ToString("F"));//fee
 						}
@@ -1278,7 +1118,6 @@ namespace OpenDental{
 						row.Bold=true;
 						row.ColorLborder=System.Drawing.Color.Black;
 						gridMain.Rows.Add(row);
-						//substandard=0;
 						subfee=0;
 						subpriIns=0;
 						subsecIns=0;
@@ -1434,6 +1273,7 @@ namespace OpenDental{
 		}
 
 		private void FillSummary(){
+			/*
 			textPriMax.Text="";
 			textPriDed.Text="";
 			textPriDedRem.Text="";
@@ -1539,7 +1379,7 @@ namespace OpenDental{
 						(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
 					textSecDedRem.Text=(ded-dedUsed).ToString("F");
 				}
-			}
+			}*/
 		}
 
     private void FillPreAuth(){
@@ -2466,6 +2306,8 @@ namespace OpenDental{
 		}
 
 		private void OnPreAuth_Click() {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"You can only send a preauth from the current TP, not a saved TP.");
 				return;
@@ -2579,7 +2421,7 @@ namespace OpenDental{
 			//FormCE.CalculateEstimates(
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void gridPreAuth_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {

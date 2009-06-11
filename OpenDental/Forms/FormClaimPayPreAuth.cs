@@ -208,6 +208,8 @@ namespace OpenDental
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
+			MessageBox.Show("Underconstruction for version 6.7");
+			/*
 			try{
 				SaveGridChanges();
 			}
@@ -223,7 +225,7 @@ namespace OpenDental
 				return;
 			}
 			FillGrid();
-			FillTotals();
+			FillTotals();*/
 		}
 
 		private void gridMain_CellTextChanged(object sender,EventArgs e) {

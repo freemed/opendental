@@ -51,6 +51,8 @@ namespace OpenDental{
 			//And for preauth.
 			Procedure ProcCur;
 			InsPlan plan=InsPlans.GetPlan(claimCur.PlanNum,planList);
+			List<ClaimProcHist> histList=null;
+			List<ClaimProcHist> loopList=null;
 			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.NotReceived
 					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
@@ -87,12 +89,14 @@ namespace OpenDental{
 					dedRem=0;
 				}
 				else{
+					dedRem=0;
+/*
 					dedRem=InsPlans.GetDedRem(claimProcList,ClaimProcsForClaim[i].ProcDate,claimCur.PlanNum,patPlanNum,
 						claimCur.ClaimNum,planList,benefitList,ProcedureCodes.GetStringProcCode(ProcCur.CodeNum))
 						-dedApplied;//subtracts deductible amounts already applied on this claim
 					if(dedRem<0) {
 						dedRem=0;
-					}
+					*/
 				}
 				if(dedRem > ClaimProcsForClaim[i].FeeBilled){//if deductible is more than cost of procedure
 					ClaimProcsForClaim[i].DedApplied=ClaimProcsForClaim[i].FeeBilled;
@@ -100,7 +104,7 @@ namespace OpenDental{
 				else{
 					ClaimProcsForClaim[i].DedApplied=dedRem;
 				}
-				ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benefitList);//handles dedBeforePerc
+				ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benefitList,histList,loopList);//handles dedBeforePerc
 				if(claimCur.ClaimType=="P") {//primary
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,claimProcList,PriSecTot.Pri,patPlans,true);	
 				}

@@ -2172,6 +2172,8 @@ namespace OpenDental {
 		}
 
 		private void FillInsInfo() {
+			//Broken during overhaul of 6.7
+			/*
 			List<InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList);
@@ -2291,7 +2293,7 @@ namespace OpenDental {
 			else {
 				labelInsLeft.Text = Lan.g(this,"Ins. Left");
 				labelInsLeftAmt.Text = textPriRem.Text;
-			}
+			}*/
 		}
 
 		private void FillMain(){
@@ -2577,6 +2579,8 @@ namespace OpenDental {
 		}
 
 		private void OnIns_Click() {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2676,7 +2680,7 @@ namespace OpenDental {
 					//Claims.Cur=ClaimCur;
 				}
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
@@ -2882,6 +2886,8 @@ namespace OpenDental {
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2929,10 +2935,12 @@ namespace OpenDental {
 			}
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2978,10 +2986,12 @@ namespace OpenDental {
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -3054,10 +3064,12 @@ namespace OpenDental {
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
+			MessageBox.Show("Under construction for version 6.7");
+			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -3099,7 +3111,7 @@ namespace OpenDental {
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void OnPayPlan_Click() {

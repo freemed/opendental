@@ -464,6 +464,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		/*
 		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied procCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
 		public static double GetDedRem(List<ClaimProc> claimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> PlanList,List<Benefit> benList,string procCode) {
 			//No need to check RemotingRole; no call to db.
@@ -473,7 +474,7 @@ namespace OpenDentBusiness {
 				return 0;
 			}
 			return dedTot-dedUsed;
-		}
+		}*/
 
 		/*
 		///<Summary>Only used in TP to calculate discount for PPO procedure.  Will return -1 if no fee found.</Summary>

@@ -494,8 +494,8 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.</summary>
-		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList){
+		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.</summary>
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList){
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -594,11 +594,12 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//Deductible----------------------------------------------------------------------------------------
-//todo: calculate deductible.  Partially based on benefit list.  Partially based on proc history.  Partially based on proc loop history.
-//for now, we'll say it's $50.
+//todo: test deductible calculation.
 //Remember to include handling of only partial usage of available deductible. 
 //For now, the code below handles that.  It will probably stay that way.
-			cp.DedEst=50;
+			if(loopList!=null && histList!=null) {
+				cp.DedEst=Benefits.GetDeductibleByCode(benList,plan.PlanNum,patPlanNum,cp.ProcDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum);
+			}
 			if(cp.DedEst > cp.InsEstTotal){//if the deductible is more than the fee
 				cp.DedEst=cp.InsEstTotal;//reduce the deductible
 			}
@@ -639,19 +640,92 @@ namespace OpenDentBusiness{
 			//annual max-------------------------------------------------------------------------------------------
 //todo: calculate annual max (or any other similar limitaion
 //just for testing, here's one
-			double limitation=34;
-			cp.InsEstTotal-=limitation;
-			cp.EstimateNote+="\r\nOver annual max: $34";
+			//double limitation=34;
+			//cp.InsEstTotal-=limitation;
+			//cp.EstimateNote+="\r\nOver annual max: $34";
 			
 			
 			
 			
 		}
 
+		public static double GetEstTotal(ClaimProc cp) {
+			if(cp.InsEstTotalOverride!=-1) {
+				return cp.InsEstTotalOverride;
+			}
+			return cp.InsEstTotal;
+		}
+
+		public static string GetPercentageDisplay(ClaimProc cp) {
+			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
+				return "";
+			}
+			if(cp.PercentOverride!=-1) {
+				return cp.PercentOverride.ToString();
+			}
+			else if(cp.Percentage!=-1) {
+				return cp.Percentage.ToString();
+			}
+			return "";
+		}
+
+		public static string GetCopayDisplay(ClaimProc cp) {
+			if(cp.CopayOverride!=-1) {
+				return cp.CopayOverride.ToString("f");
+			}
+			else if(cp.CopayAmt!=-1) {
+				return cp.CopayAmt.ToString("f");
+			}
+			return "";
+		}
+
+		public static string GetEstimateDisplay(ClaimProc cp) {
+			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
+				return "";
+			}
+			if(cp.Status==ClaimProcStatus.Estimate) {
+				if(cp.InsEstTotalOverride!=-1) {
+					return cp.InsEstTotalOverride.ToString("f");
+				}
+				else{//shows even if 0.
+					return cp.InsEstTotal.ToString("f");
+				}
+			}
+			return cp.InsPayEst.ToString("f");
+		}
+
+		public static string GetDeductibleDisplay(ClaimProc cp) {
+			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
+				return "";
+			}
+			if(cp.Status==ClaimProcStatus.Estimate) {
+				if(cp.DedEstOverride != -1) {
+					return cp.DedEstOverride.ToString("n");
+				}
+				else if(cp.DedEst > 0) {
+					return cp.DedEst.ToString("n");
+				}
+				else {
+					return "";
+				}
+			}
+			return cp.DedApplied.ToString("n");
+		}
+
 
 	}
 
-	
+	///<summary>During the ClaimProc.ComputeBaseEst(), this holds historical payment information for one procedure or an adjustment to insurance benefits from patplan.</summary>
+	public class ClaimProcHist {
+		public DateTime ProcDate;
+		public string StrProcCode;
+		///<summary>Insurance paid or est.</summary>
+		public double Amount;
+		///<summary>Deductible paid or est.</summary>
+		public double Deduct;
+		///<summary>Because a list can store info for an entire family.</summary>
+		public int PatNum;
+	}
 
 
 }

@@ -88,7 +88,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(312,250);
+			this.label1.Location = new System.Drawing.Point(312,237);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118,18);
 			this.label1.TabIndex = 2;
@@ -143,7 +143,7 @@ namespace OpenDental{
 			// labelArizonaPrimaryCare
 			// 
 			this.labelArizonaPrimaryCare.AutoSize = true;
-			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,310);
+			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,297);
 			this.labelArizonaPrimaryCare.Name = "labelArizonaPrimaryCare";
 			this.labelArizonaPrimaryCare.Size = new System.Drawing.Size(104,13);
 			this.labelArizonaPrimaryCare.TabIndex = 20;
@@ -155,7 +155,7 @@ namespace OpenDental{
 			this.listArizonaPrimaryCare.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listArizonaPrimaryCare.FormattingEnabled = true;
 			this.listArizonaPrimaryCare.ItemHeight = 15;
-			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,328);
+			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,315);
 			this.listArizonaPrimaryCare.Name = "listArizonaPrimaryCare";
 			this.listArizonaPrimaryCare.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listArizonaPrimaryCare.Size = new System.Drawing.Size(204,34);
@@ -235,7 +235,7 @@ namespace OpenDental{
 			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listPublicHealth.FormattingEnabled = true;
 			this.listPublicHealth.ItemHeight = 15;
-			this.listPublicHealth.Location = new System.Drawing.Point(315,271);
+			this.listPublicHealth.Location = new System.Drawing.Point(315,258);
 			this.listPublicHealth.Name = "listPublicHealth";
 			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
@@ -250,7 +250,7 @@ namespace OpenDental{
 			this.listLists.Location = new System.Drawing.Point(315,64);
 			this.listLists.Name = "listLists";
 			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size = new System.Drawing.Size(204,184);
+			this.listLists.Size = new System.Drawing.Size(204,169);
 			this.listLists.TabIndex = 9;
 			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
@@ -357,7 +357,7 @@ namespace OpenDental{
 				Lan.g(this,"Referrals - Raw"),
 				Lan.g(this,"Referral Analysis"),
 				Lan.g(this,"Treatment Finder"),
-				Lan.g(this,"Treatment Plan Manager")
+				//Lan.g(this,"Treatment Plan Manager")//jsparks- See note further down.
 			});
 			listPublicHealth.Items.AddRange(new string[] {
 				Lan.g(this,"Raw Screening Data"),
@@ -621,11 +621,12 @@ namespace OpenDental{
 					FormT.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
 					break;
-				case 11://Treatment Plan Manager
-					FormTxPlanManager FormTM=new FormTxPlanManager();
-					FormTM.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");
-					break;
+				//jsparks- With the improved benefit calculations, this would need an overhaul, so removing it for now.
+				//case 11://Treatment Plan Manager
+				//	FormTxPlanManager FormTM=new FormTxPlanManager();
+				//	FormTM.ShowDialog();
+				//	SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");
+				//	break;
 			}
 		}
 
