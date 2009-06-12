@@ -1010,8 +1010,10 @@ namespace OpenDental {
 					whereProv += ") ";
 					patStat = BuildPatStatList(checkActiveOnly.Checked);
 					command = SetPatientBaseSelect();
-					command += "WHERE CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) >= " + "'" + textStartName.Text + "'";
-					command += " AND CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) <= " + "'" + textEndName.Text + "'";
+					command += "WHERE CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) >= " + 
+						"'" + POut.PString(textStartName.Text) + "'";
+					command += " AND CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI) <= " + 
+						"'" + POut.PString(textEndName.Text) + "'";
 					if(checkGroupByFamily.Checked == true) {
 						command += " AND patient.Guarantor = patient.PatNum";
 					}
