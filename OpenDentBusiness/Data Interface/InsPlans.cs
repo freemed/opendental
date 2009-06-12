@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden,MonthRenew) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -60,7 +60,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
 				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
 				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
-				+"'"+POut.PBool(plan.IsHidden)+"')";
+				+"'"+POut.PBool(plan.IsHidden)+"', "
+				+"'"+POut.PInt(plan.MonthRenew)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -106,6 +107,7 @@ namespace OpenDentBusiness {
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
+				+",MonthRenew='"     +POut.PInt(plan.MonthRenew)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			Db.NonQ(command);
 		}
@@ -136,6 +138,7 @@ namespace OpenDentBusiness {
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
 				+",IsHidden='"         +POut.PBool  (plan.IsHidden)+"'"
+				//MonthRenew would be different between similar plans
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -288,7 +291,8 @@ namespace OpenDentBusiness {
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 				plan.CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
-				plan.IsHidden       = PIn.PBool  (table.Rows[i][29].ToString());
+				plan.IsHidden       = PIn.PBool(table.Rows[i][29].ToString());
+				plan.MonthRenew     = PIn.PInt(table.Rows[i][30].ToString());
 				planList.Add(plan);
 			}
 			return planList;

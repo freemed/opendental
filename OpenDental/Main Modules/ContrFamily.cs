@@ -1295,6 +1295,19 @@ namespace OpenDental{
 			}
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);
+			//Calendar vs service year------------------------------------------------------------------------------------
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableCoverage","Benefit Period"));
+			for(int i=0;i<planArray.Count;i++) {
+				if(planArray[i].MonthRenew==0) {
+					row.Cells.Add(Lan.g("TableCoverage","Calendar Year"));
+				}
+				else {
+					DateTime dateservice=new DateTime(2000,planArray[i].MonthRenew,1);
+					row.Cells.Add(Lan.g("TableCoverage","Service year begins:")+" "+dateservice.ToString("MMMM"));
+				}
+			}
+			gridIns.Rows.Add(row);
 			//Benefits-----------------------------------------------------------------------------------------------------
 			List <Benefit> bensForPat=Benefits.Refresh(PatPlanList);
 			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList);

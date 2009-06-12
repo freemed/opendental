@@ -3219,12 +3219,14 @@ namespace OpenDental{
 			FormInsBenefits FormI=new FormInsBenefits(PlanCur.PlanNum,patPlanNum);
 			FormI.OriginalBenList=benefitList;
 			FormI.Note=textSubscNote.Text;
+			FormI.MonthRenew=PlanCur.MonthRenew;
 			FormI.ShowDialog();
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			FillBenefits();
 			textSubscNote.Text=FormI.Note;
+			PlanCur.MonthRenew=FormI.MonthRenew;
 		}
 
 		///<summary>Gets an employerNum based on the name entered. Called from FillCur</summary>
@@ -3787,6 +3789,7 @@ namespace OpenDental{
 			PlanCur.ReleaseInfo=checkRelease.Checked;
 			PlanCur.AssignBen=checkAssign.Checked;
 			PlanCur.SubscNote=textSubscNote.Text;
+			//MonthRenew already handled inside benefit window.
 			return true;
 		}
 		

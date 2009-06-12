@@ -497,6 +497,22 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc ADD EstimateNote varchar(255) NOT NULL";
 				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD MonthRenew tinyint NOT NULL";
+				Db.NonQ(command);
+				command="SELECT insplan.PlanNum,MONTH(DateEffective) "
+					+"FROM insplan,benefit "
+					+"WHERE insplan.PlanNum=benefit.PlanNum "
+					+"AND benefit.TimePeriod=1 "
+					+"GROUP BY insplan.PlanNum";//service year
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE insplan SET MonthRenew="+table.Rows[i][1].ToString()
+						+" WHERE PlanNum="+table.Rows[i][0].ToString();
+					Db.NonQ(command);
+				}
+
+
+
 
 
 

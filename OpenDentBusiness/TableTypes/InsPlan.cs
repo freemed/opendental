@@ -65,6 +65,8 @@ namespace OpenDentBusiness{
 		public bool CodeSubstNone;
 		///<summary>Set to true to hide it from the pick list and from the main list.</summary>
 		public bool IsHidden;
+		///<summary>The month, 1 through 12 when the insurance plan renews.  It will renew on the first of the month.  To indicate calendar year, set renew month to 0.</summary>
+		public int MonthRenew;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;
 		
