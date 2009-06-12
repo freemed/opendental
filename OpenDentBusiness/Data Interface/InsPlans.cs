@@ -400,8 +400,8 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Get insurance deductible used for one benefit year.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetDedUsed(List<ClaimProc> claimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		///<summary>Only for display purposes rather than for calculations.  Get insurance deductible used for one benefit year.  Must supply a history list for the patient/family.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The planNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
+		public static double GetDedUsed(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList,BenefitCoverageLevel coverageLevel,int patNum) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -409,36 +409,28 @@ namespace OpenDentBusiness {
 			}
 			//get the most recent renew date, possibly including today. Date based on annual max.
 			DateTime renewDate=Benefits.GetRenewDate(benList,planNum,patPlanNum,curPlan.DateEffective,asofDate);
-			//DateTime startDate;//for benefit year
 			DateTime stopDate=renewDate.AddYears(1);
-			/*if(renewDate.Month <= date.Month && renewDate.Day <= date.Day) {
-				startDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year+1,renewDate.Month,renewDate.Day);
-			}
-			else {//otherwise, renew date must be late last year
-				startDate=new DateTime(date.Year-1,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-			}*/
 			double retVal=0;
-			for(int i=0;i<claimProcList.Count;i++) {
-				if(claimProcList[i].PlanNum==planNum
-					&& claimProcList[i].ClaimNum != excludeClaim
-					&& claimProcList[i].ProcDate < stopDate
-					&& claimProcList[i].ProcDate >= renewDate
-					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& (claimProcList[i].Status==ClaimProcStatus.Adjustment
-					|| claimProcList[i].Status==ClaimProcStatus.NotReceived
-					|| claimProcList[i].Status==ClaimProcStatus.Received
-					|| claimProcList[i].Status==ClaimProcStatus.Supplemental)
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].PlanNum!=planNum
+					|| histList[i].ClaimNum == excludeClaim
+					|| histList[i].ProcDate >= stopDate
+					|| histList[i].ProcDate < renewDate
+					//no need to check status, because only the following statuses will be part of histlist:
+					//Adjustment,NotReceived,Received,Supplemental
 					)
 				{
-					retVal+=claimProcList[i].DedApplied;
+					continue;
 				}
+				if(coverageLevel!=BenefitCoverageLevel.Family && histList[i].PatNum != patNum) {
+					continue;//to exclude histList items from other family members
+				}
+				retVal+=histList[i].Deduct;
 			}
 			return retVal;
 		}
 
-		///<summary>Get pending insurance for a given plan for one benefit year. Include a ClaimProcList which is all claimProcs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The insplan.PlanNum is the plan to get value for.</summary>
+		///<summary>Only for display purposes rather than for calculations.  Get pending insurance for a given plan for one benefit year. Include a history list for the patient/family.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The planNum is the plan to get value for.</summary>
 		public static double GetPending(List<ClaimProc> claimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
 			//InsPlan curPlan=GetPlan(planNum,PlanList);

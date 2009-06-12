@@ -521,7 +521,7 @@ namespace OpenDentBusiness{
 				cp.PaidOtherInsOverride=-1;
 				return;
 			}
-			cp.EstimateNote="test";
+			cp.EstimateNote="";
 			//This function is called every time a ProcFee is changed,
 			//so the BaseEst does reflect the new ProcFee.
 			//ProcFee----------------------------------------------------------------------------------------------
@@ -626,7 +626,7 @@ namespace OpenDentBusiness{
 			//base estimate is now done and will not be altered further.  From here out, we are only altering insEstTotal
 //todo: calculate PaidOtherIns
 //for now, assume it's $40.
-			cp.PaidOtherIns=40;
+			cp.PaidOtherIns=0;//40;
 			double paidOtherIns=cp.PaidOtherIns;
 			if(cp.PaidOtherInsOverride != -1) {//use the override
 				paidOtherIns=cp.PaidOtherInsOverride;
@@ -650,6 +650,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static double GetEstTotal(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
 			if(cp.InsEstTotalOverride!=-1) {
 				return cp.InsEstTotalOverride;
 			}
@@ -657,6 +658,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetPercentageDisplay(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
 				return "";
 			}
@@ -670,6 +672,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetCopayDisplay(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
 			if(cp.CopayOverride!=-1) {
 				return cp.CopayOverride.ToString("f");
 			}
@@ -680,6 +683,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetEstimateDisplay(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
 				return "";
 			}
@@ -695,6 +699,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetDeductibleDisplay(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
 				return "";
 			}
@@ -712,10 +717,98 @@ namespace OpenDentBusiness{
 			return cp.DedApplied.ToString("n");
 		}
 
+		///<summary>We pass in the benefit list so that we know whether to include family and whether it's calendar or service year.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.</summary>
+		public static List<ClaimProcHist> GetHistList(int patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimProcHist>>(MethodBase.GetCurrentMethod(),patNum,benList,patPlanList,planList);
+			}
+			List<ClaimProcHist> retVal=new List<ClaimProcHist>();
+			InsPlan plan;
+			int calcount;
+			int servcount;
+			bool isFam;
+			bool isLife;
+			bool isCalendarYear;
+			DateTime dateStart;
+			DataTable table;
+			ClaimProcHist cph;
+			ClaimProcStatus stat;
+			for(int p=0;p<patPlanList.Count;p++) {//loop through each plan that this patient is covered by
+				//get the plan for the given patPlan
+				plan=InsPlans.GetPlan(patPlanList[p].PlanNum,planList);
+				//test benefits for calendar vs service
+				calcount=0;
+				servcount=0;
+				isFam=false;
+				isLife=false;
+				for(int i=0;i<benList.Count;i++) {
+					if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanList[p].PatPlanNum) {
+						continue;
+					}
+					if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=plan.PlanNum) {
+						continue;
+					}
+					if(benList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
+						calcount++;
+					}
+					else if(benList[i].TimePeriod==BenefitTimePeriod.ServiceYear) {
+						servcount++;
+					}
+					else if(benList[i].TimePeriod==BenefitTimePeriod.Lifetime) {
+						isLife=true;
+					}
+					if(benList[i].CoverageLevel==BenefitCoverageLevel.Family) {
+						isFam=true;
+					}
+				}
+				isCalendarYear= calcount >= servcount;
+				if(isFam) {
+					dateStart=new DateTime(1880,1,1);
+				}
+				else {
+					dateStart=BenefitLogic.ComputeRenewDate(DateTime.Today,isCalendarYear,plan.DateEffective);
+				}
+				//we don't include planNum in the query because we are already restricting to one plan
+				//but we do include patnum because this one query can get results for multiple patients that all have this one plan.
+				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum "
+					+"FROM claimproc "
+					+"LEFT JOIN procedurelog on claimproc.ProcNum=procedurelog.ProcNum "//to get the codenum
+					+"WHERE claimproc.PlanNum="+POut.PInt(plan.PlanNum)
+					+" AND claimproc.ProcDate >= "+POut.PDate(dateStart)
+					+" AND claimproc.Status IN("
+					+POut.PInt((int)ClaimProcStatus.NotReceived)+","
+					+POut.PInt((int)ClaimProcStatus.Adjustment)+","//insPayAmt and DedApplied
+					+POut.PInt((int)ClaimProcStatus.Received)+","
+					+POut.PInt((int)ClaimProcStatus.Supplemental)+")";
+				if(!isFam) {
+					command+=" AND claimproc.PatNum="+POut.PInt(patNum);
+				}
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					cph=new ClaimProcHist();
+					cph.ProcDate   = PIn.PDate (table.Rows[i]["ProcDate"].ToString());
+					cph.StrProcCode= ProcedureCodes.GetStringProcCode(PIn.PInt(table.Rows[i]["CodeNum"].ToString()));
+					stat=(ClaimProcStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
+					if(stat==ClaimProcStatus.NotReceived) {
+						cph.Amount   = PIn.PDouble(table.Rows[i]["InsPayEst"].ToString());
+					}
+					else {
+						cph.Amount   = PIn.PDouble(table.Rows[i]["InsPayAmt"].ToString());
+					}
+					cph.Deduct     = PIn.PDouble(table.Rows[i]["DedApplied"].ToString());
+					cph.PatNum     = PIn.PInt   (table.Rows[i]["PatNum"].ToString());
+					cph.ClaimNum   = PIn.PInt   (table.Rows[i]["ClaimNum"].ToString());
+					cph.PlanNum=plan.PlanNum;
+					retVal.Add(cph);
+				}
+			}
+			return retVal;
+		}
+
 
 	}
 
-	///<summary>During the ClaimProc.ComputeBaseEst(), this holds historical payment information for one procedure or an adjustment to insurance benefits from patplan.</summary>
+	///<summary>During the ClaimProc.ComputeBaseEst() and related sections, this holds historical payment information for one procedure or an adjustment to insurance benefits from patplan.</summary>
 	public class ClaimProcHist {
 		public DateTime ProcDate;
 		public string StrProcCode;
@@ -725,6 +818,10 @@ namespace OpenDentBusiness{
 		public double Deduct;
 		///<summary>Because a list can store info for an entire family.</summary>
 		public int PatNum;
+		///<summary>Because a list can store info about multiple plans.</summary>
+		public int PlanNum;
+		///<summary>So that we can exclude history from the claim that we are in.</summary>
+		public int ClaimNum;
 	}
 
 

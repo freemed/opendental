@@ -178,6 +178,8 @@ namespace OpenDental{
 		private Label label18;
 		private ODGrid gridIns;
 		private bool StartedAttachedToClaim;
+		public List<ClaimProcHist> HistList;
+		public List<ClaimProcHist> LoopList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -186,6 +188,8 @@ namespace OpenDental{
 			PatCur=patCur;
 			FamCur=famCur;
 			PlanList=InsPlans.Refresh(FamCur);
+			HistList=null;
+			LoopList=null;
 			InitializeComponent();
 			Lan.F(this);
 			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
@@ -2352,14 +2356,12 @@ namespace OpenDental{
 		}
 
 		private void gridIns_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
-			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList);
+			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList);
 			if(!butOK.Enabled){
 				FormC.NoPermissionProc=true;
 			}
 			FormC.ShowDialog();
-			FillIns();*/
+			FillIns();
 		}
 
 		private void butAddEstimate_Click(object sender, System.EventArgs e) {

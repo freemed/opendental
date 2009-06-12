@@ -3167,20 +3167,19 @@ namespace OpenDental{
 		}
 		
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
-			//ClaimProcs.Cur=(ClaimProc)ClaimProcs.ForClaim[e.Row];
 			if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.\r\nThen, don't forget to finish by creating the check using the button below this section.\r\nYou should probably click cancel unless you are just editing estimates.\r\nContinue anyway?")){
 				return;
 			}
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList);
+			List<ClaimProcHist> histList=null;
+			List<ClaimProcHist> loopList=null;
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
 				return;
 			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			FillGrids();*/
+			FillGrids();
 		}
 
 		private void gridPay_CellClick(object sender,ODGridClickEventArgs e) {

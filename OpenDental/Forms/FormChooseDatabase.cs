@@ -126,6 +126,7 @@ namespace OpenDental{
 			// 
 			this.textPassword.Location = new System.Drawing.Point(13,181);
 			this.textPassword.Name = "textPassword";
+			this.textPassword.PasswordChar = '*';
 			this.textPassword.Size = new System.Drawing.Size(280,20);
 			this.textPassword.TabIndex = 1;
 			// 
