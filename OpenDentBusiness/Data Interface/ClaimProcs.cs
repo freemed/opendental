@@ -33,6 +33,43 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(table);
 		}
 
+		///<summary>Gets a list of ClaimProcs for one claim.</summary>
+		public static List<ClaimProc> RefreshForClaim(int claimNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),claimNum);
+			}
+			string command=
+				"SELECT * FROM claimproc "
+				+"WHERE ClaimNum = "+POut.PInt(claimNum);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
+		}
+
+		///<summary>Gets a list of ClaimProcs with status of estimate.</summary>
+		public static List<ClaimProc> RefreshForTP(int patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command=
+				"SELECT * FROM claimproc "
+				+"WHERE Status="+POut.PInt((int)ClaimProcStatus.Estimate)
+				+" AND PatNum = "+POut.PInt(patNum);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
+		}
+
+		///<summary>Gets a list of ClaimProcs for one proc.</summary>
+		public static List<ClaimProc> RefreshForProc(int procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),procNum);
+			}
+			string command=
+				"SELECT * FROM claimproc "
+				+"WHERE ProcNum="+POut.PInt(procNum);
+			DataTable table=Db.GetTable(command);
+			return RefreshAndFill(table);
+		}
+
 		private static List<ClaimProc> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			List<ClaimProc> retVal=new List<ClaimProc>();
@@ -234,21 +271,34 @@ namespace OpenDentBusiness{
 			Insert(cp);
 		}
 
-
-		///<summary>Converts the supplied list into a list of ClaimProcs for one claim.</summary>
-		public static List<ClaimProc> GetForClaim(List<ClaimProc> list,int claimNum){
+		///<summary>This compares the two lists and saves all the changes to the database.  It also removes all the items marked doDelete.</summary>
+		public static void Synch(ref List<ClaimProc> ClaimProcList,List<ClaimProc> claimProcListOld) {
 			//No need to check RemotingRole; no call to db.
-			List<ClaimProc> retVal=new List<ClaimProc>();
-			for(int i=0;i<list.Count;i++){
-				if(list[i].ClaimNum==claimNum){
-					retVal.Add(list[i]);  
+			for(int i=0;i<ClaimProcList.Count;i++) {
+				if(ClaimProcList[i].DoDelete) {
+					ClaimProcs.Delete(ClaimProcList[i]);
+					continue;
+				}
+				//new procs
+				if(i>=claimProcListOld.Count) {
+					ClaimProcs.Insert(ClaimProcList[i]);//this should properly update the ClaimProcNum
+					continue;
+				}
+				//changed procs
+				if(!ClaimProcList[i].Equals(claimProcListOld[i])) {
+					ClaimProcs.Update(ClaimProcList[i]);
 				}
 			}
-			return retVal;
+			//go backwards to actually remove the deleted items.
+			for(int i=ClaimProcList.Count-1;i>=0;i--) {
+				if(ClaimProcList[i].DoDelete) {
+					ClaimProcList.RemoveAt(i);
+				}
+			}
 		}
 
 		///<summary>When sending or printing a claim, this converts the supplied list into a list of ClaimProcs that need to be sent.</summary>
-		public static List<ClaimProc> GetForSendClaim(List<ClaimProc> claimProcList,int claimNum){
+		public static List<ClaimProc> GetForSendClaim(List<ClaimProc> claimProcList,int claimNum) {
 			//No need to check RemotingRole; no call to db.
 			//MessageBox.Show(List.Length.ToString());
 			List<ClaimProc> retVal=new List<ClaimProc>();
@@ -494,7 +544,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.</summary>
+		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.</summary>
 		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList){
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
@@ -594,9 +644,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//Deductible----------------------------------------------------------------------------------------
-//todo: test deductible calculation.
-//Remember to include handling of only partial usage of available deductible. 
-//For now, the code below handles that.  It will probably stay that way.
+			//The code below handles partial usage of available deductible. 
 			if(loopList!=null && histList!=null) {
 				cp.DedEst=Benefits.GetDeductibleByCode(benList,plan.PlanNum,patPlanNum,cp.ProcDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum);
 			}
@@ -649,7 +697,8 @@ namespace OpenDentBusiness{
 			
 		}
 
-		public static double GetEstTotal(ClaimProc cp) {
+		///<summary>Simply gets insEstTotal or its override if applicable.</summary>
+		public static double GetInsEstTotal(ClaimProc cp) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.InsEstTotalOverride!=-1) {
 				return cp.InsEstTotalOverride;
@@ -698,23 +747,24 @@ namespace OpenDentBusiness{
 			return cp.InsPayEst.ToString("f");
 		}
 
-		public static string GetDeductibleDisplay(ClaimProc cp) {
+		///<summary>Returns 0 or -1 if no deduct.</summary>
+		public static double GetDeductibleDisplay(ClaimProc cp) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
-				return "";
+				return -1;
 			}
 			if(cp.Status==ClaimProcStatus.Estimate) {
 				if(cp.DedEstOverride != -1) {
-					return cp.DedEstOverride.ToString("n");
+					return cp.DedEstOverride;
 				}
-				else if(cp.DedEst > 0) {
-					return cp.DedEst.ToString("n");
-				}
-				else {
-					return "";
-				}
+				//else if(cp.DedEst > 0) {
+					return cp.DedEst;//could be -1
+				//}
+				//else {
+				//	return "";
+				//}
 			}
-			return cp.DedApplied.ToString("n");
+			return cp.DedApplied;
 		}
 
 		///<summary>We pass in the benefit list so that we know whether to include family and whether it's calendar or service year.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.</summary>
@@ -724,21 +774,15 @@ namespace OpenDentBusiness{
 			}
 			List<ClaimProcHist> retVal=new List<ClaimProcHist>();
 			InsPlan plan;
-			int calcount;
-			int servcount;
 			bool isFam;
 			bool isLife;
-			bool isCalendarYear;
 			DateTime dateStart;
 			DataTable table;
 			ClaimProcHist cph;
-			ClaimProcStatus stat;
 			for(int p=0;p<patPlanList.Count;p++) {//loop through each plan that this patient is covered by
 				//get the plan for the given patPlan
 				plan=InsPlans.GetPlan(patPlanList[p].PlanNum,planList);
-				//test benefits for calendar vs service
-				calcount=0;
-				servcount=0;
+				//test benefits for fam and life
 				isFam=false;
 				isLife=false;
 				for(int i=0;i<benList.Count;i++) {
@@ -748,12 +792,6 @@ namespace OpenDentBusiness{
 					if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=plan.PlanNum) {
 						continue;
 					}
-					if(benList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
-						calcount++;
-					}
-					else if(benList[i].TimePeriod==BenefitTimePeriod.ServiceYear) {
-						servcount++;
-					}
 					else if(benList[i].TimePeriod==BenefitTimePeriod.Lifetime) {
 						isLife=true;
 					}
@@ -761,12 +799,11 @@ namespace OpenDentBusiness{
 						isFam=true;
 					}
 				}
-				isCalendarYear= calcount >= servcount;
-				if(isFam) {
+				if(isLife) {
 					dateStart=new DateTime(1880,1,1);
 				}
 				else {
-					dateStart=BenefitLogic.ComputeRenewDate(DateTime.Today,isCalendarYear,plan.DateEffective);
+					dateStart=BenefitLogic.ComputeRenewDate(DateTime.Today,plan.MonthRenew);
 				}
 				//we don't include planNum in the query because we are already restricting to one plan
 				//but we do include patnum because this one query can get results for multiple patients that all have this one plan.
@@ -788,8 +825,8 @@ namespace OpenDentBusiness{
 					cph=new ClaimProcHist();
 					cph.ProcDate   = PIn.PDate (table.Rows[i]["ProcDate"].ToString());
 					cph.StrProcCode= ProcedureCodes.GetStringProcCode(PIn.PInt(table.Rows[i]["CodeNum"].ToString()));
-					stat=(ClaimProcStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
-					if(stat==ClaimProcStatus.NotReceived) {
+					cph.Status=(ClaimProcStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
+					if(cph.Status==ClaimProcStatus.NotReceived) {
 						cph.Amount   = PIn.PDouble(table.Rows[i]["InsPayEst"].ToString());
 					}
 					else {
@@ -805,6 +842,33 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		/// <summary>Used in TP list estimation.  Some of the items in the claimProcList passed in will not have been saved to the database yet.</summary>
+		public static List<ClaimProcHist> GetHistForProc(List<ClaimProc> claimProcList,int procNum,int codeNum) {
+			List<ClaimProcHist> retVal=new List<ClaimProcHist>();
+			ClaimProcHist cph;
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum != procNum) {
+					continue;
+				}
+				cph=new ClaimProcHist();
+				cph.Amount=ClaimProcs.GetInsEstTotal(claimProcList[i]);
+				cph.ClaimNum=0;
+				if(claimProcList[i].DedEstOverride != -1) {
+					cph.Deduct=claimProcList[i].DedEstOverride;
+				}
+				else {
+					cph.Deduct=claimProcList[i].DedEst;
+				}
+				cph.PatNum=claimProcList[i].PatNum;
+				cph.PlanNum=claimProcList[i].PlanNum;
+				cph.ProcDate=DateTime.Today;
+				cph.Status=ClaimProcStatus.Estimate;
+				cph.StrProcCode=ProcedureCodes.GetStringProcCode(codeNum);
+				retVal.Add(cph);
+			}
+			return retVal;
+		}
+
 
 	}
 
@@ -812,7 +876,7 @@ namespace OpenDentBusiness{
 	public class ClaimProcHist {
 		public DateTime ProcDate;
 		public string StrProcCode;
-		///<summary>Insurance paid or est.</summary>
+		///<summary>Insurance paid or est, depending on the status.</summary>
 		public double Amount;
 		///<summary>Deductible paid or est.</summary>
 		public double Deduct;
@@ -822,6 +886,12 @@ namespace OpenDentBusiness{
 		public int PlanNum;
 		///<summary>So that we can exclude history from the claim that we are in.</summary>
 		public int ClaimNum;
+		///<summary>Only 4 statuses get used anyway.  This helps us filter the pending items sometimes.</summary>
+		public ClaimProcStatus Status;
+
+		public override string ToString() {
+			return StrProcCode+" "+Status.ToString()+" "+Amount.ToString()+" ded:"+Deduct.ToString();
+		}
 	}
 
 

@@ -347,12 +347,12 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
-		public static double GetInsRem(List<ClaimProc> claimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		public static double GetInsRem(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList,int patNum) {
 			//No need to check RemotingRole; no call to db.
-			double insUsed=GetInsUsed(claimProcList,date,planNum,patPlanNum,excludeClaim,planList,benList);
+			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
-			double insPending=GetPending(claimProcList,date,plan,patPlanNum,excludeClaim,benList);
-			double annualMax=Benefits.GetAnnualMax(benList,planNum,patPlanNum);
+			double insPending=GetPendingDisplay(histList,asofDate,plan,patPlanNum,excludeClaim,patNum);
+			double annualMax=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum);
 			if(annualMax<0) {
 				return 999999;
 			}
@@ -362,39 +362,56 @@ namespace OpenDentBusiness {
 			return annualMax-insUsed-insPending;
 		}
 
-		/// <summary>Get insurance benefits used for one benefit year.  Returns actual insurance used based on ClaimProc data. Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetInsUsed(List<ClaimProc> claimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList) {
+		///<summary>Only for display purposes rather than for calculations.  Get pending insurance for a given plan for one benefit year. Include a history list for the patient/family.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The planNum is the plan to get value for.</summary>
+		public static double GetPendingDisplay(List<ClaimProcHist> histList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,int patNum) {
+			//No need to check RemotingRole; no call to db.
+			//InsPlan curPlan=GetPlan(planNum,PlanList);
+			if(curPlan==null) {
+				return 0;
+			}
+			//get the most recent renew date, possibly including today:
+			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
+			DateTime stopDate=renewDate.AddYears(1);
+			double retVal=0;
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].PlanNum==curPlan.PlanNum
+					&& histList[i].ClaimNum != excludeClaim
+					&& histList[i].ProcDate < stopDate
+					&& histList[i].ProcDate >= renewDate
+					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
+					&& histList[i].Status==ClaimProcStatus.NotReceived
+					&& histList[i].PatNum==patNum)
+				//Status Adjustment has no insPayEst, so can ignore it here.
+				{
+					retVal+=histList[i].Amount;
+				}
+			}
+			return retVal;
+		}
+
+		/// <summary>Only for display purposes rather than for calculations.  Get insurance benefits used for one benefit year.  Must supply all relevant hist for the patient.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
+		public static double GetInsUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
 				return 0;
 			}
 			//get the most recent renew date, possibly including today:
-			DateTime renewDate=Benefits.GetRenewDate(benList,planNum,patPlanNum,curPlan.DateEffective,asofDate);
-			//DateTime startDate;//for benefit year
+			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
-			/*
-			//if renew date is earlier this year or is today(assuming typical situation of date being today)
-			if(renewDate.Month <= date.Month && renewDate.Day <= date.Day) {
-				startDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year+1,renewDate.Month,renewDate.Day);
-			}
-			else {//otherwise, renew date must be late last year
-				startDate=new DateTime(date.Year-1,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-			}*/
 			double retVal=0;
-			for(int i=0;i<claimProcList.Count;i++) {
-				if(claimProcList[i].PlanNum==planNum
-					&& claimProcList[i].ClaimNum != excludeClaim
-					&& claimProcList[i].ProcDate < stopDate
-					&& claimProcList[i].ProcDate >= renewDate
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].PlanNum==planNum
+					&& histList[i].ClaimNum != excludeClaim
+					&& histList[i].ProcDate < stopDate
+					&& histList[i].ProcDate >= renewDate
 					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& claimProcList[i].Status!=ClaimProcStatus.Preauth) {
-					if(claimProcList[i].Status==ClaimProcStatus.Received 
-						|| claimProcList[i].Status==ClaimProcStatus.Adjustment
-						|| claimProcList[i].Status==ClaimProcStatus.Supplemental) {
-						retVal+=claimProcList[i].InsPayAmt;
+					) {
+					if(histList[i].Status==ClaimProcStatus.Received 
+						|| histList[i].Status==ClaimProcStatus.Adjustment
+						|| histList[i].Status==ClaimProcStatus.Supplemental) 
+					{
+						retVal+=histList[i].Amount;
 					}
 					else {//NotReceived
 						//retVal-=ClaimProcList[i].InsPayEst;
@@ -404,15 +421,15 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Only for display purposes rather than for calculations.  Get insurance deductible used for one benefit year.  Must supply a history list for the patient/family.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The planNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetDedUsed(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList,BenefitCoverageLevel coverageLevel,int patNum) {
+		///<summary>Only for display purposes rather than for calculations.  Get insurance deductible used for one benefit year.  Must supply a history list for the patient/family.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The planNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  It includes pending deductibles in the result.</summary>
+		public static double GetDedUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,BenefitCoverageLevel coverageLevel,int patNum) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
 				return 0;
 			}
 			//get the most recent renew date, possibly including today. Date based on annual max.
-			DateTime renewDate=Benefits.GetRenewDate(benList,planNum,patPlanNum,curPlan.DateEffective,asofDate);
+			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
 			for(int i=0;i<histList.Count;i++) {
@@ -430,32 +447,6 @@ namespace OpenDentBusiness {
 					continue;//to exclude histList items from other family members
 				}
 				retVal+=histList[i].Deduct;
-			}
-			return retVal;
-		}
-
-		///<summary>Only for display purposes rather than for calculations.  Get pending insurance for a given plan for one benefit year. Include a history list for the patient/family.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The planNum is the plan to get value for.</summary>
-		public static double GetPending(List<ClaimProc> claimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,List<Benefit> benList) {
-			//No need to check RemotingRole; no call to db.
-			//InsPlan curPlan=GetPlan(planNum,PlanList);
-			if(curPlan==null) {
-				return 0;
-			}
-			//get the most recent renew date, possibly including today:
-			DateTime renewDate=Benefits.GetRenewDate(benList,curPlan.PlanNum,patPlanNum,curPlan.DateEffective,asofDate);
-			DateTime stopDate=renewDate.AddYears(1);
-			double retVal=0;
-			for(int i=0;i<claimProcList.Count;i++) {
-				if(claimProcList[i].PlanNum==curPlan.PlanNum
-					&& claimProcList[i].ClaimNum != excludeClaim
-					&& claimProcList[i].ProcDate < stopDate
-					&& claimProcList[i].ProcDate >= renewDate
-					//enum ClaimProcStatus{NotReceived,Received,Preauth,Adjustment,Supplemental}
-					&& claimProcList[i].Status==ClaimProcStatus.NotReceived)
-				//Status Adjustment has no insPayEst, so can ignore it here.
-				{
-					retVal+=claimProcList[i].InsPayEst;
-				}
 			}
 			return retVal;
 		}

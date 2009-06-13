@@ -479,8 +479,8 @@ namespace OpenDental{
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
-      List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-      ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum); 
+      //List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+      ClaimProcsForClaim=ClaimProcs.RefreshForClaim(ClaimCur.ClaimNum); 
 			claimprocs=new List<ClaimProc>();
 			bool includeThis;
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){//fill the arraylist

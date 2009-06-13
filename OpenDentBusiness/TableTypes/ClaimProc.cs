@@ -71,6 +71,8 @@ namespace OpenDentBusiness{
 		public double PaidOtherInsOverride;
 		///<summary>An automatically generated note that displays information about over max, exclusions, and other limitations for which there are no fields.  Only applies to estimate.  Once it's attached to a claim, similar information can go in the remarks field.</summary>
 		public string EstimateNote;
+		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
+		public bool DoDelete;
 
 
 		///<summary>Returns a copy of this ClaimProc.</summary>
@@ -78,7 +80,50 @@ namespace OpenDentBusiness{
 			return (ClaimProc)MemberwiseClone();
 		}
 
-		
+		public override bool Equals(object obj) {
+			ClaimProc cp=(ClaimProc)obj;
+			if(ClaimProcNum != cp.ClaimProcNum
+				|| ProcNum != cp.ProcNum
+				|| ClaimNum != cp.ClaimNum
+				|| PatNum != cp.PatNum
+				|| ProvNum != cp.ProvNum
+				|| FeeBilled != cp.FeeBilled
+				|| InsPayEst != cp.InsPayEst
+				|| DedApplied != cp.DedApplied
+				|| Status != cp.Status
+				|| InsPayAmt != cp.InsPayAmt
+				|| Remarks != cp.Remarks
+				|| ClaimPaymentNum != cp.ClaimPaymentNum
+				|| PlanNum != cp.PlanNum
+				|| DateCP != cp.DateCP
+				|| WriteOff != cp.WriteOff
+				|| CodeSent != cp.CodeSent
+				|| AllowedOverride != cp.AllowedOverride
+				|| Percentage != cp.Percentage
+				|| PercentOverride != cp.PercentOverride
+				|| CopayAmt != cp.CopayAmt
+				|| NoBillIns != cp.NoBillIns
+				|| PaidOtherIns != cp.PaidOtherIns
+				|| BaseEst != cp.BaseEst
+				|| CopayOverride != cp.CopayOverride
+			  || ProcDate != cp.ProcDate
+				|| DateEntry != cp.DateEntry
+				|| LineNumber != cp.LineNumber
+				|| DedEst != cp.DedEst
+				|| DedEstOverride != cp.DedEstOverride
+				|| InsEstTotal != cp.InsEstTotal
+				|| InsEstTotalOverride != cp.InsEstTotalOverride
+				|| PaidOtherInsOverride != cp.PaidOtherInsOverride
+				|| EstimateNote != cp.EstimateNote) 
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public override string ToString() {
+			return Status.ToString()+ProcDate.ToShortDateString()+" est:"+InsEstTotal.ToString()+" ded:"+DedEst.ToString();
+		}
 
 
 

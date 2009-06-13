@@ -74,7 +74,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddEstimate;
 		private Procedure ProcCur;
 		private Procedure ProcOld;
-		private List<ClaimProc> ClaimProcList;
+		//private List<ClaimProc> ClaimProcList;
 		private OpenDental.ValidDouble textProcFee;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
 		private OpenDental.ODtextBox textNotes;
@@ -188,8 +188,8 @@ namespace OpenDental{
 			PatCur=patCur;
 			FamCur=famCur;
 			PlanList=InsPlans.Refresh(FamCur);
-			HistList=null;
-			LoopList=null;
+			//HistList=null;
+			//LoopList=null;
 			InitializeComponent();
 			Lan.F(this);
 			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
@@ -1840,10 +1840,11 @@ namespace OpenDental{
 					}
 				}
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			ClaimProcsForProc=ClaimProcs.RefreshForProc(ProcCur.ProcNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
-			if(Procedures.IsAttachedToClaim(ProcCur,ClaimProcList)){
+			if(Procedures.IsAttachedToClaim(ProcCur,ClaimProcsForProc)){
 				StartedAttachedToClaim=true;
 				//however, this doesn't stop someone from creating a claim while this window is open,
 				//so this is checked at the end, too.
@@ -2206,10 +2207,11 @@ namespace OpenDental{
 		}
 
 		private void FillIns(bool refreshClaimProcsFirst){
-			if(refreshClaimProcsFirst){
-				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			if(refreshClaimProcsFirst) {
+				//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+				//}
+				ClaimProcsForProc=ClaimProcs.RefreshForProc(ProcCur.ProcNum);
 			}
-			ClaimProcsForProc=ClaimProcs.GetForProc(ClaimProcList,ProcCur.ProcNum);
 			gridIns.BeginUpdate();
 			gridIns.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProcIns","Ins Plan"),190);
@@ -2318,7 +2320,13 @@ namespace OpenDental{
 				else {
 					row.Cells.Add("");
 				}
-				row.Cells.Add(ClaimProcs.GetDeductibleDisplay(ClaimProcsForProc[i]));
+				double ded=ClaimProcs.GetDeductibleDisplay(ClaimProcsForProc[i]);
+				if(ded>0) {
+					row.Cells.Add(ded.ToString("n"));
+				}
+				else {
+					row.Cells.Add("");
+				}
 				row.Cells.Add(ClaimProcs.GetPercentageDisplay(ClaimProcsForProc[i]));
 				row.Cells.Add(ClaimProcs.GetCopayDisplay(ClaimProcsForProc[i]));
 				/*if(ClaimProcsForProc[i].InsEstTotalOverride!=-1) {
@@ -2474,7 +2482,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcCur.ProcFee=procFee;
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -2552,7 +2560,7 @@ namespace OpenDental{
 					radioU.Checked=true;
 					break;
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
       SetControls();
 		}
@@ -2735,7 +2743,7 @@ namespace OpenDental{
 			}
 			//next line is needed to recalc BaseEst, etc, for claimprocs that are no longer NoBillIns
 			//also, if they are NoBillIns, then it clears out the other values.
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
 			FillIns();
 		}
 
@@ -3338,15 +3346,15 @@ namespace OpenDental{
 				{
 					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
 				}
-				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
 				return;
 			}
 			if(IsNew){//if cancelling on a new procedure
 				//delete any newly created claimprocs
-				for(int i=0;i<ClaimProcList.Count;i++) {
-					if(ClaimProcList[i].ProcNum==ProcCur.ProcNum){
-						ClaimProcs.Delete(ClaimProcList[i]);
-					}
+				for(int i=0;i<ClaimProcsForProc.Count;i++) {
+					//if(ClaimProcsForProc[i].ProcNum==ProcCur.ProcNum) {
+					ClaimProcs.Delete(ClaimProcsForProc[i]);
+					//}
 				}
 			}
 		}

@@ -763,8 +763,6 @@ namespace OpenDental{
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);
-//This will soon be obsolete:
-        ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList);
 			}
 		}
@@ -972,11 +970,20 @@ namespace OpenDental{
 				}
 				ClaimProc claimproc;//holds the estimate.
 				string descript;
-				for(int i=0;i<ProcListTP.Length;i++){
-					LoopList=new List<ClaimProcHist>();
-					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList,HistList,LoopList);
+				ClaimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
+				List<ClaimProc> claimProcListOld=new List<ClaimProc>();//This didn't work:(ClaimProcList);//make a copy
+				for(int i=0;i<ClaimProcList.Count;i++) {
+					claimProcListOld.Add(ClaimProcList[i].Copy());
 				}
-				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+				LoopList=new List<ClaimProcHist>();
+				for(int i=0;i<ProcListTP.Length;i++){
+					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ref ClaimProcList,false,InsPlanList,PatPlanList,BenefitList,HistList,LoopList,false);
+					//then, add this information to loopList so that the next procedure is aware of it.
+					LoopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcList,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+				}
+				//save changes in the list to the database
+				ClaimProcs.Synch(ref ClaimProcList,claimProcListOld);
+				//claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
 				for(int i=0;i<ProcListTP.Length;i++) {
 					row=new ODGridRow();
 					row.Cells.Add("");//never done
@@ -1004,7 +1011,11 @@ namespace OpenDental{
 								priIns=0;
 							}
 							else{
-								priIns=ClaimProcs.GetEstTotal(claimproc);
+								priIns=ClaimProcs.GetInsEstTotal(claimproc);
+								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
+								if(ded > 0) { 
+									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+ded.ToString("c");
+								}	
 							}
 						}
 						else{//no primary ins
@@ -1017,6 +1028,10 @@ namespace OpenDental{
 							}
 							else{
 								secIns=claimproc.InsPayEst;
+								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
+								if(ded != -1) {
+									row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+ded.ToString("c");
+								}
 							}
 						}//secondary
 						else{//no secondary ins
@@ -1328,29 +1343,11 @@ namespace OpenDental{
 			InsPlan PlanCur;//=new InsPlan();
 			if(PatPlanList.Count>0){
 				PlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
-				//bool isFamMax=Benefits.GetIsFamMax(BenefitList,PlanCur.PlanNum);
-				//bool isFamDed=Benefits.GetIsFamDed(BenefitList,PlanCur.PlanNum);
-				//if(isFamMax || isFamDed){
-				//	labelFamily.Visible=true;
-				//}
-				//else{
-				//	labelFamily.Visible=false;
-				//}
-				//List<ClaimProc> claimProcsFam=null;
-				//if(isFamMax || isFamDed){
-				//	claimProcsFam=ClaimProcs.RefreshFam(PlanCur.PlanNum);
-				//	pend=InsPlans.GetPending
-				//		(claimProcsFam,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,BenefitList);
-				//	used=InsPlans.GetInsUsed
-				//		(claimProcsFam,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
-				//}
-				//else{
-				pend=InsPlans.GetPending(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,BenefitList);
-				used=InsPlans.GetInsUsed(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
-				//}
+				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatCur.PatNum);
+				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList);
 				textPriPend.Text=pend.ToString("F");
 				textPriUsed.Text=used.ToString("F");
-				max=Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
+				max=Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
 				if(max==-1){//if annual max is blank
 					textPriMax.Text="";
 					textPriRem.Text="";
@@ -1364,11 +1361,11 @@ namespace OpenDental{
 					textPriRem.Text=remain.ToString("F");
 				}
 				//deductible:
-				ded=Benefits.GetDeductGeneral(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Individual);
-				dedFam=Benefits.GetDeductGeneral(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Family);
+				ded=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Individual);
+				dedFam=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Family);
 				if(ded!=-1){
 					textPriDed.Text=ded.ToString("F");
-					dedUsed=InsPlans.GetDedUsed(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList,
+					dedUsed=InsPlans.GetDedUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,
 						BenefitCoverageLevel.Individual,PatCur.PatNum);
 					textPriDedRem.Text=(ded-dedUsed).ToString("F");
 				}
@@ -1378,13 +1375,11 @@ namespace OpenDental{
 			}
 			if(PatPlanList.Count>1){
 				PlanCur=InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
-				pend=InsPlans.GetPending
-					(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,BenefitList);
+				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatCur.PatNum);
 				textSecPend.Text=pend.ToString("F");
-				used=InsPlans.GetInsUsed
-					(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
+				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList);
 				textSecUsed.Text=used.ToString("F");
-				max=Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
+				max=Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
 				if(max==-1){
 					textSecMax.Text="";
 					textSecRem.Text="";
@@ -1397,11 +1392,11 @@ namespace OpenDental{
 					textSecMax.Text=max.ToString("F");
 					textSecRem.Text=remain.ToString("F");
 				}
-				ded=Benefits.GetDeductGeneral(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Individual);
-				dedFam=Benefits.GetDeductGeneral(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Family);
+				ded=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Individual);
+				dedFam=Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Family);
 				if(ded!=-1){
 					textSecDed.Text=ded.ToString("F");
-					dedUsed=InsPlans.GetDedUsed(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList,
+					dedUsed=InsPlans.GetDedUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,
 						BenefitCoverageLevel.Individual,PatCur.PatNum);
 					textSecDedRem.Text=(ded-dedUsed).ToString("F");
 				}
@@ -1458,6 +1453,14 @@ namespace OpenDental{
 			}
 			if(gridPlans.SelectedIndices[0]==0){//current plan
 				Procedure ProcCur=Procedures.GetOneProc(((Procedure)gridMain.Rows[e.Row].Tag).ProcNum,true); 
+				//generate a new loop list containing only the procs before this one in it
+				LoopList=new List<ClaimProcHist>();
+				for(int i=0;i<ProcListTP.Length;i++) {
+					if(ProcListTP[i].ProcNum==ProcCur.ProcNum) {
+						break;
+					}
+					LoopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcList,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+				}
 				FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur);
 				FormPE.LoopList=LoopList;
 				FormPE.HistList=HistList;
@@ -2192,6 +2195,7 @@ namespace OpenDental{
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0
 			double standardfee;
 			double insfee;
+			List<ClaimProc> claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
       for(int i=0;i<ProcListTP.Length;i++){
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
@@ -2209,7 +2213,7 @@ namespace OpenDental{
 				else {
 					procCur.ProcFee=insfee;
 				}
-				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
       }
@@ -2472,7 +2476,7 @@ namespace OpenDental{
 			}
 			gridMain.SetSelected(false);
 			Claim ClaimCur=(Claim)ALPreAuth[e.Row];
-			List<ClaimProc> ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
+			List<ClaimProc> ClaimProcsForClaim=ClaimProcs.RefreshForClaim(ClaimCur.ClaimNum);
 			Procedure proc;
 			for(int i=0;i<gridMain.Rows.Count;i++){//ProcListTP.Length;i++){
 				if(gridMain.Rows[i].Tag==null){

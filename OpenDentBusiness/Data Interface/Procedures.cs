@@ -1258,11 +1258,12 @@ namespace OpenDentBusiness {
 		}
 
 		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList) {
-			ComputeEstimates(proc,patNum,claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null);
+			//This is a stub that needs revision.
+			ComputeEstimates(proc,patNum,ref claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null,true);
 		}
 
-		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list can be all claimProcs for the patient, but must at least include all claimprocs for this proc.  Only set isInitialEntry true from Chart module; this is for cap procs.</summary>
-		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList) {
+		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list only needs to include claimprocs for this proc, although it can include more.  Only set isInitialEntry true from Chart module; it is for cap procs.  loopList only contains information about procedures that come before this one in a list such as TP or claim.</summary>
+		public static void ComputeEstimates(Procedure proc,int patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb) {
 			//No need to check RemotingRole; no call to db.
 			bool doCreate=true;
 			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
@@ -1300,7 +1301,12 @@ namespace OpenDentBusiness {
 				}
 				//If claimProc estimate is for a plan that is not current, delete it
 				if(!planIsCurrent) {
-					ClaimProcs.Delete(claimProcs[i]);
+					if(saveToDb) {
+						ClaimProcs.Delete(claimProcs[i]);
+					}
+					else {
+						claimProcs[i].DoDelete=true;
+					}
 				}
 			}
 			InsPlan PlanCur;
@@ -1365,11 +1371,16 @@ namespace OpenDentBusiness {
 				cp.CopayOverride=-1;
 				cp.ProcDate=proc.ProcDate;
 				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
-				ClaimProcs.Insert(cp);
+				if(saveToDb) {
+					ClaimProcs.Insert(cp);
+				}
+				else {
+					claimProcs.Add(cp);//this newly added cp has not ClaimProcNum and is not yet in the db.
+				}
 				cpAdded=true;
 			}
 			//if any were added, refresh the list
-			if(cpAdded) {
+			if(cpAdded && saveToDb) {//no need to refresh the list if !saveToDb, because list already made current.
 				claimProcs=ClaimProcs.Refresh(patNum);
 			}
 			for(int i=0;i<claimProcs.Count;i++) {
@@ -1409,12 +1420,14 @@ namespace OpenDentBusiness {
 						patPlanNum=patPlans[1].PatPlanNum;
 					}
 					if(patPlanNum != 0) {
+						//the cp is altered within ComputeBaseEst, but not saved.
 						ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlanNum,benefitList,histList,loopList);
 					}
 				}
 				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate
-					&&proc.ProcStatus==ProcStat.C) {
+					&&proc.ProcStatus==ProcStat.C) 
+				{
 					claimProcs[i].Status=ClaimProcStatus.CapComplete;
 				}
 				//prov only updated if still an estimate
@@ -1422,7 +1435,9 @@ namespace OpenDentBusiness {
 					||claimProcs[i].Status==ClaimProcStatus.CapEstimate) {
 					claimProcs[i].ProvNum=proc.ProvNum;
 				}
-				ClaimProcs.Update(claimProcs[i]);
+				if(saveToDb) {
+					ClaimProcs.Update(claimProcs[i]);
+				}
 			}
 		}
 

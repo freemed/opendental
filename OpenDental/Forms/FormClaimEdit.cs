@@ -3034,7 +3034,7 @@ namespace OpenDental{
 			gridProc.Rows.Clear();
 			ODGridRow row;
 			Procedure ProcCur;
-			ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
+			ClaimProcsForClaim=ClaimProcs.RefreshForClaim(ClaimCur.ClaimNum);
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){
 				row=new ODGridRow();
 				if(ClaimProcsForClaim[i].LineNumber==0){

@@ -162,8 +162,7 @@ namespace OpenDental.Eclaims {
 						throw new Exception(this.ToString()+".FormCCDPrint: failed to load secondary insurance info!");
 					}
 				}
-				List<ClaimProc> claimprocall=ClaimProcs.Refresh(patient.PatNum);
-				claimprocs=ClaimProcs.GetForClaim(claimprocall,claim.ClaimNum);
+				List<ClaimProc> claimprocs=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 				patPlansForPatient=PatPlans.Refresh(claim.PatNum);
 				subscriber=Patients.GetPat(insplan.Subscriber);
 				if(subscriber.Language=="fr") {

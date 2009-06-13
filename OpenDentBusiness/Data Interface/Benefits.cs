@@ -230,9 +230,9 @@ namespace OpenDentBusiness {
 			string command="DELETE FROM benefit WHERE BenefitNum ="+POut.PInt(ben.BenefitNum);
 			Db.NonQ(command);
 		}
-		
-		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
-		public static double GetAnnualMax(List<Benefit> list,int planNum,int patPlanNum) {
+
+		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
+		public static double GetAnnualMaxDisplay(List<Benefit> list,int planNum,int patPlanNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -250,11 +250,21 @@ namespace OpenDentBusiness {
 				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
 					continue;
 				}
+				//coverage level?
+				if(list[i].CodeNum != 0) {
+					continue;
+				}
+				if(list[i].CovCatNum != 0) {
+					EbenefitCategory eben=CovCats.GetEbenCat(list[i].CovCatNum);
+					if(eben != EbenefitCategory.General && eben != EbenefitCategory.None) {
+						continue;
+					}
+				}
 				return list[i].MonetaryAmt;
 			}
 			return -1;
 		}
-
+		/*
 		///<Summary>Returns true if there is a family max for the given plan.</Summary>
 		public static bool GetIsFamMax(List <Benefit> list,int planNum) {
 			//No need to check RemotingRole; no call to db.
@@ -277,10 +287,10 @@ namespace OpenDentBusiness {
 				return true;
 			}
 			return false;
-		}
+		}*/
 
-		///<summary>Gets a general deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Used for display purposes more than any calculations.</summary>
-		public static double GetDeductGeneral(List <Benefit> list,int planNum,int patPlanNum,BenefitCoverageLevel level) {
+		///<summary>Only for display purposes rather than any calculations.  Gets a general deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.</summary>
+		public static double GetDeductGeneralDisplay(List <Benefit> list,int planNum,int patPlanNum,BenefitCoverageLevel level) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -493,7 +503,7 @@ namespace OpenDentBusiness {
 			double retVal=benInd.MonetaryAmt;
 			//reduce by amount already paid this year
 			//establish date range for procedures to consider
-			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,benInd.TimePeriod==BenefitTimePeriod.CalendarYear,plan.DateEffective);
+			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
 			DateTime dateEnd=procDate;//I guess we don't want to consider anything after the date of this procedure.
 			if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
 				dateStart=DateTime.MinValue;
@@ -641,31 +651,6 @@ namespace OpenDentBusiness {
 				return famded;
 			}
 			return retVal;
-		}
-
-		///<summary>Gets the renewal date for annual benefits from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  It will decide whether to use calendar year or service year based on the majority of benefits.   Because there is one renew date each year, the date returned will be the asofDate or earlier; the most recent renewal date.  This is mostly used for display purposes rather than any actual calculations.</summary>
-		public static DateTime GetRenewDate(List<Benefit> benList,int planNum,int patPlanNum,DateTime insStartDate,DateTime asofDate) {
-			//No need to check RemotingRole; no call to db.
-			int calcount=0;
-			int servcount=0;
-			for(int i=0;i<benList.Count;i++) {
-				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
-					continue;
-				}
-				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
-					continue;
-				}
-
-				if(benList[i].TimePeriod==BenefitTimePeriod.CalendarYear) {
-					calcount++;
-				}
-				else if(benList[i].TimePeriod==BenefitTimePeriod.ServiceYear) {
-					servcount++;
-				}
-			}
-			bool isCalendarYear= calcount >= servcount;
-			return OpenDentBusiness.BenefitLogic.ComputeRenewDate(asofDate,isCalendarYear,insStartDate);
-			//return new DateTime(asofDate.Year,1,1);
 		}
 
 		///<summary>Only use pri or sec, not tot.  Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
