@@ -2222,16 +2222,12 @@ namespace OpenDental{
 			gridIns.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcIns","NoBill"),45,HorizontalAlignment.Center);
 			gridIns.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableProcIns","Copay"),55,HorizontalAlignment.Right);
+			gridIns.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcIns","Deduct"),55,HorizontalAlignment.Right);
 			gridIns.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcIns","Percent"),55,HorizontalAlignment.Center);
 			gridIns.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProcIns","Copay"),55,HorizontalAlignment.Right);
-			gridIns.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TableProcIns","BaseEst"),55,HorizontalAlignment.Right);
-			//gridIns.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TableProcIns","Override"),55,HorizontalAlignment.Right);
-			//gridIns.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcIns","Ins Est"),55,HorizontalAlignment.Right);
 			gridIns.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcIns","Ins Pay"),55,HorizontalAlignment.Right);
@@ -2320,6 +2316,7 @@ namespace OpenDental{
 				else {
 					row.Cells.Add("");
 				}
+				row.Cells.Add(ClaimProcs.GetCopayDisplay(ClaimProcsForProc[i]));
 				double ded=ClaimProcs.GetDeductibleDisplay(ClaimProcsForProc[i]);
 				if(ded>0) {
 					row.Cells.Add(ded.ToString("n"));
@@ -2328,19 +2325,6 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				row.Cells.Add(ClaimProcs.GetPercentageDisplay(ClaimProcsForProc[i]));
-				row.Cells.Add(ClaimProcs.GetCopayDisplay(ClaimProcsForProc[i]));
-				/*if(ClaimProcsForProc[i].InsEstTotalOverride!=-1) {
-					row.Cells.Add(ClaimProcsForProc[i].InsEstTotal.ToString("n"));
-					cell=new ODGridCell(ClaimProcsForProc[i].InsEstTotalOverride.ToString("n"));
-					cell.Bold=YN.Yes;
-					row.Cells.Add(cell);
-				}
-				else {
-					cell=new ODGridCell(ClaimProcsForProc[i].InsEstTotal.ToString("n"));
-					cell.Bold=YN.Yes;
-					row.Cells.Add(cell);
-					row.Cells.Add(ClaimProcsForProc[i].InsEstTotalOverride.ToString("n"));
-				}*/
 				row.Cells.Add(ClaimProcs.GetEstimateDisplay(ClaimProcsForProc[i]));
 				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
 					row.Cells.Add("");

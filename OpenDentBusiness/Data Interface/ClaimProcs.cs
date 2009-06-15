@@ -780,8 +780,13 @@ namespace OpenDentBusiness{
 			return cp.DedApplied;
 		}
 
-		///<summary>We pass in the benefit list so that we know whether to include family.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.</summary>
 		public static List<ClaimProcHist> GetHistList(int patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList) {
+			//No need to check RemotingRole; no call to db.
+			return GetHistList(patNum,benList,patPlanList,planList,-1);
+		}
+
+		///<summary>We pass in the benefit list so that we know whether to include family.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.  Use excludeClaimNum=-1 to not exclude a claim.  A claim is excluded if editing from inside that claim.</summary>
+		public static List<ClaimProcHist> GetHistList(int patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,int excludeClaimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProcHist>>(MethodBase.GetCurrentMethod(),patNum,benList,patPlanList,planList);
 			}
@@ -832,6 +837,9 @@ namespace OpenDentBusiness{
 					+POut.PInt((int)ClaimProcStatus.Supplemental)+")";
 				if(!isFam) {
 					command+=" AND claimproc.PatNum="+POut.PInt(patNum);
+				}
+				if(excludeClaimNum != -1) {
+					command+=" AND claimproc.ClaimNum != "+POut.PInt(excludeClaimNum);
 				}
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {

@@ -40,7 +40,7 @@ namespace OpenDental{
 			//And for preauth.
 			Procedure ProcCur;
 			//InsPlan plan=InsPlans.GetPlan(claimCur.PlanNum,planList);
-			List<ClaimProcHist> histList=ClaimProcs.GetHistList(claimCur.PatNum,benefitList,patPlans,planList);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(claimCur.PatNum,benefitList,patPlans,planList,claimCur.ClaimNum);
 			List<ClaimProc> claimProcListOld=new List<ClaimProc>();//make a copy
 			for(int i=0;i<ClaimProcsAll.Count;i++) {
 				claimProcListOld.Add(ClaimProcsAll[i].Copy());

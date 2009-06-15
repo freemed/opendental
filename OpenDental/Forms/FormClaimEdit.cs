@@ -2980,23 +2980,13 @@ namespace OpenDental{
 		}
 
 		private void butRecalc_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7.");
-			/*
 			if(!ClaimIsValid()){
 				return;
 			}
 			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
-			bool isFamMax=Benefits.GetIsFamMax(benefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(benefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed){
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
-			}
-			else{
-				ClaimL.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
-			}
+			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			FillGrids();*/
+			FillGrids();
 		}
 
 		private void FillGrids(){
@@ -3825,8 +3815,6 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			//MessageBox.Show("Underconstruction for version 6.7");
-			
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
 				return;

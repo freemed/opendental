@@ -2353,8 +2353,6 @@ namespace OpenDental{
 		}
 
 		private void OnPreAuth_Click() {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"You can only send a preauth from the current TP, not a saved TP.");
 				return;
@@ -2453,22 +2451,13 @@ namespace OpenDental{
 				//ProcCur.Update(ProcOld);
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,Claims.Cur.ClaimNum);
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed) {
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else {
-				ClaimL.CalculateAndUpdate(ClaimProcList,ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
+			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			ClaimL.CalculateAndUpdate(ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			//FormCE.CalculateEstimates(
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void gridPreAuth_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
