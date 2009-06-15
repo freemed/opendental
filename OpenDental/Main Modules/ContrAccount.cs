@@ -2579,8 +2579,6 @@ namespace OpenDental {
 		}
 
 		private void OnIns_Click() {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2639,16 +2637,16 @@ namespace OpenDental {
 			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			List<ClaimProc> claimProcsFam=null;			
-			if(isFamMax || isFamDed){
-				claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else{
-				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
+			//bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			//bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			//List<ClaimProc> claimProcsFam=null;			
+			//if(isFamMax || isFamDed){
+			//	claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+			//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			//}
+			//else{
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			//}
 			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -2668,19 +2666,19 @@ namespace OpenDental {
 					}
 					ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 					ClaimCur.ClaimStatus="H";
-					isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-					isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-					if(isFamMax || isFamDed) {
-						claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-						ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-					}
-					else {
-						ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-					}
+					//isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+					//isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+					//if(isFamMax || isFamDed) {
+					//	claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+					//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+					//}
+					//else {
+					ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+					//}
 					//Claims.Cur=ClaimCur;
 				}
 			}
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>

@@ -893,6 +893,7 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		/*No longer relevant due to database changes.
 		public static string EtransRemoveOldReceivedClaimTransactions(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
@@ -917,7 +918,7 @@ namespace OpenDentBusiness {
 					rowsCleared.ToString()+"\r\n";
 			}
 			return "";
-		}
+		}*/
 
 		public static string InsPlanCheckNoCarrier(bool verbose) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

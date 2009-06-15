@@ -1133,14 +1133,10 @@ namespace OpenDentBusiness {
 			return extracted;
 		}
 
-		///<summary>Base estimate or override is retrieved from supplied claimprocs. Does not take into consideration annual max or deductible.  If limitToTotal set to true, then it does limit total of pri+sec to not be more than total fee.  The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
-		public static double GetEst(Procedure proc,List<ClaimProc> claimProcs,PriSecTot pst,List <PatPlan> patPlans,bool limitToTotal) {
+		/*
+		///<summary>InsEstTotal or override is retrieved from supplied claimprocs. Includes annual max and deductible.  The claimProc array typically includes all claimProcs for the patient, but must at least include the claimprocs for this proc that we need.  Will always return a meaningful value rather than -1.</summary>
+		public static double GetEst(Procedure proc,List<ClaimProc> claimProcs,int planNum) {
 			//No need to check RemotingRole; no call to db.
-			/*
-			double priBaseEst=0;
-			double secBaseEst=0;
-			double priOverride=-1;
-			double secOverride=-1;
 			for(int i=0;i<claimProcs.Count;i++) {
 				//adjustments automatically ignored since no ProcNum
 				if(claimProcs[i].Status==ClaimProcStatus.CapClaim
@@ -1148,36 +1144,19 @@ namespace OpenDentBusiness {
 					||claimProcs[i].Status==ClaimProcStatus.Supplemental) {
 					continue;
 				}
-				if(claimProcs[i].ProcNum==proc.ProcNum) {
-					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-						//if this is a Cap, then this will still work. Est comes out 0.
-						priBaseEst=claimProcs[i].BaseEst;
-						priOverride=claimProcs[i].BaseEstOverride;
-					} else if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-						secBaseEst=claimProcs[i].BaseEst;
-						secOverride=claimProcs[i].BaseEstOverride;
-					}
+				if(claimProcs[i].ProcNum!=proc.ProcNum) {
+					continue;
 				}
+				if(claimProcs[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(claimProcs[i].InsEstTotalOverride != -1){
+					return claimProcs[i].InsEstTotalOverride;
+				}
+				return claimProcs[i].InsEstTotal;
 			}
-			if(priOverride!=-1) {
-				priBaseEst=priOverride;
-			}
-			if(secOverride!=-1) {
-				secBaseEst=secOverride;
-			}
-			if(limitToTotal&&proc.ProcFee-priBaseEst-secBaseEst<0) {
-				secBaseEst=proc.ProcFee-priBaseEst;
-			}
-			switch(pst) {
-				case PriSecTot.Pri:
-					return priBaseEst;
-				case PriSecTot.Sec:
-					return secBaseEst;
-				case PriSecTot.Tot:
-					return priBaseEst+secBaseEst;
-			}*/
 			return 0;
-		}
+		}*/
 
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
 		public static int GlobalUpdateFees() {

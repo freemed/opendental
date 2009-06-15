@@ -970,6 +970,8 @@ namespace OpenDental{
 				}
 				ClaimProc claimproc;//holds the estimate.
 				string descript;
+				//One thing to watch out for here is that we must be absolutely sure to include all claimprocs for the procedures listed,
+				//regardless of status.  Needed for Procedures.ComputeEstimates.  This should be fine.
 				ClaimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
 				List<ClaimProc> claimProcListOld=new List<ClaimProc>();//This didn't work:(ClaimProcList);//make a copy
 				for(int i=0;i<ClaimProcList.Count;i++) {
@@ -1004,44 +1006,54 @@ namespace OpenDental{
 					subfee+=fee;
 					totFee+=fee;
 					#region ShowMaxDed
-					if(checkShowMaxDed.Checked){//whether visible or not
-						if(PatPlanList.Count>0){//Primary
-							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
-							if(claimproc==null){
-								priIns=0;
-							}
-							else{
-								priIns=ClaimProcs.GetInsEstTotal(claimproc);
-								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
-								if(ded > 0) { 
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+ded.ToString("c");
-								}	
-							}
-						}
-						else{//no primary ins
+					//if(checkShowMaxDed.Checked){//whether visible or not
+					if(PatPlanList.Count>0){//Primary
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
+						if(claimproc==null){
 							priIns=0;
 						}
-						if(PatPlanList.Count>1) {//Secondary
-							claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
-							if(claimproc==null){
-								secIns=0;
+						else{
+							if(checkShowMaxDed.Checked) {//whether visible or not
+								priIns=ClaimProcs.GetInsEstTotal(claimproc);
+								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
+								if(ded > 0) {
+									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+ded.ToString("c");
+								}
 							}
-							else{
+							else {
+								priIns=claimproc.BaseEst;
+							}
+						}
+					}
+					else{//no primary ins
+						priIns=0;
+					}
+					if(PatPlanList.Count>1) {//Secondary
+						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,SecPlanCur.PlanNum);
+						if(claimproc==null){
+							secIns=0;
+						}
+						else{
+							if(checkShowMaxDed.Checked) {
 								secIns=claimproc.InsPayEst;
 								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
 								if(ded != -1) {
 									row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+ded.ToString("c");
 								}
 							}
-						}//secondary
-						else{//no secondary ins
-							secIns=0;
+							else {
+								secIns=claimproc.BaseEst;
+							}
 						}
-					}//showMaxDed
-					else{
-						priIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,true);
-						secIns=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList,true);
+					}//secondary
+					else{//no secondary ins
+						secIns=0;
 					}
+					//}//showMaxDed
+					//else{
+					//	priIns=Procedures.GetInsEstTotal(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList);
+					//	secIns=Procedures.GetInsEstTotal(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList);
+					//}
 					#endregion ShowMaxDed
 					subpriIns+=priIns;
 					totPriIns+=priIns;

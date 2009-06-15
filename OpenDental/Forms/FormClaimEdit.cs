@@ -2804,18 +2804,24 @@ namespace OpenDental{
 				textCode9.Text=CurCondCodeLog.Code9.ToString();
 				textCode10.Text=CurCondCodeLog.Code10.ToString();
 			}
-			if(ClaimCur.DateService.Year<1880)
+			if(ClaimCur.DateService.Year<1880) {
 				textDateService.Text="";
-			else
+			}
+			else {
 				textDateService.Text=ClaimCur.DateService.ToShortDateString();
-			if(ClaimCur.DateSent.Year<1880)
+			}
+			if(ClaimCur.DateSent.Year<1880) {
 				textDateSent.Text="";
-			else
+			}
+			else {
 				textDateSent.Text=ClaimCur.DateSent.ToShortDateString();
-			if(ClaimCur.DateReceived.Year<1880)
+			}
+			if(ClaimCur.DateReceived.Year<1880) {
 				textDateRec.Text="";
-			else
+			}
+			else {
 				textDateRec.Text=ClaimCur.DateReceived.ToShortDateString();
+			}
 			switch(ClaimCur.ClaimStatus){
 				case "U"://unsent
 					listClaimStatus.SelectedIndex=0;
@@ -3819,14 +3825,15 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Underconstruction for version 6.7");
-			/*
+			//MessageBox.Show("Underconstruction for version 6.7");
+			
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;//jump straight to Closing, where the claimprocs will be changed
 				return;
 			}
-			if(!ClaimIsValid())
+			if(!ClaimIsValid()){
 				return;
+			}
 			UpdateClaim();
 			bool paymentIsAttached=false;
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){
@@ -3876,10 +3883,10 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].ClaimNum=0;
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null);
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);
@@ -3889,7 +3896,7 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
 				Lan.g(this,"Delete Claim")+", "+PatCur.GetNameLF()+""
 				+Lan.g(this,"Date of service: ")+ClaimCur.DateService.ToShortDateString());
-      DialogResult=DialogResult.OK;*/
+      DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

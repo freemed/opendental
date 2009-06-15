@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE ClaimNum = "+POut.PInt(claimNum);
+				+"WHERE ClaimNum = "+POut.PInt(claimNum)+" ORDER BY LineNumber";
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
 		}
@@ -52,8 +52,9 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE Status="+POut.PInt((int)ClaimProcStatus.Estimate)
-				+" AND PatNum = "+POut.PInt(patNum);
+				+"WHERE (Status="+POut.PInt((int)ClaimProcStatus.Estimate)
+				+" OR Status="+POut.PInt((int)ClaimProcStatus.CapEstimate)+") "
+				+"AND PatNum = "+POut.PInt(patNum);
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
 		}
@@ -706,6 +707,18 @@ namespace OpenDentBusiness{
 			return cp.InsEstTotal;
 		}
 
+		///<summary>Simply gets dedEst or its override if applicable.  Can return 0, but never -1.</summary>
+		public static double GetDedEst(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
+			if(cp.DedEstOverride!=-1) {
+				return cp.DedEstOverride;
+			}
+			else if(cp.DedEst!=-1) {
+				return cp.DedEst;
+			}
+			return 0;
+		}
+
 		public static string GetPercentageDisplay(ClaimProc cp) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapEstimate || cp.Status==ClaimProcStatus.CapComplete) {
@@ -767,7 +780,7 @@ namespace OpenDentBusiness{
 			return cp.DedApplied;
 		}
 
-		///<summary>We pass in the benefit list so that we know whether to include family and whether it's calendar or service year.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.</summary>
+		///<summary>We pass in the benefit list so that we know whether to include family.  We are getting a simplified list of claimprocs.  History of payments and pending payments.  If the patient has multiple insurance, then this info will be for all of their insurance plans.  It runs a separate query for each plan because that's the only way to handle family history.  For some plans, the benefits will indicate entire family, but not for other plans.  And the date ranges can be different as well.   When this list is processed later, it is again filtered, but it can't have missing information.</summary>
 		public static List<ClaimProcHist> GetHistList(int patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProcHist>>(MethodBase.GetCurrentMethod(),patNum,benList,patPlanList,planList);
@@ -842,7 +855,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		/// <summary>Used in TP list estimation.  Some of the items in the claimProcList passed in will not have been saved to the database yet.</summary>
+		/// <summary>Used in creation of the loopList.  Used in TP list estimation and in claim creation.  Some of the items in the claimProcList passed in will not have been saved to the database yet.</summary>
 		public static List<ClaimProcHist> GetHistForProc(List<ClaimProc> claimProcList,int procNum,int codeNum) {
 			List<ClaimProcHist> retVal=new List<ClaimProcHist>();
 			ClaimProcHist cph;
