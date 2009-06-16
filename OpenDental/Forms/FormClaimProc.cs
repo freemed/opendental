@@ -1510,7 +1510,12 @@ namespace OpenDental
 			else {
 				ClaimProcCur.InsEstTotalOverride=PIn.PDouble(textInsEstTotalOverride.Text);
 			}
-			ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,HistList,LoopList);
+			if(IsProc) {
+				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,HistList,LoopList);
+			}
+			//else {
+			//	ClaimProcs.ComputeBaseEst(ClaimProcCur,0,"",0,Plan,PatPlanNum,BenefitList,HistList,LoopList);
+			//}
 			if(ClaimProcCur.CopayAmt == -1) {
 				textCopayAmt.Text="";
 			}
@@ -1537,23 +1542,26 @@ namespace OpenDental
 			}
 			textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
 			textInsEstTotal.Text=ClaimProcCur.InsEstTotal.ToString("f");
-			double allowed=proc.ProcFee;
-			if(Plan.PlanType=="p") {//for PPO's use the allowed amount
-				if(ClaimProcCur.AllowedOverride != -1) {
-					allowed=ClaimProcCur.AllowedOverride;
+			double patPortion=0;
+			if(IsProc) {
+				double allowed=proc.ProcFee;
+				if(Plan.PlanType=="p") {//for PPO's use the allowed amount
+					if(ClaimProcCur.AllowedOverride != -1) {
+						allowed=ClaimProcCur.AllowedOverride;
+					}
+					else if(textCarrierAllowed.Text != "") {
+						allowed=PIn.PDouble(textCarrierAllowed.Text);
+					}
 				}
-				else if(textCarrierAllowed.Text != "") {
-					allowed=PIn.PDouble(textCarrierAllowed.Text);
+				patPortion=allowed;
+				if(ClaimProcCur.InsEstTotalOverride != -1) {
+					patPortion-=ClaimProcCur.InsEstTotalOverride;
 				}
+				else {
+					patPortion-=ClaimProcCur.InsEstTotal;
+				}
+				textPatPortion1.Text=patPortion.ToString("f");
 			}
-			double patPortion=allowed;
-			if(ClaimProcCur.InsEstTotalOverride != -1){
-				patPortion-=ClaimProcCur.InsEstTotalOverride;
-			}
-			else{
-				patPortion-=ClaimProcCur.InsEstTotal;
-			}
-			textPatPortion1.Text=patPortion.ToString("f");
 			textEstimateNote.Text=ClaimProcCur.EstimateNote;
 			//insurance box---------------------------------------------------------------
 			if(groupClaimInfo.Visible){
@@ -1562,17 +1570,19 @@ namespace OpenDental
 				ClaimProcCur.InsPayAmt=PIn.PDouble(textInsPayAmt.Text);
 				ClaimProcCur.WriteOff=Math.Abs(PIn.PDouble(textWriteOff.Text));//if user enters a negative, convert it to a positive.
 				//for PPO's the writeoff now replaces consideration of allowed fee
-				if(ClaimProcCur.Status==ClaimProcStatus.NotReceived){//not received.
-					patPortion=proc.ProcFee-ClaimProcCur.InsPayEst-ClaimProcCur.WriteOff;
+				if(IsProc) {
+					if(ClaimProcCur.Status==ClaimProcStatus.NotReceived) {//not received.
+						patPortion=proc.ProcFee-ClaimProcCur.InsPayEst-ClaimProcCur.WriteOff;
+					}
+					else if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate || ClaimProcCur.Status==ClaimProcStatus.CapComplete) {
+						patPortion=proc.ProcFee-ClaimProcCur.WriteOff;
+					}
+					else {
+						patPortion=proc.ProcFee-ClaimProcCur.InsPayAmt-ClaimProcCur.WriteOff;
+					}
+					textPatPortion2.Text=patPortion.ToString("f");
+					textPatPortion1.Visible=false;
 				}
-				else if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate || ClaimProcCur.Status==ClaimProcStatus.CapComplete){
-					patPortion=proc.ProcFee-ClaimProcCur.WriteOff;
-				}
-				else{
-					patPortion=proc.ProcFee-ClaimProcCur.InsPayAmt-ClaimProcCur.WriteOff;
-				}
-				textPatPortion2.Text=patPortion.ToString("f");
-				textPatPortion1.Visible=false;
 			}
 		}
 

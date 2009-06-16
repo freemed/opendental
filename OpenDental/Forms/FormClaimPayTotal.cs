@@ -387,8 +387,6 @@ namespace OpenDental
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			MessageBox.Show("Underconstruction for version 6.7");
-			/*
 			try{
 				SaveGridChanges();
 			}
@@ -396,7 +394,9 @@ namespace OpenDental
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList);
+			List<ClaimProcHist> histList=null;
+			List<ClaimProcHist> loopList=null;
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsToEdit[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList);
 			FormCP.IsInClaim=true;
 			//no need to worry about permissions here
 			FormCP.ShowDialog();
@@ -404,7 +404,7 @@ namespace OpenDental
 				return;
 			}
 			FillGrid();
-			FillTotals();*/
+			FillTotals();
 		}
 
 		private void gridMain_CellTextChanged(object sender,EventArgs e) {

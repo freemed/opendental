@@ -2357,8 +2357,6 @@ namespace OpenDental{
 		}
 
 		private void butAddEstimate_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			FormInsPlanSelect FormIS=new FormInsPlanSelect(PatCur.PatNum);
 			FormIS.ShowDialog();
 			if(FormIS.DialogResult==DialogResult.Cancel){
@@ -2368,18 +2366,18 @@ namespace OpenDental{
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
 			if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[0].PatPlanNum,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[0].PatPlanNum,benList,HistList,LoopList);
 			}
 			else if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,2)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[1].PatPlanNum,benList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[1].PatPlanNum,benList,HistList,LoopList);
 			}
-			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList);
+			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.Cancel){
 				ClaimProcs.Delete(cp);
 			}
-			FillIns();*/
+			FillIns();
 		}
 
 		private void FillPayments(){

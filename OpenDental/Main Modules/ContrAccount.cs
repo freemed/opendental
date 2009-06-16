@@ -2884,8 +2884,6 @@ namespace OpenDental {
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2915,30 +2913,17 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed) {
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else {
-				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -2968,28 +2953,16 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed) {
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else {
-				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -3045,29 +3018,17 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed) {
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else {
-				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			//Claims.Cur=ClaimCur;
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
-			MessageBox.Show("Under construction for version 6.7");
-			/*
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List <InsPlan> InsPlanList=InsPlans.Refresh(FamCur);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -3093,23 +3054,12 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
-			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			if(isFamMax || isFamDed) {
-				List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			else {
-				ClaimL.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			}
-			//Claims.Cur=ClaimCur;
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void OnPayPlan_Click() {
