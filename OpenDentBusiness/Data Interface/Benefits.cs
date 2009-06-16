@@ -653,32 +653,112 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Only use pri or sec, not tot.  Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
+		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  Handles general, category, or procedure level.  Does not handle pat vs family coveragelevel.  Does handle patient override by using patplan.  Does not need to be aware of procedure history or loop history.</summary>
 		public static int GetPercent(string procCodeStr,string planType,int planNum,int patPlanNum,List <Benefit> benList){
 			//No need to check RemotingRole; no call to db.
 			if(planType=="f" || planType=="c"){
 				return 100;//flat and cap are always covered 100%
 			}
+			//first, create a much shorter list with only relevant benefits in it.
+			List<Benefit> listShort=new List<Benefit>();
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
+					continue;
+				}
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(benList[i].BenefitType!=InsBenefitType.CoInsurance) {
+					continue;
+				}
+				if(benList[i].Percent == -1) {
+					continue;
+				}
+				listShort.Add(benList[i]);
+			}
+			//Find the best benefit matches.
+			//Plan and Pat here indicate patplan override and have nothing to do with pat vs family coverage level.
+			Benefit benPlan=null;
+			Benefit benPat=null;
+			//start with no category
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CodeNum > 0) {
+					continue;
+				}
+				if(listShort[i].CovCatNum != 0) {
+					continue;
+				}
+				if(benList[i].PatPlanNum !=0) {
+					benPat=listShort[i];
+				}
+				else {
+					benPlan=listShort[i];
+				}
+			}
+			//then, specific category.
 			CovSpan[] spansForCat;
-			//loop through benefits starting at bottom (most specific)
-			for(int i=benList.Count-1;i>=0;i--){
-				//if plan benefit, but no match
-				if(benList[i].PlanNum!=0 && planNum!=benList[i].PlanNum){
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CodeNum>0) {
 					continue;
 				}
-				//if patplan benefit, but no match
-				if(benList[i].PatPlanNum!=0 && patPlanNum!=benList[i].PatPlanNum){
+				if(listShort[i].CovCatNum==0) {
 					continue;
 				}
-				if(benList[i].BenefitType!=InsBenefitType.CoInsurance){
-					continue;
-				}
-				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
-				for(int j=0;j<spansForCat.Length;j++){
+				//see if the span matches
+				spansForCat=CovSpans.GetForCat(listShort[i].CovCatNum);
+				bool isMatch=false;
+				for(int j=0;j<spansForCat.Length;j++) {
 					if(String.Compare(procCodeStr,spansForCat[j].FromCode)>=0 && String.Compare(procCodeStr,spansForCat[j].ToCode)<=0) {
-						return benList[i].Percent;
+						isMatch=true;
+						break;
 					}
 				}
+				if(!isMatch) {
+					continue;//no match
+				}
+				if(benList[i].PatPlanNum !=0) {
+					if(benPat != null && benPat.CovCatNum!=0) {//must compare
+						//only use the new one if the item order is larger
+						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benPat.CovCatNum)) {
+							benPat=listShort[i];
+						}
+					}
+					else {//first one encountered for a category
+						benPat=listShort[i];
+					}
+				}
+				else {
+					if(benPlan != null && benPlan.CovCatNum!=0) {//must compare
+						//only use the new one if the item order is larger
+						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benPlan.CovCatNum)) {
+							benPlan=listShort[i];
+						}
+					}
+					else {//first one encountered for a category
+						benPlan=listShort[i];
+					}
+				}
+			}
+			//then, specific code
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CodeNum==0) {
+					continue;
+				}
+				if(procCodeStr != ProcedureCodes.GetStringProcCode(listShort[i].CodeNum)) {
+					continue;
+				}
+				if(benList[i].PatPlanNum !=0) {
+					benPat=listShort[i];
+				}
+				else {
+					benPlan=listShort[i];
+				}				
+			}
+			if(benPat != null) {
+				return benPat.Percent;
+			}
+			if(benPlan != null) {
+				return benPlan.Percent;
 			}
 			return 0;
 		}

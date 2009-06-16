@@ -488,7 +488,7 @@ namespace OpenDental{
 				return;
 			}
 			if(listType.SelectedIndex != (int)InsBenefitType.CoInsurance && PIn.PInt(textPercent.Text)!=0){
-				MsgBox.Show(this,"Not allowed to enter a percentage unless type is Percentage.");
+				MsgBox.Show(this,"Not allowed to enter a percentage unless type is CoInsurance.");
 				return;
 			}
 			if(textProcCode.Text!="" && ProcedureCodes.GetCodeNum(textProcCode.Text)==0){

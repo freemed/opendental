@@ -662,7 +662,6 @@ namespace OpenDentBusiness{
 				cp.InsEstTotal-=cp.DedEst;
 			}
 			//Percentage----------------------------------------------------------------------------------------
-//todo: overhaul the percentage subroutine.
 			cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanType,plan.PlanNum,patPlanNum,benList);//will never =-1
 			if(cp.PercentOverride != -1) {//override, so use PercentOverride
 				cp.BaseEst=cp.BaseEst*(double)cp.PercentOverride/100d;
@@ -697,6 +696,8 @@ namespace OpenDentBusiness{
 			
 			
 		}
+
+		//public static 
 
 		///<summary>Simply gets insEstTotal or its override if applicable.</summary>
 		public static double GetInsEstTotal(ClaimProc cp) {
