@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 				LEFT JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
 				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
-				+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
+				//+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				+"WHERE patient.patstatus=0 ";
 			if(provNum>0){
