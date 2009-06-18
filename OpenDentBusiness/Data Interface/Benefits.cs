@@ -580,7 +580,7 @@ namespace OpenDentBusiness {
 			}
 			//if there is still a deductible, we might still reduce it based on family ded used.
 			if(benFam==null || benFam.MonetaryAmt==-1) {
-				return 0;
+				return retVal;
 			}
 			double famded=benFam.MonetaryAmt;
 			//reduce the family deductible by amounts already used.

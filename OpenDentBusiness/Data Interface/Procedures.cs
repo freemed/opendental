@@ -1349,6 +1349,12 @@ namespace OpenDentBusiness {
 				cp.PaidOtherIns=-1;
 				cp.CopayOverride=-1;
 				cp.ProcDate=proc.ProcDate;
+				cp.BaseEst=0;
+				cp.InsEstTotal=0;
+				cp.InsEstTotalOverride=-1;
+				cp.DedEst=-1;
+				cp.DedEstOverride=-1;
+				cp.PaidOtherInsOverride=-1;
 				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
 				if(saveToDb) {
 					ClaimProcs.Insert(cp);
@@ -1362,6 +1368,16 @@ namespace OpenDentBusiness {
 			if(cpAdded && saveToDb) {//no need to refresh the list if !saveToDb, because list already made current.
 				claimProcs=ClaimProcs.Refresh(patNum);
 			}
+			
+			//int ordinal;
+			//int patPlanNum;
+			double priEstTotal=0;
+			double secEstTotal=0;
+			double tertEstTotal=0;
+			double priBaseEst=0;
+			double secBaseEst=0;
+			double tertBaseEst=0;
+			PatPlan patplan;
 			for(int i=0;i<claimProcs.Count;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
@@ -1391,16 +1407,31 @@ namespace OpenDentBusiness {
 				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
 				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
 				if(claimProcs[i].PlanNum>0) {
-					int patPlanNum=0;
-					if(PatPlans.GetPlanNum(patPlans,1)==claimProcs[i].PlanNum) {
-						patPlanNum=patPlans[0].PatPlanNum;
-					}
-					if(PatPlans.GetPlanNum(patPlans,2)==claimProcs[i].PlanNum) {
-						patPlanNum=patPlans[1].PatPlanNum;
-					}
-					if(patPlanNum != 0) {
+					patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum);
+					if(patplan != null) {
 						//the cp is altered within ComputeBaseEst, but not saved.
-						ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patPlanNum,benefitList,histList,loopList);
+						if(patplan.Ordinal==1) {
+							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+								benefitList,histList,loopList,patPlans,0,0);
+							priEstTotal+=claimProcs[i].InsEstTotal;
+							priBaseEst+=claimProcs[i].BaseEst;
+						}
+						else if(patplan.Ordinal==2) {
+							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+								benefitList,histList,loopList,patPlans,priEstTotal,priBaseEst);
+							secEstTotal+=claimProcs[i].InsEstTotal;
+							secBaseEst+=claimProcs[i].BaseEst;
+						}
+						else if(patplan.Ordinal==3) {
+							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+								benefitList,histList,loopList,patPlans,priEstTotal+secEstTotal,priBaseEst+secBaseEst);
+							tertEstTotal+=claimProcs[i].InsEstTotal;
+							tertBaseEst+=claimProcs[i].BaseEst;
+						}
+						else {//estimate will malfunction if more than 4 insurances.
+							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+								benefitList,histList,loopList,patPlans,priEstTotal+secEstTotal+tertEstTotal,priBaseEst+secBaseEst+tertBaseEst);
+						}
 					}
 				}
 				if(isInitialEntry

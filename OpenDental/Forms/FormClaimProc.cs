@@ -117,9 +117,13 @@ namespace OpenDental
 		private List<Benefit> BenefitList;
 		private List<ClaimProcHist> HistList;
 		private List<ClaimProcHist> LoopList;
+		private List<PatPlan> PatPlanList;
+		///<summary>This value is obtained by a query when this window first opens.  It only includes estimates, not actual payments or pending payments.  Will be 0 if this is a primary estimate.</summary>
+		private double PaidOtherInsEstTotal;
+		private double PaidOtherInsBaseEst;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
-		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList){
+		public FormClaimProc(ClaimProc claimProcCur,Procedure procCur,Family famCur,Patient patCur,List <InsPlan> planList,List<ClaimProcHist> histList,ref List<ClaimProcHist> loopList,List<PatPlan> patPlanList){
 			ClaimProcCur=claimProcCur;
 			ClaimProcOld=ClaimProcCur.Copy();
 			proc=procCur;
@@ -128,6 +132,7 @@ namespace OpenDental
 			PlanList=planList;
 			HistList=histList;
 			LoopList=loopList;
+			PatPlanList=patPlanList;
 			InitializeComponent();// Required for Windows Form Designer support
 			//can't use Lan.F because of complexity of label use
 			Lan.C(this, new System.Windows.Forms.Control[]
@@ -1122,8 +1127,10 @@ namespace OpenDental
 				butDelete.Enabled=false;
 			}
 			Plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
-			PatPlanNum=PatPlans.GetPatPlanNum(ClaimProcCur.PatNum,Plan.PlanNum);
+			PatPlanNum=PatPlans.GetPatPlanNum(PatPlanList,Plan.PlanNum);
 			BenefitList=null;//only fill it if proc
+			PaidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(ClaimProcCur,PatPlanList);
+			PaidOtherInsBaseEst=ClaimProcs.GetPaidOtherInsBaseEst(ClaimProcCur,PatPlanList);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
@@ -1349,29 +1356,25 @@ namespace OpenDental
 			if(ClaimProcCur.CopayOverride!=-1){
 				textCopayOverride.Text=ClaimProcCur.CopayOverride.ToString("f");
 			}
-			if(ClaimProcCur.Percentage!=-1){
-				textPercentage.Text=ClaimProcCur.Percentage.ToString();
-			}
-			if(ClaimProcCur.PercentOverride!=-1){
-				textPercentOverride.Text=ClaimProcCur.PercentOverride.ToString();
-			}
-			//textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
-			//if(ClaimProcCur.BaseEstOverride!=-1){
-			//	textBaseEstOverride.Text=ClaimProcCur.BaseEstOverride.ToString("f");
-			//}
-			//checkDedBeforePerc.Checked=ClaimProcCur.DedBeforePerc;
 			if(ClaimProcCur.DedEst > 0) {
 				textDedEst.Text=ClaimProcCur.DedEst.ToString("f");
 			}
 			if(ClaimProcCur.DedEstOverride!=-1) {
 				textDedEstOverride.Text=ClaimProcCur.DedEstOverride.ToString("f");
 			}
+			if(ClaimProcCur.Percentage!=-1){
+				textPercentage.Text=ClaimProcCur.Percentage.ToString();
+			}
+			if(ClaimProcCur.PercentOverride!=-1){
+				textPercentOverride.Text=ClaimProcCur.PercentOverride.ToString();
+			}
 			if(ClaimProcCur.PaidOtherIns!=-1){
 				textPaidOtherIns.Text=ClaimProcCur.PaidOtherIns.ToString("f");
 			}
-			//if(ClaimProcCur.OverAnnualMax!=-1){
-			//	textOverAnnualMax.Text=ClaimProcCur.OverAnnualMax.ToString("f");
-			//}
+			if(ClaimProcCur.PaidOtherInsOverride!=-1) {
+				textPaidOtherInsOverride.Text=ClaimProcCur.PaidOtherInsOverride.ToString("f");
+			}
+			textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
 			if(ClaimProcCur.InsEstTotal!=-1) {
 				textInsEstTotal.Text=ClaimProcCur.InsEstTotal.ToString("f");
 			}
@@ -1511,7 +1514,8 @@ namespace OpenDental
 				ClaimProcCur.InsEstTotalOverride=PIn.PDouble(textInsEstTotalOverride.Text);
 			}
 			if(IsProc) {
-				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,HistList,LoopList);
+				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
+					HistList,LoopList,PatPlanList,PaidOtherInsEstTotal,PaidOtherInsBaseEst);
 			}
 			//else {
 			//	ClaimProcs.ComputeBaseEst(ClaimProcCur,0,"",0,Plan,PatPlanNum,BenefitList,HistList,LoopList);
@@ -1540,6 +1544,9 @@ namespace OpenDental
 			else {
 				textPaidOtherIns.Text=ClaimProcCur.PaidOtherIns.ToString("f");
 			}
+
+
+
 			textBaseEst.Text=ClaimProcCur.BaseEst.ToString("f");
 			textInsEstTotal.Text=ClaimProcCur.InsEstTotal.ToString("f");
 			double patPortion=0;

@@ -763,7 +763,7 @@ namespace OpenDental{
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);
-				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList);
+				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today);
 			}
 		}
 
@@ -1035,9 +1035,9 @@ namespace OpenDental{
 						}
 						else{
 							if(checkShowMaxDed.Checked) {
-								secIns=claimproc.InsPayEst;
+								secIns=ClaimProcs.GetInsEstTotal(claimproc);
 								double ded=ClaimProcs.GetDeductibleDisplay(claimproc);
-								if(ded != -1) {
+								if(ded > 0) {
 									row.Cells[5].Text+="\r\n"+Lan.g(this,"Sec Deduct Applied: ")+ded.ToString("c");
 								}
 							}

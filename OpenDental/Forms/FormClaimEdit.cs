@@ -3168,7 +3168,7 @@ namespace OpenDental{
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcsForClaim[e.Row],null,FamCur,PatCur,PlanList,histList,ref loopList,PatPlanList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -3272,7 +3272,7 @@ namespace OpenDental{
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcs.Insert(ClaimProcCur);
 			List<ClaimProcHist> loopList=null;
-			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList);
+			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList);
 			FormCP.IsInClaim=true;
 			FormCP.ShowDialog();
 			if(FormCP.DialogResult!=DialogResult.OK){
@@ -3364,7 +3364,7 @@ namespace OpenDental{
 				cpList[i].DateCP=DateTime.Today;
 			}
 			if(ClaimCur.ClaimType=="PreAuth") {
-				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList);
+				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList,PatPlanList);
 				FormCPP.ClaimProcsToEdit=cpList;
 				FormCPP.ShowDialog();
 				if(FormCPP.DialogResult!=DialogResult.OK) {
@@ -3378,7 +3378,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList);
+				FormClaimPayTotal FormCPT=new FormClaimPayTotal(PatCur,FamCur,PlanList,PatPlanList);
 				FormCPT.ClaimProcsToEdit=cpList.ToArray();
 				FormCPT.ShowDialog();
 				if(FormCPT.DialogResult!=DialogResult.OK){
@@ -3870,11 +3870,13 @@ namespace OpenDental{
 					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
 					ClaimProcsForClaim[i].ClaimNum=0;
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
+					//We're not going to bother to also get paidOtherInsBaseEst:
+					double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(ClaimProcsForClaim[i],PatPlanList);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal);//last value is a dummy.
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		public double CopayAmt;
 		///<summary>Set to true to not bill to this insurance plan.</summary>
 		public bool NoBillIns;
-		///<summary>-1 if blank. The amount paid by another insurance. This amount is then subtracted from what the current insurance would pay. So, always blank for primary claims (for now).  User cannot edit, but can use PaidOtherInsOverride.</summary>
+		///<summary>-1 if blank. The amount paid or estimated to be paid by another insurance.  This amount is then subtracted from what the current insurance would pay.  When running the calculation and considering other claimprocs, it will ignore any patPlan with a higher ordinal.  So, always blank for primary claims.  User cannot edit, but can use PaidOtherInsOverride.</summary>
 		public double PaidOtherIns;
 		///<summary>Always has a value. Used in TP, etc. The base estimate is the ((fee or allowedOverride)-Copay) x (percentage or percentOverride). Does not include all the extras like ded, annualMax,and paidOtherIns that InsEstTotal holds.  BaseEst cannot be overridden by the user.  Instead, the following fields can be manipulated: allowedOverride, CopayOverride, PercentOverride.</summary>
 		public double BaseEst;
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 		public double InsEstTotal;
 		///<summary>-1 if blank.  Overrides the InsEstTotal value.</summary>
 		public double InsEstTotalOverride;
-		///<summary>-1 if blank.  Overrides the PaidOtherIns value.  Used estimate calculations, but not any important calculations.</summary>
+		///<summary>-1 if blank.  Overrides the PaidOtherIns value.</summary>
 		public double PaidOtherInsOverride;
 		///<summary>An automatically generated note that displays information about over max, exclusions, and other limitations for which there are no fields.  Only applies to estimate.  Once it's attached to a claim, similar information can go in the remarks field.</summary>
 		public string EstimateNote;

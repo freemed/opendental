@@ -127,6 +127,28 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		///<summary>Will return 1 for primary insurance, etc.  Will return 0 if planNum not found in the list.</summary>
+		public static int GetOrdinal(List<PatPlan> patPlans,int planNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int p=0;p<patPlans.Count;p++) {
+				if(patPlans[p].PlanNum==planNum) {
+					return patPlans[p].Ordinal;
+				}
+			}
+			return 0;
+		}
+
+		///<summary>Will return null if planNum not found in the list.</summary>
+		public static PatPlan GetFromList(List<PatPlan> patPlans,int planNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int p=0;p<patPlans.Count;p++) {
+				if(patPlans[p].PlanNum==planNum) {
+					return patPlans[p];
+				}
+			}
+			return null;
+		}
+
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
 		public static void SetOrdinal(int patPlanNum,int newOrdinal){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -176,12 +198,12 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.  Only used once in Claims.cs.</summary>
-		public static int GetPatPlanNum(List <PatPlan> patPlans,int planNum) {
+		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.</summary>
+		public static int GetPatPlanNum(List <PatPlan> patPlanList,int planNum) {
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<patPlans.Count;i++) {
-				if(patPlans[i].PlanNum==planNum) {
-					return patPlans[i].PatPlanNum;
+			for(int i=0;i<patPlanList.Count;i++) {
+				if(patPlanList[i].PlanNum==planNum) {
+					return patPlanList[i].PatPlanNum;
 				}
 			}
 			return 0;
@@ -196,6 +218,7 @@ namespace OpenDentBusiness{
 			return PIn.PInt(Db.GetScalar(command));
 		}
 
+		///<summary>Gets directly from database.  Used by Trojan.</summary>
 		public static PatPlan[] GetByPlanNum(int planNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);

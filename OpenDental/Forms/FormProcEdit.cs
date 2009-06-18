@@ -2348,7 +2348,7 @@ namespace OpenDental{
 		}
 
 		private void gridIns_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList);
+			FormClaimProc FormC=new FormClaimProc(ClaimProcsForProc[e.Row],ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
 			if(!butOK.Enabled){
 				FormC.NoPermissionProc=true;
 			}
@@ -2365,13 +2365,13 @@ namespace OpenDental{
 			List <Benefit> benList=Benefits.Refresh(PatPlanList);
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
-			if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,1)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[0].PatPlanNum,benList,HistList,LoopList);
+			int patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
+			if(patPlanNum > 0){
+				double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(cp,PatPlanList);
+				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
+					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal);	
 			}
-			else if(FormIS.SelectedPlan.PlanNum==PatPlans.GetPlanNum(PatPlanList,2)){
-				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,PatPlanList[1].PatPlanNum,benList,HistList,LoopList);
-			}
-			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList);
+			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.Cancel){
