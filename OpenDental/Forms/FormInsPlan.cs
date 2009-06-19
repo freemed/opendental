@@ -2243,6 +2243,10 @@ namespace OpenDental{
 				return;
 			}
 			//C:\ETW
+			if(regKey.GetValue("INSTALLDIR")==null) {
+				MessageBox.Show(@"Registry entry is missing and should be added manually.  LocalMachine\Software\TROJAN BENEFIT SERVICE. StringValue.  Name='INSTALLDIR', value= path where the Trojan program is located.  Full path to directory, without trailing slash.");
+				return;
+			}
 			string file=ODFileUtils.CombinePaths(regKey.GetValue("INSTALLDIR").ToString(),"Planout.txt");
 			if(!File.Exists(file)) {
 				MessageBox.Show(file+" not found.  You should export from Trojan first.");

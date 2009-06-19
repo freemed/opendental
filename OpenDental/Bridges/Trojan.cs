@@ -27,12 +27,14 @@ namespace OpenDental.Bridges {
 			}
 			//Ensure that Trojan has a sane install.
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
-			if(regKey==null||regKey.GetValue("INSTALLDIR")==null) {
+			if(regKey==null || regKey.GetValue("INSTALLDIR")==null) {
+				//jsparks: The below is wrong.  The user should create a registry key manually.
+				return;
 				//The old trojan registry key is missing. Try to locate the new Trojan registry key.
-				regKey=Registry.LocalMachine.OpenSubKey("Software\\Trojan Eligibility");
-				if(regKey==null||regKey.GetValue("INSTALLDIR")==null) {//Unix OS will exit here.
-					return;
-				}
+				//regKey=Registry.LocalMachine.OpenSubKey("Software\\Trojan Eligibility");
+				//if(regKey==null||regKey.GetValue("INSTALLDIR")==null) {//Unix OS will exit here.
+				//	return;
+				//}
 			}
 			//Process DELETEDPLANS.TXT for recently deleted insurance plans.
 			string file=regKey.GetValue("INSTALLDIR").ToString()+@"\DELETEDPLANS.TXT";//C:\ETW\DELETEDPLANS.TXT
