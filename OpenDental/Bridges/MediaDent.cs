@@ -16,6 +16,56 @@ namespace OpenDental.Bridges{
 			
 		}
 
+		///<summary>Launches the program by passing the name of a file with data in it.  </summary>
+		public static void SendData(Program ProgramCur,Patient pat) {
+			//ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum); ;
+			if(pat==null) {
+				try {
+					Process.Start(ProgramCur.Path);//should start Mediadent without bringing up a pt.
+				}
+				catch {
+					MessageBox.Show(ProgramCur.Path+" is not available.");
+				}
+			}
+			string infoFile=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Text file path");
+			try {
+				using(StreamWriter sw=new StreamWriter(infoFile,false)) {
+					string id="";
+					if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+						id=pat.PatNum.ToString();
+					}
+					else {
+						id=pat.ChartNumber;
+					}
+					sw.WriteLine(pat.LName+", "+pat.FName
+						+" "+pat.Birthdate.ToShortDateString()
+						+" "+id);
+					sw.WriteLine();
+					sw.WriteLine("PN="+id);
+					sw.WriteLine("LN="+pat.LName);
+					sw.WriteLine("FN="+pat.FName);
+					sw.WriteLine("BD="+pat.Birthdate.ToString("MM/dd/yyyy"));
+					if(pat.Gender==PatientGender.Female) {
+						sw.WriteLine("SX=F");
+					}
+					else {
+						sw.WriteLine("SX=M");
+					}
+				}
+			}
+			catch {
+				MessageBox.Show("Unable to write to text file: "+infoFile);
+				return;
+			}
+			try{
+				Process.Start(ProgramCur.Path,"@"+infoFile);
+			}
+			catch {
+				MessageBox.Show(ProgramCur.Path+" is not available.");
+			}
+		}
+
+		/*Outdated version 4.
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			//Usage: mediadent.exe /P<Patient Name> /D<Practitioner> /L<Language> /F<Image folder> /B<Birthdate>
@@ -46,7 +96,7 @@ namespace OpenDental.Bridges{
 			catch{
 				MessageBox.Show(ProgramCur.Path+" "+info+" is not available.");
 			}
-		}
+		}*/
 
 		///<summary>Makes sure invalid characters don't slip through.</summary>
 		private static string Cleanup(string input){

@@ -382,6 +382,28 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '6.6.8.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_6_16();
+		}
+
+		private static void To6_6_16() {
+			if(FromVersion<new Version("6.6.16.0")) {
+				string command;
+				command="SELECT ProgramNum FROM program WHERE ProgName='MediaDent'";
+				int programNum=PIn.PInt(Db.GetScalar(command));
+				command="DELETE FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)
+					+" AND PropertyDesc='Image Folder'";
+				Db.NonQ(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.PInt(programNum)+"', "
+					+"'"+POut.PString("Text file path")+"', "
+					+"'"+POut.PString(@"C:\MediadentInfo.txt")+"')";
+				Db.NonQ(command);
+				command="UPDATE program SET Note='Text file path needs to be the same on all computers.' WHERE ProgramNum="+POut.PInt(programNum);
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.6.16.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_7_0();
 		}
 
