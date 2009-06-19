@@ -1515,7 +1515,7 @@ namespace OpenDental
 			}
 			if(IsProc) {
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
-					HistList,LoopList,PatPlanList,PaidOtherInsEstTotal,PaidOtherInsBaseEst);
+					HistList,LoopList,PatPlanList,PaidOtherInsEstTotal,PaidOtherInsBaseEst,PatCur.Age);
 			}
 			//else {
 			//	ClaimProcs.ComputeBaseEst(ClaimProcCur,0,"",0,Plan,PatPlanNum,BenefitList,HistList,LoopList);

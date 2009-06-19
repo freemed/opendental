@@ -501,7 +501,7 @@ namespace OpenDentBusiness {
 				return 0;
 			}
 			double retVal=benInd.MonetaryAmt;
-			//reduce by amount already paid this year
+			//reduce by amount individual already paid this year--------------------------------------------------------------------
 			//establish date range for procedures to consider
 			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
 			DateTime dateEnd=procDate;//I guess we don't want to consider anything after the date of this procedure.
@@ -541,7 +541,7 @@ namespace OpenDentBusiness {
 				//if no category, then benefits are not restricted by proc code.
 				retVal-=histList[i].Deduct;
 			}
-			//now, do a similar thing with loopList
+			//now, do a similar thing with loopList, individ-----------------------------------------------------------------------
 			for(int i=0;i<loopList.Count;i++) {
 				//no date restriction, since all TP or part of current claim
 				//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
@@ -583,7 +583,7 @@ namespace OpenDentBusiness {
 				return retVal;
 			}
 			double famded=benFam.MonetaryAmt;
-			//reduce the family deductible by amounts already used.
+			//reduce the family deductible by amounts already used----------------------------------------------------------
 			for(int i=0;i<histList.Count;i++) {
 				if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
 					continue;
@@ -617,6 +617,7 @@ namespace OpenDentBusiness {
 				//if no category, then benefits are not restricted by proc code.
 				famded-=histList[i].Deduct;
 			}
+			//reduce family ded by amounts already used in loop---------------------------------------------------------------
 			for(int i=0;i<loopList.Count;i++) {
 				if(loopList[i].PlanNum != planNum) {
 					continue;//different plan
@@ -651,6 +652,359 @@ namespace OpenDentBusiness {
 				return famded;
 			}
 			return retVal;
+		}
+
+		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Calculates the most specific limitation for the specified code.  This is usually an annual max, ortho max, or fluoride limitation (only if age match).  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family limitations will reduce the returned value independently.  Works for individual procs, categories, and general.  Also outputs a string description of the limitation.  There don't seem to be any situations where multiple limitations would each partially reduce coverage for a single code, other than ind/fam.  The returned value will be the original insEstTotal passed in unless there was some limitation that reduced it.</summary>
+		public static double GetLimitationByCode(List<Benefit> benList,int planNum,int patPlanNum,DateTime procDate,string procCodeStr,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,int patNum,out string note,double insEstTotal,int patientAge) {
+			//No need to check RemotingRole;no call to db.
+			note ="";
+			//first, create a much shorter list with only relevant benefits in it.
+			List<Benefit> listShort=new List<Benefit>();
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
+					continue;
+				}
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(benList[i].BenefitType!=InsBenefitType.Limitations) {
+					continue;
+				}
+				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear 
+					&& benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear
+					&& benList[i].TimePeriod!=BenefitTimePeriod.Lifetime)
+				{
+					continue;
+				}
+				listShort.Add(benList[i]);
+			}
+			//look for the best matching individual limitation----------------------------------------------------------------
+			Benefit benInd=null;
+			//start with no category
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+					continue;
+				}
+				if(listShort[i].CodeNum>0) {
+					continue;
+				}
+				if(listShort[i].CovCatNum==0) {
+					benInd=listShort[i];
+				}
+			}
+			//then, specific category.
+			CovSpan[] spansForCat;
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+					continue;
+				}
+				if(listShort[i].CodeNum>0) {
+					continue;
+				}
+				if(listShort[i].CovCatNum!=0) {
+					//see if the span matches
+					spansForCat=CovSpans.GetForCat(listShort[i].CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(procCodeStr,spansForCat[j].FromCode)>=0 && String.Compare(procCodeStr,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;//no match
+					}
+					if(benInd != null && benInd.CovCatNum!=0) {//must compare
+						//only use the new one if the item order is larger
+						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benInd.CovCatNum)) {
+							benInd=listShort[i];
+						}
+					}
+					else {//first one encountered for a category
+						benInd=listShort[i];
+					}
+				}
+			}
+			//then, specific code
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+					continue;
+				}
+				if(listShort[i].CodeNum==0) {
+					continue;
+				}
+				if(procCodeStr!=ProcedureCodes.GetStringProcCode(listShort[i].CodeNum)) {
+					continue;
+				}
+				//if it's an age based limitation, then make sure the patient age matches.
+				//If we have an age match, then we exit the method right here.
+				if(listShort[i].QuantityQualifier==BenefitQuantity.AgeLimit && listShort[i].Quantity > 0){
+					if(patientAge > listShort[i].Quantity){
+						return 0;//not covered if too old.
+					}
+				}
+				else{//anything but an age limit
+					benInd=listShort[i];
+				}
+			}
+			//look for the best matching family limitation----------------------------------------------------------------
+			Benefit benFam=null;
+			//start with no category
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
+					continue;
+				}
+				if(listShort[i].CodeNum>0) {
+					continue;
+				}
+				if(listShort[i].CovCatNum==0) {
+					benFam=listShort[i];
+				}
+			}
+			//then, specific category.
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
+					continue;
+				}
+				if(listShort[i].CodeNum>0) {
+					continue;
+				}
+				if(listShort[i].CovCatNum!=0) {
+					//see if the span matches
+					spansForCat=CovSpans.GetForCat(listShort[i].CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(procCodeStr,spansForCat[j].FromCode)>=0 && String.Compare(procCodeStr,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;//no match
+					}
+					if(benFam != null && benFam.CovCatNum!=0) {//must compare
+						//only use the new one if the item order is larger
+						if(CovCats.GetOrderShort(listShort[i].CovCatNum) > CovCats.GetOrderShort(benFam.CovCatNum)) {
+							benFam=listShort[i];
+						}
+					}
+					else {//first one encountered for a category
+						benFam=listShort[i];
+					}
+				}
+			}
+			//then, specific code
+			for(int i=0;i<listShort.Count;i++) {
+				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
+					continue;
+				}
+				if(listShort[i].CodeNum==0) {
+					continue;
+				}
+				if(procCodeStr==ProcedureCodes.GetStringProcCode(listShort[i].CodeNum)) {
+					benFam=listShort[i];
+				}
+			}
+			//example. $1000 individual max, $3000 family max.
+			//Only individual max makes sense as the starting point.
+			//Family max just limits the sum of individual maxes.
+			//If there is no individual limitation that matches, then return 0.
+			//fluoride age limit already handled, so all that's left is maximums. 
+			if(benInd==null || benInd.MonetaryAmt==-1 || benInd.MonetaryAmt==0) {
+				return insEstTotal;//no max found for this code.
+			}
+			double maxInd=benInd.MonetaryAmt;
+			//reduce individual max by amount already paid this year/lifetime---------------------------------------------------
+			//establish date range for procedures to consider
+			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
+			DateTime dateEnd=procDate;//don't consider anything after the date of this procedure.
+			if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+				dateStart=DateTime.MinValue;
+			}
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].PlanNum != planNum) {
+					continue;//different plan
+				}
+				if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
+					continue;
+				}
+				if(histList[i].PatNum != patNum) {
+					continue;//this is for someone else in the family
+				}
+				if(benInd.CodeNum!=0) {//specific code
+					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
+						continue;
+					}
+				}
+				else if(benInd.CovCatNum!=0) {//specific category
+					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;
+					}
+				}
+				//if no category, then benefits are not restricted by proc code.
+				//In other words, there wouldn't be an annual max for one single code.
+				maxInd-=histList[i].Amount;
+			}
+			//reduce individual max by amount in loop ------------------------------------------------------------------
+			for(int i=0;i<loopList.Count;i++) {
+				//no date restriction, since all TP or part of current claim
+				//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
+				//	continue;
+				//}
+				if(loopList[i].PlanNum != planNum) {
+					continue;//different plan.  Even the loop list can contain info for multiple plans.
+				}
+				if(loopList[i].PatNum != patNum) {
+					continue;//this is for someone else in the family
+				}
+				if(benInd.CodeNum!=0) {//specific code
+					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=loopList[i].StrProcCode) {
+						continue;
+					}
+				}
+				else if(benInd.CovCatNum!=0) {//specific category
+					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;
+					}
+				}
+				//if no category, then benefits are not restricted by proc code.
+				maxInd-=loopList[i].Amount;
+			}
+			if(maxInd <= 0) {//then patient has use up all of their annual max, so no coverage.
+				return 0;
+			}
+			if(insEstTotal < maxInd) {//if there's not enough left in the annual max to cover this proc.
+				return maxInd;//insurance will only cover up to the remaining annual max
+			}
+			//So at this point, there seems to be enough to cover this procedure, and the only reason to continue
+			//would be if there was also a family max that had been met.
+			//I don't think this is common, but the following code will handle it.
+			if(benFam==null || benFam.MonetaryAmt==-1) {
+				return insEstTotal;//no family max anyway, so no need to go further.
+			}
+			double maxFam=benFam.MonetaryAmt;
+			//reduce the family max by amounts already used----------------------------------------------------------
+			for(int i=0;i<histList.Count;i++) {
+				if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
+					continue;
+				}
+				if(histList[i].PlanNum != planNum) {
+					continue;//different plan
+				}
+				//now, we do want to see all family members.
+				//if(histList[i].PatNum != patNum) {
+				//	continue;//this is for someone else in the family
+				//}
+				if(benFam.CodeNum!=0) {//specific code
+					if(ProcedureCodes.GetStringProcCode(benFam.CodeNum)!=histList[i].StrProcCode) {
+						continue;
+					}
+				}
+				else if(benFam.CovCatNum!=0) {//specific category
+					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(histList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(histList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+			}
+
+
+
+
+				/*
+				//if no category, then benefits are not restricted by proc code.
+				famded-=histList[i].Deduct;
+			}
+			//reduce family ded by amounts already used in loop---------------------------------------------------------------
+			for(int i=0;i<loopList.Count;i++) {
+				if(loopList[i].PlanNum != planNum) {
+					continue;//different plan
+				}
+				if(benFam.CodeNum!=0) {//specific code
+					if(ProcedureCodes.GetStringProcCode(benFam.CodeNum)!=loopList[i].StrProcCode) {
+						continue;
+					}
+				}
+				else if(benFam.CovCatNum!=0) {//specific category
+					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
+					bool isMatch=false;
+					for(int j=0;j<spansForCat.Length;j++) {
+						if(String.Compare(loopList[i].StrProcCode,spansForCat[j].FromCode)>=0 
+							&& String.Compare(loopList[i].StrProcCode,spansForCat[j].ToCode)<=0) {
+							isMatch=true;
+							break;
+						}
+					}
+					if(!isMatch) {
+						continue;
+					}
+				}
+				//if no category, then benefits are not restricted by proc code.
+				famded-=loopList[i].Deduct;
+			}
+			//if the family deductible has all been used up on other procs
+			if(famded<=0) {
+				return 0;//then no deductible, regardless of what we computed for individual
+			}
+			if(retVal > famded) {//example; retInd=$50, but 120 of 150 family ded has been used.  famded=30.  We need to return 30.
+				return famded;
+			}
+			return retVal;
+
+				*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			return 0;
 		}
 
 		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  Handles general, category, or procedure level.  Does not handle pat vs family coveragelevel.  Does handle patient override by using patplan.  Does not need to be aware of procedure history or loop history.</summary>
@@ -761,6 +1115,42 @@ namespace OpenDentBusiness {
 				return benPlan.Percent;
 			}
 			return 0;
+		}
+
+		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to determine if a given procedure is completely excluded from coverage.  It does not consider any dates of service or history.</summary>
+		public static bool IsExcluded(string strProcCode,List<Benefit> benList,int planNum,int patPlanNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<benList.Count;i++) {
+				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
+					continue;
+				}
+				if(benList[i].PatPlanNum==0 && benList[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(benList[i].BenefitType!=InsBenefitType.Exclusions) {
+					continue;
+				}
+				if(benList[i].CodeNum > 0) {
+					if(strProcCode==ProcedureCodes.GetStringProcCode(benList[i].CodeNum)) {
+						return true;//specific procedure code excluded
+					}
+					continue;
+				}
+				if(benList[i].CovCatNum==0) {
+					continue;
+					//General exclusion with no category.  This is considered an unsupported type of benefit.
+					//Nobody should be able to exclude everything with one benefit entry.
+				}
+				//see if the span matches
+				CovSpan[] spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
+				//bool isMatch=false;
+				for(int j=0;j<spansForCat.Length;j++) {
+					if(String.Compare(strProcCode,spansForCat[j].FromCode)>=0 && String.Compare(strProcCode,spansForCat[j].ToCode)<=0) {
+						return true;//span matches
+					}
+				}
+			}
+			return false;//no exclusions found for this code
 		}
 
 		///<summary>Used in FormInsPlan to sych database with changes user made to the benefit list for a plan.  Must supply an old list for comparison.  Only the differences are saved.</summary>

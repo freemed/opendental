@@ -979,7 +979,8 @@ namespace OpenDental{
 				}
 				LoopList=new List<ClaimProcHist>();
 				for(int i=0;i<ProcListTP.Length;i++){
-					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ref ClaimProcList,false,InsPlanList,PatPlanList,BenefitList,HistList,LoopList,false);
+					Procedures.ComputeEstimates(ProcListTP[i],PatCur.PatNum,ref ClaimProcList,false,InsPlanList,PatPlanList,BenefitList,
+						HistList,LoopList,false,PatCur.Age);
 					//then, add this information to loopList so that the next procedure is aware of it.
 					LoopList.AddRange(ClaimProcs.GetHistForProc(ClaimProcList,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
 				}
@@ -2225,7 +2226,7 @@ namespace OpenDental{
 				else {
 					procCur.ProcFee=insfee;
 				}
-				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(procCur,PatCur.PatNum,claimProcList,false,InsPlanList,PatPlanList,BenefitList,PatCur.Age);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
       }
@@ -2452,7 +2453,7 @@ namespace OpenDental{
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			ClaimL.CalculateAndUpdate(ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(ProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			//FormCE.CalculateEstimates(
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.

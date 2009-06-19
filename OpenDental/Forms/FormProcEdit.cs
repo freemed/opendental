@@ -2369,7 +2369,7 @@ namespace OpenDental{
 			if(patPlanNum > 0){
 				double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
-					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal);	
+					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age);	
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled
@@ -2464,7 +2464,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcCur.ProcFee=procFee;
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 			FillIns();
 		}
 
@@ -2542,7 +2542,7 @@ namespace OpenDental{
 					radioU.Checked=true;
 					break;
 			}
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 			FillIns();
       SetControls();
 		}
@@ -2725,7 +2725,7 @@ namespace OpenDental{
 			}
 			//next line is needed to recalc BaseEst, etc, for claimprocs that are no longer NoBillIns
 			//also, if they are NoBillIns, then it clears out the other values.
-			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
+			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 			FillIns();
 		}
 
@@ -3328,7 +3328,7 @@ namespace OpenDental{
 				{
 					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
 				}
-				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList);
+				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 				return;
 			}
 			if(IsNew){//if cancelling on a new procedure

@@ -403,10 +403,10 @@ namespace OpenDental {
 		}*/
 
 		private string CheckDefaults(){
-			//There needs to be at least 13 categories, each with an etype and no duplicates.
+			//There needs to be at least 14 categories, each with an etype and no duplicates.
 			string retVal="";
 			int count;
-			for(int i=1;i<14;i++) {//starts with 1 because we don't care about None category
+			for(int i=1;i<15;i++) {//starts with 1 because we don't care about None category
 				count=CovCats.CountForEbenCat((EbenefitCategory)i);
 				if(count>1){
 					retVal+="Duplicate category: "+((EbenefitCategory)i).ToString()+"\r\n";

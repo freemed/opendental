@@ -210,6 +210,7 @@ namespace OpenDentBusiness {
 			SetOrder(GetForEbenCat(EbenefitCategory.MaxillofacialProsth),10);
 			SetOrder(GetForEbenCat(EbenefitCategory.Accident),11);
 			SetOrder(GetForEbenCat(EbenefitCategory.Orthodontics),12);
+			SetOrder(GetForEbenCat(EbenefitCategory.Adjunctive),13);
 			//now set the remaining categories to come after the ebens.
 			int idx=14;
 			for(int i=0;i<CovCatC.ListShort.Count;i++) {
@@ -239,6 +240,11 @@ namespace OpenDentBusiness {
 			span=new CovSpan();
 			span.CovCatNum=covCatNum;
 			span.FromCode="D0000";
+			span.ToCode="D7999";
+			CovSpans.Insert(span);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D9000";
 			span.ToCode="D9999";
 			CovSpans.Insert(span);
 			covCatNum=GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
@@ -330,6 +336,15 @@ namespace OpenDentBusiness {
 			span.FromCode="D8000";
 			span.ToCode="D8999";
 			CovSpans.Insert(span);
+			covCatNum=GetForEbenCat(EbenefitCategory.Adjunctive).CovCatNum;
+			CovSpans.DeleteForCat(covCatNum);
+			span=new CovSpan();
+			span.CovCatNum=covCatNum;
+			span.FromCode="D9000";
+			span.ToCode="D9999";
+			CovSpans.Insert(span);
+
+
 		}
 
 

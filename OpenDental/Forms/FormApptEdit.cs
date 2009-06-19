@@ -1362,7 +1362,7 @@ namespace OpenDental{
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
-			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList);
+			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
@@ -1624,7 +1624,7 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
-				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList);
+				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList,pat.Age);
 			}
 			listQuickAdd.SelectedIndex=-1;
 			string[] selectedProcs=new string[gridProc.SelectedIndices.Length];
@@ -1831,7 +1831,7 @@ namespace OpenDental{
 						return false;
 					}
 					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
+					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum,pat.Age);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}

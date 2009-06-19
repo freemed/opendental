@@ -2984,7 +2984,7 @@ namespace OpenDental{
 				return;
 			}
 			List <Benefit> benefitList=Benefits.Refresh(PatPlanList);
-			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+			ClaimL.CalculateAndUpdate(ProcList,PlanList,ClaimCur,PatPlanList,benefitList,PatCur.Age);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}
@@ -3873,10 +3873,10 @@ namespace OpenDental{
 					//We're not going to bother to also get paidOtherInsBaseEst:
 					double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(ClaimProcsForClaim[i],PatPlanList);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal);//last value is a dummy.
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age);//paidOtherInsEstTotal is a dummy value.
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

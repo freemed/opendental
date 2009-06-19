@@ -291,7 +291,7 @@ namespace OpenDental{
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				ProcCur.BaseUnits = ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//no recall synch required
-				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new List<ClaimProc>(),false,planList,patPlanList,benefitList);
+				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new List<ClaimProc>(),false,planList,patPlanList,benefitList,patCur.Age);
 			}
 			return AptCur;
 		}

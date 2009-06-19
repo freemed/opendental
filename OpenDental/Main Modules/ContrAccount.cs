@@ -2645,7 +2645,7 @@ namespace OpenDental {
 			//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			//}
 			//else{
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			//}
 			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
@@ -2673,7 +2673,7 @@ namespace OpenDental {
 					//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 					//}
 					//else {
-					ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+					ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 					//}
 					//Claims.Cur=ClaimCur;
 				}
@@ -2917,7 +2917,7 @@ namespace OpenDental {
 			ClaimCur.DateSent=DateTime.Today;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
@@ -2955,7 +2955,7 @@ namespace OpenDental {
 			}
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
@@ -3020,7 +3020,7 @@ namespace OpenDental {
 			}
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -3054,7 +3054,7 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.

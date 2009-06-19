@@ -171,7 +171,7 @@ namespace OpenDental {
 			ProcCur.SiteNum=pat.SiteNum;
 			Procedures.Insert(ProcCur);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList);
-			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,planList,patPlanList,benefitList);
+			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,planList,patPlanList,benefitList,pat.Age);
 			FormProcEdit FormPE=new FormProcEdit(ProcCur,pat.Copy(),fam);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();

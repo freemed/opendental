@@ -1086,7 +1086,7 @@ namespace OpenDentBusiness{
 	public enum EbenefitCategory{
 		///<summary>0- Default.  Applies to all codes.</summary>
 		None,
-		///<summary>1- X12: 30 and 35. All ADA codes.</summary>
+		///<summary>1- X12: 30 and 35. All ADA codes except ortho.  D0000-D7999 and D9000-D9999</summary>
 		General,
 		///<summary>2- X12: 23. ADA D0000-D0999.  This includes DiagnosticXray.</summary>
 		Diagnostic,
@@ -1102,7 +1102,7 @@ namespace OpenDentBusiness{
 		Crowns,
 		///<summary>8- X12: 37. ADA range?</summary>
 		Accident,
-		///<summary>9- X12: 38. ADA D8000</summary>
+		///<summary>9- X12: 38. ADA D8000-D8999</summary>
 		Orthodontics,
 		///<summary>10- X12: 39. ADA D5000-D5899 (removable), and D6200-D6899 (fixed)</summary>
 		Prosthodontics,
@@ -1111,7 +1111,9 @@ namespace OpenDentBusiness{
 		///<summary>12- X12: 41. ADA D1000</summary>
 		RoutinePreventive,
 		///<summary>13- X12: 4. ADA D0200-D0399.  So this is like an optional category which is otherwise considered to be diagnosic.</summary>
-		DiagnosticXRay
+		DiagnosticXRay,
+		///<summary>14- X12: 28. ADA D9000-D9999</summary>
+		Adjunctive
 	}
 
 	///<summary>Used in accounting for chart of accounts.</summary>

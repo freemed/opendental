@@ -546,7 +546,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, not any paid or pending payments.  PaidOtherInsBaseEst</summary>
-		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst){
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge){
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -718,14 +718,39 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
+			//Exclusions---------------------------------------------------------------------------------------
+			//We are not going to consider date of proc.  Just simple exclusions
+			if(Benefits.IsExcluded(ProcedureCodes.GetStringProcCode(codeNum),benList,plan.PlanNum,patPlanNum)) {
+				cp.BaseEst=0;
+				cp.InsEstTotal=0;
+				if(cp.EstimateNote!="") {
+					cp.EstimateNote+=", ";
+				}
+				cp.EstimateNote+=Lans.g("ClaimProcs","Exclusion");
+			}
 			//base estimate is now done and will not be altered further.  From here out, we are only altering insEstTotal
-			//annual max-------------------------------------------------------------------------------------------
-//todo: calculate annual max (or any other similar limitaion
-//just for testing, here's one
+			//annual max and other limitations--------------------------------------------------------------------------------
+//todo: calculate
 			//double limitation=34;
 			//cp.InsEstTotal-=limitation;
 			//cp.EstimateNote+="\r\nOver annual max: $34";
-			
+			//procDate;//was already calculated in the deductible section.
+			if(loopList!=null && histList!=null) {
+				string note;
+				cp.InsEstTotal=Benefits.GetLimitationByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum,out note,cp.InsEstTotal,patientAge);
+			}
+			if(cp.DedEst > cp.InsEstTotal) {//if the deductible is more than the fee
+				cp.DedEst=cp.InsEstTotal;//reduce the deductible
+			}
+			if(cp.DedEstOverride > cp.InsEstTotal) {//if the deductible override is more than the fee
+				cp.DedEstOverride=cp.InsEstTotal;//reduce the override.
+			}
+			if(cp.DedEstOverride != -1) {//use the override
+				cp.InsEstTotal-=cp.DedEstOverride;//subtract
+			}
+			else if(cp.DedEst != -1) {//use the calculated deductible
+				cp.InsEstTotal-=cp.DedEst;
+			}
 			
 			
 			

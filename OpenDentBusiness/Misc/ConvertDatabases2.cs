@@ -485,12 +485,29 @@ DROP TABLE IF EXISTS etAck";
 				//set MonetaryAmt empty when Limitation and a quantity is entered
 				command="UPDATE benefit SET MonetaryAmt=-1 WHERE BenefitType=5 AND Quantity != 0";
 				Db.NonQ(command);
-				command="UPDATE covcat SET CovOrder=CovOrder+1 WHERE CovOrder > 1";
-				Db.NonQ(command);
-				command="INSERT INTO covcat (Description,DefaultPercent,CovOrder,IsHidden,EbenefitCat) VALUES('X-Ray',100,2,0,13)";
-				int covCatNum=Db.NonQ(command,true);
-				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0200','D0399')";
-				Db.NonQ(command);
+				if(CultureInfo.CurrentCulture.Name=="en-US") {
+					command="UPDATE covcat SET CovOrder=CovOrder+1 WHERE CovOrder > 1";
+					Db.NonQ(command);
+					command="INSERT INTO covcat (Description,DefaultPercent,CovOrder,IsHidden,EbenefitCat) VALUES('X-Ray',100,2,0,13)";
+					int covCatNum=Db.NonQ(command,true);
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0200','D0399')";
+					Db.NonQ(command);
+					command="SELECT MAX(CovOrder) FROM covcat";
+					int covOrder=PIn.PInt(Db.GetScalar(command));
+					command="INSERT INTO covcat (Description,DefaultPercent,CovOrder,IsHidden,EbenefitCat) VALUES('Adjunctive',-1,"
+						+POut.PInt(covOrder+1)+",0,14)";//adjunctive
+					covCatNum=Db.NonQ(command,true);
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D9000','D9999')";
+					Db.NonQ(command);
+					command="SELECT CovCatNum FROM covcat WHERE EbenefitCat=1";//general
+					covCatNum=Db.NonQ(command,true);
+					command="DELETE FROM covspan WHERE CovCatNum="+POut.PInt(covCatNum);
+					Db.NonQ(command);
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0000','D7999')";
+					Db.NonQ(command);
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D9000','D9999')";
+					Db.NonQ(command);
+				}
 				command="ALTER TABLE claimproc ADD DedEst double NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE claimproc ADD DedEstOverride double NOT NULL";
