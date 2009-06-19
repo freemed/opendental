@@ -64,6 +64,7 @@ namespace OpenDental{
 		private Label labelPatientCount;
 		private ComboBox comboSort;
 		private Label label5;
+		private OpenDental.UI.Button butLabelOne;
 		///<summary>Only used if PinClicked=true</summary>
 		public List<int> AptNumsSelected;
 
@@ -123,6 +124,7 @@ namespace OpenDental{
 			this.butSchedFam = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
 			this.labelPatientCount = new System.Windows.Forms.Label();
+			this.butLabelOne = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -317,7 +319,7 @@ namespace OpenDental{
 			this.butReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReport.CornerRadius = 4F;
-			this.butReport.Location = new System.Drawing.Point(381,663);
+			this.butReport.Location = new System.Drawing.Point(451,663);
 			this.butReport.Name = "butReport";
 			this.butReport.Size = new System.Drawing.Size(87,24);
 			this.butReport.TabIndex = 13;
@@ -422,7 +424,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(474,663);
+			this.butPrint.Location = new System.Drawing.Point(544,663);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(87,24);
 			this.butPrint.TabIndex = 19;
@@ -480,9 +482,9 @@ namespace OpenDental{
 			this.butEmail.CornerRadius = 4F;
 			this.butEmail.Image = global::OpenDental.Properties.Resources.email1;
 			this.butEmail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butEmail.Location = new System.Drawing.Point(256,663);
+			this.butEmail.Location = new System.Drawing.Point(354,663);
 			this.butEmail.Name = "butEmail";
-			this.butEmail.Size = new System.Drawing.Size(119,24);
+			this.butEmail.Size = new System.Drawing.Size(91,24);
 			this.butEmail.TabIndex = 60;
 			this.butEmail.Text = "E-Mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
@@ -496,11 +498,29 @@ namespace OpenDental{
 			this.labelPatientCount.Text = "Patient Count:";
 			this.labelPatientCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butLabelOne
+			// 
+			this.butLabelOne.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLabelOne.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butLabelOne.Autosize = true;
+			this.butLabelOne.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLabelOne.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLabelOne.CornerRadius = 4F;
+			this.butLabelOne.Image = global::OpenDental.Properties.Resources.butLabel;
+			this.butLabelOne.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLabelOne.Location = new System.Drawing.Point(256,663);
+			this.butLabelOne.Name = "butLabelOne";
+			this.butLabelOne.Size = new System.Drawing.Size(92,24);
+			this.butLabelOne.TabIndex = 63;
+			this.butLabelOne.Text = "One Label";
+			this.butLabelOne.Click += new System.EventHandler(this.butLabelOne_Click);
+			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,691);
+			this.Controls.Add(this.butLabelOne);
 			this.Controls.Add(this.labelPatientCount);
 			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.groupBox2);
@@ -886,6 +906,30 @@ namespace OpenDental{
 			//printPreview.TotalPages=;
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change statuses and make commlog entries for all of the selected patients?")) {
+				Cursor=Cursors.WaitCursor;
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					//make commlog entries for each patient
+					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+				}
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					Recalls.UpdateStatus(
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
+				}
+			}
+			FillMain();
+			Cursor=Cursors.Default;
+		}
+
+		private void butLabelOne_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select patient(s) first.");
+				return;
+			}
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				LabelSingle.PrintPat(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()));
+			}
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the labels finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if labels printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
@@ -1323,6 +1367,7 @@ namespace OpenDental{
 				SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			}
 		}
+
 
 	
 
