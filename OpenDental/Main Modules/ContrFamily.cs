@@ -1313,6 +1313,7 @@ namespace OpenDental{
 			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList);
 			string desc;
 			string val;
+			ProcedureCode proccode=null;
 			for(int y=0;y<benMatrix.GetLength(1);y++){//rows
 				row=new ODGridRow();
 				desc="";
@@ -1328,7 +1329,6 @@ namespace OpenDental{
 					if(benMatrix[x,y].CoverageLevel==BenefitCoverageLevel.Family) {
 						desc+=Lan.g(this,"Fam")+" ";
 					}
-					ProcedureCode proccode=null;
 					if(benMatrix[x,y].CodeNum!=0) {
 						proccode=ProcedureCodes.GetProcCode(benMatrix[x,y].CodeNum);
 					}
@@ -1417,6 +1417,17 @@ namespace OpenDental{
 					{//annual max 0
 						val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
 					}*/
+					if(benMatrix[x,y].BenefitType==InsBenefitType.Exclusions
+						|| benMatrix[x,y].BenefitType==InsBenefitType.Limitations) 
+					{
+						if(benMatrix[x,y].CodeNum != 0) {
+							proccode=ProcedureCodes.GetProcCode(benMatrix[x,y].CodeNum);
+							val+=proccode.ProcCode+"-"+proccode.AbbrDesc+" ";
+						}
+						else if(benMatrix[x,y].CovCatNum != 0){
+							val+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" ";
+						}
+					}
 					if(benMatrix[x,y].QuantityQualifier==BenefitQuantity.NumberOfServices){//eg 2 times per CalendarYear
 						val+=benMatrix[x,y].Quantity.ToString()+" "+Lan.g(this,"times per")+" "
 							+Lan.g("enumBenefitQuantity",benMatrix[x,y].TimePeriod.ToString())+" ";
@@ -1444,9 +1455,9 @@ namespace OpenDental{
 					//if(benMatrix[x,y].MonetaryAmt!=0){
 					//	val+=benMatrix[x,y].MonetaryAmt.ToString("c0")+" ";
 					//}
-					if(val==""){
-						val="val";
-					}
+					//if(val==""){
+					//	val="val";
+					//}
 					row.Cells.Add(val);
 				}
 				gridIns.Rows.Add(row);

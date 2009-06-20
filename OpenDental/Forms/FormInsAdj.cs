@@ -20,6 +20,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		///<summary></summary>
 		public bool IsNew;
+		private OpenDental.UI.Button butDelete;
 		private ClaimProc ClaimProcCur;
 
 		///<summary></summary>
@@ -56,6 +57,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -114,9 +116,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(259,126);
+			this.butOK.Location = new System.Drawing.Point(260,148);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,25);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -130,9 +132,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(259,162);
+			this.butCancel.Location = new System.Drawing.Point(260,180);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,25);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -145,12 +147,30 @@ namespace OpenDental{
 			this.label4.TabIndex = 5;
 			this.label4.Text = "Make sure the date you use falls within the correct benefit year.";
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(18,180);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 6;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormInsAdj
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(354,208);
+			this.ClientSize = new System.Drawing.Size(354,217);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -179,6 +199,18 @@ namespace OpenDental{
 			textDedUsed.Text=ClaimProcCur.DedApplied.ToString("F");
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show("All",MsgBoxButtons.OKCancel,"Delete?")) {
+				return;
+			}
+			ClaimProcs.Delete(ClaimProcCur);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(  textDate.errorProvider1.GetError(textDate)!=""
 				|| textInsUsed.errorProvider1.GetError(textInsUsed)!=""
@@ -202,6 +234,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 		
 	}
 }

@@ -380,7 +380,7 @@ namespace OpenDentBusiness {
 			Benefit benInd=null;
 			//start with no category
 			for(int i=0;i<listShort.Count;i++){
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual){
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
 					continue;
 				}
 				if(listShort[i].CodeNum>0){
@@ -393,7 +393,7 @@ namespace OpenDentBusiness {
 			//then, specific category.
 			CovSpan[] spansForCat;
 			for(int i=0;i<listShort.Count;i++){
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual){
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
 					continue;
 				}
 				if(listShort[i].CodeNum>0){
@@ -425,7 +425,7 @@ namespace OpenDentBusiness {
 			}
 			//then, specific code
 			for(int i=0;i<listShort.Count;i++){
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual){
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
 					continue;
 				}
 				if(listShort[i].CodeNum==0){
@@ -670,19 +670,19 @@ namespace OpenDentBusiness {
 				if(benList[i].BenefitType!=InsBenefitType.Limitations) {
 					continue;
 				}
-				if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear 
-					&& benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear
-					&& benList[i].TimePeriod!=BenefitTimePeriod.Lifetime)
-				{
-					continue;
-				}
+				//if(benList[i].TimePeriod!=BenefitTimePeriod.CalendarYear 
+				//	&& benList[i].TimePeriod!=BenefitTimePeriod.ServiceYear
+				//	&& benList[i].TimePeriod!=BenefitTimePeriod.Lifetime)
+				//{
+				//	continue;
+				//}
 				listShort.Add(benList[i]);
 			}
 			//look for the best matching individual limitation----------------------------------------------------------------
 			Benefit benInd=null;
 			//start with no category
 			for(int i=0;i<listShort.Count;i++) {
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family) {
 					continue;
 				}
 				if(listShort[i].CodeNum>0) {
@@ -695,7 +695,7 @@ namespace OpenDentBusiness {
 			//then, specific category.
 			CovSpan[] spansForCat;
 			for(int i=0;i<listShort.Count;i++) {
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family) {
 					continue;
 				}
 				if(listShort[i].CodeNum>0) {
@@ -727,7 +727,7 @@ namespace OpenDentBusiness {
 			}
 			//then, specific code
 			for(int i=0;i<listShort.Count;i++) {
-				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Individual) {
+				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family) {
 					continue;
 				}
 				if(listShort[i].CodeNum==0) {
@@ -740,6 +740,7 @@ namespace OpenDentBusiness {
 				//If we have an age match, then we exit the method right here.
 				if(listShort[i].QuantityQualifier==BenefitQuantity.AgeLimit && listShort[i].Quantity > 0){
 					if(patientAge > listShort[i].Quantity){
+						note=Lans.g("Benefits","Age limitation:")+" "+listShort[i].Quantity.ToString();
 						return 0;//not covered if too old.
 					}
 				}
@@ -851,7 +852,7 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
-				//In other words, there wouldn't be an annual max for one single code.
+				//In other words, the benefit applies to all codes.
 				maxInd-=histList[i].Amount;
 			}
 			//reduce individual max by amount in loop ------------------------------------------------------------------
@@ -888,17 +889,35 @@ namespace OpenDentBusiness {
 				//if no category, then benefits are not restricted by proc code.
 				maxInd-=loopList[i].Amount;
 			}
-			if(maxInd <= 0) {//then patient has use up all of their annual max, so no coverage.
+			if(maxInd <= 0) {//then patient has used up all of their annual max, so no coverage.
+				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+					note+=Lans.g("Benefits","Over lifetime max.");
+				}
+				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) 
+				{
+					note+=Lans.g("Benefits","Over annual max.");
+				}
 				return 0;
 			}
-			if(insEstTotal < maxInd) {//if there's not enough left in the annual max to cover this proc.
-				return maxInd;//insurance will only cover up to the remaining annual max
+			double retVal=insEstTotal;
+			if(maxInd < insEstTotal) {//if there's not enough left in the annual max to cover this proc.
+				retVal=maxInd;//insurance will only cover up to the remaining annual max
 			}
-			//So at this point, there seems to be enough to cover this procedure, and the only reason to continue
+			//So at this point, there seems to be enough to cover at least part of this procedure, and the only reason to continue
 			//would be if there was also a family max that had been met.
 			//I don't think this is common, but the following code will handle it.
 			if(benFam==null || benFam.MonetaryAmt==-1) {
-				return insEstTotal;//no family max anyway, so no need to go further.
+				if(retVal != insEstTotal){
+					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+						note+=Lans.g("Benefits","Over lifetime max.");
+					}
+					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+						|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+						note+=Lans.g("Benefits","Over annual max.");
+					}
+				}
+				return retVal;//no family max anyway, so no need to go further.
 			}
 			double maxFam=benFam.MonetaryAmt;
 			//reduce the family max by amounts already used----------------------------------------------------------
@@ -932,27 +951,10 @@ namespace OpenDentBusiness {
 						continue;
 					}
 				}
-
-
-
-
-
-
-
-
-
-
-
-			}
-
-
-
-
-				/*
 				//if no category, then benefits are not restricted by proc code.
-				famded-=histList[i].Deduct;
+				maxFam-=histList[i].Amount;
 			}
-			//reduce family ded by amounts already used in loop---------------------------------------------------------------
+			//reduce family max by amounts already used in loop---------------------------------------------------------------
 			for(int i=0;i<loopList.Count;i++) {
 				if(loopList[i].PlanNum != planNum) {
 					continue;//different plan
@@ -977,34 +979,53 @@ namespace OpenDentBusiness {
 					}
 				}
 				//if no category, then benefits are not restricted by proc code.
-				famded-=loopList[i].Deduct;
+				maxFam-=loopList[i].Amount;
 			}
-			//if the family deductible has all been used up on other procs
-			if(famded<=0) {
-				return 0;//then no deductible, regardless of what we computed for individual
+			//if the family max has all been used up on other procs
+			if(maxFam<=0) {
+				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+					note+=Lans.g("Benefits","Over family lifetime max.");
+				}
+				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+					note+=Lans.g("Benefits","Over family annual max.");
+				}
+				return 0;//then no coverage, regardless of what we computed for individual
 			}
-			if(retVal > famded) {//example; retInd=$50, but 120 of 150 family ded has been used.  famded=30.  We need to return 30.
-				return famded;
+			if(maxFam > maxInd) {//restrict by maxInd
+				//which we already calculated
+				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+					note+=Lans.g("Benefits","Over lifetime max.");
+				}
+				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+					note+=Lans.g("Benefits","Over annual max.");
+				}
+				return retVal;
+			}
+			else {//restrict by maxFam
+				if(maxFam < retVal) {//if there's not enough left in the annual max to cover this proc.
+					//example. retVal=$70.  But 2970 of 3000 family max has been used.  maxFam=30.  We need to return 30.
+					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+						note+=Lans.g("Benefits","Over family lifetime max.");
+					}
+					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+						note+=Lans.g("Benefits","Over family annual max.");
+					}
+					return maxFam;//insurance will only cover up to the remaining annual max
+				}
+			}
+			if(retVal<insEstTotal) {//must have been an individual restriction
+				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
+					note+=Lans.g("Benefits","Over lifetime max.");
+				}
+				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
+					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
+					note+=Lans.g("Benefits","Over annual max.");
+				}
 			}
 			return retVal;
-
-				*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			return 0;
 		}
 
 		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  Handles general, category, or procedure level.  Does not handle pat vs family coveragelevel.  Does handle patient override by using patplan.  Does not need to be aware of procedure history or loop history.</summary>

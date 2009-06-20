@@ -230,7 +230,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
 				return;
 			}
-			string command= "DELETE from claimproc WHERE claimprocNum = '"+POut.PInt(cp.ClaimProcNum)+"'";
+			string command= "DELETE from claimproc WHERE claimprocNum = "+POut.PInt(cp.ClaimProcNum);
 			Db.NonQ(command);
 		}
 
@@ -736,23 +736,15 @@ namespace OpenDentBusiness{
 			//cp.EstimateNote+="\r\nOver annual max: $34";
 			//procDate;//was already calculated in the deductible section.
 			if(loopList!=null && histList!=null) {
-				string note;
+				string note="";
 				cp.InsEstTotal=Benefits.GetLimitationByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum,out note,cp.InsEstTotal,patientAge);
+				if(note != "") {
+					if(cp.EstimateNote != "") {
+						cp.EstimateNote+=", ";
+					}
+					cp.EstimateNote+=note;
+				}
 			}
-			if(cp.DedEst > cp.InsEstTotal) {//if the deductible is more than the fee
-				cp.DedEst=cp.InsEstTotal;//reduce the deductible
-			}
-			if(cp.DedEstOverride > cp.InsEstTotal) {//if the deductible override is more than the fee
-				cp.DedEstOverride=cp.InsEstTotal;//reduce the override.
-			}
-			if(cp.DedEstOverride != -1) {//use the override
-				cp.InsEstTotal-=cp.DedEstOverride;//subtract
-			}
-			else if(cp.DedEst != -1) {//use the calculated deductible
-				cp.InsEstTotal-=cp.DedEst;
-			}
-			
-			
 			
 		}
 

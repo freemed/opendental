@@ -14,7 +14,7 @@ namespace OpenDental{
 	public class FormInsBenefits : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butClear;
+		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butAdd;
 		private OpenDental.UI.ODGrid gridBenefits;
 		private CheckBox checkSimplified;
@@ -154,6 +154,7 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.comboExams = new System.Windows.Forms.ComboBox();
+			this.label24 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.comboPano = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -184,7 +185,6 @@ namespace OpenDental{
 			this.panelSimple = new System.Windows.Forms.Panel();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
-			this.label24 = new System.Windows.Forms.Label();
 			this.label30 = new System.Windows.Forms.Label();
 			this.groupYear = new System.Windows.Forms.GroupBox();
 			this.checkCalendarYear = new System.Windows.Forms.CheckBox();
@@ -221,7 +221,7 @@ namespace OpenDental{
 			this.textBW = new OpenDental.ValidNumber();
 			this.textSubscNote = new OpenDental.ODtextBox();
 			this.gridBenefits = new OpenDental.UI.ODGrid();
-			this.butClear = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -330,6 +330,15 @@ namespace OpenDental{
 			this.comboExams.Name = "comboExams";
 			this.comboExams.Size = new System.Drawing.Size(136,21);
 			this.comboExams.TabIndex = 178;
+			// 
+			// label24
+			// 
+			this.label24.Location = new System.Drawing.Point(6,17);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(270,13);
+			this.label24.TabIndex = 180;
+			this.label24.Text = "These do not affect estimate calculations.";
+			this.label24.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// label8
 			// 
@@ -665,15 +674,6 @@ namespace OpenDental{
 			this.label13.Text = "Individual";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(6,17);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(270,13);
-			this.label24.TabIndex = 180;
-			this.label24.Text = "These do not affect estimate calculations.";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
 			// label30
 			// 
 			this.label30.Location = new System.Drawing.Point(89,15);
@@ -984,28 +984,29 @@ namespace OpenDental{
 			this.gridBenefits.Location = new System.Drawing.Point(23,337);
 			this.gridBenefits.Name = "gridBenefits";
 			this.gridBenefits.ScrollValue = 0;
+			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridBenefits.Size = new System.Drawing.Size(574,180);
 			this.gridBenefits.TabIndex = 156;
 			this.gridBenefits.Title = "Other Benefits";
 			this.gridBenefits.TranslationName = "TableInsBenefits";
 			this.gridBenefits.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBenefits_CellDoubleClick);
 			// 
-			// butClear
+			// butDelete
 			// 
-			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butClear.Autosize = true;
-			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClear.CornerRadius = 4F;
-			this.butClear.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(122,524);
-			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(84,24);
-			this.butClear.TabIndex = 153;
-			this.butClear.Text = "Clear List";
-			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(110,524);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(78,24);
+			this.butDelete.TabIndex = 153;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butClear_Click);
 			// 
 			// butAdd
 			// 
@@ -1019,7 +1020,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(23,524);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(84,24);
+			this.butAdd.Size = new System.Drawing.Size(78,24);
 			this.butAdd.TabIndex = 152;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -1064,7 +1065,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textSubscNote);
 			this.Controls.Add(this.label28);
 			this.Controls.Add(this.gridBenefits);
-			this.Controls.Add(this.butClear);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -1762,7 +1763,16 @@ namespace OpenDental{
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
-			List<Benefit> listToClear=new List<Benefit>(benefitList);
+			if(gridBenefits.SelectedIndices.Length==0) {
+				gridBenefits.SetSelected(true);
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete all benefits in list?")) {
+					return;
+				}
+			}
+			List<Benefit> listToClear=new List<Benefit>();
+			for(int i=0;i<gridBenefits.SelectedIndices.Length;i++) {
+				listToClear.Add(benefitList[gridBenefits.SelectedIndices[i]]);
+			}
 			for(int i=0;i<listToClear.Count;i++) {
 				benefitList.Remove(listToClear[i]);
 				benefitListAll.Remove(listToClear[i]);
