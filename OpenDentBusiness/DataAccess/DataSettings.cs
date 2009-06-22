@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.Common;
 using OpenDentBusiness;
 using MySql.Data.MySqlClient;
-using Oracle.DataAccess.Client;
+//using Oracle.DataAccess.Client;
 
 namespace OpenDentBusiness.DataAccess {
 	public static class DataSettings {
@@ -85,8 +85,8 @@ namespace OpenDentBusiness.DataAccess {
 			switch (DbType) {
 				case DatabaseType.MySql:
 					return new MySqlConnection(ConnectionString);
-				case DatabaseType.Oracle:
-					return new OracleConnection(ConnectionString);
+				//case DatabaseType.Oracle:
+				//	return new OracleConnection(ConnectionString);
 				default:
 					throw new NotSupportedException();
 			}
