@@ -1217,7 +1217,7 @@ namespace OpenDentBusiness{
 	}
 
 	///<summary></summary>
-	public enum InsFilingCode{
+	public enum InsFilingCodeOld{
 		///<summary>0</summary>
 		Commercial_Insurance,
 		///<summary>1</summary>

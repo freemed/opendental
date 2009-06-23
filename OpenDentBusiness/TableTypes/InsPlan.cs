@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 		///<summary>Specific to an individual plan and not synchronized in any way.  Use to store any other info that affects coverage.</summary>
 		public string SubscNote;
 		///<summary>Enum:InsFilingCode Only used for e-claims.  Should become obsolete when PlanID implemented by HIPAA.</summary>
-		public InsFilingCode FilingCode;
+		public InsFilingCodeOld FilingCode;
 		///<summary>Canadian e-claim field. D11 and E07.  Mandatory for Dentaide.  Value must be greater than 0.  Not used for all others.  2 digit.</summary>
 		public int DentaideCardSequence;
 		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>

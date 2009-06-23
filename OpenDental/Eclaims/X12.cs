@@ -1527,51 +1527,51 @@ namespace OpenDental.Eclaims
 		///<summary>Until recently, we always just used CI for commercial ins.  But due to demand from customers, we had to add this even though it will become obsolete soon.</summary>
 		private static string GetFilingCode(InsPlan plan){
 			switch(plan.FilingCode){
-				case InsFilingCode.SelfPay:
+				case InsFilingCodeOld.SelfPay:
 					return "09";
-				case InsFilingCode.OtherNonFed:
+				case InsFilingCodeOld.OtherNonFed:
 					return "11";
-				case InsFilingCode.PPO:
+				case InsFilingCodeOld.PPO:
 					return "12";
-				case InsFilingCode.POS:
+				case InsFilingCodeOld.POS:
 					return "13";
-				case InsFilingCode.EPO:
+				case InsFilingCodeOld.EPO:
 					return "14";
-				case InsFilingCode.Indemnity:
+				case InsFilingCodeOld.Indemnity:
 					return "15";
-				case InsFilingCode.HMO_MedicareRisk:
+				case InsFilingCodeOld.HMO_MedicareRisk:
 					return "16";
-				case InsFilingCode.DMO:
+				case InsFilingCodeOld.DMO:
 					return "17";
-				case InsFilingCode.BCBS:
+				case InsFilingCodeOld.BCBS:
 					return "BL";
-				case InsFilingCode.Champus:
+				case InsFilingCodeOld.Champus:
 					return "CH";
-				case InsFilingCode.Commercial_Insurance:
+				case InsFilingCodeOld.Commercial_Insurance:
 					return "CI";
-				case InsFilingCode.Disability:
+				case InsFilingCodeOld.Disability:
 					return "DS";
-				case InsFilingCode.FEP:
+				case InsFilingCodeOld.FEP:
 					return "FI";
-				case InsFilingCode.HMO:
+				case InsFilingCodeOld.HMO:
 					return "HM";
-				case InsFilingCode.LiabilityMedical:
+				case InsFilingCodeOld.LiabilityMedical:
 					return "LM";
-				case InsFilingCode.MedicarePartB:
+				case InsFilingCodeOld.MedicarePartB:
 					return "MB";
-				case InsFilingCode.Medicaid:
+				case InsFilingCodeOld.Medicaid:
 					return "MC";
-				case InsFilingCode.ManagedCare_NonHMO:
+				case InsFilingCodeOld.ManagedCare_NonHMO:
 					return "MH";
-				case InsFilingCode.OtherFederalProgram:
+				case InsFilingCodeOld.OtherFederalProgram:
 					return "OF";
-				case InsFilingCode.SelfAdministered:
+				case InsFilingCodeOld.SelfAdministered:
 					return "SA";
-				case InsFilingCode.Veterans:
+				case InsFilingCodeOld.Veterans:
 					return "VA";
-				case InsFilingCode.WorkersComp:
+				case InsFilingCodeOld.WorkersComp:
 					return "WC";
-				case InsFilingCode.MutuallyDefined:
+				case InsFilingCodeOld.MutuallyDefined:
 					return "ZZ";
 				default:
 					return "CI";

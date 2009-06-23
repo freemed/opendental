@@ -286,7 +286,7 @@ namespace OpenDentBusiness {
 				plan.BenefitNotes   = PIn.PString(table.Rows[i][21].ToString());
 				plan.IsMedical      = PIn.PBool  (table.Rows[i][22].ToString());
 				plan.SubscNote      = PIn.PString(table.Rows[i][23].ToString());
-				plan.FilingCode     = (InsFilingCode)PIn.PInt(table.Rows[i][24].ToString());
+				plan.FilingCode     = (InsFilingCodeOld)PIn.PInt(table.Rows[i][24].ToString());
 				plan.DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());

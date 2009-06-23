@@ -1723,8 +1723,8 @@ namespace OpenDental{
 				}
 			}
 			comboFilingCode.Items.Clear();
-			for(int i=0;i<Enum.GetNames(typeof(InsFilingCode)).Length;i++) {
-				comboFilingCode.Items.Add(Enum.GetNames(typeof(InsFilingCode))[i]);
+			for(int i=0;i<Enum.GetNames(typeof(InsFilingCodeOld)).Length;i++) {
+				comboFilingCode.Items.Add(Enum.GetNames(typeof(InsFilingCodeOld))[i]);
 				if((int)PlanCur.FilingCode==i) {
 					comboFilingCode.SelectedIndex=i;
 				}
@@ -3786,7 +3786,7 @@ namespace OpenDental{
 			else{
 				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].FeeSchedNum;
 			}
-			PlanCur.FilingCode=(InsFilingCode)comboFilingCode.SelectedIndex;
+			PlanCur.FilingCode=(InsFilingCodeOld)comboFilingCode.SelectedIndex;
 			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
