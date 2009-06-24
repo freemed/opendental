@@ -553,7 +553,7 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD INDEX (InsPlan1)";
 				Db.NonQ(command);
-				command="ALTER TABLE apppointment ADD COLUMN InsPlan2 INT NOT NULL";
+				command="ALTER TABLE appointment ADD COLUMN InsPlan2 INT NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD INDEX (InsPlan2)";
 				Db.NonQ(command);
@@ -568,7 +568,16 @@ DROP TABLE IF EXISTS etAck";
 					INDEX(ItemOrder)
 					)";
 				Db.NonQ(command);
-
+				command="DROP TABLE IF EXISTS insfilingcodesubtype";
+				Db.NonQ(command);
+				command=@"CREATE TABLE insfilingcodesubtype (
+					InsFilingCodeSubtypeNum INT AUTO_INCREMENT,
+					InsFilingCodeNum INT,
+					Descript VARCHAR(255),
+					INDEX(InsFilingCodeNum),
+					PRIMARY KEY(InsFilingCodeSubtypeNum)
+					)";
+				Db.NonQ(command);
 
 
 				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";

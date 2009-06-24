@@ -360,6 +360,7 @@
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
+    <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
     <Compile Include="X12\X12Parse.cs" />
