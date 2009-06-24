@@ -81,6 +81,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\InsFilingCodeC.cs" />
+    <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Misc\AnestheticQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
@@ -357,6 +359,7 @@
     <Compile Include="Misc\ReplicationQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
+    <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
     <Compile Include="X12\X12Parse.cs" />

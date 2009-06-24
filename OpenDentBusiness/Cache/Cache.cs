@@ -109,6 +109,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(CovCats.RefreshCache());
 				ds.Tables.Add(CovSpans.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.InsFilingCodes) || isAll){
+				ds.Tables.Add(InsFilingCodes.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Languages) || isAll) {
 				ds.Tables.Add(Lans.RefreshCache());
 			}
@@ -258,6 +261,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll) {
 				FeeScheds.FillCache(ds.Tables["CovCat"]);
 				FeeScheds.FillCache(ds.Tables["CovSpan"]);
+			}
+			if(itypes.Contains((int)InvalidType.InsFilingCodes) || isAll){
+				InsFilingCodes.FillCache(ds.Tables["InsFilingCode"]);
 			}
 			if(itypes.Contains((int)InvalidType.Languages) || isAll) {
 				Lans.FillCache(ds.Tables["Language"]);

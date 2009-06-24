@@ -307,7 +307,9 @@ namespace OpenDentBusiness{
 		///<summary>45</summary>
 		ProviderIdents,
 		///<summary>46</summary>
-		ShutDownNow
+		ShutDownNow,
+		///<summary>47</summary>
+		InsFilingCodes,
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

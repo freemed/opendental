@@ -549,9 +549,23 @@ DROP TABLE IF EXISTS etAck";
 						+" WHERE PlanNum="+table.Rows[i][0].ToString();
 					Db.NonQ(command);
 				}
-
-
-
+				command="ALTER TABLE appointment ADD COLUMN InsPlan1 INT NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD INDEX (InsPlan1)";
+				Db.NonQ(command);
+				command="ALTER TABLE apppointment ADD COLUMN InsPlan2 INT NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE appointment ADD INDEX (InsPlan2)";
+				Db.NonQ(command);
+				command="CREATE TABLE insfilingcode ("
+					+"InsFilingCodeNum INT AUTO_INCREMENT,"
+					+"Descript VARCHAR(255),"
+					+"EclaimCode VARCHAR(100),"
+					+"ItemOrder INT,"
+					+"PRIMARY KEY(InsFilingCodeNum),"
+					+"INDEX(ItemOrder)"
+					+")";
+				Db.NonQ(command);
 
 
 
