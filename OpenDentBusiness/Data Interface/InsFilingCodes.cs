@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string c="SELECT * from insfilingcode ORDER BY ItemOrder";
+			string c="SELECT * FROM insfilingcode ORDER BY ItemOrder";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),c);
 			table.TableName="InsFilingCode";
 			FillCache(table);

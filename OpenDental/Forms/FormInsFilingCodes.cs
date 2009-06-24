@@ -208,6 +208,14 @@ namespace OpenDental{
 				butOK.Visible=false;
 				butNone.Visible=false;
 			}
+			//synch the itemorders just in case
+			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
+			  if(InsFilingCodeC.Listt[i].ItemOrder!=i) {
+			    InsFilingCodeC.Listt[i].ItemOrder=i;
+			    InsFilingCodes.WriteObject(InsFilingCodeC.Listt[i]);
+			    changed=true;
+			  }
+			}
 			FillGrid();
 			if(SelectedInsFilingCodeNum!=0) {
 				for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
@@ -217,35 +225,22 @@ namespace OpenDental{
 					}
 				}
 			}
-			//synch the itemorders just in case
-			bool outOfSynch=false;
-			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
-			  if(InsFilingCodeC.Listt[i].ItemOrder!=i) {
-			    InsFilingCodeC.Listt[i].ItemOrder=i;
-			    InsFilingCodes.WriteObject(InsFilingCodeC.Listt[i]);
-			    outOfSynch=true;
-			    changed=true;
-			  }
-			}
-			if(outOfSynch) {
-			  InsFilingCodes.RefreshCache();
-			}
 		}
 
 		private void FillGrid(){
 			InsFilingCodes.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableInsFilingCodes","EclaimCode"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableInsFilingCodes","Description"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableInsFilingCodes","Description"),130);
+			col=new ODGridColumn(Lan.g("TableInsFilingCodes","EclaimCode"),300);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<InsFilingCodeC.Listt.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(InsFilingCodeC.Listt[i].EclaimCode);
 				row.Cells.Add(InsFilingCodeC.Listt[i].Descript);
+				row.Cells.Add(InsFilingCodeC.Listt[i].EclaimCode);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -302,7 +297,7 @@ namespace OpenDental{
 			if(idx==0) {
 				return;
 			}
-			//swap the orders.  This makes it work no matter which types are being viewed.
+			//swap the orders.
 			int order1=InsFilingCodeC.Listt[idx-1].ItemOrder;
 			int order2=InsFilingCodeC.Listt[idx].ItemOrder;
 			InsFilingCodeC.Listt[idx-1].ItemOrder=order2;

@@ -557,14 +557,16 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD INDEX (InsPlan2)";
 				Db.NonQ(command);
-				command="CREATE TABLE insfilingcode ("
-					+"InsFilingCodeNum INT AUTO_INCREMENT,"
-					+"Descript VARCHAR(255),"
-					+"EclaimCode VARCHAR(100),"
-					+"ItemOrder INT,"
-					+"PRIMARY KEY(InsFilingCodeNum),"
-					+"INDEX(ItemOrder)"
-					+")";
+				command="DROP TABLE IF EXISTS insfilingcode";
+				Db.NonQ(command);
+				command=@"CREATE TABLE insfilingcode (
+					InsFilingCodeNum INT AUTO_INCREMENT,
+					Descript VARCHAR(255),
+					EclaimCode VARCHAR(100),
+					ItemOrder INT,
+					PRIMARY KEY(InsFilingCodeNum),
+					INDEX(ItemOrder)
+					)";
 				Db.NonQ(command);
 
 
