@@ -5,7 +5,7 @@ using OpenDentBusiness.DataAccess;
 namespace OpenDentBusiness{
 	///<summary>Stores the list of insurance filing code subtypes.</summary>
 	[DataObject("InsFilingCodeSubtype")]
-	public class Tablename : DataObjectBase{
+	public class InsFilingCodeSubtype : DataObjectBase{
 		[DataField("InsFilingCodeSubtypeNum",PrimaryKey=true,AutoNumber=true)]
 		private int insFilingCodeSubtypeNum;
 		private bool insFilingCodeSubtypeNumChanged;
@@ -42,8 +42,8 @@ namespace OpenDentBusiness{
 			get{return descriptChanged;}
 		}
 		
-		public Tablename Copy(){
-			return (Tablename)Clone();
+		public InsFilingCodeSubtype Copy(){
+			return (InsFilingCodeSubtype)Clone();
 		}	
 	}
 }

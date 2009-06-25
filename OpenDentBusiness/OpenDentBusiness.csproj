@@ -81,9 +81,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
+    <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
     <Compile Include="Misc\AnestheticQueries.cs" />
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />

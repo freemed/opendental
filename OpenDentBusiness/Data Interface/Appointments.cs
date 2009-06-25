@@ -332,7 +332,7 @@ namespace OpenDentBusiness{
 				+"pattern,confirmed,TimeLocked,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
 				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene,"//DateTStamp
-				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed) VALUES(";
+				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
 			if(includeAptNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
 			}
@@ -361,7 +361,9 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (appt.IsHygiene)+"', "
 				    +POut.PDateT (appt.DateTimeArrived)+", "
 				    +POut.PDateT (appt.DateTimeSeated)+", "
-				    +POut.PDateT (appt.DateTimeDismissed)+")";
+				    +POut.PDateT (appt.DateTimeDismissed)+", "
+				+"'"+POut.PInt		(appt.InsPlan1)+"', "
+				+"'"+POut.PInt		(appt.InsPlan2)+"')";
 				//DateTStamp
 			if(includeAptNum || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -506,6 +508,16 @@ namespace OpenDentBusiness{
 			if(appt.DateTimeDismissed!=oldApt.DateTimeDismissed){
 				if(comma) c+=",";
 				c+="DateTimeDismissed = "   +POut.PDateT(appt.DateTimeDismissed);
+				comma=true;
+			}
+			if(appt.InsPlan1!=oldApt.InsPlan1){
+				if(comma) c+=",";
+				c+="InsPlan1 = "+POut.PInt(appt.InsPlan1);
+				comma=true;
+			}
+			if(appt.InsPlan2!=oldApt.InsPlan1) {
+				if(comma) c+=",";
+				c+="InsPlan2 = "+POut.PInt(appt.InsPlan2);
 				comma=true;
 			}
 			if(!comma)
@@ -737,6 +749,8 @@ namespace OpenDentBusiness{
 				apt.DateTimeArrived=PIn.PDateT(table.Rows[i][24].ToString());
 				apt.DateTimeSeated =PIn.PDateT(table.Rows[i][25].ToString());
 				apt.DateTimeDismissed=PIn.PDateT(table.Rows[i][26].ToString());
+				apt.InsPlan1=PIn.PInt(table.Rows[i][27].ToString());
+				apt.InsPlan2=PIn.PInt(table.Rows[i][28].ToString());
 				list.Add(apt);
 			}
 			return list;

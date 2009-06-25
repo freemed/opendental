@@ -58,6 +58,10 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeSeated;
 		///<summary>The date and time that the patient got up out of the chair</summary>
 		public DateTime DateTimeDismissed;
+		///<summary>FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0.</summary>
+		public int InsPlan1;
+		///<summary>FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0.</summary>
+		public int InsPlan2;
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Copy(){

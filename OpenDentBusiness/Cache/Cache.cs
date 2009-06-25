@@ -111,6 +111,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.InsFilingCodes) || isAll){
 				ds.Tables.Add(InsFilingCodes.RefreshCache());
+				ds.Tables.Add(InsFilingCodeSubtypes.RefreshCache());
 			}
 			if(itypes.Contains((int)InvalidType.Languages) || isAll) {
 				ds.Tables.Add(Lans.RefreshCache());
@@ -264,6 +265,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.InsFilingCodes) || isAll){
 				InsFilingCodes.FillCache(ds.Tables["InsFilingCode"]);
+				InsFilingCodeSubtypes.FillCache(ds.Tables["InsFilingCodeSubtype"]);
 			}
 			if(itypes.Contains((int)InvalidType.Languages) || isAll) {
 				Lans.FillCache(ds.Tables["Language"]);

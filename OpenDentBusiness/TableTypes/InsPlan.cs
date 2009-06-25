@@ -69,6 +69,8 @@ namespace OpenDentBusiness{
 		public int MonthRenew;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;
+		///<summary>FK to insfilingcodesubtype.insfilingcodesubtypenum</summary>
+		public int FilingCodeSubtype;
 		
 
 		/*

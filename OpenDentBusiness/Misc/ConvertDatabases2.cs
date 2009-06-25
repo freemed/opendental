@@ -578,6 +578,9 @@ DROP TABLE IF EXISTS etAck";
 					PRIMARY KEY(InsFilingCodeSubtypeNum)
 					)";
 				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD COLUMN FilingCodeSubtype INT";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan ADD INDEX (FilingCodeSubtype)";
 
 
 				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";

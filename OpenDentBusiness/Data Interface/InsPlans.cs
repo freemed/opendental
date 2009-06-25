@@ -27,7 +27,8 @@ namespace OpenDentBusiness {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden,MonthRenew) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype"
+				+") VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -61,7 +62,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
 				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
 				+"'"+POut.PBool(plan.IsHidden)+"', "
-				+"'"+POut.PInt(plan.MonthRenew)+"')";
+				+"'"+POut.PInt(plan.MonthRenew)+"',"
+				+"'"+POut.PInt(plan.FilingCodeSubtype)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -108,6 +110,7 @@ namespace OpenDentBusiness {
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
 				+",MonthRenew='"     +POut.PInt(plan.MonthRenew)+"'"
+				+",FilingCodeSubtype='"		+POut.PInt(plan.FilingCodeSubtype)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			Db.NonQ(command);
 		}
@@ -293,6 +296,7 @@ namespace OpenDentBusiness {
 				plan.CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
 				plan.IsHidden       = PIn.PBool(table.Rows[i][29].ToString());
 				plan.MonthRenew     = PIn.PInt(table.Rows[i][30].ToString());
+				plan.FilingCodeSubtype = PIn.PInt(table.Rows[i][31].ToString());
 				planList.Add(plan);
 			}
 			return planList;
