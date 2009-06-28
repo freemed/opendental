@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Signals {
 		///<summary>Gets all Signals and Acks Since a given DateTime.  If it can't connect to the database, then it no longer throws an error, but instead returns a list of length 0.  Remeber that the supplied dateTime is server time.  This has to be accounted for.</summary>
-		public static List <Signal> RefreshTimed(DateTime sinceDateT) {
+		public static List<Signal> RefreshTimed(DateTime sinceDateT) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
@@ -32,9 +32,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This excludes all Invalids.  It is only concerned with text and button messages.  It includes all messages, whether acked or not.  It's up to the UI to filter out acked if necessary.  Also includes all unacked messages regardless of date.</summary>
-		public static ArrayList RefreshFullText(DateTime sinceDateT) {
+		public static List<Signal> RefreshFullText(DateTime sinceDateT) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),sinceDateT);
+				return Meth.GetObject<List<Signal>>(MethodBase.GetCurrentMethod(),sinceDateT);
 			}
 			string command="SELECT * FROM signal "
 				+"WHERE (SigDateTime>"+POut.PDateT(sinceDateT)+" "
@@ -54,8 +54,8 @@ namespace OpenDentBusiness{
 			for(int i=0;i<sigList.Count;i++) {
 				sigList[i].ElementList=SigElements.GetForSig(sigElementsAll,sigList[i].SignalNum);
 			}
-			ArrayList retVal=new ArrayList(sigList);
-			return retVal;
+			//ArrayList retVal=new ArrayList(sigList);
+			return sigList;//retVal;
 		}
 
 		///<summary>Only used when starting up to get the current button state.  Only gets unacked messages.  There may well be extra and useless messages included.  But only the lights will be used anyway, so it doesn't matter.</summary>

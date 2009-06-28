@@ -56,7 +56,7 @@ namespace OpenDental{
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
 		///<summary>Collection of Signals</summary>
-		private ArrayList SignalList;
+		private List<Signal> SignalList;
 		private SigElementDef[] sigElementDefUser;
 		private SigElementDef[] sigElementDefExtras;
 		private Label labelSending;
