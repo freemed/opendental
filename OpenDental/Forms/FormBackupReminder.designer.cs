@@ -80,7 +80,7 @@ namespace OpenDental{
 			this.checkA1.Name = "checkA1";
 			this.checkA1.Size = new System.Drawing.Size(200,20);
 			this.checkA1.TabIndex = 8;
-			this.checkA1.Text = "Online (Mozy, Carbonite, etc)";
+			this.checkA1.Text = "Online";
 			this.checkA1.UseVisualStyleBackColor = true;
 			// 
 			// label3
@@ -97,7 +97,7 @@ namespace OpenDental{
 			this.checkA2.Name = "checkA2";
 			this.checkA2.Size = new System.Drawing.Size(530,20);
 			this.checkA2.TabIndex = 9;
-			this.checkA2.Text = "Removable (external HD, USB drive, etc) (using manual, SyncBack, etc.)";
+			this.checkA2.Text = "Removable (external HD, USB drive, etc)";
 			this.checkA2.UseVisualStyleBackColor = true;
 			// 
 			// checkA4
