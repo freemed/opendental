@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using OpenDentBusiness;
@@ -40,6 +41,10 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto) {
 			string result=SendAndReceive(dto);
+			if(Regex.IsMatch(result,"<DtoException xmlns:xsi=")) {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
 			try {
 				return XmlConverter.XmlToDs(result);
 			}
