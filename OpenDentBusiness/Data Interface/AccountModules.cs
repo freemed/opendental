@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled,bool showProcBreakdown,bool showNotes){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled);
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled,showProcBreakdown,showNotes);
 			} 
 			fam=Patients.GetFamily(patNum);
 			if(intermingled){

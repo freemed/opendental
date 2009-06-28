@@ -549,11 +549,11 @@ DROP TABLE IF EXISTS etAck";
 						+" WHERE PlanNum="+table.Rows[i][0].ToString();
 					Db.NonQ(command);
 				}
-				command="ALTER TABLE appointment ADD COLUMN InsPlan1 INT NOT NULL";
+				command="ALTER TABLE appointment ADD InsPlan1 INT NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD INDEX (InsPlan1)";
 				Db.NonQ(command);
-				command="ALTER TABLE appointment ADD COLUMN InsPlan2 INT NOT NULL";
+				command="ALTER TABLE appointment ADD InsPlan2 INT NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE appointment ADD INDEX (InsPlan2)";
 				Db.NonQ(command);
@@ -578,9 +578,19 @@ DROP TABLE IF EXISTS etAck";
 					PRIMARY KEY(InsFilingCodeSubtypeNum)
 					)";
 				Db.NonQ(command);
-				command="ALTER TABLE insplan ADD COLUMN FilingCodeSubtype INT";
+				command="ALTER TABLE insplan ADD FilingCodeSubtype INT NOT NULL";
 				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD INDEX (FilingCodeSubtype)";
+				Db.NonQ(command);
+
+
+
+
+
+
+
+
+
 
 
 				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";
