@@ -173,6 +173,9 @@ namespace OpenDental{
 				return;
 			}
 			if(program.ProgName=="eClinicalWorks") {
+				if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+					return;
+				}
 				FormEClinicalWorks FormECW=new FormEClinicalWorks();
 				FormECW.ProgramCur=program;
 				FormECW.ShowDialog();

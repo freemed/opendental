@@ -299,6 +299,12 @@ namespace OpenDental{
 		}
 
 		private void checkEnabled_Click(object sender,EventArgs e) {
+			//security already checked when launching this form.  Only admin allowed.
+			if(Security.CurUser.Password != "") {
+				MsgBox.Show(this,"Admin password must be blank before this change can be made.");
+				checkEnabled.Checked=!checkEnabled.Checked;
+				return;
+			}
 			MsgBox.Show(this,"You will need to restart Open Dental to see the effects.");
 		}
 

@@ -560,6 +560,9 @@ namespace OpenDental{
 			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
 			}
+			if(Security.CurUser.UserNum==user.UserNum) {
+				Security.CurUser=FormU.UserCur;//if user changed their own password, this keeps the CurUser synched.  Needed for eCW bridge.
+			}
 			FillUsers();
 			for(int i=0;i<table.Rows.Count;i++){
 				if(table.Rows[i]["UserNum"].ToString()==FormU.UserCur.UserNum.ToString()){
