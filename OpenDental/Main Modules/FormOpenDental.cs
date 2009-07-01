@@ -1266,7 +1266,6 @@ namespace OpenDental{
 				Splash.Dispose();
 				return;
 			}
-			//This next line used to read InvalidTypes.AllLocal-InvalidTypes.Prefs.  But we can't really do that now.
 			if(Programs.IsEnabled("eClinicalWorks")){
 				Splash.Dispose();
 			}
@@ -1455,117 +1454,6 @@ namespace OpenDental{
 			}
 			Cache.RefreshCache(itypesStr);
 			RefreshLocalDataPostCleanup(itypeList,isAll,itypes);
-			/*
-			if(itypeList.Contains((int)InvalidType.Prefs) || isAll){
-				//all moved to RefreshLocalDataPostCleanup
-			}
-			if(itypeList.Contains((int)InvalidType.AccountingAutoPays) || isAll) {
-				AccountingAutoPays.RefreshCache();
-			}
-			if(itypeList.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
-				AutoCodes.RefreshCache();
-				AutoCodeItems.RefreshCache();
-				AutoCodeConds.RefreshCache();
-				ProcButtons.Refresh();
-				ProcButtonItems.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Carriers) || isAll){
-				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
-			}
-			if(itypeList.Contains((int)InvalidType.ClaimForms) || isAll){
-				ClaimFormItems.RefreshCache();
-				ClaimForms.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.ClearHouses) || isAll){
-				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Computers) || isAll){
-				Computers.Refresh();
-				Printers.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Defs) || isAll){
-			//if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
-				//Defs_client.RefreshClient();
-			}
-			if(itypeList.Contains((int)InvalidType.DentalSchools) || isAll){
-				SchoolClasses.Refresh();
-				SchoolCourses.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.DisplayFields) || isAll) {
-				//DisplayFields.RefreshCache();
-			}
-			if(itypeList.Contains((int)InvalidType.Email) || isAll){
-			//if((itypes & InvalidTypes.Email)==InvalidTypes.Email){
-				EmailTemplates.Refresh();
-				DiseaseDefs.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Employees) || isAll){
-				Employees.Refresh();
-				PayPeriods.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Fees) || isAll){
-				Fees.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.InsCats) || isAll){
-				CovCatL.Refresh();
-				CovSpans.RefreshCache();
-			}
-			if(itypeList.Contains((int)InvalidType.Letters) || isAll){
-				Letters.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.LetterMerge) || isAll){
-				LetterMergeFields.Refresh();
-				LetterMerges.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Operatories) || isAll){
-				//Operatory_client.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.PatFields) || isAll) {
-				PatFieldDefs.Refresh();
-			}
-			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
-
-			//}
-			if(itypeList.Contains((int)InvalidType.ProcCodes) || isAll){
-				//ProcedureCodes.Refresh();
-				ProcCodeNotes.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Programs) || isAll){
-				//
-			}
-			if(itypeList.Contains((int)InvalidType.Providers) || isAll){
-				//Provider_client.RefreshOnClient();
-				ProviderIdents.Refresh();
-				Clinics.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.QuickPaste) || isAll){
-				QuickPasteNotes.Refresh();
-				QuickPasteCats.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Security) || isAll){
-				//Userod_client.Refresh();
-				UserGroups.Refresh();
-				GroupPermissions.RefreshCache();
-			}
-			if(itypeList.Contains((int)InvalidType.Signals) || isAll) {
-				SigElementDefs.Refresh();
-				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
-			}
-			if(itypeList.Contains((int)InvalidType.Startup) || isAll){
-				Employers.Refresh();//only needed when opening the prog. After that, automated.
-				ElectIDs.Refresh();//only run on startup
-				Referrals.Refresh();//Referrals are also refreshed dynamically.
-			}
-			//InvalidTypes.Tasks not handled here.
-			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll){
-				ToolButItems.Refresh();
-			}
-			if(itypeList.Contains((int)InvalidType.Views) || isAll){
-				AppointmentRules.RefreshCache();
-			}
-			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
-				ZipCodes.Refresh();
-			}*/
 		}
 
 		///<summary>Performs a few tasks that must be done when local data is changed.</summary>
@@ -1694,7 +1582,12 @@ namespace OpenDental{
 					myOutlookBar.Buttons[0].Visible=false;
 					myOutlookBar.Buttons[1].Visible=false;
 					myOutlookBar.Buttons[2].Visible=false;
-					myOutlookBar.Buttons[5].Visible=false;
+					if(ProgramProperties.GetPropVal("eClinicalWorks","ShowImagesModule")=="1") {
+						myOutlookBar.Buttons[5].Visible=true;
+					}
+					else {
+						myOutlookBar.Buttons[5].Visible=false;
+					}
 					myOutlookBar.Buttons[6].Visible=false;
 				}
 			}

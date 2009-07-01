@@ -35,6 +35,7 @@ namespace OpenDental{
 		private Label label5;
 		private Label label6;
 		private ComboBox comboDefaultUserGroup;
+		private CheckBox checkShowImages;
 		private Label label3;
 
 		///<summary></summary>
@@ -85,6 +86,7 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.comboDefaultUserGroup = new System.Windows.Forms.ComboBox();
+			this.checkShowImages = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -97,7 +99,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(524,271);
+			this.butCancel.Location = new System.Drawing.Point(524,269);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -112,7 +114,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443,271);
+			this.butOK.Location = new System.Drawing.Point(443,269);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -236,11 +238,24 @@ namespace OpenDental{
 			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215,21);
 			this.comboDefaultUserGroup.TabIndex = 54;
 			// 
+			// checkShowImages
+			// 
+			this.checkShowImages.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowImages.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowImages.Location = new System.Drawing.Point(60,229);
+			this.checkShowImages.Name = "checkShowImages";
+			this.checkShowImages.Size = new System.Drawing.Size(199,18);
+			this.checkShowImages.TabIndex = 55;
+			this.checkShowImages.Text = "Show Images Module";
+			this.checkShowImages.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowImages.Click += new System.EventHandler(this.checkShowImages_Click);
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(611,307);
+			this.ClientSize = new System.Drawing.Size(611,305);
+			this.Controls.Add(this.checkShowImages);
 			this.Controls.Add(this.comboDefaultUserGroup);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.groupBox1);
@@ -287,6 +302,7 @@ namespace OpenDental{
 					comboDefaultUserGroup.SelectedIndex=i;
 				}
 			}
+			checkShowImages.Checked=GetProp("ShowImagesModule")=="1";
 		}
 
 		private string GetProp(string desc){
@@ -308,6 +324,10 @@ namespace OpenDental{
 			MsgBox.Show(this,"You will need to restart Open Dental to see the effects.");
 		}
 
+		private void checkShowImages_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"You will need to restart Open Dental to see the effects.");
+		}
+
 		private bool SaveToDb(){
 			if(textProgDesc.Text==""){
 				MessageBox.Show("Description may not be blank.");
@@ -324,6 +344,12 @@ namespace OpenDental{
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderOut",textHL7FolderOut.Text);
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
 				UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
+			if(checkShowImages.Checked) {
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
+			}
+			else {
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","0");
+			}
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
 		}
@@ -342,6 +368,8 @@ namespace OpenDental{
 		private void FormProgramLinkEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			
 		}
+
+	
 
 	
 

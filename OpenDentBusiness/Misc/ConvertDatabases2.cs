@@ -582,6 +582,14 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD INDEX (FilingCodeSubtype)";
 				Db.NonQ(command);
+				command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
+				int programNum=PIn.PInt(Db.GetScalar(command));
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.PInt(programNum)+"', "
+					+"'ShowImagesModule', "
+					+"'0')";
+				Db.NonQ(command);
 
 
 
