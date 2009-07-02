@@ -35,11 +35,13 @@
 			this.menuItemWrapUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemOfflineAssist = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemUnavailable = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemLunch = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemHome = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemBreak = new System.Windows.Forms.ToolStripMenuItem();
+			this.labelMsg = new System.Windows.Forms.Label();
+			this.timerMsgs = new System.Windows.Forms.Timer(this.components);
 			this.butOverride = new OpenDental.UI.Button();
 			this.gridEmp = new OpenDental.UI.ODGrid();
-			this.menuItemHome = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItemLunch = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuNumbers.SuspendLayout();
 			this.menuStatus.SuspendLayout();
 			this.SuspendLayout();
@@ -55,19 +57,19 @@
             this.menuItemManage,
             this.menuItemAdd});
 			this.menuNumbers.Name = "contextMenuStrip1";
-			this.menuNumbers.Size = new System.Drawing.Size(281,48);
+			this.menuNumbers.Size = new System.Drawing.Size(291,48);
 			// 
 			// menuItemManage
 			// 
 			this.menuItemManage.Name = "menuItemManage";
-			this.menuItemManage.Size = new System.Drawing.Size(280,22);
+			this.menuItemManage.Size = new System.Drawing.Size(290,22);
 			this.menuItemManage.Text = "Manage Phone Numbers";
 			this.menuItemManage.Click += new System.EventHandler(this.menuItemManage_Click);
 			// 
 			// menuItemAdd
 			// 
 			this.menuItemAdd.Name = "menuItemAdd";
-			this.menuItemAdd.Size = new System.Drawing.Size(280,22);
+			this.menuItemAdd.Size = new System.Drawing.Size(290,22);
 			this.menuItemAdd.Text = "Attach Phone Number to Current Patient";
 			this.menuItemAdd.Click += new System.EventHandler(this.menuItemAdd_Click);
 			// 
@@ -84,56 +86,86 @@
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(153,224);
+			this.menuStatus.Size = new System.Drawing.Size(141,202);
 			// 
 			// menuItemAvailable
 			// 
 			this.menuItemAvailable.Name = "menuItemAvailable";
-			this.menuItemAvailable.Size = new System.Drawing.Size(152,22);
+			this.menuItemAvailable.Size = new System.Drawing.Size(140,22);
 			this.menuItemAvailable.Text = "Available";
 			this.menuItemAvailable.Click += new System.EventHandler(this.menuItemAvailable_Click);
 			// 
 			// menuItemTraining
 			// 
 			this.menuItemTraining.Name = "menuItemTraining";
-			this.menuItemTraining.Size = new System.Drawing.Size(152,22);
+			this.menuItemTraining.Size = new System.Drawing.Size(140,22);
 			this.menuItemTraining.Text = "Training";
 			this.menuItemTraining.Click += new System.EventHandler(this.menuItemTraining_Click);
 			// 
 			// menuItemTeamAssist
 			// 
 			this.menuItemTeamAssist.Name = "menuItemTeamAssist";
-			this.menuItemTeamAssist.Size = new System.Drawing.Size(152,22);
+			this.menuItemTeamAssist.Size = new System.Drawing.Size(140,22);
 			this.menuItemTeamAssist.Text = "TeamAssist";
 			this.menuItemTeamAssist.Click += new System.EventHandler(this.menuItemTeamAssist_Click);
 			// 
 			// menuItemWrapUp
 			// 
 			this.menuItemWrapUp.Name = "menuItemWrapUp";
-			this.menuItemWrapUp.Size = new System.Drawing.Size(152,22);
+			this.menuItemWrapUp.Size = new System.Drawing.Size(140,22);
 			this.menuItemWrapUp.Text = "WrapUp";
 			this.menuItemWrapUp.Click += new System.EventHandler(this.menuItemWrapUp_Click);
 			// 
 			// menuItemOfflineAssist
 			// 
 			this.menuItemOfflineAssist.Name = "menuItemOfflineAssist";
-			this.menuItemOfflineAssist.Size = new System.Drawing.Size(152,22);
+			this.menuItemOfflineAssist.Size = new System.Drawing.Size(140,22);
 			this.menuItemOfflineAssist.Text = "OfflineAssist";
 			this.menuItemOfflineAssist.Click += new System.EventHandler(this.menuItemOfflineAssist_Click);
 			// 
 			// menuItemUnavailable
 			// 
 			this.menuItemUnavailable.Name = "menuItemUnavailable";
-			this.menuItemUnavailable.Size = new System.Drawing.Size(152,22);
+			this.menuItemUnavailable.Size = new System.Drawing.Size(140,22);
 			this.menuItemUnavailable.Text = "Unavailable";
 			this.menuItemUnavailable.Click += new System.EventHandler(this.menuItemUnavailable_Click);
+			// 
+			// menuItemLunch
+			// 
+			this.menuItemLunch.Name = "menuItemLunch";
+			this.menuItemLunch.Size = new System.Drawing.Size(140,22);
+			this.menuItemLunch.Text = "Lunch";
+			this.menuItemLunch.Click += new System.EventHandler(this.menuItemLunch_Click);
+			// 
+			// menuItemHome
+			// 
+			this.menuItemHome.Name = "menuItemHome";
+			this.menuItemHome.Size = new System.Drawing.Size(140,22);
+			this.menuItemHome.Text = "Home";
+			this.menuItemHome.Click += new System.EventHandler(this.menuItemHome_Click);
 			// 
 			// menuItemBreak
 			// 
 			this.menuItemBreak.Name = "menuItemBreak";
-			this.menuItemBreak.Size = new System.Drawing.Size(152,22);
+			this.menuItemBreak.Size = new System.Drawing.Size(140,22);
 			this.menuItemBreak.Text = "Break";
 			this.menuItemBreak.Click += new System.EventHandler(this.menuItemBreak_Click);
+			// 
+			// labelMsg
+			// 
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelMsg.Location = new System.Drawing.Point(180,2);
+			this.labelMsg.Name = "labelMsg";
+			this.labelMsg.Size = new System.Drawing.Size(198,20);
+			this.labelMsg.TabIndex = 25;
+			this.labelMsg.Text = "Phone Messages: 0";
+			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// timerMsgs
+			// 
+			this.timerMsgs.Interval = 3000;
+			this.timerMsgs.Tick += new System.EventHandler(this.timerMsgs_Tick);
 			// 
 			// butOverride
 			// 
@@ -164,24 +196,11 @@
 			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
 			this.gridEmp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridEmp_MouseUp);
 			// 
-			// menuItemHome
-			// 
-			this.menuItemHome.Name = "menuItemHome";
-			this.menuItemHome.Size = new System.Drawing.Size(152,22);
-			this.menuItemHome.Text = "Home";
-			this.menuItemHome.Click += new System.EventHandler(this.menuItemHome_Click);
-			// 
-			// menuItemLunch
-			// 
-			this.menuItemLunch.Name = "menuItemLunch";
-			this.menuItemLunch.Size = new System.Drawing.Size(152,22);
-			this.menuItemLunch.Text = "Lunch";
-			this.menuItemLunch.Click += new System.EventHandler(this.menuItemLunch_Click);
-			// 
 			// UserControlPhonePanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butOverride);
 			this.Controls.Add(this.gridEmp);
 			this.Name = "UserControlPhonePanel";
@@ -211,5 +230,7 @@
 		private System.Windows.Forms.ToolStripMenuItem menuItemBreak;
 		private System.Windows.Forms.ToolStripMenuItem menuItemLunch;
 		private System.Windows.Forms.ToolStripMenuItem menuItemHome;
+		private System.Windows.Forms.Label labelMsg;
+		private System.Windows.Forms.Timer timerMsgs;
 	}
 }

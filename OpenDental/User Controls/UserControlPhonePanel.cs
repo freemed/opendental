@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -20,6 +21,8 @@ namespace OpenDental {
 		private int colI;
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
+		private int msgCount;
+		string pathPhoneMsg=@"\\asterisk\Voicemail\default\998\INBOXx";
 
 		public UserControlPhonePanel() {
 			InitializeComponent();
@@ -27,8 +30,54 @@ namespace OpenDental {
 
 		private void UserControlPhonePanel_Load(object sender,EventArgs e) {
 			timer1.Enabled=true;
+			timerMsgs.Enabled=true;
+			SetLabelMsg();
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			FillEmps();
+			//look for phone messages
+			/*
+			string pathPhoneMsg=@"\\asterisk\Voicemail\default\998\INBOX";
+			if(!Directory.Exists(pathPhoneMsg)) {
+				MessageBox.Show("Could not find voicemail path: "+pathPhoneMsg);
+				return;
+			}
+			FileSystemWatcher watcher=new FileSystemWatcher(pathPhoneMsg,"*.txt");
+			watcher.Created += new FileSystemEventHandler(OnCreated);
+			watcher.Deleted +=new FileSystemEventHandler(OnDeleted);
+			watcher.EnableRaisingEvents=true;
+			//set initial value
+			msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
+			SetLabelMsg();*/
+		}
+
+		/*
+		private void OnCreated(object source,FileSystemEventArgs e) {
+			msgCount++;
+			SetLabelMsg();
+		}
+
+		private void OnDeleted(object source,FileSystemEventArgs e) {
+			msgCount--;
+			SetLabelMsg();
+		}*/
+
+		private void SetLabelMsg() {
+			if(Directory.Exists(pathPhoneMsg)) {
+				msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
+			}
+			else {
+				msgCount=0;
+			}
+			if(msgCount==0) {
+				labelMsg.Text="Phone Messages: 0";
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+				labelMsg.ForeColor=Color.Black;
+			}
+			else {
+				labelMsg.Text="Phone Messages: "+msgCount.ToString();
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+				labelMsg.ForeColor=Color.Firebrick;
+			}
 		}
 
 		protected void OnGoToChanged() {
@@ -122,6 +171,11 @@ namespace OpenDental {
 			//For now, happens once per 1.6 seconds regardless of phone activity.
 			//This might need improvement.
 			FillEmps();
+		}
+
+		private void timerMsgs_Tick(object sender,EventArgs e) {
+			//every 3 sec.
+			SetLabelMsg();
 		}
 
 		private void butOverride_Click(object sender,EventArgs e) {
@@ -396,6 +450,8 @@ namespace OpenDental {
 			Employees.Update(EmpCur);
 			return true;
 		}
+
+		
 
 		
 
