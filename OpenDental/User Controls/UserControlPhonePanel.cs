@@ -22,7 +22,7 @@ namespace OpenDental {
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
 		private int msgCount;
-		string pathPhoneMsg=@"\\asterisk\Voicemail\default\998\INBOXx";
+		string pathPhoneMsg=@"\\asterisk\Voicemail\default\998\INBOX";
 
 		public UserControlPhonePanel() {
 			InitializeComponent();
@@ -62,12 +62,13 @@ namespace OpenDental {
 		}*/
 
 		private void SetLabelMsg() {
-			if(Directory.Exists(pathPhoneMsg)) {
-				msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
+			if(!Directory.Exists(pathPhoneMsg)) {
+				labelMsg.Text="msg path not found";
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+				labelMsg.ForeColor=Color.Black;
+				return;
 			}
-			else {
-				msgCount=0;
-			}
+			msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
 			if(msgCount==0) {
 				labelMsg.Text="Phone Messages: 0";
 				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
