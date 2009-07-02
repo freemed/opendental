@@ -3019,6 +3019,9 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
 			ToolBarMain.Buttons.Add(button);
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
+			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -3137,6 +3140,9 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = false;
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					ToolBarMain.Buttons["Commlog"].Enabled=false;
+				}
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3158,6 +3164,9 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled=true;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = true;
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					ToolBarMain.Buttons["Commlog"].Enabled=true;
+				}
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
@@ -3229,6 +3238,9 @@ namespace OpenDental{
 						break;
 					case "Consent":
 						OnConsent_Click();
+						break;
+					case "Commlog"://only for eCW
+						OnCommlog_Click();
 						break;
 				}
 			}
@@ -3304,6 +3316,23 @@ namespace OpenDental{
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
+		}
+
+		///<summary>Only used for eCW.  Everyone else has the commlog button up in the main toolbar.</summary>
+		private void OnCommlog_Click() {
+			Commlog CommlogCur = new Commlog();
+			CommlogCur.PatNum = PatCur.PatNum;
+			CommlogCur.CommDateTime = DateTime.Now;
+			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI = new FormCommItem(CommlogCur);
+			FormCI.IsNew = true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult == DialogResult.OK) {
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {
