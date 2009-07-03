@@ -264,6 +264,10 @@ namespace OpenDental{
 		private RadioButton radioEntryCn;
 		private CheckBox checkShowCn;
 		private int Chartscrollval;
+		private OpenDental.UI.Button butECWdown;
+		private OpenDental.UI.Button butECWup;
+		private WebBrowser webBrowser1;
+		private Panel panelEcw;
 		private bool InitializedOnStartup;
 	
 		///<summary></summary>
@@ -414,6 +418,10 @@ namespace OpenDental{
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.toothChart = new SparksToothChart.GraphicalToothChart();
+			this.panelEcw = new System.Windows.Forms.Panel();
+			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+			this.butECWdown = new OpenDental.UI.Button();
+			this.butECWup = new OpenDental.UI.Button();
 			this.butForeignKey = new OpenDental.UI.Button();
 			this.butAddKey = new OpenDental.UI.Button();
 			this.butBig = new OpenDental.UI.Button();
@@ -507,6 +515,7 @@ namespace OpenDental{
 			this.groupBox6.SuspendLayout();
 			this.tabDraw.SuspendLayout();
 			this.groupBox8.SuspendLayout();
+			this.panelEcw.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textSurf
@@ -935,10 +944,10 @@ namespace OpenDental{
 			this.panelImages.Controls.Add(this.listViewImages);
 			this.panelImages.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panelImages.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.panelImages.Location = new System.Drawing.Point(0,524);
+			this.panelImages.Location = new System.Drawing.Point(0,592);
 			this.panelImages.Name = "panelImages";
 			this.panelImages.Padding = new System.Windows.Forms.Padding(0,4,0,0);
-			this.panelImages.Size = new System.Drawing.Size(939,157);
+			this.panelImages.Size = new System.Drawing.Size(939,89);
 			this.panelImages.TabIndex = 186;
 			this.panelImages.Visible = false;
 			this.panelImages.MouseLeave += new System.EventHandler(this.panelImages_MouseLeave);
@@ -956,7 +965,7 @@ namespace OpenDental{
 			this.listViewImages.Location = new System.Drawing.Point(0,4);
 			this.listViewImages.MultiSelect = false;
 			this.listViewImages.Name = "listViewImages";
-			this.listViewImages.Size = new System.Drawing.Size(937,151);
+			this.listViewImages.Size = new System.Drawing.Size(937,83);
 			this.listViewImages.TabIndex = 0;
 			this.listViewImages.UseCompatibleStateImageBehavior = false;
 			this.listViewImages.DoubleClick += new System.EventHandler(this.listViewImages_DoubleClick);
@@ -1094,7 +1103,7 @@ namespace OpenDental{
 			this.tabMissing.Location = new System.Drawing.Point(4,22);
 			this.tabMissing.Name = "tabMissing";
 			this.tabMissing.Padding = new System.Windows.Forms.Padding(3);
-			this.tabMissing.Size = new System.Drawing.Size(516,235);
+			this.tabMissing.Size = new System.Drawing.Size(516,233);
 			this.tabMissing.TabIndex = 1;
 			this.tabMissing.Text = "Missing Teeth";
 			this.tabMissing.UseVisualStyleBackColor = true;
@@ -1146,7 +1155,7 @@ namespace OpenDental{
 			this.tabMovements.Controls.Add(this.groupBox3);
 			this.tabMovements.Location = new System.Drawing.Point(4,22);
 			this.tabMovements.Name = "tabMovements";
-			this.tabMovements.Size = new System.Drawing.Size(516,235);
+			this.tabMovements.Size = new System.Drawing.Size(516,233);
 			this.tabMovements.TabIndex = 3;
 			this.tabMovements.Text = "Movements";
 			this.tabMovements.UseVisualStyleBackColor = true;
@@ -1264,7 +1273,7 @@ namespace OpenDental{
 			this.tabPrimary.Controls.Add(this.butAllPerm);
 			this.tabPrimary.Location = new System.Drawing.Point(4,22);
 			this.tabPrimary.Name = "tabPrimary";
-			this.tabPrimary.Size = new System.Drawing.Size(516,235);
+			this.tabPrimary.Size = new System.Drawing.Size(516,233);
 			this.tabPrimary.TabIndex = 2;
 			this.tabPrimary.Text = "Primary";
 			this.tabPrimary.UseVisualStyleBackColor = true;
@@ -1290,7 +1299,7 @@ namespace OpenDental{
 			this.tabPlanned.Controls.Add(this.checkDone);
 			this.tabPlanned.Location = new System.Drawing.Point(4,22);
 			this.tabPlanned.Name = "tabPlanned";
-			this.tabPlanned.Size = new System.Drawing.Size(516,235);
+			this.tabPlanned.Size = new System.Drawing.Size(516,233);
 			this.tabPlanned.TabIndex = 4;
 			this.tabPlanned.Text = "Planned Appts";
 			this.tabPlanned.UseVisualStyleBackColor = true;
@@ -1310,7 +1319,7 @@ namespace OpenDental{
 			this.tabShow.Controls.Add(this.butShowNone);
 			this.tabShow.Location = new System.Drawing.Point(4,22);
 			this.tabShow.Name = "tabShow";
-			this.tabShow.Size = new System.Drawing.Size(516,235);
+			this.tabShow.Size = new System.Drawing.Size(516,233);
 			this.tabShow.TabIndex = 5;
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
@@ -1474,7 +1483,7 @@ namespace OpenDental{
 			this.tabDraw.Controls.Add(this.radioPointer);
 			this.tabDraw.Location = new System.Drawing.Point(4,22);
 			this.tabDraw.Name = "tabDraw";
-			this.tabDraw.Size = new System.Drawing.Size(516,235);
+			this.tabDraw.Size = new System.Drawing.Size(516,233);
 			this.tabDraw.TabIndex = 6;
 			this.tabDraw.Text = "Draw";
 			this.tabDraw.UseVisualStyleBackColor = true;
@@ -1775,6 +1784,61 @@ namespace OpenDental{
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
+			// panelEcw
+			// 
+			this.panelEcw.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelEcw.Controls.Add(this.webBrowser1);
+			this.panelEcw.Controls.Add(this.butECWdown);
+			this.panelEcw.Controls.Add(this.butECWup);
+			this.panelEcw.Location = new System.Drawing.Point(444,521);
+			this.panelEcw.Name = "panelEcw";
+			this.panelEcw.Size = new System.Drawing.Size(373,65);
+			this.panelEcw.TabIndex = 197;
+			// 
+			// webBrowser1
+			// 
+			this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.webBrowser1.Location = new System.Drawing.Point(1,11);
+			this.webBrowser1.MinimumSize = new System.Drawing.Size(20,20);
+			this.webBrowser1.Name = "webBrowser1";
+			this.webBrowser1.Size = new System.Drawing.Size(370,52);
+			this.webBrowser1.TabIndex = 198;
+			this.webBrowser1.Url = new System.Uri("http://www.eclinicalworks.com/",System.UriKind.Absolute);
+			// 
+			// butECWdown
+			// 
+			this.butECWdown.AdjustImageLocation = new System.Drawing.Point(0,-1);
+			this.butECWdown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butECWdown.Autosize = true;
+			this.butECWdown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butECWdown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butECWdown.CornerRadius = 2F;
+			this.butECWdown.Image = global::OpenDental.Properties.Resources.arrowDownTriangle;
+			this.butECWdown.Location = new System.Drawing.Point(321,1);
+			this.butECWdown.Name = "butECWdown";
+			this.butECWdown.Size = new System.Drawing.Size(24,9);
+			this.butECWdown.TabIndex = 197;
+			this.butECWdown.UseVisualStyleBackColor = true;
+			this.butECWdown.Click += new System.EventHandler(this.butECWdown_Click);
+			// 
+			// butECWup
+			// 
+			this.butECWup.AdjustImageLocation = new System.Drawing.Point(0,-1);
+			this.butECWup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butECWup.Autosize = true;
+			this.butECWup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butECWup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butECWup.CornerRadius = 2F;
+			this.butECWup.Image = global::OpenDental.Properties.Resources.arrowUpTriangle;
+			this.butECWup.Location = new System.Drawing.Point(346,1);
+			this.butECWup.Name = "butECWup";
+			this.butECWup.Size = new System.Drawing.Size(24,9);
+			this.butECWup.TabIndex = 196;
+			this.butECWup.UseVisualStyleBackColor = true;
+			this.butECWup.Click += new System.EventHandler(this.butECWup_Click);
+			// 
 			// butForeignKey
 			// 
 			this.butForeignKey.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1818,7 +1882,7 @@ namespace OpenDental{
 			this.butBig.CornerRadius = 4F;
 			this.butBig.Location = new System.Drawing.Point(375,26);
 			this.butBig.Name = "butBig";
-			this.butBig.Size = new System.Drawing.Size(35,23);
+			this.butBig.Size = new System.Drawing.Size(35,21);
 			this.butBig.TabIndex = 191;
 			this.butBig.Text = "Big";
 			this.butBig.Click += new System.EventHandler(this.butBig_Click);
@@ -2684,7 +2748,7 @@ namespace OpenDental{
 			this.gridPlanned.Name = "gridPlanned";
 			this.gridPlanned.ScrollValue = 0;
 			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridPlanned.Size = new System.Drawing.Size(516,210);
+			this.gridPlanned.Size = new System.Drawing.Size(516,208);
 			this.gridPlanned.TabIndex = 193;
 			this.gridPlanned.Title = "Planned Appointments";
 			this.gridPlanned.TranslationName = "TablePlannedAppts";
@@ -2832,6 +2896,7 @@ namespace OpenDental{
 			// 
 			// ContrChart
 			// 
+			this.Controls.Add(this.panelEcw);
 			this.Controls.Add(this.butForeignKey);
 			this.Controls.Add(this.butAddKey);
 			this.Controls.Add(this.butBig);
@@ -2871,6 +2936,7 @@ namespace OpenDental{
 			this.groupBox6.ResumeLayout(false);
 			this.tabDraw.ResumeLayout(false);
 			this.groupBox8.ResumeLayout(false);
+			this.panelEcw.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -2888,6 +2954,12 @@ namespace OpenDental{
 		private void ContrChart_Resize(object sender,EventArgs e) {
 			if(!ProgramC.HListIsNull() && Programs.IsEnabled("eClinicalWorks")) {
 				gridProg.Width=524;
+				if(panelImages.Visible) {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
+				}
+				else {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
+				}
 				return;
 			}
 			if(gridProg.Columns !=null && gridProg.Columns.Count>0){
@@ -2921,7 +2993,34 @@ namespace OpenDental{
 			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
 			tabProc.SelectedIndex=0;
 			tabProc.Height=259;
-			//moved these two lines to InitializeLocalData:
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				toothChart.Location=new Point(524+2,26);
+				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
+				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
+				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
+				gridPtInfo.Visible=false;
+				panelEcw.Visible=true;
+				panelEcw.Location=new Point(524+2,textTreatmentNotes.Bottom+1);
+				panelEcw.Size=new Size(411,tabControlImages.Top-panelEcw.Top+1);
+				butECWdown.Location=butECWup.Location;//they will be at the same location, but just hide one or the other.
+				butECWdown.Visible=false;
+				tabProc.Location=new Point(0,28);
+				gridProg.Location=new Point(0,tabProc.Bottom+2);
+				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
+			}
+			else {//normal:
+				toothChart.Location=new Point(0,26);
+				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
+				textTreatmentNotes.Location=new Point(0,toothChart.Bottom+1);
+				textTreatmentNotes.Size=new Size(411,71);
+				gridPtInfo.Visible=true;
+				gridPtInfo.Location=new Point(0,textTreatmentNotes.Bottom+1);
+				panelEcw.Visible=false;
+				tabProc.Location=new Point(415,28);
+				gridProg.Location=new Point(415,tabProc.Bottom+2);
+				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
+			}
+			//original two lines replaced by code above:
 			//gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
 			//gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			//can't use Lan.F
@@ -2994,27 +3093,6 @@ namespace OpenDental{
 			}
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
-			}
-			if(Programs.IsEnabled("eClinicalWorks")) {
-				toothChart.Location=new Point(524+2,26);
-				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
-				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
-				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
-				gridPtInfo.Visible=false;
-				tabProc.Location=new Point(0,28);
-				gridProg.Location=new Point(0,tabProc.Bottom+2);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
-			}
-			else {//normal:
-				toothChart.Location=new Point(0,26);
-				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
-				textTreatmentNotes.Location=new Point(0,toothChart.Bottom+1);
-				textTreatmentNotes.Size=new Size(411,71);
-				gridPtInfo.Visible=true;
-				gridPtInfo.Location=new Point(0,textTreatmentNotes.Bottom+1);
-				tabProc.Location=new Point(415,28);
-				gridProg.Location=new Point(415,tabProc.Bottom+2);
-				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			}
 		}
 
@@ -6735,6 +6813,15 @@ namespace OpenDental{
 			if(panelNewH>panelImages.Bottom-toothChart.Bottom)
 				panelNewH=panelImages.Bottom-toothChart.Bottom;//keeps it from going too high
 			panelImages.Height=panelNewH;
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				if(panelImages.Visible) {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1
+						-(panelImages.Height+2);
+				}
+				else {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
+				}
+			}
 		}
 
 		private void panelImages_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -6787,6 +6874,14 @@ namespace OpenDental{
 			}
 			selectedImageTab=tabControlImages.SelectedIndex;
 			FillImages();//it will not actually fill the images unless panelImages is visible
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				if(panelImages.Visible) {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
+				}
+				else {
+					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
+				}
+			}
 		}
 
 		private void listViewImages_DoubleClick(object sender, System.EventArgs e) {
@@ -6818,6 +6913,30 @@ namespace OpenDental{
 		private void butBig_Click(object sender,EventArgs e) {
 			FormToothChartingBig FormT=new FormToothChartingBig(checkShowTeeth.Checked,ToothInitialList,ProcList);
 			FormT.Show();
+		}
+
+		private void butECWup_Click(object sender,EventArgs e) {
+			panelEcw.Location=toothChart.Location;
+			if(panelImages.Visible) {
+				panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
+			}
+			else {
+				panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
+			}
+			butECWdown.Visible=true;
+			butECWup.Visible=false;
+		}
+
+		private void butECWdown_Click(object sender,EventArgs e) {
+			panelEcw.Location=new Point(524+2,textTreatmentNotes.Bottom+1);
+			if(panelImages.Visible) {
+				panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
+			}
+			else {
+				panelEcw.Height=tabControlImages.Top-panelEcw.Top+1;
+			}
+			butECWdown.Visible=false;
+			butECWup.Visible=true;
 		}
 
 		#region Quick Buttons
@@ -6947,6 +7066,8 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+		
 
 		
 
