@@ -64,7 +64,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClear;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.Label labelDx;
-		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.ComboBox comboPriority;
 		private System.Windows.Forms.ContextMenu menuProgRight;
@@ -298,6 +297,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.radioEntryCn = new System.Windows.Forms.RadioButton();
 			this.radioEntryR = new System.Windows.Forms.RadioButton();
 			this.radioEntryC = new System.Windows.Forms.RadioButton();
 			this.radioEntryEO = new System.Windows.Forms.RadioButton();
@@ -326,7 +326,6 @@ namespace OpenDental{
 			this.checkShowC = new System.Windows.Forms.CheckBox();
 			this.checkShowTP = new System.Windows.Forms.CheckBox();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
-			this.label4 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.menuProgRight = new System.Windows.Forms.ContextMenu();
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
@@ -381,6 +380,7 @@ namespace OpenDental{
 			this.checkLabCase = new System.Windows.Forms.CheckBox();
 			this.checkExtraNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkShowCn = new System.Windows.Forms.CheckBox();
 			this.tabDraw = new System.Windows.Forms.TabPage();
 			this.radioColorChanger = new System.Windows.Forms.RadioButton();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -413,11 +413,10 @@ namespace OpenDental{
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
-			this.radioEntryCn = new System.Windows.Forms.RadioButton();
+			this.toothChart = new SparksToothChart.GraphicalToothChart();
 			this.butForeignKey = new OpenDental.UI.Button();
 			this.butAddKey = new OpenDental.UI.Button();
 			this.butBig = new OpenDental.UI.Button();
-			this.toothChart = new SparksToothChart.GraphicalToothChart();
 			this.gridProg = new OpenDental.UI.ODGrid();
 			this.buttonAMODB = new OpenDental.UI.Button();
 			this.buttonAMODL = new OpenDental.UI.Button();
@@ -488,7 +487,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.checkShowCn = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -536,6 +534,16 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 35;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Entry Status";
+			// 
+			// radioEntryCn
+			// 
+			this.radioEntryCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioEntryCn.Location = new System.Drawing.Point(2,91);
+			this.radioEntryCn.Name = "radioEntryCn";
+			this.radioEntryCn.Size = new System.Drawing.Size(75,16);
+			this.radioEntryCn.TabIndex = 5;
+			this.radioEntryCn.Text = "Condition";
+			this.radioEntryCn.CheckedChanged += new System.EventHandler(this.radioEntryCn_CheckedChanged);
 			// 
 			// radioEntryR
 			// 
@@ -828,14 +836,6 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(3,"Anesth.gif");
 			this.imageListMain.Images.SetKeyName(4,"commlog.gif");
 			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(1,284);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(384,18);
-			this.label4.TabIndex = 180;
-			this.label4.Text = "Treatment Notes (for items that do not display above)";
-			// 
 			// menuProgRight
 			// 
 			this.menuProgRight.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -983,7 +983,7 @@ namespace OpenDental{
 			this.tabProc.Location = new System.Drawing.Point(415,28);
 			this.tabProc.Name = "tabProc";
 			this.tabProc.SelectedIndex = 0;
-			this.tabProc.Size = new System.Drawing.Size(524,261);
+			this.tabProc.Size = new System.Drawing.Size(524,259);
 			this.tabProc.TabIndex = 190;
 			this.tabProc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabProc_MouseDown);
 			// 
@@ -1014,7 +1014,7 @@ namespace OpenDental{
 			this.tabEnterTx.Location = new System.Drawing.Point(4,22);
 			this.tabEnterTx.Name = "tabEnterTx";
 			this.tabEnterTx.Padding = new System.Windows.Forms.Padding(3);
-			this.tabEnterTx.Size = new System.Drawing.Size(516,235);
+			this.tabEnterTx.Size = new System.Drawing.Size(516,233);
 			this.tabEnterTx.TabIndex = 0;
 			this.tabEnterTx.Text = "Enter Treatment";
 			this.tabEnterTx.UseVisualStyleBackColor = true;
@@ -1452,6 +1452,18 @@ namespace OpenDental{
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Procedures";
 			// 
+			// checkShowCn
+			// 
+			this.checkShowCn.Checked = true;
+			this.checkShowCn.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowCn.Location = new System.Drawing.Point(9,81);
+			this.checkShowCn.Name = "checkShowCn";
+			this.checkShowCn.Size = new System.Drawing.Size(101,13);
+			this.checkShowCn.TabIndex = 15;
+			this.checkShowCn.Text = "Conditions";
+			this.checkShowCn.Click += new System.EventHandler(this.checkShowCn_Click);
+			// 
 			// tabDraw
 			// 
 			this.tabDraw.Controls.Add(this.radioColorChanger);
@@ -1748,15 +1760,20 @@ namespace OpenDental{
 			this.menuItem7.Index = 6;
 			this.menuItem7.Text = "Attach Lab Fee";
 			// 
-			// radioEntryCn
+			// toothChart
 			// 
-			this.radioEntryCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryCn.Location = new System.Drawing.Point(2,91);
-			this.radioEntryCn.Name = "radioEntryCn";
-			this.radioEntryCn.Size = new System.Drawing.Size(75,16);
-			this.radioEntryCn.TabIndex = 5;
-			this.radioEntryCn.Text = "Condition";
-			this.radioEntryCn.CheckedChanged += new System.EventHandler(this.radioEntryCn_CheckedChanged);
+			this.toothChart.AutoFinish = false;
+			this.toothChart.ColorBackground = System.Drawing.Color.Empty;
+			this.toothChart.Cursor = System.Windows.Forms.Cursors.Default;
+			this.toothChart.CursorTool = SparksToothChart.CursorTool.Pointer;
+			this.toothChart.Location = new System.Drawing.Point(0,26);
+			this.toothChart.Name = "toothChart";
+			this.toothChart.PreferredPixelFormatNumber = 0;
+			this.toothChart.SimpleMode = true;
+			this.toothChart.Size = new System.Drawing.Size(410,307);
+			this.toothChart.TabIndex = 194;
+			this.toothChart.UseHardware = false;
+			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
 			// butForeignKey
 			// 
@@ -1805,21 +1822,6 @@ namespace OpenDental{
 			this.butBig.TabIndex = 191;
 			this.butBig.Text = "Big";
 			this.butBig.Click += new System.EventHandler(this.butBig_Click);
-			// 
-			// toothChart
-			// 
-			this.toothChart.AutoFinish = false;
-			this.toothChart.ColorBackground = System.Drawing.Color.Empty;
-			this.toothChart.Cursor = System.Windows.Forms.Cursors.Default;
-			this.toothChart.CursorTool = SparksToothChart.CursorTool.Pointer;
-			this.toothChart.Location = new System.Drawing.Point(0,26);
-			this.toothChart.Name = "toothChart";
-			this.toothChart.PreferredPixelFormatNumber = 0;
-			this.toothChart.SimpleMode = true;
-			this.toothChart.Size = new System.Drawing.Size(410,307);
-			this.toothChart.TabIndex = 194;
-			this.toothChart.UseHardware = false;
-			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
 			// gridProg
 			// 
@@ -2828,18 +2830,6 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// checkShowCn
-			// 
-			this.checkShowCn.Checked = true;
-			this.checkShowCn.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowCn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowCn.Location = new System.Drawing.Point(9,81);
-			this.checkShowCn.Name = "checkShowCn";
-			this.checkShowCn.Size = new System.Drawing.Size(101,13);
-			this.checkShowCn.TabIndex = 15;
-			this.checkShowCn.Text = "Conditions";
-			this.checkShowCn.Click += new System.EventHandler(this.checkShowCn_Click);
-			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.butForeignKey);
@@ -2854,7 +2844,6 @@ namespace OpenDental{
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.textTreatmentNotes);
 			this.Controls.Add(this.gridPtInfo);
-			this.Controls.Add(this.label4);
 			this.Name = "ContrChart";
 			this.Size = new System.Drawing.Size(939,708);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrChart_Layout);
@@ -2897,6 +2886,10 @@ namespace OpenDental{
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
+			if(!ProgramC.HListIsNull() && Programs.IsEnabled("eClinicalWorks")) {
+				gridProg.Width=524;
+				return;
+			}
 			if(gridProg.Columns !=null && gridProg.Columns.Count>0){
 				int gridW=0;
 				for(int i=0;i<gridProg.Columns.Count;i++){
@@ -2927,9 +2920,10 @@ namespace OpenDental{
 			//tabPlanned.Controls.Add(ApptPlanned);
 			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
 			tabProc.SelectedIndex=0;
-			tabProc.Height=253;
-			gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
-			gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
+			tabProc.Height=259;
+			//moved these two lines to InitializeLocalData:
+			//gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
+			//gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			//can't use Lan.F
 			Lan.C(this,new Control[]
 				{
@@ -2963,8 +2957,7 @@ namespace OpenDental{
 				label14,
 				//textProcCode is handled in ClearButtons()
 				butOK,
-				label13,
-				label4
+				label13
 			});
 			//Lan.C(this,menuPrimary.MenuItems[0]);
 			//Lan.C(this,menuPrimary.MenuItems[1]);
@@ -2986,7 +2979,8 @@ namespace OpenDental{
 			ComputerPrefs.Update(computerPref);
 			if(computerPref.GraphicsSimple){
 				butBig.Visible=false;				
-			}else{
+			}
+			else{
 				butBig.Visible=true;
 			}
 			if(PatCur!=null){
@@ -3000,6 +2994,27 @@ namespace OpenDental{
 			}
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
+			}
+			if(Programs.IsEnabled("eClinicalWorks")) {
+				toothChart.Location=new Point(524+2,26);
+				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
+				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
+				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
+				gridPtInfo.Visible=false;
+				tabProc.Location=new Point(0,28);
+				gridProg.Location=new Point(0,tabProc.Bottom+2);
+				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
+			}
+			else {//normal:
+				toothChart.Location=new Point(0,26);
+				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
+				textTreatmentNotes.Location=new Point(0,toothChart.Bottom+1);
+				textTreatmentNotes.Size=new Size(411,71);
+				gridPtInfo.Visible=true;
+				gridPtInfo.Location=new Point(0,textTreatmentNotes.Bottom+1);
+				tabProc.Location=new Point(415,28);
+				gridProg.Location=new Point(415,tabProc.Bottom+2);
+				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			}
 		}
 
@@ -3927,7 +3942,10 @@ namespace OpenDental{
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
-			if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
+			if(Programs.IsEnabled("eClinicalWorks")){
+				gridProg.Width=524;
+			}
+			else if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
 				int gridW=0;
 				for(int i=0;i<gridProg.Columns.Count;i++) {
 					gridW+=gridProg.Columns[i].ColWidth;
@@ -6736,7 +6754,7 @@ namespace OpenDental{
 				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;
 			}
 			else if(tabProc.Height==27){//clicked on a minimized tab
-				tabProc.Height=254;
+				tabProc.Height=259;
 				tabProc.Refresh();
 				gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+1);
 				gridProg.Height=this.ClientSize.Height-gridProg.Location.Y-2;

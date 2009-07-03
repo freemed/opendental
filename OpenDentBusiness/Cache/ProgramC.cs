@@ -33,6 +33,10 @@ namespace OpenDentBusiness {
 				listt=value;
 			}
 		}
+
+		public static bool HListIsNull(){
+			return hList==null;
+		}
 		
 	}
 }

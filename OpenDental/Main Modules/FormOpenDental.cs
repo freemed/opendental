@@ -3280,6 +3280,7 @@ namespace OpenDental{
 			}
 			FormProgramLinks FormPL=new FormProgramLinks();
 			FormPL.ShowDialog();
+			ContrChart2.InitializeLocalData();//for eCW
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Program Links");
 		}
 
