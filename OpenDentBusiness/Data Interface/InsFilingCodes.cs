@@ -35,24 +35,19 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<Summary>Gets one InsFilingCode from the database.</Summary>
-		public static InsFilingCode CreateObject(int insFilingCodeNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<InsFilingCode>(MethodBase.GetCurrentMethod(),insFilingCodeNum);
+		public static string GetEclaimCode(int insFilingCodeNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
+				if(InsFilingCodeC.Listt[i].InsFilingCodeNum != insFilingCodeNum) {
+					continue;
+				}
+				return InsFilingCodeC.Listt[i].EclaimCode;
 			}
-			return DataObjectFactory<InsFilingCode>.CreateObject(insFilingCodeNum);
-		}
-
-		public static List<InsFilingCode> GetInsFilingCodes(List <int> insFilingCodeNums){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<InsFilingCode>>(MethodBase.GetCurrentMethod(),insFilingCodeNums);
-			}
-			Collection<InsFilingCode> collectState=DataObjectFactory<InsFilingCode>.CreateObjects(insFilingCodeNums);
-			return new List<InsFilingCode>(collectState);		
+			return "CI";//should not happen
 		}
 
 		///<summary></summary>
-		public static int WriteObject(InsFilingCode insFilingCode){
+		public static int WriteObject(InsFilingCode insFilingCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				insFilingCode.InsFilingCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),insFilingCode);
 				return insFilingCode.InsFilingCodeNum;

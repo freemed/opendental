@@ -74,6 +74,13 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrowRightTriangle {
+            get {
+                object obj = ResourceManager.GetObject("arrowRightTriangle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap arrowUpTriangle {
             get {
                 object obj = ResourceManager.GetObject("arrowUpTriangle", resourceCulture);

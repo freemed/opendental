@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("ItemOrder")]
 		private int itemOrder;
 		private bool itemOrderChanged;
-		///<summary>Display order for this filing code within the UI.</summary>
+		///<summary>Display order for this filing code within the UI.  0-indexed.</summary>
 		public int ItemOrder {
 			get { return itemOrder; }
 			set { if(itemOrder!=value) { itemOrder=value; MarkDirty(); itemOrderChanged=true; } }

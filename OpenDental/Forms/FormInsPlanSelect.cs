@@ -22,11 +22,13 @@ namespace OpenDental{
 		public bool ViewRelat;
 		private Patient PatCur;
 		private Family FamCur;
-		///<summary>After closing this form, this will contain the selected plan.</summary>
+		///<summary>After closing this form, this will contain the selected plan.  May be null to indicate none.</summary>
 		public InsPlan SelectedPlan;
 		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridMain;
+		private OpenDental.UI.Button butNone;
 		private int PatNum;
+		public bool ShowNoneButton;
 
 		///<summary></summary>
 		public FormInsPlanSelect(int patNum){
@@ -55,6 +57,7 @@ namespace OpenDental{
 			this.labelRelat = new System.Windows.Forms.Label();
 			this.listRelat = new System.Windows.Forms.ListBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butNone = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -68,7 +71,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(618,330);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(76,26);
+			this.butCancel.Size = new System.Drawing.Size(76,24);
 			this.butCancel.TabIndex = 6;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -83,7 +86,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(618,294);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(76,26);
+			this.butOK.Size = new System.Drawing.Size(76,24);
 			this.butOK.TabIndex = 5;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -115,12 +118,28 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableInsPlans";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.Location = new System.Drawing.Point(22,330);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(76,24);
+			this.butNone.TabIndex = 11;
+			this.butNone.Text = "None";
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
+			// 
 			// FormInsPlanSelect
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,374);
+			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listRelat);
 			this.Controls.Add(this.labelRelat);
@@ -151,6 +170,9 @@ namespace OpenDental{
 			PatCur=FamCur.GetPatient(PatNum);
       PlanList=InsPlans.Refresh(FamCur);
 			FillPlanData();
+			if(!ShowNoneButton) {
+				butNone.Visible=false;
+			}
     }
 
 		private void FillPlanData(){
@@ -202,6 +224,11 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butNone_Click(object sender,EventArgs e) {
+			SelectedPlan=null;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1){
 				MessageBox.Show(Lan.g(this,"Please select a plan first."));
@@ -221,6 +248,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

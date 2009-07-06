@@ -1524,8 +1524,15 @@ namespace OpenDental.Eclaims
 			}
 		}
 
-		///<summary>Until recently, we always just used CI for commercial ins.  But due to demand from customers, we had to add this even though it will become obsolete soon.</summary>
+		///<summary>This used to be an enumeration.</summary>
 		private static string GetFilingCode(InsPlan plan){
+			string filingcode=InsFilingCodes.GetEclaimCode(plan.FilingCode);
+			//must be one or two char in length.
+			if(filingcode=="" || filingcode.Length>2){
+				return "CI";
+			}
+			return Sout(filingcode,2,1);
+			/*
 			switch(plan.FilingCode){
 				case InsFilingCodeOld.SelfPay:
 					return "09";
@@ -1576,6 +1583,7 @@ namespace OpenDental.Eclaims
 				default:
 					return "CI";
 			}
+			*/
 		}
 
 		private static string GetArea(Procedure proc,ProcedureCode procCode){

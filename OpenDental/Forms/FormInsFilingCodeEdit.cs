@@ -311,7 +311,8 @@ namespace OpenDental{
 			InsFilingCodeCur.EclaimCode=textEclaimCode.Text;
 			try {
 				InsFilingCodes.WriteObject(InsFilingCodeCur);
-			} catch(Exception ex) {
+			} 
+			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 				return;
 			}

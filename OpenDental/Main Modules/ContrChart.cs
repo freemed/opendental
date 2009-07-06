@@ -6407,7 +6407,7 @@ namespace OpenDental{
 				if(!MsgBox.Show(this,true,"Set appointment complete?")){
 					return;
 				}
-				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
+				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
 				Procedures.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					PatCur.GetNameLF() + ", "

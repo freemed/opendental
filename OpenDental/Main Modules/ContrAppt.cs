@@ -3508,7 +3508,7 @@ namespace OpenDental{
 					+ "Pt NOTE Set Complete");//shouldn't ever happen, but don't allow procedures to be completed from notes
 			}
 			else {
-				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
+				Appointments.SetAptStatusComplete(apt.AptNum,PatPlans.GetPlanNum(PatPlanList,1),PatPlans.GetPlanNum(PatPlanList,2));
 				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum,pat.Age);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "

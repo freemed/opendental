@@ -151,9 +151,6 @@
   <data name="topazPen10" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\topazPen10.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ReportAccountingBalanceSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ReportAccountingBalanceSheet.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="butRecall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butRecall.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -178,6 +175,9 @@
   <data name="stationary sample1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\stationary sample1.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CDAErrorMessagesFr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CDAErrorMessagesFr.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ReportAccountingGenLedger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ReportAccountingGenLedger.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -189,6 +189,12 @@
   </data>
   <data name="email1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\email1.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrowUpTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrowUpTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportAccountingBalanceSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReportAccountingBalanceSheet.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="butZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butZoomOut.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,9 +217,6 @@
   <data name="butPin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butPin.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="butPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butPreview.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="PaymentsRDL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PaymentsRDL.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -235,22 +238,22 @@
   <data name="butPaste" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butPaste.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="arrowDownTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrowDownTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Add.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CDAErrorMessagesEn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CDAErrorMessagesEn.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="CDAErrorMessagesFr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CDAErrorMessagesFr.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="butPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butPreview.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="commlog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\commlog.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="arrowUpTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrowUpTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="arrowDownTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrowDownTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="arrowRightTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrowRightTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

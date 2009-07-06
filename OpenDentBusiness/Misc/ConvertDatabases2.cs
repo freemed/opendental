@@ -590,10 +590,57 @@ DROP TABLE IF EXISTS etAck";
 					+"'ShowImagesModule', "
 					+"'0')";
 				Db.NonQ(command);
-
-
-
-
+				command="UPDATE insplan SET FilingCode = FilingCode+1";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(1,'Commercial_Insurance','CI',0)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(2,'SelfPay','09',1)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(3,'OtherNonFed','11',2)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(4,'PPO','12',3)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(5,'POS','13',4)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(6,'EPO','14',5)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(7,'Indemnity','15',6)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(8,'HMO_MedicareRisk','16',7)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(9,'DMO','17',8)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(10,'BCBS','BL',9)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(11,'Champus','CH',10)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(12,'Disability','DS',11)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(13,'FEP','FI',12)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(14,'HMO','HM',13)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(15,'LiabilityMedical','LM',14)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(16,'MedicarePartB','MB',15)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(17,'Medicaid','MC',16)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(18,'ManagedCare_NonHMO','MH',17)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(19,'OtherFederalProgram','OF',18)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(20,'SelfAdministered','SA',19)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(21,'Veterans','VA',20)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(22,'WorkersComp','WC',21)";
+				Db.NonQ(command);
+				command="INSERT INTO insfilingcode VALUES(23,'MutuallyDefined','ZZ',22)";
+				Db.NonQ(command);
+			
+			
+				
 
 
 

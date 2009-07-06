@@ -56,7 +56,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(plan.BenefitNotes)+"', "
 				+"'"+POut.PBool(plan.IsMedical)+"', "
 				+"'"+POut.PString(plan.SubscNote)+"', "
-				+"'"+POut.PInt((int)plan.FilingCode)+"', "
+				+"'"+POut.PInt(plan.FilingCode)+"', "
 				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
 				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
@@ -103,7 +103,7 @@ namespace OpenDentBusiness {
 				+",BenefitNotes='"   +POut.PString(plan.BenefitNotes)+"'"
 				+",IsMedical='"      +POut.PBool  (plan.IsMedical)+"'"
 				+",SubscNote='"      +POut.PString(plan.SubscNote)+"'"
-				+",FilingCode='"     +POut.PInt((int)plan.FilingCode)+"'"
+				+",FilingCode='"     +POut.PInt(plan.FilingCode)+"'"
 				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
@@ -136,7 +136,7 @@ namespace OpenDentBusiness {
 				+",ClaimFormNum = '"   +POut.PInt   (plan.ClaimFormNum)+"'"
 				+",AllowedFeeSched= '" +POut.PInt   (plan.AllowedFeeSched)+"'"
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
-				+",FilingCode = '"     +POut.PInt   ((int)plan.FilingCode)+"'"
+				+",FilingCode = '"     +POut.PInt   (plan.FilingCode)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
@@ -289,7 +289,7 @@ namespace OpenDentBusiness {
 				plan.BenefitNotes   = PIn.PString(table.Rows[i][21].ToString());
 				plan.IsMedical      = PIn.PBool  (table.Rows[i][22].ToString());
 				plan.SubscNote      = PIn.PString(table.Rows[i][23].ToString());
-				plan.FilingCode     = (InsFilingCodeOld)PIn.PInt(table.Rows[i][24].ToString());
+				plan.FilingCode     = PIn.PInt   (table.Rows[i][24].ToString());
 				plan.DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());

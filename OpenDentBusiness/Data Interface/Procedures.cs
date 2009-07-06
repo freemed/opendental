@@ -1530,7 +1530,7 @@ namespace OpenDentBusiness {
 			//	Recalls.Reset(apt.PatNum);//this also synchs recall
 			//}
 			Recalls.Synch(apt.PatNum);
-			Patient pt=Patients.GetPat(apt.PatNum);
+			//Patient pt=Patients.GetPat(apt.PatNum);
 			//jsparks-See notes within this method:
 			//Reporting.Allocators.AllocatorCollection.CallAll_Allocators(pt.Guarantor);
 		}

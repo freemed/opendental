@@ -697,7 +697,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Use to send to unscheduled list, or to set broken.</summary>
+		///<summary>Use to send to unscheduled list, to set broken, etc.  Do not use to set complete.</summary>
 		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
@@ -705,6 +705,20 @@ namespace OpenDentBusiness{
 			}
 			string command="UPDATE appointment SET AptStatus="+POut.PInt((int)newStatus)
 				+" WHERE AptNum="+POut.PInt(aptNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static void SetAptStatusComplete(int aptNum,int planNum1,int planNum2) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,planNum1,planNum2);
+				return;
+			}
+			string command="UPDATE appointment SET "
+				+"AptStatus="+POut.PInt((int)ApptStatus.Complete)+", "
+				+"InsPlan1="+POut.PInt(planNum1)+", "
+				+"InsPlan2="+POut.PInt(planNum2)+" "
+				+"WHERE AptNum="+POut.PInt(aptNum);
 			Db.NonQ(command);
 		}
 
@@ -836,9 +850,10 @@ namespace OpenDentBusiness{
 			table.Columns.Add("wirelessPhone");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
-				+"patient.BillingType,patient.BirthDate,patient.Guarantor,"
+				+"patient.BillingType,patient.BirthDate,"
+				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
 				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
-				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
+				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
@@ -860,7 +875,11 @@ namespace OpenDentBusiness{
 				command+="LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum ";
 			}
 			command+="LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
-				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum ";
+				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
+				+"LEFT JOIN insplan plan1 ON InsPlan1=plan1.PlanNum "
+				+"LEFT JOIN insplan plan2 ON InsPlan2=plan2.PlanNum "
+				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
+				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
 					+"AND AptDateTime < "+POut.PDate(dateEnd.AddDays(1))+" "
@@ -870,16 +889,6 @@ namespace OpenDentBusiness{
 				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);
 			}
 			command+=" GROUP BY appointment.AptNum";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=",p1.Abbr,p2.Abbr,patient.AddrNote,"
-				+"patient.ApptModNote,AptDateTime,AptStatus,Assistant,"
-				+"patient.BillingType,patient.BirthDate,patient.Guarantor,"
-				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
-				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
-				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
-				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
-				+"patient.PreferRecallMethod,patient.Premed,ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone";
-			}
 			DataTable raw=dcon.GetTable(command);
 			DataTable rawProc;
 			if(raw.Rows.Count==0){
@@ -1033,7 +1042,16 @@ namespace OpenDentBusiness{
 				row["hmPhone"]=Lans.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
 				row["insurance"]="";
-				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
+				if(raw.Rows[i]["carrierName1"].ToString()!="") {
+					row["insurance"]+=raw.Rows[i]["carrierName1"].ToString();
+					if(raw.Rows[i]["carrierName2"].ToString()!="") {
+						//if(row["insurance"].ToString()!="") {
+						row["insurance"]+="\r\n";
+						//}
+						row["insurance"]+=raw.Rows[i]["carrierName2"].ToString();
+					}
+				}
+				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
 					row["insurance"]=Lans.g("Appointments","Insured");
 				}
 				row["IsHygiene"]=raw.Rows[i]["IsHygiene"].ToString();
