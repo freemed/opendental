@@ -2952,7 +2952,9 @@ namespace OpenDental{
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
-			if(!ProgramC.HListIsNull() && Programs.IsEnabled("eClinicalWorks")) {
+			if(!ProgramC.HListIsNull() && Programs.IsEnabled("eClinicalWorks") 
+				&& ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") 
+			{
 				gridProg.Width=524;
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
@@ -2993,7 +2995,7 @@ namespace OpenDental{
 			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
 			tabProc.SelectedIndex=0;
 			tabProc.Height=259;
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				toothChart.Location=new Point(524+2,26);
 				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
 				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
@@ -3100,7 +3102,12 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			if(!Programs.IsEnabled("eClinicalWorks")){
+			if(Programs.IsEnabled("eClinicalWorks")){
+				if(ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1") {
+					ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+				}
+			}
+			else{
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
@@ -3112,7 +3119,7 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
 			ToolBarMain.Buttons.Add(button);
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
@@ -3224,7 +3231,12 @@ namespace OpenDental{
 				toothChart.Enabled=false;
 				gridProg.Enabled=false;
 				butBig.Enabled=false;
-				if(!Programs.IsEnabled("eClinicalWorks")) {
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					if(ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1") {
+						ToolBarMain.Buttons["Rx"].Enabled=false;
+					}
+				}
+				else{
 					ToolBarMain.Buttons["Rx"].Enabled=false;
 				}
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
@@ -3233,7 +3245,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = false;
-				if(Programs.IsEnabled("eClinicalWorks")) {
+				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 				}
 				tabProc.Enabled = false;
@@ -3247,7 +3259,12 @@ namespace OpenDental{
 				toothChart.Enabled=true;
 				gridProg.Enabled=true;
 				butBig.Enabled=true;
-				if(!Programs.IsEnabled("eClinicalWorks")) {
+				if(Programs.IsEnabled("eClinicalWorks")) {
+					if(ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1") {
+						ToolBarMain.Buttons["Rx"].Enabled=true;
+					}
+				}
+				else{
 					ToolBarMain.Buttons["Rx"].Enabled=true;
 				}
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
@@ -3257,7 +3274,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled=true;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = true;
-				if(Programs.IsEnabled("eClinicalWorks")) {
+				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 				}
 				tabProc.Enabled=true;
@@ -3591,7 +3608,11 @@ namespace OpenDental{
 			}
 			ODGridCell cell;
 			//medical fields-----------------------------------------------------------------
-			if(!Programs.IsEnabled("eClinicalWorks")) {
+			bool showMed=true;
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
+				showMed=false;
+			}
+			if(showMed){
 				//premed flag.
 				if(PatCur.Premed) {
 					row=new ODGridRow();
@@ -4020,7 +4041,7 @@ namespace OpenDental{
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
-			if(Programs.IsEnabled("eClinicalWorks")){
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				gridProg.Width=524;
 			}
 			else if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
@@ -6813,7 +6834,7 @@ namespace OpenDental{
 			if(panelNewH>panelImages.Bottom-toothChart.Bottom)
 				panelNewH=panelImages.Bottom-toothChart.Bottom;//keeps it from going too high
 			panelImages.Height=panelNewH;
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1
 						-(panelImages.Height+2);
@@ -6874,7 +6895,7 @@ namespace OpenDental{
 			}
 			selectedImageTab=tabControlImages.SelectedIndex;
 			FillImages();//it will not actually fill the images unless panelImages is visible
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
 				}

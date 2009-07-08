@@ -30,13 +30,15 @@ namespace OpenDental{
 		//private static Thread thread;
 		private TextBox textHL7FolderIn;
 		private TextBox textHL7FolderOut;
-		private Label label4;
+		private Label labelHL7FolderOut;
 		private GroupBox groupBox1;
 		private Label label5;
-		private Label label6;
+		private Label labelDefaultUserGroup;
 		private ComboBox comboDefaultUserGroup;
 		private CheckBox checkShowImages;
-		private Label label3;
+		private RadioButton radioModeTight;
+		private RadioButton radioModeStandalone;
+		private Label labelHL7FolderIn;
 
 		///<summary></summary>
 		public FormEClinicalWorks() {
@@ -79,14 +81,16 @@ namespace OpenDental{
 			this.textProgDesc = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textHL7FolderIn = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.labelHL7FolderIn = new System.Windows.Forms.Label();
 			this.textHL7FolderOut = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelHL7FolderOut = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
+			this.labelDefaultUserGroup = new System.Windows.Forms.Label();
 			this.comboDefaultUserGroup = new System.Windows.Forms.ComboBox();
 			this.checkShowImages = new System.Windows.Forms.CheckBox();
+			this.radioModeTight = new System.Windows.Forms.RadioButton();
+			this.radioModeStandalone = new System.Windows.Forms.RadioButton();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -99,7 +103,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(524,269);
+			this.butCancel.Location = new System.Drawing.Point(524,320);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -114,7 +118,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443,269);
+			this.butOK.Location = new System.Drawing.Point(443,320);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -173,14 +177,14 @@ namespace OpenDental{
 			this.textHL7FolderIn.Size = new System.Drawing.Size(275,20);
 			this.textHL7FolderIn.TabIndex = 49;
 			// 
-			// label3
+			// labelHL7FolderIn
 			// 
-			this.label3.Location = new System.Drawing.Point(3,44);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(229,18);
-			this.label3.TabIndex = 48;
-			this.label3.Text = "In to eClinicalWorks";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelHL7FolderIn.Location = new System.Drawing.Point(3,44);
+			this.labelHL7FolderIn.Name = "labelHL7FolderIn";
+			this.labelHL7FolderIn.Size = new System.Drawing.Size(229,18);
+			this.labelHL7FolderIn.TabIndex = 48;
+			this.labelHL7FolderIn.Text = "In to eClinicalWorks";
+			this.labelHL7FolderIn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textHL7FolderOut
 			// 
@@ -189,23 +193,23 @@ namespace OpenDental{
 			this.textHL7FolderOut.Size = new System.Drawing.Size(275,20);
 			this.textHL7FolderOut.TabIndex = 51;
 			// 
-			// label4
+			// labelHL7FolderOut
 			// 
-			this.label4.Location = new System.Drawing.Point(6,70);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(226,18);
-			this.label4.TabIndex = 50;
-			this.label4.Text = "Out from eClinicalWorks";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelHL7FolderOut.Location = new System.Drawing.Point(6,70);
+			this.labelHL7FolderOut.Name = "labelHL7FolderOut";
+			this.labelHL7FolderOut.Size = new System.Drawing.Size(226,18);
+			this.labelHL7FolderOut.TabIndex = 50;
+			this.labelHL7FolderOut.Text = "Out from eClinicalWorks";
+			this.labelHL7FolderOut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.textHL7FolderOut);
 			this.groupBox1.Controls.Add(this.textHL7FolderIn);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(12,86);
+			this.groupBox1.Controls.Add(this.labelHL7FolderOut);
+			this.groupBox1.Controls.Add(this.labelHL7FolderIn);
+			this.groupBox1.Location = new System.Drawing.Point(12,138);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(538,101);
 			this.groupBox1.TabIndex = 52;
@@ -220,20 +224,20 @@ namespace OpenDental{
 			this.label5.TabIndex = 45;
 			this.label5.Text = "Folder locations must be valid on the computer where the HL7 process is running";
 			// 
-			// label6
+			// labelDefaultUserGroup
 			// 
-			this.label6.Location = new System.Drawing.Point(12,202);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(232,18);
-			this.label6.TabIndex = 53;
-			this.label6.Text = "Default User Group for new users";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelDefaultUserGroup.Location = new System.Drawing.Point(12,254);
+			this.labelDefaultUserGroup.Name = "labelDefaultUserGroup";
+			this.labelDefaultUserGroup.Size = new System.Drawing.Size(232,18);
+			this.labelDefaultUserGroup.TabIndex = 53;
+			this.labelDefaultUserGroup.Text = "Default User Group for new users";
+			this.labelDefaultUserGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboDefaultUserGroup
 			// 
 			this.comboDefaultUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDefaultUserGroup.FormattingEnabled = true;
-			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246,202);
+			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246,254);
 			this.comboDefaultUserGroup.Name = "comboDefaultUserGroup";
 			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215,21);
 			this.comboDefaultUserGroup.TabIndex = 54;
@@ -242,7 +246,7 @@ namespace OpenDental{
 			// 
 			this.checkShowImages.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowImages.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowImages.Location = new System.Drawing.Point(60,229);
+			this.checkShowImages.Location = new System.Drawing.Point(60,281);
 			this.checkShowImages.Name = "checkShowImages";
 			this.checkShowImages.Size = new System.Drawing.Size(199,18);
 			this.checkShowImages.TabIndex = 55;
@@ -250,14 +254,42 @@ namespace OpenDental{
 			this.checkShowImages.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowImages.Click += new System.EventHandler(this.checkShowImages_Click);
 			// 
+			// radioModeTight
+			// 
+			this.radioModeTight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioModeTight.Location = new System.Drawing.Point(77,84);
+			this.radioModeTight.Name = "radioModeTight";
+			this.radioModeTight.Size = new System.Drawing.Size(182,18);
+			this.radioModeTight.TabIndex = 56;
+			this.radioModeTight.TabStop = true;
+			this.radioModeTight.Text = "Tight Integration";
+			this.radioModeTight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioModeTight.UseVisualStyleBackColor = true;
+			this.radioModeTight.Click += new System.EventHandler(this.radioModeTight_Click);
+			// 
+			// radioModeStandalone
+			// 
+			this.radioModeStandalone.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioModeStandalone.Location = new System.Drawing.Point(77,104);
+			this.radioModeStandalone.Name = "radioModeStandalone";
+			this.radioModeStandalone.Size = new System.Drawing.Size(182,18);
+			this.radioModeStandalone.TabIndex = 57;
+			this.radioModeStandalone.TabStop = true;
+			this.radioModeStandalone.Text = "Standalone";
+			this.radioModeStandalone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioModeStandalone.UseVisualStyleBackColor = true;
+			this.radioModeStandalone.Click += new System.EventHandler(this.radioModeStandalone_Click);
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(611,305);
+			this.ClientSize = new System.Drawing.Size(611,356);
+			this.Controls.Add(this.radioModeStandalone);
+			this.Controls.Add(this.radioModeTight);
 			this.Controls.Add(this.checkShowImages);
 			this.Controls.Add(this.comboDefaultUserGroup);
-			this.Controls.Add(this.label6);
+			this.Controls.Add(this.labelDefaultUserGroup);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textProgDesc);
 			this.Controls.Add(this.textProgName);
@@ -293,6 +325,13 @@ namespace OpenDental{
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
+			if(GetProp("IsStandalone")=="1") {
+				radioModeStandalone.Checked=true;
+			}
+			else {
+				radioModeTight.Checked=true;
+			}
+			SetModeVisibilities();
 			textHL7FolderIn.Text=GetProp("HL7FolderIn");
 			textHL7FolderOut.Text=GetProp("HL7FolderOut");
 			comboDefaultUserGroup.Items.Clear();
@@ -321,7 +360,60 @@ namespace OpenDental{
 				checkEnabled.Checked=!checkEnabled.Checked;
 				return;
 			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before turning this bridge on or off.  Make sure you understand the difference between the two bridging modes and how it will affect patient accounts.  Continue anyway?")) {
+				checkEnabled.Checked=!checkEnabled.Checked;
+				return;
+			}
 			MsgBox.Show(this,"You will need to restart Open Dental to see the effects.");
+		}
+
+		private void radioModeTight_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before changing this option.  Make sure you understand the difference between the two bridging modes and how it will affect patient accounts.  Continue anyway?")) {
+				//set radio buttons according to what they already are in the db
+				if(GetProp("IsStandalone")=="1") {
+					radioModeStandalone.Checked=true;
+				}
+				else {
+					radioModeTight.Checked=true;
+				}
+				SetModeVisibilities();
+				return;
+			}
+
+			SetModeVisibilities();
+		}
+
+		private void radioModeStandalone_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before changing this option.  Make sure you understand the difference between the two bridging modes and how it will affect patient accounts.  Continue anyway?")) {
+				//set radio buttons according to what they already are in the db
+				if(GetProp("IsStandalone")=="1") {
+					radioModeStandalone.Checked=true;
+				}
+				else {
+					radioModeTight.Checked=true;
+				}
+				SetModeVisibilities();
+				return;
+			}
+
+			SetModeVisibilities();
+		}
+
+		private void SetModeVisibilities() {
+			if(radioModeTight.Checked) {
+				labelHL7FolderIn.Visible=true;
+				textHL7FolderIn.Visible=true;
+				labelDefaultUserGroup.Visible=true;
+				comboDefaultUserGroup.Visible=true;
+				checkShowImages.Visible=true;
+			}
+			else {//standalone
+				labelHL7FolderIn.Visible=false;
+				textHL7FolderIn.Visible=false;
+				labelDefaultUserGroup.Visible=false;
+				comboDefaultUserGroup.Visible=false;
+				checkShowImages.Visible=false;
+			}
 		}
 
 		private void checkShowImages_Click(object sender,EventArgs e) {
@@ -333,22 +425,31 @@ namespace OpenDental{
 				MessageBox.Show("Description may not be blank.");
 				return false;
 			}
-			if(comboDefaultUserGroup.SelectedIndex==-1) {
+			if(radioModeTight.Checked && comboDefaultUserGroup.SelectedIndex==-1) {
 				MessageBox.Show("Please select a default user group first.");
 				return false;
 			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
-			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn",textHL7FolderIn.Text);
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderOut",textHL7FolderOut.Text);
-			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
-				UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
-			if(checkShowImages.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
+			if(radioModeTight.Checked) {
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IsStandalone","0");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn",textHL7FolderIn.Text);
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
+					UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
+				if(checkShowImages.Checked) {
+					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
+				}
+				else {
+					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","0");
+				}
 			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","0");
+			else {//standalone
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IsStandalone","1");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7FolderIn","");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup","0");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"ShowImagesModule","1");
 			}
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
@@ -368,6 +469,8 @@ namespace OpenDental{
 		private void FormProgramLinkEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			
 		}
+
+		
 
 	
 

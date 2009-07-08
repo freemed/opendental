@@ -582,6 +582,7 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE insplan ADD INDEX (FilingCodeSubtype)";
 				Db.NonQ(command);
+				//eCW bridge enhancements
 				command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
 				int programNum=PIn.PInt(Db.GetScalar(command));
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
@@ -589,6 +590,12 @@ DROP TABLE IF EXISTS etAck";
 					+"'"+POut.PInt(programNum)+"', "
 					+"'ShowImagesModule', "
 					+"'0')";
+				Db.NonQ(command);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+POut.PInt(programNum)+"', "
+					+"'IsStandalone', "
+					+"'0')";//starts out as false
 				Db.NonQ(command);
 				command="UPDATE insplan SET FilingCode = FilingCode+1";
 				Db.NonQ(command);

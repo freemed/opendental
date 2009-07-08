@@ -1341,7 +1341,7 @@ namespace OpenDental{
 				userControlTasks1.InitializeOnStartup();
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				myOutlookBar.SelectedIndex=4;//Chart module
 				ToolBarMain.Height=0;//this should force the modules further up on the screen
 				ToolBarMain.Visible=false;
@@ -1578,7 +1578,7 @@ namespace OpenDental{
 				if(Programs.GetCur("PT").Enabled) {
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
 				}
-				if(Programs.IsEnabled("eClinicalWorks")) {
+				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					myOutlookBar.Buttons[0].Visible=false;
 					myOutlookBar.Buttons[1].Visible=false;
 					myOutlookBar.Buttons[2].Visible=false;
@@ -3898,7 +3898,7 @@ namespace OpenDental{
 				allNeutral();
 				Userod user=Userods.GetUserByName(userName);
 				if(user==null) {
-					if(Programs.IsEnabled("eClinicalWorks")) {
+					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 						user=new Userod();
 						user.UserName=userName;
 						user.UserGroupNum=PIn.PInt(ProgramProperties.GetPropVal("eClinicalWorks","DefaultUserGroup"));
@@ -3911,7 +3911,7 @@ namespace OpenDental{
 						Userods.InsertOrUpdate(true,user);//probably no need to try/catch
 						DataValid.SetInvalid(InvalidType.Security);
 					}
-					else {//not using eCW
+					else {//not using eCW in tight integration mode
 						//So present logon screen
 						FormLogOn FormL=new FormLogOn();
 						FormL.ShowDialog();
