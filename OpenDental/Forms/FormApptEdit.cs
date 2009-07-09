@@ -1094,7 +1094,7 @@ namespace OpenDental{
 				tbTime.TopBorder[0,32]=Color.Black;
 				tbTime.TopBorder[0,36]=Color.Black;
 			}
-			if(Programs.IsEnabled("eClinicalWorks")) {
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				butComplete.Visible=true;
 				//for eCW, we need to hide some things--------------------
 				butDelete.Visible=false;

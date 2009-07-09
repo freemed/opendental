@@ -18,6 +18,7 @@ namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
 		private System.Threading.Timer timer;
 		private static string inFolder;
+		private static bool IsStandalone;
 
 		public ServiceHL7() {
 			InitializeComponent();
@@ -62,7 +63,8 @@ namespace OpenDentHL7 {
 
 			//start filewatcher
 
-			string hl7folderOut=HL7Msgs.GetHL7FolderOut();
+			string hl7folderOut=ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
+				//HL7Msgs.GetHL7FolderOut();
 			if(!Directory.Exists(hl7folderOut)) {
 				throw new ApplicationException(hl7folderOut+" does not exist.");
 			}
@@ -75,8 +77,13 @@ namespace OpenDentHL7 {
 			for(int i=0;i<existingFiles.Length;i++) {
 				ProcessMessage(existingFiles[i]);
 			}
+			IsStandalone=ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1";
+			if(IsStandalone) {
+				return;//do not continue with the HL7 sending code below
+			}
 			//start polling the db for new HL7 messages to send
-			inFolder=HL7Msgs.GetHL7FolderIn();
+			inFolder=ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderIn");
+				//HL7Msgs.GetHL7FolderIn();
 			if(!Directory.Exists(inFolder)) {
 				throw new ApplicationException(inFolder+" does not exist.");
 			}

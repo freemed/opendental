@@ -69,6 +69,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		/*
 		public static string GetHL7FolderOut() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
@@ -77,8 +78,7 @@ namespace OpenDentBusiness{
 				WHERE programproperty.ProgramNum=program.ProgramNum
 				AND program.ProgName='eClinicalWorks'
 				AND programproperty.PropertyDesc='HL7FolderOut'";
-			DataTable table=Db.GetTable(command);
-			return table.Rows[0][0].ToString();
+			return Db.GetScalar(command);
 		}
 
 		public static string GetHL7FolderIn() {
@@ -89,9 +89,8 @@ namespace OpenDentBusiness{
 				WHERE programproperty.ProgramNum=program.ProgramNum
 				AND program.ProgName='eClinicalWorks'
 				AND programproperty.PropertyDesc='HL7FolderIn'";
-			DataTable table=Db.GetTable(command);
-			return table.Rows[0][0].ToString();
-		}
+			return Db.GetScalar(command);
+		}*/
 
 		/*
 		///<summary></summary>

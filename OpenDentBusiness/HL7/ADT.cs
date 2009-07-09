@@ -23,9 +23,6 @@ namespace OpenDentBusiness.HL7 {
 
 					break;
 			}*/
-		//}
-
-		//private static void ProcessADTMessage(MessageHL7 message) {
 			//MSH-Ignore
 			//EVN-Ignore
 			//PID-------------------------------------

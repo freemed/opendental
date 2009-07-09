@@ -422,11 +422,19 @@ namespace OpenDental{
 
 		private bool SaveToDb(){
 			if(textProgDesc.Text==""){
-				MessageBox.Show("Description may not be blank.");
+				MsgBox.Show(this,"Description may not be blank.");
 				return false;
 			}
 			if(radioModeTight.Checked && comboDefaultUserGroup.SelectedIndex==-1) {
-				MessageBox.Show("Please select a default user group first.");
+				MsgBox.Show(this,"Please select a default user group first.");
+				return false;
+			}
+			if(textHL7FolderOut.Text=="") {
+				MsgBox.Show(this,"HL7 out folder may not be blank.");
+				return false;
+			}
+			if(radioModeTight.Checked && textHL7FolderIn.Text=="") {
+				MsgBox.Show(this,"HL7 in folder may not be blank.");
 				return false;
 			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
