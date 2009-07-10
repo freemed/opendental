@@ -302,12 +302,12 @@ namespace OpenDental{
 			}
 			
 			//Patient-------------------------------------------------------------------------------------
-			DataTable table;
-			table=Patients.GetPatientByNameAndBirthday(pat);
+			//DataTable table;
+			int patNum=Patients.GetPatNumByNameAndBirthday(pat.LName,pat.FName,pat.Birthdate);
 			Patient existingPat=null;
 			existingPatOld=null;//we will need this to do an update.
-			if(table.Rows.Count>0){//a patient already exists, so only add missing fields
-				existingPat=Patients.GetPat(PIn.PInt(table.Rows[0][0].ToString()));
+			if(patNum != 0){//a patient already exists, so only add missing fields
+				existingPat=Patients.GetPat(patNum);
 				existingPatOld=existingPat.Copy();
 				if(existingPat.MiddleI==""){//only alter existing if blank
 					existingPat.MiddleI=pat.MiddleI;
@@ -376,10 +376,10 @@ namespace OpenDental{
 				else{
 					//if guarRelat is not self, and name and birthdate not supplied, a warning was issued, and relat was changed to self.
 					//add guarantor or attach to an existing guarantor
-					table=Patients.GetPatientByNameAndBirthday(pat);
-					if(table.Rows.Count>0){//a guar already exists, so simply attach. Make no other changes
+					patNum=Patients.GetPatNumByNameAndBirthday(pat.LName,pat.FName,pat.Birthdate);
+					if(patNum != 0){//a guar already exists, so simply attach. Make no other changes
 						existingPatOld=pat.Copy();
-						pat.Guarantor=PIn.PInt(table.Rows[0][0].ToString());
+						pat.Guarantor=patNum;
 						if(guarRelat=="parent"){
 							pat.Position=PatientPosition.Child;
 						}
@@ -412,9 +412,9 @@ namespace OpenDental{
 				plan.Subscriber=pat.PatNum;
 			}
 			else{//we need to find or add the subscriber
-				table=Patients.GetPatientByNameAndBirthday(subsc);
-				if(table.Rows.Count>0){//a subsc already exists, so simply attach. Make no other changes
-					plan.Subscriber=PIn.PInt(table.Rows[0][0].ToString());
+				patNum=Patients.GetPatNumByNameAndBirthday(subsc.LName,subsc.FName,subsc.Birthdate);
+				if(patNum != 0){//a subsc already exists, so simply attach. Make no other changes
+					plan.Subscriber=patNum;
 				}
 				else{//need to create and attach a subscriber
 					Patients.Insert(subsc,false);

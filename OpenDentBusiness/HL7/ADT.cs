@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class ADT {
-		public static void ProcessMessage(MessageHL7 message){
+		public static void ProcessMessage(MessageHL7 message,bool isStandalone){
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);
 			switch(triggerevent) {
 				case "A01"://Admit/Visit Information
@@ -28,13 +28,39 @@ namespace OpenDentBusiness.HL7 {
 			//PID-------------------------------------
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			int patNum=PIn.PInt(seg.GetFieldFullText(2));
-			Patient pat=Patients.GetPat(patNum);
+			Patient pat=null;
+			if(isStandalone) {
+				pat=Patients.GetPatByChartNumber(patNum.ToString());
+				if(pat==null) {
+					//try to find the patient in question by using name and birthdate
+					string lName=seg.GetFieldComponent(5,0);
+					string fName=seg.GetFieldComponent(5,1);
+					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(7));
+					int patNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
+					if(patNumByName==0) {//patient does not exist in OD
+						//so pat will still be null, triggering creation of new patient further down.
+					}
+					else {
+						pat=Patients.GetPat(patNumByName);
+						pat.ChartNumber=patNum.ToString();//from now on, we will be able to find pat by chartNumber
+					}
+				}
+			}
+			else {
+				pat=Patients.GetPat(patNum);
+			}
 			Patient patOld=null;
 			bool isNewPat = pat==null;
 			if(isNewPat) {
 				pat=new Patient();
-				pat.PatNum=patNum;
-				pat.Guarantor=patNum;
+				if(isStandalone) {
+					pat.ChartNumber=patNum.ToString();
+				}
+				else {
+					pat.PatNum=patNum;
+				}
+				//this line does not work if isStandalone, so moved to end
+				//pat.Guarantor=patNum;
 				pat.PriProv=PrefC.GetInt("PracticeDefaultProv");
 				pat.BillingType=PrefC.GetInt("PracticeDefaultBillType");
 			}
@@ -54,7 +80,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//GT1-Guarantor-------------------------------------
 			seg=message.GetSegment(SegmentName.GT1,true);
-			SegmentPID.ProcessGT1(pat,seg);
+			SegmentPID.ProcessGT1(pat,seg,isStandalone);
 			//IN1-Insurance-------------------------------------
 			List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
 			for(int i=0;i<segments.Count;i++) {
@@ -62,6 +88,11 @@ namespace OpenDentBusiness.HL7 {
 			}
 			if(isNewPat) {
 				Patients.Insert(pat,true);
+				if(pat.Guarantor==0) {
+					patOld=pat.Copy();
+					pat.Guarantor=pat.PatNum;
+					Patients.Update(pat,patOld);
+				}
 			}
 			else {
 				Patients.Update(pat,patOld);

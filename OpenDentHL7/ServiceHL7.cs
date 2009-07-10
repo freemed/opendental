@@ -60,7 +60,7 @@ namespace OpenDentHL7 {
 			}
 			//inform od via signal that this service is running
 
-
+			IsStandalone=ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1";
 			//start filewatcher
 
 			string hl7folderOut=ProgramProperties.GetPropVal("eClinicalWorks","HL7FolderOut");
@@ -77,7 +77,6 @@ namespace OpenDentHL7 {
 			for(int i=0;i<existingFiles.Length;i++) {
 				ProcessMessage(existingFiles[i]);
 			}
-			IsStandalone=ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="1";
 			if(IsStandalone) {
 				return;//do not continue with the HL7 sending code below
 			}
@@ -122,9 +121,9 @@ namespace OpenDentHL7 {
 			try {
 				MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
 				if(msg.MsgType==MessageType.ADT) {
-					ADT.ProcessMessage(msg);
+					ADT.ProcessMessage(msg,IsStandalone);
 				}
-				else if(msg.MsgType==MessageType.SIU) {
+				else if(msg.MsgType==MessageType.SIU && !IsStandalone) {//appointments don't get imported if standalone mode.
 					SIU.ProcessMessage(msg);
 				}
 			}

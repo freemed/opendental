@@ -268,7 +268,13 @@ namespace OpenDentBusiness{
 			string retVal="";
 			cmd.CommandText=command;
 			con.Open();
-			retVal=cmd.ExecuteScalar().ToString();
+			object scalar=cmd.ExecuteScalar();
+			if(scalar==null) {
+				retVal="";
+			}
+			else {
+				retVal=scalar.ToString();
+			}
 			con.Close();
 			return retVal;
 		}

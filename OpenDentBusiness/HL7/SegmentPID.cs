@@ -5,13 +5,14 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	/// <summary>(and GT1 and PV1)</summary>
 	public class SegmentPID {
-		///<summary>The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.</summary>
+		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.</summary>
 		public static void ProcessPID(Patient pat,SegmentHL7 seg) {
 			int patNum=PIn.PInt(seg.GetFieldFullText(2));
-			if(pat.PatNum==0) {
-				pat.PatNum=patNum;
-			}
-			else if(pat.PatNum != patNum) {
+			//if(pat.PatNum==0) {
+			//	pat.PatNum=patNum;
+			//}
+			//else 
+			if(pat.PatNum!=0 && pat.PatNum != patNum) {
 				throw new ApplicationException("Invalid patNum");
 			}
 			pat.LName=seg.GetFieldComponent(5,0);
@@ -28,30 +29,57 @@ namespace OpenDentBusiness.HL7 {
 			pat.HmPhone=PhoneParse(seg.GetFieldFullText(13));
 			pat.WkPhone=PhoneParse(seg.GetFieldFullText(14));
 			pat.Position=MaritalStatusParse(seg.GetFieldFullText(16));
-			//pat.ChartNumber=seg.GetFieldFullText(18);//this is wrong
+			//pat.ChartNumber=seg.GetFieldFullText(18);//this is wrong.  Would also break standalone mode
 			pat.SSN=seg.GetFieldFullText(19);
 		}
 
-		///<summary>A new pat will already have guarantor set as self. If relationship is self, this loop does nothing.</summary>
-		public static void ProcessGT1(Patient pat,SegmentHL7 seg) {
+		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
+		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool isStandalone) {
 			int guarNum=PIn.PInt(seg.GetFieldFullText(2));
 			if(seg.GetFieldFullText(11)=="1") {//if relationship is self
 				return;
 			}
-			pat.Guarantor=guarNum;
-			Patient guar=Patients.GetPat(guarNum);
+			Patient guar=null;
 			Patient guarOld=null;
+			//So guarantor is someone else
+			if(isStandalone) {
+				//try to find guarantor by using chartNumber
+				guar=Patients.GetPatByChartNumber(guarNum.ToString());
+				if(guar==null) {
+					//try to find the guarantor by using name and birthdate
+					string lName=seg.GetFieldComponent(3,0);
+					string fName=seg.GetFieldComponent(3,1);
+					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(8));
+					int guarNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
+					if(guarNumByName==0) {//guarantor does not exist in OD
+						//so guar will still be null, triggering creation of new guarantor further down.
+					}
+					else {
+						guar=Patients.GetPat(guarNumByName);
+						guar.ChartNumber=guarNum.ToString();//from now on, we will be able to find guar by chartNumber
+					}
+				}
+			}
+			else {
+				guar=Patients.GetPat(guarNum);
+			}
+			//we can't necessarily set pat.Guarantor yet, because in Standalone mode, we might not know it yet.
 			bool isNewGuar= guar==null;
 			if(isNewGuar) {//then we need to add guarantor to db
 				guar=new Patient();
-				guar.PatNum=guarNum;
+				if(isStandalone) {
+					guar.ChartNumber=guarNum.ToString();
+				}
+				else {
+					guar.PatNum=guarNum;
+				}
 				guar.PriProv=PrefC.GetInt("PracticeDefaultProv");
 				guar.BillingType=PrefC.GetInt("PracticeDefaultBillType");
 			}
 			else {
-				guarOld=pat.Copy();
+				guarOld=guar.Copy();
 			}
-			guar.Guarantor=guarNum;
+			//guar.Guarantor=guarNum;
 			guar.LName=seg.GetFieldComponent(3,0);
 			guar.FName=seg.GetFieldComponent(3,1);
 			guar.MiddleI=seg.GetFieldComponent(3,2);
@@ -68,10 +96,14 @@ namespace OpenDentBusiness.HL7 {
 			guar.SSN=seg.GetFieldFullText(12);
 			if(isNewGuar) {
 				Patients.Insert(guar,true);
+				guarOld=guar.Copy();
+				guar.Guarantor=guar.PatNum;
+				Patients.Update(guar,guarOld);
 			}
 			else {
 				Patients.Update(guar,guarOld);
 			}
+			pat.Guarantor=guar.PatNum;
 		}
 
 		public static void ProcessPV1(Patient pat,SegmentHL7 seg) {

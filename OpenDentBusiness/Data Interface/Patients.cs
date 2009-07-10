@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			if(chartNumber=="") {
 				return null;
 			}
-			string command="SELECT * FROM patient WHERE ChartNumber="+POut.PString(chartNumber);
+			string command="SELECT * FROM patient WHERE ChartNumber='"+POut.PString(chartNumber)+"'";
 			Patient pat=null;
 			try {
 				pat= DataObjectFactory<Patient>.CreateObject(command);
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 			if(ssn=="") {
 				return null;
 			}
-			string command="SELECT * FROM patient WHERE SSN="+POut.PString(ssn);
+			string command="SELECT * FROM patient WHERE SSN='"+POut.PString(ssn)+"'";
 			Patient pat=null;
 			try {
 				pat= DataObjectFactory<Patient>.CreateObject(command);
@@ -1658,16 +1658,17 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetPatientByNameAndBirthday(Patient pat){
+		///<summary>Will return 0 if can't find exact matching pat.</summary>
+		public static int GetPatNumByNameAndBirthday(string lName,string fName,DateTime birthdate){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),pat);
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
 			}
 			string command="SELECT PatNum FROM patient WHERE "
-				+"LName='"+POut.PString(pat.LName)+"' "
-				+"AND FName='"+POut.PString(pat.FName)+"' "
-				+"AND Birthdate="+POut.PDate(pat.Birthdate)+" "
+				+"LName='"+POut.PString(lName)+"' "
+				+"AND FName='"+POut.PString(fName)+"' "
+				+"AND Birthdate="+POut.PDate(birthdate)+" "
 				+"AND PatStatus!=4";//not deleted
-			return Db.GetTable(command);
+			return PIn.PInt(Db.GetScalar(command));
 		}
 
 		public static void UpdateFamilyBillingType(int billingType,int Guarantor){
