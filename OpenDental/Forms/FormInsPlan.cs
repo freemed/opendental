@@ -1379,6 +1379,7 @@ namespace OpenDental{
 			this.comboFilingCode.Name = "comboFilingCode";
 			this.comboFilingCode.Size = new System.Drawing.Size(212,21);
 			this.comboFilingCode.TabIndex = 159;
+			this.comboFilingCode.SelectionChangeCommitted += new System.EventHandler(this.comboFilingCode_SelectionChangeCommitted);
 			// 
 			// label13
 			// 
@@ -1735,10 +1736,18 @@ namespace OpenDental{
 				}
 			}
 			comboFilingCode.Items.Clear();
+			comboFilingCodeSubtype.Items.Clear();
 			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
 				comboFilingCode.Items.Add(InsFilingCodeC.Listt[i].Descript);
 				if(PlanCur.FilingCode==InsFilingCodeC.Listt[i].InsFilingCodeNum) {
 					comboFilingCode.SelectedIndex=i;
+					List<InsFilingCodeSubtype> subtypeList=InsFilingCodeSubtypes.GetForInsFilingCode(PlanCur.FilingCode);
+					for(int j=0;j<subtypeList.Count;j++) {
+						comboFilingCodeSubtype.Items.Add(subtypeList[j].Descript);
+						if(PlanCur.FilingCodeSubtype==subtypeList[j].InsFilingCodeSubtypeNum) {
+							comboFilingCodeSubtype.SelectedIndex=j;
+						}
+					}
 				}
 			}
 			FillCarrier(PlanCur.CarrierNum);
@@ -2233,6 +2242,18 @@ namespace OpenDental{
 			textElectID.Text=FormE.selectedID.PayorID;
 			FillPayor();
 			//textElectIDdescript.Text=FormE.selectedID.CarrierName;
+		}
+
+		private void comboFilingCode_SelectionChangeCommitted(object sender,EventArgs e) {
+			comboFilingCodeSubtype.Items.Clear();
+			List<InsFilingCodeSubtype> subtypeList
+				=InsFilingCodeSubtypes.GetForInsFilingCode(InsFilingCodeC.Listt[comboFilingCode.SelectedIndex].InsFilingCodeNum);
+			for(int j=0;j<subtypeList.Count;j++) {
+				comboFilingCodeSubtype.Items.Add(subtypeList[j].Descript);
+				//if(PlanCur.FilingCodeSubtype==subtypeList[j].InsFilingCodeSubtypeNum) {
+				//	comboFilingCodeSubtype.SelectedIndex=j;
+				//}
+			}
 		}
 
 		private void butImportTrojan_Click(object sender,System.EventArgs e) {
@@ -3799,6 +3820,11 @@ namespace OpenDental{
 				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].FeeSchedNum;
 			}
 			PlanCur.FilingCode=InsFilingCodeC.Listt[comboFilingCode.SelectedIndex].InsFilingCodeNum;
+			PlanCur.FilingCodeSubtype=0;
+			List<InsFilingCodeSubtype> subtypeList=InsFilingCodeSubtypes.GetForInsFilingCode(PlanCur.FilingCode);
+			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {
+				PlanCur.FilingCodeSubtype=subtypeList[comboFilingCodeSubtype.SelectedIndex].InsFilingCodeSubtypeNum;
+			}
 			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
@@ -3926,6 +3952,8 @@ namespace OpenDental{
 				PatPlans.Delete(PatPlanCur.PatPlanNum);//no need to check dependencies.  Maintains ordinals and recomputes estimates.
 			}
 		}
+
+		
 
 	
 
