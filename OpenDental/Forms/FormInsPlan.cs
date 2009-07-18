@@ -159,6 +159,8 @@ namespace OpenDental{
 		private TextBox textElectBenLastDate;
 		private Label label9;
 		private OpenDental.UI.Button butHistoryElect;
+		private ComboBox comboFilingCodeSubtype;
+		private Label label15;
 		private CheckBox checkIsHidden;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -327,6 +329,8 @@ namespace OpenDental{
 			this.groupCarrier = new System.Windows.Forms.GroupBox();
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
+			this.comboFilingCodeSubtype = new System.Windows.Forms.ComboBox();
+			this.label15 = new System.Windows.Forms.Label();
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.checkCodeSubst = new System.Windows.Forms.CheckBox();
 			this.checkShowBaseUnits = new System.Windows.Forms.CheckBox();
@@ -1280,6 +1284,8 @@ namespace OpenDental{
 			this.panelPlan.AutoScroll = true;
 			this.panelPlan.AutoScrollMargin = new System.Drawing.Size(0,10);
 			this.panelPlan.BackColor = System.Drawing.SystemColors.Control;
+			this.panelPlan.Controls.Add(this.comboFilingCodeSubtype);
+			this.panelPlan.Controls.Add(this.label15);
 			this.panelPlan.Controls.Add(this.checkIsHidden);
 			this.panelPlan.Controls.Add(this.checkCodeSubst);
 			this.panelPlan.Controls.Add(this.checkShowBaseUnits);
@@ -1302,6 +1308,24 @@ namespace OpenDental{
 			this.panelPlan.Size = new System.Drawing.Size(454,438);
 			this.panelPlan.TabIndex = 157;
 			// 
+			// comboFilingCodeSubtype
+			// 
+			this.comboFilingCodeSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFilingCodeSubtype.Location = new System.Drawing.Point(112,530);
+			this.comboFilingCodeSubtype.MaxDropDownItems = 30;
+			this.comboFilingCodeSubtype.Name = "comboFilingCodeSubtype";
+			this.comboFilingCodeSubtype.Size = new System.Drawing.Size(212,21);
+			this.comboFilingCodeSubtype.TabIndex = 167;
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(0,532);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(110,19);
+			this.label15.TabIndex = 166;
+			this.label15.Text = "Filing Code Subtype";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// checkIsHidden
 			// 
 			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -1322,7 +1346,7 @@ namespace OpenDental{
 			// 
 			// checkShowBaseUnits
 			// 
-			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,553);
+			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,576);
 			this.checkShowBaseUnits.Name = "checkShowBaseUnits";
 			this.checkShowBaseUnits.Size = new System.Drawing.Size(289,17);
 			this.checkShowBaseUnits.TabIndex = 162;
@@ -1331,7 +1355,7 @@ namespace OpenDental{
 			// 
 			// textDentaide
 			// 
-			this.textDentaide.Location = new System.Drawing.Point(158,532);
+			this.textDentaide.Location = new System.Drawing.Point(158,555);
 			this.textDentaide.MaxVal = 255;
 			this.textDentaide.MinVal = 0;
 			this.textDentaide.Name = "textDentaide";
@@ -1340,7 +1364,7 @@ namespace OpenDental{
 			// 
 			// labelDentaide
 			// 
-			this.labelDentaide.Location = new System.Drawing.Point(12,535);
+			this.labelDentaide.Location = new System.Drawing.Point(12,558);
 			this.labelDentaide.Name = "labelDentaide";
 			this.labelDentaide.Size = new System.Drawing.Size(140,19);
 			this.labelDentaide.TabIndex = 160;

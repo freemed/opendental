@@ -1266,7 +1266,7 @@ namespace OpenDental{
 				Splash.Dispose();
 				return;
 			}
-			if(Programs.IsEnabled("eClinicalWorks")){
+			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				Splash.Dispose();
 			}
 			//We no longer do this shotgun approach because it can slow the loading time.
@@ -3863,27 +3863,40 @@ namespace OpenDental{
 			string userName="";
 			string passHash="";
 			string aptNum="";
+			string ecwConfigPath="";
+			int userId=0;
 			for(int i=0;i<args.Length;i++) {
-				if(args[i].StartsWith("PatNum=")) {
+				if(args[i].StartsWith("PatNum=") && args[i].Length>7) {
+					string patNumStr=args[i].Substring(7).Trim('"');
 					try {
-						patNum=System.Convert.ToInt32(args[i].Substring(7));
+						patNum=Convert.ToInt32(patNumStr);
 					}
 					catch { }
 				}
 				if(args[i].StartsWith("ChartNumber=") && args[i].Length>12) {
-					chartNumber=args[i].Substring(12);
+					chartNumber=args[i].Substring(12).Trim('"');
 				}
 				if(args[i].StartsWith("SSN=") && args[i].Length>4) {
-					ssn=args[i].Substring(4);
+					ssn=args[i].Substring(4).Trim('"');
 				}
 				if(args[i].StartsWith("UserName=") && args[i].Length>9) {
-					userName=args[i].Substring(9);
+					userName=args[i].Substring(9).Trim('"');
 				}
 				if(args[i].StartsWith("PassHash=") && args[i].Length>9) {
-					passHash=args[i].Substring(9);
+					passHash=args[i].Substring(9).Trim('"');
 				}
 				if(args[i].StartsWith("AptNum=") && args[i].Length>7) {
-					aptNum=args[i].Substring(7);
+					aptNum=args[i].Substring(7).Trim('"');
+				}
+				if(args[i].StartsWith("EcwConfigPath=") && args[i].Length>14) {
+					ecwConfigPath=args[i].Substring(14).Trim('"');
+				}
+				if(args[i].StartsWith("UserId=") && args[i].Length>7) {
+					string userIdStr=args[i].Substring(7).Trim('"');
+					try {
+						userId=Convert.ToInt32(userIdStr);
+					}
+					catch { }
 				}
 			}
 			//Username and password-----------------------------------------------------
@@ -3978,6 +3991,9 @@ namespace OpenDental{
 				Patient pat=Patients.GetPatByChartNumber(chartNumber);
 				if(pat==null) {
 					//todo: decide action
+					CurPatNum=0;
+					RefreshCurrentModule();
+					FillPatientButton(0,"",false,"",0);
 				}
 				else {
 					CurPatNum=pat.PatNum;
@@ -3989,6 +4005,9 @@ namespace OpenDental{
 				Patient pat=Patients.GetPatBySSN(ssn);
 				if(pat==null) {
 					//todo: decide action
+					CurPatNum=0;
+					RefreshCurrentModule();
+					FillPatientButton(0,"",false,"",0);
 				}
 				else {
 					CurPatNum=pat.PatNum;
@@ -3998,8 +4017,8 @@ namespace OpenDental{
 			}
 			//AptNum-------------------------------------------------------------
 			Bridges.ECW.AptNum=PIn.PInt(aptNum);
-			
-
+			Bridges.ECW.EcwConfigPath=ecwConfigPath;
+			Bridges.ECW.UserId=userId;
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
