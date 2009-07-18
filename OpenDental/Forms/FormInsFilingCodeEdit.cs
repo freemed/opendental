@@ -280,11 +280,11 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete this Insurance Filing Code?")) {
+			if(!MsgBox.Show(this,true,"Delete this code?")) {
 				return;
 			}
 			try{
-				InsFilingCodes.DeleteObject(InsFilingCodeCur.InsFilingCodeNum);
+				InsFilingCodes.Delete(InsFilingCodeCur.InsFilingCodeNum);
 				InsFilingCodeSubtypes.DeleteForInsFilingCode(InsFilingCodeCur.InsFilingCodeNum);
 				DialogResult=DialogResult.OK;
 			}

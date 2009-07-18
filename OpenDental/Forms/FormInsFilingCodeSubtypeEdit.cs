@@ -158,11 +158,11 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete this Insurance Filing Code Subtype?")) {
+			if(!MsgBox.Show(this,true,"Delete?")) {
 				return;
 			}
 			try{
-				InsFilingCodeSubtypes.DeleteObject(InsFilingCodeSubtypeCur.InsFilingCodeSubtypeNum);
+				InsFilingCodeSubtypes.Delete(InsFilingCodeSubtypeCur.InsFilingCodeSubtypeNum);
 				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex){

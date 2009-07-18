@@ -51,11 +51,15 @@ namespace OpenDentBusiness {
 			return insFilingCodeSubtype.InsFilingCodeSubtypeNum;
 		}
 
-		///<summary></summary>
-		public static void DeleteObject(int insFilingCodeSubtypeNum) {
+		///<summary>Surround with try/catch</summary>
+		public static void Delete(int insFilingCodeSubtypeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeSubtypeNum);
 				return;
+			}
+			string command="SELECT COUNT(*) FROM insplan WHERE FilingCodeSubtype="+POut.PInt(insFilingCodeSubtypeNum);
+			if(Db.GetScalar(command) != "0") {
+				throw new ApplicationException(Lans.g("InsFilingCodeSubtype","Already in use by insplans."));
 			}
 			DataObjectFactory<InsFilingCodeSubtype>.DeleteObject(insFilingCodeSubtypeNum);
 		}

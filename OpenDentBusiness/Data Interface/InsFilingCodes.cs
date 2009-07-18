@@ -56,13 +56,16 @@ namespace OpenDentBusiness{
 			return insFilingCode.InsFilingCodeNum;
 		}
 
-		///<summary></summary>
-		public static void DeleteObject(int insFilingCodeNum){
+		///<summary>Surround with try/catch</summary>
+		public static void Delete(int insFilingCodeNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeNum);
 				return;
 			}
-			//TODO: validate that not currently in use.
+			string command="SELECT COUNT(*) FROM insplan WHERE FilingCode="+POut.PInt(insFilingCodeNum);
+			if(Db.GetScalar(command) != "0") {
+				throw new ApplicationException(Lans.g("InsFilingCode","Already in use by insplans."));
+			}
 			DataObjectFactory<InsFilingCode>.DeleteObject(insFilingCodeNum);
 		}
 

@@ -2250,9 +2250,6 @@ namespace OpenDental{
 				=InsFilingCodeSubtypes.GetForInsFilingCode(InsFilingCodeC.Listt[comboFilingCode.SelectedIndex].InsFilingCodeNum);
 			for(int j=0;j<subtypeList.Count;j++) {
 				comboFilingCodeSubtype.Items.Add(subtypeList[j].Descript);
-				//if(PlanCur.FilingCodeSubtype==subtypeList[j].InsFilingCodeSubtypeNum) {
-				//	comboFilingCodeSubtype.SelectedIndex=j;
-				//}
 			}
 		}
 
