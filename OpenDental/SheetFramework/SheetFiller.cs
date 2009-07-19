@@ -176,6 +176,7 @@ namespace OpenDental{
 				}
 				fldval=field.FieldValue;
 				fldval=fldval.Replace("[address]",address);
+				fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
 				fldval=fldval.Replace("[Birthdate]",birthdate);
 				fldval=fldval.Replace("[carrierName]",carrierName);
 				fldval=fldval.Replace("[ChartNumber]",pat.ChartNumber);
@@ -192,8 +193,10 @@ namespace OpenDental{
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[Email]",pat.Email);
 				fldval=fldval.Replace("[HmPhone]",StripPhoneBeyondSpace(pat.HmPhone));
+				fldval=fldval.Replace("[nameF]",pat.FName);
 				fldval=fldval.Replace("[nameFL]",pat.GetNameFL());
 				fldval=fldval.Replace("[nameFLFormal]",pat.GetNameFLFormal());
+				fldval=fldval.Replace("[nameL]",pat.LName);
 				fldval=fldval.Replace("[nameLF]",pat.GetNameLF());
 				fldval=fldval.Replace("[nextSchedApptDateT]",nextSchedApptDateT);
 				fldval=fldval.Replace("[PatNum]",pat.PatNum.ToString());

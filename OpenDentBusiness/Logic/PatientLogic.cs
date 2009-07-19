@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				return LName+", '"+Preferred+"' "+FName+" "+MiddleI;
 		}
 
-		///<summary>Converts a date to an age.  Blank if over 115.  Only used where it's important to show the month, too.</summary>
+		///<summary>Converts a date to an age.  Blank if over 115.  Only used where it's important to show the month, too.  Month will only show if less than 18yo.</summary>
 		public static string DateToAgeString(DateTime date) {
 			if(date.Year<1880)
 				return "";

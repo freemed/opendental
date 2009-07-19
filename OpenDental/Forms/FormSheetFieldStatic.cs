@@ -50,6 +50,7 @@ namespace OpenDental {
 		private void FillFields(){
 			string[] fieldArray=new string[] {
 				"address",
+				"age",
 				"Birthdate",
 				"carrierName",
 				"ChartNumber",
@@ -66,8 +67,10 @@ namespace OpenDental {
 				"dateToday",
 				"Email",
 				"HmPhone",
+				"nameF",
 				"nameFL",
 				"nameFLFormal",
+				"nameL",
 				"nameLF",
 				"nextSchedApptDateT",
 				"PatNum",
