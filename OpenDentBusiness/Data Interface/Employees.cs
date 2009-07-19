@@ -94,6 +94,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
+			if(Cur.LName=="" && Cur.FName=="") {
+				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
+			}
 			string command="UPDATE employee SET " 
 				+ "lname = '"       +POut.PString(Cur.LName)+"' "
 				+ ",fname = '"      +POut.PString(Cur.FName)+"' "
@@ -112,7 +115,11 @@ namespace OpenDentBusiness{
 				Cur.EmployeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
 			}
-			string command = "INSERT INTO employee (lname,fname,middlei,ishidden"
+			string command;
+			if(Cur.LName=="" && Cur.FName=="") {
+				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
+			}
+			command= "INSERT INTO employee (lname,fname,middlei,ishidden"
 				+",ClockStatus,PhoneExt) "
 				+"VALUES("
 				+"'"+POut.PString(Cur.LName)+"', "

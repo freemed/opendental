@@ -645,7 +645,9 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO insfilingcode VALUES(23,'MutuallyDefined','ZZ',22)";
 				Db.NonQ(command);
-			
+				//Fixes bug here instead of db maint
+				command="UPDATE employee SET LName='O' WHERE LName='' AND FName=''";
+				Db.NonQ(command);
 			
 				
 

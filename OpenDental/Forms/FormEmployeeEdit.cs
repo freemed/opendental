@@ -257,11 +257,17 @@ namespace OpenDental{
 				EmployeeCur.PhoneExt=0;
 			}
 			EmployeeCur.IsHidden=checkIsHidden.Checked;
-			if(IsNew){
-				Employees.Insert(EmployeeCur);
+			try {
+				if(IsNew) {
+					Employees.Insert(EmployeeCur);
+				}
+				else {
+					Employees.Update(EmployeeCur);
+				}
 			}
-			else{
-				Employees.Update(EmployeeCur);
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
 			}
 			DialogResult=DialogResult.OK;
 		}
