@@ -206,12 +206,12 @@ namespace OpenDental.Imaging {
 			encoders = ImageCodecInfo.GetImageEncoders();
 			myImageCodecInfo = null;
 			for(int j = 0; j < encoders.Length; j++) {
-				if(encoders[j].MimeType == "image/jpeg")
+				if(encoders[j].MimeType == "image/jpeg") {
 					myImageCodecInfo = encoders[j];
+				}
 			}
-			System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
 			EncoderParameters myEncoderParameters = new EncoderParameters(1);
-			EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, qualityL);
+			EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityL);
 			myEncoderParameters.Param[0] = myEncoderParameter;
 			//AutoCrop()?
 			try {

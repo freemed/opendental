@@ -183,18 +183,36 @@ namespace OpenDental{
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			try {
-				if(ImageHelper.HasImageExtension(oldPath)){
-					Bitmap bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
-					Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplySettings.ALL);
-					bitmapnew.Save(newPath);
+				if(ImageHelper.HasImageExtension(oldPath)) {
+					if(doc.CropH !=0
+						|| doc.CropW !=0
+						|| doc.CropX !=0
+						|| doc.CropY !=0
+						|| doc.DegreesRotated !=0
+						|| doc.IsFlipped
+						|| doc.WindowingMax !=0
+						|| doc.WindowingMin !=0) 
+					{
+						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
+						Bitmap bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
+						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplySettings.ALL);
+						bitmapnew.Save(newPath);
+					}
+					else {
+						File.Copy(oldPath,newPath);
+					}
 				}
-				else{
+				else {
 					File.Copy(oldPath,newPath);
 				}
 				ClaimAttachNew=new ClaimAttach();
 				ClaimAttachNew.DisplayedFileName=Docs[gridMain.GetSelectedIndex()].FileName;
 				ClaimAttachNew.ActualFileName=newName;
 				DialogResult=DialogResult.OK;
+			}
+			catch(FileNotFoundException ex) {
+				MessageBox.Show(Lan.g(this,"File not found: ")+ex.Message);
+				return;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

@@ -1259,16 +1259,19 @@ namespace OpenDental{
 			ImageType imgType;
 			if(scanType=="xray"){
 				imgType=ImageType.Radiograph;
-			}else if(scanType=="photo"){
+			}
+			else if(scanType=="photo"){
 				imgType=ImageType.Photo;
-			}else{//Assume document
+			}
+			else{//Assume document
 				imgType=ImageType.Document;
 			}
 			bool saved=true;
 			Document doc = null;
 			try{//Create corresponding image file.
 				doc = imageStore.Import(scannedImage, GetCurrentCategory(), imgType);
-			}catch(Exception ex){
+			}
+			catch(Exception ex){
 				saved=false;
 				MessageBox.Show(Lan.g(this,"Unable to save document")+": "+ex.Message);
 			}
