@@ -426,13 +426,22 @@ namespace OpenDental{
 			else{
 				string email=PatCur.Email;
 				int siteNum=PatCur.SiteNum;
+				//
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;
 				FormP.ShowDialog();
+				//there are many things which may have changed that need to trigger refresh:
+				//FName, LName, MiddleI, Preferred, SiteNum, or ChartNumber should refresh title bar.
+				//Email change should change email but enabled.
+				//Instead of checking for each of those:
+				/*
 				if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}
 				if(siteNum!=PatCur.SiteNum){
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				}*/
+				if(FormP.DialogResult==DialogResult.OK) {
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}
 			}
