@@ -404,6 +404,17 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '6.6.16.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_6_19();
+		}
+
+		private static void To6_6_19() {
+			if(FromVersion<new Version("6.6.19.0")) {
+				string command;
+				command="UPDATE employee SET LName='O' WHERE LName='' AND FName=''";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.6.19.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_7_0();
 		}
 
@@ -646,6 +657,7 @@ DROP TABLE IF EXISTS etAck";
 				command="INSERT INTO insfilingcode VALUES(23,'MutuallyDefined','ZZ',22)";
 				Db.NonQ(command);
 				//Fixes bug here instead of db maint
+				//Duplicated in version 6.6
 				command="UPDATE employee SET LName='O' WHERE LName='' AND FName=''";
 				Db.NonQ(command);
 			
