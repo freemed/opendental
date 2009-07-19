@@ -3882,7 +3882,17 @@ namespace OpenDental{
 			TimeSpan beforeTime=new TimeSpan(0);
 			if(textBefore.Text!=""){
 				try{
-					beforeTime=TimeSpan.FromHours(PIn.PDouble(textBefore.Text));
+					string[] hrmin=textBefore.Text.Split(new char[] {':'},StringSplitOptions.RemoveEmptyEntries);//doesn't work with foreign times.
+					string hr="0";
+					if(hrmin.Length>0){
+						hr=hrmin[0];
+					}
+					string min="0";
+					if(hrmin.Length>1) {
+						min=hrmin[1];
+					}
+					beforeTime=TimeSpan.FromHours(PIn.PDouble(hr))
+						+TimeSpan.FromMinutes(PIn.PDouble(min));
 					if(radioBeforePM.Checked && beforeTime.Hours<12){
 						beforeTime=beforeTime+TimeSpan.FromHours(12);
 					}
@@ -3896,7 +3906,17 @@ namespace OpenDental{
 			TimeSpan afterTime=new TimeSpan(0);
 			if(textAfter.Text!=""){
 				try{
-					afterTime=TimeSpan.FromHours(PIn.PDouble(textAfter.Text));
+					string[] hrmin=textAfter.Text.Split(new char[] { ':' },StringSplitOptions.RemoveEmptyEntries);//doesn't work with foreign times.
+					string hr="0";
+					if(hrmin.Length>0) {
+						hr=hrmin[0];
+					}
+					string min="0";
+					if(hrmin.Length>1) {
+						min=hrmin[1];
+					}
+					afterTime=TimeSpan.FromHours(PIn.PDouble(hr))
+						+TimeSpan.FromMinutes(PIn.PDouble(min));
 					if(radioAfterPM.Checked && afterTime.Hours<12){
 						afterTime=afterTime+TimeSpan.FromHours(12);
 					}
