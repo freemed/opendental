@@ -412,6 +412,8 @@ namespace OpenDentBusiness {
 				string command;
 				command="UPDATE employee SET LName='O' WHERE LName='' AND FName=''";
 				Db.NonQ(command);
+				command="UPDATE schedule SET SchedType=1 WHERE ProvNum != 0 AND SchedType != 1";
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.6.19.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}

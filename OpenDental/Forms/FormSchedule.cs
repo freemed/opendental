@@ -330,7 +330,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(28,410);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(103,26);
+			this.butDelete.Size = new System.Drawing.Size(103,24);
 			this.butDelete.TabIndex = 27;
 			this.butDelete.Text = "Clear Week";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -346,7 +346,7 @@ namespace OpenDental{
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(28,662);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(90,26);
+			this.butPrint.Size = new System.Drawing.Size(90,24);
 			this.butPrint.TabIndex = 26;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -374,7 +374,7 @@ namespace OpenDental{
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(64,4);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,26);
+			this.butRefresh.Size = new System.Drawing.Size(75,24);
 			this.butRefresh.TabIndex = 11;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -419,8 +419,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Schedule";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSchedule_FormClosing);
 			this.Load += new System.EventHandler(this.FormSchedule_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSchedule_FormClosing);
 			this.groupCopy.ResumeLayout(false);
 			this.groupCopy.PerformLayout();
 			this.groupPaste.ResumeLayout(false);

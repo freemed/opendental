@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.butProvNote.CornerRadius = 4F;
 			this.butProvNote.Location = new System.Drawing.Point(58,424);
 			this.butProvNote.Name = "butProvNote";
-			this.butProvNote.Size = new System.Drawing.Size(80,26);
+			this.butProvNote.Size = new System.Drawing.Size(80,24);
 			this.butProvNote.TabIndex = 15;
 			this.butProvNote.Text = "Note";
 			this.butProvNote.Click += new System.EventHandler(this.butProvNote_Click);
@@ -156,7 +156,7 @@ namespace OpenDental{
 			this.butAddTime.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddTime.Location = new System.Drawing.Point(58,391);
 			this.butAddTime.Name = "butAddTime";
-			this.butAddTime.Size = new System.Drawing.Size(80,26);
+			this.butAddTime.Size = new System.Drawing.Size(80,24);
 			this.butAddTime.TabIndex = 4;
 			this.butAddTime.Text = "&Add";
 			this.butAddTime.Click += new System.EventHandler(this.butAddTime_Click);
@@ -190,7 +190,7 @@ namespace OpenDental{
 			this.butHoliday.CornerRadius = 4F;
 			this.butHoliday.Location = new System.Drawing.Point(14,53);
 			this.butHoliday.Name = "butHoliday";
-			this.butHoliday.Size = new System.Drawing.Size(80,26);
+			this.butHoliday.Size = new System.Drawing.Size(80,24);
 			this.butHoliday.TabIndex = 15;
 			this.butHoliday.Text = "Holiday";
 			this.butHoliday.Click += new System.EventHandler(this.butHoliday_Click);
@@ -204,7 +204,7 @@ namespace OpenDental{
 			this.butNote.CornerRadius = 4F;
 			this.butNote.Location = new System.Drawing.Point(14,20);
 			this.butNote.Name = "butNote";
-			this.butNote.Size = new System.Drawing.Size(80,26);
+			this.butNote.Size = new System.Drawing.Size(80,24);
 			this.butNote.TabIndex = 14;
 			this.butNote.Text = "Note";
 			this.butNote.Click += new System.EventHandler(this.butNote_Click);
@@ -219,7 +219,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(684,647);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -251,7 +251,7 @@ namespace OpenDental{
 			this.butCloseOffice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butCloseOffice.Location = new System.Drawing.Point(726,503);
 			this.butCloseOffice.Name = "butCloseOffice";
-			this.butCloseOffice.Size = new System.Drawing.Size(80,26);
+			this.butCloseOffice.Size = new System.Drawing.Size(80,24);
 			this.butCloseOffice.TabIndex = 5;
 			this.butCloseOffice.Text = "Delete";
 			this.butCloseOffice.Click += new System.EventHandler(this.butDelete_Click);
@@ -266,7 +266,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(771,647);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -494,14 +494,14 @@ namespace OpenDental{
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
-				SchedCur.SchedType=ScheduleType.Provider;
+				schedTemp.SchedType=ScheduleType.Provider;
 				schedTemp.ProvNum=ProviderC.List[listProv.SelectedIndices[i]].ProvNum;
 				SchedList.Add(schedTemp);
 			}
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
-				SchedCur.SchedType=ScheduleType.Employee;
+				schedTemp.SchedType=ScheduleType.Employee;
 				schedTemp.EmployeeNum=Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum;
 				SchedList.Add(schedTemp);
 			}

@@ -80,7 +80,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(97,64);
+			this.textNote.Location = new System.Drawing.Point(97,63);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(220,113);
@@ -88,7 +88,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(31,65);
+			this.label4.Location = new System.Drawing.Point(31,64);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(64,16);
 			this.label4.TabIndex = 16;
