@@ -2462,8 +2462,8 @@ namespace OpenDental{
 		}
 
 		private void gridPreAuth_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-      Claim ClaimCur=(Claim)ALPreAuth[e.Row];
- 			FormClaimEdit FormC=new FormClaimEdit(ClaimCur,PatCur,FamCur);
+			Claim claim=Claims.GetClaim(((Claim)ALPreAuth[e.Row]).ClaimNum);//gets attached images.
+ 			FormClaimEdit FormC=new FormClaimEdit(claim,PatCur,FamCur);
       //FormClaimEdit2.IsPreAuth=true;
 			FormC.ShowDialog();
 			if(FormC.DialogResult!=DialogResult.OK){
