@@ -163,6 +163,9 @@ namespace OpenDentBusiness{
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("toothNum"));
 			}
+			else if(outInCheck==OutInCheck.Check) {
+				list.Add(NewCheck("misc"));
+			}
 			return list;
 		}
 
@@ -201,6 +204,9 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In){
 				//none
+			}
+			else if(outInCheck==OutInCheck.Check) {
+				list.Add(NewCheck("misc"));
 			}
 			return list;
 		}
