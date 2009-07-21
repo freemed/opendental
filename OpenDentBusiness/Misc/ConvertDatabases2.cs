@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("6.7.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("6.8.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -417,11 +417,11 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '6.6.19.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To6_7_0();
+			To6_7_1();
 		}
 
-		private static void To6_7_0() {
-			if(FromVersion<new Version("6.7.0.0")) {
+		private static void To6_7_1() {
+			if(FromVersion<new Version("6.7.1.0")) {
 				string command;
 				command="ALTER TABLE document ADD DateTStamp TimeStamp";
 				Db.NonQ(command);
@@ -662,19 +662,31 @@ DROP TABLE IF EXISTS etAck";
 				//Duplicated in version 6.6
 				command="UPDATE employee SET LName='O' WHERE LName='' AND FName=''";
 				Db.NonQ(command);
-			
-				
-
-
-
-
-
-
-
-				command="UPDATE preference SET ValueString = '6.7.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE schedule SET SchedType=1 WHERE ProvNum != 0 AND SchedType != 1";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To6_7_?();
+			To6_8_0();
+		}
+
+		private static void To6_8_0() {
+			if(FromVersion<new Version("6.8.0.0")) {
+				string command;
+
+
+
+
+
+
+
+
+
+				
+				command="UPDATE preference SET ValueString = '6.8.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To6_7_1();
 		}
 
 	}
