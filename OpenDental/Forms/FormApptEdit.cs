@@ -1001,6 +1001,9 @@ namespace OpenDental{
 				comboStatus.Items.Add(Lan.g("enumApptStatus", "Broken"));
 				comboStatus.SelectedIndex=(int)AptCur.AptStatus-1;
 			}
+			if(AptCur.AptStatus==ApptStatus.UnschedList) {
+				comboStatus.Enabled=false;
+			}
 			//convert time pattern from 5 to current increment.
 			strBTime=new StringBuilder();
 			for(int i=0;i<AptCur.Pattern.Length;i++) {
