@@ -438,8 +438,11 @@ namespace OpenDentBusiness {
 				command=@"CREATE TABLE etransmessagetext (
 					EtransMessageTextNum int NOT NULL auto_increment,
 					MessageText text NOT NULL,
-					PRIMARY KEY (EtransMessageTextNum)
+					PRIMARY KEY (EtransMessageTextNum),
+					INDEX(MessageText(255))
 					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+				command="ALTER TABLE etrans ADD INDEX(MessageText(255))";
 				Db.NonQ(command);
 				command="INSERT INTO etransmessagetext (MessageText) "
 					+"SELECT DISTINCT MessageText FROM etrans "
@@ -450,6 +453,8 @@ namespace OpenDentBusiness {
 					+"WHERE etrans.MessageText=etransmessagetext.MessageText";
 				Db.NonQ(command);
 				command="ALTER TABLE etrans DROP MessageText";
+				Db.NonQ(command);
+				command="ALTER TABLE etransmessagetext DROP INDEX MessageText";
 				Db.NonQ(command);
 				command="ALTER TABLE etrans ADD AckEtransNum INT NOT NULL";
 				Db.NonQ(command);
