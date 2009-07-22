@@ -3233,7 +3233,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = false;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
-					webBrowserEcw.Url=new Uri("");
+					webBrowserEcw.Url=null;
 				}
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
