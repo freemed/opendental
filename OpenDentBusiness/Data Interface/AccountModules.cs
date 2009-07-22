@@ -1254,7 +1254,6 @@ namespace OpenDentBusiness {
 			row["DateTime"]=DateTime.MinValue;
 			row["date"]="";
 			row["description"]=Lans.g("AccountModule","Balance Forward");
-			row["extraDetail"]="";
 			row["patient"]="";
 			row["PatNum"]="0";
 			row["PayNum"]="0";
