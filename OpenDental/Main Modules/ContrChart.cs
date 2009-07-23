@@ -268,6 +268,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butECWup;
 		private WebBrowser webBrowserEcw;
 		private Panel panelEcw;
+		private Label labelECWerror;
 		private bool InitializedOnStartup;
 	
 		///<summary></summary>
@@ -495,6 +496,7 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.labelECWerror = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2728,6 +2730,7 @@ namespace OpenDental{
 			// panelEcw
 			// 
 			this.panelEcw.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelEcw.Controls.Add(this.labelECWerror);
 			this.panelEcw.Controls.Add(this.webBrowserEcw);
 			this.panelEcw.Controls.Add(this.butECWdown);
 			this.panelEcw.Controls.Add(this.butECWup);
@@ -2893,6 +2896,18 @@ namespace OpenDental{
 			this.gridPtInfo.Title = "Patient Info";
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
+			// 
+			// labelECWerror
+			// 
+			this.labelECWerror.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelECWerror.Location = new System.Drawing.Point(25,22);
+			this.labelECWerror.Name = "labelECWerror";
+			this.labelECWerror.Size = new System.Drawing.Size(314,27);
+			this.labelECWerror.TabIndex = 199;
+			this.labelECWerror.Text = "Error:";
+			this.labelECWerror.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ContrChart
 			// 
@@ -3257,11 +3272,19 @@ namespace OpenDental{
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					String strAppServer="";
-					ecwEx.InitClass oExInit=new ecwEx.InitClass();
-					strAppServer=oExInit.getAppServer();
-					webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
-						+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
-						+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+					try {
+						ecwEx.InitClass oExInit=new ecwEx.InitClass();
+						strAppServer=oExInit.getAppServer();
+						webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
+							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+						labelECWerror.Visible=false;
+					}
+					catch (Exception ex){
+						webBrowserEcw.Url=null;
+						labelECWerror.Text="Error: "+ex.Message;
+						labelECWerror.Visible=true;
+					}
 				}
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
