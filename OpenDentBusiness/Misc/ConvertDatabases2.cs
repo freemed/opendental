@@ -672,6 +672,22 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_7_3();
+		}
+
+		private static void To6_7_3() {
+			if(FromVersion<new Version("6.7.3.0")) {
+				string command=@"UPDATE claimform,claimformitem SET claimformitem.FieldName='IsGroupHealthPlan'
+					WHERE claimformitem.FieldName='IsStandardClaim' AND claimform.ClaimFormNum=claimformitem.ClaimFormNum
+					AND claimform.UniqueID='OD9'";//1500
+				Db.NonQ(command);
+				command=@"UPDATE claimform,claimformitem SET claimformitem.XPos='97'
+					WHERE claimformitem.XPos='30' AND claimform.ClaimFormNum=claimformitem.ClaimFormNum
+					AND claimform.UniqueID='OD9'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.7.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_8_0();
 		}
 

@@ -566,6 +566,17 @@ namespace OpenDental{
 						if(PatCur.MedicaidID!="")
 							displayStrings[i]="X";
 						break;
+					case "IsGroupHealthPlan":
+						string eclaimcode=InsFilingCodes.GetEclaimCode(planCur.FilingCode);
+						if(PatCur.MedicaidID=="" 
+							&& eclaimcode != "MC"//medicaid
+							&& eclaimcode != "CH"//champus
+							&& eclaimcode != "VA")//veterans
+							//&& eclaimcode != ""//medicare?
+						{
+							displayStrings[i]="X";
+						}
+						break;
 					case "PreAuthString":
 						displayStrings[i]=ClaimCur.PreAuthString;
 						break;

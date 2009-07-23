@@ -653,6 +653,7 @@ namespace OpenDental{
 					case "IsPreAuth":
 					case "IsStandardClaim":
 					case "IsMedicaidClaim":
+					case "IsGroupHealthPlan":
 					case "OtherInsExists":
 					case "OtherInsNotExists":
 					case "OtherInsSubscrIsMale":
