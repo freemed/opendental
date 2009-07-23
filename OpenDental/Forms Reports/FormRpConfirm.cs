@@ -135,49 +135,49 @@ namespace OpenDental{
 
 		private void FormRpConfirm_Load(object sender, System.EventArgs e){
 			ALSelect=new ArrayList();
-			ALSelect.Add(Lan.g(this,"LName"));
-			ALSelect.Add(Lan.g(this,"FName")); 
-			ALSelect.Add(Lan.g(this,"MiddleI"));
-      ALSelect.Add(Lan.g(this,"Preferred"));
-			ALSelect.Add(Lan.g(this,"Salutation")); 
-      ALSelect.Add(Lan.g(this,"Address")); 
-      ALSelect.Add(Lan.g(this,"Address2"));
-			ALSelect.Add(Lan.g(this,"City")); 
-			ALSelect.Add(Lan.g(this,"State"));
-			ALSelect.Add(Lan.g(this,"Zip"));
-			ALSelect.Add(Lan.g(this,"HmPhone"));
-			ALSelect.Add(Lan.g(this,"WkPhone")); 
-			ALSelect.Add(Lan.g(this,"WirelessPhone")); 
-			ALSelect.Add(Lan.g(this,"Birthdate"));
-			ALSelect.Add(Lan.g(this,"AptDateTime"));
+			ALSelect.Add("LName");
+			ALSelect.Add("FName"); 
+			ALSelect.Add("MiddleI");
+      ALSelect.Add("Preferred");
+			ALSelect.Add("Salutation"); 
+      ALSelect.Add("Address"); 
+      ALSelect.Add("Address2");
+			ALSelect.Add("City"); 
+			ALSelect.Add("State");
+			ALSelect.Add("Zip");
+			ALSelect.Add("HmPhone");
+			ALSelect.Add("WkPhone"); 
+			ALSelect.Add("WirelessPhone"); 
+			ALSelect.Add("Birthdate");
+			ALSelect.Add("AptDateTime");
 			ALSelect2=new ArrayList();
-      ALSelect2.Add(Lan.g(this,"BillingType"));      
-      ALSelect2.Add(Lan.g(this,"CreditType"));
-			ALSelect2.Add(Lan.g(this,"SSN"));  
-			ALSelect2.Add(Lan.g(this,"ChartNumber"));   
-			ALSelect2.Add(Lan.g(this,"FeeSched"));
-			ALSelect2.Add(Lan.g(this,"Position")); 
-			ALSelect2.Add(Lan.g(this,"Gender"));
-			ALSelect2.Add(Lan.g(this,"PatStatus"));
-			ALSelect2.Add(Lan.g(this,"PatNum")); 
-      ALSelect2.Add(Lan.g(this,"Email"));
-      ALSelect2.Add(Lan.g(this,"EstBalance")); 
-      ALSelect2.Add(Lan.g(this,"AddrNote")); 
-      ALSelect2.Add(Lan.g(this,"FamFinUrgNote")); 
-      ALSelect2.Add(Lan.g(this,"MedUrgNote")); 
-			ALSelect2.Add(Lan.g(this,"ApptModNote"));
-      ALSelect2.Add(Lan.g(this,"PriPlanNum"));//Primary Carrier?
-      ALSelect2.Add(Lan.g(this,"PriRelationship"));// ?
-			ALSelect2.Add(Lan.g(this,"SecPlanNum"));//Secondary Carrier? 
-			ALSelect2.Add(Lan.g(this,"SecRelationship"));// ?
-      ALSelect2.Add(Lan.g(this,"RecallInterval")); 
-			ALSelect2.Add(Lan.g(this,"StudentStatus"));
-      ALSelect2.Add(Lan.g(this,"SchoolName")); 
-			ALSelect2.Add(Lan.g(this,"PriProv")); 
-      ALSelect2.Add(Lan.g(this,"SecProv"));
-			ALSelect2.Add(Lan.g(this,"NextAptNum")); 
-			ALSelect2.Add(Lan.g(this,"Guarantor")); 
-			ALSelect2.Add(Lan.g(this,"ImageFolder"));
+      ALSelect2.Add("BillingType");      
+      ALSelect2.Add("CreditType");
+			ALSelect2.Add("SSN");  
+			ALSelect2.Add("ChartNumber");   
+			ALSelect2.Add("FeeSched");
+			ALSelect2.Add("Position"); 
+			ALSelect2.Add("Gender");
+			ALSelect2.Add("PatStatus");
+			ALSelect2.Add("PatNum"); 
+      ALSelect2.Add("Email");
+      ALSelect2.Add("EstBalance"); 
+      ALSelect2.Add("AddrNote"); 
+      ALSelect2.Add("FamFinUrgNote"); 
+      ALSelect2.Add("MedUrgNote"); 
+			ALSelect2.Add("ApptModNote");
+      ALSelect2.Add("PriCarrier");
+      ALSelect2.Add("PriRelationship");
+			ALSelect2.Add("SecCarrier");
+			ALSelect2.Add("SecRelationship");
+      ALSelect2.Add("RecallInterval"); 
+			ALSelect2.Add("StudentStatus");
+      ALSelect2.Add("SchoolName"); 
+			ALSelect2.Add("PriProv"); 
+      ALSelect2.Add("SecProv");
+			ALSelect2.Add("NextAptNum"); 
+			ALSelect2.Add("Guarantor"); 
+			ALSelect2.Add("ImageFolder");
 			for(int i=0;i<ALSelect.Count;i++){
 				listSelect.Items.Add(ALSelect[i]);
 				listSelect.SetSelected(i,true);
@@ -201,7 +201,21 @@ namespace OpenDental{
 					command+=",";
 				}
 				if(fieldsSelected[i]=="AptDateTime"){
-					command+="appointment."+fieldsSelected[i];
+					command+="appointment.AptDateTime";
+				}
+				else if(fieldsSelected[i]=="PriCarrier"){
+					command+="(SELECT carrier.CarrierName FROM patplan,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
+						+"AND patplan.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=1) PriCarrier";
+				}
+				else if(fieldsSelected[i]=="PriRelationship") {
+					command+="(SELECT Relationship FROM patplan WHERE patplan.PatNum=patient.PatNum AND patplan.Ordinal=1) PriRelationship";
+				}
+				else if(fieldsSelected[i]=="SecCarrier") {
+					command+="(SELECT carrier.CarrierName FROM patplan,insplan,carrier WHERE patplan.PatNum=patient.PatNum "
+						+"AND patplan.PlanNum=insplan.PlanNum AND insplan.CarrierNum=carrier.CarrierNum AND patplan.Ordinal=2) SecCarrier";
+				}
+				else if(fieldsSelected[i]=="SecRelationship") {
+					command+="(SELECT Relationship FROM patplan WHERE patplan.PatNum=patient.PatNum AND patplan.Ordinal=2) SecRelationship";
 				}
 				else{
 					command+="patient."+fieldsSelected[i];
