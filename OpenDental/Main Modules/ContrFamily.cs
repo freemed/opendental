@@ -848,7 +848,8 @@ namespace OpenDental{
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			Commlog[] commlogList=Commlogs.Refresh(PatCur.PatNum);
 			PayPlan[] payPlanList=PayPlans.Refresh(PatCur.Guarantor,PatCur.PatNum);
-			List <InsPlan> planList=InsPlans.Refresh(FamCur);
+			List<InsPlan> planList=InsPlans.Refresh(FamCur);
+			List<MedicationPat> medList=MedicationPats.GetList(PatCur.PatNum);
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
 			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
@@ -860,6 +861,7 @@ namespace OpenDental{
 			bool hasComm=commlogList.Length>0;
 			bool hasPayPlans=payPlanList.Length>0;
 			bool hasInsPlans=false;
+			bool hasMeds=medList.Count>0;
 			for(int i=0;i<planList.Count;i++){
 				if(planList[i].Subscriber==PatCur.PatNum){
 					hasInsPlans=true;
@@ -867,7 +869,7 @@ namespace OpenDental{
 			}
 			bool hasRef=RefAttachList.Length>0;
 			if(hasProcs || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
-				|| hasInsPlans || hasRef)
+				|| hasInsPlans || hasRef || hasMeds)
 			{
 				string message=Lan.g(this,
 					"You cannot delete this patient without first deleting the following data:")+"\r";
@@ -889,6 +891,8 @@ namespace OpenDental{
 					message+=Lan.g(this,"Insurance plans")+"\r";
 				if(hasRef)
 					message+=Lan.g(this,"References")+"\r";
+				if(hasMeds)
+					message+=Lan.g(this,"Medications")+"\r";
 				MessageBox.Show(message);
 				return;
 			}

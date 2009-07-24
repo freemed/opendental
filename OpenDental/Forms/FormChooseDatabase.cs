@@ -664,7 +664,7 @@ namespace OpenDental{
 				string originalURI=RemotingClient.ServerURI;
 				RemotingClient.ServerURI=textURI.Text;
 				try{
-					//if we want to support eCW here, we will have to make the user indicated it.  No way to tell from the database yet.
+					//if we want to support eCW here, we will have to make the user indicate it.  No way to tell from the database yet.
 					Userod user=Security.LogInWeb(textUser2.Text,Userods.EncryptPassword(textPassword2.Text,true),"",Application.ProductVersion);
 					Security.CurUser=user;
 					RemotingClient.RemotingRole=RemotingRole.ClientWeb;
