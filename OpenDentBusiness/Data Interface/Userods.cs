@@ -283,6 +283,9 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static bool CheckPassword(string inputPass,string hashedPass) {
 			//No need to check RemotingRole; no call to db.
+			if(hashedPass=="") {
+				return inputPass=="";
+			}
 			string hashedInput=EncryptPassword(inputPass);
 			//MessageBox.Show(
 			//Debug.WriteLine(hashedInput+","+hashedPass);

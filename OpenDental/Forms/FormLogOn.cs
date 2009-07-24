@@ -207,11 +207,9 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			Userod selectedUser = (Userod)listUser.SelectedItem;
-			if(selectedUser.Password != "") {
-				if(!Userods.CheckPassword(textPassword.Text,selectedUser.Password)) {
-					MsgBox.Show(this,"Incorrect password");
-					return;
-				}
+			if(!Userods.CheckPassword(textPassword.Text,selectedUser.Password)) {
+				MsgBox.Show(this,"Incorrect password");
+				return;
 			}
 			Security.CurUser = selectedUser.Copy();
 			if(PrefC.GetBool("TasksCheckOnStartup")){
