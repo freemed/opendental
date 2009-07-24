@@ -383,7 +383,7 @@ CONCAT(referral.LName,IF(referral.FName='','',','),referral.FName) refname,SUM(p
 				(SELECT PatNum, MIN(ProcDate) dateFirstProc FROM procedurelog
 				WHERE ProcStatus=2 GROUP BY PatNum
 				HAVING dateFirstProc >= "+POut.PDate(dateFrom)+" "
-				+"AND dateFirstProc <= "+POut.PDate(dateTo)+" ) table1 "
+				+"AND DATE(dateFirstProc) <= "+POut.PDate(dateTo)+" ) table1 "
 				+@"INNER JOIN patient ON table1.PatNum=patient.PatNum 
 				LEFT JOIN procedurelog ON patient.PatNum=procedurelog.PatNum AND procedurelog.ProcStatus=2
 				LEFT JOIN refattach ON patient.PatNum=refattach.PatNum AND refattach.IsFrom=1
