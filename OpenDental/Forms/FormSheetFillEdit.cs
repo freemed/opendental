@@ -58,6 +58,7 @@ namespace OpenDental {
 			LayoutFields();
 		}
 
+		///<summary>Runs as the final step of loading the form, and also immediately after fields are moved down due to growth.</summary>
 		private void LayoutFields(){
 			panelMain.Controls.Clear();
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
@@ -227,6 +228,7 @@ namespace OpenDental {
 				//since CheckBoxes also trigger this event for sig invalid.
 				return;
 			}
+			//everything below here is for growth calc.
 			RichTextBox textBox=(RichTextBox)sender;
 			//remember where we were
 			int cursorPos=textBox.SelectionStart;
@@ -255,7 +257,12 @@ namespace OpenDental {
 			int amountOfGrowth=calcH-fld.Height;
 			fld.Height=calcH;
 			//FillFieldsFromControls();//We already changed the value of this field manually, and the other field values don't matter.
-			SheetUtil.MoveAllDownBelowThis(SheetCur,fld,amountOfGrowth);
+			if(fld.GrowthBehavior==GrowthBehaviorEnum.DownGlobal) {
+				SheetUtil.MoveAllDownBelowThis(SheetCur,fld,amountOfGrowth);
+			}
+			else if(fld.GrowthBehavior==GrowthBehaviorEnum.DownLocal) {
+				SheetUtil.MoveAllDownWhichIntersect(SheetCur,fld);
+			}
 			LayoutFields();
 			//find the original textbox, and put the cursor back where it belongs
 			foreach(Control control in panelMain.Controls){

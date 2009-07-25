@@ -75,7 +75,7 @@ namespace OpenDental{
 		}
 
 		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one is moved down, this method is called recursively.  The end result should be no intersections among fields near to the original field that grew.</Summary>
-		private static void MoveAllDownWhichIntersect(Sheet sheet,SheetField field){
+		public static void MoveAllDownWhichIntersect(Sheet sheet,SheetField field){
 			//it turns out that order of operation is critical.
 			//The recursion feature can't be called until everything below has been evenly moved down.
 			//So... First phase
@@ -96,6 +96,7 @@ namespace OpenDental{
 					MoveAllDownWhichIntersect(sheet,field2);
 				}
 			}
+			//js- did I forget the second phase?
 		}
 
 		///<summary>Creates a Sheet object from a sheetDef, complete with fields and parameters.  This overload is only to be used when the sheet will not be saved to the database, such as for labels</summary>
