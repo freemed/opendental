@@ -256,7 +256,8 @@ namespace OpenDental {
 			//the field height needs to change, so:
 			int amountOfGrowth=calcH-fld.Height;
 			fld.Height=calcH;
-			//FillFieldsFromControls();//We already changed the value of this field manually, and the other field values don't matter.
+			FillFieldsFromControls();//We already changed the value of this field manually, 
+				//but if the other fields don't get changed, they will erroneously 'reset'.
 			if(fld.GrowthBehavior==GrowthBehaviorEnum.DownGlobal) {
 				SheetUtil.MoveAllDownBelowThis(SheetCur,fld,amountOfGrowth);
 			}
