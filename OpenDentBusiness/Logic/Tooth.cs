@@ -321,22 +321,45 @@ namespace OpenDentBusiness{
 
 		///<summary>Used every time user enters toothNum in procedure box. Must be followed with FromInternat. These are the *ONLY* methods that are designed to accept user input.  Can also handle international toothnum</summary>
 		public static bool IsValidEntry(string toothNum){
-			//international
-			if(PrefC.GetBool("UseInternationalToothNumbers")){
-				if(toothNum==null || toothNum=="")
-					return false;
-				Regex regex=new Regex("^[1-4][1-8]$");//perm teeth: matches firt digit 1-4 and second digit 1-8,9 would be supernumerary?
-				if(regex.IsMatch(toothNum))
-					return true;
-				regex=new Regex("^[5-8][1-5]$");//pri teeth: matches firt digit 5-8 and second digit 1-5
-				if(regex.IsMatch(toothNum))
-					return true;
-				return false;
-			}	
-			else{//american
+			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
+			if(nomenclature==0){//Universal,american
 				//tooth numbers validated the same as they are in db.
 				return IsValidDB(toothNum);
 			}
+			else if(nomenclature==1){// FDI
+				if(toothNum==null || toothNum==""){
+					return false;
+				}
+				if(Regex.IsMatch(toothNum,"^[1-4][1-8]$")){//perm teeth: matches firt digit 1-4 and second digit 1-8,9 would be supernumerary?
+					return true;
+				}
+				if(Regex.IsMatch(toothNum,"^[5-8][1-5]$")){//pri teeth: matches firt digit 5-8 and second digit 1-5
+					return true;
+				}
+				return false;
+			}
+			else if(nomenclature==2) {//Haderup
+				if(toothNum==null || toothNum=="") {
+					return false;
+				}
+				for(int i=0;i<labelsHaderup.Length;i++) {
+					if(labelsHaderup[i]==toothNum) {
+						return true;
+					}
+				}
+				return false;
+			}
+			else{// if(nomenclature==3) {// Palmer
+				if(toothNum==null || toothNum=="") {
+					return false;
+				}
+				for(int i=0;i<labelsPalmer.Length;i++) {
+					if(labelsPalmer[i]==toothNum) {
+						return true;
+					}
+				}
+				return false;
+			}			
 		}
 
 		///<summary>Intended to validate toothNum coming in from database. Will not handle any international tooth nums since all database teeth are in US format.</summary>
