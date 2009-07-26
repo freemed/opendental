@@ -3816,7 +3816,12 @@ namespace OpenDental{
 			else{
 				PlanCur.AllowedFeeSched=FeeSchedsAllowed[comboAllowedFeeSched.SelectedIndex-1].FeeSchedNum;
 			}
-			PlanCur.FilingCode=InsFilingCodeC.Listt[comboFilingCode.SelectedIndex].InsFilingCodeNum;
+			if(comboFilingCode.SelectedIndex==-1) {
+				PlanCur.FilingCode=0;
+			}
+			else {
+				PlanCur.FilingCode=InsFilingCodeC.Listt[comboFilingCode.SelectedIndex].InsFilingCodeNum;
+			}
 			PlanCur.FilingCodeSubtype=0;
 			List<InsFilingCodeSubtype> subtypeList=InsFilingCodeSubtypes.GetForInsFilingCode(PlanCur.FilingCode);
 			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {

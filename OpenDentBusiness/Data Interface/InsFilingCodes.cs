@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 				}
 				return InsFilingCodeC.Listt[i].EclaimCode;
 			}
-			return "CI";//should not happen
+			return "CI";
 		}
 
 		///<summary></summary>

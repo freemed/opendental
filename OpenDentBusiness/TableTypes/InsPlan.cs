@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 		public bool IsMedical;
 		///<summary>Specific to an individual plan and not synchronized in any way.  Use to store any other info that affects coverage.</summary>
 		public string SubscNote;
-		///<summary>FK to insfilingcode.InsFilingCodeNum.  Used for e-claims.  Also used for some complex reports in public health.  The e-claim usage might become obsolete when PlanID implemented by HIPAA.</summary>
+		///<summary>FK to insfilingcode.InsFilingCodeNum.  Used for e-claims.  Also used for some complex reports in public health.  The e-claim usage might become obsolete when PlanID implemented by HIPAA.  Can be 0 to indicate none.  Then 'CI' will go out on claims.</summary>
 		public int FilingCode;
 		///<summary>Canadian e-claim field. D11 and E07.  Mandatory for Dentaide.  Value must be greater than 0.  Not used for all others.  2 digit.</summary>
 		public int DentaideCardSequence;
