@@ -156,47 +156,62 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		private static Referral GetFromList(int referralNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i];
+				}
+			}
+			//couldn't find it, so refresh list and try again
+			Referrals.RefreshCache();
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i];
+				}
+			}
+			return null;
+		}
+
 		///<summary></summary>
 		public static string GetNameLF(int referralNum) {
 			//No need to check RemotingRole; no call to db.
-			if(referralNum==0)
+			if(referralNum==0) {
 				return "";
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ReferralNum==referralNum){
-					//Referral refer=List[i];
-					string retVal=List[i].LName;
-					if(List[i].FName!="") {
-						retVal+=", "+List[i].FName+" "+List[i].MName;
-					}
-					return retVal;
-				}
 			}
-			return "";
+			Referral referral=GetFromList(referralNum);
+			if(referral==null) {
+				return "";
+			}
+			string retVal=referral.LName;
+			if(referral.FName!="") {
+				retVal+=", "+referral.FName+" "+referral.MName;
+			}
+			return retVal;
 		}
 
 		///<summary>Includes title, such as DMD.</summary>
 		public static string GetNameFL(int referralNum) {
 			//No need to check RemotingRole; no call to db.
-			if(referralNum==0)
+			if(referralNum==0) {
 				return "";
-			for(int i=0;i<List.Length;i++) {
-				if(List[i].ReferralNum==referralNum) {
-					//Referral refer=List[i];
-					string retVal="";
-					if(List[i].FName!="") {
-						retVal+=List[i].FName+" ";
-					}
-					if(List[i].MName!=""){
-						retVal+=List[i].MName+" ";
-					}
-					retVal+=List[i].LName;
-					if(List[i].Title!="") {
-						retVal+=", "+List[i].Title;
-					}
-					return retVal;
-				}
 			}
-			return "";
+			Referral referral=GetFromList(referralNum);
+			if(referral==null) {
+				return "";
+			}
+			string retVal="";
+			if(referral.FName!="") {
+				retVal+=referral.FName+" ";
+			}
+			if(referral.MName!="") {
+				retVal+=referral.MName+" ";
+			}
+			retVal+=referral.LName;
+			if(referral.Title!="") {
+				retVal+=", "+referral.Title;
+			}
+			return retVal;
 		}
 
 		///<summary></summary>
