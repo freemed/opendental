@@ -346,8 +346,11 @@ namespace OpenDental
 				y+=15;
 			}
 			str=Lan.g(this,"Note:")+" "+Appts[pagesPrinted].Note;
-			g.DrawString(str,font,brush,x,y);
-			y+=25;
+			SizeF sizef=g.MeasureString(str,font,725);
+			RectangleF rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
+			g.DrawString(str,font,brush,rectf);
+			y+=sizef.Height;
+			y+=5;
 			//Patient/Family Info---------------------------------------------------------------------------------------------
 			g.DrawLine(Pens.Black,75,y,775,y);
 			str=Lan.g(this,"Patient Info");
@@ -519,11 +522,12 @@ namespace OpenDental
 				+"  90+:"+fam.ListPats[0].BalOver90.ToString("c");
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
-			str=Lan.g(this,"Fam Urgent Fin Note:")
-				+fam.ListPats[0].FamFinUrgNote;
-			g.DrawString(str,font,brush,x,y);
-			y+=15;
-			y+=10;
+			str=Lan.g(this,"Fam Urgent Fin Note:")+fam.ListPats[0].FamFinUrgNote;
+			sizef=g.MeasureString(str,font,725);
+			rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
+			g.DrawString(str,font,brush,rectf);
+			y+=sizef.Height;
+			y+=5;
 			//Treatment Plan--------------------------------------------------------------------------------------------------
 			g.DrawLine(Pens.Black,75,y,775,y);
 			str=Lan.g(this,"Treatment Plan");
