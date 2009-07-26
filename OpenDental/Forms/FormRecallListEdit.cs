@@ -60,7 +60,8 @@ namespace OpenDental{
 		private TextBox textEmail;
 		private Label label6;
 		private OpenDental.UI.Button butCommlog;
-		private List <InsPlan> PlanList;
+		private List<InsPlan> PlanList;
+		private List<PatPlan> PatPlanList;
 
 		///<summary></summary>
 		public FormRecallListEdit(Recall recallCur){
@@ -564,10 +565,13 @@ namespace OpenDental{
 			PatCur=FamCur.GetPatient(RecallCur.PatNum);
 			PlanList=InsPlans.Refresh(FamCur);
 			ProcList=Procedures.Refresh(PatCur.PatNum);
+			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			Text="Recall for "+PatCur.GetNameLF();
 			textCreditType.Text=PatCur.CreditType;
 			textBillingType.Text=DefC.GetName(DefCat.BillingTypes,PatCur.BillingType);
-			//textPriIns.Text=InsPlans.GetDescript(PatCur.PriPlanNum,FamCur,PlanList);
+			if(PatPlanList.Count>0){
+				textPriIns.Text=InsPlans.GetDescript(PatPlanList[0].PlanNum,FamCur,PlanList);
+			}
       textHmPhone.Text=PatCur.HmPhone;
 			textWkPhone.Text=PatCur.WkPhone;
 			textWirelessPhone.Text=PatCur.WirelessPhone;
