@@ -413,15 +413,14 @@ namespace OpenDental
 			str=Lan.g(this,"Insurance");
 			g.DrawString(str,fontHeading,brush,x,y);
 			y+=18;
-			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			List <InsPlan> plans=InsPlans.Refresh(fam);
+			List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+			List<InsPlan> plans=InsPlans.Refresh(fam);
 			List<ClaimProc> claimProcList=ClaimProcs.Refresh(pat.PatNum);
-			List <Benefit> benefits=Benefits.Refresh(patPlanList);
+			List<Benefit> benefits=Benefits.Refresh(patPlanList);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefits,patPlanList,plans,DateTime.Today);
 			InsPlan plan;
 			Carrier carrier;
 			string subscriber;
-			double max;
-			double deduct;
 			if(patPlanList.Count==0){
 				str=Lan.g(this,"none");
 				g.DrawString(str,font,brush,x,y);
@@ -440,29 +439,35 @@ namespace OpenDental
 				str=Lan.g(this,"Subscriber:")+" "+subscriber;
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
-				/*
-				bool isFamMax=Benefits.GetIsFamMax(benefits,plan.PlanNum);
-				str="";
-				if(isFamMax){
-					str+=Lan.g(this,"Family ");
+				str=Lan.g(this,"Annual Max:")+" ";
+				double max=Benefits.GetAnnualMaxDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum);
+				if(max!=-1) {
+					str+=max.ToString("c")+", ";
+					double pending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanList[i].PatPlanNum,-1,pat.PatNum);
+					str+=Lan.g(this,"Pending:")+" "+pending.ToString("c")+", ";
+					double used=InsPlans.GetInsUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans);
+					str+=Lan.g(this,"Used:")+" "+used.ToString("c");
+					g.DrawString(str,font,brush,x,y);
+					y+=15;
 				}
-				str+=Lan.g(this,"Annual Max:")+" ";
-				max=Benefits.GetAnnualMax(benefits,plan.PlanNum,patPlanList[i].PatPlanNum);
-				if(max!=-1){
-					str+=max.ToString("n0")+" ";
+				double dedInd=Benefits.GetDeductGeneralDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,BenefitCoverageLevel.Individual);
+				if(dedInd!=-1) {
+					str=Lan.g(this,"Deductible:")+" "+dedInd.ToString("c")+", ";
+					double dedUsed=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans,
+						BenefitCoverageLevel.Individual,pat.PatNum);
+					str+=Lan.g(this,"Ded Used:")+" "+dedUsed.ToString("c");
+					g.DrawString(str,font,brush,x,y);
+					y+=15;
 				}
-				str+="   ";
-				bool isFamDed=Benefits.GetIsFamDed(benefits,plan.PlanNum);
-				if(isFamDed) {
-					str+=Lan.g(this,"Family ");
+				double dedFam=Benefits.GetDeductGeneralDisplay(benefits,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,BenefitCoverageLevel.Family);
+				if(dedFam!=-1) {
+					str=Lan.g(this,"Family Deductible:")+" "+dedFam.ToString("c")+", ";
+					double dedUsedFam=InsPlans.GetDedUsedDisplay(histList,DateTime.Today,patPlanList[i].PlanNum,patPlanList[i].PatPlanNum,-1,plans,
+						BenefitCoverageLevel.Family,pat.PatNum);
+					str+=Lan.g(this,"Ded Used Fam:")+" "+dedUsedFam.ToString("c");
+					g.DrawString(str,font,brush,x,y);
+					y+=15;
 				}
-				str+=Lan.g(this,"Deductible:")+" ";
-				deduct=Benefits.GetDeductible(benefits,plan.PlanNum,patPlanList[i].PatPlanNum);
-				if(deduct!=-1) {
-					str+=deduct.ToString("n0");
-				}
-				g.DrawString(str,font,brush,x,y);
-				y+=15;*/
 				str="";
 				for(int j=0;j<benefits.Count;j++){
 					if(benefits[j].PlanNum != plan.PlanNum){
@@ -477,29 +482,13 @@ namespace OpenDental
 					str+=CovCats.GetDesc(benefits[j].CovCatNum)+" "+benefits[j].Percent.ToString()+"%";
 				}
 				if(str!=""){
-					g.DrawString(str,font,brush,x,y);
-					y+=15;
+					sizef=g.MeasureString(str,font,725);
+					rectf=new RectangleF(x,y,sizef.Width,sizef.Height);
+					g.DrawString(str,font,brush,rectf);
+					y+=sizef.Height;
 				}
-				/*
-				double pend=0;
-				double used=0;
-				if(isFamMax || isFamDed){
-					List<ClaimProc> claimProcsFam=ClaimProcs.RefreshFam(plan.PlanNum);
-					used=InsPlans.GetInsUsed(claimProcsFam,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits);
-					pend=InsPlans.GetPending(claimProcsFam,date,plan,patPlanList[i].PatPlanNum,-1,benefits);
-				}
-				else{
-					used=InsPlans.GetInsUsed(claimProcList,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits);
-					pend=InsPlans.GetPending(claimProcList,date,plan,patPlanList[i].PatPlanNum,-1,benefits);
-				}
-				str=Lan.g(this,"Ins Used:")+" "+used.ToString("n");
-				g.DrawString(str,font,brush,x,y);
-				y+=15;
-				str=Lan.g(this,"Ins Pending:")+" "+pend.ToString("n");
-				g.DrawString(str,font,brush,x,y);
-				y+=15;*/
 			}
-			y+=10;
+			y+=5;
 			//Account Info---------------------------------------------------------------------------------------------------
 			g.DrawLine(Pens.Black,75,y,775,y);
 			str=Lan.g(this,"Account Info");
