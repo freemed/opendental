@@ -296,7 +296,12 @@ namespace OpenDental{
 					row.Cells.Add(AptList[i].AptDateTime.ToShortDateString());
 				}
 				row.Cells.Add(DefC.GetName(DefCat.RecallUnschedStatus,AptList[i].UnschedStatus));
-				row.Cells.Add(Providers.GetAbbr(AptList[i].ProvNum));
+				if(AptList[i].IsHygiene) {
+					row.Cells.Add(Providers.GetAbbr(AptList[i].ProvHyg));
+				}
+				else {
+					row.Cells.Add(Providers.GetAbbr(AptList[i].ProvNum));
+				}
 				row.Cells.Add(AptList[i].ProcDescript);
 				row.Cells.Add(AptList[i].Note);
 			  
