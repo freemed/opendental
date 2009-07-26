@@ -174,6 +174,7 @@ namespace OpenDental{
 			DrawProcsOfStatus(ProcStat.C);
 			DrawProcsOfStatus(ProcStat.R);
 			DrawProcsOfStatus(ProcStat.TP);
+			DrawProcsOfStatus(ProcStat.Cn);
 			toothChart.ResumeLayout();
 			//FillMovementsAndHidden();
 			Cursor=Cursors.Default;
@@ -216,6 +217,10 @@ namespace OpenDental{
 						case ProcStat.R:
 							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
 							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
+							break;
+						case ProcStat.Cn:
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][16].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][17].ItemColor;
 							break;
 					}
 				}
