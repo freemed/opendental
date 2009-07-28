@@ -3899,6 +3899,10 @@ namespace OpenDental{
 					catch { }
 				}
 			}
+			//eCW bridge values-------------------------------------------------------------
+			Bridges.ECW.AptNum=PIn.PInt(aptNum);
+			Bridges.ECW.EcwConfigPath=ecwConfigPath;
+			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
 			if(userName!=""//if a username was passed in
 				&& Security.CurUser.UserName != userName)//and it's different from the current user
@@ -4015,10 +4019,6 @@ namespace OpenDental{
 					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 				}
 			}
-			//AptNum-------------------------------------------------------------
-			Bridges.ECW.AptNum=PIn.PInt(aptNum);
-			Bridges.ECW.EcwConfigPath=ecwConfigPath;
-			Bridges.ECW.UserId=userId;
 		}
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
