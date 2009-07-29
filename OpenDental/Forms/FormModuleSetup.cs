@@ -74,6 +74,7 @@ namespace OpenDental{
 		private CheckBox checkCoPayFeeScheduleBlankLikeZero;
 		private CheckBox checkStatementShowProcBreakdown;
 		private CheckBox checkStatementShowNotes;
+		private CheckBox checkClaimsValidateACN;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -104,11 +105,14 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkStatementShowProcBreakdown = new System.Windows.Forms.CheckBox();
+			this.checkStatementShowNotes = new System.Windows.Forms.CheckBox();
 			this.checkIntermingleDefault = new System.Windows.Forms.CheckBox();
 			this.comboBillingChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textClaimAttachPath = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
@@ -123,6 +127,7 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
@@ -153,12 +158,9 @@ namespace OpenDental{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.checkCoPayFeeScheduleBlankLikeZero = new System.Windows.Forms.CheckBox();
 			this.checkAllowedFeeSchedsAutomate = new System.Windows.Forms.CheckBox();
-			this.checkStatementShowNotes = new System.Windows.Forms.CheckBox();
-			this.checkStatementShowProcBreakdown = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.checkClaimsValidateACN = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -226,13 +228,14 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(12,383);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(422,139);
+			this.groupBox1.Size = new System.Drawing.Size(422,159);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.checkClaimsValidateACN);
 			this.groupBox5.Controls.Add(this.checkStatementShowProcBreakdown);
 			this.groupBox5.Controls.Add(this.checkStatementShowNotes);
 			this.groupBox5.Controls.Add(this.checkIntermingleDefault);
@@ -261,16 +264,38 @@ namespace OpenDental{
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox5.Location = new System.Drawing.Point(454,11);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(422,411);
+			this.groupBox5.Size = new System.Drawing.Size(422,430);
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
+			// 
+			// checkStatementShowProcBreakdown
+			// 
+			this.checkStatementShowProcBreakdown.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStatementShowProcBreakdown.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkStatementShowProcBreakdown.Location = new System.Drawing.Point(48,66);
+			this.checkStatementShowProcBreakdown.Name = "checkStatementShowProcBreakdown";
+			this.checkStatementShowProcBreakdown.Size = new System.Drawing.Size(368,17);
+			this.checkStatementShowProcBreakdown.TabIndex = 202;
+			this.checkStatementShowProcBreakdown.Text = "Show procedure breakdown on statements";
+			this.checkStatementShowProcBreakdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkStatementShowNotes
+			// 
+			this.checkStatementShowNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStatementShowNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkStatementShowNotes.Location = new System.Drawing.Point(48,49);
+			this.checkStatementShowNotes.Name = "checkStatementShowNotes";
+			this.checkStatementShowNotes.Size = new System.Drawing.Size(368,17);
+			this.checkStatementShowNotes.TabIndex = 201;
+			this.checkStatementShowNotes.Text = "Show notes for payments and adjustments on statements";
+			this.checkStatementShowNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkIntermingleDefault
 			// 
 			this.checkIntermingleDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIntermingleDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIntermingleDefault.Location = new System.Drawing.Point(6,392);
+			this.checkIntermingleDefault.Location = new System.Drawing.Point(6,391);
 			this.checkIntermingleDefault.Name = "checkIntermingleDefault";
 			this.checkIntermingleDefault.Size = new System.Drawing.Size(410,16);
 			this.checkIntermingleDefault.TabIndex = 200;
@@ -317,6 +342,16 @@ namespace OpenDental{
 			this.checkStatementSummaryShowInsInfo.TabIndex = 195;
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,149);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label18
 			// 
@@ -463,6 +498,16 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,117);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -697,7 +742,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.comboToothNomenclature);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
-			this.groupBox3.Location = new System.Drawing.Point(454,424);
+			this.groupBox3.Location = new System.Drawing.Point(454,444);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(422,98);
 			this.groupBox3.TabIndex = 191;
@@ -810,28 +855,6 @@ namespace OpenDental{
 			this.checkAllowedFeeSchedsAutomate.Click += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_Click);
 			this.checkAllowedFeeSchedsAutomate.CheckedChanged += new System.EventHandler(this.checkAllowedFeeSchedsAutomate_CheckedChanged);
 			// 
-			// checkStatementShowNotes
-			// 
-			this.checkStatementShowNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStatementShowNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStatementShowNotes.Location = new System.Drawing.Point(48,49);
-			this.checkStatementShowNotes.Name = "checkStatementShowNotes";
-			this.checkStatementShowNotes.Size = new System.Drawing.Size(368,17);
-			this.checkStatementShowNotes.TabIndex = 201;
-			this.checkStatementShowNotes.Text = "Show notes for payments and adjustments on statements";
-			this.checkStatementShowNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkStatementShowProcBreakdown
-			// 
-			this.checkStatementShowProcBreakdown.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStatementShowProcBreakdown.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStatementShowProcBreakdown.Location = new System.Drawing.Point(48,66);
-			this.checkStatementShowProcBreakdown.Name = "checkStatementShowProcBreakdown";
-			this.checkStatementShowProcBreakdown.Size = new System.Drawing.Size(368,17);
-			this.checkStatementShowProcBreakdown.TabIndex = 202;
-			this.checkStatementShowProcBreakdown.Text = "Show procedure breakdown on statements";
-			this.checkStatementShowProcBreakdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -841,7 +864,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(768,552);
+			this.butCancel.Location = new System.Drawing.Point(768,562);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -856,32 +879,23 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(663,552);
+			this.butOK.Location = new System.Drawing.Point(663,562);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textPayPlansBillInAdvanceDays
+			// checkClaimsValidateACN
 			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(357,149);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(357,117);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.checkClaimsValidateACN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkClaimsValidateACN.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkClaimsValidateACN.Location = new System.Drawing.Point(20,407);
+			this.checkClaimsValidateACN.Name = "checkClaimsValidateACN";
+			this.checkClaimsValidateACN.Size = new System.Drawing.Size(396,17);
+			this.checkClaimsValidateACN.TabIndex = 194;
+			this.checkClaimsValidateACN.Text = "Require ACN# in remarks on claims with ADDP group name";
+			this.checkClaimsValidateACN.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -995,6 +1009,7 @@ namespace OpenDental{
 			checkClaimFormTreatDentSaysSigOnFile.Checked=PrefC.GetBool("ClaimFormTreatDentSaysSigOnFile");
 			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool("StatementSummaryShowInsInfo");
 			checkIntermingleDefault.Checked=PrefC.GetBool("IntermingleFamilyDefault");
+			checkClaimsValidateACN.Checked=PrefC.GetBool("ClaimsValidateACN");
 			//TP module-----------------------------------------------------------------------
 			textTreatNote.Text=PrefC.GetString("TreatmentPlanNote");
 			checkTreatPlanShowGraphics.Checked=PrefC.GetBool("TreatPlanShowGraphics");
@@ -1091,6 +1106,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("AllowedFeeSchedsAutomate",checkAllowedFeeSchedsAutomate.Checked)
 				| Prefs.UpdateBool("IntermingleFamilyDefault",checkIntermingleDefault.Checked)
 				| Prefs.UpdateBool("CoPay_FeeSchedule_BlankLikeZero",checkCoPayFeeScheduleBlankLikeZero.Checked)
+				| Prefs.UpdateBool("ClaimsValidateACN",checkClaimsValidateACN.Checked)
 				)
 			{
 				changed=true;

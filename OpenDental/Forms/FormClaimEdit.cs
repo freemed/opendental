@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
 using CodeBase;
@@ -4012,6 +4013,15 @@ namespace OpenDental{
 					FillGrids();
 					MsgBox.Show(this,"Status of procedures was changed back to preauth to match status of claim.");
 					return false;
+				}
+			}
+			if(PrefC.GetBool("ClaimsValidateACN")) {
+				InsPlan plan=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
+				if(plan!=null && plan.GroupName.Contains("ADDP")) {
+					if(!Regex.IsMatch(textNote.Text,"ACN[0-9]{5,}")) {//ACN with at least 5 digits following
+						MsgBox.Show(this,"For an ADDP claim, there must be an ACN number in the note.  Example format: ACN12345");
+						return false;
+					}
 				}
 			}
 			return true;

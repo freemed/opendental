@@ -698,6 +698,16 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.7.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_7_5();
+		}
+
+		private static void To6_7_5() {
+			if(FromVersion<new Version("6.7.5.0")) {
+				string command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ClaimsValidateACN','0','If set to 1, then any claim with a groupName containing ADDP will require an ACN number in the claim remarks.')";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.7.5.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_8_0();
 		}
 
