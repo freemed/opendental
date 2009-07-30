@@ -590,7 +590,7 @@ namespace OpenDentBusiness{
 			}
 			else {
 				//no point in wasting time calculating this unless it's needed.
-				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.PlanNum,plan.AllowedFeeSched,
+				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(codeNum).ProcCode,plan.FeeSched,plan.AllowedFeeSched,
 					plan.CodeSubstNone,plan.PlanType,toothNum,cp.ProvNum);
 				if(carrierAllowed != -1) {
 					if(carrierAllowed > procFee) {
