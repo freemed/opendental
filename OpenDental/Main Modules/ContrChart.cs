@@ -3273,8 +3273,9 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					String strAppServer="";
 					try {
-						ecwEx.InitClass oExInit=new ecwEx.InitClass();
-						strAppServer=oExInit.getAppServer();
+						//ecwEx.InitClass oExInit=new ecwEx.InitClass();
+						strAppServer=VBbridges.Ecw.GetAppServer(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+						//oExInit.getAppServer();
 						webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
 							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
 							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
@@ -3378,7 +3379,8 @@ namespace OpenDental{
 
 		private void OnRx_Click(){
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
-				ecwEx.InitClass oExInit=new ecwEx.InitClass();
+				VBbridges.Ecw.LoadRxForm(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,Bridges.ECW.AptNum);
+				/*ecwEx.InitClass oExInit=new ecwEx.InitClass();
 				string strConfigFile=Bridges.ECW.EcwConfigPath;
 				int nUserId=Bridges.ECW.UserId;
 				bool bEnableADAuth=false;
@@ -3391,7 +3393,7 @@ namespace OpenDental{
 				short nDefTab=1;
 				object oParent=null;
 				oEx.LoadAddRxForm(ref oParent,ref nEncId,ref bProInt,ref nDefTab);
-				oEx=null;
+				oEx=null;*/
 			}
 			else {
 				if(!Security.IsAuthorized(Permissions.RxCreate)) {
