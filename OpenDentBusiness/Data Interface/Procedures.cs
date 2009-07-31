@@ -1078,7 +1078,7 @@ namespace OpenDentBusiness {
 			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
 		}
 
-		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
+		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.  Also sets procDate for TP procs.</Summary>
 		public static void SetProvidersInAppointment(Appointment apt,List<Procedure> procList) {
 			//No need to check RemotingRole; no call to db.
 			ProcedureCode procCode;
@@ -1089,13 +1089,18 @@ namespace OpenDentBusiness {
 					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
 					if(procCode.IsHygiene) {//hygiene proc
 						changedProc.ProvNum=apt.ProvHyg;
-					} else {//dentist proc
+					} 
+					else {//dentist proc
 						changedProc.ProvNum=apt.ProvNum;
 					}
-				} else {//same provider for every procedure
+				} 
+				else {//same provider for every procedure
 					changedProc.ProvNum=apt.ProvNum;
 				}
 				changedProc.ClinicNum=apt.ClinicNum;
+				if(procList[i].ProcStatus==ProcStat.TP) {
+					changedProc.ProcDate=apt.AptDateTime;
+				}
 				Procedures.Update(changedProc,procList[i]);//won't go to db unless a field has changed.
 			}
 		}
