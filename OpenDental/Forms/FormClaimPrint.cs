@@ -536,8 +536,9 @@ namespace OpenDental{
 			if(ClaimFormCur==null){
 				if(ClaimCur.ClaimForm>0){
 					ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
-				} else {
-				ClaimFormCur=ClaimForms.GetClaimForm(planCur.ClaimFormNum);
+				} 
+				else {
+					ClaimFormCur=ClaimForms.GetClaimForm(planCur.ClaimFormNum);
 				}
 			}
 			displayStrings=new string[ClaimFormCur.Items.Length];

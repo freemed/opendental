@@ -574,6 +574,7 @@ namespace OpenDental{
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				FormCP.ThisPatNum=listQueue[gridMain.SelectedIndices[i]].PatNum;
 				FormCP.ThisClaimNum=listQueue[gridMain.SelectedIndices[i]].ClaimNum;
+				FormCP.ClaimFormCur=null;//so that it will pull from the individual claim or plan.
 				if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,1)){
 					return;
 				}
