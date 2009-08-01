@@ -133,7 +133,7 @@ namespace OpenDentBusiness {
 					}
 					row["description"]+=rawCharge.Rows[i]["Note"].ToString();
 				}
-				row["extraDetail"]="";
+				//row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
@@ -190,7 +190,7 @@ namespace OpenDentBusiness {
 					row["description"]+=" "+Lans.g("ContrAccount","(split)");
 				}
 				//we might use DatePay here to add to description
-				row["extraDetail"]="";
+				//row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
