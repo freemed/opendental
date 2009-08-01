@@ -169,26 +169,18 @@ namespace OpenDental{
 						break;
 				}
 			}
-			DrawProcsOfStatus(ProcStat.EO);
-			DrawProcsOfStatus(ProcStat.EC);
-			DrawProcsOfStatus(ProcStat.C);
-			DrawProcsOfStatus(ProcStat.R);
-			DrawProcsOfStatus(ProcStat.TP);
-			DrawProcsOfStatus(ProcStat.Cn);
+			DrawProcGraphics();
 			toothChart.ResumeLayout();
 			//FillMovementsAndHidden();
 			Cursor=Cursors.Default;
 		}
 
-		private void DrawProcsOfStatus(ProcStat procStat) {
+		private void DrawProcGraphics() {
 			//this requires: ProcStatus, ProcCode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
 			string[] teeth;
 			Color cLight=Color.White;
 			Color cDark=Color.White;
 			for(int i=0;i<ProcList.Count;i++) {
-				if(PIn.PInt(ProcList[i]["ProcStatus"].ToString())!=(int)procStat) {
-					continue;
-				}
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
 					PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
 					|| PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
