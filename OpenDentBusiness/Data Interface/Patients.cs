@@ -1016,6 +1016,7 @@ namespace OpenDentBusiness{
 				WHERE patient.PatNum=paysplit.PatNum
 				AND paysplit.PayNum!=@ExcludePayNum
 				AND patient.Guarantor=@GuarNum
+				AND paysplit.PayPlanNum=0
 				GROUP BY patient.PatNum,ProvNum;
 
 				/*payplan princ reduction*/
