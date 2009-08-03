@@ -467,7 +467,7 @@ namespace OpenDental{
 			if(radio90.Checked){
 				Queries.CurReport.SubTitle[2]="Over 90 Days";
 			}
-			if(listBillType.SelectedIndices.Count==DefC.Short[(int)DefCat.BillingTypes].Length){
+			if(checkBillTypesAll.Checked){
 				Queries.CurReport.SubTitle[3]="All Billing Types";
 			}
 			else{
