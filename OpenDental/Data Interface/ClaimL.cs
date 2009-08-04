@@ -80,6 +80,9 @@ namespace OpenDental{
 					if(feebilled > ProcCur.ProcFee) {
 						ClaimProcsForClaim[i].FeeBilled=qty*feebilled;
 					}
+					else {
+						ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
+					}
 				}
 				else {//don't use ucr.  Use the procedure fee instead.
 					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
