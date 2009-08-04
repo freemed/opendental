@@ -1100,6 +1100,21 @@ namespace OpenDental.Eclaims
 					//2230B N3,N4: (medical) Other payer address. We don't support.
 					//2330B PER: Other payer contact info. Not needed.
 					//2330B DTP: Claim Paid date
+					if(claim.ClaimType!="P") {
+						DateTime datePaidOtherIns=DateTime.Today;
+						DateTime dtThisCP;
+						for(int j=0;j<claimProcs.Count;j++) {
+							dtThisCP=ClaimProcs.GetDatePaid(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
+							if(dtThisCP>datePaidOtherIns){
+								datePaidOtherIns=dtThisCP;
+							}
+						}
+						//it's a required segment, so always include it.
+						seg++;
+						sw.WriteLine("DTP*573*"//DTP01: 573=Date claim paid
+							+"D8*"//DTP02: date time format qualifier
+							+datePaidOtherIns.ToString("yyyyMMdd")+"~");//DTP03 date
+					}
 					//2330B DTP: (medical) Claim adjudication date. We might need to add this
 					//2330B REF: Other payer secondary ID
 					//2330B REF: Other payer referral number

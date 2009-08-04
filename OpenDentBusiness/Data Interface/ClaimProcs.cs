@@ -446,6 +446,26 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Used in E-claims to get the most recent date paid (by primary?). The insurance amount paid by the planNum based on all claimprocs with this procNum. The list can be all ClaimProcs for patient, or just those for this procedure.</summary>
+		public static DateTime GetDatePaid(List<ClaimProc> claimProcList,int procNum,int planNum) {
+			//No need to check RemotingRole; no call to db.
+			DateTime retVal=DateTime.MinValue;
+			for(int i=0;i<claimProcList.Count;i++) {
+				if(claimProcList[i].ProcNum==procNum
+					&& claimProcList[i].PlanNum==planNum
+					&& claimProcList[i].Status!=ClaimProcStatus.Preauth
+					&& claimProcList[i].Status!=ClaimProcStatus.CapEstimate
+					&& claimProcList[i].Status!=ClaimProcStatus.CapComplete
+					&& claimProcList[i].Status!=ClaimProcStatus.Estimate) 
+				{
+					if(claimProcList[i].DateCP > retVal) {
+						retVal=claimProcList[i].DateCP;
+					}
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Used once in Account on the Claim line.  The amount paid on a claim only by total, not including by procedure.  The list can be all ClaimProcs for patient, or just those for this claim.</summary>
 		public static double ClaimByTotalOnly(ClaimProc[] List,int claimNum){
 			//No need to check RemotingRole; no call to db.
