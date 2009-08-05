@@ -133,18 +133,22 @@ namespace OpenDental.UI {
 
 		protected override void OnPaint(PaintEventArgs pe) {
 			Graphics g=pe.Graphics;
-			g.Clear(Color.White);
-			g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);
-			for(int i=0;i<apptList.Count;i++){
-				apptList[i].CreateShadow();
-				g.DrawImage(apptList[i].Shadow,0,i*13);
+			try {
+				g.Clear(Color.White);
+				g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);
+				for(int i=0;i<apptList.Count;i++) {
+					apptList[i].CreateShadow();
+					g.DrawImage(apptList[i].Shadow,0,i*13);
+				}
+				if(apptList.Count==0) {
+					StringFormat format=new StringFormat();
+					format.Alignment=StringAlignment.Center;
+					format.LineAlignment=StringAlignment.Center;
+					g.DrawString(Lan.g(this,"Drag Appointments to this PinBoard"),Font,Brushes.Gray,new RectangleF(0,0,Width,Height-20),format);
+				}
 			}
-			if(apptList.Count==0){
-				StringFormat format=new StringFormat();
-				format.Alignment=StringAlignment.Center;
-				format.LineAlignment=StringAlignment.Center;
-				g.DrawString(Lan.g(this,"Drag Appointments to this PinBoard"),Font,Brushes.Gray,new RectangleF(0,0,Width,Height-20),format);
-			}
+			catch { }
+			g.Dispose();
 			base.OnPaint(pe);
 		}
 
