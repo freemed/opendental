@@ -1392,7 +1392,7 @@ namespace OpenDentBusiness {
 					continue;
 				}
 				row["description"]+="\r\nPatient: "+fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
-				row["extraDetail"]="";
+				//row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
