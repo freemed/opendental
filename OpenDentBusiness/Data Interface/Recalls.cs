@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Recalls{
 
-		///<summary>Gets all recalls for the supplied patients, usually a family or single pat.  Result might have a length of zero.</summary>
+		///<summary>Gets all recalls for the supplied patients, usually a family or single pat.  Result might have a length of zero.  Each recall will also have the DateScheduled filled by pulling that info from other tables.</summary>
 		public static List<Recall> GetList(List<int> patNums){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),patNums);
@@ -26,6 +26,7 @@ namespace OpenDentBusiness{
 				//MIN prevents multiple rows from being returned in the subquery.
 				+"(SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
+				+"AND appointment.AptDateTime > NOW() "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "

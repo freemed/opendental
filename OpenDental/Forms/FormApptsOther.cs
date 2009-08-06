@@ -620,20 +620,28 @@ namespace OpenDental{
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
 			List<Procedure> procList;
-			//List<Recall> recallList;
+			List<Recall> recallList;//=Recalls.GetList(FamCur.ListPats
 			List <InsPlan> planList;
 			Appointment apt=null;
 			Recall recall;
+			int alreadySched=0;
+			int noRecalls=0;
 			for(int i=0;i<FamCur.ListPats.Length;i++){
 				procList=Procedures.Refresh(FamCur.ListPats[i].PatNum);
-				//recallList=Recalls.GetList(FamCur.List[i].PatNum);//get the recall for this pt
-				//if(recallList.Count==0) {
+				recallList=Recalls.GetList(FamCur.ListPats[i].PatNum);//get the recall for this pt
+				if(recallList.Count==0) {
+					noRecalls++;
 					//MsgBox.Show(this,"This patient does not have any recall due.");
-				//	continue;
-				//}
-				//if(recallList[0].IsDisabled){
-				//	continue;
-				//}
+					continue;
+				}
+				if(recallList[0].IsDisabled){
+					noRecalls++;
+					continue;
+				}
+				if(recallList[0].DateScheduled.Year > 1880) {
+					alreadySched++;
+					continue;
+				}
 				planList=InsPlans.Refresh(FamCur);
 				try{
 					apt=AppointmentL.CreateRecallApt(FamCur.ListPats[i],procList,planList);
@@ -652,9 +660,26 @@ namespace OpenDental{
 					DateJumpToString=recall.DateDue.ToShortDateString();
 				}
 			}
-			if(AptNumsSelected.Count==0){
-				MsgBox.Show(this,"No recall is due.");
+			string userMsg="";
+			if(noRecalls > 0){
+				userMsg+=Lan.g(this,"Family members skipped because recall disabled: ")+noRecalls.ToString();
+			}
+			if(alreadySched > 0) {
+				if(userMsg !="") {
+					userMsg+="\r\n";
+				}
+				userMsg+=Lan.g(this,"Family members skipped because already scheduled: ")+alreadySched.ToString();
+			}
+			if(AptNumsSelected.Count==0) {
+				if(userMsg !="") {
+					userMsg+="\r\n";
+				}
+				userMsg+=Lan.g(this,"There are no recall appointments to schedule.");
+				MessageBox.Show(userMsg);
 				return;
+			}
+			if(userMsg !="") {
+				MessageBox.Show(userMsg);
 			}
 			DialogResult=DialogResult.OK;
 		}
