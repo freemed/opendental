@@ -7,11 +7,11 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDental {
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormReportsMore : System.Windows.Forms.Form{
+	public class FormReportsMore:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butClose;
 		private Label label1;
 		private Label label2;
@@ -29,14 +29,13 @@ namespace OpenDental{
 		private OpenDental.UI.ListBoxClickable listDaily;
 		private Label label5;
 		private Label label6;
-        private OpenDental.UI.Button butLaserLabels;
-				private OpenDental.UI.ListBoxClickable listArizonaPrimaryCare;
-				private Label labelArizonaPrimaryCare;
+		private OpenDental.UI.Button butLaserLabels;
+		private OpenDental.UI.ListBoxClickable listArizonaPrimaryCare;
+		private Label labelArizonaPrimaryCare;
 		private OpenDental.UI.ListBoxClickable listMonthly;
 
 		///<summary></summary>
-		public FormReportsMore()
-		{
+		public FormReportsMore() {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -47,16 +46,13 @@ namespace OpenDental{
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -64,8 +60,7 @@ namespace OpenDental{
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportsMore));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -88,7 +83,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(312,237);
+			this.label1.Location = new System.Drawing.Point(312,251);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118,18);
 			this.label1.TabIndex = 2;
@@ -143,7 +138,7 @@ namespace OpenDental{
 			// labelArizonaPrimaryCare
 			// 
 			this.labelArizonaPrimaryCare.AutoSize = true;
-			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,297);
+			this.labelArizonaPrimaryCare.Location = new System.Drawing.Point(312,311);
 			this.labelArizonaPrimaryCare.Name = "labelArizonaPrimaryCare";
 			this.labelArizonaPrimaryCare.Size = new System.Drawing.Size(104,13);
 			this.labelArizonaPrimaryCare.TabIndex = 20;
@@ -155,7 +150,7 @@ namespace OpenDental{
 			this.listArizonaPrimaryCare.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listArizonaPrimaryCare.FormattingEnabled = true;
 			this.listArizonaPrimaryCare.ItemHeight = 15;
-			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,315);
+			this.listArizonaPrimaryCare.Location = new System.Drawing.Point(315,329);
 			this.listArizonaPrimaryCare.Name = "listArizonaPrimaryCare";
 			this.listArizonaPrimaryCare.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listArizonaPrimaryCare.Size = new System.Drawing.Size(204,34);
@@ -235,7 +230,7 @@ namespace OpenDental{
 			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listPublicHealth.FormattingEnabled = true;
 			this.listPublicHealth.ItemHeight = 15;
-			this.listPublicHealth.Location = new System.Drawing.Point(315,258);
+			this.listPublicHealth.Location = new System.Drawing.Point(315,272);
 			this.listPublicHealth.Name = "listPublicHealth";
 			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
@@ -250,7 +245,7 @@ namespace OpenDental{
 			this.listLists.Location = new System.Drawing.Point(315,64);
 			this.listLists.Name = "listLists";
 			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size = new System.Drawing.Size(204,169);
+			this.listLists.Size = new System.Drawing.Size(204,184);
 			this.listLists.TabIndex = 9;
 			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
@@ -343,7 +338,7 @@ namespace OpenDental{
 				Lan.g(this,"Procedures Not Billed to Insurance"),
 				Lan.g(this,"PPO Writeoffs"),
 				Lan.g(this,"Payment Plans"),
-                Lan.g(this,"Receivable Breakdown Report")// KS
+		Lan.g(this,"Receivable Breakdown Report")// KS
 			});
 			listLists.Items.AddRange(new string[] {
 				Lan.g(this,"Appointments"),
@@ -357,7 +352,7 @@ namespace OpenDental{
 				Lan.g(this,"Referrals - Raw"),
 				Lan.g(this,"Referral Analysis"),
 				Lan.g(this,"Treatment Finder"),
-				//Lan.g(this,"Treatment Plan Manager")//jsparks- See note further down.
+				Lan.g(this,"Treatment Plan Manager")
 			});
 			listPublicHealth.Items.AddRange(new string[] {
 				Lan.g(this,"Raw Screening Data"),
@@ -369,7 +364,7 @@ namespace OpenDental{
 			});
 			//Arizona primary care list and label must only be visible when the Arizona primary
 			//care option is checked in the miscellaneous options.
-			if(UsingArizonaPrimaryCare()){
+			if(UsingArizonaPrimaryCare()) {
 				labelArizonaPrimaryCare.Visible=true;
 				listArizonaPrimaryCare.Visible=true;
 			}
@@ -436,11 +431,11 @@ namespace OpenDental{
 					break;
 				case 1://Yesterday
 					FormPI.DailyMonthlyAnnual="Daily";
-					if(DateTime.Today.DayOfWeek==DayOfWeek.Monday){
+					if(DateTime.Today.DayOfWeek==DayOfWeek.Monday) {
 						FormPI.DateStart=DateTime.Today.AddDays(-3);
 						FormPI.DateEnd=DateTime.Today.AddDays(-3);
 					}
-					else{
+					else {
 						FormPI.DateStart=DateTime.Today.AddDays(-1);
 						FormPI.DateEnd=DateTime.Today.AddDays(-1);
 					}
@@ -487,12 +482,12 @@ namespace OpenDental{
 				case 2://Procedures
 					FormRpProcSheet FormProcSheet=new FormRpProcSheet();
 					FormProcSheet.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Procedures");	
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Procedures");
 					break;
 				case 3://Writeoffs
 					FormRpWriteoffSheet FormW=new FormRpWriteoffSheet();
 					FormW.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Writeoffs");	
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Writeoffs");
 					break;
 				case 4://Incomplete Procedure Notes
 					FormRpProcNote FormPN=new FormRpProcNote();
@@ -508,10 +503,10 @@ namespace OpenDental{
 
 		private void listMonthly_MouseDown(object sender,MouseEventArgs e) {
 			int selected=listMonthly.IndexFromPoint(e.Location);
-			if(selected==-1){
+			if(selected==-1) {
 				return;
 			}
-			switch(selected){
+			switch(selected) {
 				case 0://Aging Report
 					FormRpAging FormA=new FormRpAging();
 					FormA.ShowDialog();
@@ -552,20 +547,20 @@ namespace OpenDental{
 					FormPP.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Payment Plans.");
 					break;
-                case 8://Receivable Breakdown Report  KS
-                    FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
-                    FormRcv.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Receivable Breakdown Report.");
-                    break;
+				case 8://Receivable Breakdown Report  KS
+					FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
+					FormRcv.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown Report.");
+					break;
 			}
 		}
 
 		private void listLists_MouseDown(object sender,MouseEventArgs e) {
 			int selected=listLists.IndexFromPoint(e.Location);
-			if(selected==-1){
+			if(selected==-1) {
 				return;
 			}
-			switch(selected){
+			switch(selected) {
 				case 0://Appointments
 					FormRpAppointments FormA=new FormRpAppointments();
 					FormA.ShowDialog();
@@ -621,21 +616,20 @@ namespace OpenDental{
 					FormT.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Finder");
 					break;
-				//jsparks- With the improved benefit calculations, this would need an overhaul, so removing it for now.
-				//case 11://Treatment Plan Manager
-				//	FormTxPlanManager FormTM=new FormTxPlanManager();
-				//	FormTM.ShowDialog();
-				//	SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");
-				//	break;
+				case 11://Treatment Plan Manager
+					FormTxPlanManager FormTM=new FormTxPlanManager();
+					FormTM.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Treatment Plan Manager");
+					break;
 			}
 		}
 
 		private void listPublicHealth_MouseDown(object sender,MouseEventArgs e) {
 			int selected=listPublicHealth.IndexFromPoint(e.Location);
-			if(selected==-1){
+			if(selected==-1) {
 				return;
 			}
-			switch(selected){
+			switch(selected) {
 				case 0://Raw Screening Data
 					FormRpPHRawScreen FormPH=new FormRpPHRawScreen();
 					FormPH.ShowDialog();
@@ -646,7 +640,7 @@ namespace OpenDental{
 					FormPHR.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PH Raw population");
 					break;
-				
+
 			}
 		}
 
@@ -654,10 +648,10 @@ namespace OpenDental{
 			Close();
 		}
 
-    private void butLaserLabels_Click(object sender, EventArgs e) {
-        FormRpLaserLabels LaserLabels = new FormRpLaserLabels();
-        LaserLabels.ShowDialog();
-    }
+		private void butLaserLabels_Click(object sender,EventArgs e) {
+			FormRpLaserLabels LaserLabels = new FormRpLaserLabels();
+			LaserLabels.ShowDialog();
+		}
 
 		private void listArizonaPrimaryCare_MouseDown(object sender,MouseEventArgs e) {
 			int selected=this.listArizonaPrimaryCare.IndexFromPoint(e.Location);

@@ -216,21 +216,21 @@ namespace OpenDental {
 		}
 		// calls this function from TxPlanAnalyzer to create array of patients to display in grid  MSN 05/22/2006
 		public void CreateTxPlanList(string procDate,int[] billingTypes,double UnusedPri,double UnusedSec,
-			ArrayList procedureList,CheckBox checkAllProv,ListBox listProv) {
+						ArrayList procedureList,CheckBox checkAllProv,ListBox listProv) {
 			string command;
 			string whereProc;
 			command = "SELECT distinct patient.PatNum," +
-        "patient.LName,patient.FName,patient.MiddleI," +
-        "patient.Address,patient.Address2,patient.City," +
-        "patient.State,patient.Zip,patient.HmPhone,patient.WkPhone," + 
-        "patient.AddrNote " +
-        "FROM  patplan " +
-        "Inner Join patient ON patient.PatNum = patplan.PatNum " +
-        "Inner Join procedurelog ON patplan.PatNum = procedurelog.PatNum " +
-        " Where patplan.ordinal in (1,2) " +
-        " and patient.patstatus = 0 " +
-        "and procedurelog.procstatus = 1 " +
-        "and billingtype in (";
+                      "patient.LName,patient.FName,patient.MiddleI," +
+                      "patient.Address,patient.Address2,patient.City," +
+                      "patient.State,patient.Zip,patient.HmPhone,patient.WkPhone," + 
+                      "patient.AddrNote " +
+                      "FROM  patplan " +
+                        "Inner Join patient ON patient.PatNum = patplan.PatNum " +
+                        "Inner Join procedurelog ON patplan.PatNum = procedurelog.PatNum " +
+                        " Where patplan.ordinal in (1,2) " +
+                        " and patient.patstatus = 0 " +
+                        "and procedurelog.procstatus = 1 " +
+                        "and billingtype in (";
 			// Go through Billing types and build SQL IN Clause 
 			// For ex BillingType in (40,41)
 			for(int i = 0;i <= billingTypes.Length-1;i++) {
@@ -241,9 +241,11 @@ namespace OpenDental {
 					command += ") ORDER BY patient.LName,patient.FName";
 				// SPK: ORDER BY has to move at last
 			}
+
 			// Build Where Clause for Procedure Codes 
 			// And pass on to GetPatientTreatments
 			whereProc = buildSQLForProcedures(procedureList);
+
 			// Build Where clause for Providers
 			string whereProv;
 			if(checkAllProv.Checked) {
@@ -260,7 +262,13 @@ namespace OpenDental {
 				}
 				whereProv += ")";
 			}
-			AddrTable =Reports.GetTable(command);
+
+			AddrTable = Reports.GetTable(command);
+
+			// HINA - SPK 07/18
+			// Add This column to AddrTable Data Table - start
+			AddrTable.Columns.Add("DoesPatientHasTreatment",System.Type.GetType("System.Boolean"));
+			// Add This column to AddrTable Data Table - end
 			int PatNum;
 			// Variables for Primary Insurance
 			double PriMax;
@@ -269,7 +277,6 @@ namespace OpenDental {
 			double PriUsed;
 			double PriPend;
 			double PriRemain;
-
 			// Variables for Secondary Insurance
 			double SecMax;
 			double SecDed;
@@ -296,7 +303,8 @@ namespace OpenDental {
 
 			// Create Rows
 			gridTxPlanList.Rows.Clear();
-			for(int i = 0;i <= AddrTable.Rows.Count - 1;i++) {
+			for(int i = 0;i <= AddrTable.Rows.Count - 1;i++) // changed < to <= , SPK
+            {
 				PatNum = PIn.PInt(AddrTable.Rows[i]["PatNum"].ToString());
 				PriMax = 0;
 				PriPend = 0;
@@ -315,23 +323,33 @@ namespace OpenDental {
 						ref SecMax,ref SecPend,ref SecUsed,ref SecDed,ref SecDedRemain,
 						ref SecRemain);
 				if(PriRemain > UnusedPri && SecRemain > UnusedSec) {
-					GetPatientTreatments(PatNum,procDate,PriRemain.ToString(),SecRemain.ToString(),whereProc,whereProv);
+					// HINA / SPK 07/18
+					// Update Data Column DoesPatientHasTreatment
+					// True if Patient have Treatment, else False
+					AddrTable.Rows[i]["DoesPatientHasTreatment"] = GetPatientTreatments(PatNum,procDate,PriRemain.ToString(),SecRemain.ToString(),whereProc,whereProv);
 				}
-				//row.Tag = table.Rows[i];
+				else
+					AddrTable.Rows[i]["DoesPatientHasTreatment"] = false;
 			}
 			gridTxPlanList.EndUpdate();
 			gridTxPlanList.ScrollToEnd();
 			gridTxPlanList.SetSelected(true);
+
+			// HINA /SPK - 7/18/2009
+			// Delete Patients that does not have any Treatments in given timeframe
+			// This delete is must for Label and PostCard
+			DeletePatientsWithoutTreatment();
 		}
 		/// <summary>
-		/// 
+		/// This method now returns boolean Value
 		/// </summary>
-		private void GetPatientTreatments(int PatNum,string procDate,string PriRemain,string SecRemain,string whereProc,string whereProv) {
+		private bool GetPatientTreatments(int PatNum,string procDate,string PriRemain,string SecRemain,string whereProc,string whereProv) {
 			string command;
 			DataTable PatientTreatmentTable;
 			Patient PatCur;
 			OpenDental.UI.ODGridRow row;
 			PatCur = Patients.GetPat(PatNum);
+			bool DoesPatientHasTreatment;
 
 			command = "SELECT date_format(procedurelog.DateTP,'%m/%d/%Y') AS ProcDate," +
                       "procedurelog.ToothNum,procedurelog.Surf,procedurecode.ProcCode," +
@@ -346,37 +364,44 @@ namespace OpenDental {
                       "AND procedurelog.ProcStatus = 1 " +
                       "AND procedurelog.ProcFee > 0 " +
                       "AND procedurelog.DateTP >= '" + procDate + "' " + whereProc + whereProv;
-
+			// Added PaidOtherIns for sec ins. and claimproc.Status =6, SPK 2/09         
 			// "AND procedurelog.PatNum = claimproc.PatNum " + Removed SPK     
 			PatientTreatmentTable = Reports.GetTable(command);
-			for(int i = 0;i <= PatientTreatmentTable.Rows.Count - 1;i++) {
-				row = new OpenDental.UI.ODGridRow();
-				if(i == 0) {
-					row.Cells.Add(PatCur.ChartNumber);
-					row.Cells.Add(PatCur.LName + ", " + PatCur.FName + " " + PatCur.MiddleI + "\r\n" + "W: " + PatCur.WkPhone + " H: " + PatCur.WkPhone);
+
+			if(PatientTreatmentTable.Rows.Count == 0)
+				DoesPatientHasTreatment = false;
+			else {
+				DoesPatientHasTreatment = true;
+				for(int i = 0;i <= PatientTreatmentTable.Rows.Count - 1;i++) {
+					row = new OpenDental.UI.ODGridRow();
+					if(i == 0) {
+						row.Cells.Add(PatCur.ChartNumber);
+						row.Cells.Add(PatCur.LName + ", " + PatCur.FName + " " + PatCur.MiddleI + "\r\n" + "W: " + PatCur.WkPhone + " H: " + PatCur.WkPhone);
+					}
+					else {
+						row.Cells.Add("");
+						row.Cells.Add("");
+					}
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcDate"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["ToothNum"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["Surf"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcCode"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["Descript"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcFee"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["PatPays"].ToString());
+					row.Cells.Add(PatientTreatmentTable.Rows[i]["InsPayEst"].ToString());
+					if(i == 0) {
+						row.Cells.Add(PriRemain.ToString());
+						row.Cells.Add(SecRemain.ToString());
+					}
+					else {
+						row.Cells.Add("");
+						row.Cells.Add("");
+					}
+					gridTxPlanList.Rows.Add(row);
 				}
-				else {
-					row.Cells.Add("");
-					row.Cells.Add("");
-				}
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcDate"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["ToothNum"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["Surf"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcCode"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["Descript"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["ProcFee"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["PatPays"].ToString());
-				row.Cells.Add(PatientTreatmentTable.Rows[i]["InsPayEst"].ToString());
-				if(i == 0) {
-					row.Cells.Add(PriRemain.ToString());
-					row.Cells.Add(SecRemain.ToString());
-				}
-				else {
-					row.Cells.Add("");
-					row.Cells.Add("");
-				}
-				gridTxPlanList.Rows.Add(row);
 			}
+			return DoesPatientHasTreatment;
 		}
 
 		/// <summary>
@@ -389,13 +414,11 @@ namespace OpenDental {
 				ref double PriDed,ref double PriDedRemain,ref double PriRemain,
 				ref double SecMax,ref double SecPend,ref double SecUsed,
 				ref double SecDed,ref double SecDedRemain,ref double SecRemain) {
-			/*
 			List<PatPlan> PatPlanList;
 			List<InsPlan> InsPlanList;
 			List<Benefit> BenefitList;
 			List<ClaimProc> ClaimProcList;
 			Family FamCur;
-
 			double max = 0;
 			double ded = 0;
 			double dedUsed = 0;
@@ -406,19 +429,17 @@ namespace OpenDental {
 			InsPlanList = InsPlans.Refresh(FamCur);
 			PatPlanList = PatPlans.Refresh(PatNum);
 			BenefitList = Benefits.Refresh(PatPlanList);
-			Claims.Refresh(PatNum);
+			//Claims.Refresh(PatNum);
 			ClaimProcList = ClaimProcs.Refresh(PatNum);
-
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today);
 			InsPlan PlanCur; //=new InsPlan();
 			if(PatPlanList.Count > 0) {
 				PlanCur = InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
-				pend = InsPlans.GetPending
-					 (ClaimProcList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,BenefitList);
+				pend = InsPlans.GetPendingDisplay(histList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatNum);
 				PriPend = pend;
-				used = InsPlans.GetInsUsed
-						(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
+				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList);
 				PriUsed = used;
-				max = Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
+				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
 				if(max == -1) {//if annual max is blank
 					PriMax = 0;
 					PriRemain = 0;
@@ -432,23 +453,20 @@ namespace OpenDental {
 					PriRemain = remain;
 				}
 				//deductible:
-				ded = Benefits.GetDeductible(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum);
+				ded = Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,BenefitCoverageLevel.Individual);
 				if(ded != -1) {
 					PriDed = ded;
-					dedUsed = InsPlans.GetDedUsed
-							(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
+					dedUsed = InsPlans.GetDedUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitCoverageLevel.Individual,PatNum);
 					PriDedRemain = (ded - dedUsed);
 				}
 			}
 			if(PatPlanList.Count > 1) {
 				PlanCur = InsPlans.GetPlan(PatPlanList[1].PlanNum,InsPlanList);
-				pend = InsPlans.GetPending // changed below, SPK
-						(ClaimProcList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,BenefitList);
+				pend = InsPlans.GetPendingDisplay(histList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatNum);
 				SecPend = pend;
-				used = InsPlans.GetInsUsed
-						(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
+				used = InsPlans.GetInsUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList);
 				SecUsed = used;
-				max = Benefits.GetAnnualMax(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
+				max = Benefits.GetAnnualMaxDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
 				if(max == -1) {
 					SecMax = 0;
 					SecRemain = 0;
@@ -461,14 +479,13 @@ namespace OpenDental {
 					SecMax = max;
 					SecRemain = remain;
 				}
-				ded = Benefits.GetDeductible(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum);
+				ded = Benefits.GetDeductGeneralDisplay(BenefitList,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,BenefitCoverageLevel.Individual);
 				if(ded != -1) {
 					SecDed = ded;
-					dedUsed = InsPlans.GetDedUsed
-							(ClaimProcList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList);
+					dedUsed = InsPlans.GetDedUsedDisplay(histList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitCoverageLevel.Individual,PatNum);
 					SecDedRemain = ded - dedUsed;
 				}
-			}*/
+			}
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
@@ -797,5 +814,19 @@ namespace OpenDental {
 			}
 			return ProcCodeWhere;
 		}
+
+		// HINA / SPK - 07/18/2009 
+		// Start
+		/// <summary>
+		/// This method delete all patients that does not have treatments
+		/// </summary>
+		private void DeletePatientsWithoutTreatment() {
+			foreach(DataRow dr in AddrTable.Rows) {
+				if((bool)dr["DoesPatientHasTreatment"] == false)
+					dr.Delete();
+			}
+			AddrTable.AcceptChanges();
+		}
+		// End
 	}
 }
