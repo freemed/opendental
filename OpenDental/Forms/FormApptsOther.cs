@@ -582,6 +582,31 @@ namespace OpenDental{
 				return;
 			}
 			AptNumsSelected.Add(apt.AptNum);
+			if(this.InitialClick) {
+				Appointment oldApt=apt.Copy();
+				DateTime d;
+				if(ContrApptSheet.IsWeeklyView) {
+					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
+				}
+				else {
+					d=AppointmentL.DateSelected;
+				}
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
+				apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
+				apt.Op=ContrAppt.SheetClickedonOp;
+				Operatory curOp=Operatories.GetOperatory(apt.Op);
+				if(curOp.ProvDentist!=0) {
+					apt.ProvNum=curOp.ProvDentist;
+				}
+				apt.ProvHyg=curOp.ProvHygienist;
+				apt.IsHygiene=curOp.IsHygiene;
+				apt.ClinicNum=curOp.ClinicNum;
+				Appointments.Update(apt,oldApt);
+				oResult=OtherResult.CreateNew;
+				DialogResult=DialogResult.OK;
+				return;
+			}
+			//not initialClick
 			oResult=OtherResult.PinboardAndSearch;
 			Recall recall=Recalls.GetRecallProphyOrPerio(PatCur.PatNum);//shouldn't return null.
 			if(recall.DateDue<DateTime.Today){
