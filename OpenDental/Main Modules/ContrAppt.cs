@@ -3149,6 +3149,9 @@ namespace OpenDental{
 				if(SchedListPeriod[i].SchedType!=ScheduleType.Provider){
 					continue;
 				}
+				if(SchedListPeriod[i].StartTime.TimeOfDay==TimeSpan.FromHours(0)) {//ignore notes at midnight
+					continue;
+				}
         AListStart.Add(SchedListPeriod[i].StartTime);
         AListStop.Add(SchedListPeriod[i].StopTime);
       } 
