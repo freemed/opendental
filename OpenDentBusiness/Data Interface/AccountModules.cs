@@ -1439,7 +1439,7 @@ namespace OpenDentBusiness {
 					row["DateTime"]=rawAmort.Rows[d]["DateTime"];
 					row["date"]=rawAmort.Rows[d]["date"];
 					row["description"]=rawAmort.Rows[d]["description"];
-					row["extraDetail"]="";
+					//row["extraDetail"]="";
 					row["patient"]=rawAmort.Rows[d]["patient"];
 					row["PatNum"]=rawAmort.Rows[d]["PatNum"];
 					row["PayNum"]=rawAmort.Rows[d]["PayNum"];
