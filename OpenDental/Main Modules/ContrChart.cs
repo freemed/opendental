@@ -3271,6 +3271,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
+					//the following sequence also gets repeated after exiting the Rx window to refresh.
 					String strAppServer="";
 					try {
 						//ecwEx.InitClass oExInit=new ecwEx.InitClass();
@@ -3380,20 +3381,19 @@ namespace OpenDental{
 		private void OnRx_Click(){
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				VBbridges.Ecw.LoadRxForm(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,Bridges.ECW.AptNum);
-				/*ecwEx.InitClass oExInit=new ecwEx.InitClass();
-				string strConfigFile=Bridges.ECW.EcwConfigPath;
-				int nUserId=Bridges.ECW.UserId;
-				bool bEnableADAuth=false;
-				string strTomcatLoginName="";
-				string strTomcatLoginPass="";
-				oExInit.InitExtensionEnvironment(ref strConfigFile,ref nUserId,ref bEnableADAuth,ref strTomcatLoginName,ref strTomcatLoginPass);
-				ecwEx.FuncsClass oEx=new ecwEx.FuncsClass();
-				int nEncId=Bridges.ECW.AptNum;
-				bool bProInt=false;
-				short nDefTab=1;
-				object oParent=null;
-				oEx.LoadAddRxForm(ref oParent,ref nEncId,ref bProInt,ref nDefTab);
-				oEx=null;*/
+				//refresh the right panel:
+				try {
+					string strAppServer=VBbridges.Ecw.GetAppServer(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+					webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
+							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+					labelECWerror.Visible=false;
+				}
+				catch(Exception ex) {
+					webBrowserEcw.Url=null;
+					labelECWerror.Text="Error: "+ex.Message;
+					labelECWerror.Visible=true;
+				}
 			}
 			else {
 				if(!Security.IsAuthorized(Permissions.RxCreate)) {
