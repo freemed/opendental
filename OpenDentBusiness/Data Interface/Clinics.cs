@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			get {
 				if(list==null) {
-					Refresh();
+					RefreshCache();
 				}
 				return list;
 			}
@@ -22,28 +22,33 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Refresh all clinics</summary>
-		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
+		///<summary>Refresh all clinics.  Not actually part of official cache.</summary>
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM clinic";
-			DataTable table=Db.GetTable(command);
-			List=new Clinic[table.Rows.Count];
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="clinic";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			list=new Clinic[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Clinic();
-				List[i].ClinicNum       = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description     = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Address         = PIn.PString(table.Rows[i][2].ToString());
-				List[i].Address2        = PIn.PString(table.Rows[i][3].ToString());
-				List[i].City            = PIn.PString(table.Rows[i][4].ToString());
-				List[i].State           = PIn.PString(table.Rows[i][5].ToString());
-				List[i].Zip             = PIn.PString(table.Rows[i][6].ToString());
-				List[i].Phone           = PIn.PString(table.Rows[i][7].ToString());
-				List[i].BankNumber      = PIn.PString(table.Rows[i][8].ToString());
-				List[i].DefaultPlaceService=(PlaceOfService)PIn.PInt(table.Rows[i][9].ToString());
-				List[i].InsBillingProv  = PIn.PInt   (table.Rows[i][10].ToString());
+				list[i]=new Clinic();
+				list[i].ClinicNum       = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].Description     = PIn.PString(table.Rows[i][1].ToString());
+				list[i].Address         = PIn.PString(table.Rows[i][2].ToString());
+				list[i].Address2        = PIn.PString(table.Rows[i][3].ToString());
+				list[i].City            = PIn.PString(table.Rows[i][4].ToString());
+				list[i].State           = PIn.PString(table.Rows[i][5].ToString());
+				list[i].Zip             = PIn.PString(table.Rows[i][6].ToString());
+				list[i].Phone           = PIn.PString(table.Rows[i][7].ToString());
+				list[i].BankNumber      = PIn.PString(table.Rows[i][8].ToString());
+				list[i].DefaultPlaceService=(PlaceOfService)PIn.PInt(table.Rows[i][9].ToString());
+				list[i].InsBillingProv  = PIn.PInt(table.Rows[i][10].ToString());
 			}
 		}
 

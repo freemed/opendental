@@ -134,7 +134,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Clinics.Refresh();
+			Clinics.RefreshCache();
 			listMain.Items.Clear();
 			for(int i=0;i<Clinics.List.Length;i++){
 				listMain.Items.Add(Clinics.List[i].Description);
