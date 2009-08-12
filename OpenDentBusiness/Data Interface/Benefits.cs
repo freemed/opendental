@@ -87,7 +87,7 @@ namespace OpenDentBusiness {
 		}
 
 
-		///<summary>Used in the Plan edit window to get a typical list of benefits for all identical plans.  If the supplied plan has a planNum, then that planNum will be excluded from result list.  patPlanNum can be 0.</summary>
+		///<summary>Used in the Plan edit window to get a typical list of benefits for all identical plans.  It used to exclude the supplied plan from the benefits, but no longer does that.  This behavior needs to be watched closely for possible bugs.</summary>
 		public static List<Benefit> RefreshForAll(InsPlan like) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),like);
@@ -97,8 +97,8 @@ namespace OpenDentBusiness {
 			}
 			//Get planNums for all identical plans
 			string command="SELECT PlanNum FROM insplan "
-				+"WHERE PlanNum != "   +POut.PInt(like.PlanNum)+" "
-				+"AND EmployerNum = '" +POut.PInt(like.EmployerNum)+"' "
+				//+"WHERE PlanNum != "   +POut.PInt(like.PlanNum)+" "
+				+"WHERE EmployerNum = '" +POut.PInt(like.EmployerNum)+"' "
 				+"AND GroupName = '"   +POut.PString(like.GroupName)+"' "
 				+"AND GroupNum = '"    +POut.PString(like.GroupNum)+"' "
 				+"AND DivisionNo = '"  +POut.PString(like.DivisionNo)+"'"
