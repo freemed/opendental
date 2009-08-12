@@ -3120,7 +3120,13 @@ namespace OpenDental{
 			}
 			//Status taken care of when list pushed
 			ProcCur.Note=this.textNotes.Text;
-			SaveSignature();
+			try {
+				SaveSignature();
+			}
+			catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
+				//and continue with the rest of this method
+			}
 			if(comboProvNum.SelectedIndex!=-1)
 				ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			if(comboDx.SelectedIndex!=-1)
