@@ -329,29 +329,19 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
-		
-
-
-
-
-
 		private void SaveLogToFile() {
-			FileStream fs=null;
-			try{
-				fs=new FileStream("RepairLog.txt",FileMode.Append,FileAccess.Write,FileShare.Read);
-				StreamWriter sw=new StreamWriter(fs);
-				sw.WriteLine(textLog.Text);
-				sw.Close();
-				sw=null;
+			string path=CodeBase.ODFileUtils.CombinePaths(Application.StartupPath,"RepairLog.txt");
+			try {
+				File.AppendAllText(path,textLog.Text);
 			}
-			catch(SecurityException){
+			catch(SecurityException se) {
 				MsgBox.Show(this,"Log not saved to Repairlog.txt because user does not have permission to access that file.");
 			}
-			finally{
-				if(fs!=null){
-					fs.Close();
-					fs=null;
-				}
+			catch(UnauthorizedAccessException ua) {
+				MsgBox.Show(this,"Log not saved to Repairlog.txt because user does not have permission to access that file.");
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
 		}
 
