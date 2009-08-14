@@ -3302,7 +3302,8 @@ namespace OpenDental{
 				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur,benefitList,PatPlanCur.PatPlanNum);
 			}
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
-				MessageBox.Show(ex.Message);
+				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
+				msgbox.ShowDialog();
 			}
 			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
 			FillBenefits();

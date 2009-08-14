@@ -223,37 +223,31 @@ namespace OpenDental.Eclaims
 		}
 
 		public static string Benefits270(Clearinghouse clearhouse,string x12message) {
-			//We could create a SoapHttpClientProtocol class, but it might be hard to set it to generate exactly the text we want.
-			//And using XML tools to extract the result is really really easy.  Extracting the result from a Soap class wrapper would be harder.
-			//So...
-			string soapMsg=@"<?xml version=""1.0\"" encoding=""UTF-8""?>
-<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:xsi=""http://www.w3.org/1999/XMLSchema-instance"" xmlns:SOAP-ENC=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:SOAP-ENV=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/1999/XMLSchema"">
-<SOAP-ENV:Body>
-<namesp2:lookupEligibility xmlns:namesp2=""dciservice"">
-<credentials>
-<serviceID xsi:type=""xsd:string"">DCI Web Service ID: 002778</serviceID>
-<username xsi:type=""xsd:string"">"+clearhouse.LoginID+@"</username>
-<password xsi:type=""xsd:string"">"+clearhouse.Password+@"</password>
-<client xsi:type=""xsd:string"">OpenDental</client>
-<version xsi:type=""xsd:string"">"+Application.ProductVersion+@"</version>
-</credentials>
-<request>
-<content xsi:type=""xsd:string""><![CDATA["+x12message+@"]]></content>
-</request>
-</namesp2:lookupEligibility>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>";
+			com.dentalxchange.webservices.Credentials cred = new com.dentalxchange.webservices.Credentials();
+			if(PrefC.GetBool("CustomizedForPracticeWeb")) {
+				cred.client="Practice-Web";
+				cred.serviceID="DCI Web Service ID: 001513";
+			}
+			else {
+				cred.client="OpenDental";
+				cred.serviceID="DCI Web Service ID: 002778";
+			}
+			cred.version=Application.ProductVersion;
+			cred.username=clearhouse.LoginID;
+			cred.password=clearhouse.Password;
+			com.dentalxchange.webservices.Request request=new com.dentalxchange.webservices.Request();
+			request.content=x12message;
+			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
+			service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
+			// service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
+			//com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
+			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(response.content);
+			//msgbox.ShowDialog();
+			//return response.content;
 
-
-/*			string strRawResponse="";
-			string strRawResponseNormal=@"<?xml version=""1.0"" encoding=""UTF-8""?>
-<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
-	<soapenv:Body>
-		<ns1:lookupEligibilityResponse soapenv:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:ns1=""dciservice"">
-			<lookupEligibilityReturn xsi:type=""xsd:string""><![CDATA[ISA*00*          *00*          *30*330989922      *29*AA0989922      *030606*0936*U*00401*000013966*0*T*:~GS*HB*330989922*AA0989922*20030606*0936*13966*X*004010X092~ST*271*0001~BHT*0022*11*ASX012145WEB*20030606*0936~HL*1**20*1~NM1*PR*2*ACME INC*****PI*12345~HL*2*1*21*1~NM1*1P*1*PROVLAST*PROVFIRST****SV*5558006~HL*3*2*22*0~TRN*2*100*1330989922~NM1*IL*1*SMITH*JOHN*B***MI*123456789~REF*6P*XYZ123*GROUPNAME~REF*18*2484568*TEST PLAN NAME~N3*29 FREMONT ST*~N4*PEACE*NY*10023~DMG*D8*19570515*M~DTP*307*RD8*19910712-19920525~EB*1*FAM*30~SE*17*0001~GE*1*13966~IEA*1*000013966~]]></lookupEligibilityReturn>
-		</ns1:lookupEligibilityResponse>
-	</soapenv:Body>
-</soapenv:Envelope>";
+			
+			string strRawResponse="";
+			string strRawResponseNormal="ISA*00*          *00*          *30*330989922      *29*AA0989922      *030606*0936*U*00401*000013966*0*T*:~GS*HB*330989922*AA0989922*20030606*0936*13966*X*004010X092~ST*271*0001~BHT*0022*11*ASX012145WEB*20030606*0936~HL*1**20*1~NM1*PR*2*ACME INC*****PI*12345~HL*2*1*21*1~NM1*1P*1*PROVLAST*PROVFIRST****SV*5558006~HL*3*2*22*0~TRN*2*100*1330989922~NM1*IL*1*SMITH*JOHN*B***MI*123456789~REF*6P*XYZ123*GROUPNAME~REF*18*2484568*TEST PLAN NAME~N3*29 FREMONT ST*~N4*PEACE*NY*10023~DMG*D8*19570515*M~DTP*307*RD8*19910712-19920525~EB*1*FAM*30~SE*17*0001~GE*1*13966~IEA*1*000013966~";
 			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<soapenv:Body>
@@ -279,26 +273,9 @@ namespace OpenDental.Eclaims
 			</detail>
 		</soapenv:Fault>
 	</soapenv:Body>
-</soapenv:Envelope>";*/
-			
-			//only use one of the following:
-			string hostName="https://prelive2.dentalxchange.com/dws/services/dciservice.svl";//testing
-			//string hostName="https://webservices.dentalxchange.com/dws/services/dciservice.svl";//production
-			HttpWebRequest request=(HttpWebRequest)WebRequest.Create(hostName);
-			request.Method="POST";
-			request.ContentType="text/xml";
-			request.Headers.Add("SOAPAction: \"lookupEligibility\"");//
-			Stream stream=request.GetRequestStream();
-			StreamWriter writer=new StreamWriter(stream);
-			writer.Write(soapMsg);
-			writer.Close();
-			stream.Close();
-			WebResponse response=request.GetResponse();
-			Stream streamResponse=response.GetResponseStream();
-			StreamReader reader=new StreamReader(streamResponse);
-			string strRawResponse=reader.ReadToEnd();
-			reader.Close();
-			streamResponse.Close();
+</soapenv:Envelope>";
+			return strRawResponseNormal;
+			/*
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(strRawResponse);
 			//StringReader strReader=new StringReader(strRawResponseNormal);
@@ -316,6 +293,7 @@ namespace OpenDental.Eclaims
 				throw new ApplicationException("Authentication failed.");
 			}
 			return node.InnerText;//997
+			*/
 		}
 
 
