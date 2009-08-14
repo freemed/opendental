@@ -1278,10 +1278,10 @@ namespace OpenDental{
 			if(saved){
 				FillDocList(false);//Reload and keep new document selected.
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
-				FormDocInfo formDocInfo=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
+				FormDocInfo formDocInfo=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
-					File.Delete(doc.FileName);
+					File.Delete(selectionDoc.FileName);
 					DeleteSelection(false);
 				}else{
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
