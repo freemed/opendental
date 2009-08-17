@@ -2833,13 +2833,13 @@ namespace OpenDental {
 			//ClaimCur.DedApplied=0;//calcs in ClaimEdit.
 			//preauthstring, etc, etc
 			ClaimCur.IsProsthesis="N";
-			int clinicInsBillingProv=0;
-			bool useClinic=false;
-			if(ClaimCur.ClinicNum>0){
-				useClinic=true;
-				clinicInsBillingProv=Clinics.GetClinic(ClaimCur.ClinicNum).InsBillingProv;
-			}
-			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
+			//int clinicInsBillingProv=0;
+			//bool useClinic=false;
+			//if(ClaimCur.ClinicNum>0){
+			//	useClinic=true;
+			//	clinicInsBillingProv=Clinics.GetClinic(ClaimCur.ClinicNum).InsBillingProv;
+			//}
+			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,ClaimCur.ClinicNum);//,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
 			ClaimCur.EmployRelated=YN.No;
 			//attach procedures
 			Procedure ProcCur;

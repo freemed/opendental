@@ -365,6 +365,8 @@
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
     <Compile Include="X12\DTP271.cs" />
     <Compile Include="X12\EB271.cs" />
+    <Compile Include="X12\X12Generator.cs" />
+    <Compile Include="X12\X12Validate.cs" />
     <Compile Include="X12\X12Parse.cs" />
     <Compile Include="X12\X271.cs" />
     <Compile Include="X12\X270.cs" />
