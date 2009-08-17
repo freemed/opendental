@@ -10,7 +10,7 @@ namespace CodeBase{
 	/// </summary>
 	public class MsgBoxCopyPaste:System.Windows.Forms.Form {
 		private Button butOK;//I know this is not the "good" button.
-		private TextBox textMain;
+		public TextBox textMain;//this way, the text will be available on close.
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -74,7 +74,6 @@ namespace CodeBase{
 			this.textMain.Location = new System.Drawing.Point(12,12);
 			this.textMain.Multiline = true;
 			this.textMain.Name = "textMain";
-			this.textMain.ReadOnly = true;
 			this.textMain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textMain.Size = new System.Drawing.Size(678,588);
 			this.textMain.TabIndex = 2;
