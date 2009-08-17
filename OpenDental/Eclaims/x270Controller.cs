@@ -14,11 +14,27 @@ namespace OpenDental.Eclaims {
 			//throw exception if missing info
 			Patient pat=Patients.GetPat(patNum);
 			Patient subsc=Patients.GetPat(plan.Subscriber);
-			//validation goes here
-
+			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
+			//int clinicInsBillingProv=0;
+			//bool useClinic=false;
+			//if(pat.ClinicNum>0){
+			//	useClinic=true;
+			//	clinicInsBillingProv=Clinics.GetClinic(pat.ClinicNum).InsBillingProv;
+			//}
+			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(pat.PriProv,pat.ClinicNum));
+			//validation-----------------------------------------------------------------------
+			string validationResult=X270.Validate(clearhouse,carrier,billProv,clinic,plan,subsc);
+			if(validationResult != "") {
+				throw new Exception(validationResult);
+			}
 			//create a 270 message---------------------------------------------------------------
-			string x12message=X270.GenerateMessageText();//replace this
-
+			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste("");
+			//msgbox.Text="Enter X12 msg to test:";
+			//msgbox.ShowDialog();
+			string x12message=X270.GenerateMessageText(clearhouse,carrier,billProv,clinic,plan,subsc);
+				//msgbox.textMain.Text;
+			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(x12message);
+			//msgbox.ShowDialog();
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText=x12message;
 			EtransMessageTexts.Insert(etransMessageText);
@@ -86,9 +102,15 @@ namespace OpenDental.Eclaims {
 			etrans271.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans271);
 			etrans.AckEtransNum=etrans271.EtransNum;
-			etrans.Note="Normal 271 response.";//change this later to be explanatory of content.
+			string processingerror=x271.GetProcessingError();
 			if(etrans271.Etype==EtransType.Acknowledge_997) {
 				etrans.Note="Malformed document sent.  997 error returned.";
+			}
+			else if(processingerror != "") {
+				etrans.Note=processingerror;
+			}
+			else {
+				etrans.Note="Normal 271 response.";//change this later to be explanatory of content.
 			}
 			Etranss.Update(etrans);
 			//show the user a list of benefits to pick from for import--------------------------

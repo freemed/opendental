@@ -3285,6 +3285,10 @@ namespace OpenDental{
 		}
 
 		private void butGetElectronic_Click(object sender,EventArgs e) {
+			if(PrefC.GetBool("CustomizedForPracticeWeb")) {
+				EligibilityCheckDentalXchange();
+				return;
+			}
 			//Visible for everyone.  Only works with ClaimConnect so far.
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null){
@@ -3298,13 +3302,17 @@ namespace OpenDental{
 			if(!FillPlanCurFromForm()) {
 				return;
 			}
+			Cursor=Cursors.WaitCursor;
 			try {
 				Eclaims.x270Controller.RequestBenefits(clearhouse,PlanCur,PatPlanCur.PatNum,CarrierCur,benefitList,PatPlanCur.PatPlanNum);
 			}
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
+				//this also catches validation errors such as missing info.
+				Cursor=Cursors.Default;
 				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
 				msgbox.ShowDialog();
 			}
+			Cursor=Cursors.Default;
 			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
 			FillBenefits();
 		}
@@ -3319,7 +3327,6 @@ namespace OpenDental{
 
 		#region EligibilityCheckDentalXchange
 		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
-		//PraciceWeb functionality deprecated.
 		private void EligibilityCheckDentalXchange() {
 			Cursor = Cursors.WaitCursor;
 			OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 

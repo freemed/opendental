@@ -80,7 +80,7 @@ namespace OpenDental.Eclaims
 				sw.Write("ISA*00*          *"//ISA01,ISA02: 00 + 10 spaces
 					+"00*          *"//ISA03,ISA04: 00 + 10 spaces
 					+clearhouse.ISA05+"*"//ISA05: Sender ID type: ZZ=mutually defined. 30=TIN. Validated
-					+GetISA06(clearhouse)+"*"//ISA06: Sender ID(TIN). Or might be TIN of Open Dental
+					+X12Generator.GetISA06(clearhouse)+"*"//ISA06: Sender ID(TIN). Or might be TIN of Open Dental
 					+clearhouse.ISA07+"*"//ISA07: Receiver ID type: ZZ=mutually defined. 30=TIN. Validated
 					+Sout(clearhouse.ISA08,15,15)+"*"//ISA08: Receiver ID. Validated to make sure length is at least 2.
 					+DateTime.Today.ToString("yyMMdd")+"*"//ISA09: today's date
@@ -121,7 +121,7 @@ namespace OpenDental.Eclaims
 		}
 
 		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int batchNum,Clearinghouse clearhouse){
-			int transactionNum=1;//one for each carrier. Can be reused in other functional groups and interchanges, so not persisted
+			int transactionNum=1;//Gets incremented for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
 			bool isMedical=queueItems[0].IsMedical;
@@ -129,7 +129,7 @@ namespace OpenDental.Eclaims
 			if(isMedical){
 				//groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
+					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
 					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
 					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
 					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
@@ -140,7 +140,7 @@ namespace OpenDental.Eclaims
 			else{//dental
 				//groupControlNumber="1";
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
+					+X12Generator.GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
 					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
 					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
 					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
@@ -266,7 +266,7 @@ namespace OpenDental.Eclaims
 						seg++;
 						sw.WriteLine("PRV*BI*"//PRV01: Provider Code. BI=Billing
 							+"PXC*"//PRV02: taxonomy code
-							+GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
+							+X12Generator.GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
 					}
 					else{//dental
 						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
@@ -274,7 +274,7 @@ namespace OpenDental.Eclaims
 						seg++;
 						sw.WriteLine("PRV*PT*"//PRV01: Provider Code. BI=Billing, PT=Pay-To
 							+"ZZ*"//PRV02: mutually defined taxonomy codes
-							+GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
+							+X12Generator.GetTaxonomy(billProv.Specialty)+"~");//PRV03: Provider taxonomy code
 					}
 					//2010AA NM1: Billing provider
 					seg++;
@@ -938,14 +938,14 @@ namespace OpenDental.Eclaims
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
 						+"PXC*"//PRV02: PXC=Health Care Provider Taxonomy Code
-						+GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						+X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
 				}
 				else{//dental
 					seg++;
 					sw.WriteLine("PRV*"
 						+"PE*"//PRV01: PE=Performing
 						+"ZZ*"//PRV02: ZZ=mutually defined taxonomy code
-						+GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						+X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
 				}
 				//2310B REF: Rendering provider secondary ID
 					//All of these will be eliminated when NPI is mandated.
@@ -1290,7 +1290,7 @@ namespace OpenDental.Eclaims
 						else{
 							sw.Write("ZZ*");//PRV02: ZZ=mutually defined taxonomy code
 						}
-						sw.WriteLine(GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
+						sw.WriteLine(X12Generator.GetTaxonomy(provTreat.Specialty)+"~");//PRV03: Taxonomy code
 						//2420A REF: Rendering provider secondary ID. 
 						//2420A REF: (medical)Required before NPI date. We already enforce NPI in NM109.  Less allowed values.
 						seg++;
@@ -1330,25 +1330,9 @@ namespace OpenDental.Eclaims
 			
 		}
 
-		///<summary>If clearhouse.SenderTIN is blank, then 810624427 will be used to indicate Open Dental.</summary>
-		private static string GetISA06(Clearinghouse clearhouse){
-			if(clearhouse.SenderTIN==""){
-				return Sout("810624427",15,15);//TIN of OD.
-			}
-			else{
-				return Sout(clearhouse.SenderTIN,15,15);//already validated to be length at least 2.
-			}
-		}
+		
 
-		/// <summary>Sometimes SenderTIN, sometimes OD's TIN.</summary>
-		private static string GetGS02(Clearinghouse clearhouse){
-			if(clearhouse.SenderTIN=="") {
-				return Sout("810624427",15,2);
-			}
-			else {
-				return Sout(clearhouse.SenderTIN,15,2);//already validated to be length at least 2.
-			}
-		}
+		
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
 		private static void Write1000A_NM1(StreamWriter sw,Clearinghouse clearhouse){
@@ -1382,29 +1366,6 @@ namespace OpenDental.Eclaims
 					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
 					+clearhouse.SenderTelephone+"~");//PER04:Comm Number. aka telephone number. Validated to be exactly 10 digits.
 			}
-		}
-
-		///<summary>Returns the Provider Taxonomy code for the given specialty.</summary>
-		public static string GetTaxonomy(DentalSpecialty specialty){
-			//must return a string with length of at least one char.
-			string spec=" ";
-			switch(specialty){
-				case DentalSpecialty.General:       spec="1223G0001X";	break;
-				case DentalSpecialty.Hygienist:			spec="124Q00000X";	break;//?
-				case DentalSpecialty.PublicHealth:  spec="1223D0001X";	break;
-				case DentalSpecialty.Endodontics:   spec="1223E0200X";	break;
-				case DentalSpecialty.Pathology:     spec="1223P0106X";	break;
-				case DentalSpecialty.Radiology:     spec="1223D0008X";	break;
-				case DentalSpecialty.Surgery:       spec="1223S0112X";	break;
-				case DentalSpecialty.Ortho:         spec="1223X0400X";	break;
-				case DentalSpecialty.Pediatric:     spec="1223P0221X";	break;
-				case DentalSpecialty.Perio:         spec="1223P0300X";	break;
-				case DentalSpecialty.Prosth:        spec="1223P0700X";	break;
-				case DentalSpecialty.Denturist:			spec=" ";						break;
-				case DentalSpecialty.Assistant:			spec=" ";						break;
-				case DentalSpecialty.LabTech:				spec=" ";						break;
-			}
-			return spec;
 		}
 
 		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse.  Used for billing prov and also for treating prov. Returns the number of segments written</summary>
@@ -1684,59 +1645,18 @@ namespace OpenDental.Eclaims
 
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.  There is also an out parameter containing any warnings.  Warnings will not block sending.</summary>
 		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warning){
-			string retVal="";
+			StringBuilder strb=new StringBuilder();
 			warning="";
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum);
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
 			//if(clearhouse.Eformat==ElectronicClaimFormat.X12){//not needed since this is always true
-			if(clearhouse.ISA05!="01" && clearhouse.ISA05!="14" && clearhouse.ISA05!="20" && clearhouse.ISA05!="27" 
-				&& clearhouse.ISA05!="28"	&& clearhouse.ISA05!="29" && clearhouse.ISA05!="30" && clearhouse.ISA05!="33"
-				&& clearhouse.ISA05!="ZZ")
-			{
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Clearinghouse ISA05";
-			}
-			if(clearhouse.SenderTIN!=""){//if it IS blank, then we'll be using OD's info as the sender, so no need to validate the rest
-				if(clearhouse.SenderTIN.Length<2) {
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clearinghouse SenderTIN";
-				}
-				if(clearhouse.SenderName=="") {//1000A NM103 min length=1
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clearinghouse Sender Name";
-				}
-				if(!Regex.IsMatch(clearhouse.SenderTelephone,@"^\d{10}$")) {//1000A PER04 min length=1
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clearinghouse Sender Phone";
-				}
-			}
-			if(clearhouse.ISA07!="01" && clearhouse.ISA07!="14" && clearhouse.ISA07!="20" && clearhouse.ISA07!="27" 
-				&& clearhouse.ISA07!="28"	&& clearhouse.ISA07!="29" && clearhouse.ISA07!="30" && clearhouse.ISA07!="33"
-				&& clearhouse.ISA07!="ZZ")
-			{
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Clearinghouse ISA07";
-			}
-			if(clearhouse.ISA08.Length<2) {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Clearinghouse ISA08";
-			}
-			if(clearhouse.ISA15!="T" && clearhouse.ISA15!="P") {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Clearinghouse ISA15";
-			}
+			X12Validate.ISA(clearhouse,strb);
 			if(clearhouse.GS03.Length<2) {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Clearinghouse GS03";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Clearinghouse GS03");
 			}
 			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
@@ -1746,185 +1666,106 @@ namespace OpenDental.Eclaims
 				return "Medical e-claims not allowed";
 			}
 			//billProv
-			if(billProv.LName==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Billing Prov LName";
-			}
-			if(billProv.FName==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Billing Prov FName";
-			}
-			if(billProv.SSN.Length<2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Billing Prov SSN";
-			}
-			if(billProv.NationalProvID.Length<2) {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Billing Prov NPI";
-			}
-			if(billProv.StateLicense==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Billing Prov Lic #";
-			}
+			X12Validate.BillProv(billProv,strb);
 			//treatProv
 			if(treatProv.LName==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Treating Prov LName";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov LName");
 			}
 			if(treatProv.FName==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Treating Prov FName";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov FName");
 			}
 			if(treatProv.SSN.Length<2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Treating Prov SSN";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov SSN");
 			}
 			if(treatProv.NationalProvID.Length<2) {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Treating Prov NPI";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov NPI");
 			}
 			if(treatProv.StateLicense==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Treating Prov Lic #";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov Lic #");
 			}
 			if(insPlan.IsMedical){
 				if(treatProv.NationalProvID.Length<2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Treating Prov NPI";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Treating Prov NPI");
 				}
 			}
 			if(PrefC.GetString("PracticeTitle")=="") {
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Practice Title";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Practice Title");
 			}
 			if(clinic==null){
-				if(PrefC.GetString("PracticePhone").Length!=10) {
-					//10 digit phone is required by WebMD and is universally assumed 
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Practice Phone";
-				}
-				if(PrefC.GetString("PracticeAddress")==""){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Practice Address";
-				}
-				if(PrefC.GetString("PracticeCity").Length<2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Practice City";
-				}
-				if(PrefC.GetString("PracticeST").Length!=2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Practice State(2 char)";
-				}
-				if(PrefC.GetString("PracticeZip").Length<3){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Practice Zip";
-				}
+				X12Validate.PracticeAddress(strb);
 			}
 			else{
-				if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.
-					//But 10 digit phone is required by WebMD and is universally assumed 
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clinic Phone";
-				}
-				if(clinic.Address==""){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clinic Address";
-				}
-				if(clinic.City.Length<2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clinic City";
-				}
-				if(clinic.State.Length!=2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clinic State(2 char)";
-				}
-				if(clinic.Zip.Length<3){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Clinic Zip";
-				}
+				X12Validate.Clinic(clinic,strb);
 			}
 			if(!insPlan.ReleaseInfo){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="InsPlan Release of Info";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("InsPlan Release of Info");
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
-			if(carrier.Address==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Carrier Address";
-			}
-			if(carrier.City.Length<2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Carrier City";
-			}
-			if(carrier.State.Length!=2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Carrier State(2 char)";
-			}
-			if(carrier.Zip.Length<3){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Carrier Zip";
-			}
+			X12Validate.Carrier(carrier,strb);
 			ElectID electID=ElectIDs.GetID(carrier.ElectID);
 			if(electID!=null && electID.IsMedicaid && billProv.MedicaidID==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Medicaid ID";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Medicaid ID");
 			}
 			if(claim.PlanNum2>0){
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List <InsPlan> ());
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				if(carrier2.Address==""){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Secondary Carrier Address";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Carrier Address");
 				}
 				if(carrier2.City.Length<2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Secondary Carrier City";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Carrier City");
 				}
 				if(carrier2.State.Length!=2){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Secondary Carrier State(2 char)";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Carrier State(2 char)");
 				}
 				if(carrier2.Zip.Length<3){
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Secondary Carrier Zip";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Carrier Zip");
 				}
 				if(claim.PatNum != insPlan2.Subscriber//if patient is not subscriber
 					&& claim.PatRelat2==Relat.Self) {//and relat is self
-					if(retVal!="")
-						retVal+=",";
-					retVal+="Secondary Relationship";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Relationship");
 				}
 			}
 			//Provider Idents:
@@ -1933,52 +1774,60 @@ namespace OpenDental.Eclaims
 			for(int i=0;i<providerIdents.Length;i++){
 				if(!ProviderIdents.IdentExists(providerIdents[i],billProv.ProvNum,carrier.ElectID)){
 					if(retVal!="")
-						retVal+=",";
-					retVal+="Billing Prov Supplemental ID:"+providerIdents[i].ToString();
+						strb.Append(",";
+					strb.Append("Billing Prov Supplemental ID:"+providerIdents[i].ToString();
 				}
 			}*/
 			if(insPlan.SubscriberID.Length<2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="SubscriberID";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("SubscriberID");
 			}
 			Patient patient=Patients.GetPat(claim.PatNum);
 			Patient subscriber=Patients.GetPat(insPlan.Subscriber);
 			if(claim.PatNum != insPlan.Subscriber//if patient is not subscriber
 				&& claim.PatRelat==Relat.Self){//and relat is self
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Claim Relationship";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Claim Relationship");
 			}
 			if(patient.Address==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Patient Address";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient Address");
 			}
 			if(patient.City.Length<2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Patient City";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient City");
 			}
 			if(patient.State.Length!=2){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Patient State";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient State");
 			}
 			if(patient.Zip.Length<3){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Patient Zip";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient Zip");
 			}
 			if(patient.Birthdate.Year<1880){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Patient Birthdate";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Patient Birthdate");
 			}
 			if(claim.AccidentRelated=="A" && claim.AccidentST.Length!=2){//auto accident with no state
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Auto accident State";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Auto accident State");
 			}
 			/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
 				string storedFile;
@@ -1986,8 +1835,8 @@ namespace OpenDental.Eclaims
 					storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
 					if(!File.Exists(storedFile)){
 						if(retVal!="")
-							retVal+=",";
-						retVal+="attachments missing";
+							strb.Append(",";
+						strb.Append("attachments missing";
 						break;
 					}
 				}
@@ -2021,40 +1870,46 @@ namespace OpenDental.Eclaims
 				proc=Procedures.GetProcFromList(procList,claimProcs[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);		
 				if(procCode.TreatArea==TreatmentArea.Arch && proc.Surf==""){
-					if(retVal!="")
-						retVal+=",";
-					retVal+=procCode.AbbrDesc+" missing arch";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append(procCode.AbbrDesc+" missing arch");
 				}
 				if(procCode.TreatArea==TreatmentArea.ToothRange && proc.ToothRange==""){
-					if(retVal!="")
-						retVal+=",";
-					retVal+=procCode.AbbrDesc+" tooth range";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append(procCode.AbbrDesc+" tooth range");
 				}
 				if((procCode.TreatArea==TreatmentArea.Tooth || procCode.TreatArea==TreatmentArea.Surf)
 					&& !Tooth.IsValidDB(proc.ToothNum)) {
-					if(retVal!="")
-						retVal+=",";
-					retVal+=procCode.AbbrDesc+" tooth number";
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append(procCode.AbbrDesc+" tooth number");
 				}
 				if(procCode.IsProsth){
 					if(proc.Prosthesis==""){//they didn't enter whether Initial or Replacement
-						if(retVal!="")
-							retVal+=",";
-						retVal+=procCode.AbbrDesc+" Prosthesis";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append(procCode.AbbrDesc+" Prosthesis");
 					}
 					if(proc.Prosthesis=="R"
 						&& proc.DateOriginalProsth.Year<1880)
 					{//if a replacement, they didn't enter a date
-						if(retVal!="")
-							retVal+=",";
-						retVal+=procCode.AbbrDesc+" Prosth Date";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append(procCode.AbbrDesc+" Prosth Date");
 					}
 				}
 				if(insPlan.IsMedical){
 					if(proc.DiagnosticCode==""){
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Procedure Diagnosis";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Procedure Diagnosis");
 					}
 					if(proc.IsPrincDiag && proc.DiagnosticCode!=""){
 						princDiagExists=true;
@@ -2063,47 +1918,54 @@ namespace OpenDental.Eclaims
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool("EclaimsSeparateTreatProv")){
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 					if(treatProv.LName==""){
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Treating Prov LName";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov LName");
 					}
 					if(treatProv.FName==""){
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Treating Prov FName";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov FName");
 					}
 					if(treatProv.SSN.Length<2){
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Treating Prov SSN";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov SSN");
 					}
 					if(treatProv.NationalProvID.Length<2) {
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Treating Prov NPI";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov NPI");
 					}
 					if(treatProv.StateLicense==""){
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Treating Prov Lic #";
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov Lic #");
 					}
 					//will add any other checks as needed. Can't think of any others at the moment.
 				}
 			}//for int i claimProcs
 			if(insPlan.IsMedical && !princDiagExists){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="Princ Diagnosis";
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Princ Diagnosis");
 			}
-			
-/*
-			if(==""){
-				if(retVal!="")
-					retVal+=",";
-				retVal+="";
-			}*/
 
-			return retVal;
+			/*
+						if(==""){
+							if(strb.Length!=0) {
+								strb.Append(",");
+							}
+							strb.Append("";
+						}*/
+
+			return strb.ToString();
 		}
 
 	///<summary>Copies the given file to an archive directory within the same directory as the file.</summary>

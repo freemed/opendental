@@ -224,7 +224,7 @@ namespace OpenDental.Eclaims
 
 		public static string Benefits270(Clearinghouse clearhouse,string x12message) {
 			com.dentalxchange.webservices.Credentials cred = new com.dentalxchange.webservices.Credentials();
-			if(PrefC.GetBool("CustomizedForPracticeWeb")) {
+			if(PrefC.GetBool("CustomizedForPracticeWeb")) {//even though they currently use code from a different part of the program.
 				cred.client="Practice-Web";
 				cred.serviceID="DCI Web Service ID: 001513";
 			}
@@ -240,12 +240,12 @@ namespace OpenDental.Eclaims
 			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
 			service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
 			// service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
-			//com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
+			com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
 			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(response.content);
 			//msgbox.ShowDialog();
-			//return response.content;
+			return response.content;
 
-			
+			/*
 			string strRawResponse="";
 			string strRawResponseNormal="ISA*00*          *00*          *30*330989922      *29*AA0989922      *030606*0936*U*00401*000013966*0*T*:~GS*HB*330989922*AA0989922*20030606*0936*13966*X*004010X092~ST*271*0001~BHT*0022*11*ASX012145WEB*20030606*0936~HL*1**20*1~NM1*PR*2*ACME INC*****PI*12345~HL*2*1*21*1~NM1*1P*1*PROVLAST*PROVFIRST****SV*5558006~HL*3*2*22*0~TRN*2*100*1330989922~NM1*IL*1*SMITH*JOHN*B***MI*123456789~REF*6P*XYZ123*GROUPNAME~REF*18*2484568*TEST PLAN NAME~N3*29 FREMONT ST*~N4*PEACE*NY*10023~DMG*D8*19570515*M~DTP*307*RD8*19910712-19920525~EB*1*FAM*30~SE*17*0001~GE*1*13966~IEA*1*000013966~";
 			string strRawResponseFailureAuth=@"<?xml version=""1.0"" encoding=""UTF-8""?>
@@ -274,7 +274,8 @@ namespace OpenDental.Eclaims
 		</soapenv:Fault>
 	</soapenv:Body>
 </soapenv:Envelope>";
-			return strRawResponseNormal;
+			return strRawResponseNormal;*/
+			 
 			/*
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(strRawResponse);
