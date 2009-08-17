@@ -29,6 +29,10 @@ namespace OpenDental{
 				Apteryx.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName=="Camsight") {
+				Camsight.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="DBSWin") {
 				DBSWin.SendData(prog,pat);
 				return;
