@@ -33,6 +33,10 @@ namespace OpenDental{
 				Camsight.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName=="CliniView") {
+				Cliniview.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName=="DBSWin") {
 				DBSWin.SendData(prog,pat);
 				return;

@@ -155,6 +155,7 @@
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
     <Compile Include="Bridges\Camsight.cs" />
+    <Compile Include="Bridges\Cliniview.cs" />
     <Compile Include="Bridges\ICat.cs" />
     <Compile Include="Bridges\ECW.cs" />
     <Compile Include="Bridges\Tesia_statements.cs" />

@@ -723,7 +723,7 @@ DROP TABLE IF EXISTS etAck";
 					+"'"+POut.PString(@"C:\cdm\cdm\cdmx\cdmx.exe")+"', "
 					+"'', "
 					+"'')";
-				programNum=Db.NonQ(command,true);
+				int programNum=Db.NonQ(command,true);
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
