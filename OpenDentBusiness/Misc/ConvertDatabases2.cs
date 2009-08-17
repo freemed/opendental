@@ -736,6 +736,28 @@ DROP TABLE IF EXISTS etAck";
 					+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 					+"'Camsight')";
 				Db.NonQ(command);
+				//CliniView Bridge---------------------------------------------------------------------------
+				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+") VALUES("
+					+"'CliniView', "
+					+"'CliniView', "
+					+"'0', "
+					+"'"+POut.PString(@"C:\Program Files\CliniView\CliniView.exe")+"', "
+					+"'', "
+					+"'')";
+				programNum=Db.NonQ(command,true);
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+programNum.ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ(command);
+				command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+"VALUES ("
+					+"'"+POut.PInt(programNum)+"', "
+					+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+					+"'CliniView')";
+				Db.NonQ(command);
 				command="UPDATE preference SET ValueString = '6.7.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
