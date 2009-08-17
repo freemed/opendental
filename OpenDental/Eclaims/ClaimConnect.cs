@@ -238,8 +238,8 @@ namespace OpenDental.Eclaims
 			com.dentalxchange.webservices.Request request=new com.dentalxchange.webservices.Request();
 			request.content=x12message;
 			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
-			service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
-			// service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
+			//service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
+			service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
 			com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
 			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(response.content);
 			//msgbox.ShowDialog();
