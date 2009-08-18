@@ -95,10 +95,24 @@ namespace OpenDental {
 				}
 				string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
 				//look at the manifest to see if it's the version we need
-				string manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
+				string manifestVersion="";
+				try {
+					manifestVersion=File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"));
+				}
+				catch {
+					//fail silently
+				}
 				if(manifestVersion!=storedVersion.ToString(3)) {//manifest version is wrong
 					//No point trying the Setup.exe because that's probably wrong too.
 					//Just go straight to downloading and running the Setup.exe.
+					string manpath=ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt");
+					if(MessageBox.Show(Lan.g("Prefs","The expected version information was not found in this file: ")+manpath+".  "
+						+Lan.g("Prefs","There is probably a permission issue on that folder which should be fixed."),
+						"",MessageBoxButtons.OKCancel)!=DialogResult.OK)//they don't want to download again.
+					{
+						Application.Exit();
+						return false;
+					}
 					DownloadAndRunSetup(storedVersion,currentVersion);
 					Application.Exit();
 					return false;
@@ -133,7 +147,7 @@ namespace OpenDental {
 			return true;
 		}
 
-		///<summary>If AtoZ.manifest was wrong, or if user is not using AtoZ, then just download again.  Will use temp dir.  If an appropriate download is not available, it will fail and inform user.</summary>
+		///<summary>If AtoZ.manifest was wrong, or if user is not using AtoZ, then just download again.  Will use dir selected by user.  If an appropriate download is not available, it will fail and inform user.</summary>
 		private static void DownloadAndRunSetup(Version storedVersion,Version currentVersion) {
 			string patchName="Setup.exe";
 			string updateUri=PrefC.GetString("UpdateWebsitePath");
@@ -152,7 +166,13 @@ namespace OpenDental {
 			{
 				return;
 			}
-			string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
+			FolderBrowserDialog dlg=new FolderBrowserDialog();
+			dlg.SelectedPath=FormPath.GetPreferredImagePath();
+			if(dlg.ShowDialog()!=DialogResult.OK) {
+				return;//app will exit
+			}
+			string tempFile=ODFileUtils.CombinePaths(dlg.SelectedPath,patchName);
+				//ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);
 			FormUpdate.DownloadInstallPatchFromURI(updateUri+updateCode+"/"+patchName,//Source URI
 				tempFile,true,false);//Local destination file.
 			File.Delete(tempFile);//Cleanup install file.
