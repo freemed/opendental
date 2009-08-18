@@ -168,6 +168,7 @@ namespace OpenDental {
 			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
 			dlg.SelectedPath=FormPath.GetPreferredImagePath();
+			dlg.Description=Lan.g("Prefs","Setup.exe will be downloaded to the folder you select below");
 			if(dlg.ShowDialog()!=DialogResult.OK) {
 				return;//app will exit
 			}
