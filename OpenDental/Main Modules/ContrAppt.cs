@@ -1058,10 +1058,15 @@ namespace OpenDental{
 			}
 			//Max is set again in Resize event
 			vScrollBar1.SmallChange=6*ContrApptSheet.Lh;//6 rows
-			if(vScrollBar1.Value==0 
-				&& 8*ContrApptSheet.RowsPerHr*ContrApptSheet.Lh<vScrollBar1.Maximum-vScrollBar1.LargeChange)
-			{
-				vScrollBar1.Value=8*ContrApptSheet.RowsPerHr*ContrApptSheet.Lh;//8am
+			if(vScrollBar1.Value==0) {//ApptViewC.List seems to already be not null by this point.
+				int rowsPerHr=60/ContrApptSheet.MinPerIncr*ContrApptSheet.RowsPerIncr;
+				//use the row setting from the first view.
+				if(ApptViewC.List.Length>0) {
+					rowsPerHr=60/ContrApptSheet.MinPerIncr*ApptViewC.List[0].RowsPerIncr;
+				}
+				if(8*rowsPerHr*ContrApptSheet.Lh<vScrollBar1.Maximum-vScrollBar1.LargeChange) {
+					vScrollBar1.Value=8*rowsPerHr*ContrApptSheet.Lh;//8am
+				}
 			}
 			if(vScrollBar1.Value>vScrollBar1.Maximum-vScrollBar1.LargeChange){
 				vScrollBar1.Value=vScrollBar1.Maximum-vScrollBar1.LargeChange;
