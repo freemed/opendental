@@ -67,6 +67,11 @@ namespace OpenDental.Eclaims {
 					x271=new X271(x12response);
 				}
 			}
+			else {//neither a 997 nor a 271
+				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
+				Etranss.Delete(etrans.EtransNum);
+				throw new ApplicationException(x12response);
+			}
 			/*
 			//In realtime mode, X12 limits the request to one patient.
 			//We will always use the subscriber.
@@ -90,7 +95,7 @@ namespace OpenDental.Eclaims {
 			etrans271.DateTimeTrans=DateTime.Now;
 			etrans271.ClearinghouseNum=clearhouse.ClearinghouseNum;
 			etrans271.Etype=EtransType.TextReport;
-			if(X12object.IsX12(x12response)) {
+			if(X12object.IsX12(x12response)) {//this shouldn't need to be tested because it was tested above.
 				if(x271==null){
 					etrans271.Etype=EtransType.Acknowledge_997;
 				}
@@ -102,15 +107,31 @@ namespace OpenDental.Eclaims {
 			etrans271.EtransMessageTextNum=etransMessageText.EtransMessageTextNum;
 			Etranss.Insert(etrans271);
 			etrans.AckEtransNum=etrans271.EtransNum;
-			string processingerror=x271.GetProcessingError();
 			if(etrans271.Etype==EtransType.Acknowledge_997) {
-				etrans.Note="Malformed document sent.  997 error returned.";
-			}
-			else if(processingerror != "") {
-				etrans.Note=processingerror;
+				X997 x997=new X997(x12response);
+				string error997=x997.GetHumanReadable();
+				etrans.Note="Error: "+error997;//"Malformed document sent.  997 error returned.";
+				Etranss.Update(etrans);
+				MessageBox.Show(etrans.Note);
+				//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(etrans.Note);
+				//msgbox.ShowDialog();
+				//don't show the 270 interface.
+				return;
 			}
 			else {
-				etrans.Note="Normal 271 response.";//change this later to be explanatory of content.
+				string processingerror=x271.GetProcessingError();
+				if(processingerror != "") {
+					etrans.Note=processingerror;
+					Etranss.Update(etrans);
+					MessageBox.Show(etrans.Note);
+					//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(etrans.Note);
+					//msgbox.ShowDialog();
+					//don't show the 270 interface.
+					return;
+				}
+				else {
+					etrans.Note="Normal 271 response.";//change this later to be explanatory of content.
+				}
 			}
 			Etranss.Update(etrans);
 			//show the user a list of benefits to pick from for import--------------------------

@@ -69,7 +69,7 @@ namespace OpenDentBusiness
 				+Sout(carrier.CarrierName,35)+"*"//NM103: Name Last.
 				+"****"//NM104-07 not used
 				+"PI*"//NM108: PI=PayorID
-				+Sout(carrier.ElectID,80,2)+"~");//NM109: PayorID
+				+Sout(carrier.ElectID,80,2)+"~");//NM109: PayorID. Validated to be at least length of 2.
 			HLcount++;
 			//2000B HL: Information Receiver------------------------------------------------------------------------
 			seg++;
@@ -259,7 +259,7 @@ IEA*1*000012145~";
 			StringBuilder strb=new StringBuilder();
 			X12Validate.ISA(clearhouse,strb);
 			X12Validate.Carrier(carrier,strb);
-			if(carrier.ElectID=="") {
+			if(carrier.ElectID.Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}

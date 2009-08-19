@@ -238,12 +238,22 @@ namespace OpenDental.Eclaims
 			com.dentalxchange.webservices.Request request=new com.dentalxchange.webservices.Request();
 			request.content=x12message;
 			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
-			//service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
-			service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
-			com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
+			service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
+			//service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
+			string strResponse="";
+			try {
+				com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
+				strResponse=response.content;
+			}
+			catch(SoapException ex) {
+				strResponse=ex.Detail.InnerText;
+			}
+			//cleanup response.  Seems to start with \n and 4 spaces.  Ends with trailing \n.
+			strResponse=strResponse.Replace("\n","");
+			strResponse=strResponse.TrimStart(' ');
 			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(response.content);
 			//msgbox.ShowDialog();
-			return response.content;
+			return strResponse;
 
 			/*
 			string strRawResponse="";

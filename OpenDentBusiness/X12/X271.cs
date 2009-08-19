@@ -41,7 +41,7 @@ namespace OpenDentBusiness
 			return retVal;
 		}
 
-		///<summary>If there was no processing error (AAA segment), then this will return empty string.</summary>
+		///<summary>If there was no processing error (2100A, 2100B, 2100C, 2110C AAA segment), then this will return empty string.</summary>
 		public string GetProcessingError() {
 			string retVal="";
 			for(int i=0;i<Segments.Count;i++) {
@@ -57,17 +57,26 @@ namespace OpenDentBusiness
 			return retVal;
 		}
 
+		///<summary>Some of these codes are only found in certain loops.</summary>
 		private string GetRejectReason(string code) {
 			switch(code) {
-				case "15": return "Required application data missing"; 
+				case "04": return "Authorized Quantity Exceeded (too many patients in request)"; 
+				case "15": return "Required application data missing";
+				case "41": return "Authorization Access Restriction (not allowed to submit requests)"; 
 				case "42": return "Unable to Respond at Current Time"; 
-				case "43": return "Invalid/Missing Provider Identification"; 
-				case "45": return "Invalid/Missing Provider Specialty"; 
+				case "43": return "Invalid/Missing Provider Identification";
+				case "44": return "Invalid/Missing Provider Name"; 
+				case "45": return "Invalid/Missing Provider Specialty";
+				case "46": return "Invalid/Missing Provider Phone Number";
 				case "47": return "Invalid/Missing Provider State"; 
 				case "48": return "Invalid/Missing Referring Provider Identification Number"; 
-				case "49": return "Provider is Not Primary Care Physician"; 
+				case "49": return "Provider is Not Primary Care Physician";
+				case "50": return "Provider Ineligible for Inquiries"; 
 				case "51": return "Provider Not on File"; 
-				case "52": return "Service Dates Not Within Provider Plan Enrollment"; 
+				case "52": return "Service Dates Not Within Provider Plan Enrollment";
+				case "53": return "Inquired Benefit Inconsistent with Provider Type";
+				case "54": return "Inappropriate Product/Service ID Qualifier";
+				case "55": return "Inappropriate Product/Service ID";
 				case "56": return "Inappropriate Date"; 
 				case "57": return "Invalid/Missing Date(s) of Service"; 
 				case "58": return "Invalid/Missing Date-of-Birth"; 
@@ -79,7 +88,9 @@ namespace OpenDentBusiness
 				case "65": return "Invalid/Missing Patient Name"; 
 				case "66": return "Invalid/Missing Patient Gender Code"; 
 				case "67": return "Patient Not Found"; 
-				case "68": return "Duplicate Patient ID Number"; 
+				case "68": return "Duplicate Patient ID Number";
+				case "69": return "Inconsistent with Patient’s Age";
+				case "70": return "Inconsistent with Patient’s Gender";
 				case "71": return "Patient Birth Date Does Not Match That for the Patient on the Database"; 
 				case "72": return "Invalid/Missing Subscriber/Insured ID"; 
 				case "73": return "Invalid/Missing Subscriber/Insured Name"; 
@@ -87,7 +98,11 @@ namespace OpenDentBusiness
 				case "75": return "Subscriber/Insured Not Found"; 
 				case "76": return "Duplicate Subscriber/Insured ID Number"; 
 				case "77": return "Subscriber Found, Patient Not Found"; 
-				case "78": return "Subscriber/Insured Not in Group/Plan Identified"; 
+				case "78": return "Subscriber/Insured Not in Group/Plan Identified";
+				case "79": return "Invalid Participant Identification (this payer does not provide e-benefits)";
+				case "80": return "No Response received - Transaction Terminated";
+				case "97": return "Invalid or Missing Provider Address";
+				case "T4": return "Payer Name or Identifier Missing";
 				default: return "Error code '"+code+"' not valid.";
 			} 
 		}
@@ -96,6 +111,7 @@ namespace OpenDentBusiness
 			switch(code) {
 				case "C": return "Please Correct and Resubmit";
 				case "N": return "Resubmission Not Allowed";
+				case "P": return "Please Resubmit Original Transaction";
 				case "R": return "Resubmission Allowed";
 				case "S": return "Do Not Resubmit; Inquiry Initiated to a Third Party";
 				case "W": return "Please Wait 30 Days and Resubmit";

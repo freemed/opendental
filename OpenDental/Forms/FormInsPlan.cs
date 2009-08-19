@@ -1945,6 +1945,7 @@ namespace OpenDental{
 			//set all benefitNums to 0 to trigger having them saved as new
 			for(int i=0;i<benefitList.Count;i++) {
 				((Benefit)benefitList[i]).BenefitNum=0;
+				((Benefit)benefitList[i]).PlanNum=PlanCur.PlanNum;
 			}
 			Benefits.UpdateList(benefitListOld,benefitList);//replaces all benefits for this plan in the database
 			FillBenefits();
@@ -3309,7 +3310,8 @@ namespace OpenDental{
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
 				//this also catches validation errors such as missing info.
 				Cursor=Cursors.Default;
-				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
+				string displayMsg=Lan.g(this,"Please fix the following errors first:\r\n")+ex.Message;
+				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(displayMsg);
 				msgbox.ShowDialog();
 			}
 			Cursor=Cursors.Default;
@@ -3877,6 +3879,11 @@ namespace OpenDental{
 				//}
 			}
 			else{//also triggered when IsNew, because box is unchecked and hidden
+				for(int i=0;i<benefitList.Count;i++) {
+					if(benefitList[i].BenefitNum==0 && benefitList[i].PatPlanNum==0 && benefitList[i].PlanNum==0){
+						benefitList[i].PlanNum=PlanCur.PlanNum;
+					}
+				}
 				Benefits.UpdateList(benefitListOld,benefitList);
 				InsPlans.ComputeEstimatesForPlan(PlanCur.PlanNum);
 			}

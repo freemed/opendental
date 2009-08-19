@@ -164,6 +164,23 @@ namespace OpenDental {
 			msgbox.ShowDialog();
 		}
 
+		/*
+		private void butShowResponseDeciph_Click(object sender,EventArgs e) {
+			if(!X12object.IsX12(MessageTextAck)) {
+				MessageBox.Show("Only works with 997's");
+				return;
+			}
+			X12object x12obj=new X12object(MessageTextAck);
+			if(!x12obj.Is997()) {
+				MessageBox.Show("Only works with 997's");
+				return;
+			}
+			X997 x997=new X997(MessageTextAck);
+			string display=x997.GetHumanReadable();
+			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(display);
+			msgbox.ShowDialog();
+		}*/
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			//This button is not visible if IsNew
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete entire request and response?")) {
@@ -191,6 +208,8 @@ namespace OpenDental {
 			//}
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

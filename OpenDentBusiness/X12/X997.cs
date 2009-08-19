@@ -116,6 +116,74 @@ namespace OpenDentBusiness{
 		*/
 		//the only rows that we evaluate are AK2, which has transaction# (batchNumber), and AK5 which has ack code.
 
+		///<summary></summary>
+		public string GetHumanReadable() {
+			string retVal="";
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID!="AK3"
+					&& Segments[i].SegmentID!="AK4") {
+					continue;
+				}
+				if(retVal != "") {//if multiple errors
+					retVal+="\r\n";
+				}
+				if(Segments[i].SegmentID=="AK3") {
+					retVal+="Segment "+Segments[i].Get(1)+": "+GetSegmentSyntaxError(Segments[i].Get(4));
+				}
+				if(Segments[i].SegmentID=="AK4") {
+					retVal+="Element "+Segments[i].Get(1)+": "+GetElementSyntaxError(Segments[i].Get(3));
+				}
+				//retVal+=GetRejectReason(Segments[i].Get(3))+", "
+				//	+GetFollowupAction(Segments[i].Get(4));
+			}
+			return retVal;
+		}
+
+		/*Example of 997 from failed 270 request.
+		ISA*00*          *00*          *30*330989922      *ZZ*810624427      *090819*1501*U*00401*000000000*0*T*:~
+		GS*FA*330989922*330989922*20090819*1501*0*X*004010~
+		ST*997*0001~
+		AK1*HS*26~
+		AK2*270*0001~
+		AK3*NM1*4**8~
+		AK4*9*725*4*1~
+		AK5*R*5~
+		AK9*R*1*1*0~
+		SE*8*0001~
+		GE*1*0~
+		IEA*1*000000000~
+		 */
+
+		private string GetSegmentSyntaxError(string code) {
+			switch(code) {
+				case "1": return "Unrecognized segment ID";
+				case "2": return "Unexpected segment";
+				case "3": return "Mandatory segment missing";
+				case "4": return "Loop Occurs Over Maximum Times";
+				case "5": return "Segment Exceeds Maximum Use";
+				case "6": return "Segment Not in Defined Transaction Set";
+				case "7": return "Segment Not in Proper Sequence";
+				case "8": return "Segment Has Data Element Errors";
+				default: return code;//will never happen
+			}
+		}
+
+		private string GetElementSyntaxError(string code) {
+			switch(code) {
+				case "1": return "Mandatory data element missing";
+				case "2": return "Conditional required data element missing";
+				case "3": return "Too many data elements";
+				case "4": return "Data element too short";
+				case "5": return "Data element too long";
+				case "6": return "Invalid character in data element";
+				case "7": return "Invalid code value";
+				case "8": return "Invalid Date";
+				case "9": return "Invalid Time";
+				case "10": return "Exclusion Condition Violated";
+				default: return code;//will never happen
+			}
+		}
+	
 
 	}
 }
