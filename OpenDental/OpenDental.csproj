@@ -154,6 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
+    <Compile Include="Bridges\FormTrophyNamePick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bridges\FormTrophyNamePick.Designer.cs">
+      <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bridges\Camsight.cs" />
     <Compile Include="Bridges\Cliniview.cs" />
     <Compile Include="Bridges\ICat.cs" />
@@ -3602,6 +3608,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
+      <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Bridges\FormPatienteBill.resx">
       <DependentUpon>FormPatienteBill.cs</DependentUpon>
       <SubType>Designer</SubType>

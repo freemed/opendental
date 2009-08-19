@@ -1716,6 +1716,18 @@ namespace OpenDentBusiness{
 			return PIn.PString(table.Rows[0][1].ToString()) + ", "+ PIn.PString(table.Rows[0][0].ToString()) + " is Eligible";
 		}
 
+		///<summary>Only a partial folderName will be sent in.  Not the .rvg part.</summary>
+		public static bool IsTrophyFolderInUse(string folderName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),folderName);
+			}
+			string command ="SELECT COUNT(*) FROM patient WHERE TrophyFolder LIKE '%"+POut.PString(folderName)+"%'";
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 	}
 
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>
