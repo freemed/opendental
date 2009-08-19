@@ -138,6 +138,9 @@ namespace OpenDental{
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
 		//private ContrApptSingle PinApptSingle;
+		///<summary>Local computer time.  Used by waiting room feature as delta time for display refresh.</summary>
+		private DateTime LastTimeDataRetrieved;
+		private Timer timerWaitingRoom;
 		private bool InitializedOnStartup;
 
 		///<summary></summary>
@@ -242,6 +245,7 @@ namespace OpenDental{
 			this.tabWaiting = new System.Windows.Forms.TabPage();
 			this.gridWaiting = new OpenDental.UI.ODGrid();
 			this.tabSched = new System.Windows.Forms.TabPage();
+			this.timerWaitingRoom = new System.Windows.Forms.Timer(this.components);
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -977,6 +981,12 @@ namespace OpenDental{
 			this.tabSched.Text = "Emp";
 			this.tabSched.UseVisualStyleBackColor = true;
 			// 
+			// timerWaitingRoom
+			// 
+			this.timerWaitingRoom.Enabled = true;
+			this.timerWaitingRoom.Interval = 1000;
+			this.timerWaitingRoom.Tick += new System.EventHandler(this.timerWaitingRoom_Tick);
+			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
@@ -1462,6 +1472,7 @@ namespace OpenDental{
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
 			DS=Appointments.RefreshPeriod(startDate,endDate);
+			LastTimeDataRetrieved=DateTime.Now;
 			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
 			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Length][];
@@ -1638,6 +1649,10 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void FillWaitingRoom(){
+			if(DS==null) {
+				return;
+			}
+			TimeSpan delta=DateTime.Now-LastTimeDataRetrieved;
 			DataTable table=DS.Tables["WaitingRoom"];
 			gridWaiting.BeginUpdate();
 			gridWaiting.Columns.Clear();
@@ -1646,11 +1661,14 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g("TableApptWaiting","Waited"),100,HorizontalAlignment.Center);
 			gridWaiting.Columns.Add(col);
 			gridWaiting.Rows.Clear();
+			DateTime waitTime;
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["patName"].ToString());
-				row.Cells.Add(table.Rows[i]["waitTime"].ToString());
+				waitTime=DateTime.Parse(table.Rows[i]["waitTime"].ToString());//we ignore date
+				waitTime+=delta;
+				row.Cells.Add(waitTime.ToString("H:mm:ss"));
 				gridWaiting.Rows.Add(row);
 			}
 			gridWaiting.EndUpdate();
@@ -4129,6 +4147,10 @@ namespace OpenDental{
 		private void butMonth_Click(object sender,EventArgs e) {
 			FormMonthView FormM=new FormMonthView();
 			FormM.ShowDialog();
+		}
+
+		private void timerWaitingRoom_Tick(object sender,EventArgs e) {
+			FillWaitingRoom();
 		}
 
 		
