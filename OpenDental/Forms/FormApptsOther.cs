@@ -137,7 +137,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 3;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textApptModNote
@@ -759,7 +759,8 @@ namespace OpenDental{
 				AptCur.ProvNum=PatCur.PriProv;
 			}
 			AptCur.ProvHyg=PatCur.SecProv;
-			AptCur.AptStatus=ApptStatus.Scheduled;
+			AptCur.AptStatus=ApptStatus.UnschedList;
+			AptCur.AptDateTime=DateTime.Now;
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick){//initially double clicked on appt module
 				DateTime d;
