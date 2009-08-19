@@ -879,6 +879,7 @@ namespace OpenDental{
 			FormPCN.ShowDialog();
 			if(FormPCN.Changed){
 				changed=true;
+				ProcedureCodes.RefreshCache();
 				FillGrid();
 			}
 		}
