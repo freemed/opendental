@@ -1663,7 +1663,13 @@ namespace OpenDental{
 			//}
 			FillFormWithPlanCur();
 			FillBenefits();
-			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
+			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
+			if(dateLast270.Year<1880) {
+				textElectBenLastDate.Text="";
+			}
+			else {
+				textElectBenLastDate.Text=dateLast270.ToShortDateString();
+			}
 			Cursor=Cursors.Default;
 		}
 
@@ -3315,7 +3321,13 @@ namespace OpenDental{
 				msgbox.ShowDialog();
 			}
 			Cursor=Cursors.Default;
-			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
+			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
+			if(dateLast270.Year<1880) {
+				textElectBenLastDate.Text="";
+			}
+			else {
+				textElectBenLastDate.Text=dateLast270.ToShortDateString();
+			}
 			FillBenefits();
 		}
 
@@ -3323,7 +3335,13 @@ namespace OpenDental{
 			FormBenefitElectHistory formB=new FormBenefitElectHistory(PlanCur.PlanNum,PatPlanCur.PatPlanNum);
 			formB.BenList=benefitList;
 			formB.ShowDialog();
-			textElectBenLastDate.Text=Etranss.GetLastDate270(PlanCur.PlanNum).ToShortDateString();
+			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
+			if(dateLast270.Year<1880) {
+				textElectBenLastDate.Text="";
+			}
+			else {
+				textElectBenLastDate.Text=dateLast270.ToShortDateString();
+			}
 			FillBenefits();
 		}
 

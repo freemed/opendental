@@ -26,12 +26,12 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butShowResponse = new OpenDental.UI.Button();
-			this.butShowRequest = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butImport = new OpenDental.UI.Button();
 			this.gridBen = new OpenDental.UI.ODGrid();
 			this.gridDates = new OpenDental.UI.ODGrid();
+			this.butShowResponse = new OpenDental.UI.Button();
+			this.butShowRequest = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -66,34 +66,6 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 116;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Show Raw Message of...";
-			// 
-			// butShowResponse
-			// 
-			this.butShowResponse.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowResponse.Autosize = true;
-			this.butShowResponse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowResponse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowResponse.CornerRadius = 4F;
-			this.butShowResponse.Location = new System.Drawing.Point(87,19);
-			this.butShowResponse.Name = "butShowResponse";
-			this.butShowResponse.Size = new System.Drawing.Size(75,24);
-			this.butShowResponse.TabIndex = 116;
-			this.butShowResponse.Text = "Response";
-			this.butShowResponse.Click += new System.EventHandler(this.butShowResponse_Click);
-			// 
-			// butShowRequest
-			// 
-			this.butShowRequest.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowRequest.Autosize = true;
-			this.butShowRequest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowRequest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowRequest.CornerRadius = 4F;
-			this.butShowRequest.Location = new System.Drawing.Point(6,19);
-			this.butShowRequest.Name = "butShowRequest";
-			this.butShowRequest.Size = new System.Drawing.Size(75,24);
-			this.butShowRequest.TabIndex = 115;
-			this.butShowRequest.Text = "Request";
-			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
 			// 
 			// label1
 			// 
@@ -143,6 +115,34 @@ namespace OpenDental{
 			this.gridDates.Title = "Dates";
 			this.gridDates.TranslationName = "FormEtrans270Edit";
 			// 
+			// butShowResponse
+			// 
+			this.butShowResponse.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowResponse.Autosize = true;
+			this.butShowResponse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowResponse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowResponse.CornerRadius = 4F;
+			this.butShowResponse.Location = new System.Drawing.Point(87,19);
+			this.butShowResponse.Name = "butShowResponse";
+			this.butShowResponse.Size = new System.Drawing.Size(75,24);
+			this.butShowResponse.TabIndex = 116;
+			this.butShowResponse.Text = "Response";
+			this.butShowResponse.Click += new System.EventHandler(this.butShowResponse_Click);
+			// 
+			// butShowRequest
+			// 
+			this.butShowRequest.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowRequest.Autosize = true;
+			this.butShowRequest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowRequest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowRequest.CornerRadius = 4F;
+			this.butShowRequest.Location = new System.Drawing.Point(6,19);
+			this.butShowRequest.Name = "butShowRequest";
+			this.butShowRequest.Size = new System.Drawing.Size(75,24);
+			this.butShowRequest.TabIndex = 115;
+			this.butShowRequest.Text = "Request";
+			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
+			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
@@ -170,6 +170,7 @@ namespace OpenDental{
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 113;
 			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 

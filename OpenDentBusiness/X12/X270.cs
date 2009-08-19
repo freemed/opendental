@@ -195,8 +195,33 @@ namespace OpenDentBusiness
 				+DateTime.Today.ToString("yyyyMMdd")+"~");//DTP03: Date
 			//2110C EQ: Subscriber Eligibility or Benefit Enquiry Information
 			//We can loop this 99 times to request very specific benefits.
+			//strb.AppendLine("EQ*30~");//EQ01: 30=General Coverage
 			seg++;
-			strb.AppendLine("EQ*30~");//EQ01: 30=General Coverage
+			strb.AppendLine("EQ*23~");//Diagnostic
+			seg++;
+			strb.AppendLine("EQ*4~");//Diagnostic Xray
+			seg++;
+			strb.AppendLine("EQ*41~");//Routine Preventive
+			seg++;
+			strb.AppendLine("EQ*25~");//Restorative
+			seg++;
+			strb.AppendLine("EQ*26~");//Endo
+			seg++;
+			strb.AppendLine("EQ*24~");//Perio
+			seg++;
+			strb.AppendLine("EQ*40~");//Oral Surgery
+			seg++;
+			strb.AppendLine("EQ*36~");//Crowns
+			seg++;
+			strb.AppendLine("EQ*39~");//Prosth
+			seg++;
+			strb.AppendLine("EQ*27~");//Maxillofacial Prosth
+			seg++;
+			strb.AppendLine("EQ*37~");//Accident
+			seg++;
+			strb.AppendLine("EQ*38~");//Ortho
+			seg++;
+			strb.AppendLine("EQ*28~");//Adjunctive
 			//Transaction Trailer
 			seg++;
 			strb.AppendLine("SE*"
