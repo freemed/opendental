@@ -400,6 +400,10 @@ namespace OpenDental
 				if(fam.ListPats[i].PatNum==pat.PatNum) {
 					continue;
 				}
+				if(fam.ListPats[i].PatStatus==PatientStatus.Archived
+					|| fam.ListPats[i].PatStatus==PatientStatus.Deceased) {
+					continue;
+				}
 				str=fam.ListPats[i].GetNameFL();
 				if(fam.ListPats[i].Age>0){
 					str+=",   "+fam.ListPats[i].Age.ToString();
