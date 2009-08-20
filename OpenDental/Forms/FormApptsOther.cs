@@ -759,7 +759,6 @@ namespace OpenDental{
 				AptCur.ProvNum=PatCur.PriProv;
 			}
 			AptCur.ProvHyg=PatCur.SecProv;
-			AptCur.AptStatus=ApptStatus.UnschedList;
 			AptCur.AptDateTime=DateTime.Now;
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick){//initially double clicked on appt module
@@ -781,9 +780,11 @@ namespace OpenDental{
 				AptCur.ProvHyg=curOp.ProvHygienist;
 				AptCur.IsHygiene=curOp.IsHygiene;
 				AptCur.ClinicNum=curOp.ClinicNum;
+				AptCur.AptStatus=ApptStatus.Scheduled;
 			}
 			else{
 				//new appt will be placed on pinboard instead of specific time
+				AptCur.AptStatus=ApptStatus.UnschedList;
 			}
 			try{
 				Appointments.Insert(AptCur);
