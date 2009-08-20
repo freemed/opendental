@@ -238,8 +238,12 @@ namespace OpenDental.Eclaims
 			com.dentalxchange.webservices.Request request=new com.dentalxchange.webservices.Request();
 			request.content=x12message;
 			com.dentalxchange.webservices.WebServiceService service = new com.dentalxchange.webservices.WebServiceService();
-			service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
-			//service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
+#if DEBUG
+			//service.Url = "https://prelive2.dentalxchange.com/dws/services/dciservice.svl"; // testing
+			service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; // production
+#else
+			service.Url = "https://webservices.dentalxchange.com/dws/services/dciservice.svl"; //always use production. So I don't forget
+#endif
 			string strResponse="";
 			try {
 				com.dentalxchange.webservices.Response response = service.lookupEligibility(cred,request);
