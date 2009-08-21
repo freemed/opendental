@@ -293,8 +293,8 @@ namespace OpenDental{
 				whereProv+=")";
 			}
 			string queryIns=
-				@"SELECT claimproc.DateCP,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) lfname,
-				carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+				@"SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') AS DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
+				carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
 				FROM claimproc,insplan,patient,carrier,provider,claimpayment 
 				WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
 				AND provider.ProvNum=claimproc.ProvNum 
@@ -330,9 +330,9 @@ namespace OpenDental{
 				whereProv+=")";
 			}
 			string queryPat=
-				@"SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
+				@"SELECT DATE_FORMAT(paysplit.DatePay,'%c/%d/%Y') AS DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
 				payment.PayType,provider.Abbr,payment.CheckNum,
-				SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
+				FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
 				FROM paysplit
 				LEFT JOIN payment ON payment.PayNum=paysplit.PayNum 
 				LEFT JOIN patient ON patient.PatNum=paysplit.PatNum

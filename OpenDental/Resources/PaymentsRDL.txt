@@ -15,8 +15,8 @@
     <DataSet Name="Data">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT claimproc.DateCP,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) lfname,
-carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+        <CommandText>SELECT DATE_FORMAT(claimproc.DateCP,'%c/%d/%Y') AS DateCP,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
+carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,FORMAT(SUM(claimproc.InsPayAmt),2) amt,claimproc.ClaimNum 
 FROM claimproc,insplan,patient,carrier,provider,claimpayment 
 WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
 AND provider.ProvNum=claimproc.ProvNum 
@@ -54,9 +54,9 @@ GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum</CommandText>
     <DataSet Name="DataPatPay">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
+        <CommandText>SELECT DATE_FORMAT(paysplit.DatePay,'%c/%d/%Y') AS DatePay,CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS lfname,
 payment.PayType,provider.Abbr,payment.CheckNum,
-SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
+FORMAT(SUM(paysplit.SplitAmt),2) amt, payment.PayNum,ItemName 
 FROM payment,patient,provider,paysplit,definition
 WHERE payment.PayNum=paysplit.PayNum 
 AND patient.PatNum=paysplit.PatNum 
@@ -302,7 +302,6 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                           <Bottom>Silver</Bottom>
                         </BorderColor>
                         <BorderWidth />
-                        <Format>MM/dd/yyyy</Format>
                         <VerticalAlign>Middle</VerticalAlign>
                       </Style>
                     </Textbox>
@@ -424,7 +423,6 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                           <Bottom>Silver</Bottom>
                         </BorderColor>
                         <BorderWidth />
-                        <Format>0.00</Format>
                         <VerticalAlign>Middle</VerticalAlign>
                       </Style>
                     </Textbox>
@@ -763,7 +761,6 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                         </BorderColor>
                         <BorderWidth />
                         <VerticalAlign>Middle</VerticalAlign>
-                        <Format>MM/dd/yyyy</Format>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -857,7 +854,6 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
                         <BorderWidth />
                         <TextAlign>Right</TextAlign>
                         <VerticalAlign>Middle</VerticalAlign>
-                        <Format>0.00</Format>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -1201,7 +1197,7 @@ GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum</CommandText>
     <DataSource Name="DS1">
       <ConnectionProperties>
         <DataProvider>MySQL.NET</DataProvider>
-        <ConnectString>Server=localhost;Database=development66;User ID=root;Password=;CharSet=utf8</ConnectString>
+        <ConnectString>Server=localhost;Database=development67;User ID=root;Password=;CharSet=utf8</ConnectString>
         <IntegratedSecurity>false</IntegratedSecurity>
       </ConnectionProperties>
     </DataSource>
