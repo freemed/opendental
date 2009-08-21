@@ -255,6 +255,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTreatPlanEdit_Load(object sender, System.EventArgs e) {
+			//this window never comes up for new TP.  Always saved ahead of time.
+			if(!Security.IsAuthorized(Permissions.TreatPlanEdit,PlanCur.DateTP)) {
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+				butPickResponsParty.Enabled=false;
+				butClearResponsParty.Enabled=false;
+			}
 			textDateTP.Text=PlanCur.DateTP.ToShortDateString();
 			textHeading.Text=PlanCur.Heading;
 			textNote.Text=PlanCur.Note;
@@ -299,6 +306,7 @@ namespace OpenDental{
 				return;
 			}
 			TreatPlans.Delete(PlanCur);
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Delete TP: "+PlanCur.DateTP.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 
@@ -316,6 +324,7 @@ namespace OpenDental{
 			PlanCur.Heading=textHeading.Text;
 			PlanCur.Note=textNote.Text;
 			TreatPlans.Update(PlanCur);
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit TP: "+PlanCur.DateTP.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 

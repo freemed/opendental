@@ -400,6 +400,8 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.TPModule);
+				node2=SetNode(Permissions.TreatPlanEdit);
+					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ChartModule);
 				node2=SetNode("Procedure");

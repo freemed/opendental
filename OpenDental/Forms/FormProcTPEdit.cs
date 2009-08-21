@@ -38,9 +38,10 @@ namespace OpenDental{
 		private ValidDouble textDiscount;
 		private Label label2;
 		private OpenDental.ValidDouble textPatAmt;
+		private DateTime DateTP;
 
 		///<summary></summary>
-		public FormProcTPEdit(ProcTP procCur)
+		public FormProcTPEdit(ProcTP procCur,DateTime dateTP)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -48,6 +49,7 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			ProcCur=procCur.Copy();
+			DateTP=dateTP;
 		}
 
 		/// <summary>
@@ -351,6 +353,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcTPEdit_Load(object sender, System.EventArgs e){
+			//this window never comes up for new TP.  Always saved ahead of time.
+			if(!Security.IsAuthorized(Permissions.TreatPlanEdit,DateTP)) {
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+			}
 			comboPriority.Items.Add(Lan.g(this,"none"));
 			comboPriority.SelectedIndex=0;
 			for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
@@ -372,6 +379,8 @@ namespace OpenDental{
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			ProcTPs.Delete(ProcCur);
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Delete tp proc: "+ProcCur.Descript);
+			
 			DialogResult=DialogResult.OK;
 		}
 
@@ -401,6 +410,7 @@ namespace OpenDental{
 			ProcCur.Discount=PIn.PDouble(textDiscount.Text);
 			ProcCur.PatAmt=PIn.PDouble(textPatAmt.Text);
 			ProcTPs.InsertOrUpdate(ProcCur,false);//IsNew not applicable here
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit proc: "+ProcCur.Descript);
 			DialogResult=DialogResult.OK;
 		}
 

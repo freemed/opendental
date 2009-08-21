@@ -91,7 +91,6 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.PaymentEdit
 				|| perm==Permissions.ProcComplCreate
 				|| perm==Permissions.ProcComplEdit
-				//|| perm==Permissions.ClaimsSentEdit
 				|| perm==Permissions.InsPayCreate
 				|| perm==Permissions.InsPayEdit
 				)
@@ -117,10 +116,11 @@ namespace OpenDentBusiness{
 			if(date>dateLimit){//authorized
 				return true;
 			}
-			//3 situations.  There might be others, but we have to handle them individually to avoid introduction of bugs.
+			//Handling of min dates.  There might be others, but we have to handle them individually to avoid introduction of bugs.
 			if(perm==Permissions.ClaimSentEdit//no date sent was entered before setting claim received
 				|| perm==Permissions.ProcComplEdit//a completed procedure with a min date.
-				|| perm==Permissions.InsPayEdit)//a claim payment with no date.
+				|| perm==Permissions.InsPayEdit//a claim payment with no date.
+				|| perm==Permissions.TreatPlanEdit)
 			{
 				if(date.Year<1880	&& dateLimit.Year<1880) {
 					return true;

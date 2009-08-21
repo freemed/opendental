@@ -767,7 +767,16 @@ DROP TABLE IF EXISTS etAck";
 		private static void To6_8_0() {
 			if(FromVersion<new Version("6.8.0.0")) {
 				string command;
-
+				//add TreatPlanEdit permission to all groups------------------------------------------------------
+				command="SELECT UserGroupNum FROM usergroup";
+				DataTable table=Db.GetTable(command);
+				int groupNum;
+				for(int i=0;i<table.Rows.Count;i++) {
+					groupNum=PIn.PInt(table.Rows[i][0].ToString());
+					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
+						+"VALUES('0001-01-01',"+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.TreatPlanEdit)+")";
+					Db.NonQ(command);
+				}
 
 
 

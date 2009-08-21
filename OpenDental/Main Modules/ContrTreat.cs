@@ -1488,7 +1488,8 @@ namespace OpenDental{
 			}
 			//any other TP
 			ProcTP procT=(ProcTP)gridMain.Rows[e.Row].Tag;
-			FormProcTPEdit FormP=new FormProcTPEdit(procT);
+			DateTime dateTP=PlanList[gridPlans.SelectedIndices[0]-1].DateTP;
+			FormProcTPEdit FormP=new FormProcTPEdit(procT,dateTP);
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel){
 				return;

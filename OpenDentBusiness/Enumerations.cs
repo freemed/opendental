@@ -1015,7 +1015,9 @@ namespace OpenDentBusiness{
 		///<summary>36</summary>
 		InsPayCreate,
 		///<summary>37</summary>
-		InsPayEdit
+		InsPayEdit,
+		///<summary>38</summary>
+		TreatPlanEdit
 	}
 
 	///<summary>The type of signal being sent.</summary>

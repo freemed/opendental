@@ -199,6 +199,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Edit All Timecards");
 				case Permissions.TPModule:
 					return Lans.g("enumPermissions","TreatmentPlan Module");
+				case Permissions.TreatPlanEdit:
+					return Lans.g("enumPermissions","Edit Treatment Plan");
 				case Permissions.UserQuery:
 					return Lans.g("enumPermissions","User Query");
 			}
@@ -216,6 +218,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.AccountingEdit
 				|| permType==Permissions.AccountingCreate//prevents backdating
 				|| permType==Permissions.DepositSlips//prevents backdating
+				|| permType==Permissions.TreatPlanEdit
 				)
 			{
 				return true;

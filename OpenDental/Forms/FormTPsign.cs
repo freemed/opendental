@@ -44,8 +44,8 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormTPsign(){
 			InitializeComponent();//Required for Windows Form Designer support
-            allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
-            sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
+			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 			if(!allowTopaz) {
 				butTopazSign.Visible=false;
                 sigBox.Visible=true;
@@ -251,6 +251,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTPsign_Load(object sender, System.EventArgs e) {
+			//this window never comes up for new TP.  Always saved ahead of time.
+			if(!Security.IsAuthorized(Permissions.TreatPlanEdit,TPcur.DateTP)) {
+				butOK.Enabled=false;
+				sigBox.Enabled=false;
+				butClearSig.Enabled=false;
+				butTopazSign.Enabled=false;
+			}
 			LayoutToolBar();
 			ToolBarMain.Buttons["FullPage"].Pushed=true;
 			previewContr.Location=new Point(0,ToolBarMain.Bottom);
@@ -553,6 +560,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			SaveSignature();
 			TreatPlans.Update(TPcur);
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Sign TP");
 			DialogResult=DialogResult.OK;
 		}
 
