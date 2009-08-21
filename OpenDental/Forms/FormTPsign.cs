@@ -560,7 +560,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,EventArgs e) {
 			SaveSignature();
 			TreatPlans.Update(TPcur);
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Sign TP");
+			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,TPcur.PatNum,"Sign TP");
 			DialogResult=DialogResult.OK;
 		}
 
