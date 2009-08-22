@@ -1017,7 +1017,11 @@ namespace OpenDentBusiness{
 		///<summary>37</summary>
 		InsPayEdit,
 		///<summary>38</summary>
-		TreatPlanEdit
+		TreatPlanEdit,
+		///<summary>39</summary>
+		ReportProdInc,
+		///<summary>40</summary>
+		TimecardDeleteEntry
 	}
 
 	///<summary>The type of signal being sent.</summary>

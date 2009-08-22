@@ -203,6 +203,10 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Edit Treatment Plan");
 				case Permissions.UserQuery:
 					return Lans.g("enumPermissions","User Query");
+				case Permissions.ReportProdInc:
+					return Lans.g("enumPermissions","Reports - Production and Income");
+				case Permissions.TimecardDeleteEntry:
+					return Lans.g("enumPermissions","Timecard Delete Entry");
 			}
 			return "";//should never happen
 		}
@@ -219,6 +223,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.AccountingCreate//prevents backdating
 				|| permType==Permissions.DepositSlips//prevents backdating
 				|| permType==Permissions.TreatPlanEdit
+				|| permType==Permissions.TimecardDeleteEntry
 				)
 			{
 				return true;

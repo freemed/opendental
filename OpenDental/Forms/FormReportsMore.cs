@@ -422,6 +422,9 @@ namespace OpenDental {
 			if(selected==-1) {
 				return;
 			}
+			if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
+				return;
+			}
 			FormRpProdInc FormPI=new FormRpProdInc();
 			switch(selected) {
 				case 0://Today
@@ -460,7 +463,7 @@ namespace OpenDental {
 					break;
 			}
 			FormPI.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Production and Income");
+			SecurityLogs.MakeLogEntry(Permissions.ReportProdInc,0,"");
 		}
 
 		private void listDaily_MouseDown(object sender,MouseEventArgs e) {

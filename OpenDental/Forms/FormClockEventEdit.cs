@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(555,266);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -104,7 +104,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(555,225);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -206,7 +206,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(31,267);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(84,26);
+			this.butDelete.Size = new System.Drawing.Size(84,24);
 			this.butDelete.TabIndex = 12;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -243,6 +243,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClockEventEdit_Load(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.TimecardDeleteEntry,ClockEventCur.TimeEntered,true)) {
+				butDelete.Enabled=false;
+				return;
+			}
 			textTimeEntered.Text=ClockEventCur.TimeEntered.ToString();
 			textTimeDisplayed.Text=ClockEventCur.TimeDisplayed.ToString();
 			if(ClockEventCur.ClockIn){
@@ -274,6 +278,8 @@ namespace OpenDental{
 				return;
 			}
 			ClockEvents.Delete(ClockEventCur);
+			SecurityLogs.MakeLogEntry(Permissions.TimecardDeleteEntry,0,
+				"Original entry: "+ClockEventCur.TimeEntered.ToString());
 			DialogResult=DialogResult.OK;
 		}
 

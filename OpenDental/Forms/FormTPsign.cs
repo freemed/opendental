@@ -569,9 +569,9 @@ namespace OpenDental{
 		}
 
 		private void FormTPsign_FormClosing(object sender,FormClosingEventArgs e) {
-            if(allowTopaz){
-			    sigBoxTopaz.Dispose();
-            }
+			if(allowTopaz){
+				sigBoxTopaz.Dispose();
+			}
 		}
 
 		
