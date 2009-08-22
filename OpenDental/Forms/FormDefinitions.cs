@@ -275,29 +275,21 @@ namespace OpenDental{
 			lookupCat[1]=DefCat.AdjTypes;
 			lookupCat[2]=DefCat.AppointmentColors;
 			lookupCat[3]=DefCat.ApptConfirmed;
-			//lookupCat[4]=DefCat.ApptPhoneNotes;
 			lookupCat[4]=DefCat.ApptProcsQuickAdd;
 			lookupCat[5]=DefCat.BillingTypes;
 			lookupCat[6]=DefCat.BlockoutTypes;
 			lookupCat[7]=DefCat.ChartGraphicColors;
-			//lookupCat[9]=DefCat.ClaimFormats;
 			lookupCat[8]=DefCat.CommLogTypes;
 			lookupCat[9]=DefCat.ContactCategories;
 			lookupCat[10]=DefCat.Diagnosis;
-			//lookupCat[12]=DefCat.DiscountTypes;
-			//lookupCat[13]=DefCat.DunningMessages;
-			//lookupCat[11]=DefCat.FeeSchedNames;
 			lookupCat[11]=DefCat.ImageCats;
 			lookupCat[12]=DefCat.LetterMergeCats;
-			//lookupCat[17]=DefCat.MedicalNotes;
 			lookupCat[13]=DefCat.MiscColors;
-			//lookupCat[19]=DefCat.OperatoriesOld;
 			lookupCat[14]=DefCat.PaymentTypes;
 			lookupCat[15]=DefCat.ProcButtonCats;
 			lookupCat[16]=DefCat.ProcCodeCats;
 			lookupCat[17]=DefCat.ProgNoteColors;
 			lookupCat[18]=DefCat.RecallUnschedStatus;
-			//lookupCat[25]=DefCat.ServiceNotes;
 			lookupCat[19]=DefCat.SupplyCats;
 			lookupCat[20]=DefCat.TxPriorities;
 			for(int i=0;i<listCategory.Items.Count;i++){
@@ -392,17 +384,11 @@ namespace OpenDental{
 					FormDefEdit.ValueText=Lan.g(this,"1 or 2 letter abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"The diagnosis list is shown when entering a procedure.  Ones that are less used should go lower on the list.  The abbreviation is shown in the progress notes.  BE VERY CAREFUL.  Changes affect all patients.");
 					break;
-				/*case 11://"Fee Sched Names":
-					//SelectedCat=7;
-					FormDefEdit.EnableValue=true;
-					FormDefEdit.ValueText=Lan.g(this,"C=CoPay, A=Allowed");
-					FormDefEdit.HelpText=Lan.g(this,"Fee Schedule names.  Caution: any changes to the names affect all patients. Changing the order does not cause any problems.");
-					break;*/
 				case 11://"Image Categories":
 					//SelectedCat=18;
-					FormDefEdit.EnableValue=true;
-					FormDefEdit.ValueText=Lan.g(this,"X=Chart,P=PatPict,S=Stmt");
-					FormDefEdit.HelpText=Lan.g(this,"These are the categories that will be available in the image and chart modules.  If you hide a category, images in that category will be hidden, so only hide a category if you are certain it has never been used.  If you want the category to show in the Chart module, enter an X in the second column.  One category can be used for patient pictures, marked with P.  One category should be used for statements, marked with S. Affects all patient records.");
+					//FormDefEdit.EnableValue=true;
+					FormDefEdit.ValueText=Lan.g(this,"Usage");
+					FormDefEdit.HelpText=Lan.g(this,"These are the categories that will be available in the image and chart modules.  If you hide a category, images in that category will be hidden, so only hide a category if you are certain it has never been used.  Multiple categories can be set to show in the Chart module, but only one category should set for patient pictures, statements, and tooth chart. Affects all patient records.");
 					break;
 				case 12://"Letter Merge Cats"
 					//SelectedCat=(int)DefCat.LetterMergeCats;
@@ -460,7 +446,12 @@ namespace OpenDental{
 			tbDefs.SetBackGColor(Color.White);
 			for(int i=0;i<DefsList.Length;i++){
 				tbDefs.Cell[0,i]=DefsList[i].ItemName;
-				tbDefs.Cell[1,i]=DefsList[i].ItemValue;
+				if(lookupCat[listCategory.SelectedIndex]==DefCat.ImageCats) {
+					tbDefs.Cell[1,i]=GetItemDescForImages(DefsList[i].ItemValue);
+				}
+				else {
+					tbDefs.Cell[1,i]=DefsList[i].ItemValue;
+				}
 				if(FormDefEdit.EnableColor){
 					tbDefs.BackGColor[2,i]=DefsList[i].ItemColor;
 				}
@@ -498,6 +489,32 @@ namespace OpenDental{
 			textGuide.Text=FormDefEdit.HelpText;
 		}
 
+		private string GetItemDescForImages(string itemValue) {
+			string retVal="";
+			if(itemValue.Contains("X")){
+				retVal=Lan.g(this,"ChartModule");
+			}
+			if(itemValue.Contains("P")){
+				if(retVal!=""){
+					retVal+=", ";
+				}
+				retVal+=Lan.g(this,"PatientPic");
+			}
+			if(itemValue.Contains("S")){
+				if(retVal!=""){
+					retVal+=", ";
+				}
+				retVal+=Lan.g(this,"Statement");
+			}
+			if(itemValue.Contains("T")){
+				if(retVal!=""){
+					retVal+=", ";
+				}
+				retVal+=Lan.g(this,"ToothChart");
+			}
+			return retVal;
+		}
+
 		private void tbDefs_CellClicked(object sender, CellEventArgs e){
 			//Can't move this logic into the Table control because we never want to paint on col 3
 			if(DefsIsSelected){
@@ -530,28 +547,42 @@ namespace OpenDental{
 			tbDefs.Refresh();
 			DefsIsSelected=true;
 			DefsSelected=e.Row;
-			FormDefEdit FormDefEdit2 = new FormDefEdit(DefsList[e.Row]);
-			//Defs.Cur = Defs.List[e.Row];
-			FormDefEdit2.IsNew=false;
-			FormDefEdit2.ShowDialog();
-			//Preferences2.GetCatList(listCategory.SelectedIndex);
+			if(lookupCat[listCategory.SelectedIndex]==DefCat.ImageCats) {
+				FormDefEditImages FormDEI=new FormDefEditImages(DefsList[e.Row]);
+				FormDEI.IsNew=false;
+				FormDEI.ShowDialog();
+			}
+			else {
+				FormDefEdit FormDefEdit2 = new FormDefEdit(DefsList[e.Row]);
+				FormDefEdit2.IsNew=false;
+				FormDefEdit2.ShowDialog();
+				//Preferences2.GetCatList(listCategory.SelectedIndex);
+			}
 			changed=true;
 			FillDefs();
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			//if(SelectedCat==-1){//never -1.
-			//	MessageBox.Show(Lan.g(this,"Please select item first."));
-			//	return;
-			//}
 			Def DefCur=new Def();
 			DefCur.ItemOrder=DefsList.Length;
 			DefCur.Category=(DefCat)SelectedCat;
-			FormDefEdit FormDE=new FormDefEdit(DefCur);
-			FormDE.IsNew=true;
-			FormDE.ShowDialog();
-			if(FormDE.DialogResult!=DialogResult.OK){
-				return;
+			DefCur.ItemName="";
+			DefCur.ItemValue="";//necessary
+			if(lookupCat[listCategory.SelectedIndex]==DefCat.ImageCats) {
+				FormDefEditImages FormDEI=new FormDefEditImages(DefCur);
+				FormDEI.IsNew=true;
+				FormDEI.ShowDialog();
+				if(FormDEI.DialogResult!=DialogResult.OK) {
+					return;
+				}
+			}
+			else {
+				FormDefEdit FormDE=new FormDefEdit(DefCur);
+				FormDE.IsNew=true;
+				FormDE.ShowDialog();
+				if(FormDE.DialogResult!=DialogResult.OK) {
+					return;
+				}
 			}
 			DefsSelected=DefsList.Length;//this is one more than allowed, but it's ok
 			DefsIsSelected=true;

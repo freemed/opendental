@@ -152,7 +152,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPerm;
 		private OpenDental.UI.Button butPrimary;
 		private int SelectedProcTab;
-		private OpenDental.UI.Button butBig;
 		private OpenDental.UI.Button butTipBplus;
 		private OpenDental.UI.Button butTipMplus;
 		private OpenDental.UI.Button butShiftBplus;
@@ -254,13 +253,6 @@ namespace OpenDental{
 		private Label label24;
 		private ODGrid gridPlanned;
 		private ContextMenu menuConsent;
-		private MenuItem menuItem1;
-		private MenuItem menuItem2;
-		private MenuItem menuItem3;
-		private MenuItem menuItem4;
-		private MenuItem menuItem5;
-		private MenuItem menuItem6;
-		private MenuItem menuItem7;
 		private RadioButton radioEntryCn;
 		private CheckBox checkShowCn;
 		private int Chartscrollval;
@@ -269,6 +261,9 @@ namespace OpenDental{
 		private WebBrowser webBrowserEcw;
 		private Panel panelEcw;
 		private Label labelECWerror;
+		private ContextMenu menuToothChart;
+		private MenuItem menuItemChartBig;
+		private MenuItem menuItemChartSave;
 		private bool InitializedOnStartup;
 	
 		///<summary></summary>
@@ -476,27 +471,22 @@ namespace OpenDental{
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
 			this.menuConsent = new System.Windows.Forms.ContextMenu();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
-			this.menuItem5 = new System.Windows.Forms.MenuItem();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
-			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.toothChart = new SparksToothChart.GraphicalToothChart();
 			this.panelEcw = new System.Windows.Forms.Panel();
+			this.labelECWerror = new System.Windows.Forms.Label();
 			this.webBrowserEcw = new System.Windows.Forms.WebBrowser();
 			this.butECWdown = new OpenDental.UI.Button();
 			this.butECWup = new OpenDental.UI.Button();
 			this.butForeignKey = new OpenDental.UI.Button();
 			this.butAddKey = new OpenDental.UI.Button();
-			this.butBig = new OpenDental.UI.Button();
 			this.gridProg = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.labelECWerror = new System.Windows.Forms.Label();
+			this.menuToothChart = new System.Windows.Forms.ContextMenu();
+			this.menuItemChartBig = new System.Windows.Forms.MenuItem();
+			this.menuItemChartSave = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2667,50 +2657,7 @@ namespace OpenDental{
 			// 
 			// menuConsent
 			// 
-			this.menuConsent.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
-            this.menuItem2,
-            this.menuItem3,
-            this.menuItem4,
-            this.menuItem5,
-            this.menuItem6,
-            this.menuItem7});
 			this.menuConsent.Popup += new System.EventHandler(this.menuConsent_Popup);
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.Text = "Delete";
-			// 
-			// menuItem2
-			// 
-			this.menuItem2.Index = 1;
-			this.menuItem2.Text = "Set Complete";
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 2;
-			this.menuItem3.Text = "Edit All";
-			// 
-			// menuItem4
-			// 
-			this.menuItem4.Index = 3;
-			this.menuItem4.Text = "Print Progress Notes ...";
-			// 
-			// menuItem5
-			// 
-			this.menuItem5.Index = 4;
-			this.menuItem5.Text = "Print Day for Hospital";
-			// 
-			// menuItem6
-			// 
-			this.menuItem6.Index = 5;
-			this.menuItem6.Text = "Detach Lab Fee";
-			// 
-			// menuItem7
-			// 
-			this.menuItem7.Index = 6;
-			this.menuItem7.Text = "Attach Lab Fee";
 			// 
 			// toothChart
 			// 
@@ -2738,6 +2685,18 @@ namespace OpenDental{
 			this.panelEcw.Name = "panelEcw";
 			this.panelEcw.Size = new System.Drawing.Size(373,65);
 			this.panelEcw.TabIndex = 197;
+			// 
+			// labelECWerror
+			// 
+			this.labelECWerror.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelECWerror.Location = new System.Drawing.Point(25,22);
+			this.labelECWerror.Name = "labelECWerror";
+			this.labelECWerror.Size = new System.Drawing.Size(314,27);
+			this.labelECWerror.TabIndex = 199;
+			this.labelECWerror.Text = "Error:";
+			this.labelECWerror.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// webBrowserEcw
 			// 
@@ -2817,20 +2776,6 @@ namespace OpenDental{
 			this.butAddKey.Visible = false;
 			this.butAddKey.Click += new System.EventHandler(this.butAddKey_Click);
 			// 
-			// butBig
-			// 
-			this.butBig.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butBig.Autosize = true;
-			this.butBig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBig.CornerRadius = 4F;
-			this.butBig.Location = new System.Drawing.Point(375,26);
-			this.butBig.Name = "butBig";
-			this.butBig.Size = new System.Drawing.Size(35,21);
-			this.butBig.TabIndex = 191;
-			this.butBig.Text = "Big";
-			this.butBig.Click += new System.EventHandler(this.butBig_Click);
-			// 
 			// gridProg
 			// 
 			this.gridProg.HScrollVisible = true;
@@ -2897,24 +2842,30 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// labelECWerror
+			// menuToothChart
 			// 
-			this.labelECWerror.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelECWerror.Location = new System.Drawing.Point(25,22);
-			this.labelECWerror.Name = "labelECWerror";
-			this.labelECWerror.Size = new System.Drawing.Size(314,27);
-			this.labelECWerror.TabIndex = 199;
-			this.labelECWerror.Text = "Error:";
-			this.labelECWerror.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.menuToothChart.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemChartBig,
+            this.menuItemChartSave});
+			this.menuToothChart.Popup += new System.EventHandler(this.menuToothChart_Popup);
+			// 
+			// menuItemChartBig
+			// 
+			this.menuItemChartBig.Index = 0;
+			this.menuItemChartBig.Text = "Show Big";
+			this.menuItemChartBig.Click += new System.EventHandler(this.menuItemChartBig_Click);
+			// 
+			// menuItemChartSave
+			// 
+			this.menuItemChartSave.Index = 1;
+			this.menuItemChartSave.Text = "Save to Images";
+			this.menuItemChartSave.Click += new System.EventHandler(this.menuItemChartSave_Click);
 			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.panelEcw);
 			this.Controls.Add(this.butForeignKey);
 			this.Controls.Add(this.butAddKey);
-			this.Controls.Add(this.butBig);
 			this.Controls.Add(this.toothChart);
 			this.Controls.Add(this.gridProg);
 			this.Controls.Add(this.tabProc);
@@ -3012,7 +2963,6 @@ namespace OpenDental{
 			tabProc.Height=259;
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				toothChart.Location=new Point(524+2,26);
-				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
 				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
 				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
 				gridPtInfo.Visible=false;
@@ -3027,7 +2977,6 @@ namespace OpenDental{
 			}
 			else {//normal:
 				toothChart.Location=new Point(0,26);
-				butBig.Location=new Point(toothChart.Right-butBig.Width,toothChart.Top);
 				textTreatmentNotes.Location=new Point(0,toothChart.Bottom+1);
 				textTreatmentNotes.Size=new Size(411,71);
 				gridPtInfo.Visible=true;
@@ -3093,12 +3042,6 @@ namespace OpenDental{
 			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
 			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
 			ComputerPrefs.Update(computerPref);
-			if(computerPref.GraphicsSimple){
-				butBig.Visible=false;				
-			}
-			else{
-				butBig.Visible=true;
-			}
 			if(PatCur!=null){
 				FillToothChart(true);
 			}
@@ -3126,6 +3069,10 @@ namespace OpenDental{
 			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
+			ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton(Lan.g(this,"Tooth Chart"),-1,"","ToothChart");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuToothChart;
 			ToolBarMain.Buttons.Add(button);
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
@@ -3238,7 +3185,6 @@ namespace OpenDental{
 				//tabPlanned.Enabled=false;
 				toothChart.Enabled=false;
 				gridProg.Enabled=false;
-				butBig.Enabled=false;
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
@@ -3246,6 +3192,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = false;
+				ToolBarMain.Buttons["ToothChart"].Enabled = false;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					webBrowserEcw.Url=null;
@@ -3260,7 +3207,6 @@ namespace OpenDental{
 				//groupPlanned.Enabled=true;
 				toothChart.Enabled=true;
 				gridProg.Enabled=true;
-				butBig.Enabled=true;
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
@@ -3269,6 +3215,7 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Anesthesia"].Enabled=true;
 				}
 				ToolBarMain.Buttons["Consent"].Enabled = true;
+				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
@@ -3362,6 +3309,9 @@ namespace OpenDental{
 						break;
 					case "Commlog"://only for eCW
 						OnCommlog_Click();
+						break;
+					case "ToothChart":
+						OnToothChart_Click();
 						break;
 				}
 			}
@@ -3457,6 +3407,11 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		private void OnToothChart_Click() {
+			MsgBox.Show(this,"Please use dropdown list.");
+			return;
+		}
+
 		///<summary>Only used for eCW.  Everyone else has the commlog button up in the main toolbar.</summary>
 		private void OnCommlog_Click() {
 			Commlog CommlogCur = new Commlog();
@@ -3498,6 +3453,26 @@ namespace OpenDental{
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void menuToothChart_Popup(object sender,EventArgs e) {
+			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			//only enable the big button if 3D graphics
+			if(computerPref.GraphicsSimple) {
+				menuItemChartBig.Enabled=false;
+			}
+			else {
+				menuItemChartBig.Enabled=true;
+			}
+		}
+
+		private void menuItemChartBig_Click(object sender,EventArgs e) {
+			FormToothChartingBig FormT=new FormToothChartingBig(checkShowTeeth.Checked,ToothInitialList,ProcList);
+			FormT.Show();
+		}
+
+		private void menuItemChartSave_Click(object sender,EventArgs e) {
+
 		}
 
 		private void FillPtInfo(){
@@ -6953,8 +6928,7 @@ namespace OpenDental{
 		}
 
 		private void butBig_Click(object sender,EventArgs e) {
-			FormToothChartingBig FormT=new FormToothChartingBig(checkShowTeeth.Checked,ToothInitialList,ProcList);
-			FormT.Show();
+			
 		}
 
 		private void butECWup_Click(object sender,EventArgs e) {
@@ -7108,6 +7082,10 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+		
+
+		
 
 		
 

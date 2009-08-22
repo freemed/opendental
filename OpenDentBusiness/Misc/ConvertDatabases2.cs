@@ -785,7 +785,13 @@ DROP TABLE IF EXISTS etAck";
 				}
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingExcludeIfUnsentProcs','0','')";
 				Db.NonQ(command);
-
+				command="SELECT MAX(DefNum) FROM definition";
+				int defNum=PIn.PInt(Db.GetScalar(command))+1;
+				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
+				int order=PIn.PInt(Db.GetScalar(command))+1;
+				command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES("
+					+POut.PInt(defNum)+",18,"+POut.PInt(order)+",'Tooth Charts','T',0,0)";
+				Db.NonQ(command);
 
 
 
