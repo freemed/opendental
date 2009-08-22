@@ -49,6 +49,7 @@ namespace OpenDental{
 		private Label label2;
 		private OpenDental.UI.Button butUndo;
 		private CheckBox checkIgnoreInPerson;
+		private CheckBox checkExcludeIfProcs;
 		private Dunning[] dunningList;
 
 		///<summary></summary>
@@ -78,6 +79,7 @@ namespace OpenDental{
 			this.textExcludeLessThan = new OpenDental.ValidDouble();
 			this.checkExcludeInactive = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkIgnoreInPerson = new System.Windows.Forms.CheckBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
@@ -106,7 +108,7 @@ namespace OpenDental{
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.butDefaults = new OpenDental.UI.Button();
 			this.butUndo = new OpenDental.UI.Button();
-			this.checkIgnoreInPerson = new System.Windows.Forms.CheckBox();
+			this.checkExcludeIfProcs = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -145,7 +147,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(5,187);
+			this.label1.Location = new System.Drawing.Point(5,206);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(192,16);
 			this.label1.TabIndex = 18;
@@ -169,7 +171,7 @@ namespace OpenDental{
 			// textExcludeLessThan
 			// 
 			this.textExcludeLessThan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textExcludeLessThan.Location = new System.Drawing.Point(199,186);
+			this.textExcludeLessThan.Location = new System.Drawing.Point(199,205);
 			this.textExcludeLessThan.Name = "textExcludeLessThan";
 			this.textExcludeLessThan.Size = new System.Drawing.Size(77,20);
 			this.textExcludeLessThan.TabIndex = 22;
@@ -188,6 +190,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkExcludeIfProcs);
 			this.groupBox2.Controls.Add(this.checkIgnoreInPerson);
 			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.label7);
@@ -212,6 +215,18 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Filter";
 			// 
+			// checkIgnoreInPerson
+			// 
+			this.checkIgnoreInPerson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkIgnoreInPerson.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIgnoreInPerson.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIgnoreInPerson.Location = new System.Drawing.Point(2,233);
+			this.checkIgnoreInPerson.Name = "checkIgnoreInPerson";
+			this.checkIgnoreInPerson.Size = new System.Drawing.Size(274,18);
+			this.checkIgnoreInPerson.TabIndex = 247;
+			this.checkIgnoreInPerson.Text = "Ignore walkout (InPerson) statements";
+			this.checkIgnoreInPerson.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// label2
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -225,7 +240,7 @@ namespace OpenDental{
 			// label7
 			// 
 			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.Location = new System.Drawing.Point(5,239);
+			this.label7.Location = new System.Drawing.Point(5,258);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(111,16);
 			this.label7.TabIndex = 245;
@@ -319,7 +334,7 @@ namespace OpenDental{
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(118,239);
+			this.listBillType.Location = new System.Drawing.Point(118,258);
 			this.listBillType.Name = "listBillType";
 			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillType.Size = new System.Drawing.Size(158,225);
@@ -528,17 +543,17 @@ namespace OpenDental{
 			this.butUndo.Text = "Undo Billing";
 			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
 			// 
-			// checkIgnoreInPerson
+			// checkExcludeIfProcs
 			// 
-			this.checkIgnoreInPerson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkIgnoreInPerson.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIgnoreInPerson.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIgnoreInPerson.Location = new System.Drawing.Point(2,214);
-			this.checkIgnoreInPerson.Name = "checkIgnoreInPerson";
-			this.checkIgnoreInPerson.Size = new System.Drawing.Size(274,18);
-			this.checkIgnoreInPerson.TabIndex = 247;
-			this.checkIgnoreInPerson.Text = "Ignore walkout (InPerson) statements";
-			this.checkIgnoreInPerson.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkExcludeIfProcs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkExcludeIfProcs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkExcludeIfProcs.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkExcludeIfProcs.Location = new System.Drawing.Point(45,182);
+			this.checkExcludeIfProcs.Name = "checkExcludeIfProcs";
+			this.checkExcludeIfProcs.Size = new System.Drawing.Size(231,18);
+			this.checkExcludeIfProcs.TabIndex = 248;
+			this.checkExcludeIfProcs.Text = "Exclude if unsent procedures";
+			this.checkExcludeIfProcs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormBillingOptions
 			// 
@@ -601,6 +616,7 @@ namespace OpenDental{
 			checkExcludeInactive.Checked=PrefC.GetBool("BillingExcludeInactive");
 			checkExcludeNegative.Checked=PrefC.GetBool("BillingExcludeNegative");
 			checkExcludeInsPending.Checked=PrefC.GetBool("BillingExcludeInsPending");
+			checkExcludeIfProcs.Checked=PrefC.GetBool("BillingExcludeIfUnsentProcs");
 			textExcludeLessThan.Text=PrefC.GetString("BillingExcludeLessThan");
 			checkIgnoreInPerson.Checked=PrefC.GetBool("BillingIgnoreInPerson");
 			listBillType.Items.Add(Lan.g(this,"(all)"));
@@ -675,6 +691,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("BillingExcludeInactive",checkExcludeInactive.Checked)
 				| Prefs.UpdateBool("BillingExcludeNegative",checkExcludeNegative.Checked)
 				| Prefs.UpdateBool("BillingExcludeInsPending",checkExcludeInsPending.Checked)
+				| Prefs.UpdateBool("BillingExcludeIfUnsentProcs",checkExcludeIfProcs.Checked)
 				| Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text)
 				| Prefs.UpdateBool("BillingIgnoreInPerson",checkIgnoreInPerson.Checked))
 			{
@@ -823,7 +840,7 @@ namespace OpenDental{
 			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked,
 				checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text),
 				checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked,
-				checkIgnoreInPerson.Checked);
+				checkExcludeIfProcs.Checked,checkIgnoreInPerson.Checked);
 			DateTime dateRangeFrom=DateTime.MinValue;
 			DateTime dateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){

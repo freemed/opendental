@@ -1235,11 +1235,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is only used in the Billing dialog</summary>
-		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr
-			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,bool ignoreInPerson)
+		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr,
+			bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,
+			bool excludeIfUnsentProcs,bool ignoreInPerson)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,ignoreInPerson);
+				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,excludeIfUnsentProcs,ignoreInPerson);
 			}
 			string command="";
 			if(includeChanged){
@@ -1282,6 +1283,24 @@ namespace OpenDentBusiness{
 					AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
 					GROUP BY patient.Guarantor;";
 			}
+			if(excludeIfUnsentProcs) {
+				command+=@"DROP TABLE IF EXISTS tempunsentprocs;
+					CREATE TABLE tempunsentprocs(
+					Guarantor int unsigned NOT NULL,
+					UnsentProcCount int NOT NULL,
+					PRIMARY KEY (Guarantor));
+					INSERT INTO tempunsentprocs
+					SELECT patient.Guarantor,COUNT(*)
+					FROM patient,procedurecode,procedurelog,claimproc 
+					WHERE claimproc.procnum=procedurelog.procnum
+					AND patient.PatNum=procedurelog.PatNum
+					AND procedurelog.CodeNum=procedurecode.CodeNum
+					AND claimproc.NoBillIns=0
+					AND procedurelog.ProcFee>0
+					AND claimproc.Status=6
+					AND procedurelog.procstatus=2
+					GROUP BY patient.Guarantor;";
+			}
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
 				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred, "
 				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
@@ -1291,6 +1310,9 @@ namespace OpenDentBusiness{
 			}
 			if(excludeInsPending){
 				command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
+			}
+			if(excludeIfUnsentProcs) {
+				command+=",IFNULL(tempunsentprocs.UnsentProcCount,'0') AS _unsentProcCount ";
 			}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
@@ -1304,6 +1326,9 @@ namespace OpenDentBusiness{
 			}
 			if(excludeInsPending){
 				command+="LEFT JOIN tempclaimspending ON patient.PatNum=tempclaimspending.Guarantor ";
+			}
+			if(excludeIfUnsentProcs) {
+				command+="LEFT JOIN tempunsentprocs ON patient.PatNum=tempunsentprocs.Guarantor ";
 			}
 			command+="WHERE ";
 			if(excludeInactive){
@@ -1360,6 +1385,9 @@ namespace OpenDentBusiness{
 			if(excludeInsPending){
 				command+="AND ClaimCount=0 ";
 			}
+			if(excludeIfUnsentProcs) {
+				command+="AND _unsentProcCount=0 ";
+			}
 			command+="ORDER BY LName,FName";
 			//Debug.WriteLine(command);
 			DataTable table=Db.GetTable(command);
@@ -1404,6 +1432,10 @@ namespace OpenDentBusiness{
 			}
 			if(excludeInsPending){
 				command="DROP TABLE IF EXISTS tempclaimspending";
+				Db.NonQ(command);
+			}
+			if(excludeIfUnsentProcs){
+				command="DROP TABLE IF EXISTS tempunsentprocs";
 				Db.NonQ(command);
 			}
 			return agingList;

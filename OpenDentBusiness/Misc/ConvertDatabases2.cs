@@ -767,7 +767,7 @@ DROP TABLE IF EXISTS etAck";
 		private static void To6_8_0() {
 			if(FromVersion<new Version("6.8.0.0")) {
 				string command;
-				//add TreatPlanEdit permission to all groups------------------------------------------------------
+				//add TreatPlanEdit,ReportProdInc,TimecardDeleteEntry permissions to all groups------------------------------------------------------
 				command="SELECT UserGroupNum FROM usergroup";
 				DataTable table=Db.GetTable(command);
 				int groupNum;
@@ -776,8 +776,15 @@ DROP TABLE IF EXISTS etAck";
 					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
 						+"VALUES('0001-01-01',"+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.TreatPlanEdit)+")";
 					Db.NonQ(command);
+					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
+						+"VALUES('0001-01-01',"+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.ReportProdInc)+")";
+					Db.NonQ(command);
+					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
+						+"VALUES('0001-01-01',"+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.TimecardDeleteEntry)+")";
+					Db.NonQ(command);
 				}
-
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('BillingExcludeIfUnsentProcs','0','')";
+				Db.NonQ(command);
 
 
 
