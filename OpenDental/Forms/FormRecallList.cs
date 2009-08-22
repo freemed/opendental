@@ -1128,6 +1128,9 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message+"\r\nPatient:"+AddrTable.Rows[i]["patientNameFL"].ToString());
 					break;
 				}
+				message.MsgDateTime=DateTime.Now;
+				message.SentOrReceived=CommSentOrReceived.Sent;
+				EmailMessages.Insert(message);
 				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
 				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
 				for(int r=0;r<recallNumArray.Length;r++){
