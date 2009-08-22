@@ -32,6 +32,8 @@ namespace OpenDental{
 		private Label label5;
 		private TextBox textUser;
 		private Label label16;
+		private Label labelCommlogNum;
+		private TextBox textCommlogNum;
 		private Commlog CommlogCur;
 
 		///<summary></summary>
@@ -72,6 +74,8 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textUser = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
+			this.labelCommlogNum = new System.Windows.Forms.Label();
+			this.textCommlogNum = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -240,11 +244,30 @@ namespace OpenDental{
 			this.label16.Text = "User";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// labelCommlogNum
+			// 
+			this.labelCommlogNum.Location = new System.Drawing.Point(152,490);
+			this.labelCommlogNum.Name = "labelCommlogNum";
+			this.labelCommlogNum.Size = new System.Drawing.Size(96,16);
+			this.labelCommlogNum.TabIndex = 104;
+			this.labelCommlogNum.Text = "CommlogNum";
+			this.labelCommlogNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCommlogNum
+			// 
+			this.textCommlogNum.Location = new System.Drawing.Point(254,487);
+			this.textCommlogNum.Name = "textCommlogNum";
+			this.textCommlogNum.ReadOnly = true;
+			this.textCommlogNum.Size = new System.Drawing.Size(94,20);
+			this.textCommlogNum.TabIndex = 105;
+			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(702,526);
+			this.Controls.Add(this.textCommlogNum);
+			this.Controls.Add(this.labelCommlogNum);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.textPatientName);
@@ -304,6 +327,11 @@ namespace OpenDental{
 			//checkIsStatementSent.Checked=CommlogCur.IsStatementSent;
 			textNote.Text=CommlogCur.Note;
 			textNote.SelectionStart=textNote.Text.Length;
+			#if !DEBUG
+				labelCommlogNum.Visible=false;
+				textCommlogNum.Visible=false;
+			#endif
+			textCommlogNum.Text=CommlogCur.CommlogNum.ToString();
 			textNote.Select();
 		}
 

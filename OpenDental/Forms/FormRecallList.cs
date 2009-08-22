@@ -1118,6 +1118,8 @@ namespace OpenDental{
 						str=PrefC.GetString("RecallEmailMessage3");
 					}
 					str=str.Replace("[DueDate]",PIn.PDate(AddrTable.Rows[i]["dateDue"].ToString()).ToShortDateString());
+					str=str.Replace("[NameF]",AddrTable.Rows[i]["patientNameF"].ToString());
+					str=str.Replace("[NameFL]",AddrTable.Rows[i]["patientNameFL"].ToString());
 				}
 				message.BodyText=str;
 				try{

@@ -741,6 +741,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("famList");
 			table.Columns.Add("guarLName");
 			table.Columns.Add("numberOfReminders");//for a family, this will be the max for the family
+			table.Columns.Add("patientNameF");//Only used when single email
 			table.Columns.Add("patientNameFL");
 			table.Columns.Add("patNums");//Comma delimited.  Used in email.
 			table.Columns.Add("recallNums");//Comma delimited.  Used during e-mail
@@ -768,6 +769,12 @@ namespace OpenDentBusiness{
 					row["famList"]="";
 					row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
 					row["numberOfReminders"]=PIn.PInt(rawRows[i]["numberOfReminders"].ToString()).ToString();
+					if(rawRows[i]["Preferred"].ToString()=="") {
+						row["patientNameF"]=rawRows[i]["FName"].ToString();
+					}
+					else {
+						row["patientNameF"]=rawRows[i]["Preferred"].ToString();
+					}
 					row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
 						+rawRows[i]["MiddleI"].ToString()+" "
 						+rawRows[i]["LName"].ToString();
@@ -811,6 +818,12 @@ namespace OpenDentBusiness{
 						row["famList"]="";
 						row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
 						row["numberOfReminders"]=maxNumReminders.ToString();
+						if(rawRows[i]["Preferred"].ToString()=="") {
+							row["patientNameF"]=rawRows[i]["FName"].ToString();
+						}
+						else {
+							row["patientNameF"]=rawRows[i]["Preferred"].ToString();
+						}
 						row["patientNameFL"]=rawRows[i]["FName"].ToString()+" "
 							+rawRows[i]["MiddleI"].ToString()+" "
 							+rawRows[i]["LName"].ToString();
@@ -851,6 +864,7 @@ namespace OpenDentBusiness{
 					row["famList"]=familyAptList;
 					row["guarLName"]=rawRows[i]["guarLName"].ToString();
 					row["numberOfReminders"]=maxNumReminders.ToString();
+					row["patientNameF"]="";//not used here
 					row["patientNameFL"]="";//we won't use this
 					row["patNums"]=patNumStr;
 					row["recallNums"]=recallNumStr;
