@@ -1277,6 +1277,20 @@ namespace OpenDental{
 				row.Cells.Add(InsPlans.GetCarrierName(PatPlanList[i].PlanNum,planArray));
 			}
 			gridIns.Rows.Add(row);
+			//group name
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableCoverage","Group Name"));
+			for(int i=0;i<PatPlanList.Count;i++) {
+				row.Cells.Add(planArray[i].GroupName);
+			}
+			gridIns.Rows.Add(row);
+			//group number
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableCoverage","Group Number"));
+			for(int i=0;i<PatPlanList.Count;i++) {
+				row.Cells.Add(planArray[i].GroupNum);
+			}
+			gridIns.Rows.Add(row);
 			//plan type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Type"));
