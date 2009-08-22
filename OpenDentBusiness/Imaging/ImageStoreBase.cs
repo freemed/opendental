@@ -182,6 +182,7 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
+		/// <summary></summary>
 		public Document Import(Bitmap image, int docCategory, ImageType imageType) {
 			Document doc = new Document();
 			doc.ImgType = imageType;
@@ -192,14 +193,14 @@ namespace OpenDental.Imaging {
 			Documents.Insert(doc, Patient);//creates filename and saves to db
 			long qualityL = 0;
 			if(imageType == ImageType.Radiograph) {
-				qualityL = Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
+				qualityL=100; //Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
 			}
 			else if(imageType == ImageType.Photo) {
-				qualityL = Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
+				qualityL=100;// Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
 			}
 			else {//Assume document
 				//Possible values 0-100?
-				qualityL = (long)Convert.ToInt32(((Pref)PrefC.HList["ScannerCompression"]).ValueString);
+				qualityL=(long)Convert.ToInt32(((Pref)PrefC.HList["ScannerCompression"]).ValueString);
 			}
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
