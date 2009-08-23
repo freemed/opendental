@@ -398,7 +398,7 @@ namespace OpenDental{
 			}
 			checkOnlyScheduledProvs.Checked=ApptViewCur.OnlyScheduledProvs;
 			SetOpLabel();
-			ApptViewItemL.GetForCurView(ApptViewCur);
+			ApptViewItemL.GetForCurView(ApptViewCur,true);
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
 				if(ApptViewItemL.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
@@ -433,7 +433,7 @@ namespace OpenDental{
 			allElements.Add("WirelessPhone");
 			allElements.Add("WkPhone");
 			displayedElements=new ArrayList();
-			for(int i=0;i<ApptViewItemL.ApptRows.Length;i++){
+			for(int i=0;i<ApptViewItemL.ApptRows.Count;i++) {
 				displayedElements.Add(ApptViewItemL.ApptRows[i]);
 			}
 			FillElements();

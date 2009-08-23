@@ -1045,7 +1045,7 @@ namespace OpenDental{
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
 			if(DefC.Short!=null) {
-				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			this.SuspendLayout();
@@ -1286,7 +1286,7 @@ namespace OpenDental{
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(!DefC.DefShortIsNull) {
-				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			panelOps.Width=panelSheet.Width;
@@ -1479,9 +1479,9 @@ namespace OpenDental{
 			DS=Appointments.RefreshPeriod(startDate,endDate);
 			LastTimeDataRetrieved=DateTime.Now;
 			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
-			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);
-			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Length][];
-			for(int i=0;i<ApptViewItemL.VisProvs.Length;i++){
+			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);
+			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Count][];
+			for(int i=0;i<ApptViewItemL.VisProvs.Count;i++) {
 				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
 			}
 			if(ContrApptSingle3!=null){//I think this is not needed.
@@ -1578,7 +1578,7 @@ namespace OpenDental{
 		///<summary>Fills the production summary for the day.</summary>
 		private void FillProduction(){
 			bool showProduction=false;
-			for(int i=0;i<ApptViewItemL.ApptRows.Length;i++){
+			for(int i=0;i<ApptViewItemL.ApptRows.Count;i++) {
 				if(ApptViewItemL.ApptRows[i].ElementDesc=="Production"){
 					showProduction=true;
 				}
@@ -1898,7 +1898,7 @@ namespace OpenDental{
 			if(DoesOverlap(aptCur)){
 				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItemL.VisOps.Length;i++){
+				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
 					aptCur.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(aptCur)){
 						stillOverlaps=false;
@@ -2118,7 +2118,7 @@ namespace OpenDental{
 
 		///<summary>Returns the apptNum of the appointment at these coordinates, or 0 if none.  This is new code which is going to replace some of the outdated code on this page.</summary>
 		private int HitTestAppt(Point point){
-			if(ApptViewItemL.VisOps.Length==0){//no ops visible.
+			if(ApptViewItemL.VisOps.Count==0) {//no ops visible.
 				return 0;
 			}
 			int day=ContrApptSheet.XPosToDay(point.X);
@@ -2187,7 +2187,7 @@ namespace OpenDental{
 			if(infoBubble.Visible) {
 				infoBubble.Visible=false;
 			}
-			if(ApptViewItemL.VisOps.Length==0){//no ops visible.
+			if(ApptViewItemL.VisOps.Count==0) {//no ops visible.
 				return;
 			}
 			if(mouseIsDown){//if user clicks right mouse button while dragging
@@ -2547,7 +2547,7 @@ namespace OpenDental{
 			if(DoesOverlap(apt)) {
 				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItemL.VisOps.Length;i++) {
+				for(int i=startingOp;i<ApptViewItemL.VisOps.Count;i++) {
 					apt.Op=OperatoryC.ListShort[ApptViewItemL.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(apt)) {
 						stillOverlaps=false;

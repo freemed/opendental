@@ -179,7 +179,7 @@ namespace OpenDental{
 				int adjustedX=newX-TimeWidth-deltaDay;
 				retVal=(int)Math.Round((double)(adjustedX)/ColAptWidth);
 				//when there are multiple days, special situation where x is within the last op for the day, so it goes to next day.
-				if(retVal>ApptViewItemL.VisOps.Length-1 && dayI<NumOfWeekDaysToDisplay-1){
+				if(retVal>ApptViewItemL.VisOps.Count-1 && dayI<NumOfWeekDaysToDisplay-1) {
 					retVal=0;
 				}
 			}
@@ -187,8 +187,8 @@ namespace OpenDental{
 				retVal=(int)Math.Round((double)(newX-TimeWidth-ProvWidth*ProvCount)/ColWidth);
 			}
 			//make sure it's not outside bounds of array:
-			if(retVal > ApptViewItemL.VisOps.Length-1)
-				retVal=ApptViewItemL.VisOps.Length-1;
+			if(retVal > ApptViewItemL.VisOps.Count-1)
+				retVal=ApptViewItemL.VisOps.Count-1;
 			if(retVal<0)
 				retVal=0;
 			return retVal;
@@ -455,7 +455,7 @@ namespace OpenDental{
 			Provider provCur;
 			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
-			for(int j=0;j<ApptViewItemL.VisProvs.Length;j++){
+			for(int j=0;j<ApptViewItemL.VisProvs.Count;j++) {
 				provCur=ProviderC.List[ApptViewItemL.VisProvs[j]];
 				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++){	
@@ -632,13 +632,13 @@ namespace OpenDental{
 			try{
 				if(RowsPerIncr==0)
 					RowsPerIncr=1;
-				ColCount=ApptViewItemL.VisOps.Length;
+				ColCount=ApptViewItemL.VisOps.Count;
 				if(IsWeeklyView){
 					//ColCount=NumOfWeekDaysToDisplay;
 					ProvCount=0;
 				}
 				else{
-					ProvCount=ApptViewItemL.VisProvs.Length;
+					ProvCount=ApptViewItemL.VisProvs.Count;
 				}
 				if(ColCount==0) {
 					ColWidth=0;
