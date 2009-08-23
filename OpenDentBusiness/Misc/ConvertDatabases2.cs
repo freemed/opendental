@@ -792,7 +792,8 @@ DROP TABLE IF EXISTS etAck";
 				command="INSERT INTO definition (DefNum,Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES("
 					+POut.PInt(defNum)+",18,"+POut.PInt(order)+",'Tooth Charts','T',0,0)";
 				Db.NonQ(command);
-
+				command="ALTER TABLE apptview ADD OnlyScheduledProvs tinyint unsigned NOT NULL";
+				Db.NonQ(command);
 
 
 

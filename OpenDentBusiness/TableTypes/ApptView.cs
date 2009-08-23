@@ -13,17 +13,21 @@ namespace OpenDentBusiness{
 		public int ItemOrder;
 		///<summary>Number of rows per time increment.  Usually 1 or 2.  Programming note: Value updated to ContrApptSheet.RowsPerIncr to track current state.</summary>
 		public int RowsPerIncr;
+		///<summary>If set to true, then the only operatories that will show will be for providers that have schedules for the day, ops with no provs assigned.</summary>
+		public bool OnlyScheduledProvs;
 
 		public ApptView(){
 
 		}
 
+		/*
 		public ApptView(int apptViewNum,string description,int itemOrder,int rowsPerIncr){
 			ApptViewNum=apptViewNum;
 			Description=description;
 			ItemOrder=itemOrder;
 			RowsPerIncr=rowsPerIncr;
-		}
+			//OnlyScheduledProvs=
+		}*/
 
 
 	}

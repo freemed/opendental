@@ -25,7 +25,8 @@ namespace OpenDentBusiness{
 				ApptViewC.List[i].ApptViewNum = PIn.PInt   (table.Rows[i][0].ToString());
 				ApptViewC.List[i].Description = PIn.PString(table.Rows[i][1].ToString());
 				ApptViewC.List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
-				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());	
+				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());
+				ApptViewC.List[i].OnlyScheduledProvs = PIn.PBool  (table.Rows[i][4].ToString());	
 			}
 		}
 
@@ -35,11 +36,12 @@ namespace OpenDentBusiness{
 				Cur.ApptViewNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ApptViewNum;
 			}
-			string command = "INSERT INTO apptview (Description,ItemOrder,RowsPerIncr) "
+			string command = "INSERT INTO apptview (Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs) "
 				+"VALUES ("
 				+"'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PInt   (Cur.ItemOrder)+"', "
-				+"'"+POut.PInt   (Cur.RowsPerIncr)+"')";
+				+"'"+POut.PInt   (Cur.RowsPerIncr)+"', "
+				+"'"+POut.PBool  (Cur.OnlyScheduledProvs)+"')";
 			//MessageBox.Show(string command);
 			Cur.ApptViewNum=Db.NonQ(command,true);
 			return Cur.ApptViewNum;
@@ -55,6 +57,7 @@ namespace OpenDentBusiness{
 				+"Description='"   +POut.PString(Cur.Description)+"'"
 				+",ItemOrder = '"  +POut.PInt   (Cur.ItemOrder)+"'"
 				+",RowsPerIncr = '"+POut.PInt   (Cur.RowsPerIncr)+"'"
+				+",OnlyScheduledProvs = '"+POut.PBool(Cur.OnlyScheduledProvs)+"'"
 				+" WHERE ApptViewNum = '"+POut.PInt(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);
 		}
