@@ -332,6 +332,7 @@ namespace OpenDentBusiness {
 				,"UPDATE appointment SET DateTimeArrived='0001-01-01 00:00:00' WHERE DateTimeArrived LIKE '0000-00-00%'"
 				,"UPDATE appointment SET DateTimeSeated='0001-01-01 00:00:00' WHERE DateTimeSeated LIKE '0000-00-00%'"
 				,"UPDATE appointment SET DateTimeDismissed='0001-01-01 00:00:00' WHERE DateTimeDismissed LIKE '0000-00-00%'"
+				,"UPDATE appointment SET DateTStamp='2009-08-24 00:00:00' WHERE DateTStamp='0000-00-00 00:00:00'"
 				,"UPDATE claim SET DateService='0001-01-01' WHERE DateService='0000-00-00'"
 				,"UPDATE claim SET DateSent='0001-01-01' WHERE DateSent='0000-00-00'"
 				,"UPDATE claim SET DateReceived='0001-01-01' WHERE DateReceived='0000-00-00'"
