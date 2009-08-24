@@ -459,33 +459,34 @@ namespace OpenDental.UI
 			}
 			RectangleF recGlow1;
 			if(this.Image != null){
-				Rectangle rc=new Rectangle();
+				Rectangle recTxt=new Rectangle();
 				Point ImagePoint= new Point(6, 4);
 				switch(this.ImageAlign)
 				{
 					case ContentAlignment.MiddleLeft:
 						ImagePoint.X = 6;
 						ImagePoint.Y = this.ClientRectangle.Height/2-Image.Height/2;
-						rc.Width=this.ClientRectangle.Width-this.Image.Width;
-						rc.Height=this.ClientRectangle.Height;
-						rc.X=this.Image.Width;
-						rc.Y=0;
+						recTxt.Width=this.ClientRectangle.Width-this.Image.Width;
+						recTxt.Height=this.ClientRectangle.Height;
+						recTxt.X=this.Image.Width;
+						recTxt.Y=0;
 						break;
 					case ContentAlignment.MiddleRight:
-						rc.Width=this.ClientRectangle.Width-this.Image.Width-8;
-						rc.Height=this.ClientRectangle.Height;
-						rc.X=0;
-						rc.Y=0;
-						ImagePoint.X = rc.Width;
+						recTxt.Width=this.ClientRectangle.Width-this.Image.Width-8;
+						recTxt.Height=this.ClientRectangle.Height;
+						recTxt.X=0;
+						recTxt.Y=0;
+						ImagePoint.X = recTxt.Width;
+						recTxt.Width+=this.adjustImageLocation.X;
 						ImagePoint.Y = this.ClientRectangle.Height/2-Image.Height/2;
 						break;
 					case ContentAlignment.MiddleCenter:// no text in this alignment
 						ImagePoint.X = (this.ClientRectangle.Width-this.Image.Width)/2;
 						ImagePoint.Y = (this.ClientRectangle.Height-this.Image.Height)/2;
-						rc.Width=0;
-						rc.Height=0;
-						rc.X=this.ClientRectangle.Width;
-						rc.Y=this.ClientRectangle.Height;
+						recTxt.Width=0;
+						recTxt.Height=0;
+						recTxt.X=this.ClientRectangle.Width;
+						recTxt.Y=this.ClientRectangle.Height;
 						break;
 				}
 				ImagePoint.X+=adjustImageLocation.X;
@@ -496,14 +497,14 @@ namespace OpenDental.UI
 				else{
 					System.Windows.Forms.ControlPaint.DrawImageDisabled(g,this.Image,ImagePoint.X,ImagePoint.Y,BackColor);
 				}
-				recGlow1=new RectangleF(rc.X+.5f,rc.Y+.5f,rc.Width,rc.Height);
+				recGlow1=new RectangleF(recTxt.X+.5f,recTxt.Y+.5f,recTxt.Width,recTxt.Height);
 				if(this.ImageAlign != ContentAlignment.MiddleCenter){
 					if(Enabled){
 						//first draw white text slightly off center
 						g.DrawString(this.Text,this.Font,brushGlow,recGlow1,sf);
 					}
 					//then, the black text
-					g.DrawString(this.Text,this.Font,brushText,rc,sf);
+					g.DrawString(this.Text,this.Font,brushText,recTxt,sf);
 				}
 			}
 			else{//image is null
