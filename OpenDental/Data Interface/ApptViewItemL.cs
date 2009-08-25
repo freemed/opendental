@@ -13,29 +13,26 @@ namespace OpenDental{
 		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
 		///<summary>Visible provider bars in appt module.  List of indices to ProviderC.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
 		public static List<int> VisProvs;
-		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.</summary>
+		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.  If user has set View.OnlyScheduledProvs, and not isWeekly, then the only opsto show will be for providers that have schedules for the day and ops with no provs assigned.</summary>
 		public static List<int> VisOps;
 		///<summary>Subset of ForCurView. Just items for rowElements. If no view is selected, then the elements are filled with default info.</summary>
 		public static List<ApptViewItem> ApptRows;
 
-		public static void GetForCurView(int indexInList,bool isWeekly){
+		public static void GetForCurView(int indexInList,bool isWeekly,List<Schedule> dailySched) {
 			if(indexInList<0){//might be -1 or -2
-				GetForCurView(new ApptView(),isWeekly);
+				GetForCurView(new ApptView(),isWeekly,dailySched);
 			}
 			else{
-				GetForCurView(ApptViewC.List[indexInList],isWeekly);
+				GetForCurView(ApptViewC.List[indexInList],isWeekly,dailySched);
 			}
 		}
 
-		///<summary>Gets (list)ForCurView, VisOps, VisProvs, and ApptRows.  Also sets TwoRows. Works even if supply -1 to indicate no apptview is selected.</summary>
-		public static void GetForCurView(ApptView ApptViewCur,bool isWeekly){
+		///<summary>Gets (list)ForCurView, VisOps, VisProvs, and ApptRows.  Also sets TwoRows. Works even if supply -1 to indicate no apptview is selected.  Pass in null for the dailySched if this is a weekly view or if in FormApptViewEdit.</summary>
+		public static void GetForCurView(ApptView ApptViewCur,bool isWeekly,List<Schedule> dailySched){
 			ForCurView=new List<ApptViewItem>();
 			VisProvs=new List<int>();
 			VisOps=new List<int>();
 			ApptRows=new List<ApptViewItem>();
-			//ArrayList ALprov=new ArrayList();
-			//ArrayList ALops=new ArrayList();
-			//ArrayList ALelements=new ArrayList();
 			if(ApptViewCur.ApptViewNum==0){
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
@@ -62,6 +59,9 @@ namespace OpenDental{
 					if(ApptViewItemC.List[i].ApptViewNum==ApptViewCur.ApptViewNum){
 						ForCurView.Add(ApptViewItemC.List[i]);
 						if(ApptViewItemC.List[i].OpNum>0){//op
+							if(ApptViewCur.OnlyScheduledProvs && !isWeekly) {
+								continue;//handled below
+							}
 							index=Operatories.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
 								VisOps.Add(index);
@@ -80,24 +80,12 @@ namespace OpenDental{
 				}
 				ContrApptSheet.RowsPerIncr=ApptViewCur.RowsPerIncr;
 			}
+			if(ApptViewCur.OnlyScheduledProvs && !isWeekly) {
+				//intelligently decide what ops to show.  It's based on the schedule for the day.
+
+			}
 			VisOps.Sort();
 			VisProvs.Sort();
-			//ApptRows.Sort();
-			/*
-			ApptViewItemL.VisOps=new int[ALops.Count];
-			for(int i=0;i<ALops.Count;i++){
-				ApptViewItemL.VisOps[i]=(int)ALops[i];
-			}
-			Array.Sort(ApptViewItemL.VisOps);
-			ApptViewItemL.VisProvs=new int[ALprov.Count];
-			for(int i=0;i<ALprov.Count;i++){
-				ApptViewItemL.VisProvs[i]=(int)ALprov[i];
-			}
-			Array.Sort(ApptViewItemL.VisProvs);
-			ApptViewItemL.ApptRows=new ApptViewItem[ALelements.Count];
-			for(int i=0;i<ALelements.Count;i++){
-				ApptViewItemL.ApptRows[i]=(ApptViewItem)ALelements[i];
-			}*/
 		}
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>

@@ -122,10 +122,10 @@ namespace OpenDental{
 		private Point bubbleLocation;
 		private ODGrid gridEmpSched;
 		private OpenDental.UI.PictureBox PicturePat;
-		private string PatCurName;
-		private int PatCurNum;
+		//private string PatCurName;
+		//private int PatCurNum;
 		private Timer timerInfoBubble;
-		private string PatCurChartNumber;
+		//private string PatCurChartNumber;
 		private TabControl tabControl;
 		private TabPage tabWaiting;
 		private TabPage tabSched;
@@ -145,6 +145,7 @@ namespace OpenDental{
 		private RadioButton radioDay;
 		private RadioButton radioWeek;
 		private bool InitializedOnStartup;
+		private Patient PatCur;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -237,6 +238,7 @@ namespace OpenDental{
 			this.butSearchNext = new OpenDental.UI.Button();
 			this.gridWaiting = new OpenDental.UI.ODGrid();
 			this.gridEmpSched = new OpenDental.UI.ODGrid();
+			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.butBackMonth = new OpenDental.UI.Button();
 			this.butFwdMonth = new OpenDental.UI.Button();
@@ -250,7 +252,6 @@ namespace OpenDental{
 			this.butLab = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.butClearPin = new OpenDental.UI.Button();
-			this.butOther = new OpenDental.UI.Button();
 			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
@@ -821,6 +822,22 @@ namespace OpenDental{
 			this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
 			this.gridEmpSched.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmpSched_CellDoubleClick);
 			// 
+			// butOther
+			// 
+			this.butOther.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOther.Autosize = true;
+			this.butOther.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOther.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOther.CornerRadius = 4F;
+			this.butOther.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butOther.Location = new System.Drawing.Point(706,492);
+			this.butOther.Name = "butOther";
+			this.butOther.Size = new System.Drawing.Size(92,24);
+			this.butOther.TabIndex = 76;
+			this.butOther.TabStop = false;
+			this.butOther.Text = "Make/Find Appt";
+			this.butOther.Click += new System.EventHandler(this.butOther_Click);
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.ImageList = this.imageListMain;
@@ -1022,22 +1039,6 @@ namespace OpenDental{
 			this.butClearPin.Text = "Clear";
 			this.butClearPin.Click += new System.EventHandler(this.butClearPin_Click);
 			// 
-			// butOther
-			// 
-			this.butOther.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOther.Autosize = true;
-			this.butOther.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOther.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOther.CornerRadius = 4F;
-			this.butOther.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOther.Location = new System.Drawing.Point(706,492);
-			this.butOther.Name = "butOther";
-			this.butOther.Size = new System.Drawing.Size(92,24);
-			this.butOther.TabIndex = 76;
-			this.butOther.TabStop = false;
-			this.butOther.Text = "Make/Find Appt";
-			this.butOther.Click += new System.EventHandler(this.butOther_Click);
-			// 
 			// ContrApptSheet2
 			// 
 			this.ContrApptSheet2.Location = new System.Drawing.Point(2,-550);
@@ -1105,10 +1106,63 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum){
+			RefreshModuleDataPatient(patNum);
+			RefreshModuleDataPeriod();
+			LayoutScrollOpProv();//can only call this as part of ModuleSelected.
+			RefreshModuleScreenPatient();
+			RefreshModuleScreenPeriod();
+		}
+
+		public void RefreshPeriod() {
+			RefreshModuleDataPeriod();
+			LayoutScrollOpProv();
+			RefreshModuleScreenPeriod();
+		}
+
+		///<summary>Fills PatCur from the database unless the patnum has not changed.</summary>
+		private void RefreshModuleDataPatient(int patNum) {
+			if(patNum==0) {
+				PatCur=null;
+				return;
+			}
+			if(PatCur !=null && PatCur.PatNum==patNum) {//if patient has not changed
+				return;//don't do anything
+			}
+			PatCur=Patients.GetPat(patNum);
+		}
+
+		private void RefreshModuleDataPeriod() {
+			bubbleAptNum=0;
+			DateTime startDate;
+			DateTime endDate;
+			if(ContrApptSheet.IsWeeklyView) {
+				startDate=WeekStartDate;
+				endDate=WeekEndDate;
+			}
+			else {
+				startDate=AppointmentL.DateSelected;
+				endDate=AppointmentL.DateSelected;
+			}
+			if(startDate.Year<1880 || endDate.Year<1880) {
+				return;
+			}
+			//Calendar2.SetSelectionRange(startDate,endDate);
+			if(PatCur==null) {
+				//there cannot be a selected appointment if no patient is loaded.
+				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
+			}
+			DS=Appointments.RefreshPeriod(startDate,endDate);
+			LastTimeDataRetrieved=DateTime.Now;
+			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
+			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView,SchedListPeriod);
+		}
+
+		/// <summary>This also clears listConfirmed.</summary>
+		public void LayoutScrollOpProv() {//ModuleSelectedOld(int patNum){
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
 			if(DefC.Short!=null) {
-				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			this.SuspendLayout();
@@ -1131,21 +1185,21 @@ namespace OpenDental{
 					vScrollBar1.Value=8*rowsPerHr*ContrApptSheet.Lh;//8am
 				}
 			}
-			if(vScrollBar1.Value>vScrollBar1.Maximum-vScrollBar1.LargeChange){
+			if(vScrollBar1.Value>vScrollBar1.Maximum-vScrollBar1.LargeChange) {
 				vScrollBar1.Value=vScrollBar1.Maximum-vScrollBar1.LargeChange;
 			}
 			ContrApptSheet2.MouseWheel+=new MouseEventHandler(ContrApptSheet2_MouseWheel);
 			ContrApptSheet2.Location=new Point(0,-vScrollBar1.Value);
 			panelOps.Controls.Clear();
-			for(int i=0;i<ContrApptSheet.ProvCount;i++){
+			for(int i=0;i<ContrApptSheet.ProvCount;i++) {
 				Panel panProv=new Panel();
 				panProv.BackColor=ProviderC.List[ApptViewItemL.VisProvs[i]].ProvColor;
 				panProv.Location=new Point(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*i,0);
 				panProv.Width=ContrApptSheet.ProvWidth;
-				if(i==0){//just looks a little nicer:
+				if(i==0) {//just looks a little nicer:
 					panProv.Location=new Point(panProv.Location.X-1,panProv.Location.Y);
 					panProv.Width=panProv.Width+1;
-				}				
+				}
 				panProv.Height=18;
 				panProv.BorderStyle=BorderStyle.Fixed3D;
 				panProv.ForeColor=Color.DarkGray;
@@ -1153,7 +1207,7 @@ namespace OpenDental{
 				toolTip1.SetToolTip(panProv,ProviderC.List[ApptViewItemL.VisProvs[i]].Abbr);
 			}
 			Operatory curOp;
-			if(ContrApptSheet.IsWeeklyView){
+			if(ContrApptSheet.IsWeeklyView) {
 				for(int i=0;i<ContrApptSheet.NumOfWeekDaysToDisplay;i++) {
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
@@ -1178,16 +1232,16 @@ namespace OpenDental{
 					panelOps.Controls.Add(panOpName);
 				}
 			}
-			else{
-				for(int i=0;i<ContrApptSheet.ColCount;i++){
+			else {
+				for(int i=0;i<ContrApptSheet.ColCount;i++) {
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
 					curOp=OperatoryC.ListShort[ApptViewItemL.VisOps[i]];
 					labOpName.Text=curOp.OpName;
-					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
+					if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {
 						panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
 					}
-					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){
+					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {
 						panOpName.BackColor=Providers.GetColor(curOp.ProvHygienist);
 					}
 					panOpName.Location=new Point
@@ -1208,14 +1262,143 @@ namespace OpenDental{
 			}
 			this.ResumeLayout();
 			listConfirmed.Items.Clear();
-			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				this.listConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
 			}
 			//This is redundant and inefficient, but won't cause an actual bug.
 			//HOWEVER, this might be where the title bar flicker comes from sometimes, due to refreshing multiple times.
 			//In all other modules, it only does this (triggers the OnPatientSelected) if the patient actually changes)
-			RefreshModulePatient(patNum);
-			RefreshPeriod();
+			//RefreshModulePatient(patNum);//Just deleted this
+			//RefreshPeriod();
+		}
+
+		///<summary>Refreshes the appointment info panel to the right if an appointment is currently selected.</summary>
+		private void RefreshModuleScreenPatient() {
+			if(PatCur==null) {
+				butOther.Enabled=false;
+			}
+			else {
+				butOther.Enabled=true;
+			}
+			if(ContrApptSingle.SelectedAptNum>0) {
+				butUnsched.Enabled=true;
+				butBreak.Enabled=true;
+				butComplete.Enabled=true;
+				butDelete.Enabled=true;
+			}
+			else{
+				butUnsched.Enabled=false;
+				butBreak.Enabled=false;
+				butComplete.Enabled=false;
+				butDelete.Enabled=false;
+			}
+			if(panelAptInfo.Enabled && DS!=null) {
+				int aptconfirmed=0;
+				string tableAptNum;
+				if(pinBoard.SelectedIndex==-1) {//no pinboard appt selected
+					for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+						tableAptNum=DS.Tables["Appointments"].Rows[i]["AptNum"].ToString();
+						if(tableAptNum==ContrApptSingle.SelectedAptNum.ToString()) {
+							aptconfirmed=PIn.PInt(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
+							break;
+						}
+					}
+				}
+				else {//pinboard appt selected
+					aptconfirmed=PIn.PInt(pinBoard.SelectedAppt.DataRoww["Confirmed"].ToString());
+				}
+				listConfirmed.SelectedIndex=DefC.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
+			}
+			else {
+				listConfirmed.SelectedIndex=-1;
+			}
+		}
+
+		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
+		public void RefreshModuleScreenPeriod() {
+			DateTime startDate;
+			DateTime endDate;
+			if(ContrApptSheet.IsWeeklyView) {
+				startDate=WeekStartDate;
+				endDate=WeekEndDate;
+			}
+			else {
+				startDate=AppointmentL.DateSelected;
+				endDate=AppointmentL.DateSelected;
+			}
+			if(startDate.Year<1880 || endDate.Year<1880) {
+				return;
+			}
+			Calendar2.SetSelectionRange(startDate,endDate);
+			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Count][];
+			for(int i=0;i<ApptViewItemL.VisProvs.Count;i++) {
+				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
+			}
+			if(ContrApptSingle3!=null) {//I think this is not needed.
+				for(int i=0;i<ContrApptSingle3.Length;i++) {
+					if(ContrApptSingle3[i]!=null) {
+						ContrApptSingle3[i].Dispose();
+					}
+					ContrApptSingle3[i]=null;
+				}
+				ContrApptSingle3=null;
+			}
+			labelDate.Text=startDate.ToString("ddd");
+			labelDate2.Text=startDate.ToString("-  MMM d");
+			ContrApptSheet2.Controls.Clear();
+			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
+			int indexProv;
+			DataRow row;
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+				row=DS.Tables["Appointments"].Rows[i];
+				ContrApptSingle3[i]=new ContrApptSingle();
+				ContrApptSingle3[i].Visible=false;
+				if(ContrApptSingle.SelectedAptNum.ToString()==row["AptNum"].ToString()) {//if this is the selected apt
+					//if the selected patient was changed from another module, then deselect the apt.
+					if(PatCur==null || PatCur.PatNum.ToString()!=row["PatNum"].ToString()) {
+						ContrApptSingle.SelectedAptNum=-1;
+					}
+				}
+				ContrApptSingle3[i].DataRoww=row;
+				if(!ContrApptSheet.IsWeeklyView) {
+					//copy time pattern to provBar[]:
+					indexProv=-1;
+					if(row["IsHygiene"].ToString()=="1") {
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
+					}
+					else {
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
+					}
+					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
+						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
+						int startIndex=ContrApptSingle3[i].ConvertToY()/ContrApptSheet.Lh;//rounds down
+						for(int k=0;k<pattern.Length;k++) {
+							if(pattern.Substring(k,1)=="X") {
+								try {
+									ContrApptSingle.ProvBar[indexProv][startIndex+k]++;
+								}
+								catch {
+									//appointment must extend past midnight.  Very rare
+								}
+							}
+						}
+					}
+				}
+				ContrApptSingle3[i].SetLocation();
+				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
+			}//end for
+			//PinApptSingle.Refresh();
+			pinBoard.Invalidate();
+			ContrApptSheet2.SchedListPeriod=SchedListPeriod;
+			ContrApptSheet2.CreateShadow();
+			CreateAptShadows();
+			ContrApptSheet2.DrawShadow();
+			List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
+			FillLab(labCaseList);
+			FillProduction();
+			FillEmpSched();
+			FillWaitingRoom();
+			LayoutPanels();
 		}
 
 		///<summary>Only used when viewing weekly.</summary>
@@ -1247,10 +1430,11 @@ namespace OpenDental{
 				ContrApptSingle3=null;
 			}
 		}
-
+		
+		/*
 		///<summary>Was RefreshModuleData and FillPatientButton.  Gets the data for the specified patient. Does not refresh any appointment data.  This function should always be called when the patient changes since that's all this function is responsible for.</summary>
 		private void RefreshModulePatient(int patNum){//
-			if(PatCurNum==patNum) {//if patient has not changed
+			if(PatCur.PatNum==patNum) {//if patient has not changed
 				return;//don't do anything
 			}
 			PatCurNum=patNum;//might be zero
@@ -1295,7 +1479,7 @@ namespace OpenDental{
 //JUST LIKE IN THE OTHER MODULES.  WHEN IT'S HERE, IT IS ALSO GETTING CALLED EVERY TIME MODULESELECTED
 //GETS TRIGGERED FROM PARENT FORM.
 			OnPatientSelected(PatCurNum,PatCurName,hasEmail,chartNumber);
-		}
+		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber) {
@@ -1307,7 +1491,12 @@ namespace OpenDental{
 
 		///<summary>Currently only used when comboView really does change.  Otherwise, just call ModuleSelected.  Triggered in FunctionKeyPress, SetView, and  FillViews</summary>
 		private void comboView_SelectedIndexChanged(object sender,System.EventArgs e) {
-			ModuleSelected(PatCurNum);//PatCur.PatNum);
+			if(PatCur==null) {
+				ModuleSelected(0);
+			}
+			else {
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		///<summary>Activated anytime a Patient menu item is clicked.</summary>
@@ -1349,7 +1538,7 @@ namespace OpenDental{
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(!DefC.DefShortIsNull) {
-				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView,SchedListPeriod);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			panelOps.Width=panelSheet.Width;
@@ -1572,107 +1761,16 @@ namespace OpenDental{
 			WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1).Date;
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
 			if(weeklyViewChanged || isWeeklyView){
-				ModuleSelected(PatCurNum);
+				if(PatCur==null) {
+					ModuleSelected(0);
+				}
+				else {
+					ModuleSelected(PatCur.PatNum);
+				}
 			}
 			else{
 				RefreshPeriod();
 			}
-		}
-
-		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
-		public void RefreshPeriod(){
-			bubbleAptNum=0;
-			DateTime startDate;
-			DateTime endDate;
-			if(ContrApptSheet.IsWeeklyView) {
-				startDate=WeekStartDate;
-				endDate=WeekEndDate;
-			}
-			else {
-				startDate=AppointmentL.DateSelected;
-				endDate=AppointmentL.DateSelected;
-			}
-			if(startDate.Year<1880 || endDate.Year<1880) {
-				return;
-			}
-			Calendar2.SetSelectionRange(startDate, endDate);
-			if(PatCurNum==0){
-				//there cannot be a selected appointment if no patient is loaded.
-				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
-			}
-			DS=Appointments.RefreshPeriod(startDate,endDate);
-			LastTimeDataRetrieved=DateTime.Now;
-			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
-			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1,ContrApptSheet.IsWeeklyView);
-			ContrApptSingle.ProvBar=new int[ApptViewItemL.VisProvs.Count][];
-			for(int i=0;i<ApptViewItemL.VisProvs.Count;i++) {
-				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
-			}
-			if(ContrApptSingle3!=null){//I think this is not needed.
-				for(int i=0;i<ContrApptSingle3.Length;i++){
-					if(ContrApptSingle3[i]!=null){
-						ContrApptSingle3[i].Dispose();
-					}
-					ContrApptSingle3[i]=null;
-				}
-				ContrApptSingle3=null;
-			}
-			labelDate.Text=startDate.ToString("ddd");
-			labelDate2.Text=startDate.ToString("-  MMM d");
-			ContrApptSheet2.Controls.Clear();
-			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
-			int indexProv;
-			DataRow row;
-			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-				row=DS.Tables["Appointments"].Rows[i];
-				ContrApptSingle3[i]=new ContrApptSingle();
-				ContrApptSingle3[i].Visible=false;
-				if(ContrApptSingle.SelectedAptNum.ToString()==row["AptNum"].ToString()){//if this is the selected apt
-					//if the selected patient was changed from another module, then deselect the apt.
-					if(PatCurNum.ToString()!=row["PatNum"].ToString()){
-						ContrApptSingle.SelectedAptNum=-1;
-					}
-				}
-				ContrApptSingle3[i].DataRoww=row;
-				if(!ContrApptSheet.IsWeeklyView) {
-					//copy time pattern to provBar[]:
-					indexProv=-1;
-					if(row["IsHygiene"].ToString()=="1"){
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
-					}
-					else{
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
-					}
-					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()){
-						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
-						int startIndex=ContrApptSingle3[i].ConvertToY()/ContrApptSheet.Lh;//rounds down
-						for(int k=0;k<pattern.Length;k++){
-							if(pattern.Substring(k,1)=="X"){
-								try{
-									ContrApptSingle.ProvBar[indexProv][startIndex+k]++;
-								}
-								catch{
-									//appointment must extend past midnight.  Very rare
-								}
-							}
-						}
-					}
-				}
-				ContrApptSingle3[i].SetLocation();
-				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
-			}//end for
-			//PinApptSingle.Refresh();
-			pinBoard.Invalidate();
-			ContrApptSheet2.SchedListPeriod=SchedListPeriod;
-			ContrApptSheet2.CreateShadow();
-			CreateAptShadows();
-			ContrApptSheet2.DrawShadow();
-			List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
-			FillLab(labCaseList);
-			FillProduction();
-			FillEmpSched();
-			FillWaitingRoom();
-			LayoutPanels();
 		}
 
 		///<summary>Fills the lab summary for the day.</summary>
@@ -1891,14 +1989,20 @@ namespace OpenDental{
 			//}
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			//it will set pt to the last appt on the pinboard.
-			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.PInt(row["PatNum"].ToString()));
+			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			//RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
 			boolAptMoved=false;
 			ContrApptSingle.SelectedAptNum=-1;
 		}
 
 		private void pinBoard_SelectedIndexChanged(object sender,EventArgs e) {
-			RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			RefreshModuleScreenPatient();
+			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			//Since this is usually caused by user mouse, then it goes right into pinBoard_MouseDown().
 		}
 
 		///<Summary>Sets selected and prepares for drag.</Summary>
@@ -1982,14 +2086,13 @@ namespace OpenDental{
 			//convert loc to new time
 			Appointment aptCur=Appointments.GetOneApt(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
 			Appointment aptOld=aptCur.Copy();
-			Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
+			//Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
 			if(aptCur.IsNewPatient && AppointmentL.DateSelected!=aptCur.AptDateTime){
-				Procedures.SetDateFirstVisit(AppointmentL.DateSelected,4,pat);
+				Procedures.SetDateFirstVisit(AppointmentL.DateSelected,4,PatCur);
 			}
-			int tHr=ContrApptSheet2.ConvertToHour
-				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-			int tMin=ContrApptSheet2.ConvertToMin
-				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+			int tHr=ContrApptSheet2.ConvertToHour(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+			int tMin=ContrApptSheet2.ConvertToMin(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 			DateTime tDate=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView) {
 				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
@@ -2101,11 +2204,11 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message);
 					return;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,PatCurNum,
-					PatCurName+", "
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,aptCur.PatNum,
+					Patients.GetLim(aptCur.PatNum).GetNameFL()+", "
 					+aptCur.AptDateTime.ToString()+", "
 					+aptCur.ProcDescript);
-				List<Procedure> ProcList=Procedures.Refresh(PatCurNum);
+				List<Procedure> ProcList=Procedures.Refresh(aptCur.PatNum);
 				bool procAlreadyAttached=false;
 				for(int i=0;i<ProcList.Count;i++){
 					if(ProcList[i].PlannedAptNum==plannedAptNum){//if on the planned apt
@@ -2128,8 +2231,8 @@ namespace OpenDental{
 			else{//simple drag off pinboard to a new date/time
 				try{
 					Appointments.Update(aptCur,aptOld);
-					SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
-						PatCurName+", "
+					SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,aptCur.PatNum,
+						Patients.GetLim(aptCur.PatNum).GetNameFL()+", "
 						+aptCur.ProcDescript
 						+", From "
 						+aptOld.AptDateTime.ToString()+", "
@@ -2147,7 +2250,8 @@ namespace OpenDental{
 			//PinApptSingle.Visible=false;
 			//ContrApptSingle.PinBoardIsSelected=false;
 			ContrApptSingle.SelectedAptNum=aptCur.AptNum;
-			RefreshModulePatient(PatCurNum);
+			RefreshModuleScreenPatient();
+			//RefreshModulePatient(PatCurNum);
 			RefreshPeriod();//date moving to for this computer
 			SetInvalid();//date moving to for other computers
 			AppointmentL.DateSelected=fromDate;
@@ -2311,7 +2415,10 @@ namespace OpenDental{
 				ContrApptSingle3[thisIndex].CreateShadow();
 				grfx.DrawImage(ContrApptSingle3[thisIndex].Shadow,ContrApptSingle3[thisIndex].Location.X
 					,ContrApptSingle3[thisIndex].Location.Y);
-				RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleScreenPatient();
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				if(e.Button==MouseButtons.Right){
 					//if(ContrApptSheet.IsWeeklyView){
 					//	menuWeeklyApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
@@ -2519,7 +2626,9 @@ namespace OpenDental{
 				ResizingAppt=false;
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
-				RefreshModulePatient(PatCurNum);
+				RefreshModuleDataPatient(PatCur.PatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(PatCurNum);
 				RefreshPeriod();
 				bubbleAptNum=0;
 				SetInvalid();
@@ -2557,7 +2666,9 @@ namespace OpenDental{
 					CreateAptShadows();
 					ContrApptSheet2.DrawShadow();
 				}
-				RefreshModulePatient(PatCurNum);
+				RefreshModuleDataPatient(PatCur.PatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(PatCurNum);
 				TempApptSingle.Dispose();
 				return;
 			}
@@ -2700,14 +2811,16 @@ namespace OpenDental{
 			if(apt.AptStatus!=ApptStatus.Complete){
 				Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
 			}
-			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
-				PatCurName+", "
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,apt.PatNum,
+				Patients.GetLim(apt.PatNum).GetNameFL()+", "
 				+apt.ProcDescript
 				+" From "
 				+aptOld.AptDateTime.ToString()+", "
 				+" To "
 				+apt.AptDateTime.ToString());
-			RefreshModulePatient(PatCurNum);
+			RefreshModuleDataPatient(PatCur.PatNum);
+			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			//RefreshModulePatient(PatCurNum);
 			RefreshPeriod();
 			SetInvalid();
 			mouseIsDown = false;
@@ -2952,31 +3065,33 @@ namespace OpenDental{
 					return;
 				}
 				FormPatientSelect FormPS=new FormPatientSelect();
-				if(PatCurNum!=0){
-					FormPS.InitialPatNum=PatCurNum;
+				if(PatCur!=null){
+					FormPS.InitialPatNum=PatCur.PatNum;
 				}
 				FormPS.ShowDialog();
 				if(FormPS.DialogResult!=DialogResult.OK){
 					return;
 				}
-				if(FormPS.SelectedPatNum!=PatCurNum){//if the patient was changed
-					RefreshModulePatient(FormPS.SelectedPatNum);
+				if(PatCur==null || FormPS.SelectedPatNum!=PatCur.PatNum){//if the patient was changed
+					RefreshModuleDataPatient(FormPS.SelectedPatNum);
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					//RefreshModulePatient(FormPS.SelectedPatNum);
 				}
 				Appointment apt;
 				if(FormPS.NewPatientAdded){
-					Patient pat=Patients.GetPat(PatCurNum);
+					//Patient pat=Patients.GetPat(PatCurNum);
 					apt=new Appointment();
-					apt.PatNum=PatCurNum;
+					apt.PatNum=PatCur.PatNum;
 					apt.IsNewPatient=true;
 					apt.Pattern="/X/";
-					if(pat.PriProv==0){
+					if(PatCur.PriProv==0){
 						apt.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 					}
 					else{			
-						apt.ProvNum=pat.PriProv;
+						apt.ProvNum=PatCur.PriProv;
 					}
-					apt.ProvHyg=pat.SecProv;
-					apt.ClinicNum=pat.ClinicNum;
+					apt.ProvHyg=PatCur.SecProv;
+					apt.ClinicNum=PatCur.ClinicNum;
 					apt.AptStatus=ApptStatus.Scheduled;
 					DateTime d=AppointmentL.DateSelected;
 					if(ContrApptSheet.IsWeeklyView){
@@ -3003,7 +3118,9 @@ namespace OpenDental{
 					FormAE.IsNew=true;
 					FormAE.ShowDialog();
 					if(FormAE.DialogResult==DialogResult.OK){
-						RefreshModulePatient(PatCurNum);
+						RefreshModuleDataPatient(PatCur.PatNum);
+						OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+						//RefreshModulePatient(PatCurNum);
 						RefreshPeriod();
 						SetInvalid();
 					}
@@ -3016,10 +3133,10 @@ namespace OpenDental{
 
 		///<summary>Displays the Other Appointments for the current patient, then refreshes screen as needed.  initialClick specifies whether the user doubleclicked on a blank time to get to this dialog.</summary>
 		private void DisplayOtherDlg(bool initialClick){
-			if(PatCurNum==0){
+			if(PatCur==null){
 				return;
 			}
-			FormApptsOther FormAO=new FormApptsOther(PatCurNum);
+			FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);
 			FormAO.InitialClick=initialClick;
 			FormAO.ShowDialog();
 			if(FormAO.OResult==OtherResult.Cancel){
@@ -3028,12 +3145,16 @@ namespace OpenDental{
 			switch(FormAO.OResult){
 				case OtherResult.CopyToPinBoard:
 					SendToPinBoard(FormAO.AptNumsSelected);
-					RefreshModulePatient(FormAO.SelectedPatNum);
+					RefreshModuleDataPatient(FormAO.SelectedPatNum);
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.NewToPinBoard:
 					SendToPinBoard(FormAO.AptNumsSelected);
-					RefreshModulePatient(FormAO.SelectedPatNum);
+					RefreshModuleDataPatient(FormAO.SelectedPatNum);
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.PinboardAndSearch:
@@ -3049,14 +3170,18 @@ namespace OpenDental{
 					break;
 				case OtherResult.CreateNew:
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
-					RefreshModulePatient(FormAO.SelectedPatNum);
+					RefreshModuleDataPatient(FormAO.SelectedPatNum);
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					SetInvalid();
 					break;
 				case OtherResult.GoTo:
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 					AppointmentL.DateSelected=PIn.PDate(FormAO.DateJumpToString);
-					RefreshModulePatient(FormAO.SelectedPatNum);
+					RefreshModuleDataPatient(FormAO.SelectedPatNum);
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 			}
@@ -3075,7 +3200,7 @@ namespace OpenDental{
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
-				Patient pat=Patients.GetPat(PatCurNum);
+				Patient pat=Patients.GetPat(PatCur.PatNum);
 				ProgramL.Execute((int)e.Button.Tag,pat);
 			}
 		}
@@ -3098,7 +3223,9 @@ namespace OpenDental{
 				SendToPinBoard(FormUnsched2.AptSelected);
 			}
 			if(FormUnsched2.SelectedPatNum!=0){
-				RefreshModulePatient(FormUnsched2.SelectedPatNum);
+				RefreshModuleDataPatient(FormUnsched2.SelectedPatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(FormUnsched2.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -3111,7 +3238,9 @@ namespace OpenDental{
 				SendToPinBoard(FormA.AptSelected);
 			}
 			if(FormA.SelectedPatNum!=0){
-				RefreshModulePatient(FormA.SelectedPatNum);
+				RefreshModuleDataPatient(FormA.SelectedPatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(FormA.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -3124,7 +3253,9 @@ namespace OpenDental{
 				SendToPinBoard(FormRL.AptNumsSelected);
 			}
 			if(FormRL.SelectedPatNum!=0){
-				RefreshModulePatient(FormRL.SelectedPatNum);
+				RefreshModuleDataPatient(FormRL.SelectedPatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(FormRL.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -3137,7 +3268,9 @@ namespace OpenDental{
 				SendToPinBoard(FormC.AptSelected);
 			}
 			if(FormC.SelectedPatNum!=0){
-				RefreshModulePatient(FormC.SelectedPatNum);
+				RefreshModuleDataPatient(FormC.SelectedPatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(FormC.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -3150,7 +3283,9 @@ namespace OpenDental{
 				SendToPinBoard(FormTN.AptSelected);
 			}
 			if(FormTN.SelectedPatNum!=0) {
-				RefreshModulePatient(FormTN.SelectedPatNum);
+				RefreshModuleDataPatient(FormTN.SelectedPatNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(FormTN.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -3367,10 +3502,13 @@ namespace OpenDental{
 				Appointments.Delete(PIn.PInt(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
-				RefreshModulePatient(0);
+				RefreshModuleDataPatient(0);
+				//RefreshModulePatient(0);
 			}
 			else{
-				RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			}
 		}
 
@@ -3657,8 +3795,8 @@ namespace OpenDental{
 						Commlogs.Insert(CommlogCur);
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCurNum,
-					PatCurName + ", "
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCur.PatNum,
+					PatCur.GetNameFL() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "NOTE Deleted");
@@ -3683,8 +3821,8 @@ namespace OpenDental{
 						Commlogs.Insert(CommlogCur);
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCurNum,
-					PatCurName + ", "
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCur.PatNum,
+					PatCur.GetNameFL() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "Deleted");
@@ -3702,8 +3840,8 @@ namespace OpenDental{
 				}
 			}
 			//ContrApptSingle.PinBoardIsSelected=false;
-			PatCurNum=0;
-			ModuleSelected(PatCurNum);
+			//PatCurNum=0;
+			ModuleSelected(0);
 			SetInvalid();
 		}		
 
@@ -3919,6 +4057,9 @@ namespace OpenDental{
 
 		private void listConfirmed_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 			if(listConfirmed.IndexFromPoint(e.X,e.Y)==-1){
+				return;
+			}
+			if(ContrApptSingle.SelectedAptNum==-1) {
 				return;
 			}
 			int newStatus=DefC.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
@@ -4180,8 +4321,8 @@ namespace OpenDental{
 			string name;
 			str="Appointment Reminders:"+"\r\n\r\n";
 			Appointment[] aptsOnePat;
-			Family fam=Patients.GetFamily(PatCurNum);
-			Patient pat=fam.GetPatient(PatCurNum);
+			Family fam=Patients.GetFamily(PatCur.PatNum);
+			Patient pat=fam.GetPatient(PatCur.PatNum);
 			for(int i=0;i<fam.ListPats.Length;i++){
 				if(!cardPrintFamily && fam.ListPats[i].PatNum!=pat.PatNum){
 					continue;
