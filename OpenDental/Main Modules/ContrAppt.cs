@@ -1265,11 +1265,6 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				this.listConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
 			}
-			//This is redundant and inefficient, but won't cause an actual bug.
-			//HOWEVER, this might be where the title bar flicker comes from sometimes, due to refreshing multiple times.
-			//In all other modules, it only does this (triggers the OnPatientSelected) if the patient actually changes)
-			//RefreshModulePatient(patNum);//Just deleted this
-			//RefreshPeriod();
 		}
 
 		///<summary>Refreshes the appointment info panel to the right if an appointment is currently selected.</summary>

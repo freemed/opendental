@@ -82,7 +82,38 @@ namespace OpenDental{
 			}
 			if(ApptViewCur.OnlyScheduledProvs && !isWeekly) {
 				//intelligently decide what ops to show.  It's based on the schedule for the day.
-
+				List<int> listSchedOps;
+				bool opAdded;
+				int indexOp;
+				for(int i=0;i<OperatoryC.ListShort.Count;i++){
+					//find any applicable sched for the op
+					opAdded=false;
+					for(int s=0;s<dailySched.Count;s++){
+						if(dailySched[s].SchedType!=ScheduleType.Provider){
+							continue;
+						}
+						if(dailySched[s].StartTime.TimeOfDay==new TimeSpan(0)) {//skip if block starts at midnight.
+							continue;
+						}
+						if(dailySched[s].StartTime.TimeOfDay==dailySched[s].StopTime.TimeOfDay) {//skip if block has no length.
+							continue;
+						}
+						listSchedOps=dailySched[s].Ops;
+						for(int p=0;p<listSchedOps.Count;p++) {
+							if(listSchedOps[p]==OperatoryC.ListShort[i].OperatoryNum) {
+								indexOp=Operatories.GetOrder(listSchedOps[p]);
+								if(indexOp!=-1) {
+									VisOps.Add(indexOp);
+									opAdded=true;
+									break;
+								}
+							}
+						}
+						if(opAdded) {
+							break;
+						}
+					}
+				}
 			}
 			VisOps.Sort();
 			VisProvs.Sort();

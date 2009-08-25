@@ -398,7 +398,7 @@ namespace OpenDental{
 			}
 			checkOnlyScheduledProvs.Checked=ApptViewCur.OnlyScheduledProvs;
 			SetOpLabel();
-			ApptViewItemL.GetForCurView(ApptViewCur,false,null);//passing in false, triggers it to give us the proper list of ops.
+			ApptViewItemL.GetForCurView(ApptViewCur,true,null);//passing in true, triggers it to give us the proper list of ops.
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
 				if(ApptViewItemL.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
