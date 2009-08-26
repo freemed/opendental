@@ -190,6 +190,39 @@ namespace OpenDentBusiness{
 			return ProviderC.ListLong[Providers.GetIndexLong(patPriProvNum)].FeeSched;
 		}
 
+        ///<summary>Gets the fee schedule from the primary MEDICAL insurance plan, the patient, or the provider in that order.</summary>
+		public static int GetMedFeeSched(Patient pat,List <InsPlan> PlanList,List <PatPlan> patPlans){
+			//No need to check RemotingRole; no call to db. ??
+			int retVal = 0;
+			if (PatPlans.GetPlanNum(patPlans, 1) != 0){
+				//Pick the medinsplan with the ordinal closest to zero
+				int planOrdinal=10; //This is a hack, but I doubt anyone would have more than 10 plans
+				foreach(PatPlan plan in patPlans){
+					if(plan.Ordinal<planOrdinal && InsPlans.GetPlan(plan.PlanNum,PlanList).IsMedical)
+						planOrdinal=plan.Ordinal;
+				}
+				InsPlan PlanCur = InsPlans.GetPlan(PatPlans.GetPlanNum(patPlans, planOrdinal), PlanList);
+				if (PlanCur == null){
+					retVal = 0;
+				} else {
+					retVal = PlanCur.FeeSched;
+				}
+			}
+			if (retVal == 0){
+				if (pat.FeeSched != 0){
+					retVal = pat.FeeSched;
+				} else {
+					if (pat.PriProv == 0){
+						retVal = ProviderC.List[0].FeeSched;
+					} else {
+						//MessageBox.Show(Providers.GetIndex(Patients.Cur.PriProv).ToString());   
+						retVal = ProviderC.ListLong[Providers.GetIndexLong(pat.PriProv)].FeeSched;
+					}
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Clears all fees from one fee schedule.  Supply the DefNum of the feeSchedule.</summary>
 		public static void ClearFeeSched(int schedNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

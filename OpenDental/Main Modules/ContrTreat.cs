@@ -2214,7 +2214,20 @@ namespace OpenDental{
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				insfee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+  
+                //check code to see if it is a medical code
+                bool isMed=false;
+                if(procCur.MedicalCode!=""){
+					isMed=true;
+                }
+                //get fee schedule for medical ins or Fees.GetFeeSched if dental
+				int feeSch;
+				if(isMed){
+					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList);
+				} else {
+					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList);
+				}
+				insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
 					standardfee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
