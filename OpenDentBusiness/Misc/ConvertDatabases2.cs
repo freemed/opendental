@@ -761,6 +761,21 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.7.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To6_7_16();
+		}
+
+		private static void To6_7_16() {
+			if(FromVersion<new Version("6.7.16.0")) {
+				string command;
+				command="ALTER TABLE insplan CHANGE FeeSched FeeSched int NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan CHANGE CopayFeeSched CopayFeeSched int NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE insplan CHANGE AllowedFeeSched AllowedFeeSched int NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '6.7.16.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_8_0();
 		}
 
