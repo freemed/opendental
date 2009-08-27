@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("supplyorder")]
 	public class SupplyOrder : DataObjectBase {
 		[DataField("SupplyOrderNum", PrimaryKey=true, AutoNumber=true)]
-		private int supplyOrderNum;
+		private long supplyOrderNum;
 		bool supplyOrderNumChanged;
 		/// <summary>Primary key.</summary>
-		public int SupplyOrderNum {
+		public long SupplyOrderNum {
 			get { return supplyOrderNum; }
 			set { supplyOrderNum = value; MarkDirty(); supplyOrderNumChanged = true; }
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SupplierNum")]
-		private int supplierNum;
+		private long supplierNum;
 		bool supplierNumChanged;
 		/// <summary>FK to supplier.SupplierNum.</summary>
-		public int SupplierNum {
+		public long SupplierNum {
 			get { return supplierNum; }
 			set { supplierNum = value; MarkDirty(); supplierNumChanged = true; }
 		}

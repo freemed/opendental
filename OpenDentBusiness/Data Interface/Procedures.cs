@@ -8,7 +8,7 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class Procedures {
 		///<summary></summary>
-		public static int Insert(Procedure proc) {
+		public static long Insert(Procedure proc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				proc.ProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcNum;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Updates only the changed columns.</summary>
-		public static int Update(Procedure proc,Procedure oldProc) {
+		public static long Update(Procedure proc,Procedure oldProc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),proc,oldProc);
 			}
@@ -297,7 +297,7 @@ namespace OpenDentBusiness {
 				c += "SiteNum = '" + POut.PInt(proc.SiteNum)+"'";
 				comma = true;
 			}
-			int rowsChanged=0;
+			long rowsChanged=0;
 			if(comma) {
 				c+=" WHERE ProcNum = '"+POut.PInt(proc.ProcNum)+"'";
 				//DataConnection dcon=new DataConnection();
@@ -338,7 +338,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Also deletes any claimProcs. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
-		public static void Delete(int procNum) {
+		public static void Delete(long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum);
 				return;
@@ -399,7 +399,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdateAptNum(int procNum,int newAptNum) {
+		public static void UpdateAptNum(long procNum,long newAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newAptNum);
 				return;
@@ -409,7 +409,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdatePlannedAptNum(int procNum,int newPlannedAptNum) {
+		public static void UpdatePlannedAptNum(long procNum,long newPlannedAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPlannedAptNum);
 				return;
@@ -419,7 +419,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdatePriority(int procNum,int newPriority) {
+		public static void UpdatePriority(long procNum,int newPriority) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPriority);
 				return;
@@ -1019,7 +1019,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used in ContrAccount.CreateClaim to decide whether a given procedure has an estimate that can be used to attach to a claim for the specified plan.  Returns a valid claimProc if this procedure has an estimate attached that is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. Returns null if there are no claimprocs that would work.</summary>
-		public static ClaimProc GetClaimProcEstimate(int procNum,List<ClaimProc> claimProcList,InsPlan plan) {
+		public static ClaimProc GetClaimProcEstimate(long procNum,List<ClaimProc> claimProcList,InsPlan plan) {
 			//No need to check RemotingRole; no call to db.
 			//bool matchOfWrongType=false;
 			for(int i=0;i<claimProcList.Count;i++) {
@@ -1042,7 +1042,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
-		public static string ConvertProcToString(int codeNum,string surf,string toothNum) {
+		public static string ConvertProcToString(long codeNum,string surf,string toothNum) {
 			//No need to check RemotingRole; no call to db.
 			string strLine="";
 			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
@@ -1164,7 +1164,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
-		public static int GlobalUpdateFees() {
+		public static long GlobalUpdateFees() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
@@ -1188,16 +1188,16 @@ namespace OpenDentBusiness {
 							AND patient.PatNum=procedurelog.PatNum
 						";*/
 			DataTable table=Db.GetTable(command);
-			int priPlanFeeSched;
+			long priPlanFeeSched;
 			//int feeSchedNum;
-			int patFeeSched;
-			int patProv;
+			long patFeeSched;
+			long patProv;
 			string planType;
 			double insfee;
 			double standardfee;
 			double newFee;
 			double oldFee;
-			int rowsChanged=0;
+			long rowsChanged=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				priPlanFeeSched=PIn.PInt(table.Rows[i]["PlanFeeSched"].ToString());
 				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
@@ -1208,10 +1208,12 @@ namespace OpenDentBusiness {
 					standardfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
 					if(standardfee>insfee) {
 						newFee=standardfee;
-					} else {
+					} 
+					else {
 						newFee=insfee;
 					}
-				} else {
+				} 
+				else {
 					newFee=insfee;
 				}
 				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
@@ -1464,7 +1466,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
-		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,int siteNum,int patientAge) {
+		public static void SetCompleteInAppt(Appointment apt,List<InsPlan> PlanList,List<PatPlan> patPlans,long siteNum,int patientAge) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),apt,PlanList,patPlans,siteNum);
 				return;

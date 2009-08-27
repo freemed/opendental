@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 	///<summary>Each row is a bridge to an outside program, frequently an imaging program.  Most of the bridges are hard coded, and simply need to be enabled.  But user can also add their own custom bridge.</summary>
 	public class Program{
 		///<summary>Primary key.</summary>
-		public int ProgramNum;
+		public long ProgramNum;
 		///<summary>Unique name for built-in program bridges. Not user-editable.</summary>
 		public string ProgName;
 		///<summary>Description that shows.</summary>

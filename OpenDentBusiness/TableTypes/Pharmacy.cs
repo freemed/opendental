@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("pharmacy")]
 	public class Pharmacy : DataObjectBase{
 		[DataField("PharmacyNum",PrimaryKey=true,AutoNumber=true)]
-		private int pharmacyNum;
+		private long pharmacyNum;
 		private bool pharmacyNumChanged;
 		///<summary>Primary key.</summary>
-		public int PharmacyNum{
+		public long PharmacyNum{
 			get{return pharmacyNum;}
 			set{if(pharmacyNum!=value){pharmacyNum=value;MarkDirty();pharmacyNumChanged=true;}}
 		}

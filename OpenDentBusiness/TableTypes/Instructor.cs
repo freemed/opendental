@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 }
 	/*
 		///<summary>Primary key.</summary>
-		public int InstructorNum;
+		public long InstructorNum;
 		///<summary>.</summary>
 		public string LName;
 		///<summary>.</summary>

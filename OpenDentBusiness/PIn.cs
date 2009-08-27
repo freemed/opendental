@@ -84,12 +84,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int PInt (string myString){
+		public static long PInt (string myString){
 			if(myString==""){
 				return 0;
 			}
 			else{
-				return System.Convert.ToInt32(myString);
+				return System.Convert.ToInt64(myString);
 			}
 		}
 

@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("plannedappt")]
 	public class PlannedAppt : DataObjectBase{
 		[DataField("PlannedApptNum",PrimaryKey=true,AutoNumber=true)]
-		private int plannedApptNum;
+		private long plannedApptNum;
 		private bool plannedApptNumChanged;
 		///<summary>Primary key.</summary>
-		public int PlannedApptNum{
+		public long PlannedApptNum{
 			get{return plannedApptNum;}
 			set{if(plannedApptNum!=value){plannedApptNum=value;MarkDirty();plannedApptNumChanged=true;}}
 		}
@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		private bool patNumChanged;
 		///<summary>FK to patient.PatNum.</summary>
-		public int PatNum{
+		public long PatNum{
 			get{return patNum;}
 			set{if(patNum!=value){patNum=value;MarkDirty();patNumChanged=true;}}
 		}
@@ -31,10 +31,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("AptNum")]
-		private int aptNum;
+		private long aptNum;
 		private bool aptNumChanged;
 		///<summary>FK to appointment.AptNum.</summary>
-		public int AptNum{
+		public long AptNum{
 			get{return aptNum;}
 			set{if(aptNum!=value){aptNum=value;MarkDirty();aptNumChanged=true;}}
 		}
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private int itemOrder;
+		private long itemOrder;
 		private bool itemOrderChanged;
 		///<summary>One-indexed order of item in group of planned appts.</summary>
-		public int ItemOrder{
+		public long ItemOrder{
 			get{return itemOrder;}
 			set{if(itemOrder!=value){itemOrder=value;MarkDirty();itemOrderChanged=true;}}
 		}

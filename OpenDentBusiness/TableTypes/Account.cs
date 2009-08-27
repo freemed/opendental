@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
 	public class Account{
 		///<summary>Primary key..</summary>
-		public int AccountNum;
+		public long AccountNum;
 		///<summary>.</summary>
 		public string Description;
 		///<summary>Enum:AccountType Asset, Liability, Equity,Revenue, Expense</summary>

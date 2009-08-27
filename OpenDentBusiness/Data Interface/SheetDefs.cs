@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		//}
 
 		///<summary>Includes all attached fields.  It simply deletes all the old fields and inserts new ones.</summary>
-		public static int WriteObject(SheetDef sheetDef){
+		public static long WriteObject(SheetDef sheetDef){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sheetDef.SheetDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sheetDef);
 				return sheetDef.SheetDefNum;

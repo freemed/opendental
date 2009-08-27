@@ -6,13 +6,13 @@ namespace OpenDentBusiness{
 	///<summary>Insurance coverage categories.  They need to look like in the manual for the American calculations to work properly.</summary>
 	public class CovCat {
 		///<summary>Primary key.  Only used in Benefit and CovSpan tables.</summary>
-		public int CovCatNum;
+		public long CovCatNum;
 		///<summary>Description of this category.</summary>
 		public string Description;
 		///<summary>Default percent for this category. -1 to skip this category and not apply a percentage.</summary>
-		public int DefaultPercent;
+		public long DefaultPercent;
 		///<summary>The order in which the categories are displayed.  Includes hidden categories. 0-based.</summary>
-		public int CovOrder;
+		public long CovOrder;
 		///<summary>If true, this category will be hidden.</summary>
 		public bool IsHidden;
 		///<summary>Enum:EbenefitCategory  The X12 benefit categories.  Each CovCat can link to one X12 category.  Default is 0 (unlinked).</summary>

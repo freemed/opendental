@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>Rx definitions.  Can safely delete or alter, because they get copied to the rxPat table, not referenced.</summary>
 	public class RxDef{
 		///<summary>Primary key.</summary>
-		public int RxDefNum;
+		public long RxDefNum;
 		///<summary>The name of the drug.</summary>
 		public string Drug;
 		///<summary>Directions.</summary>

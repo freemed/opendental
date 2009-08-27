@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>A template email which can be used as the basis for a new email.</summary>
 	public class EmailTemplate{
 		///<summary>Primary key.</summary>
-		public int EmailTemplateNum;
+		public long EmailTemplateNum;
 		///<summary>Default subject line.</summary>
 		public string Subject;
 		///<summary>Body of the email</summary>

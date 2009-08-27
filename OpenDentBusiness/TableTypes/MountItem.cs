@@ -9,10 +9,10 @@ namespace OpenDentBusiness {
 	public class MountItem : DataObjectBase {
 		///<summary>Primary key.</summary>
 		[DataField("MountItemNum", PrimaryKey=true, AutoNumber=true)]
-		private int mountItemNum;
+		private long mountItemNum;
 
 		/// <summary>Primary key.</summary>
-		public int MountItemNum {
+		public long MountItemNum {
 			get { return mountItemNum; }
 			set { mountItemNum = value; MarkDirty(); mountItemNumChanged = true; }
 		}
@@ -25,10 +25,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>FK to mount.MountNum.</summary>
 		[DataField("MountNum")]
-		private int mountNum;
+		private long mountNum;
 
 		/// <summary>FK to mount.MountNum.</summary>
-		public int MountNum {
+		public long MountNum {
 			get { return mountNum; }
 			set { mountNum = value; MarkDirty(); mountNumChanged = true; }
 		}
@@ -41,10 +41,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>The x position, in pixels, of the item on the mount.</summary>
 		[DataField("Xpos")]
-		private int xpos;
+		private long xpos;
 
 		/// <summary>The x position, in pixels, of the item on the mount.</summary>
-		public int Xpos {
+		public long Xpos {
 			get { return xpos; }
 			set { xpos = value; MarkDirty(); xposChanged = true; }
 		}
@@ -57,10 +57,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>The y position, in pixels, of the item on the mount.</summary>
 		[DataField("Ypos")]
-		private int ypos;
+		private long ypos;
 
 		/// <summary>The y position, in pixels, of the item on the mount.</summary>
-		public int Ypos {
+		public long Ypos {
 			get { return ypos; }
 			set { ypos = value; MarkDirty(); yposChanged = true; }
 		}
@@ -73,10 +73,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>The ordinal position of the item on the mount.</summary>
 		[DataField("OrdinalPos")]
-		private int ordinalPos;
+		private long ordinalPos;
 
 		/// <summary>The ordinal position of the item on the mount.</summary>
-		public int OrdinalPos {
+		public long OrdinalPos {
 			get { return ordinalPos; }
 			set { ordinalPos = value; MarkDirty(); ordinalPosChanged = true; }
 		}
@@ -89,10 +89,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>The scaled or unscaled width of the mount item in pixels.</summary>
 		[DataField("Width")]
-		private int width;
+		private long width;
 
 		/// <summary>The scaled or unscaled width of the mount item in pixels.</summary>
-		public int Width {
+		public long Width {
 			get { return width; }
 			set { width = value; MarkDirty(); widthChanged = true; }
 		}
@@ -105,10 +105,10 @@ namespace OpenDentBusiness {
 		}
 		///<summary>The scaled or unscaled height of the mount item in pixels.</summary>
 		[DataField("Height")]
-		private int height;
+		private long height;
 
 		/// <summary>The scaled or unscaled height of the mount item in pixels.</summary>
-		public int Height {
+		public long Height {
 			get { return height; }
 			set { height = value; MarkDirty(); heightChanged = true; }
 		}

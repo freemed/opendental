@@ -8,11 +8,11 @@ namespace OpenDentBusiness{
 	///<summary>A provider is usually a dentist or a hygienist.  But a provider might also be a denturist, a dental student, or a dental hygiene student.  A provider might also be a 'dummy', used only for billing purposes or for notes in the Appointments module.  There is no limit to the number of providers that can be added.</summary>
 	public class Provider{
 		///<summary>Primary key.</summary>
-		public int ProvNum;
+		public long ProvNum;
 		///<summary>Abbreviation.  There was a limit of 5 char before version 5.4.  The new limit is 255 char.  This will allow more elegant solutions to various problems.  Providers will no longer be referred to by FName and LName.  Abbr is used as a human readable primary key.</summary>
 		public string Abbr;
 		///<summary>Order that provider will show in lists.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>Last name.</summary>
 		public string LName;
 		///<summary>First name.</summary>
@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary>eg. DMD or DDS. Was 'title' in previous versions.</summary>
 		public string Suffix;
 		///<summary>FK to feesched.FeeSchedNum.</summary>
-		public int FeeSched;
+		public long FeeSched;
 		///<summary>Enum:DentalSpecialty</summary>
 		public DentalSpecialty Specialty;
 		///<summary>or TIN.  No punctuation</summary>
@@ -48,14 +48,14 @@ namespace OpenDentBusiness{
 		///<summary>Color that shows in appointments as outline when highlighted.</summary>
 		public Color OutlineColor;
 		///<summary>FK to schoolclass.SchoolClassNum Used in dental schools.  Each student is a provider.  This keeps track of which class they are in.</summary>
-		public int SchoolClassNum;
+		public long SchoolClassNum;
 		///<summary>Used for Canadian claims right now as CDA number.  Will be required in US within a year.  Goes out on e-claims if available.</summary>
 		public string NationalProvID;
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
 		//DateTStamp
 		/// <summary> FK to ??. Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord</summary>
-		public int AnesthProvType;
+		public long AnesthProvType;
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){
@@ -66,10 +66,10 @@ namespace OpenDentBusiness{
 
 		}
 
-		public Provider(int provNum,string abbr,int itemOrder,string lName,string fName,string mI,string suffix,int feeSched,
+		public Provider(long provNum,string abbr,long itemOrder,string lName,string fName,string mI,string suffix,long feeSched,
 			DentalSpecialty specialty,string sSN,string stateLicense,string dEANum,bool isSecondary,Color provColor,bool isHidden,
-			bool usingTIN,string blueCrossID,bool sigOnFile,string medicaidID,Color outlineColor,int schoolClassNum,
-			string nationalProvID,string canadianOfficeNum,int anesthProvType)
+			bool usingTIN,string blueCrossID,bool sigOnFile,string medicaidID,Color outlineColor,long schoolClassNum,
+			string nationalProvID,string canadianOfficeNum,long anesthProvType)
 		{
 			ProvNum=provNum;
 			Abbr=abbr;

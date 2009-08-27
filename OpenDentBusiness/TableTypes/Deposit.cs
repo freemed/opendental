@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
 	public class Deposit{
 		///<summary>Primary key.</summary>
-		public int DepositNum;
+		public long DepositNum;
 		///<summary>The date of the deposit.</summary>
 		public DateTime DateDeposit;
 		///<summary>User editable.  Usually includes name on the account and account number.  Possibly the bank name as well.</summary>

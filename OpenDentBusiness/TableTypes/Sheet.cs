@@ -29,10 +29,10 @@ namespace OpenDentBusiness{
 	[DataObject("sheet")]
 	public class Sheet : DataObjectBase{
 		[DataField("SheetNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetNum;
+		private long sheetNum;
 		private bool sheetNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetNum{
+		public long SheetNum{
 			get{return sheetNum;}
 			set{if(sheetNum!=value){sheetNum=value;MarkDirty();sheetNumChanged=true;}}
 		}
@@ -53,10 +53,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		private bool patNumChanged;
 		///<summary>FK to patient.PatNum.  A saved sheet is always attached to a patient.  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
-		public int PatNum{
+		public long PatNum{
 			get{return patNum;}
 			set{if(patNum!=value){patNum=value;MarkDirty();patNumChanged=true;}}
 		}
@@ -101,10 +101,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private int width;
+		private long width;
 		private bool widthChanged;
 		///<summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Width{
+		public long Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -113,10 +113,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private int height;
+		private long height;
 		private bool heightChanged;
 		///<summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Height{
+		public long Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}
@@ -152,7 +152,7 @@ namespace OpenDentBusiness{
 			return (Sheet)Clone();
 		}	
 
-		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
+		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		///<Summary></Summary>

@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ProcCodeNote note){
+		public static long Insert(ProcCodeNote note) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				note.ProcCodeNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),note);
 				return note.ProcCodeNoteNum;
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the note for the given provider, if one exists.  Otherwise, gets the proccode.defaultnote.</summary>
-		public static string GetNote(int provNum,int codeNum){
+		public static string GetNote(long provNum,long codeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++){
 				if(Listt[i].ProvNum!=provNum){
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the time pattern for the given provider, if one exists.  Otherwise, gets the proccode.ProcTime.</summary>
-		public static string GetTimePattern(int provNum,int codeNum) {
+		public static string GetTimePattern(long provNum,long codeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].ProvNum!=provNum) {

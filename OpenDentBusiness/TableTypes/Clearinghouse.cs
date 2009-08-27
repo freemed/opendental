@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary>Since we can send e-claims to multiple clearinghouses, this table keeps track of each clearinghouse.  Will eventually be used for individual carriers as well if they accept </summary>
 	public class Clearinghouse{
 		///<summary>Primary key.</summary>
-		public int ClearinghouseNum;
+		public long ClearinghouseNum;
 		///<summary>Description of this clearinghouse</summary>
 		public string Description;
 		///<summary>The path to export the X12 file to. \ is now optional.</summary>
@@ -37,9 +37,9 @@ namespace OpenDentBusiness{
 		///<summary>If applicable, this is the name of the client program to launch.  It is even used by the hard-coded comm bridges, because the user may have changed the installation directory or exe name.</summary>
 		public string ClientProgram;
 		///<summary>Each clearinghouse increments their batch numbers by one each time a claim file is sent.  User never sees this number.  Maxes out at 999, then loops back to 1.  This field is skipped during all update and retreival except if specifically looking for this one field.  Defaults to 0 for brand new clearinghouses, which causes the first batch to go out as #1.</summary>
-		public int LastBatchNumber;
+		public long LastBatchNumber;
 		///<summary>1,2,3,or 4. The port that the modem is connected to if applicable. Always uses 9600 baud and standard settings. Will crash if port or modem not valid.</summary>
-		public int ModemPort;
+		public long ModemPort;
 		///<summary>A clearinghouse usually has a login ID that is used with the password in order to access the remote server.  This value is not usualy used within the actual claim.</summary>
 		public string LoginID;
 		///<summary>Used in 1000A NM1 and 1000A PER.  But if SenderTIN is blank, then OPEN DENTAL SOFTWARE is used instead.</summary>

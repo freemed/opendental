@@ -153,7 +153,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0.  If still not found, returns null.</summary>
-		public static InsPlan GetPlan(int planNum,List<InsPlan> planList) {
+		public static InsPlan GetPlan(long planNum,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan retPlan=new InsPlan();
 			if(planNum==0) {

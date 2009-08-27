@@ -92,10 +92,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("LoadCount")]
-		private int loadCount;
+		private long loadCount;
 		private bool loadCountChanged;
 		///<summary></summary>
-		public int LoadCount{
+		public long LoadCount{
 			get{return loadCount;}
 			set{if(loadCount!=value){loadCount=value;MarkDirty();loadCountChanged=true;}}
 		}
@@ -128,10 +128,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Outbound")]
-		private int outbound;
+		private long outbound;
 		private bool outboundChanged;
 		///<summary>Two char, uppercase.</summary>
-		public int Outbound{
+		public long Outbound{
 			get{return outbound;}
 			set{if(outbound!=value){outbound=value;MarkDirty();outboundChanged=true;}}
 		}
@@ -140,10 +140,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Inbound")]
-		private int inbound;
+		private long inbound;
 		private bool inboundChanged;
 		///<summary></summary>
-		public int Inbound{
+		public long Inbound{
 			get{return inbound;}
 			set{if(inbound!=value){inbound=value;MarkDirty();inboundChanged=true;}}
 		}
@@ -152,10 +152,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Processed")]
-		private int processed;
+		private long processed;
 		private bool processedChanged;
 		///<summary></summary>
-		public int Processed{
+		public long Processed{
 			get{return processed;}
 			set{if(processed!=value){processed=value;MarkDirty();processedChanged=true;}}
 		}
@@ -164,10 +164,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Warnings")]
-		private int warnings;
+		private long warnings;
 		private bool warningsChanged;
 		///<summary></summary>
-		public int Warnings{
+		public long Warnings{
 			get{return warnings;}
 			set{if(warnings!=value){warnings=value;MarkDirty();warningsChanged=true;}}
 		}
@@ -176,10 +176,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Loaded")]
-		private int loaded;
+		private long loaded;
 		private bool loadedChanged;
 		///<summary></summary>
-		public int Loaded{
+		public long Loaded{
 			get{return loaded;}
 			set{if(loaded!=value){loaded=value;MarkDirty();loadedChanged=true;}}
 		}
@@ -188,10 +188,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SchemaLoaded")]
-		private int schemaLoaded;
+		private long schemaLoaded;
 		private bool schemaLoadedChanged;
 		///<summary></summary>
-		public int SchemaLoaded{
+		public long SchemaLoaded{
 			get{return schemaLoaded;}
 			set{if(schemaLoaded!=value){schemaLoaded=value;MarkDirty();schemaLoadedChanged=true;}}
 		}
@@ -224,10 +224,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("HL7Format")]
-		private int hL7Format;
+		private long hL7Format;
 		private bool hL7FormatChanged;
 		///<summary></summary>
-		public int HL7Format{
+		public long HL7Format{
 			get{return hL7Format;}
 			set{if(hL7Format!=value){hL7Format=value;MarkDirty();hL7FormatChanged=true;}}
 		}
@@ -236,10 +236,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SegmentCount")]
-		private int segmentCount;
+		private long segmentCount;
 		private bool segmentCountChanged;
 		///<summary></summary>
-		public int SegmentCount{
+		public long SegmentCount{
 			get{return segmentCount;}
 			set{if(segmentCount!=value){segmentCount=value;MarkDirty();segmentCountChanged=true;}}
 		}
@@ -248,10 +248,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("MessageSize")]
-		private int messageSize;
+		private long messageSize;
 		private bool messageSizeChanged;
 		///<summary></summary>
-		public int MessageSize{
+		public long MessageSize{
 			get{return messageSize;}
 			set{if(messageSize!=value){messageSize=value;MarkDirty();messageSizeChanged=true;}}
 		}

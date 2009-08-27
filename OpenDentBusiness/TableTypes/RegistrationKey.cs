@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 	///<summary>Keeps track of which product keys have been assigned to which customers. This datatype is only used if the program is being run from a distributor installation. A single customer is allowed to have more than one key, to accommodate for various circumstances, including having multiple physical business locations.</summary>
 	public class RegistrationKey {
 		///<summary>Primary Key.</summary>
-		public int RegistrationKeyNum;
+		public long RegistrationKeyNum;
 		///<summary>FK to patient.PatNum. The customer to which this registration key applies.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>The registration key as stored in the customer database.</summary>
 		public string RegKey;
 		///<summary>Db note about the registration key. Specifically, the note must include information about the location to which this key pertains, since once at least one key must be assigned to each location to be legal.</summary>

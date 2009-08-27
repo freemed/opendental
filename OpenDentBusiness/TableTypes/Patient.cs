@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	public class Patient : DataObjectBase {
 		
 		[DataField("PatNum", PrimaryKey=true, AutoNumber=true)]
-		private int patNum;
+		private long patNum;
 		bool patNumChanged;
 		/// <summary>Primary key.</summary>
-		public int PatNum {
+		public long PatNum {
 			get { return patNum; }
 			set { if(patNum!=value){patNum = value; MarkDirty(); patNumChanged = true; }}
 		}
@@ -224,10 +224,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Guarantor")]
-		private int guarantor;
+		private long guarantor;
 		bool guarantorChanged;
 		/// <summary>FK to patient.PatNum.  Head of household.</summary>
-		public int Guarantor {
+		public long Guarantor {
 			get { return guarantor; }
 			set { if(guarantor!=value){guarantor = value; MarkDirty(); guarantorChanged = true; }}
 		}
@@ -235,9 +235,9 @@ namespace OpenDentBusiness{
 			get { return guarantorChanged; }
 		}
 
-		private int age;
+		private long age;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
-		public int Age {
+		public long Age {
 			get { return age; }
 			set { age = value; }
 		}
@@ -291,10 +291,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("PriProv")]
-		private int priProv;
+		private long priProv;
 		bool priProvChanged;
 		/// <summary>FK to provider.ProvNum.  The patient's primary provider.  Required.  The database maintenance tool ensures that every patient always has this number set, so the program no longer has to handle 0.</summary>
-		public int PriProv {
+		public long PriProv {
 			get { return priProv; }
 			set { if(priProv!=value){priProv = value; MarkDirty(); priProvChanged = true; }}
 		}
@@ -303,10 +303,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SecProv")]
-		private int secProv;
+		private long secProv;
 		bool secProvChanged;
 		/// <summary>FK to provider.ProvNum.  Secondary provider (hygienist). Optional.</summary>
-		public int SecProv {
+		public long SecProv {
 			get { return secProv; }
 			set { if(secProv!=value){secProv = value; MarkDirty(); secProvChanged = true; }}
 		}
@@ -315,10 +315,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("FeeSched")]
-		private int feeSched;
+		private long feeSched;
 		bool feeSchedChanged;
 		/// <summary>FK to feesched.FeeSchedNum.  Fee schedule for this patient.  Usually not used.  If missing, the practice default fee schedule is used. If patient has insurance, then the fee schedule for the insplan is used.</summary>
-		public int FeeSched {
+		public long FeeSched {
 			get { return feeSched; }
 			set { if(feeSched!=value){feeSched = value; MarkDirty(); feeSchedChanged = true; }}
 		}
@@ -327,10 +327,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("BillingType")]
-		private int billingType;
+		private long billingType;
 		bool billingTypeChanged;
 		/// <summary>FK to definition.DefNum.  Must have a value, or the patient will not show on some reports.</summary>
-		public int BillingType {
+		public long BillingType {
 			get { return billingType; }
 			set { if(billingType!=value){billingType = value; MarkDirty(); billingTypeChanged = true; }}
 		}
@@ -527,10 +527,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("EmployerNum")]
-		private int employerNum;
+		private long employerNum;
 		bool employerNumChanged;
 		/// <summary>FK to employer.EmployerNum.</summary>
-		public int EmployerNum {
+		public long EmployerNum {
 			get { return employerNum; }
 			set { if(employerNum!=value){employerNum = value; MarkDirty(); employerNumChanged = true; }}
 		}
@@ -611,10 +611,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ClinicNum")]
-		private int clinicNum;
+		private long clinicNum;
 		bool clinicNumChanged;
 		/// <summary>FK to clinic.ClinicNum. Can be zero if not attached to a clinic or no clinics set up.</summary>
-		public int ClinicNum {
+		public long ClinicNum {
 			get { return clinicNum; }
 			set { if(clinicNum!=value){clinicNum = value; MarkDirty(); clinicNumChanged = true; }}
 		}
@@ -803,10 +803,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SiteNum")]
-		private int siteNum;
+		private long siteNum;
 		bool siteNumChanged;
 		///<summary>FK to site.SiteNum. Can be zero. Replaces the old GradeSchool field with a proper foreign key.</summary>
-		public int SiteNum {
+		public long SiteNum {
 			get { return siteNum; }
 			set { if(siteNum!=value){siteNum = value; MarkDirty(); siteNumChanged = true; }}
 		}
@@ -818,10 +818,10 @@ namespace OpenDentBusiness{
 		//This won't be seen in the code.
 
 		[DataField("ResponsParty")]
-		private int responsParty;
+		private long responsParty;
 		bool responsPartyChanged;
 		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>
-		public int ResponsParty {
+		public long ResponsParty {
 			get { return responsParty; }
 			set { if(responsParty!=value){responsParty = value; MarkDirty(); responsPartyChanged = true; }}
 		}

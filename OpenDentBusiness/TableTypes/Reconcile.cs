@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>Used in the Accounting section.  Each row represents one reconcile.  Transactions will be attached to it.</summary>
 	public class Reconcile{
 		///<summary>Primary key.</summary>
-		public int ReconcileNum;
+		public long ReconcileNum;
 		///<summary>FK to account.AccountNum</summary>
-		public int AccountNum;
+		public long AccountNum;
 		///<summary>User enters starting balance here.</summary>
 		public double StartingBal;
 		///<summary>User enters ending balance here.</summary>

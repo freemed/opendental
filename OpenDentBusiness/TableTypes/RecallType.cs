@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("recalltype")]
 	public class RecallType : DataObjectBase{
 		[DataField("RecallTypeNum",PrimaryKey=true,AutoNumber=true)]
-		private int recallTypeNum;
+		private long recallTypeNum;
 		private bool recallTypeNumChanged;
 		///<summary>Primary key.</summary>
-		public int RecallTypeNum{
+		public long RecallTypeNum{
 			get{return recallTypeNum;}
 			set{if(recallTypeNum!=value){recallTypeNum=value;MarkDirty();recallTypeNumChanged=true;}}
 		}

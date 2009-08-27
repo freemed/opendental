@@ -10,9 +10,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Primary key.</summary>
 		[DataField("DocNum", PrimaryKey=true, AutoNumber=true)]
-		private int docNum;
+		private long docNum;
 		/// <summary>Primary key.</summary>
-		public int DocNum {
+		public long DocNum {
 			get { return docNum; }
 			set { docNum = value; MarkDirty(); docNumChanged = true; }
 		}
@@ -49,9 +49,9 @@ namespace OpenDentBusiness{
 
 		///<summary>FK to definition.DefNum. Categories for documents.</summary>
 		[DataField("DocCategory")]
-		private int docCategory;
+		private long docCategory;
 		/// <summary>FK to definition.DefNum. Categories for documents.</summary>
-		public int DocCategory {
+		public long DocCategory {
 			get { return docCategory; }
 			set { docCategory = value; MarkDirty(); docCategoryChanged = true; }
 		}
@@ -62,9 +62,9 @@ namespace OpenDentBusiness{
 
 		///<summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		/// <summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
-		public int PatNum {
+		public long PatNum {
 			get { return patNum; }
 			set { patNum = value; MarkDirty(); patNumChanged = true; }
 		}
@@ -114,9 +114,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Only allowed 0,90,180, and 270.</summary>
 		[DataField("DegreesRotated")]
-		private int degreesRotated;
+		private long degreesRotated;
 		/// <summary>Only allowed 0,90,180, and 270.</summary>
-		public int DegreesRotated {
+		public long DegreesRotated {
 			get { return degreesRotated; }
 			set { degreesRotated = value; MarkDirty(); degreesRotatedChanged = true; }
 		}
@@ -181,9 +181,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropX")]
-		private int cropX;
+		private long cropX;
 		/// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
-		public int CropX {
+		public long CropX {
 			get { return cropX; }
 			set { cropX = value; MarkDirty(); cropXChanged = true; }
 		}
@@ -195,9 +195,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropY")]
-		private int cropY;
+		private long cropY;
 		/// <summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
-		public int CropY {
+		public long CropY {
 			get { return cropY; }
 			set { cropY = value; MarkDirty(); cropYChanged = true; }
 		}
@@ -209,9 +209,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
 		[DataField("CropW")]
-		private int cropW;
+		private long cropW;
 		/// <summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
-		public int CropW {
+		public long CropW {
 			get { return cropW; }
 			set { cropW = value; MarkDirty(); cropWChanged = true; }
 		}
@@ -223,9 +223,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
 		[DataField("CropH")]
-		private int cropH;
+		private long cropH;
 		/// <summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
-		public int CropH {
+		public long CropH {
 			get { return cropH; }
 			set { cropH = value; MarkDirty(); cropHChanged = true; }
 		}
@@ -237,9 +237,9 @@ namespace OpenDentBusiness{
 
 		///<summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
 		[DataField("WindowingMin")]
-		private int windowingMin;
+		private long windowingMin;
 		/// <summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
-		public int WindowingMin {
+		public long WindowingMin {
 			get { return windowingMin; }
 			set { windowingMin = value; MarkDirty(); windowingMinChanged = true; }
 		}
@@ -251,9 +251,9 @@ namespace OpenDentBusiness{
 
 		///<summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
 		[DataField("WindowingMax")]
-		private int windowingMax;
+		private long windowingMax;
 		/// <summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
-		public int WindowingMax {
+		public long WindowingMax {
 			get { return windowingMax; }
 			set { windowingMax = value; MarkDirty(); windowingMaxChanged = true; }
 		}
@@ -265,9 +265,9 @@ namespace OpenDentBusiness{
 
 		///<summary>FK to mountitem.MountItemNum. If set to 0, then no mount item is associated with this document.</summary>
 		[DataField("MountItemNum")]
-		private int mountItemNum;
+		private long mountItemNum;
 		/// <summary>FK to mountitem.MountItemNum. If set to 0, then no mount item is associated with this document.</summary>
-		public int MountItemNum {
+		public long MountItemNum {
 			get { return mountItemNum; }
 			set { mountItemNum = value; MarkDirty(); mountItemNumChanged = true; }
 		}

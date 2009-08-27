@@ -10,10 +10,10 @@ namespace OpenDentBusiness{
 	public class MountDef : DataObjectBase {
 		///<summary>Primary key.</summary>
 		[DataField("MountDefNum", PrimaryKey=true, AutoNumber=true)]
-		private int mountDefNum;
+		private long mountDefNum;
 
 		/// <summary>Primary key.</summary>
-		public int MountDefNum {
+		public long MountDefNum {
 			get { return mountDefNum; }
 			set { mountDefNum = value; MarkDirty(); mountDefNumChanged = true; }
 		}
@@ -42,10 +42,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>The order that the mount defs will show in various lists.</summary>
 		[DataField("ItemOrder")]
-		private int itemOrder;
+		private long itemOrder;
 
 		/// <summary>The order that the mount defs will show in various lists.</summary>
-		public int ItemOrder {
+		public long ItemOrder {
 			get { return itemOrder; }
 			set { itemOrder = value; MarkDirty(); itemOrderChanged = true; }
 		}
@@ -74,10 +74,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>The width of the mount, in pixels.  For radiograph mounts, this could be very large.  It must be large enough for the radiographs to fit in the mount without scaling.  For photos, it should also be large so that the scaling won't be too noticeable.  Shrinking to view or print will always produce nicer results than enlarging to view or print.</summary>
 		[DataField("Width")]
-		private int width;
+		private long width;
 
 		/// <summary>The width of the mount, in pixels.  For radiograph mounts, this could be very large.  It must be large enough for the radiographs to fit in the mount without scaling.  For photos, it should also be large so that the scaling won't be too noticeable.  Shrinking to view or print will always produce nicer results than enlarging to view or print.</summary>
-		public int Width {
+		public long Width {
 			get { return width; }
 			set { width = value; MarkDirty(); widthChanged = true; }
 		}
@@ -90,10 +90,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>Height of the mount in pixels.</summary>
 		[DataField("Height")]
-		private int height;
+		private long height;
 
 		/// <summary>Height of the mount in pixels.</summary>
-		public int Height {
+		public long Height {
 			get { return height; }
 			set { height = value; MarkDirty(); heightChanged = true; }
 		}

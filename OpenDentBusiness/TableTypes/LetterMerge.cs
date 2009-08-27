@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary>Describes the templates for letter merges to Word.</summary>
 	public class LetterMerge{
 		///<summary>Primary key.</summary>
-		public int LetterMergeNum;
+		public long LetterMergeNum;
 		///<summary>Description of this letter.</summary>
 		public string Description;
 		///<summary>The filename of the Word template. eg MyTemplate.doc.</summary>
@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		///<summary>The name of the data file. eg MyTemplate.txt.</summary>
 		public string DataFileName;
 		///<summary>FK to definition.DefNum.</summary>
-		public int Category;
+		public long Category;
 		///<summary>Not a database column.  Filled using fk from the lettermergefields table.  The arrayList is a collection of strings representing field names.</summary>
 		public List<string> Fields;
 

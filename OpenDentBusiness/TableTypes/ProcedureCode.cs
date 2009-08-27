@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class ProcedureCode{
 		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
 		//[XmlIgnore]
-		public int CodeNum;
+		public long CodeNum;
 		///<summary>Was Primary key, but now CodeNum is primary key.  Can hold dental codes, medical codes, custom codes, etc.</summary>
 		public string ProcCode;
 		///<summary>The main description.</summary>
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		public string ProcTime;
 		///<summary>FK to definition.DefNum.  The category that this code will be found under in the search window.  Has nothing to do with insurance categories.</summary>
 		//[XmlIgnore]
-		public int ProcCat;
+		public long ProcCat;
 		///<summary>Enum:TreatmentArea</summary>
 		public TreatmentArea TreatArea;
 		///<summary>If true, do not usually bill this procedure to insurance.</summary>
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public bool IsHygiene;
 		///<summary>No longer used.</summary>
 		//[XmlIgnore]
-		public int GTypeNum;
+		public long GTypeNum;
 		///<summary>For Medicaid.  There may be more later.</summary>
 		//[XmlIgnore]
 		public string AlternateCode1;
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		public bool PreExisting;
 		///<summary>Support for Base Units for a Code (like anesthesia).  Should normally be zero.</summary>
 		//[XmlIgnore]
-		public int BaseUnits;
+		public long BaseUnits;
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
 		//[XmlIgnore]
 		public string SubstitutionCode;
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 
 		public ProcedureCode(){
 			ProcTime="/X/";
-			//procCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][0].DefNum;
+			//procCode.ProcCat=DefC.Short[(long)DefCat.ProcCodeCats][0].DefNum;
 			GraphicColor=Color.FromArgb(0);
 		}
 

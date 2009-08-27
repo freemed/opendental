@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary>A dental laboratory. Will be attached to lab cases.</summary>
 	public class Laboratory{
 		///<summary>Primary key.</summary>
-		public int LaboratoryNum;
+		public long LaboratoryNum;
 		///<summary>Description of lab.</summary>
 		public string Description;
 		///<summary>Freeform text includes punctuation.</summary>

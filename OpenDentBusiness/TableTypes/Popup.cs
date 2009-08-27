@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("popup")]
 	public class Popup : DataObjectBase {
 		[DataField("PopupNum", PrimaryKey=true, AutoNumber=true)]
-		private int popupNum;
+		private long popupNum;
 		bool popupNumChanged;
 		/// <summary>Primary key.</summary>
-		public int PopupNum {
+		public long PopupNum {
 			get { return popupNum; }
 			set { popupNum = value; MarkDirty(); popupNumChanged = true; }
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		bool patNumChanged;
 		/// <summary>FK to patient.PatNum.</summary>
-		public int PatNum {
+		public long PatNum {
 			get { return patNum; }
 			set { patNum = value; MarkDirty(); patNumChanged = true; }
 		}

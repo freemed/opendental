@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 
 	public class AutoNote{
 		///<summary>Primary key</summary>
-		public int AutoNoteNum;
+		public long AutoNoteNum;
 		///<summary>Name of AutoNote</summary>
 		public string AutoNoteName;
 		///<summary>Was 'ControlsToInc' in previous versions.</summary>

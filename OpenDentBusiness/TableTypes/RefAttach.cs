@@ -5,13 +5,13 @@ namespace OpenDentBusiness{
 	///<summary>Attaches a referral to a patient.</summary>
 	public class RefAttach{  
 		///<summary>Primary key.</summary>
-		public int RefAttachNum;
+		public long RefAttachNum;
 		///<summary>FK to referral.ReferralNum.</summary>
-		public int ReferralNum;
+		public long ReferralNum;
 		///<summary>FK to patient.PatNum.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>Order to display in patient info. Will be automated more in future.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>Date of referral.</summary>
 		public DateTime RefDate;//
 		///<summary>true=from, false=to</summary>

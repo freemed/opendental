@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>Always attached to covcats, this describes the span of procedure codes to which the category applies.</summary>
 	public class CovSpan {
 		///<summary>Primary key.</summary>
-		public int CovSpanNum;
+		public long CovSpanNum;
 		///<summary>FK to covcat.CovCatNum.</summary>
-		public int CovCatNum;
+		public long CovCatNum;
 		///<summary>Lower range of the span.  Does not need to be a valid code.</summary>
 		public string FromCode;
 		///<summary>Upper range of the span.  Does not need to be a valid code.</summary>

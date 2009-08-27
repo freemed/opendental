@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary>Every InsPlan has a Carrier.  The carrier stores the name and address.</summary>
 	public class Carrier{
 		///<summary>Primary key.</summary>
-		public int CarrierNum;
+		public long CarrierNum;
 		///<summary>Name of the carrier.</summary>
 		public string CarrierName;
 		///<summary>.</summary>
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///<summary>The version of CDAnet supported.  Either 2, 3, or 4.</summary>
 		public string CDAnetVersion;
 		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.</summary>
-		public int CanadianNetworkNum;
+		public long CanadianNetworkNum;
 		///<summary></summary>
 		public bool IsHidden;
 

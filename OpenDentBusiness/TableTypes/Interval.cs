@@ -6,16 +6,16 @@ namespace OpenDentBusiness{
 	///<summary>Currently used in recall interval. Uses all four values together to establish an interval between two dates, letting the user have total control.  Will later be used for such things as lab cases, appointment scheduling, etc.  Includes a way to combine all four values into one number to be stored in the database (as an int32).  Each value has a max of 255, except years has a max of 127.</summary>
 	public struct Interval {
 		///<summary></summary>
-		public int Years;
+		public long Years;
 		///<summary></summary>
-		public int Months;
+		public long Months;
 		///<summary></summary>
-		public int Weeks;
+		public long Weeks;
 		///<summary></summary>
-		public int Days;
+		public long Days;
 
 		///<summary></summary>
-		public Interval(int combinedValue) {
+		public Interval(long combinedValue) {
 			BitVector32 bitVector=new BitVector32(combinedValue);
 			BitVector32.Section sectionDays=BitVector32.CreateSection(255);
 			BitVector32.Section sectionWeeks=BitVector32.CreateSection(255,sectionDays);
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public Interval(int days,int weeks,int months,int years) {
+		public Interval(long days,long weeks,long months,long years) {
 			Days=days;
 			Weeks=weeks;
 			Months=months;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public int ToInt() {
+		public long ToInt() {
 			BitVector32 bitVector=new BitVector32(0);
 			BitVector32.Section sectionDays=BitVector32.CreateSection(255);
 			BitVector32.Section sectionWeeks=BitVector32.CreateSection(255,sectionDays);

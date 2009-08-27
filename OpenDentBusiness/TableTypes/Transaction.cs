@@ -6,15 +6,15 @@ namespace OpenDentBusiness{
 	///<summary>Used in the accounting section of the program.  Each row is one transaction in the ledger, and must always have at least two splits.  All splits must always add up to zero.</summary>
 	public class Transaction{
 		///<summary>Primary key.</summary>
-		public int TransactionNum;
+		public long TransactionNum;
 		///<summary>Not user editable.  Server time.</summary>
 		public DateTime DateTimeEntry;
 		///<summary>FK to user.UserNum.</summary>
-		public int UserNum;
+		public long UserNum;
 		///<summary>FK to deposit.DepositNum.  Will eventually be replaced by a source document table, and deposits will just be one of many types.</summary>
-		public int DepositNum;
+		public long DepositNum;
 		///<summary>FK to payment.PayNum.  Like DepositNum, it will eventually be replaced by a source document table, and payments will just be one of many types.</summary>
-		public int PayNum;
+		public long PayNum;
 
 		///<summary></summary>
 		public Transaction Copy() {

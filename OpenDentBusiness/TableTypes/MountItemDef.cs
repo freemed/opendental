@@ -10,10 +10,10 @@ namespace OpenDentBusiness{
 	public class MountItemDef : DataObjectBase {
 		///<summary>Primary key.</summary>
 		[DataField("MountItemDefNum")]
-		private int mountItemDefNum;
+		private long mountItemDefNum;
 
 		/// <summary>Primary key.</summary>
-		public int MountItemDefNum {
+		public long MountItemDefNum {
 			get { return mountItemDefNum; }
 			set { mountItemDefNum = value; MarkDirty(); mountItemDefNumChanged = true; }
 		}
@@ -26,10 +26,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>FK to mountdef.MountDefNum.</summary>
 		[DataField("MountDefNum")]
-		private int mountDefNum;
+		private long mountDefNum;
 
 		/// <summary>FK to mountdef.MountDefNum.</summary>
-		public int MountDefNum {
+		public long MountDefNum {
 			get { return mountDefNum; }
 			set { mountDefNum = value; MarkDirty(); mountDefNumChanged = true; }
 		}
@@ -42,10 +42,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>The x position, in pixels, of the item on the mount.</summary>
 		[DataField("Xpos")]
-		private int xpos;
+		private long xpos;
 
 		/// <summary>The x position, in pixels, of the item on the mount.</summary>
-		public int Xpos {
+		public long Xpos {
 			get { return xpos; }
 			set { xpos = value; MarkDirty(); xposChanged = true; }
 		}
@@ -58,10 +58,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>The y position, in pixels, of the item on the mount.</summary>
 		[DataField("Ypos")]
-		private int ypos;
+		private long ypos;
 
 		/// <summary>The y position, in pixels, of the item on the mount.</summary>
-		public int Ypos {
+		public long Ypos {
 			get { return ypos; }
 			set { ypos = value; MarkDirty(); yposChanged = true; }
 		}
@@ -74,10 +74,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>Ignored if mount IsRadiograph.  For other mounts, the image will be scaled to fit within this space.  Any cropping, rotating, etc, will all be defined in the original image itself.</summary>
 		[DataField("Width")]
-		private int width;
+		private long width;
 
 		/// <summary>Ignored if mount IsRadiograph.  For other mounts, the image will be scaled to fit within this space.  Any cropping, rotating, etc, will all be defined in the original image itself.</summary>
-		public int Width {
+		public long Width {
 			get { return width; }
 			set { width = value; MarkDirty(); widthChanged = true; }
 		}
@@ -90,10 +90,10 @@ namespace OpenDentBusiness{
 		}
 		///<summary>Ignored if mount IsRadiograph.  For other mounts, the image will be scaled to fit within this space.  Any cropping, rotating, etc, will all be defined in the original image itself.</summary>
 		[DataField("Height")]
-		private int height;
+		private long height;
 
 		/// <summary>Ignored if mount IsRadiograph.  For other mounts, the image will be scaled to fit within this space.  Any cropping, rotating, etc, will all be defined in the original image itself.</summary>
-		public int Height {
+		public long Height {
 			get { return height; }
 			set { height = value; MarkDirty(); heightChanged = true; }
 		}

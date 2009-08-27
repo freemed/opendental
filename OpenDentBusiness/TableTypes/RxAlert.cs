@@ -6,11 +6,11 @@ namespace OpenDentBusiness {
 	/// <summary>Many-to-many relationship connecting Rx with DiseaseDef.</summary>
 	public class RxAlert{
 		///<summary>Primary key.</summary>
-		public int RxAlertNum;
+		public long RxAlertNum;
 		///<summary>FK to rxdef.RxDefNum.</summary>
-		public int RxDefNum;
+		public long RxDefNum;
 		///<summary>FK to diseasedef.DiseaseDefNum</summary>
-		public int DiseaseDefNum;
+		public long DiseaseDefNum;
 
 		///<summary></summary>
 		public RxAlert Copy() {

@@ -10,25 +10,25 @@ namespace OpenDentBusiness {
 
 		///<summary>Primary key.</summary>
 		[DataField("MountNum", PrimaryKey=true, AutoNumber=true)]
-		private int mountNum;
+		private long mountNum;
 		///<summary>Primary key.</summary>
-		public int MountNum{get{return mountNum;}set{mountNum=value;MarkDirty();mountNumChanged=true;}}
+		public long MountNum{get{return mountNum;}set{mountNum=value;MarkDirty();mountNumChanged=true;}}
 		bool mountNumChanged;
 		public bool MountNumChanged{get{return mountNumChanged;}}
 
 		///<summary>FK to patient.PatNum</summary>
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		///<summary>FK to patient.PatNum</summary>
-		public int PatNum{get{return patNum;}set{patNum=value;MarkDirty();patNumChanged=true;}}
+		public long PatNum{get{return patNum;}set{patNum=value;MarkDirty();patNumChanged=true;}}
 		bool patNumChanged;
 		public bool PatNumChanged{get{return patNumChanged;}}
 
 		///<summary>FK to definition.DefNum. Categories for documents.</summary>
 		[DataField("DocCategory")]
-		private int docCategory;
+		private long docCategory;
 		///<summary>FK to definition.DefNum. Categories for documents.</summary>
-		public int DocCategory{get{return docCategory;}set{docCategory=value;MarkDirty();docCategoryChanged=true;}}
+		public long DocCategory{get{return docCategory;}set{docCategory=value;MarkDirty();docCategoryChanged=true;}}
 		bool docCategoryChanged;
 		public bool DocCategoryChanged{get{return docCategoryChanged;}}
 
@@ -86,9 +86,9 @@ namespace OpenDentBusiness {
 
 		///<summary>The static width of the mount, in pixels.</summary>
 		[DataField("Width")]
-		private int width;
+		private long width;
 		/// <summary>The static width of the mount, in pixels.</summary>
-		public int Width {
+		public long Width {
 			get { return width; }
 			set { width = value; MarkDirty(); widthChanged = true; }
 		}
@@ -99,9 +99,9 @@ namespace OpenDentBusiness {
 
 		///<summary>The static height of the mount, in pixels.</summary>
 		[DataField("Height")]
-		private int height;
+		private long height;
 		/// <summary>The static height of the mount, in pixels.</summary>
-		public int Height {
+		public long Height {
 			get { return height; }
 			set { height = value; MarkDirty(); heightChanged = true; }
 		}

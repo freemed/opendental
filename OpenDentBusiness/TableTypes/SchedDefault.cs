@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>Default weekly schedule for either practice, provider, or blockout.</summary>
 	public class SchedDefault{
 		///<summary>Primary key.</summary>
-		public int SchedDefaultNum;
+		public long SchedDefaultNum;
 		///<summary>Sun=0, Mon=1, etc.</summary>
-		public int DayOfWeek;
+		public long DayOfWeek;
 		///<summary>Start time for this timeblock.</summary>
 		public DateTime StartTime;
 		///<summary>Stop time for this timeblock.</summary>
@@ -16,11 +16,11 @@ namespace OpenDentBusiness{
 		///<summary>Enum:ScheduleType  Practice, Provider, or Blockout</summary>
 		public ScheduleType SchedType;
 		///<summary>FK to provider.ProvNum if provider type.</summary>
-		public int ProvNum;
+		public long ProvNum;
 		///<summary>FK to definition.DefNum if blockout type.</summary>
-		public int BlockoutType;
+		public long BlockoutType;
 		///<summary>FK to operatory.OperatoryNum.  Only used right now for Blockouts.  Will later add practice type.  If 0, then it applies to all ops.</summary>
-		public int Op;
+		public long Op;
 
 		
 

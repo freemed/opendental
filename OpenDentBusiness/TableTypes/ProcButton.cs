@@ -7,13 +7,13 @@ namespace OpenDentBusiness{
 	///<summary>The 'buttons' to show in the Chart module.  They must have items attached in order to do anything.</summary>
 	public class ProcButton{
 		///<summary>Primary key</summary>
-		public int ProcButtonNum;
+		public long ProcButtonNum;
 		///<summary>The text to show on the button.</summary>
 		public string Description;
 		///<summary>Order that they will show in the Chart module.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>FK to definition.DefNum.</summary>
-		public int Category;
+		public long Category;
 		///<summary>If no image, then the blob will be an empty string.  In this case, the bitmap will be null when loaded from the database.</summary>
 		public Bitmap ButtonImage;
 

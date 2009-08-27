@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Provider prov){
+		public static long Insert(Provider prov){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				prov.ProvNum=Meth.GetInt(MethodBase.GetCurrentMethod(),prov);
 				return prov.ProvNum;
@@ -158,7 +158,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
-		public static DataTable Refresh(int schoolClass,bool isAlph){
+		public static DataTable Refresh(long schoolClass,bool isAlph){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolClass,isAlph);
 			}
@@ -187,7 +187,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string GetAbbr(int provNum){
+		public static string GetAbbr(long provNum){
 			//No need to check RemotingRole; no call to db.
 			if(ProviderC.ListLong==null){
 				RefreshCache();
@@ -201,7 +201,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in the HouseCalls bridge</summary>
-		public static string GetLName(int provNum){
+		public static string GetLName(long provNum){
 			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
@@ -213,7 +213,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>First Last, Suffix</summary>
-		public static string GetFormalName(int provNum){
+		public static string GetFormalName(long provNum){
 			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Abbr - LName, FName (hidden).</summary>
-		public static string GetLongDesc(int provNum) {
+		public static string GetLongDesc(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProviderC.ListLong.Length;i++) {
 				if(ProviderC.ListLong[i].ProvNum==provNum) {
@@ -240,7 +240,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Color GetColor(int provNum){
+		public static Color GetColor(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.White;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
@@ -252,7 +252,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Color GetOutlineColor(int provNum){
+		public static Color GetOutlineColor(long provNum){
 			//No need to check RemotingRole; no call to db.
 			Color retCol=Color.Black;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
@@ -264,7 +264,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static bool GetIsSec(int provNum){
+		public static bool GetIsSec(long provNum){
 			//No need to check RemotingRole; no call to db.
 			bool retVal=false;
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
@@ -276,7 +276,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a provider from the List.  If provnum is not valid, then it returns null.</summary>
-		public static Provider GetProv(int provNum) {
+		public static Provider GetProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			if(provNum==0){
 				return null;
@@ -321,7 +321,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary></summary>
-		public static int GetIndexLong(int provNum){
+		public static int GetIndexLong(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProviderC.ListLong.Length;i++){
 				if(ProviderC.ListLong[i].ProvNum==provNum){
@@ -332,7 +332,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int GetIndex(int provNum){
+		public static int GetIndex(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			//Gets the index of the provider in short list (visible providers)
 			for(int i=0;i<ProviderC.List.Length;i++){
@@ -344,7 +344,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
-		public static int GetBillingProvNum(int treatProv,int clinicNum){//,bool useClinic,int clinicInsBillingProv){
+		public static int GetBillingProvNum(long treatProv,long clinicNum) {//,bool useClinic,int clinicInsBillingProv){
 			//No need to check RemotingRole; no call to db.
 			int clinicInsBillingProv=0;
 			bool useClinic=false;
@@ -447,7 +447,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetPrimaryProviders(int PatNum){
+		public static DataTable GetPrimaryProviders(long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}

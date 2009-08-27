@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class ClaimProcs{
 
 		///<summary></summary>
-		public static List<ClaimProc> Refresh(int patNum){
+		public static List<ClaimProc> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>When using family deduct or max, this gets all claimprocs for the given plan.  This info is needed to compute used and pending insurance.</summary>
-		public static List<ClaimProc> RefreshFam(int planNum) {
+		public static List<ClaimProc> RefreshFam(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),planNum);
 			}
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of ClaimProcs for one claim.</summary>
-		public static List<ClaimProc> RefreshForClaim(int claimNum) {
+		public static List<ClaimProc> RefreshForClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),claimNum);
 			}
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of ClaimProcs with status of estimate.</summary>
-		public static List<ClaimProc> RefreshForTP(int patNum) {
+		public static List<ClaimProc> RefreshForTP(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of ClaimProcs for one proc.</summary>
-		public static List<ClaimProc> RefreshForProc(int procNum) {
+		public static List<ClaimProc> RefreshForProc(long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimProc>>(MethodBase.GetCurrentMethod(),procNum);
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ClaimProc cp) {
+		public static long Insert(ClaimProc cp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cp.ClaimProcNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cp);
 				return cp.ClaimProcNum;
@@ -566,7 +566,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, not any paid or pending payments.  PaidOtherInsBaseEst</summary>
-		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,int codeNum,InsPlan plan,int patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge){
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete

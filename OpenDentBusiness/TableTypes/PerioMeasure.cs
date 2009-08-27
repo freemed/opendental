@@ -5,27 +5,27 @@ namespace OpenDentBusiness{
 	///<summary>One row can hold up to six measurements for one tooth, all of the same type.  Always attached to a perioexam.</summary>
 	public class PerioMeasure{
 		///<summary>Primary key.</summary>
-		public int PerioMeasureNum;
+		public long PerioMeasureNum;
 		///<summary>FK to perioexam.PerioExamNum.</summary>
-		public int PerioExamNum;
+		public long PerioExamNum;
 		///<summary>Enum:PerioSequenceType  eg probing, mobility, recession, etc.</summary>
 		public PerioSequenceType SequenceType;
 		///<summary>Valid values are 1-32. Every measurement must be associated with a tooth.</summary>
-		public int IntTooth;
+		public long IntTooth;
 		///<summary>This is used when the measurement does not apply to a surface(mobility and skiptooth).  Valid values for all surfaces are 0 through 19, or -1 to represent no measurement taken.</summary>
-		public int ToothValue;
+		public long ToothValue;
 		///<summary>.</summary>
-		public int MBvalue;
+		public long MBvalue;
 		///<summary>.</summary>
-		public int Bvalue;
+		public long Bvalue;
 		///<summary>.</summary>
-		public int DBvalue;
+		public long DBvalue;
 		///<summary>.</summary>
-		public int MLvalue;
+		public long MLvalue;
 		///<summary>.</summary>
-		public int Lvalue;
+		public long Lvalue;
 		///<summary>.</summary>
-		public int DLvalue;
+		public long DLvalue;
 
 		public PerioMeasure Copy(){
 			PerioMeasure p=new PerioMeasure();

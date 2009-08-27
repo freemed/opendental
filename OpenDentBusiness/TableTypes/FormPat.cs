@@ -7,9 +7,9 @@ namespace OpenDentBusiness{
 	///<summary>One form or questionnaire filled out by a patient.  Each patient can have multiple forms.</summary>
 	public class FormPat{
 		///<summary>Primary key.</summary>
-		public int FormPatNum;
+		public long FormPatNum;
 		///<summary>FK to patient.PatNum.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>The date and time that this questionnaire was filled out.</summary>
 		public DateTime FormDateTime;
 		///<summary>Not a database field.</summary>

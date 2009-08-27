@@ -5,11 +5,11 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class QuickPasteNote{
 		///<summary>Primary key.</summary>
-		public int QuickPasteNoteNum;
+		public long QuickPasteNoteNum;
 		///<summary>FK to quickpastecat.QuickPasteCatNum.  Keeps track of which category this note is in.</summary>
-		public int QuickPasteCatNum;
+		public long QuickPasteCatNum;
 		///<summary>The order of this note within it's category. 0-based.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>The actual note. Can be multiple lines and possibly very long.</summary>
 		public string Note;
 		///<summary>The abbreviation which will automatically substitute when preceded by a ?.</summary>

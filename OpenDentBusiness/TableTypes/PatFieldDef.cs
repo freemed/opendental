@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	/// <summary>These are the definitions for the custom patient fields added and managed by the user.</summary>
 	public class PatFieldDef{
 		///<summary>Primary key.</summary>
-		public int PatFieldDefNum;
+		public long PatFieldDefNum;
 		///<summary>The name of the field that the user will be allowed to fill in the patient info window.</summary>
 		public string FieldName;
 

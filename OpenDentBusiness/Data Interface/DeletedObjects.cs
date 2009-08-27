@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static void SetDeleted(DeletedObjectType objType,int objectNum){
+		public static void SetDeleted(DeletedObjectType objType,long objectNum){
 			DeletedObject delObj=new DeletedObject();
 			delObj.IsNew=true;
 			delObj.ObjectNum=objectNum;

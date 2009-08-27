@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 	///<summary>An actual signal that gets sent out as part of the messaging functionality.</summary>
 	public class Signal:IComparable{
 		///<summary>Primary key.</summary>
-		public int SignalNum;
+		public long SignalNum;
 		///<summary>Text version of 'user' this message was sent from, which can actually be any description of a group or individual.</summary>
 		public string FromUser;
-		///<summary>Enum:InvalidType List of InvalidType int values separated by commas.  Can be empty.  When Date or Tasks are used, they are used all alone with no other flags present.</summary>
+		///<summary>Enum:InvalidType List of InvalidType long values separated by commas.  Can be empty.  When Date or Tasks are used, they are used all alone with no other flags present.</summary>
 		public string ITypes;
 		///<summary>If IType=Date, then this is the affected date in the Appointments module.</summary>
 		public DateTime DateViewing;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		///<summary>If this signal has been acknowledged, then this will contain the date and time.  This is how lights get turned off also.</summary>
 		public DateTime AckTime;
 		///<summary>If IType=Tasks, then this is the taskNum that was added.</summary>
-		public int TaskNum;
+		public long TaskNum;
 		///<summary>Not a database field.  The sounds and lights attached to the signal.</summary>
 		public SigElement[] ElementList;
 

@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("supply")]
 	public class Supply : DataObjectBase {
 		[DataField("SupplyNum", PrimaryKey=true, AutoNumber=true)]
-		private int supplyNum;
+		private long supplyNum;
 		bool supplyNumChanged;
 		/// <summary>Primary key.</summary>
-		public int SupplyNum {
+		public long SupplyNum {
 			get { return supplyNum; }
 			set { if(supplyNum!=value){supplyNum = value; MarkDirty(); supplyNumChanged = true; }}
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SupplierNum")]
-		private int supplierNum;
+		private long supplierNum;
 		bool supplierNumChanged;
 		/// <summary>FK to supplier.SupplierNum</summary>
-		public int SupplierNum {
+		public long SupplierNum {
 			get { return supplierNum; }
 			set { if(supplierNum!=value){supplierNum = value; MarkDirty(); supplierNumChanged = true;} }
 		}
@@ -56,10 +56,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Category")]
-		private int category;
+		private long category;
 		bool categoryChanged;
 		/// <summary>FK to definition.DefNum.  User can define their own categories for supplies.</summary>
-		public int Category {
+		public long Category {
 			get { return category; }
 			set { if(category!=value){category = value; MarkDirty(); categoryChanged = true;} }
 		}
@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private int itemOrder;
+		private long itemOrder;
 		bool itemOrderChanged;
 		///<summary>The zero-based order of this supply within it's category.</summary>
-		public int ItemOrder {
+		public long ItemOrder {
 			get { return itemOrder; }
 			set { if(itemOrder!=value){itemOrder = value; MarkDirty(); itemOrderChanged = true; }}
 		}

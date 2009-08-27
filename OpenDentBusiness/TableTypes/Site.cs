@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("site")]
 	public class Site : DataObjectBase {
 		[DataField("SiteNum", PrimaryKey=true, AutoNumber=true)]
-		private int siteNum;
+		private long siteNum;
 		bool siteNumChanged;
 		///<summary>Primary key.</summary>
-		public int SiteNum {
+		public long SiteNum {
 			get { return siteNum; }
 			set { if(siteNum!=value){siteNum = value; MarkDirty(); siteNumChanged = true; }}
 		}

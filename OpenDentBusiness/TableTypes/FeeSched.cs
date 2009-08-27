@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("feesched")]
 	public class FeeSched : DataObjectBase{
 		[DataField("FeeSchedNum",PrimaryKey=true,AutoNumber=true)]
-		private int feeSchedNum;
+		private long feeSchedNum;
 		private bool feeSchedNumChanged;
 		///<summary>Primary key.</summary>
-		public int FeeSchedNum{
+		public long FeeSchedNum{
 			get{return feeSchedNum;}
 			set{if(feeSchedNum!=value){feeSchedNum=value;MarkDirty();feeSchedNumChanged=true;}}
 		}
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private int itemOrder;
+		private long itemOrder;
 		private bool itemOrderChanged;
 		///<summary>Unlike with the old definition table, this ItemOrder is not as critical in the caching of data.  The item order is only for fee schedules of the same type.</summary>
-		public int ItemOrder{
+		public long ItemOrder{
 			get{return itemOrder;}
 			set{if(itemOrder!=value){itemOrder=value;MarkDirty();itemOrderChanged=true;}}
 		}

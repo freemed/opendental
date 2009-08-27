@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("sheetfield")]
 	public class SheetField : DataObjectBase{
 		[DataField("SheetFieldNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetFieldNum;
+		private long sheetFieldNum;
 		private bool sheetFieldNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetFieldNum{
+		public long SheetFieldNum{
 			get{return sheetFieldNum;}
 			set{if(sheetFieldNum!=value){sheetFieldNum=value;MarkDirty();sheetFieldNumChanged=true;}}
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SheetNum")]
-		private int sheetNum;
+		private long sheetNum;
 		private bool sheetNumChanged;
 		///<summary>FK to sheet.SheetNum.</summary>
-		public int SheetNum{
+		public long SheetNum{
 			get{return sheetNum;}
 			set{if(sheetNum!=value){sheetNum=value;MarkDirty();sheetNumChanged=true;}}
 		}
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldName")]
 		private string fieldName;
 		private bool fieldNameChanged;
-		///<summary>Mostly for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For a PatImage, this now contains the int FK to the document.  A join must be done to that table to find the filename.   When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
+		///<summary>Mostly for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For a PatImage, this now contains the long FK to the document.  A join must be done to that table to find the filename.   When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
 		public string FieldName{
 			get{return fieldName;}
 			set{if(fieldName!=value){fieldName=value;MarkDirty();fieldNameChanged=true;}}
@@ -104,10 +104,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("XPos")]
-		private int xPos;
+		private long xPos;
 		private bool xPosChanged;
 		///<summary>In pixels.</summary>
-		public int XPos{
+		public long XPos{
 			get{return xPos;}
 			set{if(xPos!=value){xPos=value;MarkDirty();xPosChanged=true;}}
 		}
@@ -116,10 +116,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("YPos")]
-		private int yPos;
+		private long yPos;
 		private bool yPosChanged;
 		///<summary>In pixels.</summary>
-		public int YPos{
+		public long YPos{
 			get{return yPos;}
 			set{if(yPos!=value){yPos=value;MarkDirty();yPosChanged=true;}}
 		}
@@ -128,10 +128,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private int width;
+		private long width;
 		private bool widthChanged;
 		///<summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
-		public int Width{
+		public long Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -140,10 +140,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private int height;
+		private long height;
 		private bool heightChanged;
 		///<summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
-		public int Height{
+		public long Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}

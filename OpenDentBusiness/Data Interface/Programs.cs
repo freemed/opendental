@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Program Cur){
+		public static long Insert(Program Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ProgramNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ProgramNum;
@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply a valid program Name.  Will return 0 if not found.</summary>
-		public static int GetProgramNum(string progName) {
+		public static long GetProgramNum(string progName) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
 				if(ProgramC.Listt[i].ProgName==progName) {

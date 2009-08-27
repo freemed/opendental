@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>When doing a lettermerge, a data file is created with certain fields.  This is a list of those fields for each lettermerge.</summary>
 	public class LetterMergeField{
 		///<summary>Primary key.</summary>
-		public int FieldNum;
+		public long FieldNum;
 		///<summary>FK to lettermerge.LetterMergeNum.</summary>
-		public int LetterMergeNum;
+		public long LetterMergeNum;
 		///<summary>One of the preset available field names.</summary>
 		public string FieldName;
 

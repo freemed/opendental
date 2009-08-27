@@ -9,10 +9,10 @@ namespace OpenDentBusiness{
 	[DataObject("sheetfielddef")]
 	public class SheetFieldDef : DataObjectBase{
 		[DataField("SheetFieldDefNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetFieldDefNum;
+		private long sheetFieldDefNum;
 		private bool sheetFieldDefNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetFieldDefNum{
+		public long SheetFieldDefNum{
 			get{return sheetFieldDefNum;}
 			set{if(sheetFieldDefNum!=value){sheetFieldDefNum=value;MarkDirty();sheetFieldDefNumChanged=true;}}
 		}
@@ -21,10 +21,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SheetDefNum")]
-		private int sheetDefNum;
+		private long sheetDefNum;
 		private bool sheetDefNumChanged;
 		///<summary>FK to sheetdef.SheetDefNum.</summary>
-		public int SheetDefNum{
+		public long SheetDefNum{
 			get{return sheetDefNum;}
 			set{if(sheetDefNum!=value){sheetDefNum=value;MarkDirty();sheetDefNumChanged=true;}}
 		}
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldName")]
 		private string fieldName;
 		private bool fieldNameChanged;
-		///<summary>Mostly for OutputText, InputField, and CheckBox types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For Pat Images, this is an int FK/DefNum to the default folder for the image.  The filename of a PatImage will later be stored in FieldValue.</summary>
+		///<summary>Mostly for OutputText, InputField, and CheckBox types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For Pat Images, this is an long FK/DefNum to the default folder for the image.  The filename of a PatImage will later be stored in FieldValue.</summary>
 		public string FieldName{
 			get{return fieldName;}
 			set{if(fieldName!=value){fieldName=value;MarkDirty();fieldNameChanged=true;}}
@@ -105,10 +105,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("XPos")]
-		private int xPos;
+		private long xPos;
 		private bool xPosChanged;
 		///<summary>In pixels.</summary>
-		public int XPos{
+		public long XPos{
 			get{return xPos;}
 			set{if(xPos!=value){xPos=value;MarkDirty();xPosChanged=true;}}
 		}
@@ -117,10 +117,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("YPos")]
-		private int yPos;
+		private long yPos;
 		private bool yPosChanged;
 		///<summary>In pixels.</summary>
-		public int YPos{
+		public long YPos{
 			get{return yPos;}
 			set{if(yPos!=value){yPos=value;MarkDirty();yPosChanged=true;}}
 		}
@@ -129,10 +129,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private int width;
+		private long width;
 		private bool widthChanged;
 		///<summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
-		public int Width{
+		public long Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -141,10 +141,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private int height;
+		private long height;
 		private bool heightChanged;
 		///<summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
-		public int Height{
+		public long Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}
@@ -170,7 +170,7 @@ namespace OpenDentBusiness{
 	
 		public SheetFieldDef(SheetFieldType fieldType,string fieldName,string fieldValue,
 			float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height,
+			long xPos,long yPos,long width,long height,
 			GrowthBehaviorEnum growthBehavior) 
 		{
 			FieldType=fieldType;
@@ -204,61 +204,61 @@ namespace OpenDentBusiness{
 		}
 
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height)
+			long xPos,long yPos,long width,long height)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
+			long xPos,long yPos,long width,long height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,growthBehavior);
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height)
+			long xPos,long yPos,long width,long height)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
+			long xPos,long yPos,long width,long height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,growthBehavior);
 		}
 
 		public static SheetFieldDef NewInput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			int xPos,int yPos,int width,int height)
+			long xPos,long yPos,long width,long height)
 		{
 			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewImage(string fileName,int xPos,int yPos,int width,int height){
+		public static SheetFieldDef NewImage(string fileName,long xPos,long yPos,long width,long height){
 			return new SheetFieldDef(SheetFieldType.Image,fileName,"",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewLine(int xPos,int yPos,int width,int height){
+		public static SheetFieldDef NewLine(long xPos,long yPos,long width,long height){
 			return new SheetFieldDef(SheetFieldType.Line,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewRect(int xPos,int yPos,int width,int height){
+		public static SheetFieldDef NewRect(long xPos,long yPos,long width,long height){
 			return new SheetFieldDef(SheetFieldType.Rectangle,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewCheckBox(string fieldName,int xPos,int yPos,int width,int height){
+		public static SheetFieldDef NewCheckBox(string fieldName,long xPos,long yPos,long width,long height){
 			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewSigBox(int xPos,int yPos,int width,int height){
+		public static SheetFieldDef NewSigBox(long xPos,long yPos,long width,long height){
 			return new SheetFieldDef(SheetFieldType.SigBox,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}

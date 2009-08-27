@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>The new way of getting a procCode. Uses the primary key instead of string code.</summary>
-		public static ProcedureCode GetProcCode(int codeNum) {
+		public static ProcedureCode GetProcCode(long codeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(codeNum==0) {
 				//MessageBox.Show(Lans.g("ProcCodes","Error. Invalid procedure code."));

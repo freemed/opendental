@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>A clinic is usually a separate physical office location.  If multiple clinics are sharing one database, then this is used.  Patients, Operatories, Claims, and many other types of objects can be assigned to a clinic.</summary>
 	public class Clinic{
 		///<summary>Primary key.  Used in patient,payment,claimpayment,appointment,procedurelog</summary>
-		public int ClinicNum;
+		public long ClinicNum;
 		///<summary>.</summary>
 		public string Description;
 		///<summary>.</summary>
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:PlaceOfService Usually 0 unless a mobile clinic for instance.</summary>
 		public PlaceOfService DefaultPlaceService;
 		///<summary>FK to provider.ProvNum.  0=Default practice provider, -1=Treating provider.</summary>
-		public int InsBillingProv;
+		public long InsBillingProv;
 
 		///<summary>Returns a copy of this Clinic.</summary>
 		public Clinic Copy(){

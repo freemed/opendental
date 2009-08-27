@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(MountItemDef def) {
+		public static long Insert(MountItemDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.MountItemDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.MountItemDefNum;

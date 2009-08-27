@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 	///<summary>A group of users.  Security permissions are determined by the usergroup of a user.</summary>
 	public class UserGroup{
 		///<summary>Primary key.</summary>
-		public int UserGroupNum;
+		public long UserGroupNum;
 		///<summary>.</summary>
 		public string Description;
 

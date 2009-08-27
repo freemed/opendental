@@ -7,9 +7,9 @@ namespace OpenDentBusiness {
 	///<summary>There is either one or zero per claim.</summary>
 	public class ClaimCondCodeLog {
 		///<summary>Primary key.</summary>
-		public int ClaimCondCodeNum;
+		public long ClaimCondCodeNum;
 		///<summary>FK to claim.ClaimNum.</summary>
-		public int ClaimNum;
+		public long ClaimNum;
 		public string Code0;
 		public string Code1;
 		public string Code2;

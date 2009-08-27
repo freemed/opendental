@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		///<summary>Stores the string of the command that will be sent to the database.</summary>
 		public MySqlCommand cmd;
 		///<summary>After inserting a row, this variable will contain the primary key for the newly inserted row.  This can frequently save an additional query to the database.</summary>
-		public int InsertID;
+		public long InsertID;
 		private static string Database;
 		private static string ServerName;
 		private static string MysqlUser;
@@ -230,8 +230,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
-		public int NonQ(string commands,bool getInsertID){
-			int rowsChanged=0;
+		public long NonQ(string commands,bool getInsertID){
+			long rowsChanged=0;
 			cmd.CommandText=commands;
 			con.Open();
 			rowsChanged=cmd.ExecuteNonQuery();

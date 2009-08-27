@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("deletedobject")]
 	public class DeletedObject : DataObjectBase{
 		[DataField("DeletedObjectNum",PrimaryKey=true,AutoNumber=true)]
-		private int deletedObjectNum;
+		private long deletedObjectNum;
 		private bool deletedObjectNumChanged;
 		///<summary>Primary key.</summary>
-		public int DeletedObjectNum{
+		public long DeletedObjectNum{
 			get{return deletedObjectNum;}
 			set{if(deletedObjectNum!=value){deletedObjectNum=value;MarkDirty();deletedObjectNumChanged=true;}}
 		}
@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ObjectNum")]
-		private int objectNum;
+		private long objectNum;
 		private bool objectNumChanged;
 		///<summary>Foreign key to a number of different tables, depending on which type it is.</summary>
-		public int ObjectNum{
+		public long ObjectNum{
 			get{return objectNum;}
 			set{if(objectNum!=value){objectNum=value;MarkDirty();objectNumChanged=true;}}
 		}

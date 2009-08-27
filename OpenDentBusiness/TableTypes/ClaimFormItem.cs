@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	public class ClaimFormItem{
 		///<summary>Primary key.</summary>
 		[XmlIgnore]
-		public int ClaimFormItemNum;
+		public long ClaimFormItemNum;
 		///<summary>FK to claimform.ClaimFormNum</summary>
 		[XmlIgnore]
-		public int ClaimFormNum;
+		public long ClaimFormNum;
 		///<summary>If this item is an image.  Usually only one per claimform.  eg ADA2002.emf.  Otherwise it MUST be left blank, or it will trigger an error that the image cannot be found.</summary>
 		public string ImageFileName;
 		///<summary>Must be one of the hardcoded available fieldnames for claims.</summary>

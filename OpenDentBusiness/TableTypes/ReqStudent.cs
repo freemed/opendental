@@ -6,21 +6,21 @@ namespace OpenDentBusiness{
 		///<summary>For Dental Schools.  The purpose of this table changed significantly in version 4.5.  This now only stores completed requirements.  There can be multiple completed requirements of each ReqNeededNum.  No need to synchronize any longer.</summary>
 	public class ReqStudent{
 		///<summary>Primary key.</summary>
-		public int ReqStudentNum;
+		public long ReqStudentNum;
 		///<summary>FK to reqneeded.ReqNeededNum.</summary>
-		public int ReqNeededNum;
+		public long ReqNeededNum;
 		///<summary>.</summary>
 		public string Descript;
 		///<summary>FK to schoolcourse.SchoolCourseNum.  Never 0.</summary>
-		public int SchoolCourseNum;
+		public long SchoolCourseNum;
 		///<summary>FK to provider.ProvNum.  The student.  Never 0.</summary>
-		public int ProvNum;
+		public long ProvNum;
 		///<summary>FK to appointment.AptNum.</summary>
-		public int AptNum;
+		public long AptNum;
 		///<summary>FK to patient.PatNum</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>FK to provider.ProvNum</summary>
-		public int InstructorNum;
+		public long InstructorNum;
 		///<summary>The date that the requirement was completed.</summary>
 		public DateTime DateCompleted;
 

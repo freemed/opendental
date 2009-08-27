@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("supplyorderitem")]
 	public class SupplyOrderItem : DataObjectBase {
 		[DataField("SupplyOrderItemNum", PrimaryKey=true, AutoNumber=true)]
-		private int supplyOrderItemNum;
+		private long supplyOrderItemNum;
 		bool supplyOrderItemNumChanged;
 		/// <summary>Primary key.</summary>
-		public int SupplyOrderItemNum {
+		public long SupplyOrderItemNum {
 			get { return supplyOrderItemNum; }
 			set { supplyOrderItemNum = value; MarkDirty(); supplyOrderItemNumChanged = true; }
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SupplyOrderNum")]
-		private int supplyOrderNum;
+		private long supplyOrderNum;
 		bool supplyOrderNumChanged;
 		/// <summary>FK to supplyorder.supplyOrderNum.</summary>
-		public int SupplyOrderNum {
+		public long SupplyOrderNum {
 			get { return supplyOrderNum; }
 			set { supplyOrderNum = value; MarkDirty(); supplyOrderNumChanged = true; }
 		}
@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SupplyNum")]
-		private int supplyNum;
+		private long supplyNum;
 		bool supplyNumChanged;
 		/// <summary>FK to supply.SupplyNum.</summary>
-		public int SupplyNum {
+		public long SupplyNum {
 			get { return supplyNum; }
 			set { supplyNum = value; MarkDirty(); supplyNumChanged = true; }
 		}
@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Qty")]
-		private int qty;
+		private long qty;
 		bool qtyChanged;
 		/// <summary>How many were ordered.</summary>
-		public int Qty {
+		public long Qty {
 			get { return qty; }
 			set { qty = value; MarkDirty(); qtyChanged = true; }
 		}

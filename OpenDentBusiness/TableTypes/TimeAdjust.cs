@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>Used on employee timecards to make adjustments.</summary>
 	public class TimeAdjust{
 		///<summary>Primary key.</summary>
-		public int TimeAdjustNum;
+		public long TimeAdjustNum;
 		///<summary>FK to employee.EmployeeNum</summary>
-		public int EmployeeNum;
+		public long EmployeeNum;
 		///<summary>The date and time that this entry will show on timecard.</summary>
 		public DateTime TimeEntry;
 		///<summary>The number of regular hours to adjust timecard by.  Can be + or -.</summary>

@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("hl7msg")]
 	public class HL7Msg : DataObjectBase{
 		[DataField("HL7MsgNum",PrimaryKey=true,AutoNumber=true)]
-		private int hL7MsgNum;
+		private long hL7MsgNum;
 		private bool hL7MsgNumChanged;
 		///<summary>Primary key.</summary>
-		public int HL7MsgNum{
+		public long HL7MsgNum{
 			get{return hL7MsgNum;}
 			set{if(hL7MsgNum!=value){hL7MsgNum=value;MarkDirty();hL7MsgNumChanged=true;}}
 		}
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("AptNum")]
-		private int aptNum;
+		private long aptNum;
 		private bool aptNumChanged;
 		///<summary>FK to appointment.AptNum.  Many of the messages contain "Visit ID" which is equivalent to the our AptNum.</summary>
-		public int AptNum {
+		public long AptNum {
 			get { return aptNum; }
 			set { if(aptNum!=value) { aptNum=value; MarkDirty(); aptNumChanged=true; } }
 		}

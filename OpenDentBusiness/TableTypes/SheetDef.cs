@@ -12,10 +12,10 @@ namespace OpenDentBusiness{
 	[DataObject("sheetdef")]
 	public class SheetDef : DataObjectBase{
 		[DataField("SheetDefNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetDefNum;
+		private long sheetDefNum;
 		private bool sheetDefNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetDefNum{
+		public long SheetDefNum{
 			get{return sheetDefNum;}
 			set{if(sheetDefNum!=value){sheetDefNum=value;MarkDirty();sheetDefNumChanged=true;}}
 		}
@@ -72,10 +72,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private int width;
+		private long width;
 		private bool widthChanged;
 		///<summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Width{
+		public long Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -84,10 +84,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private int height;
+		private long height;
 		private bool heightChanged;
 		///<summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
-		public int Height{
+		public long Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 			get{return isLandscapeChanged;}
 		}
 
-		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
+		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		public List<SheetFieldDef> SheetFieldDefs;		

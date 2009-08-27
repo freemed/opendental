@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	public class InsFilingCode : DataObjectBase{
 
 		[DataField("InsFilingCodeNum",PrimaryKey=true,AutoNumber=true)]
-		private int insFilingCodeNum;
+		private long insFilingCodeNum;
 		private bool insFilingCodeNumChanged;
 		///<summary>Primary key.</summary>
-		public int InsFilingCodeNum{
+		public long InsFilingCodeNum{
 			get { return insFilingCodeNum;}
 			set { if(insFilingCodeNum!=value) { insFilingCodeNum=value; MarkDirty(); insFilingCodeNumChanged=true; } }
 		}
@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private int itemOrder;
+		private long itemOrder;
 		private bool itemOrderChanged;
 		///<summary>Display order for this filing code within the UI.  0-indexed.</summary>
-		public int ItemOrder {
+		public long ItemOrder {
 			get { return itemOrder; }
 			set { if(itemOrder!=value) { itemOrder=value; MarkDirty(); itemOrderChanged=true; } }
 		}

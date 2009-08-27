@@ -6,17 +6,17 @@ namespace OpenDentBusiness{
 	///<summary>These are copies of procedures that are attached to treatment plans.</summary>
 	public class ProcTP{
 		///<summary>Primary key.</summary>
-		public int ProcTPNum;
+		public long ProcTPNum;
 		///<summary>FK to treatplan.TreatPlanNum.  The treatment plan to which this proc is attached.</summary>
-		public int TreatPlanNum;
+		public long TreatPlanNum;
 		///<summary>FK to patient.PatNum.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>FK to procedurelog.ProcNum.  It is very common for the referenced procedure to be missing.  This procNum is only here to compare and test the existence of the referenced procedure.  If present, it will check to see whether the procedure is still status TP.</summary>
-		public int ProcNumOrig;
+		public long ProcNumOrig;
 		///<summary>The order of this proc within its tp.  This is set when the tp is first created and can't be changed.  Drastically simplifies loading the tp.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>FK to definition.DefNum which contains the text of the priority.</summary>
-		public int Priority;
+		public long Priority;
 		///<summary>A simple string displaying the tooth number.  If international tooth numbers are used, then this will be in international format already.</summary>
 		public string ToothNumTP;
 		///<summary>Tooth surfaces or area.</summary>

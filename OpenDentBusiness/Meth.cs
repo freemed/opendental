@@ -65,15 +65,15 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int GetInt(MethodBase methodBase,params object[] parameters) {
+		public static long GetInt(MethodBase methodBase,params object[] parameters) {
 			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
 				throw new ApplicationException("Meth.GetInt may only be used when RemotingRole is ClientWeb.");
 			}
 			#if DEBUG
 				//Verify that it returns an int
 				MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
-				if(methodInfo.ReturnType != typeof(int)) {
-					throw new ApplicationException("Meth.GetInt calling class must return int.");
+				if(methodInfo.ReturnType != typeof(long)) {
+					throw new ApplicationException("Meth.GetInt calling class must return long.");
 				}
 			#endif
 			DtoGetInt dto=new DtoGetInt();

@@ -6,27 +6,27 @@ namespace OpenDentBusiness{
 	///<summary>Always attached to a payment.  Always affects exactly one patient account and one provider.</summary>
 	public class PaySplit{
 		///<summary>Primary key.</summary>
-		public int SplitNum;
+		public long SplitNum;
 		///<summary>Amount of split.</summary>
 		public double SplitAmt;
 		///<summary>FK to patient.PatNum.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>Procedure date.  This is the date that shows on the account.  Frequently the same as the date of the payment, but not necessarily.  Not when the payment was made.  This is what the aging will be based on in a future version.</summary>
 		public DateTime ProcDate;
 		///<summary>FK to payment.PayNum.  Every paysplit must be linked to a payment.</summary>
-		public int PayNum;
+		public long PayNum;
 		///<summary>No longer used.</summary>
 		public bool IsDiscount;
 		///<summary>No longer used</summary>
-		public int DiscountType;
+		public long DiscountType;
 		///<summary>FK to provider.ProvNum.</summary>
-		public int ProvNum;
+		public long ProvNum;
 		///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>
-		public int PayPlanNum;
+		public long PayPlanNum;
 		///<summary>Date always in perfect synch with Payment date.</summary>
 		public DateTime DatePay;
 		///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
-		public int ProcNum;
+		public long ProcNum;
 		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
 		public DateTime DateEntry;
 

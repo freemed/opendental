@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("InsFilingCodeSubtype")]
 	public class InsFilingCodeSubtype : DataObjectBase{
 		[DataField("InsFilingCodeSubtypeNum",PrimaryKey=true,AutoNumber=true)]
-		private int insFilingCodeSubtypeNum;
+		private long insFilingCodeSubtypeNum;
 		private bool insFilingCodeSubtypeNumChanged;
 		///<summary>Primary key.</summary>
-		public int InsFilingCodeSubtypeNum{
+		public long InsFilingCodeSubtypeNum{
 			get{return insFilingCodeSubtypeNum;}
 			set{if(insFilingCodeSubtypeNum!=value){insFilingCodeSubtypeNum=value;MarkDirty();insFilingCodeSubtypeNumChanged=true;}}
 		}
@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("InsFilingCodeNum")]
-		private int insFilingCodeNum;
+		private long insFilingCodeNum;
 		private bool insFilingCodeNumChanged;
 		///<summary>FK to insfilingcode.insfilingcodenum</summary>
-		public int InsFilingCodeNum{
+		public long InsFilingCodeNum{
 			get{return insFilingCodeNum;}
 			set{if(insFilingCodeNum!=value){insFilingCodeNum=value;MarkDirty();insFilingCodeNumChanged=true;}}
 		}

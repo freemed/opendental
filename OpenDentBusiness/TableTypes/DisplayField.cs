@@ -6,15 +6,15 @@ namespace OpenDentBusiness{
 	///<summary>Allows customization of which fields display in various lists and grids.  For now, the only grid is ProgressNotes.  Will also eventually let users set column widths and translate titles.  For now, the selections are the same for all computers.</summary>
 	public class DisplayField{
 		///<summary>Primary key.</summary>
-		public int DisplayFieldNum;
+		public long DisplayFieldNum;
 		///<summary>This is the internal name that OD uses to identify the field within this category.  This will be the default description if the user doesn't specify an alternate.</summary>
 		public string InternalName;
 		///<summary>Order to display in the grid or list. Every entry must have a unique itemorder.</summary>
-		public int ItemOrder;
+		public long ItemOrder;
 		///<summary>Optional alternate description to display for field.  Can be in another language.</summary>
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
-		public int ColumnWidth;
+		public long ColumnWidth;
 		///<summary>Enum:DisplayFieldCategory</summary>
 		public DisplayFieldCategory Category;
 
@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 
 		}
 
-		public DisplayField(string internalName,int columnWidth,DisplayFieldCategory category){
+		public DisplayField(string internalName,long columnWidth,DisplayFieldCategory category){
 			this.InternalName=internalName;
 			//this.Description=description;
 			this.ColumnWidth=columnWidth;

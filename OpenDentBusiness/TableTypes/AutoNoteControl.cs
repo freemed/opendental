@@ -6,7 +6,7 @@ namespace OpenDentBusiness {
 	///<summary>In the program, this is now called an autonote prompt.</summary>
 	public class AutoNoteControl {
 		///<summary>Primary key</summary>
-		public int AutoNoteControlNum;
+		public long AutoNoteControlNum;
 		///<summary>The description of the prompt as it will be referred to from other windows.</summary>
 		public string Descript;
 		///<summary>'Text', 'OneResponse', or 'MultiResponse'.  More types to be added later.</summary>

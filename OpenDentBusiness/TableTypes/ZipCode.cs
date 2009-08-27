@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 	///<summary>Zipcodes are also known as postal codes.  Zipcodes are always copied to patient records rather than linked.  So items in this list can be freely altered or deleted without harming patient data.</summary>
 	public class ZipCode{
 		///<summary>Primary key.</summary>
-		public int ZipCodeNum;
+		public long ZipCodeNum;
 		///<summary>The actual zipcode.</summary>
 		public string ZipCodeDigits;
 		///<summary>.</summary>

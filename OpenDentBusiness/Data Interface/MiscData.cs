@@ -23,35 +23,41 @@ namespace OpenDentBusiness {
 			return PIn.PDateT(table.Rows[0][0].ToString());
 		}
 
-		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  Currently, the range of returned values is greater than 0, and less than or equal to 16777215, the limit for mysql medium int.  This will eventually change to a max of 18446744073709551615.  Then, the return value would have to be a ulong and the mysql type would have to be bigint.</summary>
-		public static int GetKey(string tablename, string field) {
+		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  The range of returned values is greater than 0, and less than or equal to 9223372036854775807.</summary>
+		public static long GetKey(string tablename, string field) {
 			//No need to check RemotingRole; no call to db.
 			int numComputers=0;
 			int myComputerNum=0;//One-based unique computer number index. Used to decide which key-partition to use for this computer.
 			int myPartitionStart=0;
 			int myPartitionEnd=0;
+			long keymaxval=9223372036854775807;
 			//Calculate the primary key range for this computer if it has not already calculated.
-			if(numComputers==0 || myComputerNum==0){
+			if(numComputers==0 || myComputerNum==0){//the way it's written, this will always be true
 				try{
 					numComputers=GetNumComputers();
 					myComputerNum=GetComputerNumForName(Dns.GetHostName());					
-				}catch{
+				}
+				catch{
 					//This computer has not yet been added to the computer table. Generate any old random number as long as it is unique.
 					//This is the first introduction of the computer into the cluster.
 					numComputers=1;
 					myComputerNum=1;
 				}
-				int keymaxval=16777215;
 				int partitionSize=keymaxval/numComputers;//truncation here is good (to avoid partition overflow).
 				myPartitionStart=(myComputerNum-1)*partitionSize+1;
 				myPartitionEnd=myPartitionStart+partitionSize-1;
 			}
 			Random random=new Random();
-			int rnd;
+			long rndLong;
 			do{
-				rnd=random.Next(myPartitionStart,myPartitionEnd);
-			}while(rnd==0||KeyInUse(tablename,field,rnd));
-			return rnd;
+				rndLong=random.NextDouble()*keymaxval;
+				//rnd=random.Next(myPartitionStart,myPartitionEnd);
+			}
+			while(rndLong==0  
+				|| rndLong < myPartitionStart
+				|| rndLong > myPartitionEnd
+				|| KeyInUse(tablename,field,rnd));
+			return rndLong;
 		}
 
 		public static int GetNumComputers(){
@@ -68,8 +74,8 @@ namespace OpenDentBusiness {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerName);
 			}
 			string command="SELECT COUNT(*) FROM computer "+
-				"WHERE ComputerNum<=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
-				"like '"+computerName+"')";
+				"WHERE ComputerNum <=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
+				"LIKE '"+computerName+"')";
 			DataTable table=Db.GetTable(command);
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}

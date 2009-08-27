@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatPlans {
 		///<summary>Gets a list of all patplans for a given patient</summary>
-		public static List<PatPlan> Refresh(int patNum) {
+		public static List<PatPlan> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),patNum);
 			} 
@@ -139,7 +139,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return null if planNum not found in the list.</summary>
-		public static PatPlan GetFromList(List<PatPlan> patPlans,int planNum) {
+		public static PatPlan GetFromList(List<PatPlan> patPlans,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
 				if(patPlans[p].PlanNum==planNum) {
@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.</summary>
-		public static void SetOrdinal(int patPlanNum,int newOrdinal){
+		public static void SetOrdinal(long patPlanNum,int newOrdinal) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
 				return;
@@ -188,7 +188,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list to find the one patplan needed.</summary>
-		public static PatPlan GetFromList(PatPlan[] patPlans,int patPlanNum){
+		public static PatPlan GetFromList(PatPlan[] patPlans,long patPlanNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlans.Length;i++){
 				if(patPlans[i].PatPlanNum==patPlanNum){
@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.</summary>
-		public static int GetPatPlanNum(List <PatPlan> patPlanList,int planNum) {
+		public static int GetPatPlanNum(List<PatPlan> patPlanList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlanList.Count;i++) {
 				if(patPlanList[i].PlanNum==planNum) {
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one patPlanNum directly from database.  Only used once in FormClaimProc.</summary>
-		public static int GetPatPlanNum(int patNum,int planNum) {
+		public static int GetPatPlanNum(long patNum,long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum,planNum);
 			}
@@ -219,7 +219,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets directly from database.  Used by Trojan.</summary>
-		public static PatPlan[] GetByPlanNum(int planNum){
+		public static PatPlan[] GetByPlanNum(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
 			} 
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return null if none exists.</summary>
-		public static PatPlan GetPatPlan(int patNum,int ordinal) {
+		public static PatPlan GetPatPlan(long patNum,int ordinal) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patNum,ordinal);
 			} 
@@ -244,7 +244,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes the patplan with the specified patPlanNum.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Then, recomputes all estimates for this patient because their coverage is now different.  Also sets patient.HasIns to the correct value.</summary>
-		public static void Delete(int patPlanNum) {
+		public static void Delete(long patPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
 				return;
@@ -254,7 +254,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0) {
 				return;
 			}
-			int patNum=PIn.PInt(table.Rows[0][0].ToString());
+			long patNum=PIn.PInt(table.Rows[0][0].ToString());
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			bool doDecrement=false;
 			for(int i=0;i<patPlans.Count;i++) {

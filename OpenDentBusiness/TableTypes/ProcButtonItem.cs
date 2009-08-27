@@ -6,15 +6,15 @@ namespace OpenDentBusiness{
 	///<summary>Attached to procbuttons.  These tell the program what to do when a user clicks on a button.  There are two types: proccodes or autocodes.</summary>
 	public class ProcButtonItem{
 		///<summary>Primary key.</summary>
-		public int ProcButtonItemNum;
+		public long ProcButtonItemNum;
 		///<summary>FK to procbutton.ProcButtonNum.</summary>
-		public int ProcButtonNum;
+		public long ProcButtonNum;
 		///<summary>Do not use.</summary>
 		public string OldCode;
 		///<summary>FK to autocode.AutoCodeNum.  0 if this is a procedure code.</summary>
-		public int AutoCodeNum;
+		public long AutoCodeNum;
 		///<summary>FK to procedurecode.CodeNum.  0 if this is an autocode.</summary>
-		public int CodeNum;
+		public long CodeNum;
 
 		///<summary></summary>
 		public ProcButtonItem Copy() {

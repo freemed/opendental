@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	public class ClaimForm{
 		///<summary>Primary key.</summary>
 		//[XmlIgnore]
-		public int ClaimFormNum;
+		public long ClaimFormNum;
 		///<summary>eg. ADA2002 or CA Medicaid</summary>
 		public string Description;
 		///<summary>If true, then it will not be displayed in various claim form lists as a choice.</summary>
@@ -23,10 +23,10 @@ namespace OpenDentBusiness{
 		public bool PrintImages;
 		///<summary>Shifts all items by x/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
 		//[XmlIgnore]
-		public int OffsetX;
+		public long OffsetX;
 		///<summary>Shifts all items by y/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
 		//[XmlIgnore]
-		public int OffsetY;
+		public long OffsetY;
 		///<summary>This is not a database column.  It is an array of all claimformItems that are attached to this ClaimForm.</summary>
 		public ClaimFormItem[] Items;
 
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 			return cf;
 		}
 
-		public int ClaimFormKey {
+		public long ClaimFormKey {
 			get {
 				return ClaimFormNum;
 			}

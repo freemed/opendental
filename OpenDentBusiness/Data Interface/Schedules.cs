@@ -144,7 +144,7 @@ namespace OpenDentBusiness{
 				sched.Status         = (SchedStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
 				sched.EmployeeNum    = PIn.PInt   (table.Rows[i]["EmployeeNum"].ToString());
 				if(table.Columns.Contains("ops")){
-					sched.Ops=new List<int>();
+					sched.Ops=new List<long>();
 					opstr=PIn.PString(table.Rows[i]["ops"].ToString());
 					if(opstr!=""){
 						oparray=opstr.Split(',');
@@ -188,7 +188,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.  It's currently used a lot for copy/paste situations, where most of the validation is not needed.</summary>
-		public static int Insert(Schedule sched){
+		public static long Insert(Schedule sched){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sched.ScheduleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sched);
 				return sched.ScheduleNum;
@@ -312,7 +312,7 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
-		public static Schedule[] GetForType(List<Schedule> ListDay,ScheduleType schedType,int provNum){
+		public static Schedule[] GetForType(List<Schedule> ListDay,ScheduleType schedType,long provNum){
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<ListDay.Count;i++){
@@ -377,7 +377,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		public static int GetAssignedProvNumForSpot(List<Schedule> listForPeriod,Operatory op,bool isSecondary,DateTime aptDateTime){
+		public static long GetAssignedProvNumForSpot(List<Schedule> listForPeriod,Operatory op,bool isSecondary,DateTime aptDateTime) {
 			//No need to check RemotingRole; no call to db.
 			//first, look for a sched assigned specifically to that spot
 			for(int i=0;i<listForPeriod.Count;i++){

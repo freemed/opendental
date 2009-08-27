@@ -6,11 +6,11 @@ namespace OpenDentBusiness{
 	///<summary>This table is not part of the general release.  User would have to add it manually.</summary>
 	public class PhoneOverride{
 		///<summary></summary>
-		public int PhoneOverrideNum;
+		public long PhoneOverrideNum;
 		///<summary></summary>
-		public int Extension;
+		public long Extension;
 		///<summary>EmployeeNum</summary>
-		public int EmpCurrent;
+		public long EmpCurrent;
 		///<summary></summary>
 		public bool IsAvailable;
 		///<summary></summary>

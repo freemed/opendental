@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	/// <summary>Each row represents one charge that will be added monthly.</summary>
 	public class RepeatCharge{
 		/// <summary>Primary key</summary>
-		public int RepeatChargeNum;
+		public long RepeatChargeNum;
 		/// <summary>FK to patient.PatNum.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>FK to procedurecode.ProcCode.  The code that will be added to the account as a completed procedure.</summary>
 		public string ProcCode;
 		///<summary>The amount that will be charged.  The amount from the procedurecode will not be used.  This way, a repeating charge cannot be accidentally altered.</summary>

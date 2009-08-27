@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>All info about a referral is stored with that referral even if a patient.  That way, it's available for easy queries.</summary>
 	public class Referral{
 		///<summary>Primary key.</summary>
-		public int ReferralNum;
+		public long ReferralNum;
 		///<summary>Last name.</summary>
 		public string LName;
 		///<summary>First name.</summary>
@@ -44,11 +44,11 @@ namespace OpenDentBusiness{
 		///<summary>.</summary>
 		public string EMail;
 		///<summary>FK to patient.PatNum for referrals that are patients.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>NPI for the referral</summary>
 		public string NationalProvID;
 		///<summary>FK to sheetdef.SheetDefNum.  Referral slips can be set for individual referral sources.  If zero, then the default internal referral slip will be used instead of a custom referral slip.</summary>
-		public int Slip;
+		public long Slip;
 
 		///<summary>Returns a copy of this Referral.</summary>
 		public Referral Copy(){

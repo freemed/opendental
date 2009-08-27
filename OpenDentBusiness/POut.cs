@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 			else if (dataType == typeof(float)) {
 				return PFloat((float)value);
 			}
-			else if (dataType == typeof(int)) {
+			else if (dataType == typeof(long)) {
 				return PInt((int)value);
 			}
 			else if(dataType == typeof(short)) {
@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PInt (int myInt){
+		public static string PInt (long myInt){
 			return myInt.ToString();
 		}
 

@@ -7,9 +7,9 @@ namespace OpenDentBusiness
 	public class AnestheticData
 	{
 		///<summary>Primary key.</summary>
-		public int AnestheticDataNum;
+		public long AnestheticDataNum;
 		///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
-		public int AnestheticRecordNum;
+		public long AnestheticRecordNum;
 		public string AnesthOpen;
 		public string AnesthClose;
 		public string SurgOpen;
@@ -22,8 +22,8 @@ namespace OpenDentBusiness
 		public string VSMSerNum;
 		public string ASA;
 		public string ASA_EModifier;
-		public int O2LMin;
-		public int N2OLMin;
+		public long O2LMin;
+		public long N2OLMin;
 		public bool RteNasCan;
 		public bool RteNasHood;
 		public bool RteETT;
@@ -34,12 +34,12 @@ namespace OpenDentBusiness
 		public bool MedRouteNasal;
 		public bool MedRouteRectal;
 		public string IVSite;
-		public int IVGauge;
+		public long IVGauge;
 		public bool IVSideR;
 		public bool IVSideL;
-		public int IVAtt;
+		public long IVAtt;
 		public string IVF;
-		public int IVFVol;
+		public long IVFVol;
 		public bool MonBP;
 		public bool MonSpO2;
 		public bool MonEtCO2;
@@ -47,10 +47,10 @@ namespace OpenDentBusiness
 		public bool MonTemp;
 		public bool MonEKG;
 		public string Notes;
-		public int PatWgt;
+		public long PatWgt;
 		public bool WgtUnitsLbs;
 		public bool WgtUnitsKgs;
-		public int PatHgt;
+		public long PatHgt;
 		public bool HgtUnitsIn;
 		public bool HgtUnitsCm;
 		public string EscortName;

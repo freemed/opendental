@@ -8,7 +8,7 @@ using OpenDentBusiness;
 namespace OpenDentBusiness {
 	public class Mounts {
 
-		public static int Insert(Mount mount){
+		public static long Insert(Mount mount){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
 			}
@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 			return Db.NonQ(command,true);
 		}
 
-		public static int Update(Mount mount){
+		public static long Update(Mount mount){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
 			}

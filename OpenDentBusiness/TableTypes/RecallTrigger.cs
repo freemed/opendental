@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	[DataObject("recalltrigger")]
 	public class RecallTrigger : DataObjectBase{
 		[DataField("RecallTriggerNum",PrimaryKey=true,AutoNumber=true)]
-		private int recallTriggerNum;
+		private long recallTriggerNum;
 		private bool recallTriggerNumChanged;
 		///<summary>Primary key.</summary>
-		public int RecallTriggerNum{
+		public long RecallTriggerNum{
 			get{return recallTriggerNum;}
 			set{if(recallTriggerNum!=value){recallTriggerNum=value;MarkDirty();recallTriggerNumChanged=true;}}
 		}
@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("RecallTypeNum")]
-		private int recallTypeNum;
+		private long recallTypeNum;
 		private bool recallTypeNumChanged;
 		///<summary>FK to recalltype.RecallTypeNum</summary>
-		public int RecallTypeNum{
+		public long RecallTypeNum{
 			get{return recallTypeNum;}
 			set{if(recallTypeNum!=value){recallTypeNum=value;MarkDirty();recallTypeNumChanged=true;}}
 		}
@@ -31,10 +31,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("CodeNum")]
-		private int codeNum;
+		private long codeNum;
 		private bool codeNumChanged;
 		///<summary>FK to procedurecode.CodeNum</summary>
-		public int CodeNum{
+		public long CodeNum{
 			get{return codeNum;}
 			set{if(codeNum!=value){codeNum=value;MarkDirty();codeNumChanged=true;}}
 		}

@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("tasksubscription")]
 	public class TaskSubscription : DataObjectBase {
 		[DataField("TaskSubscriptionNum", PrimaryKey=true, AutoNumber=true)]
-		private int taskSubscriptionNum;
+		private long taskSubscriptionNum;
 		bool taskSubscriptionNumChanged;
 		/// <summary>Primary key.</summary>
-		public int TaskSubscriptionNum {
+		public long TaskSubscriptionNum {
 			get { return taskSubscriptionNum; }
 			set { if(taskSubscriptionNum!=value){taskSubscriptionNum = value; MarkDirty(); taskSubscriptionNumChanged = true; }}
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("UserNum")]
-		private int userNum;
+		private long userNum;
 		bool userNumChanged;
 		/// <summary>FK to userod.UserNum</summary>
-		public int UserNum {
+		public long UserNum {
 			get { return userNum; }
 			set { if(userNum!=value){userNum = value; MarkDirty(); userNumChanged = true;} }
 		}
@@ -32,10 +32,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("TaskListNum")]
-		private int taskListNum;
+		private long taskListNum;
 		bool taskListNumChanged;
 		/// <summary>FK to tasklist.TaskListNum</summary>
-		public int TaskListNum {
+		public long TaskListNum {
 			get { return taskListNum; }
 			set { if(taskListNum!=value) { taskListNum = value; MarkDirty(); taskListNumChanged = true; } }
 		}

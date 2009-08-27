@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 	///<summary>An outgoing email message is stored here.</summary>
 	public class EmailMessage {
 		///<summary>Primary key.</summary>
-		public int EmailMessageNum;
+		public long EmailMessageNum;
 		///<summary>FK to patient.PatNum</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>Single valid email address. Bcc field might be added later, although it won't be very useful.  We will never allow visible cc for privacy reasons.</summary>
 		public string ToAddress;
 		///<summary>Valid email address.</summary>
@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 		public EmailMessage Copy() {
 			EmailMessage e=(EmailMessage)this.MemberwiseClone();
 			e.Attachments=new List<EmailAttach>();
-			for(int i=0;i<Attachments.Count;i++) {
+			for(long i=0;i<Attachments.Count;i++) {
 				e.Attachments.Add(Attachments[i].Copy());
 			}
 			return e;

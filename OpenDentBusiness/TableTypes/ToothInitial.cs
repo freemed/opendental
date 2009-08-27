@@ -7,9 +7,9 @@ namespace OpenDentBusiness{
 	/// <summary>Used to track missing teeth, primary teeth, movements, and drawings.</summary>
 	public class ToothInitial{
 		///<summary>Primary key.</summary>
-		public int ToothInitialNum;
+		public long ToothInitialNum;
 		///<summary>FK to patient.PatNum</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>1-32 or A-Z. Supernumeraries not supported here yet.</summary>
 		public string ToothNum;
 		///<summary>Enum:ToothInitialType</summary>

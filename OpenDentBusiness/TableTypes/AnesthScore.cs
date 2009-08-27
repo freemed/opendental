@@ -6,20 +6,20 @@ namespace OpenDentBusiness
 	///<summary>A single Anesthesia Score.</summary>
 		public class AnesthScore{
 		///<summary>Primary key.</summary>
-        public int AnesthScoreNum;
+        public long AnesthScoreNum;
         ///<summary>FK to anestheticRecord.AnestheticRecordNum.</summary>
-		public int AnestheticRecordNum;
-		public int QActivity;
-		public int QResp;
-		public int QCirc;
-		public int QConc;
-		public int QColor;
-		public int AnesthesiaScore;
-		public int DischAmb;
-		public int DischWheelChr;
-		public int DischAmbulance;
-		public int DischCondStable;
-		public int DischCondUnstable;
+		public long AnestheticRecordNum;
+		public long QActivity;
+		public long QResp;
+		public long QCirc;
+		public long QConc;
+		public long QColor;
+		public long AnesthesiaScore;
+		public long DischAmb;
+		public long DischWheelChr;
+		public long DischAmbulance;
+		public long DischCondStable;
+		public long DischCondUnstable;
 
 		
 	}

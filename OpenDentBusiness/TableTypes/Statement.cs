@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 	[DataObject("statement")]
 	public class Statement : DataObjectBase {
 		[DataField("StatementNum", PrimaryKey=true, AutoNumber=true)]
-		private int statementNum;
+		private long statementNum;
 		bool statementNumChanged;
 		/// <summary>Primary key.</summary>
-		public int StatementNum {
+		public long StatementNum {
 			get { return statementNum; }
 			set { if(statementNum!=value){statementNum = value; MarkDirty(); statementNumChanged = true; }}
 		}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("PatNum")]
-		private int patNum;
+		private long patNum;
 		bool patNumChanged;
 		/// <summary>FK to patient.PatNum. Typically the guarantor.  Can also be the patient for walkout statements.</summary>
-		public int PatNum {
+		public long PatNum {
 			get { return patNum; }
 			set { if(patNum!=value){patNum = value; MarkDirty(); patNumChanged = true;} }
 		}
@@ -152,10 +152,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("DocNum")]
-		private int docNum;
+		private long docNum;
 		bool docNumChanged;
 		/// <summary>FK to document.DocNum when a pdf has been archived.</summary>
-		public int DocNum {
+		public long DocNum {
 			get { return docNum; }
 			set { if(docNum!=value){docNum = value; MarkDirty(); docNumChanged = true;} }
 		}

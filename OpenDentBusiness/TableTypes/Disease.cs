@@ -6,17 +6,17 @@ namespace OpenDentBusiness {
 	/// <summary>Each row is one disease that one patient has.  A disease is a medical condition or allergy.  Diseases are defined in the DiseaseDef table.</summary>
 	public class Disease{//:IComparable{
 		///<summary>Primary key.</summary>
-		public int DiseaseNum;
+		public long DiseaseNum;
 		///<summary>FK to patient.PatNum</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.</summary>
-		public int DiseaseDefNum;
+		public long DiseaseDefNum;
 		///<summary>Any note about this disease that is specific to this patient.</summary>
 		public string PatNote;
 
 		/*
 		///<summary>IComparable.CompareTo implementation.  This is used to order disease lists.</summary>
-		public int CompareTo(object obj) {
+		public long CompareTo(object obj) {
 			if(!(obj is Disease)) {
 				throw new ArgumentException("object is not a Disease");
 			}

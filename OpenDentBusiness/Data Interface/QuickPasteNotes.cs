@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(QuickPasteNote note){
+		public static long Insert(QuickPasteNote note) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				note.QuickPasteNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),note);
 				return note.QuickPasteNoteNum;

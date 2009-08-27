@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	///<summary>Used in dental schools.  eg. Dental 2009 or Hygiene 2007.</summary>
 	public class SchoolClass{
 		///<summary>Primary key.</summary>
-		public int SchoolClassNum;
+		public long SchoolClassNum;
 		///<summary>The year this class will graduate</summary>
-		public int GradYear;
+		public long GradYear;
 		///<summary>Description of this class. eg Dental or Hygiene</summary>
 		public string Descript;
 
