@@ -49,6 +49,7 @@ namespace OpenDental{
 		private int headingPrintH;
 		private ComboBox comboProv;
 		private Label label4;
+		private OpenDental.UI.Button butEmail;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
 
@@ -90,6 +91,7 @@ namespace OpenDental{
 			this.butPostcards = new OpenDental.UI.Button();
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
+			this.butEmail = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -103,9 +105,9 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(895,656);
+			this.butClose.Location = new System.Drawing.Point(895,659);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -118,9 +120,9 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(379,43);
+			this.butRefresh.Location = new System.Drawing.Point(20,34);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(84,26);
+			this.butRefresh.Size = new System.Drawing.Size(84,24);
 			this.butRefresh.TabIndex = 2;
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -138,7 +140,7 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(5,4);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(475,77);
+			this.groupBox1.Size = new System.Drawing.Size(632,63);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
@@ -146,7 +148,7 @@ namespace OpenDental{
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(282,16);
+			this.comboProv.Location = new System.Drawing.Point(439,16);
 			this.comboProv.MaxDropDownItems = 40;
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(181,21);
@@ -154,7 +156,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(189,20);
+			this.label4.Location = new System.Drawing.Point(346,20);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(91,14);
 			this.label4.TabIndex = 22;
@@ -163,21 +165,21 @@ namespace OpenDental{
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(88,38);
+			this.textDateTo.Location = new System.Drawing.Point(232,38);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(94,20);
 			this.textDateTo.TabIndex = 14;
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(88,16);
+			this.textDateFrom.Location = new System.Drawing.Point(232,16);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(94,20);
 			this.textDateFrom.TabIndex = 13;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(8,40);
+			this.label2.Location = new System.Drawing.Point(152,40);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(77,14);
 			this.label2.TabIndex = 12;
@@ -186,7 +188,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(8,19);
+			this.label1.Location = new System.Drawing.Point(152,19);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(77,14);
 			this.label1.TabIndex = 11;
@@ -201,9 +203,9 @@ namespace OpenDental{
 			this.butReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReport.CornerRadius = 4F;
-			this.butReport.Location = new System.Drawing.Point(876,40);
+			this.butReport.Location = new System.Drawing.Point(445,659);
 			this.butReport.Name = "butReport";
-			this.butReport.Size = new System.Drawing.Size(87,26);
+			this.butReport.Size = new System.Drawing.Size(87,24);
 			this.butReport.TabIndex = 13;
 			this.butReport.Text = "R&un Report";
 			this.butReport.Click += new System.EventHandler(this.butReport_Click);
@@ -218,9 +220,9 @@ namespace OpenDental{
 			this.butLabels.CornerRadius = 4F;
 			this.butLabels.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabels.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabels.Location = new System.Drawing.Point(756,40);
+			this.butLabels.Location = new System.Drawing.Point(129,659);
 			this.butLabels.Name = "butLabels";
-			this.butLabels.Size = new System.Drawing.Size(102,26);
+			this.butLabels.Size = new System.Drawing.Size(102,24);
 			this.butLabels.TabIndex = 14;
 			this.butLabels.Text = "Label Preview";
 			this.butLabels.Click += new System.EventHandler(this.butLabels_Click);
@@ -233,9 +235,9 @@ namespace OpenDental{
 			// 
 			this.groupBox3.Controls.Add(this.comboStatus);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(504,4);
+			this.groupBox3.Location = new System.Drawing.Point(643,4);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(143,77);
+			this.groupBox3.Size = new System.Drawing.Size(143,63);
 			this.groupBox3.TabIndex = 15;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Set Status";
@@ -261,9 +263,9 @@ namespace OpenDental{
 			this.butPostcards.CornerRadius = 4F;
 			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPostcards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPostcards.Location = new System.Drawing.Point(739,8);
+			this.butPostcards.Location = new System.Drawing.Point(4,659);
 			this.butPostcards.Name = "butPostcards";
-			this.butPostcards.Size = new System.Drawing.Size(119,26);
+			this.butPostcards.Size = new System.Drawing.Size(119,24);
 			this.butPostcards.TabIndex = 16;
 			this.butPostcards.Text = "Postcard Preview";
 			this.butPostcards.Click += new System.EventHandler(this.butPostcards_Click);
@@ -271,16 +273,16 @@ namespace OpenDental{
 			// grid
 			// 
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(4,87);
+			this.grid.Location = new System.Drawing.Point(4,69);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
 			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.grid.Size = new System.Drawing.Size(963,562);
+			this.grid.Size = new System.Drawing.Size(963,585);
 			this.grid.TabIndex = 0;
 			this.grid.Title = "Confirmation List";
 			this.grid.TranslationName = "TableConfirmList";
-			this.grid.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellClick);
 			this.grid.Click += new System.EventHandler(this.grid_Click);
+			this.grid.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellClick);
 			this.grid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellDoubleClick);
 			// 
 			// butPrint
@@ -293,18 +295,36 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(876,8);
+			this.butPrint.Location = new System.Drawing.Point(538,659);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(87,26);
+			this.butPrint.Size = new System.Drawing.Size(87,24);
 			this.butPrint.TabIndex = 20;
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// butEmail
+			// 
+			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butEmail.Autosize = true;
+			this.butEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEmail.CornerRadius = 4F;
+			this.butEmail.Image = global::OpenDental.Properties.Resources.email1;
+			this.butEmail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butEmail.Location = new System.Drawing.Point(348,659);
+			this.butEmail.Name = "butEmail";
+			this.butEmail.Size = new System.Drawing.Size(91,24);
+			this.butEmail.TabIndex = 61;
+			this.butEmail.Text = "E-Mail";
+			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// FormConfirmList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,688);
+			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butPostcards);
 			this.Controls.Add(this.grid);
@@ -736,6 +756,132 @@ namespace OpenDental{
 			}*/
 		}
 
+		private void butEmail_Click(object sender,EventArgs e) {
+			/*
+			if(gridMain.Rows.Count < 1) {
+				MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));
+				return;
+			}
+			if(PrefC.GetString("EmailSMTPserver")=="") {
+				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
+				return;
+			}
+			if(PrefC.GetInt("RecallStatusEmailed")==0) {
+				MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
+				return;
+			}
+			if(gridMain.SelectedIndices.Length==0) {
+				ContactMethod cmeth;
+				for(int i=0;i<table.Rows.Count;i++) {
+					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
+					if(cmeth!=ContactMethod.Email) {
+						continue;
+					}
+					gridMain.SetSelected(i,true);
+				}
+				if(gridMain.SelectedIndices.Length==0) {
+					MsgBox.Show(this,"No patients of email type.");
+					return;
+				}
+			}
+			else {//deselect the ones that do not have email addresses specified
+				int skipped=0;
+				for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {
+					if(table.Rows[gridMain.SelectedIndices[i]]["Email"].ToString()=="") {
+						skipped++;
+						gridMain.SetSelected(gridMain.SelectedIndices[i],false);
+					}
+				}
+				if(gridMain.SelectedIndices.Length==0) {
+					MsgBox.Show(this,"None of the selected patients had email addresses entered.");
+					return;
+				}
+				if(skipped>0) {
+					MessageBox.Show(Lan.g(this,"Selected patients skipped due to missing email addresses: ")+skipped.ToString());
+				}
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send email to all of the selected patients?")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			List<int> recallNums=new List<int>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+			}
+			bool sortAlph=false;
+			if(comboSort.SelectedIndex==1) {
+				sortAlph=true;
+			}
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			EmailMessage message;
+			string str="";
+			string[] recallNumArray;
+			string[] patNumArray;
+			for(int i=0;i<AddrTable.Rows.Count;i++) {
+				message=new EmailMessage();
+				message.PatNum=PIn.PInt(AddrTable.Rows[i]["emailPatNum"].ToString());
+				message.ToAddress=PIn.PString(AddrTable.Rows[i]["email"].ToString());//might be guarantor email
+				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+					message.Subject=PrefC.GetString("RecallEmailSubject");
+				}
+				else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+					message.Subject=PrefC.GetString("RecallEmailSubject2");
+				}
+				else {
+					message.Subject=PrefC.GetString("RecallEmailSubject3");
+				}
+				//family
+				if(checkGroupFamilies.Checked	&& AddrTable.Rows[i]["famList"].ToString()!="") {
+					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+						str=PrefC.GetString("RecallEmailFamMsg");
+					}
+					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+						str=PrefC.GetString("RecallEmailFamMsg2");
+					}
+					else {
+						str=PrefC.GetString("RecallEmailFamMsg3");
+					}
+					str=str.Replace("[FamilyList]",AddrTable.Rows[i]["famList"].ToString());
+				}
+				//single
+				else {
+					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+						str=PrefC.GetString("RecallEmailMessage");
+					}
+					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+						str=PrefC.GetString("RecallEmailMessage2");
+					}
+					else {
+						str=PrefC.GetString("RecallEmailMessage3");
+					}
+					str=str.Replace("[DueDate]",PIn.PDate(AddrTable.Rows[i]["dateDue"].ToString()).ToShortDateString());
+					str=str.Replace("[NameF]",AddrTable.Rows[i]["patientNameF"].ToString());
+					str=str.Replace("[NameFL]",AddrTable.Rows[i]["patientNameFL"].ToString());
+				}
+				message.BodyText=str;
+				try {
+					FormEmailMessageEdit.SendEmail(message);
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(ex.Message+"\r\nPatient:"+AddrTable.Rows[i]["patientNameFL"].ToString());
+					break;
+				}
+				message.MsgDateTime=DateTime.Now;
+				message.SentOrReceived=CommSentOrReceived.Sent;
+				EmailMessages.Insert(message);
+				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
+				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
+				for(int r=0;r<recallNumArray.Length;r++) {
+					Commlogs.InsertForRecall(PIn.PInt(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
+					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
+				}
+			}
+			FillMain();
+			Cursor=Cursors.Default;*/
+		}
+
 		private void butSave_Click(object sender, System.EventArgs e) {
 			/*if(  textDaysPast.errorProvider1.GetError(textDaysPast)!=""
 				|| textDaysFuture.errorProvider1.GetError(textDaysFuture)!="")
@@ -815,6 +961,8 @@ namespace OpenDental{
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
 
 	
 
