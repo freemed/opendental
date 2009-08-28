@@ -429,7 +429,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdateFee(int procNum,double newFee) {
+		public static void UpdateFee(long procNum,double newFee) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newFee);
 				return;
@@ -440,7 +440,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets all procedures for a single patient, without notes.  Does not include deleted procedures.</summary>
-		public static List<Procedure> Refresh(int patNum) {
+		public static List<Procedure> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -453,7 +453,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets one procedure directly from the db.  Option to include the note.</summary>
-		public static Procedure GetOneProc(int procNum,bool includeNote) {
+		public static Procedure GetOneProc(long procNum,bool includeNote) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Procedure>(MethodBase.GetCurrentMethod(),procNum,includeNote);
 			}
@@ -574,7 +574,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
-		public static List<Procedure> GetProcsForSingle(int aptNum,bool isPlanned) {
+		public static List<Procedure> GetProcsForSingle(long aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
 			}
@@ -590,13 +590,13 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
-		public static List<Procedure> GetProcsMultApts(List <int> myAptNums) {
+		public static List<Procedure> GetProcsMultApts(List<long> myAptNums) {
 			//No need to check RemotingRole; no call to db.
 			return GetProcsMultApts(myAptNums,false);
 		}
 
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list or GetProductionOneApt.  This process requires only one call to the database.  "myAptNums" is the list of appointments to get procedures for.  isForNext gets procedures for a list of next appointments rather than regular appointments.</summary>
-		public static List<Procedure> GetProcsMultApts(List<int> myAptNums,bool isForPlanned) {
+		public static List<Procedure> GetProcsMultApts(List<long> myAptNums,bool isForPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),myAptNums,isForPlanned);
 			}
@@ -621,7 +621,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
-		public static Procedure[] GetProcsOneApt(int myAptNum,List<Procedure> procsMultApts) {
+		public static Procedure[] GetProcsOneApt(long myAptNum,List<Procedure> procsMultApts) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<procsMultApts.Count;i++) {
@@ -635,7 +635,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets the production for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
-		public static double GetProductionOneApt(int myAptNum,Procedure[] procsMultApts,bool isPlanned) {
+		public static double GetProductionOneApt(long myAptNum,Procedure[] procsMultApts,bool isPlanned) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<procsMultApts.Length;i++) {
@@ -650,7 +650,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormClaimEdit,FormClaimPrint,FormClaimPayTotal,ContrAccount etc to get description of procedure. Procedure list needs to include the procedure we are looking for.</summary>
-		public static Procedure GetProcFromList(List<Procedure> list,int procNum) {
+		public static Procedure GetProcFromList(List<Procedure> list,long procNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(procNum==list[i].ProcNum) {
@@ -729,7 +729,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Called from FormApptsOther when creating a new appointment.  Returns true if there are any procedures marked complete for this patient.  The result is that the NewPt box on the appointment won't be checked.</summary>
-		public static bool AreAnyComplete(int patNum) {
+		public static bool AreAnyComplete(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -744,7 +744,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Called from AutoCodeItems.  Makes a call to the database to determine whether the specified tooth has been extracted or will be extracted. This could then trigger a pontic code.</summary>
-		public static bool WillBeMissing(string toothNum,int patNum) {
+		public static bool WillBeMissing(string toothNum,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),toothNum,patNum);
 			}
@@ -770,14 +770,14 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		public static void AttachToApt(int procNum,int aptNum,bool isPlanned) {
+		public static void AttachToApt(long procNum,long aptNum,bool isPlanned) {
 			//No need to check RemotingRole; no call to db.
-			List<int> procNums=new List<int>();
+			List<long> procNums=new List<long>();
 			procNums.Add(procNum);
 			AttachToApt(procNums,aptNum,isPlanned);
 		}
 
-		public static void AttachToApt(List<int> procNums,int aptNum,bool isPlanned) {
+		public static void AttachToApt(List<long> procNums,long aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNums,aptNum,isPlanned);
 				return;
@@ -802,7 +802,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void DetachFromApt(List<int> procNums,bool isPlanned) {
+		public static void DetachFromApt(List<long> procNums,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNums,isPlanned);
 				return;
@@ -990,7 +990,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in ContrAccount.CreateClaim to validate that procedure is not already attached to a claim for this specific insPlan.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
-		public static bool IsAlreadyAttachedToClaim(Procedure proc,List<ClaimProc> claimProcList,int planNum) {
+		public static bool IsAlreadyAttachedToClaim(Procedure proc,List<ClaimProc> claimProcList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==proc.ProcNum
@@ -1004,7 +1004,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this plan that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
-		public static bool NeedsSent(int procNum,List<ClaimProc> claimProcList,int planNum) {
+		public static bool NeedsSent(int procNum,List<ClaimProc> claimProcList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum
@@ -1243,13 +1243,13 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static void ComputeEstimates(Procedure proc,int patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
+		public static void ComputeEstimates(Procedure proc,long patNum,List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
 			//This is a stub that needs revision.
 			ComputeEstimates(proc,patNum,ref claimProcs,isInitialEntry,PlanList,patPlans,benefitList,null,null,true,patientAge);
 		}
 
 		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list only needs to include claimprocs for this proc, although it can include more.  Only set isInitialEntry true from Chart module; it is for cap procs.  loopList only contains information about procedures that come before this one in a list such as TP or claim.</summary>
-		public static void ComputeEstimates(Procedure proc,int patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge) {
+		public static void ComputeEstimates(Procedure proc,long patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge) {
 			//No need to check RemotingRole; no call to db.
 			bool doCreate=true;
 			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
@@ -1458,7 +1458,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
-		public static void ComputeEstimatesForAll(int patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
+		public static void ComputeEstimatesForAll(long patNum,List<ClaimProc> claimProcs,List<Procedure> procs,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,int patientAge) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<procs.Count;i++) {
 				ComputeEstimates(procs[i],patNum,claimProcs,false,PlanList,patPlans,benefitList,patientAge);

@@ -16,7 +16,7 @@ namespace OpenDentBusiness
 		public Patient[] ListPats;
 
 		///<summary>Tries to get the LastName,FirstName of the patient from this family.  If not found, then gets the name from the database.</summary>
-		public string GetNameInFamLF(int myPatNum){
+		public string GetNameInFamLF(long myPatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListPats.Length;i++){
 				if(ListPats[i].PatNum==myPatNum){
@@ -40,7 +40,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Gets a formatted name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
-		public string GetNameInFamFL(int myPatNum){
+		public string GetNameInFamFL(long myPatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListPats.Length;i++){
 				if(ListPats[i].PatNum==myPatNum){
@@ -64,7 +64,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
-		public string GetNameInFamFirst(int myPatNum){
+		public string GetNameInFamFirst(long myPatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListPats.Length;i++){
 				if(ListPats[i].PatNum==myPatNum){
@@ -75,7 +75,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>The index of the patient within the family.  Returns -1 if not found.</summary>
-		public int GetIndex(int patNum){
+		public int GetIndex(long patNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListPats.Length;i++){
 				if(ListPats[i].PatNum==patNum){
@@ -86,7 +86,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Gets a copy of a specific patient from within the family. Does not make a call to the database.</summary>
-		public Patient GetPatient(int patNum){
+		public Patient GetPatient(long patNum) {
 			//No need to check RemotingRole; no call to db.
 			Patient retVal=null;
 			for(int i=0;i<ListPats.Length;i++){
@@ -98,7 +98,7 @@ namespace OpenDentBusiness
 		}
 
 		/// <summary>Duplicate of the same class in Patients.  Gets nine of the most useful fields from the db for the given patnum.</summary>
-		public static Patient GetLim(int patNum){
+		public static Patient GetLim(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
 			}

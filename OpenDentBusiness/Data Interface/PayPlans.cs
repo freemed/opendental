@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PayPlan plan){
+		public static long Insert(PayPlan plan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				plan.PayPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
 				return plan.PayPlanNum;
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Used from Account and ComputeBal to get the total amount of the original principal for one payment plan.  Does not include any interest.The chargelist must include all charges for this payplan, but it can include more as well.</summary>
-		public static double GetTotalPrinc(int payPlanNum, List<PayPlanCharge> chargeList){
+		public static double GetTotalPrinc(long payPlanNum,List<PayPlanCharge> chargeList) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<chargeList.Count;i++){
@@ -209,7 +209,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the sum of all payment plan entries for guarantor and/or patient.</summary>
-		public static double ComputeBal(int patNum,PayPlan[] list,List<PayPlanCharge> chargeList){
+		public static double ComputeBal(long patNum,PayPlan[] list,List<PayPlanCharge> chargeList) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<list.Length;i++){

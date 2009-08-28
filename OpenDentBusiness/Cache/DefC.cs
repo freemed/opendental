@@ -50,7 +50,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get one def from Long.  Returns null if not found.  Only used for very limited situations.  Other Get functions tend to be much more useful since they don't return null.  There is also BIG potential for silent bugs if you use this.ItemOrder instead of GetOrder().</summary>
-		public static Def GetDef(DefCat myCat,int myDefNum) {
+		public static Def GetDef(DefCat myCat,long myDefNum) {
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
 				if(DefC.Long[(int)myCat][i].DefNum==myDefNum) {
 					return DefC.Long[(int)myCat][i].Copy();
@@ -60,7 +60,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static string GetName(DefCat myCat,int myDefNum) {
+		public static string GetName(DefCat myCat,long myDefNum) {
 			if(myDefNum==0){
 				return "";
 			}
@@ -86,7 +86,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets the order of the def within Short or -1 if not found.</summary>
-		public static int GetOrder(DefCat myCat,int myDefNum) {
+		public static int GetOrder(DefCat myCat,long myDefNum) {
 			//gets the index in the list of unhidden (the Short list).
 			for(int i=0;i<DefC.Short[(int)myCat].GetLength(0);i++) {
 				if(DefC.Short[(int)myCat][i].DefNum==myDefNum) {
@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static string GetValue(DefCat myCat,int myDefNum) {
+		public static string GetValue(DefCat myCat,long myDefNum) {
 			string retStr="";
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
 				if(DefC.Long[(int)myCat][i].DefNum==myDefNum) {
@@ -108,7 +108,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static Color GetColor(DefCat myCat,int myDefNum) {
+		public static Color GetColor(DefCat myCat,long myDefNum) {
 			Color retCol=Color.White;
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
 				if(DefC.Long[(int)myCat][i].DefNum==myDefNum) {
@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static bool GetHidden(DefCat myCat,int myDefNum) {
+		public static bool GetHidden(DefCat myCat,long myDefNum) {
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
 				if(DefC.Long[(int)myCat][i].DefNum==myDefNum) {
 					return DefC.Long[(int)myCat][i].IsHidden;

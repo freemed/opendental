@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 	public class Patients{
 		
 		///<summary>Returns a Family object for the supplied patNum.  Use Family.GetPatient to extract the desired patient from the family.</summary>
-		public static Family GetFamily(int patNum){
+		public static Family GetFamily(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Family>(MethodBase.GetCurrentMethod(),patNum);
 			} 
@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 			return fam;
 		}
 
-		public static string GetFamilySelectCommand(int patNum){
+		public static string GetFamilySelectCommand(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found.</summary>
-		public static Patient GetPat(int patNum){
+		public static Patient GetPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
 			}

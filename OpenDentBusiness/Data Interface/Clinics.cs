@@ -185,7 +185,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns null if clinic not found.</summary>
-		public static Clinic GetClinic(int clinicNum){
+		public static Clinic GetClinic(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns an empty string for invalid clinicNums.</summary>
-		public static string GetDesc(int clinicNum){
+		public static string GetDesc(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){
@@ -207,7 +207,7 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary>Returns practice default for invalid clinicNums.</summary>
-		public static PlaceOfService GetPlaceService(int clinicNum){
+		public static PlaceOfService GetPlaceService(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ClinicNum==clinicNum){

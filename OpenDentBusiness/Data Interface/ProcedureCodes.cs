@@ -183,7 +183,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets code from db to avoid having to constantly refresh in FormProcCodes</summary>
-		public static ProcedureCode GetProcCodeFromDb(int codeNum) {
+		public static ProcedureCode GetProcCodeFromDb(long codeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ProcedureCode>(MethodBase.GetCurrentMethod(),codeNum);
 			}
@@ -237,7 +237,7 @@ namespace OpenDentBusiness{
 			return proc.CodeNum;
 		}
 
-		public static string GetStringProcCode(int codeNum) {
+		public static string GetStringProcCode(long codeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(codeNum==0) {
 				return "";

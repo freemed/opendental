@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PatPlan p){
+		public static long Insert(PatPlan p) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				p.PatPlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),p);
 				return p.PatPlanNum;
@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
-		public static int GetPlanNum(List <PatPlan> list,int ordinal){
+		public static long GetPlanNum(List<PatPlan> list,int ordinal) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++){
 				if(list[i].Ordinal==ordinal){
@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return 1 for primary insurance, etc.  Will return 0 if planNum not found in the list.</summary>
-		public static int GetOrdinal(List<PatPlan> patPlans,int planNum) {
+		public static int GetOrdinal(List<PatPlan> patPlans,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
 				if(patPlans[p].PlanNum==planNum) {
@@ -160,7 +160,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0){
 				return;
 			}
-			int patNum=PIn.PInt(table.Rows[0][0].ToString());
+			long patNum=PIn.PInt(table.Rows[0][0].ToString());
 			List<PatPlan> patPlans=Refresh(patNum);
 			//int oldOrdinal=GetFromList(patPlans,patPlanNum).Ordinal;
 			if(newOrdinal>patPlans.Count){
@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list to find the one patplanNum needed based on the planNum.  Returns 0 if patient is not currently covered by the planNum supplied.</summary>
-		public static int GetPatPlanNum(List<PatPlan> patPlanList,long planNum) {
+		public static long GetPatPlanNum(List<PatPlan> patPlanList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<patPlanList.Count;i++) {
 				if(patPlanList[i].PlanNum==planNum) {
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one patPlanNum directly from database.  Only used once in FormClaimProc.</summary>
-		public static int GetPatPlanNum(long patNum,long planNum) {
+		public static long GetPatPlanNum(long patNum,long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patNum,planNum);
 			}
