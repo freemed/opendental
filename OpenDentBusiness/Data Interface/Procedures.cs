@@ -555,10 +555,10 @@ namespace OpenDentBusiness {
 				proc.CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				proc.RevCode         = PIn.PString(table.Rows[i][31].ToString());
 				proc.UnitCode        = PIn.PString(table.Rows[i][32].ToString());
-				proc.UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
-				proc.BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
-				proc.StartTime       = PIn.PInt(table.Rows[i][35].ToString());
-				proc.StopTime        = PIn.PInt(table.Rows[i][36].ToString());
+				proc.UnitQty         = PIn.PInt32(table.Rows[i][33].ToString());
+				proc.BaseUnits       = PIn.PInt32(table.Rows[i][34].ToString());
+				proc.StartTime       = PIn.PInt32(table.Rows[i][35].ToString());
+				proc.StopTime        = PIn.PInt32(table.Rows[i][36].ToString());
 				proc.DateTP          = PIn.PDate(table.Rows[i][37].ToString());
 				proc.SiteNum         = PIn.PInt(table.Rows[i][38].ToString());
 				//only used sometimes:

@@ -31,22 +31,20 @@ namespace OpenDentBusiness{
 		public long NextAptNum;
 		///<summary>FK to definition.DefNum.  The definition.Category in the definition table is DefCat.RecallUnschedStatus.  Only used if this is an Unsched or Planned appt.</summary>
 		public long UnschedStatus;
-		///<summary>Do not use.  See the labcase table instead.</summary>
-		public long LabOld;
 		///<summary>This is the first appoinment this patient has had at this office.  Somewhat automated.</summary>
 		public bool IsNewPatient;
 		///<summary>A one line summary of all procedures.  Can be used in various reports, Unscheduled list, and Planned appointment tracker.  Not user editable right now, so it doesn't show on the screen.</summary>
 		public string ProcDescript;
 		///<summary>FK to employee.EmployeeNum.  You can assign an assistant to the appointment.</summary>
 		public long Assistant;
-		///<summary>Not used.</summary>
-		public long InstructorNum;
-		///<summary>Not used</summary>
-		public long SchoolClassNum;
-		///<summary>Not used.</summary>
-		public long SchoolCourseNum;
-		///<summary>Not used.</summary>
-		public float GradePoint;
+		//<summary>Not used.</summary>
+		//public long InstructorNum;
+		//<summary>Not used</summary>
+		//public long SchoolClassNum;
+		//<summary>Not used.</summary>
+		//public long SchoolCourseNum;
+		//<summary>Not used.</summary>
+		//public float GradePoint;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;
 		///<summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>

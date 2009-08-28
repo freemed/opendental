@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used from FormPayPlan, Account, and ComputeBal to get the accumulated amount due for a payment plan based on today's date.  Includes interest, but does not include payments made so far.  The chargelist must include all charges for this payplan, but it can include more as well.</summary>
-		public static double GetAccumDue(int payPlanNum, List<PayPlanCharge> chargeList){
+		public static double GetAccumDue(long payPlanNum, List<PayPlanCharge> chargeList){
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<chargeList.Count;i++){

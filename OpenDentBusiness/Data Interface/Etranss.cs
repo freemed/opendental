@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Etrans GetEtrans(int etransNum){
+		public static Etrans GetEtrans(long etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
 			}
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of all 270's for this plan.</summary>
-		public static List<Etrans> GetList270ForPlan(int planNum) {
+		public static List<Etrans> GetList270ForPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),planNum);
 			}
@@ -136,15 +136,15 @@ namespace OpenDentBusiness{
 				etrans.ClearinghouseNum    =PIn.PInt(table.Rows[i][2].ToString());
 				etrans.Etype               =(EtransType)PIn.PInt(table.Rows[i][3].ToString());
 				etrans.ClaimNum            =PIn.PInt(table.Rows[i][4].ToString());
-				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[i][5].ToString());
-				etrans.CarrierTransCounter =PIn.PInt(table.Rows[i][6].ToString());
-				etrans.CarrierTransCounter2=PIn.PInt(table.Rows[i][7].ToString());
+				etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[i][5].ToString());
+				etrans.CarrierTransCounter =PIn.PInt32(table.Rows[i][6].ToString());
+				etrans.CarrierTransCounter2=PIn.PInt32(table.Rows[i][7].ToString());
 				etrans.CarrierNum          =PIn.PInt(table.Rows[i][8].ToString());
 				etrans.CarrierNum2         =PIn.PInt(table.Rows[i][9].ToString());
 				etrans.PatNum              =PIn.PInt(table.Rows[i][10].ToString());
-				etrans.BatchNumber         =PIn.PInt(table.Rows[i][11].ToString());
+				etrans.BatchNumber         =PIn.PInt32(table.Rows[i][11].ToString());
 				etrans.AckCode             =PIn.PString(table.Rows[i][12].ToString());
-				etrans.TransSetNum         =PIn.PInt(table.Rows[i][13].ToString());
+				etrans.TransSetNum         =PIn.PInt32(table.Rows[i][13].ToString());
 				etrans.Note                =PIn.PString(table.Rows[i][14].ToString());
 				etrans.EtransMessageTextNum=PIn.PInt(table.Rows[i][15].ToString());
 				etrans.AckEtransNum        =PIn.PInt(table.Rows[i][16].ToString());
@@ -155,7 +155,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
-		public static int Insert(Etrans etrans) {
+		public static long Insert(Etrans etrans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				etrans.EtransNum=Meth.GetInt(MethodBase.GetCurrentMethod(),etrans);
 				return etrans.EtransNum;
@@ -266,7 +266,7 @@ namespace OpenDentBusiness{
 			string command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0) {
-				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
+				etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[0][0].ToString());
 				if(etrans.OfficeSequenceNumber==999999){//if the office has sent > 1 million messages, and has looped back around to 1.
 					//get the date of the most recent max
 					//This works, but it got even more complex for CarrierTransCounter, so we will just throw an exception for now.
@@ -291,7 +291,7 @@ namespace OpenDentBusiness{
 				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -300,7 +300,7 @@ namespace OpenDentBusiness{
 					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -331,7 +331,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes the etrans entry and changes the status of the claim back to W.  If it encounters an entry that's not a claim, it skips it for now.  Later, it will handle all types of undo.  It will also check Canadian claims to prevent alteration if an ack or EOB has been received.</summary>
-		public static void Undo(int etransNum){
+		public static void Undo(long etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum);
 				return;
@@ -339,7 +339,7 @@ namespace OpenDentBusiness{
 			//see if it's a claim.
 			string command="SELECT ClaimNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
 			DataTable table=Db.GetTable(command);
-			int claimNum=PIn.PInt(table.Rows[0][0].ToString());
+			long claimNum=PIn.PInt(table.Rows[0][0].ToString());
 			if(claimNum==0){//if no claim
 				return;//for now
 			}
@@ -354,7 +354,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes the etrans entry.  Mostly used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will not delete the message associated with the etrans.  That must be done separately.  Will throw exception if the etrans does not exist.</summary>
-		public static void Delete(int etransNum) {
+		public static void Delete(long etransNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransNum);
 				return;
@@ -370,7 +370,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sets the status of the claim to sent.  Also makes an entry in etrans.  If this is canadian eclaims, then this function gets run first.  Then, the messagetext is created and an attempt is made to send the claim.  Finally, the messagetext and added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  If it fails, Canadians will need to delete the etrans entries (or we will need to roll back the changes).</summary>
-		public static Etrans SetClaimSentOrPrinted(int claimNum,int patNum,int clearinghouseNum,EtransType etype,
+		public static Etrans SetClaimSentOrPrinted(long claimNum,long patNum,long clearinghouseNum,EtransType etype,
 			string messageText,int batchNumber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),claimNum,patNum,clearinghouseNum,etype,messageText,batchNumber);
@@ -406,7 +406,7 @@ namespace OpenDentBusiness{
 				command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
+					etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[0][0].ToString());
 					if(etrans.OfficeSequenceNumber==999999) {//if the office has sent > 1 million messages, and has looped back around to 1.
 						throw new ApplicationException
 							("OfficeSequenceNumber has maxed out at 999999.  This program will need to be enhanced.");
@@ -420,7 +420,7 @@ namespace OpenDentBusiness{
 				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -429,7 +429,7 @@ namespace OpenDentBusiness{
 					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -444,7 +444,7 @@ namespace OpenDentBusiness{
 						+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum2);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
-						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+						tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 					}
 					if(tempcounter>etrans.CarrierTransCounter2) {
 						etrans.CarrierTransCounter2=tempcounter;
@@ -453,7 +453,7 @@ namespace OpenDentBusiness{
 						+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum2);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
-						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
+						tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
 					}
 					if(tempcounter>etrans.CarrierTransCounter2) {
 						etrans.CarrierTransCounter2=tempcounter;
@@ -473,7 +473,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>
-		public static void ProcessIncomingReport(DateTime dateTimeTrans,int clearinghouseNum,string messageText) {
+		public static void ProcessIncomingReport(DateTime dateTimeTrans,long clearinghouseNum,string messageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dateTimeTrans,clearinghouseNum,messageText);
 				return;
@@ -540,7 +540,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static DateTime GetLastDate270(int planNum) {
+		public static DateTime GetLastDate270(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod(),planNum);
 			}

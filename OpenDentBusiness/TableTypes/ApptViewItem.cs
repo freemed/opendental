@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 		///<summary>Must be one of the hard coded strings picked from the available list.</summary>
 		public string ElementDesc;
 		///<summary>If this is a row Element, then this is the 0-based order.</summary>
-		public long ElementOrder;
+		public int ElementOrder;
 		///<summary>If this is an element, then this is the color.</summary>
 		public Color ElementColor;
 

@@ -76,13 +76,13 @@ namespace OpenDentBusiness {
 		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
 		public string UnitCode;
 		///<summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
-		public long UnitQty;
+		public int UnitQty;
 		///<summary>Base units used for some billing codes.  Default is 0.</summary>
-		public long BaseUnits;
+		public int BaseUnits;
 		///<summary>Start time in military</summary>
-		public long StartTime;
+		public int StartTime;
 		///<summary>Stop time in military</summary>
-		public long StopTime;
+		public int StopTime;
 		///<summary>The date that the procedure was originally treatment planned.  Does not change when marked complete.</summary>
 		public DateTime DateTP;
 		///<summary>FK to site.SiteNum.</summary>

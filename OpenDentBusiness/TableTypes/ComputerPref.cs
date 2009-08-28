@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		///<summary>Indicates wether or not the Suni sensor uses binned operation.</summary>
 		public bool SensorBinned;
 		///<summary>Indicates which Suni box port to connect with. There are 2 ports on a box (ports 0 and 1).</summary>
-		public long SensorPort;
+		public int SensorPort;
 		///<summary>Indicates the exposure level to use when capturing from a Suni sensor. Values can be 1 through 7.</summary>
 		public long SensorExposure;
 		///<summary>Indicates if the user prefers double-buffered 3D tooth-chart (where applicable).</summary>

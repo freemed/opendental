@@ -153,7 +153,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Claim Cur) {
+		public static long Insert(Claim Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ClaimNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ClaimNum;
@@ -414,7 +414,7 @@ namespace OpenDentBusiness{
 	///<summary>Holds a list of claims to show in the claims 'queue' waiting to be sent.</summary>
 	public class ClaimSendQueueItem{
 		///<summary></summary>
-		public int ClaimNum;
+		public long ClaimNum;
 		///<summary></summary>
 		public bool NoSendElect;
 		///<summary></summary>
@@ -425,9 +425,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public string Carrier;
 		///<summary></summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary></summary>
-		public int ClearinghouseNum;
+		public long ClearinghouseNum;
 		///<summary>True if the plan is a medical plan.</summary>
 		public bool IsMedical;
 
@@ -439,11 +439,11 @@ namespace OpenDentBusiness{
 	///<summary>Holds a list of claims to show in the Claim Check Edit window.</summary>
 	public class ClaimPaySplit{
 		///<summary></summary>
-		public int ClaimNum;
+		public long ClaimNum;
 		///<summary></summary>
 		public string PatName;
 		///<summary></summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary></summary>
 		public string Carrier;
 		///<summary></summary>
@@ -455,7 +455,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public double InsPayAmt;
 		///<summary></summary>
-		public int ClaimPaymentNum;
+		public long ClaimPaymentNum;
 	}
 	
 }

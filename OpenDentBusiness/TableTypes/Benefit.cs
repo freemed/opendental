@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:InsBenefitType Corresponds to X12 EB01. Examples: 0=ActiveCoverage, 1=CoInsurance, 2=Deductible, 3=CoPayment, 4=Exclusions, 5=Limitations. ActiveCoverage doesn't really provide meaningful information.</summary>
 		public InsBenefitType BenefitType;
 		///<summary>Only used if BenefitType=CoInsurance.  Valid values are 0 to 100.  -1 indicates empty, which is almost always true if not CoInsurance.  The percentage that insurance will pay on the procedure.  Note that benefits coming from carriers are usually backwards, indicating the percetage that the patient is responsible for.</summary>
-		public long Percent;
+		public int Percent;
 		///<summary>Used for CoPayment, Limitations, and Deductible.  -1 indicates empty</summary>
 		public double MonetaryAmt;
 		///<summary>Enum:BenefitTimePeriod Corresponds to X12 EB06, Time Period Qualifier.  Examples: 0=None,1=ServiceYear,2=CalendarYear,3=Lifetime,4=Years. Might add Visit and Remaining.</summary>
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:BenefitQuantity Corresponds to X12 EB09. Not used very much. Examples: 0=None,1=NumberOfServices,2=AgeLimit,3=Visits,4=Years,5=Months</summary>
 		public BenefitQuantity QuantityQualifier;
 		///<summary>Corresponds to X12 EB10. Qualify the quantity using QuantityQualifier.</summary>
-		public long Quantity;
+		public int Quantity;
 		///<summary>FK to procedurecode.CodeNum.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat should be None.</summary>
 		public long CodeNum;
 		///<Summary>Enum:BenefitCoverageLevel Corresponds to X12 EB02.  None, Individual, or Family.  Individual and Family are commonly used for deductibles and maximums.  None is commonly used for percentages and copays.</Summary>

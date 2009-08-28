@@ -235,9 +235,9 @@ namespace OpenDentBusiness{
 			get { return guarantorChanged; }
 		}
 
-		private long age;
+		private int age;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
-		public long Age {
+		public int Age {
 			get { return age; }
 			set { age = value; }
 		}

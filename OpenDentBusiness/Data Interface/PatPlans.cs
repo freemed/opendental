@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 				patplan.PatPlanNum  = PIn.PInt(table.Rows[i][0].ToString());
 				patplan.PatNum      = PIn.PInt(table.Rows[i][1].ToString());
 				patplan.PlanNum     = PIn.PInt(table.Rows[i][2].ToString());
-				patplan.Ordinal     = PIn.PInt(table.Rows[i][3].ToString());
+				patplan.Ordinal     = PIn.PInt32(table.Rows[i][3].ToString());
 				patplan.IsPending   = PIn.PBool(table.Rows[i][4].ToString());
 				patplan.Relationship= (Relat)PIn.PInt(table.Rows[i][5].ToString());
 				patplan.PatID       = PIn.PString(table.Rows[i][6].ToString());

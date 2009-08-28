@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary></summary>
-		public static int Insert(ClaimPayment cp){
+		public static long Insert(ClaimPayment cp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cp.ClaimPaymentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cp);
 				return cp.ClaimPaymentNum;

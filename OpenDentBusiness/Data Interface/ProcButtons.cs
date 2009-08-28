@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>must have already checked procCode for nonduplicate.</summary>
-		public static int Insert(ProcButton but) {
+		public static long Insert(ProcButton but) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				but.ProcButtonNum=Meth.GetInt(MethodBase.GetCurrentMethod(),but);
 				return but.ProcButtonNum;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static ProcButton[] GetForCat(int selectedCat){
+		public static ProcButton[] GetForCat(long selectedCat) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -120,10 +120,10 @@ namespace OpenDentBusiness{
 				DELETE FROM procbuttonitem;
 				DELETE FROM definition WHERE Category=26";
 			Db.NonQ(command);
-			int category;//defNum
-			int procButtonNum;
-			int autoCodeNum;
-			int autoCodeNum2;
+			long category;//defNum
+			long procButtonNum;
+			long autoCodeNum;
+			long autoCodeNum2;
 			//Db---------------------------------------------------------------------------------------------------------
 			command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
 				+"VALUES (26,0,'General','',0,0)";

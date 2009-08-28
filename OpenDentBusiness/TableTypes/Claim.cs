@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 		///<summary>True if is ortho.</summary>
 		public bool IsOrtho;
 		///<summary>Remaining months of ortho. Valid values are 1-36.</summary>
-		public long OrthoRemainM;
+		public int OrthoRemainM;
 		///<summary>Date ortho appliance placed.</summary>
 		public DateTime OrthoDate;
 		///<summary>Enum:Relat  Relationship to subscriber.  The relationship is copied from InsPlan when the claim is created.  It might need to be changed in both places.</summary>
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		///<summary>Sum of ClaimProc.Writeoff for this claim.</summary>
 		public double WriteOff;
 		///<summary>The number of x-rays enclosed.</summary>
-		public long Radiographs;
+		public int Radiographs;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;
 		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
@@ -83,9 +83,9 @@ namespace OpenDentBusiness{
 		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
 		public EtransType EFormat;
 		///<summary>The number of intraoral images attached.  Not the number of files attached.  This is the value that goes on the 2006 claimform.</summary>
-		public long AttachedImages;
+		public int AttachedImages;
 		///<summary>The number of models attached.</summary>
-		public long AttachedModels;
+		public int AttachedModels;
 		///<summary>A comma-delimited set of flag keywords.  Can have one or more of the following: EoB,Note,Perio,Misc.  Must also contain one of these: Mail or Elect.</summary>
 		public string AttachedFlags;
 		///<summary>Example: NEA#1234567.  If present, and if the claim note does not already start with this Id, then it will be prepended to the claim note for both e-claims and mail.  If using e-claims, this same ID will be used for all PWK segements.</summary>

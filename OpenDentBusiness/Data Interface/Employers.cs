@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Employer Cur){
+		public static long Insert(Employer Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.EmployerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployerNum;
@@ -217,7 +217,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets an employerNum from the database based on the supplied name.  If that empName does not exist, then a new employer is created, and the employerNum for the new employer is returned.</summary>
-		public static int GetEmployerNum(string empName){
+		public static long GetEmployerNum(string empName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),empName);
 			}

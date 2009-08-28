@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PayPlanCharge charge){
+		public static long Insert(PayPlanCharge charge) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				charge.PayPlanChargeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),charge);
 				return charge.PayPlanChargeNum;

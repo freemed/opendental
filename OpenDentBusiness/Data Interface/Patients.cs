@@ -1526,7 +1526,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>
-		public static void SetHasIns(int patNum){
+		public static void SetHasIns(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;

@@ -10,9 +10,9 @@ namespace OpenDentBusiness{
 		///<summary>Description of this view.  Gets displayed in Appt module.</summary>
 		public string Description;
 		///<summary>Order to display in lists. Every view must have a unique itemorder, but it is acceptable to have some missing itemorders in the sequence.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>Number of rows per time increment.  Usually 1 or 2.  Programming note: Value updated to ContrApptSheet.RowsPerIncr to track current state.</summary>
-		public long RowsPerIncr;
+		public int RowsPerIncr;
 		///<summary>If set to true, then the only operatories that will show will be for providers that have schedules for the day, ops with no provs assigned.</summary>
 		public bool OnlyScheduledProvs;
 

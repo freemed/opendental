@@ -48,7 +48,7 @@ namespace OpenDentBusiness {
 		}			
 
 		///<summary></summary>
-		public static Userod GetUser(int userNum) {
+		public static Userod GetUser(long userNum) {
 			//No need to check RemotingRole; no call to db.
 			if(UserodC.Listt==null){
 				RefreshCache();
@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 			return user;
 		}		*/
 
-		public static string GetName(int userNum){
+		public static string GetName(long userNum){
 			//No need to check RemotingRole; no call to db.
 			if(userNum==0){
 				return "";
@@ -293,7 +293,7 @@ namespace OpenDentBusiness {
 		}		
 
 		///<summary>usertype can be 'all', 'prov', 'emp', or 'other'.</summary>
-		public static DataTable RefreshSecurity(string usertype,int schoolClassNum){
+		public static DataTable RefreshSecurity(string usertype,long schoolClassNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),usertype,schoolClassNum);
 			}
@@ -343,7 +343,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		private static int Insert(Userod user){
+		private static long Insert(Userod user){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				user.UserNum=Meth.GetInt(MethodBase.GetCurrentMethod(),user);
 				return user.UserNum;
@@ -372,7 +372,7 @@ namespace OpenDentBusiness {
 			//should add a check that employeenum and provnum are not both set.
 			//make sure username is not already taken
 			string command;
-			int excludeUserNum;
+			long excludeUserNum;
 			if(isNew){
 				excludeUserNum=0;
 			}
@@ -417,7 +417,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Supply 0 or -1 for the excludeUserNum to not exclude any.</summary>
-		public static bool IsUserNameUnique(string username,int excludeUserNum){
+		public static bool IsUserNameUnique(string username,long excludeUserNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),username,excludeUserNum);
 			}
@@ -434,7 +434,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormSecurity.FillTreeUsers</summary>
-		public static List<Userod> GetForGroup(int userGroupNum){
+		public static List<Userod> GetForGroup(long userGroupNum) {
 			//No need to check RemotingRole; no call to db.
 			//ArrayList al=new ArrayList();
 			List<Userod> retVal=new List<Userod>();
@@ -466,7 +466,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Will return 0 if no inbox found for user.</summary>
-		public static int GetInbox(int userNum){
+		public static long GetInbox(long userNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].UserNum==userNum){
@@ -490,7 +490,7 @@ namespace OpenDentBusiness {
 		}
 
 		//Return 3, which is non-admin provider type
-		public static int GetAnesthProvType(int anesthProvType) {
+		public static long GetAnesthProvType(long anesthProvType) {
 			//No need to check RemotingRole; no call to db.
 			for(int i = 0;i < UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].AnesthProvType == anesthProvType) {

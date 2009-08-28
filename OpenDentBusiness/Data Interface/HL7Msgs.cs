@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(HL7Msg hL7Msg){
+		public static long WriteObject(HL7Msg hL7Msg) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				hL7Msg.HL7MsgNum=Meth.GetInt(MethodBase.GetCurrentMethod(),hL7Msg);
 				return hL7Msg.HL7MsgNum;
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static bool MessageWasSent(int aptNum) {
+		public static bool MessageWasSent(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),aptNum);
 			}

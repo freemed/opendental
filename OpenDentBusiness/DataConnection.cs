@@ -247,7 +247,7 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
-		public int NonQ(string command){
+		public long NonQ(string command) {
 			return NonQ(command,false);
 		}
 

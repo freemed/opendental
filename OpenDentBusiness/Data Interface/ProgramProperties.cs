@@ -122,7 +122,7 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
-		public static string GetPropVal(int programNum,string desc){
+		public static string GetPropVal(long programNum,string desc) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
@@ -138,7 +138,7 @@ namespace OpenDentBusiness {
 
 		public static string GetPropVal(string progName,string propertyDesc) {
 			//No need to check RemotingRole; no call to db.
-			int programNum=Programs.GetProgramNum(progName);
+			long programNum=Programs.GetProgramNum(progName);
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum!=programNum) {
 					continue;
@@ -152,7 +152,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormUAppoint to get frequent and current data.</summary>
-		public static string GetValFromDb(int programNum,string desc){
+		public static string GetValFromDb(long programNum,string desc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),programNum,desc);
 			}

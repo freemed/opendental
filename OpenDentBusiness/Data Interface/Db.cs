@@ -61,12 +61,38 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>We need to get away from this due to poor support from databases.  For now, each command will be sent entirely separately.  This never returns number of rows affected.</summary>
-		internal static int NonQ(string[] commands) {
+		internal static long NonQ(string[] commands) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+commands[0]);
 			}
 			for(int i=0;i<commands.Length;i++) {
 				DataCore.NonQ(commands[i],false);
+			}
+			return 0;
+		}
+
+		///<summary>This is used only for historical commands in ConvertDatabase.</summary>
+		internal static int NonQ32(string command,bool getInsertID) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
+			}
+			else {
+				return (int)DataCore.NonQ(command,getInsertID);
+			}
+		}
+
+		///<summary>This is used only for historical commands in ConvertDatabase.</summary>
+		internal static int NonQ32(string command) {
+			return NonQ32(command,false);
+		}
+
+		///<summary>This is used only for historical commands in ConvertDatabase.</summary>
+		internal static int NonQ32(string[] commands) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+commands[0]);
+			}
+			for(int i=0;i<commands.Length;i++) {
+				(int)DataCore.NonQ(commands[i],false);
 			}
 			return 0;
 		}

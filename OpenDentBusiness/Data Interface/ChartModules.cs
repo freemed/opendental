@@ -183,7 +183,7 @@ namespace OpenDentBusiness {
 				}
 				row["ProcDate"]=dateT;
 				double amt = PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString());
-				int qty = PIn.PInt(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.PInt(rawProcs.Rows[i]["BaseUnits"].ToString());
+				int qty = PIn.PInt32(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.PInt32(rawProcs.Rows[i]["BaseUnits"].ToString());
 				if(qty>0) {
 					amt *= qty;
 				}
@@ -480,7 +480,7 @@ namespace OpenDentBusiness {
 				+" ORDER BY AptDateTime";
 			//+" AND AptStatus != 6"//do not include planned appts.
 			rawApt=dcon.GetTable(command);
-			int apptStatus;
+			long apptStatus;
 			for(int i=0;i<rawApt.Rows.Count;i++) {
 				row=table.NewRow();
 				row["aptDateTime"]=DateTime.MinValue;

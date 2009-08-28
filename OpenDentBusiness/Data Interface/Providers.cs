@@ -55,13 +55,13 @@ namespace OpenDentBusiness{
 				prov.StateLicense  = PIn.PString(table.Rows[i][10].ToString());
 				prov.DEANum        = PIn.PString(table.Rows[i][11].ToString());
 				prov.IsSecondary   = PIn.PBool  (table.Rows[i][12].ToString());
-				prov.ProvColor     = Color.FromArgb(PIn.PInt(table.Rows[i][13].ToString()));
+				prov.ProvColor     = Color.FromArgb(PIn.PInt32(table.Rows[i][13].ToString()));
 				prov.IsHidden      = PIn.PBool  (table.Rows[i][14].ToString());
 				prov.UsingTIN      = PIn.PBool  (table.Rows[i][15].ToString());
 				//prov.BlueCrossID = PIn.PString(table.Rows[i][16].ToString());
 				prov.SigOnFile     = PIn.PBool  (table.Rows[i][17].ToString());
 				prov.MedicaidID    = PIn.PString(table.Rows[i][18].ToString());
-				prov.OutlineColor  = Color.FromArgb(PIn.PInt(table.Rows[i][19].ToString()));
+				prov.OutlineColor  = Color.FromArgb(PIn.PInt32(table.Rows[i][19].ToString()));
 				prov.SchoolClassNum= PIn.PInt   (table.Rows[i][20].ToString());
 				prov.NationalProvID= PIn.PString(table.Rows[i][21].ToString());
 				prov.CanadianOfficeNum= PIn.PString(table.Rows[i][22].ToString());
@@ -344,9 +344,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
-		public static int GetBillingProvNum(long treatProv,long clinicNum) {//,bool useClinic,int clinicInsBillingProv){
+		public static long GetBillingProvNum(long treatProv,long clinicNum) {//,bool useClinic,int clinicInsBillingProv){
 			//No need to check RemotingRole; no call to db.
-			int clinicInsBillingProv=0;
+			long clinicInsBillingProv=0;
 			bool useClinic=false;
 			if(clinicNum>0) {
 				useClinic=true;

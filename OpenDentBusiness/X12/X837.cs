@@ -11,7 +11,7 @@ namespace OpenDentBusiness
 		}
 		
 		///<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
-		public int GetTransNum(int claimNum){
+		public int GetTransNum(long claimNum) {
 			string curTransNumStr="";
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].SegmentID=="ST"){
@@ -20,7 +20,7 @@ namespace OpenDentBusiness
 				if(Segments[i].SegmentID=="CLM"){
 					if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
 						try {
-							return PIn.PInt(curTransNumStr);
+							return PIn.PInt32(curTransNumStr);
 						}
 						catch {
 							return 0;
@@ -32,7 +32,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Loops through the 837 to see if attachments were sent.</summary>
-		public bool AttachmentsWereSent(int claimNum) {
+		public bool AttachmentsWereSent(long claimNum) {
 			bool isCurrentClaim=false;
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].SegmentID=="CLM") {

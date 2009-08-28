@@ -105,10 +105,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("XPos")]
-		private long xPos;
+		private int xPos;
 		private bool xPosChanged;
 		///<summary>In pixels.</summary>
-		public long XPos{
+		public int XPos {
 			get{return xPos;}
 			set{if(xPos!=value){xPos=value;MarkDirty();xPosChanged=true;}}
 		}
@@ -117,10 +117,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("YPos")]
-		private long yPos;
+		private int yPos;
 		private bool yPosChanged;
 		///<summary>In pixels.</summary>
-		public long YPos{
+		public int YPos {
 			get{return yPos;}
 			set{if(yPos!=value){yPos=value;MarkDirty();yPosChanged=true;}}
 		}
@@ -129,10 +129,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private long width;
+		private int width;
 		private bool widthChanged;
 		///<summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
-		public long Width{
+		public int Width {
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -141,10 +141,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private long height;
+		private int height;
 		private bool heightChanged;
 		///<summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
-		public long Height{
+		public int Height {
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}
@@ -170,7 +170,7 @@ namespace OpenDentBusiness{
 	
 		public SheetFieldDef(SheetFieldType fieldType,string fieldName,string fieldValue,
 			float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height,
+			int xPos,int yPos,int width,int height,
 			GrowthBehaviorEnum growthBehavior) 
 		{
 			FieldType=fieldType;
@@ -204,61 +204,61 @@ namespace OpenDentBusiness{
 		}
 
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height)
+			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
 		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height,GrowthBehaviorEnum growthBehavior)
+			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,growthBehavior);
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height)
+			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
 		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height,GrowthBehaviorEnum growthBehavior)
+			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
 		{
 			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,growthBehavior);
 		}
 
 		public static SheetFieldDef NewInput(string fieldName,float fontSize,string fontName,bool fontIsBold,
-			long xPos,long yPos,long width,long height)
+			int xPos,int yPos,int width,int height)
 		{
 			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",fontSize,fontName,fontIsBold,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewImage(string fileName,long xPos,long yPos,long width,long height){
+		public static SheetFieldDef NewImage(string fileName,int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Image,fileName,"",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewLine(long xPos,long yPos,long width,long height){
+		public static SheetFieldDef NewLine(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Line,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewRect(long xPos,long yPos,long width,long height){
+		public static SheetFieldDef NewRect(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.Rectangle,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewCheckBox(string fieldName,long xPos,long yPos,long width,long height){
+		public static SheetFieldDef NewCheckBox(string fieldName,int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewSigBox(long xPos,long yPos,long width,long height){
+		public static SheetFieldDef NewSigBox(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.SigBox,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}

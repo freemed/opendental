@@ -94,6 +94,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static int PInt32(string myString) {
+			if(myString=="") {
+				return 0;
+			}
+			else {
+				return System.Convert.ToInt32(myString);
+			}
+		}
+
+		///<summary></summary>
 		public static short PShort(string myString) {
 			if(myString == "") {
 				return 0;

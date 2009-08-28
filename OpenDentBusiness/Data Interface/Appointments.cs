@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
-		public static Appointment[] RefreshUnsched(string orderby,int provNum,int siteNum) {
+		public static Appointment[] RefreshUnsched(string orderby,long provNum,long siteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
 			}
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets list of asap appointments.</summary>
-		public static List<Appointment> RefreshASAP(int provNum,int siteNum) {
+		public static List<Appointment> RefreshASAP(long provNum,long siteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),provNum,siteNum);
 			}
@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Allowed orderby: status, alph, date</summary>
-		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum,int siteNum){
+		public static List<Appointment> RefreshPlannedTracker(string orderby,long provNum,long siteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),orderby,provNum,siteNum);
 			}
@@ -113,7 +113,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns all appointments for the given patient, ordered from earliest to latest.  Used in statements, appt cards, OtherAppts window, etc.</summary>
-		public static Appointment[] GetForPat(int patNum) {
+		public static Appointment[] GetForPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 			return TableToObjects(table).ToArray();
 		}
 
-		public static List<Appointment> GetListForPat(int patNum) {
+		public static List<Appointment> GetListForPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
-		public static Appointment GetOneApt(int aptNum) {
+		public static Appointment GetOneApt(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment>(MethodBase.GetCurrentMethod(),aptNum);
 			}
@@ -156,7 +156,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Appointment GetScheduledPlannedApt(int nextAptNum) {
+		public static Appointment GetScheduledPlannedApt(long nextAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment>(MethodBase.GetCurrentMethod(),nextAptNum);
 			}
@@ -174,7 +174,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of all future appointments which are either sched or ASAP.  Ordered by dateTime</summary>
-		public static List<Appointment> GetFutureSchedApts(int patNum) {
+		public static List<Appointment> GetFutureSchedApts(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Appointment>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -189,7 +189,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
-		public static Appointment[] GetRouting(DateTime date,List <int> provNums) {
+		public static Appointment[] GetRouting(DateTime date,List<long> provNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Appointment[]>(MethodBase.GetCurrentMethod(),date,provNums);
 			}
@@ -331,7 +331,7 @@ namespace OpenDentBusiness{
 			command+="patnum,aptstatus, "
 				+"pattern,confirmed,TimeLocked,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
-				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene,"//DateTStamp
+				+"Assistant,ClinicNum,IsHygiene,"//DateTStamp
 				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
 			if(includeAptNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
@@ -353,10 +353,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (appt.IsNewPatient)+"', "
 				+"'"+POut.PString(appt.ProcDescript)+"', "
 				+"'"+POut.PInt   (appt.Assistant)+"', "
-				+"'"+POut.PInt   (appt.InstructorNum)+"', "
-				+"'"+POut.PInt   (appt.SchoolClassNum)+"', "
-				+"'"+POut.PInt   (appt.SchoolCourseNum)+"', "
-				+"'"+POut.PFloat (appt.GradePoint)+"', "
+				//+"'"+POut.PInt   (appt.InstructorNum)+"', "
+				//+"'"+POut.PInt   (appt.SchoolClassNum)+"', "
+				//+"'"+POut.PInt   (appt.SchoolCourseNum)+"', "
+				//+"'"+POut.PFloat (appt.GradePoint)+"', "
 				+"'"+POut.PInt   (appt.ClinicNum)+"', "
 				+"'"+POut.PBool  (appt.IsHygiene)+"', "
 				    +POut.PDateT (appt.DateTimeArrived)+", "
@@ -464,6 +464,7 @@ namespace OpenDentBusiness{
 				c+="Assistant = '"   +POut.PInt   (appt.Assistant)+"'";
 				comma=true;
 			}
+			/*
 			if(appt.InstructorNum!=oldApt.InstructorNum){
 				if(comma) c+=",";
 				c+="InstructorNum = '"   +POut.PInt   (appt.InstructorNum)+"'";
@@ -483,7 +484,7 @@ namespace OpenDentBusiness{
 				if(comma) c+=",";
 				c+="GradePoint = '"   +POut.PFloat  (appt.GradePoint)+"'";
 				comma=true;
-			}
+			}*/
 			if(appt.ClinicNum!=oldApt.ClinicNum){
 				if(comma) c+=",";
 				c+="ClinicNum = '"   +POut.PInt  (appt.ClinicNum)+"'";
@@ -547,7 +548,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Used in FormConfirmList</summary>
-		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,int provNum){
+		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum);
 			}
@@ -648,7 +649,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in Confirm list to just get addresses.</summary>
-		public static DataTable GetAddrTable(List <int> aptNums){
+		public static DataTable GetAddrTable(List<long> aptNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNums);
 			}
@@ -668,7 +669,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
-		public static void SetConfirmed(int aptNum,int newStatus){
+		public static void SetConfirmed(long aptNum,int newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
 				return;
@@ -749,22 +750,21 @@ namespace OpenDentBusiness{
 				apt.AptDateTime    =PIn.PDateT(table.Rows[i][10].ToString());
 				apt.NextAptNum     =PIn.PInt(table.Rows[i][11].ToString());
 				apt.UnschedStatus  =PIn.PInt(table.Rows[i][12].ToString());
-				//apt.Lab            =PIn.PInt(table.Rows[i][13].ToString());
-				apt.IsNewPatient   =PIn.PBool(table.Rows[i][14].ToString());
-				apt.ProcDescript   =PIn.PString(table.Rows[i][15].ToString());
-				apt.Assistant      =PIn.PInt(table.Rows[i][16].ToString());
-				apt.InstructorNum  =PIn.PInt(table.Rows[i][17].ToString());
-				apt.SchoolClassNum =PIn.PInt(table.Rows[i][18].ToString());
-				apt.SchoolCourseNum=PIn.PInt(table.Rows[i][19].ToString());
-				apt.GradePoint     =PIn.PFloat(table.Rows[i][20].ToString());
-				apt.ClinicNum      =PIn.PInt(table.Rows[i][21].ToString());
-				apt.IsHygiene      =PIn.PBool(table.Rows[i][22].ToString());
+				apt.IsNewPatient   =PIn.PBool(table.Rows[i][13].ToString());
+				apt.ProcDescript   =PIn.PString(table.Rows[i][14].ToString());
+				apt.Assistant      =PIn.PInt(table.Rows[i][15].ToString());
+				//apt.InstructorNum  =PIn.PInt(table.Rows[i][16].ToString());
+				//apt.SchoolClassNum =PIn.PInt(table.Rows[i][17].ToString());
+				//apt.SchoolCourseNum=PIn.PInt(table.Rows[i][18].ToString());
+				//apt.GradePoint     =PIn.PFloat(table.Rows[i][19].ToString());
+				apt.ClinicNum      =PIn.PInt(table.Rows[i][16].ToString());
+				apt.IsHygiene      =PIn.PBool(table.Rows[i][17].ToString());
 				//DateTStamp
-				apt.DateTimeArrived=PIn.PDateT(table.Rows[i][24].ToString());
-				apt.DateTimeSeated =PIn.PDateT(table.Rows[i][25].ToString());
-				apt.DateTimeDismissed=PIn.PDateT(table.Rows[i][26].ToString());
-				apt.InsPlan1=PIn.PInt(table.Rows[i][27].ToString());
-				apt.InsPlan2=PIn.PInt(table.Rows[i][28].ToString());
+				apt.DateTimeArrived=PIn.PDateT(table.Rows[i][19].ToString());
+				apt.DateTimeSeated =PIn.PDateT(table.Rows[i][20].ToString());
+				apt.DateTimeDismissed=PIn.PDateT(table.Rows[i][21].ToString());
+				apt.InsPlan1=PIn.PInt(table.Rows[i][22].ToString());
+				apt.InsPlan2=PIn.PInt(table.Rows[i][23].ToString());
 				list.Add(apt);
 			}
 			return list;

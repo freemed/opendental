@@ -42,14 +42,14 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one Pharmacy from the database.</Summary>
-		public static Pharmacy CreateObject(int PharmacyNum){
+		public static Pharmacy CreateObject(long PharmacyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Pharmacy>(MethodBase.GetCurrentMethod(),PharmacyNum);
 			}
 			return DataObjectFactory<Pharmacy>.CreateObject(PharmacyNum);
 		}
 
-		public static List<Pharmacy> GetPharmacies(List <int> PharmacyNums){
+		public static List<Pharmacy> GetPharmacies(List<long> PharmacyNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Pharmacy>>(MethodBase.GetCurrentMethod(),PharmacyNums);
 			}
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int PharmacyNum){
+		public static void DeleteObject(long PharmacyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),PharmacyNum);
 				return;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<Pharmacy>.DeleteObject(PharmacyNum);
 		//}
 
-		public static string GetDescription(int PharmacyNum){
+		public static string GetDescription(long PharmacyNum) {
 			//No need to check RemotingRole; no call to db.
 			if(PharmacyNum==0){
 				return "";

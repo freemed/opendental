@@ -6,7 +6,7 @@ namespace OpenDentBusiness.HL7 {
 	public class SIU {
 		public static void ProcessMessage(MessageHL7 message){
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
-			int patNum=PIn.PInt(seg.GetFieldFullText(2));
+			long patNum=PIn.PInt(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
 			Patient patOld=null;
 			bool isNewPat = pat==null;
@@ -28,7 +28,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//SCH- Schedule Activity Information
 			seg=message.GetSegment(SegmentName.SCH,true);
-			int aptNum=PIn.PInt(seg.GetFieldFullText(1));
+			long aptNum=PIn.PInt(seg.GetFieldFullText(1));
 			Appointment apt=Appointments.GetOneApt(aptNum);
 			Appointment aptOld=null;
 			bool isNewApt = apt==null;
@@ -93,11 +93,11 @@ namespace OpenDentBusiness.HL7 {
 			if(str.Length != 14) {
 				return DateTime.MinValue;
 			}
-			int year=PIn.PInt(str.Substring(0,4));
-			int month=PIn.PInt(str.Substring(4,2));
-			int day=PIn.PInt(str.Substring(6,2));
-			int hour=PIn.PInt(str.Substring(8,2));
-			int minute=PIn.PInt(str.Substring(10,2));
+			int year=PIn.PInt32(str.Substring(0,4));
+			int month=PIn.PInt32(str.Substring(4,2));
+			int day=PIn.PInt32(str.Substring(6,2));
+			int hour=PIn.PInt32(str.Substring(8,2));
+			int minute=PIn.PInt32(str.Substring(10,2));
 			//skip seconds
 			DateTime retVal=new DateTime(year,month,day,hour,minute,0);
 			return retVal;

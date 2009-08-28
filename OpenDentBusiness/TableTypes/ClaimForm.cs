@@ -23,10 +23,10 @@ namespace OpenDentBusiness{
 		public bool PrintImages;
 		///<summary>Shifts all items by x/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
 		//[XmlIgnore]
-		public long OffsetX;
+		public int OffsetX;
 		///<summary>Shifts all items by y/100th's of an inch to compensate for printer, typically less than 1/4 inch.</summary>
 		//[XmlIgnore]
-		public long OffsetY;
+		public int OffsetY;
 		///<summary>This is not a database column.  It is an array of all claimformItems that are attached to this ClaimForm.</summary>
 		public ClaimFormItem[] Items;
 
