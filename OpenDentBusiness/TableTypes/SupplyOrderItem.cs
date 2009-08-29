@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Qty")]
-		private long qty;
+		private int qty;
 		bool qtyChanged;
 		/// <summary>How many were ordered.</summary>
-		public long Qty {
+		public int Qty {
 			get { return qty; }
 			set { qty = value; MarkDirty(); qtyChanged = true; }
 		}

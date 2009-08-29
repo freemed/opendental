@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Order to display in patient info. Will be automated more in future.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>Date of referral.</summary>
 		public DateTime RefDate;//
 		///<summary>true=from, false=to</summary>

@@ -10,9 +10,9 @@ namespace OpenDentBusiness{
 		///<summary>The text on the button</summary>
 		public string ButtonText;
 		///<summary>0-based index defines the order of the buttons.</summary>
-		public long ButtonIndex;
+		public int ButtonIndex;
 		///<summary>0=none, or 1-9. The cell in the 3x3 tic-tac-toe main program icon that is to be synched with this button.  It will light up or clear whenever this button lights or clears.</summary>
-		public long SynchIcon;
+		public int SynchIcon;
 		///<summary>Blank for the default buttons.  Or contains the computer name for the buttons that override the defaults.</summary>
 		public string ComputerName;
 		///<summary>Not a database field.  The sounds and lights attached to the button.</summary>

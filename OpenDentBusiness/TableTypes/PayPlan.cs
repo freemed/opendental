@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		public double APR;
 		///<summary>Generally used to archive the terms when the amortization schedule is created.</summary>
 		public string Note;
-		///<summary>Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to insplan.PlanNum and Guarantor will be 0.</summary>
+		///<summary>FK to insplan.PlanNum.  Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to insplan.PlanNum and Guarantor will be 0.</summary>
 		public long PlanNum;
 		///<summary>The amount of the treatment that has already been completed.  This should match the sum of the principal amounts for most situations.  But if the procedures have not yet been completed, and the payment plan is to make any sense, then this number must be changed.</summary>
 		public double CompletedAmt;

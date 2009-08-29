@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to quickpastecat.QuickPasteCatNum.  Keeps track of which category this note is in.</summary>
 		public long QuickPasteCatNum;
 		///<summary>The order of this note within it's category. 0-based.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>The actual note. Can be multiple lines and possibly very long.</summary>
 		public string Note;
 		///<summary>The abbreviation which will automatically substitute when preceded by a ?.</summary>

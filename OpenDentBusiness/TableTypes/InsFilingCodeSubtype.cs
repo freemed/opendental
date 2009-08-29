@@ -4,7 +4,7 @@ using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>Stores the list of insurance filing code subtypes.</summary>
-	[DataObject("InsFilingCodeSubtype")]
+	[DataObject("insfilingcodesubtype")]
 	public class InsFilingCodeSubtype : DataObjectBase{
 		[DataField("InsFilingCodeSubtypeNum",PrimaryKey=true,AutoNumber=true)]
 		private long insFilingCodeSubtypeNum;

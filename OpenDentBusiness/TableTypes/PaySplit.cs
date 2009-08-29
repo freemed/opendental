@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		///<summary>No longer used.</summary>
 		public bool IsDiscount;
 		///<summary>No longer used</summary>
-		public long DiscountType;
+		public int DiscountType;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long ProvNum;
 		///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>

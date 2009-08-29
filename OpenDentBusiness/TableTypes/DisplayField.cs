@@ -10,11 +10,11 @@ namespace OpenDentBusiness{
 		///<summary>This is the internal name that OD uses to identify the field within this category.  This will be the default description if the user doesn't specify an alternate.</summary>
 		public string InternalName;
 		///<summary>Order to display in the grid or list. Every entry must have a unique itemorder.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>Optional alternate description to display for field.  Can be in another language.</summary>
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
-		public long ColumnWidth;
+		public int ColumnWidth;
 		///<summary>Enum:DisplayFieldCategory</summary>
 		public DisplayFieldCategory Category;
 

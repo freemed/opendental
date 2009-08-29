@@ -79,7 +79,7 @@ namespace DocumentationBuilder {
 			this.label4.TabIndex = 4;
 			this.label4.Text = "Step 4: Build.  The output file is DocumentationBuilder/OpenDentalDocumentation.x" +
     "ml, which will be automatically launched when done.  Approximate time to complet" +
-    "e is 5 seconds on a fast computer.";
+    "e is 9 seconds on a fast computer.";
 			// 
 			// label6
 			// 
@@ -95,7 +95,7 @@ namespace DocumentationBuilder {
 			this.textVersion.Name = "textVersion";
 			this.textVersion.Size = new System.Drawing.Size(59,20);
 			this.textVersion.TabIndex = 7;
-			this.textVersion.Text = "6.4.0";
+			this.textVersion.Text = "6.8.0";
 			// 
 			// textConnStr
 			// 

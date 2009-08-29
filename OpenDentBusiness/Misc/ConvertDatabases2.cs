@@ -821,6 +821,22 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE appointment DROP GradePoint";
 				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS graphicassembly";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS graphicelement";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS graphicpoint";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS graphicshape";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS graphictype";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS proclicense";
+				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS scheddefault";
+				Db.NonQ32(command);
+
+
 
 
 

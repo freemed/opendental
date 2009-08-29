@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum.</summary>
 		public long BillingType;
 		///<summary>This is an long field, but program forces only 0,30,60,or 90.</summary>
-		public long AgeAccount;
+		public int AgeAccount;
 		///<summary>Enum:YN Set Y to only show if insurance is pending.</summary>
 		public YN InsIsPending;
 		///<summary>A message that will be copied to the NoteBold field of the Statement.</summary>

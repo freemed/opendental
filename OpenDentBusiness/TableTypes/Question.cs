@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
 		///<summary>The order that this question shows in the list.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>The original question.</summary>
 		public string Description;
 		///<summary>The answer to the question in text form.</summary>

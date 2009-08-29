@@ -68,10 +68,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private long itemOrder;
+		private int itemOrder;
 		bool itemOrderChanged;
 		///<summary>The zero-based order of this supply within it's category.</summary>
-		public long ItemOrder {
+		public int ItemOrder {
 			get { return itemOrder; }
 			set { if(itemOrder!=value){itemOrder = value; MarkDirty(); itemOrderChanged = true; }}
 		}

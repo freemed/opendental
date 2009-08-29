@@ -216,6 +216,7 @@ namespace DocumentationBuilder {
 				case "covcat": return "CovCat";
 				case "covspan": return "CovSpan";
 				case "definition": return "Def";
+				case "deletedobject": return "DeletedObject";
 				case "diseasedef": return "DiseaseDef";
 				case "displayfield": return "DisplayField";
 				case "docattach": return "DocAttach";
@@ -223,6 +224,7 @@ namespace DocumentationBuilder {
 				case "emailattach": return "EmailAttach";
 				case "emailmessage": return "EmailMessage";
 				case "emailtemplate": return "EmailTemplate";
+				case "etransmessagetext": return "EtransMessageText";
 				case "feesched": return "FeeSched";
 				case "formpat": return "FormPat";
 				case "graphicassembly": return "GraphicAssembly Not Used";
@@ -231,6 +233,9 @@ namespace DocumentationBuilder {
 				case "graphicshape": return "graphicshape Not Used";
 				case "graphictype": return "graphictype Not Used";
 				case "grouppermission": return "GroupPermission";
+				case "hl7msg": return "HL7Msg";
+				case "insfilingcode": return "InsFilingCode";
+				case "insfilingcodesubtype": return "InsFilingCodeSubtype";
 				case "insplan": return "InsPlan";
 				case "journalentry": return "JournalEntry";
 				case "labcase": return "LabCase";

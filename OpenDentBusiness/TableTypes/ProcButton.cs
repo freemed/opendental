@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		///<summary>The text to show on the button.</summary>
 		public string Description;
 		///<summary>Order that they will show in the Chart module.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>FK to definition.DefNum.</summary>
 		public long Category;
 		///<summary>If no image, then the blob will be an empty string.  In this case, the bitmap will be null when loaded from the database.</summary>

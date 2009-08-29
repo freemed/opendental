@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary>The question as presented to the patient.</summary>
 		public string Description;
 		///<summary>The order that the Questions will show.</summary>
-		public long ItemOrder;
+		public int ItemOrder;
 		///<summary>Enum:QuestionType</summary>
 		public QuestionType QuestType;
 

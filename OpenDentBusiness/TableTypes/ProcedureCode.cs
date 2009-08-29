@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public bool IsHygiene;
 		///<summary>No longer used.</summary>
 		//[XmlIgnore]
-		public long GTypeNum;
+		public int GTypeNum;
 		///<summary>For Medicaid.  There may be more later.</summary>
 		//[XmlIgnore]
 		public string AlternateCode1;
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		public bool PreExisting;
 		///<summary>Support for Base Units for a Code (like anesthesia).  Should normally be zero.</summary>
 		//[XmlIgnore]
-		public long BaseUnits;
+		public int BaseUnits;
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
 		//[XmlIgnore]
 		public string SubstitutionCode;

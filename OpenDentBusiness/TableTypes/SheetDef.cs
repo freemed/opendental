@@ -72,10 +72,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private long width;
+		private int width;
 		private bool widthChanged;
 		///<summary>Width of the sheet in pixels, 100 pixels per inch.</summary>
-		public long Width{
+		public int Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -84,10 +84,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private long height;
+		private int height;
 		private bool heightChanged;
 		///<summary>Height of the sheet in pixels, 100 pixels per inch.</summary>
-		public long Height{
+		public int Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}

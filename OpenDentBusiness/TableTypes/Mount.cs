@@ -8,7 +8,6 @@ namespace OpenDentBusiness {
 	[DataObject("mount")]
 	public class Mount : DataObjectBase {
 
-		///<summary>Primary key.</summary>
 		[DataField("MountNum", PrimaryKey=true, AutoNumber=true)]
 		private long mountNum;
 		///<summary>Primary key.</summary>
@@ -16,7 +15,6 @@ namespace OpenDentBusiness {
 		bool mountNumChanged;
 		public bool MountNumChanged{get{return mountNumChanged;}}
 
-		///<summary>FK to patient.PatNum</summary>
 		[DataField("PatNum")]
 		private long patNum;
 		///<summary>FK to patient.PatNum</summary>
@@ -24,7 +22,6 @@ namespace OpenDentBusiness {
 		bool patNumChanged;
 		public bool PatNumChanged{get{return patNumChanged;}}
 
-		///<summary>FK to definition.DefNum. Categories for documents.</summary>
 		[DataField("DocCategory")]
 		private long docCategory;
 		///<summary>FK to definition.DefNum. Categories for documents.</summary>
@@ -32,7 +29,6 @@ namespace OpenDentBusiness {
 		bool docCategoryChanged;
 		public bool DocCategoryChanged{get{return docCategoryChanged;}}
 
-		///<summary>The date at which the mount itself was created. Has no bearing on the creation date of the images the mount houses.</summary>
 		[DataField("DateCreated")]
 		private DateTime dateCreated;
 		/// <summary>The date at which the mount itself was created. Has no bearing on the creation date of the images the mount houses.</summary>
@@ -45,7 +41,6 @@ namespace OpenDentBusiness {
 			get { return dateCreatedChanged; }
 		}
 
-		///<summary>Used to provide a document description in the image module tree-view.</summary>
 		[DataField("Description")]
 		private string description;
 		/// <summary>Used to provide a document description in the image module tree-view.</summary>
@@ -58,7 +53,6 @@ namespace OpenDentBusiness {
 			get { return descriptionChanged; }
 		}
 
-		///<summary>To allow the user to enter specific information regarding the exam and tooth numbers, as well as points on interest in the xray images.</summary>
 		[DataField("Note")]
 		private string note;
 		/// <summary>To allow the user to enter specific information regarding the exam and tooth numbers, as well as points on interest in the xray images.</summary>
@@ -71,7 +65,6 @@ namespace OpenDentBusiness {
 			get { return noteChanged; }
 		}
 
-		///<summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
 		[DataField("ImgType")]
 		private ImageType imgType;
 		/// <summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
@@ -84,11 +77,10 @@ namespace OpenDentBusiness {
 			get { return imgTypeChanged; }
 		}
 
-		///<summary>The static width of the mount, in pixels.</summary>
 		[DataField("Width")]
-		private long width;
+		private int width;
 		/// <summary>The static width of the mount, in pixels.</summary>
-		public long Width {
+		public int Width {
 			get { return width; }
 			set { width = value; MarkDirty(); widthChanged = true; }
 		}
@@ -97,11 +89,10 @@ namespace OpenDentBusiness {
 			get { return widthChanged; }
 		}
 
-		///<summary>The static height of the mount, in pixels.</summary>
 		[DataField("Height")]
-		private long height;
+		private int height;
 		/// <summary>The static height of the mount, in pixels.</summary>
-		public long Height {
+		public int Height {
 			get { return height; }
 			set { height = value; MarkDirty(); heightChanged = true; }
 		}

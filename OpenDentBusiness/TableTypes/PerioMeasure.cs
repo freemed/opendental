@@ -11,21 +11,21 @@ namespace OpenDentBusiness{
 		///<summary>Enum:PerioSequenceType  eg probing, mobility, recession, etc.</summary>
 		public PerioSequenceType SequenceType;
 		///<summary>Valid values are 1-32. Every measurement must be associated with a tooth.</summary>
-		public long IntTooth;
+		public int IntTooth;
 		///<summary>This is used when the measurement does not apply to a surface(mobility and skiptooth).  Valid values for all surfaces are 0 through 19, or -1 to represent no measurement taken.</summary>
-		public long ToothValue;
+		public int ToothValue;
 		///<summary>.</summary>
-		public long MBvalue;
+		public int MBvalue;
 		///<summary>.</summary>
-		public long Bvalue;
+		public int Bvalue;
 		///<summary>.</summary>
-		public long DBvalue;
+		public int DBvalue;
 		///<summary>.</summary>
-		public long MLvalue;
+		public int MLvalue;
 		///<summary>.</summary>
-		public long Lvalue;
+		public int Lvalue;
 		///<summary>.</summary>
-		public long DLvalue;
+		public int DLvalue;
 
 		public PerioMeasure Copy(){
 			PerioMeasure p=new PerioMeasure();

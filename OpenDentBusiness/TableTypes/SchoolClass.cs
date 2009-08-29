@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		public long SchoolClassNum;
 		///<summary>The year this class will graduate</summary>
-		public long GradYear;
+		public int GradYear;
 		///<summary>Description of this class. eg Dental or Hygiene</summary>
 		public string Descript;
 

@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public long CarrierNum;
 		///<summary>FK to carrier.CarrierNum Only used if secondary insurance info is provided on a claim.  Necessary for Canada.</summary>
 		public long CarrierNum2;
-		///<summary>This is useful in case the original claim has been deleted.  Now, we can still tell who the patient was.</summary>
+		///<summary>FK to patient.PatNum This is useful in case the original claim has been deleted.  Now, we can still tell who the patient was.</summary>
 		public long PatNum;
 		///<summary>Maxes out at 999, then loops back to 1.  This is not a good key, but is a restriction of (canadian?).  So dates must also be used to isolate the correct BatchNumber key.  Specific to one clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a functional group number)</summary>
 		public int BatchNumber;

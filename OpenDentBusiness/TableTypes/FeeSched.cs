@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private long itemOrder;
+		private int itemOrder;
 		private bool itemOrderChanged;
 		///<summary>Unlike with the old definition table, this ItemOrder is not as critical in the caching of data.  The item order is only for fee schedules of the same type.</summary>
-		public long ItemOrder{
+		public int ItemOrder{
 			get{return itemOrder;}
 			set{if(itemOrder!=value){itemOrder=value;MarkDirty();itemOrderChanged=true;}}
 		}

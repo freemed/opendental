@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:PatientGrade</summary>
 		public PatientGrade GradeLevel;
 		///<summary>Age of patient at the time the screening was done. Faster than recording birthdates.</summary>
-		public long Age;
+		public int Age;
 		///<summary>Enum:TreatmentUrgency</summary>
 		public TreatmentUrgency Urgency;
 		///<summary>Enum:YN Set to true if patient has cavities.</summary>
@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to screengroup.ScreenGroupNum.</summary>
 		public long ScreenGroupNum;
 		///<summary>The order of this item within its group.</summary>
-		public long ScreenGroupOrder;
+		public int ScreenGroupOrder;
 		///<summary>.</summary>
 		public string Comments;
 	}

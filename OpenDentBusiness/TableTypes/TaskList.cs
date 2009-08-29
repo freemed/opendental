@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<Summary>Not a database table.  A string description of the parents of this list.  Might look like this: MegaParent/Parent/  This string may then be tacked on before the Descript to indicate the heirarchy.  It will extend a max of 3 levels.  Only useful in the User tab.</Summary>
 		public string ParentDesc;
 		///<summary>Not a database table.  The number of new tasks found within a tasklist.  Used in the user tab to turn the tasklist orange, indicating that tasks are present.</summary>
-		public long NewTaskCount;
+		public int NewTaskCount;
 
 		///<summary></summary>
 		public TaskList Copy(){

@@ -21,21 +21,21 @@ namespace OpenDentBusiness {
 		///<summary>Indicates which Suni box port to connect with. There are 2 ports on a box (ports 0 and 1).</summary>
 		public int SensorPort;
 		///<summary>Indicates the exposure level to use when capturing from a Suni sensor. Values can be 1 through 7.</summary>
-		public long SensorExposure;
+		public int SensorExposure;
 		///<summary>Indicates if the user prefers double-buffered 3D tooth-chart (where applicable).</summary>
 		public bool GraphicsDoubleBuffering;
 		///<summary>Indicates the current pixel format by number which the user prefers.</summary>
-		public long PreferredPixelFormatNum;
+		public int PreferredPixelFormatNum;
 		///<summary>The path of the A-Z folder for the specified computer.  Overrides the officewide default.  Used when multiple locations are on a single virtual database and they each want to look to the local data folder for images.</summary>
 		public string AtoZpath;
 		///<summary>If the global setting for showing the Task List is on, this controls if it should be hidden on this specified computer</summary>
 		public bool TaskKeepListHidden;
 		///<summary>Dock task bar on bottom (0) or right (1).</summary>
-		public long TaskDock;
+		public int TaskDock;
 		///<summary>X pos for right docked task list.</summary>
-		public long TaskX;
+		public int TaskX;
 		///<summary>Y pos for bottom docked task list.</summary>
-		public long TaskY;
+		public int TaskY;
 
 		public ComputerPref Copy(){
 			return (ComputerPref)MemberwiseClone();

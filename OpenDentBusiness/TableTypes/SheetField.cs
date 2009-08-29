@@ -104,10 +104,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("XPos")]
-		private long xPos;
+		private int xPos;
 		private bool xPosChanged;
 		///<summary>In pixels.</summary>
-		public long XPos{
+		public int XPos{
 			get{return xPos;}
 			set{if(xPos!=value){xPos=value;MarkDirty();xPosChanged=true;}}
 		}
@@ -116,10 +116,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("YPos")]
-		private long yPos;
+		private int yPos;
 		private bool yPosChanged;
 		///<summary>In pixels.</summary>
-		public long YPos{
+		public int YPos{
 			get{return yPos;}
 			set{if(yPos!=value){yPos=value;MarkDirty();yPosChanged=true;}}
 		}
@@ -128,10 +128,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Width")]
-		private long width;
+		private int width;
 		private bool widthChanged;
 		///<summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</summary>
-		public long Width{
+		public int Width{
 			get{return width;}
 			set{if(width!=value){width=value;MarkDirty();widthChanged=true;}}
 		}
@@ -140,10 +140,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Height")]
-		private long height;
+		private int height;
 		private bool heightChanged;
 		///<summary>The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer.</summary>
-		public long Height{
+		public int Height{
 			get{return height;}
 			set{if(height!=value){height=value;MarkDirty();heightChanged=true;}}
 		}

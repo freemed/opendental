@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary>Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.</summary>
 		public DateTime NewerDate;
 		///<summary>Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today.</summary>
-		public long NewerDays;
+		public int NewerDays;
 		///<summary>FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted.</summary>
 		public long UserGroupNum;
 		///<summary>Enum:Permissions</summary>

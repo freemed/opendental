@@ -114,9 +114,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Only allowed 0,90,180, and 270.</summary>
 		[DataField("DegreesRotated")]
-		private long degreesRotated;
+		private int degreesRotated;
 		/// <summary>Only allowed 0,90,180, and 270.</summary>
-		public long DegreesRotated {
+		public int DegreesRotated {
 			get { return degreesRotated; }
 			set { degreesRotated = value; MarkDirty(); degreesRotatedChanged = true; }
 		}
@@ -181,9 +181,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropX")]
-		private long cropX;
+		private int cropX;
 		/// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
-		public long CropX {
+		public int CropX {
 			get { return cropX; }
 			set { cropX = value; MarkDirty(); cropXChanged = true; }
 		}
@@ -195,9 +195,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropY")]
-		private long cropY;
+		private int cropY;
 		/// <summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
-		public long CropY {
+		public int CropY {
 			get { return cropY; }
 			set { cropY = value; MarkDirty(); cropYChanged = true; }
 		}
@@ -209,9 +209,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
 		[DataField("CropW")]
-		private long cropW;
+		private int cropW;
 		/// <summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
-		public long CropW {
+		public int CropW {
 			get { return cropW; }
 			set { cropW = value; MarkDirty(); cropWChanged = true; }
 		}
@@ -223,9 +223,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
 		[DataField("CropH")]
-		private long cropH;
+		private int cropH;
 		/// <summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
-		public long CropH {
+		public int CropH {
 			get { return cropH; }
 			set { cropH = value; MarkDirty(); cropHChanged = true; }
 		}
@@ -237,9 +237,9 @@ namespace OpenDentBusiness{
 
 		///<summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
 		[DataField("WindowingMin")]
-		private long windowingMin;
+		private int windowingMin;
 		/// <summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
-		public long WindowingMin {
+		public int WindowingMin {
 			get { return windowingMin; }
 			set { windowingMin = value; MarkDirty(); windowingMinChanged = true; }
 		}
@@ -251,9 +251,9 @@ namespace OpenDentBusiness{
 
 		///<summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
 		[DataField("WindowingMax")]
-		private long windowingMax;
+		private int windowingMax;
 		/// <summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
-		public long WindowingMax {
+		public int WindowingMax {
 			get { return windowingMax; }
 			set { windowingMax = value; MarkDirty(); windowingMaxChanged = true; }
 		}

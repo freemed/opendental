@@ -3,8 +3,8 @@ using System.Collections;
 using OpenDentBusiness.DataAccess;
 
 namespace OpenDentBusiness{
-	///<summary>Description of table</summary>
-	[DataObject("InsFilingCode")]
+	///<summary>An optional field on insplan and claims.  This lets user customize so that they can track insurance types.</summary>
+	[DataObject("insfilingcode")]
 	public class InsFilingCode : DataObjectBase{
 
 		[DataField("InsFilingCodeNum",PrimaryKey=true,AutoNumber=true)]
@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("ItemOrder")]
-		private long itemOrder;
+		private int itemOrder;
 		private bool itemOrderChanged;
 		///<summary>Display order for this filing code within the UI.  0-indexed.</summary>
-		public long ItemOrder {
+		public int ItemOrder {
 			get { return itemOrder; }
 			set { if(itemOrder!=value) { itemOrder=value; MarkDirty(); itemOrderChanged=true; } }
 		}

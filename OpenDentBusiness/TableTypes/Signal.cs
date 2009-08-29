@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public string ToUser;
 		///<summary>If this signal has been acknowledged, then this will contain the date and time.  This is how lights get turned off also.</summary>
 		public DateTime AckTime;
-		///<summary>If IType=Tasks, then this is the taskNum that was added.</summary>
+		///<summary>FK to task.TaskNum.  If IType=Tasks, then this is the taskNum that was added.</summary>
 		public long TaskNum;
 		///<summary>Not a database field.  The sounds and lights attached to the signal.</summary>
 		public SigElement[] ElementList;
