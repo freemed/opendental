@@ -26,10 +26,10 @@ namespace OpenDentBusiness {
 		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  The range of returned values is greater than 0, and less than or equal to 9223372036854775807.</summary>
 		public static long GetKey(string tablename, string field) {
 			//No need to check RemotingRole; no call to db.
-			int numComputers=0;
-			int myComputerNum=0;//One-based unique computer number index. Used to decide which key-partition to use for this computer.
-			int myPartitionStart=0;
-			int myPartitionEnd=0;
+			long numComputers=0;
+			long myComputerNum=0;//One-based unique computer number index. Used to decide which key-partition to use for this computer.
+			long myPartitionStart=0;
+			long myPartitionEnd=0;
 			long keymaxval=9223372036854775807;
 			//Calculate the primary key range for this computer if it has not already calculated.
 			if(numComputers==0 || myComputerNum==0){//the way it's written, this will always be true
@@ -43,24 +43,24 @@ namespace OpenDentBusiness {
 					numComputers=1;
 					myComputerNum=1;
 				}
-				int partitionSize=keymaxval/numComputers;//truncation here is good (to avoid partition overflow).
+				long partitionSize=keymaxval/numComputers;//truncation here is good (to avoid partition overflow).
 				myPartitionStart=(myComputerNum-1)*partitionSize+1;
 				myPartitionEnd=myPartitionStart+partitionSize-1;
 			}
 			Random random=new Random();
 			long rndLong;
 			do{
-				rndLong=random.NextDouble()*keymaxval;
+				rndLong=(long)(random.NextDouble()*keymaxval);
 				//rnd=random.Next(myPartitionStart,myPartitionEnd);
 			}
 			while(rndLong==0  
 				|| rndLong < myPartitionStart
 				|| rndLong > myPartitionEnd
-				|| KeyInUse(tablename,field,rnd));
+				|| KeyInUse(tablename,field,rndLong));
 			return rndLong;
 		}
 
-		public static int GetNumComputers(){
+		public static long GetNumComputers(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
@@ -69,7 +69,7 @@ namespace OpenDentBusiness {
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
-		public static int GetComputerNumForName(string computerName){
+		public static long GetComputerNumForName(string computerName){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerName);
 			}
@@ -80,7 +80,7 @@ namespace OpenDentBusiness {
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
-		private static bool KeyInUse(string tablename,string field,int keynum){
+		private static bool KeyInUse(string tablename,string field,long keynum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),tablename,field,keynum);
 			}
@@ -105,7 +105,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Backs up the database to the same directory as the original just in case the user did not have sense enough to do a backup first.</summary>
-		public static int MakeABackup() {
+		public static long MakeABackup() {
 			//This function should always make the backup on the server itself, and since no directories are
 			//referred to (all handled with MySQL), this function will always be referred to the server from
 			//client machines.

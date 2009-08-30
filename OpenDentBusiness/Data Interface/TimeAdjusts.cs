@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		}
 	
 		///<summary></summary>
-		public static int Insert(TimeAdjust adj) {
+		public static long Insert(TimeAdjust adj) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				adj.TimeAdjustNum=Meth.GetInt(MethodBase.GetCurrentMethod(),adj);
 				return adj.TimeAdjustNum;

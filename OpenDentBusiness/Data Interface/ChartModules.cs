@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 	public class ChartModules {
 		private static DataTable rawApt;
 
-		public static DataSet GetAll(int patNum,bool isAuditMode) {
+		public static DataSet GetAll(long patNum,bool isAuditMode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,isAuditMode);
 			} 
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static DataTable GetProgNotes(int patNum,bool isAuditMode) {
+		public static DataTable GetProgNotes(long patNum,bool isAuditMode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,isAuditMode);
 			}
@@ -698,7 +698,7 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		private static DataTable GetPlannedApt(int patNum){
+		private static DataTable GetPlannedApt(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}

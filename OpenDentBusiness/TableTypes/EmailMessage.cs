@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 		public EmailMessage Copy() {
 			EmailMessage e=(EmailMessage)this.MemberwiseClone();
 			e.Attachments=new List<EmailAttach>();
-			for(long i=0;i<Attachments.Count;i++) {
+			for(int i=0;i<Attachments.Count;i++) {
 				e.Attachments.Add(Attachments[i].Copy());
 			}
 			return e;

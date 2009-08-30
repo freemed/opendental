@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Deposit dep){
+		public static long Insert(Deposit dep) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				dep.DepositNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dep);
 				return dep.DepositNum;

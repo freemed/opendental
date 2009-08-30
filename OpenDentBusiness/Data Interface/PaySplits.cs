@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PaySplit split){
+		public static long Insert(PaySplit split) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				split.SplitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),split);
 				return split.SplitNum;
@@ -220,7 +220,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used once in ContrAccount to just get the splits for a single patient.  The supplied list also contains splits that are not necessarily for this one patient.</summary>
-		public static PaySplit[] GetForPatient(int patNum,PaySplit[] List){
+		public static PaySplit[] GetForPatient(long patNum,PaySplit[] List) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -234,7 +234,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used once in ContrAccount.  Usually returns 0 unless there is a payplan for this payment and patient.</summary>
-		public static int GetPayPlanNum(int payNum,int patNum,PaySplit[] List){
+		public static long GetPayPlanNum(long payNum,long patNum,PaySplit[] List) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].PayNum==payNum && List[i].PatNum==patNum && List[i].PayPlanNum!=0){

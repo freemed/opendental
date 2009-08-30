@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(Supplier supp){
+		public static long WriteObject(Supplier supp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				supp.SupplierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplierNum;
@@ -37,12 +37,12 @@ namespace OpenDentBusiness{
 			}
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM supplyorder WHERE SupplierNum="+POut.PInt(supp.SupplierNum);
-			int count=PIn.PInt(Db.GetCount(command));
+			int count=PIn.PInt32(Db.GetCount(command));
 			if(count>0) {
 				throw new ApplicationException(Lans.g("Supplies","Supplier is already in use on an order. Not allowed to delete."));
 			}
 			command="SELECT COUNT(*) FROM supply WHERE SupplierNum="+POut.PInt(supp.SupplierNum);
-			count=PIn.PInt(Db.GetCount(command));
+			count=PIn.PInt32(Db.GetCount(command));
 			if(count>0) {
 				throw new ApplicationException(Lans.g("Supplies","Supplier is already in use on a supply. Not allowed to delete."));
 			}

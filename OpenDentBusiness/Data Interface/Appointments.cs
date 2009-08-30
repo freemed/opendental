@@ -308,7 +308,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW.</summary>
-		public static int Insert(Appointment appt,bool includeAptNum) {
+		public static long Insert(Appointment appt,bool includeAptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				appt.AptNum=Meth.GetInt(MethodBase.GetCurrentMethod(),appt,includeAptNum);
 				return appt.AptNum;
@@ -330,7 +330,7 @@ namespace OpenDentBusiness{
 			}
 			command+="patnum,aptstatus, "
 				+"pattern,confirmed,TimeLocked,op,note,provnum,"
-				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
+				+"provhyg,aptdatetime,nextaptnum,unschedstatus,isnewpatient,procdescript,"
 				+"Assistant,ClinicNum,IsHygiene,"//DateTStamp
 				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2) VALUES(";
 			if(includeAptNum || PrefC.RandomKeys) {
@@ -349,14 +349,9 @@ namespace OpenDentBusiness{
 				+POut.PDateT (appt.AptDateTime)+", "
 				+"'"+POut.PInt   (appt.NextAptNum)+"', "
 				+"'"+POut.PInt   (appt.UnschedStatus)+"', "
-				+"'"+POut.PInt   (appt.LabOld)+"', "
 				+"'"+POut.PBool  (appt.IsNewPatient)+"', "
 				+"'"+POut.PString(appt.ProcDescript)+"', "
 				+"'"+POut.PInt   (appt.Assistant)+"', "
-				//+"'"+POut.PInt   (appt.InstructorNum)+"', "
-				//+"'"+POut.PInt   (appt.SchoolClassNum)+"', "
-				//+"'"+POut.PInt   (appt.SchoolCourseNum)+"', "
-				//+"'"+POut.PFloat (appt.GradePoint)+"', "
 				+"'"+POut.PInt   (appt.ClinicNum)+"', "
 				+"'"+POut.PBool  (appt.IsHygiene)+"', "
 				    +POut.PDateT (appt.DateTimeArrived)+", "
@@ -379,7 +374,7 @@ namespace OpenDentBusiness{
 		//}
 
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
-		public static int Update(Appointment appt, Appointment oldApt){
+		public static long Update(Appointment appt,Appointment oldApt) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),appt,oldApt);
 			}
@@ -524,7 +519,7 @@ namespace OpenDentBusiness{
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE AptNum = '"+POut.PInt(appt.AptNum)+"'";
- 			int rowsChanged=Db.NonQ(c);
+ 			long rowsChanged=Db.NonQ(c);
 			//MessageBox.Show(c);
 			return rowsChanged;
 		}

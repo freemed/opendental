@@ -167,7 +167,7 @@ namespace OpenDentBusiness.DataAccess
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
 		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
-		public static void SetPrimaryKey(T value, int key) {
+		public static void SetPrimaryKey(T value,long key) {
 			DataFieldInfo primaryKeyField = GetPrimaryKeyField();
 			primaryKeyField.Field.SetValue(value, key);
 		}

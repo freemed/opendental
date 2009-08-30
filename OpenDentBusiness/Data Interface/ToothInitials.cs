@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 				ti.InitialType    = (ToothInitialType)PIn.PInt(table.Rows[i][3].ToString());
 				ti.Movement       = PIn.PFloat (table.Rows[i][4].ToString());
 				ti.DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
-				ti.ColorDraw      = Color.FromArgb(PIn.PInt(table.Rows[i][6].ToString()));
+				ti.ColorDraw      = Color.FromArgb(PIn.PInt32(table.Rows[i][6].ToString()));
 				tList.Add(ti);
 			}
 			return tList;
@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 	
 
 		///<summary></summary>
-		public static int Insert(ToothInitial init){
+		public static long Insert(ToothInitial init) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				init.ToothInitialNum=Meth.GetInt(MethodBase.GetCurrentMethod(),init);
 				return init.ToothInitialNum;

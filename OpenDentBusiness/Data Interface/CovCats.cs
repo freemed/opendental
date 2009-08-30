@@ -27,8 +27,8 @@ namespace OpenDentBusiness {
 				covcat=new CovCat();
 				covcat.CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
 				covcat.Description   =PIn.PString(table.Rows[i][1].ToString());
-				covcat.DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
-				covcat.CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
+				covcat.DefaultPercent=PIn.PInt32(table.Rows[i][2].ToString());
+				covcat.CovOrder      =PIn.PInt32(table.Rows[i][3].ToString());
 				covcat.IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
 				covcat.EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
@@ -137,10 +137,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int GetCovCatNum(int orderShort){
+		public static long GetCovCatNum(int orderShort){
 			//No need to check RemotingRole; no call to db.
 			//need to check this again:
-			int retVal=0;
+			long retVal=0;
 			for(int i=0;i<CovCatC.ListShort.Count;i++){
 				if(orderShort==CovCatC.ListShort[i].CovOrder){
 					retVal=CovCatC.ListShort[i].CovCatNum;
@@ -233,7 +233,7 @@ namespace OpenDentBusiness {
 		public static void SetSpansToDefault() {
 			//This can only be run if the validation checks have been run first.
 			//No need to check RemotingRole; no call to db.
-			int covCatNum;
+			long covCatNum;
 			CovSpan span;
 			covCatNum=GetForEbenCat(EbenefitCategory.General).CovCatNum;
 			CovSpans.DeleteForCat(covCatNum);

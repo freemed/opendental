@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SchoolClass();
 				list[i].SchoolClassNum=PIn.PInt(table.Rows[i][0].ToString());
-				list[i].GradYear=PIn.PInt(table.Rows[i][1].ToString());
+				list[i].GradYear=PIn.PInt32(table.Rows[i][1].ToString());
 				list[i].Descript=PIn.PString(table.Rows[i][2].ToString());
 			}
 		}
@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(SchoolClass sc){
+		private static long Insert(SchoolClass sc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sc.SchoolClassNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sc);
 				return sc.SchoolClassNum;

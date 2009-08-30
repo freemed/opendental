@@ -387,11 +387,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
-		public static long InsertMissing(Patient patient,List<string> fileList) {
+		public static int InsertMissing(Patient patient,List<string> fileList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),patient,fileList);
+				return Meth.GetInt32(MethodBase.GetCurrentMethod(),patient,fileList);
 			}
-			long countAdded=0;
+			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
 			DataTable table=Db.GetTable(command);
 			for(int j=0;j<fileList.Count;j++){

@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		private static double balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled,bool showProcBreakdown,bool showNotes){
+		public static DataSet GetAll(long patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled,bool showProcBreakdown,bool showNotes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled,showProcBreakdown,showNotes);
 			} 
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
-		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled) {
+		public static DataSet GetStatement(long patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,singlePatient,fromDate,toDate,intermingled);
 			}
@@ -79,7 +79,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
-		public static DataSet GetPayPlanAmort(int payPlanNum){
+		public static DataSet GetPayPlanAmort(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),payPlanNum);
 			} 
@@ -89,7 +89,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		private static DataTable GetPayPlanAmortTable(int payPlanNum){
+		private static DataTable GetPayPlanAmortTable(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
@@ -264,7 +264,7 @@ namespace OpenDentBusiness {
 			DataTable rawPayPlan=dcon.GetTable(command);
 		}*/
 
-		private static void GetCommLog(int patNum) {
+		private static void GetCommLog(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;
@@ -455,7 +455,7 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If isForStatement, then the resulting payplan table looks totally different.</summary>
-		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,bool isForStatement,bool showProcBreakdown,bool showNotes) {
+		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,bool isForStatement,bool showProcBreakdown,bool showNotes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,isForStatement);
 				return;
@@ -1356,7 +1356,7 @@ namespace OpenDentBusiness {
 			double princ;
 			double bal;
 			DataTable rawAmort;
-			int payPlanNum;
+			long payPlanNum;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
 				princ=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
 				bal=princ;
@@ -1508,7 +1508,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Future appointments.</summary>
-		private static void GetApptTable(Family fam,bool singlePatient,int patNum){
+		private static void GetApptTable(Family fam,bool singlePatient,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),fam,singlePatient,patNum);
 				return;
@@ -1540,7 +1540,7 @@ namespace OpenDentBusiness {
 			command+=") ORDER BY PatNum,AptDateTime";
 			DataTable raw=dcon.GetTable(command);
 			DateTime dateT;
-			int patNumm;
+			long patNumm;
 			for(int i=0;i<raw.Rows.Count;i++){
 				row=table.NewRow();
 				patNumm=PIn.PInt(raw.Rows[i]["PatNum"].ToString());
@@ -1558,7 +1558,7 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		private static void GetMisc(Family fam,int patNum){
+		private static void GetMisc(Family fam,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),fam,patNum);
 				return;

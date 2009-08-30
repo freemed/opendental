@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Statement>.CreateObject(statementNum);
 		}
 
-		public static List<Statement> GetStatements(List <int> statementNums){
+		public static List<Statement> GetStatements(List<long> statementNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Statement>>(MethodBase.GetCurrentMethod(),statementNums);
 			}
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(Statement statement){
+		public static long WriteObject(Statement statement) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				statement.StatementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),statement);
 				return statement.StatementNum;

@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
-		public static int Insert(Patient pat, bool includePatNum) {
+		public static long Insert(Patient pat,bool includePatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				pat.PatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pat,includePatNum);
 				return pat.PatNum;
@@ -242,7 +242,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply the old Patient object to compare for changes.</summary>
-		public static int Update(Patient pat, Patient CurOld) {
+		public static long Update(Patient pat,Patient CurOld) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat,CurOld);
 			}
@@ -1119,15 +1119,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Key=patNum, value=formatted name.  Used for reports, FormASAP, FormTrackNext, and FormUnsched.</summary>
-		public static Dictionary<int,string> GetAllPatientNames(){
+		public static Dictionary<long,string> GetAllPatientNames() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Dictionary<int,string>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<Dictionary<long,string>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT patnum,lname,fname,middlei,preferred "
 				+"FROM patient";
 			DataTable table=Db.GetTable(command);
-			Dictionary<int,string> dict=new Dictionary<int,string>();
-			int patnum;
+			Dictionary<long,string> dict=new Dictionary<long,string>();
+			long patnum;
 			string lname,fname,middlei,preferred;
 			for(int i=0;i<table.Rows.Count;i++){
 				patnum=PIn.PInt(table.Rows[i][0].ToString());
@@ -1207,7 +1207,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			bool phoneIsSame=true;
 			bool noteIsSame=true;
-			int guar=PIn.PInt(table.Rows[0]["Guarantor"].ToString());
+			long guar=PIn.PInt(table.Rows[0]["Guarantor"].ToString());
 			for(int i=0;i<table.Rows.Count;i++){
 				if(table.Rows[i]["HmPhone"].ToString()!=table.Rows[0]["HmPhone"].ToString()){
 					phoneIsSame=false;
@@ -1518,11 +1518,11 @@ namespace OpenDentBusiness{
 		///<summary>Used in the patient select window to determine if a trial version user is over their limit.</summary>
 		public static int GetNumberPatients(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetInt32(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT Count(*) FROM patient";
 			DataTable table=Db.GetTable(command);
-			return PIn.PInt(table.Rows[0][0].ToString());
+			return PIn.PInt32(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>
@@ -1567,7 +1567,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the provider for this patient.  If provNum==0, then it gets the practice default prov.</summary>
-		public static int GetProvNum(Patient pat) {
+		public static long GetProvNum(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),pat);
 			}
@@ -1581,13 +1581,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>
-		public static int[] GetAllPatNums(){
+		public static long[] GetAllPatNums() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<int[]>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<long[]>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT PatNum From patient";
 			DataTable dt=Db.GetTable(command);
-			int[] patnums=new int[dt.Rows.Count];
+			long[] patnums=new long[dt.Rows.Count];
 			for(int i=0;i<patnums.Length;i++){
 				patnums[i]=PIn.PInt(dt.Rows[i]["PatNum"].ToString());
 			}
@@ -1694,7 +1694,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return 0 if can't find exact matching pat.</summary>
-		public static int GetPatNumByNameAndBirthday(string lName,string fName,DateTime birthdate){
+		public static long GetPatNumByNameAndBirthday(string lName,string fName,DateTime birthdate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),lName,fName,birthdate);
 			}

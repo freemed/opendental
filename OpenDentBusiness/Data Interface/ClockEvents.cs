@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ClockEvent ce) {
+		public static long Insert(ClockEvent ce) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ce.ClockEventNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ce);
 				return ce.ClockEventNum;

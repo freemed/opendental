@@ -166,7 +166,7 @@ namespace OpenDentBusiness{
 				tasklist.ParentDesc="";
 				tasklist.NewTaskCount=0;
 				if(table.Columns.Count>9){
-					tasklist.NewTaskCount=PIn.PInt(table.Rows[i][9].ToString());
+					tasklist.NewTaskCount=PIn.PInt32(table.Rows[i][9].ToString());
 				}
 				if(table.Columns.Count>10){
 					desc=PIn.PString(table.Rows[i][10].ToString());
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(TaskList tlist){
+		private static long Insert(TaskList tlist) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				tlist.TaskListNum=Meth.GetInt(MethodBase.GetCurrentMethod(),tlist);
 				return tlist.TaskListNum;

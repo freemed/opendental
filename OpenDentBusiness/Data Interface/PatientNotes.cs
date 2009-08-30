@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class PatientNotes{
 		
 		///<summary></summary>
-		public static PatientNote Refresh(int patNum,int guarantor){
+		public static PatientNote Refresh(long patNum,long guarantor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatientNote>(MethodBase.GetCurrentMethod(),patNum,guarantor);
 			}
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Update(PatientNote Cur, int guarantor){
+		public static void Update(PatientNote Cur,long guarantor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur,guarantor);
 				return;
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void InsertRow(int patNum){
+		private static void InsertRow(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;

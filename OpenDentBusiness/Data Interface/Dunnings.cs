@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 				List[i].DunningNum     = PIn.PInt(table.Rows[i][0].ToString());
 				List[i].DunMessage     = PIn.PString(table.Rows[i][1].ToString());
 				List[i].BillingType    = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].AgeAccount     = PIn.PInt(table.Rows[i][3].ToString());
+				List[i].AgeAccount     = PIn.PInt32(table.Rows[i][3].ToString());
 				List[i].InsIsPending   = (YN)PIn.PInt(table.Rows[i][4].ToString());
 				List[i].MessageBold    = PIn.PString(table.Rows[i][5].ToString());
 			}
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Dunning dun){
+		public static long Insert(Dunning dun) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				dun.DunningNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dun);
 				return dun.DunningNum;

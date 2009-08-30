@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Printer GetOnePrinter(PrintSituation sit,int compNum){
+		public static Printer GetOnePrinter(PrintSituation sit,long compNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Printer>(MethodBase.GetCurrentMethod(),sit,compNum);
 			}
@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(Printer cur){
+		private static long Insert(Printer cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cur.PrinterNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cur);
 				return cur.PrinterNum;
@@ -153,7 +153,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0){
 				return;//computer not yet entered in db.
 			}
-			int compNum=PIn.PInt(table.Rows[0][0].ToString());
+			long compNum=PIn.PInt(table.Rows[0][0].ToString());
 			Printer existing=GetOnePrinter(sit,compNum);   //GetForSit(sit);
 			if(printerName=="" && !displayPrompt){//then should not be an entry in db
 				if(existing!=null){//need to delete Printer

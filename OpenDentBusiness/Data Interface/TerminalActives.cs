@@ -59,7 +59,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(TerminalActive te) {
+		public static long Insert(TerminalActive te) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				te.TerminalActiveNum=Meth.GetInt(MethodBase.GetCurrentMethod(),te);
 				return te.TerminalActiveNum;

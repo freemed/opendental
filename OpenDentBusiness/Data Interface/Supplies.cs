@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 			}
 			//validate that not already in use.
 			string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
-			int count=PIn.PInt(Db.GetCount(command));
+			int count=PIn.PInt32(Db.GetCount(command));
 			if(count>0){
 				throw new ApplicationException(Lans.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
 			}
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		///<Summary>Loops through the supplied list and verifies that the ItemOrders are not corrupted.  If they are, then it fixes them.  Returns true if fix was required.  It makes a few assumptions about the quality of the list supplied.  Specifically, that there are no missing items, and that categories are grouped and sorted.</Summary>
 		public static bool CleanupItemOrders(List<Supply> listSupply){
 			//No need to check RemotingRole; no call to db.
-			int catCur=-1;
+			long catCur=-1;
 			int previousOrder=-1;
 			bool retVal=false;
 			for(int i=0;i<listSupply.Count;i++){
@@ -83,9 +83,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets from the database the last itemOrder for the specified category.  Used to send un unhidden supply to the end of the list.</Summary>
-		public static int GetLastItemOrder(int supplierNum,int catNum){
+		public static int GetLastItemOrder(long supplierNum,long catNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),supplierNum,catNum);
+				return Meth.GetInt32(MethodBase.GetCurrentMethod(),supplierNum,catNum);
 			}
 			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.PInt(supplierNum)
 				+" AND Category="+POut.PInt(catNum)+" AND IsHidden=0";
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0){
 				return -1;
 			}
-			return PIn.PInt(table.Rows[0][0].ToString());
+			return PIn.PInt32(table.Rows[0][0].ToString());
 		}
 
 		

@@ -40,7 +40,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static int NonQ(string command){
+		public static long NonQ(string command){
 			return NonQ(command,false);
 		}
 

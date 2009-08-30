@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ZipCode Cur){
+		public static long Insert(ZipCode Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ZipCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ZipCodeNum;

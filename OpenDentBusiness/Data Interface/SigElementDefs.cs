@@ -41,12 +41,12 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SigElementDef();
 				list[i].SigElementDefNum= PIn.PInt(table.Rows[i][0].ToString());
-				list[i].LightRow        = PIn.PInt(table.Rows[i][1].ToString());
-				list[i].LightColor      = Color.FromArgb(PIn.PInt(table.Rows[i][2].ToString()));
+				list[i].LightRow        = PIn.PInt32(table.Rows[i][1].ToString());
+				list[i].LightColor      = Color.FromArgb(PIn.PInt32(table.Rows[i][2].ToString()));
 				list[i].SigElementType  = (SignalElementType)PIn.PInt(table.Rows[i][3].ToString());
 				list[i].SigText         = PIn.PString(table.Rows[i][4].ToString());
 				list[i].Sound           = PIn.PString(table.Rows[i][5].ToString());
-				list[i].ItemOrder       = PIn.PInt(table.Rows[i][6].ToString());
+				list[i].ItemOrder       = PIn.PInt32(table.Rows[i][6].ToString());
 			}
 		}
 	
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(SigElementDef def) {
+		public static long Insert(SigElementDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.SigElementDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.SigElementDefNum;

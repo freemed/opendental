@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 
 		}
 
-		public DisplayField(string internalName,long columnWidth,DisplayFieldCategory category){
+		public DisplayField(string internalName,int columnWidth,DisplayFieldCategory category){
 			this.InternalName=internalName;
 			//this.Description=description;
 			this.ColumnWidth=columnWidth;

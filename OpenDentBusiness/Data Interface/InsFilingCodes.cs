@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 				insFilingCode.InsFilingCodeNum=PIn.PInt(table.Rows[i][0].ToString());
 				insFilingCode.Descript=PIn.PString(table.Rows[i][1].ToString());
 				insFilingCode.EclaimCode=PIn.PString(table.Rows[i][2].ToString());
-				insFilingCode.ItemOrder=PIn.PInt(table.Rows[i][3].ToString());
+				insFilingCode.ItemOrder=PIn.PInt32(table.Rows[i][3].ToString());
 				InsFilingCodeC.Listt.Add(insFilingCode);
 			}
 		}
@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(InsFilingCode insFilingCode) {
+		public static long WriteObject(InsFilingCode insFilingCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				insFilingCode.InsFilingCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),insFilingCode);
 				return insFilingCode.InsFilingCodeNum;

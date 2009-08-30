@@ -94,8 +94,8 @@ namespace OpenDentBusiness{
 				cp.WriteOff        = PIn.PDouble(table.Rows[i][14].ToString());
 				cp.CodeSent        = PIn.PString(table.Rows[i][15].ToString());
 				cp.AllowedOverride = PIn.PDouble(table.Rows[i][16].ToString());
-				cp.Percentage      = PIn.PInt   (table.Rows[i][17].ToString());
-				cp.PercentOverride = PIn.PInt   (table.Rows[i][18].ToString());
+				cp.Percentage      = PIn.PInt32   (table.Rows[i][17].ToString());
+				cp.PercentOverride = PIn.PInt32   (table.Rows[i][18].ToString());
 				cp.CopayAmt        = PIn.PDouble(table.Rows[i][19].ToString());
 				cp.NoBillIns       = PIn.PBool  (table.Rows[i][20].ToString());
 				cp.PaidOtherIns    = PIn.PDouble(table.Rows[i][21].ToString());
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 				cp.CopayOverride   = PIn.PDouble(table.Rows[i][23].ToString());
 				cp.ProcDate        = PIn.PDate  (table.Rows[i][24].ToString());
 				cp.DateEntry       = PIn.PDate  (table.Rows[i][25].ToString());
-				cp.LineNumber      = PIn.PInt   (table.Rows[i][26].ToString());
+				cp.LineNumber      = PIn.PInt32   (table.Rows[i][26].ToString());
 				cp.DedEst          = PIn.PDouble(table.Rows[i][27].ToString());
 				cp.DedEstOverride  = PIn.PDouble(table.Rows[i][28].ToString());
 				cp.InsEstTotal     = PIn.PDouble(table.Rows[i][29].ToString());
@@ -769,7 +769,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>We don't care about a looplist because those would be for different procedures.  So this calculation really only makes sense when calculating secondary insurance in the claim edit window or when calculating secondary estimates in the TP module.  HistList will include actual payments and estimated pending payments for this proc, but it will not include primary estimates.  Estimates are not handled here, but are instead passed in to ComputeBaseEst</summary>
-		private static double GetPaidOtherIns(ClaimProc cp,List<PatPlan> patPlanList,int patPlanNum,List<ClaimProcHist> histList) {
+		private static double GetPaidOtherIns(ClaimProc cp,List<PatPlan> patPlanList,long patPlanNum,List<ClaimProcHist> histList) {
 			if(cp.ProcNum==0) {
 				return -1;
 			}
@@ -807,7 +807,7 @@ namespace OpenDentBusiness{
 			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride FROM claimproc WHERE ProcNum="+POut.PInt(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
-			int planNum;
+			long planNum;
 			int ordinal;
 			double insEstTotal;
 			double insEstTotalOverride;
@@ -844,7 +844,7 @@ namespace OpenDentBusiness{
 			string command="SELECT PlanNum,BaseEst FROM claimproc WHERE ProcNum="+POut.PInt(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
-			int planNum;
+			long planNum;
 			int ordinal;
 			double baseEst;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -1065,11 +1065,11 @@ namespace OpenDentBusiness{
 		///<summary>Deductible paid or est.</summary>
 		public double Deduct;
 		///<summary>Because a list can store info for an entire family.</summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary>Because a list can store info about multiple plans.</summary>
-		public int PlanNum;
+		public long PlanNum;
 		///<summary>So that we can exclude history from the claim that we are in.</summary>
-		public int ClaimNum;
+		public long ClaimNum;
 		///<summary>Only 4 statuses get used anyway.  This helps us filter the pending items sometimes.</summary>
 		public ClaimProcStatus Status;
 

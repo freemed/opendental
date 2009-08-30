@@ -50,7 +50,7 @@ namespace OpenDentBusiness.HL7 {
 					string lName=seg.GetFieldComponent(3,0);
 					string fName=seg.GetFieldComponent(3,1);
 					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(8));
-					int guarNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
+					long guarNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
 					if(guarNumByName==0) {//guarantor does not exist in OD
 						//so guar will still be null, triggering creation of new guarantor further down.
 					}

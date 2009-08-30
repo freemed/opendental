@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Called from LetterMerge.Refresh() to get all field names for a given letter.  The result is a collection of strings representing field names.</summary>
-		public static List<string> GetForLetter(int letterMergeNum){
+		public static List<string> GetForLetter(long letterMergeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(list==null) {
 				RefreshCache();

@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Site>.CreateObject(siteNum);
 		}
 
-		public static List<Site> GetSites(List <int> siteNums){
+		public static List<Site> GetSites(List<long> siteNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Site>>(MethodBase.GetCurrentMethod(),siteNums);
 			}
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(Site site){
+		public static long WriteObject(Site site) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				site.SiteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),site);
 				return site.SiteNum;
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int siteNum){
+		public static void DeleteObject(long siteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),siteNum);
 				return;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<Site>.DeleteObject(siteNum);
 		//}
 
-		public static string GetDescription(int siteNum){
+		public static string GetDescription(long siteNum) {
 			//No need to check RemotingRole; no call to db.
 			if(siteNum==0){
 				return "";
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return -1 if no match.</summary>
-		public static int FindMatchSiteNum(string description) {
+		public static long FindMatchSiteNum(string description) {
 			//No need to check RemotingRole; no call to db.
 			if(description=="") {
 				return 0;

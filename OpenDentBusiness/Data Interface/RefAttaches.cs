@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 				List[i].RefAttachNum= PIn.PInt(table.Rows[i][0].ToString());
 				List[i].ReferralNum = PIn.PInt(table.Rows[i][1].ToString());
 				List[i].PatNum      = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].ItemOrder   = PIn.PInt(table.Rows[i][3].ToString());
+				List[i].ItemOrder   = PIn.PInt32(table.Rows[i][3].ToString());
 				List[i].RefDate     = PIn.PDate(table.Rows[i][4].ToString());
 				List[i].IsFrom      = PIn.PBool(table.Rows[i][5].ToString());
 				List[i].RefToStatus = (ReferralToStatus)PIn.PInt(table.Rows[i][6].ToString());

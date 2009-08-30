@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Adjustment adj){
+		public static long Insert(Adjustment adj) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				adj.AdjNum=Meth.GetInt(MethodBase.GetCurrentMethod(),adj);
 				return adj.AdjNum;
@@ -173,12 +173,12 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Returns the number of finance charges deleted.</summary>
-		public static int UndoFinanceCharges(DateTime dateUndo){
+		public static long UndoFinanceCharges(DateTime dateUndo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
 			}
 			string command;
-			int numAdj;
+			long numAdj;
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'FinanceChargeAdjustmentType'";
 			table=Db.GetTable(command);
@@ -189,12 +189,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the number of billing charges deleted.</summary>
-		public static int UndoBillingCharges(DateTime dateUndo) {
+		public static long UndoBillingCharges(DateTime dateUndo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),dateUndo);
 			}
 			string command;
-			int numAdj;
+			long numAdj;
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'BillingChargeAdjustmentType'";
 			table=Db.GetTable(command);

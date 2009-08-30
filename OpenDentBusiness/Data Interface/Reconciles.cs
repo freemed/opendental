@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class Reconciles {
 
 		///<summary></summary>
-		public static Reconcile[] GetList(int accountNum) {
+		public static Reconcile[] GetList(long accountNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Reconcile[]>(MethodBase.GetCurrentMethod(),accountNum);
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one reconcile directly from the database.  Program will crash if reconcile not found.</summary>
-		public static Reconcile GetOne(int reconcileNum) {
+		public static Reconcile GetOne(long reconcileNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Reconcile>(MethodBase.GetCurrentMethod(),reconcileNum);
 			}

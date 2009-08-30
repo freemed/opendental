@@ -27,7 +27,7 @@ namespace OpenDentBusiness.HL7 {
 			//EVN-Ignore
 			//PID-------------------------------------
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
-			int patNum=PIn.PInt(seg.GetFieldFullText(2));
+			long patNum=PIn.PInt(seg.GetFieldFullText(2));
 			Patient pat=null;
 			if(isStandalone) {
 				pat=Patients.GetPatByChartNumber(patNum.ToString());
@@ -36,7 +36,7 @@ namespace OpenDentBusiness.HL7 {
 					string lName=seg.GetFieldComponent(5,0);
 					string fName=seg.GetFieldComponent(5,1);
 					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(7));
-					int patNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
+					long patNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
 					if(patNumByName==0) {//patient does not exist in OD
 						//so pat will still be null, triggering creation of new patient further down.
 					}
@@ -100,7 +100,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		public static void ProcessPD1(Patient pat,SegmentHL7 seg) {
-			int provNum=SegmentPID.ProvProcess(seg.GetField(4));//don't know why both
+			long provNum=SegmentPID.ProvProcess(seg.GetField(4));//don't know why both
 			if(provNum!=0) {
 				pat.PriProv=provNum;
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.HL7 {
 			//as a general strategy, if certain things are the same, like subscriber and carrier,
 			//then we change the existing plan.
 			//However, if basics change at all, then we drop the old plan and create a new one
-			int ordinal=PIn.PInt(seg.GetFieldFullText(1));
+			int ordinal=PIn.PInt32(seg.GetFieldFullText(1));
 			PatPlan oldPatPlan=PatPlans.GetPatPlan(pat.PatNum,ordinal);
 			if(oldPatPlan==null) {
 				//create a new plan and a new patplan

@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(CanadianExtract cur) {
+		private static long Insert(CanadianExtract cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cur.CanadianExtractNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cur);
 				return cur.CanadianExtractNum;

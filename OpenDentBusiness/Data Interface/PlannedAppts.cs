@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int WriteObject(PlannedAppt plannedAppt){
+		public static long WriteObject(PlannedAppt plannedAppt) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				plannedAppt.PlannedApptNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plannedAppt);
 				return plannedAppt.PlannedApptNum;

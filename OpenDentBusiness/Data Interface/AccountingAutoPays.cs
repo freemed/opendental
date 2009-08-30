@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary></summary>
-		public static int Insert(AccountingAutoPay pay){
+		public static long Insert(AccountingAutoPay pay) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				pay.AccountingAutoPayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
 				return pay.AccountingAutoPayNum;

@@ -23,18 +23,18 @@ namespace OpenDentBusiness{
 			retVal.ClaimNum=claimNum;
 			retVal.MaterialsForwarded =PIn.PString(table.Rows[0][1].ToString());
 			retVal.ReferralProviderNum=PIn.PString(table.Rows[0][2].ToString());
-			retVal.ReferralReason     =PIn.PInt   (table.Rows[0][3].ToString());
+			retVal.ReferralReason     =PIn.PInt32   (table.Rows[0][3].ToString());
 			//retVal.CardSequenceNumber =PIn.PInt   (table.Rows[0][4].ToString());
 			retVal.SecondaryCoverage  =PIn.PString(table.Rows[0][4].ToString());
 			retVal.IsInitialLower     =PIn.PString(table.Rows[0][5].ToString());
 			retVal.DateInitialLower   =PIn.PDate  (table.Rows[0][6].ToString());
-			retVal.MandProsthMaterial =PIn.PInt   (table.Rows[0][7].ToString());
+			retVal.MandProsthMaterial =PIn.PInt32   (table.Rows[0][7].ToString());
 			retVal.IsInitialUpper     =PIn.PString(table.Rows[0][8].ToString());
 			retVal.DateInitialUpper   =PIn.PDate  (table.Rows[0][9].ToString());
-			retVal.MaxProsthMaterial  =PIn.PInt   (table.Rows[0][10].ToString());
-			retVal.EligibilityCode    =PIn.PInt   (table.Rows[0][11].ToString());
+			retVal.MaxProsthMaterial  =PIn.PInt32   (table.Rows[0][10].ToString());
+			retVal.EligibilityCode    =PIn.PInt32   (table.Rows[0][11].ToString());
 			retVal.SchoolName         =PIn.PString(table.Rows[0][12].ToString());
-			retVal.PayeeCode          =PIn.PInt   (table.Rows[0][13].ToString());
+			retVal.PayeeCode          =PIn.PInt32   (table.Rows[0][13].ToString());
 			return retVal;
 		}
 

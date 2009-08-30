@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(PhoneNumber phoneNumber){
+		public static long WriteObject(PhoneNumber phoneNumber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				phoneNumber.PhoneNumberNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneNumber);
 				return phoneNumber.PhoneNumberNum;

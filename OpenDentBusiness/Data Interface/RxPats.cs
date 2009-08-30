@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(RxPat rx) {
+		public static long Insert(RxPat rx) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				rx.RxNum=Meth.GetInt(MethodBase.GetCurrentMethod(),rx);
 				return rx.RxNum;

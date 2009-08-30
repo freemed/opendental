@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Transaction trans) {
+		public static long Insert(Transaction trans) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				trans.TransactionNum=Meth.GetInt(MethodBase.GetCurrentMethod(),trans);
 				return trans.TransactionNum;

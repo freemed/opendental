@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		///historical mode where InsEst excludes insurance estimates after AsOfDate.
 		///4) PayPlanDue will always include all payment plan charges minus credits, except when in
 		///historical mode where PayPlanDue excludes payment plan charges and payments after AsOfDate.</summary>
-		public static void ComputeAging(int guarantor,DateTime AsOfDate,bool historic){
+		public static void ComputeAging(long guarantor,DateTime AsOfDate,bool historic) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),guarantor,AsOfDate,historic);
 				return;

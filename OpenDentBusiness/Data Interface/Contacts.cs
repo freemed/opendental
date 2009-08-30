@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Contact Cur){
+		public static long Insert(Contact Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ContactNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ContactNum;

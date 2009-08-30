@@ -29,10 +29,10 @@ namespace OpenDentBusiness {
 				mount=new MountDef();
 				mount.MountDefNum =PIn.PInt   (table.Rows[i][0].ToString());
 				mount.Description =PIn.PString(table.Rows[i][1].ToString());
-				mount.ItemOrder   =PIn.PInt   (table.Rows[i][2].ToString());
+				mount.ItemOrder   =PIn.PInt32   (table.Rows[i][2].ToString());
 				mount.IsRadiograph=PIn.PBool  (table.Rows[i][3].ToString());
-				mount.Width       =PIn.PInt   (table.Rows[i][4].ToString());
-				mount.Height      =PIn.PInt   (table.Rows[i][5].ToString());
+				mount.Width       =PIn.PInt32   (table.Rows[i][4].ToString());
+				mount.Height      =PIn.PInt32   (table.Rows[i][5].ToString());
 				MountDefC.Listt.Add(mount);
 			}
 		}
@@ -54,7 +54,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(MountDef def) {
+		public static long Insert(MountDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.MountDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.MountDefNum;

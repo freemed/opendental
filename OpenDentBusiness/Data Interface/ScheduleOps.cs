@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ScheduleOps {
 		///<summary></summary>
-		public static int Insert(ScheduleOp op){
+		public static long Insert(ScheduleOp op) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				op.ScheduleOpNum=Meth.GetInt(MethodBase.GetCurrentMethod(),op);
 				return op.ScheduleOpNum;

@@ -96,7 +96,7 @@ namespace OpenDentBusiness.DataAccess {
 		/// <exception cref="ArgumentNullException"><paramref name="id"/> is <see langword="null"/>.</exception>
 		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
 		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
-		public static Collection<T> CreateObjects(int[] id) {
+		public static Collection<T> CreateObjects(long[] id) {
 			if (id == null){
 				throw new ArgumentNullException("id");
 			}
@@ -476,7 +476,7 @@ namespace OpenDentBusiness.DataAccess {
 			// Should we generate a new, random key?
 			bool generateRandomKey = updatePrimaryKey && PrefC.RandomKeys;
 			if (generateRandomKey) {
-				int key = MiscData.GetKey(DataObjectInfo<T>.GetTableName(), DataObjectInfo<T>.GetPrimaryKeyFieldName());
+				long key = MiscData.GetKey(DataObjectInfo<T>.GetTableName(),DataObjectInfo<T>.GetPrimaryKeyFieldName());
 				DataObjectInfo<T>.SetPrimaryKey(value, key);
 				// The primary key as already been updated. No need to retrieve it from the database.
 				updatePrimaryKey = false;
