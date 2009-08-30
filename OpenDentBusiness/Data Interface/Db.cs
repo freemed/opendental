@@ -92,7 +92,7 @@ namespace OpenDentBusiness {
 				throw new ApplicationException("No longer allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+commands[0]);
 			}
 			for(int i=0;i<commands.Length;i++) {
-				(int)DataCore.NonQ(commands[i],false);
+				DataCore.NonQ(commands[i],false);
 			}
 			return 0;
 		}

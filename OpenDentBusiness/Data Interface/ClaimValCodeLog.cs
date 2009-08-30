@@ -35,7 +35,7 @@ namespace OpenDentBusiness {
 				vc.ClaimField=PIn.PString(table.Rows[i][2].ToString());
 				vc.ValCode=PIn.PString(table.Rows[i][3].ToString());
 				vc.ValAmount=PIn.PDouble(table.Rows[i][4].ToString());
-				vc.Ordinal=PIn.PInt(table.Rows[i][5].ToString());
+				vc.Ordinal=PIn.PInt32(table.Rows[i][5].ToString());
 				List.Add(vc);
 			}
 			return List;

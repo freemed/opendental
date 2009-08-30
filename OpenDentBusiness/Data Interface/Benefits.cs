@@ -39,11 +39,11 @@ namespace OpenDentBusiness {
 				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
 				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
-				ben.Percent          = PIn.PInt(table.Rows[i][5].ToString());
+				ben.Percent          = PIn.PInt32(table.Rows[i][5].ToString());
 				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
 				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
 				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
-				ben.Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+				ben.Quantity         = PIn.PInt32(table.Rows[i][9].ToString());
 				ben.CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
 				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				list.Add(ben);
@@ -53,7 +53,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in the PlanEdit and FormClaimProc to get a list of benefits for specified plan and patPlan.  patPlanNum can be 0.</summary>
-		public static List<Benefit> RefreshForPlan(int planNum,int patPlanNum) {
+		public static List<Benefit> RefreshForPlan(long planNum,long patPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Benefit>>(MethodBase.GetCurrentMethod(),planNum,patPlanNum);
 			}
@@ -74,11 +74,11 @@ namespace OpenDentBusiness {
 				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
 				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
-				ben.Percent          = PIn.PInt(table.Rows[i][5].ToString());
+				ben.Percent          = PIn.PInt32(table.Rows[i][5].ToString());
 				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
 				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
 				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
-				ben.Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+				ben.Quantity         = PIn.PInt32(table.Rows[i][9].ToString());
 				ben.CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
 				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				retVal.Add(ben);
@@ -125,11 +125,11 @@ namespace OpenDentBusiness {
 					benList[i].PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 					benList[i].CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
 					benList[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][4].ToString());
-					benList[i].Percent          = PIn.PInt(table.Rows[i][5].ToString());
+					benList[i].Percent          = PIn.PInt32(table.Rows[i][5].ToString());
 					benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][6].ToString());
 					benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][7].ToString());
 					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][8].ToString());
-					benList[i].Quantity         = PIn.PInt(table.Rows[i][9].ToString());
+					benList[i].Quantity         = PIn.PInt32(table.Rows[i][9].ToString());
 					benList[i].CodeNum          = PIn.PInt(table.Rows[i][10].ToString());
 					benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][11].ToString());
 				}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(Benefit ben) {
+		public static long Insert(Benefit ben) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ben.BenefitNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ben);
 				return ben.BenefitNum;
@@ -232,7 +232,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only for display purposes rather than any calculations.  Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
-		public static double GetAnnualMaxDisplay(List<Benefit> list,int planNum,int patPlanNum) {
+		public static double GetAnnualMaxDisplay(List<Benefit> list,long planNum,long patPlanNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -290,7 +290,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Only for display purposes rather than any calculations.  Gets a general deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.</summary>
-		public static double GetDeductGeneralDisplay(List <Benefit> list,int planNum,int patPlanNum,BenefitCoverageLevel level) {
+		public static double GetDeductGeneralDisplay(List<Benefit> list,long planNum,long patPlanNum,BenefitCoverageLevel level) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -351,7 +351,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Gets a deductible amount from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family deductibles will reduce the returned value independently.  Works for individual procs, categories, and general.</summary>
-		public static double GetDeductibleByCode(List<Benefit> benList,int planNum,int patPlanNum,DateTime procDate,string procCode,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,int patNum) {
+		public static double GetDeductibleByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCode,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//first, create a much shorter list with only relevant benefits in it.
 			List<Benefit> listShort=new List<Benefit>();
@@ -655,7 +655,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Calculates the most specific limitation for the specified code.  This is usually an annual max, ortho max, or fluoride limitation (only if age match).  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family limitations will reduce the returned value independently.  Works for individual procs, categories, and general.  Also outputs a string description of the limitation.  There don't seem to be any situations where multiple limitations would each partially reduce coverage for a single code, other than ind/fam.  The returned value will be the original insEstTotal passed in unless there was some limitation that reduced it.</summary>
-		public static double GetLimitationByCode(List<Benefit> benList,int planNum,int patPlanNum,DateTime procDate,string procCodeStr,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,int patNum,out string note,double insEstTotal,int patientAge) {
+		public static double GetLimitationByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCodeStr,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,int patNum,out string note,double insEstTotal,int patientAge) {
 			//No need to check RemotingRole;no call to db.
 			note ="";
 			//first, create a much shorter list with only relevant benefits in it.
@@ -1029,7 +1029,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  Handles general, category, or procedure level.  Does not handle pat vs family coveragelevel.  Does handle patient override by using patplan.  Does not need to be aware of procedure history or loop history.</summary>
-		public static int GetPercent(string procCodeStr,string planType,int planNum,int patPlanNum,List <Benefit> benList){
+		public static int GetPercent(string procCodeStr,string planType,long planNum,long patPlanNum,List<Benefit> benList) {
 			//No need to check RemotingRole; no call to db.
 			if(planType=="f" || planType=="c"){
 				return 100;//flat and cap are always covered 100%
@@ -1139,7 +1139,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used from ClaimProc.ComputeBaseEst. This is a low level function to determine if a given procedure is completely excluded from coverage.  It does not consider any dates of service or history.</summary>
-		public static bool IsExcluded(string strProcCode,List<Benefit> benList,int planNum,int patPlanNum) {
+		public static bool IsExcluded(string strProcCode,List<Benefit> benList,long planNum,long patPlanNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<benList.Count;i++) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
@@ -1223,7 +1223,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormInsPlan when applying changes to all identical plans.  Also used when merging plans. It first compares the old benefit list with the new one.  If there are no changes, it does nothing.  But if there are any changes, then we no longer care what the old benefit list was.  We will just delete it for all similar plans and recreate it.  Returns true if a change was made, false if no change made.</summary>
-		public static bool UpdateListForIdentical(List<Benefit> oldBenefitList,List<Benefit> newBenefitList,List<int> planNums) {
+		public static bool UpdateListForIdentical(List<Benefit> oldBenefitList,List<Benefit> newBenefitList,List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),oldBenefitList,newBenefitList,planNums);
 			}
@@ -1360,7 +1360,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Deletes all benefits for a plan from the database.  Only used in FormInsPlan when picking a plan from the list.  Need to clear out benefits so that they won't be picked up when choosing benefits for all.</summary>
-		public static void DeleteForPlan(int planNum){
+		public static void DeleteForPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
 				return;

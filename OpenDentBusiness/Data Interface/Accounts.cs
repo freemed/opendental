@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 				AccountC.ListLong[i].AcctType    = (AccountType)PIn.PInt(table.Rows[i][2].ToString());
 				AccountC.ListLong[i].BankNumber  = PIn.PString(table.Rows[i][3].ToString());
 				AccountC.ListLong[i].Inactive    = PIn.PBool(table.Rows[i][4].ToString());
-				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
+				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.PInt32(table.Rows[i][5].ToString()));
 				if(!AccountC.ListLong[i].Inactive) {
 					AL.Add(AccountC.ListLong[i].Copy());
 				}
@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Account acct) {
+		public static long Insert(Account acct) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				acct.AccountNum=Meth.GetInt(MethodBase.GetCurrentMethod(),acct);
 				return acct.AccountNum;

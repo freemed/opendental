@@ -221,7 +221,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
-		public static int Insert(Carrier Cur){
+		public static long Insert(Carrier Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.CarrierNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.CarrierNum;
@@ -339,7 +339,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the name of a carrier based on the carrierNum.  This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
-		public static string GetName(int carrierNum){
+		public static string GetName(long carrierNum) {
 			//No need to check RemotingRole; no call to db.
 			if(HList.ContainsKey(carrierNum)){
 				return ((Carrier)HList[carrierNum]).CarrierName;
@@ -354,7 +354,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Replacing GetCur. Gets the specified carrier. This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
-		public static Carrier GetCarrier(int carrierNum){
+		public static Carrier GetCarrier(long carrierNum) {
 			//No need to check RemotingRole; no call to db.
 			if(carrierNum==0){
 				Carrier retVal=new Carrier();
@@ -442,7 +442,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch Combines all the given carriers into one. The carrier that will be used as the basis of the combination is specified in the pickedCarrier argument. Updates insplan, then deletes all the other carriers.</summary>
-		public static void Combine(List <int> carrierNums,int pickedCarrierNum){
+		public static void Combine(List<long> carrierNums,long pickedCarrierNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),carrierNums,pickedCarrierNum);
 				return;
@@ -451,7 +451,7 @@ namespace OpenDentBusiness{
 				return;//nothing to do
 			}
 			//remove pickedCarrierNum from the carrierNums list to make the queries easier to construct.
-			List<int> carrierNumList=new List<int>();
+			List<long> carrierNumList=new List<long>();
 			for(int i=0;i<carrierNums.Count;i++){
 				if(carrierNums[i]==pickedCarrierNum)
 					continue;
@@ -487,7 +487,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in the FormCarrierCombine window.</summary>
-		public static List<Carrier> GetCarriers(List <int> carrierNums){
+		public static List<Carrier> GetCarriers(List<long> carrierNums) {
 			//No need to check RemotingRole; no call to db.
 			List<Carrier> retVal=new List<Carrier>();
 			for(int i=0;i<List.Length;i++){
@@ -544,12 +544,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a dictionary of carrier names for the supplied patient list.</summary>
-		public static Dictionary<int,string> GetCarrierNames(List<Patient> patients){
+		public static Dictionary<long,string> GetCarrierNames(List<Patient> patients){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Dictionary<int,string>>(MethodBase.GetCurrentMethod(),patients);
+				return Meth.GetObject<Dictionary<long,string>>(MethodBase.GetCurrentMethod(),patients);
 			}
 			if(patients.Count==0){
-				return new Dictionary<int,string>();
+				return new Dictionary<long,string>();
 			}
 			string command="SELECT patient.PatNum,carrier.CarrierName "
 				+"FROM patient "
@@ -565,7 +565,7 @@ namespace OpenDentBusiness{
 			}
 			command+=" GROUP BY patient.PatNum";
 			DataTable table=Db.GetTable(command);
-			Dictionary<int,string> retVal=new Dictionary<int,string>();
+			Dictionary<long,string> retVal=new Dictionary<long,string>();
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal.Add(PIn.PInt(table.Rows[i]["PatNum"].ToString()),table.Rows[i]["CarrierName"].ToString());
 			}

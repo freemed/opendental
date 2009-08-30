@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(CanadianNetwork network) {
+		public static long Insert(CanadianNetwork network) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				network.CanadianNetworkNum=Meth.GetInt(MethodBase.GetCurrentMethod(),network);
 				return network.CanadianNetworkNum;

@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class InsPlans {
 		///<summary>Also fills PlanNum from db.</summary>
-		public static int Insert(InsPlan plan) {
+		public static long Insert(InsPlan plan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				plan.PlanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
 				return plan.PlanNum;
@@ -202,7 +202,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
-		public static List <InsPlan> GetListForSubscriber(int subscriber) {
+		public static List <InsPlan> GetListForSubscriber(long subscriber) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return MiscUtils.ArrayToList(Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber));
 			} 
@@ -212,7 +212,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only loads one plan from db. Can return null.</summary>
-		private static InsPlan Refresh(int planNum) {
+		private static InsPlan Refresh(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<InsPlan>(MethodBase.GetCurrentMethod(),planNum);
 			} 
@@ -290,12 +290,12 @@ namespace OpenDentBusiness {
 				plan.IsMedical      = PIn.PBool  (table.Rows[i][22].ToString());
 				plan.SubscNote      = PIn.PString(table.Rows[i][23].ToString());
 				plan.FilingCode     = PIn.PInt   (table.Rows[i][24].ToString());
-				plan.DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
+				plan.DentaideCardSequence= PIn.PInt32(table.Rows[i][25].ToString());
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 				plan.CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
 				plan.IsHidden       = PIn.PBool(table.Rows[i][29].ToString());
-				plan.MonthRenew     = PIn.PInt(table.Rows[i][30].ToString());
+				plan.MonthRenew     = PIn.PInt32(table.Rows[i][30].ToString());
 				plan.FilingCodeSubtype = PIn.PInt(table.Rows[i][31].ToString());
 				planList.Add(plan);
 			}
@@ -303,7 +303,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a description of the specified plan, including carrier name and subscriber. It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the list.  You can supply an array of length 0 for both family and planlist.</summary>
-		public static string GetDescript(int planNum,Family family,List<InsPlan> planList) {
+		public static string GetDescript(long planNum,Family family,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			if(planNum==0)
 				return "";
@@ -337,7 +337,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in Ins lines in Account module and in Family module.</summary>
-		public static string GetCarrierName(int planNum,List<InsPlan> planList) {
+		public static string GetCarrierName(long planNum,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan plan=GetPlan(planNum,planList);
 			if(plan==null) {
@@ -351,7 +351,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
-		public static double GetInsRem(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,List<Benefit> benList,int patNum) {
+		public static double GetInsRem(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,List<Benefit> benList,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
@@ -367,7 +367,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only for display purposes rather than for calculations.  Get pending insurance for a given plan for one benefit year. Include a history list for the patient/family.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The planNum is the plan to get value for.</summary>
-		public static double GetPendingDisplay(List<ClaimProcHist> histList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,int patNum) {
+		public static double GetPendingDisplay(List<ClaimProcHist> histList,DateTime asofDate,InsPlan curPlan,long patPlanNum,long excludeClaim,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
@@ -394,7 +394,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Only for display purposes rather than for calculations.  Get insurance benefits used for one benefit year.  Must supply all relevant hist for the patient.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.</summary>
-		public static double GetInsUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList) {
+		public static double GetInsUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -426,7 +426,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only for display purposes rather than for calculations.  Get insurance deductible used for one benefit year.  Must supply a history list for the patient/family.  asofDate is used to determine which benefit year to calc.  Usually date of service for a claim.  The planNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  It includes pending deductibles in the result.</summary>
-		public static double GetDedUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,List<InsPlan> planList,BenefitCoverageLevel coverageLevel,int patNum) {
+		public static double GetDedUsedDisplay(List<ClaimProcHist> histList,DateTime asofDate,long planNum,long patPlanNum,long excludeClaim,List<InsPlan> planList,BenefitCoverageLevel coverageLevel,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			InsPlan curPlan=GetPlan(planNum,planList);
 			if(curPlan==null) {
@@ -479,7 +479,7 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			DataTable table=GetCarrierTable();
 			Hashtable HListAll=new Hashtable(table.Rows.Count);
-			int plannum;
+			long plannum;
 			string carrierName;
 			for(int i=0;i<table.Rows.Count;i++){
 				plannum=PIn.PInt(table.Rows[i][0].ToString());
@@ -500,7 +500,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets all distinct notes for the planNums supplied.  Supply a planNum to exclude it.  Only called when closing FormInsPlan.  Includes blank notes.</summary>
-		public static string[] GetNotesForPlans(List<int> planNums,int excludePlanNum){
+		public static string[] GetNotesForPlans(List<long> planNums,long excludePlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),planNums,excludePlanNum);
 			}
@@ -530,7 +530,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Called when closing FormInsPlan to set the PlanNote for multiple plans at once.</summary>
-		public static void UpdateNoteForPlans(List<int> planNums,string newNote){
+		public static void UpdateNoteForPlans(List<long> planNums,string newNote) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNums,newNote);
 				return;
@@ -551,7 +551,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Called from FormInsPlan when user wants to view a benefit note for similar plans.  Should never include the current plan that the user is editing.  This function will get one note from the database, not including blank notes.  If no note can be found, then it returns empty string.</summary>
-		public static string GetBenefitNotes(List<int> planNums){
+		public static string GetBenefitNotes(List<long> planNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),planNums);
 			}
@@ -581,7 +581,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Only used once.  Gets a list of subscriber names from the database that have identical plan info as this one. Used to display in the insplan window.  The returned list never includes the plan that we're viewing.  Use excludePlan for this purpose; it's more consistent, because we have no way of knowing if the current plan will be picked up or not.</summary>
 		public static string[] GetSubscribersForSamePlans(string employerName, string groupName, string groupNum,
-				string divisionNo, string carrierName, bool isMedical, int excludePlan)
+				string divisionNo,string carrierName,bool isMedical,long excludePlan)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,excludePlan);
@@ -613,10 +613,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of PlanNums from the database of plans that have identical info as this one. Used to perform updates to benefits, etc.  Note that you have the option to include the current plan in the list.</summary>
-		public static List<int> GetPlanNumsOfSamePlans(string employerName, string groupName, string groupNum,
-				string divisionNo, string carrierName, bool isMedical, int planNum, bool includePlanNum) {
+		public static List<long> GetPlanNumsOfSamePlans(string employerName,string groupName,string groupNum,
+				string divisionNo,string carrierName,bool isMedical,long planNum,bool includePlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<int>>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,planNum,includePlanNum);
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),employerName,groupName,groupNum,divisionNo,carrierName,isMedical,planNum,includePlanNum);
 			}
 			string command="SELECT PlanNum FROM insplan "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
@@ -634,7 +634,7 @@ namespace OpenDentBusiness {
 				+"AND insplan.IsMedical = '"  +POut.PBool  (isMedical)+"'"
 				+"AND insplan.PlanNum != "+POut.PInt(planNum);
 			DataTable table=Db.GetTable(command);
-			List<int> retVal=new List<int>();
+			List<long> retVal=new List<long>();
 			//if(includePlanNum){
 			//	retVal=new int[table.Rows.Count+1];
 			//}
@@ -735,7 +735,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in FormFeesForIns</summary>
-		public static DataTable GetListFeeCheck(string carrierName,string carrierNameNot,int feeSchedWithout,int feeSchedWith,
+		public static DataTable GetListFeeCheck(string carrierName,string carrierNameNot,long feeSchedWithout,long feeSchedWith,
 			FeeScheduleType feeSchedType)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -773,7 +773,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Based on the four supplied parameters, it updates all similar plans.  Used in a specific tool: FormFeesForIns.</summary>
-		public static int SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,int feeSchedNum,
+		public static long SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,long feeSchedNum,
 			FeeScheduleType feeSchedType)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -824,7 +824,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns number of rows affected.</summary>
-		public static int ConvertToNewClaimform(int oldClaimFormNum, int newClaimFormNum){
+		public static long ConvertToNewClaimform(long oldClaimFormNum,long newClaimFormNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
@@ -834,7 +834,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the number of fee schedules added.  It doesn't inform the user of how many plans were affected, but there will obviously be a certain number of plans for every new fee schedule.</summary>
-		public static int GenerateAllowedFeeSchedules(){
+		public static long GenerateAllowedFeeSchedules() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
@@ -851,7 +851,7 @@ namespace OpenDentBusiness {
 			FeeSched sched;
 			int itemOrder=FeeSchedC.ListLong.Count;
 			DataTable tableCarrierNums;
-			int retVal=0;
+			long retVal=0;
 			for(int i=0;i<table.Rows.Count;i++){
 				carrierName=PIn.PString(table.Rows[i]["CarrierName"].ToString());
 				if(carrierName=="" || carrierName==" "){
@@ -894,11 +894,11 @@ namespace OpenDentBusiness {
 
 		public static int UnusedGetCount() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetInt32(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
-			int count=PIn.PInt(Db.GetCount(command));
+			int count=PIn.PInt32(Db.GetCount(command));
 			return count;
 		}
 
@@ -941,7 +941,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns -1 if no copay feeschedule.  Can return -1 if copay amount is blank.</summary>
-		public static double GetCopay(int codeNum,int feeSched,int copayFeeSched) {
+		public static double GetCopay(long codeNum,long feeSched,long copayFeeSched) {
 			//No need to check RemotingRole; no call to db.
 			if(copayFeeSched==0) {
 				return -1;
@@ -961,7 +961,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
-		public static double GetAllowed(string procCodeStr,int feeSched,int allowedFeeSched,bool codeSubstNone,string planType,string toothNum,int provNum) {
+		public static double GetAllowed(string procCodeStr,long feeSched,long allowedFeeSched,bool codeSubstNone,string planType,string toothNum,long provNum) {
 			//No need to check RemotingRole; no call to db.
 			//if(planNum==0) {
 			//	return -1;
@@ -970,8 +970,8 @@ namespace OpenDentBusiness {
 			//if(plan==null) {
 			//	return -1;
 			//}
-			int codeNum=ProcedureCodes.GetCodeNum(procCodeStr);
-			int substCodeNum=codeNum;
+			long codeNum=ProcedureCodes.GetCodeNum(procCodeStr);
+			long substCodeNum=codeNum;
 			if(!codeSubstNone) {
 				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCodeStr,toothNum);//for posterior composites
 			}
@@ -996,14 +996,14 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used when closing the edit plan window to find all patients using this plan and to update all claimProcs for each patient.  This keeps estimates correct.</summary>
-		public static void ComputeEstimatesForPlan(int planNum) {
+		public static void ComputeEstimatesForPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
 				return;
 			}
 			string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.PInt(planNum);
 			DataTable table=Db.GetTable(command);
-			int patNum=0;
+			long patNum=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				patNum=PIn.PInt(table.Rows[i][0].ToString());
 				Family fam=Patients.GetFamily(patNum);
@@ -1068,7 +1068,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static int SetDeductBeforePercentAll(bool checkDeductibleBeforePercentChecked) {
+		public static long SetDeductBeforePercentAll(bool checkDeductibleBeforePercentChecked) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),checkDeductibleBeforePercentChecked);
 			}
@@ -1079,7 +1079,7 @@ namespace OpenDentBusiness {
 			else {
 				command+="0";
 			}
-			int result=Db.NonQ(command);
+			long result=Db.NonQ(command);
 			return result;
 		}
 

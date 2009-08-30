@@ -37,7 +37,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Loops through listLong to find a description for the specified account.  0 returns an empty string.</summary>
-		public static string GetDescript(int accountNum){
+		public static string GetDescript(long accountNum){
 			if(accountNum==0) {
 				return "";
 			}
@@ -50,7 +50,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Loops through listLong to find an account.  Will return null if accountNum is 0.</summary>
-		public static Account GetAccount(int accountNum) {
+		public static Account GetAccount(long accountNum) {
 			if(accountNum==0){
 				return null;
 			}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using OpenDentBusiness.DataAccess;
 
@@ -126,7 +127,7 @@ namespace OpenDentBusiness{
 		}
 		public bool ZipChanged{
 			get{return zipChanged;}
-		}
+		}*/
 
         /*[DataField("Country")]
         private string country;
@@ -142,7 +143,7 @@ namespace OpenDentBusiness{
             get { return countryChanged; }
         }*/
 
-        [DataField("Contact")]
+/*        [DataField("Contact")]
         private string contact;
         private bool contactChanged;
         ///<summary>Includes all punctuation.</summary>
@@ -183,4 +184,4 @@ namespace OpenDentBusiness{
 		//}	
 	}
 }
-
+*/

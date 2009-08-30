@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns an amount if a fee has been entered.  Otherwise returns -1.  Not usually used directly.</summary>
-		public static double GetAmount(int codeNum, int feeSchedNum){
+		public static double GetAmount(long codeNum,long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.
 			if(codeNum==0){
 				return -1;
@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 		public static long GetFeeSched(Patient pat,List<InsPlan> PlanList,List<PatPlan> patPlans) {
 			//No need to check RemotingRole; no call to db.
 			//there's not really a good place to put this function, so it's here.
-			int retVal=0;
+			long retVal=0;
 			if(PatPlans.GetPlanNum(patPlans,1)!=0){
 				InsPlan PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(patPlans,1),PlanList);
 				if(PlanCur==null){
@@ -193,7 +193,7 @@ namespace OpenDentBusiness{
         ///<summary>Gets the fee schedule from the primary MEDICAL insurance plan, the patient, or the provider in that order.</summary>
 		public static long GetMedFeeSched(Patient pat,List<InsPlan> PlanList,List<PatPlan> patPlans) {
 			//No need to check RemotingRole; no call to db. ??
-			int retVal = 0;
+			long retVal = 0;
 			if (PatPlans.GetPlanNum(patPlans, 1) != 0){
 				//Pick the medinsplan with the ordinal closest to zero
 				int planOrdinal=10; //This is a hack, but I doubt anyone would have more than 10 plans
@@ -296,8 +296,8 @@ namespace OpenDentBusiness{
 	}
 
 	public struct FeeKey{
-		public int codeNum;
-		public int feeSchedNum;
+		public long codeNum;
+		public long feeSchedNum;
 	}
 
 }

@@ -154,7 +154,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the SigElementDef with the specified num.</summary>
-		public static SigElementDef GetElement(int SigElementDefNum) {
+		public static SigElementDef GetElement(long SigElementDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].SigElementDefNum==SigElementDefNum) {

@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(UserGroup group){
+		public static long Insert(UserGroup group) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				group.UserGroupNum=Meth.GetInt(MethodBase.GetCurrentMethod(),group);
 				return group.UserGroupNum;

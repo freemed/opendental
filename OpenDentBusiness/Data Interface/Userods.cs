@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 				user.ProvNum       = PIn.PInt   (table.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (table.Rows[i][7].ToString());
 				user.TaskListInBox = PIn.PInt   (table.Rows[i][8].ToString());
-				user.AnesthProvType = PIn.PInt  (table.Rows[i][9].ToString());
+				user.AnesthProvType = PIn.PInt32  (table.Rows[i][9].ToString());
 				UserodC.Listt.Add(user);
 			}
 		}			

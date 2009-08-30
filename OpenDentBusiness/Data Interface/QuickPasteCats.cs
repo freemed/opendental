@@ -41,13 +41,13 @@ namespace OpenDentBusiness{
 				List[i]=new QuickPasteCat();
 				List[i].QuickPasteCatNum=PIn.PInt(table.Rows[i][0].ToString());
 				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].ItemOrder=PIn.PInt32(table.Rows[i][2].ToString());
 				List[i].DefaultForTypes=PIn.PString(table.Rows[i][3].ToString());
 			}
 		}
 
 		///<summary></summary>
-		public static int Insert(QuickPasteCat cat){
+		public static long Insert(QuickPasteCat cat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cat.QuickPasteCatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cat);
 				return cat.QuickPasteCatNum;

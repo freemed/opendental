@@ -213,7 +213,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Task task){
+		public static long Insert(Task task) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				task.TaskNum=Meth.GetInt(MethodBase.GetCurrentMethod(),task);
 				return task.TaskNum;
@@ -302,7 +302,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
 		public static int UserTasksCount(int userNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),userNum);
+				return Meth.GetInt32(MethodBase.GetCurrentMethod(),userNum);
 			}
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
@@ -310,7 +310,7 @@ namespace OpenDentBusiness{
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
 				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
 				+" AND task.TaskStatus="+POut.PInt((int)TaskStatusEnum.New);
-			return PIn.PInt(Db.GetCount(command));
+			return PIn.PInt32(Db.GetCount(command));
 		}
 	
 	

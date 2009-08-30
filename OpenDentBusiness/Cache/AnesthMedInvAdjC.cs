@@ -5,8 +5,8 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class AnesthMedInvAdjC {
-		///<summary>A list of all Anesthetic Medications.</summary>
-		public static List<AnesthMedsInventoryAdj> List;
+		//<summary>A list of all Anesthetic Medications.</summary>
+		//public static List<AnesthMedsInventoryAdj> List;
 
 	}
 }

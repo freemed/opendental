@@ -29,25 +29,26 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
+		///<summary>returns int32</summary>
 		public static int GetUniqueFileNum(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetInt32(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
 			DataTable table=Db.GetTable(command);
-			int previousNum=PIn.PInt(table.Rows[0][0].ToString());
+			int previousNum=PIn.PInt32(table.Rows[0][0].ToString());
 			int thisNum=previousNum+1;
 			command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+
 				"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
 				+" AND ValueString='"+POut.PInt(previousNum)+"'";
-			int result=Db.NonQ(command);
+			int result=Db.NonQ32(command);
 			while(result!=1) {//someone else sent one at the same time
 				previousNum++;
 				thisNum++;
 				command="UPDATE preference SET ValueString='"+POut.PInt(thisNum)+
 					"' WHERE PrefName='TrojanExpressCollectPreviousFileNumber'"
 					+" AND ValueString='"+POut.PInt(previousNum)+"'";
-				result=Db.NonQ(command);
+				result=Db.NonQ32(command);
 			}
 			return thisNum;
 		}
@@ -127,11 +128,11 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static int GetPlanNums(InsPlan plan,ArrayList benefitList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),plan);
+				return Meth.GetInt32(MethodBase.GetCurrentMethod(),plan);
 			}
 			string command="SELECT PlanNum FROM insplan WHERE TrojanID='"+POut.PString(plan.TrojanID)+"'"; 
 			DataTable table=Db.GetTable(command);
-			int planNum;
+			long planNum;
 			for(int i=0;i<table.Rows.Count;i++) {
 				planNum=PIn.PInt(table.Rows[i][0].ToString());
 				//update plan

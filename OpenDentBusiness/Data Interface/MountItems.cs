@@ -9,7 +9,7 @@ using CodeBase;
 namespace OpenDentBusiness {
 	public class MountItems {
 
-		public static int Insert(MountItem mountItem) {
+		public static long Insert(MountItem mountItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
 			}
@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 			return Db.NonQ(command,true);
 		}
 
-		public static int Update(MountItem mountItem) {
+		public static long Update(MountItem mountItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
 			}
@@ -54,16 +54,16 @@ namespace OpenDentBusiness {
 			MountItem mountItem=new MountItem();
 			mountItem.MountItemNum=PIn.PInt(mountItemRow["MountItemNum"].ToString());
 			mountItem.MountNum=PIn.PInt(mountItemRow["MountNum"].ToString());
-			mountItem.Xpos=PIn.PInt(mountItemRow["Xpos"].ToString());
-			mountItem.Ypos=PIn.PInt(mountItemRow["Ypos"].ToString());
-			mountItem.OrdinalPos=PIn.PInt(mountItemRow["OrdinalPos"].ToString());
-			mountItem.Width=PIn.PInt(mountItemRow["Width"].ToString());
-			mountItem.Height=PIn.PInt(mountItemRow["Height"].ToString());
+			mountItem.Xpos=PIn.PInt32(mountItemRow["Xpos"].ToString());
+			mountItem.Ypos=PIn.PInt32(mountItemRow["Ypos"].ToString());
+			mountItem.OrdinalPos=PIn.PInt32(mountItemRow["OrdinalPos"].ToString());
+			mountItem.Width=PIn.PInt32(mountItemRow["Width"].ToString());
+			mountItem.Height=PIn.PInt32(mountItemRow["Height"].ToString());
 			return mountItem;
 		}
 
 		///<summary>Returns the list of mount items associated with the given mount key.</summary>
-		public static List <MountItem> GetItemsForMount(int mountNum){
+		public static List<MountItem> GetItemsForMount(long mountNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <MountItem>>(MethodBase.GetCurrentMethod(),mountNum);
 			}

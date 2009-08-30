@@ -73,7 +73,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns 0 if it can't find the named def.  If the name is blank, then it returns the first def in the category.</summary>
-		public static int GetByExactName(DefCat myCat,string itemName) {
+		public static long GetByExactName(DefCat myCat,string itemName) {
 			if(itemName=="") {
 				return DefC.Long[(int)myCat][0].DefNum;//return the first one in the list
 			}

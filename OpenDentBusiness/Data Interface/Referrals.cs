@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Referral refer) {
+		public static long Insert(Referral refer) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				refer.ReferralNum=Meth.GetInt(MethodBase.GetCurrentMethod(),refer);
 				return refer.ReferralNum;
@@ -156,7 +156,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		private static Referral GetFromList(int referralNum) {
+		private static Referral GetFromList(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ReferralNum==referralNum) {
@@ -174,7 +174,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string GetNameLF(int referralNum) {
+		public static string GetNameLF(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			if(referralNum==0) {
 				return "";
@@ -191,7 +191,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Includes title, such as DMD.</summary>
-		public static string GetNameFL(int referralNum) {
+		public static string GetNameFL(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			if(referralNum==0) {
 				return "";
@@ -215,7 +215,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string GetPhone(int referralNum) {
+		public static string GetPhone(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			if(referralNum==0)
 				return "";
@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets Referral info from memory. Does not make a call to the database unless needed.</summary>
-		public static Referral GetReferral(int referralNum) {
+		public static Referral GetReferral(long referralNum) {
 			//No need to check RemotingRole; no call to db.
 			if(referralNum==0) {
 				return null;
@@ -263,7 +263,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the first referral "from" for the given patient.  Will return null if no "from" found for patient.</summary>
-		public static Referral GetReferralForPat(int patNum) {
+		public static Referral GetReferralForPat(long patNum) {
 			//No need to check RemotingRole; no call to db.
 			RefAttach[] RefAttachList=RefAttaches.Refresh(patNum);
 			for(int i=0;i<RefAttachList.Length;i++) {

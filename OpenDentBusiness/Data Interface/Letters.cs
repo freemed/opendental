@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Letter Cur){
+		public static long Insert(Letter Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.LetterNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.LetterNum;

@@ -258,8 +258,8 @@ namespace OpenDental.Imaging {
 			doc.DateCreated = DateTime.Today;
 			doc.PatNum = Patient.PatNum;
 			doc.DocCategory = docCategory;
-			doc.WindowingMin = PrefC.GetInt("ImageWindowingMin");
-			doc.WindowingMax = PrefC.GetInt("ImageWindowingMax");
+			doc.WindowingMin = PrefC.GetInt32("ImageWindowingMin");
+			doc.WindowingMax = PrefC.GetInt32("ImageWindowingMax");
 			Documents.Insert(doc, Patient);//creates filename and saves to db
 			try {
 				SaveDocument(doc, image, ImageFormat.Bmp);
@@ -286,7 +286,7 @@ namespace OpenDental.Imaging {
 			//Find the category, hopefully 'Patient Information'
 			//otherwise, just default to first one
 			Def[] defs=DefC.GetList(DefCat.ImageCats);
-			int iCategory = defs[0].DefNum; ;
+			long iCategory = defs[0].DefNum; ;
 			for(int i = 0;i < defs.Length;i++) {
 				if(defs[i].ItemName == "Patient Information") {
 					iCategory = defs[i].DefNum;

@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 				prov=new Provider();
 				prov.ProvNum       = PIn.PInt   (table.Rows[i][0].ToString());
 				prov.Abbr          = PIn.PString(table.Rows[i][1].ToString());
-				prov.ItemOrder     = PIn.PInt   (table.Rows[i][2].ToString());
+				prov.ItemOrder     = PIn.PInt32   (table.Rows[i][2].ToString());
 				prov.LName         = PIn.PString(table.Rows[i][3].ToString());
 				prov.FName         = PIn.PString(table.Rows[i][4].ToString());
 				prov.MI            = PIn.PString(table.Rows[i][5].ToString());
@@ -379,7 +379,7 @@ namespace OpenDentBusiness{
 		///<summary>Used when adding a provider to get the next available itemOrder.</summary>
 		public static int GetNextItemOrder(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetInt32(MethodBase.GetCurrentMethod());
 			}
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";
@@ -387,7 +387,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0){
 				return 1;
 			}
-			return PIn.PInt(table.Rows[0][0].ToString())+1;
+			return PIn.PInt32(table.Rows[0][0].ToString())+1;
 		}
 
 		///<Summary>Used once in the Provider Select window to warn user of duplicate Abbrs.</Summary>

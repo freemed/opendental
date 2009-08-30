@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(SchoolCourse sc){
+		private static long Insert(SchoolCourse sc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sc.SchoolCourseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sc);
 				return sc.SchoolCourseNum;

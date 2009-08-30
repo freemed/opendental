@@ -31,8 +31,8 @@ namespace OpenDentBusiness{
 				sheetdef.SheetType   = (SheetTypeEnum)PIn.PInt(table.Rows[i][2].ToString());
 				sheetdef.FontSize    = PIn.PFloat (table.Rows[i][3].ToString());
 				sheetdef.FontName    = PIn.PString(table.Rows[i][4].ToString());
-				sheetdef.Width       = PIn.PInt   (table.Rows[i][5].ToString());
-				sheetdef.Height      = PIn.PInt   (table.Rows[i][6].ToString());
+				sheetdef.Width       = PIn.PInt32 (table.Rows[i][5].ToString());
+				sheetdef.Height      = PIn.PInt32   (table.Rows[i][6].ToString());
 				sheetdef.IsLandscape = PIn.PBool  (table.Rows[i][7].ToString());
 				SheetDefC.Listt.Add(sheetdef);
 			}

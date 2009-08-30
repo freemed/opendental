@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static bool IsEnabled(int programNum){
+		public static bool IsEnabled(long programNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
 				if(ProgramC.Listt[i].ProgramNum==programNum && ProgramC.Listt[i].Enabled) {

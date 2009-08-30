@@ -28,9 +28,9 @@ namespace OpenDentBusiness {
 				field = new DisplayField();
 				field.DisplayFieldNum = PIn.PInt   (table.Rows[i][0].ToString());
 				field.InternalName    = PIn.PString(table.Rows[i][1].ToString());
-				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
+				field.ItemOrder       = PIn.PInt32   (table.Rows[i][2].ToString());
 				field.Description     = PIn.PString(table.Rows[i][3].ToString());
-				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
+				field.ColumnWidth     = PIn.PInt32   (table.Rows[i][4].ToString());
 				field.Category        = (DisplayFieldCategory)PIn.PInt(table.Rows[i][5].ToString());
 				DisplayFieldC.Listt.Add(field);
 			}

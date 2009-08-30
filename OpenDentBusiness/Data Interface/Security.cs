@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will throw an error if not authorized and message not suppressed.</summary>
-		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage,int userGroupNum) {
+		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage,long userGroupNum) {
 			//No need to check RemotingRole; no call to db.
 			if(!GroupPermissions.HasPermission(userGroupNum,perm)){
 				if(!suppressMessage){
@@ -133,7 +133,7 @@ namespace OpenDentBusiness{
 			return false;		
 		}
 
-		private static DateTime GetDateLimit(Permissions permType,int userGroupNum){
+		private static DateTime GetDateLimit(Permissions permType,long userGroupNum){
 			//No need to check RemotingRole; no call to db.
 			DateTime nowDate=MiscData.GetNowDateTime().Date;
 			DateTime retVal=DateTime.MinValue;

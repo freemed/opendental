@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(AutoCodeItem Cur){
+		public static long Insert(AutoCodeItem Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.AutoCodeItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeItemNum;
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Delete(int autoCodeNum){
+		public static void Delete(long autoCodeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoCodeNum);
 				return;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<AutoCodeItem> GetListForCode(int autoCodeNum){
+		public static List<AutoCodeItem> GetListForCode(long autoCodeNum) {
 			//No need to check RemotingRole; no call to db.
 			//loop through AutoCodeItems.List to fill ListForCode
 			List<AutoCodeItem> retVal=new List<AutoCodeItem>();
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		//-----
 
 		///<summary>Only called from ContrChart.listProcButtons_Click.  Called once for each tooth selected and for each autocode item attached to the button.</summary>
-		public static int GetCodeNum(int autoCodeNum,string toothNum,string surf,bool isAdditional,int patNum,int age) {
+		public static long GetCodeNum(long autoCodeNum,string toothNum,string surf,bool isAdditional,long patNum,int age) {
 			//No need to check RemotingRole; no call to db.
 			bool allCondsMet;
 			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode(autoCodeNum);
@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only called when closing the procedure edit window. Usually returns the supplied CodeNum, unless a better match is found.</summary>
-		public static int VerifyCode(int codeNum,string toothNum,string surf,bool isAdditional,int patNum,int age,
+		public static long VerifyCode(long codeNum,string toothNum,string surf,bool isAdditional,long patNum,int age,
 			out AutoCode AutoCodeCur) {
 			//No need to check RemotingRole; no call to db.
 			bool allCondsMet;

@@ -63,8 +63,8 @@ namespace OpenDentBusiness{
 				ListLong[i].FontSize=PIn.PFloat(table.Rows[i][4].ToString());
 				ListLong[i].UniqueID=PIn.PString(table.Rows[i][5].ToString());
 				ListLong[i].PrintImages=PIn.PBool(table.Rows[i][6].ToString());
-				ListLong[i].OffsetX=PIn.PInt(table.Rows[i][7].ToString());
-				ListLong[i].OffsetY=PIn.PInt(table.Rows[i][8].ToString());
+				ListLong[i].OffsetX=PIn.PInt32(table.Rows[i][7].ToString());
+				ListLong[i].OffsetY=PIn.PInt32(table.Rows[i][8].ToString());
 				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
 				if(!ListLong[i].IsHidden)
 					tempAL.Add(ListLong[i]);
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts this claimform into database and retrieves the new primary key.</summary>
-		public static int Insert(ClaimForm cf){
+		public static long Insert(ClaimForm cf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				cf.ClaimFormNum=Meth.GetInt(MethodBase.GetCurrentMethod(),cf);
 				return cf.ClaimFormNum;
@@ -152,7 +152,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT ClaimFormNum FROM claimform WHERE UniqueID ='"+cf.UniqueID.ToString()+"'";
  			DataTable table=Db.GetTable(command);
-			int[] claimFormNums=new int[table.Rows.Count];
+			long[] claimFormNums=new long[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				claimFormNums[i]=PIn.PInt   (table.Rows[i][0].ToString());
 			}
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Returns number of insplans affected.</summary>
-		public static int Reassign(int oldClaimFormNum, int newClaimFormNum){
+		public static long Reassign(long oldClaimFormNum,long newClaimFormNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}

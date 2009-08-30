@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts this lettermergefield into database.</summary>
-		public static int Insert(LetterMergeField lmf){
+		public static long Insert(LetterMergeField lmf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				lmf.FieldNum=Meth.GetInt(MethodBase.GetCurrentMethod(),lmf);
 				return lmf.FieldNum;

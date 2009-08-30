@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int Insert(SigButDefElement element){
+		public static long Insert(SigButDefElement element) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				element.ElementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),element);
 				return element.ElementNum;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Loops through the SigButDefElement list and pulls out all elements for one specific button.</summary>
-		public static SigButDefElement[] GetForButton(int sigButDefNum){
+		public static SigButDefElement[] GetForButton(long sigButDefNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<List.Length;i++){

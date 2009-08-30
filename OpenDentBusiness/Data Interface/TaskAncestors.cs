@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class TaskAncestors {
 	
 		///<summary></summary>
-		public static int WriteObject(TaskAncestor ancestor){
+		public static long WriteObject(TaskAncestor ancestor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ancestor.TaskAncestorNum=Meth.GetInt(MethodBase.GetCurrentMethod(),ancestor);
 				return ancestor.TaskAncestorNum;
@@ -33,8 +33,8 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE FROM taskancestor WHERE TaskNum="+POut.PInt(task.TaskNum);
 			Db.NonQ(command);
-			int taskListNum=0;
-			int parentNum=task.TaskListNum;
+			long taskListNum=0;
+			long parentNum=task.TaskListNum;
 			DataTable table;
 			TaskAncestor ancestor;
 			while(true){

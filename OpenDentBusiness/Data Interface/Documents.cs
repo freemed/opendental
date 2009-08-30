@@ -60,12 +60,12 @@ namespace OpenDentBusiness {
 			doc.Note            =PIn.PString(row[10].ToString());
 			doc.SigIsTopaz      =PIn.PBool  (row[11].ToString());
 			doc.Signature       =PIn.PString(row[12].ToString());
-			doc.CropX           =PIn.PInt   (row[13].ToString());
-			doc.CropY           =PIn.PInt   (row[14].ToString());
-			doc.CropW           =PIn.PInt   (row[15].ToString());
-			doc.CropH           =PIn.PInt   (row[16].ToString());
-			doc.WindowingMin    =PIn.PInt   (row[17].ToString());
-			doc.WindowingMax    =PIn.PInt   (row[18].ToString());
+			doc.CropX           =PIn.PInt32   (row[13].ToString());
+			doc.CropY           =PIn.PInt32   (row[14].ToString());
+			doc.CropW           =PIn.PInt32   (row[15].ToString());
+			doc.CropH           =PIn.PInt32   (row[16].ToString());
+			doc.WindowingMin    =PIn.PInt32   (row[17].ToString());
+			doc.WindowingMax    =PIn.PInt32   (row[18].ToString());
 			doc.MountItemNum    =PIn.PInt   (row[19].ToString());
 			doc.DateTStamp      =PIn.PDateT (row[20].ToString());
 			return doc;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness {
 		}*/
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
-		public static int Insert(Document doc,Patient pat){
+		public static long Insert(Document doc,Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				doc.DocNum=Meth.GetInt(MethodBase.GetCurrentMethod(),doc,pat);
 				return doc.DocNum;
@@ -246,12 +246,12 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary>Will return null if no picture for this patient.</summary>
-		public static Document GetPatPictFromDb(int patNum) {
+		public static Document GetPatPictFromDb(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document>(MethodBase.GetCurrentMethod(),patNum);
 			} 
 			//first establish which category pat pics are in
-			int defNumPicts=0;
+			long defNumPicts=0;
 			Def[] defs=DefC.GetList(DefCat.ImageCats);
 			for(int i=0;i<defs.Length;i++){
 				if(Regex.IsMatch(defs[i].ItemValue,@"P")){
@@ -282,7 +282,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
+		public static bool GetPatPict(long patNum,string patFolder,out Bitmap patientPict) {
 			//No need to check RemotingRole; no call to db.
 			Document pictureDoc=GetPatPictFromDb(patNum);
 			if(pictureDoc==null) {
@@ -387,11 +387,11 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
-		public static int InsertMissing(Patient patient,List <string> fileList){
+		public static long InsertMissing(Patient patient,List<string> fileList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patient,fileList);
 			}
-			int countAdded=0;
+			long countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
 			DataTable table=Db.GetTable(command);
 			for(int j=0;j<fileList.Count;j++){

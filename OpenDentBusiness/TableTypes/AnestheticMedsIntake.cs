@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,3 +25,4 @@ namespace OpenDentBusiness.TableTypes {
 		public string InvoiceNum;
 	}
 }
+*/

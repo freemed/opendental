@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 				sched.FeeSchedNum = PIn.PInt   (table.Rows[i][0].ToString());
 				sched.Description = PIn.PString(table.Rows[i][1].ToString());
 				sched.FeeSchedType= (FeeScheduleType)PIn.PInt(table.Rows[i][2].ToString());
-				sched.ItemOrder   = PIn.PInt   (table.Rows[i][3].ToString());
+				sched.ItemOrder   = PIn.PInt32   (table.Rows[i][3].ToString());
 				sched.IsHidden    = PIn.PBool  (table.Rows[i][4].ToString());
 				FeeSchedC.ListLong.Add(sched);
 				if(!sched.IsHidden){
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int WriteObject(FeeSched feeSched){
+		public static long WriteObject(FeeSched feeSched) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				feeSched.FeeSchedNum=Meth.GetInt(MethodBase.GetCurrentMethod(),feeSched);
 				return feeSched.FeeSchedNum;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<FeeSched>.DeleteObject(FeeSchedNum);
 		//}*/
 
-		public static string GetDescription(int feeSchedNum){
+		public static string GetDescription(long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.
 			if(feeSchedNum==0){
 				return "";
@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		public static bool GetIsHidden(int feeSchedNum){
+		public static bool GetIsHidden(long feeSchedNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<FeeSchedC.ListLong.Count;i++){
 				if(FeeSchedC.ListLong[i].FeeSchedNum==feeSchedNum){

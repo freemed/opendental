@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(Popup popup){
+		public static long WriteObject(Popup popup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				popup.PopupNum=Meth.GetInt(MethodBase.GetCurrentMethod(),popup);
 				return popup.PopupNum;

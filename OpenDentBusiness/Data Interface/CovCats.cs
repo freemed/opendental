@@ -102,7 +102,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static CovCat GetCovCat(int covCatNum){
+		public static CovCat GetCovCat(long covCatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<CovCatC.Listt.Count;i++) {
 				if(covCatNum==CovCatC.Listt[i].CovCatNum) {
@@ -113,7 +113,7 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary></summary>
-		public static double GetDefaultPercent(int myCovCatNum){
+		public static double GetDefaultPercent(long myCovCatNum) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<CovCatC.Listt.Count;i++){
@@ -125,7 +125,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static string GetDesc(int covCatNum){
+		public static string GetDesc(long covCatNum) {
 			//No need to check RemotingRole; no call to db.
 			string retStr="";
 			for(int i=0;i<CovCatC.Listt.Count;i++){
@@ -150,7 +150,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int GetOrderShort(int CovCatNum){
+		public static int GetOrderShort(long CovCatNum) {
 			//No need to check RemotingRole; no call to db.
 			int retVal=-1;
 			for(int i=0;i<CovCatC.ListShort.Count;i++){
@@ -173,7 +173,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>If none assigned, it will return None.</summary>
-		public static EbenefitCategory GetEbenCat(int covCatNum) {
+		public static EbenefitCategory GetEbenCat(long covCatNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<CovCatC.ListShort.Count;i++) {
 				if(covCatNum==CovCatC.ListShort[i].CovCatNum) {

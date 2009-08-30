@@ -44,8 +44,8 @@ namespace OpenDentBusiness {
 				listt[i]=new SigButDef();
 				listt[i].SigButDefNum= PIn.PInt(table.Rows[i][0].ToString());
 				listt[i].ButtonText  = PIn.PString(table.Rows[i][1].ToString());
-				listt[i].ButtonIndex = PIn.PInt(table.Rows[i][2].ToString());
-				listt[i].SynchIcon   = PIn.PInt(table.Rows[i][3].ToString());
+				listt[i].ButtonIndex = PIn.PInt32(table.Rows[i][2].ToString());
+				listt[i].SynchIcon   = PIn.PInt32(table.Rows[i][3].ToString());
 				listt[i].ComputerName= PIn.PString(table.Rows[i][4].ToString());
 				listt[i].ElementList=SigButDefElements.GetForButton(listt[i].SigButDefNum);
 			}
@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(SigButDef def) {
+		public static long Insert(SigButDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.SigButDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.SigButDefNum;

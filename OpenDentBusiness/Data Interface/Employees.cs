@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Employee Cur){
+		public static long Insert(Employee Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.EmployeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
@@ -266,7 +266,7 @@ namespace OpenDentBusiness{
 			if(tablePhone.Rows.Count==0){
 				return;
 			}
-			int empNum=PIn.PInt(tablePhone.Rows[0]["EmployeeNum"].ToString());
+			long empNum=PIn.PInt(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			bool isAvailable=PIn.PBool(tablePhone.Rows[0]["isAvail"].ToString());
 			bool overridden=PIn.PBool(tablePhone.Rows[0]["overridden"].ToString());
 			bool isInUse=false;
@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used when clocking in and out, but not through the phone grid.  Keeps the phone grid current. Handles situations where employee is listed on two different extensions.</summary>
-		public static void SetPhoneClockStatus(int employeeNum,string clockStatus){
+		public static void SetPhoneClockStatus(long employeeNum,string clockStatus){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,clockStatus);
 				return;
@@ -291,7 +291,7 @@ namespace OpenDentBusiness{
 			int extension;
 			string curClockStatus;
 			for(int i=0;i<table.Rows.Count;i++){
-				extension=PIn.PInt(table.Rows[i]["Extension"].ToString());
+				extension=PIn.PInt32(table.Rows[i]["Extension"].ToString());
 				curClockStatus=table.Rows[i]["ClockStatus"].ToString();
 				if(curClockStatus=="Unavailable"){
 					continue;//don't change "Unavailable" to anything else.
@@ -300,7 +300,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		private static Color GetColorBar(string clockStatus,bool overridden,bool isAvailable,int empNum,bool isInUse){
+		private static Color GetColorBar(string clockStatus,bool overridden,bool isAvailable,long empNum,bool isInUse){
 			//No need to check RemotingRole; no call to db.
 			//there is an exact duplicate of this function in the phone server.
 			Color colorBar=Color.White;

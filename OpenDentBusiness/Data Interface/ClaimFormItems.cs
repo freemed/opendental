@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Gets all claimformitems for the specified claimform from the preloaded List.</summary>
-		public static ClaimFormItem[] GetListForForm(int claimFormNum){
+		public static ClaimFormItem[] GetListForForm(long claimFormNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<ClaimFormItemC.List.Length;i++){

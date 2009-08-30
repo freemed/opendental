@@ -55,10 +55,22 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int ProcessGetInt(DtoGetInt dto) {
+		public static long ProcessGetInt(DtoGetInt dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
 				return PIn.PInt(result);
+			}
+			catch {
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
+				throw new Exception(exception.Message);
+			}
+		}
+
+		///<summary></summary>
+		public static int ProcessGetInt32(DtoGetInt32 dto) {
+			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
+			try {
+				return PIn.PInt32(result);
 			}
 			catch {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);

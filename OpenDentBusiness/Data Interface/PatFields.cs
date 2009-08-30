@@ -40,7 +40,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(PatField pf) {
+		public static long Insert(PatField pf) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				pf.PatFieldNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pf);
 				return pf.PatFieldNum;

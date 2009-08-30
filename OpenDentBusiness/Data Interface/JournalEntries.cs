@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class JournalEntries {
 
 		///<summary>Used when displaying the splits for a transaction.</summary>
-		public static ArrayList GetForTrans(int transactionNum) {
+		public static ArrayList GetForTrans(long transactionNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),transactionNum);
 			}
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used to display a list of entries for one account.</summary>
-		public static List <JournalEntry> GetForAccount(int accountNum) {
+		public static List <JournalEntry> GetForAccount(long accountNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <JournalEntry>>(MethodBase.GetCurrentMethod(),accountNum);
 			}
@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in reconcile window.</summary>
-		public static List <JournalEntry> GetForReconcile(int accountNum,bool includeUncleared,int reconcileNum) {
+		public static List <JournalEntry> GetForReconcile(long accountNum,bool includeUncleared,long reconcileNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <JournalEntry>>(MethodBase.GetCurrentMethod(),accountNum,includeUncleared,reconcileNum);
 			}
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(JournalEntry je) {
+		public static long Insert(JournalEntry je) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				je.JournalEntryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),je);
 				return je.JournalEntryNum;
@@ -219,7 +219,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Called once from FormReconcileEdit when closing.  Saves the reconcileNum for every item in the list.</summary>
-		public static void SaveList(List <JournalEntry> journalList,int reconcileNum) {
+		public static void SaveList(List <JournalEntry> journalList,long reconcileNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),journalList,reconcileNum);
 				return;

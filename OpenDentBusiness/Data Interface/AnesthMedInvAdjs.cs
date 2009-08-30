@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using System.Data;
 using System.Drawing;
@@ -114,7 +115,8 @@ namespace OpenDentBusiness{
 			MySqlCommand command2 = new MySqlCommand();
 			con=new MySqlConnection();
 			con.Open();
-			command2.CommandText = "SELECT AdjustNum from anesthmedsinventoryadj WHERE AnestheticMedNum = '" + anestheticMedNum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			command2.CommandText = "SELECT AdjustNum from anesthmedsinventoryadj WHERE AnestheticMedNum = '" + anestheticMedNum.ToString() + "'";    
+ //"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
 			command2.Connection = con;
 			int adjustNum = Convert.ToInt32(command2.ExecuteScalar());
 			return adjustNum;
@@ -126,4 +128,4 @@ namespace OpenDentBusiness{
 
 
 
-}
+}*/

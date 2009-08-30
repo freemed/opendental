@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}*/
 	
 		///<summary></summary>
-		public static int WriteObject(TaskSubscription subsc){
+		public static long WriteObject(TaskSubscription subsc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				subsc.TaskSubscriptionNum=Meth.GetInt(MethodBase.GetCurrentMethod(),subsc);
 				return subsc.TaskSubscriptionNum;

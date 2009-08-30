@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class Recalls{
 
 		///<summary>Gets all recalls for the supplied patients, usually a family or single pat.  Result might have a length of zero.  Each recall will also have the DateScheduled filled by pulling that info from other tables.</summary>
-		public static List<Recall> GetList(List<int> patNums){
+		public static List<Recall> GetList(List<long> patNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),patNums);
 			} 
@@ -38,9 +38,9 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(table);
 		}
 
-		public static List<Recall> GetList(int patNum){
+		public static List<Recall> GetList(long patNum) {
 			//No need to check RemotingRole; no call to db.
-			List<int> patNums=new List<int>();
+			List<long> patNums=new List<long>();
 			patNums.Add(patNum);
 			return GetList(patNums);
 		}
@@ -48,14 +48,14 @@ namespace OpenDentBusiness{
 		/// <summary></summary>
 		public static List<Recall> GetList(List<Patient> patients){
 			//No need to check RemotingRole; no call to db.
-			List<int> patNums=new List<int>();
+			List<long> patNums=new List<long>();
 			for(int i=0;i<patients.Count;i++){
 				patNums.Add(patients[i].PatNum);
 			}
 			return GetList(patNums);
 		}
 
-		public static Recall GetRecall(int recallNum){
+		public static Recall GetRecall(long recallNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),recallNum);
 			} 
@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return a recall or null.</summary>
-		public static Recall GetRecallProphyOrPerio(int patNum){
+		public static Recall GetRecallProphyOrPerio(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),patNum);
 			} 
@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 				recall.DateDueCalc    = PIn.PDate  (table.Rows[i][2].ToString());
 				recall.DateDue        = PIn.PDate  (table.Rows[i][3].ToString());
 				recall.DatePrevious   = PIn.PDate  (table.Rows[i][4].ToString());
-				recall.RecallInterval = new Interval(PIn.PInt(table.Rows[i][5].ToString()));
+				recall.RecallInterval = new Interval(PIn.PInt32(table.Rows[i][5].ToString()));
 				recall.RecallStatus   = PIn.PInt   (table.Rows[i][6].ToString());
 				recall.Note           = PIn.PString(table.Rows[i][7].ToString());
 				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
@@ -114,8 +114,8 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.  If sortAlph is false, it will sort by dueDate.</summary>
-		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum,int clinicNum,
-			int siteNum,bool sortAlph)
+		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,long provNum,long clinicNum,
+			long siteNum,bool sortAlph)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortAlph);
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 				+"GROUP BY patient.Guarantor";
 			DataTable maxTable=Db.GetTable(command);
 			//key=guarantor, value=maxDateDue
-			Dictionary<int,DateTime> dictMaxDateDue=new Dictionary<int,DateTime>();
+			Dictionary<long,DateTime> dictMaxDateDue=new Dictionary<long,DateTime>();
 			for(int i=0;i<maxTable.Rows.Count;i++) {
 				dictMaxDateDue.Add(PIn.PInt(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
 			}
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 				+"AND recall.DateDue >= "+POut.PDate(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
 				+"AND recall.IsDisabled = 0 ";
-			List<int> recalltypes=new List<int>();
+			List<long> recalltypes=new List<long>();
 			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
@@ -234,7 +234,7 @@ namespace OpenDentBusiness{
 			Interval interv;
 			Patient pat;
 			ContactMethod contmeth;
-			int guarNum;
+			long guarNum;
 			string numberOfReminders;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
@@ -369,7 +369,7 @@ namespace OpenDentBusiness{
 				else{
 					row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
 				}
-				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
+				interv=new Interval(PIn.PInt32(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
 				row["recallType"]=rawtable.Rows[i]["_recalltype"].ToString();
@@ -387,7 +387,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Recall recall) {
+		public static long Insert(Recall recall) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				recall.RecallNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recall);
 				return recall.RecallNum;
@@ -788,7 +788,7 @@ namespace OpenDentBusiness{
 					maxNumReminders=0;
 					//loop through the whole family, and determine the maximum number of reminders
 					for(int f=i;f<rawRows.Count;f++) {
-						maxRemindersThisPat=PIn.PInt(rawRows[f]["numberOfReminders"].ToString());
+						maxRemindersThisPat=PIn.PInt32(rawRows[f]["numberOfReminders"].ToString());
 						if(maxRemindersThisPat>maxNumReminders) {
 							maxNumReminders=maxRemindersThisPat;
 						}

@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class EtransMessageTexts {
 
 		///<summary></summary>
-		public static int Insert(EtransMessageText etransMessageText) {
+		public static long Insert(EtransMessageText etransMessageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				etransMessageText.EtransMessageTextNum=Meth.GetInt(MethodBase.GetCurrentMethod(),etransMessageText);
 				return etransMessageText.EtransMessageTextNum;

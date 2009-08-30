@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int Insert(SigElement se){
+		public static long Insert(SigElement se) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				se.SigElementNum=Meth.GetInt(MethodBase.GetCurrentMethod(),se);
 				return se.SigElementNum;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Loops through the supplied sigElement list and pulls out all elements for one specific signal.</summary>
-		public static SigElement[] GetForSig(SigElement[] elementList,int signalNum){
+		public static SigElement[] GetForSig(SigElement[] elementList,long signalNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<elementList.Length;i++){

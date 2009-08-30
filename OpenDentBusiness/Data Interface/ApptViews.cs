@@ -24,14 +24,14 @@ namespace OpenDentBusiness{
 				ApptViewC.List[i]=new ApptView();
 				ApptViewC.List[i].ApptViewNum = PIn.PInt   (table.Rows[i][0].ToString());
 				ApptViewC.List[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				ApptViewC.List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
-				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());
+				ApptViewC.List[i].ItemOrder   = PIn.PInt32   (table.Rows[i][2].ToString());
+				ApptViewC.List[i].RowsPerIncr = PIn.PInt32   (table.Rows[i][3].ToString());
 				ApptViewC.List[i].OnlyScheduledProvs = PIn.PBool  (table.Rows[i][4].ToString());	
 			}
 		}
 
 		///<summary></summary>
-		public static int Insert(ApptView Cur){
+		public static long Insert(ApptView Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ApptViewNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ApptViewNum;

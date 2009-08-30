@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(AppointmentRule rule){
+		public static long Insert(AppointmentRule rule) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				rule.AppointmentRuleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),rule);
 				return rule.AppointmentRuleNum;

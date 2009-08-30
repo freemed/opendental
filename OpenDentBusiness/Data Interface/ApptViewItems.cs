@@ -30,8 +30,8 @@ namespace OpenDentBusiness{
 				ApptViewItemC.List[i].OpNum           = PIn.PInt   (table.Rows[i][2].ToString());
 				ApptViewItemC.List[i].ProvNum         = PIn.PInt   (table.Rows[i][3].ToString());
 				ApptViewItemC.List[i].ElementDesc     = PIn.PString(table.Rows[i][4].ToString());
-				ApptViewItemC.List[i].ElementOrder    = PIn.PInt   (table.Rows[i][5].ToString());
-				ApptViewItemC.List[i].ElementColor    = Color.FromArgb(PIn.PInt(table.Rows[i][6].ToString()));
+				ApptViewItemC.List[i].ElementOrder    = PIn.PInt32   (table.Rows[i][5].ToString());
+				ApptViewItemC.List[i].ElementColor    = Color.FromArgb(PIn.PInt32(table.Rows[i][6].ToString()));
 			}
 		}
 
@@ -94,10 +94,10 @@ namespace OpenDentBusiness{
 			Db.NonQ(c);
 		}
 
-		public static List<int> GetOpsForView(int apptViewNum){
+		public static List<long> GetOpsForView(long apptViewNum) {
 			//No need to check RemotingRole; no call to db.
 			//ArrayList AL=new ArrayList();
-			List<int> retVal=new List<int>();
+			List<long> retVal=new List<long>();
 			for(int i=0;i<ApptViewItemC.List.Length;i++){
 				if(ApptViewItemC.List[i].ApptViewNum==apptViewNum && ApptViewItemC.List[i].OpNum!=0){
 					retVal.Add(ApptViewItemC.List[i].OpNum);

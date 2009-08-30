@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteForCat(int covCatNum) {
+		public static void DeleteForCat(long covCatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),covCatNum);
 				return;
@@ -95,9 +95,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int GetCat(string myCode){
+		public static long GetCat(string myCode){
 			//No need to check RemotingRole; no call to db.
-			int retVal=0;
+			long retVal=0;
 			for(int i=0;i<CovSpanC.List.Length;i++){
 				if(String.Compare(myCode,CovSpanC.List[i].FromCode)>=0
 					&& String.Compare(myCode,CovSpanC.List[i].ToCode)<=0){
@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static CovSpan[] GetForCat(int catNum){
+		public static CovSpan[] GetForCat(long catNum){
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<CovSpanC.List.Length;i++){

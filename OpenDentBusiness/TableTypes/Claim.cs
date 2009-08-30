@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		public Claim Copy() {
 			Claim c=(Claim)MemberwiseClone();
 			c.Attachments=new List<ClaimAttach>();
-			for(long i=0;i<Attachments.Count;i++){
+			for(int i=0;i<Attachments.Count;i++){
 				c.Attachments.Add(Attachments[i].Copy());
 			}
 			return c;

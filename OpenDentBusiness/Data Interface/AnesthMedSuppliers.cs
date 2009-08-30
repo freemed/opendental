@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -79,6 +80,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use.
+ */
 			/*string command="SELECT LName,FName FROM patient WHERE PharmacyNum="+POut.PInt(PharmacyNum);
 			DataTable table=Db.GetTable(command);
 			string pats="";
@@ -91,6 +93,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("Pharmacys","Pharmacy is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
+/*
 			DataObjectFactory<AnesthMedSupplier>.DeleteObject(SupplierIDNum);
 		}
 
@@ -120,4 +123,4 @@ namespace OpenDentBusiness{
 		}
 }
 
-
+*/

@@ -58,16 +58,16 @@ namespace OpenDentBusiness{
 				code.IsProsth      =PIn.PBool  (table.Rows[i][8].ToString());
 				code.DefaultNote   =PIn.PString(table.Rows[i][9].ToString());
 				code.IsHygiene     =PIn.PBool  (table.Rows[i][10].ToString());
-				code.GTypeNum      =PIn.PInt   (table.Rows[i][11].ToString());
+				code.GTypeNum      =PIn.PInt32   (table.Rows[i][11].ToString());
 				code.AlternateCode1=PIn.PString(table.Rows[i][12].ToString());
 				code.MedicalCode   =PIn.PString(table.Rows[i][13].ToString());
 				code.IsTaxed       =PIn.PBool  (table.Rows[i][14].ToString());
 				code.PaintType     =(ToothPaintingType)PIn.PInt(table.Rows[i][15].ToString());
-				code.GraphicColor  =Color.FromArgb(PIn.PInt(table.Rows[i][16].ToString()));
+				code.GraphicColor  =Color.FromArgb(PIn.PInt32(table.Rows[i][16].ToString()));
 				code.LaymanTerm    =PIn.PString(table.Rows[i][17].ToString());
 				code.IsCanadianLab =PIn.PBool  (table.Rows[i][18].ToString());
 				code.PreExisting	 =PIn.PBool  (table.Rows[i][19].ToString());
-				code.BaseUnits     =PIn.PInt   (table.Rows[i][20].ToString());
+				code.BaseUnits     =PIn.PInt32   (table.Rows[i][20].ToString());
 				code.SubstitutionCode=PIn.PString(table.Rows[i][21].ToString());
 				code.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(table.Rows[i][22].ToString());
 				//DateTStamp
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ProcedureCode code){
+		public static long Insert(ProcedureCode code) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				code.CodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),code);
 				return code.CodeNum;
@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply the human readable proc code such as D####</summary>
-		public static int GetCodeNum(string myCode){
+		public static long GetCodeNum(string myCode) {
 			//No need to check RemotingRole; no call to db.
 			if(myCode==null || myCode=="") {
 				return 0;
@@ -214,7 +214,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If a substitute exists for the given proc code, then it will give the CodeNum of that code.  Otherwise, it will return the codeNum for the given procCode.</summary>
-		public static int GetSubstituteCodeNum(string procCode,string toothNum) {
+		public static long GetSubstituteCodeNum(string procCode,string toothNum) {
 			//No need to check RemotingRole; no call to db.
 			if(procCode==null || procCode=="") {
 				return 0;
@@ -343,7 +343,7 @@ namespace OpenDentBusiness{
 				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)
 				AND ProcCode LIKE 'T%'";
 			DataTable table=Db.GetTable(command);
-			int codenum;
+			long codenum;
 			for(int i=0;i<table.Rows.Count;i++) {
 				codenum=PIn.PInt(table.Rows[i]["CodeNum"].ToString());
 				command="DELETE FROM fee WHERE CodeNum="+POut.PInt(codenum);
@@ -357,7 +357,7 @@ namespace OpenDentBusiness{
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
 			table=Db.GetTable(command);
-			int catNum=DefC.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
+			long catNum=DefC.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
 			Def def;
 			if(catNum!=0) {//if a category exists with that name
 				def=DefC.GetDef(DefCat.ProcCodeCats,catNum);

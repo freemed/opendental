@@ -34,10 +34,10 @@ namespace OpenDentBusiness{
 				sfd.FontSize        = PIn.PFloat (table.Rows[i][5].ToString());
 				sfd.FontName        = PIn.PString(table.Rows[i][6].ToString());
 				sfd.FontIsBold      = PIn.PBool  (table.Rows[i][7].ToString());
-				sfd.XPos            = PIn.PInt   (table.Rows[i][8].ToString());
-				sfd.YPos            = PIn.PInt   (table.Rows[i][9].ToString());
-				sfd.Width           = PIn.PInt   (table.Rows[i][10].ToString());
-				sfd.Height          = PIn.PInt   (table.Rows[i][11].ToString());
+				sfd.XPos            = PIn.PInt32   (table.Rows[i][8].ToString());
+				sfd.YPos            = PIn.PInt32   (table.Rows[i][9].ToString());
+				sfd.Width           = PIn.PInt32   (table.Rows[i][10].ToString());
+				sfd.Height          = PIn.PInt32   (table.Rows[i][11].ToString());
 				sfd.GrowthBehavior  = (GrowthBehaviorEnum)PIn.PInt(table.Rows[i][12].ToString());
 				SheetFieldDefC.Listt.Add(sfd);
 			}
@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int WriteObject(SheetFieldDef sheetFieldDef){
+		public static long WriteObject(SheetFieldDef sheetFieldDef) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sheetFieldDef.SheetFieldDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sheetFieldDef);
 				return sheetFieldDef.SheetFieldDefNum;

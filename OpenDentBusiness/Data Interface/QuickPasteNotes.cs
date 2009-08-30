@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 				List[i]=new QuickPasteNote();
 				List[i].QuickPasteNoteNum=PIn.PInt(table.Rows[i][0].ToString());
 				List[i].QuickPasteCatNum=PIn.PInt(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].ItemOrder=PIn.PInt32(table.Rows[i][2].ToString());
 				List[i].Note=PIn.PString(table.Rows[i][3].ToString());
 				List[i].Abbreviation=PIn.PString(table.Rows[i][4].ToString());
 			}

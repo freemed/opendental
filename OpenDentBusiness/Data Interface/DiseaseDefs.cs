@@ -56,7 +56,7 @@ namespace OpenDentBusiness {
 				ListLong[i]=new DiseaseDef();
 				ListLong[i].DiseaseDefNum=PIn.PInt(table.Rows[i][0].ToString());
 				ListLong[i].DiseaseName=PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				ListLong[i].ItemOrder=PIn.PInt32(table.Rows[i][2].ToString());
 				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][3].ToString());
 				if(!ListLong[i].IsHidden) {
 					AL.Add(ListLong[i]);
@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(DiseaseDef def) {
+		public static long Insert(DiseaseDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.DiseaseDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.DiseaseDefNum;
@@ -195,7 +195,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the diseaseDefNum that exactly matches the specified string.  Used in import functions when you only have the name to work with.  Can return 0 if no match.  Does not match hidden diseases.</summary>
-		public static int GetNumFromName(string diseaseName){
+		public static long GetNumFromName(string diseaseName){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(diseaseName==List[i].DiseaseName){

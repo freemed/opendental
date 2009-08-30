@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 				proc.TreatPlanNum= PIn.PInt(table.Rows[i][1].ToString());
 				proc.PatNum      = PIn.PInt(table.Rows[i][2].ToString());
 				proc.ProcNumOrig = PIn.PInt(table.Rows[i][3].ToString());
-				proc.ItemOrder   = PIn.PInt(table.Rows[i][4].ToString());
+				proc.ItemOrder   = PIn.PInt32(table.Rows[i][4].ToString());
 				proc.Priority    = PIn.PInt(table.Rows[i][5].ToString());
 				proc.ToothNumTP  = PIn.PString(table.Rows[i][6].ToString());
 				proc.Surf        = PIn.PString(table.Rows[i][7].ToString());
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(ProcTP proc){
+		private static long Insert(ProcTP proc){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				proc.ProcTPNum=Meth.GetInt(MethodBase.GetCurrentMethod(),proc);
 				return proc.ProcTPNum;

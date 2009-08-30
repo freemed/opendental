@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Commlog comm){
+		public static long Insert(Commlog comm) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				comm.CommlogNum=Meth.GetInt(MethodBase.GetCurrentMethod(),comm);
 				return comm.CommlogNum;
@@ -117,12 +117,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
-		public static void InsertForRecall(int patNum,CommItemMode _mode,int numberOfReminders){
+		public static void InsertForRecall(long patNum,CommItemMode _mode,int numberOfReminders) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,_mode,numberOfReminders);
 				return;
 			}
-			int recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+			long recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			string command;
 			if(recallType!=0){
 				command="SELECT COUNT(*) FROM commlog WHERE ";
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Returns a defnum.  If no match, then it returns the first one in the list in that category.</Summary>
-		public static int GetTypeAuto(CommItemTypeAuto typeauto){
+		public static long GetTypeAuto(CommItemTypeAuto typeauto) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<DefC.Long[(int)DefCat.CommLogTypes].Length;i++){
 				if(DefC.Long[(int)DefCat.CommLogTypes][i].ItemValue==typeauto.ToString()){

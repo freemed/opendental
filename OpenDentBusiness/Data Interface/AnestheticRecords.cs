@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using System.Data;
 using OpenDentBusiness.DataAccess;
@@ -58,7 +59,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Creates a new AnestheticRecord in the db</summary>
-		public static int Insert(AnestheticRecord Cur) {
+		public static long Insert(AnestheticRecord Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.AnestheticRecordNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AnestheticRecordNum;
@@ -129,7 +130,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>/// Gets the Anesthetic Record number from the anestheticrecord table./// </summary>
 
-		public static int GetRecordNum(int patnum) {
+		public static long GetRecordNum(int patnum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),patnum);
 			}
@@ -139,7 +140,7 @@ namespace OpenDentBusiness {
 			if(con.State == ConnectionState.Open)
 				con.Close();
 			con.Open();
-			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    /*"SELECT Max(AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";*/
+			cmd.CommandText = "SELECT AnestheticRecordNum FROM anestheticrecord WHERE PatNum = '" + patnum.ToString() + "'";    //"SELECT Max AnestheticRecordNum) FROM anestheticrecord a, patient p where a.Patnum = p.Patnum and p.patnum = " + patnum + "";
 			cmd.Connection = con;
 			int anestheticRecordNum = Convert.ToInt32(cmd.ExecuteScalar());
 			con.Close();
@@ -149,7 +150,7 @@ namespace OpenDentBusiness {
 
 		/// <summary>/// Returns the date shown in the listAnesthetic.SelectedItem so it can be used to pull the correct AnestheticRecordCur from the db/// </summary>
 
-		public static int GetRecordNumByDate(string AnestheticDateCur) {
+		public static long GetRecordNumByDate(string AnestheticDateCur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),AnestheticDateCur);
 			}
@@ -212,7 +213,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static int GetAnesthScore(int AnestheticRecordNum) {
+		public static int GetAnesthScore(long AnestheticRecordNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),AnestheticRecordNum);
 			}
@@ -318,3 +319,5 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+*/

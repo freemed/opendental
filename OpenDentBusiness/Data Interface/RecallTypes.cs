@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 				rtype.IsNew=false;
 				rtype.RecallTypeNum  = PIn.PInt   (table.Rows[i][0].ToString());
 				rtype.Description    = PIn.PString(table.Rows[i][1].ToString());
-				rtype.DefaultInterval= new Interval(PIn.PInt(table.Rows[i][2].ToString()));
+				rtype.DefaultInterval= new Interval(PIn.PInt32(table.Rows[i][2].ToString()));
 				rtype.TimePattern    = PIn.PString(table.Rows[i][3].ToString());
 				rtype.Procedures     = PIn.PString(table.Rows[i][4].ToString());
 				list.Add(rtype);
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int WriteObject(RecallType recallType){
+		public static long WriteObject(RecallType recallType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				recallType.RecallTypeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),recallType);
 				return recallType.RecallTypeNum;
@@ -221,7 +221,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the pref table RecallTypeSpecialProphy RecallTypeNum.</summary>
-		public static int ProphyType{
+		public static long ProphyType{
 			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialProphy");
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the pref table RecallTypeSpecialPerio RecallTypeNum.</summary>
-		public static int PerioType{
+		public static long PerioType{
 			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialPerio");
@@ -237,7 +237,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the pref table RecallTypeSpecialChildProphy RecallTypeNum.</summary>
-		public static int ChildProphyType{
+		public static long ChildProphyType{
 			//No need to check RemotingRole; no call to db.
 			get{
 				return PrefC.GetInt("RecallTypeSpecialChildProphy");

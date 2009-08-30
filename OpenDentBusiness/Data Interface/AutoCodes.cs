@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(AutoCode Cur){
+		public static long Insert(AutoCode Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.AutoCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeNum;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</summary>
-		public static int GetNumFromDescript(string descript) {
+		public static long GetNumFromDescript(string descript) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<AutoCodeC.ListShort.Length;i++) {
 				if(AutoCodeC.ListShort[i].Description==descript) {
@@ -104,8 +104,8 @@ namespace OpenDentBusiness{
 				DELETE FROM autocodecond;
 				DELETE FROM autocodeitem";
 			Db.NonQ(command);
-			int autoCodeNum;
-			int autoCodeItemNum;
+			long autoCodeNum;
+			long autoCodeItemNum;
 			//Amalgam-------------------------------------------------------------------------------------------------------
 			command="INSERT INTO autocode (Description,IsHidden,LessIntrusive) VALUES ('Amalgam',0,0)";
 			autoCodeNum=Db.NonQ(command,true);

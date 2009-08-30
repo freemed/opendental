@@ -86,6 +86,27 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
+		public static int GetInt32(MethodBase methodBase,params object[] parameters) {
+			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
+				throw new ApplicationException("Meth.GetInt32 may only be used when RemotingRole is ClientWeb.");
+			}
+			#if DEBUG
+			//Verify that it returns an int
+			MethodInfo methodInfo=methodBase.ReflectedType.GetMethod(methodBase.Name);
+			if(methodInfo.ReturnType != typeof(int)) {
+				throw new ApplicationException("Meth.GetInt32 calling class must return int.");
+			}
+			#endif
+			DtoGetInt32 dto=new DtoGetInt32();
+			dto.MethodName=methodBase.DeclaringType.Name+"."+methodBase.Name;
+			dto.Params=DtoObject.ConstructArray(parameters);
+			dto.Credentials=new Credentials();
+			dto.Credentials.Username=Security.CurUser.UserName;
+			dto.Credentials.PassHash=Security.CurUser.Password;
+			return RemotingClient.ProcessGetInt32(dto);
+		}
+
+		///<summary></summary>
 		public static void GetVoid(MethodBase methodBase,params object[] parameters) {
 			if(RemotingClient.RemotingRole!=RemotingRole.ClientWeb) {
 				throw new ApplicationException("Meth.GetVoid may only be used when RemotingRole is ClientWeb.");

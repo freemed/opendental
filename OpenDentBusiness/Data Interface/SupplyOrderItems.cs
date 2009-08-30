@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int WriteObject(SupplyOrderItem supp){
+		public static long WriteObject(SupplyOrderItem supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				supp.SupplyOrderItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
 				return supp.SupplyOrderItemNum;

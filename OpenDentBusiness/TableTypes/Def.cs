@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 
 		}
 
-		public Def(long defNum,DefCat category,long itemOrder,string itemName,string itemValue,Color itemColor,bool isHidden){
+		public Def(long defNum,DefCat category,int itemOrder,string itemName,string itemValue,Color itemColor,bool isHidden){
 			DefNum=defNum;
 			Category=category;
 			ItemOrder=itemOrder;

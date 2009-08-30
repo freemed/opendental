@@ -119,7 +119,7 @@ namespace OpenDentBusiness.DataAccess {
 			return CreateObjects(queryBuilder.ToString());
 		}
 
-		public static Collection<T> CreateObjects(List <int> id) {
+		public static Collection<T> CreateObjects(List<long> id) {
 			return CreateObjects(id.ToArray());
 		}
 
@@ -132,7 +132,7 @@ namespace OpenDentBusiness.DataAccess {
 		/// <remarks>This method assumes the table corresponding to this object has a single, integer primary key.</remarks>
 		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
 		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
-		public static T CreateObject(int id) {
+		public static T CreateObject(long id) {
 			// Specific case. Create an object, based on an ID. 
 			// Construct the query.
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
@@ -653,7 +653,7 @@ namespace OpenDentBusiness.DataAccess {
 			}
 		}
 
-		public static void DeleteObject(int id) {
+		public static void DeleteObject(long id) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("DataObjectFactory not allowed to Create Objects if ClientWeb.");
 				//FactoryClient<T>.SendRequest(enumDtoCommand.DeleteObject, default(T), new object[] { id });

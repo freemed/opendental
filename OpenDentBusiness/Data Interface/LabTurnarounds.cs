@@ -22,8 +22,8 @@ namespace OpenDentBusiness{
 				lab.LabTurnaroundNum= PIn.PInt   (table.Rows[i][0].ToString());
 				lab.LaboratoryNum   = PIn.PInt   (table.Rows[i][1].ToString());
 				lab.Description     = PIn.PString(table.Rows[i][2].ToString());
-				lab.DaysPublished   = PIn.PInt   (table.Rows[i][3].ToString());
-				lab.DaysActual      = PIn.PInt   (table.Rows[i][4].ToString());
+				lab.DaysPublished   = PIn.PInt32   (table.Rows[i][3].ToString());
+				lab.DaysActual      = PIn.PInt32   (table.Rows[i][4].ToString());
 				retVal.Add(lab);
 			}
 			return retVal;

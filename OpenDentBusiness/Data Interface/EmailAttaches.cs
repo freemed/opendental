@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EmailAttaches{
 
-		public static int Insert(EmailAttach attach) {
+		public static long Insert(EmailAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				attach.EmailAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
 				return attach.EmailAttachNum;

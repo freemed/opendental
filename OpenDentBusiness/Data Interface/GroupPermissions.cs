@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 				GroupPermissionC.List[i]=new GroupPermission();
 				GroupPermissionC.List[i].GroupPermNum  = PIn.PInt(table.Rows[i][0].ToString());
 				GroupPermissionC.List[i].NewerDate     = PIn.PDate(table.Rows[i][1].ToString());
-				GroupPermissionC.List[i].NewerDays     = PIn.PInt(table.Rows[i][2].ToString());
+				GroupPermissionC.List[i].NewerDays     = PIn.PInt32(table.Rows[i][2].ToString());
 				GroupPermissionC.List[i].UserGroupNum  = PIn.PInt(table.Rows[i][3].ToString());
 				GroupPermissionC.List[i].PermType      =(Permissions)PIn.PInt(table.Rows[i][4].ToString());
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in Security.IsAuthorized</summary>
-		public static bool HasPermission(int userGroupNum,Permissions permType){
+		public static bool HasPermission(long userGroupNum,Permissions permType){
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<GroupPermissionC.List.Length;i++){
 				if(GroupPermissionC.List[i].UserGroupNum!=userGroupNum || GroupPermissionC.List[i].PermType!=permType){

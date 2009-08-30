@@ -665,7 +665,7 @@ namespace OpenDentBusiness{
  		///<summary>Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			int billingtype,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate,int siteNum)
+			long billingtype,bool guarOnly,bool showArchived,long clinicNum,DateTime birthdate,long siteNum)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum);
@@ -801,7 +801,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used when filling appointments for an entire day. Gets a list of Pats, multPats, of all the specified patients.  Then, use GetOnePat to pull one patient from this list.  This process requires only one call to the database.</summary>
-		public static Patient[] GetMultPats(List <int> patNums){
+		public static Patient[] GetMultPats(List<long> patNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient[]>(MethodBase.GetCurrentMethod(),patNums);
 			}
@@ -907,7 +907,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>First call GetMultPats to fill the list of multPats. Then, use this to return one patient from that list.</summary>
-		public static Patient GetOnePat(Patient[] multPats, int patNum){
+		public static Patient GetOnePat(Patient[] multPats,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<multPats.Length;i++){
 				if(multPats[i].PatNum==patNum){
@@ -918,7 +918,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Gets nine of the most useful fields from the db for the given patnum.</summary>
-		public static Patient GetLim(int patNum){
+		public static Patient GetLim(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -947,7 +947,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
-		public static DataTable GetPaymentStartingBalances(int guarNum,int excludePayNum){
+		public static DataTable GetPaymentStartingBalances(long guarNum,long excludePayNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),guarNum,excludePayNum);
 			}
@@ -1197,7 +1197,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used from FormRecallListEdit.  Updates two fields for family if they are already the same for the entire family.  If they start out different for different family members, then it only changes the two fields for the single patient.</summary>
-		public static void UpdatePhoneAndNoteIfNeeded(string newphone, string newnote, int patNum){
+		public static void UpdatePhoneAndNoteIfNeeded(string newphone,string newnote,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),newphone,newnote,patNum);
 				return;
@@ -1235,7 +1235,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is only used in the Billing dialog</summary>
-		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr,
+		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<long> billingNums,bool excludeAddr,
 			bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending,
 			bool excludeIfUnsentProcs,bool ignoreInPerson)
 		{
@@ -1681,7 +1681,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static DataTable GetGuarantorInfo(int PatientID) {
+		public static DataTable GetGuarantorInfo(long PatientID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
 			}
@@ -1706,7 +1706,7 @@ namespace OpenDentBusiness{
 			return PIn.PInt(Db.GetScalar(command));
 		}
 
-		public static void UpdateFamilyBillingType(int billingType,int Guarantor){
+		public static void UpdateFamilyBillingType(long billingType,long Guarantor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),billingType,Guarantor);
 				return;
@@ -1716,7 +1716,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static DataTable GetPartialPatientData(int PatNum){
+		public static DataTable GetPartialPatientData(long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}
@@ -1725,7 +1725,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetPartialPatientData2(int PatNum) {
+		public static DataTable GetPartialPatientData2(long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}
@@ -1735,7 +1735,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static string GetEligibilityDisplayName(int patId) {
+		public static string GetEligibilityDisplayName(long patId) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patId);
 			}
@@ -1765,7 +1765,7 @@ namespace OpenDentBusiness{
 	///<summary>Not a database table.  Just used in billing and finance charges.</summary>
 	public class PatAging{
 		///<summary></summary>
-		public int PatNum;
+		public long PatNum;
 		///<summary></summary>
 		public double Bal_0_30;
 		///<summary></summary>
@@ -1783,11 +1783,11 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public double AmountDue;
 		///<summary>The patient priprov to assign the finance charge to.</summary>
-		public int PriProv;
+		public long PriProv;
 		///<summary>The date of the last statement.</summary>
 		public DateTime DateLastStatement;
 		///<summary>FK to defNum.</summary>
-		public int BillingType;
+		public long BillingType;
 		///<summary></summary>
 		public double PayPlanDue;
 	}

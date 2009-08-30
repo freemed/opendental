@@ -62,8 +62,8 @@ namespace OpenDentBusiness {
 			mount.Description=PIn.PString(mountRow["Description"].ToString());
 			mount.Note=PIn.PString(mountRow["Note"].ToString());
 			mount.ImgType=(ImageType)PIn.PInt(mountRow["ImgType"].ToString());
-			mount.Width=PIn.PInt(mountRow["Width"].ToString());
-			mount.Height=PIn.PInt(mountRow["Height"].ToString());
+			mount.Width=PIn.PInt32(mountRow["Width"].ToString());
+			mount.Height=PIn.PInt32(mountRow["Height"].ToString());
 			return mount;
 		}
 

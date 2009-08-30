@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClaimAttaches{
 
-		public static int Insert(ClaimAttach attach) {
+		public static long Insert(ClaimAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				attach.ClaimAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
 				return attach.ClaimAttachNum;

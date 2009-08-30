@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public long PhoneOverrideNum;
 		///<summary></summary>
-		public long Extension;
+		public int Extension;
 		///<summary>EmployeeNum</summary>
 		public long EmpCurrent;
 		///<summary></summary>

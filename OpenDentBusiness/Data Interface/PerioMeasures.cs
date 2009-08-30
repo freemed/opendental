@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PerioMeasure Cur){
+		public static long Insert(PerioMeasure Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.PerioMeasureNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.PerioMeasureNum;
@@ -143,20 +143,20 @@ namespace OpenDentBusiness{
 				Cur.PerioMeasureNum =PIn.PInt(table.Rows[i][0].ToString());
 				Cur.PerioExamNum    =PIn.PInt(table.Rows[i][1].ToString());
 				Cur.SequenceType    =(PerioSequenceType)PIn.PInt(table.Rows[i][2].ToString());
-				Cur.IntTooth        =PIn.PInt(table.Rows[i][3].ToString());
-				Cur.ToothValue      =PIn.PInt(table.Rows[i][4].ToString());
-				Cur.MBvalue         =PIn.PInt(table.Rows[i][5].ToString());
-				Cur.Bvalue          =PIn.PInt(table.Rows[i][6].ToString());
-				Cur.DBvalue         =PIn.PInt(table.Rows[i][7].ToString());
-				Cur.MLvalue         =PIn.PInt(table.Rows[i][8].ToString());
-				Cur.Lvalue          =PIn.PInt(table.Rows[i][9].ToString());
-				Cur.DLvalue         =PIn.PInt(table.Rows[i][10].ToString());
+				Cur.IntTooth        =PIn.PInt32(table.Rows[i][3].ToString());
+				Cur.ToothValue      =PIn.PInt32(table.Rows[i][4].ToString());
+				Cur.MBvalue         =PIn.PInt32(table.Rows[i][5].ToString());
+				Cur.Bvalue          =PIn.PInt32(table.Rows[i][6].ToString());
+				Cur.DBvalue         =PIn.PInt32(table.Rows[i][7].ToString());
+				Cur.MLvalue         =PIn.PInt32(table.Rows[i][8].ToString());
+				Cur.Lvalue          =PIn.PInt32(table.Rows[i][9].ToString());
+				Cur.DLvalue         =PIn.PInt32(table.Rows[i][10].ToString());
 				//perioexam.ExamDate                           11
 				//the next statement can also handle exams with no measurements:
 				if(i==0//if this is the first row
 					|| table.Rows[i][1].ToString() != table.Rows[i-1][1].ToString())//or examNum has changed
 				{
-					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PInt(table.Rows[i][1].ToString()));
+					curExamI=PerioExams.GetExamIndex(listPerioExams,PIn.PInt32(table.Rows[i][1].ToString()));
 				}
 				List[curExamI,(int)Cur.SequenceType,Cur.IntTooth]=Cur;
 			}

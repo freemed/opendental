@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(RepeatCharge charge){
+		public static long Insert(RepeatCharge charge) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				charge.RepeatChargeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),charge);
 				return charge.RepeatChargeNum;

@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(AutoCodeCond Cur){
+		public static long Insert(AutoCodeCond Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.AutoCodeCondNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeCondNum;
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteForItemNum(int itemNum){
+		public static void DeleteForItemNum(long itemNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),itemNum);
 				return;
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<AutoCodeCond> GetListForItem(int autoCodeItemNum){
+		public static List<AutoCodeCond> GetListForItem(long autoCodeItemNum) {
 			//No need to check RemotingRole; no call to db.
 			List<AutoCodeCond> retVal=new List<AutoCodeCond>();
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){

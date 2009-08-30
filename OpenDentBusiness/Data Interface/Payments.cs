@@ -166,7 +166,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
-		public static int Insert(Payment pay){
+		public static long Insert(Payment pay){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				pay.PayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
 				return pay.PayNum;
@@ -364,7 +364,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This does all the validation before calling AlterLinkedEntries.  It had to be separated like this because of the complexity of saving a payment.  Surround with try-catch.  Will throw an exception if user is trying to change, but not allowed.  Will return false if no synch with accounting is needed.  Use -1 for newAcct to indicate no change.</summary>
-		public static bool ValidateLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct){
+		public static bool ValidateLinkedEntries(double oldAmt, double newAmt, bool isNew, long payNum, long newAcct){
 			//No need to check RemotingRole; no call to db.
 			if(!Accounts.PaymentsLinked()){
 				return false;//user has not even set up accounting links, so no need to check any of this.
@@ -389,7 +389,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("Payments","Not allowed to change amount.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program."));
 			}
 			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-			int oldAcct=0;
+			long oldAcct=0;
 			JournalEntry jeDebit=null;
 			JournalEntry jeCredit=null;
 			double absOld=oldAmt;//the absolute value of the old amount
@@ -433,7 +433,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only called once from FormPayment when trying to change an amount or an account on a payment that's already linked to the Accounting section or when trying to create a new link.  This automates updating the Accounting section.  Do not surround with try-catch, because it was already validated in ValidateLinkedEntries above.  Use -1 for newAcct to indicate no changed. The name is required to give descriptions to new entries.</summary>
-		public static void AlterLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct,DateTime payDate,
+		public static void AlterLinkedEntries(double oldAmt, double newAmt, bool isNew, long payNum, long newAcct,DateTime payDate,
 			string patName)
 		{
 			//No need to check RemotingRole; no call to db.
@@ -490,7 +490,7 @@ namespace OpenDentBusiness{
 			}
 			//at this point, we have established that there is a previous transaction.
 			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-			int oldAcct=0;
+			long oldAcct=0;
 			JournalEntry jeDebit=null;
 			JournalEntry jeCredit=null;
 			bool signChanged=false;

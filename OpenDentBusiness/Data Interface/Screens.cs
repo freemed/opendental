@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 				List[i].Gender          =(PatientGender)   PIn.PInt   (table.Rows[i][7].ToString());
 				List[i].Race            =(PatientRace)     PIn.PInt   (table.Rows[i][8].ToString());
 				List[i].GradeLevel      =(PatientGrade)    PIn.PInt   (table.Rows[i][9].ToString());
-				List[i].Age             =                  PIn.PInt   (table.Rows[i][10].ToString());
+				List[i].Age             =                  PIn.PInt32   (table.Rows[i][10].ToString());
 				List[i].Urgency         =(TreatmentUrgency)PIn.PInt   (table.Rows[i][11].ToString());
 				List[i].HasCaries       =(YN)              PIn.PInt   (table.Rows[i][12].ToString());
 				List[i].NeedsSealants   =(YN)              PIn.PInt   (table.Rows[i][13].ToString());
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				List[i].MissingAllTeeth =(YN)              PIn.PInt   (table.Rows[i][17].ToString());
 				List[i].Birthdate       =                  PIn.PDate  (table.Rows[i][18].ToString());
 				List[i].ScreenGroupNum  =                  PIn.PInt   (table.Rows[i][19].ToString());
-				List[i].ScreenGroupOrder=                  PIn.PInt   (table.Rows[i][20].ToString());
+				List[i].ScreenGroupOrder=                  PIn.PInt32   (table.Rows[i][20].ToString());
 				List[i].Comments        =                  PIn.PString(table.Rows[i][21].ToString());
 			}
 			return List;

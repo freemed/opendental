@@ -55,7 +55,7 @@ namespace OpenDentBusiness.HL7 {
 			//AIG is optional, but looks like the only way to get provider for the appt-----------
 			seg=message.GetSegment(SegmentName.AIG,false);
 			if(seg!=null) {
-				int provNum=SegmentPID.ProvProcess(seg.GetField(3));
+				long provNum=SegmentPID.ProvProcess(seg.GetField(3));
 				if(provNum!=0) {
 					apt.ProvNum=provNum;
 				}

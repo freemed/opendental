@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class FormPats{
 
 		///<summary></summary>
-		public static int Insert(FormPat Cur) {
+		public static long Insert(FormPat Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.FormPatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.FormPatNum;
@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				quest=new Question();
 				quest.QuestionNum=PIn.PInt   (table.Rows[i][0].ToString());
 				quest.PatNum     =PIn.PInt   (table.Rows[i][1].ToString());
-				quest.ItemOrder  =PIn.PInt   (table.Rows[i][2].ToString());
+				quest.ItemOrder  =PIn.PInt32   (table.Rows[i][2].ToString());
 				quest.Description=PIn.PString(table.Rows[i][3].ToString());
 				quest.Answer     =PIn.PString(table.Rows[i][4].ToString());
 				quest.FormPatNum =PIn.PInt   (table.Rows[i][5].ToString());

@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 ///<summary></summary>
 	public class ReqNeededs{
 
-		public static DataTable Refresh(int schoolClass,int schoolCourse){
+		public static DataTable Refresh(long schoolClass,long schoolCourse) {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM reqneeded WHERE SchoolClassNum="+POut.PInt(schoolClass)
 				+" AND SchoolCourseNum="+POut.PInt(schoolCourse)
@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static ReqNeeded GetReq(int reqNeededNum){
+		public static ReqNeeded GetReq(long reqNeededNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ReqNeeded>(MethodBase.GetCurrentMethod(),reqNeededNum);
 			}
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ReqNeeded req) {
+		public static long Insert(ReqNeeded req) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				req.ReqNeededNum=Meth.GetInt(MethodBase.GetCurrentMethod(),req);
 				return req.ReqNeededNum;
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch.</summary>
-		public static void Delete(int reqNeededNum) {
+		public static void Delete(long reqNeededNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqNeededNum);
 				return;

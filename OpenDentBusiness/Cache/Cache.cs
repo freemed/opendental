@@ -40,7 +40,7 @@ namespace OpenDentBusiness {
 			List<int> itypes=new List<int>();
 			string[] strArray=itypesStr.Split(',');
 			for(int i=0;i<strArray.Length;i++){
-				itypes.Add(PIn.PInt(strArray[i]));
+				itypes.Add(PIn.PInt32(strArray[i]));
 			}
 			bool isAll=false;
 			if(itypes.Contains((int)InvalidType.AllLocal)){
@@ -195,7 +195,7 @@ namespace OpenDentBusiness {
 			List<int> itypes=new List<int>();
 			string[] strArray=itypesStr.Split(',');
 			for(int i=0;i<strArray.Length;i++) {
-				itypes.Add(PIn.PInt(strArray[i]));
+				itypes.Add(PIn.PInt32(strArray[i]));
 			}
 			bool isAll=false;
 			if(itypes.Contains((int)InvalidType.AllLocal)) {

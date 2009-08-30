@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class RefAttaches{
 
 		///<summary>For one patient</summary>
-		public static RefAttach[] Refresh(int patNum) {
+		public static RefAttach[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RefAttach[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(RefAttach attach){
+		public static long Insert(RefAttach attach) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				attach.RefAttachNum=Meth.GetInt(MethodBase.GetCurrentMethod(),attach);
 				return attach.RefAttachNum;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness{
 		}		
 
 		///<summary></summary>
-		public static bool IsReferralAttached(int referralNum){
+		public static bool IsReferralAttached(long referralNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),referralNum);
 			}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a list of patient names that are attached to this referral. Used to display in the referral edit window.</summary>
-		public static string[] GetPats(int refNum,bool IsFrom){
+		public static string[] GetPats(long refNum,bool IsFrom) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),refNum,IsFrom);
 			}

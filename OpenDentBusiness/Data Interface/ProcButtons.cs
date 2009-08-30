@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				List[i]=new ProcButton();
 				List[i].ProcButtonNum=PIn.PInt(table.Rows[i][0].ToString());
 				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
+				List[i].ItemOrder=PIn.PInt32(table.Rows[i][2].ToString());
 				List[i].Category=PIn.PInt(table.Rows[i][3].ToString());
 				List[i].ButtonImage=PIn.PBitmap(table.Rows[i][4].ToString());
 			}

@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static int Insert(Operatory op){
+		private static long Insert(Operatory op) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				op.OperatoryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),op);
 				return op.OperatoryNum;

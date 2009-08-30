@@ -4031,7 +4031,7 @@ namespace OpenDentBusiness{
 		private static void To4_8_1() {
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
-				int practiceDefaultProv=PrefC.GetInt("PracticeDefaultProv");
+				int practiceDefaultProv=PrefC.GetInt32("PracticeDefaultProv");
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";

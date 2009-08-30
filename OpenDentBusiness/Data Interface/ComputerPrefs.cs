@@ -52,15 +52,15 @@ namespace OpenDentBusiness {
 			computerPref.GraphicsSimple=				PIn.PBool		(table.Rows[0][3].ToString());
 			computerPref.SensorType=					PIn.PString		(table.Rows[0][4].ToString());
 			computerPref.SensorBinned=					PIn.PBool		(table.Rows[0][5].ToString());
-			computerPref.SensorPort=					PIn.PInt		(table.Rows[0][6].ToString());
-			computerPref.SensorExposure=				PIn.PInt		(table.Rows[0][7].ToString());
+			computerPref.SensorPort=					PIn.PInt32		(table.Rows[0][6].ToString());
+			computerPref.SensorExposure=				PIn.PInt32		(table.Rows[0][7].ToString());
 			computerPref.GraphicsDoubleBuffering=		PIn.PBool		(table.Rows[0][8].ToString());
-			computerPref.PreferredPixelFormatNum=		PIn.PInt		(table.Rows[0][9].ToString());
+			computerPref.PreferredPixelFormatNum=		PIn.PInt32		(table.Rows[0][9].ToString());
 			computerPref.AtoZpath=						PIn.PString		(table.Rows[0][10].ToString());
 			computerPref.TaskKeepListHidden=			PIn.PBool		(table.Rows[0][11].ToString());
-			computerPref.TaskDock=						PIn.PInt		(table.Rows[0][12].ToString());
-			computerPref.TaskX=							PIn.PInt		(table.Rows[0][13].ToString());
-			computerPref.TaskY=							PIn.PInt		(table.Rows[0][14].ToString());
+			computerPref.TaskDock=						PIn.PInt32		(table.Rows[0][12].ToString());
+			computerPref.TaskX=							PIn.PInt32		(table.Rows[0][13].ToString());
+			computerPref.TaskY=							PIn.PInt32		(table.Rows[0][14].ToString());
 			return computerPref;
 		}
 
@@ -77,7 +77,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
-		public static int Insert(ComputerPref computerPref){
+		public static long Insert(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				computerPref.ComputerPrefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
 				return computerPref.ComputerPrefNum;
@@ -117,7 +117,7 @@ namespace OpenDentBusiness {
 			return computerPref.ComputerPrefNum;
 		}
 
-		public static int Update(ComputerPref computerPref){
+		public static long Update(ComputerPref computerPref) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),computerPref);
 			}

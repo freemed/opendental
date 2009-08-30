@@ -7,7 +7,7 @@ namespace OpenDentBusiness.HL7 {
 	public class SegmentPID {
 		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.</summary>
 		public static void ProcessPID(Patient pat,SegmentHL7 seg) {
-			int patNum=PIn.PInt(seg.GetFieldFullText(2));
+			long patNum=PIn.PInt(seg.GetFieldFullText(2));
 			//if(pat.PatNum==0) {
 			//	pat.PatNum=patNum;
 			//}
@@ -35,7 +35,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
 		public static void ProcessGT1(Patient pat,SegmentHL7 seg,bool isStandalone) {
-			int guarNum=PIn.PInt(seg.GetFieldFullText(2));
+			long guarNum=PIn.PInt(seg.GetFieldFullText(2));
 			if(seg.GetFieldFullText(11)=="1") {//if relationship is self
 				return;
 			}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		public static void ProcessPV1(Patient pat,SegmentHL7 seg) {
-			int provNum=ProvProcess(seg.GetField(7));
+			long provNum=ProvProcess(seg.GetField(7));
 			if(provNum!=0) {
 				pat.PriProv=provNum;
 			}
@@ -118,9 +118,9 @@ namespace OpenDentBusiness.HL7 {
 			if(str.Length != 8) {
 				return DateTime.MinValue;
 			}
-			int year=PIn.PInt(str.Substring(0,4));
-			int month=PIn.PInt(str.Substring(4,2));
-			int day=PIn.PInt(str.Substring(6));
+			int year=PIn.PInt32(str.Substring(0,4));
+			int month=PIn.PInt32(str.Substring(4,2));
+			int day=PIn.PInt32(str.Substring(6));
 			DateTime retVal=new DateTime(year,month,day);
 			return retVal;
 		}
@@ -189,7 +189,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Supply in format UPIN^LastName^FirstName^MI.  If UPIN(abbr) does not exist, provider gets created.  If name has changed, provider gets updated.  ProvNum is returned.  If blank, then returns 0.  If field is NULL, returns 0.</summary>
-		public static int ProvProcess(FieldHL7 field) {
+		public static long ProvProcess(FieldHL7 field) {
 			if(field==null) {
 				return 0;
 			}

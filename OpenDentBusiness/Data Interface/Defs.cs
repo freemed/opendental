@@ -47,10 +47,10 @@ namespace OpenDentBusiness {
 				def=new Def();
 				def.DefNum    = PIn.PInt(table.Rows[i][0].ToString());
 				def.Category  = (DefCat)PIn.PInt(table.Rows[i][1].ToString());
-				def.ItemOrder = PIn.PInt(table.Rows[i][2].ToString());
+				def.ItemOrder = PIn.PInt32(table.Rows[i][2].ToString());
 				def.ItemName  = PIn.PString(table.Rows[i][3].ToString());
 				def.ItemValue = PIn.PString(table.Rows[i][4].ToString());
-				def.ItemColor = Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
+				def.ItemColor = Color.FromArgb(PIn.PInt32(table.Rows[i][5].ToString()));
 				def.IsHidden  = PIn.PBool(table.Rows[i][6].ToString());
 				list.Add(def);
 			}
@@ -72,10 +72,10 @@ namespace OpenDentBusiness {
 				List[i]=new Def();
 				List[i].DefNum    = PIn.PInt   (table.Rows[i][0].ToString());
 				List[i].Category  = (DefCat)PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].ItemOrder = PIn.PInt   (table.Rows[i][2].ToString());
+				List[i].ItemOrder = PIn.PInt32   (table.Rows[i][2].ToString());
 				List[i].ItemName  = PIn.PString(table.Rows[i][3].ToString());
 				List[i].ItemValue = PIn.PString(table.Rows[i][4].ToString());
-				List[i].ItemColor = Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
+				List[i].ItemColor = Color.FromArgb(PIn.PInt32(table.Rows[i][5].ToString()));
 				List[i].IsHidden  = PIn.PBool  (table.Rows[i][6].ToString());
 			}
 			return List;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(Def def) {
+		public static long Insert(Def def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.DefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.DefNum;

@@ -167,7 +167,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
+		///<summary>Handles int32 just fine too.</summary>
 		public static string PInt (long myInt){
 			return myInt.ToString();
 		}

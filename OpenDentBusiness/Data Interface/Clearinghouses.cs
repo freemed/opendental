@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				list[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][13].ToString());
 				list[i].ClientProgram   = PIn.PString(table.Rows[i][14].ToString());
 				//15: LastBatchNumber
-				list[i].ModemPort       = PIn.PInt(table.Rows[i][16].ToString());
+				list[i].ModemPort       = PIn.PInt32(table.Rows[i][16].ToString());
 				list[i].LoginID         = PIn.PString(table.Rows[i][17].ToString());
 				list[i].SenderName      = PIn.PString(table.Rows[i][18].ToString());
 				list[i].SenderTelephone = PIn.PString(table.Rows[i][19].ToString());
@@ -148,13 +148,13 @@ namespace OpenDentBusiness{
 		///<summary>Gets the last batch number for this clearinghouse and increments it by one.  Saves the new value, then returns it.  So even if the new value is not used for some reason, it will have already been incremented. Remember that LastBatchNumber is never accurate with local data in memory.</summary>
 		public static int GetNextBatchNumber(Clearinghouse clearhouse){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),clearhouse);
+				return Meth.GetInt32(MethodBase.GetCurrentMethod(),clearhouse);
 			}
 			//get last batch number
 			string command="SELECT LastBatchNumber FROM clearinghouse "
 				+"WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
  			DataTable table=Db.GetTable(command);
-			int batchNum=PIn.PInt(table.Rows[0][0].ToString());
+			int batchNum=PIn.PInt32(table.Rows[0][0].ToString());
 			//and increment it by one
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
 				if(batchNum==999999)
@@ -176,7 +176,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the clearinghouseNum for claims for the supplied payorID.  If the payorID was not entered or if no default was set, then 0 is returned.</summary>
-		public static int GetNumForPayor(string payorID){
+		public static long GetNumForPayor(string payorID){
 			//No need to check RemotingRole; no call to db.
 			//this is not done because Renaissance does not require payorID
 			//if(payorID==""){

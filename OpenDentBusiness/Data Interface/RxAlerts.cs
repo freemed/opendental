@@ -40,7 +40,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(RxAlert alert) {
+		public static long Insert(RxAlert alert) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				alert.RxAlertNum=Meth.GetInt(MethodBase.GetCurrentMethod(),alert);
 				return alert.RxAlertNum;

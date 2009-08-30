@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 
 		}
 
-		public Provider(long provNum,string abbr,long itemOrder,string lName,string fName,string mI,string suffix,long feeSched,
+		public Provider(long provNum,string abbr,int itemOrder,string lName,string fName,string mI,string suffix,long feeSched,
 			DentalSpecialty specialty,string sSN,string stateLicense,string dEANum,bool isSecondary,Color provColor,bool isHidden,
 			bool usingTIN,string blueCrossID,bool sigOnFile,string medicaidID,Color outlineColor,long schoolClassNum,
 			string nationalProvID,string canadianOfficeNum,long anesthProvType)

@@ -124,7 +124,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(Signal sig){
+		public static long Insert(Signal sig) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				sig.SignalNum=Meth.GetInt(MethodBase.GetCurrentMethod(),sig);
 				return sig.SignalNum;
@@ -215,8 +215,8 @@ namespace OpenDentBusiness{
 			return Tasks.RefreshAndFill(Db.GetTable(command));
 		}
 
-		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>
-		public static List<int> GetInvalidTypes(List <Signal> signalList){
+		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.  Because type are an enumeration, the returned list is int32, not int64.</summary>
+		public static List<int> GetInvalidTypes(List<Signal> signalList) {
 			//No need to check RemotingRole; no call to db.
 			List<int> retVal=new List<int>();
 			string[] strArray;
@@ -235,8 +235,8 @@ namespace OpenDentBusiness{
 				}
 				strArray=signalList[i].ITypes.Split(',');
 				for(int t=0;t<strArray.Length;t++){
-					if(!retVal.Contains(PIn.PInt(strArray[t]))){
-						retVal.Add(PIn.PInt(strArray[t]));
+					if(!retVal.Contains(PIn.PInt32(strArray[t]))){
+						retVal.Add(PIn.PInt32(strArray[t]));
 					}
 				}
 			}

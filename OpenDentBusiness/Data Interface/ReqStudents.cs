@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ReqStudent req) {
+		public static long Insert(ReqStudent req) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				req.ReqStudentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),req);
 				return req.ReqStudentNum;

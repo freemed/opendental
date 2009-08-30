@@ -22,8 +22,8 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Gets a pref of type int.</summary>
-		public static int GetInt(string prefName) {
+		///<summary>Gets a pref of type long.</summary>
+		public static long GetInt(string prefName) {
 			if(HList==null){
 				Prefs.RefreshCache();
 			}
@@ -31,6 +31,17 @@ namespace OpenDentBusiness {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
 			return PIn.PInt(((Pref)HList[prefName]).ValueString);
+		}
+
+		///<summary>Gets a pref of type int32.  Used when the pref is an enumeration, itemorder, etc.  Also used for historical queries in ConvertDatabase.</summary>
+		public static int GetInt32(string prefName) {
+			if(HList==null) {
+				Prefs.RefreshCache();
+			}
+			if(!HList.ContainsKey(prefName)) {
+				throw new Exception(prefName+" is an invalid pref name.");
+			}
+			return PIn.PInt32(((Pref)HList[prefName]).ValueString);
 		}
 
 		///<summary>Gets a pref of type double.</summary>

@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,7 +83,7 @@ namespace OpenDentBusiness {
 
 		}
 
-		public static int UpdateVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
+		public static long UpdateVSData(int anestheticRecordNum,int patNum,string VSMName,string VSMSerNum,int NBPs,int NBPd,int NBPm,int HR,int SpO2,int temp,int EtCO2,string VSTimeStamp,string MessageID,string HL7Message) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),anestheticRecordNum,patNum,VSMName,VSMSerNum,NBPs,NBPd,NBPm,HR,SpO2,temp,EtCO2,VSTimeStamp,MessageID,HL7Message);
 			}
@@ -100,7 +101,7 @@ namespace OpenDentBusiness {
 						+ " ,MessageID = '" + POut.PString(MessageID) + "' "
 						+ " ,HL7Message = '" + POut.PString(HL7Message) + "' "
 						+ "WHERE VSTimeStamp='" + Convert.ToString(VSTimeStamp)+ "'" + " AND AnestheticRecordNum = " + anestheticRecordNum;
-			int val = Db.NonQ(command);
+			long val = Db.NonQ(command);
 			return val;
 
 		}
@@ -135,7 +136,7 @@ namespace OpenDentBusiness {
 
 
 
-
+*/
 
 
 

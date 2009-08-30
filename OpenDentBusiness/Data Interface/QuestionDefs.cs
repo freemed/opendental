@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 				List[i]=new QuestionDef();
 				List[i].QuestionDefNum= PIn.PInt(table.Rows[i][0].ToString());
 				List[i].Description   = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder     = PIn.PInt(table.Rows[i][2].ToString());
+				List[i].ItemOrder     = PIn.PInt32(table.Rows[i][2].ToString());
 				List[i].QuestType     = (QuestionType)PIn.PInt(table.Rows[i][3].ToString());
 			}
 			return List;
@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static int Insert(QuestionDef def) {
+		public static long Insert(QuestionDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				def.QuestionDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.QuestionDefNum;

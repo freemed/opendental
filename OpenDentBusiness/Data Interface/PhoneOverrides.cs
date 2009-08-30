@@ -42,9 +42,9 @@ namespace OpenDentBusiness{
 			PhoneOverride phoneCur;
 			for(int i=0;i<table.Rows.Count;i++){
 				phoneCur=new PhoneOverride();
-				phoneCur.PhoneOverrideNum=PIn.PInt   (table.Rows[0]["PhoneOverrideNum"].ToString());
-				phoneCur.Extension       =PIn.PInt   (table.Rows[0]["Extension"].ToString());
-				phoneCur.EmpCurrent      =PIn.PInt   (table.Rows[0]["EmpCurrent"].ToString());
+				phoneCur.PhoneOverrideNum=PIn.PInt32   (table.Rows[0]["PhoneOverrideNum"].ToString());
+				phoneCur.Extension       =PIn.PInt32   (table.Rows[0]["Extension"].ToString());
+				phoneCur.EmpCurrent      =PIn.PInt32   (table.Rows[0]["EmpCurrent"].ToString());
 				phoneCur.IsAvailable     =PIn.PBool  (table.Rows[0]["IsAvailable"].ToString());
 				phoneCur.Explanation     =PIn.PString(table.Rows[0]["Explanation"].ToString());
 				list.Add(phoneCur);
@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(PhoneOverride phoneCur){
+		public static long Insert(PhoneOverride phoneCur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				phoneCur.PhoneOverrideNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneCur);
 				return phoneCur.PhoneOverrideNum;

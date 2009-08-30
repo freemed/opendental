@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(ScreenGroup Cur){
+		public static long Insert(ScreenGroup Cur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Cur.ScreenGroupNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ScreenGroupNum;

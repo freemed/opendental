@@ -72,9 +72,14 @@ namespace OpenDentBusiness {
 
 	}
 
-	///<summary>Gets an int.</summary>
+	///<summary>Gets a long.</summary>
 	public class DtoGetInt:DataTransferObject{
 		
+	}
+
+	///<summary>Gets an int.</summary>
+	public class DtoGetInt32:DataTransferObject {
+
 	}
 
 	///<summary>Used when the return type is void.  It will still return 0 to ack.</summary>

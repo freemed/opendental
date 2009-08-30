@@ -7,8 +7,8 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness {
 	public class AnesthMedsC {
-		///<summary></summary>
-		public static AnesthMedsC[] Listt;
+		//<summary></summary>
+		//public static AnesthMedsC[] Listt;
 
 	}
 }

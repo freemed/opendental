@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(EmailMessage message){
+		public static long Insert(EmailMessage message) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				message.EmailMessageNum=Meth.GetInt(MethodBase.GetCurrentMethod(),message);
 				return message.EmailMessageNum;

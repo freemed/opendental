@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static int WriteObject(RecallTrigger trigger){
+		public static long WriteObject(RecallTrigger trigger) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				trigger.RecallTriggerNum=Meth.GetInt(MethodBase.GetCurrentMethod(),trigger);
 				return trigger.RecallTriggerNum;
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<RecallTrigger>.DeleteObject(RecallTriggerNum);
 		//}
 
-		public static List<RecallTrigger> GetForType(int recallTypeNum){
+		public static List<RecallTrigger> GetForType(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			List<RecallTrigger> triggerList=new List<RecallTrigger>();
 			if(recallTypeNum==0){
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			return triggerList;
 		}
 
-		public static void SetForType(int recallTypeNum,List<RecallTrigger> triggerList){
+		public static void SetForType(long recallTypeNum,List<RecallTrigger> triggerList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum,triggerList);
 				return;

@@ -207,7 +207,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int Insert(LabCase lab){
+		public static long Insert(LabCase lab){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				lab.LabCaseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),lab);
 				return lab.LabCaseNum;

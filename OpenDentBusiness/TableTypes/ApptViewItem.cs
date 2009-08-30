@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>this constructor is just used in GetForCurView when no view selected.</summary>
-		public ApptViewItem(string elementDesc,long elementOrder,Color elementColor) {
+		public ApptViewItem(string elementDesc,int elementOrder,Color elementColor) {
 			ApptViewItemNum=0;
 			ApptViewNum=0;
 			OpNum=0;
