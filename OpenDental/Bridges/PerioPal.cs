@@ -18,7 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			//Usage: [Application Path]PerioPal "PtChart; PtName ; PtBday; PtMedAlert"
+			//Usage: [Application Path]PerioPal "PtChart; PtName ; PtBday; PtMedAlert;"
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				return;
@@ -42,10 +42,10 @@ namespace OpenDental.Bridges{
 				hasMedicalAlert=true;
 			}
 			if(hasMedicalAlert){
-				info+="Y";
+				info+="Y;";
 			}
 			else{
-				info+="N";
+				info+="N;";
 			}
 			//MessageBox.Show(info);
 			try{
