@@ -23,6 +23,10 @@ namespace OpenDental.Bridges{
 				MessageBox.Show("Please select a patient first.");
 				return;
 			}
+			if(pat.Race==PatientRace.Unknown) {
+				MsgBox.Show(this,"Race must be entered first.");
+				return;
+			}
 			//Make sure the program is running
 			if(Process.GetProcessesByName("DrCeph").Length==0) {
 				try{
