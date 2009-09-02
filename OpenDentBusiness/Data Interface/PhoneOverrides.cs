@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PhoneOverrides{
 
-		public static PhoneOverride GetPhoneOverride(int phoneOverrideNum){
+		public static PhoneOverride GetPhoneOverride(long phoneOverrideNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),phoneOverrideNum);
 			}
@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Could easily return null.</summary>
-		public static PhoneOverride GetByExtAndEmp(int extension,int employeeNum){
+		public static PhoneOverride GetByExtAndEmp(int extension,long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),extension,employeeNum);
 			}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If an existing override changes the extension of an employee, then this just changes IsAvailable to true.  But if the existing override has no effect on the extension, then it just gets deleted.</summary>
-		public static void SetAvailable(int extension,int empNum){
+		public static void SetAvailable(int extension,long empNum) {
 			//No need to check RemotingRole; no call to db.
 			PhoneOverride phoneOR=GetByExtAndEmp(extension,empNum);
 			if(phoneOR==null){

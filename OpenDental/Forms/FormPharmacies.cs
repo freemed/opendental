@@ -23,7 +23,7 @@ namespace OpenDental{
 		private bool changed;
 		public bool IsSelectionMode;
 		///<summary>Only used if IsSelectionMode.  On OK, contains selected pharmacyNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-		public int SelectedPharmacyNum;
+		public long SelectedPharmacyNum;
 
 		///<summary></summary>
 		public FormPharmacies()

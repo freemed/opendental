@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class ClaimPayments {
 
 		///<summary></summary>
-		public static DataTable GetForClaim(int claimNum) {
+		public static DataTable GetForClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),claimNum);
 			}
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all unattached claimpayments for display in a new deposit.  Excludes payments before dateStart.</summary>
-		public static ClaimPayment[] GetForDeposit(DateTime dateStart,int clinicNum) {
+		public static ClaimPayment[] GetForDeposit(DateTime dateStart,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),dateStart,clinicNum);
 			}
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all claimpayments for one specific deposit.</summary>
-		public static ClaimPayment[] GetForDeposit(int depositNum) {
+		public static ClaimPayment[] GetForDeposit(long depositNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),depositNum);
 			}
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one claimpayment directly from database.</summary>
-		public static ClaimPayment GetOne(int claimPaymentNum) {
+		public static ClaimPayment GetOne(long claimPaymentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimPayment>(MethodBase.GetCurrentMethod(),claimPaymentNum);
 			}

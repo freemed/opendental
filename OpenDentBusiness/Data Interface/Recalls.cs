@@ -672,7 +672,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary></summary>
-		public static DataTable GetAddrTable(List<int> recallNums,bool groupByFamily,bool sortAlph){
+		public static DataTable GetAddrTable(List<long> recallNums,bool groupByFamily,bool sortAlph) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),recallNums,groupByFamily,sortAlph);
 			}
@@ -879,7 +879,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary></summary>
-		public static void UpdateStatus(int recallNum,int newStatus){
+		public static void UpdateStatus(long recallNum,long newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallNum,newStatus);
 				return;

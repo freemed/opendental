@@ -13,7 +13,7 @@ namespace OpenDental {
 		//public int PatNum;
 		private List<Procedure> ProcList;
 		///<summary>If form closes with OK, this contains selected proc num.</summary>
-		public List<int> SelectedProcNums;
+		public List<long> SelectedProcNums;
 		///<summary>It's OK if AptCur is not completely up-to-date.  We are going to use PatNum, isPlanned, AptDateTime, AptStatus, and AptNum.</summary>
 		public Appointment AptCur;
 
@@ -198,7 +198,7 @@ namespace OpenDental {
 			}
 			bool isAttachedToOtherApt=false;
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
-			SelectedProcNums=new List<int>();
+			SelectedProcNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				SelectedProcNums.Add(ProcList[gridMain.SelectedIndices[i]].ProcNum);
 				if(isPlanned && ProcList[gridMain.SelectedIndices[i]].PlannedAptNum!=0){
@@ -210,7 +210,7 @@ namespace OpenDental {
 			}
 			if(isAttachedToOtherApt){
 				if(!MsgBox.Show(this,true,"One or more of the procedures is already attached to another appointment.  Attach to this appointment instead?")){
-					SelectedProcNums=new List<int>();
+					SelectedProcNums=new List<long>();
 					return;
 				}
 			}

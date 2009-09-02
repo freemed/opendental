@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int[] GetCodeNumListForButton(int procButtonNum){
+		public static int[] GetCodeNumListForButton(long procButtonNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList ALCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int[] GetAutoListForButton(int procButtonNum) {
+		public static int[] GetAutoListForButton(long procButtonNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList ALautoCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++) {
@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteAllForButton(int procButtonNum){
+		public static void DeleteAllForButton(long procButtonNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procButtonNum);
 				return;

@@ -1703,18 +1703,18 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(int patNum) {
+		public void ModuleSelected(long patNum) {
 			ModuleSelected(patNum,false);
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(int patNum,bool isSelectingFamily) {
+		public void ModuleSelected(long patNum,bool isSelectingFamily) {
 			RefreshModuleData(patNum,isSelectingFamily);
 			RefreshModuleScreen(isSelectingFamily);
 		}
 
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
-		public void ModuleSelected(int patNum,int claimNum) {
+		public void ModuleSelected(long patNum,long claimNum) {
 			ModuleSelected(patNum);
 /*
 			for(int i=0;i<AcctLineList.Count;i++){
@@ -1756,7 +1756,7 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
+		private void RefreshModuleData(long patNum,bool isSelectingFamily) {
 			if (patNum == 0)
 			{
 				PatCur=null;
@@ -2352,7 +2352,7 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["charges"].ToString());
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
 				if(i==table.Rows.Count-1//last row
 					|| (DateTime)table.Rows[i]["DateTime"]!=(DateTime)table.Rows[i+1]["DateTime"])
 				{
@@ -2531,7 +2531,7 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
@@ -2683,7 +2683,7 @@ namespace OpenDental {
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
 		private Claim CreateClaim(string claimType,List <PatPlan> PatPlanList,List <InsPlan> InsPlanList,List<ClaimProc> ClaimProcList,List<Procedure> procsForPat){
-			int claimFormNum = 0;
+			long claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
 			Relat relatOther=Relat.Self;
@@ -2738,7 +2738,7 @@ namespace OpenDental {
 				}
 			}
 			proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
-			int clinicNum=proc.ClinicNum;
+			long clinicNum=proc.ClinicNum;
 			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
 				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(clinicNum!=proc.ClinicNum){
@@ -2747,7 +2747,7 @@ namespace OpenDental {
 				}
 			}
 			ClaimProc[] claimProcs=new ClaimProc[gridAccount.SelectedIndices.Length];//1:1 with selectedIndices
-			int procNum;
+			long procNum;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
 				//and try to find an estimate that can be used
 				procNum=PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString());
@@ -2968,7 +2968,7 @@ namespace OpenDental {
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			List <Benefit> BenefitList=Benefits.Refresh(PatPlanList);
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
-			int medPlanNum=0;
+			long medPlanNum=0;
 			for(int i=0;i<PatPlanList.Count;i++){
 				if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
 					medPlanNum=PatPlanList[i].PlanNum;
@@ -3671,8 +3671,8 @@ namespace OpenDental {
 				if (checkNotes.Checked) {
 					row.Note = table.Rows[i]["note"].ToString();
 				}
-				row.ColorText = Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG = Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText = Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG = Color.FromArgb(PIn.PInt32(table.Rows[i]["colorBackG"].ToString()));
 				row.Tag = table.Rows[i];
 				gridProg.Rows.Add(row);
 			

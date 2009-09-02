@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class TreatPlans {
 
 		///<summary>Gets all TreatPlans for a given Patient, ordered by date.</summary>
-		public static TreatPlan[] Refresh(int patNum) {
+		public static TreatPlan[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<TreatPlan[]>(MethodBase.GetCurrentMethod(),patNum);
 			}

@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static UserGroup GetGroup(int userGroupNum){
+		public static UserGroup GetGroup(long userGroupNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].UserGroupNum==userGroupNum){

@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Creates a subscription to a list.</summary>
-		public static void SubscList(int taskListNum,int userNum){
+		public static void SubscList(long taskListNum,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskListNum,userNum);
 				return;
@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Removes a subscription to a list.</summary>
-		public static void UnsubscList(int taskListNum,int userNum) {
+		public static void UnsubscList(long taskListNum,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskListNum,userNum);
 				return;

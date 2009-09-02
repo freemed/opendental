@@ -45,7 +45,7 @@ namespace OpenDental{
 		private MainMenu mainMenu1;
 		private MenuItem menuItemSetup;
 		private IContainer components;
-		public int PatNum;
+		public long PatNum;
 		private Patient patCur;
 		private Patient guarCur;
 		private Employer empCur;

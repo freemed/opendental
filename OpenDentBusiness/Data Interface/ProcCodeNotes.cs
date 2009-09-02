@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<ProcCodeNote> GetList(int codeNum) {
+		public static List<ProcCodeNote> GetList(long codeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcCodeNote>>(MethodBase.GetCurrentMethod(),codeNum);
 			}
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static void Delete(int procCodeNoteNum){
+		public static void Delete(long procCodeNoteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procCodeNoteNum);
 				return;

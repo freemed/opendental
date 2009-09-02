@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static string GetEclaimCode(int insFilingCodeNum) {
+		public static string GetEclaimCode(long insFilingCodeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<InsFilingCodeC.Listt.Count;i++) {
 				if(InsFilingCodeC.Listt[i].InsFilingCodeNum != insFilingCodeNum) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch</summary>
-		public static void Delete(int insFilingCodeNum){
+		public static void Delete(long insFilingCodeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeNum);
 				return;

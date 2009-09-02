@@ -664,7 +664,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
-		public static void SetConfirmed(long aptNum,int newStatus) {
+		public static void SetConfirmed(long aptNum,long newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
 				return;
@@ -684,7 +684,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
-		public static void SetPattern(int aptNum,string newPattern) {
+		public static void SetPattern(long aptNum,string newPattern) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newPattern);
 				return;
@@ -694,7 +694,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Use to send to unscheduled list, to set broken, etc.  Do not use to set complete.</summary>
-		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
+		public static void SetAptStatus(long aptNum,ApptStatus newStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,newStatus);
 				return;
@@ -705,7 +705,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void SetAptStatusComplete(int aptNum,int planNum1,int planNum2) {
+		public static void SetAptStatusComplete(long aptNum,long planNum1,long planNum2) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,planNum1,planNum2);
 				return;
@@ -779,7 +779,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static DataSet RefreshOneApt(int aptNum,bool isPlanned) {
+		public static DataSet RefreshOneApt(long aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),aptNum,isPlanned);
 			} 
@@ -789,7 +789,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=1.  This changes which procedures are retrieved.</summary>
-		private static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,int aptNum,bool isPlanned) {
+		private static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,long aptNum,bool isPlanned) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd,aptNum,isPlanned);
 			} 
@@ -1302,7 +1302,7 @@ namespace OpenDentBusiness{
 		//-------------------------------------------------------------------------------------------------------------------------
 
 		///<summary></summary>
-		public static DataSet GetApptEdit(int aptNum){
+		public static DataSet GetApptEdit(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),aptNum);
 			}
@@ -1322,7 +1322,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		private static DataTable GetApptTable(int aptNum){
+		private static DataTable GetApptTable(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNum);
 			}
@@ -1627,7 +1627,7 @@ namespace OpenDentBusiness{
 
 		//private static DataRow GetRowFromTable(
 		///<summary></summary>
-		public static void Delete(int aptNum) {
+		public static void Delete(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum);
 				return;

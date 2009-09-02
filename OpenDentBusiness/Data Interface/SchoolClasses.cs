@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround by a try/catch in case there are dependencies.</summary>
-		public static void Delete(int classNum){
+		public static void Delete(long classNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),classNum);
 				return;
@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
-		public static string GetDescript(int SchoolClassNum){
+		public static string GetDescript(long SchoolClassNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){
 				if(List[i].SchoolClassNum==SchoolClassNum){

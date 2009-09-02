@@ -520,7 +520,7 @@ namespace OpenDental{
 			//this is necessary because Microsoft's updown control is too buggy to be useful
 			int currentValue=0;
 			try{
-				currentValue=PIn.PInt(textAge.Text);
+				currentValue=PIn.PInt32(textAge.Text);
 			}
 			catch{
 				return;
@@ -597,7 +597,7 @@ namespace OpenDental{
 
 		private void FillCur(){
 			//the first 6 fields are handled when the ScreenGroup is saved.
-			ScreenCur.ScreenGroupOrder=PIn.PInt(textScreenGroupOrder.Text);
+			ScreenCur.ScreenGroupOrder=PIn.PInt32(textScreenGroupOrder.Text);
 			ScreenCur.ScreenGroupNum=ScreenGroupCur.ScreenGroupNum;
 			if(radioUnknown.Checked)
         ScreenCur.Gender=PatientGender.Unknown;
@@ -607,7 +607,7 @@ namespace OpenDental{
         ScreenCur.Gender=PatientGender.Female;
 			ScreenCur.Race=(PatientRace)listRace.SelectedIndex;
 			ScreenCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
-			ScreenCur.Age=PIn.PInt(textAge.Text);//"" is OK
+			ScreenCur.Age=PIn.PInt32(textAge.Text);//"" is OK
 			ScreenCur.Urgency=(TreatmentUrgency)listUrgency.SelectedIndex;
 			ScreenCur.HasCaries=GetCheckState(checkHasCaries);
 			ScreenCur.NeedsSealants=GetCheckState(checkNeedsSealants);

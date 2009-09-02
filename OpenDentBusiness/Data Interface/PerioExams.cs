@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public static List<PerioExam> ListExams;
 
 		///<summary>Most recent date last.  All exams loaded, even if not displayed.</summary>
-		public static void Refresh(int patNum){
+		public static void Refresh(long patNum) {
 			//No need to check RemotingRole; no call to db.
 			DataTable table=GetExamsTable(patNum);
 			ListExams=new List<PerioExam>();
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 			//PerioMeasures.Refresh(patNum);
 		}
 
-		public static DataTable GetExamsTable(int patNum) {
+		public static DataTable GetExamsTable(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used by PerioMeasures when refreshing to organize array.</summary>
-		public static int GetExamIndex(List<PerioExam> list,int perioExamNum) {
+		public static int GetExamIndex(List<PerioExam> list,long perioExamNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].PerioExamNum==perioExamNum) {

@@ -12,13 +12,13 @@ namespace OpenDentBusiness{
 		public static MedicationPat[] List;
 
 		///<summary></summary>
-		public static void Refresh(int patNum){
+		public static void Refresh(long patNum) {
 			//No need to check RemotingRole; no call to db.
 			List<MedicationPat> list=GetList(patNum);
 			List=list.ToArray();
 		}
 
-		public static List<MedicationPat> GetList(int patNum){
+		public static List<MedicationPat> GetList(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
 			}

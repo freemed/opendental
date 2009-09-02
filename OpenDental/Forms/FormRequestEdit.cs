@@ -159,7 +159,7 @@ namespace OpenDental {
 			textDetail.Text=detail;
 			checkIsMine.Checked=PIn.PBool(row["isMine"]);
 			textDifficulty.Text=row["Difficulty"];
-			int approval=PIn.PInt(row["Approval"]);
+			int approval=PIn.PInt32(row["Approval"]);
 			if(IsAdminMode){
 				textSubmitter.Text=row["submitter"];
 			}
@@ -197,7 +197,7 @@ namespace OpenDental {
 				textDetail.BackColor=colorDisabled;
 				textDetail.ReadOnly=true;
 			}
-			myPointsUsed=PIn.PInt(row["myPointsUsed"]);
+			myPointsUsed=PIn.PInt32(row["myPointsUsed"]);
 			//textMyPointsRemain.Text=;this will be filled automatically when myPoints changes
 			textMyPoints.Text=row["myPoints"];
 			RecalcMyPoints();
@@ -474,7 +474,7 @@ namespace OpenDental {
 				//else{
 				if(!IsAdminMode){
 					try{
-						myPoints=PIn.PInt(textMyPoints.Text);//handles "" gracefully
+						myPoints=PIn.PInt32(textMyPoints.Text);//handles "" gracefully
 					}
 					catch{
 						MsgBox.Show(this,"Points is invalid.");
@@ -529,7 +529,7 @@ namespace OpenDental {
 				if(textDifficulty.Text!=row["Difficulty"]){
 					changesMade=true;
 				}
-				int approval=PIn.PInt(row["Approval"]);
+				int approval=PIn.PInt32(row["Approval"]);
 				if(comboApproval.SelectedIndex!=approval){
 					changesMade=true;
 				}

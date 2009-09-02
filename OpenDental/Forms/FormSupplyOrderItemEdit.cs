@@ -59,7 +59,7 @@ namespace OpenDental {
 			if(textQty.Text=="" || textPrice.Text==""){
 				return;
 			}
-			int qty=PIn.PInt(textQty.Text);
+			int qty=PIn.PInt32(textQty.Text);
 			double price=PIn.PDouble(textPrice.Text);
 			double subtotal=qty*price;
 			textSubtotal.Text=subtotal.ToString("n");
@@ -72,7 +72,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			ItemCur.Qty=PIn.PInt(textQty.Text);
+			ItemCur.Qty=PIn.PInt32(textQty.Text);
 			ItemCur.Price=PIn.PDouble(textPrice.Text);
 			SupplyOrderItems.WriteObject(ItemCur);
 			DialogResult=DialogResult.OK;

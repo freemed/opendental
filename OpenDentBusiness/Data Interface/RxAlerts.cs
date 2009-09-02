@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 	public class RxAlerts {
 
 		///<summary>Gets a list of all RxAlerts for one RxDef.</summary>
-		public static RxAlert[] Refresh(int rxDefNum) {
+		public static RxAlert[] Refresh(long rxDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RxAlert[]>(MethodBase.GetCurrentMethod(),rxDefNum);
 			}

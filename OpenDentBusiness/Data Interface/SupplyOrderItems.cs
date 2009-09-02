@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SupplyOrderItems {
 
-		public static DataTable GetItemsForOrder(int orderNum){
+		public static DataTable GetItemsForOrder(long orderNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),orderNum);
 			}
@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static SupplyOrderItem CreateObject(int supplyOrderItemNum){
+		public static SupplyOrderItem CreateObject(long supplyOrderItemNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SupplyOrderItem>(MethodBase.GetCurrentMethod(),supplyOrderItemNum);
 			}

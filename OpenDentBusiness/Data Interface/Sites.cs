@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one Site from the database.</Summary>
-		public static Site CreateObject(int siteNum){
+		public static Site CreateObject(long siteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Site>(MethodBase.GetCurrentMethod(),siteNum);
 			}

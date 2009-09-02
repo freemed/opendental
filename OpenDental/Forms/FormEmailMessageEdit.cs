@@ -771,7 +771,7 @@ namespace OpenDental{
 		}
 
 		public static void SendEmail(EmailMessage emailMessage){
-			SmtpClient client=new SmtpClient(PrefC.GetString("EmailSMTPserver"),PrefC.GetInt("EmailPort"));
+			SmtpClient client=new SmtpClient(PrefC.GetString("EmailSMTPserver"),PrefC.GetInt32("EmailPort"));
 			//The default credentials are not used by default, according to: 
 			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
 			client.Credentials=new NetworkCredential(PrefC.GetString("EmailUsername"),PrefC.GetString("EmailPassword"));

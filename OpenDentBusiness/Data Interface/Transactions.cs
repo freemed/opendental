@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Transactions {
 		///<summary>Since transactions are always viewed individually, this function returns one transaction</summary>
-		public static Transaction GetTrans(int transactionNum) {
+		public static Transaction GetTrans(long transactionNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),transactionNum);
 			}
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one transaction directly from the database which has this deposit attached to it.  If none exist, then returns null.</summary>
-		public static Transaction GetAttachedToDeposit(int depositNum) {
+		public static Transaction GetAttachedToDeposit(long depositNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Transaction>(MethodBase.GetCurrentMethod(),depositNum);
 			}

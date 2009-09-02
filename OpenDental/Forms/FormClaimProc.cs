@@ -113,7 +113,7 @@ namespace OpenDental
 		private TextBox textEstimateNote;
 		private double CarrierAllowedAmount;
 		private InsPlan Plan;
-		private int PatPlanNum;
+		private long PatPlanNum;
 		private List<Benefit> BenefitList;
 		private List<ClaimProcHist> HistList;
 		private List<ClaimProcHist> LoopList;
@@ -1309,17 +1309,17 @@ namespace OpenDental
 				textFee.Text=proc.ProcFee.ToString("f");
 				InsPlan plan=InsPlans.GetPlan(ClaimProcCur.PlanNum,PlanList);
 				if(plan.PlanType=="p"){//if ppo, then show the standard fee schedule
-					int standardFeeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
+					long standardFeeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
 					textFeeSched.Text=FeeScheds.GetDescription(standardFeeSched);
 				}
 				else{//otherwise, show the plan fee schedule
 					List <PatPlan> patPlanList=PatPlans.Refresh(PatCur.PatNum);
-					int feeSched=Fees.GetFeeSched(PatCur,PlanList,patPlanList);
+					long feeSched=Fees.GetFeeSched(PatCur,PlanList,patPlanList);
 					textFeeSched.Text=FeeScheds.GetDescription(feeSched);
 				}
 				string stringProcCode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
 				//int codeNum=proc.CodeNum;
-				int substCodeNum=proc.CodeNum;
+				long substCodeNum=proc.CodeNum;
 				if(!plan.CodeSubstNone){
 					substCodeNum=ProcedureCodes.GetSubstituteCodeNum(stringProcCode,proc.ToothNum);//for posterior composites
 				}
@@ -1417,7 +1417,7 @@ namespace OpenDental
 				MsgBox.Show(this,"Plan must either be a PPO type or it must have an 'Allowed' fee schedule set.");
 				return;
 			}
-			int feeSched=-1;
+			long feeSched=-1;
 			if(plan.AllowedFeeSched!=0) {
 				feeSched=plan.AllowedFeeSched;
 			}
@@ -1499,7 +1499,7 @@ namespace OpenDental
 				ClaimProcCur.PercentOverride=-1;
 			}
 			else {
-				ClaimProcCur.PercentOverride=PIn.PInt(textPercentOverride.Text);
+				ClaimProcCur.PercentOverride=PIn.PInt32(textPercentOverride.Text);
 			}
 			if(textPaidOtherInsOverride.Text=="") {
 				ClaimProcCur.PaidOtherInsOverride=-1;

@@ -30,8 +30,8 @@ namespace OpenDental{
 		private Label label1;
 		private static DateTime DateCopyStart=DateTime.MinValue;
 		private static DateTime DateCopyEnd=DateTime.MinValue;
-		public int ApptViewNumCur;
-		private static int ApptViewNumPrevious;
+		public long ApptViewNumCur;
+		private static long ApptViewNumPrevious;
 		private OpenDental.UI.Button butClearDay;
 		public DateTime DateSelected;
 

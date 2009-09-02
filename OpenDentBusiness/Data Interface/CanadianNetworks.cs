@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static CanadianNetwork GetNetwork(int networkNum){
+		public static CanadianNetwork GetNetwork(long networkNum) {
 			//No need to check RemotingRole; no call to db.
 			if(listt==null) {
 				Refresh();

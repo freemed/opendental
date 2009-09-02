@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class Commlogs {
 
 		///<summary>Gets all items for the current patient ordered by date.</summary>
-		public static Commlog[] Refresh(int patNum) {
+		public static Commlog[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Commlog[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one commlog item from database.</summary>
-		public static Commlog GetOne(int commlogNum) {
+		public static Commlog GetOne(long commlogNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Commlog>(MethodBase.GetCurrentMethod(),commlogNum);
 			}

@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<Summary>Gets one Sheet from the database.</Summary>
-		public static Sheet CreateObject(int sheetNum){
+		public static Sheet CreateObject(long sheetNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),sheetNum);
 			}
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a single sheet from the database.  Then, gets all the fields and parameters for it.  So it returns a fully functional sheet.</summary>
-		public static Sheet GetSheet(int sheetNum){
+		public static Sheet GetSheet(long sheetNum) {
 			//No need to check RemotingRole; no call to db.
 			Sheet sheet=CreateObject(sheetNum);
 			SheetFields.GetFieldsAndParameters(sheet);
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
-		public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
+		public static List<Sheet> GetReferralSlips(long patNum,long referralNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum,referralNum);
 			}
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormRxEdit to view an existing rx.  Will return null if none exist.</summary>
-		public static Sheet GetRx(int patNum,int rxNum){
+		public static Sheet GetRx(long patNum,long rxNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,rxNum);
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetNum){
+		public static void DeleteObject(long sheetNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetNum);
 				return;

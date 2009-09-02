@@ -23,8 +23,8 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private int FromPatNum;
-		private int ToPatNum;
+		private long FromPatNum;
+		private long ToPatNum;
 		public Family FamCur;
 		private OpenDental.UI.Button butSearchTo;
 		private ComboBox comboToPat;
@@ -36,8 +36,8 @@ namespace OpenDental{
 		private Label labelAmount;
 		///<summary>If dialogResult.OK, then this will contain exactly two paysplits.</summary>
 		public List<PaySplit> SplitList;
-		public int PayNum;
-		public int PatNum;
+		public long PayNum;
+		public long PatNum;
 
 		///<summary>This form is not currently used.  A better way was found.</summary>
 		public FormProvIncTransAdd()

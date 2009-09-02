@@ -283,7 +283,7 @@ namespace OpenDental{
 			pdfRenderer.RenderDocument();
 			pdfRenderer.PdfDocument.Save(tempPath);
 			//get the category-----------------------------------------------------------------------------
-			int category=0;
+			long category=0;
 			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
 				if(Regex.IsMatch(DefC.Short[(int)DefCat.ImageCats][i].ItemValue,@"S")){
 					category=DefC.Short[(int)DefCat.ImageCats][i].DefNum;
@@ -957,7 +957,7 @@ namespace OpenDental{
 			//Loop through each table.  Could be one intermingled, or one for each patient-----------------------------------------
 			DataTable tableAccount;
 			string tablename;
-			int patnum;
+			long patnum;
 			for(int i=0;i<dataSet.Tables.Count;i++){
 				tableAccount=dataSet.Tables[i];
 				tablename=tableAccount.TableName;

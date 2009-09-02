@@ -186,7 +186,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  This will be called twice, once with isPopup=true and once with isPopup=false.</summary>
-		public static List<Task> GetNewTaskPopupsThisUser(List <Signal> signalList,int userNum){
+		public static List<Task> GetNewTaskPopupsThisUser(List<Signal> signalList,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),signalList,userNum);
 			}

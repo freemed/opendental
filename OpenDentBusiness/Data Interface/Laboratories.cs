@@ -89,7 +89,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
-		public static void Delete(int labNum){
+		public static void Delete(long labNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum);
 				return;

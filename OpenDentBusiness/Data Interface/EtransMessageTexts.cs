@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If the message text is X12, then it always normalizes it to include carriage returns for better readability.</summary>
-		public static string GetMessageText(int etransMessageTextNum) {
+		public static string GetMessageText(long etransMessageTextNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),etransMessageTextNum);
 			}
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 */
 
 		///<summary></summary>
-		public static void Delete(int etransMessageTextNum) {
+		public static void Delete(long etransMessageTextNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),etransMessageTextNum);
 				return;

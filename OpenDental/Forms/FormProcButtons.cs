@@ -20,7 +20,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEdit;
 		private bool changed;
 		///<summary>defnum</summary>
-		private int selectedCat;
+		private long selectedCat;
 		private ListView listViewButtons;
 		private ColumnHeader columnHeader1;
 		private ImageList imageListProcButtons;

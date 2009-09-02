@@ -57,7 +57,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"There are no output methods selected.");
 				return;
 			}
-			PaperCopies=PIn.PInt(textPaperCopies.Text);
+			PaperCopies=PIn.PInt32(textPaperCopies.Text);
 			EmailPat=checkEmailPat.Checked;
 			EmailPatAddress=textEmailPat.Text;
 			if(Email2Visible){

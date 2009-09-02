@@ -134,7 +134,7 @@ namespace OpenDental.Imaging {
 		#endregion
 
 		#region Import methods
-		public Document Import(string path, int docCategory) {
+		public Document Import(string path,long docCategory) {
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
 			doc.FileName = Path.GetExtension(path);
@@ -164,7 +164,7 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
-		public Document Import(Bitmap image, int docCategory) {
+		public Document Import(Bitmap image,long docCategory) {
 			Document doc = new Document();
 			doc.FileName = ".jpg";
 			doc.DateCreated = DateTime.Today;
@@ -183,7 +183,7 @@ namespace OpenDental.Imaging {
 		}
 
 		/// <summary></summary>
-		public Document Import(Bitmap image, int docCategory, ImageType imageType) {
+		public Document Import(Bitmap image,long docCategory,ImageType imageType) {
 			Document doc = new Document();
 			doc.ImgType = imageType;
 			doc.FileName = ".jpg";
@@ -225,7 +225,7 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
-		public Document ImportForm(string form, int docCategory) {
+		public Document ImportForm(string form,long docCategory) {
 			string fileName = ODFileUtils.CombinePaths(new string[] {FileStoreSettings.GetPreferredImagePath,
 				"Forms",form});
 			if(!File.Exists(fileName)) {
@@ -248,7 +248,7 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
-		public Document ImportCapturedImage(Bitmap image, short rotationAngle, int mountItemNum, int docCategory) {
+		public Document ImportCapturedImage(Bitmap image,short rotationAngle,long mountItemNum,long docCategory) {
 			string fileExtention = ".bmp";//The file extention to save the greyscale image as.
 			Document doc = new Document();
 			doc.MountItemNum = mountItemNum;

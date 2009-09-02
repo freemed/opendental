@@ -60,7 +60,7 @@ namespace OpenDental{
 		public event PatientSelectedEventHandler GoToChanged=null;
 		private bool isInitial=true;
 
-		protected void OnGoToChanged(int patNum) {
+		protected void OnGoToChanged(long patNum) {
 			if(GoToChanged!=null) {
 				Patient pat=Patients.GetPat(patNum);
 				GoToChanged(this,new PatientSelectedEventArgs(patNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber));
@@ -479,7 +479,7 @@ namespace OpenDental{
 				return;
 			}
 			int scrollPos=gridBill.ScrollValue;
-			List<int> selectedKeys=new List<int>();
+			List<long> selectedKeys=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				selectedKeys.Add(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 			}
@@ -604,7 +604,7 @@ namespace OpenDental{
 				return;
 			}
 			else{
-				int patNum=PIn.PInt(table.Rows[gridBill.SelectedIndices[0]]["PatNum"].ToString());
+				long patNum=PIn.PInt(table.Rows[gridBill.SelectedIndices[0]]["PatNum"].ToString());
 				OnGoToChanged(patNum);
 				SendToBack();//??
 			}
@@ -740,7 +740,7 @@ namespace OpenDental{
 			//OpenDental.Bridges.Tesia_statements.GeneratePracticeInfo(writerElect);
 			OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
 			DataSet dataSet;
-			List<int> stateNumsElect=new List<int>();
+			List<long> stateNumsElect=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				fam=Patients.GetFamily(stmt.PatNum);

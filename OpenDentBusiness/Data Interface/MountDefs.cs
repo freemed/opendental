@@ -71,7 +71,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
-		public static void Delete(int mountDefNum) {
+		public static void Delete(long mountDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountDefNum);
 				return;

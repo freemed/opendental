@@ -29,7 +29,7 @@ namespace OpenDental{
 		//<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
 		//public DateTime DateViewing;
 		///<summary>If this is zero, then it's an ordinary close.</summary>
-		public int GoToAptNum;
+		public long GoToAptNum;
 
 		///<summary></summary>
 		public FormLabCases()
@@ -256,7 +256,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			int selectedLabCase=PIn.PInt(table.Rows[e.Row]["LabCaseNum"].ToString());
+			long selectedLabCase=PIn.PInt(table.Rows[e.Row]["LabCaseNum"].ToString());
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=LabCases.GetOne(selectedLabCase);
 			FormL.ShowDialog();

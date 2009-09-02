@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PaySplits {
 		///<summary>Returns all paySplits for the given patNum, organized by procDate.  WARNING! Also includes related paysplits that aren't actually attached to patient.  Includes any split where payment is for this patient.</summary>
-		public static PaySplit[] Refresh(int patNum) {
+		public static PaySplit[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PaySplit[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used from payment window to get all paysplits for the payment.</summary>
-		public static List<PaySplit> GetForPayment(int payNum) {
+		public static List<PaySplit> GetForPayment(long payNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PaySplit>>(MethodBase.GetCurrentMethod(),payNum);
 			}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used from ContrAccount and ProcEdit to display and calculate payments attached to procs. Used once in FormProcEdit</summary>
-		public static double GetTotForProc(int procNum,PaySplit[] List){
+		public static double GetTotForProc(long procNum,PaySplit[] List) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
@@ -153,7 +153,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used from FormPaySplitEdit.  Returns total payments for a procedure for all paysplits other than the supplied excluded paysplit.</summary>
-		public static double GetTotForProc(int procNum,PaySplit[] List,int excludeSplitNum){
+		public static double GetTotForProc(long procNum,PaySplit[] List,long excludeSplitNum) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used once in ContrAccount.  WARNING!  The returned list of 'paysplits' are not real paysplits.  They are actually grouped by patient and date.  Only the ProcDate, SplitAmt, PatNum, and ProcNum(one of many) are filled. Must supply a list which would include all paysplits for this payment.</summary>
-		public static ArrayList GetGroupedForPayment(int payNum,PaySplit[] List){
+		public static ArrayList GetGroupedForPayment(long payNum,PaySplit[] List) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			int matchI;
@@ -198,7 +198,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only those amounts that have the same paynum, procDate, and patNum as the payment, and are not attached to procedures.</summary>
-		public static double GetAmountForPayment(int payNum,DateTime payDate,int patNum, PaySplit[] paySplitList){
+		public static double GetAmountForPayment(long payNum,DateTime payDate,long patNum,PaySplit[] paySplitList) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<paySplitList.Length;i++){

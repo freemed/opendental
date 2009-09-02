@@ -20,7 +20,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ImageList imageListPerm;
 		private System.Windows.Forms.Label labelPerm;
 		private System.ComponentModel.IContainer components;
-		private int SelectedGroupNum;
+		private long SelectedGroupNum;
 		private TreeNode clickedPermNode;
 		private System.Windows.Forms.CheckBox checkTimecardSecurityEnabled;
 		private OpenDental.UI.Button butSetAll;
@@ -506,7 +506,7 @@ namespace OpenDental{
 			if(comboUsers.SelectedIndex==3) {
 				usertype="other";
 			}
-			int classNum=0;
+			long classNum=0;
 			if(comboSchoolClass.Visible && comboSchoolClass.SelectedIndex>0){
 				classNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
 			}
@@ -612,7 +612,7 @@ namespace OpenDental{
 		}
 
 		///<summary>A recursive function that sets the checkbox for a node.  Also sets the text for the node.</summary>
-		private void FillNodes(TreeNode node,int userGroupNum){
+		private void FillNodes(TreeNode node,long userGroupNum) {
 			//first, any child nodes
 			for(int i=0;i<node.Nodes.Count;i++){
 				FillNodes(node.Nodes[i],userGroupNum);

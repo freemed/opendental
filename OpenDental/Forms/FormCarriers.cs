@@ -370,7 +370,7 @@ namespace OpenDental{
 			{
 				return;
 			}
-			List <int> pickedCarrierNums=new List <int> ();
+			List<long> pickedCarrierNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				pickedCarrierNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["CarrierNum"].ToString()));
 			}

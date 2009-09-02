@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one SheetDef from the cache.  Also includes the fields and parameters for the sheetdef.</Summary>
-		public static SheetDef GetSheetDef(int sheetDefNum){
+		public static SheetDef GetSheetDef(long sheetDefNum) {
 			//No need to check RemotingRole; no call to db.
 			SheetDef sheetdef=null;
 			for(int i=0;i<SheetDefC.Listt.Count;i++){
@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetDefNum){
+		public static void DeleteObject(long sheetDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetDefNum);
 				return;

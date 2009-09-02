@@ -664,7 +664,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(int patNum){
+		public void ModuleSelected(long patNum) {
 			PatCurNum=patNum;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
@@ -675,7 +675,7 @@ namespace OpenDental{
 			//this is not getting triggered yet.
 		}
 
-		private void RefreshModuleData(int patNum){
+		private void RefreshModuleData(long patNum) {
 			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
 			Employees.RefreshCache();
 			//RefreshModulePatient(patNum);
@@ -700,7 +700,7 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);

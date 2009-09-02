@@ -90,7 +90,7 @@ namespace OpenDental{
 			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypeList,true,0));
 		}
 
-		public static void SetInvalidTask(int taskNum,bool isPopup){
+		public static void SetInvalidTask(long taskNum,bool isPopup) {
 			List<int> itypeList=new List<int>();
 			if(isPopup){
 				itypeList.Add((int)InvalidType.TaskPopup);
@@ -165,22 +165,22 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Goes directly to an existing appointment.</summary>
-		public static void GotoAppointment(DateTime dateSelected,int selectedAptNum) {
+		public static void GotoAppointment(DateTime dateSelected,long selectedAptNum) {
 			OnModuleSelected(new ModuleEventArgs(dateSelected,new List<int>(),selectedAptNum,0,0));
 		}
 
 		///<summary>Goes directly to a claim in someone's Account.</summary>
-		public static void GotoClaim(int claimNum){
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<int>(),0,2,claimNum));
+		public static void GotoClaim(long claimNum) {
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,claimNum));
 		}
 
 		///<summary>Goes directly to an Account.  Patient should already have been selected</summary>
 		public static void GotoAccount() {
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<int>(),0,2,0));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,0));
 		}
 
 		///<summary>Puts appointment on pinboard, then jumps to Appointments module.  Patient should already have been selected</summary>
-		public static void PinToAppt(List<int> pinAptNums) {
+		public static void PinToAppt(List<long> pinAptNums) {
 			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAptNums,0,0,0));
 		}
 
@@ -198,14 +198,15 @@ namespace OpenDental{
 	///<summary></summary>
 	public class ModuleEventArgs : System.EventArgs{
 		private DateTime dateSelected;
-		private List<int> pinAppts;
-		private int selectedAptNum;
+		private List<long> pinAppts;
+		private long selectedAptNum;
 		private int iModule;
-		private int claimNum;
+		private long claimNum;
 		
 		///<summary></summary>
-		public ModuleEventArgs(DateTime dateSelected,List<int> pinAppts,int selectedAptNum,int iModule,
-			int claimNum) : base()
+		public ModuleEventArgs(DateTime dateSelected,List<long> pinAppts,long selectedAptNum,int iModule,
+			long claimNum)
+			: base()
 		{
 			this.dateSelected=dateSelected;
 			this.pinAppts=pinAppts;
@@ -220,12 +221,12 @@ namespace OpenDental{
 		}
 
 		///<summary>The aptNums of the appointments that we want to put on the pinboard of the Apt Module.</summary>
-		public List<int> PinAppts{
+		public List<long> PinAppts {
 			get{return pinAppts;}
 		}
 
 		///<summary></summary>
-		public int SelectedAptNum{
+		public long SelectedAptNum {
 			get{return selectedAptNum;}
 		}
 
@@ -235,7 +236,7 @@ namespace OpenDental{
 		}
 
 		///<summary>If going to Account module, this lets you pick a claim.</summary>
-		public int ClaimNum{
+		public long ClaimNum {
 			get{return claimNum;}
 		}
 	}

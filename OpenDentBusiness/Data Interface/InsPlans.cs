@@ -773,7 +773,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Based on the four supplied parameters, it updates all similar plans.  Used in a specific tool: FormFeesForIns.</summary>
-		public static long SetFeeSched(int employerNum,string carrierName,string groupNum,string groupName,long feeSchedNum,
+		public static long SetFeeSched(long employerNum,string carrierName,string groupNum,string groupName,long feeSchedNum,
 			FeeScheduleType feeSchedType)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

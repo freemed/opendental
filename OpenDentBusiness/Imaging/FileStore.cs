@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace OpenDental.Imaging {
 	public class FileStore : ImageStoreBase {
-		public delegate int UpdatePatientDelegate(Patient patCur, Patient patOld);
+		public delegate long UpdatePatientDelegate(Patient patCur,Patient patOld);
 
 		private string storeIdentifier;
 		public object StoreIdentifier {

@@ -186,7 +186,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through List to find matching employee, and returns FName MiddleI LName.</summary>
-		public static string GetNameFL(int employeeNum) {
+		public static string GetNameFL(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].EmployeeNum==employeeNum) {
@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through List to find matching employee, and returns first 2 letters of first name.  Will later be improved with abbr field.</summary>
-		public static string GetAbbr(int employeeNum){
+		public static string GetAbbr(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			string retVal="";
 			for(int i=0;i<ListLong.Length;i++){
@@ -211,7 +211,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		public static Employee GetEmp(int employeeNum){
+		public static Employee GetEmp(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].EmployeeNum==employeeNum) {
@@ -222,7 +222,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary> Returns -1 if employeeNum is not found.  0 if not hidden and 1 if hidden </summary>		
-		public static int IsHidden(int employeeNum){
+		public static int IsHidden(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			int rValue = -1;
 			if (ListLong != null){

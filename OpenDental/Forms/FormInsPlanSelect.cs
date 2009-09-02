@@ -27,11 +27,11 @@ namespace OpenDental{
 		private List <InsPlan> PlanList;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butNone;
-		private int PatNum;
+		private long PatNum;
 		public bool ShowNoneButton;
 
 		///<summary></summary>
-		public FormInsPlanSelect(int patNum){
+		public FormInsPlanSelect(long patNum) {
 			InitializeComponent();
 			PatNum=patNum;
 			//tbPlans.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPlans_CellDoubleClicked);

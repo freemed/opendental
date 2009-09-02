@@ -30,7 +30,7 @@ namespace OpenDental{
 		///<summary>This needs to be set ahead of time externally.  It needs to be saved to the database before this form is opened.</summary>
 		public Payment PaymentCur;
 		///<summary>The patnum of the patient from which this window was opened.  There is a chance the family could be different from the one that most of the transfer refers to.</summary>
-		public int PatNum;
+		public long PatNum;
 		private OpenDental.UI.Button butDeleteAll;
 		///<summary>The patient from which this window was accessed.</summary>
 		private Patient PatCur;

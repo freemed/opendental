@@ -444,7 +444,7 @@ namespace OpenDental{
 				!=DialogResult.OK) {
 					return;
 				}
-				int rowsAffected=Adjustments.UndoFinanceCharges(PIn.PDate(textDateUndo.Text));
+				long rowsAffected=Adjustments.UndoFinanceCharges(PIn.PDate(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Finance charge adjustments deleted: ")+rowsAffected.ToString());
 				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Finance Charges undo. Date "+textDateUndo.Text);
@@ -455,7 +455,7 @@ namespace OpenDental{
 				!=DialogResult.OK) {
 					return;
 				}
-				int rowsAffected=Adjustments.UndoBillingCharges(PIn.PDate(textDateUndo.Text));
+				long rowsAffected=Adjustments.UndoBillingCharges(PIn.PDate(textDateUndo.Text));
 				MessageBox.Show(Lan.g(this,"Billing charge adjustments deleted: ")+rowsAffected.ToString());
 				Ledgers.RunAging();
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing Charges undo. Date "+textDateUndo.Text);
@@ -555,7 +555,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void AddFinanceCharge(int PatNum, DateTime date, string APR, double OverallBalance, int PriProv) {
+		private void AddFinanceCharge(long PatNum,DateTime date,string APR,double OverallBalance,long PriProv) {
 			Adjustment AdjustmentCur = new Adjustment();
 			AdjustmentCur.PatNum = PatNum;
 			//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
@@ -568,7 +568,7 @@ namespace OpenDental{
 			Adjustments.Insert(AdjustmentCur);
 		}
 
-		private void AddBillingCharge(int PatNum, DateTime date, string BillingChargeAmount, int PriProv) {
+		private void AddBillingCharge(long PatNum,DateTime date,string BillingChargeAmount,long PriProv) {
 			Adjustment AdjustmentCur = new Adjustment();
 			AdjustmentCur.PatNum = PatNum;
 			//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled

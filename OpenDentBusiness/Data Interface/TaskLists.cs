@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class TaskLists {
 
 		///<summary>Gets all task lists for the trunk of the user tab.</summary>
-		public static List<TaskList> RefreshUserTrunk(int userNum){
+		public static List<TaskList> RefreshUserTrunk(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),userNum);
 			}
@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
-		public static List<TaskList> RefreshChildren(int parent){
+		public static List<TaskList> RefreshChildren(long parent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),parent);
 			}
@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static TaskList GetOne(int taskListNum){
+		public static TaskList GetOne(long taskListNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<TaskList>(MethodBase.GetCurrentMethod(),taskListNum);
 			}

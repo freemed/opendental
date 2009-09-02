@@ -21,9 +21,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPrint;
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
-		public int ThisClaimNum;
+		public long ThisClaimNum;
 		///<summary></summary>
-		public int ThisPatNum;
+		public long ThisPatNum;
 		//<summary>This will be 0 unless the user is trying to print a batch e-claim with a predefined ClaimForm.</summary>
 		//public int ClaimFormNum;
 		///<summary></summary>

@@ -52,12 +52,12 @@ namespace OpenDental{
 		///<summary>When closing the form, this indicates whether a new patient was added from within this form.</summary>
 		public bool NewPatientAdded;
 		///<summary>Only used when double clicking blank area in Appts. Sets this value to the currently selected pt.  That patient will come up on the screen already selected and user just has to click OK. Or they can select a different pt or add a new pt.  If 0, then no initial patient is selected.</summary>
-		public int InitialPatNum;
+		public long InitialPatNum;
 		private DataTable PtDataTable;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.User_Controls.ContrKeyboard contrKeyboard1;
 		///<summary>When closing the form, this will hold the value of the newly selected PatNum.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		private CheckBox checkShowArchived;
 		private TextBox textBirthdate;
 		private Label label2;

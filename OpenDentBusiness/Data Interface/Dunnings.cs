@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Will return null if no dunning matches the given criteria.</summary>
-		public static Dunning GetDunning(Dunning[] dunList, int billingType,int ageAccount,YN insIsPending){
+		public static Dunning GetDunning(Dunning[] dunList,long billingType,int ageAccount,YN insIsPending) {
 			//No need to check RemotingRole; no call to db.
 			//loop backwards through Dunning list and find the first dunning that matches criteria.
 			for(int i=dunList.Length-1;i>=0;i--){

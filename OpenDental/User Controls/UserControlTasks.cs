@@ -30,7 +30,7 @@ namespace OpenDental {
 		///<summary>After closing, if this is not zero, then it will jump to the object specified in GotoKeyNum.</summary>
 		public TaskObjectType GotoType;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
-		public int GotoKeyNum;
+		public long GotoKeyNum;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
@@ -170,7 +170,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
-			int parent;
+			long parent;
 			DateTime date;
 			if(TreeHistory==null){
 				return;
@@ -414,7 +414,7 @@ namespace OpenDental {
 		}
 
 		///<summary>If parent=0, then this is a trunk.</summary>
-		private void RefreshMainLists(int parent,DateTime date) {
+		private void RefreshMainLists(long parent,DateTime date) {
 			DateTime startDate=DateTime.MinValue;
 			if(textStartDate.Visible && textStartDate.Text!=""){
 				if(textStartDate.errorProvider1.GetError(textStartDate)==""){

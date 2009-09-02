@@ -8,7 +8,7 @@ using System.Reflection;
 namespace OpenDentBusiness {
 	public class ClaimCondCodeLogs {
 
-		public static ClaimCondCodeLog GetOne(int ClaimNum){
+		public static ClaimCondCodeLog GetOne(long ClaimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimCondCodeLog>(MethodBase.GetCurrentMethod(),ClaimNum);
 			}

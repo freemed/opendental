@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the balance of an account directly from the database.</summary>
-		public static double GetBalance(int accountNum,AccountType acctType){
+		public static double GetBalance(long accountNum,AccountType acctType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),accountNum,acctType);
 			}

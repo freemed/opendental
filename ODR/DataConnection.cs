@@ -26,7 +26,7 @@ namespace ODR{
 		///<summary>Stores the string of the command that will be sent to the database.</summary>
 		private MySqlCommand cmd;
 		///<summary>After inserting a row, this variable will contain the primary key for the newly inserted row.  This can frequently save an additional query to the database.</summary>
-		public int InsertID;
+		public long InsertID;
 
 		///<summary>Constructor sets the connection values.</summary>
 		public DataConnection(){
@@ -162,12 +162,12 @@ namespace ODR{
 		}
 
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
-		public int NonQ(string command){
+		public long NonQ(string command){
 			return NonQ(command,false);
 		}
 
 		///<summary>Sends a non query command to the database and returns the number of rows affected. If true, then InsertID will be set to the value of the primary key of the newly inserted row.</summary>
-		public int NonQ(string command,bool getInsertID){
+		public long NonQ(string command,bool getInsertID){
  			cmd.CommandText=command;
 			int rowsChanged=0;
  			try{
@@ -176,8 +176,9 @@ namespace ODR{
  				if(getInsertID){
 					cmd.CommandText="SELECT LAST_INSERT_ID()";
 					dr=(MySqlDataReader)cmd.ExecuteReader();
-					if(dr.Read())
+					if(dr.Read()) {
 						InsertID=PIn.PInt(dr[0].ToString());
+					}
 				}
 			}
 			catch(MySqlException e){

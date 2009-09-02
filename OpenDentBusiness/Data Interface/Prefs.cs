@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateInt(string prefName,int newValue) {
+		public static bool UpdateInt(string prefName,long newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {
 				throw new ApplicationException(prefName+" is an invalid pref name.");

@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all adjustments for a single patient.</summary>
-		public static Adjustment[] Refresh(int patNum){
+		public static Adjustment[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Adjustment[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one adjustment from the db.</summary>
-		public static Adjustment GetOne(int adjNum){
+		public static Adjustment GetOne(long adjNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Adjustment>(MethodBase.GetCurrentMethod(),adjNum);
 			}
@@ -139,7 +139,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the supplied list of adjustments and returns an ArrayList of adjustments for the given proc.</summary>
-		public static ArrayList GetForProc(int procNum,Adjustment[] List){
+		public static ArrayList GetForProc(long procNum,Adjustment[] List) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -151,7 +151,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used from ContrAccount and ProcEdit to display and calculate adjustments attached to procs.</summary>
-		public static double GetTotForProc(int procNum,Adjustment[] List){
+		public static double GetTotForProc(long procNum,Adjustment[] List) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){

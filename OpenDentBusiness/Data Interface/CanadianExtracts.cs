@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class CanadianExtracts{
 	
 		///<summary>The list can be 0 length.</summary>
-		public static List<CanadianExtract> GetForClaim(int claimNum){
+		public static List<CanadianExtract> GetForClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CanadianExtract>>(MethodBase.GetCurrentMethod(),claimNum);
 			}
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			return Tooth.ToInt(t1).CompareTo(Tooth.ToInt(t2));
 		}
 
-		public static void UpdateForClaim(int claimNum, List<CanadianExtract> missinglist){
+		public static void UpdateForClaim(long claimNum,List<CanadianExtract> missinglist) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,missinglist);
 				return;

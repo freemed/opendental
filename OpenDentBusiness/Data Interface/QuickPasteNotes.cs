@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used from FormQuickPaste to get all notes for the selected cat.</summary>
-		public static QuickPasteNote[] GetForCat(int cat){
+		public static QuickPasteNote[] GetForCat(long cat) {
 			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();

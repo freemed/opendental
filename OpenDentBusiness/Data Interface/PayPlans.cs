@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PayPlans {
 		///<summary>Gets a list of all payplans for a given patient, whether they are the guarantor or the patient.  This is also used in UpdateAll to store all payment plans in entire database.</summary>
-		public static PayPlan[] Refresh(int guarantor,int patNum) {
+		public static PayPlan[] Refresh(long guarantor,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PayPlan[]>(MethodBase.GetCurrentMethod(),guarantor,patNum);
 			}
@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(Db.GetTable(command)).ToArray();
 		}
 
-		public static PayPlan GetOne(int payPlanNum){
+		public static PayPlan GetOne(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PayPlan>(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Refreshes the list for the specified guarantor, and then determines if there are any valid plans with that patient as the guarantor.  If more than one valid payment plan, displays list to select from.  If any valid plans, then it returns that plan, else returns null.</summary>
-		public static List<PayPlan> GetValidPlansNoIns(int guarNum){//,bool isIns){
+		public static List<PayPlan> GetValidPlansNoIns(long guarNum) {//,bool isIns){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PayPlan>>(MethodBase.GetCurrentMethod(),guarNum);
 			}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Gets info directly from database. Used from PayPlan and Account windows to get the amount paid so far on one payment plan.</summary>
-		public static double GetAmtPaid(int payPlanNum){
+		public static double GetAmtPaid(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Used from Account window to get the amount paid so far on one payment plan.  Must pass in the total amount paid and the returned value will not be more than this.  The chargelist must include all charges for this payplan, but it can include more as well.  It will loop sequentially through the charges to get just the principal portion.</summary>
-		public static double GetPrincPaid(double amtPaid,int payPlanNum,List<PayPlanCharge> chargeList){
+		public static double GetPrincPaid(double amtPaid,long payPlanNum,List<PayPlanCharge> chargeList) {
 			//No need to check RemotingRole; no call to db.
 			//amtPaid gets reduced to 0 throughout this loop.
 			double retVal=0;

@@ -423,59 +423,17 @@
     <Compile Include="Forms\FormSecurityLock.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormAnesthMedDelDose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedDelDose.Designer.cs">
-      <DependentUpon>FormAnesthMedDelDose.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsInventory.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsInventory.designer.cs">
-      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedsEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedsEdit.Designer.cs">
-      <DependentUpon>FormAnesthMedsEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnesthElevateSecurityPriv.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedSuppliers.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormBackupReminder.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormBackupReminder.designer.cs">
       <DependentUpon>FormBackupReminder.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormAnestheticMedsWasteQty.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsWasteQty.Designer.cs">
-      <DependentUpon>FormAnestheticMedsWasteQty.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormMonthView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormMonthView.designer.cs">
       <DependentUpon>FormMonthView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedSuppliersEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnesthMedSuppliersEdit.designer.cs">
-      <DependentUpon>FormAnesthMedSuppliersEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnesthesiaScore.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnesthesiaScore.designer.cs">
-      <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormFeeSchedEdit.cs">
       <SubType>Form</SubType>
@@ -646,15 +604,6 @@
       <DependentUpon>FormPatientAddAll.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAccountingLock.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsIntake.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticMedsIntake.Designer.cs">
-      <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAnestheticRecord.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormBillingDefaults.cs">
@@ -1692,14 +1641,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAccountingLock.resx">
       <DependentUpon>FormAccountingLock.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsIntake.resx">
-      <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticRecord.resx">
-      <DependentUpon>FormAnestheticRecord.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBillingDefaults.resx">
@@ -3175,11 +3116,6 @@
       <DependentUpon>PrintPreview.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\ContrAnesthesia.resx">
-      <DependentUpon>ContrAnesthesia.cs</DependentUpon>
-      <LastGenOutput>ContrAnesthesia.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ContrApptSheet.resx">
       <DependentUpon>ContrApptSheet.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3539,9 +3475,6 @@
     <Compile Include="UI\SignatureBoxWrapper.Designer.cs">
       <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\ContrAnesthesia.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="User Controls\ContrApptSheet.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3561,9 +3494,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="User Controls\ContrTeeth.cs" />
-    <Compile Include="User Controls\ContrAnesthesiaData.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="User Controls\ODtextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -3766,44 +3696,12 @@
       <DependentUpon>FormSecurityLock.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthMedDelDose.resx">
-      <DependentUpon>FormAnesthMedDelDose.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
-      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthMedsEdit.resx">
-      <DependentUpon>FormAnesthMedsEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthElevateSecurityPriv.resx">
-      <DependentUpon>FormAnesthElevateSecurityPriv.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthMedSuppliers.resx">
-      <DependentUpon>FormAnesthMedSuppliers.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBackupReminder.resx">
       <DependentUpon>FormBackupReminder.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnestheticMedsWasteQty.resx">
-      <DependentUpon>FormAnestheticMedsWasteQty.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMonthView.resx">
       <DependentUpon>FormMonthView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthMedSuppliersEdit.resx">
-      <DependentUpon>FormAnesthMedSuppliersEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAnesthesiaScore.resx">
-      <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFeeSchedEdit.resx">
@@ -3968,11 +3866,6 @@
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight8.gif" />
     <EmbeddedResource Include="UI\SignatureBoxWrapper.resx">
       <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\ContrAnesthesiaData.resx">
-      <DependentUpon>ContrAnesthesiaData.cs</DependentUpon>
-      <LastGenOutput>ContrAnesthesia.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\UserControlPhonePanel.resx">

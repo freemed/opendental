@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class PatFields {
 		///<summary>Gets a list of all PatFields for a given patient.</summary>
-		public static PatField[] Refresh(int patNum) {
+		public static PatField[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatField[]>(MethodBase.GetCurrentMethod(),patNum);
 			}

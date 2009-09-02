@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class TimeAdjusts {
 
 		///<summary></summary>
-		public static TimeAdjust[] Refresh(int empNum,DateTime fromDate,DateTime toDate) {
+		public static TimeAdjust[] Refresh(long empNum,DateTime fromDate,DateTime toDate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<TimeAdjust[]>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate);
 			}

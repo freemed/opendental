@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in the Schedules edit window to get a filtered list of schedule items in preparation for paste or repeat.</summary>
-		public static List<Schedule> RefreshPeriod(DateTime dateStart,DateTime dateEnd,List <int> provNums, List <int> empNums,bool includePractice)
+		public static List<Schedule> RefreshPeriod(DateTime dateStart,DateTime dateEnd,List<long> provNums,List<long> empNums,bool includePractice)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNums,empNums,includePractice);
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<Schedule> RefreshPeriodBlockouts(DateTime dateStart,DateTime dateEnd,List<int> opNums){
+		public static List<Schedule> RefreshPeriodBlockouts(DateTime dateStart,DateTime dateEnd,List<long> opNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Schedule>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,opNums);
 			}
@@ -447,7 +447,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.  If includePractice is true, then practice notes and holidays will be included.</summary>
-		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,List <int> provNums,List <int> empNums,bool includePractice){
+		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,List<long> provNums,List<long> empNums,bool includePractice) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNums,empNums,includePractice);
 			}
@@ -616,7 +616,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Clears all schedule entries for the given date range and the given providers, employees, and practice.</summary>
-		public static void Clear(DateTime dateStart,DateTime dateEnd,List <int> provNums,List <int> empNums,bool includePractice){
+		public static void Clear(DateTime dateStart,DateTime dateEnd,List<long> provNums,List<long> empNums,bool includePractice) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNums,empNums,includePractice);
 				return;
@@ -670,7 +670,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Clears all Blockout schedule entries for the given date range and the given ops.</summary>
-		public static void ClearBlockouts(DateTime dateStart,DateTime dateEnd,List<int> opNums) {
+		public static void ClearBlockouts(DateTime dateStart,DateTime dateEnd,List<long> opNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dateStart,dateEnd,opNums);
 				return;

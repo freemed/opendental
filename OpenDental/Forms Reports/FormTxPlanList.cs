@@ -269,7 +269,7 @@ namespace OpenDental {
 			// Add This column to AddrTable Data Table - start
 			AddrTable.Columns.Add("DoesPatientHasTreatment",System.Type.GetType("System.Boolean"));
 			// Add This column to AddrTable Data Table - end
-			int PatNum;
+			long PatNum;
 			// Variables for Primary Insurance
 			double PriMax;
 			double PriDed;
@@ -343,7 +343,7 @@ namespace OpenDental {
 		/// <summary>
 		/// This method now returns boolean Value
 		/// </summary>
-		private bool GetPatientTreatments(int PatNum,string procDate,string PriRemain,string SecRemain,string whereProc,string whereProv) {
+		private bool GetPatientTreatments(long PatNum,string procDate,string PriRemain,string SecRemain,string whereProc,string whereProv) {
 			string command;
 			DataTable PatientTreatmentTable;
 			Patient PatCur;
@@ -409,7 +409,7 @@ namespace OpenDental {
 		/// It also returns Annual Maximum, Ben Used, pending, Deductible, and Deductible Remaining
 		/// for both primary and secondary benefits
 		/// </summary>
-		private void FillSummary(int PatNum,
+		private void FillSummary(long PatNum,
 				ref double PriMax,ref double PriPend,ref double PriUsed,
 				ref double PriDed,ref double PriDedRemain,ref double PriRemain,
 				ref double SecMax,ref double SecPend,ref double SecUsed,

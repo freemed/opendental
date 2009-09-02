@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ClockEvents {
 		///<summary>isBreaks is ignored if getAll is true.</summary>
-		public static ClockEvent[] Refresh(int empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks) {
+		public static ClockEvent[] Refresh(long empNum,DateTime fromDate,DateTime toDate,bool getAll,bool isBreaks) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClockEvent[]>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate,getAll,isBreaks);
 			}
@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
-		public static TimeSpan GetWeekTotal(int empNum,DateTime date){
+		public static TimeSpan GetWeekTotal(long empNum,DateTime date) {
 			//No need to check RemotingRole; no call to db.
 			ClockEvent[] events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false,false);
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.

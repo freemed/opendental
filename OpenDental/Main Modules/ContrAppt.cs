@@ -51,7 +51,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Button butBreak;
 		///<summary>The actual operatoryNum of the clicked op.</summary>
-		public static int SheetClickedonOp;
+		public static long SheetClickedonOp;
 		///<summary></summary>
 		public static int SheetClickedonHour;
 		///<summary></summary>
@@ -117,7 +117,7 @@ namespace OpenDental{
 		///<summary>If the user has done a blockout/copy, then this will contain the blockout that is on the "clipboard".</summary>
 		private Schedule BlockoutClipboard;
 		///<summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</summary>
-		private int bubbleAptNum;
+		private long bubbleAptNum;
 		private DateTime bubbleTime;
 		private Point bubbleLocation;
 		private ODGrid gridEmpSched;
@@ -1099,13 +1099,13 @@ namespace OpenDental{
     }
 
 		///<summary>Overload used when jumping here from another module, and you want to place appointments on the pinboard.</summary>
-		public void ModuleSelected(int patNum,List<int> pinAptNums){
+		public void ModuleSelected(long patNum,List<long> pinAptNums) {
 			ModuleSelected(patNum);
 			SendToPinBoard(pinAptNums);
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(int patNum){
+		public void ModuleSelected(long patNum) {
 			RefreshModuleDataPatient(patNum);
 			RefreshModuleDataPeriod();
 			LayoutScrollOpProv();//can only call this as part of ModuleSelected.
@@ -1120,7 +1120,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Fills PatCur from the database unless the patnum has not changed.</summary>
-		private void RefreshModuleDataPatient(int patNum) {
+		private void RefreshModuleDataPatient(long patNum) {
 			if(patNum==0) {
 				PatCur=null;
 				return;
@@ -1288,7 +1288,7 @@ namespace OpenDental{
 				butDelete.Enabled=false;
 			}
 			if(panelAptInfo.Enabled && DS!=null) {
-				int aptconfirmed=0;
+				long aptconfirmed=0;
 				string tableAptNum;
 				if(pinBoard.SelectedIndex==-1) {//no pinboard appt selected
 					for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
@@ -1477,7 +1477,7 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber) {
+		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
@@ -1935,7 +1935,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets the index within the array of appointment controls, based on the supplied primary key.</summary>
-		private int GetIndex(int myAptNum){
+		private int GetIndex(long myAptNum) {
 			int retVal=-1;
 			for(int i=0;i<ContrApptSingle3.Length;i++){
 				if(ContrApptSingle3[i].DataRoww["AptNum"].ToString()==myAptNum.ToString()){
@@ -1945,14 +1945,14 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		private void SendToPinBoard(int aptNum){
-			List<int> list=new List<int>();
+		private void SendToPinBoard(long aptNum) {
+			List<long> list=new List<long>();
 			list.Add(aptNum);
 			SendToPinBoard(list);
 		}
 
 		///<summary>Loads all info for for specified appointment into the control that displays the pinboard appointment. Runs RefreshModulePatient.  Sets pinboard appointment as selected.</summary>
-		private void SendToPinBoard(List<int> aptNums){
+		private void SendToPinBoard(List<long> aptNums) {
 			if(aptNums.Count==0){
 				return;
 			}
@@ -2096,7 +2096,7 @@ namespace OpenDental{
 			aptCur.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
 			if(AppointmentRuleC.List.Length>0){
 				//this is crude and temporary:
-				List <int> aptNums=new List <int> ();
+				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
@@ -2151,8 +2151,8 @@ namespace OpenDental{
 			if(aptCur.AptStatus==ApptStatus.UnschedList){
 				aptCur.AptStatus=ApptStatus.Scheduled;
 			}
-			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
-			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
+			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,aptCur.AptDateTime);
+			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,aptCur.AptDateTime);
 			if(aptCur.AptStatus!=ApptStatus.PtNote && aptCur.AptStatus!=ApptStatus.PtNoteCompleted) {
 				//if no dentist/hygienist is assigned to spot, then keep the original dentist/hygienist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=aptCur.ProvNum) || (assignedHyg!=0 && assignedHyg!=aptCur.ProvHyg)) {
@@ -2188,7 +2188,7 @@ namespace OpenDental{
 			}
 			aptCur.ClinicNum=curOp.ClinicNum;//we always make clinic match without prompt
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
-				int plannedAptNum=aptCur.AptNum;
+				long plannedAptNum=aptCur.AptNum;
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
 				aptCur.NextAptNum=aptCur.AptNum;
 				aptCur.AptStatus=ApptStatus.Scheduled;
@@ -2297,7 +2297,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns the apptNum of the appointment at these coordinates, or 0 if none.  This is new code which is going to replace some of the outdated code on this page.</summary>
-		private int HitTestAppt(Point point){
+		private long HitTestAppt(Point point) {
 			if(ApptViewItemL.VisOps.Count==0) {//no ops visible.
 				return 0;
 			}
@@ -2316,7 +2316,7 @@ namespace OpenDental{
 			if(xOp>OperatoryC.ListShort.Count-1){
 				return 0;
 			}
-			int op=OperatoryC.ListShort[xOp].OperatoryNum;
+			long op=OperatoryC.ListShort[xOp].OperatoryNum;
 			int hour=ContrApptSheet.YPosToHour(point.Y);
 			int minute=ContrApptSheet.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
@@ -2342,7 +2342,7 @@ namespace OpenDental{
 
 		///<summary>If the given point is in the bottom few pixels of an appointment, then this returns true.  Use HitTestAppt to figure out which appointment.</summary>
 		private bool HitTestApptBottom(Point point){
-			int aptnum=HitTestAppt(point);
+			long aptnum=HitTestAppt(point);
 			if(aptnum==0){
 				return false;
 			}
@@ -2654,7 +2654,7 @@ namespace OpenDental{
 					return;
 				}
 				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-				List<int> list=new List<int>();
+				List<long> list=new List<long>();
 				list.Add(ContrApptSingle.SelectedAptNum);
 				SendToPinBoard(list);//sets selectedAptNum=-1. do before refresh prev
 				if(prevSel!=-1) {
@@ -2703,14 +2703,14 @@ namespace OpenDental{
 			List<Procedure> procsMultApts=null;
 			Procedure[] procsForOne=null;
 			if(AppointmentRuleC.List.Length>0) {
-				List <int> aptNums=new List <int> ();
+				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			}
 			if(AppointmentRuleC.List.Length>0) {
-				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
+				long[] aptNums=new long[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
 				}
@@ -2761,8 +2761,8 @@ namespace OpenDental{
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
-			int assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
-			int assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
+			long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
+			long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
 			if(apt.AptStatus!=ApptStatus.PtNote && apt.AptStatus!=ApptStatus.PtNoteCompleted) {
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
@@ -2854,7 +2854,7 @@ namespace OpenDental{
 				return;
 			}
 			bubbleLocation=p;
-			int aptNum=HitTestAppt(p);
+			long aptNum=HitTestAppt(p);
 			if(aptNum==0 || HitTestApptBottom(p)) {
 				if(infoBubble.Visible) {
 					infoBubble.Visible=false;
@@ -3027,7 +3027,7 @@ namespace OpenDental{
 			//this logic is a little different than mouse down for now because on the first click of a 
 			//double click, an appointment control is created under the mouse.
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt
-				int patnum=PIn.PInt(TempApptSingle.DataRoww["PatNum"].ToString());
+				long patnum=PIn.PInt(TempApptSingle.DataRoww["PatNum"].ToString());
 				TempApptSingle.Dispose();
 				//security handled inside the form
 				FormApptEdit FormAE=new FormApptEdit(ContrApptSingle.ClickedAptNum);
@@ -3690,7 +3690,7 @@ namespace OpenDental{
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
 				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
 				+"Broke");
-			int provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
+			long provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
 			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
@@ -3763,7 +3763,7 @@ namespace OpenDental{
 		}
 
 		private void OnDelete_Click(){
-			int selectedAptNum=ContrApptSingle.SelectedAptNum;
+			long selectedAptNum=ContrApptSingle.SelectedAptNum;
 			Appointment apt = Appointments.GetOneApt(selectedAptNum);
 			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
@@ -3877,7 +3877,7 @@ namespace OpenDental{
 				return;
 			}
 			Schedule sched=BlockoutClipboard.Copy();
-			sched.Ops=new List<int>();
+			sched.Ops=new List<long>();
 			sched.Ops.Add(SheetClickedonOp);
 			sched.SchedDate=AppointmentL.DateSelected;
 			if(ContrApptSheet.IsWeeklyView){
@@ -4057,7 +4057,7 @@ namespace OpenDental{
 			if(ContrApptSingle.SelectedAptNum==-1) {
 				return;
 			}
-			int newStatus=DefC.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
+			long newStatus=DefC.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
 			Appointments.SetConfirmed(ContrApptSingle.SelectedAptNum,newStatus);
 			RefreshPeriod();
 			SetInvalid();
@@ -4175,7 +4175,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			int[] providers=new int[listProviders.SelectedIndices.Count];
+			long[] providers=new long[listProviders.SelectedIndices.Count];
 			for(int i=0;i<providers.Length;i++){
 				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
 			}

@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class Supplies {
 
 		///<summary>Gets all Supplies, ordered by category and itemOrder.  Optionally hides those marked IsHidden.  FindText must only include alphanumeric characters.</summary>
-		public static List<Supply> CreateObjects(bool includeHidden,int supplierNum,string findText) {
+		public static List<Supply> CreateObjects(bool includeHidden,long supplierNum,string findText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Supply>>(MethodBase.GetCurrentMethod(),includeHidden,supplierNum,findText);
 			}
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one supply from the database.  Used for display in SupplyOrderItemEdit window.</Summary>
-		public static Supply CreateObject(int supplyNum){
+		public static Supply CreateObject(long supplyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Supply>(MethodBase.GetCurrentMethod(),supplyNum);
 			}

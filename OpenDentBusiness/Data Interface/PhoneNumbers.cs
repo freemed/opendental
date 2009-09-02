@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<phoneNumber>.CreateObject(phoneNumberNum);
 		}*/
 
-		public static List<PhoneNumber> GetPhoneNumbers(int patNum){
+		public static List<PhoneNumber> GetPhoneNumbers(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PhoneNumber>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<phoneNumber>.DeleteObject(phoneNumberNum);
 		}*/
 
-		public static void DeleteObject(int phoneNumberNum){
+		public static void DeleteObject(long phoneNumberNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneNumberNum);
 				return;

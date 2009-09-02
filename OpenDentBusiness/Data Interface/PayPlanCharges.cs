@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PayPlanCharges {
 		///<summary>Gets all PayPlanCharges for a guarantor or patient, ordered by date.</summary>
-		public static List<PayPlanCharge> Refresh(int patNum) {
+		public static List<PayPlanCharge> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<PayPlanCharge> GetForPayPlan(int payPlanNum){
+		public static List<PayPlanCharge> GetForPayPlan(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),payPlanNum);
 			}
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static PayPlanCharge GetOne(int payPlanChargeNum){
+		public static PayPlanCharge GetOne(long payPlanChargeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PayPlanCharge>(MethodBase.GetCurrentMethod(),payPlanChargeNum);
 			}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 		}	
 
 		///<summary></summary>
-		public static void DeleteAllInPlan(int payPlanNum){
+		public static void DeleteAllInPlan(long payPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),payPlanNum);
 				return;

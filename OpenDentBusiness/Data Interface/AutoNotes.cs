@@ -61,7 +61,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Delete(int autoNoteNum) {
+		public static void Delete(long autoNoteNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoNoteNum);
 				return;

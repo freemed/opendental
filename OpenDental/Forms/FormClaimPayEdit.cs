@@ -39,7 +39,7 @@ namespace OpenDental{
 		private ClaimPayment ClaimPaymentCur;
 		private OpenDental.UI.ODGrid gridMain;
 		///<summary>Set this externally.</summary>
-		public int OriginatingClaimNum;
+		public long OriginatingClaimNum;
 
 		///<summary></summary>
 		public FormClaimPayEdit(ClaimPayment claimPaymentCur){

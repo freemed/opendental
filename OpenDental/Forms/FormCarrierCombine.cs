@@ -20,9 +20,9 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<summary>After this window closes, this will be the carrierNum of the selected carrier.</summary>
-		public int PickedCarrierNum;
+		public long PickedCarrierNum;
 		///<summary>Before opening this Form, set the carrierNums to show.</summary>
-		public List <int> CarrierNums;
+		public List<long> CarrierNums;
 		private List<Carrier> carrierList;
 
 		///<summary></summary>

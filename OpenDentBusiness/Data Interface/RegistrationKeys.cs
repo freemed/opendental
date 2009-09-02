@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 	///<summary>Used to keep track of which product keys have been assigned to which customers. This class is only used if the program is being run from a distributor installation.</summary>
 	public class RegistrationKeys {
 		///<summary>Retrieves all registration keys for a particular customer's family. There can be multiple keys assigned to a single customer, or keys assigned to individual family members, since the customer may have multiple physical locations of business.</summary>
-		public static RegistrationKey[] GetForPatient(int patNum){
+		public static RegistrationKey[] GetForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RegistrationKey[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -109,7 +109,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void Delete(int registrationKeyNum){
+		public static void Delete(long registrationKeyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKeyNum);
 				return;

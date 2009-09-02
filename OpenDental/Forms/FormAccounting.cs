@@ -333,7 +333,7 @@ namespace OpenDental{
 				{
 					row.ColorLborder=Color.Black;
 				}
-				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["color"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.PInt32(table.Rows[i]["color"].ToString()));
 				gridMain.Rows.Add(row);
 			}
 			/*for(int i=0;i<Accounts.ListLong.Length;i++){
@@ -382,7 +382,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please pick an account first.");
 				return;
 			}
-			int acctNum=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AccountNum"].ToString());
+			long acctNum=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AccountNum"].ToString());
 			if(acctNum==0) {
 				MsgBox.Show(this,"This account is generated automatically, and cannot be edited.");
 				return;
@@ -399,7 +399,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			int acctNum=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AccountNum"].ToString());
+			long acctNum=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AccountNum"].ToString());
 			if(acctNum==0) {
 				MsgBox.Show(this,"This account is generated automatically, and there is currently no way to view the detail.  It is the sum of all income minus all expenses for all previous years.");
 				return;

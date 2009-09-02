@@ -914,7 +914,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Used in ContrAccount.CreateClaim when validating selected procedures. Returns true if there is any claimproc for this procedure and plan which is marked NoBillIns.  The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are set NoBillIns.</summary>
-		public static bool NoBillIns(Procedure proc,List<ClaimProc> claimProcList,int planNum) {
+		public static bool NoBillIns(Procedure proc,List<ClaimProc> claimProcList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			if(proc==null) {
 				return false;
@@ -1004,7 +1004,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this plan that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
-		public static bool NeedsSent(int procNum,List<ClaimProc> claimProcList,long planNum) {
+		public static bool NeedsSent(long procNum,List<ClaimProc> claimProcList,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
 				if(claimProcList[i].ProcNum==procNum

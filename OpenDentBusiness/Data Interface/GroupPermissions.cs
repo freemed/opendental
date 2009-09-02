@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void RemovePermission(int groupNum,Permissions permType){
+		public static void RemovePermission(long groupNum,Permissions permType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),groupNum,permType);
 				return;
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a GroupPermission based on the supplied userGroupNum and permType.  If not found, then it returns null.  Used in FormSecurity when double clicking on a dated permission or when clicking the all button.</summary>
-		public static GroupPermission GetPerm(int userGroupNum,Permissions permType){
+		public static GroupPermission GetPerm(long userGroupNum,Permissions permType) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<GroupPermissionC.List.Length;i++){
 				if(GroupPermissionC.List[i].UserGroupNum==userGroupNum && GroupPermissionC.List[i].PermType==permType){

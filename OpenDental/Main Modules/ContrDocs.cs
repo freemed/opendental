@@ -703,7 +703,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(int patNum){
+		public void ModuleSelected(long patNum) {
 			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
 				this.Enabled=false;
@@ -723,7 +723,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void RefreshModuleData(int patNum){
+		private void RefreshModuleData(long patNum) {
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
 				imageStore=null;
@@ -757,7 +757,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);

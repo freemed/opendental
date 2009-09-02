@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns a single mount object corresponding to the given mount number key.</summary>
-		public static Mount GetByNum(int mountNum){
+		public static Mount GetByNum(long mountNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Mount>(MethodBase.GetCurrentMethod(),mountNum);
 			}

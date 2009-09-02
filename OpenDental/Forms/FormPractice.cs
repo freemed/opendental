@@ -618,10 +618,9 @@ namespace OpenDental{
 			}
 			listPlaceService.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(PlaceOfService)).Length;i++){
-				listPlaceService.Items.Add
-					(Lan.g("enumPlaceOfService",Enum.GetNames(typeof(PlaceOfService))[i]));
+				listPlaceService.Items.Add(Lan.g("enumPlaceOfService",Enum.GetNames(typeof(PlaceOfService))[i]));
 			}
-			listPlaceService.SelectedIndex=PrefC.GetInt("DefaultProcedurePlaceService");
+			listPlaceService.SelectedIndex=PrefC.GetInt32("DefaultProcedurePlaceService");
 			for(int i=0;i<ProviderC.List.Length;i++){
 				comboInsBillingProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}

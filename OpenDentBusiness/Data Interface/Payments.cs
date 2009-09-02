@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Payments {
 		///<summary>Gets all payments for the specified patient. This has NOTHING to do with pay splits.  Must use pay splits for accounting.  This is only for display in Account module.</summary>
-		public static List <Payment> Refresh(int patNum) {
+		public static List<Payment> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Get one specific payment from db.</summary>
-		public static Payment GetPayment(int payNum) {
+		public static Payment GetPayment(long payNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Payment>(MethodBase.GetCurrentMethod(),payNum);
 			}
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Get all specified payments.</summary>
-		public static List<Payment> GetPayments(List <int> payNums) {
+		public static List<Payment> GetPayments(List<long> payNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),payNums);
 			}
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all payments attached to a single deposit.</summary>
-		public static List <Payment> GetForDeposit(int depositNum) {
+		public static List<Payment> GetForDeposit(long depositNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),depositNum);
 			}
@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all unattached payments for a new deposit slip.  Excludes payments before dateStart.  There is a chance payTypes might be of length 1 or even 0.</summary>
-		public static List <Payment> GetForDeposit(DateTime dateStart,int clinicNum,List <int> payTypes) {
+		public static List<Payment> GetForDeposit(DateTime dateStart,long clinicNum,List<long> payTypes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <Payment>>(MethodBase.GetCurrentMethod(),dateStart,clinicNum,payTypes);
 			}
@@ -236,7 +236,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Called just before Allocate in FormPayment.butOK click.  If true, then it will prompt the user before allocating.</summary>
-		public static bool AllocationRequired(double payAmt, int patNum){
+		public static bool AllocationRequired(double payAmt,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),payAmt,patNum);
 			}
@@ -553,7 +553,7 @@ namespace OpenDentBusiness{
 		}		
 
 		///<summary>Used for display in ProcEdit. List MUST include the requested payment. Use GetPayments to get the list.</summary>
-		public static Payment GetFromList(int payNum,List <Payment> List){
+		public static Payment GetFromList(long payNum,List<Payment> List) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Count;i++){
 				if(List[i].PayNum==payNum){

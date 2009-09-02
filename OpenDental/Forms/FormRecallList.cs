@@ -46,7 +46,7 @@ namespace OpenDental{
 		private ValidDate textDateStart;
 		private CheckBox checkGroupFamilies;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		private OpenDental.UI.Button butPrint;
 		DataTable table;
 		private bool headingPrinted;
@@ -66,7 +66,7 @@ namespace OpenDental{
 		private Label label5;
 		private OpenDental.UI.Button butLabelOne;
 		///<summary>Only used if PinClicked=true</summary>
-		public List<int> AptNumsSelected;
+		public List<long> AptNumsSelected;
 
 		///<summary></summary>
 		public FormRecallList(){

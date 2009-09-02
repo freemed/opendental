@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one SheetFieldDef from the database.</Summary>
-		public static SheetFieldDef CreateObject(int sheetFieldDefNum){
+		public static SheetFieldDef CreateObject(long sheetFieldDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SheetFieldDef>(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
 			}
@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetFieldDefNum){
+		public static void DeleteObject(long sheetFieldDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldDefNum);
 				return;

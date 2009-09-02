@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ProcTPs {
 		///<summary>Gets all ProcTPs for a given Patient ordered by ItemOrder.</summary>
-		public static ProcTP[] Refresh(int patNum) {
+		public static ProcTP[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ProcTP[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Only used when obtaining the signature data.  Ordered by ItemOrder.</summary>
-		public static List<ProcTP> RefreshForTP(int tpNum){
+		public static List<ProcTP> RefreshForTP(long tpNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ProcTP>>(MethodBase.GetCurrentMethod(),tpNum);
 			}
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list for just one tp.  Used in TP module.  Supply a list of all ProcTPs for pt.</summary>
-		public static ProcTP[] GetListForTP(int treatPlanNum, ProcTP[] listAll){
+		public static ProcTP[] GetListForTP(long treatPlanNum,ProcTP[] listAll) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<listAll.Length;i++){
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 		
 
 		///<summary>No dependencies to worry about.</summary>
-		public static void DeleteForTP(int treatPlanNum){
+		public static void DeleteForTP(long treatPlanNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),treatPlanNum);
 				return;

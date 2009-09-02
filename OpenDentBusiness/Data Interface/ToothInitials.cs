@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class ToothInitials {
 
 		///<summary>Gets all toothinitial entries for the current patient.</summary>
-		public static List<ToothInitial> Refresh(int patNum) {
+		public static List<ToothInitial> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ToothInitial>>(MethodBase.GetCurrentMethod(),patNum);
 			}

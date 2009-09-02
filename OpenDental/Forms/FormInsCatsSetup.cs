@@ -283,7 +283,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			bool isCat=false;
-			int selectedKey=0;
+			long selectedKey=0;
 			if(gridMain.Rows[e.Row].Tag.GetType()==typeof(CovCat)){
 				isCat=true;
 				selectedKey=((CovCat)gridMain.Rows[e.Row].Tag).CovCatNum;
@@ -347,7 +347,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a category first.");
 				return;
 			}
-			int catNum=((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag).CovCatNum;
+			long catNum=((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag).CovCatNum;
 			CovCats.MoveUp((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag);
 			changed=true;
 			FillSpans();
@@ -367,7 +367,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a category first.");
 				return;
 			}
-			int catNum=((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag).CovCatNum;
+			long catNum=((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag).CovCatNum;
 			CovCats.MoveDown((CovCat)gridMain.Rows[gridMain.SelectedIndices[0]].Tag);
 			changed=true;
 			FillSpans();

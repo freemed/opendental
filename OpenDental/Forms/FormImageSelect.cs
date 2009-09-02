@@ -20,7 +20,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		public int PatNum;
+		public long PatNum;
 		private Document[] Docs;
 		///<summary>If DialogResult==OK, then this will contain the new ClaimAttach with the filename that the file was saved under.  File will be in the EmailAttachments folder.  But ClaimNum will not be set.</summary>
 		public ClaimAttach ClaimAttachNew;

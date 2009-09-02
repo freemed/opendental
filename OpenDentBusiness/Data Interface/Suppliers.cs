@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Supplier>.DeleteObject(supp);
 		}
 
-		public static string GetName(List<Supplier> listSupplier,int supplierNum){
+		public static string GetName(List<Supplier> listSupplier,long supplierNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listSupplier.Count;i++){
 				if(listSupplier[i].SupplierNum==supplierNum){

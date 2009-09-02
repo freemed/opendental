@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 			return Relat.Self;
 		}
 
-		public static string GetPatID(List <PatPlan> patPlans,int planNum) {
+		public static string GetPatID(List<PatPlan> patPlans,long planNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int p=0;p<patPlans.Count;p++) {
 				if(patPlans[p].PlanNum==planNum) {

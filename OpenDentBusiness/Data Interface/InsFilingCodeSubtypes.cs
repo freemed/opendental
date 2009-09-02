@@ -34,7 +34,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<Summary>Gets one InsFilingCodeSubtype from the database.</Summary>
-		public static InsFilingCodeSubtype CreateObject(int insFilingCodeSubtypeNum) {
+		public static InsFilingCodeSubtype CreateObject(long insFilingCodeSubtypeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<InsFilingCodeSubtype>(MethodBase.GetCurrentMethod(),insFilingCodeSubtypeNum);
 			}
@@ -64,7 +64,7 @@ namespace OpenDentBusiness {
 			DataObjectFactory<InsFilingCodeSubtype>.DeleteObject(insFilingCodeSubtypeNum);
 		}
 
-		public static List <InsFilingCodeSubtype> GetForInsFilingCode(int insFilingCodeNum) {
+		public static List<InsFilingCodeSubtype> GetForInsFilingCode(long insFilingCodeNum) {
 			List <InsFilingCodeSubtype> insFilingCodeSubtypes=new List<InsFilingCodeSubtype>();
 			for(int i=0;i<InsFilingCodeSubtypeC.Listt.Count;i++){
 				if(InsFilingCodeSubtypeC.Listt[i].InsFilingCodeNum==insFilingCodeNum){
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 			return insFilingCodeSubtypes;
 		}
 
-		public static void DeleteForInsFilingCode(int insFilingCodeNum){
+		public static void DeleteForInsFilingCode(long insFilingCodeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeNum);
 				return;

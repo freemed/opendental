@@ -24,11 +24,11 @@ namespace OpenDental.Imaging {
 
 		void ImportImage(Document document, string filename);
 		/// <summary>This will also save the new document.</summary>
-		Document Import(Bitmap image, int docCategory, ImageType imageType);
-		Document Import(string path, int docCategory);
-		Document Import(Bitmap image, int docCategory);
-		Document ImportCapturedImage(Bitmap image, short rotationAngle, int mountItemNum, int docCategory);
-		Document ImportForm(string form, int docCategory);
+		Document Import(Bitmap image,long docCategory,ImageType imageType);
+		Document Import(string path,long docCategory);
+		Document Import(Bitmap image,long docCategory);
+		Document ImportCapturedImage(Bitmap image,short rotationAngle,long mountItemNum,long docCategory);
+		Document ImportForm(string form,long docCategory);
 		void ImportPdf(string sPDF);
 
 		string GetHashString(Document doc);

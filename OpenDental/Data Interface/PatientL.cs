@@ -101,13 +101,13 @@ namespace OpenDental{
 	
 	///<summary></summary>
 	public class PatientSelectedEventArgs{
-		private int patNum;
+		private long patNum;
 		private string patName;
 		private bool hasEmail;
 		private string chartNumber;
 
 		///<summary></summary>
-		public PatientSelectedEventArgs(int patNum,string patName,bool hasEmail,string chartNumber){
+		public PatientSelectedEventArgs(long patNum,string patName,bool hasEmail,string chartNumber) {
 			this.patNum=patNum;
 			this.patName=patName;
 			this.hasEmail=hasEmail;
@@ -115,7 +115,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public int PatNum{
+		public long PatNum {
 			get{ 
 				return patNum;
 			}

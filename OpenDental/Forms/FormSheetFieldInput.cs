@@ -102,10 +102,10 @@ namespace OpenDental {
 			SheetFieldDefCur.FontName=comboFontName.Text;
 			SheetFieldDefCur.FontSize=fontSize;
 			SheetFieldDefCur.FontIsBold=checkFontIsBold.Checked;
-			SheetFieldDefCur.XPos=PIn.PInt(textXPos.Text);
-			SheetFieldDefCur.YPos=PIn.PInt(textYPos.Text);
-			SheetFieldDefCur.Width=PIn.PInt(textWidth.Text);
-			SheetFieldDefCur.Height=PIn.PInt(textHeight.Text);
+			SheetFieldDefCur.XPos=PIn.PInt32(textXPos.Text);
+			SheetFieldDefCur.YPos=PIn.PInt32(textYPos.Text);
+			SheetFieldDefCur.Width=PIn.PInt32(textWidth.Text);
+			SheetFieldDefCur.Height=PIn.PInt32(textHeight.Text);
 			SheetFieldDefCur.GrowthBehavior=(GrowthBehaviorEnum)comboGrowthBehavior.SelectedIndex;
 			//don't save to database here.
 			DialogResult=DialogResult.OK;

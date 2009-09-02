@@ -280,7 +280,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a list of procedure codes directly from the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
-		public static DataTable GetProcTable(string abbr,string desc,string code,List <int> categories,int feeSched,
+		public static DataTable GetProcTable(string abbr,string desc,string code,List<long> categories,long feeSched,
 			int feeSchedComp1,int feeSchedComp2){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),abbr,desc,code,categories,feeSched,feeSchedComp1,feeSchedComp2);
@@ -319,7 +319,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
-		public static string GetLaymanTerm(int codeNum) {
+		public static string GetLaymanTerm(long codeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ProcedureCodeC.Listt.Count;i++) {
 				if(ProcedureCodeC.Listt[i].CodeNum==codeNum) {

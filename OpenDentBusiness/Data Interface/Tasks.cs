@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Gets one Task from database.</summary>
-		public static Task GetOne(int TaskNum) {
+		public static Task GetOne(long TaskNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Task>(MethodBase.GetCurrentMethod(),TaskNum);
 			}
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
-		public static List<Task> RefreshChildren(int listNum, bool showDone,DateTime startDate) {
+		public static List<Task> RefreshChildren(long listNum,bool showDone,DateTime startDate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod(),listNum,showDone,startDate);
 			}
@@ -300,7 +300,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
-		public static int UserTasksCount(int userNum){
+		public static int UserTasksCount(long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt32(MethodBase.GetCurrentMethod(),userNum);
 			}

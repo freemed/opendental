@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes all ToolButItems for the Programs.Cur.  This is used regularly when saving a Program link because of the way the user interface works.</summary>
-		public static void DeleteAllForProgram(int programNum){
+		public static void DeleteAllForProgram(long programNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),programNum);
 				return;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
-		public static List<ToolButItem> GetForProgram(int programNum){
+		public static List<ToolButItem> GetForProgram(long programNum) {
 			//No need to check RemotingRole; no call to db.
 			if(List==null) {
 				RefreshCache();

@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>For the current exam, clears existing skipped teeth and resets them to the specified skipped teeth. The ArrayList valid values are 1-32 int.</summary>
-		public static void SetSkipped(int perioExamNum, ArrayList skippedTeeth){
+		public static void SetSkipped(long perioExamNum,ArrayList skippedTeeth) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),perioExamNum,skippedTeeth);
 				return;
@@ -115,7 +115,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormPerio.Add_Click. For the specified exam, gets a list of all skipped teeth. The ArrayList valid values are 1-32 int.</summary>
-		public static ArrayList GetSkipped(int perioExamNum){
+		public static ArrayList GetSkipped(long perioExamNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),perioExamNum);
 			}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all measurements for the current patient, then organizes them by exam and sequence.</summary>
-		public static void Refresh(int patNum,List<PerioExam> listPerioExams) {
+		public static void Refresh(long patNum,List<PerioExam> listPerioExams) {
 			//No need to check RemotingRole; no call to db.
 			DataTable table=GetMeasurementTable(patNum,listPerioExams);
 			List=new PerioMeasure[listPerioExams.Count,Enum.GetNames(typeof(PerioSequenceType)).Length,33];
@@ -162,7 +162,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		public static DataTable GetMeasurementTable(int patNum,List<PerioExam> listPerioExams) {
+		public static DataTable GetMeasurementTable(long patNum,List<PerioExam> listPerioExams) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum,listPerioExams);
 			}

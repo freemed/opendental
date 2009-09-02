@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class LabTurnarounds {
 
 		///<summary></summary>
-		public static List<LabTurnaround> GetForLab(int laboratoryNum) {
+		public static List<LabTurnaround> GetForLab(long laboratoryNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LabTurnaround>>(MethodBase.GetCurrentMethod(),laboratoryNum);
 			}
@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is used when saving a laboratory.  All labturnarounds for the lab are deleted and recreated.  So the list that's passed in will not have the correct keys set.  The key columns will be ignored.</summary>
-		public static void SetForLab(int labNum,List<LabTurnaround> lablist){
+		public static void SetForLab(long labNum,List<LabTurnaround> lablist) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum,lablist);
 				return;

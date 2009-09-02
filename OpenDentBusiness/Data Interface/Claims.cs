@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class Claims{
 		
 		///<summary></summary>
-		public static List<ClaimPaySplit> RefreshByCheck(int claimPaymentNum, bool showUnattached){
+		public static List<ClaimPaySplit> RefreshByCheck(long claimPaymentNum,bool showUnattached) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),claimPaymentNum,showUnattached);
 			}
@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the specified claim from the database.</summary>
-		public static Claim GetClaim(int claimNum){
+		public static Claim GetClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Claim>(MethodBase.GetCurrentMethod(),claimNum);
 			}
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets all claims for the specified patient. But without any attachments.</summary>
-		public static List<Claim> Refresh(int patNum){
+		public static List<Claim> Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Claim>>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -142,7 +142,7 @@ namespace OpenDentBusiness{
 			return claims;
 		}
 
-		public static Claim GetFromList(List<Claim> list,int claimNum) {
+		public static Claim GetFromList(List<Claim> list,long claimNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<list.Count;i++) {
 				if(list[i].ClaimNum==claimNum) {
@@ -318,7 +318,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
-		public static ClaimSendQueueItem[] GetQueueList(int claimNum,int clinicNum){
+		public static ClaimSendQueueItem[] GetQueueList(long claimNum,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimSendQueueItem[]>(MethodBase.GetCurrentMethod(),claimNum,clinicNum);
 			}
@@ -358,15 +358,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(int claimNum){
+		public static object[,] GetX12TransactionInfo(long claimNum) {
 			//No need to check RemotingRole; no call to db.
-			List <int> claimNums=new List <int> ();
+			List<long> claimNums=new List<long>();
 			claimNums.Add(claimNum);
 			return GetX12TransactionInfo(claimNums);
 		}
 
 		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(List <int> claimNums){//ArrayList queueItemss){
+		public static object[,] GetX12TransactionInfo(List<long> claimNums) {//ArrayList queueItemss){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<object[,]>(MethodBase.GetCurrentMethod(),claimNums);
 			}

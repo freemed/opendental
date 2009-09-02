@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the name of an employer based on the employerNum.  This also refreshes the list if necessary, so it will work even if the list has not been refreshed recently.</summary>
-		public static string GetName(int employerNum){
+		public static string GetName(long employerNum) {
 			//No need to check RemotingRole; no call to db.
 			if(employerNum==0){
 				return "";
@@ -199,7 +199,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets an employer based on the employerNum. This will work even if the list has not been refreshed recently, but if you are going to need a lot of names all at once, then it is faster to refresh first.</summary>
-		public static Employer GetEmployer(int employerNum){
+		public static Employer GetEmployer(long employerNum) {
 			//No need to check RemotingRole; no call to db.
 			if(employerNum==0){
 				return new Employer();
@@ -251,7 +251,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Combines all the given employers into one. Updates patient and insplan. Then deletes all the others.</summary>
-		public static void Combine(List <int> employerNums){
+		public static void Combine(List<long> employerNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),employerNums);
 				return;

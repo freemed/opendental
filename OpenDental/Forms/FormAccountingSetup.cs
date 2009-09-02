@@ -34,9 +34,9 @@ namespace OpenDental{
 		private TextBox textAccountCashInc;
 		private Label label5;
 		private OpenDental.UI.Button butAddPay;
-		private int PickedDepAccountNum;
+		private long PickedDepAccountNum;
 		//private ArrayList cashAL;
-		private int PickedPayAccountNum;
+		private long PickedPayAccountNum;
 		private OpenDental.UI.ODGrid gridMain;
 		///<summary>Arraylist of AccountingAutoPays.</summary>
 		private ArrayList payAL;

@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class Screens{
 	
 		///<summary></summary>
-		public static Screen[] Refresh(int screenGroupNum){
+		public static Screen[] Refresh(long screenGroupNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Screen[]>(MethodBase.GetCurrentMethod(),screenGroupNum);
 			}

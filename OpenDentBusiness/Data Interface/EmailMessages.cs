@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	///<summary>An email message is always attached to a patient.</summary>
 	public class EmailMessages{
 		///<summary>Gets one email message from the database.</summary>
-		public static EmailMessage GetOne(int msgNum){
+		public static EmailMessage GetOne(long msgNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<EmailMessage>(MethodBase.GetCurrentMethod(),msgNum);
 			}

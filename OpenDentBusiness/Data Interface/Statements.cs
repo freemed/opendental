@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Statements{
 		///<Summary>Gets one statement from the database.</Summary>
-		public static Statement CreateObject(int statementNum){
+		public static Statement CreateObject(long statementNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Statement>(MethodBase.GetCurrentMethod(),statementNum);
 			}
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Statement>.DeleteObject(statement);
 		}
 
-		public static void DeleteObject(int statementNum){
+		public static void DeleteObject(long statementNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
 				return;
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		public static void MarkSent(int statementNum,DateTime dateSent) {
+		public static void MarkSent(long statementNum,DateTime dateSent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,dateSent);
 				return;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static void AttachDoc(int statementNum,int docNum) {
+		public static void AttachDoc(long statementNum,long docNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,docNum);
 				return;
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable GetStatementNotes(int PatientID){
+		public static DataTable GetStatementNotes(long PatientID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
 			}
@@ -204,7 +204,7 @@ namespace OpenDentBusiness{
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetStatementInfo(int PatientID){
+		public static DataTable GetStatementInfo(long PatientID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatientID);
 			}

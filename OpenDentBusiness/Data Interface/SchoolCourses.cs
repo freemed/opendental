@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Delete(int courseNum){
+		public static void Delete(long courseNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),courseNum);
 				return;
@@ -129,7 +129,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Description is CourseID Descript.</summary>
-		public static string GetDescript(int schoolCourseNum) {
+		public static string GetDescript(long schoolCourseNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].SchoolCourseNum==schoolCourseNum) {
@@ -144,7 +144,7 @@ namespace OpenDentBusiness{
 			return course.CourseID+" "+course.Descript;
 		}
 
-		public static string GetCourseID(int schoolCourseNum) {
+		public static string GetCourseID(long schoolCourseNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].SchoolCourseNum==schoolCourseNum) {

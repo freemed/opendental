@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes all lettermergefields for the given letter.  This is then followed by adding them all back, which is simpler than just updating.</summary>
-		public static void DeleteForLetter(int letterMergeNum){
+		public static void DeleteForLetter(long letterMergeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),letterMergeNum);
 				return;

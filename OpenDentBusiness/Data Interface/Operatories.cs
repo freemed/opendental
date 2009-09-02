@@ -120,7 +120,7 @@ namespace OpenDentBusiness{
 			return TableToList(table);
 		}
 
-		public static string GetAbbrev(int operatoryNum){
+		public static string GetAbbrev(long operatoryNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.Listt.Count;i++){
 				if(OperatoryC.Listt[i].OperatoryNum==operatoryNum){
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the order of the op within ListShort or -1 if not found.</summary>
-		public static int GetOrder(int opNum) {
+		public static int GetOrder(long opNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.ListShort.Count;i++) {
 				if(OperatoryC.ListShort[i].OperatoryNum==opNum) {
@@ -142,7 +142,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Operatory GetOperatory(int operatoryNum) {
+		public static Operatory GetOperatory(long operatoryNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.Listt.Count;i++) {
 				if(OperatoryC.Listt[i].OperatoryNum==operatoryNum) {

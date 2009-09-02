@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		//public static Contact[] List;//for one category only. Not refreshed with local data
 
 		///<summary></summary>
-		public static Contact[] Refresh(int category){
+		public static Contact[] Refresh(long category) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Contact[]>(MethodBase.GetCurrentMethod(),category);
 			}

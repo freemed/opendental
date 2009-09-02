@@ -97,9 +97,6 @@ namespace OpenDentBusiness {
 			string command="DELETE FROM terminalactive WHERE TerminalActiveNum ="+POut.PInt(te.TerminalActiveNum);
 			Db.NonQ(command);
 		}
-
-	
-
 	
 		///<summary>Run when starting up a terminal window to delete any previous entries for this computer that didn't get deleted properly.</summary>
 		public static void DeleteAllForComputer(string computerName){
@@ -112,7 +109,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Called whenever user wants to edit patient info.  Not allowed to if patient edit window is open at a terminal.  Once patient is done at terminal, then staff allowed back into patient edit window.</summary>
-		public static bool PatIsInUse(int patNum){
+		public static bool PatIsInUse(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum);
 			}

@@ -120,7 +120,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
-		public static int GetIndexProv(int provNum) {
+		public static int GetIndexProv(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisProvs.Count;i++) {
 				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
@@ -130,7 +130,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in FormApptViewEdit. Must have run GetForCurView first.</summary>
-		public static bool OpIsInView(int opNum) {
+		public static bool OpIsInView(long opNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForCurView.Count;i++) {
 				if(ForCurView[i].OpNum==opNum)
@@ -140,7 +140,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
-		public static bool ProvIsInView(int provNum) {
+		public static bool ProvIsInView(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForCurView.Count;i++) {
 				if(ForCurView[i].ProvNum==provNum)
@@ -150,7 +150,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
-		public static int GetIndexOp(int opNum) {
+		public static int GetIndexOp(long opNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisOps.Count;i++) {
 				if(OperatoryC.ListShort[VisOps[i]].OperatoryNum==opNum)

@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		}*/
 
 		///<summary></summary>
-		public static RxPat GetRx(int rxNum) {
+		public static RxPat GetRx(long rxNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RxPat>(MethodBase.GetCurrentMethod(),rxNum);
 			}
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Delete(int rxNum) {
+		public static void Delete(long rxNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),rxNum);
 				return;

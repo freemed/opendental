@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Loops through the AList to find one with the specified payType (defNum).  If none is found, then it returns null.</summary>
-		public static AccountingAutoPay GetForPayType(int payType){
+		public static AccountingAutoPay GetForPayType(long payType) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<AccountingAutoPayC.AList.Count;i++){
 				if(((AccountingAutoPay)AccountingAutoPayC.AList[i]).PayType==payType){

@@ -171,7 +171,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the claim form specified by the given claimFormNum</summary>
-		public static ClaimForm GetClaimForm(int claimFormNum){
+		public static ClaimForm GetClaimForm(long claimFormNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].ClaimFormNum==claimFormNum){

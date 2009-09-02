@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 ///<summary></summary>
 	public class ReqStudents{
 
-		public static List<ReqStudent> GetForAppt(int aptNum) {
+		public static List<ReqStudent> GetForAppt(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ReqStudent>>(MethodBase.GetCurrentMethod(),aptNum);
 			}
@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
-		public static ReqStudent GetOne(int ReqStudentNum) {
+		public static ReqStudent GetOne(long ReqStudentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ReqStudent>(MethodBase.GetCurrentMethod(),ReqStudentNum);
 			}
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try/catch.</summary>
-		public static void Delete(int reqStudentNum) {
+		public static void Delete(long reqStudentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqStudentNum);
 				return;
@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		public static DataTable RefreshOneStudent(int provNum){
+		public static DataTable RefreshOneStudent(long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),provNum);
 			}
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable RefreshManyStudents(int classNum,int courseNum) {
+		public static DataTable RefreshManyStudents(long classNum,long courseNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),classNum,courseNum);
 			}
@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static List<Provider> GetStudents(int classNum) {
+		public static List<Provider> GetStudents(long classNum) {
 			//No need to check RemotingRole; no call to db.
 			List<Provider> retVal=new List<Provider>();
 			for(int i=0;i<ProviderC.List.Length;i++){
@@ -209,7 +209,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Provider(student) is required.</summary>
-		public static DataTable GetForCourseClass(int schoolCourse,int schoolClass){
+		public static DataTable GetForCourseClass(long schoolCourse,long schoolClass) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),schoolCourse,schoolClass);
 			}
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 
 		
 		///<summary>All fields for all reqs will have already been set.  All except for reqstudent.ReqStudentNum if new.  Now, they just have to be persisted to the database.</summary>
-		public static void SynchApt(List<ReqStudent> reqsAttached,int aptNum){
+		public static void SynchApt(List<ReqStudent> reqsAttached,long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),reqsAttached,aptNum);
 				return;
@@ -251,7 +251,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Before reqneeded.Delete, this checks to make sure that req is not in use by students.  Used to prompt user.</summary>
-		public static string InUseBy(int reqNeededNum){
+		public static string InUseBy(long reqNeededNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),reqNeededNum);
 			}

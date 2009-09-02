@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class RepeatCharges {
 		///<summary>Gets a list of all RepeatCharges for a given patient.  Supply 0 to get a list for all patients.</summary>
-		public static RepeatCharge[] Refresh(int patNum) {
+		public static RepeatCharge[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RepeatCharge[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used in FormRepeatChargesUpdate to get a list of the dates of procedures that have the proccode and patnum specified.</summary>
-		public static ArrayList GetDates(int codeNum,int patNum){
+		public static ArrayList GetDates(long codeNum,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ArrayList>(MethodBase.GetCurrentMethod(),codeNum,patNum);
 			}

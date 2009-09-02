@@ -30,12 +30,12 @@ namespace OpenDental{
 		private GroupBox groupBox2;
 		private ComboBox comboClaimForm;
 		private ComboBox comboEFormat;
-		private int PatNum;
-		public int ClaimFormNum;
+		private long PatNum;
+		public long ClaimFormNum;
 		public EtransType EFormat;
 
 		///<summary></summary>
-		public FormClaimCreate(int patNum){
+		public FormClaimCreate(long patNum) {
 			InitializeComponent();
 			PatNum=patNum;
 			//tbPlans.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPlans_CellDoubleClicked);

@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class SheetFields{
 
 		///<Summary>Gets one SheetField from the database.</Summary>
-		public static SheetField CreateObject(int sheetFieldNum){
+		public static SheetField CreateObject(long sheetFieldNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SheetField>(MethodBase.GetCurrentMethod(),sheetFieldNum);
 			}
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetFieldNum){
+		public static void DeleteObject(long sheetFieldNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),sheetFieldNum);
 				return;
@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes all existing drawing fields for a sheet from the database and then adds back the list supplied.</summary>
-		public static void SetDrawings(List<SheetField> drawingList,int sheetNum){
+		public static void SetDrawings(List<SheetField> drawingList,long sheetNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),drawingList,sheetNum);
 				return;

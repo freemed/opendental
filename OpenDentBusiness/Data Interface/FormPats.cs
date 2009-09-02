@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			return Cur.FormPatNum;
 		}
 
-		public static FormPat GetOne(int formPatNum){
+		public static FormPat GetOne(long formPatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<FormPat>(MethodBase.GetCurrentMethod(),formPatNum);
 			}
@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 		
 
 		///<summary></summary>
-		public static void Delete(int formPatNum){
+		public static void Delete(long formPatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),formPatNum);
 				return;

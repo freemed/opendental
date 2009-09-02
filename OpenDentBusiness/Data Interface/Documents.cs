@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 	public class Documents {
 
 		///<summary></summary>
-		public static Document[] GetAllWithPat(int patNum) {
+		public static Document[] GetAllWithPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets the document with the specified document number.</summary>
-		public static Document GetByNum(int docNum){
+		public static Document GetByNum(long docNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document>(MethodBase.GetCurrentMethod(),docNum);
 			}

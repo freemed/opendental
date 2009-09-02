@@ -64,7 +64,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void Delete(int autoNoteControlNum) {
+		public static void Delete(long autoNoteControlNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoNoteControlNum);
 				return;

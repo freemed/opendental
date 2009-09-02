@@ -7,7 +7,7 @@ using System.Reflection;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Diseases {
-		public static Disease GetSpecificDiseaseForPatient(int patNum,int diseaseDefNum) {
+		public static Disease GetSpecificDiseaseForPatient(long patNum,long diseaseDefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Disease>(MethodBase.GetCurrentMethod(),patNum,diseaseDefNum);
 			}
@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
-		public static Disease[] Refresh(int patNum) {
+		public static Disease[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Disease[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
@@ -101,7 +101,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Deletes all diseases for one patient.</summary>
-		public static void DeleteAllForPt(int patNum){
+		public static void DeleteAllForPt(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;

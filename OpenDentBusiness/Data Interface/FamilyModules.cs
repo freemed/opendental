@@ -6,7 +6,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class FamilyModules {
-		public static DataSet GetAll(int patNum) {
+		public static DataSet GetAll(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum);
 			} 
@@ -37,7 +37,7 @@ namespace OpenDentBusiness {
 			return ds;
 		}
 
-		public static DataTable GetPatPlanList(int patNum){
+		public static DataTable GetPatPlanList(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),patNum);
 			}

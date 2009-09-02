@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a list of all patients using this medication.</summary>
-		public static string[] GetPats(int medicationNum){
+		public static string[] GetPats(long medicationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),medicationNum);
 			}
@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a list of all brands dependend on this generic. Only gets run if this is a generic.</summary>
-		public static string[] GetBrands(int medicationNum){
+		public static string[] GetBrands(long medicationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),medicationNum);
 			}
@@ -134,13 +134,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static Medication GetMedication(int medNum){
+		public static Medication GetMedication(long medNum) {
 			//No need to check RemotingRole; no call to db.
 			return (Medication)HList[medNum];
 		}
 
 		///<summary>Gets the generic medication for the specified medication Num.</summary>
-		public static Medication GetGeneric(int medNum) {
+		public static Medication GetGeneric(long medNum) {
 			//No need to check RemotingRole; no call to db.
 			return (Medication)HList[((Medication)HList[medNum]).GenericNum];
 		}

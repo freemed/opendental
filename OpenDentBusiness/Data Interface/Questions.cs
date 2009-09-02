@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Questions {
 		///<summary>Gets a list of all Questions for a given patient.  Sorted by ItemOrder.</summary>
-		public static Question[] Refresh(int patNum) {
+		public static Question[] Refresh(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Question[]>(MethodBase.GetCurrentMethod(),patNum);
 			}

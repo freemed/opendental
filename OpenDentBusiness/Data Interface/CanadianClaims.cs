@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 	public class CanadianClaims{
 	
 		///<summary>Will frequently return null when no canadianClaim saved yet.</summary>
-		public static CanadianClaim GetForClaim(int claimNum){
+		public static CanadianClaim GetForClaim(long claimNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<CanadianClaim>(MethodBase.GetCurrentMethod(),claimNum);
 			}
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>An important part of creating a "canadian claim" is setting all the missing teeth.  So this must be passed in.  It is preferrable to not include any dates with the missing teeth.  This will force the user to enter dates.</summary>
-		public static CanadianClaim Insert(int claimNum, List<CanadianExtract> missingList){
+		public static CanadianClaim Insert(long claimNum,List<CanadianExtract> missingList) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<CanadianClaim>(MethodBase.GetCurrentMethod(),missingList);
 			}

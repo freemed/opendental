@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	public class SupplyOrders {
 
 		///<summary>Gets all SupplyOrders for one supplier, ordered by date.</summary>
-		public static List<SupplyOrder> CreateObjects(int supplierNum){
+		public static List<SupplyOrder> CreateObjects(long supplierNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<SupplyOrder>>(MethodBase.GetCurrentMethod(),supplierNum);
 			}

@@ -162,7 +162,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the order in ListLong, whether hidden or not.</summary>
-		public static int GetOrder(int diseaseDefNum){
+		public static int GetOrder(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].DiseaseDefNum==diseaseDefNum){
@@ -173,7 +173,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the name of the disease, whether hidden or not.</summary>
-		public static string GetName(int diseaseDefNum) {
+		public static string GetName(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].DiseaseDefNum==diseaseDefNum) {
@@ -184,7 +184,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns the diseaseDef with the specified num.</summary>
-		public static DiseaseDef GetItem(int diseaseDefNum) {
+		public static DiseaseDef GetItem(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].DiseaseDefNum==diseaseDefNum) {

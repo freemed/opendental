@@ -41,9 +41,9 @@ namespace OpenDental{
 		//<summary>This will contain a selected appointment upon closing of the form in some situations.  Used when picking an appointment for task lists.  Also used if the GoTo or Create new buttons are clicked.</summary>
 		//public int AptSelected;
 		///<summary>After closing, this may contain aptNums of appointments that should be placed on the pinboard. Used when picking an appointment for task lists.  Also used if the GoTo, Create new, or Recall buttons are pushed.</summary>
-		public List<int> AptNumsSelected;
+		public List<long> AptNumsSelected;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		private TextBox textFinUrg;
 		private Label label3;
 		private OpenDental.UI.Button butNote;
@@ -52,7 +52,7 @@ namespace OpenDental{
 		public string DateJumpToString;
 
 		///<summary></summary>
-		public FormApptsOther(int patNum){//Patient pat,Family fam){
+		public FormApptsOther(long patNum) {//Patient pat,Family fam){
 			InitializeComponent();
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);

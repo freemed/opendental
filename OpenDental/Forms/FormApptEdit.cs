@@ -97,7 +97,7 @@ namespace OpenDental{
 		public bool CloseOD;
 
 		///<summary></summary>
-		public FormApptEdit(int aptNum)
+		public FormApptEdit(long aptNum)
 		{
 			//
 			// Required for Windows Form Designer support

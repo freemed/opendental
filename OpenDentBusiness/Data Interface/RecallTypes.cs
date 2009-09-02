@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<RecallType>.DeleteObject(RecallTypeNum);
 		//}
 
-		public static string GetDescription(int recallTypeNum){
+		public static string GetDescription(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return "";
@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		public static Interval GetInterval(int recallTypeNum){
+		public static Interval GetInterval(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return new Interval(0,0,0,0);
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a collection of proccodes (D####).  Count could be zero.</summary>
-		public static List<string> GetProcs(int recallTypeNum){
+		public static List<string> GetProcs(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			List<string> retVal=new List<string>();
 			if(recallTypeNum==0){
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		public static string GetTimePattern(int recallTypeNum){
+		public static string GetTimePattern(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==0){
 				return "";
@@ -178,7 +178,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		public static string GetSpecialTypeStr(int recallTypeNum){
+		public static string GetSpecialTypeStr(long recallTypeNum) {
 			//No need to check RemotingRole; no call to db.
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
 				return Lans.g("FormRecallTypeEdit","Prophy");

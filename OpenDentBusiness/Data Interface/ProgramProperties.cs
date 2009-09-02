@@ -77,7 +77,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns a List of programproperties attached to the specified programNum</summary>
-		public static List<ProgramProperty> GetListForProgram(int programNum){
+		public static List<ProgramProperty> GetListForProgram(long programNum) {
 			//No need to check RemotingRole; no call to db.
 			List<ProgramProperty> ForProgram=new List<ProgramProperty>();
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
@@ -89,7 +89,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns an ArrayList of programproperties attached to the specified programNum</summary>
-		public static ArrayList GetForProgram(int programNum){
+		public static ArrayList GetForProgram(long programNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList ForProgram=new ArrayList();
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
@@ -100,7 +100,7 @@ namespace OpenDentBusiness {
 			return ForProgram;
 		}
 
-		public static void SetProperty(int programNum,string desc,string propval){
+		public static void SetProperty(long programNum,string desc,string propval) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),programNum,desc,propval);
 				return;

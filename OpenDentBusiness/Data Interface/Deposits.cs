@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a single deposit directly from the database.</summary>
-		public static Deposit GetOne(int depositNum) {
+		public static Deposit GetOne(long depositNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Deposit>(MethodBase.GetCurrentMethod(),depositNum);
 			}

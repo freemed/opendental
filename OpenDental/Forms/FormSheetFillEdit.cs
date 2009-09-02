@@ -389,7 +389,7 @@ namespace OpenDental {
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
-							point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+							point=new Point(PIn.PInt32(xy[0]),PIn.PInt32(xy[1]));
 							points.Add(point);
 						}
 					}
@@ -463,7 +463,7 @@ namespace OpenDental {
 					FormS.Email2Visible=false;//prevents trying to attach email to nonexistent referral.
 				}
 				else{
-					int referralNum=PIn.PInt(parameter.ParamValue.ToString());
+					long referralNum=PIn.PInt(parameter.ParamValue.ToString());
 					referral=Referrals.GetReferral(referralNum);
 					if(referral.EMail!=""){
 						FormS.Email2Address=referral.EMail;

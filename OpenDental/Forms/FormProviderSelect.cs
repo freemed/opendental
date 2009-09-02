@@ -287,13 +287,13 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			int selectedProvNum=0;
+			long selectedProvNum=0;
 			if(gridMain.SelectedIndices.Length==1){
 				selectedProvNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString());
 			}
 			int scroll=gridMain.ScrollValue;
 			Cache.Refresh(InvalidType.Providers);
-			int schoolClass=0;
+			long schoolClass=0;
 			if(groupDentalSchools.Visible && comboClass.SelectedIndex>0){
 				schoolClass=SchoolClasses.List[comboClass.SelectedIndex-1].SchoolClassNum;
 			}
