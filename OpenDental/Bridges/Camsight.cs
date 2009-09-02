@@ -45,7 +45,7 @@ namespace OpenDental.Bridges{
 			info+=";"+Tidy(pat.FName)
 				+";"+Tidy(pat.LName)
 				+";"+pat.SSN//dashes already missing
-				+";"+pat.Birthdate.ToString("MMddyyyy");
+				+";"+pat.Birthdate.ToString("MM/dd/yyyy");
 			Process process=new Process();
 			process.StartInfo=new ProcessStartInfo(ProgramCur.Path,info);
 			try{
