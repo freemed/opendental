@@ -24,7 +24,7 @@ namespace OpenDental.Bridges{
 				return;
 			}
 			if(pat.Race==PatientRace.Unknown) {
-				MsgBox.Show(this,"Race must be entered first.");
+				MessageBox.Show("Race must be entered first.");
 				return;
 			}
 			//Make sure the program is running
