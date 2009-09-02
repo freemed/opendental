@@ -3662,7 +3662,7 @@ namespace OpenDental{
 
 		private void OnBreak_Click(){
 			if(!PrefC.GetBool("BrokenApptCommLogNotAdjustment") && PrefC.GetInt("BrokenAppointmentAdjustmentType")==0){
-				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Misc to fix this.");
+				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Modules to fix this.");
 				return;
 			}
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
