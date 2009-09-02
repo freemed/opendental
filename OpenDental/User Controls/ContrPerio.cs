@@ -208,7 +208,7 @@ namespace OpenDental
 
 		///<summary>Sets the user editable colors</summary>
 		public void SetColors(){
-			if(DefC.Long==null){
+			if(DefC.DefShortIsNull) {
 				cBlood=Color.FromArgb(240,20,20);
 				cSupp=Color.FromArgb(255,160,0);
 				cPlaque=Color.FromArgb(240,20,20);

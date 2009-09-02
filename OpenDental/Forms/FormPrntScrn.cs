@@ -23,7 +23,6 @@ namespace OpenDental{
 	public class FormPrntScrn : System.Windows.Forms.Form{
 		private System.Windows.Forms.Label label1;
 		private System.Drawing.Printing.PrintDocument pd2;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		private System.Windows.Forms.PrintPreviewControl printPreviewControl2;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog2;
@@ -84,7 +83,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.printPreviewControl2 = new System.Windows.Forms.PrintPreviewControl();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.butCancel = new OpenDental.UI.Button();
 			this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
 			this.textMouseX = new System.Windows.Forms.TextBox();
@@ -113,8 +111,8 @@ namespace OpenDental{
 			this.printPreviewControl2.Size = new System.Drawing.Size(842,538);
 			this.printPreviewControl2.TabIndex = 1;
 			this.printPreviewControl2.Zoom = 1;
-			this.printPreviewControl2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.printPreviewControl2_MouseDown);
 			this.printPreviewControl2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.printPreviewControl2_MouseMove);
+			this.printPreviewControl2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.printPreviewControl2_MouseDown);
 			this.printPreviewControl2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.printPreviewControl2_MouseUp);
 			// 
 			// pd2
@@ -269,8 +267,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Prnt Scrn Tool";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormPrntScrn_Layout);
 			this.Load += new System.EventHandler(this.FormPrntScrn_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormPrntScrn_Layout);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

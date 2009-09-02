@@ -17,7 +17,6 @@ namespace OpenDental{
 	public class FormRpCourseGrades : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.PrintDialog printDialog1;
 		private System.Windows.Forms.ComboBox comboSchoolCourse;
 		private System.Windows.Forms.ComboBox comboSchoolClass;
 		private System.Windows.Forms.Label label21;
@@ -65,7 +64,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRpCourseGrades));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.printDialog1 = new System.Windows.Forms.PrintDialog();
 			this.comboSchoolCourse = new System.Windows.Forms.ComboBox();
 			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
 			this.label21 = new System.Windows.Forms.Label();

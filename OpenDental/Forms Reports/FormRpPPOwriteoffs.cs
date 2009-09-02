@@ -18,7 +18,6 @@ namespace OpenDental{
 	public class FormRpPPOwriteoffs : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.PrintDialog printDialog1;
 		private MonthCalendar date2;
 		private MonthCalendar date1;
 		private Label labelTO;
@@ -73,7 +72,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRpPPOwriteoffs));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.printDialog1 = new System.Windows.Forms.PrintDialog();
 			this.date2 = new System.Windows.Forms.MonthCalendar();
 			this.date1 = new System.Windows.Forms.MonthCalendar();
 			this.labelTO = new System.Windows.Forms.Label();

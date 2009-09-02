@@ -324,6 +324,7 @@ namespace OpenDental {
 			MyPrintDialog.PrintToFile = false;
 			MyPrintDialog.ShowHelp = false;
 			MyPrintDialog.ShowNetwork = false;
+			MyPrintDialog.UseEXDialog=true;
 			if(MyPrintDialog.ShowDialog() != DialogResult.OK){
 				return false;
 			}

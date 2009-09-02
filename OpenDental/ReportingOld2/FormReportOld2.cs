@@ -22,7 +22,6 @@ namespace OpenDental.ReportingOld2
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butPrint;
 		private System.Drawing.Printing.PrintDocument pd2;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary>The report to display.</summary>
 		private ReportOld2 MyReport;
 		private OpenDental.UI.Button butSetup;
@@ -79,7 +78,6 @@ namespace OpenDental.ReportingOld2
 			this.butFwd = new OpenDental.UI.Button();
 			this.butSetup = new OpenDental.UI.Button();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.setupDialog2 = new System.Windows.Forms.PageSetupDialog();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
@@ -200,7 +198,7 @@ namespace OpenDental.ReportingOld2
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(831,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(831,25);
 			this.ToolBarMain.TabIndex = 5;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -234,8 +232,8 @@ namespace OpenDental.ReportingOld2
 			this.ShowInTaskbar = false;
 			this.Text = "Report";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.Load += new System.EventHandler(this.FormReport_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 

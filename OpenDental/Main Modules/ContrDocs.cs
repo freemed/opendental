@@ -1059,6 +1059,9 @@ namespace OpenDental{
 				return;
 			}
 			try{
+				//This needs to be debugged in both 6.7 and 6.8(head).
+				//Dialog seems to be shown, but no value from it used.
+				//include: PrintDialog1.UseEXDialog=true; so that it will work on 64 bit.
 				if(PrintDialog1.ShowDialog()==DialogResult.OK){
 					if(PrintDocument2.DefaultPageSettings.PaperSize.Width==0 ||
 							PrintDocument2.DefaultPageSettings.PaperSize.Height==0) {

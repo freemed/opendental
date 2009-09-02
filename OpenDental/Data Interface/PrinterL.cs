@@ -46,6 +46,7 @@ namespace OpenDental{
 			}
 			PrintDialog dialog=new PrintDialog();
 			dialog.PrinterSettings=pSet;
+			dialog.UseEXDialog=true;
 			#if DEBUG
 				return true;
 			#else

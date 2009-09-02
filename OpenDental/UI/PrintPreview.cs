@@ -15,7 +15,6 @@ namespace OpenDental.UI{
 	///<summary></summary>
 	public class PrintPreview : System.Windows.Forms.Form{
 		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary></summary>
 		private int TotalPages;
 		private OpenDental.UI.ODToolBar ToolBarMain;
@@ -56,7 +55,6 @@ namespace OpenDental.UI{
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrintPreview));
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.printPreviewControl2 = new System.Windows.Forms.PrintPreviewControl();
@@ -68,7 +66,7 @@ namespace OpenDental.UI{
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(831,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(831,25);
 			this.ToolBarMain.TabIndex = 5;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -100,8 +98,8 @@ namespace OpenDental.UI{
 			this.ShowInTaskbar = false;
 			this.Text = "Report";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.Load += new System.EventHandler(this.FormPrintPreview_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.ResumeLayout(false);
 
 		}

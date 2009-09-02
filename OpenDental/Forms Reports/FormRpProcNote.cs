@@ -18,7 +18,6 @@ namespace OpenDental{
 	public class FormRpProcNote : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.PrintDialog printDialog1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -62,7 +61,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRpProcNote));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.printDialog1 = new System.Windows.Forms.PrintDialog();
 			this.SuspendLayout();
 			// 
 			// butCancel

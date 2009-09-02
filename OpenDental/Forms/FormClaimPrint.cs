@@ -28,7 +28,6 @@ namespace OpenDental{
 		//public int ClaimFormNum;
 		///<summary></summary>
 		public bool PrintBlank;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary></summary>
 		public bool PrintImmediately;
     private string[] displayStrings;
@@ -87,7 +86,6 @@ namespace OpenDental{
 			this.Preview2 = new System.Windows.Forms.PrintPreviewControl();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.butPrint = new OpenDental.UI.Button();
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.labelTotPages = new System.Windows.Forms.Label();
 			this.butBack = new OpenDental.UI.Button();
 			this.butFwd = new OpenDental.UI.Button();
@@ -192,8 +190,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Print Claim";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormClaimPrint_Layout);
 			this.Load += new System.EventHandler(this.FormClaimPrint_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormClaimPrint_Layout);
 			this.ResumeLayout(false);
 
 		}

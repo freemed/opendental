@@ -17,7 +17,6 @@ namespace OpenDental{
 	///<summary></summary>
 	public class FormTPsign : System.Windows.Forms.Form{
 		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary></summary>
 		public int TotalPages;
 		private OpenDental.UI.ODToolBar ToolBarMain;
@@ -85,7 +84,6 @@ namespace OpenDental{
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTPsign));
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.previewContr = new System.Windows.Forms.PrintPreviewControl();
 			this.panelSig = new System.Windows.Forms.Panel();

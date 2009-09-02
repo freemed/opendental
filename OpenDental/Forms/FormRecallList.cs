@@ -30,7 +30,6 @@ namespace OpenDental{
 		///<summary>Will be set to true when form closes if user click Send to Pinboard.</summary>
 		public bool PinClicked=false;
 		private OpenDental.UI.Button butReport;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		private int pagesPrinted;
 		private DataTable AddrTable;
 		private int patientsPrinted;
@@ -112,7 +111,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butReport = new OpenDental.UI.Button();
 			this.butLabels = new OpenDental.UI.Button();
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.comboStatus = new System.Windows.Forms.ComboBox();
 			this.butSetStatus = new OpenDental.UI.Button();
@@ -342,10 +340,6 @@ namespace OpenDental{
 			this.butLabels.TabIndex = 14;
 			this.butLabels.Text = "Label Preview";
 			this.butLabels.Click += new System.EventHandler(this.butLabels_Click);
-			// 
-			// printDialog2
-			// 
-			this.printDialog2.AllowPrintToFile = false;
 			// 
 			// groupBox3
 			// 

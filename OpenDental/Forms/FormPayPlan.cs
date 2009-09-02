@@ -47,7 +47,6 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupBox3;
 		private OpenDental.ValidDouble textDownPayment;
 		private System.Drawing.Printing.PrintDocument pd2;
-		private System.Windows.Forms.PrintDialog printDialog2;
 		private System.Windows.Forms.Label label12;
 		/// <summary>Go to the specified patnum.  Upon dialog close, if this number is not 0, then patients.Cur will be changed to this new patnum, and Account refreshed to the new patient.</summary>
 		public int GotoPatNum;
@@ -154,7 +153,6 @@ namespace OpenDental{
 			this.textPatient = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
-			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.label12 = new System.Windows.Forms.Label();
 			this.textAmtPaid = new System.Windows.Forms.TextBox();
 			this.textAccumulatedDue = new System.Windows.Forms.TextBox();
