@@ -107,7 +107,7 @@ namespace OpenDental.Bridges{
 			el.InnerXml=pat.MiddleI;
 			elementPat.AppendChild(el);
 			//Birthdate
-			el=doc.CreateElement("Birthdate");
+			el=doc.CreateElement("BirthDate");
 			el.InnerXml=pat.Birthdate.ToString("yyyy/MM/dd");
 			elementPat.AppendChild(el);
 			//Gender
