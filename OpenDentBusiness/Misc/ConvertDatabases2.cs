@@ -840,6 +840,840 @@ DROP TABLE IF EXISTS etAck";
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				command="ALTER TABLE account CHANGE AccountNum AccountNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE accountingautopay CHANGE AccountingAutoPayNum AccountingAutoPayNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE accountingautopay CHANGE PayType PayType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE adjustment CHANGE AdjNum AdjNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE adjustment CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE adjustment CHANGE AdjType AdjType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE adjustment CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE adjustment CHANGE ProcNum ProcNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE AptNum AptNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE Confirmed Confirmed bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE Op Op bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE ProvHyg ProvHyg bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE NextAptNum NextAptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE UnschedStatus UnschedStatus bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE Assistant Assistant bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE InsPlan1 InsPlan1 bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointment CHANGE InsPlan2 InsPlan2 bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE appointmentrule CHANGE AppointmentRuleNum AppointmentRuleNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE apptview CHANGE ApptViewNum ApptViewNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE apptviewitem CHANGE ApptViewItemNum ApptViewItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE apptviewitem CHANGE ApptViewNum ApptViewNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE apptviewitem CHANGE OpNum OpNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE apptviewitem CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocode CHANGE AutoCodeNum AutoCodeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocodecond CHANGE AutoCodeCondNum AutoCodeCondNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocodecond CHANGE AutoCodeItemNum AutoCodeItemNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocodeitem CHANGE AutoCodeItemNum AutoCodeItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocodeitem CHANGE AutoCodeNum AutoCodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE autocodeitem CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE autonote CHANGE AutoNoteNum AutoNoteNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE autonotecontrol CHANGE AutoNoteControlNum AutoNoteControlNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE benefit CHANGE BenefitNum BenefitNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE benefit CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE benefit CHANGE PatPlanNum PatPlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE benefit CHANGE CovCatNum CovCatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE benefit CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE canadianclaim CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE canadianextract CHANGE CanadianExtractNum CanadianExtractNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE canadianextract CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE canadiannetwork CHANGE CanadianNetworkNum CanadianNetworkNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE carrier CHANGE CarrierNum CarrierNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE carrier CHANGE CanadianNetworkNum CanadianNetworkNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ClaimNum ClaimNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ProvTreat ProvTreat bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ProvBill ProvBill bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ReferringProv ReferringProv bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE PlanNum2 PlanNum2 bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claim CHANGE ClaimForm ClaimForm bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimattach CHANGE ClaimAttachNum ClaimAttachNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimattach CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimcondcodelog CHANGE ClaimCondCodeLogNum ClaimCondCodeLogNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimcondcodelog CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimform CHANGE ClaimFormNum ClaimFormNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimformitem CHANGE ClaimFormItemNum ClaimFormItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimformitem CHANGE ClaimFormNum ClaimFormNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimpayment CHANGE ClaimPaymentNum ClaimPaymentNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimpayment CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimpayment CHANGE DepositNum DepositNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE ClaimProcNum ClaimProcNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE ProcNum ProcNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE ClaimPaymentNum ClaimPaymentNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimproc CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimvalcodelog CHANGE ClaimValCodeLogNum ClaimValCodeLogNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE claimvalcodelog CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE clearinghouse CHANGE ClearingHouseNum ClearingHouseNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE clinic CHANGE ClinicNum ClinicNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE clinic CHANGE InsBillingProv InsBillingProv bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE clockevent CHANGE ClockEventNum ClockEventNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE clockevent CHANGE EmployeeNum EmployeeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE commlog CHANGE CommlogNum CommlogNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE commlog CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE commlog CHANGE CommType CommType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE commlog CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE computer CHANGE ComputerNum ComputerNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE computerpref CHANGE ComputerPrefNum ComputerPrefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE contact CHANGE ContactNum ContactNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE contact CHANGE Category Category bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE covcat CHANGE CovCatNum CovCatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE covspan CHANGE CovSpanNum CovSpanNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE covspan CHANGE CovCatNum CovCatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE definition CHANGE DefNum DefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE deletedobject CHANGE DeletedObjectNum DeletedObjectNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE deletedobject CHANGE ObjectNum ObjectNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE deposit CHANGE DepositNum DepositNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE disease CHANGE DiseaseNum DiseaseNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE disease CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE disease CHANGE DiseaseDefNum DiseaseDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE diseasedef CHANGE DiseaseDefNum DiseaseDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE displayfield CHANGE DisplayFieldNum DisplayFieldNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE document CHANGE DocNum DocNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE document CHANGE DocCategory DocCategory bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE document CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE document CHANGE MountItemNum MountItemNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE dunning CHANGE DunningNum DunningNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE dunning CHANGE BillingType BillingType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE electid CHANGE ElectIDNum ElectIDNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE emailattach CHANGE EmailAttachNum EmailAttachNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE emailattach CHANGE EmailMessageNum EmailMessageNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE emailmessage CHANGE EmailMessageNum EmailMessageNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE emailmessage CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE emailtemplate CHANGE EmailTemplateNum EmailTemplateNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE employee CHANGE EmployeeNum EmployeeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE employer CHANGE EmployerNum EmployerNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE EtransNum EtransNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE ClearingHouseNum ClearingHouseNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE ClaimNum ClaimNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE CarrierNum CarrierNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE CarrierNum2 CarrierNum2 bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE EtransMessageTextNum EtransMessageTextNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE AckEtransNum AckEtransNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etrans CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE etransmessagetext CHANGE EtransMessageTextNum EtransMessageTextNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE fee CHANGE FeeNum FeeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE fee CHANGE FeeSched FeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE fee CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE feesched CHANGE FeeSchedNum FeeSchedNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE files CHANGE DocNum DocNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE formpat CHANGE FormPatNum FormPatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE formpat CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE grouppermission CHANGE GroupPermissionNum GroupPermissionNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE grouppermission CHANGE UserGroupNum UserGroupNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE hl7msg CHANGE HL7MsgNum HL7MsgNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE hl7msg CHANGE AptNum AptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insfilingcode CHANGE InsFilingCodeNum InsFilingCodeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE insfilingcodesubtype CHANGE InsFilingCodeSubTypeNum InsFilingCodeSubTypeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE insfilingcodesubtype CHANGE InsFilingCodeNum InsFilingCodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE PlanNum PlanNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE Subscriber Subscriber bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE FeeSched FeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE ClaimFormNum ClaimFormNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE CopayFeeSched CopayFeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE EmployerNum EmployerNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE CarrierNum CarrierNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE AllowedFeeSched AllowedFeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE FilingCode FilingCode bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE insplan CHANGE FilingCodeSubtype FilingCodeSubtype bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE journalentry CHANGE JournalEntryNum JournalEntryNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE journalentry CHANGE TransactionNum TransactionNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE journalentry CHANGE AccountNum AccountNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE journalentry CHANGE ReconcileNum ReconcileNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE LabCaseNum LabCaseNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE LaboratoryNum LaboratoryNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE AptNum AptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE PlannedAptNum PlannedAptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE labcase CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE laboratory CHANGE LaboratoryNum LaboratoryNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE labturnaround CHANGE LabTurnaroundNum LabTurnaroundNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE labturnaround CHANGE LaboratoryNum LaboratoryNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE letter CHANGE LetterNum LetterNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE lettermerge CHANGE LetterMergeNum LetterMergeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE lettermerge CHANGE Category Category bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE lettermergefield CHANGE FieldNum FieldNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE lettermergefield CHANGE LetterMergeNum LetterMergeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE medication CHANGE MedicationNum MedicationNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE medication CHANGE GenericNum GenericNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE medicationpat CHANGE MedicationPatNum MedicationPatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE medicationpat CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE medicationpat CHANGE MedicationNum MedicationNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE mount CHANGE MountNum MountNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE mount CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE mount CHANGE DocCategory DocCategory bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE mountdef CHANGE MountDefNum MountDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE mountitem CHANGE MountItemNum MountItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE mountitem CHANGE MountNum MountNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE mountitemdef CHANGE MountItemDefNum MountItemDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE mountitemdef CHANGE MountDefNum MountDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE operatory CHANGE OperatoryNum OperatoryNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE operatory CHANGE ProvDentist ProvDentist bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE operatory CHANGE ProvHygienist ProvHygienist bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE operatory CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patfield CHANGE PatFieldNum PatFieldNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE patfield CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patfielddef CHANGE PatFieldDefNum PatFieldDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE PatNum PatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE Guarantor Guarantor bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE PriProv PriProv bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE SecProv SecProv bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE FeeSched FeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE BillingType BillingType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE EmployerNum EmployerNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE SiteNum SiteNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patient CHANGE ResponsParty ResponsParty bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patientnote CHANGE PatNum PatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE patplan CHANGE PatPlanNum PatPlanNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE patplan CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE patplan CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payment CHANGE PayNum PayNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE payment CHANGE PayType PayType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payment CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payment CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payment CHANGE DepositNum DepositNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payperiod CHANGE PayPeriodNum PayPeriodNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplan CHANGE PayPlanNum PayPlanNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplan CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplan CHANGE Guarantor Guarantor bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplan CHANGE PlanNum PlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplancharge CHANGE PayPlanChargeNum PayPlanChargeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplancharge CHANGE PayPlanNum PayPlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplancharge CHANGE Guarantor Guarantor bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplancharge CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE payplancharge CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE SplitNum SplitNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE PayNum PayNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE PayPlanNum PayPlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE paysplit CHANGE ProcNum ProcNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE perioexam CHANGE PerioExamNum PerioExamNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE perioexam CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE perioexam CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE periomeasure CHANGE PerioMeasureNum PerioMeasureNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE periomeasure CHANGE PerioExamNum PerioExamNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE pharmacy CHANGE PharmacyNum PharmacyNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE phonenumber CHANGE PhoneNumberNum PhoneNumberNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE phonenumber CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE plannedappt CHANGE PlannedApptNum PlannedApptNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE plannedappt CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE plannedappt CHANGE AptNum AptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE popup CHANGE PopupNum PopupNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE popup CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE printer CHANGE PrinterNum PrinterNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE printer CHANGE ComputerNum ComputerNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbutton CHANGE ProcButtonNum ProcButtonNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbutton CHANGE Category Category bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbuttonitem CHANGE ProcButtonItemNum ProcButtonItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbuttonitem CHANGE ProcButtonNum ProcButtonNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbuttonitem CHANGE AutoCodeNum AutoCodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procbuttonitem CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proccodenote CHANGE ProcCodeNoteNum ProcCodeNoteNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE proccodenote CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proccodenote CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurecode CHANGE CodeNum CodeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurecode CHANGE ProcCat ProcCat bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE ProcNum ProcNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE AptNum AptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE Priority Priority bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE Dx Dx bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE PlannedAptNum PlannedAptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE ProcNumLab ProcNumLab bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE BillingTypeOne BillingTypeOne bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE BillingTypeTwo BillingTypeTwo bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procedurelog CHANGE SiteNum SiteNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procnote CHANGE ProcNoteNum ProcNoteNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE procnote CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procnote CHANGE ProcNum ProcNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE procnote CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proctp CHANGE ProcTPNum ProcTPNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE proctp CHANGE TreatPlanNum TreatPlanNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proctp CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proctp CHANGE ProcNumOrig ProcNumOrig bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE proctp CHANGE Priority Priority bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE program CHANGE ProgramNum ProgramNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE programproperty CHANGE ProgramPropertyNum ProgramPropertyNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE programproperty CHANGE ProgramNum ProgramNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE provider CHANGE ProvNum ProvNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE provider CHANGE FeeSched FeeSched bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE provider CHANGE SchoolClassNum SchoolClassNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE provider CHANGE AnesthProvType AnesthProvType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE providerident CHANGE ProviderIdentNum ProviderIdentNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE providerident CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE question CHANGE QuestionNum QuestionNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE question CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE question CHANGE FormPatNum FormPatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE questiondef CHANGE QuestionDefNum QuestionDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE quickpastecat CHANGE QuickPasteCatNum QuickPasteCatNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE quickpastenote CHANGE QuickPasteNoteNum QuickPasteNoteNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE quickpastenote CHANGE QuickPasteCatNum QuickPasteCatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recall CHANGE RecallNum RecallNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE recall CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recall CHANGE RecallStatus RecallStatus bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recall CHANGE RecallTypeNum RecallTypeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recalltrigger CHANGE RecallTriggerNum RecallTriggerNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE recalltrigger CHANGE RecallTypeNum RecallTypeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recalltrigger CHANGE CodeNum CodeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE recalltype CHANGE RecallTypeNum RecallTypeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE reconcile CHANGE ReconcileNum ReconcileNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE reconcile CHANGE AccountNum AccountNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE refattach CHANGE RefAttachNum RefAttachNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE refattach CHANGE ReferralNum ReferralNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE refattach CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE referral CHANGE ReferralNum ReferralNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE referral CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE referral CHANGE Slip Slip bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE registrationkey CHANGE RegistrationKeyNum RegistrationKeyNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE registrationkey CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE repeatcharge CHANGE RepeatChargeNum RepeatChargeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE repeatcharge CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqneeded CHANGE ReqNeededNum ReqNeededNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqneeded CHANGE SchoolCourseNum SchoolCourseNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqneeded CHANGE SchoolClassNum SchoolClassNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE ReqStudentNum ReqStudentNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE ReqNeededNum ReqNeededNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE SchoolCourseNum SchoolCourseNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE AptNum AptNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE reqstudent CHANGE InstructorNum InstructorNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxalert CHANGE RxAlertNum RxAlertNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxalert CHANGE RxDefNum RxDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxalert CHANGE DiseaseDefNum DiseaseDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxdef CHANGE RxDefNum RxDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxpat CHANGE RxNum RxNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxpat CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxpat CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE rxpat CHANGE PharmacyNum PharmacyNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE schedule CHANGE ScheduleNum ScheduleNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE schedule CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE schedule CHANGE BlockoutType BlockoutType bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE schedule CHANGE EmployeeNum EmployeeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE scheduleop CHANGE ScheduleOpNum ScheduleOpNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE scheduleop CHANGE ScheduleNum ScheduleNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE scheduleop CHANGE OperatoryNum OperatoryNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE schoolclass CHANGE SchoolClassNum SchoolClassNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE schoolcourse CHANGE SchoolCourseNum SchoolCourseNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE screen CHANGE ScreenNum ScreenNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE screen CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE screen CHANGE ScreenGroupNum ScreenGroupNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE screengroup CHANGE ScreenGroupNum ScreenGroupNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE securitylog CHANGE SecurityLogNum SecurityLogNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE securitylog CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE securitylog CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheet CHANGE SheetNum SheetNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheet CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheetdef CHANGE SheetDefNum SheetDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheetfield CHANGE SheetFieldNum SheetFieldNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheetfield CHANGE SheetNum SheetNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheetfielddef CHANGE SheetFieldDefNum SheetFieldDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sheetfielddef CHANGE SheetDefNum SheetDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigbutdef CHANGE SigButDefNum SigButDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigbutdefelement CHANGE ElementNum ElementNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigbutdefelement CHANGE SigButDefNum SigButDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigbutdefelement CHANGE SigElementDefNum SigElementDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigelement CHANGE SigElementNum SigElementNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigelement CHANGE SigElementDefNum SigElementDefNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigelement CHANGE SignalNum SignalNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE sigelementdef CHANGE SigElementDefNum SigElementDefNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE signal CHANGE SignalNum SignalNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE signal CHANGE TaskNum TaskNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE site CHANGE SiteNum SiteNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE statement CHANGE StatementNum StatementNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE statement CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE statement CHANGE DocNum DocNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplier CHANGE SupplierNum SupplierNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE supply CHANGE SupplyNum SupplyNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE supply CHANGE SupplierNum SupplierNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE supply CHANGE Category Category bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyneeded CHANGE SupplyNeededNum SupplyNeededNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyorder CHANGE SupplyOrderNum SupplyOrderNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyorder CHANGE SupplierNum SupplierNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyorderitem CHANGE SupplyOrderItemNum SupplyOrderItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyorderitem CHANGE SupplyOrderNum SupplyOrderNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE supplyorderitem CHANGE SupplyNum SupplyNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE task CHANGE TaskNum TaskNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE task CHANGE TaskListNum TaskListNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE task CHANGE KeyNum KeyNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE task CHANGE FormNum FormNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE task CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				
 				command="UPDATE preference SET ValueString = '6.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
