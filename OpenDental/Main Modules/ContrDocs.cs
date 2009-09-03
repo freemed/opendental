@@ -42,8 +42,6 @@ namespace OpenDental{
 		private System.Windows.Forms.ImageList imageListTree;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ImageList imageListTools2;
-		private System.Windows.Forms.PrintDialog PrintDialog1;
-		private System.Drawing.Printing.PrintDocument PrintDocument2;
 		private System.Windows.Forms.TreeView TreeDocuments;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItem1;
@@ -209,39 +207,37 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrDocs));
-			this.TreeDocuments = new System.Windows.Forms.TreeView();
-			this.contextTree = new System.Windows.Forms.ContextMenu();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
-			this.imageListTree = new System.Windows.Forms.ImageList(this.components);
-			this.PrintDialog1 = new System.Windows.Forms.PrintDialog();
-			this.PrintDocument2 = new System.Drawing.Printing.PrintDocument();
-			this.imageListTools2 = new System.Windows.Forms.ImageList(this.components);
-			this.PictureBox1 = new System.Windows.Forms.PictureBox();
-			this.MountMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuExit = new System.Windows.Forms.MenuItem();
-			this.menuPrefs = new System.Windows.Forms.MenuItem();
-			this.panelNote = new System.Windows.Forms.Panel();
-			this.labelInvalidSig = new System.Windows.Forms.Label();
-			this.sigBox = new OpenDental.UI.SignatureBox();
-			this.label15 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textNote = new System.Windows.Forms.TextBox();
-			this.paintToolsUnderline = new System.Windows.Forms.Panel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panelDrTech = new System.Windows.Forms.Panel();
-			this.buttonClipboard = new OpenDental.UI.Button();
-			this.butCBSheet = new OpenDental.UI.Button();
-			this.butCameraPic = new OpenDental.UI.Button();
-			this.butOpenFolder = new OpenDental.UI.Button();
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.paintTools = new OpenDental.UI.ODToolBar();
-			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
+			this.components=new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(ContrDocs));
+			this.TreeDocuments=new System.Windows.Forms.TreeView();
+			this.contextTree=new System.Windows.Forms.ContextMenu();
+			this.menuItem2=new System.Windows.Forms.MenuItem();
+			this.menuItem3=new System.Windows.Forms.MenuItem();
+			this.menuItem4=new System.Windows.Forms.MenuItem();
+			this.imageListTree=new System.Windows.Forms.ImageList(this.components);
+			this.imageListTools2=new System.Windows.Forms.ImageList(this.components);
+			this.PictureBox1=new System.Windows.Forms.PictureBox();
+			this.MountMenu=new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mainMenu1=new System.Windows.Forms.MainMenu(this.components);
+			this.menuItem1=new System.Windows.Forms.MenuItem();
+			this.menuExit=new System.Windows.Forms.MenuItem();
+			this.menuPrefs=new System.Windows.Forms.MenuItem();
+			this.panelNote=new System.Windows.Forms.Panel();
+			this.labelInvalidSig=new System.Windows.Forms.Label();
+			this.sigBox=new OpenDental.UI.SignatureBox();
+			this.label15=new System.Windows.Forms.Label();
+			this.label1=new System.Windows.Forms.Label();
+			this.textNote=new System.Windows.Forms.TextBox();
+			this.paintToolsUnderline=new System.Windows.Forms.Panel();
+			this.panel1=new System.Windows.Forms.Panel();
+			this.panelDrTech=new System.Windows.Forms.Panel();
+			this.buttonClipboard=new OpenDental.UI.Button();
+			this.butCBSheet=new OpenDental.UI.Button();
+			this.butCameraPic=new OpenDental.UI.Button();
+			this.butOpenFolder=new OpenDental.UI.Button();
+			this.ToolBarMain=new OpenDental.UI.ODToolBar();
+			this.paintTools=new OpenDental.UI.ODToolBar();
+			this.brightnessContrastSlider=new OpenDental.UI.ContrWindowingSlider();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.panelDrTech.SuspendLayout();
@@ -249,23 +245,23 @@ namespace OpenDental{
 			// 
 			// TreeDocuments
 			// 
-			this.TreeDocuments.ContextMenu = this.contextTree;
-			this.TreeDocuments.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.TreeDocuments.FullRowSelect = true;
-			this.TreeDocuments.HideSelection = false;
-			this.TreeDocuments.ImageIndex = 2;
-			this.TreeDocuments.ImageList = this.imageListTree;
-			this.TreeDocuments.Indent = 20;
-			this.TreeDocuments.Location = new System.Drawing.Point(0,29);
-			this.TreeDocuments.Name = "TreeDocuments";
-			this.TreeDocuments.SelectedImageIndex = 2;
-			this.TreeDocuments.Size = new System.Drawing.Size(228,519);
-			this.TreeDocuments.TabIndex = 0;
-			this.TreeDocuments.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDoubleClick);
-			this.TreeDocuments.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseUp);
-			this.TreeDocuments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseMove);
-			this.TreeDocuments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDown);
-			this.TreeDocuments.MouseLeave += new System.EventHandler(this.TreeDocuments_MouseLeave);
+			this.TreeDocuments.ContextMenu=this.contextTree;
+			this.TreeDocuments.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.TreeDocuments.FullRowSelect=true;
+			this.TreeDocuments.HideSelection=false;
+			this.TreeDocuments.ImageIndex=2;
+			this.TreeDocuments.ImageList=this.imageListTree;
+			this.TreeDocuments.Indent=20;
+			this.TreeDocuments.Location=new System.Drawing.Point(0,29);
+			this.TreeDocuments.Name="TreeDocuments";
+			this.TreeDocuments.SelectedImageIndex=2;
+			this.TreeDocuments.Size=new System.Drawing.Size(228,519);
+			this.TreeDocuments.TabIndex=0;
+			this.TreeDocuments.MouseDoubleClick+=new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDoubleClick);
+			this.TreeDocuments.MouseUp+=new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseUp);
+			this.TreeDocuments.MouseMove+=new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseMove);
+			this.TreeDocuments.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.TreeDocuments_MouseDown);
+			this.TreeDocuments.MouseLeave+=new System.EventHandler(this.TreeDocuments_MouseLeave);
 			// 
 			// contextTree
 			// 
@@ -276,23 +272,23 @@ namespace OpenDental{
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 0;
-			this.menuItem2.Text = "Print";
+			this.menuItem2.Index=0;
+			this.menuItem2.Text="Print";
 			// 
 			// menuItem3
 			// 
-			this.menuItem3.Index = 1;
-			this.menuItem3.Text = "Delete";
+			this.menuItem3.Index=1;
+			this.menuItem3.Text="Delete";
 			// 
 			// menuItem4
 			// 
-			this.menuItem4.Index = 2;
-			this.menuItem4.Text = "Info";
+			this.menuItem4.Index=2;
+			this.menuItem4.Text="Info";
 			// 
 			// imageListTree
 			// 
-			this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
-			this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListTree.ImageStream=((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
+			this.imageListTree.TransparentColor=System.Drawing.Color.Transparent;
 			this.imageListTree.Images.SetKeyName(0,"");
 			this.imageListTree.Images.SetKeyName(1,"");
 			this.imageListTree.Images.SetKeyName(2,"");
@@ -301,19 +297,10 @@ namespace OpenDental{
 			this.imageListTree.Images.SetKeyName(5,"");
 			this.imageListTree.Images.SetKeyName(6,"");
 			// 
-			// PrintDialog1
-			// 
-			this.PrintDialog1.AllowPrintToFile = false;
-			this.PrintDialog1.Document = this.PrintDocument2;
-			// 
-			// PrintDocument2
-			// 
-			this.PrintDocument2.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument2_PrintPage);
-			// 
 			// imageListTools2
 			// 
-			this.imageListTools2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTools2.ImageStream")));
-			this.imageListTools2.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListTools2.ImageStream=((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTools2.ImageStream")));
+			this.imageListTools2.TransparentColor=System.Drawing.Color.Transparent;
 			this.imageListTools2.Images.SetKeyName(0,"Pat.gif");
 			this.imageListTools2.Images.SetKeyName(1,"print.gif");
 			this.imageListTools2.Images.SetKeyName(2,"deleteX.gif");
@@ -335,28 +322,28 @@ namespace OpenDental{
 			// 
 			// PictureBox1
 			// 
-			this.PictureBox1.BackColor = System.Drawing.SystemColors.Window;
-			this.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.PictureBox1.ContextMenuStrip = this.MountMenu;
-			this.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.PictureBox1.InitialImage = null;
-			this.PictureBox1.Location = new System.Drawing.Point(233,54);
-			this.PictureBox1.Name = "PictureBox1";
-			this.PictureBox1.Size = new System.Drawing.Size(703,370);
-			this.PictureBox1.TabIndex = 6;
-			this.PictureBox1.TabStop = false;
-			this.PictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
-			this.PictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
-			this.PictureBox1.MouseHover += new System.EventHandler(this.PictureBox1_MouseHover);
-			this.PictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
-			this.PictureBox1.SizeChanged += new System.EventHandler(this.PictureBox1_SizeChanged);
+			this.PictureBox1.BackColor=System.Drawing.SystemColors.Window;
+			this.PictureBox1.BackgroundImageLayout=System.Windows.Forms.ImageLayout.None;
+			this.PictureBox1.BorderStyle=System.Windows.Forms.BorderStyle.Fixed3D;
+			this.PictureBox1.ContextMenuStrip=this.MountMenu;
+			this.PictureBox1.Cursor=System.Windows.Forms.Cursors.Hand;
+			this.PictureBox1.InitialImage=null;
+			this.PictureBox1.Location=new System.Drawing.Point(233,54);
+			this.PictureBox1.Name="PictureBox1";
+			this.PictureBox1.Size=new System.Drawing.Size(703,370);
+			this.PictureBox1.TabIndex=6;
+			this.PictureBox1.TabStop=false;
+			this.PictureBox1.MouseMove+=new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
+			this.PictureBox1.MouseDown+=new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
+			this.PictureBox1.MouseHover+=new System.EventHandler(this.PictureBox1_MouseHover);
+			this.PictureBox1.MouseUp+=new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
+			this.PictureBox1.SizeChanged+=new System.EventHandler(this.PictureBox1_SizeChanged);
 			// 
 			// MountMenu
 			// 
-			this.MountMenu.Name = "MountMenu";
-			this.MountMenu.Size = new System.Drawing.Size(61,4);
-			this.MountMenu.Opening += new System.ComponentModel.CancelEventHandler(this.MountMenu_Opening);
+			this.MountMenu.Name="MountMenu";
+			this.MountMenu.Size=new System.Drawing.Size(61,4);
+			this.MountMenu.Opening+=new System.ComponentModel.CancelEventHandler(this.MountMenu_Opening);
 			// 
 			// mainMenu1
 			// 
@@ -366,20 +353,20 @@ namespace OpenDental{
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 0;
+			this.menuItem1.Index=0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuExit});
-			this.menuItem1.Text = "File";
+			this.menuItem1.Text="File";
 			// 
 			// menuExit
 			// 
-			this.menuExit.Index = 0;
-			this.menuExit.Text = "Exit";
+			this.menuExit.Index=0;
+			this.menuExit.Text="Exit";
 			// 
 			// menuPrefs
 			// 
-			this.menuPrefs.Index = 1;
-			this.menuPrefs.Text = "Preferences";
+			this.menuPrefs.Index=1;
+			this.menuPrefs.Text="Preferences";
 			// 
 			// panelNote
 			// 
@@ -388,80 +375,80 @@ namespace OpenDental{
 			this.panelNote.Controls.Add(this.label15);
 			this.panelNote.Controls.Add(this.label1);
 			this.panelNote.Controls.Add(this.textNote);
-			this.panelNote.Location = new System.Drawing.Point(234,485);
-			this.panelNote.Name = "panelNote";
-			this.panelNote.Size = new System.Drawing.Size(705,64);
-			this.panelNote.TabIndex = 11;
-			this.panelNote.Visible = false;
-			this.panelNote.DoubleClick += new System.EventHandler(this.panelNote_DoubleClick);
+			this.panelNote.Location=new System.Drawing.Point(234,485);
+			this.panelNote.Name="panelNote";
+			this.panelNote.Size=new System.Drawing.Size(705,64);
+			this.panelNote.TabIndex=11;
+			this.panelNote.Visible=false;
+			this.panelNote.DoubleClick+=new System.EventHandler(this.panelNote_DoubleClick);
 			// 
 			// labelInvalidSig
 			// 
-			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
-			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(398,31);
-			this.labelInvalidSig.Name = "labelInvalidSig";
-			this.labelInvalidSig.Size = new System.Drawing.Size(196,59);
-			this.labelInvalidSig.TabIndex = 94;
-			this.labelInvalidSig.Text = "Invalid Signature -  Document or note has changed since it was signed.";
-			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
+			this.labelInvalidSig.BackColor=System.Drawing.SystemColors.Window;
+			this.labelInvalidSig.Font=new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInvalidSig.Location=new System.Drawing.Point(398,31);
+			this.labelInvalidSig.Name="labelInvalidSig";
+			this.labelInvalidSig.Size=new System.Drawing.Size(196,59);
+			this.labelInvalidSig.TabIndex=94;
+			this.labelInvalidSig.Text="Invalid Signature -  Document or note has changed since it was signed.";
+			this.labelInvalidSig.TextAlign=System.Drawing.ContentAlignment.MiddleCenter;
+			this.labelInvalidSig.DoubleClick+=new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
 			// sigBox
 			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(362,79);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
+			this.sigBox.Location=new System.Drawing.Point(308,20);
+			this.sigBox.Name="sigBox";
+			this.sigBox.Size=new System.Drawing.Size(362,79);
+			this.sigBox.TabIndex=90;
+			this.sigBox.DoubleClick+=new System.EventHandler(this.sigBox_DoubleClick);
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(305,0);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(63,18);
-			this.label15.TabIndex = 87;
-			this.label15.Text = "Signature";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.label15.DoubleClick += new System.EventHandler(this.label15_DoubleClick);
+			this.label15.Location=new System.Drawing.Point(305,0);
+			this.label15.Name="label15";
+			this.label15.Size=new System.Drawing.Size(63,18);
+			this.label15.TabIndex=87;
+			this.label15.Text="Signature";
+			this.label15.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label15.DoubleClick+=new System.EventHandler(this.label15_DoubleClick);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(0,0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(38,18);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Note";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
+			this.label1.Location=new System.Drawing.Point(0,0);
+			this.label1.Name="label1";
+			this.label1.Size=new System.Drawing.Size(38,18);
+			this.label1.TabIndex=1;
+			this.label1.Text="Note";
+			this.label1.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.DoubleClick+=new System.EventHandler(this.label1_DoubleClick);
 			// 
 			// textNote
 			// 
-			this.textNote.BackColor = System.Drawing.SystemColors.Window;
-			this.textNote.Location = new System.Drawing.Point(0,20);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.ReadOnly = true;
-			this.textNote.Size = new System.Drawing.Size(302,79);
-			this.textNote.TabIndex = 0;
-			this.textNote.DoubleClick += new System.EventHandler(this.textNote_DoubleClick);
-			this.textNote.MouseHover += new System.EventHandler(this.textNote_MouseHover);
+			this.textNote.BackColor=System.Drawing.SystemColors.Window;
+			this.textNote.Location=new System.Drawing.Point(0,20);
+			this.textNote.Multiline=true;
+			this.textNote.Name="textNote";
+			this.textNote.ReadOnly=true;
+			this.textNote.Size=new System.Drawing.Size(302,79);
+			this.textNote.TabIndex=0;
+			this.textNote.DoubleClick+=new System.EventHandler(this.textNote_DoubleClick);
+			this.textNote.MouseHover+=new System.EventHandler(this.textNote_MouseHover);
 			// 
 			// paintToolsUnderline
 			// 
-			this.paintToolsUnderline.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.paintToolsUnderline.Location = new System.Drawing.Point(236,48);
-			this.paintToolsUnderline.Name = "paintToolsUnderline";
-			this.paintToolsUnderline.Size = new System.Drawing.Size(702,2);
-			this.paintToolsUnderline.TabIndex = 15;
+			this.paintToolsUnderline.BackColor=System.Drawing.SystemColors.ControlDark;
+			this.paintToolsUnderline.Location=new System.Drawing.Point(236,48);
+			this.paintToolsUnderline.Name="paintToolsUnderline";
+			this.paintToolsUnderline.Size=new System.Drawing.Size(702,2);
+			this.paintToolsUnderline.TabIndex=15;
 			// 
 			// panel1
 			// 
-			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panel1.Location = new System.Drawing.Point(233,25);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(2,25);
-			this.panel1.TabIndex = 16;
+			this.panel1.BackColor=System.Drawing.SystemColors.ControlDark;
+			this.panel1.Location=new System.Drawing.Point(233,25);
+			this.panel1.Name="panel1";
+			this.panel1.Size=new System.Drawing.Size(2,25);
+			this.panel1.TabIndex=16;
 			// 
 			// panelDrTech
 			// 
@@ -469,107 +456,107 @@ namespace OpenDental{
 			this.panelDrTech.Controls.Add(this.butCBSheet);
 			this.panelDrTech.Controls.Add(this.butCameraPic);
 			this.panelDrTech.Controls.Add(this.butOpenFolder);
-			this.panelDrTech.Location = new System.Drawing.Point(863,0);
-			this.panelDrTech.Name = "panelDrTech";
-			this.panelDrTech.Size = new System.Drawing.Size(74,78);
-			this.panelDrTech.TabIndex = 17;
-			this.panelDrTech.Visible = false;
+			this.panelDrTech.Location=new System.Drawing.Point(863,0);
+			this.panelDrTech.Name="panelDrTech";
+			this.panelDrTech.Size=new System.Drawing.Size(74,78);
+			this.panelDrTech.TabIndex=17;
+			this.panelDrTech.Visible=false;
 			// 
 			// buttonClipboard
 			// 
-			this.buttonClipboard.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonClipboard.Autosize = false;
-			this.buttonClipboard.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonClipboard.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonClipboard.CornerRadius = 4F;
-			this.buttonClipboard.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.buttonClipboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonClipboard.Location = new System.Drawing.Point(0,58);
-			this.buttonClipboard.Name = "buttonClipboard";
-			this.buttonClipboard.Size = new System.Drawing.Size(72,20);
-			this.buttonClipboard.TabIndex = 85;
-			this.buttonClipboard.Text = "Folder to Clipbrd";
-			this.buttonClipboard.Click += new System.EventHandler(this.buttonClipboard_Click);
+			this.buttonClipboard.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.buttonClipboard.Autosize=false;
+			this.buttonClipboard.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonClipboard.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonClipboard.CornerRadius=4F;
+			this.buttonClipboard.Font=new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.buttonClipboard.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonClipboard.Location=new System.Drawing.Point(0,58);
+			this.buttonClipboard.Name="buttonClipboard";
+			this.buttonClipboard.Size=new System.Drawing.Size(72,20);
+			this.buttonClipboard.TabIndex=85;
+			this.buttonClipboard.Text="Folder to Clipbrd";
+			this.buttonClipboard.Click+=new System.EventHandler(this.buttonClipboard_Click);
 			// 
 			// butCBSheet
 			// 
-			this.butCBSheet.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCBSheet.Autosize = false;
-			this.butCBSheet.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCBSheet.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCBSheet.CornerRadius = 4F;
-			this.butCBSheet.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butCBSheet.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCBSheet.Location = new System.Drawing.Point(0,39);
-			this.butCBSheet.Name = "butCBSheet";
-			this.butCBSheet.Size = new System.Drawing.Size(72,20);
-			this.butCBSheet.TabIndex = 84;
-			this.butCBSheet.Text = "New C&&B Sheet";
-			this.butCBSheet.Click += new System.EventHandler(this.butCBSheet_Click);
+			this.butCBSheet.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butCBSheet.Autosize=false;
+			this.butCBSheet.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCBSheet.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCBSheet.CornerRadius=4F;
+			this.butCBSheet.Font=new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butCBSheet.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCBSheet.Location=new System.Drawing.Point(0,39);
+			this.butCBSheet.Name="butCBSheet";
+			this.butCBSheet.Size=new System.Drawing.Size(72,20);
+			this.butCBSheet.TabIndex=84;
+			this.butCBSheet.Text="New C&&B Sheet";
+			this.butCBSheet.Click+=new System.EventHandler(this.butCBSheet_Click);
 			// 
 			// butCameraPic
 			// 
-			this.butCameraPic.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCameraPic.Autosize = true;
-			this.butCameraPic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCameraPic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCameraPic.CornerRadius = 4F;
-			this.butCameraPic.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butCameraPic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCameraPic.Location = new System.Drawing.Point(0,20);
-			this.butCameraPic.Name = "butCameraPic";
-			this.butCameraPic.Size = new System.Drawing.Size(72,20);
-			this.butCameraPic.TabIndex = 83;
-			this.butCameraPic.Text = "Camera Pics";
-			this.butCameraPic.Click += new System.EventHandler(this.butCameraPic_Click);
+			this.butCameraPic.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butCameraPic.Autosize=true;
+			this.butCameraPic.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCameraPic.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCameraPic.CornerRadius=4F;
+			this.butCameraPic.Font=new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butCameraPic.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCameraPic.Location=new System.Drawing.Point(0,20);
+			this.butCameraPic.Name="butCameraPic";
+			this.butCameraPic.Size=new System.Drawing.Size(72,20);
+			this.butCameraPic.TabIndex=83;
+			this.butCameraPic.Text="Camera Pics";
+			this.butCameraPic.Click+=new System.EventHandler(this.butCameraPic_Click);
 			// 
 			// butOpenFolder
 			// 
-			this.butOpenFolder.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOpenFolder.Autosize = false;
-			this.butOpenFolder.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOpenFolder.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOpenFolder.CornerRadius = 4F;
-			this.butOpenFolder.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butOpenFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butOpenFolder.Location = new System.Drawing.Point(0,1);
-			this.butOpenFolder.Name = "butOpenFolder";
-			this.butOpenFolder.Size = new System.Drawing.Size(72,20);
-			this.butOpenFolder.TabIndex = 82;
-			this.butOpenFolder.Text = "Pt Folder/E-Mail";
-			this.butOpenFolder.Click += new System.EventHandler(this.butOpenFolder_Click);
+			this.butOpenFolder.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butOpenFolder.Autosize=false;
+			this.butOpenFolder.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOpenFolder.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOpenFolder.CornerRadius=4F;
+			this.butOpenFolder.Font=new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butOpenFolder.ImageAlign=System.Drawing.ContentAlignment.MiddleLeft;
+			this.butOpenFolder.Location=new System.Drawing.Point(0,1);
+			this.butOpenFolder.Name="butOpenFolder";
+			this.butOpenFolder.Size=new System.Drawing.Size(72,20);
+			this.butOpenFolder.TabIndex=82;
+			this.butOpenFolder.Text="Pt Folder/E-Mail";
+			this.butOpenFolder.Click+=new System.EventHandler(this.butOpenFolder_Click);
 			// 
 			// ToolBarMain
 			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListTools2;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
-			this.ToolBarMain.TabIndex = 10;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.Dock=System.Windows.Forms.DockStyle.Top;
+			this.ToolBarMain.ImageList=this.imageListTools2;
+			this.ToolBarMain.Location=new System.Drawing.Point(0,0);
+			this.ToolBarMain.Name="ToolBarMain";
+			this.ToolBarMain.Size=new System.Drawing.Size(939,25);
+			this.ToolBarMain.TabIndex=10;
+			this.ToolBarMain.ButtonClick+=new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// paintTools
 			// 
-			this.paintTools.ImageList = this.imageListTools2;
-			this.paintTools.Location = new System.Drawing.Point(440,24);
-			this.paintTools.Name = "paintTools";
-			this.paintTools.Size = new System.Drawing.Size(499,25);
-			this.paintTools.TabIndex = 14;
-			this.paintTools.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.paintTools_ButtonClick);
+			this.paintTools.ImageList=this.imageListTools2;
+			this.paintTools.Location=new System.Drawing.Point(440,24);
+			this.paintTools.Name="paintTools";
+			this.paintTools.Size=new System.Drawing.Size(499,25);
+			this.paintTools.TabIndex=14;
+			this.paintTools.ButtonClick+=new OpenDental.UI.ODToolBarButtonClickEventHandler(this.paintTools_ButtonClick);
 			// 
 			// brightnessContrastSlider
 			// 
-			this.brightnessContrastSlider.Enabled = false;
-			this.brightnessContrastSlider.Location = new System.Drawing.Point(240,32);
-			this.brightnessContrastSlider.MaxVal = 255;
-			this.brightnessContrastSlider.MinVal = 0;
-			this.brightnessContrastSlider.Name = "brightnessContrastSlider";
-			this.brightnessContrastSlider.Size = new System.Drawing.Size(194,14);
-			this.brightnessContrastSlider.TabIndex = 12;
-			this.brightnessContrastSlider.Text = "contrWindowingSlider1";
-			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
-			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
+			this.brightnessContrastSlider.Enabled=false;
+			this.brightnessContrastSlider.Location=new System.Drawing.Point(240,32);
+			this.brightnessContrastSlider.MaxVal=255;
+			this.brightnessContrastSlider.MinVal=0;
+			this.brightnessContrastSlider.Name="brightnessContrastSlider";
+			this.brightnessContrastSlider.Size=new System.Drawing.Size(194,14);
+			this.brightnessContrastSlider.TabIndex=12;
+			this.brightnessContrastSlider.Text="contrWindowingSlider1";
+			this.brightnessContrastSlider.Scroll+=new System.EventHandler(this.brightnessContrastSlider_Scroll);
+			this.brightnessContrastSlider.ScrollComplete+=new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
 			// 
 			// ContrDocs
 			// 
@@ -582,9 +569,9 @@ namespace OpenDental{
 			this.Controls.Add(this.panelNote);
 			this.Controls.Add(this.PictureBox1);
 			this.Controls.Add(this.TreeDocuments);
-			this.Name = "ContrDocs";
-			this.Size = new System.Drawing.Size(939,585);
-			this.Resize += new System.EventHandler(this.ContrDocs_Resize);
+			this.Name="ContrDocs";
+			this.Size=new System.Drawing.Size(939,585);
+			this.Resize+=new System.EventHandler(this.ContrDocs_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
 			this.panelNote.ResumeLayout(false);
 			this.panelNote.PerformLayout();
@@ -1054,25 +1041,33 @@ namespace OpenDental{
 		}
 
 		private void OnPrint_Click(){
-			if(TreeDocuments.SelectedNode==null || TreeDocuments.SelectedNode.Tag==null){
+			if(TreeDocuments.SelectedNode==null||TreeDocuments.SelectedNode.Tag==null) {
 				MsgBox.Show(this,"Cannot print. No document currently selected.");
 				return;
 			}
-			try{
-				//This needs to be debugged in both 6.7 and 6.8(head).
-				//Dialog seems to be shown, but no value from it used.
-				//include: PrintDialog1.UseEXDialog=true; so that it will work on 64 bit.
-				if(PrintDialog1.ShowDialog()==DialogResult.OK){
-					if(PrintDocument2.DefaultPageSettings.PaperSize.Width==0 ||
-							PrintDocument2.DefaultPageSettings.PaperSize.Height==0) {
-						PrintDocument2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			try {
+				PrintDocument printDocument=new PrintDocument();
+				printDocument.PrintPage+=new PrintPageEventHandler(printDocument_PrintPage);
+				PrintDialog PrintDialog1=new PrintDialog();
+				PrintDialog1.AllowCurrentPage=false;
+				PrintDialog1.AllowPrintToFile=true;
+				PrintDialog1.AllowSelection=false;
+				PrintDialog1.AllowSomePages=false;
+				PrintDialog1.Document=printDocument;
+				PrintDialog1.PrintToFile=false;
+				PrintDialog1.ShowHelp=true;
+				PrintDialog1.ShowNetwork=true;
+				PrintDialog1.UseEXDialog=true; //needed because PrintDialog was not showing on 64 bit Vista systems
+				if(PrintDialog1.ShowDialog()==DialogResult.OK) {
+					if(printDocument.DefaultPageSettings.PaperSize.Width==0||
+							printDocument.DefaultPageSettings.PaperSize.Height==0) {
+						printDocument.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 					}
-					PrintDocument2.OriginAtMargins=true;
-					PrintDocument2.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around.
-					PrintDocument2.Print();
+					printDocument.OriginAtMargins=true;
+					printDocument.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around
+					printDocument.Print();
 				}
-			}
-			catch(System.Exception ex){
+			} catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"An error occurred while printing")+"\r\n"+ex.ToString());
 			}
 		}
@@ -1505,7 +1500,7 @@ namespace OpenDental{
 			paintTools.Invalidate();
 		}
 
-		private void printDocument2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e){
+		private void printDocument_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e){
 			Bitmap prePrintImage=renderImage; //Keep a local pointer to the render image after this point, 
 																				//so that the print results cannot be messed up by the current
 																				//rendering thread (by changing the renderImage).
