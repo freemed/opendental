@@ -38,7 +38,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDateTo;
 		private OpenDental.UI.ODGrid grid;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		///<summary>This list of appointments displayed</summary>
 		private DataTable table;
 		private PrintDocument pd;
@@ -50,7 +50,7 @@ namespace OpenDental{
 		private Label label4;
 		private OpenDental.UI.Button butEmail;
 		///<summary>Only used if PinClicked=true</summary>
-		public int AptSelected;
+		public long AptSelected;
 
 		///<summary></summary>
 		public FormConfirmList(){
@@ -375,7 +375,7 @@ namespace OpenDental{
 		private void FillMain(){
 			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
 			DateTime dateTo=PIn.PDate(textDateTo.Text);
-			int provNum=0;
+			long provNum=0;
 			if(comboProv.SelectedIndex!=0) {
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
@@ -440,7 +440,7 @@ namespace OpenDental{
 				grid.Invalidate();
 				return;
 			}
-			int guar=PIn.PInt(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
+			long guar=PIn.PInt(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
 			int famCount=0;
 			for(int i=0;i<grid.Rows.Count;i++){
 				if(PIn.PInt(table.Rows[i]["Guarantor"].ToString())==guar){
@@ -464,7 +464,7 @@ namespace OpenDental{
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
 			Cursor=Cursors.WaitCursor;
-			int selectedApt=PIn.PInt(table.Rows[e.Row]["AptNum"].ToString());
+			long selectedApt=PIn.PInt(table.Rows[e.Row]["AptNum"].ToString());
 			//Appointment apt=Appointments.GetOneApt(selectedApt);
 			FormApptEdit FormA=new FormApptEdit(selectedApt);
 			FormA.PinIsVisible=true;
@@ -493,7 +493,7 @@ namespace OpenDental{
 			}
 			Appointment apt;
 			Cursor=Cursors.WaitCursor;
-			int[] selectedApts=new int[grid.SelectedIndices.Length];
+			long[] selectedApts=new long[grid.SelectedIndices.Length];
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				selectedApts[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
 			}
@@ -534,15 +534,15 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"There are no appointments in the list.  Must have at least one to run report."));    
         return;
       }
-      int[] aptNums;
+			long[] aptNums;
       if(grid.SelectedIndices.Length==0){
-        aptNums=new int[table.Rows.Count];
+				aptNums=new long[table.Rows.Count];
         for(int i=0;i<aptNums.Length;i++){
           aptNums[i]=PIn.PInt(table.Rows[i]["AptNum"].ToString());
         }
       }
       else{
-        aptNums=new int[grid.SelectedIndices.Length];
+				aptNums=new long[grid.SelectedIndices.Length];
         for(int i=0;i<aptNums.Length;i++){
           aptNums[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
         }
@@ -561,7 +561,7 @@ namespace OpenDental{
 					grid.SetSelected(i,true);
 				}
 			}
-      List <int> aptNums=new List <int> ();
+			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
         aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
@@ -587,7 +587,7 @@ namespace OpenDental{
 					grid.SetSelected(i,true);
 				}
 			}
-      List <int> aptNums=new List <int> ();
+			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
         aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }

@@ -303,7 +303,7 @@ namespace OpenDental{
 			
 			//Patient-------------------------------------------------------------------------------------
 			//DataTable table;
-			int patNum=Patients.GetPatNumByNameAndBirthday(pat.LName,pat.FName,pat.Birthdate);
+			long patNum=Patients.GetPatNumByNameAndBirthday(pat.LName,pat.FName,pat.Birthdate);
 			Patient existingPat=null;
 			existingPatOld=null;//we will need this to do an update.
 			if(patNum != 0){//a patient already exists, so only add missing fields

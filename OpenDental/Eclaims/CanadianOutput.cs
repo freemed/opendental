@@ -9,8 +9,8 @@ using OpenDentBusiness;
 namespace OpenDental.Eclaims {
 	public class CanadianOutput {
 		///<summary>The result is a string which can be dropped into the insplan.BenefitNotes.  Or it might throw an exception if invalid data.  This class is also responsible for saving the returned message to the etrans table and printing out the required form.</summary>
-		public static string SendElegibility(string electID,int patNum,string groupNumber, string divisionNo,
-			string subscriberID, string patID,Relat patRelat, int subscNum, string dentaideCardSequence)
+		public static string SendElegibility(string electID,long patNum,string groupNumber,string divisionNo,
+			string subscriberID,string patID,Relat patRelat,long subscNum,string dentaideCardSequence)
 		{
 			//Note: This might be the only class of this kind that returns a string.  It's a special situation.
 			//We are simply not going to bother with language translation here.

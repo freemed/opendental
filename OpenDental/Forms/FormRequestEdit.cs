@@ -12,7 +12,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormRequestEdit:Form {
-		public int RequestId;
+		public long RequestId;
 		public bool IsAdminMode;
 		//private Request ReqCur;
 		//public bool IsNew;//might be redundant, since RequestId will be zero anyway.

@@ -1547,7 +1547,7 @@ namespace OpenDental{
 		private void FormInsPlan_Load(object sender,System.EventArgs e) {
 			Cursor=Cursors.WaitCursor; 
 			PlanCurOld=PlanCur.Copy();
-			int patPlanNum=0;
+			long patPlanNum=0;
 			if(PatPlanCur!=null) {
 				patPlanNum=PatPlanCur.PatPlanNum;
 			}
@@ -1757,7 +1757,7 @@ namespace OpenDental{
 				}
 			}
 			FillCarrier(PlanCur.CarrierNum);
-			int excludePlan=-1;
+			long excludePlan=-1;
 			if(!IsForAll){
 				excludePlan=PlanCur.PlanNum;
 			}
@@ -1806,7 +1806,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Fills the carrier fields on the form based on the specified carrierNum.</summary>
-		private void FillCarrier(int carrierNum) {
+		private void FillCarrier(long carrierNum) {
 			Carrier carrier=Carriers.GetCarrier(carrierNum);
 			textCarrier.Text=carrier.CarrierName;
 			textPhone.Text=carrier.Phone;
@@ -2431,7 +2431,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.PInt32(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2456,7 +2456,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.PInt32(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2495,7 +2495,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.PInt32(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2536,7 +2536,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt(splitField[0]);
+								percent=PIn.PInt32(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2742,7 +2742,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.PInt32(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2761,7 +2761,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.PInt32(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2801,7 +2801,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.PInt32(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2832,7 +2832,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt(splitField[0]);
+							percent=PIn.PInt32(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -3068,7 +3068,7 @@ namespace OpenDental{
 			string otherBenNote="";
 			if(PlanCur.BenefitNotes=="") {
 				//try to find some other similar notes. Never includes the current plan.
-				List<int> samePlans=InsPlans.GetPlanNumsOfSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
+				List<long> samePlans=InsPlans.GetPlanNumsOfSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
 					textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,PlanCur.PlanNum,false);
 				otherBenNote=InsPlans.GetBenefitNotes(samePlans);
 				if(otherBenNote=="") {
@@ -3253,7 +3253,7 @@ namespace OpenDental{
 		}
 
 		private void gridBenefits_DoubleClick(object sender,EventArgs e) {
-			int patPlanNum=0;
+			long patPlanNum=0;
 			if(PatPlanCur!=null) {
 				patPlanNum=PatPlanCur.PatPlanNum;
 			}
@@ -3855,7 +3855,7 @@ namespace OpenDental{
 			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {
 				PlanCur.FilingCodeSubtype=subtypeList[comboFilingCodeSubtype.SelectedIndex].InsFilingCodeSubtypeNum;
 			}
-			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
+			PlanCur.DentaideCardSequence=PIn.PInt32(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
 			PlanCur.ReleaseInfo=checkRelease.Checked;
@@ -3872,7 +3872,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			if(PatPlanCur!=null) {
 				if(PIn.PInt(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
-					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.PInt(textOrdinal.Text));
+					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.PInt32(textOrdinal.Text));
 				}
 				PatPlanCur.IsPending=checkIsPending.Checked;
 				PatPlanCur.Relationship=(Relat)comboRelationship.SelectedIndex;
@@ -3880,7 +3880,7 @@ namespace OpenDental{
 				PatPlans.Update(PatPlanCur);
 			}
 			//Update the plan(s)
-			List<int> planNums=InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(PlanCurOld.EmployerNum),PlanCurOld.GroupName,
+			List<long> planNums=InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(PlanCurOld.EmployerNum),PlanCurOld.GroupName,
 				PlanCurOld.GroupNum,PlanCurOld.DivisionNo,Carriers.GetName(PlanCurOld.CarrierNum),PlanCurOld.IsMedical,
 				PlanCurOld.PlanNum,true);//include the current plan.
 			if(!IsForAll){

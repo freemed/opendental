@@ -17,13 +17,13 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private int Subscriber;
+		private long Subscriber;
 		private List <InsPlan> PlanList;
 		///<summary>When dialogResult=OK, this will contain the PlanNum of the selected plan.  If this is 0, then user has selected the 'New' option.</summary>
-		public int SelectedPlanNum;
+		public long SelectedPlanNum;
 
 		///<summary></summary>
-		public FormInsSelectSubscr(int subscriber)
+		public FormInsSelectSubscr(long subscriber)
 		{
 			//
 			// Required for Windows Form Designer support

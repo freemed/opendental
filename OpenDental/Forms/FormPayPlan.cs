@@ -49,7 +49,7 @@ namespace OpenDental{
 		private System.Drawing.Printing.PrintDocument pd2;
 		private System.Windows.Forms.Label label12;
 		/// <summary>Go to the specified patnum.  Upon dialog close, if this number is not 0, then patients.Cur will be changed to this new patnum, and Account refreshed to the new patient.</summary>
-		public int GotoPatNum;
+		public long GotoPatNum;
 		private System.Windows.Forms.Label label13;
 		//private double amtPaid;
 		private System.Windows.Forms.Label label15;
@@ -818,7 +818,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.Cells.Add("");
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
 				if(i<table.Rows.Count-1//not the last row
 					&& ((DateTime)table.Rows[i]["DateTime"]).Date<=DateTime.Today
 					&& ((DateTime)table.Rows[i+1]["DateTime"]).Date>DateTime.Today)

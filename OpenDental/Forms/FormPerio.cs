@@ -1389,26 +1389,25 @@ namespace OpenDental{
 			//this is necessary because Microsoft's updown control is too buggy to be useful
 			Cursor=Cursors.WaitCursor;
 			Pref pref=null;
+			int currentValue=0;
 			if(sender==updownProb){
-				//textRedProb.Cursor=Cursors.WaitCursor;
-				pref=(Pref)PrefC.HList["PerioRedProb"];//erioRedNumber
+				currentValue=PrefC.GetInt32("PerioRedProb");
 			}
-			else if(sender==updownMGJ){
-				pref=(Pref)PrefC.HList["PerioRedMGJ"];
+			else if(sender==updownMGJ) {
+				currentValue=PrefC.GetInt32("PerioRedMGJ");
 			}
-			else if(sender==updownGing){
-				pref=(Pref)PrefC.HList["PerioRedGing"];
+			else if(sender==updownGing) {
+				currentValue=PrefC.GetInt32("PerioRedGing");
 			}
-			else if(sender==updownCAL){
-				pref=(Pref)PrefC.HList["PerioRedCAL"];
+			else if(sender==updownCAL) {
+				currentValue=PrefC.GetInt32("PerioRedCAL");
 			}
-			else if(sender==updownFurc){
-				pref=(Pref)PrefC.HList["PerioRedFurc"];
+			else if(sender==updownFurc) {
+				currentValue=PrefC.GetInt32("PerioRedFurc");
 			}
-			else if(sender==updownMob){
-				pref=(Pref)PrefC.HList["PerioRedMob"];
+			else if(sender==updownMob) {
+				currentValue=PrefC.GetInt32("PerioRedMob");
 			}
-			int currentValue=PIn.PInt(pref.ValueString);
 			if(e.Y<8){//up
 				currentValue++;
 			}

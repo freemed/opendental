@@ -252,7 +252,7 @@ namespace OpenDental{
 			SchedCur.StartTime=DateTime.Parse(comboStart.Text);
 			SchedCur.StopTime=DateTime.Parse(comboStop.Text);
       SchedCur.Note=textNote.Text;
-			SchedCur.Ops=new List<int>();
+			SchedCur.Ops=new List<long>();
 			if(!listOps.SelectedIndices.Contains(0)){
 				for(int i=0;i<listOps.SelectedIndices.Count;i++){
 					SchedCur.Ops.Add(OperatoryC.ListShort[listOps.SelectedIndices[i]-1].OperatoryNum);

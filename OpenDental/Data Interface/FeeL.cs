@@ -9,7 +9,7 @@ namespace OpenDental{
 	public class FeeL {
 
 		///<summary>If the named fee schedule does not exist, then it will be created.  It always returns the defnum for the feesched used, regardless of whether it already existed.  procCode must have already been tested for valid code, and feeSchedName must not be blank.</summary>
-		public static int ImportTrojan(string procCode,double amt,string feeSchedName){
+		public static long ImportTrojan(string procCode,double amt,string feeSchedName) {
 			FeeSched feeSched=FeeScheds.GetByExactName(feeSchedName);
 			//if isManaged, then this should be done differently from here on out.
 			if(feeSched==null){

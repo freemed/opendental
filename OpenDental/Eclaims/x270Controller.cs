@@ -10,7 +10,7 @@ namespace OpenDental.Eclaims {
 	public class x270Controller {
 
 		///<summary>The insplan that's passed in need not be properly updated to the database first.</summary>
-		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,int patNum,Carrier carrier,List<Benefit> benList,int patPlanNum) {
+		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,long patNum,Carrier carrier,List<Benefit> benList,long patPlanNum) {
 			//throw exception if missing info
 			Patient pat=Patients.GetPat(patNum);
 			Patient subsc=Patients.GetPat(plan.Subscriber);

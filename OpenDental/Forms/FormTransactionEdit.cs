@@ -60,7 +60,7 @@ namespace OpenDental{
 		public bool IsNew;
 
 		///<summary></summary>
-		public FormTransactionEdit(int transNum,int accountNum)
+		public FormTransactionEdit(long transNum,long accountNum)
 		{
 			//
 			// Required for Windows Form Designer support

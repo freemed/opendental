@@ -482,11 +482,11 @@ namespace OpenDental{
 		private void FillGrids(){
 			if(IsNew){
 				DateTime dateStart=PIn.PDate(textDateStart.Text);
-				int clinicNum=0;
+				long clinicNum=0;
 				if(comboClinic.SelectedIndex!=0){
 					clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 				}
-				List<int> payTypes=new List<int>();//[listPayType.SelectedIndices.Count];
+				List<long> payTypes=new List<long>();//[listPayType.SelectedIndices.Count];
 				for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
 					payTypes.Add(DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum);
 				}
@@ -498,7 +498,7 @@ namespace OpenDental{
 				ClaimPayList=ClaimPayments.GetForDeposit(DepositCur.DepositNum);
 			}
 			//Fill Patient Payment Grid---------------------------------------
-			List <int> patNums=new List <int> ();
+			List<long> patNums=new List<long>();
 			for(int i=0;i<PatPayList.Count;i++){
 				patNums.Add(PatPayList[i].PatNum);
 			}
@@ -665,7 +665,7 @@ namespace OpenDental{
 			Queries.CurReport=new ReportOld();
 			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
 			DataRow row;
-			List <int> patNums=new List <int> ();
+			List<long> patNums=new List<long>();
 			for(int i=0;i<PatPayList.Count;i++){
 				patNums.Add(PatPayList[i].PatNum);
 			}

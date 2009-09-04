@@ -21,10 +21,10 @@ namespace OpenDental{
 		//<summary>If dialog result=ok, this will contain the TaskList that was selected.</summary>
 		//public TaskList SelectedList;
 		private TaskList[] TaskListList;
-		private int KeyNum;
+		private long KeyNum;
 
 		///<summary></summary>
-		public FormTaskListSelect(TaskObjectType oType,int keyNum)
+		public FormTaskListSelect(TaskObjectType oType,long keyNum)
 		{
 			//
 			// Required for Windows Form Designer support

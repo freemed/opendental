@@ -13,7 +13,7 @@ namespace OpenDental {
 	public partial class UserControlPhonePanel:UserControl {
 		DataTable tablePhone;
 		///<summary>When the GoToChanged event fires, this tells us which patnum.</summary>
-		public int GotoPatNum;
+		public long GotoPatNum;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
@@ -138,8 +138,8 @@ namespace OpenDental {
 				else{
 					row.Cells.Add("");
 				}
-				row.ColorBackG=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorBar"].ToString()));
-				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.PInt32(tablePhone.Rows[i]["ColorBar"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt32(tablePhone.Rows[i]["ColorText"].ToString()));
 				gridEmp.Rows.Add(row);
 			}
 			gridEmp.EndUpdate();
@@ -188,13 +188,13 @@ namespace OpenDental {
 			if((e.Button & MouseButtons.Right)==MouseButtons.Right){
 				return;
 			}
-			int patNum=PIn.PInt(tablePhone.Rows[e.Row]["PatNum"].ToString());
+			long patNum=PIn.PInt(tablePhone.Rows[e.Row]["PatNum"].ToString());
 			GotoPatNum=patNum;
 			OnGoToChanged();
 		}
 
 		private void menuItemManage_Click(object sender,EventArgs e) {
-			int patNum=PIn.PInt(tablePhone.Rows[rowI]["PatNum"].ToString());
+			long patNum=PIn.PInt(tablePhone.Rows[rowI]["PatNum"].ToString());
 			if(patNum==0){
 				MsgBox.Show(this,"Please attach this number to a patient first.");
 				return;
@@ -247,8 +247,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			Employees.SetPhoneStatus("Available",extension);//green
 			FillEmps();
@@ -258,8 +258,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			Employees.SetPhoneStatus("Training",extension);
 			FillEmps();
@@ -269,8 +269,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			Employees.SetPhoneStatus("TeamAssist",extension);
 			FillEmps();
@@ -280,8 +280,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			Employees.SetPhoneStatus("WrapUp",extension);
 			//this is usually an automatic status
@@ -292,8 +292,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			PhoneOverrides.SetAvailable(extension,employeeNum);
 			Employees.SetPhoneStatus("OfflineAssist",extension);
 			FillEmps();
@@ -303,8 +303,8 @@ namespace OpenDental {
 			if(!ClockIn()){
 				return;
 			}
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			//Employees.SetUnavailable(extension,employeeNum);
 			//Get an override if it exists
 			PhoneOverride phoneOR=PhoneOverrides.GetByExtAndEmp(extension,employeeNum);
@@ -339,8 +339,8 @@ namespace OpenDental {
 
 		private void menuItemLunch_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			if(PrefC.GetBool("TimecardSecurityEnabled")){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -368,8 +368,8 @@ namespace OpenDental {
 
 		private void menuItemHome_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			if(PrefC.GetBool("TimecardSecurityEnabled")){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -397,8 +397,8 @@ namespace OpenDental {
 
 		private void menuItemBreak_Click(object sender,EventArgs e) {
 			//verify that employee is logged in as user
-			int extension=PIn.PInt(tablePhone.Rows[rowI]["Extension"].ToString());
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			int extension=PIn.PInt32(tablePhone.Rows[rowI]["Extension"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			if(PrefC.GetBool("TimecardSecurityEnabled")){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
@@ -426,7 +426,7 @@ namespace OpenDental {
 
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private bool ClockIn(){
-			int employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
+			long employeeNum=PIn.PInt(tablePhone.Rows[rowI]["EmployeeNum"].ToString());
 			if(ClockEvents.IsClockedIn(employeeNum)){
 				return true;//if employee is already clocked in, then return
 			}

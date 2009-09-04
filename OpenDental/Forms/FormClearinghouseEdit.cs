@@ -957,7 +957,7 @@ namespace OpenDental{
 			ClearinghouseCur.ResponsePath=textResponsePath.Text;
 			ClearinghouseCur.Eformat=(ElectronicClaimFormat)(comboFormat.SelectedIndex);
 			ClearinghouseCur.CommBridge=(EclaimsCommBridge)(comboCommBridge.SelectedIndex);
-			ClearinghouseCur.ModemPort=PIn.PInt(textModemPort.Text);
+			ClearinghouseCur.ModemPort=PIn.PInt32(textModemPort.Text);
 			ClearinghouseCur.ClientProgram=textClientProgram.Text;
 			ClearinghouseCur.IsDefault=checkIsDefault.Checked;
 			ClearinghouseCur.Payors=textPayors.Text;

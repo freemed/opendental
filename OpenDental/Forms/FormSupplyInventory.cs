@@ -91,7 +91,7 @@ namespace OpenDental {
 		}
 
 		private void FillGridOrder() {
-			int supplier=0;
+			long supplier=0;
 			if(comboSupplier.SelectedIndex!=-1){
 				supplier=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
 			}
@@ -138,7 +138,7 @@ namespace OpenDental {
 		private void gridOrder_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormSupplyOrderEdit FormS=new FormSupplyOrderEdit();
 			FormS.Order=listOrder[e.Row];
-			int selectedOrderNum=listOrder[e.Row].SupplyOrderNum;
+			long selectedOrderNum=listOrder[e.Row].SupplyOrderNum;
 			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
@@ -177,7 +177,7 @@ namespace OpenDental {
 		}
 
 		private void FillGridOrderItem(){
-			int orderNum=0;
+			long orderNum=0;
 			if(gridOrder.GetSelectedIndex()!=-1){//an order is selected
 				orderNum=listOrder[gridOrder.GetSelectedIndex()].SupplyOrderNum;
 			}
@@ -205,7 +205,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(tableOrderItem.Rows[i]["CatalogNumber"].ToString());
 				row.Cells.Add(tableOrderItem.Rows[i]["Descript"].ToString());
-				qty=PIn.PInt(tableOrderItem.Rows[i]["Qty"].ToString());
+				qty=PIn.PInt32(tableOrderItem.Rows[i]["Qty"].ToString());
 				row.Cells.Add(qty.ToString());
 				price=PIn.PDouble(tableOrderItem.Rows[i]["Price"].ToString());
 				row.Cells.Add(price.ToString("n"));
@@ -246,7 +246,7 @@ namespace OpenDental {
 		}
 
 		private void FillGridSupplyMain(){
-			int supplier=0;
+			long supplier=0;
 			if(comboSupplier.SelectedIndex!=-1) {
 				supplier=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
 			}
@@ -309,7 +309,7 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			int selected=listSupply[e.Row].SupplyNum;
+			long selected=listSupply[e.Row].SupplyNum;
 			int scroll=gridSupplyMain.ScrollValue;
 			FillGridSupplyMain();
 			gridSupplyMain.ScrollValue=scroll;
@@ -343,7 +343,7 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			int selected=FormS.Supp.SupplyNum;
+			long selected=FormS.Supp.SupplyNum;
 			int scroll=gridSupplyMain.ScrollValue;
 			FillGridSupplyMain();
 			gridSupplyMain.ScrollValue=scroll;
@@ -364,7 +364,7 @@ namespace OpenDental {
 				return;
 			}
 			SupplyOrderItem item;
-			List<int> itemNums=new List<int>();
+			List<long> itemNums=new List<long>();
 			List<Supply> skippedSupplies=new List<Supply>();
 			bool isSkipped;
 			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++){
@@ -433,7 +433,7 @@ namespace OpenDental {
 				return;//already at the top
 			}
 			//remember the selected SupplyNums for rehighlighting later.
-			List<int> selectedSupplyNums=new List<int>();
+			List<long> selectedSupplyNums=new List<long>();
 			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++) {
 				selectedSupplyNums.Add(listSupply[gridSupplyMain.SelectedIndices[i]].SupplyNum);
 			}
@@ -487,7 +487,7 @@ namespace OpenDental {
 				return;//already at the bottom
 			}
 			//remember the selected SupplyNums for rehighlighting later.
-			List<int> selectedSupplyNums=new List<int>();
+			List<long> selectedSupplyNums=new List<long>();
 			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++) {
 				selectedSupplyNums.Add(listSupply[gridSupplyMain.SelectedIndices[i]].SupplyNum);
 			}

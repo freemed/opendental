@@ -456,7 +456,7 @@ namespace OpenDental
 				}
 				birthdate=PIn.PDate(BirthdayTable.Rows[patientsPrinted]["Birthdate"].ToString());
 				//age=Shared.DateToAge(birthdate,PIn.PDate(textDateTo.Text).AddDays(1));//age on the day after the range
-				age=PIn.PInt(BirthdayTable.Rows[patientsPrinted]["Age"].ToString());
+				age=PIn.PInt32(BirthdayTable.Rows[patientsPrinted]["Age"].ToString());
 				str=str.Replace("?AgeOrdinal",Shared.NumberToOrdinal(age));
 				str=str.Replace("?Age",age.ToString());
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,10),Brushes.Black,new RectangleF(xPos+45,yPos+180,250,190));

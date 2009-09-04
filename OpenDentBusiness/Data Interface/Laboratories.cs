@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one laboratory from database</summary>
-		public static Laboratory GetOne(int laboratoryNum) {
+		public static Laboratory GetOne(long laboratoryNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Laboratory>(MethodBase.GetCurrentMethod(),laboratoryNum);
 			}

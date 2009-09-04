@@ -20,9 +20,9 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
 		private OpenDental.UI.Button butAdd;
-		public int PatNum;
+		public long PatNum;
 		///<summary>This only has a value when DialogResult=OK.</summary>
-		public int SelectedLabCaseNum;
+		public long SelectedLabCaseNum;
 		private OpenDental.UI.ODGrid gridMain;
 		private Label label1;
 		private List<LabCase> labCaseList;

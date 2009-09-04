@@ -393,7 +393,7 @@ namespace OpenDental{
 		}
 
 		private void FormApptsOther_Load(object sender, System.EventArgs e) {
-			AptNumsSelected=new List<int>();
+			AptNumsSelected=new List<long>();
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
 			textApptModNote.Text=PatCur.ApptModNote;
 			if(SelectOnly){
@@ -883,8 +883,8 @@ namespace OpenDental{
 
 		private void listFamily_Click(object sender,EventArgs e) {
 			//Changes the patient to whoever was clicked in the list 
-			int oldPatNum=PatCur.PatNum;
-			int newPatNum=FamCur.ListPats[listFamily.SelectedIndices[0]].PatNum;
+			long oldPatNum=PatCur.PatNum;
+			long newPatNum=FamCur.ListPats[listFamily.SelectedIndices[0]].PatNum;
 			if(newPatNum==oldPatNum){
 				return;
 			}

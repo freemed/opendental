@@ -3684,74 +3684,60 @@ namespace OpenDental {
 		private void gridProg_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			//Chartscrollval = gridProg.ScrollValue;
 			DataRow row = (DataRow)gridProg.Rows[e.Row].Tag;
-			if (row["ProcNum"].ToString() != "0")
-			{
-				if (checkAudit.Checked)
-				{
-					MsgBox.Show(this, "Not allowed to edit procedures when in audit mode.");
+			if(row["ProcNum"].ToString() != "0") {
+				if(checkAudit.Checked) {
+					MsgBox.Show(this,"Not allowed to edit procedures when in audit mode.");
 					return;
 				}
-				Procedure proc = Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()), true);
-				FormProcEdit FormP = new FormProcEdit(proc, PatCur, FamCur);
+				Procedure proc = Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),true);
+				FormProcEdit FormP = new FormProcEdit(proc,PatCur,FamCur);
 				FormP.ShowDialog();
-				if (FormP.DialogResult != DialogResult.OK)
-				{
+				if(FormP.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["CommlogNum"].ToString() != "0")
-			{
+			else if(row["CommlogNum"].ToString() != "0") {
 				Commlog comm = Commlogs.GetOne(PIn.PInt(row["CommlogNum"].ToString()));
 				FormCommItem FormC = new FormCommItem(comm);
 				FormC.ShowDialog();
-				if (FormC.DialogResult != DialogResult.OK)
-				{
+				if(FormC.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["RxNum"].ToString() != "0")
-			{
+			else if(row["RxNum"].ToString() != "0") {
 				RxPat rx = RxPats.GetRx(PIn.PInt(row["RxNum"].ToString()));
-				FormRxEdit FormRxE = new FormRxEdit(PatCur, rx);
+				FormRxEdit FormRxE = new FormRxEdit(PatCur,rx);
 				FormRxE.ShowDialog();
-				if (FormRxE.DialogResult != DialogResult.OK)
-				{
+				if(FormRxE.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["LabCaseNum"].ToString() != "0")
-			{
+			else if(row["LabCaseNum"].ToString() != "0") {
 				LabCase lab = LabCases.GetOne(PIn.PInt(row["LabCaseNum"].ToString()));
 				FormLabCaseEdit FormL = new FormLabCaseEdit();
 				FormL.CaseCur = lab;
 				FormL.ShowDialog();
-				if (FormL.DialogResult != DialogResult.OK)
-				{
+				if(FormL.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["TaskNum"].ToString() != "0")
-			{
+			else if(row["TaskNum"].ToString() != "0") {
 				Task curTask = Tasks.GetOne(PIn.PInt(row["TaskNum"].ToString()));
 				FormTaskEdit FormT = new FormTaskEdit(curTask);
 				FormT.ShowDialog();
-				if (FormT.GotoType != TaskObjectType.None)
-				{
+				if(FormT.GotoType != TaskObjectType.None) {
 					TaskObjectType GotoType = FormT.GotoType;
-					int GotoKeyNum = FormT.GotoKeyNum;
+					long GotoKeyNum = FormT.GotoKeyNum;
 					//OnGoToChanged();
-					if (GotoType == TaskObjectType.Patient)
-					{
-						if (GotoKeyNum != 0)
-						{
+					if(GotoType == TaskObjectType.Patient) {
+						if(GotoKeyNum != 0) {
 							Patient pat = Patients.GetPat(GotoKeyNum);
-							OnPatientSelected(pat.PatNum, pat.GetNameLF(), pat.Email != "", pat.ChartNumber);
+							OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email != "",pat.ChartNumber);
 							ModuleSelected(pat.PatNum);
 							return;
 						}
 					}
-					if (GotoType == TaskObjectType.Appointment)
-					{
+					if(GotoType == TaskObjectType.Appointment) {
 						/*There's nothing to do here, since we're not in the appt module.
 							if(GotoKeyNum!=0) {
 							Appointment apt=Appointments.GetOneApt(GotoKeyNum);
@@ -3776,29 +3762,24 @@ namespace OpenDental {
 						return;
 					}
 				}
-				if (FormT.DialogResult != DialogResult.OK)
-				{
+				if(FormT.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["AptNum"].ToString() != "0")
-			{
+			else if(row["AptNum"].ToString() != "0") {
 				//Appointment apt=Appointments.GetOneApt(
 				FormApptEdit FormA = new FormApptEdit(PIn.PInt(row["AptNum"].ToString()));
 				//PinIsVisible=false
 				FormA.ShowDialog();
-				if (FormA.DialogResult != DialogResult.OK)
-				{
+				if(FormA.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}
-			else if (row["EmailMessageNum"].ToString() != "0")
-			{
+			else if(row["EmailMessageNum"].ToString() != "0") {
 				EmailMessage msg = EmailMessages.GetOne(PIn.PInt(row["EmailMessageNum"].ToString()));
 				FormEmailMessageEdit FormE = new FormEmailMessageEdit(msg);
 				FormE.ShowDialog();
-				if (FormE.DialogResult != DialogResult.OK)
-				{
+				if(FormE.DialogResult != DialogResult.OK) {
 					return;
 				}
 			}

@@ -11,11 +11,11 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormBenefitElectHistory:Form {
 		private List<Etrans> list;
-		private int PlanNum;
-		private int PatPlanNum;
+		private long PlanNum;
+		private long PatPlanNum;
 		public List<Benefit> BenList;
 
-		public FormBenefitElectHistory(int planNum,int patPlanNum) {
+		public FormBenefitElectHistory(long planNum,long patPlanNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PlanNum=planNum;

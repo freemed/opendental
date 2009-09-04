@@ -10,7 +10,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormRecallsPat:Form {
-		public int PatNum;
+		public long PatNum;
 		///<summary>This is just the list for the current patient.</summary>
 		private List<Recall> RecallList;
 		private bool IsPerio;

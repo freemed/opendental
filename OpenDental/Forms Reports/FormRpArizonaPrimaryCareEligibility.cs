@@ -64,7 +64,7 @@ namespace OpenDental {
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
-			int copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
+			long copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+

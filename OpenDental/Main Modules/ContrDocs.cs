@@ -889,7 +889,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets the document category of the current selection. The current selection can be a folder itself, or a document within a folder.</summary>
-		private int GetCurrentCategory() {
+		private long GetCurrentCategory() {
 			return DefC.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 		}
 
@@ -1649,7 +1649,7 @@ namespace OpenDental{
 				documentDragTime.Milliseconds>250) { //Only takes effect if it happens over a period of time longer than .25 seconds.
 				TreeDocuments.Cursor=Cursors.Default;
 				//Find the destination folder.
-				int destinationCategory;
+				long destinationCategory;
 				if(node.Parent!=null) {
 					destinationCategory=DefC.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
 				}
@@ -2243,8 +2243,8 @@ namespace OpenDental{
 					MountItems.Insert(mountItem);
 					FillDocList(false);
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
-					brightnessContrastSlider.MinVal=PrefC.GetInt("ImageWindowingMin");
-					brightnessContrastSlider.MaxVal=PrefC.GetInt("ImageWindowingMax");
+					brightnessContrastSlider.MinVal=PrefC.GetInt32("ImageWindowingMin");
+					brightnessContrastSlider.MaxVal=PrefC.GetInt32("ImageWindowingMax");
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
 					ImageHelper.RenderMountFrames(renderImage,selectionMountItems,-1);
@@ -2626,7 +2626,7 @@ namespace OpenDental{
 		}
 
 		private void MountMenuSwap_Click(object sender,EventArgs e) {
-			int tempMountItemNum=mountDocs[hotDocument].MountItemNum;
+			long tempMountItemNum=mountDocs[hotDocument].MountItemNum;
 			mountDocs[hotDocument].MountItemNum=mountDocs[copyDocumentNumber].MountItemNum;
 			mountDocs[copyDocumentNumber].MountItemNum=tempMountItemNum;
 			Document tempMountDocument=mountDocs[hotDocument];

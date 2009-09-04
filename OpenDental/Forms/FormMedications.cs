@@ -21,7 +21,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddGeneric;
 		private OpenDental.UI.Button butAddBrand;
 		///<summary>the number returned if using select mode.</summary>
-		public int MedicationNum;
+		public long MedicationNum;
 
 		///<summary></summary>
 		public FormMedications()

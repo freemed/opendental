@@ -7,9 +7,9 @@ using OpenDentBusiness;
 namespace OpenDental.Bridges {
 	public class ECW {
 		///<summary>AptNum is always passed in by eCW.  It is used in the logic for setting procedures complete within apt edit window.</summary>
-		public static int AptNum;
+		public static long AptNum;
 		public static string EcwConfigPath;
-		public static int UserId;
+		public static long UserId;
 
 		//OD accepts commandline arguments from eCW.  That's handled in FormOpenDental.
 

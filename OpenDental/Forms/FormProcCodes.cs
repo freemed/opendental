@@ -22,7 +22,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		///<summary>If IsSelectionMode=true and DialogResult=OK, then this will contain the selected CodeNum.</summary>
-		public int SelectedCodeNum;
+		public long SelectedCodeNum;
 		//public string SelectedADA;	
 		private System.Windows.Forms.ListBox listFeeSched;
 		private System.Windows.Forms.Label labelFeeSched;
@@ -565,16 +565,16 @@ namespace OpenDental{
 				selected=ProcTable.Rows[gridMain.GetSelectedIndex()][3].ToString();
 			}
 			int scroll=gridMain.ScrollValue;
-			List <int> cats=new List <int> ();
+			List<long> cats=new List<long>();
 			for(int i=0;i<listCategories.SelectedIndices.Count;i++) {
 				cats.Add(CatList[listCategories.SelectedIndices[i]].DefNum);
 			}
-			int feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
-			int feeSchedComp1=0;
+			long feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
+			long feeSchedComp1=0;
 			if(comboCompare1.SelectedIndex!=0) {
 				feeSchedComp1=FeeSchedC.ListShort[comboCompare1.SelectedIndex-1].FeeSchedNum;
 			}
-			int feeSchedComp2=0;
+			long feeSchedComp2=0;
 			if(comboCompare2.SelectedIndex!=0) {
 				feeSchedComp2=FeeSchedC.ListShort[comboCompare2.SelectedIndex-1].FeeSchedNum;
 			}
@@ -723,7 +723,7 @@ namespace OpenDental{
 
 		private void butEditFeeSched_Click(object sender, System.EventArgs e) {
 			//won't even be visible if no permission
-			int selectedSched=0;
+			long selectedSched=0;
 			if(listFeeSched.SelectedIndex !=-1){
 				selectedSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
 			}
@@ -894,11 +894,11 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)){
 				return;
 			}
-			int codeNum=PIn.PInt(ProcTable.Rows[e.Row]["CodeNum"].ToString());
+			long codeNum=PIn.PInt(ProcTable.Rows[e.Row]["CodeNum"].ToString());
 			//string =ProcTable.Rows[e.Row]["ProcCode"].ToString();
 			if(e.Col>3){//if double clicked on a fee
 				Fee FeeCur=null;
-				int feesched=0;
+				long feesched=0;
 				if(e.Col==4){
 					feesched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
 					FeeCur=Fees.GetFee(codeNum,feesched);

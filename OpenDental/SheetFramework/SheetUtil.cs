@@ -10,7 +10,7 @@ using CodeBase;
 namespace OpenDental{
 	public class SheetUtil {
 		///<summary>Supply a template sheet as well as a list of primary keys.  This method creates a new collection of sheets which each have a parameter of int.  It also fills the sheets with data from the database, so no need to run that separately.</summary>
-		public static List<Sheet> CreateBatch(SheetDef sheetDef,List<int> priKeys){
+		public static List<Sheet> CreateBatch(SheetDef sheetDef,List<long> priKeys) {
 			//we'll assume for now that a batch sheet has only one parameter, so no need to check for values.
 			//foreach(SheetParameter param in sheet.Parameters){
 			//	if(param.IsRequired && param.ParamValue==null){
@@ -105,7 +105,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Creates a Sheet object from a sheetDef, complete with fields and parameters.  Sets date to today.</summary>
-		public static Sheet CreateSheet(SheetDef sheetDef,int patNum){
+		public static Sheet CreateSheet(SheetDef sheetDef,long patNum) {
 			Sheet sheet=new Sheet();
 			sheet.IsNew=true;
 			sheet.DateTimeSheet=DateTime.Now;

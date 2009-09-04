@@ -407,7 +407,7 @@ namespace OpenDental{
 				else{//patfield
 					string tag=gridPat.Rows[e.Row].Tag.ToString();
 					tag=tag.Substring(8);//strips off all but the number: PatField1
-					int index=PIn.PInt(tag);
+					int index=PIn.PInt32(tag);
 					PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
 					if(field==null) {
 						field=new PatField();
@@ -425,7 +425,7 @@ namespace OpenDental{
 			}
 			else{
 				string email=PatCur.Email;
-				int siteNum=PatCur.SiteNum;
+				long siteNum=PatCur.SiteNum;
 				//
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;

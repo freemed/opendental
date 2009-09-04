@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Surround with try/catch</summary>
-		public static void Delete(int insFilingCodeSubtypeNum) {
+		public static void Delete(long insFilingCodeSubtypeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeSubtypeNum);
 				return;

@@ -233,7 +233,7 @@ namespace OpenDental.UI
 					inputs[i]=new ComboBoxMulti();
 					//these two arrays are matched item for item
 					string[] foreignRows=GetFRows(multInputItems[i].FKType);
-					int[] foreignKeys=GetFKeys(multInputItems[i].FKType);
+					long[] foreignKeys=GetFKeys(multInputItems[i].FKType);
 					for(int j=0;j<foreignRows.Length;j++){
 						((ComboBoxMulti)inputs[i]).Items.Add(foreignRows[j]);
 						if(multInputItems[i].CurrentValues.Count > 0
@@ -322,11 +322,11 @@ namespace OpenDental.UI
 			return retVal;
 		}
 
-		private int[] GetFKeys(ReportFKType fKType){
-			int[] retVal=new int[0];
+		private long[] GetFKeys(ReportFKType fKType) {
+			long[] retVal=new long[0];
 			switch(fKType){
 				case ReportFKType.SchoolClass:
-					retVal=new int[SchoolClasses.List.Length];
+					retVal=new long[SchoolClasses.List.Length];
 					for(int i=0;i<SchoolClasses.List.Length;i++){
 						retVal[i]=SchoolClasses.List[i].SchoolClassNum;
 					}

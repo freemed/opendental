@@ -363,8 +363,8 @@ namespace OpenDental{
 				comboCategory.SelectedIndex=0;//we know that there will always be at least one cat. Validated in FormProcButtons
 			}
 			pictureBox.Image=ProcButtonCur.ButtonImage;
-			int[] codeNumList=ProcButtonItems.GetCodeNumListForButton(ProcButtonCur.ProcButtonNum);
-			int[] auto=ProcButtonItems.GetAutoListForButton(ProcButtonCur.ProcButtonNum);
+			long[] codeNumList=ProcButtonItems.GetCodeNumListForButton(ProcButtonCur.ProcButtonNum);
+			long[] auto=ProcButtonItems.GetAutoListForButton(ProcButtonCur.ProcButtonNum);
 			listADA.Items.Clear();
 			for(int i=0;i<codeNumList.Length;i++) {
 				listADA.Items.Add(ProcedureCodes.GetStringProcCode(codeNumList[i]));

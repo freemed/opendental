@@ -1494,7 +1494,7 @@ namespace OpenDental{
 
 		///<summary>Activated anytime a Patient menu item is clicked.</summary>
 		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=PatientL.ButtonSelect(menuPatient,sender,null);
+			long newPatNum=PatientL.ButtonSelect(menuPatient,sender,null);
 			ModuleSelected(newPatNum);
 		}
 

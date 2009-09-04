@@ -379,8 +379,8 @@ namespace OpenDental{
 			comboType.Items.Add("B");
 			comboType.Items.Add("D");
 			textDoc.Text=PrefC.GetInt("ScannerCompression").ToString();
-			slider.MinVal=PrefC.GetInt("ImageWindowingMin");
-			slider.MaxVal=PrefC.GetInt("ImageWindowingMax");
+			slider.MinVal=PrefC.GetInt32("ImageWindowingMin");
+			slider.MaxVal=PrefC.GetInt32("ImageWindowingMax");
 			computerPrefs=ComputerPrefs.GetForLocalComputer();
 			upDownPort.Value=computerPrefs.SensorPort;
 			comboType.Text=computerPrefs.SensorType;

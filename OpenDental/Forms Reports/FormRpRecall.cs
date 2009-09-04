@@ -23,8 +23,8 @@ namespace OpenDental{
 		private ArrayList ALpatSelect2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listPatientSelect2;
-		private System.Windows.Forms.ListBox listPatientSelect; 
-    private List<int> RecallNumList;
+		private System.Windows.Forms.ListBox listPatientSelect;
+		private List<long> RecallNumList;
 
 		///<summary></summary>
 		public FormRpRecall(){
@@ -38,9 +38,9 @@ namespace OpenDental{
 		}
   
 		///<summary></summary>
-		public FormRpRecall(List<int> recallNumList){
+		public FormRpRecall(List<long> recallNumList) {
 			InitializeComponent();
-      RecallNumList=new List<int>(recallNumList);
+			RecallNumList=new List<long>(recallNumList);
       ALpatSelect=new ArrayList();
 			ALpatSelect2=new ArrayList();
 			SQLselect="";

@@ -28,7 +28,7 @@ namespace OpenDental{
 		private ODGrid gridMain;
 		private ClaimSendQueueItem[] listQueue;
 		///<summary></summary>
-		public int GotoPatNum;
+		public long GotoPatNum;
 		private ODGrid gridHistory;
 		private MonthCalendar calendarTo;
 		private OpenDental.UI.Button butDropTo;
@@ -39,7 +39,7 @@ namespace OpenDental{
 		private ValidDate textDateFrom;
 		private Label label1;
 		///<summary></summary>
-		public int GotoClaimNum;
+		public long GotoClaimNum;
 		private ODToolBar ToolBarHistory;
 		private DataTable tableHistory;
 		private int pagesPrinted;
@@ -443,7 +443,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			int clinicNum=0;
+			long clinicNum=0;
 			if(!PrefC.GetBool("EasyNoClinics") && comboClinic.SelectedIndex!=0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
@@ -597,7 +597,7 @@ namespace OpenDental{
 			//Carrier carrier;
 			Claim claim;
 			InsPlan plan;
-			List<int> carrierNums=new List<int>();
+			List<long> carrierNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				claim=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum);
 				plan=InsPlans.GetPlan(claim.PlanNum,new List <InsPlan> ());
@@ -611,7 +611,7 @@ namespace OpenDental{
 		}
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
-		private void OnEclaims_Click(int clearinghouseNum){
+		private void OnEclaims_Click(long clearinghouseNum) {
 			if(clearinghouseNum==0 && !PrefC.GetBool("EasyNoClinics")) {
 				MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
 				return;
@@ -703,7 +703,7 @@ namespace OpenDental{
 			//Now, the cool part.  Highlight all the claims that were just sent in the history grid
 			for(int i=0;i<queueItems.Count;i++){
 				for(int j=0;j<tableHistory.Rows.Count;j++){
-					int claimNum=PIn.PInt(tableHistory.Rows[j]["ClaimNum"].ToString());
+					long claimNum=PIn.PInt(tableHistory.Rows[j]["ClaimNum"].ToString());
 					if(claimNum==queueItems[i].ClaimNum){
 						gridHistory.SetSelected(j,true);
 						break;

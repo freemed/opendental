@@ -9,7 +9,7 @@ namespace OpenDental{
 	public class ClearinghouseL {
 
 		///<summary>Returns the clearinghouse specified by the given num.</summary>
-		public static Clearinghouse GetClearinghouse(int clearinghouseNum){
+		public static Clearinghouse GetClearinghouse(long clearinghouseNum) {
 			for(int i=0;i<Clearinghouses.List.Length;i++){
 				if(Clearinghouses.List[i].ClearinghouseNum==clearinghouseNum) {
 					return Clearinghouses.List[i];
@@ -20,7 +20,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets the index of this clearinghouse within List</summary>
-		public static int GetIndex(int clearinghouseNum){
+		public static int GetIndex(long clearinghouseNum) {
 			for(int i=0;i<Clearinghouses.List.Length;i++) {
 				if(Clearinghouses.List[i].ClearinghouseNum==clearinghouseNum) {
 					return i;
@@ -31,7 +31,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public static string GetDescript(int clearinghouseNum) {
+		public static string GetDescript(long clearinghouseNum) {
 			if(clearinghouseNum==0) {
 				return "";
 			}

@@ -59,7 +59,7 @@ namespace OpenDental {
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
-			int payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
+			long payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
 			//Only certain procedures can be billed to the Arizona Primary Care program.

@@ -67,7 +67,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSupply;
 		private Employee EmployeeCur;
 		private FormBilling FormB;
-		private int PatCurNum;
+		private long PatCurNum;
 		//private bool InitializedOnStartup;
 
 		///<summary></summary>
@@ -1012,9 +1012,9 @@ namespace OpenDental{
 			if(textDays.Visible && errorProvider1.GetError(textDays) !=""){
 				return;
 			}
-			int[] selected=new int[gridMessages.SelectedIndices.Length];
+			long[] selected=new long[gridMessages.SelectedIndices.Length];
 			for(int i=0;i<selected.Length;i++){
-				selected[i]=((Signal)SignalList[gridMessages.SelectedIndices[i]]).SignalNum;
+				selected[i]=SignalList[gridMessages.SelectedIndices[i]].SignalNum;
 			}
 			gridMessages.BeginUpdate();
 			gridMessages.Columns.Clear();
@@ -1034,7 +1034,7 @@ namespace OpenDental{
 			Signal sig;
 			string str;
 			for(int i=0;i<SignalList.Count;i++){
-				sig=(Signal)SignalList[i];
+				sig=SignalList[i];
 				if(checkIncludeAck.Checked){
 					if(sig.AckTime.Year>1880//if this is acked
 						&& sig.AckTime < DateTime.Today.AddDays(1-PIn.PInt(textDays.Text)))

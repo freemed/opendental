@@ -653,7 +653,7 @@ namespace OpenDental{
 						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 				}
-				MinPerIncr=PrefC.GetInt("AppointmentTimeIncrement");
+				MinPerIncr=PrefC.GetInt32("AppointmentTimeIncrement");
 				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
 				//if(TwoRowsPerIncrement){

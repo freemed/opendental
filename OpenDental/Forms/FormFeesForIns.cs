@@ -346,8 +346,8 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			int feeSchedWithout=0;
-			int feeSchedWith=0;
+			long feeSchedWithout=0;
+			long feeSchedWith=0;
 			if(comboFeeSchedWithout.SelectedIndex!=0){
 				feeSchedWithout=FeeSchedsForType[comboFeeSchedWithout.SelectedIndex-1].FeeSchedNum;
 			}
@@ -422,16 +422,16 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			int employerNum;
+			long employerNum;
 			string carrierName;
 			string groupNum;
 			string groupName;
-			int newFeeSchedNum=0;
+			long newFeeSchedNum=0;
 			if(comboFeeSchedNew.SelectedIndex!=0){
 				newFeeSchedNum=FeeSchedsForType[comboFeeSchedNew.SelectedIndex-1].FeeSchedNum;
 			}
-			int oldFeeSchedNum;
-			int rowsChanged=0;
+			long oldFeeSchedNum;
+			long rowsChanged=0;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				oldFeeSchedNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["feeSched"].ToString());
 				if(oldFeeSchedNum==newFeeSchedNum){

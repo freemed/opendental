@@ -149,7 +149,7 @@ namespace OpenDental.Eclaims
 					+"004010X097A1~");//GS08: Version
 			}
 			//Gets an array with PayorID,ProvBill,Subscriber,PatNum,ClaimNum all in the correct order
-			List <int> claimNums=new List <int> ();
+			List<long> claimNums=new List<long>();
 			for(int i=0;i<queueItems.Count;i++) {
 				claimNums.Add(queueItems[i].ClaimNum);
 			}
@@ -251,7 +251,7 @@ namespace OpenDental.Eclaims
 					//An improvement would be to generate another loop if provider changes address for different claims.  Complicated.
 					if(!PrefC.GetBool("EasyNoClinics")){//if using clinics
 						Claim clm=Claims.GetClaim((int)claimAr[4,i]);
-						int clinicNum=clm.ClinicNum;
+						long clinicNum=clm.ClinicNum;
 						clinic=Clinics.GetClinic(clinicNum);
 					}
 					//2000A HL: Billing/Pay-to provider HL loop

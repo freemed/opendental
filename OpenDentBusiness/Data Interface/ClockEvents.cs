@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets directly from the database.  Returns true if the last time clock entry for this employee was a clockin.</summary>
-		public static bool IsClockedIn(int employeeNum){
+		public static bool IsClockedIn(long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum);
 			}
@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets info directly from database.  If the employee is clocked out, this gets the status for clockin is based on how they last clocked out.  Also used to determine how to initially display timecard.</summary>
-		public static TimeClockStatus GetLastStatus(int employeeNum){
+		public static TimeClockStatus GetLastStatus(long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<TimeClockStatus>(MethodBase.GetCurrentMethod(),employeeNum);
 			}

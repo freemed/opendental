@@ -61,7 +61,7 @@ namespace OpenDental{
 		private Label labelDepositAccount;
 		private ComboBox comboDepositAccount;
 		///<summary>Set this value to a PaySplitNum if you want one of the splits highlighted when opening this form.</summary>
-		public int InitialPaySplit;
+		public long InitialPaySplit;
 		///<summary></summary>
 		private List<PaySplit> SplitList;
 		private OpenDental.UI.ODGrid gridMain;
@@ -71,7 +71,7 @@ namespace OpenDental{
 		private MenuItem menuXcharge;
 		private TextBox textDepositAccount;
 		private ODGrid gridBal;
-		private int[] DepositAccounts;
+		private long[] DepositAccounts;
 		private TextBox textFamStart;
 		private Label label10;
 		private TextBox textFamEnd;
@@ -1273,7 +1273,7 @@ namespace OpenDental{
 			}
 			bool accountingSynchRequired=false;
 			double accountingOldAmt=PaymentCur.PayAmt;
-			int accountingNewAcct=-1;//the old acctNum will be retrieved inside the validation code.
+			long accountingNewAcct=-1;//the old acctNum will be retrieved inside the validation code.
 			if(textDepositAccount.Visible){
 				accountingNewAcct=-1;//indicates no change
 			}

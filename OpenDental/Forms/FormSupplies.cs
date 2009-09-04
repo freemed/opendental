@@ -36,7 +36,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
-			int supplier=0;
+			long supplier=0;
 			if(comboSupplier.SelectedIndex!=-1) {
 				supplier=ListSupplier[comboSupplier.SelectedIndex].SupplierNum;
 			}
@@ -106,7 +106,7 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			int selected=FormS.Supp.SupplyNum;
+			long selected=FormS.Supp.SupplyNum;
 			int scroll=gridMain.ScrollValue;
 			FillGrid();
 			gridMain.ScrollValue=scroll;
@@ -125,7 +125,7 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;	
 			}
-			int selected=listSupply[e.Row].SupplyNum;
+			long selected=listSupply[e.Row].SupplyNum;
 			int scroll=gridMain.ScrollValue;
 			FillGrid();
 			gridMain.ScrollValue=scroll;
@@ -171,7 +171,7 @@ namespace OpenDental {
 				return;//already at the top
 			}
 			//remember the selected SupplyNums for rehighlighting later.
-			List<int> selectedSupplyNums=new List<int>();
+			List<long> selectedSupplyNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				selectedSupplyNums.Add(listSupply[gridMain.SelectedIndices[i]].SupplyNum);
 			}
@@ -226,7 +226,7 @@ namespace OpenDental {
 				return;//already at the bottom
 			}
 			//remember the selected SupplyNums for rehighlighting later.
-			List<int> selectedSupplyNums=new List<int>();
+			List<long> selectedSupplyNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				selectedSupplyNums.Add(listSupply[gridMain.SelectedIndices[i]].SupplyNum);
 			}

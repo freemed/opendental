@@ -17,7 +17,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		public int ProvNum;
+		public long ProvNum;
 		private OpenDental.UI.ODGrid gridMain;
 		private Provider prov;
 		private DataTable table;

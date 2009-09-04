@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int[] GetCodeNumListForButton(long procButtonNum) {
+		public static long[] GetCodeNumListForButton(long procButtonNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList ALCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 					ALCodes.Add(List[i].CodeNum);
 				} 
 			}
-			int[] codeList=new int[ALCodes.Count];
+			long[] codeList=new long[ALCodes.Count];
 			if(ALCodes.Count > 0){
 				ALCodes.CopyTo(codeList);
 			}
@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int[] GetAutoListForButton(long procButtonNum) {
+		public static long[] GetAutoListForButton(long procButtonNum) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList ALautoCodes=new ArrayList();
 			for(int i=0;i<List.Length;i++) {
@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 					ALautoCodes.Add(List[i].AutoCodeNum);
 				}
 			}
-			int[] autoCodeList=new int[ALautoCodes.Count];
+			long[] autoCodeList=new long[ALautoCodes.Count];
 			if(ALautoCodes.Count > 0) {
 				ALautoCodes.CopyTo(autoCodeList);
 			}

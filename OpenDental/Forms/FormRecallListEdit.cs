@@ -50,7 +50,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private OpenDental.UI.Button butEditRecall;
 		///<summary>Only used if PinClicked=true</summary>
-		public int AptSelected;
+		public long AptSelected;
 		private Recall RecallCur;
 		private Patient PatCur;
 		private Family FamCur;
@@ -675,7 +675,7 @@ namespace OpenDental{
 
 		///<summary>Called from Pin_Click and OK_Click.</summary>
 		private void SaveRecall(){
-			int newStatus;
+			long newStatus;
 			if(comboStatus.SelectedIndex==0){
 				newStatus=0;
 			}

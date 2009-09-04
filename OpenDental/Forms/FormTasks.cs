@@ -18,7 +18,7 @@ namespace OpenDental{
 		private Timer timer1;
 		private IContainer components;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
-		public int GotoKeyNum;
+		public long GotoKeyNum;
 
 	
 		///<summary></summary>

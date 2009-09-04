@@ -506,7 +506,7 @@ namespace OpenDental{
 			InsPlan[] listSelected=new InsPlan[gridMain.SelectedIndices.Length];
 			for(int i=0;i<listSelected.Length;i++){
 				listSelected[i]=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PlanNum"].ToString()),null);
-				listSelected[i].NumberPlans=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["plans"].ToString());
+				listSelected[i].NumberPlans=PIn.PInt32(table.Rows[gridMain.SelectedIndices[i]]["plans"].ToString());
 			}
 			FormInsPlansMerge FormI=new FormInsPlansMerge();
 			FormI.ListAll=listSelected;
@@ -518,13 +518,13 @@ namespace OpenDental{
 			InsPlan planToMergeTo=FormI.PlanToMergeTo.Copy();
 			List<Benefit> benList=Benefits.RefreshForAll(planToMergeTo);
 			Cursor=Cursors.WaitCursor;
-			List<int> planNums;
+			List<long> planNums;
 			for(int i=0;i<listSelected.Length;i++){//loop through each selected plan group
 				//skip the planToMergeTo, because it's already correct
 				if(planToMergeTo.PlanNum==listSelected[i].PlanNum){
 					continue;
 				}
-				planNums=new List<int>(InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(listSelected[i].EmployerNum),
+				planNums=new List<long>(InsPlans.GetPlanNumsOfSamePlans(Employers.GetName(listSelected[i].EmployerNum),
 					listSelected[i].GroupName,listSelected[i].GroupNum,listSelected[i].DivisionNo,
 					Carriers.GetName(listSelected[i].CarrierNum),
 					listSelected[i].IsMedical,listSelected[i].PlanNum,false));//remember that planNum=0

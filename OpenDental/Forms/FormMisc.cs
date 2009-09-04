@@ -467,7 +467,7 @@ namespace OpenDental{
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
-			comboShowID.SelectedIndex=PrefC.GetInt("ShowIDinTitleBar");
+			comboShowID.SelectedIndex=PrefC.GetInt32("ShowIDinTitleBar");
 			checkTasksCheckOnStartup.Checked=PrefC.GetBool("TasksCheckOnStartup");
 			checkTaskListAlwaysShow.Checked=PrefC.GetBool("TaskListAlwaysShowsAtBottom");
 			if(checkTaskListAlwaysShow.Checked) {
@@ -573,12 +573,12 @@ namespace OpenDental{
 				computerPref.TaskDock=1;
 				changed=true;
 			}
-			if(computerPref.TaskX!=PIn.PInt(validNumX.Text)){
-				computerPref.TaskX=PIn.PInt(validNumX.Text);
+			if(computerPref.TaskX!=PIn.PInt32(validNumX.Text)){
+				computerPref.TaskX=PIn.PInt32(validNumX.Text);
 				changed=true;
 			}
-			if(computerPref.TaskY!=PIn.PInt(validNumY.Text)){
-				computerPref.TaskY=PIn.PInt(validNumY.Text);
+			if(computerPref.TaskY!=PIn.PInt32(validNumY.Text)){
+				computerPref.TaskY=PIn.PInt32(validNumY.Text);
 				changed=true;
 			}
 			//end of tasklist section-----------------------------------------------------------------------------

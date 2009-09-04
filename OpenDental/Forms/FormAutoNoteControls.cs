@@ -13,7 +13,7 @@ namespace OpenDental {
 
 	public partial class FormAutoNoteControls:Form {
 		///<summary>If OK, then this is the control that the user selected.</summary>
-		public int SelectedControlNum;
+		public long SelectedControlNum;
 
 		public FormAutoNoteControls() {
 			//

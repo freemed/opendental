@@ -85,7 +85,7 @@ namespace OpenDental{
 				birthdate="";
 			}
 			List <PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-			int planNum=PatPlans.GetPlanNum(patPlanList,1);
+			long planNum=PatPlans.GetPlanNum(patPlanList,1);
 			InsPlan plan=InsPlans.GetPlan(planNum,new List <InsPlan> ());
 			Carrier carrier=null;
 			string carrierName="";
@@ -228,7 +228,7 @@ namespace OpenDental{
 				return;
 			}
 			Document[] docList=Documents.GetAllWithPat(pat.PatNum);
-			int category;
+			long category;
 			//string fieldVal;//zoom and pan
 			//int x;
 			//int y;

@@ -82,7 +82,7 @@ namespace OpenDental{
 			}
 			if(ApptViewCur.OnlyScheduledProvs && !isWeekly) {
 				//intelligently decide what ops to show.  It's based on the schedule for the day.
-				List<int> listSchedOps;
+				List<long> listSchedOps;
 				bool opAdded;
 				int indexOp;
 				for(int i=0;i<OperatoryC.ListShort.Count;i++){

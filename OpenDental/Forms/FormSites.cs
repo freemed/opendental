@@ -24,7 +24,7 @@ namespace OpenDental{
 		public bool IsSelectionMode;
 		private OpenDental.UI.Button butNone;
 		///<summary>Only used if IsSelectionMode.  On OK, contains selected siteNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-		public int SelectedSiteNum;
+		public long SelectedSiteNum;
 
 		///<summary></summary>
 		public FormSites()

@@ -209,8 +209,8 @@ namespace OpenDental{
 				return;
 			}
 			LabTurnaroundCur.Description=textDescription.Text;
-			LabTurnaroundCur.DaysPublished=PIn.PInt(textDaysPublished.Text);
-			LabTurnaroundCur.DaysActual=PIn.PInt(textDaysActual.Text);
+			LabTurnaroundCur.DaysPublished=PIn.PInt32(textDaysPublished.Text);
+			LabTurnaroundCur.DaysActual=PIn.PInt32(textDaysActual.Text);
 			DialogResult=DialogResult.OK;
 		}
 

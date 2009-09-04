@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of procedure codes directly from the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
 		public static DataTable GetProcTable(string abbr,string desc,string code,List<long> categories,long feeSched,
-			int feeSchedComp1,int feeSchedComp2){
+			long feeSchedComp1,long feeSchedComp2) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),abbr,desc,code,categories,feeSched,feeSchedComp1,feeSchedComp2);
 			}

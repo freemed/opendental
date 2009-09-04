@@ -238,7 +238,7 @@ namespace OpenDental{
 				return;
 			}
 			FieldCur.Description=textDescription.Text;
-			FieldCur.ColumnWidth=PIn.PInt(textWidth.Text);
+			FieldCur.ColumnWidth=PIn.PInt32(textWidth.Text);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -828,7 +828,7 @@ namespace OpenDental{
 			if(comboAge.SelectedIndex==1) getAge="30";
 			else if(comboAge.SelectedIndex==2) getAge="60";
 			else if(comboAge.SelectedIndex==3) getAge="90";
-			List<int> billingNums=new List<int>();//[listBillType.SelectedIndices.Count];
+			List<long> billingNums=new List<long>();//[listBillType.SelectedIndices.Count];
 			for(int i=0;i<listBillType.SelectedIndices.Count;i++){
 				if(listBillType.SelectedIndices[i]==0){//if (all) is selected, then ignore any other selections
 					billingNums.Clear();

@@ -111,7 +111,7 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemHelpContents;
 		private System.Windows.Forms.MenuItem menuItemHelp;
 		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.  I also used it in UserControlPhonePanel for simplicity</summary>
-		public static int CurPatNum;
+		public static long CurPatNum;
 		private System.Windows.Forms.MenuItem menuItemClearinghouses;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
 		private System.Windows.Forms.MenuItem menuItemHelpWindows;
@@ -1281,7 +1281,7 @@ namespace OpenDental{
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
 			signalLastRefreshed=MiscData.GetNowDateTime();
-			timerSignals.Interval=PrefC.GetInt("ProcessSigsIntervalInSecs")*1000;
+			timerSignals.Interval=PrefC.GetInt32("ProcessSigsIntervalInSecs")*1000;
 			timerSignals.Enabled=true;
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");
@@ -1725,7 +1725,7 @@ namespace OpenDental{
 		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
 		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
 			CurPatNum=e.PatNum;
-			int siteNum=0;
+			long siteNum=0;
 			if(PrefC.GetBool("TitleBarShowSite") && e.PatNum!=0){
 				Patient pat=Patients.GetPat(e.PatNum);
 				siteNum=pat.SiteNum;
@@ -2994,6 +2994,7 @@ namespace OpenDental{
 		//Setup
 
 		private void menuItemAnesthMeds_Click(object sender, EventArgs e){
+			/*
 			if (!Security.IsAuthorized(Permissions.Setup))
 			{
 				return;
@@ -3001,7 +3002,7 @@ namespace OpenDental{
 			FormAnestheticMedsInventory FormAM = new FormAnestheticMedsInventory();
 			FormAM.ShowDialog();
 			RefreshCurrentModule();
-			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
+			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");*/
 		}
 
 		private void menuItemApptViews_Click(object sender, System.EventArgs e) {
@@ -3212,7 +3213,7 @@ namespace OpenDental{
 				timerSignals.Enabled=false;
 			}
 			else{
-				timerSignals.Interval=PrefC.GetInt("ProcessSigsIntervalInSecs")*1000;
+				timerSignals.Interval=PrefC.GetInt32("ProcessSigsIntervalInSecs")*1000;
 				timerSignals.Enabled=true;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Misc");
@@ -3806,13 +3807,14 @@ namespace OpenDental{
 		}
 
 		private void menuItemAnesthSuppliers_Click(object sender, EventArgs e){
+			/*
 			if (!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
 			FormAnesthMedSuppliers FormAS = new FormAnesthMedSuppliers();
 			FormAS.ShowDialog();
 			RefreshCurrentModule();
-			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
+			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");*/
 		}
 
 		///<summary>separate thread</summary>
@@ -4058,7 +4060,7 @@ namespace OpenDental{
 	}
 
 	class PopupEvent:IComparable{
-		public int PatNum;
+		public long PatNum;
 		///<summary>Disable popup for this patient until this time.</summary>
 		public DateTime DisableUntil;
 

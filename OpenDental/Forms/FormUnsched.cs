@@ -25,7 +25,7 @@ namespace OpenDental{
 		private int headingPrintH;
 		private int pagesPrinted;
 		///<summary>Only used if PinClicked=true</summary>
-		public int AptSelected;
+		public long AptSelected;
 		private ComboBox comboOrder;
 		private Label label1;
 		private ComboBox comboProv;
@@ -34,8 +34,8 @@ namespace OpenDental{
 		private ComboBox comboSite;
 		private Label labelSite;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
-		public int SelectedPatNum;
-		private Dictionary<int,string> patientNames;
+		public long SelectedPatNum;
+		private Dictionary<long,string> patientNames;
 
 		///<summary></summary>
 		public FormUnsched(){
@@ -255,11 +255,11 @@ namespace OpenDental{
 					order="date";
 					break;
 			}
-			int provNum=0;
+			long provNum=0;
 			if(comboProv.SelectedIndex!=0) {
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
-			int siteNum=0;
+			long siteNum=0;
 			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}

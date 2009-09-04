@@ -268,7 +268,7 @@ namespace OpenDental
 				MessageBox.Show(Lan.g(this,"You must select at least one provider."));
 				return;
 			}
-			List <int> provNums=new List <int> ();
+			List<long> provNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
@@ -380,7 +380,7 @@ namespace OpenDental
 			str=Lan.g(this,"Billing Type:")+" "+DefC.GetName(DefCat.BillingTypes,pat.BillingType);
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
-			List<int> patNums=new List<int>();
+			List<long> patNums=new List<long>();
 			patNums.Add(pat.PatNum);
 			List<Recall> recallList=Recalls.GetList(patNums);
 			str=Lan.g(this,"Recall Due Date:")+" ";

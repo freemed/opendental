@@ -178,13 +178,13 @@ namespace OpenDental{
 			if(comboClass.SelectedIndex==-1 || comboCourse.SelectedIndex==-1){
 				return;
 			}
-			int selected=0;
+			long selected=0;
 			if(gridMain.GetSelectedIndex()!=-1){
 				selected=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["ReqNeededNum"].ToString());
 			}
 			int scroll=gridMain.ScrollValue;
-			int schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
-			int schoolCourse=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
+			long schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
+			long schoolCourse=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
 			table=ReqNeededs.Refresh(schoolClass,schoolCourse);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();

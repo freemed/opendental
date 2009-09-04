@@ -1265,7 +1265,7 @@ namespace OpenDental{
 				}
 			}
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
-			List<int> procNums=new List<int>();
+			List<long> procNums=new List<long>();
 			procNums.Add(PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString()));
 			if(isSelected){
 				//gridProc.SetSelected(e.Row,false);
@@ -1286,7 +1286,7 @@ namespace OpenDental{
 		}
 
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			int procNum=PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString());
+			long procNum=PIn.PInt(DS.Tables["Procedure"].Rows[e.Row]["ProcNum"].ToString());
 			Procedure proc=Procedures.GetOneProc(procNum,true);
 			FormProcEdit FormP=new FormProcEdit(proc,pat,fam);
 			FormP.ShowDialog();
@@ -1421,11 +1421,11 @@ namespace OpenDental{
 			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			ProcCur.Priority=0;
 			ProcCur.ProcStatus=ProcStat.TP;
-			int aptProvNum=ProviderC.List[0].ProvNum;
+			long aptProvNum=ProviderC.List[0].ProvNum;
 			if(comboProvNum.SelectedIndex!=-1) {
 				aptProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			}
-			int aptProvHyg=0;
+			long aptProvHyg=0;
 			if(comboProvHyg.SelectedIndex>0) {
 				aptProvHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
@@ -1525,9 +1525,9 @@ namespace OpenDental{
 			//int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetInt("AppointmentTimeIncrement");
 			strBTime=new StringBuilder("");
 			string procTime="";
-			int codeNum;
-			int dentNum=Patients.GetProvNum(pat);
-			int hygNum=Patients.GetProvNum(pat);
+			long codeNum;
+			long dentNum=Patients.GetProvNum(pat);
+			long hygNum=Patients.GetProvNum(pat);
 			if(comboProvNum.SelectedIndex!=-1){
 				dentNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 				hygNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;

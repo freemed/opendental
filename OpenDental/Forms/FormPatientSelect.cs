@@ -944,11 +944,11 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(bool limit){
-			int billingType=0;
+			long billingType=0;
 			if(comboBillingType.SelectedIndex!=0){
 				billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
 			}
-			int siteNum=0;
+			long siteNum=0;
 			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
 				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
 			}

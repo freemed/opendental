@@ -54,7 +54,7 @@ namespace OpenDental{
 		private Label labelViewed;
 		private OpenDental.UI.Button butViewed;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
-		public int GotoKeyNum;
+		public long GotoKeyNum;
 		private Label label8;
 		private Label labelReply;
 		private OpenDental.UI.Button butReply;
@@ -874,7 +874,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You can't reply to yourself.");
 				return;
 			}
-			int inbox=Userods.GetInbox(Cur.UserNum);
+			long inbox=Userods.GetInbox(Cur.UserNum);
 			if(inbox==0){
 				MsgBox.Show(this,"No inbox has been setup for this user yet.");
 				return;

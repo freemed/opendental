@@ -63,7 +63,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Converts the comma delimited list of AccountNums into an array of AccountNums.</summary>
-		public static int[] GetPickListAccounts(AccountingAutoPay pay) {
+		public static long[] GetPickListAccounts(AccountingAutoPay pay) {
 			//No need to check RemotingRole; no call to db.
 			string[] numArray=pay.PickList.Split(new char[] { ',' });
 			ArrayList AL=new ArrayList();
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 				}
 				AL.Add(PIn.PInt(numArray[i]));
 			}
-			int[] retVal=new int[AL.Count];
+			long[] retVal=new long[AL.Count];
 			AL.CopyTo(retVal);
 			return retVal;
 		}

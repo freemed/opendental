@@ -9,7 +9,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 	class GuarantorLedgerItemsCollection {
 		#region Private Members - Data Holding Objects
 		private Guarantors m_Guarantors = null;
-		private int m_GuarantorNumber;
+		private long m_GuarantorNumber;
 		private List<PP_LedgerItem> m_FullLedgerList = new List<PP_LedgerItem>();
 		private List<PP_LedgerItem> m_ChargesAndRefundsList = new List<PP_LedgerItem>();
 		private List<PP_PaymentItem> m_PaymentsAndAdjustList = new List<PP_PaymentItem>();
@@ -26,7 +26,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 			this.m_Guarantors = Guarantor;
 			this.m_GuarantorNumber = this.m_Guarantors.Number;
 		}
-		public GuarantorLedgerItemsCollection(int GuarantorNumber) {
+		public GuarantorLedgerItemsCollection(long GuarantorNumber) {
 			this.m_GuarantorNumber = GuarantorNumber;
 		}
 		#endregion
@@ -46,7 +46,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 		/// <summary>
 		/// Can be used if you don't want to use the whole DansTables.Guarantors class. To save memory.
 		/// </summary>
-		public int GUARANTOR_NUMBER {
+		public long GUARANTOR_NUMBER {
 			get { return this.m_GuarantorNumber; }
 		}
 

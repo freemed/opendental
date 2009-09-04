@@ -2445,7 +2445,7 @@ namespace OpenDental{
 				PatCur.SiteNum=0;
 			}
 			if(textSite.Text != "" && textSite.Text != Sites.GetDescription(PatCur.SiteNum)) {
-				int matchingSite=Sites.FindMatchSiteNum(textSite.Text);
+				long matchingSite=Sites.FindMatchSiteNum(textSite.Text);
 				if(matchingSite==-1) {
 					MessageBox.Show(Lan.g(this,"Invalid Site description."));
 					return;

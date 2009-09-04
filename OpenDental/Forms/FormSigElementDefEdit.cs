@@ -482,7 +482,7 @@ namespace OpenDental{
 			}
 			ElementCur.SigElementType=(SignalElementType)listType.SelectedIndex;
 			ElementCur.SigText=textSigText.Text;
-			ElementCur.LightRow=PIn.PInt(textLightRow.Text);
+			ElementCur.LightRow=PIn.PInt32(textLightRow.Text);
 			ElementCur.LightColor=butColor.BackColor;
 			if(IsNew){
 				SigElementDefs.Insert(ElementCur);

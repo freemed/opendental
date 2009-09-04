@@ -16,7 +16,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		public int PatNum;
+		public long PatNum;
 		private OpenDental.UI.Button butSlip;
 		private RefAttach[] RefAttachList;
 

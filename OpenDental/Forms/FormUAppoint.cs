@@ -516,7 +516,7 @@ namespace OpenDental{
 		private static void ThreadStartTarget(object data){
 			File.WriteAllText(logfile,DateTime.Now.ToString()+"  Synch thread started.\r\n");//creates or clears the log
 			Program prog=(Program)data;
-			int intervalSec=PIn.PInt(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
+			int intervalSec=PIn.PInt32(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
 			int intervalSecError=intervalSec*4;
 			string username=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
@@ -1083,7 +1083,7 @@ namespace OpenDental{
 			}
 			int intervalSec=0;
 			try{
-				intervalSec=PIn.PInt(textIntervalSeconds.Text);//"" is handled fine here
+				intervalSec=PIn.PInt32(textIntervalSeconds.Text);//"" is handled fine here
 			}
 			catch{
 				MessageBox.Show("Please fix the interval in seconds.");

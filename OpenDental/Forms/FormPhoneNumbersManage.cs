@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormPhoneNumbersManage:Form {
-		public int PatNum;
+		public long PatNum;
 		private Patient Pat;
 		private List<PhoneNumber> otherList;
 

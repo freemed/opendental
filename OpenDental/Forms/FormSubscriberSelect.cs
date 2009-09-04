@@ -19,7 +19,7 @@ namespace OpenDental{
 		private Family FamCur;
 		private System.Windows.Forms.Label label1;
 		///<summary>When the form closes with OK, this will contain the patient num selected.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 
 		///<summary></summary>
 		public FormSubscriberSelect(Family famCur)

@@ -19,10 +19,10 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid grid;
 		private Reconcile[] RList;
-		private int AccountNum;
+		private long AccountNum;
 
 		///<summary></summary>
-		public FormReconciles(int accountNum)
+		public FormReconciles(long accountNum)
 		{
 			//
 			// Required for Windows Form Designer support

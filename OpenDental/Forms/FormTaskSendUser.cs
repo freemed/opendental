@@ -12,7 +12,7 @@ namespace OpenDental {
 	public partial class FormTaskSendUser:Form {
 		private List<TaskList> FilteredList;
 		///<summary>If OK, then this will contain the selected </summary>
-		public int TaskListNum;
+		public long TaskListNum;
 
 		public FormTaskSendUser() {
 			InitializeComponent();

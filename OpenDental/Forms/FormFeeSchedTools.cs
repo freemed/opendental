@@ -41,10 +41,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butUpdate;
 		private Label label5;
 		///<summary>The defNum of the fee schedule that is currently displayed in the main window.</summary>
-		private int SchedNum;
+		private long SchedNum;
 
 		///<summary>Supply the fee schedule num(DefNum) to which all these changes will apply</summary>
-		public FormFeeSchedTools(int schedNum)
+		public FormFeeSchedTools(long schedNum)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -477,7 +477,7 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(Dlg.FileName);//includes full path
 			//OverwritePrompt is already set to true
-			DataTable table=ProcedureCodes.GetProcTable("","","",new List <int> (),SchedNum,0,0);
+			DataTable table=ProcedureCodes.GetProcTable("","","",new List<long>(),SchedNum,0,0);
 			double fee;
 			using(StreamWriter sr=File.CreateText(Dlg.FileName)){
 				for(int i=0;i<table.Rows.Count;i++){
@@ -538,7 +538,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			int rowsChanged=Procedures.GlobalUpdateFees();
+			long rowsChanged=Procedures.GlobalUpdateFees();
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Fees changed: ")+rowsChanged.ToString());
 			DialogResult=DialogResult.OK;

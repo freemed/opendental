@@ -13,11 +13,11 @@ namespace OpenDental{
 	/// </summary>
 	public class FormAuditOneType : System.Windows.Forms.Form{
 		private OpenDental.UI.ODGrid grid;
-		private int PatNum;
+		private long PatNum;
 		private List <Permissions> PermTypes;
 
 		///<summary>Supply the patient, types, and title.</summary>
-		public FormAuditOneType(int patNum,List<Permissions> permTypes,string title){
+		public FormAuditOneType(long patNum,List<Permissions> permTypes,string title) {
 			//
 			// Required for Windows Form Designer support
 			//

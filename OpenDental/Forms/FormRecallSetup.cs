@@ -469,7 +469,7 @@ namespace OpenDental{
 					comboStatusEmailedRecall.SelectedIndex=i;
 				}
 			}
-			List<int> recalltypes=new List<int>();
+			List<long> recalltypes=new List<long>();
 			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){

@@ -1019,7 +1019,7 @@ namespace OpenDental{
 			comboToothNomenclature.Items.Add(Lan.g(this, "FDA Notation (International, 11-48)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "Haderup (Danish)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "Palmer (Ortho)"));
-			comboToothNomenclature.SelectedIndex = PrefC.GetInt("UseInternationalToothNumbers");
+			comboToothNomenclature.SelectedIndex = PrefC.GetInt32("UseInternationalToothNumbers");
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool("AutoResetTPEntryStatus");
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool("AllowSettingProcsComplete");
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool("ChartQuickAddHideAmalgam");
@@ -1029,7 +1029,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Change all insurance plans right now?")){
 				return;
 			}
-			int result=InsPlans.SetDeductBeforePercentAll(checkDeductibleBeforePercent.Checked);
+			long result=InsPlans.SetDeductBeforePercentAll(checkDeductibleBeforePercent.Checked);
 			MessageBox.Show(Lan.g(this,"Plans changed: ")+result.ToString());
 		}
 
@@ -1042,7 +1042,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			int schedsAdded=InsPlans.GenerateAllowedFeeSchedules();
+			long schedsAdded=InsPlans.GenerateAllowedFeeSchedules();
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Done.  Allowed fee schedules added: ")+schedsAdded.ToString());
 			DataValid.SetInvalid(InvalidType.FeeScheds);
@@ -1121,21 +1121,21 @@ namespace OpenDental{
 					changed=true;
 				}
 			}
-			int timeArrivedTrigger=0;
+			long timeArrivedTrigger=0;
 			if(comboTimeArrived.SelectedIndex>0){
 				timeArrivedTrigger=DefC.Short[(int)DefCat.ApptConfirmed][comboTimeArrived.SelectedIndex-1].DefNum;
 			}
 			if(Prefs.UpdateInt("AppointmentTimeArrivedTrigger",timeArrivedTrigger)){
 				changed=true;
 			}
-			int timeSeatedTrigger=0;
+			long timeSeatedTrigger=0;
 			if(comboTimeSeated.SelectedIndex>0){
 				timeSeatedTrigger=DefC.Short[(int)DefCat.ApptConfirmed][comboTimeSeated.SelectedIndex-1].DefNum;
 			}
 			if(Prefs.UpdateInt("AppointmentTimeSeatedTrigger",timeSeatedTrigger)){
 				changed=true;
 			}
-			int timeDismissedTrigger=0;
+			long timeDismissedTrigger=0;
 			if(comboTimeDismissed.SelectedIndex>0){
 				timeDismissedTrigger=DefC.Short[(int)DefCat.ApptConfirmed][comboTimeDismissed.SelectedIndex-1].DefNum;
 			}

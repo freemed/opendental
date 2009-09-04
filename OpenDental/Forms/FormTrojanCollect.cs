@@ -590,7 +590,7 @@ namespace OpenDental{
 				MessageBox.Show("The Trojan Communicator is not running. Please check it.");
 				return;
 			}
-			int billingType=PrefC.GetInt("TrojanExpressCollectBillingType");
+			long billingType=PrefC.GetInt("TrojanExpressCollectBillingType");
 			if(billingType==0){
 				Cursor=Cursors.Default;
 				MessageBox.Show("Billing type has not been setup yet.  Please go to Setup at the top of this window.");

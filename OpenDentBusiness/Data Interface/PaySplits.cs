@@ -129,7 +129,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns all paySplits for the given procNum. Must supply a list of all paysplits for the patient.</summary>
-		public static ArrayList GetForProc(int procNum,PaySplit[] List){
+		public static ArrayList GetForProc(long procNum,PaySplit[] List) {
 			//No need to check RemotingRole; no call to db.
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Length;i++){

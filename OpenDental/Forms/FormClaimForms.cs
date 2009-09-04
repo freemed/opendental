@@ -347,10 +347,10 @@ namespace OpenDental{
 				return;
 			}
 			ClaimForm ClaimFormCur=ClaimForms.ListLong[listClaimForms.SelectedIndex].Copy();
-			int oldClaimFormNum=ClaimFormCur.ClaimFormNum;
+			long oldClaimFormNum=ClaimFormCur.ClaimFormNum;
 			ClaimFormCur.UniqueID="";//designates it as a user added claimform
 			ClaimForms.Insert(ClaimFormCur);//this duplicates the original claimform, but no items.
-			int newClaimFormNum=ClaimFormCur.ClaimFormNum;
+			long newClaimFormNum=ClaimFormCur.ClaimFormNum;
 			//ClaimFormItems.GetListForForm(ClaimForms.ListLong[listClaimForms.SelectedIndex].ClaimFormNum);
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
 				//ClaimFormItems.Cur=ClaimFormItems.ListForForm[i];
@@ -403,7 +403,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using xmlData, path will be ignored, so leave it blank.</summary>
-		public static int ImportForm(string path, bool isUpdateSequence,string xmlData){
+		public static long ImportForm(string path,bool isUpdateSequence,string xmlData) {
 			ClaimForm tempClaimForm=new ClaimForm();
 			XmlSerializer serializer=new XmlSerializer(typeof(ClaimForm));
 			if(xmlData==""){//use path
@@ -429,7 +429,7 @@ namespace OpenDental{
 					throw new ApplicationException(Lan.g("FormClaimForm","Invalid file format"));
 				}
 			}
-			int retVal=0;
+			long retVal=0;
 			bool isNew=true;
 			if(isUpdateSequence){
 				ClaimFormItems.RefreshCache();
@@ -483,7 +483,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a claimform from the list below.");
 				return;
 			}
-			int result=ClaimForms.Reassign(ClaimForms.ListLong[listClaimForms.SelectedIndex].ClaimFormNum,
+			long result=ClaimForms.Reassign(ClaimForms.ListLong[listClaimForms.SelectedIndex].ClaimFormNum,
 				ClaimForms.ListLong[comboReassign.SelectedIndex].ClaimFormNum);
 			MessageBox.Show(result.ToString()+Lan.g(this," plans changed."));
 		}

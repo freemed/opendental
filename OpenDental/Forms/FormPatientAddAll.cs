@@ -12,7 +12,7 @@ namespace OpenDental {
 	public partial class FormPatientAddAll:Form {
 		public string LName;
 		public string FName;
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		private string mostRecentLName;
 		private List<Referral> similarReferrals;
 		private string referralOriginal;
@@ -530,7 +530,7 @@ namespace OpenDental {
 
 		#region Referral
 		///<summary>Fills the referral fields based on the specified referralNum.</summary>
-		private void FillReferral(int referralNum) {
+		private void FillReferral(long referralNum) {
 			selectedReferral=Referrals.GetReferral(referralNum);
 			textReferral.Text=selectedReferral.LName;
 			textReferralFName.Text=selectedReferral.FName;
@@ -888,7 +888,7 @@ namespace OpenDental {
 
 		#region Carrier
 		///<summary>Fills the carrier fields on the form based on the specified carrierNum.</summary>
-		private void FillCarrier1(int carrierNum) {
+		private void FillCarrier1(long carrierNum) {
 			selectedCarrier1=Carriers.GetCarrier(carrierNum);
 			textCarrier1.Text=selectedCarrier1.CarrierName;
 			textPhone1.Text=selectedCarrier1.Phone;
@@ -1004,7 +1004,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Fills the carrier fields on the form based on the specified carrierNum.</summary>
-		private void FillCarrier2(int carrierNum) {
+		private void FillCarrier2(long carrierNum) {
 			selectedCarrier2=Carriers.GetCarrier(carrierNum);
 			textCarrier2.Text=selectedCarrier2.CarrierName;
 			textPhone2.Text=selectedCarrier2.Phone;
@@ -1538,7 +1538,7 @@ namespace OpenDental {
 					//get a carrier, possibly creating a new one if needed.
 					selectedCarrier1=Carriers.GetByNameAndPhone(textCarrier1.Text,textPhone1.Text);
 				}
-				int empNum1=Employers.GetEmployerNum(textEmployer1.Text);
+				long empNum1=Employers.GetEmployerNum(textEmployer1.Text);
 				if(selectedPlan1==null){
 					//don't try to get a copy of an existing plan. Instead, start from scratch.
 					selectedPlan1=new InsPlan();
@@ -1596,7 +1596,7 @@ namespace OpenDental {
 				if(selectedCarrier2==null){
 					selectedCarrier2=Carriers.GetByNameAndPhone(textCarrier2.Text,textPhone2.Text);
 				}
-				int empNum2=Employers.GetEmployerNum(textEmployer2.Text);
+				long empNum2=Employers.GetEmployerNum(textEmployer2.Text);
 				if(selectedPlan2==null){
 					//don't try to get a copy of an existing plan. Instead, start from scratch.
 					selectedPlan2=new InsPlan();

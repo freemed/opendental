@@ -32,11 +32,11 @@ namespace OpenDental{
 		private List<Provider> StudentList;
 		private DataTable ReqTable;
 		private List<ReqStudent> reqsAttached;
-		public int AptNum;
+		public long AptNum;
 		private Label label3;
 		private ComboBox comboInstructor;
 		private bool hasChanged;
-		public int PatNum;
+		public long PatNum;
 
 		///<summary></summary>
 		public FormReqAppt()
@@ -306,7 +306,7 @@ namespace OpenDental{
 			if(comboClass.SelectedIndex==-1) {
 				return;
 			}
-			int schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
+			long schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
 			//int schoolCourse=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
 			StudentList=ReqStudents.GetStudents(schoolClass);
 			gridStudents.BeginUpdate();
@@ -324,11 +324,11 @@ namespace OpenDental{
 		}
 
 		private void FillReqs(){
-			int schoolCourse=0;
+			long schoolCourse=0;
 			if(comboCourse.SelectedIndex!=-1){
 				schoolCourse=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
 			}
-			int schoolClass=0;
+			long schoolClass=0;
 			if(comboClass.SelectedIndex!=-1) {
 				schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
 			}

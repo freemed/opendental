@@ -308,7 +308,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a patient in the main window first.");
 				return;
 			}
-			int patNum=FormOpenDental.CurPatNum;
+			long patNum=FormOpenDental.CurPatNum;
 			//See if the selected patient already has diseases attached
 			Disease[] DiseaseList=Diseases.Refresh(patNum);
 			if(DiseaseList.Length>0){

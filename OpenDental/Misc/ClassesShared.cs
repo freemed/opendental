@@ -118,10 +118,11 @@ namespace OpenDental{
 		private DateTime dateViewing;
 		private List<int> itypes;
 		private bool onlyLocal;
-		private int taskNum;
+		private long taskNum;
 		
 		///<summary></summary>
-		public ValidEventArgs(DateTime dateViewing, List<int> itypes,bool onlyLocal,int taskNum) : base(){
+		public ValidEventArgs(DateTime dateViewing,List<int> itypes,bool onlyLocal,long taskNum)
+			: base() {
 			this.dateViewing=dateViewing;
 			this.itypes=itypes;
 			this.onlyLocal=onlyLocal;
@@ -144,7 +145,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public int TaskNum{
+		public long TaskNum {
 			get{return taskNum;}
 		}
 
@@ -166,7 +167,7 @@ namespace OpenDental{
 
 		///<summary>Goes directly to an existing appointment.</summary>
 		public static void GotoAppointment(DateTime dateSelected,long selectedAptNum) {
-			OnModuleSelected(new ModuleEventArgs(dateSelected,new List<int>(),selectedAptNum,0,0));
+			OnModuleSelected(new ModuleEventArgs(dateSelected,new List<long>(),selectedAptNum,0,0));
 		}
 
 		///<summary>Goes directly to a claim in someone's Account.</summary>

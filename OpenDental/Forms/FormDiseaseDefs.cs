@@ -21,7 +21,7 @@ namespace OpenDental{
 		///<summary>Set to true when user is using this to select a disease def. Currently used when adding Alerts to Rx.</summary>
 		public bool IsSelectionMode;
 		///<summary>If IsSelectionMode, then after closing with OK, this will contain number.</summary>
-		public int SelectedDiseaseDefNum;
+		public long SelectedDiseaseDefNum;
 
 		///<summary></summary>
 		public FormDiseaseDefs()

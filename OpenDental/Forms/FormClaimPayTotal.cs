@@ -581,7 +581,7 @@ namespace OpenDental
 				return;
 			}
 			//select the feeSchedule
-			int feeSched=-1;
+			long feeSched=-1;
 			//if(plan.PlanType=="p"){//ppo
 			//	feeSched=plan.FeeSched;
 			//}
@@ -593,7 +593,7 @@ namespace OpenDental
 				return;
 			}
 			Fee FeeCur=null;
-			int codeNum;
+			long codeNum;
 			List<Procedure> ProcList=Procedures.Refresh(PatCur.PatNum);
 			Procedure proc;
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){

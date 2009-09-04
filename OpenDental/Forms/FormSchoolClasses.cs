@@ -111,7 +111,7 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			int previousSelected=-1;
+			long previousSelected=-1;
 			if(listMain.SelectedIndex!=-1){
 				previousSelected=SchoolClasses.List[listMain.SelectedIndex].SchoolClassNum;
 			}

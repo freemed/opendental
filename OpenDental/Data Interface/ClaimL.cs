@@ -24,7 +24,7 @@ namespace OpenDental{
 			if(plan==null){
 				return;
 			}
-			int patPlanNum=PatPlans.GetPatPlanNum(patPlans,claimCur.PlanNum);
+			long patPlanNum=PatPlans.GetPatPlanNum(patPlans,claimCur.PlanNum);
 			//first loop handles totals for received items.
 			for(int i=0;i<ClaimProcsForClaim.Count;i++){
 				if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.Received){
@@ -71,7 +71,7 @@ namespace OpenDental{
 					qty=1;
 				}
 				if(plan.ClaimsUseUCR) {//use UCR for the provider of the procedure
-					int provNum=ProcCur.ProvNum;
+					long provNum=ProcCur.ProvNum;
 					if(provNum==0) {//if no prov set, then use practice default.
 						provNum=PrefC.GetInt("PracticeDefaultProv");
 					}

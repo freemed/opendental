@@ -289,7 +289,7 @@ namespace OpenDental{
 				,MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			List <int> employerNums=new List <int> ();
+			List<long> employerNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				employerNums.Add(Employers.List[listEmp.SelectedIndices[i]].EmployerNum);
 			}

@@ -19,7 +19,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<Summary>This will only contain a value if the user clicked GoTo.</Summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 		private DataTable table;
 
 		///<summary></summary>

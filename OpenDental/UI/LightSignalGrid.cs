@@ -182,7 +182,7 @@ namespace OpenDental.UI {
 		}
 
 		///<summary>An ack coming from the database.  If it applies to any lights currently showing, then those lights will be turned off.  Returns the 0-based index of the light acked, or -1.</summary>
-		public int ProcessAck(int signalNum){
+		public int ProcessAck(long signalNum) {
 			for(int i=0;i<sigButStates.Length;i++){
 				if(sigButStates[i].ActiveSignal==null){
 					continue;

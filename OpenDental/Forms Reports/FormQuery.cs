@@ -67,7 +67,7 @@ namespace OpenDental{
 		private int totalPages=0;
 		private static Hashtable hListPlans;
 		private UserQuery UserQueryCur;//never gets used.  It's a holdover.
-		private static Dictionary<int,string> patientNames;
+		private static Dictionary<long,string> patientNames;
 
 		///<summary></summary>
 		public FormQuery(){

@@ -231,10 +231,12 @@ namespace OpenDental {
 				return;
 			}
 			CovCatCur.Description=textDescription.Text;
-			if(textPercent.Text=="")
+			if(textPercent.Text=="") {
 				CovCatCur.DefaultPercent=-1;
-			else
-				CovCatCur.DefaultPercent=PIn.PInt(textPercent.Text);
+			}
+			else {
+				CovCatCur.DefaultPercent=PIn.PInt32(textPercent.Text);
+			}
 			CovCatCur.IsHidden=checkHidden.Checked;
 			CovCatCur.EbenefitCat=(EbenefitCategory)comboCat.SelectedIndex;
 			if(IsNew){

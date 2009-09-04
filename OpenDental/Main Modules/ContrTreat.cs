@@ -956,7 +956,7 @@ namespace OpenDental{
 			double totSecIns=0;
 			double totDiscount=0;
 			double totPat=0;
-			int feeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;//for standard fee
+			long feeSched=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;//for standard fee
 			OpenDental.UI.ODGridRow row;
 			#region currentTP
 			if(gridPlans.SelectedIndices[0]==0){//current treatplan selected
@@ -1494,10 +1494,10 @@ namespace OpenDental{
 			if(FormP.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			int selectedPlan=gridPlans.SelectedIndices[0];
-			int selectedProc=procT.ProcTPNum;
+			int selectedPlanI=gridPlans.SelectedIndices[0];
+			long selectedProc=procT.ProcTPNum;
 			ModuleSelected(PatCur.PatNum);
-			gridPlans.SetSelected(selectedPlan,true);
+			gridPlans.SetSelected(selectedPlanI,true);
 			FillMain();
 			for(int i=0;i<gridMain.Rows.Count;i++){
 				if(gridMain.Rows[i].Tag !=null && ((ProcTP)gridMain.Rows[i].Tag).ProcTPNum==selectedProc){ 
@@ -1515,7 +1515,7 @@ namespace OpenDental{
 			if(e.Row==0){
 				return;//there is nothing to edit if user clicks on current.
 			}
-			int tpNum=PlanList[e.Row-1].TreatPlanNum;
+			long tpNum=PlanList[e.Row-1].TreatPlanNum;
 			FormTreatPlanEdit FormT=new FormTreatPlanEdit(PlanList[e.Row-1]);
 			FormT.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
@@ -2205,7 +2205,7 @@ namespace OpenDental{
 			Procedure procCur;
 			//Procedure procOld
 			//Find the primary plan------------------------------------------------------------------
-			int priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			long priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0
 			double standardfee;
 			double insfee;
@@ -2215,16 +2215,17 @@ namespace OpenDental{
 				//procOld=procCur.Copy();
 				//first the fees
   
-                //check code to see if it is a medical code
-                bool isMed=false;
-                if(procCur.MedicalCode!=""){
+				//check code to see if it is a medical code
+				bool isMed=false;
+				if(procCur.MedicalCode!=""){
 					isMed=true;
-                }
-                //get fee schedule for medical ins or Fees.GetFeeSched if dental
-				int feeSch;
+				}
+				//get fee schedule for medical ins or Fees.GetFeeSched if dental
+				long feeSch;
 				if(isMed){
 					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList);
-				} else {
+				} 
+				else{
 					feeSch=Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList);
 				}
 				insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
@@ -2357,7 +2358,7 @@ namespace OpenDental{
 			FormT.TotalPages=renderer.FormattedDocument.PageCount;
 			FormT.TPcur=PlanList[gridPlans.SelectedIndices[0]-1];
 			FormT.ShowDialog();
-			int tpNum=PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum;
+			long tpNum=PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum;
 			ModuleSelected(PatCur.PatNum);
 			for(int i=0;i<PlanList.Length;i++) {
 				if(PlanList[i].TreatPlanNum==tpNum) {

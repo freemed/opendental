@@ -198,7 +198,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			int empNum=Employees.ListLong[e.Row].EmployeeNum;
+			long empNum=Employees.ListLong[e.Row].EmployeeNum;
 			FormEmployeeEdit FormEE=new FormEmployeeEdit();
 			FormEE.EmployeeCur=Employees.ListLong[e.Row];
 			FormEE.ShowDialog();

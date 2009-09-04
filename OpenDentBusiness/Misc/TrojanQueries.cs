@@ -9,7 +9,7 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class TrojanQueries {
 
-		public static DataTable GetMaxProcedureDate(int PatNum){
+		public static DataTable GetMaxProcedureDate(long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}
@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
-		public static DataTable GetMaxPaymentDate(int PatNum){
+		public static DataTable GetMaxPaymentDate(long PatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum);
 			}

@@ -50,7 +50,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		/// <param name="Guarantor"></param>
 		/// <param name="IsPulledFlag"></param>
 		/// <returns></returns>
-		public virtual string ODPullString(int Guarantor, bool IsPulledFlag)
+		public virtual string ODPullString(long Guarantor,bool IsPulledFlag)
 		{
 			return ""; // just used to override
 		}
@@ -66,7 +66,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		/// </summary>
 		/// <param name="IsPulledFlag">indicates whether you want to pull items with the IsPulled status or not</param>
 		/// <returns></returns>
-		public static string PullAll_FromOD(int Guarantor, bool IsPulledFlag)
+		public static string PullAll_FromOD(long Guarantor,bool IsPulledFlag)
 		{
 			string rVal = "";
 			L1_NegativeAdjustments L1 = new L1_NegativeAdjustments();
@@ -96,7 +96,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		/// <param name="Guarantor"></param>
 		/// <param name="IsPulledFlag">Which state of flag do you want to pull</param>
 		/// <returns></returns>
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{ // string NegAdjustmentUnion -- From GuarantorLedgerItem
 			string rVal = "SELECT "
 					+ "\n '" + (int) LedgerItemTypes.NegAdjustment + "', " //2
@@ -124,7 +124,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	}
 	class L2_PositiveAdjustments : PP_ODSQLPullStrings_LedgerItem
 	{
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{
 			//PosAdjustmentUnion
 			string rVal = "SELECT "
@@ -151,7 +151,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 	class L3_ClaimWriteOffAdjustments : PP_ODSQLPullStrings_LedgerItem
 	{
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{ //ClaimWriteOFFUnion
 			string rVal = "SELECT "
 					+ "\n      '" + (int)LedgerItemTypes.NegAdjustment + "', " //2
@@ -181,7 +181,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	class L4_PaymentsFromPaySplit : PP_ODSQLPullStrings_LedgerItem
 	{
 
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{ //Payments1Union
 			string rVal = "SELECT "
 					+ "\n      '" + (int)LedgerItemTypes.Payment + "', " //1
@@ -209,7 +209,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	class L4b_PaymentsFromPayment : PP_ODSQLPullStrings_LedgerItem
 	{
 
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{ //Payments1Union
 			string rVal = "SELECT "
 					+ "\n      '" + (int)LedgerItemTypes.Payment + "', " //1
@@ -234,7 +234,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 	class L5_PaymentsFromInsurance : PP_ODSQLPullStrings_LedgerItem
 	{
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{//Payments2InsuranceUnion
 			string rVal = "SELECT "
 					+ "\n      '" + (int)LedgerItemTypes.Payment + "', " //1
@@ -260,7 +260,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 	class L6_Charges : PP_ODSQLPullStrings_LedgerItem
 	{
-		public override string ODPullString(int Guarantor, bool IsPulledFlag)
+		public override string ODPullString(long Guarantor,bool IsPulledFlag)
 		{ //ChargesCommandUnion
 			string rVal =
 				   "SELECT "

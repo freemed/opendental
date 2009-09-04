@@ -211,7 +211,7 @@ namespace OpenDental{
 			gridMain.EndUpdate();
 		}
 
-		private string GetStringForType(int recallTypeNum){
+		private string GetStringForType(long recallTypeNum) {
 			if(recallTypeNum==0){
 				return "";
 			}

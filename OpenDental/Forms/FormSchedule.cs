@@ -468,11 +468,11 @@ namespace OpenDental{
 				return;
 			}
 			ProvsChanged=false;
-			List<int> provNums=new List<int>();
+			List<long> provNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++){
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			List<int> empNums=new List<int>();
+			List<long> empNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++){
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
@@ -626,11 +626,11 @@ namespace OpenDental{
 			else {
 				dateSelectedEnd=dateSelectedStart.AddDays(4);
 			}
-			List<int> provNums=new List<int>();
+			List<long> provNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			List<int> empNums=new List<int>();
+			List<long> empNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
@@ -731,11 +731,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
 				return;
 			}
-			List<int> provNums=new List<int>();
+			List<long> provNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			List<int> empNums=new List<int>();
+			List<long> empNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
@@ -829,11 +829,11 @@ namespace OpenDental{
 			//	MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
 			//	return;
 			//}
-			List<int> provNums=new List<int>();
+			List<long> provNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			List<int> empNums=new List<int>();
+			List<long> empNums=new List<long>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}

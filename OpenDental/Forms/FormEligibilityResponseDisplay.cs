@@ -17,7 +17,7 @@ namespace OpenDental {
 		private Label LblPatientName;
 		private DataGridView dataGridView1;
 		private System.ComponentModel.Container components = null;
-		int PatID;
+		long PatID;
 		XmlDocument doc;
 		DataSet DsEligResponse = new DataSet();
 		private System.Drawing.Printing.PrintDocument MyPrintDocument;
@@ -25,7 +25,7 @@ namespace OpenDental {
 		DataTable DtResponse = new DataTable("EligibilityResponse");
 		DataGridViewPrinter MyDataGridViewPrinter;
 		///<summary></summary>
-		public FormEligibilityResponseDisplay(XmlDocument Request,int PatientID) {
+		public FormEligibilityResponseDisplay(XmlDocument Request,long PatientID) {
 			doc = Request;
 			PatID = PatientID;
 			InitializeComponent();

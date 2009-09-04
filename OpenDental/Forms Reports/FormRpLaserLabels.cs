@@ -1364,7 +1364,7 @@ namespace OpenDental {
 			butInsCoEnd.Visible = true;
 		}
 
-		private string FillFromInsCoList(int carrierNum) {
+		private string FillFromInsCoList(long carrierNum) {
 			Carrier carrier = Carriers.GetCarrier(carrierNum);
 			if(insRange == 0) {
 				textInsCoStart.Text = carrier.CarrierName;

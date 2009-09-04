@@ -2365,7 +2365,7 @@ namespace OpenDental{
 			List <Benefit> benList=Benefits.Refresh(PatPlanList);
 			ClaimProc cp=new ClaimProc();
 			ClaimProcs.CreateEst(cp,ProcCur,FormIS.SelectedPlan);
-			int patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
+			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
 			if(patPlanNum > 0){
 				double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
@@ -2383,7 +2383,7 @@ namespace OpenDental{
 		private void FillPayments(){
 			PaySplit[] PaySplitList=PaySplits.Refresh(ProcCur.PatNum);
 			PaySplitsForProc=PaySplits.GetForProc(ProcCur.ProcNum,PaySplitList);
-			List<int> payNums=new List<int>();//[];
+			List<long> payNums=new List<long>();//[];
 			for(int i=0;i<PaySplitsForProc.Count;i++) {
 				payNums.Add(((PaySplit)PaySplitsForProc[i]).PayNum);
 			}
@@ -2513,7 +2513,7 @@ namespace OpenDental{
       ProcCur.CodeNum=FormP.SelectedCodeNum;
       ProcedureCode2=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
       textDesc.Text=ProcedureCode2.Descript;
-			int priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			long priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,PlanList);//can handle a plannum=0
 			double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			if(priplan!=null && priplan.PlanType=="p") {//PPO
@@ -2643,13 +2643,13 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			int provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+			long provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			textNotes.Text+=ProcCodeNotes.GetNote(provNum,ProcCur.CodeNum);
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
 			ProcCur.ProcStatus=ProcStat.C;
 			ProcCur.SiteNum=PatCur.SiteNum;
-			comboPlaceService.SelectedIndex=PrefC.GetInt("DefaultProcedurePlaceService");
+			comboPlaceService.SelectedIndex=PrefC.GetInt32("DefaultProcedurePlaceService");
 			if(EntriesAreValid()){
 				SaveAndClose();
 			}
@@ -3212,7 +3212,7 @@ namespace OpenDental{
 				return;
 			}
 			//this represents the suggested code based on the autocodes set up.
-			int verifyCode;
+			long verifyCode;
 			AutoCode AutoCodeCur=null;
 			if(ProcedureCode2.TreatArea==TreatmentArea.Arch){
 				if(ProcCur.Surf==""){

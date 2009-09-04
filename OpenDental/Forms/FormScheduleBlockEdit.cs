@@ -300,7 +300,7 @@ namespace OpenDental{
 			}
       SchedCur.Note=textNote.Text;
 			SchedCur.BlockoutType=DefC.Short[(int)DefCat.BlockoutTypes][listType.SelectedIndex].DefNum;
-			SchedCur.Ops=new List<int>();
+			SchedCur.Ops=new List<long>();
 			for(int i=0;i<listOp.SelectedIndices.Count;i++){
 				SchedCur.Ops.Add(OperatoryC.ListShort[listOp.SelectedIndices[i]].OperatoryNum);
 			}

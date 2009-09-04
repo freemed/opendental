@@ -207,7 +207,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			int daysOld=PIn.PInt(textDaysOld.Text);
+			int daysOld=PIn.PInt32(textDaysOld.Text);
 			//FormQuery2.ResetGrid();//this is a method in FormQuery2;
 			Queries.CurReport=new ReportOld();
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);

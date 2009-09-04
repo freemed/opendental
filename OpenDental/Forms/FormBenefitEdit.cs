@@ -38,14 +38,14 @@ namespace OpenDental{
 		private Label label8;
 		private GroupBox groupQuantity;
 		private CheckBox checkPat;
-		private int PlanNum;
+		private long PlanNum;
 		private ListBox listCoverageLevel;
 		private Label label1;
 		private ValidNumber textPercent;
-		private int PatPlanNum;
+		private long PatPlanNum;
 
 		///<summary></summary>
-		public FormBenefitEdit(int patPlanNum,int planNum){
+		public FormBenefitEdit(long patPlanNum,long planNum) {
 			InitializeComponent();
 			//BenCur=benCur.Copy();
 			PatPlanNum=patPlanNum;
@@ -515,7 +515,7 @@ namespace OpenDental{
 				BenCur.Percent=-1;
 			}
 			else {
-				BenCur.Percent=PIn.PInt(textPercent.Text);
+				BenCur.Percent=PIn.PInt32(textPercent.Text);
 			}
 			if(textAmount.Text=="") {
 				BenCur.MonetaryAmt=-1;
@@ -534,7 +534,7 @@ namespace OpenDental{
 			else{*/
 			BenCur.TimePeriod=(BenefitTimePeriod)listTimePeriod.SelectedIndex;
 			//}
-			BenCur.Quantity=PIn.PInt(textQuantity.Text);
+			BenCur.Quantity=PIn.PInt32(textQuantity.Text);
 			BenCur.QuantityQualifier=(BenefitQuantity)listQuantityQualifier.SelectedIndex;
 			BenCur.CoverageLevel=(BenefitCoverageLevel)listCoverageLevel.SelectedIndex;
 			//if(IsNew){

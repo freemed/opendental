@@ -610,33 +610,33 @@ namespace OpenDental
 				}
 				if(DataArray[i,row].Text==null || DataArray[i,row].Text==""){
 					drawOld=true;
-					cellValue=PIn.PInt(DataArray[i,row].OldText);
+					cellValue=PIn.PInt32(DataArray[i,row].OldText);
 					textColor=Color.Gray;
 				}
 				else{
 					drawOld=false;
-					cellValue=PIn.PInt(DataArray[i,row].Text);
+					cellValue=PIn.PInt32(DataArray[i,row].Text);
 					textColor=Color.Black;
 				}
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
 					case PerioSequenceType.Probing:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedProb"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedProb");
 						break;
 					case PerioSequenceType.MGJ:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedMGJ"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedMGJ");
 						break;
 					case PerioSequenceType.GingMargin:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedGing"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedGing");
 						break;
 					case PerioSequenceType.CAL:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedCAL"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedCAL");
 						break;
 					case PerioSequenceType.Furcation:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedFurc"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedFurc");
 						break;
 					case PerioSequenceType.Mobility:
-						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedMob"]).ValueString);
+						redThresh=PrefC.GetInt32("PerioRedMob");
 						break;
 				}
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]
@@ -959,7 +959,7 @@ namespace OpenDental
 		}
 
 		///<summary>Saves the cur exam measurements to the db by looping through each tooth and deciding whether the data for that tooth has changed.  If so, it either updates or inserts a measurement.  It won't delete a measurement if all values for that tooth are cleared, but just sets that measurement to all -1's.</summary>
-		public void SaveCurExam(int perioExamNum){
+		public void SaveCurExam(long perioExamNum) {
 			PerioMeasure PerioMeasureCur;
 			for(int seqI=0;seqI<PerioMeasures.List.GetLength(1);seqI++){
 				for(int toothI=1;toothI<PerioMeasures.List.GetLength(2);toothI++){
@@ -1054,7 +1054,7 @@ namespace OpenDental
 				return -1;
 			}
 			//MessageBox.Show("full");
-			return PIn.PInt(DataArray[curCell.X,curCell.Y].Text);
+			return PIn.PInt32(DataArray[curCell.X,curCell.Y].Text);
 		}
 
 		///<summary>Used in SaveCurExam to retrieve data from grid to save it.</summary>
@@ -1509,8 +1509,8 @@ namespace OpenDental
 				}
 				return;
 			}
-			int probValue=PIn.PInt(DataArray[probingCell.X,probingCell.Y].Text);
-			int gingValue=PIn.PInt(DataArray[gingLoc.X,gingLoc.Y].Text);
+			int probValue=PIn.PInt32(DataArray[probingCell.X,probingCell.Y].Text);
+			int gingValue=PIn.PInt32(DataArray[gingLoc.X,gingLoc.Y].Text);
 			DataArray[calLoc.X,calLoc.Y].Text=(gingValue+probValue).ToString();
 			if(alsoInvalidate){
 				Invalidate(Rectangle.Ceiling(GetBounds(calLoc.X,calLoc.Y)));
@@ -1700,7 +1700,7 @@ namespace OpenDental
 		}
 
 		///<summary></summary>
-		public void ToggleSkip(int perioExamNum){
+		public void ToggleSkip(long perioExamNum) {
 			if(selectedTeeth.Count==0){
 				MessageBox.Show(Lan.g(this,"Please select teeth first."));
 				return;
@@ -1762,22 +1762,22 @@ namespace OpenDental
 			int prefVal=0;
 			switch(seqType){
 				case PerioSequenceType.Probing:
-					prefVal=PrefC.GetInt("PerioRedProb");
+					prefVal=PrefC.GetInt32("PerioRedProb");
 					break;
 				case PerioSequenceType.MGJ:
-					prefVal=PrefC.GetInt("PerioRedMGJ");
+					prefVal=PrefC.GetInt32("PerioRedMGJ");
 					break;
 				case PerioSequenceType.GingMargin:
-					prefVal=PrefC.GetInt("PerioRedGing");
+					prefVal=PrefC.GetInt32("PerioRedGing");
 					break;
 				case PerioSequenceType.CAL:
-					prefVal=PrefC.GetInt("PerioRedCAL");
+					prefVal=PrefC.GetInt32("PerioRedCAL");
 					break;
 				case PerioSequenceType.Furcation:
-					prefVal=PrefC.GetInt("PerioRedFurc");
+					prefVal=PrefC.GetInt32("PerioRedFurc");
 					break;
 				case PerioSequenceType.Mobility:
-					prefVal=PrefC.GetInt("PerioRedMob");
+					prefVal=PrefC.GetInt32("PerioRedMob");
 					break;
 			}
 			ArrayList retList=new ArrayList();

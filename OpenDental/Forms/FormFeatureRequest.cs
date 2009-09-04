@@ -311,7 +311,7 @@ namespace OpenDental{
 				isAdminMode=false;
 			}
 			//FillGrid used to start here------------------------------------------------
-			int selectedRequestId=0;
+			long selectedRequestId=0;
 			int selectedIndex=gridMain.GetSelectedIndex();
 			if(selectedIndex!=-1){
 				if(table.Rows.Count>selectedIndex){

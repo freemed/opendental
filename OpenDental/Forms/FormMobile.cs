@@ -95,7 +95,7 @@ namespace OpenDental {
 			}
 			List<Patient> patientsToSynch=Patients.GetUAppoint(dateTimeLastSync);
 			int objCount=patientsToSynch.Count;
-			Dictionary<int,string> carrierNames=Carriers.GetCarrierNames(patientsToSynch);
+			Dictionary<long,string> carrierNames=Carriers.GetCarrierNames(patientsToSynch);
 			Patient pat;
 			for(int i=0;i<patientsToSynch.Count;i++){
 				pat=patientsToSynch[i];
@@ -159,7 +159,7 @@ namespace OpenDental {
 			writer.WriteEndDocument();
 			writer.Close();
 			if(objCount>0){
-				int fileNumber=PrefC.GetInt("MobileSyncLastFileNumber")+1;
+				int fileNumber=PrefC.GetInt32("MobileSyncLastFileNumber")+1;
 				string filePath=Path.Combine(path,"in"+fileNumber+".xml");
 				File.WriteAllText(filePath,strBuild.ToString(),Encoding.UTF8);
 				Prefs.UpdateInt("MobileSyncLastFileNumber",fileNumber);

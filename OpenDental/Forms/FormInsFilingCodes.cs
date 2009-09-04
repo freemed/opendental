@@ -25,7 +25,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butUp;
 		private OpenDental.UI.Button butDown;
 		///<summary>Only used if IsSelectionMode.  On OK, contains selected InsFilingCodeNum.  Can be 0.  Can also be set ahead of time externally.</summary>
-		public int SelectedInsFilingCodeNum;
+		public long SelectedInsFilingCodeNum;
 
 		///<summary></summary>
 		public FormInsFilingCodes()

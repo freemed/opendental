@@ -24,12 +24,12 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<summary>This needs to be set externally.  It will only be altered when user clicks OK and form closes.</summary>
 		public List<Benefit> OriginalBenList;
-		private int PlanNum;
+		private long PlanNum;
 		private Label label1;
 		private ODtextBox textSubscNote;
 		private Label label28;
 		private ValidDouble textAnnualMax;
-		private int PatPlanNum;
+		private long PatPlanNum;
 		///<summary>The subscriber note.  Gets set before form opens.</summary>
 		public string Note;
 		private ValidDouble textDeductible;
@@ -111,7 +111,7 @@ namespace OpenDental{
 		public int MonthRenew;
 
 		///<summary></summary>
-		public FormInsBenefits(int planNum,int patPlanNum)
+		public FormInsBenefits(long planNum,long patPlanNum)
 		{
 			//
 			// Required for Windows Form Designer support

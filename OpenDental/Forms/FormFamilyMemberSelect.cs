@@ -18,7 +18,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private Family Fam;
 		///<summary>When dialogResult=OK, this will contain the PatNum of the selected pat.</summary>
-		public int SelectedPatNum;
+		public long SelectedPatNum;
 
 		///<summary></summary>
 		public FormFamilyMemberSelect(Family fam)

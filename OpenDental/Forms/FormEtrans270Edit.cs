@@ -22,10 +22,10 @@ namespace OpenDental {
 		private List<DTP271> listDTP;
 		private X271 x271;
 		public List<Benefit> benList;
-		private int PatPlanNum;
-		private int PlanNum;
+		private long PatPlanNum;
+		private long PlanNum;
 
-		public FormEtrans270Edit(int patPlanNum,int planNum) {
+		public FormEtrans270Edit(long patPlanNum,long planNum) {
 			InitializeComponent();
 			Lan.F(this);
 			PatPlanNum=patPlanNum;

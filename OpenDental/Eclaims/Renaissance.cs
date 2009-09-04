@@ -29,7 +29,7 @@ namespace OpenDental.Eclaims{
 		}
 
 		///<summary>Called once for each claim to be created.  For claims with a lot of procedures, this may actually create multiple claims.</summary>
-		public static bool CreateClaim(int patNum, int claimNum,int batchNum){
+		public static bool CreateClaim(long patNum,long claimNum,int batchNum) {
 			//this can be eliminated later after error checking complete:
 				FormCFI=new FormClaimFormItemEdit();
 				FormCFI.FillFieldNames();

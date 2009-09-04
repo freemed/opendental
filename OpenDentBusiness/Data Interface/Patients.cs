@@ -1500,7 +1500,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the name(only one) of the patient using this chartnumber.</summary>
-		public static string ChartNumUsedBy(string chartNum,int excludePatNum){
+		public static string ChartNumUsedBy(string chartNum,long excludePatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),chartNum,excludePatNum);
 			}

@@ -160,7 +160,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			int feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;	
+			long feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;	
       string catName="";  //string to hold current category name
 			Fees fee=new Fees();
 			Queries.CurReport=new ReportOld();

@@ -49,7 +49,7 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
-		private string GetDescription(int taskListNum){
+		private string GetDescription(long taskListNum) {
 			if(taskListNum==0){
 				return "";
 			}

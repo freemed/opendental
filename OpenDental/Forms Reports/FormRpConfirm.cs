@@ -15,13 +15,13 @@ namespace OpenDental{
 		private ArrayList ALSelect2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listSelect;
-		private System.Windows.Forms.ListBox listSelect2; 
-    private int[] AptNums;
+		private System.Windows.Forms.ListBox listSelect2;
+		private long[] AptNums;
   
 		///<summary></summary>
-		public FormRpConfirm(int[] aptNums){
+		public FormRpConfirm(long[] aptNums) {
 			InitializeComponent();
-      AptNums=(int[])aptNums.Clone();
+			AptNums=(long[])aptNums.Clone();
 		} 
 
 		///<summary></summary>

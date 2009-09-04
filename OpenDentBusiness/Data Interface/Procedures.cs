@@ -419,7 +419,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdatePriority(long procNum,int newPriority) {
+		public static void UpdatePriority(long procNum,long newPriority) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPriority);
 				return;
@@ -975,7 +975,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Queries the database to determine if this procedure is attached to a claim already.</summary>
-		public static bool IsAttachedToClaim(int procNum) {
+		public static bool IsAttachedToClaim(long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),procNum);
 			}

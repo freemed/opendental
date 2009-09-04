@@ -212,7 +212,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butForeignKey;
 		private CheckBox checkTasks;
 		private CheckBox checkEmail;
-		private int PrevPtNum;
+		private long PrevPtNum;
 		private CheckBox checkShowOnlyFilmsAndExams;
 		private CheckBox checkShowOnlyHygieneProcs;
 		private CheckBox checkSheets;
@@ -3222,7 +3222,7 @@ namespace OpenDental{
 					String strAppServer="";
 					try {
 						//ecwEx.InitClass oExInit=new ecwEx.InitClass();
-						strAppServer=VBbridges.Ecw.GetAppServer(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+						strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
 						//oExInit.getAppServer();
 						webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
 							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
@@ -3330,10 +3330,10 @@ namespace OpenDental{
 
 		private void OnRx_Click(){
 			if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
-				VBbridges.Ecw.LoadRxForm(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,Bridges.ECW.AptNum);
+				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
 				//refresh the right panel:
 				try {
-					string strAppServer=VBbridges.Ecw.GetAppServer(Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+					string strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
 					webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
 							+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
 							+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
@@ -3378,6 +3378,7 @@ namespace OpenDental{
 		}
 
 		private void OnAnesthesia_Click(){
+			/*
 			AnestheticData AnestheticDataCur;
 			AnestheticDataCur = new AnestheticData();
 			FormAnestheticRecord FormAR = new FormAnestheticRecord(PatCur, AnestheticDataCur);
@@ -3386,7 +3387,7 @@ namespace OpenDental{
 			PatCur = Patients.GetPat(Convert.ToInt32(PatCur.PatNum));
 			OnPatientSelected(Convert.ToInt32(PatCur.PatNum), Convert.ToString(PatCur), true, Convert.ToString(PatCur));
 			FillPtInfo();
-			return;
+			return;*/
 		}
 
 		private void OnConsent_Click() {
@@ -3472,7 +3473,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemChartSave_Click(object sender,EventArgs e) {
-			int defNum=0;
+			long defNum=0;
 			Def[] defs=DefC.GetList(DefCat.ImageCats);
 			for(int i=0;i<defs.Length;i++){
 				if(defs[i].ItemValue.Contains("T")){
@@ -4065,8 +4066,8 @@ namespace OpenDental{
 				if(checkNotes.Checked){
 					row.Note=table.Rows[i]["note"].ToString();
 				}
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorBackG"].ToString()));
 				row.Tag=table.Rows[i];
 				gridProg.Rows.Add(row);
 			}
@@ -4611,7 +4612,7 @@ namespace OpenDental{
 				FormT.ShowDialog();
 				if(FormT.GotoType!=TaskObjectType.None) {
 					TaskObjectType GotoType=FormT.GotoType;
-					int GotoKeyNum=FormT.GotoKeyNum;
+					long GotoKeyNum=FormT.GotoKeyNum;
 					//OnGoToChanged();
 					if(GotoType==TaskObjectType.Patient) {
 						if(GotoKeyNum!=0) {
@@ -4713,10 +4714,11 @@ namespace OpenDental{
 					isMed = true;
 				}
 				//get fee schedule for medical ins or dental
-				int feeSch;
+				long feeSch;
 				if(isMed){
 					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList);
-				} else {
+				} 
+				else {
 					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
@@ -4739,13 +4741,15 @@ namespace OpenDental{
 			//ToothNum
 			//Procedures.Cur.ToothRange
 			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
-			if(comboPriority.SelectedIndex==0)
+			if(comboPriority.SelectedIndex==0) {
 				ProcCur.Priority=0;
-			else
+			}
+			else {
 				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
+			}
 			ProcCur.ProcStatus=newStatus;
-			int provPri=PatCur.PriProv;
-			int provSec=PatCur.SecProv;
+			long provPri=PatCur.PriProv;
+			long provSec=PatCur.SecProv;
 			for(int i=0;i<ApptList.Length;i++) {
 				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
 					provPri=ApptList[i].ProvNum;
@@ -4828,10 +4832,11 @@ namespace OpenDental{
 					isMed = true;
 				}
 				//get fee schedule for medical ins or dental
-				int feeSch;
+				long feeSch;
 				if(isMed){
 					feeSch = Fees.GetMedFeeSched(PatCur, PlanList, PatPlanList);
-				} else {
+				} 
+				else {
 					feeSch = Fees.GetFeeSched(PatCur, PlanList, PatPlanList);
 				}
 				insfee = Fees.GetAmount0(ProcCur.CodeNum, feeSch);
@@ -4854,13 +4859,15 @@ namespace OpenDental{
 			//toothnum
 			//ToothRange
 			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
-			if(comboPriority.SelectedIndex==0)
+			if(comboPriority.SelectedIndex==0) {
 				ProcCur.Priority=0;
-			else
+			}
+			else {
 				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
+			}
 			ProcCur.ProcStatus=newStatus;
-			int provPri=PatCur.PriProv;
-			int provSec=PatCur.SecProv;
+			long provPri=PatCur.PriProv;
+			long provSec=PatCur.SecProv;
 			for(int i=0;i<ApptList.Length;i++) {
 				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
 					provPri=ApptList[i].ProvNum;
@@ -5127,7 +5134,7 @@ namespace OpenDental{
 		}
 
 		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
-		private void ProcButtonClicked(int procButtonNum,string quickcode) {
+		private void ProcButtonClicked(long procButtonNum,string quickcode) {
 			if(newStatus==ProcStat.C){
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.PDate(textDate.Text))){
 					return;
@@ -5143,12 +5150,12 @@ namespace OpenDental{
 			bool isValid;
 			TreatmentArea tArea;
 			int quadCount=0;//automates quadrant codes.
-			int[] codeList;
-			int[] autoCodeList;
+			long[] codeList;
+			long[] autoCodeList;
 			if(procButtonNum==0){
-				codeList=new int[1];
+				codeList=new long[1];
 				codeList[0]=ProcedureCodes.GetCodeNum(quickcode);
-				autoCodeList=new int[0];
+				autoCodeList=new long[0];
 			}
 			else{
 				codeList=ProcButtonItems.GetCodeNumListForButton(procButtonNum);
@@ -5890,8 +5897,8 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["ProcDescript"].ToString());
 				row.Cells.Add(table.Rows[i]["Note"].ToString());
 				row.Cells.Add(table.Rows[i]["dateSched"].ToString());
-				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
-				row.ColorBackG=Color.FromArgb(PIn.PInt(table.Rows[i]["colorBackG"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
+				row.ColorBackG=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);
 			}
 			gridPlanned.EndUpdate();
@@ -5969,7 +5976,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an item first");
 				return;
 			}
-			List<int> aptNums=new List<int>();
+			List<long> aptNums=new List<long>();
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
 				aptNums.Add(PIn.PInt(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
@@ -5977,7 +5984,7 @@ namespace OpenDental{
 		}
 
 		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			int aptnum=PIn.PInt(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
+			long aptnum=PIn.PInt(DataSetMain.Tables["Planned"].Rows[e.Row]["AptNum"].ToString());
 			FormApptEdit FormAE=new FormApptEdit(aptnum);
 			FormAE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/

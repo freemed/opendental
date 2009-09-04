@@ -133,7 +133,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Surround with try-catch</summary>
-		public static void Delete(int employeeNum){
+		public static void Delete(long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum);
 				return;

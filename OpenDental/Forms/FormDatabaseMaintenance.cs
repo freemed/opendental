@@ -206,12 +206,12 @@ namespace OpenDental {
 				return;
 			}
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.OracleSequences(verbose);
-			if(!DatabaseMaintenance.GetSuccess()) {
-				Cursor=Cursors.Default;
-				return;
-			}
-			Application.DoEvents();
+			//textLog.Text+=DatabaseMaintenance.OracleSequences(verbose);
+			//if(!DatabaseMaintenance.GetSuccess()) {
+			//	Cursor=Cursors.Default;
+			//	return;
+			//}
+			//Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DatesNoZeros(verbose);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DecimalValues(verbose);

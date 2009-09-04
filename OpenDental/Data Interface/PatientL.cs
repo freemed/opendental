@@ -16,10 +16,10 @@ namespace OpenDental{
 		///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
 		private static List<string> buttonLastFiveNames;
 		///<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
-		private static List<int> buttonLastFivePatNums;
+		private static List<long> buttonLastFivePatNums;
 
 		///<summary>The current patient will already be on the button.  This adds the family members when user clicks dropdown arrow. Can handle null values for pat and fam.  Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
-		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,int patNum,Family fam) {
+		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,long patNum,Family fam) {
 			//No need to check RemotingRole; no call to db.
 			//fill menu
 			menu.MenuItems.Clear();
@@ -36,11 +36,11 @@ namespace OpenDental{
 		}
 
 		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
-		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
+		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//add current patient
 			if(buttonLastFivePatNums==null) {
-				buttonLastFivePatNums=new List<int>();
+				buttonLastFivePatNums=new List<long>();
 			}
 			if(buttonLastFiveNames==null) {
 				buttonLastFiveNames=new List<string>();
@@ -63,7 +63,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>
-		public static int ButtonSelect(ContextMenu menu,object sender,Family fam) {
+		public static long ButtonSelect(ContextMenu menu,object sender,Family fam) {
 			//No need to check RemotingRole; no call to db.
 			int index=menu.MenuItems.IndexOf((MenuItem)sender);
 			//Patients.PatIsLoaded=true;
@@ -77,7 +77,7 @@ namespace OpenDental{
 		}
 
 		///<summary>A simpler version which does not require as much data.</summary>
-		public static string GetMainTitle(string nameLF,int patNum,string chartNumber,int siteNum) {
+		public static string GetMainTitle(string nameLF,long patNum,string chartNumber,long siteNum) {
 			string retVal=PrefC.GetString("MainWindowTitle");
 			if(Security.CurUser!=null){
 				retVal+=" {"+Security.CurUser.UserName+"}";

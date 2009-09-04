@@ -620,7 +620,7 @@ namespace OpenDental{
 				ApptViewItems.Insert(ApptViewItemCur);
 			}
 			ApptViewCur.Description=textDescription.Text;
-			ApptViewCur.RowsPerIncr=PIn.PInt(textRowsPerIncr.Text);
+			ApptViewCur.RowsPerIncr=PIn.PInt32(textRowsPerIncr.Text);
 			ApptViewCur.OnlyScheduledProvs=checkOnlyScheduledProvs.Checked;
 			ApptViews.Update(ApptViewCur);//same whether isnew or not
 			DialogResult=DialogResult.OK;

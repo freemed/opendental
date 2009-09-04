@@ -349,7 +349,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
 				return;
 			}
-			List<int> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
+			List<long> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
 			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
 			if(checkReplace.Checked) {
 				Schedules.ClearBlockouts(dateSelectedStart,dateSelectedEnd,opNums);
@@ -404,7 +404,7 @@ namespace OpenDental{
 				dateSelectedEnd=DateSelected;
 			}
 			//it is allowed to paste back over the same day or week.
-			List<int> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
+			List<long> opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
 			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
 			Schedule sched;
 			int weekDelta=0;

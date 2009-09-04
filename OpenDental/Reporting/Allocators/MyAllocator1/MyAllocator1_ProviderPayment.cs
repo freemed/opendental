@@ -60,7 +60,7 @@ namespace OpenDental.Reporting.Allocators {
 		/// circumstances.
 		/// </summary>
 		/// <param name="iGuarantor"></param>
-		private static void _AllocateExecute(int iGuarantor) {
+		private static void _AllocateExecute(long iGuarantor) {
 			OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection Ledger =
 								new OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection(iGuarantor);
 			Ledger.Fill(false);
@@ -75,7 +75,7 @@ namespace OpenDental.Reporting.Allocators {
 		/// </summary>
 		/// <param name="iGuarantor"></param>
 		/// <returns></returns>
-		public static bool AllocateWithToolCheck(int iGuarantor) {
+		public static bool AllocateWithToolCheck(long iGuarantor) {
 			bool AllocatedNomally = false;
 			try {
 				bool toolRan = false;

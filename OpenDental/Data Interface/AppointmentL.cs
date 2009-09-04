@@ -23,7 +23,7 @@ namespace OpenDental{
 			int hourFound;
 			int[][] provBar=new int[providers.Length][];//dim 1 is for each provider.  Dim 2is the 10min increment
 			bool[][] provBarSched=new bool[providers.Length][];//keeps track of the schedule of each provider. True means open, false is closed.
-			int aptProv;
+			long aptProv;
 			string pattern;
 			int startIndex;
 			int provIndex;//the index of a provider within providers
@@ -300,7 +300,7 @@ namespace OpenDental{
 		public static ArrayList GetDoubleBookedCodes(Appointment apt,DataTable dayTable,List<Procedure> procsMultApts,Procedure[] procsForOne) {
 			ArrayList retVal=new ArrayList();//codes
 			//figure out which provider we are testing for
-			int provNum;
+			long provNum;
 			if(apt.IsHygiene){
 				provNum=apt.ProvHyg;
 			}

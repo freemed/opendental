@@ -17,14 +17,14 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private int PatNum;
+		private long PatNum;
 		private List<Procedure> ProcList;
 		private ODGrid gridMain;
 		///<summary>If form closes with OK, this contains selected proc num.</summary>
-		public int SelectedProcNum;
+		public long SelectedProcNum;
 
 		///<summary>This form only displays completed procedures to pick from.</summary>
-		public FormProcSelect(int patNum)
+		public FormProcSelect(long patNum)
 		{
 			//
 			// Required for Windows Form Designer support

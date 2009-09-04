@@ -14,7 +14,7 @@ namespace OpenDental{
 	public class ProgramL{
 
 		///<summary>Typically used when user clicks a button to a Program link.  This method attempts to identify and execute the program based on the given programNum.</summary>
-		public static void Execute(int programNum,Patient pat){
+		public static void Execute(long programNum,Patient pat) {
 			Program prog=null;
 			for(int i=0;i<ProgramC.Listt.Count;i++){
 				if(ProgramC.Listt[i].ProgramNum==programNum) {

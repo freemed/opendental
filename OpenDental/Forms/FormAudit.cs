@@ -28,11 +28,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butFind;
 		private OpenDental.UI.Button butAll;
 		///<summary>The selected patNum.  Can be 0 to include all.</summary>
-		private int PatNum;
+		private long PatNum;
 		private OpenDental.UI.Button butCurrent;
 		private OpenDental.UI.Button butPrint;
 		///<summary>This gets set externally beforehand.  Lets user quickly select audit trail for current patient.</summary>
-		public int CurPatNum;
+		public long CurPatNum;
 		private PrintDocument pd;
 		private int linesPrinted;
 		private OpenDental.UI.PrintPreview printPreview;
@@ -352,7 +352,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			int userNum=0;
+			long userNum=0;
 			if(comboUser.SelectedIndex>0){
 				userNum=UserodC.Listt[comboUser.SelectedIndex-1].UserNum;
 			}
