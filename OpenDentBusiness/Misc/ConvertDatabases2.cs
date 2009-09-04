@@ -834,70 +834,7 @@ DROP TABLE IF EXISTS etAck";
 				command="DROP TABLE IF EXISTS proclicense";
 				Db.NonQ32(command);
 				command="DROP TABLE IF EXISTS scheddefault";
-				Db.NonQ32(command);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				Db.NonQ32(command);				
 				command="ALTER TABLE account CHANGE AccountNum AccountNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
 				command="ALTER TABLE accountingautopay CHANGE AccountingAutoPayNum AccountingAutoPayNum bigint NOT NULL auto_increment";
@@ -1044,7 +981,7 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE claimvalcodelog CHANGE ClaimNum ClaimNum bigint NOT NULL";
 				Db.NonQ32(command);
-				command="ALTER TABLE clearinghouse CHANGE ClearingHouseNum ClearingHouseNum bigint NOT NULL auto_increment";
+				command="ALTER TABLE clearinghouse CHANGE ClearinghouseNum ClearinghouseNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
 				command="ALTER TABLE clinic CHANGE ClinicNum ClinicNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
@@ -1156,7 +1093,7 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE formpat CHANGE PatNum PatNum bigint NOT NULL";
 				Db.NonQ32(command);
-				command="ALTER TABLE grouppermission CHANGE GroupPermissionNum GroupPermissionNum bigint NOT NULL auto_increment";
+				command="ALTER TABLE grouppermission CHANGE GroupPermNum GroupPermNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
 				command="ALTER TABLE grouppermission CHANGE UserGroupNum UserGroupNum bigint NOT NULL";
 				Db.NonQ32(command);
@@ -1286,7 +1223,7 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE patient CHANGE ResponsParty ResponsParty bigint NOT NULL";
 				Db.NonQ32(command);
-				command="ALTER TABLE patientnote CHANGE PatNum PatNum bigint NOT NULL auto_increment";
+				command="ALTER TABLE patientnote CHANGE PatNum PatNum bigint NOT NULL";
 				Db.NonQ32(command);
 				command="ALTER TABLE patplan CHANGE PatPlanNum PatPlanNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
@@ -1640,40 +1577,76 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE task CHANGE KeyNum KeyNum bigint NOT NULL";
 				Db.NonQ32(command);
-				command="ALTER TABLE task CHANGE FormNum FormNum bigint NOT NULL";
+				command="ALTER TABLE task CHANGE FromNum FromNum bigint NOT NULL";
 				Db.NonQ32(command);
 				command="ALTER TABLE task CHANGE UserNum UserNum bigint NOT NULL";
 				Db.NonQ32(command);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				command="ALTER TABLE taskancestor CHANGE TaskAncestorNum TaskAncestorNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE taskancestor CHANGE TaskNum TaskNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE taskancestor CHANGE TaskListNum TaskListNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasklist CHANGE TaskListNum TaskListNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasklist CHANGE Parent Parent bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasklist CHANGE FromNum FromNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasksubscription CHANGE TaskSubscriptionNum TaskSubscriptionNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasksubscription CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE tasksubscription CHANGE TaskListNum TaskListNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE terminalactive CHANGE TerminalActiveNum TerminalActiveNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE terminalactive CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE timeadjust CHANGE TimeAdjustNum TimeAdjustNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE timeadjust CHANGE EmployeeNum EmployeeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE toolbutitem CHANGE ToolButItemNum ToolButItemNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE toolbutitem CHANGE ProgramNum ProgramNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE toothinitial CHANGE ToothInitialNum ToothInitialNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE toothinitial CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE transaction CHANGE TransactionNum TransactionNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE transaction CHANGE UserNum UserNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE transaction CHANGE DepositNum DepositNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE transaction CHANGE PayNum PayNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE treatplan CHANGE TreatPlanNum TreatPlanNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE treatplan CHANGE PatNum PatNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE treatplan CHANGE ResponsParty ResponsParty bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE usergroup CHANGE UserGroupNum UserGroupNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE UserNum UserNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE UserGroupNum UserGroupNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE EmployeeNum EmployeeNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE ClinicNum ClinicNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE ProvNum ProvNum bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE userod CHANGE TaskListInBox TaskListInBox bigint NOT NULL";
+				Db.NonQ32(command);
+				command="ALTER TABLE userquery CHANGE QueryNum QueryNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
+				command="ALTER TABLE zipcode CHANGE ZipCodeNum ZipCodeNum bigint NOT NULL auto_increment";
+				Db.NonQ32(command);
 				
 				command="UPDATE preference SET ValueString = '6.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
