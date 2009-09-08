@@ -239,7 +239,7 @@ namespace OpenDentBusiness{
 				cmd.CommandText="SELECT LAST_INSERT_ID()";
 				dr=(MySqlDataReader)cmd.ExecuteReader();
 				if(dr.Read()) {
-					InsertID=Convert.ToInt32(dr[0].ToString());
+					InsertID=Convert.ToInt64(dr[0].ToString());
 				}
 			}
 			con.Close();

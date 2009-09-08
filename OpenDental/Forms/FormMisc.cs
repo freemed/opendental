@@ -14,7 +14,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private IContainer components;
 		private System.Windows.Forms.TextBox textMainWindowTitle;
-		private System.Windows.Forms.CheckBox checkRandomPrimaryKeys;
 		private System.Windows.Forms.Label label3;
 		private OpenDental.ValidNumber textSigInterval;
 		private OpenDental.UI.Button butLanguages;
@@ -64,7 +63,6 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMisc));
 			this.textMainWindowTitle = new System.Windows.Forms.TextBox();
-			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -102,18 +100,6 @@ namespace OpenDental{
 			this.textMainWindowTitle.Name = "textMainWindowTitle";
 			this.textMainWindowTitle.Size = new System.Drawing.Size(267,20);
 			this.textMainWindowTitle.TabIndex = 38;
-			// 
-			// checkRandomPrimaryKeys
-			// 
-			this.checkRandomPrimaryKeys.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(102,179);
-			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
-			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
-			this.checkRandomPrimaryKeys.TabIndex = 55;
-			this.checkRandomPrimaryKeys.Text = "Use Random Primary Keys (BE VERY CAREFUL.  IRREVERSIBLE)";
-			this.checkRandomPrimaryKeys.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRandomPrimaryKeys.Click += new System.EventHandler(this.checkRandomPrimaryKeys_Click);
 			// 
 			// label3
 			// 
@@ -431,7 +417,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.checkRandomPrimaryKeys);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -458,11 +443,6 @@ namespace OpenDental{
 			else{
 				textSigInterval.Text=PrefC.GetInt("ProcessSigsIntervalInSecs").ToString();
 			}
-			checkRandomPrimaryKeys.Checked=PrefC.GetBool("RandomPrimaryKeys");
-			if(checkRandomPrimaryKeys.Checked){
-				//not allowed to uncheck it
-				checkRandomPrimaryKeys.Enabled=false;
-			}
 			textMainWindowTitle.Text=PrefC.GetString("MainWindowTitle");
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
@@ -488,21 +468,6 @@ namespace OpenDental{
 			validNumY.Text=computerPref.TaskY.ToString();
 			checkTitleBarShowSite.Checked=PrefC.GetBool("TitleBarShowSite");
 			textWebServiceServerName.Text=PrefC.GetString("WebServiceServerName");
-		}
-
-		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
-			if(MessageBox.Show("Are you absolutely sure you want to enable random primary keys?\r\n"
-				+"Advantages:\r\n"
-				+"Multiple servers can stay synchronized using merge replication.\r\n"
-				+"Realtime connection between servers not required.\r\n"
-				+"Data can be entered on all servers and synchronized later.\r\n"
-				+"Disadvantages:\r\n"
-				+"Slightly slower.\r\n"
-				+"Difficult to set up.\r\n"
-				+"Primary keys much longer, so not as user friendly.","",MessageBoxButtons.OKCancel)==DialogResult.Cancel)
-			{
-				checkRandomPrimaryKeys.Checked=false;
-			}
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {
@@ -549,8 +514,7 @@ namespace OpenDental{
 				return;
 			}
 			bool changed=false;
-			if( Prefs.UpdateBool("RandomPrimaryKeys",checkRandomPrimaryKeys.Checked)
-				| Prefs.UpdateString("MainWindowTitle",textMainWindowTitle.Text)
+			if( Prefs.UpdateString("MainWindowTitle",textMainWindowTitle.Text)
 				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex)
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)

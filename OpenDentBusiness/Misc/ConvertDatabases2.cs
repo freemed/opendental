@@ -834,7 +834,8 @@ DROP TABLE IF EXISTS etAck";
 				command="DROP TABLE IF EXISTS proclicense";
 				Db.NonQ32(command);
 				command="DROP TABLE IF EXISTS scheddefault";
-				Db.NonQ32(command);				
+				Db.NonQ32(command);
+				//Change all primary and foreign keys to 64 bit---------------------------------------------------------------
 				command="ALTER TABLE account CHANGE AccountNum AccountNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
 				command="ALTER TABLE accountingautopay CHANGE AccountingAutoPayNum AccountingAutoPayNum bigint NOT NULL auto_increment";
@@ -1647,6 +1648,30 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ32(command);
 				command="ALTER TABLE zipcode CHANGE ZipCodeNum ZipCodeNum bigint NOT NULL auto_increment";
 				Db.NonQ32(command);
+				command="DROP TABLE IF EXISTS replicationserver";
+				Db.NonQ32(command);
+				command=@"CREATE TABLE replicationserver (
+					ReplicationServerNum bigint NOT NULL auto_increment,
+					Descript TEXT NOT NULL,
+					ServerId INT unsigned NOT NULL,
+					RangeStart BIGINT NOT NULL,
+					RangeEnd BIGINT NOT NULL,
+					PRIMARY KEY(ReplicationServerNum)
+					)";
+				Db.NonQ32(command);
+
+
+
+
+
+
+
+
+
+
+
+
+
 				
 				command="UPDATE preference SET ValueString = '6.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
