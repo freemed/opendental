@@ -20,13 +20,13 @@ namespace OpenDentBusiness{
 			Type dataType = value.GetType();
 
 			if (dataType == typeof(string)) {
-				return '\'' + PString((string)value) + '\'';
+				return "'"+PString((string)value)+"'";
 			}
 			else if (dataType.IsEnum) {
 				return ((int)value).ToString();
 			}
 			else if (dataType == typeof(Bitmap)) {
-				return PBitmap((Bitmap)value);
+				return "'"+PBitmap((Bitmap)value)+"'";
 			}
 			else if (dataType == typeof(bool)) {
 				return PBool((bool)value);
@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 				return PTimeSpan((TimeSpan)value);
 			}
 			else if (dataType == typeof(double)) {
-				return '\'' + PDouble((double)value) + '\'';
+				return "'"+PDouble((double)value)+"'";
 			}
 			else if (dataType == typeof(float)) {
 				return PFloat((float)value);

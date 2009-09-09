@@ -121,7 +121,7 @@ namespace OpenDentBusiness.DataAccess
 				throw new InvalidOperationException(Resources.NotASinglePrimaryKey);
 
 			DataFieldInfo primaryKey = dataFields[0];
-			if (primaryKey.Field.FieldType != typeof(int))
+			if (primaryKey.Field.FieldType != typeof(long))
 				throw new InvalidOperationException(Resources.PrimaryKeyNotAnInteger);
 
 			return primaryKey;
@@ -157,7 +157,7 @@ namespace OpenDentBusiness.DataAccess
 		}
 
 		/// <summary>
-		/// Sets the integer primary key of the object.
+		/// Sets the long integer primary key of the object.
 		/// </summary>
 		/// <param name="value">The object on which to set the primary key.</param>
 		/// <param name="key">The value of the primary key.</param>
@@ -183,9 +183,9 @@ namespace OpenDentBusiness.DataAccess
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
 		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
-		public static int GetPrimaryKey(T value) {
+		public static long GetPrimaryKey(T value) {
 			DataFieldInfo primaryKeyField = GetPrimaryKeyField();
-			return (int)primaryKeyField.Field.GetValue(value);
+			return (long)primaryKeyField.Field.GetValue(value);
 		}
 
 		/// <summary>

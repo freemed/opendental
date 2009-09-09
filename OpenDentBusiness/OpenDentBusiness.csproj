@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Cache\InsFilingCodeSubtypeC.cs" />
     <Compile Include="Cache\InsFilingCodeC.cs" />
+    <Compile Include="Data Interface\ReplicationServers.cs" />
     <Compile Include="Data Interface\InsFilingCodes.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Misc\ReplicationQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
+    <Compile Include="TableTypes\ReplicationServer.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />

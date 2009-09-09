@@ -159,92 +159,52 @@ namespace OpenDentBusiness.DataAccess {
 				}
 				int ordinal = reader.GetOrdinal(dataField.DatabaseName);
 				// Special case for certain types
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					if(dataField.Field.FieldType==typeof(bool)) {
-						// Booleans are sometimes stored as TINYINT(3), to enable conversion to
-						// Enums if required. Hence, we need to do an explicit conversion.
-						dataField.Field.SetValue(value,reader.GetBoolean(ordinal));
-					} else if(dataField.Field.FieldType==typeof(DateTime)) {
-						// DateTime fields can have various minimum or default values depending on
-						// the database type. In MySql, for example, it is 00-00-00, which is not supported
-						// by .NET. So for now, we catch a cast exception and set it to DateTime.MinValue.
-						try {
-							dataField.Field.SetValue(value,reader.GetDateTime(ordinal));
-						}
-							// Warning: If compiled against MySql.Data.dll from the SVN repository, this will fail, because
-							// the MySqlConversionException refers to the class in that particular Dll. However, the Data
-							// Framework uses the MySql.Data.dll in the GAC. Hence, this class should be compiled
-							// using the GAC version of MySql.Data.dll.
-						catch(MySqlConversionException) {
-							dataField.Field.SetValue(value,DateTime.MinValue);
-						}
-					} else if(dataField.Field.FieldType==typeof(string)) {
-						// String fields can be null or empty in the database.
-						// There is no distinction in Oracle.  In MySQL, we must allow null for Oracle conversion compatibility.
-						// But this results in the unfortunate situation sometimes encountering null strings.
-						if(reader.IsDBNull(ordinal)) {
-							dataField.Field.SetValue(value,"");
-						} else {
-							dataField.Field.SetValue(value,reader.GetString(ordinal));
-						}
-					} else if(dataField.Field.FieldType==typeof(TimeSpan)) {
-						//For timespan values that are allowed to be null in the database, we should consider those timespan values
-						//to be the minimum possible value, so that we don't have to handle null values in the code.
-						try {
-							dataField.Field.SetValue(value,reader.GetValue(ordinal));
-						} catch {
-							dataField.Field.SetValue(value,TimeSpan.MinValue);
-						}
-					} else if(dataField.Field.FieldType.IsEnum) {
-						dataField.Field.SetValue(value,Enum.Parse(dataField.Field.FieldType,reader.GetValue(ordinal).ToString()));
-					} else {
-						dataField.Field.SetValue(value,reader.GetValue(ordinal));
+				//if(DataConnection.DBtype==DatabaseType.MySql) {
+				if(dataField.Field.FieldType==typeof(bool)) {
+					// Booleans are sometimes stored as TINYINT(3), to enable conversion to
+					// Enums if required. Hence, we need to do an explicit conversion.
+					dataField.Field.SetValue(value,reader.GetBoolean(ordinal));
+				} 
+				else if(dataField.Field.FieldType==typeof(DateTime)) {
+					// DateTime fields can have various minimum or default values depending on
+					// the database type. In MySql, for example, it is 00-00-00, which is not supported
+					// by .NET. So for now, we catch a cast exception and set it to DateTime.MinValue.
+					try {
+						dataField.Field.SetValue(value,reader.GetDateTime(ordinal));
 					}
-				} else {//oracle
-					if(dataField.Field.FieldType==typeof(bool)) {
-						// Booleans are sometimes stored as INT, to enable conversion to
-						// Enums if required. Hence, we need to do an explicit conversion.
-						dataField.Field.SetValue(value,Convert.ToInt32(reader.GetValue(ordinal))!=0);
-					} else if(dataField.Field.FieldType==typeof(DateTime)) {
-						// DateTime fields can have various minimum or default values depending on
-						// the database type. In MySql, for example, it is 00-00-00, which is not supported
-						// by .NET. So for now, we catch a cast exception and set it to DateTime.MinValue.
-						try {
-							dataField.Field.SetValue(value,reader.GetDateTime(ordinal));
-						}
-							// Warning: If compiled against MySql.Data.dll from the SVN repository, this will fail, because
-							// the MySqlConversionException refers to the class in that particular Dll. However, the Data
-							// Framework uses the MySql.Data.dll in the GAC. Hence, this class should be compiled
-							// using the GAC version of MySql.Data.dll.
-						catch(MySqlConversionException) {
-							dataField.Field.SetValue(value,DateTime.MinValue);
-						}
-					} else if(dataField.Field.FieldType==typeof(string)) {
-						// String fields can be null or empty in the database.
-						// There is no distinction in Oracle.  In MySQL, we must allow null for Oracle conversion compatibility.
-						// But this results in the unfortunate situation sometimes encountering null strings.
-						if(reader.IsDBNull(ordinal)) {
-							dataField.Field.SetValue(value,"");
-						} else {
-							dataField.Field.SetValue(value,reader.GetString(ordinal));
-						}
-					} else if(dataField.Field.FieldType==typeof(TimeSpan)) {
-						//For timespan values that are allowed to be null in the database, we should consider those timespan values
-						//to be the minimum possible value, so that we don't have to handle null values in the code.
-						try {
-							dataField.Field.SetValue(value,reader.GetValue(ordinal));
-						} catch {
-							dataField.Field.SetValue(value,TimeSpan.MinValue);
-						}
-					} else if(dataField.Field.FieldType.IsEnum) {
-						dataField.Field.SetValue(value,Enum.Parse(dataField.Field.FieldType,reader.GetValue(ordinal).ToString()));
-					} else if(dataField.Field.FieldType==typeof(System.Int32)) {
-						dataField.Field.SetValue(value,Convert.ToInt32(reader.GetValue(ordinal)));
-					} else if(dataField.Field.FieldType==typeof(System.Byte)) {
-						dataField.Field.SetValue(value,Convert.ToByte(reader.GetValue(ordinal)));
-					} else {
-						dataField.Field.SetValue(value,reader.GetValue(ordinal));
+						// Warning: If compiled against MySql.Data.dll from the SVN repository, this will fail, because
+						// the MySqlConversionException refers to the class in that particular Dll. However, the Data
+						// Framework uses the MySql.Data.dll in the GAC. Hence, this class should be compiled
+						// using the GAC version of MySql.Data.dll.
+						// jsparks - I don't agree with the above statement.  Might be specific to Linux.
+					catch(MySqlConversionException) {
+						dataField.Field.SetValue(value,DateTime.MinValue);
 					}
+				} 
+				else if(dataField.Field.FieldType==typeof(string)) {
+					// String fields can be null or empty in the database.
+					// There is no distinction in Oracle.  In MySQL, we must allow null for Oracle conversion compatibility.
+					// But this results in the unfortunate situation sometimes encountering null strings.
+					if(reader.IsDBNull(ordinal)) {
+						dataField.Field.SetValue(value,"");
+					} else {
+						dataField.Field.SetValue(value,reader.GetString(ordinal));
+					}
+				} 
+				else if(dataField.Field.FieldType==typeof(TimeSpan)) {
+					//For timespan values that are allowed to be null in the database, we should consider those timespan values
+					//to be the minimum possible value, so that we don't have to handle null values in the code.
+					try {
+						dataField.Field.SetValue(value,reader.GetValue(ordinal));
+					} catch {
+						dataField.Field.SetValue(value,TimeSpan.MinValue);
+					}
+				} 
+				else if(dataField.Field.FieldType.IsEnum) {
+					dataField.Field.SetValue(value,Enum.Parse(dataField.Field.FieldType,reader.GetValue(ordinal).ToString()));
+				} 
+				else {
+					dataField.Field.SetValue(value,reader.GetValue(ordinal));
 				}
 			}
 			value.IsDirty=false;
@@ -310,6 +270,9 @@ namespace OpenDentBusiness.DataAccess {
 						dataValue = PIn.PFloat((string)dataValue);
 					}
 					else if (dataType == typeof(int)) {
+						dataValue = PIn.PInt32((string)dataValue);
+					}
+					else if(dataType == typeof(long)) {
 						dataValue = PIn.PInt((string)dataValue);
 					}
 					else {
@@ -551,13 +514,14 @@ namespace OpenDentBusiness.DataAccess {
 							isFirstField = false;
 						}
 						else{
-							commandTextBuilder.Append(',');
+							commandTextBuilder.Append(",");
 						}
 						if (useParameters) {
 							commandTextBuilder.Append(ParameterPrefix + field.DatabaseName);
 						}
 						else {
-							commandTextBuilder.AppendFormat("{0}", POut.PObject(field.Field.GetValue(value)));
+							commandTextBuilder.Append(POut.PObject(field.Field.GetValue(value)));
+								//.AppendFormat("{0}", POut.PObject(field.Field.GetValue(value)));
 						}
 					}
 
@@ -567,13 +531,13 @@ namespace OpenDentBusiness.DataAccess {
 								isFirstField = false;
 							}
 							else{
-								commandTextBuilder.Append(',');
+								commandTextBuilder.Append(",");
 							}
 							if (useParameters) {
 								commandTextBuilder.Append(ParameterPrefix + primaryKeyField.DatabaseName);
 							}
 							else {
-								commandTextBuilder.AppendFormat("{0}", POut.PObject(primaryKeyField.Field.GetValue(value)));
+								commandTextBuilder.Append(POut.PObject(primaryKeyField.Field.GetValue(value)));
 							}
 						}
 					}
@@ -635,7 +599,7 @@ namespace OpenDentBusiness.DataAccess {
 					command.CommandText = "SELECT LAST_INSERT_ID()";
 					// The type returned by command.ExecuteScalar() is System.Int64.
 					// We need to cast it to System.Int32, that's what we use here.
-					int key = Convert.ToInt32(command.ExecuteScalar());
+					long key = Convert.ToInt64(command.ExecuteScalar());
 					DataObjectInfo<T>.SetPrimaryKey(value, key);
 				}
 				connection.Close();
