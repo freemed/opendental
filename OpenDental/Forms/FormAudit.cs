@@ -377,10 +377,18 @@ namespace OpenDental{
 			grid.Columns.Add(col);
 			grid.Rows.Clear();
 			ODGridRow row;
+			Userod user;
 			for(int i=0;i<logList.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(logList[i].LogDateTime.ToShortDateString()+" "+logList[i].LogDateTime.ToShortTimeString());
-				row.Cells.Add(Userods.GetUser(logList[i].UserNum).UserName);
+				user=Userods.GetUser(logList[i].UserNum);
+				//user might be null due to old bugs.
+				if(user==null) {
+					row.Cells.Add("unknown");
+				}
+				else {
+					row.Cells.Add(Userods.GetUser(logList[i].UserNum).UserName);
+				}
 				row.Cells.Add(logList[i].PermType.ToString());
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);
