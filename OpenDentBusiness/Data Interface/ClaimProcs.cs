@@ -633,14 +633,6 @@ namespace OpenDentBusiness{
 			if(cp.CopayOverride > allowed) {//or if the copay override is greater than the allowed fee calculated above
 				cp.CopayOverride=allowed;//reduce the override
 			}
-			if(cp.CopayOverride != -1) {//subtract copay if override
-				cp.BaseEst-=cp.CopayOverride;
-				cp.InsEstTotal-=cp.CopayOverride;
-			}
-			else if(cp.CopayAmt != -1) {//otherwise subtract calculated copay
-				cp.BaseEst-=cp.CopayAmt;
-				cp.InsEstTotal-=cp.CopayAmt;
-			}
 			if(cp.Status==ClaimProcStatus.CapEstimate) {
 				//this does automate the Writeoff. If user does not want writeoff automated,
 				//then they will have to complete the procedure first. (very rare)
@@ -663,6 +655,14 @@ namespace OpenDentBusiness{
 				cp.BaseEst=0;
 				cp.InsEstTotal=0;
 				return;
+			}
+			if(cp.CopayOverride != -1) {//subtract copay if override
+				cp.BaseEst-=cp.CopayOverride;
+				cp.InsEstTotal-=cp.CopayOverride;
+			}
+			else if(cp.CopayAmt != -1) {//otherwise subtract calculated copay
+				cp.BaseEst-=cp.CopayAmt;
+				cp.InsEstTotal-=cp.CopayAmt;
 			}
 			//Deductible----------------------------------------------------------------------------------------
 			//The code below handles partial usage of available deductible. 
