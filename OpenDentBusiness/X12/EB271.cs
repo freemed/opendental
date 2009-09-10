@@ -153,6 +153,7 @@ namespace OpenDentBusiness
 			eb02.Add(new EB02("CHD","Children Only"));
 			eb02.Add(new EB02("DEP","Dependents Only"));
 			eb02.Add(new EB02("ECH","Employee and Children",BenefitCoverageLevel.Family));
+			eb02.Add(new EB02("EMP","Employee Only"));
 			eb02.Add(new EB02("ESP","Employee and Spouse",BenefitCoverageLevel.Family));
 			eb02.Add(new EB02("FAM","Family",BenefitCoverageLevel.Family));
 			eb02.Add(new EB02("IND","Individual",BenefitCoverageLevel.Individual));
