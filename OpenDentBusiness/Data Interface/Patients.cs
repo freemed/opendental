@@ -1119,30 +1119,36 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Key=patNum, value=formatted name.  Used for reports, FormASAP, FormTrackNext, and FormUnsched.</summary>
-		public static Dictionary<long,string> GetAllPatientNames() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Dictionary<long,string>>(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT patnum,lname,fname,middlei,preferred "
-				+"FROM patient";
-			DataTable table=Db.GetTable(command);
-			Dictionary<long,string> dict=new Dictionary<long,string>();
-			long patnum;
+		public static Dictionary<int,string> GetAllPatientNames() {
+			//No need to check RemotingRole; no call to db.
+			DataTable table=GetAllPatientNamesTable();
+			Dictionary<int,string> dict=new Dictionary<int,string>();
+			int patnum;
 			string lname,fname,middlei,preferred;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				patnum=PIn.PInt(table.Rows[i][0].ToString());
 				lname=PIn.PString(table.Rows[i][1].ToString());
 				fname=PIn.PString(table.Rows[i][2].ToString());
 				middlei=PIn.PString(table.Rows[i][3].ToString());
 				preferred=PIn.PString(table.Rows[i][4].ToString());
-				if(preferred==""){
+				if(preferred=="") {
 					dict.Add(patnum,lname+", "+fname+" "+middlei);
 				}
-				else{
+				else {
 					dict.Add(patnum,lname+", '"+preferred+"' "+fname+" "+middlei);
 				}
 			}
 			return dict;
+		}
+
+		public static DataTable GetAllPatientNamesTable() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT patnum,lname,fname,middlei,preferred "
+				+"FROM patient";
+			DataTable table=Db.GetTable(command);
+			return table;
 		}
 
 		///<summary></summary>
