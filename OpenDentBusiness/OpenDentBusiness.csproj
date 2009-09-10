@@ -359,7 +359,6 @@
     <Compile Include="Misc\DatabaseMaintenance.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
-    <Compile Include="Misc\ReplicationQueries.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="TableTypes\ReplicationServer.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />

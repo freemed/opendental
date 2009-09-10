@@ -23,10 +23,115 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.label1 = new System.Windows.Forms.Label();
+			this.textDescript = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textRangeStart = new System.Windows.Forms.TextBox();
+			this.textRangeEnd = new System.Windows.Forms.TextBox();
+			this.butDelete = new OpenDental.UI.Button();
+			this.textServerId = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(340,49);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(327,48);
+			this.label1.TabIndex = 60;
+			this.label1.Text = "this also needs to be set in the my.ini file on each server.  If the my.ini file " +
+    "gets changed, be sure to restart the server and each workstation client.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textDescript
+			// 
+			this.textDescript.Location = new System.Drawing.Point(238,22);
+			this.textDescript.Name = "textDescript";
+			this.textDescript.Size = new System.Drawing.Size(318,20);
+			this.textDescript.TabIndex = 61;
+			this.textDescript.WordWrap = false;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(10,22);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(226,18);
+			this.label2.TabIndex = 62;
+			this.label2.Text = "Server Description";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(10,64);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(226,18);
+			this.label3.TabIndex = 63;
+			this.label3.Text = "server_id";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(10,107);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(226,18);
+			this.label4.TabIndex = 65;
+			this.label4.Text = "Range Start";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(10,137);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(226,18);
+			this.label5.TabIndex = 67;
+			this.label5.Text = "Range End";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textRangeStart
+			// 
+			this.textRangeStart.Location = new System.Drawing.Point(238,107);
+			this.textRangeStart.Name = "textRangeStart";
+			this.textRangeStart.Size = new System.Drawing.Size(175,20);
+			this.textRangeStart.TabIndex = 68;
+			this.textRangeStart.WordWrap = false;
+			// 
+			// textRangeEnd
+			// 
+			this.textRangeEnd.Location = new System.Drawing.Point(238,137);
+			this.textRangeEnd.Name = "textRangeEnd";
+			this.textRangeEnd.Size = new System.Drawing.Size(175,20);
+			this.textRangeEnd.TabIndex = 69;
+			this.textRangeEnd.WordWrap = false;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(33,207);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(86,24);
+			this.butDelete.TabIndex = 70;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// textServerId
+			// 
+			this.textServerId.Location = new System.Drawing.Point(238,64);
+			this.textServerId.MaxVal = 2000000000;
+			this.textServerId.MinVal = 0;
+			this.textServerId.Name = "textServerId";
+			this.textServerId.Size = new System.Drawing.Size(100,20);
+			this.textServerId.TabIndex = 64;
 			// 
 			// butOK
 			// 
@@ -36,7 +141,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,442);
+			this.butOK.Location = new System.Drawing.Point(478,207);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -51,25 +156,26 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,483);
+			this.butCancel.Location = new System.Drawing.Point(579,207);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(79,258);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(567,18);
-			this.label1.TabIndex = 60;
-			this.label1.Text = "server_id values are set in the my.ini file on each server.";
-			// 
 			// FormReplicationEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
+			this.ClientSize = new System.Drawing.Size(678,254);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.textRangeEnd);
+			this.Controls.Add(this.textRangeStart);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.textServerId);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textDescript);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -78,6 +184,7 @@ namespace OpenDental{
 			this.Text = "Edit Replication Server";
 			this.Load += new System.EventHandler(this.FormReplicationEdit_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -86,5 +193,14 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textDescript;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
+		private ValidNum textServerId;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox textRangeStart;
+		private System.Windows.Forms.TextBox textRangeEnd;
+		private OpenDental.UI.Button butDelete;
 	}
 }

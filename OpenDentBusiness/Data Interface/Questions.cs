@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 				return quest.QuestionNum;
 			}
 			if(PrefC.RandomKeys) {
-				quest.QuestionNum=MiscData.GetKey("question","QuestionNum");
+				quest.QuestionNum=ReplicationServers.GetKey("question","QuestionNum");
 			}
 			string command="INSERT INTO question (";
 			if(PrefC.RandomKeys) {

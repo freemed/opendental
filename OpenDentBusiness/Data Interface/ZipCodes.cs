@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 				return Cur.ZipCodeNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.ZipCodeNum=MiscData.GetKey("zipcode","ZipCodeNum");
+				Cur.ZipCodeNum=ReplicationServers.GetKey("zipcode","ZipCodeNum");
 			}
 			string command="INSERT INTO zipcode (";
 			if(PrefC.RandomKeys){

@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 				return cur.PrinterNum;
 			}
 			if(PrefC.RandomKeys){
-				cur.PrinterNum=MiscData.GetKey("printer","PrinterNum");
+				cur.PrinterNum=ReplicationServers.GetKey("printer","PrinterNum");
 			}
 			string command= "INSERT INTO printer (";
 			if(PrefC.RandomKeys){

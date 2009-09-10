@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 				return Cur.ContactNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.ContactNum=MiscData.GetKey("contact","ContactNum");
+				Cur.ContactNum=ReplicationServers.GetKey("contact","ContactNum");
 			}
 			string command="INSERT INTO contact (";
 			if(PrefC.RandomKeys){

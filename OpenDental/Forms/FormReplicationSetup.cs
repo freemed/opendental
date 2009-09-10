@@ -10,9 +10,12 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormReplicationSetup:Form {
+		private bool changed;
+
 		public FormReplicationSetup() {
 			InitializeComponent();
 			Lan.F(this);
+			changed=false;
 		}
 
 		private void FormReplicationSetup_Load(object sender,EventArgs e) {
@@ -25,23 +28,27 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
+			ReplicationServers.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("FormReplicationSetup","Server Name or Descript"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("FormReplicationSetup","Description"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormReplicationSetup","MySQL server_id"),100);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","server_id"),80);
 			gridMain.Columns.Add(col);
-			 
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range Start"),160);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range End"),160);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			/*
-			for(int i=0;i<List.Length;i++){
+			for(int i=0;i<ReplicationServers.Listt.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add("");
-				row.Cells.Add("");
-			  
+				row.Cells.Add(ReplicationServers.Listt[i].Descript);
+				row.Cells.Add(ReplicationServers.Listt[i].ServerId.ToString());
+				row.Cells.Add(ReplicationServers.Listt[i].RangeStart.ToString("n0"));
+				row.Cells.Add(ReplicationServers.Listt[i].RangeEnd.ToString("n0"));
 				gridMain.Rows.Add(row);
-			}*/
+			}
 			gridMain.EndUpdate();
 		}
 
@@ -73,13 +80,89 @@ namespace OpenDental {
 			}
 		}
 
-		private void butAdd_Click(object sender,EventArgs e) {
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormReplicationEdit FormR=new FormReplicationEdit();
+			FormR.RepServ=ReplicationServers.Listt[e.Row];
+			FormR.ShowDialog();
+			if(FormR.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			changed=true;
+			FillGrid();
+		}
 
+		private void butAdd_Click(object sender,EventArgs e) {
+			FormReplicationEdit FormR=new FormReplicationEdit();
+			FormR.RepServ=new ReplicationServer();
+			FormR.ShowDialog();
+			if(FormR.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			changed=true;
+			FillGrid();
+		}
+
+		private void butSetRanges_Click(object sender,EventArgs e) {
+			//long serverCount=ReplicationServers.Listt.Count;
+			long offset=10000;
+			long span=(long.MaxValue-offset) / (long)ReplicationServers.Listt.Count;//rounds down
+			long counter=offset;
+			for(int i=0;i<ReplicationServers.Listt.Count;i++) {
+				ReplicationServers.Listt[i].RangeStart=counter;
+				counter+=span-1;
+				if(i==ReplicationServers.Listt.Count-1) {
+					ReplicationServers.Listt[i].RangeEnd=long.MaxValue;
+				}
+				else {
+					ReplicationServers.Listt[i].RangeEnd=counter;
+					counter+=1;
+				}
+				ReplicationServers.WriteObject(ReplicationServers.Listt[i]);
+			}
+			changed=true;
+			FillGrid();
+		}
+
+		private void butTest_Click(object sender,EventArgs e) {
+			int server_id=ReplicationServers.Server_id;
+			string msg="";
+			if(server_id==0) {
+				msg="server_id not set for this server.\r\n\r\n";
+			}
+			else {
+				msg="server_id = "+server_id.ToString()+"\r\n\r\n";
+			} 
+			msg+="Sample generated keys:";
+			long key;
+			List<long> longlist=new List<long>();
+			for(int i=0;i<15;i++){
+				do{
+					key=ReplicationServers.GetKey("patient","PatNum");
+					//unfortunately this "random" key is based on time, so we need to ensure that result set is unique.
+					//I think it takes one millisecond to get each key this way.
+				}
+				while(longlist.Contains(key));
+				longlist.Add(key);
+				msg+="\r\n"+key.ToString("n0");
+			}
+			MessageBox.Show(msg);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		private void FormReplicationSetup_FormClosing(object sender,FormClosingEventArgs e) {
+			if(changed) {
+				DataValid.SetInvalid(InvalidType.ReplicationServers);
+			}
+		}
+
+		
+
+		
+
+		
 
 	
 

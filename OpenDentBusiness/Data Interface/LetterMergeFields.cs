@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				return lmf.FieldNum;
 			}
 			if(PrefC.RandomKeys){
-				lmf.FieldNum=MiscData.GetKey("lettermergefield","FieldNum");
+				lmf.FieldNum=ReplicationServers.GetKey("lettermergefield","FieldNum");
 			}
 			string command= "INSERT INTO lettermergefield (";
 			if(PrefC.RandomKeys){

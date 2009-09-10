@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 				return proc.ProcNum;
 			}
 			if(PrefC.RandomKeys) {
-				proc.ProcNum=MiscData.GetKey("procedurelog","ProcNum");
+				proc.ProcNum=ReplicationServers.GetKey("procedurelog","ProcNum");
 			}
 			string command= "INSERT INTO procedurelog (";
 			if(PrefC.RandomKeys) {

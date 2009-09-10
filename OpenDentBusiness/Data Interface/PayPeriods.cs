@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 				return pp.PayPeriodNum;
 			}
 			if(PrefC.RandomKeys) {
-				pp.PayPeriodNum=MiscData.GetKey("payperiod","PayPeriodNum");
+				pp.PayPeriodNum=ReplicationServers.GetKey("payperiod","PayPeriodNum");
 			}
 			string command="INSERT INTO payperiod (";
 			if(PrefC.RandomKeys) {

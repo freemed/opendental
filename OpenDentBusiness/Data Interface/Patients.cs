@@ -144,7 +144,7 @@ namespace OpenDentBusiness{
 				return pat.PatNum;
 			}
 			if(!includePatNum && PrefC.RandomKeys) {
-				pat.PatNum=MiscData.GetKey("patient","PatNum");
+				pat.PatNum=ReplicationServers.GetKey("patient","PatNum");
 			}
 			string command= "INSERT INTO patient (";
 			if(includePatNum || PrefC.RandomKeys) {

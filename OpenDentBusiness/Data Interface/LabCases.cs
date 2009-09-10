@@ -213,7 +213,7 @@ namespace OpenDentBusiness{
 				return lab.LabCaseNum;
 			}
 			if(PrefC.RandomKeys) {
-				lab.LabCaseNum=MiscData.GetKey("labcase","LabCaseNum");
+				lab.LabCaseNum=ReplicationServers.GetKey("labcase","LabCaseNum");
 			}
 			string command="INSERT INTO labcase (";
 			if(PrefC.RandomKeys) {

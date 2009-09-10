@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 				return merge.LetterMergeNum;
 			}
 			if(PrefC.RandomKeys){
-				merge.LetterMergeNum=MiscData.GetKey("lettermerge","LetterMergeNum");
+				merge.LetterMergeNum=ReplicationServers.GetKey("lettermerge","LetterMergeNum");
 			}
 			string command= "INSERT INTO lettermerge (";
 			if(PrefC.RandomKeys){

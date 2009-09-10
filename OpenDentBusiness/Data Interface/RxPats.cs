@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 				return rx.RxNum;
 			}
 			if(PrefC.RandomKeys) {
-				rx.RxNum=MiscData.GetKey("rxpat","RxNum");
+				rx.RxNum=ReplicationServers.GetKey("rxpat","RxNum");
 			}
 			string command="INSERT INTO rxpat (";
 			if(PrefC.RandomKeys) {

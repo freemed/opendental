@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 				return charge.RepeatChargeNum;
 			}
 			if(PrefC.RandomKeys){
-				charge.RepeatChargeNum=MiscData.GetKey("repeatcharge","RepeatChargeNum");
+				charge.RepeatChargeNum=ReplicationServers.GetKey("repeatcharge","RepeatChargeNum");
 			}
 			string command="INSERT INTO repeatcharge (";
 			if(PrefC.RandomKeys){

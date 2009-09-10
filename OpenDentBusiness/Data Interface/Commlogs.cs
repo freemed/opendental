@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				return comm.CommlogNum;
 			}
 			if(PrefC.RandomKeys) {
-				comm.CommlogNum=MiscData.GetKey("commlog","CommlogNum");
+				comm.CommlogNum=ReplicationServers.GetKey("commlog","CommlogNum");
 			}
 			string command="INSERT INTO commlog (";
 			if(PrefC.RandomKeys) {

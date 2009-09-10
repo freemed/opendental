@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 				return Cur.ScreenGroupNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.ScreenGroupNum=MiscData.GetKey("screengroup","ScreenGroupNum");
+				Cur.ScreenGroupNum=ReplicationServers.GetKey("screengroup","ScreenGroupNum");
 			}
 			string command="INSERT INTO screengroup (";
 			if(PrefC.RandomKeys){

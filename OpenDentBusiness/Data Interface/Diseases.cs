@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 				return disease.DiseaseNum;
 			}
 			if(PrefC.RandomKeys) {
-				disease.DiseaseNum=MiscData.GetKey("disease","DiseaseNum");
+				disease.DiseaseNum=ReplicationServers.GetKey("disease","DiseaseNum");
 			}
 			string command="INSERT INTO disease (";
 			if(PrefC.RandomKeys) {

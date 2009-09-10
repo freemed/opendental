@@ -194,7 +194,7 @@ namespace OpenDentBusiness{
 				return sched.ScheduleNum;
 			}
 			if(PrefC.RandomKeys){
-				sched.ScheduleNum=MiscData.GetKey("schedule","ScheduleNum");
+				sched.ScheduleNum=ReplicationServers.GetKey("schedule","ScheduleNum");
 			}
 			string command= "INSERT INTO schedule (";
 			if(PrefC.RandomKeys){

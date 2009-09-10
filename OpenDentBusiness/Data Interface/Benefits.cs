@@ -189,7 +189,7 @@ namespace OpenDentBusiness {
 				return ben.BenefitNum;
 			}
 			if(PrefC.RandomKeys) {
-				ben.BenefitNum=MiscData.GetKey("benefit","BenefitNum");
+				ben.BenefitNum=ReplicationServers.GetKey("benefit","BenefitNum");
 			}
 			string command="INSERT INTO benefit (";
 			if(PrefC.RandomKeys) {

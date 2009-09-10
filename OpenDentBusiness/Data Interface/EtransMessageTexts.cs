@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 				return etransMessageText.EtransMessageTextNum;
 			}
 			if(PrefC.RandomKeys) {
-				etransMessageText.EtransMessageTextNum=MiscData.GetKey("etransmessagetext","EtransMessageTextNum");
+				etransMessageText.EtransMessageTextNum=ReplicationServers.GetKey("etransmessagetext","EtransMessageTextNum");
 			}
 			string command="INSERT INTO etransmessagetext (";
 			if(PrefC.RandomKeys) {

@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 			}
 			DateTime serverTime=MiscData.GetNowDateTime();
 			if(PrefC.RandomKeys) {
-				ce.ClockEventNum=MiscData.GetKey("clockevent","ClockEventNum");
+				ce.ClockEventNum=ReplicationServers.GetKey("clockevent","ClockEventNum");
 			}
 			string command="INSERT INTO clockevent (";
 			if(PrefC.RandomKeys) {

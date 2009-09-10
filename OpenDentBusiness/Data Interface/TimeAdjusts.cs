@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				return adj.TimeAdjustNum;
 			}
 			if(PrefC.RandomKeys) {
-				adj.TimeAdjustNum=MiscData.GetKey("timeadjust","TimeAdjustNum");
+				adj.TimeAdjustNum=ReplicationServers.GetKey("timeadjust","TimeAdjustNum");
 			}
 			string command="INSERT INTO timeadjust (";
 			if(PrefC.RandomKeys) {

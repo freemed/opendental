@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				return se.SigElementNum;
 			}
 			if(PrefC.RandomKeys){
-				se.SigElementNum=MiscData.GetKey("sigelement","SigElementNum");
+				se.SigElementNum=ReplicationServers.GetKey("sigelement","SigElementNum");
 			}
 			string command= "INSERT INTO sigelement (";
 			if(PrefC.RandomKeys){

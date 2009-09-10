@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 				return Cur.EmployerNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.EmployerNum=MiscData.GetKey("employer","EmployerNum");
+				Cur.EmployerNum=ReplicationServers.GetKey("employer","EmployerNum");
 			}
 			string command="INSERT INTO employer (";
 			if(PrefC.RandomKeys){

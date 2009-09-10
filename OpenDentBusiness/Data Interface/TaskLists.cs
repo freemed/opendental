@@ -235,7 +235,7 @@ namespace OpenDentBusiness{
 				return tlist.TaskListNum;
 			}
 			if(PrefC.RandomKeys){
-				tlist.TaskListNum=MiscData.GetKey("tasklist","TaskListNum");
+				tlist.TaskListNum=ReplicationServers.GetKey("tasklist","TaskListNum");
 			}
 			string command= "INSERT INTO tasklist (";
 			if(PrefC.RandomKeys){

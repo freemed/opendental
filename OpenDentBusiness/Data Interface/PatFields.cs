@@ -46,7 +46,7 @@ namespace OpenDentBusiness {
 				return pf.PatFieldNum;
 			}
 			if(PrefC.RandomKeys) {
-				pf.PatFieldNum=MiscData.GetKey("patfield","PatFieldNum");
+				pf.PatFieldNum=ReplicationServers.GetKey("patfield","PatFieldNum");
 			}
 			string command="INSERT INTO patfield (";
 			if(PrefC.RandomKeys) {

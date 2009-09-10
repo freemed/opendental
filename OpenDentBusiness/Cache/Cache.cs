@@ -161,6 +161,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(RecallTypes.RefreshCache());
 				ds.Tables.Add(RecallTriggers.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.ReplicationServers) || isAll) {
+				ds.Tables.Add(ReplicationServers.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				ds.Tables.Add(Userods.RefreshCache());
 				ds.Tables.Add(UserGroups.RefreshCache());
@@ -310,6 +313,13 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll) {
 				QuickPasteNotes.FillCache(ds.Tables["QuickPasteNote"]);
 				QuickPasteCats.FillCache(ds.Tables["QuickPasteCat"]);
+			}
+			if(itypes.Contains((int)InvalidType.RecallTypes) || isAll) {
+				RecallTypes.FillCache(ds.Tables["RecallType"]);
+				RecallTriggers.FillCache(ds.Tables["RecallTrigger"]);
+			}
+			if(itypes.Contains((int)InvalidType.ReplicationServers) || isAll) {
+				ReplicationServers.FillCache(ds.Tables["ReplicationServer"]);
 			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll) {
 				Userods.FillCache(ds.Tables["Userod"]);

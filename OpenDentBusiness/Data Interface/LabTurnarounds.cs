@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 				return lab.LabTurnaroundNum;
 			}
 			if(PrefC.RandomKeys) {
-				lab.LabTurnaroundNum=MiscData.GetKey("labturnaround","LabTurnaroundNum");
+				lab.LabTurnaroundNum=ReplicationServers.GetKey("labturnaround","LabTurnaroundNum");
 			}
 			string command="INSERT INTO labturnaround (";
 			if(PrefC.RandomKeys) {

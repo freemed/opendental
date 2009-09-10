@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 				return dep.DepositNum;
 			}
 			if(PrefC.RandomKeys){
-				dep.DepositNum=MiscData.GetKey("deposit","DepositNum");
+				dep.DepositNum=ReplicationServers.GetKey("deposit","DepositNum");
 			}
 			string command= "INSERT INTO deposit (";
 			if(PrefC.RandomKeys){

@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 				return sc.SchoolClassNum;
 			}
 			if(PrefC.RandomKeys){
-				sc.SchoolClassNum=MiscData.GetKey("schoolclass","SchoolClassNum");
+				sc.SchoolClassNum=ReplicationServers.GetKey("schoolclass","SchoolClassNum");
 			}
 			string command= "INSERT INTO schoolclass (";
 			if(PrefC.RandomKeys){

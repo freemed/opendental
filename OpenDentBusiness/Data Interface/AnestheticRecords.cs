@@ -65,7 +65,7 @@ namespace OpenDentBusiness {
 				return Cur.AnestheticRecordNum;
 			}
 			if(PrefC.RandomKeys) {
-				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord","AnestheticRecordNum");
+				Cur.AnestheticRecordNum = ReplicationServers.GetKey("anestheticrecord","AnestheticRecordNum");
 			}
 			string command = "INSERT INTO anestheticrecord (";
 			if(PrefC.RandomKeys) {
@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			if(PrefC.RandomKeys) {
-				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord","AnestheticRecordNum");
+				Cur.AnestheticRecordNum = ReplicationServers.GetKey("anestheticrecord","AnestheticRecordNum");
 			}
 			string command = "INSERT INTO anestheticdata (";
 			if(PrefC.RandomKeys) {

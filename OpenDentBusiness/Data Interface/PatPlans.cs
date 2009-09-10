@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 				return p.PatPlanNum;
 			}
 			if(PrefC.RandomKeys){
-				p.PatPlanNum=MiscData.GetKey("patplan","PatPlanNum");
+				p.PatPlanNum=ReplicationServers.GetKey("patplan","PatPlanNum");
 			}
 			string command="INSERT INTO patplan (";
 			if(PrefC.RandomKeys){

@@ -245,7 +245,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			if(PrefC.RandomKeys){
-				Cur.CarrierNum=MiscData.GetKey("carrier","CarrierNum");
+				Cur.CarrierNum=ReplicationServers.GetKey("carrier","CarrierNum");
 			}
 			command="INSERT INTO carrier (";
 			if(PrefC.RandomKeys){

@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
 			if(PrefC.RandomKeys) {
-				je.JournalEntryNum=MiscData.GetKey("journalentry","JournalEntryNum");
+				je.JournalEntryNum=ReplicationServers.GetKey("journalentry","JournalEntryNum");
 			}
 			string command="INSERT INTO journalentry (";
 			if(PrefC.RandomKeys) {

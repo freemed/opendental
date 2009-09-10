@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 				return Cur.AdjustNum;
 			}
 			if (PrefC.RandomKeys){
-				Cur.AdjustNum = MiscData.GetKey("anesthmedsinventoryadj", "AdjustNum");
+				Cur.AdjustNum = ReplicationServers.GetKey("anesthmedsinventoryadj", "AdjustNum");
 			}
 			string command = "INSERT INTO anesthmedsinventoryadj (";
 			if(PrefC.RandomKeys){

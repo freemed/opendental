@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 				return log.SecurityLogNum;
 			}
 			if(PrefC.RandomKeys){
-				log.SecurityLogNum=MiscData.GetKey("securitylog","SecurityLogNum");
+				log.SecurityLogNum=ReplicationServers.GetKey("securitylog","SecurityLogNum");
 			}
 			string command= "INSERT INTO securitylog (";
 			if(PrefC.RandomKeys){

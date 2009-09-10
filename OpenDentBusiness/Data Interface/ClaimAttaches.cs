@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return attach.ClaimAttachNum;
 			}
 			if(PrefC.RandomKeys) {
-				attach.ClaimAttachNum=MiscData.GetKey("claimattach","ClaimAttachNum");
+				attach.ClaimAttachNum=ReplicationServers.GetKey("claimattach","ClaimAttachNum");
 			}
 			string command= "INSERT INTO claimattach (";
 			if(PrefC.RandomKeys) {

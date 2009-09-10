@@ -393,7 +393,7 @@ namespace OpenDentBusiness{
 				return recall.RecallNum;
 			}
 			if(PrefC.RandomKeys) {
-				recall.RecallNum=MiscData.GetKey("recall","RecallNum");
+				recall.RecallNum=ReplicationServers.GetKey("recall","RecallNum");
 			}
 			string command= "INSERT INTO recall (";
 			if(PrefC.RandomKeys) {

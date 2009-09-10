@@ -47,7 +47,10 @@ namespace OpenDentBusiness{
 				return PFloat((float)value);
 			}
 			else if (dataType == typeof(long)) {
-				return PInt((int)value);
+				return PInt((long)value);
+			}
+			else if(dataType == typeof(int)) {
+				return PInt32((int)value);
 			}
 			else if(dataType == typeof(short)) {
 				return PShort((short)value);
@@ -167,8 +170,13 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Handles int32 just fine too.</summary>
-		public static string PInt (long myInt){
+		///<summary></summary>
+		public static string PInt (long myLong){
+			return myLong.ToString();
+		}
+
+		///<summary></summary>
+		public static string PInt32(int myInt) {
 			return myInt.ToString();
 		}
 

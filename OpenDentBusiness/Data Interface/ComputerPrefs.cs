@@ -83,7 +83,7 @@ namespace OpenDentBusiness {
 				return computerPref.ComputerPrefNum;
 			}
 			if(PrefC.RandomKeys) {
-				computerPref.ComputerPrefNum=MiscData.GetKey("computerpref","ComputerPrefNum");
+				computerPref.ComputerPrefNum=ReplicationServers.GetKey("computerpref","ComputerPrefNum");
 			}
 			string command="INSERT INTO computerpref (";
 			if(PrefC.RandomKeys){

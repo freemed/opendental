@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 				return trans.TransactionNum;
 			}
 			if(PrefC.RandomKeys) {
-				trans.TransactionNum=MiscData.GetKey("transaction","TransactionNum");
+				trans.TransactionNum=ReplicationServers.GetKey("transaction","TransactionNum");
 			}
 			string command="INSERT INTO transaction (";
 			if(PrefC.RandomKeys) {

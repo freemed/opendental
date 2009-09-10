@@ -161,7 +161,7 @@ namespace OpenDentBusiness{
 				return etrans.EtransNum;
 			}
 			if(PrefC.RandomKeys) {
-				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
+				etrans.EtransNum=ReplicationServers.GetKey("etrans","EtransNum");
 			}
 			string command="INSERT INTO etrans (";
 			if(PrefC.RandomKeys) {

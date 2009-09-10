@@ -439,7 +439,7 @@ namespace OpenDentBusiness.DataAccess {
 			// Should we generate a new, random key?
 			bool generateRandomKey = updatePrimaryKey && PrefC.RandomKeys;
 			if (generateRandomKey) {
-				long key = MiscData.GetKey(DataObjectInfo<T>.GetTableName(),DataObjectInfo<T>.GetPrimaryKeyFieldName());
+				long key = ReplicationServers.GetKey(DataObjectInfo<T>.GetTableName(),DataObjectInfo<T>.GetPrimaryKeyFieldName());
 				DataObjectInfo<T>.SetPrimaryKey(value, key);
 				// The primary key as already been updated. No need to retrieve it from the database.
 				updatePrimaryKey = false;

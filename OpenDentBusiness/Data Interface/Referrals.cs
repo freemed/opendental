@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				return refer.ReferralNum;
 			}
 			if(PrefC.RandomKeys) {
-				refer.ReferralNum=MiscData.GetKey("referral","ReferralNum");
+				refer.ReferralNum=ReplicationServers.GetKey("referral","ReferralNum");
 			}
 			string command= "INSERT INTO referral (";
 			if(PrefC.RandomKeys) {

@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 				return cur.CanadianExtractNum;
 			}
 			if(PrefC.RandomKeys) {
-				cur.CanadianExtractNum=MiscData.GetKey("canadianextract","CanadianExtractNum");
+				cur.CanadianExtractNum=ReplicationServers.GetKey("canadianextract","CanadianExtractNum");
 			}
 			string command="INSERT INTO canadianextract (";
 			if(PrefC.RandomKeys) {

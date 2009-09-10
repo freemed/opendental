@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 				return plan.PlanNum;
 			}
 			if(PrefC.RandomKeys) {
-				plan.PlanNum=MiscData.GetKey("insplan","PlanNum");
+				plan.PlanNum=ReplicationServers.GetKey("insplan","PlanNum");
 			}
 			string command= "INSERT INTO insplan (";
 			if(PrefC.RandomKeys) {

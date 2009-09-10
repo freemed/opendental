@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		[DataField("Descript")]
 		private string descript;
 		private bool descriptChanged;
-		///<summary>The description of the descript column.</summary>
+		///<summary>The description or name of the server.  Optional.</summary>
 		public string Descript{
 			get{return descript;}
 			set{if(descript!=value){descript=value;MarkDirty();descriptChanged=true;}}
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		[DataField("ServerId")]
 		private int serverId;
 		private bool serverIdChanged;
-		///<summary>Db admin sets this server_id server variable on each replication server.  Allows us to know what server each workstation is connected to.  In display, it's ordered by this value.</summary>
+		///<summary>Db admin sets this server_id server variable on each replication server.  Allows us to know what server each workstation is connected to.  In display, it's ordered by this value.  Users are always forced to enter a value here.</summary>
 		public int ServerId{
 			get{return serverId;}
 			set{if(serverId!=value){serverId=value;MarkDirty();serverIdChanged=true;}}
@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 		[DataField("RangeStart")]
 		private long rangeStart;
 		private bool rangeStartChanged;
-		///<summary>The start of the key range for this server.</summary>
+		///<summary>The start of the key range for this server.  0 if no value entered yet.</summary>
 		public long RangeStart{
 			get{return rangeStart;}
 			set{if(rangeStart!=value){rangeStart=value;MarkDirty();rangeStartChanged=true;}}
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		[DataField("RangeEnd")]
 		private long rangeEnd;
 		private bool rangeEndChanged;
-		///<summary>The end of the key range for this server.</summary>
+		///<summary>The end of the key range for this server.  0 if no value entered yet.</summary>
 		public long RangeEnd{
 			get{return rangeEnd;}
 			set{if(rangeEnd!=value){rangeEnd=value;MarkDirty();rangeEndChanged=true;}}

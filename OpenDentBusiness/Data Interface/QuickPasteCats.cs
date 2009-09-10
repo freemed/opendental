@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				return cat.QuickPasteCatNum;
 			}
 			if(PrefC.RandomKeys){
-				cat.QuickPasteCatNum=MiscData.GetKey("quickpastecat","QuickPasteCatNum");
+				cat.QuickPasteCatNum=ReplicationServers.GetKey("quickpastecat","QuickPasteCatNum");
 			}
 			string command= "INSERT INTO quickpastecat (";
 			if(PrefC.RandomKeys){

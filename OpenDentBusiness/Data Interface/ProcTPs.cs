@@ -89,7 +89,7 @@ namespace OpenDentBusiness{
 				return proc.ProcTPNum;
 			}
 			if(PrefC.RandomKeys){
-				proc.ProcTPNum=MiscData.GetKey("proctp","ProcTPNum");
+				proc.ProcTPNum=ReplicationServers.GetKey("proctp","ProcTPNum");
 			}
 			string command= "INSERT INTO proctp (";
 			if(PrefC.RandomKeys){

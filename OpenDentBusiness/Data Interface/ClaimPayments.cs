@@ -117,7 +117,7 @@ namespace OpenDentBusiness{
 				return cp.ClaimPaymentNum;
 			}
 			if(PrefC.RandomKeys){
-				cp.ClaimPaymentNum=MiscData.GetKey("claimpayment","ClaimPaymentNum");
+				cp.ClaimPaymentNum=ReplicationServers.GetKey("claimpayment","ClaimPaymentNum");
 			}
 			string command= "INSERT INTO claimpayment (";
 			if(PrefC.RandomKeys){

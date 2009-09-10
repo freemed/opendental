@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 				return comp.ComputerNum;
 			}
 			if(PrefC.RandomKeys){
-				comp.ComputerNum=MiscData.GetKey("computer","ComputerNum");
+				comp.ComputerNum=ReplicationServers.GetKey("computer","ComputerNum");
 			}
 			string command= "INSERT INTO computer (";
 			if(PrefC.RandomKeys){

@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				return split.SplitNum;
 			}
 			if(PrefC.RandomKeys){
-				split.SplitNum=MiscData.GetKey("paysplit","SplitNum");
+				split.SplitNum=ReplicationServers.GetKey("paysplit","SplitNum");
 			}
 			string command= "INSERT INTO paysplit (";
 			if(PrefC.RandomKeys){

@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 				return acct.AccountNum;
 			}
 			if(PrefC.RandomKeys) {
-				acct.AccountNum=MiscData.GetKey("account","AccountNum");
+				acct.AccountNum=ReplicationServers.GetKey("account","AccountNum");
 			}
 			string command="INSERT INTO account (";
 			if(PrefC.RandomKeys) {

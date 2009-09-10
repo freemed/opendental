@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 				return Cur.PerioMeasureNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.PerioMeasureNum=MiscData.GetKey("periomeasure","PerioMeasureNum");
+				Cur.PerioMeasureNum=ReplicationServers.GetKey("periomeasure","PerioMeasureNum");
 			}
 			string command="INSERT INTO periomeasure (";
 			if(PrefC.RandomKeys){

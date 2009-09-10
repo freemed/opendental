@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				return Cur.MedicationPatNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.MedicationPatNum=MiscData.GetKey("medicationpat","MedicationPatNum");
+				Cur.MedicationPatNum=ReplicationServers.GetKey("medicationpat","MedicationPatNum");
 			}
 			string command="INSERT INTO medicationpat (";
 			if(PrefC.RandomKeys){

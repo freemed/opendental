@@ -134,7 +134,7 @@ namespace OpenDentBusiness{
 			//DateTime now=ClockEvents.GetServerTime();
 			sig.SigDateTime=MiscData.GetNowDateTime();
 			if(PrefC.RandomKeys){
-				sig.SignalNum=MiscData.GetKey("signal","SignalNum");
+				sig.SignalNum=ReplicationServers.GetKey("signal","SignalNum");
 			}
 			string command= "INSERT INTO signal (";
 			if(PrefC.RandomKeys){

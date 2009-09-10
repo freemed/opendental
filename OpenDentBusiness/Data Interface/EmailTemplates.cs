@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 				return template.EmailTemplateNum;
 			}
 			if(PrefC.RandomKeys){
-				template.EmailTemplateNum=MiscData.GetKey("emailtemplate","EmailTemplateNum");
+				template.EmailTemplateNum=ReplicationServers.GetKey("emailtemplate","EmailTemplateNum");
 			}
 			string command= "INSERT INTO emailtemplate (";
 			if(PrefC.RandomKeys){

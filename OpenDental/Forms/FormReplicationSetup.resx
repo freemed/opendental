@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>After adding servers to the list above, use the Set Ranges button to automatically set key ranges.  Ranges can be changed at any time with minimal risk.  If followed by a synchronization, there is zero risk.</value>
+  </data>
 </root>

@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 				return Cur.LetterNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.LetterNum=MiscData.GetKey("letter","LetterNum");
+				Cur.LetterNum=ReplicationServers.GetKey("letter","LetterNum");
 			}
 			string command="INSERT INTO letter (";
 			if(PrefC.RandomKeys){

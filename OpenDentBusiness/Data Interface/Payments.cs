@@ -172,7 +172,7 @@ namespace OpenDentBusiness{
 				return pay.PayNum;
 			}
 			if(PrefC.RandomKeys){
-				pay.PayNum=MiscData.GetKey("payment","PayNum");
+				pay.PayNum=ReplicationServers.GetKey("payment","PayNum");
 			}
 			string command= "INSERT INTO payment (";
 			if(PrefC.RandomKeys){

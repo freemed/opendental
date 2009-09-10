@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 				return attach.RefAttachNum;
 			}
 			if(PrefC.RandomKeys){
-				attach.RefAttachNum=MiscData.GetKey("refattach","RefAttachNum");
+				attach.RefAttachNum=ReplicationServers.GetKey("refattach","RefAttachNum");
 			}
 			string command="INSERT INTO refattach (";
 			if(PrefC.RandomKeys){

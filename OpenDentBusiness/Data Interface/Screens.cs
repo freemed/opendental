@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 				return Cur.ScreenNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.ScreenNum=MiscData.GetKey("screen","ScreenNum");
+				Cur.ScreenNum=ReplicationServers.GetKey("screen","ScreenNum");
 			}
 			string command="INSERT INTO screen (";
 			if(PrefC.RandomKeys){

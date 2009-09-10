@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 				return doc.DocNum;
 			}
 			if(PrefC.RandomKeys) {
-				doc.DocNum=MiscData.GetKey("document","DocNum");
+				doc.DocNum=ReplicationServers.GetKey("document","DocNum");
 			}
 			string command="INSERT INTO document (";
 			if(PrefC.RandomKeys) {

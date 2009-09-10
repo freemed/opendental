@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 				return network.CanadianNetworkNum;
 			}
 			if(PrefC.RandomKeys) {
-				network.CanadianNetworkNum=MiscData.GetKey("canadiannetwork","CanadianNetworkNum");
+				network.CanadianNetworkNum=ReplicationServers.GetKey("canadiannetwork","CanadianNetworkNum");
 			}
 			string command="INSERT INTO canadiannetwork (";
 			if(PrefC.RandomKeys) {

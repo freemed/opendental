@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 				return lab.LaboratoryNum;
 			}
 			if(PrefC.RandomKeys) {
-				lab.LaboratoryNum=MiscData.GetKey("laboratory","LaboratoryNum");
+				lab.LaboratoryNum=ReplicationServers.GetKey("laboratory","LaboratoryNum");
 			}
 			string command="INSERT INTO laboratory (";
 			if(PrefC.RandomKeys) {

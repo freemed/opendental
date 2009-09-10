@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 				return message.EmailMessageNum;
 			}
 			if(PrefC.RandomKeys) {
-				message.EmailMessageNum=MiscData.GetKey("emailmessage","EmailMessageNum");
+				message.EmailMessageNum=ReplicationServers.GetKey("emailmessage","EmailMessageNum");
 			}
 			string command="INSERT INTO emailmessage (";
 			if(PrefC.RandomKeys) {

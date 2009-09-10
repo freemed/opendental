@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				return note.QuickPasteNoteNum;
 			}
 			if(PrefC.RandomKeys){
-				note.QuickPasteNoteNum=MiscData.GetKey("quickpastenote","QuickPasteNoteNum");
+				note.QuickPasteNoteNum=ReplicationServers.GetKey("quickpastenote","QuickPasteNoteNum");
 			}
 			string command= "INSERT INTO quickpastenote (";
 			if(PrefC.RandomKeys){

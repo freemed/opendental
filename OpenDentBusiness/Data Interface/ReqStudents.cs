@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 				return req.ReqStudentNum;
 			}
 			if(PrefC.RandomKeys) {
-				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
+				req.ReqStudentNum=ReplicationServers.GetKey("reqstudent","ReqStudentNum");
 			}
 			string command= "INSERT INTO reqstudent (";
 			if(PrefC.RandomKeys) {

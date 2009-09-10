@@ -159,7 +159,7 @@ namespace OpenDentBusiness{
 				return Cur.ClaimNum;
 			}
 			if(PrefC.RandomKeys){
-				Cur.ClaimNum=MiscData.GetKey("claim","ClaimNum");
+				Cur.ClaimNum=ReplicationServers.GetKey("claim","ClaimNum");
 			}
 			string command="INSERT INTO claim (";
 			if(PrefC.RandomKeys){

@@ -310,6 +310,8 @@ namespace OpenDentBusiness{
 		ShutDownNow,
 		///<summary>47</summary>
 		InsFilingCodes,
+		///<summary>48</summary>
+		ReplicationServers
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

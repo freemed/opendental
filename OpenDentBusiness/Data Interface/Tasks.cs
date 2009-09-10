@@ -228,7 +228,7 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Tasks","In repeating tasks, only the main parents can have a task status."));
 			}
 			if(PrefC.RandomKeys){
-				task.TaskNum=MiscData.GetKey("task","TaskNum");
+				task.TaskNum=ReplicationServers.GetKey("task","TaskNum");
 			}
 			string command= "INSERT INTO task (";
 			if(PrefC.RandomKeys){

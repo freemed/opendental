@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				return adj.AdjNum;
 			}
 			if(PrefC.RandomKeys){
-				adj.AdjNum=MiscData.GetKey("adjustment","AdjNum");
+				adj.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
 			}
 			string command= "INSERT INTO adjustment (";
 			if(PrefC.RandomKeys){

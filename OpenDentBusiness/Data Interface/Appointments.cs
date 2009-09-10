@@ -322,7 +322,7 @@ namespace OpenDentBusiness{
 			}
 			//now, save to db----------------------------------------------------------------------------------------
 			if(!includeAptNum && PrefC.RandomKeys) {
-				appt.AptNum=MiscData.GetKey("appointment","AptNum");
+				appt.AptNum=ReplicationServers.GetKey("appointment","AptNum");
 			}
 			string command="INSERT INTO appointment (";
 			if(includeAptNum || PrefC.RandomKeys) {

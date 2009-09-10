@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 				return init.ToothInitialNum;
 			}
 			if(PrefC.RandomKeys) {
-				init.ToothInitialNum=MiscData.GetKey("toothinitial","ToothInitialNum");
+				init.ToothInitialNum=ReplicationServers.GetKey("toothinitial","ToothInitialNum");
 			}
 			string command="INSERT INTO toothinitial (";
 			if(PrefC.RandomKeys) {

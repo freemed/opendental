@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return attach.EmailAttachNum;
 			}
 			if(PrefC.RandomKeys) {
-				attach.EmailAttachNum=MiscData.GetKey("emailattach","EmailAttachNum");
+				attach.EmailAttachNum=ReplicationServers.GetKey("emailattach","EmailAttachNum");
 			}
 			string command= "INSERT INTO emailattach (";
 			if(PrefC.RandomKeys) {

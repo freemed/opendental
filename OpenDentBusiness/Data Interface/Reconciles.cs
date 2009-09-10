@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 				return reconcile.ReconcileNum;
 			}
 			if(PrefC.RandomKeys) {
-				reconcile.ReconcileNum=MiscData.GetKey("reconcile","ReconcileNum");
+				reconcile.ReconcileNum=ReplicationServers.GetKey("reconcile","ReconcileNum");
 			}
 			string command="INSERT INTO reconcile (";
 			if(PrefC.RandomKeys) {

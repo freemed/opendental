@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 				return Cur.FormPatNum;
 			}
 			if(PrefC.RandomKeys) {
-				Cur.FormPatNum=MiscData.GetKey("formpat","FormPatNum");
+				Cur.FormPatNum=ReplicationServers.GetKey("formpat","FormPatNum");
 			}
 			string command="INSERT INTO formpat (";
 			if(PrefC.RandomKeys) {

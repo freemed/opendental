@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 				return tp.TreatPlanNum;
 			}
 			if(PrefC.RandomKeys){
-				tp.TreatPlanNum=MiscData.GetKey("treatplan","TreatPlanNum");
+				tp.TreatPlanNum=ReplicationServers.GetKey("treatplan","TreatPlanNum");
 			}
 			string command= "INSERT INTO treatplan (";
 			if(PrefC.RandomKeys){

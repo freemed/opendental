@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				return req.ReqNeededNum;
 			}
 			if(PrefC.RandomKeys) {
-				req.ReqNeededNum=MiscData.GetKey("reqneeded","ReqNeededNum");
+				req.ReqNeededNum=ReplicationServers.GetKey("reqneeded","ReqNeededNum");
 			}
 			string command= "INSERT INTO reqneeded (";
 			if(PrefC.RandomKeys) {

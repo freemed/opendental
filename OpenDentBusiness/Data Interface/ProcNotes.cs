@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			if(PrefC.RandomKeys) {
-				procNote.ProcNoteNum=MiscData.GetKey("procnote","ProcNoteNum");
+				procNote.ProcNoteNum=ReplicationServers.GetKey("procnote","ProcNoteNum");
 			}
 			string command= "INSERT INTO procnote (";
 			if(PrefC.RandomKeys) {

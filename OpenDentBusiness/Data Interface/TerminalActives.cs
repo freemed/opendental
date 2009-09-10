@@ -65,7 +65,7 @@ namespace OpenDentBusiness {
 				return te.TerminalActiveNum;
 			}
 			if(PrefC.RandomKeys) {
-				te.TerminalActiveNum=MiscData.GetKey("terminalactive","TerminalActiveNum");
+				te.TerminalActiveNum=ReplicationServers.GetKey("terminalactive","TerminalActiveNum");
 			}
 			string command="INSERT INTO terminalactive (";
 			if(PrefC.RandomKeys) {

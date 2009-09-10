@@ -89,7 +89,7 @@ namespace OpenDentBusiness{
 				return plan.PayPlanNum;
 			}
 			if(PrefC.RandomKeys){
-				plan.PayPlanNum=MiscData.GetKey("payplan","PayPlanNum");
+				plan.PayPlanNum=ReplicationServers.GetKey("payplan","PayPlanNum");
 			}
 			string command="INSERT INTO payplan (";
 			if(PrefC.RandomKeys){
