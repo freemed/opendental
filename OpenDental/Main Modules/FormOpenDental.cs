@@ -2963,9 +2963,9 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.ChooseDatabase)){
 				return;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase,0,"");//make the entry before switching databases.
 			FormChooseDatabase FormC=new FormChooseDatabase();
 			FormC.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase,0,"");
 			if(FormC.DialogResult==DialogResult.Cancel){
 				return;
 			}

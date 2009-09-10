@@ -138,7 +138,7 @@ namespace OpenDental {
 			for(int i=0;i<15;i++){
 				do{
 					key=ReplicationServers.GetKey("patient","PatNum");
-					//unfortunately this "random" key is based on time, so we need to ensure that result set is unique.
+					//unfortunately this "random" key is based on time, so we need to ensure that the result set is unique.
 					//I think it takes one millisecond to get each key this way.
 				}
 				while(longlist.Contains(key));
