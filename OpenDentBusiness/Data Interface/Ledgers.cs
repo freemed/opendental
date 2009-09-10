@@ -60,13 +60,6 @@ namespace OpenDentBusiness{
 			if(AsOfDate.Year<1880){
 				AsOfDate=DateTime.Today;
 			}
-			//We use temporary tables using the "CREATE TEMPORARY TABLE" syntax here so that any temporary
-			//tables created are specific to the current MySQL connection and no actual files are created
-			//in the database. This will prevent rogue files from collecting in the live database, and will
-			//prevent aging calculations on one computer from affecting the aging calculations on another computer.
-			//Unfortunately, this has one side effect, which is that our MySQL connector reopens the MySQL
-			//connection every time a command is run, so the temporary tables only last for a single MySQL
-			//command. To get around this issue, we run the aging script as a single command/script.
 			string asOfDate=POut.PDate(AsOfDate);
 			string billInAdvanceDate=POut.PDate(AsOfDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")));
 			if(historic){
@@ -91,15 +84,30 @@ namespace OpenDentBusiness{
 				}
 				familyPatNums+=")";
 			}
+			//We use temporary tables using the "CREATE TEMPORARY TABLE" syntax here so that any temporary
+			//tables created are specific to the current MySQL connection and no actual files are created
+			//in the database. This will prevent rogue files from collecting in the live database, and will
+			//prevent aging calculations on one computer from affecting the aging calculations on another computer.
+			//Unfortunately, this has one side effect, which is that our MySQL connector reopens the MySQL
+			//connection every time a command is run, so the temporary tables only last for a single MySQL
+			//command. To get around this issue, we run the aging script as a single command/script.
+			//Unfortunately, the "CREATE TEMPORARY TABLE" syntax gets replicated if MySQL replication is enabled,
+			//which becomes a problem becauase the command is then no longer connection specific. Therefore,
+			//to accomodate to the few offices using database replication, when creating the temporary aging tables,
+			//we append a random string to the temporary table names so the possibility to temporary table
+			//name collision is practically zero.
 			//Create a temporary table to calculate aging into temporarily, so that the patient table is 
 			//not being changed by multiple threads if more than one user is calculating aging.
 			//Since a temporary table is dropped automatically only when the connection is closed,
 			//and since we use connection pooling, drop them before using.
-			command="DROP TEMPORARY TABLE IF EXISTS tempaging, tempodagingtrans";
+			string tempTableSuffix=CodeBase.MiscUtils.CreateRandomAlphaNumericString(32);
+			string tempAgingTableName="tempaging"+tempTableSuffix;
+			string tempOdAgingTransTableName="tempodagingtrans"+tempTableSuffix;
+			command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 			Db.NonQ(command);
-			command="DROP TABLE IF EXISTS tempaging, tempodagingtrans";
+			command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 			Db.NonQ(command);
-			command="CREATE TEMPORARY TABLE tempaging ("+
+			command="CREATE TEMPORARY TABLE "+tempAgingTableName+" ("+
 				"PatNum INT DEFAULT 0,"+
 				"Guarantor INT DEFAULT 0,"+
 				"Charges_0_30 DOUBLE DEFAULT 0,"+
@@ -114,18 +122,18 @@ namespace OpenDentBusiness{
 			if(guarantor==0) {
 				//We insert all of the patient numbers and guarantor numbers only when we are running aging for everyone,
 				//since we do not want MySQL to examine every patient record when running aging for a single family.
-				command+="INSERT INTO tempaging (PatNum,Guarantor) "+
+				command+="INSERT INTO "+tempAgingTableName+" (PatNum,Guarantor) "+
 				"SELECT p.PatNum,p.Guarantor "+
 					"FROM patient p;";
 				//When there is only one patient that aging is being calculated for, then the indexes actually
 				//slow the calculation down, but they significantly improve the speed when aging is being 
 				//calculated for all familes.
-				command+="ALTER TABLE tempaging ADD INDEX IDX_TEMPAGING_PATNUM (PatNum);";
-				command+="ALTER TABLE tempaging ADD INDEX IDX_TEMPAGING_Guarantor (Guarantor);";
+				command+="ALTER TABLE "+tempAgingTableName+" ADD INDEX IDX_"+tempAgingTableName.ToUpper()+"_PATNUM (PatNum);";
+				command+="ALTER TABLE "+tempAgingTableName+" ADD INDEX IDX_"+tempAgingTableName.ToUpper()+"_Guarantor (Guarantor);";
 			}else{
 				//Manually create insert statements to avoid having MySQL visit every patient record again.
 				//In my testing, this saves about 0.25 seconds on an individual family aging calculation on my machine.
-				command+="INSERT INTO tempaging (PatNum,Guarantor) VALUES ";
+				command+="INSERT INTO "+tempAgingTableName+" (PatNum,Guarantor) VALUES ";
 				for(int i=0;i<familyPatNumList.Count;i++){
 					if(i>0){
 						command+=",";
@@ -138,13 +146,13 @@ namespace OpenDentBusiness{
 			//so that all transactions can be treated as either a general credit or a general charge in the aging calculation.
 			//Since we are recreating a temporary table with the same name as last time aging was run,
 			//the old temporary table gets wiped out.
-			command+="CREATE TEMPORARY TABLE tempodagingtrans ("+
+			command+="CREATE TEMPORARY TABLE "+tempOdAgingTransTableName+" ("+
 					"PatNum INT DEFAULT 0,"+
 					"TranDate DATE DEFAULT '0001-01-01',"+
 					"TranAmount DOUBLE DEFAULT 0"+
 				");";
 			//Get the completed procedure dates and charges for the entire office history.
-			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT pl.PatNum PatNum,"+
 						"pl.ProcDate TranDate,"+
 						"pl.ProcFee*(pl.UnitQty+pl.BaseUnits) TranAmount "+
@@ -152,7 +160,7 @@ namespace OpenDentBusiness{
 					"WHERE pl.ProcStatus=2 "+
 						(guarantor==0?"":(" AND pl.PatNum IN "+familyPatNums))+";";
 			//Paysplits for the entire office history.
-			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT ps.PatNum PatNum,"+
 						"ps.ProcDate TranDate,"+
 						"-ps.SplitAmt TranAmount "+
@@ -160,7 +168,7 @@ namespace OpenDentBusiness{
 					"WHERE ps.PayPlanNum=0 "+//Only splits not attached to payment plans.
 						(guarantor==0?"":(" AND ps.PatNum IN "+familyPatNums))+";";
 			//Get the adjustment dates and amounts for the entire office history.
-			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT a.PatNum PatNum,"+
 						"a.AdjDate TranDate,"+
 						"a.AdjAmt TranAmount "+
@@ -168,7 +176,7 @@ namespace OpenDentBusiness{
 					"WHERE a.AdjAmt<>0 "+
 					(guarantor==0?"":(" AND a.PatNum IN "+familyPatNums))+";";
 			//Claim payments and capitation writeoffs for the entire office history.
-			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT cp.PatNum PatNum,"+
 						"cp.DateCp TranDate,"+//Always use DateCP rather than ProcDate to calculate the date of a claim payment.
 						"-cp.InsPayAmt-cp.Writeoff TranAmount "+
@@ -176,7 +184,7 @@ namespace OpenDentBusiness{
 					"WHERE cp.status IN (1,4,5,7) "+//received, supplemental, CapClaim or CapComplete.
 						(guarantor==0?"":(" AND cp.PatNum IN "+familyPatNums))+";";
 			//Payment plan principal for the entire office history.
-			command+="INSERT INTO tempodagingtrans (PatNum,TranDate,TranAmount) "+
+			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT pp.PatNum PatNum,"+
 						"pp.PayPlanDate TranDate,"+
 						"-pp.CompletedAmt TranAmount "+
@@ -186,54 +194,54 @@ namespace OpenDentBusiness{
 			//Now that we have all of the pertinent transaction history, we will calculate all of the charges for
 			//the associated patients.
 			//Calculate over 90 day charges for all specified families.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total charges for each patient during this time period and 
 				//place the results into memory table 'chargesOver90'.
-				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+ninetyDaysAgo+") GROUP BY t.PatNum) chargesOver90 "+
 				//Update the tempaging table with the caculated charges for the time period.
 				"SET a.ChargesOver90=chargesOver90.TotalCharges "+
 				"WHERE a.PatNum=chargesOver90.PatNum;";
 			//Calculate 61 to 90 day charges for all specified families.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total charges for each patient during this time period and 
 				//place the results into memory table 'charges_61_90'.
-				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+sixtyDaysAgo+") AND "+
 					"t.TranDate>=DATE("+ninetyDaysAgo+") GROUP BY t.PatNum) charges_61_90 "+
 				//Update the tempaging table with the caculated charges for the time period.
 				"SET a.Charges_61_90=charges_61_90.TotalCharges "+
 				"WHERE a.PatNum=charges_61_90.PatNum;";
 			//Calculate 31 to 60 day charges for all specified families.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total charges for each patient during this time period and 
 				//place the results into memory table 'charges_31_60'.
-				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount>0 AND t.TranDate<DATE("+thirtyDaysAgo+") AND "+
 					"t.TranDate>=DATE("+sixtyDaysAgo+") GROUP BY t.PatNum) charges_31_60 "+
 				//Update the tempaging table with the caculated charges for the time period.
 				"SET a.Charges_31_60=charges_31_60.TotalCharges "+
 				"WHERE a.PatNum=charges_31_60.PatNum;";
 			//Calculate 0 to 30 day charges for all specified families.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total charges for each patient during this time period and 
 				//place the results into memory table 'charges_0_30'.
-				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,SUM(t.TranAmount) TotalCharges FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount>0 AND t.TranDate<=DATE("+asOfDate+") AND "+
 					"t.TranDate>=DATE("+thirtyDaysAgo+") GROUP BY t.PatNum) charges_0_30 "+
 				//Update the tempaging table with the caculated charges for the time period.
 				"SET a.Charges_0_30=charges_0_30.TotalCharges "+
 				"WHERE a.PatNum=charges_0_30.PatNum;";
 			//Calculate the total credits each patient has ever received so we can apply the credits to the aged charges below.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total credits for each patient and store the results in memory table 'credits'.
-				"(SELECT t.PatNum,-SUM(t.TranAmount) TotalCredits FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,-SUM(t.TranAmount) TotalCredits FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount<0 AND t.TranDate<=DATE("+asOfDate+") GROUP BY t.PatNum) credits "+
 				//Update the total credit for each patient into the tempaging table.
 				"SET a.TotalCredits=credits.TotalCredits "+
 				"WHERE a.PatNum=credits.PatNum;";
 			//Calculate claim estimates for each patient individually on or before the specified date.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the insurance estimates for each patient and store the results into
 				//memory table 't'.
 				"(SELECT cp.PatNum,SUM(cp.InsPayEst+cp.Writeoff) InsEst "+
@@ -248,7 +256,7 @@ namespace OpenDentBusiness{
 				"WHERE a.PatNum=t.PatNum;";
 			//Calculate the payment plan amount remaining to be paid for each patient 
 			//as the amount owed due to payment plans, minus the payments made to payment plans.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Get payment plan patient amount due for the entire office history 
 				//on or before the specified date (also considering the PayPlansBillInAdvanceDays setting)
 				//and place the results in memory table 'c'.
@@ -283,10 +291,10 @@ namespace OpenDentBusiness{
 						"WHERE c.PatNum=a.PatNum AND p.PatNum=a.PatNum;";
 			//Calculate the total balance for each patient.
 			//In historical mode, only transactions on or before AsOfDate will be included.
-			command+="UPDATE tempaging a,"+
+			command+="UPDATE "+tempAgingTableName+" a,"+
 				//Calculate the total balance for each patient and
 				//place the results into memory table 'totals'.
-				"(SELECT t.PatNum,SUM(t.TranAmount) BalTotal FROM tempodagingtrans t "+
+				"(SELECT t.PatNum,SUM(t.TranAmount) BalTotal FROM "+tempOdAgingTransTableName+" t "+
 					"WHERE t.TranAmount<>0 "+(historic?(" AND t.TranDate<=DATE("+asOfDate+")"):"")+" GROUP BY t.PatNum) totals "+
 				//Update the tempaging table with the caculated charges for the time period.
 				"SET a.BalTotal=totals.BalTotal "+
@@ -301,7 +309,7 @@ namespace OpenDentBusiness{
 						"SUM(a.Charges_61_90) Charges_61_90,SUM(a.ChargesOver90) ChargesOver90,"+
 						"SUM(TotalCredits) TotalCredits,SUM(InsEst) InsEst,SUM(PayPlanDue) PayPlanDue,"+
 						"SUM(BalTotal) BalTotal "+
-						"FROM tempaging a "+
+						"FROM "+tempAgingTableName+" a "+
 						"GROUP BY a.Guarantor) f "+
 					//Perform the update of the patient table based on the family amounts summed into table 'f', and
 					//distribute the payments into the oldest balances first.
@@ -337,9 +345,9 @@ namespace OpenDentBusiness{
 					"p.PayPlanDue=f.PayPlanDue "+
 				"WHERE p.PatNum=f.Guarantor;";//Aging calculations only apply to guarantors.
 			Db.NonQ(command);
-			command="DROP TEMPORARY TABLE IF EXISTS tempaging, tempodagingtrans";
+			command="DROP TEMPORARY TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 			Db.NonQ(command);
-			command="DROP TABLE IF EXISTS tempaging, tempodagingtrans";
+			command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 			Db.NonQ(command);
 		}
 	}
