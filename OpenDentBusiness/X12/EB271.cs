@@ -14,7 +14,7 @@ namespace OpenDentBusiness
 		///<summary>Since element 4 is descriptive rather than useful for import, we will leave it like this</summary>
 		private static Dictionary<string,string> EB04;
 		private static List<EB06> eb06;
-		private static Dictionary<string,string> EB09;
+		private static List<EB09> eb09;
 		/// <summary>Some EB segments have a few segments that follow them which should all be considered together as one "benefit".  Eg dates, addresses.</summary>
 		public List<X12Segment> SupplementalSegments;
 
@@ -29,6 +29,7 @@ namespace OpenDentBusiness
 			EB02 eb02val=eb02.Find(EB02MatchesCode);
 			EB03 eb03val=eb03.Find(EB03MatchesCode);
 			EB06 eb06val=eb06.Find(EB06MatchesCode);
+			EB09 eb09val=eb09.Find(EB09MatchesCode);
 			ProcedureCode proccode=null;
 			if(ProcedureCodes.IsValidCode(Segment.Get(13,2))) {
 				proccode=ProcedureCodes.GetProcCode(Segment.Get(13,2));
@@ -36,7 +37,8 @@ namespace OpenDentBusiness
 			if(!eb01val.IsSupported
 				|| (eb02val!=null && !eb02val.IsSupported)
 				|| (eb03val!=null && !eb03val.IsSupported)
-				|| (eb06val!=null && !eb06val.IsSupported)) 
+				|| (eb06val!=null && !eb06val.IsSupported)
+				|| (eb09val!=null && !eb09val.IsSupported)) 
 			{
 				Benefitt=null;
 				return;
@@ -81,26 +83,53 @@ namespace OpenDentBusiness
 				Benefitt=null;
 				return;
 			}
-
-
+			//if only a quantity is specified with no qualifier, it's meaningless
+			if(Segment.Get(10)!="" && eb09val==null) {
+				Benefitt=null;
+				return;
+			}
+			//if only a qualifier is specified with no quantity, it's meaningless
+			if(eb09val!=null && Segment.Get(10)=="") {
+				Benefitt=null;
+				return;
+			}
 			Benefitt=new Benefit();
+			//1
 			Benefitt.BenefitType=eb01val.BenefitType;
+			//2
 			if(eb02val!=null) {
 				Benefitt.CoverageLevel=eb02val.CoverageLevel;
 			}
+			//3
 			if(eb03val!=null) {
 				Benefitt.CovCatNum=CovCats.GetForEbenCat(eb03val.ServiceType).CovCatNum;
 			}
+			//4-Insurance type - we ignore.
+			//5-Plan description - we ignore.
+			//6
 			if(eb06val!=null) {
 				Benefitt.TimePeriod=eb06val.TimePeriod;
 			}
+			//7
 			if(Segment.Get(7)!="") {
 				Benefitt.MonetaryAmt=PIn.PDouble(Segment.Get(7));//Monetary amount. Situational
 			}
+			//8
 			if(Segment.Get(8)!="") {
 				Benefitt.Percent=100-(int)(PIn.PDouble(Segment.Get(8))*100);//Percent. Situational
 				Benefitt.CoverageLevel=BenefitCoverageLevel.None;
 			}
+			//9-Quantity qualifier
+			if(eb09val!=null) {
+				Benefitt.QuantityQualifier=eb09val.QuantityQualifier;
+			}
+			//10-Quantity
+			if(Segment.Get(10)!="") {
+				Benefitt.Quantity=PIn.PInt32(Segment.Get(10));
+			}
+			//11-Authorization. Ignored.
+			//12-In network. Ignored.
+			//13-proc
 			if(proccode!=null) {
 				Benefitt.CodeNum=proccode.CodeNum;//element 13,2
 			}
@@ -290,11 +319,12 @@ namespace OpenDentBusiness
 					return PIn.PDouble(elementCode).ToString("c");//Monetary amount. Situational
 				case 8:
 					return "Patient pays "+(PIn.PDouble(elementCode)*100).ToString()+"%";//Percent. Situational
-				case 9:
-					if(!EB09.ContainsKey(elementCode)) {
+				case 9://Quantity qualifier. Situational
+					EB09 eb09val=eb09.Find(EB09MatchesCode);
+					if(eb09val==null) {
 						return "";
 					}
-					return EB09[elementCode];//Quantity qualifier. Situational
+					return eb09val.Descript;
 				case 10:
 					return elementCode;//Quantity. Situational
 				case 11:
@@ -313,7 +343,7 @@ namespace OpenDentBusiness
 					}
 					ProcedureCode procCode=ProcedureCodes.GetProcCode(procStr);
 					return procStr+" - "+procCode.AbbrDesc;//ProcedureCodes.GetLaymanTerm(procCode.CodeNum);
-				//Even though we don't make requests about specific procedure codes, some ins co's will send back codes.
+					//Even though we don't make requests about specific procedure codes, some ins co's will send back codes.
 				default:
 					return "";
 			}
@@ -346,6 +376,14 @@ namespace OpenDentBusiness
 		/// <summary>Search predicate returns true if code matches.</summary>
 		private bool EB06MatchesCode(EB06 eb06val) {
 			if(Segment.Get(6)==eb06val.Code) {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Search predicate returns true if code matches.</summary>
+		private bool EB09MatchesCode(EB09 eb09val) {
+			if(Segment.Get(9)==eb09val.Code) {
 				return true;
 			}
 			return false;
@@ -621,23 +659,22 @@ namespace OpenDentBusiness
 			eb06.Add(new EB06("35","Week"));
 			eb06.Add(new EB06("36","Admisson"));
 			//------------------------------------------------------------------------------------------------------
-			EB09=new Dictionary<string,string>();
-			EB09.Add("99","Quantity Used");
-			EB09.Add("CA","Covered - Actual");
-			EB09.Add("CE","Covered - Estimated");
-			EB09.Add("DB","Deductible Blood Units");
-			EB09.Add("DY","Days");
-			EB09.Add("HS","Hours");
-			EB09.Add("LA","Life-time Reserve - Actual");
-			EB09.Add("LE","Life-time Reserve - Estimated");
-			EB09.Add("MN","Month");
-			EB09.Add("P6","Number of Services or Procedures");
-			EB09.Add("QA","Quantity Approved");
-			EB09.Add("S7","Age, High Value");
-			EB09.Add("S8","Age, Low Value");
-			EB09.Add("VS","Visits");
-			EB09.Add("YY","Years");
-
+			eb09=new List<EB09>();
+			eb09.Add(new EB09("99","Quantity Used"));
+			eb09.Add(new EB09("CA","Covered - Actual"));
+			eb09.Add(new EB09("CE","Covered - Estimated"));
+			eb09.Add(new EB09("DB","Deductible Blood Units"));
+			eb09.Add(new EB09("DY","Days"));
+			eb09.Add(new EB09("HS","Hours"));
+			eb09.Add(new EB09("LA","Life-time Reserve - Actual"));
+			eb09.Add(new EB09("LE","Life-time Reserve - Estimated"));
+			eb09.Add(new EB09("MN","Month",BenefitQuantity.Months));
+			eb09.Add(new EB09("P6","Number of Services or Procedures",BenefitQuantity.NumberOfServices));
+			eb09.Add(new EB09("QA","Quantity Approved"));
+			eb09.Add(new EB09("S7","Age, High Value",BenefitQuantity.AgeLimit));
+			eb09.Add(new EB09("S8","Age, Low Value"));
+			eb09.Add(new EB09("VS","Visits",BenefitQuantity.Visits));
+			eb09.Add(new EB09("YY","Years",BenefitQuantity.Years));
 		}
 		
 
@@ -791,6 +828,48 @@ namespace OpenDentBusiness
 		public BenefitTimePeriod TimePeriod {
 			get { return timePeriod; }
 			set { timePeriod = value; }
+		}
+
+		public string Code {
+			get { return code; }
+			set { code = value; }
+		}
+
+		public string Descript {
+			get { return descript; }
+			set { descript = value; }
+		}
+
+		public bool IsSupported {
+			get { return isSupported; }
+			set { isSupported = value; }
+		}
+	}
+
+	///<summary>Quantity qualifier</summary>
+	public class EB09 {
+		private string code;
+		private string descript;
+		private BenefitQuantity quantityQualifier;
+		private bool isSupported;
+
+		public EB09(string code,string descript,BenefitQuantity quantityQualifier) {
+			this.code=code;
+			this.descript=descript;
+			this.quantityQualifier=quantityQualifier;
+			this.isSupported=true;
+		}
+
+		public EB09(string code,string descript) {
+			this.code=code;
+			this.descript=descript;
+			this.quantityQualifier=BenefitQuantity.None;//ignored
+			this.isSupported=false;
+		}
+
+		public BenefitQuantity QuantityQualifier {
+			get { return quantityQualifier; }
+			set { quantityQualifier = value; }
 		}
 
 		public string Code {
