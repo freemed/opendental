@@ -891,12 +891,12 @@ namespace OpenDentBusiness {
 			}
 			if(maxInd <= 0) {//then patient has used up all of their annual max, so no coverage.
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over lifetime max.");
+					note+=Lans.g("Benefits","Over lifetime max");
 				}
 				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) 
 				{
-					note+=Lans.g("Benefits","Over annual max.");
+					note+=Lans.g("Benefits","Over annual max");
 				}
 				return 0;
 			}
@@ -910,11 +910,11 @@ namespace OpenDentBusiness {
 			if(benFam==null || benFam.MonetaryAmt==-1) {
 				if(retVal != insEstTotal){
 					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-						note+=Lans.g("Benefits","Over lifetime max.");
+						note+=Lans.g("Benefits","Over lifetime max");
 					}
 					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 						|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-						note+=Lans.g("Benefits","Over annual max.");
+						note+=Lans.g("Benefits","Over annual max");
 					}
 				}
 				return retVal;//no family max anyway, so no need to go further.

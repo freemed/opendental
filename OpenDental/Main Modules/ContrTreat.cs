@@ -987,6 +987,7 @@ namespace OpenDental{
 				//save changes in the list to the database
 				ClaimProcs.Synch(ref ClaimProcList,claimProcListOld);
 				//claimProcList=ClaimProcs.RefreshForTP(PatCur.PatNum);
+				string estimateNote;
 				for(int i=0;i<ProcListTP.Length;i++) {
 					row=new ODGridRow();
 					row.Cells.Add("");//never done
@@ -997,6 +998,12 @@ namespace OpenDental{
 					descript=ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum);
 					if(ProcListTP[i].ToothRange!=""){
 						descript+=" #"+Tooth.FormatRangeForDisplay(ProcListTP[i].ToothRange);
+					}
+					if(checkShowMaxDed.Checked) {
+						estimateNote=ClaimProcs.GetEstimateNotes(ProcListTP[i].ProcNum,ClaimProcList);
+						if(estimateNote!="") {
+							descript+="\r\n"+estimateNote;
+						}
 					}
 					row.Cells.Add(descript);
 					fee=ProcListTP[i].ProcFee;

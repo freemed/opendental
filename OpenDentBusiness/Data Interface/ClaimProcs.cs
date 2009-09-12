@@ -941,6 +941,24 @@ namespace OpenDentBusiness{
 			return cp.DedApplied;
 		}
 
+		///<summary>Used in TP module.  Gets all estimate notes for this proc.</summary>
+		public static string GetEstimateNotes(long procNum,List<ClaimProc> cpList) {
+			string retVal="";
+			for(int i=0;i<cpList.Count;i++) {
+				if(cpList[i].ProcNum!=procNum) {
+					continue;
+				}
+				if(cpList[i].EstimateNote==""){
+					continue;
+				}
+				if(retVal!="") {
+					retVal+=", ";
+				}
+				retVal+=cpList[i].EstimateNote;
+			}
+			return retVal;
+		}
+
 		public static List<ClaimProcHist> GetHistList(long patNum,List<Benefit> benList,List<PatPlan> patPlanList,List<InsPlan> planList,DateTime procDate) {
 			//No need to check RemotingRole; no call to db.
 			return GetHistList(patNum,benList,patPlanList,planList,-1,procDate);
