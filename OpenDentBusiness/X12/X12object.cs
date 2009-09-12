@@ -156,12 +156,14 @@ namespace OpenDentBusiness
 		public string[] Elements;
 		///<summary></summary>
 		private X12Separators Separators;
+		private string rawText;
 
 		///<summary></summary>
-		public X12Segment(string rawText,X12Separators separators){
+		public X12Segment(string rawTxt,X12Separators separators){
+			rawText=rawTxt.ToString();
 			Separators=separators;
 			//first, remove the segment terminator
-			rawText=rawText.Replace(separators.Segment,"");
+			rawTxt=rawTxt.Replace(separators.Segment,"");
 			//then, split the row into elements, eliminating the DataElementSeparator
 			Elements=rawText.Split(Char.Parse(separators.Element));
 			SegmentID=Elements[0];
@@ -169,6 +171,10 @@ namespace OpenDentBusiness
 
 		private X12Segment(){
 
+		}
+
+		public override string ToString() {
+			return rawText;
 		}
 
 		///<summary>Returns a copy of this segement</summary>
@@ -187,16 +193,17 @@ namespace OpenDentBusiness
 			return Elements[elementPosition];
 		}
 
-		///<summary>Returns the string representation of the given element,subelement within this segment. If the element or subelement does not exist, as can happen with optional elements, then "" is returned.</summary>
+		///<summary>Returns the string representation of the given element,subelement within this segment. If the element or subelement does not exist, as can happen with optional elements, then "" is returned.  Subelement is 1-based, just like the x12 specs.</summary>
 		public string Get(int elementPosition,int subelementPosition){
 			if(Elements.Length<=elementPosition){
 				return "";
 			}
 			string[] subelements=Elements[elementPosition].Split(Char.Parse(Separators.Subelement));
-			if(subelements.Length<=subelementPosition){
+			//example, subelement passed in is 2.  Convert to 0-indexed means [1].  If Length < 2, then we have a problem.
+			if(subelements.Length < subelementPosition) {
 				return "";
 			}
-			return subelements[subelementPosition];
+			return subelements[subelementPosition-1];
 		}
 
 	}

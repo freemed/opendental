@@ -4,6 +4,7 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	public class X12Parse {
+
 		public static DateTime ToDate(string element) {
 			if(element.Length != 8) {
 				return DateTime.MinValue;
