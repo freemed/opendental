@@ -18,6 +18,7 @@ namespace OpenDental {
 		//public bool IsNew;//this makes no sense.  A 270 will never be new.  Always created, saved, and sent ahead of time.
 		///<summary>True if the 270 and response have just been created and are being viewed for the first time.</summary>
 		public bool IsInitialResponse;
+		///<summary>The list of EB objects parsed from the 270.</summary>
 		private List<EB271> listEB;
 		private List<DTP271> listDTP;
 		private X271 x271;
@@ -45,15 +46,16 @@ namespace OpenDental {
 					x271=new X271(MessageTextAck);
 				}
 			}
+			listDTP=new List<DTP271>();
+			if(x271 != null) {
+				listDTP=x271.GetListDtpSubscriber();
+			}
 			FillGridDates();
+			CreateListOfBenefits();
 			FillGrid();
 			FillGridBen();
 			if(IsInitialResponse) {
-				for(int i=0;i<listEB.Count;i++) {
-					if(listEB[i].Benefitt !=null) {
-						gridMain.SetSelected(i,true);
-					}
-				}
+				SelectForImport();
 			}
 		}
 
@@ -65,11 +67,22 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillGridDates() {
-			listDTP=new List<DTP271>();
-			if(x271 != null) {
-				listDTP=x271.GetListDtpSubscriber();
+		private void SelectForImport() {
+			for(int i=0;i<listEB.Count;i++) {
+				if(listEB[i].Benefitt !=null) {
+					gridMain.SetSelected(i,true);
+				}
 			}
+		}
+
+		private void CreateListOfBenefits() {
+			listEB=new List<EB271>();
+			if(x271 != null) {
+				listEB=x271.GetListEB(radioInNetwork.Checked);
+			}
+		}
+
+		private void FillGridDates() {
 			gridDates.BeginUpdate();
 			gridDates.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),150);
@@ -80,19 +93,14 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<listDTP.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listDTP[i].GetDateStr());
-				row.Cells.Add(listDTP[i].GetQualifier());
+				row.Cells.Add(DTP271.GetDateStr(listDTP[i].Segment.Get(2),listDTP[i].Segment.Get(3)));
+				row.Cells.Add(DTP271.GetQualifierDescript(listDTP[i].Segment.Get(1)));
 				gridDates.Rows.Add(row);
 			}
 			gridDates.EndUpdate();
 		}
 
 		private void FillGrid(){
-			//process the 271 to create a list of benefits--------------------------------------------------------
-			listEB=new List<EB271>();
-			if(x271 != null) {
-				listEB=x271.GetListEB();
-			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Response"),420);
@@ -113,6 +121,36 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(e.Col==0) {//raw benefit
+				FormEtrans270EBraw FormE=new FormEtrans270EBraw();
+				FormE.EB271val=listEB[e.Row];
+				FormE.ShowDialog();
+				//user can't make changes, so no need to refresh grid.
+			}
+			else {//generated benefit
+				if(listEB[e.Row].Benefitt==null) {//create new benefit
+					listEB[e.Row].Benefitt=new Benefit();
+					FormBenefitEdit FormB=new FormBenefitEdit(0,PlanNum);
+					FormB.IsNew=true;
+					FormB.BenCur=listEB[e.Row].Benefitt;
+					FormB.ShowDialog();
+					if(FormB.BenCur==null) {//user deleted or cancelled
+						listEB[e.Row].Benefitt=null;
+					}
+				}
+				else {//edit existing benefit
+					FormBenefitEdit FormB=new FormBenefitEdit(0,PlanNum);
+					FormB.BenCur=listEB[e.Row].Benefitt;
+					FormB.ShowDialog();
+					if(FormB.BenCur==null) {//user deleted
+						listEB[e.Row].Benefitt=null;
+					}
+				}
+				FillGrid();
+			}
 		}
 
 		private void FillGridBen() {
@@ -139,6 +177,18 @@ namespace OpenDental {
 				benList.RemoveAt(benefitListI);
 			}
 			FillGridBen();
+		}
+
+		private void radioInNetwork_Click(object sender,EventArgs e) {
+			CreateListOfBenefits();
+			FillGrid();
+			SelectForImport();
+		}
+
+		private void radioOutNetwork_Click(object sender,EventArgs e) {
+			CreateListOfBenefits();
+			FillGrid();
+			SelectForImport();
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {

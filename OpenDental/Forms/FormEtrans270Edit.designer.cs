@@ -26,17 +26,21 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.butShowResponse = new OpenDental.UI.Button();
+			this.butShowRequest = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butImport = new OpenDental.UI.Button();
 			this.gridBen = new OpenDental.UI.ODGrid();
 			this.gridDates = new OpenDental.UI.ODGrid();
-			this.butShowResponse = new OpenDental.UI.Button();
-			this.butShowRequest = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioInNetwork = new System.Windows.Forms.RadioButton();
+			this.radioOutNetwork = new System.Windows.Forms.RadioButton();
 			this.groupBox2.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label6
@@ -66,6 +70,34 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 116;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Show Raw Message of...";
+			// 
+			// butShowResponse
+			// 
+			this.butShowResponse.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowResponse.Autosize = true;
+			this.butShowResponse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowResponse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowResponse.CornerRadius = 4F;
+			this.butShowResponse.Location = new System.Drawing.Point(87,19);
+			this.butShowResponse.Name = "butShowResponse";
+			this.butShowResponse.Size = new System.Drawing.Size(75,24);
+			this.butShowResponse.TabIndex = 116;
+			this.butShowResponse.Text = "Response";
+			this.butShowResponse.Click += new System.EventHandler(this.butShowResponse_Click);
+			// 
+			// butShowRequest
+			// 
+			this.butShowRequest.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowRequest.Autosize = true;
+			this.butShowRequest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowRequest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowRequest.CornerRadius = 4F;
+			this.butShowRequest.Location = new System.Drawing.Point(6,19);
+			this.butShowRequest.Name = "butShowRequest";
+			this.butShowRequest.Size = new System.Drawing.Size(75,24);
+			this.butShowRequest.TabIndex = 115;
+			this.butShowRequest.Text = "Request";
+			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
 			// 
 			// label1
 			// 
@@ -115,34 +147,6 @@ namespace OpenDental{
 			this.gridDates.Title = "Dates";
 			this.gridDates.TranslationName = "FormEtrans270Edit";
 			// 
-			// butShowResponse
-			// 
-			this.butShowResponse.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowResponse.Autosize = true;
-			this.butShowResponse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowResponse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowResponse.CornerRadius = 4F;
-			this.butShowResponse.Location = new System.Drawing.Point(87,19);
-			this.butShowResponse.Name = "butShowResponse";
-			this.butShowResponse.Size = new System.Drawing.Size(75,24);
-			this.butShowResponse.TabIndex = 116;
-			this.butShowResponse.Text = "Response";
-			this.butShowResponse.Click += new System.EventHandler(this.butShowResponse_Click);
-			// 
-			// butShowRequest
-			// 
-			this.butShowRequest.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowRequest.Autosize = true;
-			this.butShowRequest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowRequest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowRequest.CornerRadius = 4F;
-			this.butShowRequest.Location = new System.Drawing.Point(6,19);
-			this.butShowRequest.Name = "butShowRequest";
-			this.butShowRequest.Size = new System.Drawing.Size(75,24);
-			this.butShowRequest.TabIndex = 115;
-			this.butShowRequest.Text = "Request";
-			this.butShowRequest.Click += new System.EventHandler(this.butShowRequest_Click);
-			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
@@ -154,6 +158,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Response Benefit Information";
 			this.gridMain.TranslationName = "FormEtrans270Edit";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butDelete
 			// 
@@ -202,10 +207,44 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.radioInNetwork);
+			this.groupBox1.Controls.Add(this.radioOutNetwork);
+			this.groupBox1.Location = new System.Drawing.Point(476,64);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(167,58);
+			this.groupBox1.TabIndex = 124;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Mark for import if";
+			// 
+			// radioInNetwork
+			// 
+			this.radioInNetwork.Checked = true;
+			this.radioInNetwork.Location = new System.Drawing.Point(12,16);
+			this.radioInNetwork.Name = "radioInNetwork";
+			this.radioInNetwork.Size = new System.Drawing.Size(121,18);
+			this.radioInNetwork.TabIndex = 121;
+			this.radioInNetwork.TabStop = true;
+			this.radioInNetwork.Text = "In network";
+			this.radioInNetwork.UseVisualStyleBackColor = true;
+			this.radioInNetwork.Click += new System.EventHandler(this.radioInNetwork_Click);
+			// 
+			// radioOutNetwork
+			// 
+			this.radioOutNetwork.Location = new System.Drawing.Point(12,35);
+			this.radioOutNetwork.Name = "radioOutNetwork";
+			this.radioOutNetwork.Size = new System.Drawing.Size(121,18);
+			this.radioOutNetwork.TabIndex = 122;
+			this.radioOutNetwork.Text = "Out of network";
+			this.radioOutNetwork.UseVisualStyleBackColor = true;
+			this.radioOutNetwork.Click += new System.EventHandler(this.radioOutNetwork_Click);
+			// 
 			// FormEtrans270Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(882,674);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.gridBen);
@@ -223,6 +262,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormEtrans270Edit_Load);
 			this.Shown += new System.EventHandler(this.FormEtrans270Edit_Shown);
 			this.groupBox2.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -243,5 +283,8 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridBen;
 		private OpenDental.UI.Button butImport;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.RadioButton radioInNetwork;
+		private System.Windows.Forms.RadioButton radioOutNetwork;
 	}
 }
