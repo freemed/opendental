@@ -661,11 +661,13 @@ namespace OpenDental{
 			textBankBranch.Text=PaymentCur.BankBranch;
 			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
 				listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum==PaymentCur.PayType)
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum==PaymentCur.PayType) {
 					listPayType.SelectedIndex=i;
+				}
 			}
-			if(listPayType.SelectedIndex==-1)
+			if(listPayType.SelectedIndex==-1) {
 				listPayType.SelectedIndex=0;
+			}
 			textNote.Text=PaymentCur.PayNote;
 			if(PaymentCur.DepositNum==0){
 				labelDeposit.Visible=false;
@@ -688,9 +690,10 @@ namespace OpenDental{
 					//
 				}
 				else if(payPlanList.Count==1){ //if there is only one valid payplan
-					//return PayPlanList[0].Copy();
-					AddOneSplit();//the amount and date will be updated upon closing
-					SplitList[SplitList.Count-1].PayPlanNum=payPlanList[0].PayPlanNum;
+					if(!PayPlans.PlanIsPaidOff(payPlanList[0].PayPlanNum)) {
+						AddOneSplit();//the amount and date will be updated upon closing
+						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[0].PayPlanNum;
+					}
 				}
 				else{
 					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(PatCur.PatNum);

@@ -148,6 +148,24 @@ namespace OpenDentBusiness{
 			return PIn.PDouble(table.Rows[0][0].ToString());
 		}
 
+		/// <summary>Gets info directly from database. Used when adding a payment.</summary>
+		public static bool PlanIsPaidOff(long payPlanNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),payPlanNum);
+			}
+			string command="SELECT SUM(paysplit.SplitAmt) FROM paysplit "
+				+"WHERE PayPlanNum = "+POut.PInt(payPlanNum);// +"' "
+				//+" GROUP BY paysplit.PayPlanNum";
+			double amtPaid=PIn.PDouble(Db.GetScalar(command));
+			command="SELECT SUM(Principal+Interest) FROM payplancharge "
+				+"WHERE PayPlanNum = "+POut.PInt(payPlanNum);
+			double totalCost=PIn.PDouble(Db.GetScalar(command));
+			if(totalCost-amtPaid < .01) {
+				return true;
+			}
+			return false;
+		}
+
 		///<summary>Used from FormPayPlan, Account, and ComputeBal to get the accumulated amount due for a payment plan based on today's date.  Includes interest, but does not include payments made so far.  The chargelist must include all charges for this payplan, but it can include more as well.</summary>
 		public static double GetAccumDue(long payPlanNum, List<PayPlanCharge> chargeList){
 			//No need to check RemotingRole; no call to db.
