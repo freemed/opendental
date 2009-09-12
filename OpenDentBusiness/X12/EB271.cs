@@ -11,22 +11,32 @@ namespace OpenDentBusiness
 		private static List<EB01> eb01;
 		private static List<EB02> eb02;
 		private static List<EB03> eb03;
+		///<summary>Since element 4 is descriptive rather than useful for import, we will leave it like this</summary>
 		private static Dictionary<string,string> EB04;
-		private static Dictionary<string,string> EB06;
+		private static List<EB06> eb06;
 		private static Dictionary<string,string> EB09;
+		/// <summary>Some EB segments have a few segments that follow them which should all be considered together as one "benefit".  Eg dates, addresses.</summary>
+		public List<X12Segment> SupplementalSegments;
 
-		public EB271(X12Segment segment)  {
+		public EB271(X12Segment segment,bool isInNetwork) {
 			if(eb01==null) {
 				FillDictionaries();
 			}
 			Segment=segment;
+			SupplementalSegments=new List<X12Segment>();
 			//start pattern matching to generate closest Benefit
-			EB01 eb01val=eb01.Find(EB01HasCode);
-			EB02 eb02val=eb02.Find(EB02HasCode);
-			EB03 eb03val=eb03.Find(EB03HasCode);
+			EB01 eb01val=eb01.Find(EB01MatchesCode);
+			EB02 eb02val=eb02.Find(EB02MatchesCode);
+			EB03 eb03val=eb03.Find(EB03MatchesCode);
+			EB06 eb06val=eb06.Find(EB06MatchesCode);
+			ProcedureCode proccode=null;
+			if(ProcedureCodes.IsValidCode(Segment.Get(13,2))) {
+				proccode=ProcedureCodes.GetProcCode(Segment.Get(13,2));
+			}
 			if(!eb01val.IsSupported
 				|| (eb02val!=null && !eb02val.IsSupported)
-				|| (eb03val!=null && !eb03val.IsSupported)) 
+				|| (eb03val!=null && !eb03val.IsSupported)
+				|| (eb06val!=null && !eb06val.IsSupported)) 
 			{
 				Benefitt=null;
 				return;
@@ -35,6 +45,44 @@ namespace OpenDentBusiness
 				Benefitt=null;
 				return;
 			}
+			if(eb01val.BenefitType==InsBenefitType.ActiveCoverage && proccode!=null) {
+				//A code is covered.  Informational only.
+				Benefitt=null;
+				return;
+			}
+			if(Segment.Get(8)!="") {//if percentage
+				//must have either a category or a proc code
+				if(proccode==null) {//if no proc code is specified
+					if(eb03val==null || eb03val.ServiceType==EbenefitCategory.None || eb03val.ServiceType==EbenefitCategory.General) {//and no category specified
+						Benefitt=null;
+						return;
+					}
+				}
+			}
+			//coinsurance amounts are handled with fee schedules rather than benefits
+			if(eb01val.BenefitType==InsBenefitType.CoPayment || eb01val.BenefitType==InsBenefitType.CoInsurance) {
+				if(Segment.Get(7)!="") {//and a monetary amount specified
+					Benefitt=null;
+					return;
+				}
+			}
+			//a limitation without an amount is meaningless
+			if(eb01val.BenefitType==InsBenefitType.Limitations) {
+				if(Segment.Get(7)=="") {//no monetary amount specified
+					Benefitt=null;
+					return;
+				}
+			}
+			if(isInNetwork && Segment.Get(12)=="N") {
+				Benefitt=null;
+				return;
+			}
+			if(!isInNetwork && Segment.Get(12)=="Y") {
+				Benefitt=null;
+				return;
+			}
+
+
 			Benefitt=new Benefit();
 			Benefitt.BenefitType=eb01val.BenefitType;
 			if(eb02val!=null) {
@@ -43,52 +91,236 @@ namespace OpenDentBusiness
 			if(eb03val!=null) {
 				Benefitt.CovCatNum=CovCats.GetForEbenCat(eb03val.ServiceType).CovCatNum;
 			}
+			if(eb06val!=null) {
+				Benefitt.TimePeriod=eb06val.TimePeriod;
+			}
+			if(Segment.Get(7)!="") {
+				Benefitt.MonetaryAmt=PIn.PDouble(Segment.Get(7));//Monetary amount. Situational
+			}
+			if(Segment.Get(8)!="") {
+				Benefitt.Percent=100-(int)(PIn.PDouble(Segment.Get(8))*100);//Percent. Situational
+				Benefitt.CoverageLevel=BenefitCoverageLevel.None;
+			}
+			if(proccode!=null) {
+				Benefitt.CodeNum=proccode.CodeNum;//element 13,2
+			}
 		}
 
+		///<summary>The most human-readable description possible.  This is only used in one place, the 270/271 window.</summary>
 		public string GetDescription() {
+			bool containsAddress=false;
+			bool containsDate=false;
+			for(int i=0;i<SupplementalSegments.Count;i++) {
+				if(SupplementalSegments[i].SegmentID=="LS") {
+					containsAddress=true;
+				}
+				if(SupplementalSegments[i].SegmentID=="DTP") {
+					containsDate=true;
+				}
+			}
+			if(containsAddress) {
+				return GetDescriptionForAddress();
+			}
+			if(containsDate) {
+				return GetDescriptionForDate();
+			}
+			if(Segment.Get(1)=="1" && Segment.Get(13)!="") {//active coverage and a proc code indicated
+				//informational only
+				return GetDescriptionForCodeCovered();
+			}
+			//if a co-insurance, and a percentage, and a proc code, then special display
+			if(Segment.Get(1)=="A" && Segment.Get(8)!="" && Segment.Get(13)!="") {
+				return GetDescriptionForPercentCode();
+			}
 			string retVal="";
-			retVal+=eb01.Find(EB01HasCode).Descript;//Eligibility or benefit information. Required
-			if(Segment.Get(2) !="") {
-				retVal+=", "+eb02.Find(EB02HasCode).Descript;//Coverage level code. Situational
+			string txt;
+			txt=GetDescript(1);//Eligibility or benefit information. Required
+			if(txt!="") {
+				retVal+=txt;
 			}
-			if(Segment.Get(3) !="") {
-				retVal+=", "+eb03.Find(EB03HasCode).Descript;//Service type code. Situational
+			/*//only show coverage level for things like deductible and annual max
+			txt=GetDescript(2);//Coverage level code. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
+			}*/
+			if(Segment.Get(3)!="30") {//we don't want to show the generic 30 because of clutter.
+				txt=GetDescript(3);//Service type code. Situational
+				if(txt!="") {
+					retVal+=", "+txt;
+				}
 			}
-			if(Segment.Get(4) !="") {
-				retVal+=", "+EB04[Segment.Get(4)];//Insurance type code. Situational
+			txt=GetDescript(4);//Insurance type code. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(5) !="") {
-				retVal+=", "+Segment.Get(5);//Plan coverage description. Situational
+			/*txt=GetDescript(5);//Plan coverage description. Situational
+			//We won't include this due to clutter.
+			if(txt!="") {
+				retVal+=", "+txt;
+			}*/
+			txt=GetDescript(6);//Time period qualifier. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(6) !="") {
-				retVal+=", "+EB06[Segment.Get(6)];//Time period qualifier. Situational
+			txt=GetDescript(7);//Monetary amount. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(7) !="") {
-				retVal+=", "+PIn.PDouble(Segment.Get(7)).ToString("c");//Monetary amount. Situational
+			txt=GetDescript(8);//Percent. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(8) !="") {
-				retVal+=", "+(PIn.PDouble(Segment.Get(8))*100).ToString()+"%";//Percent. Situational
+			txt=GetDescript(9);//Quantity qualifier. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(9) !="") {
-				retVal+=", "+EB09[Segment.Get(9)];//Quantity qualifier. Situational
+			txt=GetDescript(10);//Quantity. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(10) !="") {
-				retVal+=", "+Segment.Get(10);//Quantity. Situational
+			txt=GetDescript(11);//Situational.
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(11) !="") {
-				retVal+=", Authorization Required-"+Segment.Get(11);//Situational.
+			txt=GetDescript(12);//Situational.
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			if(Segment.Get(12) !="") {
-				retVal+=", In Plan Network-"+Segment.Get(12);//Situational.
+			txt=GetDescript(13);//Procedure identifier. Situational
+			if(txt!="") {
+				retVal+=", "+txt;
 			}
-			//if(Segment.Get(13) !="") {//Procedure identifier. Situational
-				//Since we won't yet be making requests about specific procedure codes, this segment should never come back.
-			//}
+			for(int i=0;i<SupplementalSegments.Count;i++) {
+				//addresses already handled
+				//messages are just annoying and cluttery
+				//if(SupplementalSegments[i].SegmentID=="MSG") {
+				//	retVal+=", "+SupplementalSegments[i].Get(1);
+				//}
+			}
 			return retVal;
 		}
 
+		private string GetDescriptionForAddress() {
+			string retVal=GetDescript(1)+"\r\n";//tells us what kind of address
+			for(int i=0;i<SupplementalSegments.Count;i++) {
+				if(SupplementalSegments[i].SegmentID=="NM1") {
+					retVal+=SupplementalSegments[i].Get(3)+" "+SupplementalSegments[i].Get(4)+"\r\n";//LName and optional FName
+				}
+				if(SupplementalSegments[i].SegmentID=="N3") {
+					retVal+=SupplementalSegments[i].Get(1)+" "+SupplementalSegments[i].Get(2)+"\r\n";//Address 1 and 2
+				}
+				if(SupplementalSegments[i].SegmentID=="N4") {
+					retVal+=SupplementalSegments[i].Get(1)+", "+SupplementalSegments[i].Get(2)+SupplementalSegments[i].Get(3);//City, State Zip
+				}
+			}
+			return retVal;
+		}
+
+		private string GetDescriptionForDate() {
+			string retVal="";
+			for(int i=0;i<SupplementalSegments.Count;i++) {
+				if(SupplementalSegments[i].SegmentID=="DTP") {
+					retVal+=DTP271.GetQualifierDescript(SupplementalSegments[i].Get(1))+": "
+						+DTP271.GetDateStr(SupplementalSegments[i].Get(2),SupplementalSegments[i].Get(3));
+				}
+			}
+			return retVal;
+		}
+
+		///<summary>Informational only</summary>
+		private string GetDescriptionForCodeCovered() {
+			string descript=GetDescript(13);
+			if(descript=="") {
+				return "";
+			}
+			return "Covered: "+descript;
+		}
+
+		///<summary></summary>
+		private string GetDescriptionForPercentCode() {
+			string descript=GetDescript(8);//patient pays 0%
+			string txt=GetDescript(12);//in or out of network
+			if(txt!="") {
+				descript+=", "+txt;
+			}
+			descript+=", "+GetDescript(13);//proc
+			return descript;
+		}
+
+		///<summary>The most human-readable description possible for a single element.</summary>
+		public string GetDescript(int elementPos) {
+			string elementCode=Segment.Get(elementPos);
+			if(elementCode=="") {
+				return "";
+			}
+			switch(elementPos) {
+				case 1:
+					//This is a required element, but we still won't assume it's found
+					EB01 eb01val=eb01.Find(EB01MatchesCode);
+					if(eb01val==null) {
+						return "";
+					}
+					return eb01val.Descript;
+				case 2:
+					EB02 eb02val=eb02.Find(EB02MatchesCode);
+					if(eb02val==null) {
+						return "";
+					}
+					return eb02val.Descript;
+				case 3:
+					EB03 eb03val=eb03.Find(EB03MatchesCode);
+					if(eb03val==null) {
+						return "";
+					}
+					return eb03val.Descript;
+				case 4:
+					if(!EB04.ContainsKey(elementCode)){
+						return "";
+					}
+					return EB04[elementCode];
+				case 5:
+					return Segment.Get(5);
+				case 6:
+					EB06 eb06val=eb06.Find(EB06MatchesCode);
+					if(eb06val==null) {
+						return "";
+					}
+					return eb06val.Descript;
+				case 7:
+					return PIn.PDouble(elementCode).ToString("c");//Monetary amount. Situational
+				case 8:
+					return "Patient pays "+(PIn.PDouble(elementCode)*100).ToString()+"%";//Percent. Situational
+				case 9:
+					if(!EB09.ContainsKey(elementCode)) {
+						return "";
+					}
+					return EB09[elementCode];//Quantity qualifier. Situational
+				case 10:
+					return elementCode;//Quantity. Situational
+				case 11:
+					return "Authorization Required-"+elementCode;//Situational.
+				case 12://Situational.
+					if(elementCode=="Y") {
+						return "In network";
+					}
+					else {
+						return "Out of network";
+					}
+				case 13:
+					string procStr=Segment.Get(13,2);
+					if(procStr=="") {
+						return "";
+					}
+					ProcedureCode procCode=ProcedureCodes.GetProcCode(procStr);
+					return procStr+" - "+procCode.AbbrDesc;//ProcedureCodes.GetLaymanTerm(procCode.CodeNum);
+				//Even though we don't make requests about specific procedure codes, some ins co's will send back codes.
+				default:
+					return "";
+			}
+		}
+
 		/// <summary>Search predicate returns true if code matches.</summary>
-		private bool EB01HasCode(EB01 eb01val) {
+		private bool EB01MatchesCode(EB01 eb01val) {
 			if(Segment.Get(1)==eb01val.Code) {
 				return true;
 			}
@@ -96,7 +328,7 @@ namespace OpenDentBusiness
 		}
 
 		/// <summary>Search predicate returns true if code matches.</summary>
-		private bool EB02HasCode(EB02 eb02val) {
+		private bool EB02MatchesCode(EB02 eb02val) {
 			if(Segment.Get(2)==eb02val.Code) {
 				return true;
 			}
@@ -104,11 +336,28 @@ namespace OpenDentBusiness
 		}
 
 		/// <summary>Search predicate returns true if code matches.</summary>
-		private bool EB03HasCode(EB03 eb03val) {
+		private bool EB03MatchesCode(EB03 eb03val) {
 			if(Segment.Get(3)==eb03val.Code) {
 				return true;
 			}
 			return false;
+		}
+
+		/// <summary>Search predicate returns true if code matches.</summary>
+		private bool EB06MatchesCode(EB06 eb06val) {
+			if(Segment.Get(6)==eb06val.Code) {
+				return true;
+			}
+			return false;
+		}
+
+		///<summary>Gives us a raw string of the original EB segment as well as all supplemental segments.  It's somewhat reconstructed rather than strictly the original.</summary>
+		public override string ToString() {
+			string retVal=Segment.ToString()+"~";
+			for(int i=0;i<SupplementalSegments.Count;i++) {
+				retVal+="\r\n"+SupplementalSegments[i].ToString()+"~";
+			}
+			return retVal;
 		}
 
 		private static void FillDictionaries(){
@@ -164,7 +413,7 @@ namespace OpenDentBusiness
 			eb03.Add(new EB03("1","Medical Care"));
 			eb03.Add(new EB03("2","Surgical"));
 			eb03.Add(new EB03("3","Consultation"));
-			eb03.Add(new EB03("4","Diagnostic X-Ray"));
+			eb03.Add(new EB03("4","Diagnostic X-Ray",EbenefitCategory.DiagnosticXRay));
 			eb03.Add(new EB03("5","Diagnostic Lab"));
 			eb03.Add(new EB03("6","Radiation Therapy"));
 			eb03.Add(new EB03("7","Anesthesia"));
@@ -183,23 +432,23 @@ namespace OpenDentBusiness
 			eb03.Add(new EB03("20","Second Surgical Opinion"));
 			eb03.Add(new EB03("21","Third Surgical Opinion"));
 			eb03.Add(new EB03("22","Social Work"));
-			eb03.Add(new EB03("23","Diagnostic Dental"));
-			eb03.Add(new EB03("24","Periodontics"));
-			eb03.Add(new EB03("25","Restorative"));
-			eb03.Add(new EB03("26","Endodontics"));
-			eb03.Add(new EB03("27","Maxillofacial Prosthetics"));
-			eb03.Add(new EB03("28","Adjunctive Dental Services"));
-			eb03.Add(new EB03("30","Health Benefit Plan Coverage"));
+			eb03.Add(new EB03("23","Diagnostic Dental",EbenefitCategory.Diagnostic));
+			eb03.Add(new EB03("24","Periodontics",EbenefitCategory.Periodontics));
+			eb03.Add(new EB03("25","Restorative",EbenefitCategory.Restorative));
+			eb03.Add(new EB03("26","Endodontics",EbenefitCategory.Endodontics));
+			eb03.Add(new EB03("27","Maxillofacial Prosthetics",EbenefitCategory.MaxillofacialProsth));
+			eb03.Add(new EB03("28","Adjunctive Dental Services",EbenefitCategory.Adjunctive));
+			eb03.Add(new EB03("30","Health Benefit Plan Coverage",EbenefitCategory.General));
 			eb03.Add(new EB03("32","Plan Waiting Period"));
 			eb03.Add(new EB03("33","Chiropractic"));
 			eb03.Add(new EB03("34","Chiropractic Office Visits"));
-			eb03.Add(new EB03("35","Dental Care"));
-			eb03.Add(new EB03("36","Dental Crowns"));
-			eb03.Add(new EB03("37","Dental Accident"));
-			eb03.Add(new EB03("38","Orthodontics"));
-			eb03.Add(new EB03("39","Prosthodontics"));
-			eb03.Add(new EB03("40","Oral Surgery"));
-			eb03.Add(new EB03("41","Routine (Preventive) Dental"));
+			eb03.Add(new EB03("35","Dental Care",EbenefitCategory.General));
+			eb03.Add(new EB03("36","Dental Crowns",EbenefitCategory.Crowns));
+			eb03.Add(new EB03("37","Dental Accident",EbenefitCategory.Accident));
+			eb03.Add(new EB03("38","Orthodontics",EbenefitCategory.Orthodontics));
+			eb03.Add(new EB03("39","Prosthodontics",EbenefitCategory.Prosthodontics));
+			eb03.Add(new EB03("40","Oral Surgery",EbenefitCategory.OralSurgery));
+			eb03.Add(new EB03("41","Routine (Preventive) Dental",EbenefitCategory.RoutinePreventive));
 			eb03.Add(new EB03("42","Home Health Care"));
 			eb03.Add(new EB03("43","Home Health Prescriptions"));
 			eb03.Add(new EB03("44","Home Health Visits"));
@@ -351,26 +600,26 @@ namespace OpenDentBusiness
 			EB04.Add("WC","Workers Compensation");
 			EB04.Add("WU","Wrap Up Policy");
 			//------------------------------------------------------------------------------------------------------
-			EB06=new Dictionary<string,string>();
-			EB06.Add("6","Hour");
-			EB06.Add("7","Day");
-			EB06.Add("13","24 Hours");
-			EB06.Add("21","Years");
-			EB06.Add("22","Service Year");
-			EB06.Add("23","Calendar Year");
-			EB06.Add("24","Year to Date");
-			EB06.Add("25","Contract");
-			EB06.Add("26","Episode");
-			EB06.Add("27","Visit");
-			EB06.Add("28","Outlier");
-			EB06.Add("29","Remaining");
-			EB06.Add("30","Exceeded");
-			EB06.Add("31","Not Exceeded");
-			EB06.Add("32","Lifetime");
-			EB06.Add("33","Lifetime Remaining");
-			EB06.Add("34","Month");
-			EB06.Add("35","Week");
-			EB06.Add("36","Admisson");
+			eb06=new List<EB06>();
+			eb06.Add(new EB06("6","Hour"));
+			eb06.Add(new EB06("7","Day"));
+			eb06.Add(new EB06("13","24 Hours"));
+			eb06.Add(new EB06("21","Years",BenefitTimePeriod.Years));
+			eb06.Add(new EB06("22","Service Year",BenefitTimePeriod.ServiceYear));
+			eb06.Add(new EB06("23","Calendar Year",BenefitTimePeriod.CalendarYear));
+			eb06.Add(new EB06("24","Year to Date"));
+			eb06.Add(new EB06("25","Contract"));
+			eb06.Add(new EB06("26","Episode"));
+			eb06.Add(new EB06("27","Visit"));
+			eb06.Add(new EB06("28","Outlier"));
+			eb06.Add(new EB06("29","Remaining"));
+			eb06.Add(new EB06("30","Exceeded"));
+			eb06.Add(new EB06("31","Not Exceeded"));
+			eb06.Add(new EB06("32","Lifetime",BenefitTimePeriod.Lifetime));
+			eb06.Add(new EB06("33","Lifetime Remaining"));
+			eb06.Add(new EB06("34","Month"));
+			eb06.Add(new EB06("35","Week"));
+			eb06.Add(new EB06("36","Admisson"));
 			//------------------------------------------------------------------------------------------------------
 			EB09=new Dictionary<string,string>();
 			EB09.Add("99","Quantity Used");
@@ -518,6 +767,46 @@ namespace OpenDentBusiness
 		}
 	}
 
+	///<summary>Time period qualifier</summary>
+	public class EB06 {
+		private string code;
+		private string descript;
+		private BenefitTimePeriod timePeriod;
+		private bool isSupported;
 
+		public EB06(string code,string descript,BenefitTimePeriod timePeriod) {
+			this.code=code;
+			this.descript=descript;
+			this.timePeriod=timePeriod;
+			this.isSupported=true;
+		}
+
+		public EB06(string code,string descript) {
+			this.code=code;
+			this.descript=descript;
+			this.timePeriod=BenefitTimePeriod.None;//ignored
+			this.isSupported=false;
+		}
+
+		public BenefitTimePeriod TimePeriod {
+			get { return timePeriod; }
+			set { timePeriod = value; }
+		}
+
+		public string Code {
+			get { return code; }
+			set { code = value; }
+		}
+
+		public string Descript {
+			get { return descript; }
+			set { descript = value; }
+		}
+
+		public bool IsSupported {
+			get { return isSupported; }
+			set { isSupported = value; }
+		}
+	}
 
 }

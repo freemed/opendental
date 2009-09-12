@@ -11,15 +11,31 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>In realtime mode, X12 limits the request to one patient.  We will always use the subscriber.  So all EB segments are for the subscriber.</summary>
-		public List<EB271> GetListEB() {
+		public List<EB271> GetListEB(bool isInNetwork) {
 			List<EB271> retVal=new List<EB271>();
-			EB271 eb;
+			EB271 eb=null;
 			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID != "EB") {
+				//loop until we encounter the first EB
+				if(Segments[i].SegmentID!="EB" && eb==null) {
 					continue;
 				}
-				eb=new EB271(Segments[i]);
-				retVal.Add(eb);
+				if(Segments[i].SegmentID=="EB") {
+					//add the previous eb
+					if(eb!=null) {
+						retVal.Add(eb);
+					}
+					//then, start the next one
+					eb=new EB271(Segments[i],isInNetwork);
+					continue;
+				}
+				else if(Segments[i].SegmentID=="SE") {//end of benefits
+					retVal.Add(eb);
+					break;
+				}
+				else {//add to existing eb
+					eb.SupplementalSegments.Add(Segments[i]);
+					continue;
+				}
 			}
 			return retVal;
 		}
@@ -29,11 +45,11 @@ namespace OpenDentBusiness
 			List<DTP271> retVal=new List<DTP271>();
 			DTP271 dtp;
 			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID!="DTP") {
-					continue;
-				}
 				if(Segments[i].SegmentID=="EB") {
 					break;
+				}
+				if(Segments[i].SegmentID!="DTP") {
+					continue;
 				}
 				dtp=new DTP271(Segments[i]);
 				retVal.Add(dtp);
