@@ -1931,6 +1931,7 @@ namespace OpenDental{
 			PlanCur.CarrierNum     =FormIP.SelectedPlan.CarrierNum;
 			PlanCur.PlanType       =FormIP.SelectedPlan.PlanType;
 			PlanCur.UseAltCode     =FormIP.SelectedPlan.UseAltCode;
+			PlanCur.CodeSubstNone  =FormIP.SelectedPlan.CodeSubstNone;
 			PlanCur.IsMedical      =FormIP.SelectedPlan.IsMedical;
 			PlanCur.ClaimsUseUCR   =FormIP.SelectedPlan.ClaimsUseUCR;
 			PlanCur.DedBeforePerc  =FormIP.SelectedPlan.DedBeforePerc;
