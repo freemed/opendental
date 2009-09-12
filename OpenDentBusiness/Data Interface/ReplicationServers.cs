@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ReplicationServers{
 		///<summary></summary>
-		public static List<ReplicationServer> Listt;
+		private static List<ReplicationServer> listt;
 		///<summary>This value is only retrieved once upon startup.</summary>
 		private static int server_id=-1;
 
@@ -21,6 +21,15 @@ namespace OpenDentBusiness{
 					server_id=GetServer_id();
 				}
 				return server_id;
+			}
+		}
+
+		public static List<ReplicationServer> Listt {
+			get {
+				if(listt==null) {
+					RefreshCache();
+				}
+				return listt;
 			}
 		}
 		
@@ -36,7 +45,7 @@ namespace OpenDentBusiness{
 
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			Listt=new List<ReplicationServer>();
+			listt=new List<ReplicationServer>();
 			ReplicationServer serv;
 			for(int i=0;i<table.Rows.Count;i++){
 				serv=new ReplicationServer();
@@ -46,7 +55,7 @@ namespace OpenDentBusiness{
 				serv.ServerId            = PIn.PInt32 (table.Rows[i][2].ToString());
 				serv.RangeStart          = PIn.PInt   (table.Rows[i][3].ToString());
 				serv.RangeEnd            = PIn.PInt   (table.Rows[i][4].ToString());
-				Listt.Add(serv);
+				listt.Add(serv);
 			}
 		}
 
