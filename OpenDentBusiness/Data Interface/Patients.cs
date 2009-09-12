@@ -1119,11 +1119,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Key=patNum, value=formatted name.  Used for reports, FormASAP, FormTrackNext, and FormUnsched.</summary>
-		public static Dictionary<int,string> GetAllPatientNames() {
+		public static Dictionary<long,string> GetAllPatientNames() {
 			//No need to check RemotingRole; no call to db.
 			DataTable table=GetAllPatientNamesTable();
-			Dictionary<int,string> dict=new Dictionary<int,string>();
-			int patnum;
+			Dictionary<long,string> dict=new Dictionary<long,string>();
+			long patnum;
 			string lname,fname,middlei,preferred;
 			for(int i=0;i<table.Rows.Count;i++) {
 				patnum=PIn.PInt(table.Rows[i][0].ToString());
