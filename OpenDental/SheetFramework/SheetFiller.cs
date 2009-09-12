@@ -17,44 +17,44 @@ namespace OpenDental{
 			Referral refer=null;
 			switch(sheet.SheetType) {
 				case SheetTypeEnum.LabelPatient:
-					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
 					FillFieldsForLabelPatient(sheet,pat);
 					break;
 				case SheetTypeEnum.LabelCarrier:
-					Carrier carrier=Carriers.GetCarrier((int)GetParamByName(sheet,"CarrierNum").ParamValue);
+					Carrier carrier=Carriers.GetCarrier((long)GetParamByName(sheet,"CarrierNum").ParamValue);
 					FillFieldsForLabelCarrier(sheet,carrier);
 					break;
 				case SheetTypeEnum.LabelReferral:
-					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					refer=Referrals.GetReferral((long)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForLabelReferral(sheet,refer);
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
 					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralSlip(sheet,pat,refer);
 					break;
 				case SheetTypeEnum.LabelAppointment:
-					Appointment appt=Appointments.GetOneApt((int)GetParamByName(sheet,"AptNum").ParamValue);
+					Appointment appt=Appointments.GetOneApt((long)GetParamByName(sheet,"AptNum").ParamValue);
 					pat=Patients.GetPat(appt.PatNum);
 					FillFieldsForLabelAppointment(sheet,appt,pat);
 					break;
 				case SheetTypeEnum.Rx:
-					RxPat rx=RxPats.GetRx((int)GetParamByName(sheet,"RxNum").ParamValue);
+					RxPat rx=RxPats.GetRx((long)GetParamByName(sheet,"RxNum").ParamValue);
 					pat=Patients.GetPat(rx.PatNum);
 					Provider prov=Providers.GetProv(rx.ProvNum);
 					FillFieldsForRx(sheet,rx,pat,prov);
 					break;
 				case SheetTypeEnum.Consent:
-					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
 					FillFieldsForConsent(sheet,pat);
 					break;
 				case SheetTypeEnum.PatientLetter:
-					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
 					FillFieldsForPatientLetter(sheet,pat);
 					break;
 				case SheetTypeEnum.ReferralLetter:
-					pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
-					refer=Referrals.GetReferral((int)GetParamByName(sheet,"ReferralNum").ParamValue);
+					pat=Patients.GetPat((long)GetParamByName(sheet,"PatNum").ParamValue);
+					refer=Referrals.GetReferral((long)GetParamByName(sheet,"ReferralNum").ParamValue);
 					FillFieldsForReferralLetter(sheet,pat,refer);
 					break;
 			}
