@@ -61,11 +61,11 @@ namespace OpenDentBusiness{
 				command+="NOW()";//DateEntry set to server date
 			}
 			command+=")";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				adj.AdjNum=Db.NonQ(command,true);
+			else {
+				adj.AdjNum=Db.NonQ(command,true);
 			}
 			return adj.AdjNum;
 		}

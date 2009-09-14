@@ -105,12 +105,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(je.Splits)+"', "
 				+"'"+POut.PString(je.CheckNumber)+"', "
 				+"'"+POut.PInt   (je.ReconcileNum)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				je.JournalEntryNum=Db.NonQ(command,true);
-			}
+			je.JournalEntryNum=Db.NonQ(command,true);
 			return je.JournalEntryNum;
 		}
 

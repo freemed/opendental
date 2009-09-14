@@ -124,10 +124,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.State)+"', "
 				+"'"+POut.PString(Cur.Zip)+"', "
 				+"'"+POut.PString(Cur.Phone)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
+			else {
 				Cur.EmployerNum=Db.NonQ(command,true);
 			}
 			return Cur.EmployerNum;

@@ -104,15 +104,31 @@ namespace OpenDentBusiness {
 				def.DefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.DefNum;
 			}
-			string command= "INSERT INTO definition (Category,ItemOrder,"
-				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES("
-				+"'"+POut.PInt((int)def.Category)+"', "
+			if(PrefC.RandomKeys) {
+				def.DefNum=ReplicationServers.GetKey("definition","DefNum");
+			}
+			string command="INSERT INTO definition (";
+			if(PrefC.RandomKeys) {
+				command+="DefNum,";
+			}
+			command+="Category,ItemOrder,"
+				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.DefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt((int)def.Category)+"', "
 				+"'"+POut.PInt(def.ItemOrder)+"', "
 				+"'"+POut.PString(def.ItemName)+"', "
 				+"'"+POut.PString(def.ItemValue)+"', "
 				+"'"+POut.PInt(def.ItemColor.ToArgb())+"', "
 				+"'"+POut.PBool(def.IsHidden)+"')";
-			def.DefNum=Db.NonQ(command,true);//used in conversion
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				def.DefNum=Db.NonQ(command,true);//used in conversion
+			}
 			return def.DefNum;
 		}
 

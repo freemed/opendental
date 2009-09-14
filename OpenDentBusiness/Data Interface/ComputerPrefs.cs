@@ -108,10 +108,10 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(computerPref.TaskDock)+"',"
 				+"'"+POut.PInt(computerPref.TaskX)+"',"
 				+"'"+POut.PInt(computerPref.TaskY)+"')";
-			if(PrefC.RandomKeys)
-			{
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
-			}else{
+			}
+			else {
 				computerPref.ComputerPrefNum=Db.NonQ(command,true);
 			}
 			return computerPref.ComputerPrefNum;

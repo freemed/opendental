@@ -56,11 +56,11 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.Fax)+"', "
 				+"'"+POut.PInt   (Cur.Category)+"', "
 				+"'"+POut.PString(Cur.Notes)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				Cur.ContactNum=Db.NonQ(command,true);
+			else {
+				Cur.ContactNum=Db.NonQ(command,true);
 			}
 			return Cur.ContactNum;
 		}

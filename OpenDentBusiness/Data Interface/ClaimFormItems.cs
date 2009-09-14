@@ -41,9 +41,20 @@ namespace OpenDentBusiness{
 				item.ClaimFormItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),item);
 				return item.ClaimFormItemNum;
 			}
-			string command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
-				+",XPos,YPos,Width,Height) VALUES("
-				+"'"+POut.PInt   (item.ClaimFormNum)+"', "
+			if(PrefC.RandomKeys) {
+				item.ClaimFormItemNum=ReplicationServers.GetKey("claimformitem","ClaimFormItemNum");
+			}
+			string command="INSERT INTO claimformitem (";
+			if(PrefC.RandomKeys) {
+				command+="ClaimFormItemNum,";
+			}
+			command+="ClaimFormNum,ImageFileName,FieldName,FormatString"
+				+",XPos,YPos,Width,Height) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(item.ClaimFormItemNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (item.ClaimFormNum)+"', "
 				+"'"+POut.PString(item.ImageFileName)+"', "
 				+"'"+POut.PString(item.FieldName)+"', "
 				+"'"+POut.PString(item.FormatString)+"', "
@@ -51,8 +62,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PFloat (item.YPos)+"', "
 				+"'"+POut.PFloat (item.Width)+"', "
 				+"'"+POut.PFloat (item.Height)+"')";
-			//MessageBox.Show(string command);
- 			item.ClaimFormItemNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				item.ClaimFormItemNum=Db.NonQ(command,true);
+			}
 			return item.ClaimFormItemNum;
 		}
 

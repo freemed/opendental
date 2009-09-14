@@ -36,17 +36,34 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static void Insert(AutoNoteControl autonotecontrol) {
+		public static long Insert(AutoNoteControl autonotecontrol) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonotecontrol);
+				autonotecontrol.AutoNoteControlNum=Meth.GetInt(MethodBase.GetCurrentMethod(),autonotecontrol);
+				return autonotecontrol.AutoNoteControlNum;
 			}
-			string command = "INSERT INTO autonotecontrol (Descript,ControlType,ControlLabel,ControlOptions)"
-			+"VALUES ("			
-			+"'"+POut.PString(autonotecontrol.Descript)+"', " 
-			+"'"+POut.PString(autonotecontrol.ControlType)+"', "
-			+"'"+POut.PString(autonotecontrol.ControlLabel)+"' ,"			
-			+"'"+POut.PString(autonotecontrol.ControlOptions)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				autonotecontrol.AutoNoteControlNum=ReplicationServers.GetKey("autonotecontrol","AutoNoteControlNum");
+			}
+			string command="INSERT INTO autonotecontrol (";
+			if(PrefC.RandomKeys) {
+				command+="AutoNoteControlNum,";
+			}
+			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(autonotecontrol.AutoNoteControlNum)+", ";
+			}
+			command+=		
+				 "'"+POut.PString(autonotecontrol.Descript)+"', " 
+				+"'"+POut.PString(autonotecontrol.ControlType)+"', "
+				+"'"+POut.PString(autonotecontrol.ControlLabel)+"' ,"			
+				+"'"+POut.PString(autonotecontrol.ControlOptions)+"')";
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				autonotecontrol.AutoNoteControlNum=Db.NonQ(command,true);
+			}
+			return autonotecontrol.AutoNoteControlNum;
 		}
 
 

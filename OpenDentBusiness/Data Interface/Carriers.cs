@@ -271,11 +271,11 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.CDAnetVersion)+"', "
 				+"'"+POut.PInt   (Cur.CanadianNetworkNum)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				Cur.CarrierNum=Db.NonQ(command,true);
+			else {
+				Cur.CarrierNum=Db.NonQ(command,true);
 			}
 			return Cur.CarrierNum;
 		}

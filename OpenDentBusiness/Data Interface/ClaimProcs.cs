@@ -170,7 +170,6 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.InsEstTotalOverride)+"', "
 				+"'"+POut.PDouble(cp.PaidOtherInsOverride)+"',"
 				+"'"+POut.PString(cp.EstimateNote)+"')";
-			//MessageBox.Show(string command);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

@@ -50,24 +50,41 @@ namespace OpenDentBusiness {
 				+",CovOrder = '"       +POut.PInt   (covcat.CovOrder)+"'"
 				+",IsHidden = '"       +POut.PBool  (covcat.IsHidden)+"'"
 				+",EbenefitCat = '"    +POut.PInt((int)covcat.EbenefitCat)+"'"
-				+" WHERE covcatnum = '"+POut.PInt(covcat.CovCatNum)+"'";
+				+" WHERE CovCatNum = '"+POut.PInt(covcat.CovCatNum)+"'";
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static void Insert(CovCat covcat) {
+		public static long Insert(CovCat covcat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),covcat);
-				return;
+				covcat.CovCatNum=Meth.GetInt(MethodBase.GetCurrentMethod(),covcat);
+				return covcat.CovCatNum;
 			}
-			string command="INSERT INTO covcat (Description,DefaultPercent,"
-				+"CovOrder,IsHidden,EbenefitCat) VALUES("
-				+"'"+POut.PString(covcat.Description)+"', "
+			if(PrefC.RandomKeys) {
+				covcat.CovCatNum=ReplicationServers.GetKey("covcat","CovCatNum");
+			}
+			string command="INSERT INTO covcat (";
+			if(PrefC.RandomKeys) {
+				command+="CovCatNum,";
+			}
+			command+="Description,DefaultPercent,"
+				+"CovOrder,IsHidden,EbenefitCat) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(covcat.CovCatNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(covcat.Description)+"', "
 				+"'"+POut.PInt(covcat.DefaultPercent)+"', "
 				+"'"+POut.PInt(covcat.CovOrder)+"', "
 				+"'"+POut.PBool(covcat.IsHidden)+"', "
 				+"'"+POut.PInt((int)covcat.EbenefitCat)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				covcat.CovCatNum=Db.NonQ(command,true);
+			}
+			return covcat.CovCatNum;
 		}
 
 		///<summary></summary>

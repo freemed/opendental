@@ -46,13 +46,27 @@ namespace OpenDentBusiness{
 				Cur.AutoCodeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.AutoCodeNum;
 			}
-			string command= "INSERT INTO autocode (Description,IsHidden,LessIntrusive) "
-				+"VALUES ("
-				+"'"+POut.PString(Cur.Description)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.AutoCodeNum=ReplicationServers.GetKey("autocode","AutoCodeNum");
+			}
+			string command="INSERT INTO autocode (";
+			if(PrefC.RandomKeys) {
+				command+="AutoCodeNum,";
+			}
+			command+="Description,IsHidden,LessIntrusive) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.AutoCodeNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"', "
 				+"'"+POut.PBool  (Cur.LessIntrusive)+"')";
-			//MessageBox.Show(string command);
-			Cur.AutoCodeNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				Cur.AutoCodeNum=Db.NonQ(command,true);
+			}
 			return Cur.AutoCodeNum;
 		}
 

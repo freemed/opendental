@@ -174,12 +174,7 @@ namespace OpenDentBusiness{
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
 			if(etrans.DateTimeTrans.Year<1880) {
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					command+=POut.PDateT(MiscData.GetNowDateTime());
-				}
-				else {//Assume MySQL
-					command+="NOW()";
-				}
+				command+="NOW()";
 			}
 			else {
 				command+=POut.PDateT(etrans.DateTimeTrans);

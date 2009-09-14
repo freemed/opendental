@@ -363,7 +363,7 @@ namespace OpenDentBusiness{
 			if(includeAptNum || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
+			else {
 				appt.AptNum=Db.NonQ(command,true);
 			}
 			return appt.AptNum;

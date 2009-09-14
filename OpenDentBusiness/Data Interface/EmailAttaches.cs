@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
+			else {
 				attach.EmailAttachNum=Db.NonQ(command,true);
 			}
 			return attach.EmailAttachNum;

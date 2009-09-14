@@ -81,11 +81,11 @@ namespace OpenDentBusiness{
 			command+=
 				"'"+POut.PString(comp.CompName)+"')";
 				//+"'"+POut.PString(PrinterName)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				comp.ComputerNum=Db.NonQ(command,true);
+			else {
+				comp.ComputerNum=Db.NonQ(command,true);
 			}
 			return comp.ComputerNum;
 		}

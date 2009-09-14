@@ -66,12 +66,11 @@ namespace OpenDentBusiness{
 			command+=
 				 "'"+POut.PString(template.Subject)+"', "
 				+"'"+POut.PString(template.BodyText)+"')";
-			//MessageBox.Show(string command);
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				template.EmailTemplateNum=Db.NonQ(command,true);
+			else {
+				template.EmailTemplateNum=Db.NonQ(command,true);
 			}
 			return template.EmailTemplateNum;
 		}

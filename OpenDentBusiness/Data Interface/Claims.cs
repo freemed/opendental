@@ -217,10 +217,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (Cur.AttachedModels)+"', "
 				+"'"+POut.PString(Cur.AttachedFlags)+"', "
 				+"'"+POut.PString(Cur.AttachmentID)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
+			else {
 				Cur.ClaimNum=Db.NonQ(command,true);
 			}
 			return Cur.ClaimNum;

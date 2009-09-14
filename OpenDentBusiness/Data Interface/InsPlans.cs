@@ -64,12 +64,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(plan.IsHidden)+"', "
 				+"'"+POut.PInt(plan.MonthRenew)+"',"
 				+"'"+POut.PInt(plan.FilingCodeSubtype)+"')";
-			if(PrefC.RandomKeys) {
-				Db.NonQ(command);
-			}
-			else {
-				plan.PlanNum=Db.NonQ(command,true);
-			}
+			plan.PlanNum=Db.NonQ(command,true);
 			return plan.PlanNum;
 		}
 

@@ -86,11 +86,27 @@ namespace OpenDentBusiness {
 				def.DiseaseDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.DiseaseDefNum;
 			}
-			string command="INSERT INTO diseasedef (DiseaseName,ItemOrder,IsHidden) VALUES("
-				+"'"+POut.PString(def.DiseaseName)+"', "
+			if(PrefC.RandomKeys) {
+				def.DiseaseDefNum=ReplicationServers.GetKey("diseasedef","DiseaseDefNum");
+			}
+			string command="INSERT INTO diseasedef (";
+			if(PrefC.RandomKeys) {
+				command+="DiseaseDefNum,";
+			}
+			command+="DiseaseName,ItemOrder,IsHidden) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.DiseaseDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(def.DiseaseName)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PBool  (def.IsHidden)+"')";
-			def.DiseaseDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				def.DiseaseDefNum=Db.NonQ(command,true);
+			}
 			return def.DiseaseDefNum;
 		}
 

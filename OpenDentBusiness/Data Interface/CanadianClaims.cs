@@ -44,6 +44,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<CanadianClaim>(MethodBase.GetCurrentMethod(),missingList);
 			}
 			CanadianExtracts.UpdateForClaim(claimNum,missingList);
+			//Random primary keys do not need to be checked here, because of 1-1 relationship with claimNum
 			string command="INSERT INTO canadianclaim (ClaimNum) VALUES("
 				+"'"+POut.PInt   (claimNum)+"')";
 				//+"'"+POut.PString(schoolName)+"')";

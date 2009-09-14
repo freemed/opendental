@@ -87,11 +87,11 @@ namespace OpenDentBusiness{
 				 POut.PDate  (dep.DateDeposit)+", "
 				+"'"+POut.PString(dep.BankAccountInfo)+"', "
 				+"'"+POut.PDouble(dep.Amount)+"')";
- 			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				dep.DepositNum=Db.NonQ(command,true);
+			else {
+				dep.DepositNum=Db.NonQ(command,true);
 			}
 			return dep.DepositNum;
 		}

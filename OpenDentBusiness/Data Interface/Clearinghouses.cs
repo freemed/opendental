@@ -72,15 +72,26 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts this clearinghouse into database.</summary>
-		public static void Insert(Clearinghouse clearhouse){
+		public static long Insert(Clearinghouse clearhouse){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),clearhouse);
-				return;
+				clearhouse.ClearinghouseNum=Meth.GetInt(MethodBase.GetCurrentMethod(),clearhouse);
+				return clearhouse.ClearinghouseNum;
 			}
-			string command="INSERT INTO clearinghouse (Description,ExportPath,IsDefault,Payors"
+			if(PrefC.RandomKeys) {
+				clearhouse.ClearinghouseNum=ReplicationServers.GetKey("clearinghouse","ClearinghouseNum");
+			}
+			string command="INSERT INTO clearinghouse (";
+			if(PrefC.RandomKeys) {
+				command+="ClearinghouseNum,";
+			}
+			command+="Description,ExportPath,IsDefault,Payors"
 				+",Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,"
-				+"LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES("
-				+"'"+POut.PString(clearhouse.Description)+"', "
+				+"LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(clearhouse.ClearinghouseNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(clearhouse.Description)+"', "
 				+"'"+POut.PString(clearhouse.ExportPath)+"', "
 				+"'"+POut.PBool  (clearhouse.IsDefault)+"', "
 				+"'"+POut.PString(clearhouse.Payors)+"', "
@@ -100,7 +111,13 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clearhouse.SenderName)+"', "
 				+"'"+POut.PString(clearhouse.SenderTelephone)+"', "
 				+"'"+POut.PString(clearhouse.GS03)+"')";
- 			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				clearhouse.ClearinghouseNum=Db.NonQ(command,true);
+			}
+			return clearhouse.ClearinghouseNum;
 		}
 
 		///<summary></summary>

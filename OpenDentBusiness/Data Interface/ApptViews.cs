@@ -36,14 +36,28 @@ namespace OpenDentBusiness{
 				Cur.ApptViewNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ApptViewNum;
 			}
-			string command = "INSERT INTO apptview (Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs) "
-				+"VALUES ("
-				+"'"+POut.PString(Cur.Description)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.ApptViewNum=ReplicationServers.GetKey("apptview","ApptViewNum");
+			}
+			string command="INSERT INTO apptview (";
+			if(PrefC.RandomKeys) {
+				command+="ApptViewNum,";
+			}
+			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.ApptViewNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PInt   (Cur.ItemOrder)+"', "
 				+"'"+POut.PInt   (Cur.RowsPerIncr)+"', "
 				+"'"+POut.PBool  (Cur.OnlyScheduledProvs)+"')";
-			//MessageBox.Show(string command);
-			Cur.ApptViewNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				Cur.ApptViewNum=Db.NonQ(command,true);
+			}
 			return Cur.ApptViewNum;
 		}
 

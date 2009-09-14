@@ -34,14 +34,30 @@ namespace OpenDentBusiness{
 				dun.DunningNum=Meth.GetInt(MethodBase.GetCurrentMethod(),dun);
 				return dun.DunningNum;
 			}
-			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending,"
-				+"MessageBold) VALUES("
-				+"'"+POut.PString(dun.DunMessage)+"', "
+			if(PrefC.RandomKeys) {
+				dun.DunningNum=ReplicationServers.GetKey("dunning","DunningNum");
+			}
+			string command="INSERT INTO dunning (";
+			if(PrefC.RandomKeys) {
+				command+="DunningNum,";
+			}
+			command+="DunMessage,BillingType,AgeAccount,InsIsPending,"
+				+"MessageBold) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(dun.DunningNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(dun.DunMessage)+"', "
 				+"'"+POut.PInt   (dun.BillingType)+"', "
 				+"'"+POut.PInt   (dun.AgeAccount)+"', "
 				+"'"+POut.PInt   ((int)dun.InsIsPending)+"', "
 				+"'"+POut.PString(dun.MessageBold)+"')";
- 			dun.DunningNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				dun.DunningNum=Db.NonQ(command,true);
+			}
 			return dun.DunningNum;
 		}
 

@@ -37,12 +37,28 @@ namespace OpenDentBusiness{
 				rule.AppointmentRuleNum=Meth.GetInt(MethodBase.GetCurrentMethod(),rule);
 				return rule.AppointmentRuleNum;
 			}
-			string command= "INSERT INTO appointmentrule (RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES("
-				+"'"+POut.PString(rule.RuleDesc)+"', "
+			if(PrefC.RandomKeys) {
+				rule.AppointmentRuleNum=ReplicationServers.GetKey("appointmentrule","AppointmentRuleNum");
+			}
+			string command="INSERT INTO appointmentrule (";
+			if(PrefC.RandomKeys) {
+				command+="AppointmentRuleNum,";
+			}
+			command+="RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(rule.AppointmentRuleNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(rule.RuleDesc)+"', "
 				+"'"+POut.PString(rule.CodeStart)+"', "
 				+"'"+POut.PString(rule.CodeEnd)+"', "
 				+"'"+POut.PBool  (rule.IsEnabled)+"')";
- 			rule.AppointmentRuleNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				rule.AppointmentRuleNum=Db.NonQ(command,true);
+			}
 			return rule.AppointmentRuleNum;
 		}
 

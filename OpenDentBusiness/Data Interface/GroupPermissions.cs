@@ -46,18 +46,34 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		private static void Insert(GroupPermission gp){
+		private static long Insert(GroupPermission gp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),gp);
-				return;
+				gp.GroupPermNum=Meth.GetInt(MethodBase.GetCurrentMethod(),gp);
+				return gp.GroupPermNum;
 			}
-			string command= "INSERT INTO grouppermission (NewerDate,NewerDays,UserGroupNum,PermType) "
-				+"VALUES("
-				+POut.PDate  (gp.NewerDate)+", "
+			if(PrefC.RandomKeys) {
+				gp.GroupPermNum=ReplicationServers.GetKey("grouppermission","GroupPermNum");
+			}
+			string command="INSERT INTO grouppermission (";
+			if(PrefC.RandomKeys) {
+				command+="GroupPermNum,";
+			}
+			command+="NewerDate,NewerDays,UserGroupNum,PermType) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(gp.GroupPermNum)+", ";
+			}
+			command+=
+				 POut.PDate  (gp.NewerDate)+", "
 				+"'"+POut.PInt   (gp.NewerDays)+"', "
 				+"'"+POut.PInt   (gp.UserGroupNum)+"', "
 				+"'"+POut.PInt   ((int)gp.PermType)+"')";
- 			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				gp.GroupPermNum=Db.NonQ(command,true);
+			}
+			return gp.GroupPermNum;
 		}
 
 		///<summary></summary>

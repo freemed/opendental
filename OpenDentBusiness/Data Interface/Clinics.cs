@@ -53,14 +53,25 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(Clinic clinic){
+		public static long Insert(Clinic clinic){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
-				return;
+				clinic.ClinicNum=Meth.GetInt(MethodBase.GetCurrentMethod(),clinic);
+				return clinic.ClinicNum;
 			}
-			string command= "INSERT INTO clinic (Description,Address,Address2,City,State,Zip,Phone,"
-				+"BankNumber,DefaultPlaceService,InsBillingProv) VALUES("
-				+"'"+POut.PString(clinic.Description)+"', "
+			if(PrefC.RandomKeys) {
+				clinic.ClinicNum=ReplicationServers.GetKey("clinic","ClinicNum");
+			}
+			string command="INSERT INTO clinic (";
+			if(PrefC.RandomKeys) {
+				command+="ClinicNum,";
+			}
+			command+="Description,Address,Address2,City,State,Zip,Phone,"
+				+"BankNumber,DefaultPlaceService,InsBillingProv) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(clinic.ClinicNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(clinic.Description)+"', "
 				+"'"+POut.PString(clinic.Address)+"', "
 				+"'"+POut.PString(clinic.Address2)+"', "
 				+"'"+POut.PString(clinic.City)+"', "
@@ -70,7 +81,13 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clinic.BankNumber)+"', "
 				+"'"+POut.PInt   ((int)clinic.DefaultPlaceService)+"', "
 				+"'"+POut.PInt   (clinic.InsBillingProv)+"')";
- 			clinic.ClinicNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				clinic.ClinicNum=Db.NonQ(command,true);
+			}
+			return clinic.ClinicNum;
 		}
 
 		///<summary></summary>

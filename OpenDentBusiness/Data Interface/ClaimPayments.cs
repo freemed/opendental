@@ -137,11 +137,11 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (cp.ClinicNum)+"', "
 				+"'"+POut.PInt   (cp.DepositNum)+"', "
 				+"'"+POut.PString(cp.CarrierName)+"')";
-			if(PrefC.RandomKeys){
+			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
-			else{
- 				cp.ClaimPaymentNum=Db.NonQ(command,true);
+			else {
+				cp.ClaimPaymentNum=Db.NonQ(command,true);
 			}
 			return cp.ClaimPaymentNum;
 		}

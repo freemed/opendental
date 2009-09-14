@@ -38,10 +38,26 @@ namespace OpenDentBusiness{
 				pay.AccountingAutoPayNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pay);
 				return pay.AccountingAutoPayNum;
 			}
-			string command= "INSERT INTO accountingautopay (PayType,PickList) VALUES("
-				+"'"+POut.PInt   (pay.PayType)+"', "
+			if(PrefC.RandomKeys) {
+				pay.AccountingAutoPayNum=ReplicationServers.GetKey("accountingautopay","AccountingAutoPayNum");
+			}
+			string command="INSERT INTO accountingautopay (";
+			if(PrefC.RandomKeys) {
+				command+="AccountingAutoPayNum,";
+			}
+			command+="PayType,PickList) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(pay.AccountingAutoPayNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (pay.PayType)+"', "
 				+"'"+POut.PString(pay.PickList)+"')";
-			pay.AccountingAutoPayNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				pay.AccountingAutoPayNum=Db.NonQ(command,true);
+			}
 			return pay.AccountingAutoPayNum;
 		}
 

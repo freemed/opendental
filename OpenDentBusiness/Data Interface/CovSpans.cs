@@ -48,18 +48,35 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(CovSpan span) {
+		public static long Insert(CovSpan span) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),span);
-				return;
+				span.CovSpanNum=Meth.GetInt(MethodBase.GetCurrentMethod(),span);
+				return span.CovSpanNum;
 			}
 			Validate(span);
-			string command="INSERT INTO covspan (CovCatNum,"
-				+"FromCode,ToCode) VALUES("
-				+"'"+POut.PInt   (span.CovCatNum)+"', "
+			if(PrefC.RandomKeys) {
+				span.CovSpanNum=ReplicationServers.GetKey("covspan","CovSpanNum");
+			}
+			string command="INSERT INTO covspan (";
+			if(PrefC.RandomKeys) {
+				command+="CovSpanNum,";
+			}
+			command+="CovCatNum,"
+				+"FromCode,ToCode) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(span.CovSpanNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (span.CovCatNum)+"', "
 				+"'"+POut.PString(span.FromCode)+"', "
 				+"'"+POut.PString(span.ToCode)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				span.CovSpanNum=Db.NonQ(command,true);
+			}
+			return span.CovSpanNum;
 		}
 
 		///<summary></summary>

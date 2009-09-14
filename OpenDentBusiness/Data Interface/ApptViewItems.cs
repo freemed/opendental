@@ -36,23 +36,37 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ApptViewItem Cur){
+		public static long Insert(ApptViewItem Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ApptViewItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ApptViewItemNum;
 			}
-			string command= "INSERT INTO apptviewitem (ApptViewNum,OpNum,ProvNum,ElementDesc,"
-				+"ElementOrder,ElementColor) "
-				+"VALUES ("
-				+"'"+POut.PInt   (Cur.ApptViewNum)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.ApptViewItemNum=ReplicationServers.GetKey("apptviewitem","ApptViewItemNum");
+			}
+			string command="INSERT INTO apptviewitem (";
+			if(PrefC.RandomKeys) {
+				command+="ApptViewItemNum,";
+			}
+			command+="ApptViewNum,OpNum,ProvNum,ElementDesc,"
+				+"ElementOrder,ElementColor) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.ApptViewItemNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (Cur.ApptViewNum)+"', "
 				+"'"+POut.PInt   (Cur.OpNum)+"', "
 				+"'"+POut.PInt   (Cur.ProvNum)+"', "
 				+"'"+POut.PString(Cur.ElementDesc)+"', "
 				+"'"+POut.PInt   (Cur.ElementOrder)+"', "
 				+"'"+POut.PInt   (Cur.ElementColor.ToArgb())+"')";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
-			//Cur.ApptViewNum=InsertID;
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				Cur.ApptViewItemNum=Db.NonQ(command,true);
+			}
+			return Cur.ApptViewItemNum;
 		}
 
 		///<summary></summary>

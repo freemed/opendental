@@ -35,16 +35,32 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static void Insert(AutoNote autonote) {
+		public static long Insert(AutoNote autonote) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),autonote);
-				return;
+				autonote.AutoNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),autonote);
+				return autonote.AutoNoteNum;
 			}
-			string command = "INSERT INTO autonote (AutoNoteName, MainText)"
-				+"VALUES ("			
-				+"'"+POut.PString(autonote.AutoNoteName)+"'," 
+			if(PrefC.RandomKeys) {
+				autonote.AutoNoteNum=ReplicationServers.GetKey("autonote","AutoNoteNum");
+			}
+			string command="INSERT INTO autonote (";
+			if(PrefC.RandomKeys) {
+				command+="AutoNoteNum,";
+			}
+			command+="AutoNoteName, MainText) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(autonote.AutoNoteNum)+", ";
+			}
+			command+=			
+				 "'"+POut.PString(autonote.AutoNoteName)+"'," 
 				+"'"+POut.PString(autonote.MainText)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				autonote.AutoNoteNum=Db.NonQ(command,true);
+			}
+			return autonote.AutoNoteNum;
 		}
 
 		///<summary></summary>

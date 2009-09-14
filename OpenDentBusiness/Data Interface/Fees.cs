@@ -71,15 +71,31 @@ namespace OpenDentBusiness{
 				fee.FeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),fee);
 				return fee.FeeNum;
 			}
-			string command= "INSERT INTO fee (amount,OldCode,"
-				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES("
-				+"'"+POut.PDouble(fee.Amount)+"', "
+			if(PrefC.RandomKeys) {
+				fee.FeeNum=ReplicationServers.GetKey("fee","FeeNum");
+			}
+			string command="INSERT INTO fee (";
+			if(PrefC.RandomKeys) {
+				command+="FeeNum,";
+			}
+			command+="amount,OldCode,"
+				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(fee.FeeNum)+", ";
+			}
+			command+=
+				 "'"+POut.PDouble(fee.Amount)+"', "
 				+"'"+POut.PString(fee.OldCode)+"', "//this must be included for Oracle compatibility
 				+"'"+POut.PInt   (fee.FeeSched)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultFee)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultCov)+"', "
 				+"'"+POut.PInt   (fee.CodeNum)+"')";
- 			fee.FeeNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				fee.FeeNum=Db.NonQ(command,true);
+			}
 			return fee.FeeNum;
 		}
 

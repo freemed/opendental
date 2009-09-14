@@ -115,20 +115,34 @@ namespace OpenDentBusiness{
 				Cur.EmployeeNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.EmployeeNum;
 			}
-			string command;
 			if(Cur.LName=="" && Cur.FName=="") {
 				throw new ApplicationException(Lans.g("FormEmployeeEdit","Must include either first name or last name"));
 			}
-			command= "INSERT INTO employee (lname,fname,middlei,ishidden"
-				+",ClockStatus,PhoneExt) "
-				+"VALUES("
-				+"'"+POut.PString(Cur.LName)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.EmployeeNum=ReplicationServers.GetKey("employee","EmployeeNum");
+			}
+			string command="INSERT INTO employee (";
+			if(PrefC.RandomKeys) {
+				command+="EmployeeNum,";
+			}
+			command+="lname,fname,middlei,ishidden"
+				+",ClockStatus,PhoneExt) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.EmployeeNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(Cur.LName)+"', "
 				+"'"+POut.PString(Cur.FName)+"', "
 				+"'"+POut.PString(Cur.MiddleI)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"', "
 				+"'"+POut.PString(Cur.ClockStatus)+"', "
 				+"'"+POut.PInt   (Cur.PhoneExt)+"')";
-			Cur.EmployeeNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				Cur.EmployeeNum=Db.NonQ(command,true);
+			}
 			return Cur.EmployeeNum;
 		}
 
