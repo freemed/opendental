@@ -50,20 +50,34 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ProviderIdent pi){
+		public static long Insert(ProviderIdent pi){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pi);
-				return;
+				pi.ProviderIdentNum=Meth.GetInt(MethodBase.GetCurrentMethod(),pi);
+				return pi.ProviderIdentNum;
 			}
-			string command= "INSERT INTO providerident (ProvNum,PayorID,SuppIDType,IDNumber"
-				+") VALUES ("
-				+"'"+POut.PInt   (pi.ProvNum)+"', "
+			if(PrefC.RandomKeys) {
+				pi.ProviderIdentNum=ReplicationServers.GetKey("providerident","ProviderIdentNum");
+			}
+			string command="INSERT INTO providerident (";
+			if(PrefC.RandomKeys) {
+				command+="ProviderIdentNum,";
+			}
+			command+="ProvNum,PayorID,SuppIDType,IDNumber) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(pi.ProviderIdentNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (pi.ProvNum)+"', "
 				+"'"+POut.PString(pi.PayorID)+"', "
 				+"'"+POut.PInt   ((int)pi.SuppIDType)+"', "
 				+"'"+POut.PString(pi.IDNumber)+"')";
-			//MessageBox.Show(string command);
- 			Db.NonQ(command);
-			//ClaimProcNum=dcon.InsertID;
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				pi.ProviderIdentNum=Db.NonQ(command,true);
+			}
+			return pi.ProviderIdentNum;
 		}
 
 		///<summary></summary>

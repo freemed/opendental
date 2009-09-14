@@ -10,10 +10,22 @@ namespace OpenDentBusiness {
 
 		public static long Insert(Mount mount){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+				mount.MountNum=Meth.GetInt(MethodBase.GetCurrentMethod(),mount);
+				return mount.MountNum;
 			}
-			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES ("
-				+"'"+POut.PInt(mount.MountNum)+"',"
+			if(PrefC.RandomKeys) {
+				mount.MountNum=ReplicationServers.GetKey("mount","MountNum");
+			}
+			string command="INSERT INTO mount (";
+			if(PrefC.RandomKeys) {
+				command+="MountNum,";
+			}
+			command+="MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(mount.MountNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt(mount.MountNum)+"',"
 				+"'"+POut.PInt(mount.PatNum)+"',"
 				+"'"+POut.PInt(mount.DocCategory)+"',"
 				+POut.PDate(mount.DateCreated)+","
@@ -22,7 +34,13 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt((int)mount.ImgType)+"',"
 				+"'"+POut.PInt(mount.Width)+"',"
 				+"'"+POut.PInt(mount.Height)+"')";
-			return Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				mount.MountNum=Db.NonQ(command,true);
+			}
+			return mount.MountNum;
 		}
 
 		public static long Update(Mount mount){

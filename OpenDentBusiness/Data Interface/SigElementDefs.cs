@@ -73,15 +73,31 @@ namespace OpenDentBusiness {
 				def.SigElementDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.SigElementDefNum;
 			}
-			string command="INSERT INTO sigelementdef (LightRow,LightColor,SigElementType,SigText,Sound,"
-				+"ItemOrder) VALUES("
-				+"'"+POut.PInt   (def.LightRow)+"', "
+			if(PrefC.RandomKeys) {
+				def.SigElementDefNum=ReplicationServers.GetKey("sigelementdef","SigElementDefNum");
+			}
+			string command="INSERT INTO sigelementdef (";
+			if(PrefC.RandomKeys) {
+				command+="SigElementDefNum,";
+			}
+			command+="LightRow,LightColor,SigElementType,SigText,Sound,"
+				+"ItemOrder) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.SigElementDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (def.LightRow)+"', "
 				+"'"+POut.PInt   (def.LightColor.ToArgb())+"', "
 				+"'"+POut.PInt   ((int)def.SigElementType)+"', "
 				+"'"+POut.PString(def.SigText)+"', "
 				+"'"+POut.PString(def.Sound)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"')";
-			def.SigElementDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				def.SigElementDefNum=Db.NonQ(command,true);
+			}
 			return def.SigElementDefNum;
 		}
 

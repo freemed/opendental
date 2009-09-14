@@ -54,7 +54,6 @@ namespace OpenDentBusiness{
 			command+=
 				 "'"+POut.PInt   (lmf.LetterMergeNum)+"', "
 				+"'"+POut.PString(lmf.FieldName)+"')";
-			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

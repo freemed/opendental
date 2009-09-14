@@ -49,17 +49,33 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(ToolButItem Cur){
+		public static long Insert(ToolButItem Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ToolButItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ToolButItemNum;
 			}
-			string command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
-				+"VALUES ("
-				+"'"+POut.PInt   (Cur.ProgramNum)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.ToolButItemNum=ReplicationServers.GetKey("toolbutitem","ToolButItemNum");
+			}
+			string command="INSERT INTO toolbutitem (";
+			if(PrefC.RandomKeys) {
+				command+="ToolButItemNum,";
+			}
+			command+=") VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.ToolButItemNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (Cur.ProgramNum)+"', "
 				+"'"+POut.PInt   ((int)Cur.ToolBar)+"', "
 				+"'"+POut.PString(Cur.ButtonText)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				Cur.ToolButItemNum=Db.NonQ(command,true);
+			}
+			return Cur.ToolButItemNum;
 		}
 
 		///<summary>This in not currently being used.</summary>

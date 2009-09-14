@@ -64,7 +64,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(lab.Phone)+"', "
 				+"'"+POut.PString(lab.Notes)+"', "
 				+"'"+POut.PString(lab.LabSlip)+"')";
-			lab.LaboratoryNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				lab.LaboratoryNum=Db.NonQ(command,true);
+			}
 			return lab.LaboratoryNum;
 		}
 

@@ -348,9 +348,20 @@ namespace OpenDentBusiness {
 				user.UserNum=Meth.GetInt(MethodBase.GetCurrentMethod(),user);
 				return user.UserNum;
 			}
-			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
-				+ "AnesthProvType) VALUES("
-				+"'"+POut.PString(user.UserName)+"', "
+			if(PrefC.RandomKeys) {
+				user.UserNum=ReplicationServers.GetKey("userod","UserNum");
+			}
+			string command="INSERT INTO userod (";
+			if(PrefC.RandomKeys) {
+				command+="UserNum,";
+			}
+			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,"
+				+ "AnesthProvType) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(user.UserNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(user.UserName)+"', "
 				+"'"+POut.PString(user.Password)+"', "
 				+"'"+POut.PInt   (user.UserGroupNum)+"', "
 				+"'"+POut.PInt   (user.EmployeeNum)+"', "
@@ -358,8 +369,13 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt   (user.ProvNum)+"', "
 				+"'"+POut.PBool  (user.IsHidden)+"', "
 				+"'"+POut.PInt   (user.TaskListInBox)+"', "
-                + "'"+POut.PInt  (user.AnesthProvType)+"')";
- 			user.UserNum=Db.NonQ(command,true);
+				+ "'"+POut.PInt  (user.AnesthProvType)+"')";
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+ 				user.UserNum=Db.NonQ(command,true);
+			}
 			return user.UserNum;
 		}
 

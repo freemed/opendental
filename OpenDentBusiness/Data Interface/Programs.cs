@@ -66,16 +66,30 @@ namespace OpenDentBusiness{
 				Cur.ProgramNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
 				return Cur.ProgramNum;
 			}
-			string command= "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
-				+") VALUES("
-				+"'"+POut.PString(Cur.ProgName)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.ProgramNum=ReplicationServers.GetKey("program","ProgramNum");
+			}
+			string command="INSERT INTO program (";
+			if(PrefC.RandomKeys) {
+				command+="ProgramNum,";
+			}
+			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.ProgramNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(Cur.ProgName)+"', "
 				+"'"+POut.PString(Cur.ProgDesc)+"', "
 				+"'"+POut.PBool  (Cur.Enabled)+"', "
 				+"'"+POut.PString(Cur.Path)+"', "
 				+"'"+POut.PString(Cur.CommandLine)+"', "
 				+"'"+POut.PString(Cur.Note)+"')";
-			//MessageBox.Show(cmd.CommandText);
-			Cur.ProgramNum=Db.NonQ(command, true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				Cur.ProgramNum=Db.NonQ(command, true);
+			}
 			return Cur.ProgramNum;
 		}
 

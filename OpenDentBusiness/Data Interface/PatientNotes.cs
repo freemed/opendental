@@ -77,9 +77,11 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;
 			}
-			string command = "INSERT INTO patientnote (patnum"
+			//Random keys not necessary to check because of 1:1 patNum.
+			//However, this is a lazy insert, so multiple locations might attempt it.
+			//Just in case, we will have it fail silently.
+			string command = "INSERT IGNORE INTO patientnote (patnum"
 				+") VALUES('"+patNum+"')";
-			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}
 

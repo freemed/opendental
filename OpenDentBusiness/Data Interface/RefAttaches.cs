@@ -74,7 +74,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool(attach.IsFrom)+"', "
 				+"'"+POut.PInt ((int)attach.RefToStatus)+"', "
 				+"'"+POut.PString(attach.Note)+"')";
- 			attach.RefAttachNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				attach.RefAttachNum=Db.NonQ(command,true);
+			}
 			return attach.RefAttachNum;
 		}
 

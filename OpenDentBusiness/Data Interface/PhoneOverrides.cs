@@ -58,13 +58,28 @@ namespace OpenDentBusiness{
 				phoneCur.PhoneOverrideNum=Meth.GetInt(MethodBase.GetCurrentMethod(),phoneCur);
 				return phoneCur.PhoneOverrideNum;
 			}
-			string command="INSERT INTO phoneoverride(Extension,EmpCurrent,IsAvailable,Explanation) "
-				+"VALUES("
-				+POut.PInt(phoneCur.Extension)+","
+			if(PrefC.RandomKeys) {
+				phoneCur.PhoneOverrideNum=ReplicationServers.GetKey("","PhoneOverrideNum");
+			}
+			string command="INSERT INTO phoneoverride (";
+			if(PrefC.RandomKeys) {
+				command+="PhoneOverrideNum,";
+			}
+			command+="Extension,EmpCurrent,IsAvailable,Explanation) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(phoneCur.PhoneOverrideNum)+", ";
+			}
+			command+=
+				 POut.PInt(phoneCur.Extension)+","
 				+POut.PInt(phoneCur.EmpCurrent)+","
 				+POut.PBool(phoneCur.IsAvailable)+","
 				+"'"+POut.PString(phoneCur.Explanation)+"')";
-			phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
+			}
 			if(phoneCur.IsAvailable){
 				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);

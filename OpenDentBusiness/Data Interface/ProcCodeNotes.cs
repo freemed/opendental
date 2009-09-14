@@ -69,12 +69,28 @@ namespace OpenDentBusiness{
 				note.ProcCodeNoteNum=Meth.GetInt(MethodBase.GetCurrentMethod(),note);
 				return note.ProcCodeNoteNum;
 			}
-			string command="INSERT INTO proccodenote (CodeNum,ProvNum,Note,ProcTime) VALUES("
-				+"'"+POut.PInt   (note.CodeNum)+"', "
+			if(PrefC.RandomKeys) {
+				note.ProcCodeNoteNum=ReplicationServers.GetKey("proccodenote","ProcCodeNoteNum");
+			}
+			string command="INSERT INTO proccodenote (";
+			if(PrefC.RandomKeys) {
+				command+="ProcCodeNoteNum,";
+			}
+			command+="CodeNum,ProvNum,Note,ProcTime) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(note.ProcCodeNoteNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (note.CodeNum)+"', "
 				+"'"+POut.PInt   (note.ProvNum)+"', "
 				+"'"+POut.PString(note.Note)+"', "
 				+"'"+POut.PString(note.ProcTime)+"')";
-			note.ProcCodeNoteNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				note.ProcCodeNoteNum=Db.NonQ(command,true);
+			}
 			return note.ProcCodeNoteNum;
 		}
 

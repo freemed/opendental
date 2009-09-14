@@ -83,14 +83,24 @@ namespace OpenDentBusiness{
 				return code.CodeNum;
 			}
 			//must have already checked procCode for nonduplicate.
-			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
+			if(PrefC.RandomKeys) {
+				code.CodeNum=ReplicationServers.GetKey("procedurecode","CodeNum");
+			}
+			string command="INSERT INTO procedurecode (";
+			if(PrefC.RandomKeys) {
+				command+="CodeNum,";
+			}
+			command+="ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
 				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,"
 				+"SubstOnlyIf"//DateTStamp
-				+") VALUES("
-				+"'"+POut.PInt(code.CodeNum)+"', "
-				+"'"+POut.PString(code.ProcCode)+"', "
+				+") VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(code.CodeNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
 				+"'"+POut.PString(code.AbbrDesc)+"', "
 				+"'"+POut.PString(code.ProcTime)+"', "
@@ -113,7 +123,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(code.SubstitutionCode)+"', "
 				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
 				//DateTStamp
-			code.CodeNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				code.CodeNum=Db.NonQ(command,true);
+			}
 			return code.CodeNum;
 		}
 

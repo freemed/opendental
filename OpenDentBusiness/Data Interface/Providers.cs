@@ -113,12 +113,23 @@ namespace OpenDentBusiness{
 				prov.ProvNum=Meth.GetInt(MethodBase.GetCurrentMethod(),prov);
 				return prov.ProvNum;
 			}
-			string command= "INSERT INTO provider (Abbr,ItemOrder,LName,FName,MI,Suffix,"
+			if(PrefC.RandomKeys) {
+				prov.ProvNum=ReplicationServers.GetKey("provider","ProvNum");
+			}
+			string command="INSERT INTO provider (";
+			if(PrefC.RandomKeys) {
+				command+="ProvNum,";
+			}
+			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,"
 				+"FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,"
 				+"UsingTIN,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,"
 				+"NationalProvID,CanadianOfficeNum,AnesthProvType"//DateTStamp
-				+") VALUES("
-				+"'"+POut.PString(prov.Abbr)+"', "
+				+") VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(prov.ProvNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(prov.Abbr)+"', "
 				+"'"+POut.PInt   (prov.ItemOrder)+"', "
 				+"'"+POut.PString(prov.LName)+"', "
 				+"'"+POut.PString(prov.FName)+"', "
@@ -142,8 +153,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(prov.CanadianOfficeNum)+"', "
 				//DateTStamp
 				+ "'"+POut.PInt(prov.AnesthProvType)+"')";
-			//MessageBox.Show(string command);
- 			prov.ProvNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+ 				prov.ProvNum=Db.NonQ(command,true);
+			}
 			return prov.ProvNum;
 		}
 

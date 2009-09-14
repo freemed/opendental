@@ -45,10 +45,26 @@ namespace OpenDentBusiness {
 				alert.RxAlertNum=Meth.GetInt(MethodBase.GetCurrentMethod(),alert);
 				return alert.RxAlertNum;
 			}
-			string command="INSERT INTO rxalert (RxDefNum,DiseaseDefNum) VALUES("
-				+"'"+POut.PInt   (alert.RxDefNum)+"', "
+			if(PrefC.RandomKeys) {
+				alert.RxAlertNum=ReplicationServers.GetKey("rxalert","RxAlertNum");
+			}
+			string command="INSERT INTO rxalert (";
+			if(PrefC.RandomKeys) {
+				command+="RxAlertNum,";
+			}
+			command+="RxDefNum,DiseaseDefNum) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(alert.RxAlertNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (alert.RxDefNum)+"', "
 				+"'"+POut.PInt   (alert.DiseaseDefNum)+"')";
-			alert.RxAlertNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				alert.RxAlertNum=Db.NonQ(command,true);
+			}
 			return alert.RxAlertNum;
 		}
 

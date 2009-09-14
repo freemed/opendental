@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public static List<Statement> GetStatements(List<long> statementNums) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Statement>>(MethodBase.GetCurrentMethod(),statementNums);
-			}
+			} 
 			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(statementNums);
 			return new List<Statement>(collectState);		
 		}

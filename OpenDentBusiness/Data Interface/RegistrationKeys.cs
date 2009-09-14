@@ -66,10 +66,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Inserts a new and unique registration key into the database.</summary>
-		public static void Create(RegistrationKey registrationKey){
+		public static long Insert(RegistrationKey registrationKey){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKey);
-				return;
+				registrationKey.RegistrationKeyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),registrationKey);
+				return registrationKey.RegistrationKeyNum;
 			}
 			do{
 				if(registrationKey.IsForeign){
@@ -91,12 +91,24 @@ namespace OpenDentBusiness {
 				}
 				if(registrationKey.RegKey==""){
 					//Don't loop forever when software is unverified.
-					return;
+					return 0;//not sure what consequence this would have.
 				}
-			} while(KeyIsInUse(registrationKey.RegKey));
-			string command="INSERT INTO registrationkey (PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
-				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting) VALUES ("
-				+"'"+POut.PInt(registrationKey.PatNum)+"',"
+			} 
+			while(KeyIsInUse(registrationKey.RegKey));
+			if(PrefC.RandomKeys) {
+				registrationKey.RegistrationKeyNum=ReplicationServers.GetKey("registrationkey","RegistrationKeyNum");
+			}
+			string command="INSERT INTO registrationkey (";
+			if(PrefC.RandomKeys) {
+				command+="RegistrationKeyNum,";
+			}
+			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
+				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(registrationKey.RegistrationKeyNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt(registrationKey.PatNum)+"',"
 				+"'"+POut.PString(registrationKey.RegKey)+"',"
 				+"'"+POut.PString(registrationKey.Note)+"',"
 				+POut.PDate(registrationKey.DateStarted)+","
@@ -106,7 +118,13 @@ namespace OpenDentBusiness {
 				+"'"+POut.PBool(registrationKey.UsesServerVersion)+"',"
 				+"'"+POut.PBool(registrationKey.IsFreeVersion)+"',"
 				+"'"+POut.PBool(registrationKey.IsOnlyForTesting)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				registrationKey.RegistrationKeyNum=Db.NonQ(command,true);
+			}
+			return registrationKey.RegistrationKeyNum;
 		}
 
 		public static void Delete(long registrationKeyNum) {

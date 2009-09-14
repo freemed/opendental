@@ -236,7 +236,12 @@ namespace OpenDentBusiness{
 				    +POut.PDateT (lab.DateTimeChecked)+", "
 				+"'"+POut.PInt   (lab.ProvNum)+"', "
 				+"'"+POut.PString(lab.Instructions)+"')";
-			lab.LabCaseNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				lab.LabCaseNum=Db.NonQ(command,true);
+			}
 			return lab.LabCaseNum;
 		}
 

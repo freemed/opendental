@@ -72,13 +72,28 @@ namespace OpenDentBusiness {
 				def.SigButDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.SigButDefNum;
 			}
-			string command="INSERT INTO sigbutdef (ButtonText,ButtonIndex,SynchIcon,ComputerName"
-				+") VALUES("
-				+"'"+POut.PString(def.ButtonText)+"', "
+			if(PrefC.RandomKeys) {
+				def.SigButDefNum=ReplicationServers.GetKey("sigbutdef","SigButDefNum");
+			}
+			string command="INSERT INTO sigbutdef (";
+			if(PrefC.RandomKeys) {
+				command+="SigButDefNum,";
+			}
+			command+="ButtonText,ButtonIndex,SynchIcon,ComputerName) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.SigButDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(def.ButtonText)+"', "
 				+"'"+POut.PInt(def.ButtonIndex)+"', "
 				+"'"+POut.PInt(def.SynchIcon)+"', "
 				+"'"+POut.PString(def.ComputerName)+"')";
-			def.SigButDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				def.SigButDefNum=Db.NonQ(command,true);
+			}
 			return def.SigButDefNum;
 		}
 

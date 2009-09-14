@@ -61,9 +61,25 @@ namespace OpenDentBusiness{
 				group.UserGroupNum=Meth.GetInt(MethodBase.GetCurrentMethod(),group);
 				return group.UserGroupNum;
 			}
-			string command= "INSERT INTO usergroup (Description) VALUES("
-				+"'"+POut.PString(group.Description)+"')";
- 			group.UserGroupNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				group.UserGroupNum=ReplicationServers.GetKey("usergroup","UserGroupNum");
+			}
+			string command="INSERT INTO usergroup (";
+			if(PrefC.RandomKeys) {
+				command+="UserGroupNum,";
+			}
+			command+="Description) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(group.UserGroupNum)+", ";
+			}
+			command+=
+				"'"+POut.PString(group.Description)+"')";
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				group.UserGroupNum=Db.NonQ(command,true);
+			}
 			return group.UserGroupNum;
 		}
 

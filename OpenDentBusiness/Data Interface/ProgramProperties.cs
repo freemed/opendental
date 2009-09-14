@@ -50,19 +50,33 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>This can only be called from ClassConversions. Users not allowed to add properties so there is no user interface.</summary>
-		public static void Insert(ProgramProperty Cur){
+		public static long Insert(ProgramProperty Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.ProgramPropertyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.ProgramPropertyNum;
 			}
-			string command = "INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
-				+") VALUES("
-				+"'"+POut.PInt   (Cur.ProgramNum)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.ProgramPropertyNum=ReplicationServers.GetKey("programproperty","ProgramPropertyNum");
+			}
+			string command="INSERT INTO programproperty (";
+			if(PrefC.RandomKeys) {
+				command+="ProgramPropertyNum,";
+			}
+			command+="ProgramNum,PropertyDesc,PropertyValue) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.ProgramPropertyNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (Cur.ProgramNum)+"', "
 				+"'"+POut.PString(Cur.PropertyDesc)+"', "
 				+"'"+POut.PString(Cur.PropertyValue)+"')";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
-			//Cur.ProgramNum=InsertID;
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				Cur.ProgramPropertyNum=Db.NonQ(command,true);
+			}
+			return Cur.ProgramPropertyNum;
 		}
 
 		

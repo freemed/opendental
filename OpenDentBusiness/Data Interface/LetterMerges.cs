@@ -95,7 +95,6 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(merge.TemplateName)+"', "
 				+"'"+POut.PString(merge.DataFileName)+"', "
 				+"'"+POut.PInt   (merge.Category)+"')";
-			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

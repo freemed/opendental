@@ -59,14 +59,29 @@ namespace OpenDentBusiness {
 				def.MountDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.MountDefNum;
 			}
-			string command="INSERT INTO mountdef (Description,ItemOrder,IsRadiograph,Width,Height"
-				+") VALUES("
-				+"'"+POut.PString(def.Description)+"', "
+			if(PrefC.RandomKeys) {
+				def.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
+			}
+			string command="INSERT INTO mountdef (";
+			if(PrefC.RandomKeys) {
+				command+="MountDefNum,";
+			}
+			command+="Description,ItemOrder,IsRadiograph,Width,Height) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.MountDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(def.Description)+"', "
 				+"'"+POut.PInt(def.ItemOrder)+"', "
 				+"'"+POut.PBool(def.IsRadiograph)+"', "
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
-			def.MountDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				def.MountDefNum=Db.NonQ(command,true);
+			}
 			return def.MountDefNum;
 		}
 

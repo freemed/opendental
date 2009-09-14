@@ -59,13 +59,8 @@ namespace OpenDentBusiness{
 			}
 			command+=
 				 "'"+POut.PInt   ((int)log.PermType)+"', "
-				+"'"+POut.PInt   (log.UserNum)+"', ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
-				command+="NOW()";
-			}
-			command+=", "//LogDateTime set to current server time
+				+"'"+POut.PInt   (log.UserNum)+"', "
+				+"NOW(), "//LogDateTime set to current server time
 				+"'"+POut.PString(log.LogText)+"', "
 				+"'"+POut.PInt   (log.PatNum)+"')";
  			if(PrefC.RandomKeys){

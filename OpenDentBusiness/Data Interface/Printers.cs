@@ -76,7 +76,6 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)cur.PrintSit)+"', "
 				+"'"+POut.PString(cur.PrinterName)+"', "
 				+"'"+POut.PBool  (cur.DisplayPrompt)+"')";
-			//MessageBox.Show(string command);
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

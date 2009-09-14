@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<Summary>Gets one supply from the database.  Used for display in SupplyOrderItemEdit window.</Summary>
-		public static Supply CreateObject(long supplyNum) {
+		public static Supply GetSupply(long supplyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Supply>(MethodBase.GetCurrentMethod(),supplyNum);
 			}
@@ -38,12 +38,13 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void WriteObject(Supply supp){
+		public static long WriteObject(Supply supp){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),supp);
-				return;
+				supp.SupplyNum=Meth.GetInt(MethodBase.GetCurrentMethod(),supp);
+				return supp.SupplyNum;
 			}
 			DataObjectFactory<Supply>.WriteObject(supp);
+			return supp.SupplyNum;
 		}
 
 		///<summary>Surround with try-catch.</summary>

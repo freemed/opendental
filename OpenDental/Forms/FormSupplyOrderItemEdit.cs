@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormSupplyOrderItemEdit_Load(object sender,EventArgs e) {
-			Supp=Supplies.CreateObject(ItemCur.SupplyNum);
+			Supp=Supplies.GetSupply(ItemCur.SupplyNum);
 			textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
 			textCategory.Text=DefC.GetName(DefCat.SupplyCats,Supp.Category);
 			textCatalogNumber.Text=Supp.CatalogNumber;

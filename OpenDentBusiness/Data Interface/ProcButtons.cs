@@ -52,12 +52,28 @@ namespace OpenDentBusiness{
 				but.ProcButtonNum=Meth.GetInt(MethodBase.GetCurrentMethod(),but);
 				return but.ProcButtonNum;
 			}
-			string command= "INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES("
-				+"'"+POut.PString(but.Description)+"', "
+			if(PrefC.RandomKeys) {
+				but.ProcButtonNum=ReplicationServers.GetKey("procbutton","ProcButtonNum");
+			}
+			string command="INSERT INTO procbutton (";
+			if(PrefC.RandomKeys) {
+				command+="ProcButtonNum,";
+			}
+			command+="Description,ItemOrder,Category,ButtonImage) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(but.ProcButtonNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(but.Description)+"', "
 				+"'"+POut.PInt   (but.ItemOrder)+"', "
 				+"'"+POut.PInt   (but.Category)+"', "
 				+"'"+POut.PBitmap(but.ButtonImage)+"')";
-			but.ProcButtonNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				but.ProcButtonNum=Db.NonQ(command,true);
+			}
 			return but.ProcButtonNum;
 		}
 

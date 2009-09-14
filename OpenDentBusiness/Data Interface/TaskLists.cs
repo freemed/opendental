@@ -253,14 +253,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (tlist.IsRepeating)+"', "
 				+"'"+POut.PInt   ((int)tlist.DateType)+"', "
 				+"'"+POut.PInt   (tlist.FromNum)+"', "
-				+"'"+POut.PInt   ((int)tlist.ObjectType)+"', ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}
-			else {//Assume MySQL
-				command+="NOW()";
-			}
-			command+=")";//DateTimeEntry set to current server time
+				+"'"+POut.PInt   ((int)tlist.ObjectType)+"', "
+				+"NOW() )";//DateTimeEntry set to current server time
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

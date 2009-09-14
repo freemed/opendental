@@ -51,14 +51,30 @@ namespace OpenDentBusiness{
 				def.RxDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.RxDefNum;
 			}
-			string command= "INSERT INTO rxdef (Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES("
-				+"'"+POut.PString(def.Drug)+"', "
+			if(PrefC.RandomKeys) {
+				def.RxDefNum=ReplicationServers.GetKey("rxdef","RxDefNum");
+			}
+			string command="INSERT INTO rxdef (";
+			if(PrefC.RandomKeys) {
+				command+="RxDefNum,";
+			}
+			command+="Drug,Sig,Disp,Refills,Notes,IsControlled) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.RxDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(def.Drug)+"', "
 				+"'"+POut.PString(def.Sig)+"', "
 				+"'"+POut.PString(def.Disp)+"', "
 				+"'"+POut.PString(def.Refills)+"', "
 				+"'"+POut.PString(def.Notes)+"', "
 				+"'"+POut.PBool(def.IsControlled)+"')";
-			def.RxDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				def.RxDefNum=Db.NonQ(command,true);
+			}
 			return def.RxDefNum;
 		}
 

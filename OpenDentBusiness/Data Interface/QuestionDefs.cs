@@ -47,11 +47,27 @@ namespace OpenDentBusiness {
 				def.QuestionDefNum=Meth.GetInt(MethodBase.GetCurrentMethod(),def);
 				return def.QuestionDefNum;
 			}
-			string command="INSERT INTO questiondef (Description,ItemOrder,QuestType) VALUES("
-				+"'"+POut.PString(def.Description)+"', "
+			if(PrefC.RandomKeys) {
+				def.QuestionDefNum=ReplicationServers.GetKey("questiondef","QuestionDefNum");
+			}
+			string command="INSERT INTO questiondef (";
+			if(PrefC.RandomKeys) {
+				command+="QuestionDefNum,";
+			}
+			command+="Description,ItemOrder,QuestType) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(def.QuestionDefNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(def.Description)+"', "
 				+"'"+POut.PInt   (def.ItemOrder)+"', "
 				+"'"+POut.PInt   ((int)def.QuestType)+"')";
-			def.QuestionDefNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else {
+				def.QuestionDefNum=Db.NonQ(command,true);
+			}
 			return def.QuestionDefNum;
 		}
 

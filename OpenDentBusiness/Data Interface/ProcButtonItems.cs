@@ -46,17 +46,34 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Must have already checked procCode for nonduplicate.</summary>
-		public static void Insert(ProcButtonItem item) {
+		public static long Insert(ProcButtonItem item) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
-				return;
+				item.ProcButtonItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),item);
+				return item.ProcButtonItemNum;
 			}
-			string command="INSERT INTO procbuttonitem (ProcButtonNum,OldCode,AutoCodeNum,CodeNum) VALUES("
-				+"'"+POut.PInt   (item.ProcButtonNum)+"', "
+			if(PrefC.RandomKeys) {
+				item.ProcButtonItemNum=ReplicationServers.GetKey("procbuttonitem","ProcButtonItemNum");
+			}
+			string command="INSERT INTO procbuttonitem (";
+			if(PrefC.RandomKeys) {
+				command+="ProcButtonItemNum,";
+			}
+			command+="ProcButtonNum,OldCode,AutoCodeNum,CodeNum) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(item.ProcButtonItemNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt   (item.ProcButtonNum)+"', "
 				+"'"+POut.PString(item.OldCode)+"', "
 				+"'"+POut.PInt   (item.AutoCodeNum)+"', "
 				+"'"+POut.PInt   (item.CodeNum)+"')";
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				item.ProcButtonItemNum=Db.NonQ(command,true);
+			}
+			return item.ProcButtonItemNum;
 		}
 
 		///<summary></summary>

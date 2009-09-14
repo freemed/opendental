@@ -11,17 +11,35 @@ namespace OpenDentBusiness {
 
 		public static long Insert(MountItem mountItem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
+				mountItem.MountItemNum=Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
+				return mountItem.MountItemNum;
 			}
-			string command="INSERT INTO mountitem (MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES ("
-				+"'"+POut.PInt(mountItem.MountItemNum)+"',"
+			if(PrefC.RandomKeys) {
+				mountItem.MountItemNum=ReplicationServers.GetKey("mountitem","MountItemNum");
+			}
+			string command="INSERT INTO mountitem (";
+			if(PrefC.RandomKeys) {
+				command+="MountItemNum,";
+			}
+			command+="MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(mountItem.MountItemNum)+", ";
+			}
+			command+=
+				 "'"+POut.PInt(mountItem.MountItemNum)+"',"
 				+"'"+POut.PInt(mountItem.MountNum)+"',"
 				+"'"+POut.PInt(mountItem.Xpos)+"',"
 				+"'"+POut.PInt(mountItem.Ypos)+"',"
 				+"'"+POut.PInt(mountItem.OrdinalPos)+"',"
 				+"'"+POut.PInt(mountItem.Width)+"',"
 				+"'"+POut.PInt(mountItem.Height)+"')";
-			return Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				mountItem.MountItemNum=Db.NonQ(command,true);
+			}
+			return mountItem.MountItemNum;
 		}
 
 		public static long Update(MountItem mountItem) {

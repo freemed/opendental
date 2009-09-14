@@ -57,10 +57,21 @@ namespace OpenDentBusiness{
 				op.OperatoryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),op);
 				return op.OperatoryNum;
 			}
-			string command= "INSERT INTO operatory (OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
+			if(PrefC.RandomKeys) {
+				op.OperatoryNum=ReplicationServers.GetKey("operatory","OperatoryNum");
+			}
+			string command="INSERT INTO operatory (";
+			if(PrefC.RandomKeys) {
+				command+="OperatoryNum,";
+			}
+			command+="OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
 				+"IsHygiene,ClinicNum"//DateTStamp
-				+") VALUES("
-				+"'"+POut.PString(op.OpName)+"', "
+				+") VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(op.OperatoryNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(op.OpName)+"', "
 				+"'"+POut.PString(op.Abbrev)+"', "
 				+"'"+POut.PInt   (op.ItemOrder)+"', "
 				+"'"+POut.PBool  (op.IsHidden)+"', "
@@ -68,7 +79,12 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (op.ProvHygienist)+"', "
 				+"'"+POut.PBool  (op.IsHygiene)+"', "
 				+"'"+POut.PInt   (op.ClinicNum)+"')";
- 			op.OperatoryNum=Db.NonQ(command,true);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				op.OperatoryNum=Db.NonQ(command,true);
+			}
 			return op.OperatoryNum;
 		}
 

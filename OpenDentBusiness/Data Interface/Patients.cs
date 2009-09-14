@@ -232,7 +232,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(pat.SiteNum)+"', "
 				//DateTStamp won't show here.
 				+"'"+POut.PInt(pat.ResponsParty)+"')";
-			if(PrefC.RandomKeys) {
+			if(includePatNum || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

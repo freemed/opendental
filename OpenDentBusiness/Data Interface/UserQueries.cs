@@ -53,17 +53,33 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Insert(UserQuery Cur){
+		public static long Insert(UserQuery Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
+				Cur.QueryNum=Meth.GetInt(MethodBase.GetCurrentMethod(),Cur);
+				return Cur.QueryNum;
 			}
-			string command="INSERT INTO userquery (description,filename,querytext) VALUES("
-				+"'"+POut.PString(Cur.Description)+"', "
+			if(PrefC.RandomKeys) {
+				Cur.QueryNum=ReplicationServers.GetKey("userquery","QueryNum");
+			}
+			string command="INSERT INTO userquery (";
+			if(PrefC.RandomKeys) {
+				command+="QueryNum,";
+			}
+			command+="description,filename,querytext) VALUES(";
+			if(PrefC.RandomKeys) {
+				command+=POut.PInt(Cur.QueryNum)+", ";
+			}
+			command+=
+				 "'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PString(Cur.FileName)+"', "
 				+"'"+POut.PString(Cur.QueryText)+"')";
-			//MessageBox.Show(string command);
-			Db.NonQ(command);
+			if(PrefC.RandomKeys) {
+				Db.NonQ(command);
+			}
+			else{
+				Cur.QueryNum=Db.NonQ(command,true);
+			}
+			return Cur.QueryNum;
 		}
 		
 		///<summary></summary>
