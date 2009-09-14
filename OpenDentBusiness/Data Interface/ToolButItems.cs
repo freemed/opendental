@@ -41,9 +41,9 @@ namespace OpenDentBusiness{
 			list=new ToolButItem[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				list[i]=new ToolButItem();
-				list[i].ToolButItemNum  =PIn.PInt   (table.Rows[i][0].ToString());
-				list[i].ProgramNum      =PIn.PInt   (table.Rows[i][1].ToString());
-				list[i].ToolBar         =(ToolBarsAvail)PIn.PInt(table.Rows[i][2].ToString());
+				list[i].ToolButItemNum  =PIn.PLong   (table.Rows[i][0].ToString());
+				list[i].ProgramNum      =PIn.PLong   (table.Rows[i][1].ToString());
+				list[i].ToolBar         =(ToolBarsAvail)PIn.PLong(table.Rows[i][2].ToString());
 				list[i].ButtonText      =PIn.PString(table.Rows[i][3].ToString());
 			}
 		}
@@ -63,11 +63,11 @@ namespace OpenDentBusiness{
 			}
 			command+=") VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.ToolButItemNum)+", ";
+				command+=POut.PLong(Cur.ToolButItemNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (Cur.ProgramNum)+"', "
-				+"'"+POut.PInt   ((int)Cur.ToolBar)+"', "
+				 "'"+POut.PLong   (Cur.ProgramNum)+"', "
+				+"'"+POut.PLong   ((int)Cur.ToolBar)+"', "
 				+"'"+POut.PString(Cur.ButtonText)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -85,10 +85,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE toolbutitem SET "
-				+"ProgramNum ='" +POut.PInt   (Cur.ProgramNum)+"'"
-				+",ToolBar ='"   +POut.PInt   ((int)Cur.ToolBar)+"'"
+				+"ProgramNum ='" +POut.PLong   (Cur.ProgramNum)+"'"
+				+",ToolBar ='"   +POut.PLong   ((int)Cur.ToolBar)+"'"
 				+",ButtonText ='"+POut.PString(Cur.ButtonText)+"'"
-				+" WHERE ToolButItemNum = '"+POut.PInt(Cur.ToolButItemNum)+"'";
+				+" WHERE ToolButItemNum = '"+POut.PLong(Cur.ToolButItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "DELETE from toolbutitem WHERE ToolButItemNum = '"
-				+POut.PInt(Cur.ToolButItemNum)+"'";
+				+POut.PLong(Cur.ToolButItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "DELETE from toolbutitem WHERE ProgramNum = '"
-				+POut.PInt(programNum)+"'";
+				+POut.PLong(programNum)+"'";
 			Db.NonQ(command);
 		}
 

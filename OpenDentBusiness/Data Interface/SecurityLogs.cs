@@ -18,24 +18,24 @@ namespace OpenDentBusiness{
 				+"WHERE LogDateTime >= "+POut.PDate(dateFrom)+" "
 				+"AND LogDateTime <= "+POut.PDate(dateTo.AddDays(1));
 			if(patNum !=0) {
-				command+=" AND PatNum= '"+POut.PInt(patNum)+"'";
+				command+=" AND PatNum= '"+POut.PLong(patNum)+"'";
 			}
 			if(permType!=Permissions.None) {
-				command+=" AND PermType="+POut.PInt((int)permType);
+				command+=" AND PermType="+POut.PLong((int)permType);
 			}
 			if(userNum!=0) {
-				command+=" AND UserNum="+POut.PInt(userNum);
+				command+=" AND UserNum="+POut.PLong(userNum);
 			}
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.PInt(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.PInt(table.Rows[i][2].ToString());
+				List[i].SecurityLogNum= PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PermType      = (Permissions)PIn.PLong(table.Rows[i][1].ToString());
+				List[i].UserNum       = PIn.PLong(table.Rows[i][2].ToString());
 				List[i].LogDateTime   = PIn.PDateT(table.Rows[i][3].ToString());
 				List[i].LogText       = PIn.PString(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.PInt(table.Rows[i][5].ToString());
+				List[i].PatNum        = PIn.PLong(table.Rows[i][5].ToString());
 			}
 			return List;
 		}
@@ -55,14 +55,14 @@ namespace OpenDentBusiness{
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(log.SecurityLogNum)+"', ";
+				command+="'"+POut.PLong(log.SecurityLogNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   ((int)log.PermType)+"', "
-				+"'"+POut.PInt   (log.UserNum)+"', "
+				 "'"+POut.PLong   ((int)log.PermType)+"', "
+				+"'"+POut.PLong   (log.UserNum)+"', "
 				+"NOW(), "//LogDateTime set to current server time
 				+"'"+POut.PString(log.LogText)+"', "
-				+"'"+POut.PInt   (log.PatNum)+"')";
+				+"'"+POut.PLong   (log.PatNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -89,21 +89,21 @@ namespace OpenDentBusiness{
 				if(i>0){
 					types+=" OR";
 				}
-				types+=" PermType="+POut.PInt((int)permTypes[i]);
+				types+=" PermType="+POut.PLong((int)permTypes[i]);
 			}
 			string command="SELECT * FROM securitylog "
-				+"WHERE PatNum= '"+POut.PInt(patNum)+"' "
+				+"WHERE PatNum= '"+POut.PLong(patNum)+"' "
 				+"AND ("+types+")";
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.PInt(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.PInt   (table.Rows[i][2].ToString());
+				List[i].SecurityLogNum= PIn.PLong   (table.Rows[i][0].ToString());
+				List[i].PermType      = (Permissions)PIn.PLong(table.Rows[i][1].ToString());
+				List[i].UserNum       = PIn.PLong   (table.Rows[i][2].ToString());
 				List[i].LogDateTime   = PIn.PDateT (table.Rows[i][3].ToString());	
 				List[i].LogText       = PIn.PString(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.PInt   (table.Rows[i][5].ToString());
+				List[i].PatNum        = PIn.PLong   (table.Rows[i][5].ToString());
 			}
 			return List;
 		}

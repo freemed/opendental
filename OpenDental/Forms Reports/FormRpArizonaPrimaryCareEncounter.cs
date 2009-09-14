@@ -52,14 +52,14 @@ namespace OpenDental {
 			}
 			string command="";
 			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
-			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			command="SELECT DefNum FROM definition WHERE Category="+POut.PLong((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
 			DataTable payDefNumTab=Reports.GetTable(command);
 			if(payDefNumTab.Rows.Count!=1) {
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
-			long payDefNum=PIn.PInt(payDefNumTab.Rows[0][0].ToString());
+			long payDefNum=PIn.PLong(payDefNumTab.Rows[0][0].ToString());
 			string outputText="";
 			string patientsIdNumberStr="SPID#";
 			//Only certain procedures can be billed to the Arizona Primary Care program.
@@ -75,7 +75,7 @@ namespace OpenDental {
 				"AND LOWER(TRIM(c.CarrierName))='noah'";
 			DataTable primaryCarePatients=Reports.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
-				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
+				string patNum=POut.PLong(PIn.PLong(primaryCarePatients.Rows[i][0].ToString()));
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
 				//that the patient has attented (completed) in the date range specified where there is at least one ADA coded procedure
 				//associated with that appointment. If there are, then those appointments will be placed into the flat file.
@@ -85,7 +85,7 @@ namespace OpenDental {
 					"pc.ProcCode IN ("+billableProcedures+") LIMIT 1)>0";
 				DataTable appointmentList=Reports.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
-					string aptNum=POut.PInt(PIn.PInt(appointmentList.Rows[j][0].ToString()));
+					string aptNum=POut.PLong(PIn.PLong(appointmentList.Rows[j][0].ToString()));
 					command="SELECT "+
 						"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 							"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number

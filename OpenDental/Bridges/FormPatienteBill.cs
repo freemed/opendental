@@ -117,7 +117,7 @@ namespace OpenDental {
 			string[] statusRespose;
 			char[] separatorequal = { '=' };
 			statusRespose = parseResponse[0].Split(separatorequal);
-			responseStatus = PIn.PInt32(statusRespose[1]);
+			responseStatus = PIn.PInt(statusRespose[1]);
 
 			Progress("Process Clearinghouse Authorization Response..");
 			string errormessage = string.Empty;
@@ -854,7 +854,7 @@ namespace OpenDental {
 				string[] statusRespose;
 				char[] separatorequal = { '=' };
 				statusRespose = parseResponse[0].Split(separatorequal);
-				responseStatus = PIn.PInt32(statusRespose[1]);
+				responseStatus = PIn.PInt(statusRespose[1]);
 
 				string errormessage = string.Empty;
 				switch(responseStatus) {

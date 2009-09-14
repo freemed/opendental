@@ -397,7 +397,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			Prefs.UpdateInt("ScannerCompression",PIn.PInt(textDoc.Text));
+			Prefs.UpdateInt("ScannerCompression",PIn.PLong(textDoc.Text));
 			Prefs.UpdateInt("ImageWindowingMin",slider.MinVal);
 			Prefs.UpdateInt("ImageWindowingMax",slider.MaxVal);
 			computerPrefs.SensorType=comboType.Text;

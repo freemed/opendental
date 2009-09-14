@@ -22,11 +22,11 @@ namespace OpenDentBusiness{
 			}
 			command+="ScheduleNum,OperatoryNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(op.ScheduleOpNum)+"', ";
+				command+="'"+POut.PLong(op.ScheduleOpNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (op.ScheduleNum)+"', "
-				+"'"+POut.PInt   (op.OperatoryNum)+"')";
+				 "'"+POut.PLong   (op.ScheduleNum)+"', "
+				+"'"+POut.PLong   (op.OperatoryNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

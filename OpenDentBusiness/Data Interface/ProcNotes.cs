@@ -21,13 +21,13 @@ namespace OpenDentBusiness {
 			}
 			command+="PatNum, ProcNum, EntryDateTime, UserNum, Note, SigIsTopaz, Signature) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(procNote.ProcNoteNum)+", ";
+				command+=POut.PLong(procNote.ProcNoteNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (procNote.PatNum)+"', "
-				+"'"+POut.PInt   (procNote.ProcNum)+"', "
+				 "'"+POut.PLong   (procNote.PatNum)+"', "
+				+"'"+POut.PLong   (procNote.ProcNum)+"', "
 				+"NOW(), "//EntryDateTime
-				+"'"+POut.PInt   (procNote.UserNum)+"', "
+				+"'"+POut.PLong   (procNote.UserNum)+"', "
 				+"'"+POut.PString(procNote.Note)+"', "
 				+"'"+POut.PBool  (procNote.SigIsTopaz)+"', "
 				+"'"+POut.Base64 (procNote.Signature)+"')";

@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM commlog"
-				+" WHERE CommlogNum = "+POut.PInt(commlogNum);
+				+" WHERE CommlogNum = "+POut.PLong(commlogNum);
 			Commlog[] commList=RefreshAndFill(Db.GetTable(command));
 			if(commList.Length==0) {
 				return null;
@@ -39,15 +39,15 @@ namespace OpenDentBusiness{
 			Commlog[] List=new Commlog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Commlog();
-				List[i].CommlogNum     = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].CommlogNum     = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PatNum         = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].CommDateTime   = PIn.PDate(table.Rows[i][2].ToString());
-				List[i].CommType       = PIn.PInt(table.Rows[i][3].ToString());
+				List[i].CommType       = PIn.PLong(table.Rows[i][3].ToString());
 				List[i].Note           = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Mode_          = (CommItemMode)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].SentOrReceived = (CommSentOrReceived)PIn.PInt(table.Rows[i][6].ToString());
+				List[i].Mode_          = (CommItemMode)PIn.PLong(table.Rows[i][5].ToString());
+				List[i].SentOrReceived = (CommSentOrReceived)PIn.PLong(table.Rows[i][6].ToString());
 				//List[i].IsStatementSent= PIn.PBool(table.Rows[i][7].ToString());
-				List[i].UserNum        = PIn.PInt(table.Rows[i][8].ToString());
+				List[i].UserNum        = PIn.PLong(table.Rows[i][8].ToString());
 			}
 			return List;
 		}
@@ -67,17 +67,17 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,UserNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(comm.CommlogNum)+"', ";
+				command+="'"+POut.PLong(comm.CommlogNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (comm.PatNum)+"', "
+				 "'"+POut.PLong   (comm.PatNum)+"', "
 				+POut.PDateT (comm.CommDateTime)+", "
-				+"'"+POut.PInt   (comm.CommType)+"', "
+				+"'"+POut.PLong   (comm.CommType)+"', "
 				+"'"+POut.PString(comm.Note)+"', "
-				+"'"+POut.PInt   ((int)comm.Mode_)+"', "
-				+"'"+POut.PInt   ((int)comm.SentOrReceived)+"', "
+				+"'"+POut.PLong   ((int)comm.Mode_)+"', "
+				+"'"+POut.PLong   ((int)comm.SentOrReceived)+"', "
 				//+"'"+POut.PBool  (comm.IsStatementSent)+"', "
-				+"'"+POut.PInt   (comm.UserNum)+"')";
+				+"'"+POut.PLong   (comm.UserNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -94,15 +94,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE commlog SET "
-				+"PatNum = '"         +POut.PInt   (comm.PatNum)+"', "
+				+"PatNum = '"         +POut.PLong   (comm.PatNum)+"', "
 				+"CommDateTime= "     +POut.PDateT (comm.CommDateTime)+", "
-				+"CommType = '"       +POut.PInt   (comm.CommType)+"', "
+				+"CommType = '"       +POut.PLong   (comm.CommType)+"', "
 				+"Note = '"           +POut.PString(comm.Note)+"', "
-				+"Mode_ = '"          +POut.PInt   ((int)comm.Mode_)+"', "
-				+"SentOrReceived = '" +POut.PInt   ((int)comm.SentOrReceived)+"', "
+				+"Mode_ = '"          +POut.PLong   ((int)comm.Mode_)+"', "
+				+"SentOrReceived = '" +POut.PLong   ((int)comm.SentOrReceived)+"', "
 				//+"IsStatementSent = '"+POut.PBool  (comm.IsStatementSent)+"', "
-				+"UserNum = '"        +POut.PInt   (comm.UserNum)+"' "
-				+"WHERE commlognum = '"+POut.PInt(comm.CommlogNum)+"'";
+				+"UserNum = '"        +POut.PLong   (comm.UserNum)+"' "
+				+"WHERE commlognum = '"+POut.PLong(comm.CommlogNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),comm);
 				return;
 			}
-			string command= "DELETE FROM commlog WHERE CommLogNum = '"+POut.PInt(comm.CommlogNum)+"'";
+			string command= "DELETE FROM commlog WHERE CommLogNum = '"+POut.PLong(comm.CommlogNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -132,8 +132,8 @@ namespace OpenDentBusiness{
 				else{//MySQL
 					command+="DATE(CommDateTime) = CURDATE()";
 				}
-				command+=" AND PatNum="+POut.PInt(patNum)+" AND CommType="+POut.PInt(recallType)
-					+" AND Mode_="+POut.PInt((int)_mode)
+				command+=" AND PatNum="+POut.PLong(patNum)+" AND CommType="+POut.PLong(recallType)
+					+" AND Mode_="+POut.PLong((int)_mode)
 					+" AND SentOrReceived=1";
 				if(Db.GetCount(command)!="0"){
 					return;

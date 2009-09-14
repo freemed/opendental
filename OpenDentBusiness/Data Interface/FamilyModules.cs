@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.PInt(fam.ListPats[i].PatNum);
+				command+=" Subscriber="+POut.PLong(fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
 			command+=") UNION (SELECT insplan.*,'0' FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
@@ -70,7 +70,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.PInt(fam.ListPats[i].PatNum);
+				command+=" patplan.PatNum="+POut.PLong(fam.ListPats[i].PatNum);
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL

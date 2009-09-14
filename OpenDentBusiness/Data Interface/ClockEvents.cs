@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * from clockevent WHERE"
-				+" EmployeeNum = '"+POut.PInt(empNum)+"'"
+				+" EmployeeNum = '"+POut.PLong(empNum)+"'"
 				+" AND TimeDisplayed >= "+POut.PDate(fromDate)
 				//adding a day takes it to midnight of the specified toDate
 				+" AND TimeDisplayed <= "+POut.PDate(toDate.AddDays(1));
@@ -28,12 +28,12 @@ namespace OpenDentBusiness{
 			ClockEvent[] List=new ClockEvent[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new ClockEvent();
-				List[i].ClockEventNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].EmployeeNum   = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].ClockEventNum = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].EmployeeNum   = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].TimeEntered   = PIn.PDateT(table.Rows[i][2].ToString());
 				List[i].TimeDisplayed = PIn.PDateT(table.Rows[i][3].ToString());
 				List[i].ClockIn       = PIn.PBool(table.Rows[i][4].ToString());
-				List[i].ClockStatus   =(TimeClockStatus)PIn.PInt(table.Rows[i][5].ToString());
+				List[i].ClockStatus   =(TimeClockStatus)PIn.PLong(table.Rows[i][5].ToString());
 				List[i].Note          = PIn.PString(table.Rows[i][6].ToString());
 			}
 			return List;
@@ -56,14 +56,14 @@ namespace OpenDentBusiness{
 			command+="EmployeeNum,TimeEntered,TimeDisplayed,ClockIn"
 				+",ClockStatus,Note) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(ce.ClockEventNum)+"', ";
+				command+="'"+POut.PLong(ce.ClockEventNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (ce.EmployeeNum)+"', "
+				 "'"+POut.PLong   (ce.EmployeeNum)+"', "
 				+POut.PDateT (serverTime)+", "
 				+POut.PDateT (serverTime)+", "
 				+"'"+POut.PBool  (ce.ClockIn)+"', "
-				+"'"+POut.PInt   ((int)ce.ClockStatus)+"', "
+				+"'"+POut.PLong   ((int)ce.ClockStatus)+"', "
 				+"'"+POut.PString(ce.Note)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -81,13 +81,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE clockevent SET "
-				+"EmployeeNum = '"    +POut.PInt   (ce.EmployeeNum)+"' "
+				+"EmployeeNum = '"    +POut.PLong   (ce.EmployeeNum)+"' "
 				+",TimeEntered = "   +POut.PDateT (ce.TimeEntered)+" "
 				+",TimeDisplayed = " +POut.PDateT (ce.TimeDisplayed)+" "
 				+",ClockIn = '"       +POut.PBool  (ce.ClockIn)+"' "
-				+",ClockStatus = '"   +POut.PInt   ((int)ce.ClockStatus)+"' "
+				+",ClockStatus = '"   +POut.PLong   ((int)ce.ClockStatus)+"' "
 				+",Note = '"          +POut.PString(ce.Note)+"' "
-				+"WHERE ClockEventNum = '"+POut.PInt(ce.ClockEventNum)+"'";
+				+"WHERE ClockEventNum = '"+POut.PLong(ce.ClockEventNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ce);
 				return;
 			}
-			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.PInt(ce.ClockEventNum);
+			string command= "DELETE FROM clockevent WHERE ClockEventNum = "+POut.PLong(ce.ClockEventNum);
 			Db.NonQ(command);
 		}
 
@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum);
 			}
-			string command="SELECT ClockIn FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
+			string command="SELECT ClockIn FROM clockevent WHERE EmployeeNum="+POut.PLong(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
@@ -127,7 +127,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<TimeClockStatus>(MethodBase.GetCurrentMethod(),employeeNum);
 			}
-			string command="SELECT ClockStatus FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
+			string command="SELECT ClockStatus FROM clockevent WHERE EmployeeNum="+POut.PLong(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
@@ -137,7 +137,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0)//if this employee has never clocked in or out.
 				return TimeClockStatus.Home;
-			return (TimeClockStatus)PIn.PInt(table.Rows[0][0].ToString());
+			return (TimeClockStatus)PIn.PLong(table.Rows[0][0].ToString());
 		}
 
 		///<summary></summary>

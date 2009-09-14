@@ -366,7 +366,7 @@ namespace OpenDental{
 				}
 				if(overlaps){
 					//we need to add all codes for this appt to retVal
-					procs=Procedures.GetProcsOneApt(PIn.PInt(dayTable.Rows[i]["AptNum"].ToString()),procsMultApts);
+					procs=Procedures.GetProcsOneApt(PIn.PLong(dayTable.Rows[i]["AptNum"].ToString()),procsMultApts);
 					for(int j=0;j<procs.Length;j++){
 						retVal.Add(ProcedureCodes.GetStringProcCode(procs[j].CodeNum));
 					}

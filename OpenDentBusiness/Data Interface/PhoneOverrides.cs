@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),phoneOverrideNum);
 			}
-			string command="SELECT * FROM phoneoverride WHERE PhoneOverrideNum="+POut.PInt(phoneOverrideNum);
+			string command="SELECT * FROM phoneoverride WHERE PhoneOverrideNum="+POut.PLong(phoneOverrideNum);
 			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
@@ -27,8 +27,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<PhoneOverride>(MethodBase.GetCurrentMethod(),extension,employeeNum);
 			}
 			string command="SELECT * FROM phoneoverride "
-				+"WHERE Extension="+POut.PInt(extension)+" "
-				+"AND EmpCurrent="+POut.PInt(employeeNum);
+				+"WHERE Extension="+POut.PLong(extension)+" "
+				+"AND EmpCurrent="+POut.PLong(employeeNum);
 			List<PhoneOverride> list=SubmitAndFill(Db.GetTable(command));
 			if(list.Count==0){
 				return null;
@@ -42,9 +42,9 @@ namespace OpenDentBusiness{
 			PhoneOverride phoneCur;
 			for(int i=0;i<table.Rows.Count;i++){
 				phoneCur=new PhoneOverride();
-				phoneCur.PhoneOverrideNum=PIn.PInt32   (table.Rows[0]["PhoneOverrideNum"].ToString());
-				phoneCur.Extension       =PIn.PInt32   (table.Rows[0]["Extension"].ToString());
-				phoneCur.EmpCurrent      =PIn.PInt32   (table.Rows[0]["EmpCurrent"].ToString());
+				phoneCur.PhoneOverrideNum=PIn.PInt   (table.Rows[0]["PhoneOverrideNum"].ToString());
+				phoneCur.Extension       =PIn.PInt   (table.Rows[0]["Extension"].ToString());
+				phoneCur.EmpCurrent      =PIn.PInt   (table.Rows[0]["EmpCurrent"].ToString());
 				phoneCur.IsAvailable     =PIn.PBool  (table.Rows[0]["IsAvailable"].ToString());
 				phoneCur.Explanation     =PIn.PString(table.Rows[0]["Explanation"].ToString());
 				list.Add(phoneCur);
@@ -67,11 +67,11 @@ namespace OpenDentBusiness{
 			}
 			command+="Extension,EmpCurrent,IsAvailable,Explanation) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(phoneCur.PhoneOverrideNum)+", ";
+				command+=POut.PLong(phoneCur.PhoneOverrideNum)+", ";
 			}
 			command+=
-				 POut.PInt(phoneCur.Extension)+","
-				+POut.PInt(phoneCur.EmpCurrent)+","
+				 POut.PLong(phoneCur.Extension)+","
+				+POut.PLong(phoneCur.EmpCurrent)+","
 				+POut.PBool(phoneCur.IsAvailable)+","
 				+"'"+POut.PString(phoneCur.Explanation)+"')";
 			if(PrefC.RandomKeys) {
@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				phoneCur.PhoneOverrideNum=Db.NonQ(command,true);
 			}
 			if(phoneCur.IsAvailable){
-				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
@@ -108,10 +108,10 @@ namespace OpenDentBusiness{
 				+"EmpCurrent="+phoneCur.EmpCurrent.ToString()+","
 				+"IsAvailable="+POut.PBool(phoneCur.IsAvailable)+","
 				+"Explanation='"+POut.PString(phoneCur.Explanation)+"' "
-				+"WHERE PhoneOverrideNum="+POut.PInt(phoneCur.PhoneOverrideNum);
+				+"WHERE PhoneOverrideNum="+POut.PLong(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
 			if(phoneCur.IsAvailable){
-				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
+				command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
 				DataTable tableEmp=Db.GetTable(command);
 				if(tableEmp.Rows.Count>0){
 					string status=tableEmp.Rows[0][0].ToString();
@@ -131,9 +131,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneCur);
 				return;
 			}
-			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.PInt(phoneCur.PhoneOverrideNum);
+			string command="DELETE FROM phoneoverride WHERE PhoneOverrideNum="+POut.PLong(phoneCur.PhoneOverrideNum);
 			Db.NonQ(command);
-			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PInt(phoneCur.EmpCurrent);
+			command="SELECT ClockStatus FROM employee WHERE EmployeeNum="+POut.PLong(phoneCur.EmpCurrent);
 			DataTable tableEmp=Db.GetTable(command);
 			if(tableEmp.Rows.Count>0){
 				string status=tableEmp.Rows[0][0].ToString();

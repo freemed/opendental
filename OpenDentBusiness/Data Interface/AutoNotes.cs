@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			AutoNote note;
 			for(int i=0;i<table.Rows.Count;i++){
 				note = new AutoNote();
-				note.AutoNoteNum = PIn.PInt(table.Rows[i][0].ToString());
+				note.AutoNoteNum = PIn.PLong(table.Rows[i][0].ToString());
 				note.AutoNoteName = PIn.PString(table.Rows[i][1].ToString());
 				note.MainText = PIn.PString(table.Rows[i][2].ToString());
 				Listt.Add(note);
@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 			}
 			command+="AutoNoteName, MainText) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(autonote.AutoNoteNum)+", ";
+				command+=POut.PLong(autonote.AutoNoteNum)+", ";
 			}
 			command+=			
 				 "'"+POut.PString(autonote.AutoNoteName)+"'," 
@@ -72,7 +72,7 @@ namespace OpenDentBusiness {
 			string command="UPDATE autonote SET "
 				+"AutoNoteName = '"+POut.PString(autonote.AutoNoteName)+"', "
 				+"MainText = '"+POut.PString(autonote.MainText)+"' "
-				+"WHERE AutoNoteNum = '"+POut.PInt(autonote.AutoNoteNum)+"'";
+				+"WHERE AutoNoteNum = '"+POut.PLong(autonote.AutoNoteNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -83,7 +83,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="DELETE FROM autonote "
-				+"WHERE AutoNoteNum = "+POut.PInt(autoNoteNum);
+				+"WHERE AutoNoteNum = "+POut.PLong(autoNoteNum);
 			Db.NonQ(command);
 		}
 

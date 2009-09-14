@@ -28,9 +28,9 @@ namespace OpenDentBusiness{
 			MedicationPat mp;
 			for(int i=0;i<table.Rows.Count;i++){
 				mp=new MedicationPat();
-				mp.MedicationPatNum=PIn.PInt(table.Rows[i][0].ToString());
-				mp.PatNum          =PIn.PInt(table.Rows[i][1].ToString());
-				mp.MedicationNum   =PIn.PInt(table.Rows[i][2].ToString());
+				mp.MedicationPatNum=PIn.PLong(table.Rows[i][0].ToString());
+				mp.PatNum          =PIn.PLong(table.Rows[i][1].ToString());
+				mp.MedicationNum   =PIn.PLong(table.Rows[i][2].ToString());
 				mp.PatNote         =PIn.PString(table.Rows[i][3].ToString());
 				retVal.Add(mp);
 			}
@@ -44,10 +44,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE medicationpat SET " 
-				+ "patnum = '"        +POut.PInt   (Cur.PatNum)+"'"
-				+ ",medicationnum = '"+POut.PInt   (Cur.MedicationNum)+"'"
+				+ "patnum = '"        +POut.PLong   (Cur.PatNum)+"'"
+				+ ",medicationnum = '"+POut.PLong   (Cur.MedicationNum)+"'"
 				+ ",patnote = '"      +POut.PString(Cur.PatNote)+"'"
-				+" WHERE medicationpatnum = '" +POut.PInt   (Cur.MedicationPatNum)+"'";
+				+" WHERE medicationpatnum = '" +POut.PLong   (Cur.MedicationPatNum)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}
@@ -68,11 +68,11 @@ namespace OpenDentBusiness{
 			command+="patnum,medicationnum,patnote"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(Cur.MedicationPatNum)+"', ";
+				command+="'"+POut.PLong(Cur.MedicationPatNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (Cur.PatNum)+"', "
-				+"'"+POut.PInt   (Cur.MedicationNum)+"', "
+				 "'"+POut.PLong   (Cur.PatNum)+"', "
+				+"'"+POut.PLong   (Cur.MedicationNum)+"', "
 				+"'"+POut.PString(Cur.PatNote)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);

@@ -521,7 +521,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt32(splitField[0]);
+						percent=PIn.PInt(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -538,7 +538,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt32(splitField[0]);
+						percent=PIn.PInt(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}
@@ -567,7 +567,7 @@ namespace OpenDental.Bridges {
 							break;
 						}
 						splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-						percent=PIn.PInt32(splitField[0]);
+						percent=PIn.PInt(splitField[0]);
 						if(percent<0 || percent>100) {
 							break;
 						}

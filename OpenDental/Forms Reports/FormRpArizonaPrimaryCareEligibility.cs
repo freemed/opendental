@@ -57,14 +57,14 @@ namespace OpenDental {
 			string statusStr="Eligibility Status";
 			string command="";
 			//Locate the payment definition number for copayments of patients using the Arizona Primary Care program.
-			command="SELECT DefNum FROM definition WHERE Category="+POut.PInt((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			command="SELECT DefNum FROM definition WHERE Category="+POut.PLong((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
 			DataTable copayDefNumTab=Reports.GetTable(command);
 			if(copayDefNumTab.Rows.Count!=1){
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
 				return;
 			}
-			long copayDefNum=PIn.PInt(copayDefNumTab.Rows[0][0].ToString());
+			long copayDefNum=PIn.PLong(copayDefNumTab.Rows[0][0].ToString());
 			//Get the list of all Arizona Primary Care patients, based on the patients which have an insurance carrier named 'noah'
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND pp.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
@@ -73,7 +73,7 @@ namespace OpenDental {
 					POut.PDate(dateTimeFrom.Value)+" AND "+POut.PDate(dateTimeTo.Value);
 			DataTable primaryCarePatients=Reports.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
-				string patNum=POut.PInt(PIn.PInt(primaryCarePatients.Rows[i][0].ToString()));
+				string patNum=POut.PLong(PIn.PLong(primaryCarePatients.Rows[i][0].ToString()));
 				command="SELECT "+
 					"TRIM((SELECT f.FieldValue FROM patfield f WHERE f.PatNum=p.PatNum AND "+
 						"LOWER(f.FieldName)=LOWER('"+patientsIdNumberStr+"') LIMIT 1)) PCIN, "+//Patient's Care ID Number
@@ -129,7 +129,7 @@ namespace OpenDental {
 				}
 				outputRow+=siteId;
 				outputRow+=PIn.PDate(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");//Patient's Date of Birth
-				outputRow+=POut.PInt(PIn.PInt(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
+				outputRow+=POut.PLong(PIn.PLong(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
 				outputRow+=primaryCareReportRow.Rows[0]["PatRace"].ToString();
 				//Household residence address
 				string householdAddress=POut.PString(PIn.PString(primaryCareReportRow.Rows[0]["HouseholdAddress"].ToString()));

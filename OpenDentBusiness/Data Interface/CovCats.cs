@@ -25,12 +25,12 @@ namespace OpenDentBusiness {
 			CovCatC.ListShort=new List<CovCat>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				covcat=new CovCat();
-				covcat.CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
+				covcat.CovCatNum     =PIn.PLong(table.Rows[i][0].ToString());
 				covcat.Description   =PIn.PString(table.Rows[i][1].ToString());
-				covcat.DefaultPercent=PIn.PInt32(table.Rows[i][2].ToString());
-				covcat.CovOrder      =PIn.PInt32(table.Rows[i][3].ToString());
+				covcat.DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
+				covcat.CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
 				covcat.IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
-				covcat.EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
+				covcat.EbenefitCat   =(EbenefitCategory)PIn.PLong(table.Rows[i][5].ToString());
 				CovCatC.Listt.Add(covcat);
 				if(!covcat.IsHidden) {
 					CovCatC.ListShort.Add(covcat);
@@ -46,11 +46,11 @@ namespace OpenDentBusiness {
 			}
 			string command= "UPDATE covcat SET "
 				+ "Description = '"    +POut.PString(covcat.Description)+"'"
-				+",DefaultPercent = '" +POut.PInt   (covcat.DefaultPercent)+"'"
-				+",CovOrder = '"       +POut.PInt   (covcat.CovOrder)+"'"
+				+",DefaultPercent = '" +POut.PLong   (covcat.DefaultPercent)+"'"
+				+",CovOrder = '"       +POut.PLong   (covcat.CovOrder)+"'"
 				+",IsHidden = '"       +POut.PBool  (covcat.IsHidden)+"'"
-				+",EbenefitCat = '"    +POut.PInt((int)covcat.EbenefitCat)+"'"
-				+" WHERE CovCatNum = '"+POut.PInt(covcat.CovCatNum)+"'";
+				+",EbenefitCat = '"    +POut.PLong((int)covcat.EbenefitCat)+"'"
+				+" WHERE CovCatNum = '"+POut.PLong(covcat.CovCatNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -70,14 +70,14 @@ namespace OpenDentBusiness {
 			command+="Description,DefaultPercent,"
 				+"CovOrder,IsHidden,EbenefitCat) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(covcat.CovCatNum)+", ";
+				command+=POut.PLong(covcat.CovCatNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(covcat.Description)+"', "
-				+"'"+POut.PInt(covcat.DefaultPercent)+"', "
-				+"'"+POut.PInt(covcat.CovOrder)+"', "
+				+"'"+POut.PLong(covcat.DefaultPercent)+"', "
+				+"'"+POut.PLong(covcat.CovOrder)+"', "
 				+"'"+POut.PBool(covcat.IsHidden)+"', "
-				+"'"+POut.PInt((int)covcat.EbenefitCat)+"')";
+				+"'"+POut.PLong((int)covcat.EbenefitCat)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

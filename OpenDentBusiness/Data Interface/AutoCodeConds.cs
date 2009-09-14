@@ -23,9 +23,9 @@ namespace OpenDentBusiness{
 			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
 			for(int i=0;i<AutoCodeCondC.List.Length;i++){
 				AutoCodeCondC.List[i]=new AutoCodeCond();
-				AutoCodeCondC.List[i].AutoCodeCondNum= PIn.PInt        (table.Rows[i][0].ToString());
-				AutoCodeCondC.List[i].AutoCodeItemNum= PIn.PInt        (table.Rows[i][1].ToString());
-				AutoCodeCondC.List[i].Cond=(AutoCondition)PIn.PInt(table.Rows[i][2].ToString());	
+				AutoCodeCondC.List[i].AutoCodeCondNum= PIn.PLong        (table.Rows[i][0].ToString());
+				AutoCodeCondC.List[i].AutoCodeItemNum= PIn.PLong        (table.Rows[i][1].ToString());
+				AutoCodeCondC.List[i].Cond=(AutoCondition)PIn.PLong(table.Rows[i][2].ToString());	
 			}
 		}
 
@@ -44,11 +44,11 @@ namespace OpenDentBusiness{
 			}
 			command+="AutoCodeItemNum,Cond) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.AutoCodeCondNum)+", ";
+				command+=POut.PLong(Cur.AutoCodeCondNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt(Cur.AutoCodeItemNum)+"', "
-				+"'"+POut.PInt((int)Cur.Cond)+"')";
+				 "'"+POut.PLong(Cur.AutoCodeItemNum)+"', "
+				+"'"+POut.PLong((int)Cur.Cond)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -65,9 +65,9 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE autocodecond SET "
-				+"autocodeitemnum='"+POut.PInt(Cur.AutoCodeItemNum)+"'"
-				+",cond ='"     +POut.PInt((int)Cur.Cond)+"'"
-				+" WHERE autocodecondnum = '"+POut.PInt(Cur.AutoCodeCondNum)+"'";
+				+"autocodeitemnum='"+POut.PLong(Cur.AutoCodeItemNum)+"'"
+				+",cond ='"     +POut.PLong((int)Cur.Cond)+"'"
+				+" WHERE autocodecondnum = '"+POut.PLong(Cur.AutoCodeCondNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 			}
 			string command= "DELETE from autocodecond WHERE autocodecondnum = '"
-				+POut.PInt(Cur.AutoCodeCondNum)+"'";
+				+POut.PLong(Cur.AutoCodeCondNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "DELETE from autocodecond WHERE autocodeitemnum = '"
-				+POut.PInt(itemNum)+"'";//AutoCodeItems.Cur.AutoCodeItemNum)
+				+POut.PLong(itemNum)+"'";//AutoCodeItems.Cur.AutoCodeItemNum)
 			Db.NonQ(command);
 		}
 

@@ -1037,7 +1037,7 @@ namespace OpenDental{
 				sig=SignalList[i];
 				if(checkIncludeAck.Checked){
 					if(sig.AckTime.Year>1880//if this is acked
-						&& sig.AckTime < DateTime.Today.AddDays(1-PIn.PInt(textDays.Text)))
+						&& sig.AckTime < DateTime.Today.AddDays(1-PIn.PLong(textDays.Text)))
 					{
 						continue;
 					}

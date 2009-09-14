@@ -27,12 +27,12 @@ namespace OpenDentBusiness {
 			MountDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
 				mount=new MountDef();
-				mount.MountDefNum =PIn.PInt   (table.Rows[i][0].ToString());
+				mount.MountDefNum =PIn.PLong   (table.Rows[i][0].ToString());
 				mount.Description =PIn.PString(table.Rows[i][1].ToString());
-				mount.ItemOrder   =PIn.PInt32   (table.Rows[i][2].ToString());
+				mount.ItemOrder   =PIn.PInt   (table.Rows[i][2].ToString());
 				mount.IsRadiograph=PIn.PBool  (table.Rows[i][3].ToString());
-				mount.Width       =PIn.PInt32   (table.Rows[i][4].ToString());
-				mount.Height      =PIn.PInt32   (table.Rows[i][5].ToString());
+				mount.Width       =PIn.PInt   (table.Rows[i][4].ToString());
+				mount.Height      =PIn.PInt   (table.Rows[i][5].ToString());
 				MountDefC.Listt.Add(mount);
 			}
 		}
@@ -45,11 +45,11 @@ namespace OpenDentBusiness {
 			}
 			string command="UPDATE mountdef SET " 
 				+"Description = '"   +POut.PString(def.Description)+"'"
-				+",ItemOrder = '" +POut.PInt(def.ItemOrder)+"'"
+				+",ItemOrder = '" +POut.PLong(def.ItemOrder)+"'"
 				+",IsRadiograph = '" +POut.PBool(def.IsRadiograph)+"'"
-				+",Width = '" +POut.PInt(def.Width)+"'"
-				+",Height = '" +POut.PInt(def.Height)+"'"
-				+" WHERE MountDefNum  ='"+POut.PInt (def.MountDefNum)+"'";
+				+",Width = '" +POut.PLong(def.Width)+"'"
+				+",Height = '" +POut.PLong(def.Height)+"'"
+				+" WHERE MountDefNum  ='"+POut.PLong (def.MountDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -68,14 +68,14 @@ namespace OpenDentBusiness {
 			}
 			command+="Description,ItemOrder,IsRadiograph,Width,Height) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(def.MountDefNum)+", ";
+				command+=POut.PLong(def.MountDefNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(def.Description)+"', "
-				+"'"+POut.PInt(def.ItemOrder)+"', "
+				+"'"+POut.PLong(def.ItemOrder)+"', "
 				+"'"+POut.PBool(def.IsRadiograph)+"', "
-				+"'"+POut.PInt(def.Width)+"', "
-				+"'"+POut.PInt(def.Height)+"')";
+				+"'"+POut.PLong(def.Width)+"', "
+				+"'"+POut.PLong(def.Height)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -91,9 +91,9 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountDefNum);
 				return;
 			}
-			string command="DELETE FROM mountdef WHERE MountDefNum="+POut.PInt(mountDefNum);
+			string command="DELETE FROM mountdef WHERE MountDefNum="+POut.PLong(mountDefNum);
 			Db.NonQ(command);
-			command="DELETE FROM mountitemdef WHERE MountDefNum ="+POut.PInt(mountDefNum);
+			command="DELETE FROM mountitemdef WHERE MountDefNum ="+POut.PLong(mountDefNum);
 			Db.NonQ(command);
 		}
 

@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 			list=new UserQuery[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				list[i]=new UserQuery();
-				list[i].QueryNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				list[i].QueryNum    = PIn.PLong   (table.Rows[i][0].ToString());
 				list[i].Description = PIn.PString(table.Rows[i][1].ToString());
 				list[i].FileName    = PIn.PString(table.Rows[i][2].ToString());
 				list[i].QueryText   = PIn.PString(table.Rows[i][3].ToString());
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 			}
 			command+="description,filename,querytext) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.QueryNum)+", ";
+				command+=POut.PLong(Cur.QueryNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.Description)+"', "
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
-			string command = "DELETE from userquery WHERE querynum = '"+POut.PInt(Cur.QueryNum)+"'";
+			string command = "DELETE from userquery WHERE querynum = '"+POut.PLong(Cur.QueryNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 				+ "description = '" +POut.PString(Cur.Description)+"'"
 				+ ",filename = '"    +POut.PString(Cur.FileName)+"'"
 				+",querytext = '"   +POut.PString(Cur.QueryText)+"'"
-				+" WHERE querynum = '"+POut.PInt(Cur.QueryNum)+"'";
+				+" WHERE querynum = '"+POut.PLong(Cur.QueryNum)+"'";
 			Db.NonQ(command);
 		}
 	}

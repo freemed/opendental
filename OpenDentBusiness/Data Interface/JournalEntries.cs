@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM journalentry "
-				+"WHERE TransactionNum="+POut.PInt(transactionNum);
+				+"WHERE TransactionNum="+POut.PLong(transactionNum);
 			List<JournalEntry> List=RefreshAndFill(Db.GetTable(command));
 			ArrayList retVal=new ArrayList();
 			for(int i=0;i<List.Count;i++) {
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM journalentry "
-				+"WHERE AccountNum="+POut.PInt(accountNum)
+				+"WHERE AccountNum="+POut.PLong(accountNum)
 				+" ORDER BY DateDisplayed";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -43,8 +43,8 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM journalentry "
-				+"WHERE AccountNum="+POut.PInt(accountNum)
-				+" AND (ReconcileNum="+POut.PInt(reconcileNum);
+				+"WHERE AccountNum="+POut.PLong(accountNum)
+				+" AND (ReconcileNum="+POut.PLong(reconcileNum);
 			if(includeUncleared) {
 				command+=" OR ReconcileNum=0)";
 			}
@@ -60,16 +60,16 @@ namespace OpenDentBusiness{
 			List <JournalEntry> List=new List <JournalEntry> ();
 			for(int i=0;i<table.Rows.Count;i++) {
 				List.Add(new JournalEntry());
-				List[i].JournalEntryNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].TransactionNum = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].AccountNum     = PIn.PInt(table.Rows[i][2].ToString());
+				List[i].JournalEntryNum= PIn.PLong(table.Rows[i][0].ToString());
+				List[i].TransactionNum = PIn.PLong(table.Rows[i][1].ToString());
+				List[i].AccountNum     = PIn.PLong(table.Rows[i][2].ToString());
 				List[i].DateDisplayed  = PIn.PDate(table.Rows[i][3].ToString());
 				List[i].DebitAmt       = PIn.PDouble(table.Rows[i][4].ToString());
 				List[i].CreditAmt      = PIn.PDouble(table.Rows[i][5].ToString());
 				List[i].Memo           = PIn.PString(table.Rows[i][6].ToString());
 				List[i].Splits         = PIn.PString(table.Rows[i][7].ToString());
 				List[i].CheckNumber    = PIn.PString(table.Rows[i][8].ToString());
-				List[i].ReconcileNum   = PIn.PInt(table.Rows[i][9].ToString());
+				List[i].ReconcileNum   = PIn.PLong(table.Rows[i][9].ToString());
 			}
 			return List;
 		}
@@ -93,18 +93,18 @@ namespace OpenDentBusiness{
 			command+="TransactionNum,AccountNum,DateDisplayed,DebitAmt,CreditAmt,Memo,Splits,CheckNumber,"
 				+"ReconcileNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(je.JournalEntryNum)+"', ";
+				command+="'"+POut.PLong(je.JournalEntryNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (je.TransactionNum)+"', "
-				+"'"+POut.PInt   (je.AccountNum)+"', "
+				 "'"+POut.PLong   (je.TransactionNum)+"', "
+				+"'"+POut.PLong   (je.AccountNum)+"', "
 				    +POut.PDate  (je.DateDisplayed)+", "
 				+"'"+POut.PDouble(je.DebitAmt)+"', "
 				+"'"+POut.PDouble(je.CreditAmt)+"', "
 				+"'"+POut.PString(je.Memo)+"', "
 				+"'"+POut.PString(je.Splits)+"', "
 				+"'"+POut.PString(je.CheckNumber)+"', "
-				+"'"+POut.PInt   (je.ReconcileNum)+"')";
+				+"'"+POut.PLong   (je.ReconcileNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,16 +124,16 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
 			string command= "UPDATE journalentry SET "
-				+"TransactionNum = '"+POut.PInt   (je.TransactionNum)+"' "
-				+",AccountNum = '"   +POut.PInt   (je.AccountNum)+"' "
+				+"TransactionNum = '"+POut.PLong   (je.TransactionNum)+"' "
+				+",AccountNum = '"   +POut.PLong   (je.AccountNum)+"' "
 				+",DateDisplayed = "+POut.PDate  (je.DateDisplayed)+" "
 				+",DebitAmt = '"     +POut.PDouble(je.DebitAmt)+"' "
 				+",CreditAmt = '"    +POut.PDouble(je.CreditAmt)+"' "
 				+",Memo = '"         +POut.PString(je.Memo)+"' "
 				+",Splits = '"       +POut.PString(je.Splits)+"' "
 				+",CheckNumber = '"  +POut.PString(je.CheckNumber)+"' "
-				+",ReconcileNum = '" +POut.PInt   (je.ReconcileNum)+"' "
-				+"WHERE JournalEntryNum = '"+POut.PInt(je.JournalEntryNum)+"'";
+				+",ReconcileNum = '" +POut.PLong   (je.ReconcileNum)+"' "
+				+"WHERE JournalEntryNum = '"+POut.PLong(je.JournalEntryNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -143,7 +143,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),je);
 				return;
 			}
-			string command= "DELETE FROM journalentry WHERE JournalEntryNum = "+POut.PInt(je.JournalEntryNum);
+			string command= "DELETE FROM journalentry WHERE JournalEntryNum = "+POut.PLong(je.JournalEntryNum);
 			Db.NonQ(command);
 		}
 
@@ -231,21 +231,21 @@ namespace OpenDentBusiness{
 					if(str!=""){
 						str+=" OR";
 					}
-					str+=" JournalEntryNum="+POut.PInt(journalList[i].JournalEntryNum);
+					str+=" JournalEntryNum="+POut.PLong(journalList[i].JournalEntryNum);
 				}
 			}
 			if(str!=""){
 				command+=str;
 				Db.NonQ(command);
 			}
-			command="UPDATE journalentry SET ReconcileNum="+POut.PInt(reconcileNum)+" WHERE";
+			command="UPDATE journalentry SET ReconcileNum="+POut.PLong(reconcileNum)+" WHERE";
 			str="";
 			for(int i=0;i<journalList.Count;i++) {
 				if(journalList[i].ReconcileNum==reconcileNum) {
 					if(str!="") {
 						str+=" OR";
 					}
-					str+=" JournalEntryNum="+POut.PInt(journalList[i].JournalEntryNum);
+					str+=" JournalEntryNum="+POut.PLong(journalList[i].JournalEntryNum);
 				}
 			}
 			if(str!=""){

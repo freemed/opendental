@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PhoneNumber>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM phonenumber WHERE PatNum="+POut.PInt(patNum);
+			string command="SELECT * FROM phonenumber WHERE PatNum="+POut.PLong(patNum);
 			Collection<PhoneNumber> collectState=DataObjectFactory<PhoneNumber>.CreateObjects(command);
 			return new List<PhoneNumber>(collectState);		
 		}

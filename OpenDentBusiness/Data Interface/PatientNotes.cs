@@ -14,16 +14,16 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatientNote>(MethodBase.GetCurrentMethod(),patNum,guarantor);
 			}
-			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PInt(patNum)+"'";
+			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PLong(patNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
 			}
 			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration "
-				+"FROM patientnote WHERE patnum ='"+POut.PInt(patNum)+"'";
+				+"FROM patientnote WHERE patnum ='"+POut.PLong(patNum)+"'";
 			table=Db.GetTable(command);
 			PatientNote Cur=new PatientNote();
-			Cur.PatNum      = PIn.PInt   (table.Rows[0][0].ToString());
+			Cur.PatNum      = PIn.PLong   (table.Rows[0][0].ToString());
 			Cur.ApptPhone   = PIn.PString(table.Rows[0][1].ToString());
 			Cur.Medical     = PIn.PString(table.Rows[0][2].ToString());
 			Cur.Service     = PIn.PString(table.Rows[0][3].ToString());
@@ -33,14 +33,14 @@ namespace OpenDentBusiness{
 			Cur.CCExpiration= PIn.PDate  (table.Rows[0][7].ToString());
 			//fam financial note:
 			command = 
-				"SELECT * FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
+				"SELECT * FROM patientnote WHERE patnum ='"+POut.PLong(guarantor)+"'";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				InsertRow(guarantor);
 			}
 			command = 
 				"SELECT famfinancial "
-				+"FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
+				+"FROM patientnote WHERE patnum ='"+POut.PLong(guarantor)+"'";
 			//MessageBox.Show(command);
 			table=Db.GetTable(command);
 			Cur.FamFinancial= PIn.PString(table.Rows[0][0].ToString());
@@ -61,12 +61,12 @@ namespace OpenDentBusiness{
 				+ ",Treatment = '"   +POut.PString(Cur.Treatment)+"'"
 				+ ",CCNumber = '"    +POut.PString(Cur.CCNumber)+"'"
 				+ ",CCExpiration = "+POut.PDate  (Cur.CCExpiration)
-				+" WHERE patnum = '"+POut.PInt   (Cur.PatNum)+"'";
+				+" WHERE patnum = '"+POut.PLong   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 			command = "UPDATE patientnote SET "
 				+ "famfinancial = '"+POut.PString(Cur.FamFinancial)+"'"
-				+" WHERE patnum = '"+POut.PInt   (guarantor)+"'";
+				+" WHERE patnum = '"+POut.PLong   (guarantor)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}

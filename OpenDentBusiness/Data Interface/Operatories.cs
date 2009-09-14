@@ -36,15 +36,15 @@ namespace OpenDentBusiness{
 			Operatory op;
 			for(int i=0;i<table.Rows.Count;i++) {
 				op=new Operatory();
-				op.OperatoryNum = PIn.PInt(table.Rows[i][0].ToString());
+				op.OperatoryNum = PIn.PLong(table.Rows[i][0].ToString());
 				op.OpName       = PIn.PString(table.Rows[i][1].ToString());
 				op.Abbrev       = PIn.PString(table.Rows[i][2].ToString());
-				op.ItemOrder    = PIn.PInt(table.Rows[i][3].ToString());
+				op.ItemOrder    = PIn.PLong(table.Rows[i][3].ToString());
 				op.IsHidden     = PIn.PBool(table.Rows[i][4].ToString());
-				op.ProvDentist  = PIn.PInt(table.Rows[i][5].ToString());
-				op.ProvHygienist= PIn.PInt(table.Rows[i][6].ToString());
+				op.ProvDentist  = PIn.PLong(table.Rows[i][5].ToString());
+				op.ProvHygienist= PIn.PLong(table.Rows[i][6].ToString());
 				op.IsHygiene    = PIn.PBool(table.Rows[i][7].ToString());
-				op.ClinicNum    = PIn.PInt(table.Rows[i][8].ToString());
+				op.ClinicNum    = PIn.PLong(table.Rows[i][8].ToString());
 				//DateTStamp
 				oplist.Add(op);
 			}
@@ -68,17 +68,17 @@ namespace OpenDentBusiness{
 				+"IsHygiene,ClinicNum"//DateTStamp
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(op.OperatoryNum)+", ";
+				command+=POut.PLong(op.OperatoryNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(op.OpName)+"', "
 				+"'"+POut.PString(op.Abbrev)+"', "
-				+"'"+POut.PInt   (op.ItemOrder)+"', "
+				+"'"+POut.PLong   (op.ItemOrder)+"', "
 				+"'"+POut.PBool  (op.IsHidden)+"', "
-				+"'"+POut.PInt   (op.ProvDentist)+"', "
-				+"'"+POut.PInt   (op.ProvHygienist)+"', "
+				+"'"+POut.PLong   (op.ProvDentist)+"', "
+				+"'"+POut.PLong   (op.ProvHygienist)+"', "
 				+"'"+POut.PBool  (op.IsHygiene)+"', "
-				+"'"+POut.PInt   (op.ClinicNum)+"')";
+				+"'"+POut.PLong   (op.ClinicNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -97,14 +97,14 @@ namespace OpenDentBusiness{
 			string command= "UPDATE operatory SET " 
 				+ "OpName = '"        +POut.PString(op.OpName)+"'"
 				+ ",Abbrev = '"       +POut.PString(op.Abbrev)+"'"
-				+ ",ItemOrder = '"    +POut.PInt   (op.ItemOrder)+"'"
+				+ ",ItemOrder = '"    +POut.PLong   (op.ItemOrder)+"'"
 				+ ",IsHidden = '"     +POut.PBool  (op.IsHidden)+"'"
-				+ ",ProvDentist = '"  +POut.PInt   (op.ProvDentist)+"'"
-				+ ",ProvHygienist = '"+POut.PInt   (op.ProvHygienist)+"'"
+				+ ",ProvDentist = '"  +POut.PLong   (op.ProvDentist)+"'"
+				+ ",ProvHygienist = '"+POut.PLong   (op.ProvHygienist)+"'"
 				+ ",IsHygiene = '"    +POut.PBool  (op.IsHygiene)+"'"
-				+ ",ClinicNum = '"    +POut.PInt   (op.ClinicNum)+"'"	
+				+ ",ClinicNum = '"    +POut.PLong   (op.ClinicNum)+"'"	
 				//DateTStamp
-				+" WHERE OperatoryNum = '" +POut.PInt(op.OperatoryNum)+"'";
+				+" WHERE OperatoryNum = '" +POut.PLong(op.OperatoryNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 		}

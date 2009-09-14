@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Laboratory>(MethodBase.GetCurrentMethod(),laboratoryNum);
 			}
-			string command="SELECT * FROM laboratory WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
+			string command="SELECT * FROM laboratory WHERE LaboratoryNum="+POut.PLong(laboratoryNum);
 			return FillFromTable(Db.GetTable(command))[0];
 		}
 
@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 			Laboratory lab;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lab=new Laboratory();
-				lab.LaboratoryNum= PIn.PInt   (table.Rows[i][0].ToString());
+				lab.LaboratoryNum= PIn.PLong   (table.Rows[i][0].ToString());
 				lab.Description  = PIn.PString(table.Rows[i][1].ToString());
 				lab.Phone        = PIn.PString(table.Rows[i][2].ToString());
 				lab.Notes        = PIn.PString(table.Rows[i][3].ToString());
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,Phone,Notes,LabSlip) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(lab.LaboratoryNum)+"', ";
+				command+="'"+POut.PLong(lab.LaboratoryNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(lab.Description)+"', "
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				+ ",Phone = '"         +POut.PString(lab.Phone)+"'"
 				+ ",Notes = '"         +POut.PString(lab.Notes)+"'"
 				+ ",LabSlip = '"       +POut.PString(lab.LabSlip)+"'"
-				+" WHERE LaboratoryNum = '" +POut.PInt(lab.LaboratoryNum)+"'";
+				+" WHERE LaboratoryNum = '" +POut.PLong(lab.LaboratoryNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -98,7 +98,7 @@ namespace OpenDentBusiness{
 			//check lab cases for dependencies
 			command="SELECT LName,FName FROM patient,labcase "
 				+"WHERE patient.PatNum=labcase.PatNum "
-				+"AND LaboratoryNum ="+POut.PInt(labNum)+" "
+				+"AND LaboratoryNum ="+POut.PLong(labNum)+" "
 				+"LIMIT 30";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Laboratories","Cannot delete Laboratory because cases exist for")+pats);
 			}
 			//delete
-			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.PInt(labNum);
+			command= "DELETE FROM laboratory WHERE LaboratoryNum = "+POut.PLong(labNum);
  			Db.NonQ(command);
 		}
 

@@ -36,11 +36,11 @@ namespace OpenDentBusiness{
 				+"WHERE AptDateTime > "+POut.PDate(aptStartDate)+" "
 				+"AND AptDateTime < "+POut.PDate(aptEndDate.AddDays(1))+" ";
 			if(!showCompleted){
-				command+="AND (AptStatus="+POut.PInt((int)ApptStatus.ASAP)
-					+" OR AptStatus="+POut.PInt((int)ApptStatus.Broken)
-					+" OR AptStatus="+POut.PInt((int)ApptStatus.None)
-					+" OR AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
-					+" OR AptStatus="+POut.PInt((int)ApptStatus.UnschedList)+") ";
+				command+="AND (AptStatus="+POut.PLong((int)ApptStatus.ASAP)
+					+" OR AptStatus="+POut.PLong((int)ApptStatus.Broken)
+					+" OR AptStatus="+POut.PLong((int)ApptStatus.None)
+					+" OR AptStatus="+POut.PLong((int)ApptStatus.Scheduled)
+					+" OR AptStatus="+POut.PLong((int)ApptStatus.UnschedList)+") ";
 			}
 			DataTable raw=Db.GetTable(command);
 			DateTime AptDateTime;
@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),aptNum);
 			}
 			string command="SELECT labcase.* FROM labcase,appointment "
-				+"WHERE labcase.PlannedAptNum="+POut.PInt(aptNum);
+				+"WHERE labcase.PlannedAptNum="+POut.PLong(aptNum);
 			DataTable table=Db.GetTable(command);
 			List<LabCase> list=FillFromTable(table);
 			if(list.Count==0){
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),labCaseNum);
 			}
-			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PLong(labCaseNum);
 			DataTable table=Db.GetTable(command);
 			return FillFromTable(table)[0];
 		}
@@ -173,7 +173,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LabCase>>(MethodBase.GetCurrentMethod(),patNum,isPlanned);
 			}
-			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum)+" AND ";
+			string command="SELECT * FROM labcase WHERE PatNum="+POut.PLong(patNum)+" AND ";
 			if(isPlanned){
 				command+="PlannedAptNum=0 AND AptNum=0";//We only show lab cases that have not been attached to any kind of appt.
 			}
@@ -189,17 +189,17 @@ namespace OpenDentBusiness{
 			List<LabCase> retVal=new List<LabCase>();
 			for(int i=0;i<table.Rows.Count;i++) {
 				lab=new LabCase();
-				lab.LabCaseNum     = PIn.PInt   (table.Rows[i][0].ToString());
-				lab.PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
-				lab.LaboratoryNum  = PIn.PInt   (table.Rows[i][2].ToString());
-				lab.AptNum         = PIn.PInt   (table.Rows[i][3].ToString());
-				lab.PlannedAptNum  = PIn.PInt   (table.Rows[i][4].ToString());
+				lab.LabCaseNum     = PIn.PLong   (table.Rows[i][0].ToString());
+				lab.PatNum         = PIn.PLong   (table.Rows[i][1].ToString());
+				lab.LaboratoryNum  = PIn.PLong   (table.Rows[i][2].ToString());
+				lab.AptNum         = PIn.PLong   (table.Rows[i][3].ToString());
+				lab.PlannedAptNum  = PIn.PLong   (table.Rows[i][4].ToString());
 				lab.DateTimeDue    = PIn.PDateT (table.Rows[i][5].ToString());
 				lab.DateTimeCreated= PIn.PDateT (table.Rows[i][6].ToString());
 				lab.DateTimeSent   = PIn.PDateT (table.Rows[i][7].ToString());
 				lab.DateTimeRecd   = PIn.PDateT (table.Rows[i][8].ToString());
 				lab.DateTimeChecked= PIn.PDateT (table.Rows[i][9].ToString());
-				lab.ProvNum        = PIn.PInt   (table.Rows[i][10].ToString());
+				lab.ProvNum        = PIn.PLong   (table.Rows[i][10].ToString());
 				lab.Instructions   = PIn.PString(table.Rows[i][11].ToString());
 				retVal.Add(lab);
 			}
@@ -222,19 +222,19 @@ namespace OpenDentBusiness{
 			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 				+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(lab.LabCaseNum)+"', ";
+				command+="'"+POut.PLong(lab.LabCaseNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (lab.PatNum)+"', "
-				+"'"+POut.PInt   (lab.LaboratoryNum)+"', "
-				+"'"+POut.PInt   (lab.AptNum)+"', "
-				+"'"+POut.PInt   (lab.PlannedAptNum)+"', "
+				 "'"+POut.PLong   (lab.PatNum)+"', "
+				+"'"+POut.PLong   (lab.LaboratoryNum)+"', "
+				+"'"+POut.PLong   (lab.AptNum)+"', "
+				+"'"+POut.PLong   (lab.PlannedAptNum)+"', "
 				    +POut.PDateT (lab.DateTimeDue)+", "
 				    +POut.PDateT (lab.DateTimeCreated)+", "
 				    +POut.PDateT (lab.DateTimeSent)+", "
 				    +POut.PDateT (lab.DateTimeRecd)+", "
 				    +POut.PDateT (lab.DateTimeChecked)+", "
-				+"'"+POut.PInt   (lab.ProvNum)+"', "
+				+"'"+POut.PLong   (lab.ProvNum)+"', "
 				+"'"+POut.PString(lab.Instructions)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -252,18 +252,18 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE labcase SET " 
-				+ "PatNum = '"          +POut.PInt   (lab.PatNum)+"'"
-				+ ",LaboratoryNum = '"  +POut.PInt   (lab.LaboratoryNum)+"'"
-				+ ",AptNum = '"         +POut.PInt   (lab.AptNum)+"'"
-				+ ",PlannedAptNum = '"  +POut.PInt   (lab.PlannedAptNum)+"'"
+				+ "PatNum = '"          +POut.PLong   (lab.PatNum)+"'"
+				+ ",LaboratoryNum = '"  +POut.PLong   (lab.LaboratoryNum)+"'"
+				+ ",AptNum = '"         +POut.PLong   (lab.AptNum)+"'"
+				+ ",PlannedAptNum = '"  +POut.PLong   (lab.PlannedAptNum)+"'"
 				+ ",DateTimeDue = "     +POut.PDateT (lab.DateTimeDue)
 				+ ",DateTimeCreated = " +POut.PDateT (lab.DateTimeCreated)
 				+ ",DateTimeSent = "    +POut.PDateT (lab.DateTimeSent)
 				+ ",DateTimeRecd = "    +POut.PDateT (lab.DateTimeRecd)
 				+ ",DateTimeChecked = " +POut.PDateT (lab.DateTimeChecked)
-				+ ",ProvNum = '"        +POut.PInt   (lab.ProvNum)+"'"
+				+ ",ProvNum = '"        +POut.PLong   (lab.ProvNum)+"'"
 				+ ",Instructions = '"   +POut.PString(lab.Instructions)+"'"
-				+" WHERE LabCaseNum = '"+POut.PInt(lab.LabCaseNum)+"'";
+				+" WHERE LabCaseNum = '"+POut.PLong(lab.LabCaseNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -289,7 +289,7 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("LabCases","Cannot delete LabCase because ")+pats);
 			}*/
 			//delete
-			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.PInt(labCaseNum);
+			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.PLong(labCaseNum);
  			Db.NonQ(command);
 		}
 
@@ -299,7 +299,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum,aptNum);
 				return;
 			}
-			string command="UPDATE labcase SET AptNum="+POut.PInt(aptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			string command="UPDATE labcase SET AptNum="+POut.PLong(aptNum)+" WHERE LabCaseNum="+POut.PLong(labCaseNum);
 			Db.NonQ(command);
 		}
 
@@ -309,7 +309,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum,plannedAptNum);
 				return;
 			}
-			string command="UPDATE labcase SET PlannedAptNum="+POut.PInt(plannedAptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			string command="UPDATE labcase SET PlannedAptNum="+POut.PLong(plannedAptNum)+" WHERE LabCaseNum="+POut.PLong(labCaseNum);
 			Db.NonQ(command);
 		}
 

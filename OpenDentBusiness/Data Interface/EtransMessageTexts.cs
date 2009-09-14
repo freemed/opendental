@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			}
 			command+="MessageText) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(etransMessageText.EtransMessageTextNum)+"', ";
+				command+="'"+POut.PLong(etransMessageText.EtransMessageTextNum)+"', ";
 			}
 			command+="'"+POut.PString(etransMessageText.MessageText)+"')";
 			if(PrefC.RandomKeys) {
@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 			if(etransMessageTextNum==0) {
 				return "";
 			}
-			string command="SELECT MessageText FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PInt(etransMessageTextNum);
+			string command="SELECT MessageText FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PLong(etransMessageTextNum);
 			string msgText=Db.GetScalar(command);
 			if(!X12object.IsX12(msgText)) {
 				return msgText;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command;
-			command="DELETE FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PInt(etransMessageTextNum);
+			command="DELETE FROM etransmessagetext WHERE EtransMessageTextNum="+POut.PLong(etransMessageTextNum);
 			Db.NonQ(command);
 		}
 		

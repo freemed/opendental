@@ -47,7 +47,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix server_id.");
 				return;
 			}
-			int serverid=PIn.PInt32(textServerId.Text);
+			int serverid=PIn.PInt(textServerId.Text);
 			if(serverid==0) {
 				MsgBox.Show(this,"Please enter a server_id number greater than zero.");
 				return;

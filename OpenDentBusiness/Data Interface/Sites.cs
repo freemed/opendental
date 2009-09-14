@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<SiteC.List.Length;i++){
 				SiteC.List[i]=new Site();
 				SiteC.List[i].IsNew=false;
-				SiteC.List[i].SiteNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				SiteC.List[i].SiteNum    = PIn.PLong   (table.Rows[i][0].ToString());
 				SiteC.List[i].Description= PIn.PString(table.Rows[i][1].ToString());
 				SiteC.List[i].Note       = PIn.PString(table.Rows[i][2].ToString());
 			}
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use.
-			string command="SELECT LName,FName FROM patient WHERE SiteNum="+POut.PInt(siteNum);
+			string command="SELECT LName,FName FROM patient WHERE SiteNum="+POut.PLong(siteNum);
 			DataTable table=Db.GetTable(command);
 			//int count=PIn.PInt(Db.GetCount(command));
 			string pats="";

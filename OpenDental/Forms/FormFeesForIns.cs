@@ -433,11 +433,11 @@ namespace OpenDental{
 			long oldFeeSchedNum;
 			long rowsChanged=0;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				oldFeeSchedNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["feeSched"].ToString());
+				oldFeeSchedNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["feeSched"].ToString());
 				if(oldFeeSchedNum==newFeeSchedNum){
 					continue;
 				}
-				employerNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["EmployerNum"].ToString());
+				employerNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["EmployerNum"].ToString());
 				carrierName=table.Rows[gridMain.SelectedIndices[i]]["CarrierName"].ToString();
 				groupNum=table.Rows[gridMain.SelectedIndices[i]]["GroupNum"].ToString();
 				groupName=table.Rows[gridMain.SelectedIndices[i]]["GroupName"].ToString();

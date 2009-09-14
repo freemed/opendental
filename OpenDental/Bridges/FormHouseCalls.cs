@@ -298,7 +298,7 @@ namespace OpenDental{
 				sr.Write("\""+Dequote(PIn.PString(table.Rows[i][14].ToString()))+"\",");//14-ApptReason
 				sr.Write("\""+table.Rows[i][15].ToString()+"\",");//15-DoctorNumber. might possibly be 0
 				//15-DoctorName. Can handle 0 without any problem.
-				sr.Write("\""+Dequote(Providers.GetLName(PIn.PInt(table.Rows[i][15].ToString())))+"\",");
+				sr.Write("\""+Dequote(Providers.GetLName(PIn.PLong(table.Rows[i][15].ToString())))+"\",");
 				if(table.Rows[i][16].ToString()=="1"){//16-IsNewPatient
 					sr.WriteLine("\"T\"");//SendEmail
 				}

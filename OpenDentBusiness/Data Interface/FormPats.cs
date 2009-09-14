@@ -24,10 +24,10 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,FormDateTime) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(Cur.FormPatNum)+"', ";
+				command+="'"+POut.PLong(Cur.FormPatNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt  (Cur.PatNum)+"', "
+				 "'"+POut.PLong  (Cur.PatNum)+"', "
 				+POut.PDateT(Cur.FormDateTime)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -42,27 +42,27 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<FormPat>(MethodBase.GetCurrentMethod(),formPatNum);
 			}
-			string command= "SELECT * FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
+			string command= "SELECT * FROM formpat WHERE FormPatNum="+POut.PLong(formPatNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;//should never happen.
 			}
 			FormPat form=new FormPat();
 			form.FormPatNum=formPatNum;
-			form.PatNum      =PIn.PInt  (table.Rows[0][1].ToString());
+			form.PatNum      =PIn.PLong  (table.Rows[0][1].ToString());
 			form.FormDateTime=PIn.PDateT(table.Rows[0][2].ToString());
 			form.QuestionList=new List<Question>();
-			command="SELECT * FROM question WHERE FormPatNum="+POut.PInt(formPatNum);
+			command="SELECT * FROM question WHERE FormPatNum="+POut.PLong(formPatNum);
 			table=Db.GetTable(command);
 			Question quest;
 			for(int i=0;i<table.Rows.Count;i++){
 				quest=new Question();
-				quest.QuestionNum=PIn.PInt   (table.Rows[i][0].ToString());
-				quest.PatNum     =PIn.PInt   (table.Rows[i][1].ToString());
-				quest.ItemOrder  =PIn.PInt32   (table.Rows[i][2].ToString());
+				quest.QuestionNum=PIn.PLong   (table.Rows[i][0].ToString());
+				quest.PatNum     =PIn.PLong   (table.Rows[i][1].ToString());
+				quest.ItemOrder  =PIn.PInt   (table.Rows[i][2].ToString());
 				quest.Description=PIn.PString(table.Rows[i][3].ToString());
 				quest.Answer     =PIn.PString(table.Rows[i][4].ToString());
-				quest.FormPatNum =PIn.PInt   (table.Rows[i][5].ToString());
+				quest.FormPatNum =PIn.PLong   (table.Rows[i][5].ToString());
 				form.QuestionList.Add(quest);
 			}
 			return form;
@@ -76,9 +76,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),formPatNum);
 				return;
 			}
-			string command="DELETE FROM formpat WHERE FormPatNum="+POut.PInt(formPatNum);
+			string command="DELETE FROM formpat WHERE FormPatNum="+POut.PLong(formPatNum);
 			Db.NonQ(command);
-			command="DELETE FROM question WHERE FormPatNum="+POut.PInt(formPatNum);
+			command="DELETE FROM question WHERE FormPatNum="+POut.PLong(formPatNum);
 			Db.NonQ(command);
 		}
 

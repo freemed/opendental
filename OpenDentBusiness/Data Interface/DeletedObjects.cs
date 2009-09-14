@@ -45,9 +45,9 @@ namespace OpenDentBusiness{
 			DeletedObject delObj;
 			for(int i=0;i<table.Rows.Count;i++) {
 				delObj=new DeletedObject();
-				delObj.DeletedObjectNum =PIn.PInt(table.Rows[i][0].ToString());
-				delObj.ObjectNum        =PIn.PInt(table.Rows[i][1].ToString());
-				delObj.ObjectType       =(DeletedObjectType)PIn.PInt(table.Rows[i][2].ToString());
+				delObj.DeletedObjectNum =PIn.PLong(table.Rows[i][0].ToString());
+				delObj.ObjectNum        =PIn.PLong(table.Rows[i][1].ToString());
+				delObj.ObjectType       =(DeletedObjectType)PIn.PLong(table.Rows[i][2].ToString());
 				//DateTStamp
 				list.Add(delObj);
 			}

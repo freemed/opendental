@@ -120,8 +120,8 @@ namespace OpenDental {
 			SheetDefCur.SheetType=(SheetTypeEnum)listSheetType.SelectedIndex;
 			SheetDefCur.FontName=comboFontName.Text;
 			SheetDefCur.FontSize=fontSize;
-			SheetDefCur.Width=PIn.PInt32(textWidth.Text);
-			SheetDefCur.Height=PIn.PInt32(textHeight.Text);
+			SheetDefCur.Width=PIn.PInt(textWidth.Text);
+			SheetDefCur.Height=PIn.PInt(textHeight.Text);
 			SheetDefCur.IsLandscape=checkIsLandscape.Checked;
 			//don't save to database here.
 			DialogResult=DialogResult.OK;

@@ -693,10 +693,10 @@ namespace OpenDental{
 			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
 			RecallCur.DateDue=PIn.PDate(textDateDue.Text);
-			RecallCur.RecallInterval.Years=PIn.PInt32(textYears.Text);
-			RecallCur.RecallInterval.Months=PIn.PInt32(textMonths.Text);
-			RecallCur.RecallInterval.Weeks=PIn.PInt32(textWeeks.Text);
-			RecallCur.RecallInterval.Days=PIn.PInt32(textDays.Text);
+			RecallCur.RecallInterval.Years=PIn.PInt(textYears.Text);
+			RecallCur.RecallInterval.Months=PIn.PInt(textMonths.Text);
+			RecallCur.RecallInterval.Weeks=PIn.PInt(textWeeks.Text);
+			RecallCur.RecallInterval.Days=PIn.PInt(textDays.Text);
       if(comboStatus.SelectedIndex==0){
 				RecallCur.RecallStatus=0;
 			}

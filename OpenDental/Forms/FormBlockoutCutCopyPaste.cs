@@ -415,7 +415,7 @@ namespace OpenDental{
 			}
 			int dayDelta=0;//this is needed when repeat pasting days in order to calculate skipping weekends.
 			//dayDelta will start out zero and increment separately from r.
-			for(int r=0;r<PIn.PInt(textRepeat.Text);r++) {
+			for(int r=0;r<PIn.PLong(textRepeat.Text);r++) {
 				if(checkReplace.Checked) {
 					if(isWeek) {
 						Schedules.ClearBlockouts(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),opNums);

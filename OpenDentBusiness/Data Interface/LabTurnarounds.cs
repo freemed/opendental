@@ -13,17 +13,17 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LabTurnaround>>(MethodBase.GetCurrentMethod(),laboratoryNum);
 			}
-			string command="SELECT * FROM labturnaround WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
+			string command="SELECT * FROM labturnaround WHERE LaboratoryNum="+POut.PLong(laboratoryNum);
 			DataTable table=Db.GetTable(command);
 			List<LabTurnaround> retVal=new List<LabTurnaround>();
 			LabTurnaround lab;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lab=new LabTurnaround();
-				lab.LabTurnaroundNum= PIn.PInt   (table.Rows[i][0].ToString());
-				lab.LaboratoryNum   = PIn.PInt   (table.Rows[i][1].ToString());
+				lab.LabTurnaroundNum= PIn.PLong   (table.Rows[i][0].ToString());
+				lab.LaboratoryNum   = PIn.PLong   (table.Rows[i][1].ToString());
 				lab.Description     = PIn.PString(table.Rows[i][2].ToString());
-				lab.DaysPublished   = PIn.PInt32   (table.Rows[i][3].ToString());
-				lab.DaysActual      = PIn.PInt32   (table.Rows[i][4].ToString());
+				lab.DaysPublished   = PIn.PInt   (table.Rows[i][3].ToString());
+				lab.DaysActual      = PIn.PInt   (table.Rows[i][4].ToString());
 				retVal.Add(lab);
 			}
 			return retVal;
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labNum,lablist);
 				return;
 			}
-			string command="DELETE FROM labturnaround WHERE LaboratoryNum="+POut.PInt(labNum);
+			string command="DELETE FROM labturnaround WHERE LaboratoryNum="+POut.PLong(labNum);
 			Db.NonQ(command);
 			for(int i=0;i<lablist.Count;i++){
 				lablist[i].LaboratoryNum=labNum;
@@ -58,13 +58,13 @@ namespace OpenDentBusiness{
 			}
 			command+="LaboratoryNum,Description,DaysPublished,DaysActual) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(lab.LabTurnaroundNum)+"', ";
+				command+="'"+POut.PLong(lab.LabTurnaroundNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (lab.LaboratoryNum)+"', "
+				 "'"+POut.PLong   (lab.LaboratoryNum)+"', "
 				+"'"+POut.PString(lab.Description)+"', "
-				+"'"+POut.PInt   (lab.DaysPublished)+"', "
-				+"'"+POut.PInt   (lab.DaysActual)+"')";
+				+"'"+POut.PLong   (lab.DaysPublished)+"', "
+				+"'"+POut.PLong   (lab.DaysActual)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

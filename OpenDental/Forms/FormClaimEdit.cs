@@ -3193,7 +3193,7 @@ namespace OpenDental{
 
 		private void gridPay_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			long tempClaimNum=ClaimCur.ClaimNum;
-			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.PInt(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
+			ClaimPayment claimPaymentCur=ClaimPayments.GetOne(PIn.PLong(tablePayments.Rows[e.Row]["ClaimPaymentNum"].ToString()));
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPaymentCur);
 			//Security handled in that form.  Anyone can view.
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
@@ -3589,7 +3589,7 @@ namespace OpenDental{
 			ClaimCur.Attachments.Add(FormI.ClaimAttachNew);
 			FillAttachments();
 			if(textRadiographs.errorProvider1.GetError(textRadiographs)==""){
-				int radiographs=PIn.PInt32(textRadiographs.Text);
+				int radiographs=PIn.PInt(textRadiographs.Text);
 				radiographs++;
 				textRadiographs.Text=radiographs.ToString();
 			}
@@ -4086,7 +4086,7 @@ namespace OpenDental{
 				ClaimCur.ProvBill=ProviderC.List[comboProvBill.SelectedIndex].ProvNum;
 			}
 			ClaimCur.IsOrtho=checkIsOrtho.Checked;
-			ClaimCur.OrthoRemainM=PIn.PInt32(textOrthoRemainM.Text);
+			ClaimCur.OrthoRemainM=PIn.PInt(textOrthoRemainM.Text);
 			ClaimCur.OrthoDate=PIn.PDate(textOrthoDate.Text);
 			ClaimCur.RefNumString=textRefNum.Text;
 			ClaimCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
@@ -4114,9 +4114,9 @@ namespace OpenDental{
 				ClaimCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			//attachments
-			ClaimCur.Radiographs=PIn.PInt32(textRadiographs.Text);
-			ClaimCur.AttachedImages=PIn.PInt32(textAttachImages.Text);
-			ClaimCur.AttachedModels=PIn.PInt32(textAttachModels.Text);
+			ClaimCur.Radiographs=PIn.PInt(textRadiographs.Text);
+			ClaimCur.AttachedImages=PIn.PInt(textAttachImages.Text);
+			ClaimCur.AttachedModels=PIn.PInt(textAttachModels.Text);
 			List<string> flags=new List<string>();
 			if(checkAttachEoB.Checked){
 				flags.Add("EoB");

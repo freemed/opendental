@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 			List=new PayPeriod[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new PayPeriod();
-				List[i].PayPeriodNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].PayPeriodNum=PIn.PLong(table.Rows[i][0].ToString());
 				List[i].DateStart=PIn.PDate(table.Rows[i][1].ToString());
 				List[i].DateStop=PIn.PDate(table.Rows[i][2].ToString());
 				List[i].DatePaycheck=PIn.PDate(table.Rows[i][3].ToString());
@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 			}
 			command+="DateStart,DateStop,DatePaycheck) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(pp.PayPeriodNum)+"', ";
+				command+="'"+POut.PLong(pp.PayPeriodNum)+"', ";
 			}
 			command+=
 				 POut.PDate  (pp.DateStart)+", "
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				+"DateStart = "    +POut.PDate  (pp.DateStart)+" "
 				+",DateStop = "    +POut.PDate  (pp.DateStop)+" "
 				+",DatePaycheck = "+POut.PDate  (pp.DatePaycheck)+" "
-				+"WHERE PayPeriodNum = '"+POut.PInt(pp.PayPeriodNum)+"'";
+				+"WHERE PayPeriodNum = '"+POut.PLong(pp.PayPeriodNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pp);
 				return;
 			}
-			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.PInt(pp.PayPeriodNum);
+			string command= "DELETE FROM payperiod WHERE PayPeriodNum = "+POut.PLong(pp.PayPeriodNum);
 			Db.NonQ(command);
 		}
 

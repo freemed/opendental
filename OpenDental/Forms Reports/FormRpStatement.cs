@@ -970,7 +970,7 @@ namespace OpenDental{
 				par.Format.SpaceAfter=Unit.FromInch(.05);
 				patnum=0;
 				if(tablename!="account"){//account123 etc.
-					patnum=PIn.PInt(tablename.Substring(7));
+					patnum=PIn.PLong(tablename.Substring(7));
 				}
 				if(patnum!=0){
 					par.AddText(fam.GetNameInFamFL(patnum));

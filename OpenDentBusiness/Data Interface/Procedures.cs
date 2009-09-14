@@ -27,47 +27,47 @@ namespace OpenDentBusiness {
 				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,"
 				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(proc.ProcNum)+"', ";
+				command+="'"+POut.PLong(proc.ProcNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(proc.PatNum)+"', "
-				+"'"+POut.PInt(proc.AptNum)+"', "
+				 "'"+POut.PLong(proc.PatNum)+"', "
+				+"'"+POut.PLong(proc.AptNum)+"', "
 				+"'"+POut.PString(proc.OldCode)+"', "
 				+POut.PDate(proc.ProcDate)+", "
 				+"'"+POut.PDouble(proc.ProcFee)+"', "
 				+"'"+POut.PString(proc.Surf)+"', "
 				+"'"+POut.PString(proc.ToothNum)+"', "
 				+"'"+POut.PString(proc.ToothRange)+"', "
-				+"'"+POut.PInt(proc.Priority)+"', "
-				+"'"+POut.PInt((int)proc.ProcStatus)+"', "
-				+"'"+POut.PInt(proc.ProvNum)+"', "
-				+"'"+POut.PInt(proc.Dx)+"', "
-				+"'"+POut.PInt(proc.PlannedAptNum)+"', "
-				+"'"+POut.PInt((int)proc.PlaceService)+"', "
+				+"'"+POut.PLong(proc.Priority)+"', "
+				+"'"+POut.PLong((int)proc.ProcStatus)+"', "
+				+"'"+POut.PLong(proc.ProvNum)+"', "
+				+"'"+POut.PLong(proc.Dx)+"', "
+				+"'"+POut.PLong(proc.PlannedAptNum)+"', "
+				+"'"+POut.PLong((int)proc.PlaceService)+"', "
 				+"'"+POut.PString(proc.Prosthesis)+"', "
 				+POut.PDate(proc.DateOriginalProsth)+", "
 				+"'"+POut.PString(proc.ClaimNote)+"', "
 				+"NOW(), "//DateEntryC
-				+"'"+POut.PInt(proc.ClinicNum)+"', "
+				+"'"+POut.PLong(proc.ClinicNum)+"', "
 				+"'"+POut.PString(proc.MedicalCode)+"', "
 				+"'"+POut.PString(proc.DiagnosticCode)+"', "
 				+"'"+POut.PBool(proc.IsPrincDiag)+"', "
-				+"'"+POut.PInt(proc.ProcNumLab)+"', "
-				+"'"+POut.PInt(proc.BillingTypeOne)+"', "
-				+"'"+POut.PInt(proc.BillingTypeTwo)+"', "
-				+"'"+POut.PInt(proc.CodeNum)+"', "
+				+"'"+POut.PLong(proc.ProcNumLab)+"', "
+				+"'"+POut.PLong(proc.BillingTypeOne)+"', "
+				+"'"+POut.PLong(proc.BillingTypeTwo)+"', "
+				+"'"+POut.PLong(proc.CodeNum)+"', "
 				+"'"+POut.PString(proc.CodeMod1)+"', "
 				+"'"+POut.PString(proc.CodeMod2)+"', "
 				+"'"+POut.PString(proc.CodeMod3)+"', "
 				+"'"+POut.PString(proc.CodeMod4)+"', "
 				+"'"+POut.PString(proc.RevCode)+"', "
 				+"'"+POut.PString(proc.UnitCode)+"', "
-				+"'"+POut.PInt(proc.UnitQty)+"', "
-				+"'"+POut.PInt(proc.BaseUnits)+"', "
-				+"'"+POut.PInt(proc.StartTime)+"', "
-				+"'"+POut.PInt(proc.StopTime)+"', "
+				+"'"+POut.PLong(proc.UnitQty)+"', "
+				+"'"+POut.PLong(proc.BaseUnits)+"', "
+				+"'"+POut.PLong(proc.StartTime)+"', "
+				+"'"+POut.PLong(proc.StopTime)+"', "
 				+POut.PDate(proc.DateTP)+", "
-				+"'"+POut.PInt(proc.SiteNum)+"')";
+				+"'"+POut.PLong(proc.SiteNum)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -94,12 +94,12 @@ namespace OpenDentBusiness {
 			bool comma=false;
 			string c = "UPDATE procedurelog SET ";
 			if(proc.PatNum!=oldProc.PatNum) {
-				c+="PatNum = '"     +POut.PInt(proc.PatNum)+"'";
+				c+="PatNum = '"     +POut.PLong(proc.PatNum)+"'";
 				comma=true;
 			}
 			if(proc.AptNum!=oldProc.AptNum) {
 				if(comma) c+=",";
-				c+="AptNum = '"		+POut.PInt(proc.AptNum)+"'";
+				c+="AptNum = '"		+POut.PLong(proc.AptNum)+"'";
 				comma=true;
 			}
 			if(proc.OldCode!=oldProc.OldCode) {
@@ -134,32 +134,32 @@ namespace OpenDentBusiness {
 			}
 			if(proc.Priority!=oldProc.Priority) {
 				if(comma) c+=",";
-				c+="Priority = '"	+POut.PInt(proc.Priority)+"'";
+				c+="Priority = '"	+POut.PLong(proc.Priority)+"'";
 				comma=true;
 			}
 			if(proc.ProcStatus!=oldProc.ProcStatus) {
 				if(comma) c+=",";
-				c+="ProcStatus = '"+POut.PInt((int)proc.ProcStatus)+"'";
+				c+="ProcStatus = '"+POut.PLong((int)proc.ProcStatus)+"'";
 				comma=true;
 			}
 			if(proc.ProvNum!=oldProc.ProvNum) {
 				if(comma) c+=",";
-				c+="ProvNum = '"		+POut.PInt(proc.ProvNum)+"'";
+				c+="ProvNum = '"		+POut.PLong(proc.ProvNum)+"'";
 				comma=true;
 			}
 			if(proc.Dx!=oldProc.Dx) {
 				if(comma) c+=",";
-				c+="Dx = '"				+POut.PInt(proc.Dx)+"'";
+				c+="Dx = '"				+POut.PLong(proc.Dx)+"'";
 				comma=true;
 			}
 			if(proc.PlannedAptNum!=oldProc.PlannedAptNum) {
 				if(comma) c+=",";
-				c+="PlannedAptNum = '"+POut.PInt(proc.PlannedAptNum)+"'";
+				c+="PlannedAptNum = '"+POut.PLong(proc.PlannedAptNum)+"'";
 				comma=true;
 			}
 			if(proc.PlaceService!=oldProc.PlaceService) {
 				if(comma) c+=",";
-				c+="PlaceService = '"	+POut.PInt((int)proc.PlaceService)+"'";
+				c+="PlaceService = '"	+POut.PLong((int)proc.PlaceService)+"'";
 				comma=true;
 			}
 			if(proc.Prosthesis!=oldProc.Prosthesis) {
@@ -190,7 +190,7 @@ namespace OpenDentBusiness {
 			}
 			if(proc.ClinicNum!=oldProc.ClinicNum) {
 				if(comma) c+=",";
-				c+="ClinicNum = '"+POut.PInt(proc.ClinicNum)+"'";
+				c+="ClinicNum = '"+POut.PLong(proc.ClinicNum)+"'";
 				comma=true;
 			}
 			if(proc.MedicalCode!=oldProc.MedicalCode) {
@@ -210,25 +210,25 @@ namespace OpenDentBusiness {
 			}
 			if(proc.ProcNumLab!=oldProc.ProcNumLab) {
 				if(comma) c+=",";
-				c+="ProcNumLab = '"+POut.PInt(proc.ProcNumLab)+"'";
+				c+="ProcNumLab = '"+POut.PLong(proc.ProcNumLab)+"'";
 				comma=true;
 			}
 			if(proc.BillingTypeOne!=oldProc.BillingTypeOne) {
 				if(comma)
 					c+=",";
-				c+="BillingTypeOne = '"+POut.PInt(proc.BillingTypeOne)+"'";
+				c+="BillingTypeOne = '"+POut.PLong(proc.BillingTypeOne)+"'";
 				comma=true;
 			}
 			if(proc.BillingTypeTwo!=oldProc.BillingTypeTwo) {
 				if(comma)
 					c+=",";
-				c+="BillingTypeTwo = '"+POut.PInt(proc.BillingTypeTwo)+"'";
+				c+="BillingTypeTwo = '"+POut.PLong(proc.BillingTypeTwo)+"'";
 				comma=true;
 			}
 			if(proc.CodeNum!=oldProc.CodeNum) {
 				if(comma)
 					c+=",";
-				c+="CodeNum = '"+POut.PInt(proc.CodeNum)+"'";
+				c+="CodeNum = '"+POut.PLong(proc.CodeNum)+"'";
 				comma=true;
 			}
 			if(proc.CodeMod1!=oldProc.CodeMod1) {
@@ -263,22 +263,22 @@ namespace OpenDentBusiness {
 			}
 			if(proc.UnitQty!=oldProc.UnitQty) {
 				if(comma) c+=",";
-				c+="UnitQty = '"+POut.PInt(proc.UnitQty)+"'";
+				c+="UnitQty = '"+POut.PLong(proc.UnitQty)+"'";
 				comma=true;
 			}
 			if(proc.BaseUnits!=oldProc.BaseUnits) {
 				if(comma) c+=",";
-				c+="BaseUnits = '"+POut.PInt(proc.BaseUnits)+"'";
+				c+="BaseUnits = '"+POut.PLong(proc.BaseUnits)+"'";
 				comma=true;
 			}
 			if(proc.StartTime != oldProc.StartTime) {
 				if(comma) c += ",";
-				c += "StartTime = '" + POut.PInt(proc.StartTime) + "'";
+				c += "StartTime = '" + POut.PLong(proc.StartTime) + "'";
 				comma = true;
 			}
 			if(proc.StopTime != oldProc.StopTime) {
 				if(comma) c += ",";
-				c += "StopTime = '" + POut.PInt(proc.StopTime) + "'";
+				c += "StopTime = '" + POut.PLong(proc.StopTime) + "'";
 				comma = true;
 			}
 			if(proc.DateTP != oldProc.DateTP) {
@@ -288,12 +288,12 @@ namespace OpenDentBusiness {
 			}
 			if(proc.SiteNum != oldProc.SiteNum) {
 				if(comma) c += ",";
-				c += "SiteNum = '" + POut.PInt(proc.SiteNum)+"'";
+				c += "SiteNum = '" + POut.PLong(proc.SiteNum)+"'";
 				comma = true;
 			}
 			long rowsChanged=0;
 			if(comma) {
-				c+=" WHERE ProcNum = '"+POut.PInt(proc.ProcNum)+"'";
+				c+=" WHERE ProcNum = '"+POut.PLong(proc.ProcNum)+"'";
 				//DataConnection dcon=new DataConnection();
 				rowsChanged=Db.NonQ(c);
 			}
@@ -338,19 +338,19 @@ namespace OpenDentBusiness {
 				return;
 			}
 			//Test to see if any payment at all has been received for this proc
-			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PInt(procNum)
-				+" AND InsPayAmt > 0 AND Status != "+POut.PInt((int)ClaimProcStatus.Preauth);
+			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.PLong(procNum)
+				+" AND InsPayAmt > 0 AND Status != "+POut.PLong((int)ClaimProcStatus.Preauth);
 			if(Db.GetCount(command)!="0") {
 				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
 			}
 			//delete adjustments
-			command="DELETE FROM adjustment WHERE ProcNum='"+POut.PInt(procNum)+"'";
+			command="DELETE FROM adjustment WHERE ProcNum='"+POut.PLong(procNum)+"'";
 			Db.NonQ(command);
 			//delete claimprocs
-			command="DELETE from claimproc WHERE ProcNum = '"+POut.PInt(procNum)+"'";
+			command="DELETE from claimproc WHERE ProcNum = '"+POut.PLong(procNum)+"'";
 			Db.NonQ(command);
 			//resynch appointment description-------------------------------------------------------------------------------------
-			command="SELECT AptNum,PlannedAptNum FROM procedurelog WHERE ProcNum = "+POut.PInt(procNum);
+			command="SELECT AptNum,PlannedAptNum FROM procedurelog WHERE ProcNum = "+POut.PLong(procNum);
 			DataTable table=Db.GetTable(command);
 			string aptnum=table.Rows[0][0].ToString();
 			string plannedaptnum=table.Rows[0][1].ToString();
@@ -358,7 +358,7 @@ namespace OpenDentBusiness {
 			if(aptnum!="0") {
 				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
 					WHERE procedurecode.CodeNum=procedurelog.CodeNum
-					AND ProcNum != "+POut.PInt(procNum)
+					AND ProcNum != "+POut.PLong(procNum)
 					+" AND procedurelog.AptNum="+aptnum;
 				table=Db.GetTable(command);
 				procdescript="";
@@ -373,7 +373,7 @@ namespace OpenDentBusiness {
 			if(plannedaptnum!="0") {
 				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
 					WHERE procedurecode.CodeNum=procedurelog.CodeNum
-					AND ProcNum != "+POut.PInt(procNum)
+					AND ProcNum != "+POut.PLong(procNum)
 					+" AND procedurelog.PlannedAptNum="+plannedaptnum;
 				table=Db.GetTable(command);
 				procdescript="";
@@ -386,10 +386,10 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 			}
 			//set the procedure deleted-----------------------------------------------------------------------------------------
-			command="UPDATE procedurelog SET ProcStatus = "+POut.PInt((int)ProcStat.D)+", "
+			command="UPDATE procedurelog SET ProcStatus = "+POut.PLong((int)ProcStat.D)+", "
 				+"AptNum=0, "
 				+"PlannedAptNum=0 "
-				+"WHERE ProcNum = '"+POut.PInt(procNum)+"'";
+				+"WHERE ProcNum = '"+POut.PLong(procNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -398,8 +398,8 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newAptNum);
 				return;
 			}
-			string command="UPDATE procedurelog SET AptNum = "+POut.PInt(newAptNum)
-				+" WHERE ProcNum = "+POut.PInt(procNum);
+			string command="UPDATE procedurelog SET AptNum = "+POut.PLong(newAptNum)
+				+" WHERE ProcNum = "+POut.PLong(procNum);
 			Db.NonQ(command);
 		}
 
@@ -408,8 +408,8 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPlannedAptNum);
 				return;
 			}
-			string command="UPDATE procedurelog SET PlannedAptNum = "+POut.PInt(newPlannedAptNum)
-				+" WHERE ProcNum = "+POut.PInt(procNum);
+			string command="UPDATE procedurelog SET PlannedAptNum = "+POut.PLong(newPlannedAptNum)
+				+" WHERE ProcNum = "+POut.PLong(procNum);
 			Db.NonQ(command);
 		}
 
@@ -418,8 +418,8 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum,newPriority);
 				return;
 			}
-			string command="UPDATE procedurelog SET Priority = "+POut.PInt(newPriority)
-				+" WHERE ProcNum = "+POut.PInt(procNum);
+			string command="UPDATE procedurelog SET Priority = "+POut.PLong(newPriority)
+				+" WHERE ProcNum = "+POut.PLong(procNum);
 			Db.NonQ(command);
 		}
 
@@ -429,7 +429,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE procedurelog SET ProcFee = "+POut.PDouble(newFee)
-				+" WHERE ProcNum = "+POut.PInt(procNum);
+				+" WHERE ProcNum = "+POut.PLong(procNum);
 			Db.NonQ(command);
 		}
 
@@ -438,7 +438,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PInt(patNum)
+			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PLong(patNum)
 				+" AND ProcStatus !=6"//don't include deleted
 				+" ORDER BY ProcDate";
 			DataTable table=Db.GetTable(command);
@@ -464,7 +464,7 @@ namespace OpenDentBusiness {
 			if(!includeNote) {
 				return proc;
 			}
-			command="SELECT * FROM procnote WHERE ProcNum="+POut.PInt(procNum)+" ORDER BY EntryDateTime DESC ";
+			command="SELECT * FROM procnote WHERE ProcNum="+POut.PLong(procNum)+" ORDER BY EntryDateTime DESC ";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}
@@ -475,7 +475,7 @@ namespace OpenDentBusiness {
 			if(table.Rows.Count==0) {
 				return proc;
 			}
-			proc.UserNum   =PIn.PInt(table.Rows[0]["UserNum"].ToString());
+			proc.UserNum   =PIn.PLong(table.Rows[0]["UserNum"].ToString());
 			proc.Note      =PIn.PString(table.Rows[0]["Note"].ToString());
 			proc.SigIsTopaz=PIn.PBool(table.Rows[0]["SigIsTopaz"].ToString());
 			proc.Signature =PIn.PString(table.Rows[0]["Signature"].ToString());
@@ -516,45 +516,45 @@ namespace OpenDentBusiness {
 			Procedure proc;
 			for(int i=0;i<table.Rows.Count;i++) {
 				proc=new Procedure();
-				proc.ProcNum				= PIn.PInt(table.Rows[i][0].ToString());
-				proc.PatNum					= PIn.PInt(table.Rows[i][1].ToString());
-				proc.AptNum					= PIn.PInt(table.Rows[i][2].ToString());
+				proc.ProcNum				= PIn.PLong(table.Rows[i][0].ToString());
+				proc.PatNum					= PIn.PLong(table.Rows[i][1].ToString());
+				proc.AptNum					= PIn.PLong(table.Rows[i][2].ToString());
 				proc.OldCode				= PIn.PString(table.Rows[i][3].ToString());
 				proc.ProcDate				= PIn.PDate(table.Rows[i][4].ToString());
 				proc.ProcFee				= PIn.PDouble(table.Rows[i][5].ToString());
 				proc.Surf						= PIn.PString(table.Rows[i][6].ToString());
 				proc.ToothNum				= PIn.PString(table.Rows[i][7].ToString());
 				proc.ToothRange			= PIn.PString(table.Rows[i][8].ToString());
-				proc.Priority				= PIn.PInt(table.Rows[i][9].ToString());
-				proc.ProcStatus			= (ProcStat)PIn.PInt(table.Rows[i][10].ToString());
-				proc.ProvNum				= PIn.PInt(table.Rows[i][11].ToString());
-				proc.Dx							= PIn.PInt(table.Rows[i][12].ToString());
-				proc.PlannedAptNum	= PIn.PInt(table.Rows[i][13].ToString());
-				proc.PlaceService		= (PlaceOfService)PIn.PInt(table.Rows[i][14].ToString());
+				proc.Priority				= PIn.PLong(table.Rows[i][9].ToString());
+				proc.ProcStatus			= (ProcStat)PIn.PLong(table.Rows[i][10].ToString());
+				proc.ProvNum				= PIn.PLong(table.Rows[i][11].ToString());
+				proc.Dx							= PIn.PLong(table.Rows[i][12].ToString());
+				proc.PlannedAptNum	= PIn.PLong(table.Rows[i][13].ToString());
+				proc.PlaceService		= (PlaceOfService)PIn.PLong(table.Rows[i][14].ToString());
 				proc.Prosthesis		  = PIn.PString(table.Rows[i][15].ToString());
 				proc.DateOriginalProsth= PIn.PDate(table.Rows[i][16].ToString());
 				proc.ClaimNote		    = PIn.PString(table.Rows[i][17].ToString());
 				proc.DateEntryC      = PIn.PDate(table.Rows[i][18].ToString());
-				proc.ClinicNum       = PIn.PInt(table.Rows[i][19].ToString());
+				proc.ClinicNum       = PIn.PLong(table.Rows[i][19].ToString());
 				proc.MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
 				proc.DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
 				proc.IsPrincDiag     = PIn.PBool(table.Rows[i][22].ToString());
-				proc.ProcNumLab      = PIn.PInt(table.Rows[i][23].ToString());
-				proc.BillingTypeOne  = PIn.PInt(table.Rows[i][24].ToString());
-				proc.BillingTypeTwo  = PIn.PInt(table.Rows[i][25].ToString());
-				proc.CodeNum         = PIn.PInt(table.Rows[i][26].ToString());
+				proc.ProcNumLab      = PIn.PLong(table.Rows[i][23].ToString());
+				proc.BillingTypeOne  = PIn.PLong(table.Rows[i][24].ToString());
+				proc.BillingTypeTwo  = PIn.PLong(table.Rows[i][25].ToString());
+				proc.CodeNum         = PIn.PLong(table.Rows[i][26].ToString());
 				proc.CodeMod1        = PIn.PString(table.Rows[i][27].ToString());
 				proc.CodeMod2        = PIn.PString(table.Rows[i][28].ToString());
 				proc.CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
 				proc.CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				proc.RevCode         = PIn.PString(table.Rows[i][31].ToString());
 				proc.UnitCode        = PIn.PString(table.Rows[i][32].ToString());
-				proc.UnitQty         = PIn.PInt32(table.Rows[i][33].ToString());
-				proc.BaseUnits       = PIn.PInt32(table.Rows[i][34].ToString());
-				proc.StartTime       = PIn.PInt32(table.Rows[i][35].ToString());
-				proc.StopTime        = PIn.PInt32(table.Rows[i][36].ToString());
+				proc.UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
+				proc.BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
+				proc.StartTime       = PIn.PInt(table.Rows[i][35].ToString());
+				proc.StopTime        = PIn.PInt(table.Rows[i][36].ToString());
 				proc.DateTP          = PIn.PDate(table.Rows[i][37].ToString());
-				proc.SiteNum         = PIn.PInt(table.Rows[i][38].ToString());
+				proc.SiteNum         = PIn.PLong(table.Rows[i][38].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -574,10 +574,10 @@ namespace OpenDentBusiness {
 			}
 			string command;
 			if(isPlanned) {
-				command = "SELECT * from procedurelog WHERE PlannedAptNum = '"+POut.PInt(aptNum)+"'";
+				command = "SELECT * from procedurelog WHERE PlannedAptNum = '"+POut.PLong(aptNum)+"'";
 			}
 			else {
-				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PInt(aptNum)+"'";
+				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PLong(aptNum)+"'";
 			}
 			DataTable table=Db.GetTable(command);
 			return ConvertToList(table);
@@ -603,10 +603,10 @@ namespace OpenDentBusiness {
 					strAptNums+=" OR";
 				}
 				if(isForPlanned) {
-					strAptNums+=" PlannedAptNum='"+POut.PInt(myAptNums[i])+"'";
+					strAptNums+=" PlannedAptNum='"+POut.PLong(myAptNums[i])+"'";
 				}
 				else {
-					strAptNums+=" AptNum='"+POut.PInt(myAptNums[i])+"'";
+					strAptNums+=" AptNum='"+POut.PLong(myAptNums[i])+"'";
 				}
 			}
 			string command = "SELECT * FROM procedurelog WHERE"+strAptNums;
@@ -698,10 +698,10 @@ namespace OpenDentBusiness {
 				}
 			}
 			string command="SELECT Count(*) from procedurelog WHERE "
-				+"PatNum = '"+POut.PInt(pat.PatNum)+"' "
+				+"PatNum = '"+POut.PLong(pat.PatNum)+"' "
 				+"AND ProcStatus = '2'";
 			DataTable table=Db.GetTable(command);
-			if(PIn.PInt(table.Rows[0][0].ToString())>0) {
+			if(PIn.PLong(table.Rows[0][0].ToString())>0) {
 				return;//there are already completed procs (for all situations)
 			}
 			if(situation==2) {
@@ -710,12 +710,12 @@ namespace OpenDentBusiness {
 			if(situation==3) {
 				command="UPDATE patient SET DateFirstVisit ='0001-01-01'"
 					+" WHERE PatNum ='"
-					+POut.PInt(pat.PatNum)+"'";
+					+POut.PLong(pat.PatNum)+"'";
 			}
 			else {
 				command="UPDATE patient SET DateFirstVisit ="
 					+POut.PDate(visitDate)+" WHERE PatNum ='"
-					+POut.PInt(pat.PatNum)+"'";
+					+POut.PLong(pat.PatNum)+"'";
 			}
 			//MessageBox.Show(cmd.CommandText);
 			//dcon.NonQ(command);
@@ -745,7 +745,7 @@ namespace OpenDentBusiness {
 			//first, check for missing teeth
 			string command="SELECT COUNT(*) FROM toothinitial "
 				+"WHERE ToothNum='"+toothNum+"' "
-				+"AND PatNum="+POut.PInt(patNum)
+				+"AND PatNum="+POut.PLong(patNum)
 				+" AND InitialType=0";//missing
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0") {
@@ -786,12 +786,12 @@ namespace OpenDentBusiness {
 			else {
 				command+="AptNum";
 			}
-			command+="="+POut.PInt(aptNum)+" WHERE ";
+			command+="="+POut.PLong(aptNum)+" WHERE ";
 			for(int i=0;i<procNums.Count;i++) {
 				if(i>0) {
 					command+=" OR ";
 				}
-				command+="ProcNum="+POut.PInt(procNums[i]);
+				command+="ProcNum="+POut.PLong(procNums[i]);
 			}
 			Db.NonQ(command);
 		}
@@ -816,7 +816,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR ";
 				}
-				command+="ProcNum="+POut.PInt(procNums[i]);
+				command+="ProcNum="+POut.PLong(procNums[i]);
 			}
 			Db.NonQ(command);
 		}
@@ -974,7 +974,7 @@ namespace OpenDentBusiness {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),procNum);
 			}
 			string command="SELECT COUNT(*) FROM claimproc "
-				+"WHERE ProcNum="+POut.PInt(procNum)+" "
+				+"WHERE ProcNum="+POut.PLong(procNum)+" "
 				+"AND ClaimNum>0";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
@@ -1193,13 +1193,13 @@ namespace OpenDentBusiness {
 			double oldFee;
 			long rowsChanged=0;
 			for(int i=0;i<table.Rows.Count;i++) {
-				priPlanFeeSched=PIn.PInt(table.Rows[i]["PlanFeeSched"].ToString());
-				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
-				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
+				priPlanFeeSched=PIn.PLong(table.Rows[i]["PlanFeeSched"].ToString());
+				patFeeSched=PIn.PLong(table.Rows[i]["PatFeeSched"].ToString());
+				patProv=PIn.PLong(table.Rows[i]["PriProv"].ToString());
 				planType=PIn.PString(table.Rows[i]["PlanType"].ToString());
-				insfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv));
+				insfee=Fees.GetAmount0(PIn.PLong(table.Rows[i]["CodeNum"].ToString()),Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv));
 				if(planType=="p") {//PPO
-					standardfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
+					standardfee=Fees.GetAmount0(PIn.PLong(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
 					if(standardfee>insfee) {
 						newFee=standardfee;
 					} 
@@ -1469,7 +1469,7 @@ namespace OpenDentBusiness {
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans);
 			//this query could be improved slightly to only get notes of interest.
-			string command="SELECT * FROM procnote WHERE PatNum="+POut.PInt(apt.PatNum)+" ORDER BY EntryDateTime";
+			string command="SELECT * FROM procnote WHERE PatNum="+POut.PLong(apt.PatNum)+" ORDER BY EntryDateTime";
 			DataTable rawNotes=Db.GetTable(command);
 			//CovPats.Refresh(PlanList,patPlans);
 			//bool doResetRecallStatus=false;
@@ -1488,7 +1488,7 @@ namespace OpenDentBusiness {
 					if(ProcList[i].ProcNum.ToString()!=rawNotes.Rows[n]["ProcNum"].ToString()) {
 						continue;
 					}
-					ProcList[i].UserNum=PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString());
+					ProcList[i].UserNum=PIn.PLong(rawNotes.Rows[n]["UserNum"].ToString());
 					ProcList[i].Note=PIn.PString(rawNotes.Rows[n]["Note"].ToString());
 					ProcList[i].SigIsTopaz=PIn.PBool(rawNotes.Rows[n]["SigIsTopaz"].ToString());
 					ProcList[i].Signature=PIn.PString(rawNotes.Rows[n]["Signature"].ToString());

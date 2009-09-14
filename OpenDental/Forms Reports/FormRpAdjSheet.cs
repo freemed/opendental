@@ -237,7 +237,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="adjustment.ProvNum = '"
-					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			string whereType="(";
@@ -246,7 +246,7 @@ namespace OpenDental{
 					whereType+="OR ";
 				}
 				whereType+="adjustment.AdjType = '"
-					+POut.PInt(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
+					+POut.PLong(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
 			}
 			whereType+=")";
 			Queries.CurReport=new ReportOld();

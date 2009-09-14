@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 			List=new Computer[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new Computer();
-				List[i].ComputerNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].ComputerNum=PIn.PLong(table.Rows[i][0].ToString());
 				List[i].CompName=PIn.PString(table.Rows[i][1].ToString());
 			}
 		}
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 			command+="CompName"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(comp.ComputerNum)+"', ";
+				command+="'"+POut.PLong(comp.ComputerNum)+"', ";
 			}
 			command+=
 				"'"+POut.PString(comp.CompName)+"')";

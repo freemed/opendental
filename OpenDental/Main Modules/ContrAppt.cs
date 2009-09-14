@@ -1292,13 +1292,13 @@ namespace OpenDental{
 					for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 						tableAptNum=DS.Tables["Appointments"].Rows[i]["AptNum"].ToString();
 						if(tableAptNum==ContrApptSingle.SelectedAptNum.ToString()) {
-							aptconfirmed=PIn.PInt(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
+							aptconfirmed=PIn.PLong(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
 							break;
 						}
 					}
 				}
 				else {//pinboard appt selected
-					aptconfirmed=PIn.PInt(pinBoard.SelectedAppt.DataRoww["Confirmed"].ToString());
+					aptconfirmed=PIn.PLong(pinBoard.SelectedAppt.DataRoww["Confirmed"].ToString());
 				}
 				listConfirmed.SelectedIndex=DefC.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
 			}
@@ -1357,10 +1357,10 @@ namespace OpenDental{
 					//copy time pattern to provBar[]:
 					indexProv=-1;
 					if(row["IsHygiene"].ToString()=="1") {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(row["ProvHyg"].ToString()));
 					}
 					else {
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(row["ProvNum"].ToString()));
 					}
 					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()) {
 						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
@@ -1808,14 +1808,14 @@ namespace OpenDental{
 					indexProv=-1;
 					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
 						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//set ishyg, but no hyg prov set.
-							indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 						}
 						else {
-							indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+							indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 						}
 					}
 					else{
-						indexProv=ApptViewItemL.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+						indexProv=ApptViewItemL.GetIndexProv(PIn.PLong(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
 					if(indexProv==-1){
 						continue;
@@ -1982,7 +1982,7 @@ namespace OpenDental{
 			//}
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			//it will set pt to the last appt on the pinboard.
-			RefreshModuleDataPatient(PIn.PInt(row["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.PLong(row["PatNum"].ToString()));
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 			//RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
@@ -1991,7 +1991,7 @@ namespace OpenDental{
 		}
 
 		private void pinBoard_SelectedIndexChanged(object sender,EventArgs e) {
-			RefreshModuleDataPatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			RefreshModuleDataPatient(PIn.PLong(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			RefreshModuleScreenPatient();
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 			//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
@@ -2077,9 +2077,9 @@ namespace OpenDental{
 			//security prevents moving an appointment by preventing placing it on the pinboard, not here
 			//We no longer ask user this question.  It just slows things down: "Move Appointment?"
 			//convert loc to new time
-			Appointment aptCur=Appointments.GetOneApt(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
+			Appointment aptCur=Appointments.GetOneApt(PIn.PLong(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
 			Appointment aptOld=aptCur.Copy();
-			RefreshModuleDataPatient(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
+			RefreshModuleDataPatient(PIn.PLong(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
 			//Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
 			if(aptCur.IsNewPatient && AppointmentL.DateSelected!=aptCur.AptDateTime){
 				Procedures.SetDateFirstVisit(AppointmentL.DateSelected,4,PatCur);
@@ -2096,7 +2096,7 @@ namespace OpenDental{
 				//this is crude and temporary:
 				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
+					aptNums.Add(PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
@@ -2332,7 +2332,7 @@ namespace OpenDental{
 				if(aptTime <= time
 					&& time < aptTime+TimeSpan.FromMinutes(DS.Tables["Appointments"].Rows[i]["Pattern"].ToString().Length*5))
 				{
-					return PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());
+					return PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());
 				}
 			}
 			return 0;
@@ -2408,7 +2408,7 @@ namespace OpenDental{
 				ContrApptSingle3[thisIndex].CreateShadow();
 				grfx.DrawImage(ContrApptSingle3[thisIndex].Shadow,ContrApptSingle3[thisIndex].Location.X
 					,ContrApptSingle3[thisIndex].Location.Y);
-				RefreshModuleDataPatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.PLong(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				RefreshModuleScreenPatient();
 				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				//RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
@@ -2615,7 +2615,7 @@ namespace OpenDental{
 				if(pattern=="") {
 					pattern="///";
 				}
-				Appointments.SetPattern(PIn.PInt(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
+				Appointments.SetPattern(PIn.PLong(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
 				ResizingAppt=false;
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
@@ -2703,14 +2703,14 @@ namespace OpenDental{
 			if(AppointmentRuleC.List.Length>0) {
 				List<long> aptNums=new List<long>();
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums.Add(PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
+					aptNums.Add(PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()));//ListDay[i].AptNum;
 				}
 				procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			}
 			if(AppointmentRuleC.List.Length>0) {
 				long[] aptNums=new long[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+					aptNums[i]=PIn.PLong(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
 				}
 				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=
@@ -2894,7 +2894,7 @@ namespace OpenDental{
 				{
 					try {
 						Bitmap patPict;
-						Documents.GetPatPict(PIn.PInt(row["PatNum"].ToString()),
+						Documents.GetPatPict(PIn.PLong(row["PatNum"].ToString()),
 							ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
 							row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
 							row["ImageFolder"].ToString(),""}),
@@ -3025,7 +3025,7 @@ namespace OpenDental{
 			//this logic is a little different than mouse down for now because on the first click of a 
 			//double click, an appointment control is created under the mouse.
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt
-				long patnum=PIn.PInt(TempApptSingle.DataRoww["PatNum"].ToString());
+				long patnum=PIn.PLong(TempApptSingle.DataRoww["PatNum"].ToString());
 				TempApptSingle.Dispose();
 				//security handled inside the form
 				FormApptEdit FormAE=new FormApptEdit(ContrApptSingle.ClickedAptNum);
@@ -3492,14 +3492,14 @@ namespace OpenDental{
 			}
 			else{//for normal appt:
 				//this gets rid of new appointments that never made it off the pinboard
-				Appointments.Delete(PIn.PInt(row["AptNum"].ToString()));
+				Appointments.Delete(PIn.PLong(row["AptNum"].ToString()));
 			}
 			if(pinBoard.SelectedIndex==-1){
 				RefreshModuleDataPatient(0);
 				//RefreshModulePatient(0);
 			}
 			else{
-				RefreshModuleDataPatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+				RefreshModuleDataPatient(PIn.PLong(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			}
@@ -3648,7 +3648,7 @@ namespace OpenDental{
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.UnschedList);
-			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			Patient pat=Patients.GetPat(PIn.PLong(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
 				pat.GetNameLF()+", "
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
@@ -3669,7 +3669,7 @@ namespace OpenDental{
 				return;
 			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			Patient pat=Patients.GetPat(PIn.PLong(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
@@ -3688,7 +3688,7 @@ namespace OpenDental{
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
 				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
 				+"Broke");
-			long provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
+			long provNum=PIn.PLong(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
 			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
@@ -4178,7 +4178,7 @@ namespace OpenDental{
 				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
-			SearchResults=AppointmentL.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
+			SearchResults=AppointmentL.GetSearchResults(PIn.PLong(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){

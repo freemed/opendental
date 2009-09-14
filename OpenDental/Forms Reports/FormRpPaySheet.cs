@@ -288,7 +288,7 @@ namespace OpenDental{
 					if(i>0) {
 						whereProv+="OR ";
 					}
-					whereProv+="claimproc.ProvNum = "+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="claimproc.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=")";
 			}
@@ -325,7 +325,7 @@ namespace OpenDental{
 					if(i>0) {
 						whereProv+="OR ";
 					}
-					whereProv+="paysplit.ProvNum = "+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
+					whereProv+="paysplit.ProvNum = "+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+" ";
 				}
 				whereProv+=")";
 			}
@@ -348,7 +348,7 @@ namespace OpenDental{
 					if(i>0) {
 						queryPat+="OR ";
 					}
-					queryPat+="payment.PayType = "+POut.PInt(DefC.Short[(int)DefCat.PaymentTypes][listTypes.SelectedIndices[i]].DefNum)+" ";
+					queryPat+="payment.PayType = "+POut.PLong(DefC.Short[(int)DefCat.PaymentTypes][listTypes.SelectedIndices[i]].DefNum)+" ";
 				}
 				queryPat+=") ";
 			}

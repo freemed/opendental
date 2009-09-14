@@ -1499,7 +1499,7 @@ namespace OpenDental
 				ClaimProcCur.PercentOverride=-1;
 			}
 			else {
-				ClaimProcCur.PercentOverride=PIn.PInt32(textPercentOverride.Text);
+				ClaimProcCur.PercentOverride=PIn.PInt(textPercentOverride.Text);
 			}
 			if(textPaidOtherInsOverride.Text=="") {
 				ClaimProcCur.PaidOtherInsOverride=-1;

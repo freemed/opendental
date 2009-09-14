@@ -380,7 +380,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="procedurelog.ProvNum = "
-						+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}

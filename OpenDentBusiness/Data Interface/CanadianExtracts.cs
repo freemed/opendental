@@ -14,14 +14,14 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CanadianExtract>>(MethodBase.GetCurrentMethod(),claimNum);
 			}
-			string command="SELECT * FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
+			string command="SELECT * FROM canadianextract WHERE ClaimNum="+POut.PLong(claimNum);
 			DataTable table=Db.GetTable(command);
 			List<CanadianExtract> retVal=new List<CanadianExtract>();
 			CanadianExtract extract;
 			for(int i=0;i<table.Rows.Count;i++){
 				extract=new CanadianExtract();
-				extract.CanadianExtractNum=PIn.PInt   (table.Rows[i][0].ToString());
-				extract.ClaimNum          =PIn.PInt   (table.Rows[i][1].ToString());
+				extract.CanadianExtractNum=PIn.PLong   (table.Rows[i][0].ToString());
+				extract.ClaimNum          =PIn.PLong   (table.Rows[i][1].ToString());
 				extract.ToothNum          =PIn.PString(table.Rows[i][2].ToString());
 				extract.DateExtraction    =PIn.PDate  (table.Rows[i][3].ToString());
 				retVal.Add(extract);
@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,missinglist);
 				return;
 			}
-			string command="DELETE FROM canadianextract WHERE ClaimNum="+POut.PInt(claimNum);
+			string command="DELETE FROM canadianextract WHERE ClaimNum="+POut.PLong(claimNum);
 			Db.NonQ(command);
 			for(int i=0;i<missinglist.Count;i++){
 				missinglist[i].ClaimNum=claimNum;
@@ -77,10 +77,10 @@ namespace OpenDentBusiness{
 			}
 			command+="ClaimNum,ToothNum,DateExtraction) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(cur.CanadianExtractNum)+"', ";
+				command+="'"+POut.PLong(cur.CanadianExtractNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (cur.ClaimNum)+"', "
+				 "'"+POut.PLong   (cur.ClaimNum)+"', "
 				+"'"+POut.PString(cur.ToothNum)+"', "
 				+POut.PDate  (cur.DateExtraction)+")";
 			if(PrefC.RandomKeys) {

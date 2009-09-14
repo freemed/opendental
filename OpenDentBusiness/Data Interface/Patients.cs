@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT guarantor FROM patient "
-				+"WHERE patnum = '"+POut.PInt(patNum)+"'";
+				+"WHERE patnum = '"+POut.PLong(patNum)+"'";
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 			if(patNum==0) {
 				return null;
 			}
-			string command="SELECT * FROM patient WHERE PatNum="+POut.PInt(patNum);
+			string command="SELECT * FROM patient WHERE PatNum="+POut.PLong(patNum);
 			Patient pat=null;
 			try {
 				pat= DataObjectFactory<Patient>.CreateObject(command);
@@ -163,15 +163,15 @@ namespace OpenDentBusiness{
 				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum"//DateTStamp
 				+",ResponsParty) VALUES (";
 			if(includePatNum || PrefC.RandomKeys) {
-				command+="'"+POut.PInt(pat.PatNum)+"', ";
+				command+="'"+POut.PLong(pat.PatNum)+"', ";
 			}
 			command+="'"+POut.PString(pat.LName)+"', "
 				+"'"+POut.PString(pat.FName)+"', "
 				+"'"+POut.PString(pat.MiddleI)+"', "
 				+"'"+POut.PString(pat.Preferred)+"', "
-				+"'"+POut.PInt((int)pat.PatStatus)+"', "
-				+"'"+POut.PInt((int)pat.Gender)+"', "
-				+"'"+POut.PInt((int)pat.Position)+"', "
+				+"'"+POut.PLong((int)pat.PatStatus)+"', "
+				+"'"+POut.PLong((int)pat.Gender)+"', "
+				+"'"+POut.PLong((int)pat.Position)+"', "
 				+POut.PDate(pat.Birthdate)+", "
 				+"'"+POut.PString(pat.SSN)+"', "
 				+"'"+POut.PString(pat.Address)+"', "
@@ -182,15 +182,15 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(pat.HmPhone)+"', "
 				+"'"+POut.PString(pat.WkPhone)+"', "
 				+"'"+POut.PString(pat.WirelessPhone)+"', "
-				+"'"+POut.PInt(pat.Guarantor)+"', "
+				+"'"+POut.PLong(pat.Guarantor)+"', "
 				+"'"+POut.PString(pat.CreditType)+"', "
 				+"'"+POut.PString(pat.Email)+"', "
 				+"'"+POut.PString(pat.Salutation)+"', "
 				+"'"+POut.PDouble(pat.EstBalance)+"', "
-				+"'"+POut.PInt(pat.PriProv)+"', "
-				+"'"+POut.PInt(pat.SecProv)+"', "
-				+"'"+POut.PInt(pat.FeeSched)+"', "
-				+"'"+POut.PInt(pat.BillingType)+"', "
+				+"'"+POut.PLong(pat.PriProv)+"', "
+				+"'"+POut.PLong(pat.SecProv)+"', "
+				+"'"+POut.PLong(pat.FeeSched)+"', "
+				+"'"+POut.PLong(pat.BillingType)+"', "
 				+"'"+POut.PString(pat.ImageFolder)+"', "
 				+"'"+POut.PString(pat.AddrNote)+"', "
 				+"'"+POut.PString(pat.FamFinUrgNote)+"', "
@@ -206,32 +206,32 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(pat.BalOver90)+"', "
 				+"'"+POut.PDouble(pat.InsEst)+"', "
 				+"'"+POut.PDouble(pat.BalTotal)+"', "
-				+"'"+POut.PInt(pat.EmployerNum)+"', "
+				+"'"+POut.PLong(pat.EmployerNum)+"', "
 				+"'"+POut.PString(pat.EmploymentNote)+"', "
-				+"'"+POut.PInt((int)pat.Race)+"', "
+				+"'"+POut.PLong((int)pat.Race)+"', "
 				+"'"+POut.PString(pat.County)+"', "
-				+"'"+POut.PInt((int)pat.GradeLevel)+"', "
-				+"'"+POut.PInt((int)pat.Urgency)+"', "
+				+"'"+POut.PLong((int)pat.GradeLevel)+"', "
+				+"'"+POut.PLong((int)pat.Urgency)+"', "
 				+POut.PDate(pat.DateFirstVisit)+", "
-				+"'"+POut.PInt(pat.ClinicNum)+"', "
+				+"'"+POut.PLong(pat.ClinicNum)+"', "
 				+"'"+POut.PString(pat.HasIns)+"', "
 				+"'"+POut.PString(pat.TrophyFolder)+"', "
 				+"'"+POut.PBool(pat.PlannedIsDone)+"', "
 				+"'"+POut.PBool(pat.Premed)+"', "
 				+"'"+POut.PString(pat.Ward)+"', "
-				+"'"+POut.PInt((int)pat.PreferConfirmMethod)+"', "
-				+"'"+POut.PInt((int)pat.PreferContactMethod)+"', "
-				+"'"+POut.PInt((int)pat.PreferRecallMethod)+"', "
+				+"'"+POut.PLong((int)pat.PreferConfirmMethod)+"', "
+				+"'"+POut.PLong((int)pat.PreferContactMethod)+"', "
+				+"'"+POut.PLong((int)pat.PreferRecallMethod)+"', "
 				+POut.PTimeSpan(pat.SchedBeforeTime)+", "
 				+POut.PTimeSpan(pat.SchedAfterTime)+", "
-				+"'"+POut.PInt(pat.SchedDayOfWeek)+"', "
+				+"'"+POut.PLong(pat.SchedDayOfWeek)+"', "
 				+"'"+POut.PString(pat.Language)+"', "
 				+POut.PDate(pat.AdmitDate)+", "
 				+"'"+POut.PString(pat.Title)+"', "
 				+"'"+POut.PDouble(pat.PayPlanDue)+"', "
-				+"'"+POut.PInt(pat.SiteNum)+"', "
+				+"'"+POut.PLong(pat.SiteNum)+"', "
 				//DateTStamp won't show here.
-				+"'"+POut.PInt(pat.ResponsParty)+"')";
+				+"'"+POut.PLong(pat.ResponsParty)+"')";
 			if(includePatNum || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -273,19 +273,19 @@ namespace OpenDentBusiness{
 			if(pat.PatStatus!=CurOld.PatStatus) {
 				if(comma)
 					c+=",";
-				c+="PatStatus = '" +POut.PInt((int)pat.PatStatus)+"'";
+				c+="PatStatus = '" +POut.PLong((int)pat.PatStatus)+"'";
 				comma=true;
 			}
 			if(pat.Gender!=CurOld.Gender) {
 				if(comma)
 					c+=",";
-				c+="Gender = '"    +POut.PInt((int)pat.Gender)+"'";
+				c+="Gender = '"    +POut.PLong((int)pat.Gender)+"'";
 				comma=true;
 			}
 			if(pat.Position!=CurOld.Position) {
 				if(comma)
 					c+=",";
-				c+="Position = '"  +POut.PInt((int)pat.Position)+"'";
+				c+="Position = '"  +POut.PLong((int)pat.Position)+"'";
 				comma=true;
 			}
 			if(pat.Birthdate!=CurOld.Birthdate) {
@@ -351,7 +351,7 @@ namespace OpenDentBusiness{
 			if(pat.Guarantor!=CurOld.Guarantor) {
 				if(comma)
 					c+=",";
-				c+="Guarantor = '"      +POut.PInt(pat.Guarantor)+"'";
+				c+="Guarantor = '"      +POut.PLong(pat.Guarantor)+"'";
 				comma=true;
 			}
 			if(pat.CreditType!=CurOld.CreditType) {
@@ -381,25 +381,25 @@ namespace OpenDentBusiness{
 			if(pat.PriProv!=CurOld.PriProv) {
 				if(comma)
 					c+=",";
-				c+="PriProv = '"        +POut.PInt(pat.PriProv)+"'";
+				c+="PriProv = '"        +POut.PLong(pat.PriProv)+"'";
 				comma=true;
 			}
 			if(pat.SecProv!=CurOld.SecProv) {
 				if(comma)
 					c+=",";
-				c+="SecProv = '"        +POut.PInt(pat.SecProv)+"'";
+				c+="SecProv = '"        +POut.PLong(pat.SecProv)+"'";
 				comma=true;
 			}
 			if(pat.FeeSched!=CurOld.FeeSched) {
 				if(comma)
 					c+=",";
-				c+="FeeSched = '"       +POut.PInt(pat.FeeSched)+"'";
+				c+="FeeSched = '"       +POut.PLong(pat.FeeSched)+"'";
 				comma=true;
 			}
 			if(pat.BillingType!=CurOld.BillingType) {
 				if(comma)
 					c+=",";
-				c+="BillingType = '"    +POut.PInt(pat.BillingType)+"'";
+				c+="BillingType = '"    +POut.PLong(pat.BillingType)+"'";
 				comma=true;
 			}
 			if(pat.ImageFolder!=CurOld.ImageFolder) {
@@ -495,7 +495,7 @@ namespace OpenDentBusiness{
 			if(pat.EmployerNum!=CurOld.EmployerNum) {
 				if(comma)
 					c+=",";
-				c+="EmployerNum = '"    +POut.PInt(pat.EmployerNum)+"'";
+				c+="EmployerNum = '"    +POut.PLong(pat.EmployerNum)+"'";
 				comma=true;
 			}
 			if(pat.EmploymentNote!=CurOld.EmploymentNote) {
@@ -507,7 +507,7 @@ namespace OpenDentBusiness{
 			if(pat.Race!=CurOld.Race) {
 				if(comma)
 					c+=",";
-				c+="Race = '"           +POut.PInt((int)pat.Race)+"'";
+				c+="Race = '"           +POut.PLong((int)pat.Race)+"'";
 				comma=true;
 			}
 			if(pat.County!=CurOld.County) {
@@ -519,13 +519,13 @@ namespace OpenDentBusiness{
 			if(pat.GradeLevel!=CurOld.GradeLevel) {
 				if(comma)
 					c+=",";
-				c+="GradeLevel = '"     +POut.PInt((int)pat.GradeLevel)+"'";
+				c+="GradeLevel = '"     +POut.PLong((int)pat.GradeLevel)+"'";
 				comma=true;
 			}
 			if(pat.Urgency!=CurOld.Urgency) {
 				if(comma)
 					c+=",";
-				c+="Urgency = '"        +POut.PInt((int)pat.Urgency)+"'";
+				c+="Urgency = '"        +POut.PLong((int)pat.Urgency)+"'";
 				comma=true;
 			}
 			if(pat.DateFirstVisit!=CurOld.DateFirstVisit) {
@@ -537,7 +537,7 @@ namespace OpenDentBusiness{
 			if(pat.ClinicNum!=CurOld.ClinicNum) {
 				if(comma)
 					c+=",";
-				c+="ClinicNum = '"     +POut.PInt(pat.ClinicNum)+"'";
+				c+="ClinicNum = '"     +POut.PLong(pat.ClinicNum)+"'";
 				comma=true;
 			}
 			if(pat.HasIns!=CurOld.HasIns) {
@@ -573,19 +573,19 @@ namespace OpenDentBusiness{
 			if(pat.PreferConfirmMethod!=CurOld.PreferConfirmMethod) {
 				if(comma)
 					c+=",";
-				c+="PreferConfirmMethod = '"     +POut.PInt((int)pat.PreferConfirmMethod)+"'";
+				c+="PreferConfirmMethod = '"     +POut.PLong((int)pat.PreferConfirmMethod)+"'";
 				comma=true;
 			}
 			if(pat.PreferContactMethod!=CurOld.PreferContactMethod) {
 				if(comma)
 					c+=",";
-				c+="PreferContactMethod = '"     +POut.PInt((int)pat.PreferContactMethod)+"'";
+				c+="PreferContactMethod = '"     +POut.PLong((int)pat.PreferContactMethod)+"'";
 				comma=true;
 			}
 			if(pat.PreferRecallMethod!=CurOld.PreferRecallMethod) {
 				if(comma)
 					c+=",";
-				c+="PreferRecallMethod = '"     +POut.PInt((int)pat.PreferRecallMethod)+"'";
+				c+="PreferRecallMethod = '"     +POut.PLong((int)pat.PreferRecallMethod)+"'";
 				comma=true;
 			}
 			if(pat.SchedBeforeTime!=CurOld.SchedBeforeTime) {
@@ -603,7 +603,7 @@ namespace OpenDentBusiness{
 			if(pat.SchedDayOfWeek!=CurOld.SchedDayOfWeek) {
 				if(comma)
 					c+=",";
-				c+="SchedDayOfWeek = '"     +POut.PInt(pat.SchedDayOfWeek)+"'";
+				c+="SchedDayOfWeek = '"     +POut.PLong(pat.SchedDayOfWeek)+"'";
 				comma=true;
 			}
 			if(pat.Language!=CurOld.Language) {
@@ -633,19 +633,19 @@ namespace OpenDentBusiness{
 			if(pat.SiteNum!=CurOld.SiteNum) {
 				if(comma)
 					c+=",";
-				c+="SiteNum = '"    +POut.PInt(pat.SiteNum)+"'";
+				c+="SiteNum = '"    +POut.PLong(pat.SiteNum)+"'";
 				comma=true;
 			}
 			//DateTStamp
 			if(pat.ResponsParty!=CurOld.ResponsParty) {
 				if(comma)
 					c+=",";
-				c+="ResponsParty = '"    +POut.PInt(pat.ResponsParty)+"'";
+				c+="ResponsParty = '"    +POut.PLong(pat.ResponsParty)+"'";
 				comma=true;
 			}
 			if(!comma)
 				return 0;//this means no change is actually required.
-			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
+			c+=" WHERE PatNum = '"   +POut.PLong(pat.PatNum)+"'";
 			return Db.NonQ(c);
 		}//end UpdatePatient
 
@@ -656,7 +656,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
 				return;
 			}
-			string command="UPDATE patient SET PatStatus="+POut.PInt((int)PatientStatus.Deleted)+", "
+			string command="UPDATE patient SET PatStatus="+POut.PLong((int)PatientStatus.Deleted)+", "
 				+"Guarantor=PatNum "
 				+"WHERE PatNum ="+pat.PatNum.ToString();
 			Db.NonQ(command);
@@ -672,7 +672,7 @@ namespace OpenDentBusiness{
 			}
 			string billingsnippet=" ";
 			if(billingtype!=0){
-				billingsnippet+="AND BillingType="+POut.PInt(billingtype)+" ";
+				billingsnippet+="AND BillingType="+POut.PLong(billingtype)+" ";
 			}
 			/*for(int i=0;i<billingtypes.Length;i++){//if length==0, it will get all billing types
 				if(i==0){
@@ -738,10 +738,10 @@ namespace OpenDentBusiness{
 				command+="AND PatNum = Guarantor ";
 			}
 			if(clinicNum!=0){
-				command+="AND ClinicNum="+POut.PInt(clinicNum)+" ";
+				command+="AND ClinicNum="+POut.PLong(clinicNum)+" ";
 			}
 			if(siteNum>0) {
-				command+="AND SiteNum="+POut.PInt(siteNum)+" ";
+				command+="AND SiteNum="+POut.PLong(siteNum)+" ";
 			}
 			command+="ORDER BY LName,FName ";
 			if(limit){
@@ -788,13 +788,13 @@ namespace OpenDentBusiness{
 				r["HmPhone"]=table.Rows[i]["HmPhone"].ToString();
 				r["WkPhone"]=table.Rows[i]["WkPhone"].ToString();
 				r["Address"]=table.Rows[i]["Address"].ToString();
-				r["PatStatus"]=((PatientStatus)PIn.PInt(table.Rows[i]["PatStatus"].ToString())).ToString();
-				r["BillingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(table.Rows[i]["BillingType"].ToString()));
+				r["PatStatus"]=((PatientStatus)PIn.PLong(table.Rows[i]["PatStatus"].ToString())).ToString();
+				r["BillingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PLong(table.Rows[i]["BillingType"].ToString()));
 				r["ChartNumber"]=table.Rows[i]["ChartNumber"].ToString();
 				r["City"]=table.Rows[i]["City"].ToString();
 				r["State"]=table.Rows[i]["State"].ToString();
-				r["PriProv"]=Providers.GetAbbr(PIn.PInt(table.Rows[i]["PriProv"].ToString()));
-				r["site"]=Sites.GetDescription(PIn.PInt(table.Rows[i]["SiteNum"].ToString()));
+				r["PriProv"]=Providers.GetAbbr(PIn.PLong(table.Rows[i]["PriProv"].ToString()));
+				r["site"]=Sites.GetDescription(PIn.PLong(table.Rows[i]["SiteNum"].ToString()));
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;
@@ -832,14 +832,14 @@ namespace OpenDentBusiness{
 			Patient pat;
 			for(int i=0;i<table.Rows.Count;i++){
 				pat=new Patient();
-				pat.PatNum       = PIn.PInt   (table.Rows[i][0].ToString());
+				pat.PatNum       = PIn.PLong   (table.Rows[i][0].ToString());
 				pat.LName        = PIn.PString(table.Rows[i][1].ToString());
 				pat.FName        = PIn.PString(table.Rows[i][2].ToString());
 				pat.MiddleI      = PIn.PString(table.Rows[i][3].ToString());
 				pat.Preferred    = PIn.PString(table.Rows[i][4].ToString());
-				pat.PatStatus    = (PatientStatus)PIn.PInt   (table.Rows[i][5].ToString());
-				pat.Gender       = (PatientGender)PIn.PInt   (table.Rows[i][6].ToString());
-				pat.Position     = (PatientPosition)PIn.PInt   (table.Rows[i][7].ToString());
+				pat.PatStatus    = (PatientStatus)PIn.PLong   (table.Rows[i][5].ToString());
+				pat.Gender       = (PatientGender)PIn.PLong   (table.Rows[i][6].ToString());
+				pat.Position     = (PatientPosition)PIn.PLong   (table.Rows[i][7].ToString());
 				pat.Birthdate    = PIn.PDate  (table.Rows[i][8].ToString());
 				pat.Age=DateToAge(pat.Birthdate);
 				pat.SSN          = PIn.PString(table.Rows[i][9].ToString());
@@ -851,15 +851,15 @@ namespace OpenDentBusiness{
 				pat.HmPhone      = PIn.PString(table.Rows[i][15].ToString());
 				pat.WkPhone      = PIn.PString(table.Rows[i][16].ToString());
 				pat.WirelessPhone= PIn.PString(table.Rows[i][17].ToString());
-				pat.Guarantor    = PIn.PInt   (table.Rows[i][18].ToString());
+				pat.Guarantor    = PIn.PLong   (table.Rows[i][18].ToString());
 				pat.CreditType   = PIn.PString(table.Rows[i][19].ToString());
 				pat.Email        = PIn.PString(table.Rows[i][20].ToString());
 				pat.Salutation   = PIn.PString(table.Rows[i][21].ToString());
 				pat.EstBalance   = PIn.PDouble(table.Rows[i][22].ToString());
-				pat.PriProv      = PIn.PInt   (table.Rows[i][23].ToString());
-				pat.SecProv      = PIn.PInt   (table.Rows[i][24].ToString());
-				pat.FeeSched     = PIn.PInt   (table.Rows[i][25].ToString());
-				pat.BillingType  = PIn.PInt   (table.Rows[i][26].ToString());
+				pat.PriProv      = PIn.PLong   (table.Rows[i][23].ToString());
+				pat.SecProv      = PIn.PLong   (table.Rows[i][24].ToString());
+				pat.FeeSched     = PIn.PLong   (table.Rows[i][25].ToString());
+				pat.BillingType  = PIn.PLong   (table.Rows[i][26].ToString());
 				pat.ImageFolder  = PIn.PString(table.Rows[i][27].ToString());
 				pat.AddrNote     = PIn.PString(table.Rows[i][28].ToString());
 				pat.FamFinUrgNote= PIn.PString(table.Rows[i][29].ToString());
@@ -875,22 +875,22 @@ namespace OpenDentBusiness{
 				pat.BalOver90    = PIn.PDouble(table.Rows[i][39].ToString());
 				pat.InsEst       = PIn.PDouble(table.Rows[i][40].ToString());
 				pat.BalTotal     = PIn.PDouble(table.Rows[i][41].ToString());
-				pat.EmployerNum  = PIn.PInt   (table.Rows[i][42].ToString());
+				pat.EmployerNum  = PIn.PLong   (table.Rows[i][42].ToString());
 				pat.EmploymentNote=PIn.PString(table.Rows[i][43].ToString());
-				pat.Race         = (PatientRace)PIn.PInt(table.Rows[i][44].ToString());
+				pat.Race         = (PatientRace)PIn.PLong(table.Rows[i][44].ToString());
 				pat.County       = PIn.PString(table.Rows[i][45].ToString());
-				pat.GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][46].ToString());
-				pat.Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][47].ToString());
+				pat.GradeLevel   = (PatientGrade)PIn.PLong(table.Rows[i][46].ToString());
+				pat.Urgency      = (TreatmentUrgency)PIn.PLong(table.Rows[i][47].ToString());
 				pat.DateFirstVisit=PIn.PDate  (table.Rows[i][48].ToString());
-				pat.ClinicNum    = PIn.PInt   (table.Rows[i][49].ToString());
+				pat.ClinicNum    = PIn.PLong   (table.Rows[i][49].ToString());
 				pat.HasIns       = PIn.PString(table.Rows[i][50].ToString());
 				pat.TrophyFolder = PIn.PString(table.Rows[i][51].ToString());
 				pat.PlannedIsDone= PIn.PBool  (table.Rows[i][52].ToString());
 				pat.Premed       = PIn.PBool  (table.Rows[i][53].ToString());
 				pat.Ward         = PIn.PString(table.Rows[i][54].ToString());
-				pat.PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][55].ToString());
-				pat.PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][56].ToString());
-				pat.PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][57].ToString());
+				pat.PreferConfirmMethod=(ContactMethod)PIn.PLong(table.Rows[i][55].ToString());
+				pat.PreferContactMethod=(ContactMethod)PIn.PLong(table.Rows[i][56].ToString());
+				pat.PreferRecallMethod=(ContactMethod)PIn.PLong(table.Rows[i][57].ToString());
 				pat.SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][58].ToString());
 				pat.SchedAfterTime= PIn.PTimeSpan(table.Rows[i][59].ToString());
 				pat.SchedDayOfWeek=PIn.PByte  (table.Rows[i][60].ToString());
@@ -898,9 +898,9 @@ namespace OpenDentBusiness{
 				pat.AdmitDate    = PIn.PDate  (table.Rows[i][62].ToString());
 				pat.Title        = PIn.PString(table.Rows[i][63].ToString());
 				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][64].ToString());
-				pat.SiteNum      = PIn.PInt   (table.Rows[i][65].ToString());
+				pat.SiteNum      = PIn.PLong   (table.Rows[i][65].ToString());
 				//DateTStamp 66
-				pat.ResponsParty = PIn.PInt   (table.Rows[i][67].ToString());
+				pat.ResponsParty = PIn.PLong   (table.Rows[i][67].ToString());
 				patList.Add(pat);
 			}
 			return patList;
@@ -934,13 +934,13 @@ namespace OpenDentBusiness{
 				return new Patient();
 			}
 			Patient Lim=new Patient();
-			Lim.PatNum     = PIn.PInt   (table.Rows[0][0].ToString());
+			Lim.PatNum     = PIn.PLong   (table.Rows[0][0].ToString());
 			Lim.LName      = PIn.PString(table.Rows[0][1].ToString());
 			Lim.FName      = PIn.PString(table.Rows[0][2].ToString());
 			Lim.MiddleI    = PIn.PString(table.Rows[0][3].ToString());
 			Lim.Preferred  = PIn.PString(table.Rows[0][4].ToString());
 			Lim.CreditType = PIn.PString(table.Rows[0][5].ToString());
-			Lim.Guarantor  = PIn.PInt   (table.Rows[0][6].ToString());
+			Lim.Guarantor  = PIn.PLong   (table.Rows[0][6].ToString());
 			Lim.HasIns     = PIn.PString(table.Rows[0][7].ToString());
 			Lim.SSN        = PIn.PString(table.Rows[0][8].ToString());
 			return Lim;
@@ -962,8 +962,8 @@ namespace OpenDentBusiness{
 				+" GROUP BY PatNum,"
 				+" ORDER BY Guarantor!=PatNum,Birthdate,";
 			*/
-			string command="SET @GuarNum="+POut.PInt(guarNum)+";"
-				+"SET @ExcludePayNum="+POut.PInt(excludePayNum)+";";
+			string command="SET @GuarNum="+POut.PLong(guarNum)+";"
+				+"SET @ExcludePayNum="+POut.PLong(excludePayNum)+";";
 			command+=@"
 				DROP TABLE IF EXISTS tempfambal;
 				CREATE TABLE tempfambal( 
@@ -1046,28 +1046,28 @@ namespace OpenDentBusiness{
 			//Move famfinurgnote to current patient:
 			string command= "UPDATE patient SET "
 				+"FamFinUrgNote = '"+POut.PString(Fam.ListPats[0].FamFinUrgNote)+"' "
-				+"WHERE PatNum = "+POut.PInt(Pat.PatNum);
+				+"WHERE PatNum = "+POut.PLong(Pat.PatNum);
  			Db.NonQ(command);
 			command= "UPDATE patient SET FamFinUrgNote = '' "
 				+"WHERE PatNum = '"+Pat.Guarantor.ToString()+"'";
 			Db.NonQ(command);
 			//Move family financial note to current patient:
 			command="SELECT FamFinancial FROM patientnote "
-				+"WHERE PatNum = "+POut.PInt(Pat.Guarantor);
+				+"WHERE PatNum = "+POut.PLong(Pat.Guarantor);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==1){
 				command= "UPDATE patientnote SET "
 					+"FamFinancial = '"+POut.PString(table.Rows[0][0].ToString())+"' "
-					+"WHERE PatNum = "+POut.PInt(Pat.PatNum);
+					+"WHERE PatNum = "+POut.PLong(Pat.PatNum);
 				Db.NonQ(command);
 			}
 			command= "UPDATE patientnote SET FamFinancial = '' "
-				+"WHERE PatNum = "+POut.PInt(Pat.Guarantor);
+				+"WHERE PatNum = "+POut.PLong(Pat.Guarantor);
 			Db.NonQ(command);
 			//change guarantor of all family members:
 			command= "UPDATE patient SET "
-				+"Guarantor = "+POut.PInt(Pat.PatNum)
-				+" WHERE Guarantor = "+POut.PInt(Pat.Guarantor);
+				+"Guarantor = "+POut.PLong(Pat.PatNum)
+				+" WHERE Guarantor = "+POut.PLong(Pat.Guarantor);
 			Db.NonQ(command);
 		}
 		
@@ -1101,7 +1101,7 @@ namespace OpenDentBusiness{
 			string strGuar=PatientNoteCur.FamFinancial;
 			command= 
 				"SELECT famfinancial "
-				+"FROM patientnote WHERE patnum ='"+POut.PInt(Pat.PatNum)+"'";
+				+"FROM patientnote WHERE patnum ='"+POut.PLong(Pat.PatNum)+"'";
 			//MessageBox.Show(string command);
 			DataTable table=Db.GetTable(command);
 			string strCur=PIn.PString(table.Rows[0][0].ToString());
@@ -1126,7 +1126,7 @@ namespace OpenDentBusiness{
 			long patnum;
 			string lname,fname,middlei,preferred;
 			for(int i=0;i<table.Rows.Count;i++) {
-				patnum=PIn.PInt(table.Rows[i][0].ToString());
+				patnum=PIn.PLong(table.Rows[i][0].ToString());
 				lname=PIn.PString(table.Rows[i][1].ToString());
 				fname=PIn.PString(table.Rows[i][2].ToString());
 				middlei=PIn.PString(table.Rows[i][3].ToString());
@@ -1165,10 +1165,10 @@ namespace OpenDentBusiness{
 				+",Zip = '"        +POut.PString(pat.Zip)+"'"
 				+",HmPhone = '"    +POut.PString(pat.HmPhone)+"'"
 				+",credittype = '" +POut.PString(pat.CreditType)+"'"
-				+",priprov = '"    +POut.PInt   (pat.PriProv)+"'"
-				+",secprov = '"    +POut.PInt   (pat.SecProv)+"'"
-				+",feesched = '"   +POut.PInt   (pat.FeeSched)+"'"
-				+",billingtype = '"+POut.PInt   (pat.BillingType)+"'"
+				+",priprov = '"    +POut.PLong   (pat.PriProv)+"'"
+				+",secprov = '"    +POut.PLong   (pat.SecProv)+"'"
+				+",feesched = '"   +POut.PLong   (pat.FeeSched)+"'"
+				+",billingtype = '"+POut.PLong   (pat.BillingType)+"'"
 				+" WHERE guarantor = '"+POut.PDouble(pat.Guarantor)+"'";
 			Db.NonQ(command);
 		}
@@ -1209,11 +1209,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="SELECT Guarantor,HmPhone,AddrNote FROM patient WHERE Guarantor="
-				+"(SELECT Guarantor FROM patient WHERE PatNum="+POut.PInt(patNum)+")";
+				+"(SELECT Guarantor FROM patient WHERE PatNum="+POut.PLong(patNum)+")";
 			DataTable table=Db.GetTable(command);
 			bool phoneIsSame=true;
 			bool noteIsSame=true;
-			long guar=PIn.PInt(table.Rows[0]["Guarantor"].ToString());
+			long guar=PIn.PLong(table.Rows[0]["Guarantor"].ToString());
 			for(int i=0;i<table.Rows.Count;i++){
 				if(table.Rows[i]["HmPhone"].ToString()!=table.Rows[0]["HmPhone"].ToString()){
 					phoneIsSame=false;
@@ -1224,18 +1224,18 @@ namespace OpenDentBusiness{
 			}
 			command="UPDATE patient SET HmPhone='"+POut.PString(newphone)+"' WHERE ";
 			if(phoneIsSame){
-				command+="Guarantor="+POut.PInt(guar);
+				command+="Guarantor="+POut.PLong(guar);
 			}
 			else{
-				command+="PatNum="+POut.PInt(patNum);
+				command+="PatNum="+POut.PLong(patNum);
 			}
 			Db.NonQ(command);
 			command="UPDATE patient SET AddrNote='"+POut.PString(newnote)+"' WHERE ";
 			if(noteIsSame) {
-				command+="Guarantor="+POut.PInt(guar);
+				command+="Guarantor="+POut.PLong(guar);
 			}
 			else {
-				command+="PatNum="+POut.PInt(patNum);
+				command+="PatNum="+POut.PLong(patNum);
 			}
 			Db.NonQ(command);
 		}
@@ -1368,7 +1368,7 @@ namespace OpenDentBusiness{
 				else{
 					command+=" OR billingtype = '";
 				}
-				command+=POut.PInt(billingNums[i])+"'";
+				command+=POut.PLong(billingNums[i])+"'";
 					//DefC.Short[(int)DefCat.BillingTypes][billingIndices[i]].DefNum.ToString()+"'";
 				if(i==billingNums.Count-1){
 					command+=")";
@@ -1402,7 +1402,7 @@ namespace OpenDentBusiness{
 			Patient pat;
 			for(int i=0;i<table.Rows.Count;i++){
 				patage=new PatAging();
-				patage.PatNum   = PIn.PInt   (table.Rows[i]["PatNum"].ToString());
+				patage.PatNum   = PIn.PLong   (table.Rows[i]["PatNum"].ToString());
 				patage.Bal_0_30 = PIn.PDouble(table.Rows[i]["Bal_0_30"].ToString());
 				patage.Bal_31_60= PIn.PDouble(table.Rows[i]["Bal_31_60"].ToString());
 				patage.Bal_61_90= PIn.PDouble(table.Rows[i]["Bal_61_90"].ToString());
@@ -1417,7 +1417,7 @@ namespace OpenDentBusiness{
 				patage.PatName=pat.GetNameLF();
 				patage.AmountDue=patage.BalTotal-patage.InsEst;
 				patage.DateLastStatement=PIn.PDate(table.Rows[i]["LastStatement"].ToString());
-				patage.BillingType=PIn.PInt(table.Rows[i]["BillingType"].ToString());
+				patage.BillingType=PIn.PLong(table.Rows[i]["BillingType"].ToString());
 				patage.PayPlanDue =PIn.PDouble(table.Rows[i]["PayPlanDue"].ToString());
 				//if(excludeInsPending && patage.InsEst>0){
 					//don't add
@@ -1461,7 +1461,7 @@ namespace OpenDentBusiness{
 			PatAging[] AgingList=new PatAging[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				AgingList[i]=new PatAging();
-				AgingList[i].PatNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				AgingList[i].PatNum   = PIn.PLong   (table.Rows[i][0].ToString());
 				AgingList[i].Bal_0_30 = PIn.PDouble(table.Rows[i][1].ToString());
 				AgingList[i].Bal_31_60= PIn.PDouble(table.Rows[i][2].ToString());
 				AgingList[i].Bal_61_90= PIn.PDouble(table.Rows[i][3].ToString());
@@ -1474,8 +1474,8 @@ namespace OpenDentBusiness{
 				//AgingList[i].Balance=AgingList[i].Bal_0_30+AgingList[i].Bal_31_60
 				//	+AgingList[i].Bal_61_90+AgingList[i].BalOver90;
 				AgingList[i].AmountDue=AgingList[i].BalTotal-AgingList[i].InsEst;
-				AgingList[i].PriProv=PIn.PInt(table.Rows[i][10].ToString());
-				AgingList[i].BillingType=PIn.PInt(table.Rows[i][11].ToString());
+				AgingList[i].PriProv=PIn.PLong(table.Rows[i][10].ToString());
+				AgingList[i].BillingType=PIn.PLong(table.Rows[i][11].ToString());
 			}
 			return AgingList;
 		}
@@ -1500,7 +1500,7 @@ namespace OpenDentBusiness{
 			string lastChartNum=PIn.PString(table.Rows[0][0].ToString());
 			//or could add more match conditions
 			//if(Regex.IsMatch(lastChartNum,@"^\d+$")){//if is an integer
-			return(PIn.PInt(lastChartNum)+1).ToString();
+			return(PIn.PLong(lastChartNum)+1).ToString();
 			//}
 			//return "1";//if there are no integer chartnumbers yet
 		}
@@ -1528,7 +1528,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT Count(*) FROM patient";
 			DataTable table=Db.GetTable(command);
-			return PIn.PInt32(table.Rows[0][0].ToString());
+			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>
@@ -1539,7 +1539,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT patient.HasIns,COUNT(patplan.PatNum) FROM patient "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum"
-				+" WHERE patient.PatNum="+POut.PInt(patNum)
+				+" WHERE patient.PatNum="+POut.PLong(patNum)
 				+" GROUP BY patplan.PatNum,patient.HasIns";
 			DataTable table=Db.GetTable(command);
 			string newVal="";
@@ -1548,7 +1548,7 @@ namespace OpenDentBusiness{
 			}
 			if(newVal!=table.Rows[0][0].ToString()){
 				command="UPDATE patient SET HasIns='"+POut.PString(newVal)
-					+"' WHERE PatNum="+POut.PInt(patNum);
+					+"' WHERE PatNum="+POut.PLong(patNum);
 				Db.NonQ(command);
 			}
 		}
@@ -1595,7 +1595,7 @@ namespace OpenDentBusiness{
 			DataTable dt=Db.GetTable(command);
 			long[] patnums=new long[dt.Rows.Count];
 			for(int i=0;i<patnums.Length;i++){
-				patnums[i]=PIn.PInt(dt.Rows[i]["PatNum"].ToString());
+				patnums[i]=PIn.PLong(dt.Rows[i]["PatNum"].ToString());
 			}
 			return patnums;
 		}
@@ -1709,7 +1709,7 @@ namespace OpenDentBusiness{
 				+"AND FName='"+POut.PString(fName)+"' "
 				+"AND Birthdate="+POut.PDate(birthdate)+" "
 				+"AND PatStatus!=4";//not deleted
-			return PIn.PInt(Db.GetScalar(command));
+			return PIn.PLong(Db.GetScalar(command));
 		}
 
 		public static void UpdateFamilyBillingType(long billingType,long Guarantor) {
@@ -1717,8 +1717,8 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),billingType,Guarantor);
 				return;
 			}
-			string command="UPDATE patient SET BillingType="+POut.PInt(billingType)+
-				" WHERE Guarantor="+POut.PInt(Guarantor);
+			string command="UPDATE patient SET BillingType="+POut.PLong(billingType)+
+				" WHERE Guarantor="+POut.PLong(Guarantor);
 			Db.NonQ(command);
 		}
 
@@ -1746,7 +1746,7 @@ namespace OpenDentBusiness{
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patId);
 			}
 			string command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
-				FROM patient WHERE patient.PatNum=" + POut.PInt(patId);
+				FROM patient WHERE patient.PatNum=" + POut.PLong(patId);
 			DataTable table = Db.GetTable(command);
 			if(table.Rows.Count == 0) {
 				return "Patient(???) is Eligible";

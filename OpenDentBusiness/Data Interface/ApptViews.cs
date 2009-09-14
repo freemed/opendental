@@ -22,10 +22,10 @@ namespace OpenDentBusiness{
 			ApptViewC.List=new ApptView[table.Rows.Count];
 			for(int i=0;i<ApptViewC.List.Length;i++){
 				ApptViewC.List[i]=new ApptView();
-				ApptViewC.List[i].ApptViewNum = PIn.PInt   (table.Rows[i][0].ToString());
+				ApptViewC.List[i].ApptViewNum = PIn.PLong   (table.Rows[i][0].ToString());
 				ApptViewC.List[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				ApptViewC.List[i].ItemOrder   = PIn.PInt32   (table.Rows[i][2].ToString());
-				ApptViewC.List[i].RowsPerIncr = PIn.PInt32   (table.Rows[i][3].ToString());
+				ApptViewC.List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
+				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());
 				ApptViewC.List[i].OnlyScheduledProvs = PIn.PBool  (table.Rows[i][4].ToString());	
 			}
 		}
@@ -45,12 +45,12 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.ApptViewNum)+", ";
+				command+=POut.PLong(Cur.ApptViewNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.Description)+"', "
-				+"'"+POut.PInt   (Cur.ItemOrder)+"', "
-				+"'"+POut.PInt   (Cur.RowsPerIncr)+"', "
+				+"'"+POut.PLong   (Cur.ItemOrder)+"', "
+				+"'"+POut.PLong   (Cur.RowsPerIncr)+"', "
 				+"'"+POut.PBool  (Cur.OnlyScheduledProvs)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -69,10 +69,10 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE apptview SET "
 				+"Description='"   +POut.PString(Cur.Description)+"'"
-				+",ItemOrder = '"  +POut.PInt   (Cur.ItemOrder)+"'"
-				+",RowsPerIncr = '"+POut.PInt   (Cur.RowsPerIncr)+"'"
+				+",ItemOrder = '"  +POut.PLong   (Cur.ItemOrder)+"'"
+				+",RowsPerIncr = '"+POut.PLong   (Cur.RowsPerIncr)+"'"
 				+",OnlyScheduledProvs = '"+POut.PBool(Cur.OnlyScheduledProvs)+"'"
-				+" WHERE ApptViewNum = '"+POut.PInt(Cur.ApptViewNum)+"'";
+				+" WHERE ApptViewNum = '"+POut.PLong(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -83,7 +83,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE from apptview WHERE ApptViewNum = '"
-				+POut.PInt(Cur.ApptViewNum)+"'";
+				+POut.PLong(Cur.ApptViewNum)+"'";
 			Db.NonQ(command);
 		}
 

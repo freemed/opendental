@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			List=new EmailTemplate[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new EmailTemplate();
-				List[i].EmailTemplateNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].EmailTemplateNum=PIn.PLong(table.Rows[i][0].ToString());
 				List[i].Subject=PIn.PString(table.Rows[i][1].ToString());
 				List[i].BodyText=PIn.PString(table.Rows[i][2].ToString());
 			}
@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 			command+="Subject,BodyText"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(template.EmailTemplateNum)+"', ";
+				command+="'"+POut.PLong(template.EmailTemplateNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(template.Subject)+"', "
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 			string command= "UPDATE emailtemplate SET "
 				+ "Subject = '"  +POut.PString(template.Subject)+"' "
 				+ ",BodyText = '"+POut.PString(template.BodyText)+"' "
-				+"WHERE EmailTemplateNum = '"+POut.PInt(template.EmailTemplateNum)+"'";
+				+"WHERE EmailTemplateNum = '"+POut.PLong(template.EmailTemplateNum)+"'";
  			Db.NonQ(command);
 		}
 

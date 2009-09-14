@@ -22,8 +22,8 @@ namespace OpenDentBusiness{
 			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new AccountingAutoPay();
-				List[i].AccountingAutoPayNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PayType              = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].AccountingAutoPayNum = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PayType              = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].PickList             = PIn.PString(table.Rows[i][2].ToString());
 			}
 			AccountingAutoPayC.AList=new ArrayList();
@@ -47,10 +47,10 @@ namespace OpenDentBusiness{
 			}
 			command+="PayType,PickList) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(pay.AccountingAutoPayNum)+", ";
+				command+=POut.PLong(pay.AccountingAutoPayNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (pay.PayType)+"', "
+				 "'"+POut.PLong   (pay.PayType)+"', "
 				+"'"+POut.PString(pay.PickList)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 				if(retVal!=""){
 					retVal+="\r\n";
 				}
-				retVal+=AccountC.GetDescript(PIn.PInt(numArray[i]));
+				retVal+=AccountC.GetDescript(PIn.PLong(numArray[i]));
 			}
 			return retVal;
 		}
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				if(numArray[i]=="") {
 					continue;
 				}
-				AL.Add(PIn.PInt(numArray[i]));
+				AL.Add(PIn.PLong(numArray[i]));
 			}
 			long[] retVal=new long[AL.Count];
 			AL.CopyTo(retVal);

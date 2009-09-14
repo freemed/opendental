@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * from timeadjust WHERE"
-				+" EmployeeNum = '"+POut.PInt(empNum)+"'"
+				+" EmployeeNum = '"+POut.PLong(empNum)+"'"
 				+" AND TimeEntry >= "+POut.PDate(fromDate)
 				//adding a day takes it to midnight of the specified toDate
 				+" AND TimeEntry <= "+POut.PDate(toDate.AddDays(1));
@@ -23,8 +23,8 @@ namespace OpenDentBusiness{
 			TimeAdjust[] List=new TimeAdjust[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new TimeAdjust();
-				List[i].TimeAdjustNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].EmployeeNum   = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].TimeAdjustNum = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].EmployeeNum   = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].TimeEntry     = PIn.PDateT(table.Rows[i][2].ToString());
 				List[i].RegHours      =TimeSpan.FromHours(PIn.PDouble(table.Rows[i][3].ToString()));
 				List[i].OTimeHours    =TimeSpan.FromHours(PIn.PDouble(table.Rows[i][4].ToString()));
@@ -48,10 +48,10 @@ namespace OpenDentBusiness{
 			}
 			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(adj.TimeAdjustNum)+"', ";
+				command+="'"+POut.PLong(adj.TimeAdjustNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (adj.EmployeeNum)+"', "
+				 "'"+POut.PLong   (adj.EmployeeNum)+"', "
 				+POut.PDateT (adj.TimeEntry)+", "
 				+"'"+POut.PDouble(adj.RegHours.TotalHours)+"', "
 				+"'"+POut.PDouble(adj.OTimeHours.TotalHours)+"', "
@@ -72,12 +72,12 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE timeadjust SET "
-				+"EmployeeNum = '"+POut.PInt   (adj.EmployeeNum)+"' "
+				+"EmployeeNum = '"+POut.PLong   (adj.EmployeeNum)+"' "
 				+",TimeEntry = " +POut.PDateT (adj.TimeEntry)+" "
 				+",RegHours = '"  +POut.PDouble(adj.RegHours.TotalHours)+"' "
 				+",OTimeHours = '"+POut.PDouble(adj.OTimeHours.TotalHours)+"' "
 				+",Note = '"      +POut.PString(adj.Note)+"' "
-				+"WHERE TimeAdjustNum = '"+POut.PInt(adj.TimeAdjustNum)+"'";
+				+"WHERE TimeAdjustNum = '"+POut.PLong(adj.TimeAdjustNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),adj);
 				return;
 			}
-			string command= "DELETE FROM timeadjust WHERE TimeAdjustNum = "+POut.PInt(adj.TimeAdjustNum);
+			string command= "DELETE FROM timeadjust WHERE TimeAdjustNum = "+POut.PLong(adj.TimeAdjustNum);
 			Db.NonQ(command);
 		}
 

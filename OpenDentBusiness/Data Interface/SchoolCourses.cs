@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			list=new SchoolCourse[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SchoolCourse();
-				list[i].SchoolCourseNum=PIn.PInt(table.Rows[i][0].ToString());
+				list[i].SchoolCourseNum=PIn.PLong(table.Rows[i][0].ToString());
 				list[i].CourseID=PIn.PString(table.Rows[i][1].ToString());
 				list[i].Descript=PIn.PString(table.Rows[i][2].ToString());
 			}
@@ -52,10 +52,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE schoolcourse SET " 
-				+"SchoolCourseNum = '" +POut.PInt   (sc.SchoolCourseNum)+"'"
+				+"SchoolCourseNum = '" +POut.PLong   (sc.SchoolCourseNum)+"'"
 				+",CourseID = '"       +POut.PString(sc.CourseID)+"'"
 				+",Descript = '"       +POut.PString(sc.Descript)+"'"
-				+" WHERE SchoolCourseNum = '"+POut.PInt(sc.SchoolCourseNum)+"'";
+				+" WHERE SchoolCourseNum = '"+POut.PLong(sc.SchoolCourseNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 			}
 			command+="CourseID,Descript) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(sc.SchoolCourseNum)+"', ";
+				command+="'"+POut.PLong(sc.SchoolCourseNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(sc.CourseID)+"', "
@@ -110,21 +110,21 @@ namespace OpenDentBusiness{
 			}
 			//check for attached reqneededs---------------------------------------------------------------------
 			string command="SELECT COUNT(*) FROM reqneeded WHERE SchoolCourseNum = '"
-				+POut.PInt(courseNum)+"'";
+				+POut.PLong(courseNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lans.g("SchoolCourses","Course already in use by 'requirements needed' table."));
 			}
 			//check for attached reqstudents--------------------------------------------------------------------------
 			command="SELECT COUNT(*) FROM reqstudent WHERE SchoolCourseNum = '"
-				+POut.PInt(courseNum)+"'";
+				+POut.PLong(courseNum)+"'";
 			table=Db.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
 				throw new Exception(Lans.g("SchoolCourses","Course already in use by 'student requirements' table."));
 			}
 			//delete---------------------------------------------------------------------------------------------
 			command= "DELETE from schoolcourse WHERE SchoolCourseNum = '"
-				+POut.PInt(courseNum)+"'";
+				+POut.PLong(courseNum)+"'";
  			Db.NonQ(command);
 		}
 

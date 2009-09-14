@@ -210,7 +210,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a graduation year.");
 				return;
 			}
-			ClassCur.GradYear=PIn.PInt32(textGradYear.Text);
+			ClassCur.GradYear=PIn.PInt(textGradYear.Text);
 			ClassCur.Descript=textDescript.Text;
 			SchoolClasses.InsertOrUpdate(ClassCur,IsNew);
 			DialogResult=DialogResult.OK;

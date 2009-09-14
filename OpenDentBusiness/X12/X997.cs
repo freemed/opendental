@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 			}
 			string num=seg.Get(2);
 			try{
-				return PIn.PInt32(num);
+				return PIn.PInt(num);
 			}
 			catch{
 				return 0;
@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 				if(seg.SegmentID=="AK2"){
 					transNum=0;
 					try{
-						transNum=PIn.PInt32(seg.Get(2));
+						transNum=PIn.PInt(seg.Get(2));
 					}
 					catch{
 						transNum=0;
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 				if(seg.SegmentID=="AK2"){
 					thisTransNum=0;
 					try {
-						thisTransNum=PIn.PInt32(seg.Get(2));
+						thisTransNum=PIn.PInt(seg.Get(2));
 					}
 					catch {
 						thisTransNum=0;

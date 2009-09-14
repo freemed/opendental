@@ -21,10 +21,10 @@ namespace OpenDentBusiness{
 			}
 			command+="EmailMessageNum, DisplayedFileName, ActualFileName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(attach.EmailAttachNum)+"', ";
+				command+="'"+POut.PLong(attach.EmailAttachNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(attach.EmailMessageNum)+"', "
+				 "'"+POut.PLong(attach.EmailMessageNum)+"', "
 				+"'"+POut.PString(attach.DisplayedFileName)+"', "
 				+"'"+POut.PString(attach.ActualFileName)+"')";
 			if(PrefC.RandomKeys) {

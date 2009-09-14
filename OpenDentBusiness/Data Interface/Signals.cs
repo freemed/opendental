@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				+"WHERE (SigDateTime>"+POut.PDateT(sinceDateT)+" "
 				+"OR AckTime>"+POut.PDateT(sinceDateT)+" "
 				+"OR AckTime<'1880-01-01') "//always include all unacked.
-				+"AND SigType="+POut.PInt((int)SignalType.Button)
+				+"AND SigType="+POut.PLong((int)SignalType.Button)
 				+" ORDER BY SigDateTime";
 			//note: this might return an occasional row that has both times newer.
 			List<Signal> sigList=new List<Signal>();
@@ -87,16 +87,16 @@ namespace OpenDentBusiness{
 			Signal sig;
 			for(int i=0;i<table.Rows.Count;i++) {
 				sig=new Signal();
-				sig.SignalNum  = PIn.PInt(table.Rows[i][0].ToString());
+				sig.SignalNum  = PIn.PLong(table.Rows[i][0].ToString());
 				sig.FromUser   = PIn.PString(table.Rows[i][1].ToString());
 				sig.ITypes     = PIn.PString(table.Rows[i][2].ToString());
 				sig.DateViewing= PIn.PDate(table.Rows[i][3].ToString());
-				sig.SigType    = (SignalType)PIn.PInt(table.Rows[i][4].ToString());
+				sig.SigType    = (SignalType)PIn.PLong(table.Rows[i][4].ToString());
 				sig.SigText    = PIn.PString(table.Rows[i][5].ToString());
 				sig.SigDateTime= PIn.PDateT(table.Rows[i][6].ToString());
 				sig.ToUser     = PIn.PString(table.Rows[i][7].ToString());
 				sig.AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
-				sig.TaskNum    = PIn.PInt(table.Rows[i][9].ToString());
+				sig.TaskNum    = PIn.PLong(table.Rows[i][9].ToString());
 				retVal.Add(sig);
 			}
 			retVal.Sort();
@@ -113,13 +113,13 @@ namespace OpenDentBusiness{
 				+"FromUser = '"    +POut.PString(sig.FromUser)+"'"
 				+",ITypes = '"     +POut.PString(sig.ITypes)+"'"
 				+",DateViewing = " +POut.PDate  (sig.DateViewing)
-				+",SigType = '"    +POut.PInt   ((int)sig.SigType)+"'"
+				+",SigType = '"    +POut.PLong   ((int)sig.SigType)+"'"
 				+",SigText = '"    +POut.PString(sig.SigText)+"'"
 				//+",SigDateTime = '"+POut.PDateT (SigDateTime)+"'"//we don't want to ever update this
 				+",ToUser = '"     +POut.PString(sig.ToUser)+"'"
 				+",AckTime = "     +POut.PDateT (sig.AckTime)
-				+",TaskNum = '"    +POut.PInt   (sig.TaskNum)+"'"
-				+" WHERE SignalNum = '"+POut.PInt(sig.SignalNum)+"'";
+				+",TaskNum = '"    +POut.PLong   (sig.TaskNum)+"'"
+				+" WHERE SignalNum = '"+POut.PLong(sig.SignalNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -143,18 +143,18 @@ namespace OpenDentBusiness{
 			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime,TaskNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(sig.SignalNum)+"', ";
+				command+="'"+POut.PLong(sig.SignalNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(sig.FromUser)+"', "
 				+"'"+POut.PString(sig.ITypes)+"', "
 				+POut.PDate  (sig.DateViewing)+", "
-				+"'"+POut.PInt   ((int)sig.SigType)+"', "
+				+"'"+POut.PLong   ((int)sig.SigType)+"', "
 				+"'"+POut.PString(sig.SigText)+"', "
 				+POut.PDateT(sig.SigDateTime)+", "
 				+"'"+POut.PString(sig.ToUser)+"', "
 				+POut.PDateT (sig.AckTime)+", "
-				+"'"+POut.PInt(sig.TaskNum)+"')";
+				+"'"+POut.PLong(sig.TaskNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -203,13 +203,13 @@ namespace OpenDentBusiness{
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
-				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
+				+"AND tasksubscription.UserNum="+POut.PLong(userNum)
 				+" AND (";
 			for(int i=0;i<sigListFiltered.Count;i++){
 				if(i>0){
 					command+=" OR ";
 				}
-				command+="task.TaskNum= "+POut.PInt(sigListFiltered[i].TaskNum);
+				command+="task.TaskNum= "+POut.PLong(sigListFiltered[i].TaskNum);
 			}
 			command+=")";
 			return Tasks.RefreshAndFill(Db.GetTable(command));
@@ -235,8 +235,8 @@ namespace OpenDentBusiness{
 				}
 				strArray=signalList[i].ITypes.Split(',');
 				for(int t=0;t<strArray.Length;t++){
-					if(!retVal.Contains(PIn.PInt32(strArray[t]))){
-						retVal.Add(PIn.PInt32(strArray[t]));
+					if(!retVal.Contains(PIn.PInt(strArray[t]))){
+						retVal.Add(PIn.PInt(strArray[t]));
 					}
 				}
 			}
@@ -285,7 +285,7 @@ namespace OpenDentBusiness{
 				+"AND SigDateTime <= "+POut.PDateT(time)+" "
 				+"AND signal.SignalNum=sigelement.SignalNum "
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
-				+"AND sigelementdef.LightRow="+POut.PInt(buttonIndex);
+				+"AND sigelementdef.LightRow="+POut.PLong(buttonIndex);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;

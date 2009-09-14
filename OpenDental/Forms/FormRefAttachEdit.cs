@@ -462,7 +462,7 @@ namespace OpenDental{
 				RefAttachCur.IsFrom=false;
 			}
 			RefAttachCur.RefDate=PIn.PDate(textRefDate.Text); 
-      RefAttachCur.ItemOrder=PIn.PInt32(textOrder.Text);
+      RefAttachCur.ItemOrder=PIn.PInt(textOrder.Text);
 			RefAttachCur.RefToStatus=(ReferralToStatus)comboRefToStatus.SelectedIndex;
 			RefAttachCur.Note=textNote.Text;
 		}

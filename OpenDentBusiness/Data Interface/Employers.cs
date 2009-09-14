@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 			List=new Employer[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Employer();
-				List[i].EmployerNum =PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].EmployerNum =PIn.PLong   (table.Rows[i][0].ToString());
 				List[i].EmpName     =PIn.PString(table.Rows[i][1].ToString());
 				List[i].Address     =PIn.PString(table.Rows[i][2].ToString());
 				List[i].Address2    =PIn.PString(table.Rows[i][3].ToString());
@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 				+ ",State= '"      +POut.PString(Cur.State)+"' "
 				+ ",Zip= '"        +POut.PString(Cur.Zip)+"' "
 				+ ",Phone= '"      +POut.PString(Cur.Phone)+"' "
-				+" WHERE EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
+				+" WHERE EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 			}
 			command+="EmpName,Address,Address2,City,State,Zip,Phone) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(Cur.EmployerNum)+"', ";
+				command+="'"+POut.PLong(Cur.EmployerNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.EmpName)+"', "
@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
 				return Meth.GetString(MethodBase.GetCurrentMethod(),Cur);
 			}
 			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient" 
-				+" WHERE EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
+				+" WHERE EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
 			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
@@ -168,7 +168,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT insplan.Carrier,CONCAT(patient.LName,patient.FName) FROM insplan,patient" 
 				+" WHERE insplan.Subscriber=patient.PatNum"
-				+" AND insplan.EmployerNum = '"+POut.PInt(Cur.EmployerNum)+"'";
+				+" AND insplan.EmployerNum = '"+POut.PLong(Cur.EmployerNum)+"'";
 			DataTable table=Db.GetTable(command);
 			string retStr="";
 			for(int i=0;i<table.Rows.Count;i++){
@@ -228,7 +228,7 @@ namespace OpenDentBusiness{
 				+" WHERE EmpName = '"+POut.PString(empName)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
-				return PIn.PInt(table.Rows[0][0].ToString());
+				return PIn.PLong(table.Rows[0][0].ToString());
 			}
 			Employer Cur=new Employer();
 			Cur.EmpName=empName;

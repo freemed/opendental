@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT DISTINCT paysplit.* FROM paysplit,payment "
 				+"WHERE paysplit.PayNum=payment.PayNum "
-				+"AND (paysplit.PatNum = '"+POut.PInt(patNum)+"' OR payment.PatNum = '"+POut.PInt(patNum)+"') "
+				+"AND (paysplit.PatNum = '"+POut.PLong(patNum)+"' OR payment.PatNum = '"+POut.PLong(patNum)+"') "
 				+"ORDER BY ProcDate";
 			return RefreshAndFill(Db.GetTable(command)).ToArray();
 		}
@@ -26,17 +26,17 @@ namespace OpenDentBusiness{
 			PaySplit split;
 			for(int i=0;i<table.Rows.Count;i++) {
 				split=new PaySplit();
-				split.SplitNum    = PIn.PInt(table.Rows[i][0].ToString());
+				split.SplitNum    = PIn.PLong(table.Rows[i][0].ToString());
 				split.SplitAmt    = PIn.PDouble(table.Rows[i][1].ToString());
-				split.PatNum      = PIn.PInt(table.Rows[i][2].ToString());
+				split.PatNum      = PIn.PLong(table.Rows[i][2].ToString());
 				split.ProcDate    = PIn.PDate(table.Rows[i][3].ToString());
-				split.PayNum      = PIn.PInt(table.Rows[i][4].ToString());
+				split.PayNum      = PIn.PLong(table.Rows[i][4].ToString());
 				//List[i].IsDiscount  = PIn.PBool  (table.Rows[i][5].ToString());
 				//List[i].DiscountType= PIn.PInt   (table.Rows[i][6].ToString());
-				split.ProvNum     = PIn.PInt(table.Rows[i][7].ToString());
-				split.PayPlanNum  = PIn.PInt(table.Rows[i][8].ToString());
+				split.ProvNum     = PIn.PLong(table.Rows[i][7].ToString());
+				split.PayPlanNum  = PIn.PLong(table.Rows[i][8].ToString());
 				split.DatePay     = PIn.PDate(table.Rows[i][9].ToString());
-				split.ProcNum     = PIn.PInt(table.Rows[i][10].ToString());
+				split.ProcNum     = PIn.PLong(table.Rows[i][10].ToString());
 				split.DateEntry   = PIn.PDate(table.Rows[i][11].ToString());
 				retVal.Add(split);
 			}
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM paysplit "
-				+"WHERE PayNum="+POut.PInt(payNum);
+				+"WHERE PayNum="+POut.PLong(payNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -62,15 +62,15 @@ namespace OpenDentBusiness{
 			}
 			string command="UPDATE paysplit SET " 
 				+ "SplitAmt = '"     +POut.PDouble(split.SplitAmt)+"'"
-				+ ",PatNum = '"      +POut.PInt   (split.PatNum)+"'"
+				+ ",PatNum = '"      +POut.PLong   (split.PatNum)+"'"
 				+ ",ProcDate = "    +POut.PDate  (split.ProcDate)
-				+ ",PayNum = '"      +POut.PInt   (split.PayNum)+"'"
-				+ ",ProvNum = '"     +POut.PInt   (split.ProvNum)+"'"
-				+ ",PayPlanNum = '"  +POut.PInt   (split.PayPlanNum)+"'"
+				+ ",PayNum = '"      +POut.PLong   (split.PayNum)+"'"
+				+ ",ProvNum = '"     +POut.PLong   (split.ProvNum)+"'"
+				+ ",PayPlanNum = '"  +POut.PLong   (split.PayPlanNum)+"'"
 				+ ",DatePay = "     +POut.PDate  (split.DatePay)
-				+ ",ProcNum = '"     +POut.PInt   (split.ProcNum)+"'"
+				+ ",ProcNum = '"     +POut.PLong   (split.ProcNum)+"'"
 				//+ ",DateEntry = '"   +POut.PDate  (DateEntry)+"'"//not allowed to change
-				+" WHERE splitNum = '" +POut.PInt (split.SplitNum)+"'";
+				+" WHERE splitNum = '" +POut.PLong (split.SplitNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -90,19 +90,19 @@ namespace OpenDentBusiness{
 			command+="SplitAmt,PatNum,ProcDate, "
 				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(split.SplitNum)+"', ";
+				command+="'"+POut.PLong(split.SplitNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PDouble(split.SplitAmt)+"', "
-				+"'"+POut.PInt   (split.PatNum)+"', "
+				+"'"+POut.PLong   (split.PatNum)+"', "
 				+POut.PDate  (split.ProcDate)+", "
-				+"'"+POut.PInt   (split.PayNum)+"', "
+				+"'"+POut.PLong   (split.PayNum)+"', "
 				+"'0', "//IsDiscount
 				+"'0', "//DiscountType
-				+"'"+POut.PInt   (split.ProvNum)+"', "
-				+"'"+POut.PInt   (split.PayPlanNum)+"', "
+				+"'"+POut.PLong   (split.ProvNum)+"', "
+				+"'"+POut.PLong   (split.PayPlanNum)+"', "
 				+POut.PDate  (split.DatePay)+", "
-				+"'"+POut.PInt   (split.ProcNum)+"', "
+				+"'"+POut.PLong   (split.ProcNum)+"', "
 				+"NOW() )";//DateEntry: date of server
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),split);
 				return;
 			}
-			string command= "DELETE from paysplit WHERE splitNum = "+POut.PInt(split.SplitNum);
+			string command= "DELETE from paysplit WHERE splitNum = "+POut.PLong(split.SplitNum);
  			Db.NonQ(command);
 		}
 

@@ -72,11 +72,11 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
 				+"LEFT JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
-				+"AND (appointment.AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
-				+" OR appointment.AptStatus="+POut.PInt((int)ApptStatus.ASAP)
-				+" OR appointment.AptStatus="+POut.PInt((int)ApptStatus.Broken)
-				+" OR appointment.AptStatus="+POut.PInt((int)ApptStatus.Complete)
-				+") WHERE procedurelog.PatNum="+POut.PInt(patNum);
+				+"AND (appointment.AptStatus="+POut.PLong((int)ApptStatus.Scheduled)
+				+" OR appointment.AptStatus="+POut.PLong((int)ApptStatus.ASAP)
+				+" OR appointment.AptStatus="+POut.PLong((int)ApptStatus.Broken)
+				+" OR appointment.AptStatus="+POut.PLong((int)ApptStatus.Complete)
+				+") WHERE procedurelog.PatNum="+POut.PLong(patNum);
 			if(!isAuditMode) {
 				command+=" AND ProcStatus !=6";//don't include deleted
 			}
@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 			DataTable rawProcs=dcon.GetTable(command);
 			command="SELECT ProcNum,EntryDateTime,UserNum,Note,"
 				+"CASE WHEN Signature!='' THEN 1 ELSE 0 END AS SigPresent "
-				+"FROM procnote WHERE PatNum="+POut.PInt(patNum)
+				+"FROM procnote WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY EntryDateTime";// but this helps when looping for notes
 			DataTable rawNotes=dcon.GetTable(command);
 			DateTime dateT;
@@ -98,7 +98,7 @@ namespace OpenDentBusiness {
 				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today) {
 					row["colorBackG"]=DefC.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
 				}
-				switch((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())) {
+				switch((ProcStat)PIn.PLong(rawProcs.Rows[i]["ProcStatus"].ToString())) {
 					case ProcStat.TP:
 						row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][0].ItemColor.ToArgb().ToString();
 						break;
@@ -131,7 +131,7 @@ namespace OpenDentBusiness {
 				if(rawProcs.Rows[i]["ToothRange"].ToString()!="") {
 					row["description"]+=" #"+Tooth.FormatRangeForDisplay(rawProcs.Rows[i]["ToothRange"].ToString());
 				}
-				row["dx"]=DefC.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
+				row["dx"]=DefC.GetValue(DefCat.Diagnosis,PIn.PLong(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
 				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
@@ -148,7 +148,7 @@ namespace OpenDentBusiness {
 							row["note"]+="\r\n------------------------------------------------------\r\n";//start a new line
 						}
 						row["note"]+=PIn.PDateT(rawNotes.Rows[n]["EntryDateTime"].ToString()).ToString();
-						row["note"]+="  "+Userods.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
+						row["note"]+="  "+Userods.GetName(PIn.PLong(rawNotes.Rows[n]["UserNum"].ToString()));
 						if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
 							row["note"]+="  "+Lans.g("ChartModule","(signed)");
 						}
@@ -160,7 +160,7 @@ namespace OpenDentBusiness {
 						if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 							continue;
 						}
-						row["user"]		 =Userods.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
+						row["user"]		 =Userods.GetName(PIn.PLong(rawNotes.Rows[n]["UserNum"].ToString()));
 						row["note"]		 =rawNotes.Rows[n]["Note"].ToString();
 						if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
 							row["signature"]=Lans.g("ChartModule","Signed");
@@ -183,14 +183,14 @@ namespace OpenDentBusiness {
 				}
 				row["ProcDate"]=dateT;
 				double amt = PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString());
-				int qty = PIn.PInt32(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.PInt32(rawProcs.Rows[i]["BaseUnits"].ToString());
+				int qty = PIn.PInt(rawProcs.Rows[i]["UnitQty"].ToString()) + PIn.PInt(rawProcs.Rows[i]["BaseUnits"].ToString());
 				if(qty>0) {
 					amt *= qty;
 				}
 				row["procFee"]=amt.ToString("F");
 				row["ProcNum"]=rawProcs.Rows[i]["ProcNum"].ToString();
 				row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
-				row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
+				row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.PLong(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
 				row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
 				row["procTime"]="";
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
@@ -217,7 +217,7 @@ namespace OpenDentBusiness {
 				+"FROM patient p1,patient p2,commlog "
 				+"WHERE commlog.PatNum=p1.PatNum "
 				+"AND p1.Guarantor=p2.Guarantor "
-				+"AND p2.PatNum="+POut.PInt(patNum)
+				+"AND p2.PatNum="+POut.PLong(patNum)
 				+" AND IsStatementSent=0 ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
 			string txt;
@@ -236,7 +236,7 @@ namespace OpenDentBusiness {
 					txt="("+rawComm.Rows[i]["FName"].ToString()+") ";
 				}
 				row["description"]=txt+Lans.g("ChartModule","Comm - ")
-					+DefC.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
+					+DefC.GetName(DefCat.CommLogTypes,PIn.PLong(rawComm.Rows[i]["CommType"].ToString()));
 				row["dx"]="";
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
@@ -271,11 +271,11 @@ namespace OpenDentBusiness {
 				row["toothNum"]="";
 				row["ToothNum"]="";
 				row["ToothRange"]="";
-				row["user"]=Userods.GetName(PIn.PInt(rawComm.Rows[i]["UserNum"].ToString()));
+				row["user"]=Userods.GetName(PIn.PLong(rawComm.Rows[i]["UserNum"].ToString()));
 				rows.Add(row);
 			}
 			//Rx------------------------------------------------------------------------------------------------------------------
-			command="SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes,PharmacyNum FROM rxpat WHERE PatNum="+POut.PInt(patNum)
+			command="SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes,PharmacyNum FROM rxpat WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY RxDate";
 			DataTable rawRx=dcon.GetTable(command);
 			for(int i=0;i<rawRx.Rows.Count;i++) {
@@ -288,7 +288,7 @@ namespace OpenDentBusiness {
 				row["CommlogNum"]=0;
 				row["description"]=Lans.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
 				if(rawRx.Rows[i]["PharmacyNum"].ToString()!="0") {
-					row["description"]+="\r\n"+Pharmacies.GetDescription(PIn.PInt(rawRx.Rows[i]["PharmacyNum"].ToString()));
+					row["description"]+="\r\n"+Pharmacies.GetDescription(PIn.PLong(rawRx.Rows[i]["PharmacyNum"].ToString()));
 				}
 				row["dx"]="";
 				row["Dx"]="";
@@ -328,7 +328,7 @@ namespace OpenDentBusiness {
 			//LabCase------------------------------------------------------------------------------------------------------------------
 			command="SELECT labcase.*,Description,Phone FROM labcase,laboratory "
 				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum "
-				+"AND PatNum="+POut.PInt(patNum)
+				+"AND PatNum="+POut.PLong(patNum)
 				+" ORDER BY DateTimeCreated";
 			DataTable rawLab=dcon.GetTable(command);
 			DateTime duedate;
@@ -399,7 +399,7 @@ namespace OpenDentBusiness {
 				+"WHERE task.KeyNum=p1.PatNum "
 				+"AND task.TaskListNum=tasklist.TaskListNum "
 				+"AND p1.Guarantor=p2.Guarantor "
-				+"AND p2.PatNum="+POut.PInt(patNum)
+				+"AND p2.PatNum="+POut.PLong(patNum)
 				+" AND task.ObjectType=1 "
 				+"ORDER BY DateTimeEntry";
 			DataTable rawTask=dcon.GetTable(command);
@@ -476,7 +476,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Appointments---------------------------------------------------------------------------------------------------------
-			command="SELECT * FROM appointment WHERE PatNum="+POut.PInt(patNum)
+			command="SELECT * FROM appointment WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY AptDateTime";
 			//+" AND AptStatus != 6"//do not include planned appts.
 			rawApt=dcon.GetTable(command);
@@ -487,7 +487,7 @@ namespace OpenDentBusiness {
 				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				dateT=PIn.PDateT(rawApt.Rows[i]["AptDateTime"].ToString());
-				apptStatus=PIn.PInt(rawApt.Rows[i]["AptStatus"].ToString());
+				apptStatus=PIn.PLong(rawApt.Rows[i]["AptStatus"].ToString());
 				row["colorBackG"]="";
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
@@ -572,7 +572,7 @@ namespace OpenDentBusiness {
 			//email------------------------------------------------------------------------------------------------------------------------------
 			command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
 				+"FROM emailmessage "
-				+"WHERE PatNum="+POut.PInt(patNum)
+				+"WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY MsgDateTime";
 			DataTable rawEmail=dcon.GetTable(command);
 			for(int i=0;i<rawEmail.Rows.Count;i++) {
@@ -629,8 +629,8 @@ namespace OpenDentBusiness {
 			//sheet-----------------------------------------------------------------------------------------------------------------
 			command="SELECT SheetNum,DateTimeSheet,SheetType "
 				+"FROM sheet "
-				+"WHERE PatNum="+POut.PInt(patNum)
-				+" AND SheetType!="+POut.PInt((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
+				+"WHERE PatNum="+POut.PLong(patNum)
+				+" AND SheetType!="+POut.PLong((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
 			DataTable rawSheet=dcon.GetTable(command);
 			SheetTypeEnum sheetType;
@@ -642,7 +642,7 @@ namespace OpenDentBusiness {
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=Color.Black.ToArgb();//DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
 				row["CommlogNum"]=0;
-				sheetType=(SheetTypeEnum)PIn.PInt(rawSheet.Rows[i]["SheetType"].ToString());
+				sheetType=(SheetTypeEnum)PIn.PLong(rawSheet.Rows[i]["SheetType"].ToString());
 				row["description"]=Lans.g("SheetTypeEnum",sheetType.ToString());
 				row["dx"]="";
 				row["Dx"]="";
@@ -720,7 +720,7 @@ namespace OpenDentBusiness {
 				+"appointment.Pattern,appointment.AptStatus "
 				+"FROM plannedappt "
 				+"LEFT JOIN appointment ON appointment.NextAptNum=plannedappt.AptNum "
-				+"WHERE plannedappt.PatNum="+POut.PInt(patNum)+" "
+				+"WHERE plannedappt.PatNum="+POut.PLong(patNum)+" "
 				+"GROUP BY plannedappt.AptNum "
 				+"ORDER BY ItemOrder";
 			DataTable rawPlannedAppts=dcon.GetTable(command);
@@ -741,7 +741,7 @@ namespace OpenDentBusiness {
 				}
 				//repair any item orders here rather than in dbmaint. It's really fast.
 				if(itemOrder.ToString()!=rawPlannedAppts.Rows[i]["ItemOrder"].ToString()){
-					command="UPDATE plannedappt SET ItemOrder="+POut.PInt(itemOrder)
+					command="UPDATE plannedappt SET ItemOrder="+POut.PLong(itemOrder)
 						+" WHERE PlannedApptNum="+rawPlannedAppts.Rows[i]["PlannedApptNum"].ToString();
 					dcon.NonQ(command);
 				}
@@ -750,7 +750,7 @@ namespace OpenDentBusiness {
 				row["AptNum"]=aptRow["AptNum"].ToString();
 				dateSched=PIn.PDate(rawPlannedAppts.Rows[i]["AptDateTime"].ToString());
 				//Colors----------------------------------------------------------------------------
-				aptStatus=(ApptStatus)PIn.PInt(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
+				aptStatus=(ApptStatus)PIn.PLong(rawPlannedAppts.Rows[i]["AptStatus"].ToString());
 				//change color if completed, broken, or unscheduled no matter the date
 				if(aptStatus==ApptStatus.Broken || aptStatus==ApptStatus.UnschedList){
 					row["colorBackG"]=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();

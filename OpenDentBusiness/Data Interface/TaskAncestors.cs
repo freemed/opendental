@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
 				return;
 			}
-			string command="DELETE FROM taskancestor WHERE TaskNum="+POut.PInt(task.TaskNum);
+			string command="DELETE FROM taskancestor WHERE TaskNum="+POut.PLong(task.TaskNum);
 			Db.NonQ(command);
 			long taskListNum=0;
 			long parentNum=task.TaskListNum;
@@ -42,13 +42,13 @@ namespace OpenDentBusiness{
 					break;//no parent to mark
 				}
 				//get the parent
-				command="SELECT TaskListNum,Parent FROM tasklist WHERE TaskListNum="+POut.PInt(parentNum);
+				command="SELECT TaskListNum,Parent FROM tasklist WHERE TaskListNum="+POut.PLong(parentNum);
 				table=Db.GetTable(command);
 				if(table.Rows.Count==0){//in case of database inconsistency
 					break;
 				}
-				taskListNum=PIn.PInt(table.Rows[0]["TaskListNum"].ToString());
-				parentNum=PIn.PInt(table.Rows[0]["Parent"].ToString());
+				taskListNum=PIn.PLong(table.Rows[0]["TaskListNum"].ToString());
+				parentNum=PIn.PLong(table.Rows[0]["Parent"].ToString());
 				ancestor=new TaskAncestor();
 				ancestor.TaskNum=task.TaskNum;
 				ancestor.TaskListNum=taskListNum;

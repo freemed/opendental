@@ -17,8 +17,8 @@ namespace OpenDentBusiness {
 			ClaimCondCodeLog CurCondCodeLog = new ClaimCondCodeLog();
 			if(table.Rows.Count>0){
 			//for(int i=0;i<table.Rows.Count;i++){
-				CurCondCodeLog.ClaimCondCodeNum=PIn.PInt(table.Rows[0][0].ToString());
-				CurCondCodeLog.ClaimNum=PIn.PInt(table.Rows[0][1].ToString());
+				CurCondCodeLog.ClaimCondCodeNum=PIn.PLong(table.Rows[0][0].ToString());
+				CurCondCodeLog.ClaimNum=PIn.PLong(table.Rows[0][1].ToString());
 				CurCondCodeLog.Code0=PIn.PString(table.Rows[0][2].ToString());
 				CurCondCodeLog.Code1=PIn.PString(table.Rows[0][3].ToString());
 				CurCondCodeLog.Code2=PIn.PString(table.Rows[0][4].ToString());

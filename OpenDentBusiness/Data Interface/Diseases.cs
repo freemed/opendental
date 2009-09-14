@@ -11,8 +11,8 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Disease>(MethodBase.GetCurrentMethod(),patNum,diseaseDefNum);
 			}
-			string command="SELECT * FROM disease WHERE PatNum="+POut.PInt(patNum)
-				+" AND DiseaseDefNum="+POut.PInt(diseaseDefNum);
+			string command="SELECT * FROM disease WHERE PatNum="+POut.PLong(patNum)
+				+" AND DiseaseDefNum="+POut.PLong(diseaseDefNum);
 			Disease[] disList=RefreshAndFill(Db.GetTable(command));
 			if(disList.Length==0){
 				return null;
@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT disease.* FROM disease,diseasedef "
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
-				+"AND PatNum="+POut.PInt(patNum)
+				+"AND PatNum="+POut.PLong(patNum)
 				+" ORDER BY diseasedef.ItemOrder";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -37,9 +37,9 @@ namespace OpenDentBusiness {
 			Disease[] List=new Disease[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Disease();
-				List[i].DiseaseNum   = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum       = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].DiseaseDefNum= PIn.PInt(table.Rows[i][2].ToString());
+				List[i].DiseaseNum   = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PatNum       = PIn.PLong(table.Rows[i][1].ToString());
+				List[i].DiseaseDefNum= PIn.PLong(table.Rows[i][2].ToString());
 				List[i].PatNote      = PIn.PString(table.Rows[i][3].ToString());
 			}
 			//Array.Sort(List);
@@ -53,10 +53,10 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE disease SET " 
-				+"PatNum = '"        +POut.PInt   (disease.PatNum)+"'"
-				+",DiseaseDefNum = '"+POut.PInt   (disease.DiseaseDefNum)+"'"
+				+"PatNum = '"        +POut.PLong   (disease.PatNum)+"'"
+				+",DiseaseDefNum = '"+POut.PLong   (disease.DiseaseDefNum)+"'"
 				+",PatNote = '"      +POut.PString(disease.PatNote)+"'"
-				+" WHERE DiseaseNum  ='"+POut.PInt   (disease.DiseaseNum)+"'";
+				+" WHERE DiseaseNum  ='"+POut.PLong   (disease.DiseaseNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -75,11 +75,11 @@ namespace OpenDentBusiness {
 			}
 			command+="PatNum,DiseaseDefNum,PatNote) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(disease.DiseaseNum)+"', ";
+				command+="'"+POut.PLong(disease.DiseaseNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (disease.PatNum)+"', "
-				+"'"+POut.PInt   (disease.DiseaseDefNum)+"', "
+				 "'"+POut.PLong   (disease.PatNum)+"', "
+				+"'"+POut.PLong   (disease.DiseaseDefNum)+"', "
 				+"'"+POut.PString(disease.PatNote)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -96,7 +96,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),disease);
 				return;
 			}
-			string command="DELETE FROM disease WHERE DiseaseNum ="+POut.PInt(disease.DiseaseNum);
+			string command="DELETE FROM disease WHERE DiseaseNum ="+POut.PLong(disease.DiseaseNum);
 			Db.NonQ(command);
 		}
 
@@ -106,7 +106,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;
 			}
-			string command="DELETE FROM disease WHERE PatNum ="+POut.PInt(patNum);
+			string command="DELETE FROM disease WHERE PatNum ="+POut.PLong(patNum);
 			Db.NonQ(command);
 		}
 

@@ -706,10 +706,10 @@ namespace OpenDental{
 				gridMain.Invalidate();
 				return;
 			}
-			long guar=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["Guarantor"].ToString());
+			long guar=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["Guarantor"].ToString());
 			int famCount=0;
 			for(int i=0;i<gridMain.Rows.Count;i++) {
-				if(PIn.PInt(table.Rows[i]["Guarantor"].ToString())==guar){
+				if(PIn.PLong(table.Rows[i]["Guarantor"].ToString())==guar){
 					famCount++;
 					gridMain.Rows[i].ColorText=Color.Red;
 				}
@@ -724,8 +724,8 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
-			Recall recall=Recalls.GetRecall(PIn.PInt(table.Rows[e.Row]["RecallNum"].ToString()));
+			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
+			Recall recall=Recalls.GetRecall(PIn.PLong(table.Rows[e.Row]["RecallNum"].ToString()));
 			FormRecallListEdit FormRE=new FormRecallListEdit(recall);
 			FormRE.ShowDialog();
 			if(FormRE.PinClicked){
@@ -738,7 +738,7 @@ namespace OpenDental{
 				FillMain();
 			}
 			for(int i=0;i<gridMain.Rows.Count;i++) {
-				if(PIn.PInt(table.Rows[i]["PatNum"].ToString())==SelectedPatNum){
+				if(PIn.PLong(table.Rows[i]["PatNum"].ToString())==SelectedPatNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
@@ -754,7 +754,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select only one patient first.");
 				return;
 			}
-			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			SelectedPatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Patient pat=fam.GetPatient(SelectedPatNum);
 			List<Procedure> procList;
@@ -797,7 +797,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select only one patient first.");
 				return;
 			}
-			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			SelectedPatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			List<Procedure> procList;
 			List <InsPlan> planList;
@@ -838,12 +838,12 @@ namespace OpenDental{
 			List<long> recallNums=new List<long>();
       if(gridMain.SelectedIndices.Length < 1){
         for(int i=0;i<gridMain.Rows.Count;i++){
-          recallNums.Add(PIn.PInt(table.Rows[i]["RecallNum"].ToString()));
+          recallNums.Add(PIn.PLong(table.Rows[i]["RecallNum"].ToString()));
         }
       }
       else{
         for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-          recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+          recallNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
         }
       }
       FormRpRecall FormRPR=new FormRpRecall(recallNums);
@@ -865,7 +865,7 @@ namespace OpenDental{
 					if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
 						continue;
 					}
-					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
+					cmeth=(ContactMethod)PIn.PLong(table.Rows[i]["PreferRecallMethod"].ToString());
 					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None){
 						continue;
 					}
@@ -881,7 +881,7 @@ namespace OpenDental{
 			}
 			List<long> recallNums=new List<long>();
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-        recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+        recallNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
 			bool sortAlph=false;
 			if(comboSort.SelectedIndex==1){
@@ -903,12 +903,12 @@ namespace OpenDental{
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt32(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					Recalls.UpdateStatus(
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
+						PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 			}
 			FillMain();
@@ -921,18 +921,18 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				LabelSingle.PrintPat(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()));
+				LabelSingle.PrintPat(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()));
 			}
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the labels finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if labels printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt32(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					Recalls.UpdateStatus(
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
+						PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 			}
 			FillMain();
@@ -954,7 +954,7 @@ namespace OpenDental{
 					//if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
 					//	continue;
 					//}
-					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
+					cmeth=(ContactMethod)PIn.PLong(table.Rows[i]["PreferRecallMethod"].ToString());
 					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None){
 						continue;
 					}
@@ -970,7 +970,7 @@ namespace OpenDental{
 			}
 			List<long> recallNums=new List<long>();
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-        recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+        recallNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
 			bool sortAlph=false;
 			if(comboSort.SelectedIndex==1) {
@@ -1001,12 +1001,12 @@ namespace OpenDental{
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt32(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					Recalls.UpdateStatus(
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
+						PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 			}
 			FillMain();
@@ -1029,7 +1029,7 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices.Length==0){
 				ContactMethod cmeth;
 				for(int i=0;i<table.Rows.Count;i++){
-					cmeth=(ContactMethod)PIn.PInt(table.Rows[i]["PreferRecallMethod"].ToString());
+					cmeth=(ContactMethod)PIn.PLong(table.Rows[i]["PreferRecallMethod"].ToString());
 					if(cmeth!=ContactMethod.Email){
 						continue;
 					}
@@ -1062,7 +1062,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			List<long> recallNums=new List<long>();
       for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-        recallNums.Add(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+        recallNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
       }
 			bool sortAlph=false;
 			if(comboSort.SelectedIndex==1) {
@@ -1075,7 +1075,7 @@ namespace OpenDental{
 			string[] patNumArray;
 			for(int i=0;i<AddrTable.Rows.Count;i++){
 				message=new EmailMessage();
-				message.PatNum=PIn.PInt(AddrTable.Rows[i]["emailPatNum"].ToString());
+				message.PatNum=PIn.PLong(AddrTable.Rows[i]["emailPatNum"].ToString());
 				message.ToAddress=PIn.PString(AddrTable.Rows[i]["email"].ToString());//might be guarantor email
 				message.FromAddress=PrefC.GetString("EmailSenderAddress");
 				if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
@@ -1130,8 +1130,8 @@ namespace OpenDental{
 				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
 				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
 				for(int r=0;r<recallNumArray.Length;r++){
-					Commlogs.InsertForRecall(PIn.PInt(patNumArray[r]),CommItemMode.Email,PIn.PInt32(AddrTable.Rows[i]["numberOfReminders"].ToString()));
-					Recalls.UpdateStatus(PIn.PInt(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
+					Commlogs.InsertForRecall(PIn.PLong(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
+					Recalls.UpdateStatus(PIn.PLong(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
 				}
 			}			
 			FillMain();
@@ -1270,10 +1270,10 @@ namespace OpenDental{
 		private void butSetStatus_Click(object sender, System.EventArgs e) {
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(comboStatus.SelectedIndex==0){
-					Recalls.UpdateStatus(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),0);
+					Recalls.UpdateStatus(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),0);
 				}
 				else{
-					Recalls.UpdateStatus(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),
+					Recalls.UpdateStatus(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),
 						DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].DefNum);
 				}
 			}
@@ -1363,7 +1363,7 @@ namespace OpenDental{
 
 		private void FormRecallList_FormClosing(object sender,FormClosingEventArgs e) {
 			if(gridMain.SelectedIndices.Length==1){
-				SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+				SelectedPatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			}
 		}
 

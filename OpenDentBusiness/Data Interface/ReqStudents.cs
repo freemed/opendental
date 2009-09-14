@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ReqStudent>>(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT * FROM reqstudent WHERE AptNum="+POut.PInt(aptNum)+" ORDER BY ProvNum,Descript";
+			string command="SELECT * FROM reqstudent WHERE AptNum="+POut.PLong(aptNum)+" ORDER BY ProvNum,Descript";
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ReqStudent>(MethodBase.GetCurrentMethod(),ReqStudentNum);
 			}
-			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.PInt(ReqStudentNum);
+			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.PLong(ReqStudentNum);
 			List<ReqStudent> reqList=RefreshAndFill(Db.GetTable(command));
 			if(reqList.Count==0) {
 				return null;
@@ -34,14 +34,14 @@ namespace OpenDentBusiness{
 			ReqStudent req;
 			for(int i=0;i<table.Rows.Count;i++) {
 				req=new ReqStudent();
-				req.ReqStudentNum  = PIn.PInt(table.Rows[i][0].ToString());
-				req.ReqNeededNum   = PIn.PInt(table.Rows[i][1].ToString());
+				req.ReqStudentNum  = PIn.PLong(table.Rows[i][0].ToString());
+				req.ReqNeededNum   = PIn.PLong(table.Rows[i][1].ToString());
 				req.Descript       = PIn.PString(table.Rows[i][2].ToString());
-				req.SchoolCourseNum= PIn.PInt(table.Rows[i][3].ToString());
-				req.ProvNum        = PIn.PInt(table.Rows[i][4].ToString());
-				req.AptNum         = PIn.PInt(table.Rows[i][5].ToString());
-				req.PatNum         = PIn.PInt(table.Rows[i][6].ToString());
-				req.InstructorNum  = PIn.PInt(table.Rows[i][7].ToString());
+				req.SchoolCourseNum= PIn.PLong(table.Rows[i][3].ToString());
+				req.ProvNum        = PIn.PLong(table.Rows[i][4].ToString());
+				req.AptNum         = PIn.PLong(table.Rows[i][5].ToString());
+				req.PatNum         = PIn.PLong(table.Rows[i][6].ToString());
+				req.InstructorNum  = PIn.PLong(table.Rows[i][7].ToString());
 				req.DateCompleted  = PIn.PDate(table.Rows[i][8].ToString());
 				reqList.Add(req);
 			}
@@ -55,15 +55,15 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command = "UPDATE reqstudent SET "
-				+ " ReqNeededNum = '"   +POut.PInt(req.ReqNeededNum)+"'"
+				+ " ReqNeededNum = '"   +POut.PLong(req.ReqNeededNum)+"'"
 				+ ",Descript = '"       +POut.PString(req.Descript)+"'"
-				+ ",SchoolCourseNum = '"+POut.PInt(req.SchoolCourseNum)+"'"
-				+ ",ProvNum = '"        +POut.PInt(req.ProvNum)+"'"
-				+ ",AptNum = '"         +POut.PInt(req.AptNum)+"'"   
-				+ ",PatNum = '"         +POut.PInt(req.PatNum)+"'"   
-				+ ",InstructorNum = '"  +POut.PInt(req.InstructorNum)+"'"   
+				+ ",SchoolCourseNum = '"+POut.PLong(req.SchoolCourseNum)+"'"
+				+ ",ProvNum = '"        +POut.PLong(req.ProvNum)+"'"
+				+ ",AptNum = '"         +POut.PLong(req.AptNum)+"'"   
+				+ ",PatNum = '"         +POut.PLong(req.PatNum)+"'"   
+				+ ",InstructorNum = '"  +POut.PLong(req.InstructorNum)+"'"   
 				+ ",DateCompleted = "   +POut.PDate(req.DateCompleted)      
-				+" WHERE ReqStudentNum = '" +POut.PInt(req.ReqStudentNum)+"'";
+				+" WHERE ReqStudentNum = '" +POut.PLong(req.ReqStudentNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -82,16 +82,16 @@ namespace OpenDentBusiness{
 			}
 			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(req.ReqStudentNum)+"', ";
+				command+="'"+POut.PLong(req.ReqStudentNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(req.ReqNeededNum)+"', "
+				 "'"+POut.PLong(req.ReqNeededNum)+"', "
 				+"'"+POut.PString(req.Descript)+"', "
-				+"'"+POut.PInt(req.SchoolCourseNum)+"', "
-				+"'"+POut.PInt(req.ProvNum)+"', "
-				+"'"+POut.PInt(req.AptNum)+"', "
-				+"'"+POut.PInt(req.PatNum)+"', "
-				+"'"+POut.PInt(req.InstructorNum)+"', "
+				+"'"+POut.PLong(req.SchoolCourseNum)+"', "
+				+"'"+POut.PLong(req.ProvNum)+"', "
+				+"'"+POut.PLong(req.AptNum)+"', "
+				+"'"+POut.PLong(req.PatNum)+"', "
+				+"'"+POut.PLong(req.InstructorNum)+"', "
 				    +POut.PDate(req.DateCompleted)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -113,7 +113,7 @@ namespace OpenDentBusiness{
 			if(ReqNeededs.GetReq(req.ReqNeededNum)==null) {
 				throw new Exception(Lans.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
 			}
-			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PInt(reqStudentNum);
+			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PLong(reqStudentNum);
 			Db.NonQ(command);
 		}
 
@@ -137,7 +137,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN schoolcourse ON reqstudent.SchoolCourseNum=schoolcourse.SchoolCourseNum "
 				+"LEFT JOIN patient ON reqstudent.PatNum=patient.PatNum "
 				+"LEFT JOIN appointment ON reqstudent.AptNum=appointment.AptNum "
-				+"WHERE reqstudent.ProvNum="+POut.PInt(provNum)
+				+"WHERE reqstudent.ProvNum="+POut.PLong(provNum)
 				+" ORDER BY CourseID,ReqDescript";
 			DataTable raw=Db.GetTable(command);
 			DateTime AptDateTime;
@@ -178,10 +178,10 @@ namespace OpenDentBusiness{
 			string command="SELECT COUNT(DISTINCT req2.ReqStudentNum) donereq,FName,LName,provider.ProvNum,"
 				+"COUNT(DISTINCT req1.ReqStudentNum) totalreq "
 				+"FROM provider "
-				+"LEFT JOIN reqstudent req1 ON req1.ProvNum=provider.ProvNum AND req1.SchoolCourseNum="+POut.PInt(courseNum)+" "
+				+"LEFT JOIN reqstudent req1 ON req1.ProvNum=provider.ProvNum AND req1.SchoolCourseNum="+POut.PLong(courseNum)+" "
 				+"LEFT JOIN reqstudent req2 ON req2.ProvNum=provider.ProvNum AND YEAR(req2.DateCompleted) > 1880 "
-				+"AND req2.SchoolCourseNum="+POut.PInt(courseNum)+" "
-				+"WHERE provider.SchoolClassNum="+POut.PInt(classNum)
+				+"AND req2.SchoolCourseNum="+POut.PLong(courseNum)+" "
+				+"WHERE provider.SchoolClassNum="+POut.PLong(classNum)
 				+" GROUP BY provider.ProvNum "
 				+"ORDER BY LName,FName";
 			DataTable raw=Db.GetTable(command);
@@ -219,10 +219,10 @@ namespace OpenDentBusiness{
 			//	command+="WHERE ProvNum="+POut.PInt(provNum);
 			//}
 			//else{
-				command+="WHERE SchoolCourseNum="+POut.PInt(schoolCourse)
+				command+="WHERE SchoolCourseNum="+POut.PLong(schoolCourse)
 					//+" AND ProvNum="+POut.PInt(provNum);
 			//}
-			+" AND SchoolClassNum="+POut.PInt(schoolClass);
+			+" AND SchoolClassNum="+POut.PLong(schoolClass);
 			command+=" ORDER BY Descript";
 			return Db.GetTable(command);
 		}
@@ -235,7 +235,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//first, detach all from this appt
-			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
+			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PLong(aptNum);
 			Db.NonQ(command);
 			if(reqsAttached.Count==0) {
 				return;
@@ -257,7 +257,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT LName,FName FROM provider,reqstudent "
 				+"WHERE provider.ProvNum=reqstudent.ProvNum "
-				+"AND reqstudent.ReqNeededNum="+POut.PInt(reqNeededNum)
+				+"AND reqstudent.ReqNeededNum="+POut.PLong(reqNeededNum)
 				+" AND reqstudent.DateCompleted > "+POut.PDate(new DateTime(1880,1,1));
 			DataTable table=Db.GetTable(command);
 			string retVal="";

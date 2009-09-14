@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				+",BalTotal  = 0"
 				+",PayPlanDue= 0";
 			if(guarantor!=0) {
-				command+=" WHERE Guarantor="+POut.PInt(guarantor);
+				command+=" WHERE Guarantor="+POut.PLong(guarantor);
 			}
 			Db.NonQ(command);
 			if(AsOfDate.Year<1880){

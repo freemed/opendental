@@ -180,7 +180,7 @@ namespace OpenDental{
 			}
 			long selected=0;
 			if(gridMain.GetSelectedIndex()!=-1){
-				selected=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["ReqNeededNum"].ToString());
+				selected=PIn.PLong(table.Rows[gridMain.GetSelectedIndex()]["ReqNeededNum"].ToString());
 			}
 			int scroll=gridMain.ScrollValue;
 			long schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
@@ -249,7 +249,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormReqNeededEdit FormR=new FormReqNeededEdit();
-			FormR.ReqCur=ReqNeededs.GetReq(PIn.PInt(table.Rows[e.Row]["ReqNeededNum"].ToString()));
+			FormR.ReqCur=ReqNeededs.GetReq(PIn.PLong(table.Rows[e.Row]["ReqNeededNum"].ToString()));
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;

@@ -229,7 +229,7 @@ namespace OpenDental{
 				if(strArray[i]=="") {
 					continue;
 				}
-				accountAL.Add(PIn.PInt(strArray[i]));
+				accountAL.Add(PIn.PLong(strArray[i]));
 			}
 			FillList();
 		}

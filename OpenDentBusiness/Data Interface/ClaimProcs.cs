@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE PlanNum = "+POut.PInt(planNum);
+				+"WHERE PlanNum = "+POut.PLong(planNum);
 				//+" OR PatPlanNum = "+POut.PInt(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE ClaimNum = "+POut.PInt(claimNum)+" ORDER BY LineNumber";
+				+"WHERE ClaimNum = "+POut.PLong(claimNum)+" ORDER BY LineNumber";
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
 		}
@@ -52,9 +52,9 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE (Status="+POut.PInt((int)ClaimProcStatus.Estimate)
-				+" OR Status="+POut.PInt((int)ClaimProcStatus.CapEstimate)+") "
-				+"AND PatNum = "+POut.PInt(patNum);
+				+"WHERE (Status="+POut.PLong((int)ClaimProcStatus.Estimate)
+				+" OR Status="+POut.PLong((int)ClaimProcStatus.CapEstimate)+") "
+				+"AND PatNum = "+POut.PLong(patNum);
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
 		}
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM claimproc "
-				+"WHERE ProcNum="+POut.PInt(procNum);
+				+"WHERE ProcNum="+POut.PLong(procNum);
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
 		}
@@ -77,25 +77,25 @@ namespace OpenDentBusiness{
 			ClaimProc cp;
 			for(int i=0;i<table.Rows.Count;i++){
 				cp=new ClaimProc();
-				cp.ClaimProcNum    = PIn.PInt   (table.Rows[i][0].ToString());
-				cp.ProcNum         = PIn.PInt   (table.Rows[i][1].ToString());
-				cp.ClaimNum        = PIn.PInt   (table.Rows[i][2].ToString());	
-				cp.PatNum          = PIn.PInt   (table.Rows[i][3].ToString());
-				cp.ProvNum         = PIn.PInt   (table.Rows[i][4].ToString());
+				cp.ClaimProcNum    = PIn.PLong   (table.Rows[i][0].ToString());
+				cp.ProcNum         = PIn.PLong   (table.Rows[i][1].ToString());
+				cp.ClaimNum        = PIn.PLong   (table.Rows[i][2].ToString());	
+				cp.PatNum          = PIn.PLong   (table.Rows[i][3].ToString());
+				cp.ProvNum         = PIn.PLong   (table.Rows[i][4].ToString());
 				cp.FeeBilled       = PIn.PDouble(table.Rows[i][5].ToString());
 				cp.InsPayEst       = PIn.PDouble(table.Rows[i][6].ToString());
 				cp.DedApplied      = PIn.PDouble(table.Rows[i][7].ToString());
-				cp.Status          = (ClaimProcStatus)PIn.PInt(table.Rows[i][8].ToString());
+				cp.Status          = (ClaimProcStatus)PIn.PLong(table.Rows[i][8].ToString());
 				cp.InsPayAmt       = PIn.PDouble(table.Rows[i][9].ToString());
 				cp.Remarks         = PIn.PString(table.Rows[i][10].ToString());
-				cp.ClaimPaymentNum = PIn.PInt   (table.Rows[i][11].ToString());
-				cp.PlanNum         = PIn.PInt   (table.Rows[i][12].ToString());
+				cp.ClaimPaymentNum = PIn.PLong   (table.Rows[i][11].ToString());
+				cp.PlanNum         = PIn.PLong   (table.Rows[i][12].ToString());
 				cp.DateCP          = PIn.PDate  (table.Rows[i][13].ToString());
 				cp.WriteOff        = PIn.PDouble(table.Rows[i][14].ToString());
 				cp.CodeSent        = PIn.PString(table.Rows[i][15].ToString());
 				cp.AllowedOverride = PIn.PDouble(table.Rows[i][16].ToString());
-				cp.Percentage      = PIn.PInt32   (table.Rows[i][17].ToString());
-				cp.PercentOverride = PIn.PInt32   (table.Rows[i][18].ToString());
+				cp.Percentage      = PIn.PInt   (table.Rows[i][17].ToString());
+				cp.PercentOverride = PIn.PInt   (table.Rows[i][18].ToString());
 				cp.CopayAmt        = PIn.PDouble(table.Rows[i][19].ToString());
 				cp.NoBillIns       = PIn.PBool  (table.Rows[i][20].ToString());
 				cp.PaidOtherIns    = PIn.PDouble(table.Rows[i][21].ToString());
@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 				cp.CopayOverride   = PIn.PDouble(table.Rows[i][23].ToString());
 				cp.ProcDate        = PIn.PDate  (table.Rows[i][24].ToString());
 				cp.DateEntry       = PIn.PDate  (table.Rows[i][25].ToString());
-				cp.LineNumber      = PIn.PInt32   (table.Rows[i][26].ToString());
+				cp.LineNumber      = PIn.PInt   (table.Rows[i][26].ToString());
 				cp.DedEst          = PIn.PDouble(table.Rows[i][27].ToString());
 				cp.DedEstOverride  = PIn.PDouble(table.Rows[i][28].ToString());
 				cp.InsEstTotal     = PIn.PDouble(table.Rows[i][29].ToString());
@@ -135,27 +135,27 @@ namespace OpenDentBusiness{
 				+"ProcDate,DateEntry,LineNumber,DedEst,DedEstOverride,InsEstTotal,"
 				+"InsEstTotalOverride,PaidOtherInsOverride,EstimateNote) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(cp.ClaimProcNum)+"', ";
+				command+="'"+POut.PLong(cp.ClaimProcNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(cp.ProcNum)+"', "
-				+"'"+POut.PInt(cp.ClaimNum)+"', "
-				+"'"+POut.PInt(cp.PatNum)+"', "
-				+"'"+POut.PInt(cp.ProvNum)+"', "
+				 "'"+POut.PLong(cp.ProcNum)+"', "
+				+"'"+POut.PLong(cp.ClaimNum)+"', "
+				+"'"+POut.PLong(cp.PatNum)+"', "
+				+"'"+POut.PLong(cp.ProvNum)+"', "
 				+"'"+POut.PDouble(cp.FeeBilled)+"', "
 				+"'"+POut.PDouble(cp.InsPayEst)+"', "
 				+"'"+POut.PDouble(cp.DedApplied)+"', "
-				+"'"+POut.PInt((int)cp.Status)+"', "
+				+"'"+POut.PLong((int)cp.Status)+"', "
 				+"'"+POut.PDouble(cp.InsPayAmt)+"', "
 				+"'"+POut.PString(cp.Remarks)+"', "
-				+"'"+POut.PInt(cp.ClaimPaymentNum)+"', "
-				+"'"+POut.PInt(cp.PlanNum)+"', "
+				+"'"+POut.PLong(cp.ClaimPaymentNum)+"', "
+				+"'"+POut.PLong(cp.PlanNum)+"', "
 				+POut.PDate(cp.DateCP)+", "
 				+"'"+POut.PDouble(cp.WriteOff)+"', "
 				+"'"+POut.PString(cp.CodeSent)+"', "
 				+"'"+POut.PDouble(cp.AllowedOverride)+"', "
-				+"'"+POut.PInt(cp.Percentage)+"', "
-				+"'"+POut.PInt(cp.PercentOverride)+"', "
+				+"'"+POut.PLong(cp.Percentage)+"', "
+				+"'"+POut.PLong(cp.PercentOverride)+"', "
 				+"'"+POut.PDouble(cp.CopayAmt)+"', "
 				+"'"+POut.PBool(cp.NoBillIns)+"', "
 				+"'"+POut.PDouble(cp.PaidOtherIns)+"', "
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.CopayOverride)+"', "
 				+POut.PDate(cp.ProcDate)+", "
 				+"NOW(), "
-				+"'"+POut.PInt(cp.LineNumber)+"', "
+				+"'"+POut.PLong(cp.LineNumber)+"', "
 				+"'"+POut.PDouble(cp.DedEst)+"', "
 				+"'"+POut.PDouble(cp.DedEstOverride)+"', "
 				+"'"+POut.PDouble(cp.InsEstTotal)+"', "
@@ -186,24 +186,24 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE claimproc SET "
-				+"ProcNum = '"        +POut.PInt(cp.ProcNum)+"'"
-				+",ClaimNum = '"      +POut.PInt(cp.ClaimNum)+"' "
-				+",PatNum = '"        +POut.PInt(cp.PatNum)+"'"
-				+",ProvNum = '"       +POut.PInt(cp.ProvNum)+"'"
+				+"ProcNum = '"        +POut.PLong(cp.ProcNum)+"'"
+				+",ClaimNum = '"      +POut.PLong(cp.ClaimNum)+"' "
+				+",PatNum = '"        +POut.PLong(cp.PatNum)+"'"
+				+",ProvNum = '"       +POut.PLong(cp.ProvNum)+"'"
 				+",FeeBilled = '"     +POut.PDouble(cp.FeeBilled)+"'"
 				+",InsPayEst = '"     +POut.PDouble(cp.InsPayEst)+"'"
 				+",DedApplied = '"    +POut.PDouble(cp.DedApplied)+"'"
-				+",Status = '"        +POut.PInt((int)cp.Status)+"'"
+				+",Status = '"        +POut.PLong((int)cp.Status)+"'"
 				+",InsPayAmt = '"     +POut.PDouble(cp.InsPayAmt)+"'"
 				+",Remarks = '"       +POut.PString(cp.Remarks)+"'"
-				+",ClaimPaymentNum= '"+POut.PInt(cp.ClaimPaymentNum)+"'"
-				+",PlanNum= '"        +POut.PInt(cp.PlanNum)+"'"
+				+",ClaimPaymentNum= '"+POut.PLong(cp.ClaimPaymentNum)+"'"
+				+",PlanNum= '"        +POut.PLong(cp.PlanNum)+"'"
 				+",DateCP= "          +POut.PDate(cp.DateCP)
 				+",WriteOff= '"       +POut.PDouble(cp.WriteOff)+"'"
 				+",CodeSent= '"       +POut.PString(cp.CodeSent)+"'"
 				+",AllowedOverride= '"+POut.PDouble(cp.AllowedOverride)+"'"
-				+",Percentage= '"     +POut.PInt(cp.Percentage)+"'"
-				+",PercentOverride= '"+POut.PInt(cp.PercentOverride)+"'"
+				+",Percentage= '"     +POut.PLong(cp.Percentage)+"'"
+				+",PercentOverride= '"+POut.PLong(cp.PercentOverride)+"'"
 				+",CopayAmt= '"       +POut.PDouble(cp.CopayAmt)+"'"
 				+",NoBillIns= '"      +POut.PBool(cp.NoBillIns)+"'"
 				+",PaidOtherIns= '"   +POut.PDouble(cp.PaidOtherIns)+"'"
@@ -211,14 +211,14 @@ namespace OpenDentBusiness{
 				+",CopayOverride= '"  +POut.PDouble(cp.CopayOverride)+"'"
 				+",ProcDate= "        +POut.PDate(cp.ProcDate)
 				+",DateEntry= "       +POut.PDate(cp.DateEntry)
-				+",LineNumber= '"     +POut.PInt(cp.LineNumber)+"'"
+				+",LineNumber= '"     +POut.PLong(cp.LineNumber)+"'"
 				+",DedEst= '"         +POut.PDouble(cp.DedEst)+"'"
 				+",DedEstOverride= '" +POut.PDouble(cp.DedEstOverride)+"'"
 				+",InsEstTotal= '"    +POut.PDouble(cp.InsEstTotal)+"'"
 				+",InsEstTotalOverride= '"+POut.PDouble(cp.InsEstTotalOverride)+"'"
 				+",PaidOtherInsOverride= '"+POut.PDouble(cp.PaidOtherInsOverride)+"'"
 				+",EstimateNote= '"   +POut.PString(cp.EstimateNote)+"'"
-				+" WHERE claimprocnum = '"+POut.PInt(cp.ClaimProcNum)+"'";
+				+" WHERE claimprocnum = '"+POut.PLong(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}
@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
 				return;
 			}
-			string command= "DELETE from claimproc WHERE claimprocNum = "+POut.PInt(cp.ClaimProcNum);
+			string command= "DELETE from claimproc WHERE claimprocNum = "+POut.PLong(cp.ClaimProcNum);
 			Db.NonQ(command);
 		}
 
@@ -803,7 +803,7 @@ namespace OpenDentBusiness{
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride FROM claimproc WHERE ProcNum="+POut.PInt(cp.ProcNum);
+			string command="SELECT PlanNum,InsEstTotal,InsEstTotalOverride FROM claimproc WHERE ProcNum="+POut.PLong(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
 			long planNum;
@@ -811,7 +811,7 @@ namespace OpenDentBusiness{
 			double insEstTotal;
 			double insEstTotalOverride;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.PInt(table.Rows[i]["PlanNum"].ToString());
+				planNum=PIn.PLong(table.Rows[i]["PlanNum"].ToString());
 				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
 				if(ordinal >= thisOrdinal) {
 					continue;
@@ -840,14 +840,14 @@ namespace OpenDentBusiness{
 			if(thisOrdinal==1) {
 				return 0;
 			}
-			string command="SELECT PlanNum,BaseEst FROM claimproc WHERE ProcNum="+POut.PInt(cp.ProcNum);
+			string command="SELECT PlanNum,BaseEst FROM claimproc WHERE ProcNum="+POut.PLong(cp.ProcNum);
 			DataTable table=Db.GetTable(command);
 			double retVal=0;
 			long planNum;
 			int ordinal;
 			double baseEst;
 			for(int i=0;i<table.Rows.Count;i++) {
-				planNum=PIn.PInt(table.Rows[i]["PlanNum"].ToString());
+				planNum=PIn.PLong(table.Rows[i]["PlanNum"].ToString());
 				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
 				if(ordinal >= thisOrdinal) {
 					continue;
@@ -1008,25 +1008,25 @@ namespace OpenDentBusiness{
 				string command="SELECT claimproc.ProcDate,CodeNum,InsPayEst,InsPayAmt,DedApplied,claimproc.PatNum,Status,ClaimNum "
 					+"FROM claimproc "
 					+"LEFT JOIN procedurelog on claimproc.ProcNum=procedurelog.ProcNum "//to get the codenum
-					+"WHERE claimproc.PlanNum="+POut.PInt(plan.PlanNum)
+					+"WHERE claimproc.PlanNum="+POut.PLong(plan.PlanNum)
 					+" AND claimproc.ProcDate >= "+POut.PDate(dateStart)//no upper limit on date.
 					+" AND claimproc.Status IN("
-					+POut.PInt((int)ClaimProcStatus.NotReceived)+","
-					+POut.PInt((int)ClaimProcStatus.Adjustment)+","//insPayAmt and DedApplied
-					+POut.PInt((int)ClaimProcStatus.Received)+","
-					+POut.PInt((int)ClaimProcStatus.Supplemental)+")";
+					+POut.PLong((int)ClaimProcStatus.NotReceived)+","
+					+POut.PLong((int)ClaimProcStatus.Adjustment)+","//insPayAmt and DedApplied
+					+POut.PLong((int)ClaimProcStatus.Received)+","
+					+POut.PLong((int)ClaimProcStatus.Supplemental)+")";
 				if(!isFam) {
-					command+=" AND claimproc.PatNum="+POut.PInt(patNum);
+					command+=" AND claimproc.PatNum="+POut.PLong(patNum);
 				}
 				if(excludeClaimNum != -1) {
-					command+=" AND claimproc.ClaimNum != "+POut.PInt(excludeClaimNum);
+					command+=" AND claimproc.ClaimNum != "+POut.PLong(excludeClaimNum);
 				}
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					cph=new ClaimProcHist();
 					cph.ProcDate   = PIn.PDate (table.Rows[i]["ProcDate"].ToString());
-					cph.StrProcCode= ProcedureCodes.GetStringProcCode(PIn.PInt(table.Rows[i]["CodeNum"].ToString()));
-					cph.Status=(ClaimProcStatus)PIn.PInt(table.Rows[i]["Status"].ToString());
+					cph.StrProcCode= ProcedureCodes.GetStringProcCode(PIn.PLong(table.Rows[i]["CodeNum"].ToString()));
+					cph.Status=(ClaimProcStatus)PIn.PLong(table.Rows[i]["Status"].ToString());
 					if(cph.Status==ClaimProcStatus.NotReceived) {
 						cph.Amount   = PIn.PDouble(table.Rows[i]["InsPayEst"].ToString());
 					}
@@ -1034,8 +1034,8 @@ namespace OpenDentBusiness{
 						cph.Amount   = PIn.PDouble(table.Rows[i]["InsPayAmt"].ToString());
 					}
 					cph.Deduct     = PIn.PDouble(table.Rows[i]["DedApplied"].ToString());
-					cph.PatNum     = PIn.PInt   (table.Rows[i]["PatNum"].ToString());
-					cph.ClaimNum   = PIn.PInt   (table.Rows[i]["ClaimNum"].ToString());
+					cph.PatNum     = PIn.PLong   (table.Rows[i]["PatNum"].ToString());
+					cph.ClaimNum   = PIn.PLong   (table.Rows[i]["ClaimNum"].ToString());
 					cph.PlanNum=plan.PlanNum;
 					retVal.Add(cph);
 				}

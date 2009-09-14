@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),recallNum);
 			} 
-			string command="SELECT * FROM recall WHERE RecallNum="+POut.PInt(recallNum);
+			string command="SELECT * FROM recall WHERE RecallNum="+POut.PLong(recallNum);
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table)[0];
 		}
@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),patNum);
 			} 
-			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum)
+			string command="SELECT * FROM recall WHERE PatNum="+POut.PLong(patNum)
 				+" AND (RecallTypeNum="+RecallTypes.ProphyType+" OR RecallTypeNum="+RecallTypes.PerioType+")";
 			DataTable table=Db.GetTable(command);
 			List<Recall> recallList=RefreshAndFill(table);
@@ -85,17 +85,17 @@ namespace OpenDentBusiness{
 			Recall recall;
 			for(int i=0;i<table.Rows.Count;i++){
 				recall=new Recall();
-				recall.RecallNum      = PIn.PInt   (table.Rows[i][0].ToString());
-				recall.PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
+				recall.RecallNum      = PIn.PLong   (table.Rows[i][0].ToString());
+				recall.PatNum         = PIn.PLong   (table.Rows[i][1].ToString());
 				recall.DateDueCalc    = PIn.PDate  (table.Rows[i][2].ToString());
 				recall.DateDue        = PIn.PDate  (table.Rows[i][3].ToString());
 				recall.DatePrevious   = PIn.PDate  (table.Rows[i][4].ToString());
-				recall.RecallInterval = new Interval(PIn.PInt32(table.Rows[i][5].ToString()));
-				recall.RecallStatus   = PIn.PInt   (table.Rows[i][6].ToString());
+				recall.RecallInterval = new Interval(PIn.PInt(table.Rows[i][5].ToString()));
+				recall.RecallStatus   = PIn.PLong   (table.Rows[i][6].ToString());
 				recall.Note           = PIn.PString(table.Rows[i][7].ToString());
 				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
 				//DateTStamp
-				recall.RecallTypeNum  = PIn.PInt   (table.Rows[i][10].ToString());
+				recall.RecallTypeNum  = PIn.PLong   (table.Rows[i][10].ToString());
 				if(table.Columns.Count>11){
 					recall.DateScheduled= PIn.PDate  (table.Rows[i][11].ToString());
 				}
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 			//key=guarantor, value=maxDateDue
 			Dictionary<long,DateTime> dictMaxDateDue=new Dictionary<long,DateTime>();
 			for(int i=0;i<maxTable.Rows.Count;i++) {
-				dictMaxDateDue.Add(PIn.PInt(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
+				dictMaxDateDue.Add(PIn.PLong(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
 			}
 			command=
 				@"SELECT patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
@@ -181,19 +181,19 @@ namespace OpenDentBusiness{
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
-				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
+				AND CommType="+POut.PLong(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
 				//+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				+"WHERE patient.patstatus=0 ";
 			if(provNum>0){
-				command+="AND (patient.PriProv="+POut.PInt(provNum)+" "
-					+"OR patient.SecProv="+POut.PInt(provNum)+") ";
+				command+="AND (patient.PriProv="+POut.PLong(provNum)+" "
+					+"OR patient.SecProv="+POut.PLong(provNum)+") ";
 			}
 			if(clinicNum>0) {
-				command+="AND patient.ClinicNum="+POut.PInt(clinicNum)+" ";
+				command+="AND patient.ClinicNum="+POut.PLong(clinicNum)+" ";
 			}
 			if(siteNum>0) {
-				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
+				command+="AND patient.SiteNum="+POut.PLong(siteNum)+" ";
 			}
 			command+=
 				"AND NOT EXISTS("//test for scheduled appt.
@@ -214,7 +214,7 @@ namespace OpenDentBusiness{
 			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
-					recalltypes.Add(PIn.PInt(typearray[i]));
+					recalltypes.Add(PIn.PLong(typearray[i]));
 				}
 			}
 			if(recalltypes.Count>0){
@@ -223,7 +223,7 @@ namespace OpenDentBusiness{
 					if(i>0){
 						command+=" OR ";
 					}
-					command+="recall.RecallTypeNum="+POut.PInt(recalltypes[i]);
+					command+="recall.RecallTypeNum="+POut.PLong(recalltypes[i]);
 				}
 				command+=") ";
 			}
@@ -261,7 +261,7 @@ namespace OpenDentBusiness{
 				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
-				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferRecallMethod"].ToString());
+				contmeth=(ContactMethod)PIn.PLong(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
 					if(groupByFamilies){
 						if(rawtable.Rows[i]["_guarEmail"].ToString() != "") {//since there is an email,
@@ -328,7 +328,7 @@ namespace OpenDentBusiness{
 				row["guarFName"]=rawtable.Rows[i]["_guarFName"].ToString();
 				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
-				guarNum=PIn.PInt(rawtable.Rows[i]["Guarantor"].ToString());
+				guarNum=PIn.PLong(rawtable.Rows[i]["Guarantor"].ToString());
 				if(dictMaxDateDue.ContainsKey(guarNum)) {
 					row["maxDateDue"]=dictMaxDateDue[guarNum];
 				}
@@ -369,11 +369,11 @@ namespace OpenDentBusiness{
 				else{
 					row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
 				}
-				interv=new Interval(PIn.PInt32(rawtable.Rows[i]["RecallInterval"].ToString()));
+				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
 				row["recallType"]=rawtable.Rows[i]["_recalltype"].ToString();
-				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
+				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PLong(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
 			}
 			RecallComparer comparer=new RecallComparer();
@@ -404,19 +404,19 @@ namespace OpenDentBusiness{
 				+"RecallTypeNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(recall.RecallNum)+"', ";
+				command+="'"+POut.PLong(recall.RecallNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (recall.PatNum)+"', "
+				 "'"+POut.PLong   (recall.PatNum)+"', "
 				    +POut.PDate  (recall.DateDueCalc)+", "
 				    +POut.PDate  (recall.DateDue)+", "
 				    +POut.PDate  (recall.DatePrevious)+", "
-				+"'"+POut.PInt   (recall.RecallInterval.ToInt())+"', "
-				+"'"+POut.PInt   (recall.RecallStatus)+"', "
+				+"'"+POut.PLong   (recall.RecallInterval.ToInt())+"', "
+				+"'"+POut.PLong   (recall.RecallStatus)+"', "
 				+"'"+POut.PString(recall.Note)+"', "
 				+"'"+POut.PBool  (recall.IsDisabled)+"', "
 				//DateTStamp
-				+"'"+POut.PInt   (recall.RecallTypeNum)+"')";
+				+"'"+POut.PLong   (recall.RecallTypeNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -433,17 +433,17 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE recall SET "
-				+"PatNum = '"          +POut.PInt   (recall.PatNum)+"'"
+				+"PatNum = '"          +POut.PLong   (recall.PatNum)+"'"
 				+",DateDueCalc = "     +POut.PDate  (recall.DateDueCalc)+" "
 				+",DateDue = "         +POut.PDate  (recall.DateDue)+" "
 				+",DatePrevious = "    +POut.PDate  (recall.DatePrevious)+" "
-				+",RecallInterval = '" +POut.PInt   (recall.RecallInterval.ToInt())+"' "
-				+",RecallStatus= '"    +POut.PInt   (recall.RecallStatus)+"' "
+				+",RecallInterval = '" +POut.PLong   (recall.RecallInterval.ToInt())+"' "
+				+",RecallStatus= '"    +POut.PLong   (recall.RecallStatus)+"' "
 				+",Note = '"           +POut.PString(recall.Note)+"' "
 				+",IsDisabled = '"     +POut.PBool  (recall.IsDisabled)+"' "
 				//DateTStamp
-				+",RecallTypeNum = '"  +POut.PInt   (recall.RecallTypeNum)+"' "
-				+" WHERE RecallNum = '"+POut.PInt   (recall.RecallNum)+"'";
+				+",RecallTypeNum = '"  +POut.PLong   (recall.RecallTypeNum)+"' "
+				+" WHERE RecallNum = '"+POut.PLong   (recall.RecallNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -453,7 +453,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),recall);
 				return;
 			}
-			string command= "DELETE from recall WHERE RecallNum = "+POut.PInt(recall.RecallNum);
+			string command= "DELETE from recall WHERE RecallNum = "+POut.PLong(recall.RecallNum);
 			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
 		}
@@ -480,7 +480,7 @@ namespace OpenDentBusiness{
 			}
 			List<RecallType> typeListActive=RecallTypes.GetActive();
 			List<RecallType> typeList=new List<RecallType>(typeListActive);
-			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
+			string command="SELECT * FROM recall WHERE PatNum="+POut.PLong(patNum);
 			DataTable table=Db.GetTable(command);
 			List<Recall> recallList=RefreshAndFill(table);
 			//determine if this patient is a perio patient.
@@ -509,7 +509,7 @@ namespace OpenDentBusiness{
 			//get previous dates for all types at once
 			command="SELECT RecallTypeNum,MAX(ProcDate) _procDate "
 				+"FROM procedurelog,recalltrigger "
-				+"WHERE PatNum="+POut.PInt(patNum)
+				+"WHERE PatNum="+POut.PLong(patNum)
 				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND (";
 			if(typeListActive.Count>0) {
@@ -517,15 +517,15 @@ namespace OpenDentBusiness{
 					if(i>0) {
 						command+=" OR";
 					}
-					command+=" RecallTypeNum="+POut.PInt(typeListActive[i].RecallTypeNum);
+					command+=" RecallTypeNum="+POut.PLong(typeListActive[i].RecallTypeNum);
 				}
 			} 
 			else {
 				command+=" RecallTypeNum=0";//Effectively forces an empty result set, without changing the returned table structure.
 			}
-			command+=") AND (ProcStatus = "+POut.PInt((int)ProcStat.C)+" "
-				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EC)+" "
-				+"OR ProcStatus = "+POut.PInt((int)ProcStat.EO)+") "
+			command+=") AND (ProcStatus = "+POut.PLong((int)ProcStat.C)+" "
+				+"OR ProcStatus = "+POut.PLong((int)ProcStat.EC)+" "
+				+"OR ProcStatus = "+POut.PLong((int)ProcStat.EO)+") "
 				+"GROUP BY RecallTypeNum";
 			DataTable tableDates=Db.GetTable(command);
 			//Go through the type list and either update recalls, or create new recalls.
@@ -667,7 +667,7 @@ namespace OpenDentBusiness{
 				+"WHERE PatStatus=0";
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				Synch(PIn.PInt(table.Rows[i][0].ToString()));
+				Synch(PIn.PLong(table.Rows[i][0].ToString()));
 			}
 		}
 
@@ -692,7 +692,7 @@ namespace OpenDentBusiness{
 				if(i>0){
 					command+=" OR ";
 				}
-				command+="recall.RecallNum="+POut.PInt(recallNums[i]);
+				command+="recall.RecallNum="+POut.PLong(recallNums[i]);
 			}
 			command+=") GROUP BY patient.Guarantor";
 			Db.NonQ(command);
@@ -709,8 +709,8 @@ namespace OpenDentBusiness{
 				LEFT JOIN patient ON patient.PatNum=recall.PatNum 
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
-				AND CommType="+POut.PInt(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
-				+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
+				AND CommType="+POut.PLong(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
+				+"AND SentOrReceived = "+POut.PLong((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				+"LEFT JOIN temprecallmaxdate ON temprecallmaxdate.Guarantor=patient.Guarantor "
 				+"WHERE ";
@@ -718,7 +718,7 @@ namespace OpenDentBusiness{
         if(i>0){
 					command+=" OR ";
 				}
-        command+="recall.RecallNum="+POut.PInt(recallNums[i]);
+        command+="recall.RecallNum="+POut.PLong(recallNums[i]);
       }
 			command+=" GROUP BY recall.RecallNum";
 			DataTable rawTable=Db.GetTable(command);
@@ -768,7 +768,7 @@ namespace OpenDentBusiness{
 					row["emailPatNum"]=rawRows[i]["PatNum"].ToString();
 					row["famList"]="";
 					row["guarLName"]=rawRows[i]["guarLName"].ToString();//even though we won't use it.
-					row["numberOfReminders"]=PIn.PInt(rawRows[i]["numberOfReminders"].ToString()).ToString();
+					row["numberOfReminders"]=PIn.PLong(rawRows[i]["numberOfReminders"].ToString()).ToString();
 					if(rawRows[i]["Preferred"].ToString()=="") {
 						row["patientNameF"]=rawRows[i]["FName"].ToString();
 					}
@@ -788,7 +788,7 @@ namespace OpenDentBusiness{
 					maxNumReminders=0;
 					//loop through the whole family, and determine the maximum number of reminders
 					for(int f=i;f<rawRows.Count;f++) {
-						maxRemindersThisPat=PIn.PInt32(rawRows[f]["numberOfReminders"].ToString());
+						maxRemindersThisPat=PIn.PInt(rawRows[f]["numberOfReminders"].ToString());
 						if(maxRemindersThisPat>maxNumReminders) {
 							maxNumReminders=maxRemindersThisPat;
 						}

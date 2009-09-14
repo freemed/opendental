@@ -17,8 +17,8 @@ namespace OpenDentBusiness {
 					if(y["Priority"].ToString()=="0") {
 						return -1;//x is less than y. Priorities always come first.
 					}
-					return DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(x["Priority"].ToString())).CompareTo
-						(DefC.GetOrder(DefCat.TxPriorities,PIn.PInt(y["Priority"].ToString())));
+					return DefC.GetOrder(DefCat.TxPriorities,PIn.PLong(x["Priority"].ToString())).CompareTo
+						(DefC.GetOrder(DefCat.TxPriorities,PIn.PLong(y["Priority"].ToString())));
 				}
 			}
 			//priorities are the same, so sort by toothrange

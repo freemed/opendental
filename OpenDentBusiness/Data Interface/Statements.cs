@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE statement SET DateSent="+POut.PDate(dateSent)+", "
-				+"IsSent=1 WHERE StatementNum="+POut.PInt(statementNum);
+				+"IsSent=1 WHERE StatementNum="+POut.PLong(statementNum);
 			Db.NonQ(command);
 		}
 
@@ -90,8 +90,8 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum,docNum);
 				return;
 			}
-			string command="UPDATE statement SET DocNum="+POut.PInt(docNum)
-				+" WHERE StatementNum="+POut.PInt(statementNum);
+			string command="UPDATE statement SET DocNum="+POut.PLong(docNum)
+				+" WHERE StatementNum="+POut.PLong(statementNum);
 			Db.NonQ(command);
 		}
 
@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 				payPlanDue=PIn.PDouble(rawTable.Rows[i]["PayPlanDue"].ToString());
 				row["amountDue"]=(balTotal-insEst).ToString("F");
 				row["balTotal"]=balTotal.ToString("F");;
-				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
+				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PLong(rawTable.Rows[i]["BillingType"].ToString()));
 				if(insEst==0){
 					row["insEst"]="";
 				}
@@ -172,7 +172,7 @@ namespace OpenDentBusiness{
 				else{
 					row["lastStatement"]=lastStatement.ToShortDateString();
 				}
-				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
+				mode=(StatementMode)PIn.PLong(rawTable.Rows[i]["Mode_"].ToString());
 				row["mode"]=Lans.g("enumStatementMode",mode.ToString());
 				pat=new Patient();
 				pat.LName=rawTable.Rows[i]["LName"].ToString();

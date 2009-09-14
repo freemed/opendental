@@ -28,18 +28,18 @@ namespace OpenDentBusiness{
 			FeeKey key;
 			for(int i=0;i<table.Rows.Count;i++) {
 				fee=new Fee();
-				fee.FeeNum=PIn.PInt(table.Rows[i][0].ToString());
+				fee.FeeNum=PIn.PLong(table.Rows[i][0].ToString());
 				fee.Amount=PIn.PDouble(table.Rows[i][1].ToString());
 				//fee.OldCode      =PIn.PString(table.Rows[i][2].ToString());
-				fee.FeeSched=PIn.PInt(table.Rows[i][3].ToString());
+				fee.FeeSched=PIn.PLong(table.Rows[i][3].ToString());
 				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
 				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
-				fee.CodeNum=PIn.PInt(table.Rows[i][6].ToString());
+				fee.CodeNum=PIn.PLong(table.Rows[i][6].ToString());
 				key.codeNum=fee.CodeNum;
 				key.feeSchedNum=fee.FeeSched;
 				if(Dict.ContainsKey(key)) {
 					//if fee was already loaded for this code, delete this duplicate.
-					string command="DELETE FROM fee WHERE FeeNum ="+POut.PInt(fee.FeeNum);
+					string command="DELETE FROM fee WHERE FeeNum ="+POut.PLong(fee.FeeNum);
 					Db.NonQ(command);
 				} else {
 					Dict.Add(key,fee);
@@ -57,11 +57,11 @@ namespace OpenDentBusiness{
 			string command= "UPDATE fee SET " 
 				+ "Amount = '"        +POut.PDouble(fee.Amount)+"'"
 				//+ ",oldcode = '"      +POut.PString(fee.OldCode)+"'"
-				+ ",FeeSched = '"     +POut.PInt   (fee.FeeSched)+"'"
+				+ ",FeeSched = '"     +POut.PLong   (fee.FeeSched)+"'"
 				//+ ",usedefaultfee = '"+POut.PBool  (fee.UseDefaultFee)+"'"
 				//+ ",usedefaultcov = '"+POut.PBool  (fee.UseDefaultCov)+"'"
-				+ ",CodeNum = '"      +POut.PInt   (fee.CodeNum)+"'"
-				+" WHERE FeeNum = '"  +POut.PInt   (fee.FeeNum)+"'";
+				+ ",CodeNum = '"      +POut.PLong   (fee.CodeNum)+"'"
+				+" WHERE FeeNum = '"  +POut.PLong   (fee.FeeNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -81,15 +81,15 @@ namespace OpenDentBusiness{
 			command+="amount,OldCode,"
 				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(fee.FeeNum)+", ";
+				command+=POut.PLong(fee.FeeNum)+", ";
 			}
 			command+=
 				 "'"+POut.PDouble(fee.Amount)+"', "
 				+"'"+POut.PString(fee.OldCode)+"', "//this must be included for Oracle compatibility
-				+"'"+POut.PInt   (fee.FeeSched)+"', "
+				+"'"+POut.PLong   (fee.FeeSched)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultFee)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultCov)+"', "
-				+"'"+POut.PInt   (fee.CodeNum)+"')";
+				+"'"+POut.PLong   (fee.CodeNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

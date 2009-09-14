@@ -235,7 +235,7 @@ namespace OpenDental {
 				CovCatCur.DefaultPercent=-1;
 			}
 			else {
-				CovCatCur.DefaultPercent=PIn.PInt32(textPercent.Text);
+				CovCatCur.DefaultPercent=PIn.PInt(textPercent.Text);
 			}
 			CovCatCur.IsHidden=checkHidden.Checked;
 			CovCatCur.EbenefitCat=(EbenefitCategory)comboCat.SelectedIndex;

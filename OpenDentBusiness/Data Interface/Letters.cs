@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 			List=new Letter[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Letter();
-				List[i].LetterNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].LetterNum=PIn.PLong(table.Rows[i][0].ToString());
 				List[i].Description=PIn.PString(table.Rows[i][1].ToString());
 				List[i].BodyText=PIn.PString(table.Rows[i][2].ToString());
 			}
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 			string command="UPDATE letter SET "
 				+ "Description= '" +POut.PString(Cur.Description)+"' "
 				+ ",BodyText= '"   +POut.PString(Cur.BodyText)+"' "
-				+"WHERE LetterNum = '"+POut.PInt(Cur.LetterNum)+"'";
+				+"WHERE LetterNum = '"+POut.PLong(Cur.LetterNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,BodyText) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(Cur.LetterNum)+"', ";
+				command+="'"+POut.PLong(Cur.LetterNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.Description)+"', "

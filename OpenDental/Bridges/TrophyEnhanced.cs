@@ -138,7 +138,7 @@ namespace OpenDental.Bridges{
 					if(formPick.PickedName=="") {//Need to generate new folder name
 						int maxInt=0;
 						if(maxFolderName!="") {
-							maxInt=PIn.PInt32(maxFolderName.Substring(1));//It will crash here if can't parse the int.
+							maxInt=PIn.PInt(maxFolderName.Substring(1));//It will crash here if can't parse the int.
 						}
 						maxInt++;
 						string paddedInt=maxInt.ToString().PadLeft(7,'0');

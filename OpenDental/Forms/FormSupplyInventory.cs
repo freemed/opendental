@@ -205,7 +205,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(tableOrderItem.Rows[i]["CatalogNumber"].ToString());
 				row.Cells.Add(tableOrderItem.Rows[i]["Descript"].ToString());
-				qty=PIn.PInt32(tableOrderItem.Rows[i]["Qty"].ToString());
+				qty=PIn.PInt(tableOrderItem.Rows[i]["Qty"].ToString());
 				row.Cells.Add(qty.ToString());
 				price=PIn.PDouble(tableOrderItem.Rows[i]["Price"].ToString());
 				row.Cells.Add(price.ToString("n"));
@@ -236,7 +236,7 @@ namespace OpenDental {
 
 		private void gridOrderItem_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormSupplyOrderItemEdit FormS=new FormSupplyOrderItemEdit();
-			FormS.ItemCur=SupplyOrderItems.CreateObject(PIn.PInt(tableOrderItem.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
+			FormS.ItemCur=SupplyOrderItems.CreateObject(PIn.PLong(tableOrderItem.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
 			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
@@ -401,7 +401,7 @@ namespace OpenDental {
 			FillGridOrderItem();
 			tabControl.SelectedIndex=1;
 			for(int i=0;i<tableOrderItem.Rows.Count;i++){
-				if(itemNums.Contains(PIn.PInt(tableOrderItem.Rows[i]["SupplyOrderItemNum"].ToString()))){
+				if(itemNums.Contains(PIn.PLong(tableOrderItem.Rows[i]["SupplyOrderItemNum"].ToString()))){
 					gridOrderItem.SetSelected(i,true);
 				}
 			}

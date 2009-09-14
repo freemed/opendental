@@ -2432,7 +2432,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt32(splitField[0]);
+								percent=PIn.PInt(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2457,7 +2457,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt32(splitField[0]);
+								percent=PIn.PInt(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2496,7 +2496,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt32(splitField[0]);
+								percent=PIn.PInt(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2537,7 +2537,7 @@ namespace OpenDental{
 									break;
 								}
 								splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-								percent=PIn.PInt32(splitField[0]);
+								percent=PIn.PInt(splitField[0]);
 								if(percent<0 || percent>100) {
 									break;
 								}
@@ -2743,7 +2743,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt32(splitField[0]);
+							percent=PIn.PInt(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2762,7 +2762,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt32(splitField[0]);
+							percent=PIn.PInt(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2802,7 +2802,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt32(splitField[0]);
+							percent=PIn.PInt(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -2833,7 +2833,7 @@ namespace OpenDental{
 								break;
 							}
 							splitField[0]=splitField[0].Remove(splitField[0].Length-1,1);//remove %
-							percent=PIn.PInt32(splitField[0]);
+							percent=PIn.PInt(splitField[0]);
 							if(percent<0 || percent>100) {
 								break;
 							}
@@ -3448,7 +3448,7 @@ namespace OpenDental{
 				infoReceiverFirstName = PIn.PString(table.Rows[0][0].ToString());
 				infoReceiverLastName = PIn.PString(table.Rows[0][1].ToString());
 				// Case statment for TaxoCode
-				switch(PIn.PInt(table.Rows[0][2].ToString())) {
+				switch(PIn.PLong(table.Rows[0][2].ToString())) {
 					case 1:
 						TaxoCode = "124Q00000X";
 						break;
@@ -3856,7 +3856,7 @@ namespace OpenDental{
 			if(comboFilingCodeSubtype.SelectedIndex != -1 && comboFilingCodeSubtype.SelectedIndex < subtypeList.Count) {
 				PlanCur.FilingCodeSubtype=subtypeList[comboFilingCodeSubtype.SelectedIndex].InsFilingCodeSubtypeNum;
 			}
-			PlanCur.DentaideCardSequence=PIn.PInt32(textDentaide.Text);
+			PlanCur.DentaideCardSequence=PIn.PInt(textDentaide.Text);
 			PlanCur.TrojanID=textTrojanID.Text;
 			PlanCur.PlanNote=textPlanNote.Text;
 			PlanCur.ReleaseInfo=checkRelease.Checked;
@@ -3872,8 +3872,8 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			if(PatPlanCur!=null) {
-				if(PIn.PInt(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
-					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.PInt32(textOrdinal.Text));
+				if(PIn.PLong(textOrdinal.Text)!=PatPlanCur.Ordinal){//if ordinal changed
+					PatPlans.SetOrdinal(PatPlanCur.PatPlanNum,PIn.PInt(textOrdinal.Text));
 				}
 				PatPlanCur.IsPending=checkIsPending.Checked;
 				PatPlanCur.Relationship=(Relat)comboRelationship.SelectedIndex;

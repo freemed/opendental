@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM task"
-				+" WHERE TaskNum = "+POut.PInt(TaskNum);
+				+" WHERE TaskNum = "+POut.PLong(TaskNum);
 			List<Task> taskList=RefreshAndFill(Db.GetTable(command));
 			if(taskList.Count==0) {
 				return null;
@@ -51,11 +51,11 @@ namespace OpenDentBusiness{
 				+"AND DateTask < '1880-01-01' "
 				+"AND IsRepeating=0";
 			if(showDone){
-				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+				command+=" AND (TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done)
 					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
 			}
 			else{
-				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+				command+=" AND TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
@@ -82,13 +82,13 @@ namespace OpenDentBusiness{
 			//startDate only applies if showing Done tasks.
 			string command=
 				"SELECT * FROM task "
-				+"WHERE TaskListNum="+POut.PInt(listNum);
+				+"WHERE TaskListNum="+POut.PLong(listNum);
 			if(showDone){
-				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+				command+=" AND (TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done)
 					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
 			}
 			else{
-				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+				command+=" AND TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT * FROM task "
 				+"WHERE IsRepeating=1 "
-				+"AND DateType="+POut.PInt((int)dateType)+" "
+				+"AND DateType="+POut.PLong((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -130,13 +130,13 @@ namespace OpenDentBusiness{
 				"SELECT * FROM task "
 				+"WHERE DateTask >= "+POut.PDate(dateFrom)
 				+" AND DateTask <= "+POut.PDate(dateTo)
-				+" AND DateType="+POut.PInt((int)dateType);
+				+" AND DateType="+POut.PLong((int)dateType);
 			if(showDone){
-				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+				command+=" AND (TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done)
 					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
 			}
 			else{
-				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+				command+=" AND TaskStatus !="+POut.PLong((int)TaskStatusEnum.Done);
 			}
 			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(Db.GetTable(command));
@@ -157,18 +157,18 @@ namespace OpenDentBusiness{
 			Task task;
 			for(int i=0;i<table.Rows.Count;i++) {
 				task=new Task();
-				task.TaskNum        = PIn.PInt(table.Rows[i][0].ToString());
-				task.TaskListNum    = PIn.PInt(table.Rows[i][1].ToString());
+				task.TaskNum        = PIn.PLong(table.Rows[i][0].ToString());
+				task.TaskListNum    = PIn.PLong(table.Rows[i][1].ToString());
 				task.DateTask       = PIn.PDate(table.Rows[i][2].ToString());
-				task.KeyNum         = PIn.PInt(table.Rows[i][3].ToString());
+				task.KeyNum         = PIn.PLong(table.Rows[i][3].ToString());
 				task.Descript       = PIn.PString(table.Rows[i][4].ToString());
-				task.TaskStatus     = (TaskStatusEnum)PIn.PInt(table.Rows[i][5].ToString());
+				task.TaskStatus     = (TaskStatusEnum)PIn.PLong(table.Rows[i][5].ToString());
 				task.IsRepeating    = PIn.PBool(table.Rows[i][6].ToString());
-				task.DateType       = (TaskDateType)PIn.PInt(table.Rows[i][7].ToString());
-				task.FromNum        = PIn.PInt(table.Rows[i][8].ToString());
-				task.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
+				task.DateType       = (TaskDateType)PIn.PLong(table.Rows[i][7].ToString());
+				task.FromNum        = PIn.PLong(table.Rows[i][8].ToString());
+				task.ObjectType     = (TaskObjectType)PIn.PLong(table.Rows[i][9].ToString());
 				task.DateTimeEntry  = PIn.PDateT(table.Rows[i][10].ToString());
-				task.UserNum        = PIn.PInt(table.Rows[i][11].ToString());
+				task.UserNum        = PIn.PLong(table.Rows[i][11].ToString());
 				task.DateTimeFinished= PIn.PDateT(table.Rows[i][12].ToString());
 				retVal.Add(task);
 			}
@@ -194,19 +194,19 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
 			}
 			string command= "UPDATE task SET " 
-				+"TaskListNum = '"    +POut.PInt   (task.TaskListNum)+"'"
+				+"TaskListNum = '"    +POut.PLong   (task.TaskListNum)+"'"
 				+",DateTask = "       +POut.PDate  (task.DateTask)
-				+",KeyNum = '"        +POut.PInt   (task.KeyNum)+"'"
+				+",KeyNum = '"        +POut.PLong   (task.KeyNum)+"'"
 				+",Descript = '"      +POut.PString(task.Descript)+"'"
-				+",TaskStatus = '"    +POut.PInt   ((int)task.TaskStatus)+"'"
+				+",TaskStatus = '"    +POut.PLong   ((int)task.TaskStatus)+"'"
 				+",IsRepeating = '"   +POut.PBool  (task.IsRepeating)+"'"
-				+",DateType = '"      +POut.PInt   ((int)task.DateType)+"'"
-				+",FromNum = '"       +POut.PInt   (task.FromNum)+"'"
-				+",ObjectType = '"    +POut.PInt   ((int)task.ObjectType)+"'"
+				+",DateType = '"      +POut.PLong   ((int)task.DateType)+"'"
+				+",FromNum = '"       +POut.PLong   (task.FromNum)+"'"
+				+",ObjectType = '"    +POut.PLong   ((int)task.ObjectType)+"'"
 				+",DateTimeEntry = "  +POut.PDateT (task.DateTimeEntry)
-				+",UserNum = '"       +POut.PInt   (task.UserNum)+"'"
+				+",UserNum = '"       +POut.PLong   (task.UserNum)+"'"
 				+",DateTimeFinished ="+POut.PDateT (task.DateTimeFinished)
-				+" WHERE TaskNum = '" +POut.PInt(task.TaskNum)+"'";
+				+" WHERE TaskNum = '" +POut.PLong(task.TaskNum)+"'";
  			Db.NonQ(command);
 			//need to optimize this later to skip unless TaskListNumChanged
 			TaskAncestors.Synch(task);
@@ -237,20 +237,20 @@ namespace OpenDentBusiness{
 			command+="TaskListNum,DateTask,KeyNum,Descript,TaskStatus,"
 				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum,DateTimeFinished) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(task.TaskNum)+"', ";
+				command+="'"+POut.PLong(task.TaskNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (task.TaskListNum)+"', "
+				 "'"+POut.PLong   (task.TaskListNum)+"', "
 				+POut.PDate  (task.DateTask)+", "
-				+"'"+POut.PInt   (task.KeyNum)+"', "
+				+"'"+POut.PLong   (task.KeyNum)+"', "
 				+"'"+POut.PString(task.Descript)+"', "
-				+"'"+POut.PInt   ((int)task.TaskStatus)+"', "
+				+"'"+POut.PLong   ((int)task.TaskStatus)+"', "
 				+"'"+POut.PBool  (task.IsRepeating)+"', "
-				+"'"+POut.PInt   ((int)task.DateType)+"', "
-				+"'"+POut.PInt   (task.FromNum)+"', "
-				+"'"+POut.PInt   ((int)task.ObjectType)+"', "
+				+"'"+POut.PLong   ((int)task.DateType)+"', "
+				+"'"+POut.PLong   (task.FromNum)+"', "
+				+"'"+POut.PLong   ((int)task.ObjectType)+"', "
 				+POut.PDateT (task.DateTimeEntry)+","
-				+"'"+POut.PInt   (task.UserNum)+"',"
+				+"'"+POut.PLong   (task.UserNum)+"',"
 				+POut.PDateT (task.DateTimeFinished)+")";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
@@ -267,7 +267,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),task);
 			}
-			string command="SELECT * FROM task WHERE TaskNum="+POut.PInt(task.TaskNum);
+			string command="SELECT * FROM task WHERE TaskNum="+POut.PLong(task.TaskNum);
 			Task oldtask=RefreshAndFill(Db.GetTable(command))[0];
 			if(oldtask.DateTask!=task.DateTask
 					|| oldtask.DateType!=task.DateType
@@ -293,9 +293,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),task);
 				return;
 			}
-			string command= "DELETE from task WHERE TaskNum = "+POut.PInt(task.TaskNum);
+			string command= "DELETE from task WHERE TaskNum = "+POut.PLong(task.TaskNum);
  			Db.NonQ(command);
-			command="DELETE from taskancestor WHERE TaskNum = "+POut.PInt(task.TaskNum);
+			command="DELETE from taskancestor WHERE TaskNum = "+POut.PLong(task.TaskNum);
 			Db.NonQ(command);
 		}
 
@@ -308,9 +308,9 @@ namespace OpenDentBusiness{
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
-				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
-				+" AND task.TaskStatus="+POut.PInt((int)TaskStatusEnum.New);
-			return PIn.PInt32(Db.GetCount(command));
+				+"AND tasksubscription.UserNum="+POut.PLong(userNum)
+				+" AND task.TaskStatus="+POut.PLong((int)TaskStatusEnum.New);
+			return PIn.PInt(Db.GetCount(command));
 		}
 	
 	

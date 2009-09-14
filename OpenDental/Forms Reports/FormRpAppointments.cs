@@ -300,7 +300,7 @@ namespace OpenDental
 				if(i>0){
 					whereProv+=",";
 				}
-				whereProv+="'"+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+="'"+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv += ") ";
 			//create the report

@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Document[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM document WHERE PatNum="+POut.PInt(patNum)+" ORDER BY DateCreated";
+			string command="SELECT * FROM document WHERE PatNum="+POut.PLong(patNum)+" ORDER BY DateCreated";
 			DataTable table=Db.GetTable(command);
 			return Fill(table);
 		}
@@ -47,26 +47,26 @@ namespace OpenDentBusiness {
 				return null;
 			}
 			Document doc=new Document();
-			doc.DocNum          =PIn.PInt   (row[0].ToString());
+			doc.DocNum          =PIn.PLong   (row[0].ToString());
 			doc.Description     =PIn.PString(row[1].ToString());
 			doc.DateCreated     =PIn.PDate  (row[2].ToString());
-			doc.DocCategory     =PIn.PInt   (row[3].ToString());
-			doc.PatNum          =PIn.PInt   (row[4].ToString());
+			doc.DocCategory     =PIn.PLong   (row[3].ToString());
+			doc.PatNum          =PIn.PLong   (row[4].ToString());
 			doc.FileName        =PIn.PString(row[5].ToString());
-			doc.ImgType         =(ImageType)PIn.PInt(row[6].ToString());
+			doc.ImgType         =(ImageType)PIn.PLong(row[6].ToString());
 			doc.IsFlipped       =PIn.PBool  (row[7].ToString());
 			doc.DegreesRotated  =PIn.PShort (row[8].ToString());
 			doc.ToothNumbers    =PIn.PString(row[9].ToString());
 			doc.Note            =PIn.PString(row[10].ToString());
 			doc.SigIsTopaz      =PIn.PBool  (row[11].ToString());
 			doc.Signature       =PIn.PString(row[12].ToString());
-			doc.CropX           =PIn.PInt32   (row[13].ToString());
-			doc.CropY           =PIn.PInt32   (row[14].ToString());
-			doc.CropW           =PIn.PInt32   (row[15].ToString());
-			doc.CropH           =PIn.PInt32   (row[16].ToString());
-			doc.WindowingMin    =PIn.PInt32   (row[17].ToString());
-			doc.WindowingMax    =PIn.PInt32   (row[18].ToString());
-			doc.MountItemNum    =PIn.PInt   (row[19].ToString());
+			doc.CropX           =PIn.PInt   (row[13].ToString());
+			doc.CropY           =PIn.PInt   (row[14].ToString());
+			doc.CropW           =PIn.PInt   (row[15].ToString());
+			doc.CropH           =PIn.PInt   (row[16].ToString());
+			doc.WindowingMin    =PIn.PInt   (row[17].ToString());
+			doc.WindowingMax    =PIn.PInt   (row[18].ToString());
+			doc.MountItemNum    =PIn.PLong   (row[19].ToString());
 			doc.DateTStamp      =PIn.PDateT (row[20].ToString());
 			return doc;
 		}
@@ -106,28 +106,28 @@ namespace OpenDentBusiness {
 				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
 				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(doc.DocNum)+"', ";
+				command+="'"+POut.PLong(doc.DocNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(doc.Description)+"', "
 				+POut.PDate(doc.DateCreated)+", "
-				+"'"+POut.PInt(doc.DocCategory)+"', "
-				+"'"+POut.PInt(doc.PatNum)+"', "
+				+"'"+POut.PLong(doc.DocCategory)+"', "
+				+"'"+POut.PLong(doc.PatNum)+"', "
 				+"'"+POut.PString(doc.FileName)+"', "//this may simply be the extension at this point, or it may be the full filename.
-				+"'"+POut.PInt((int)doc.ImgType)+"', "
+				+"'"+POut.PLong((int)doc.ImgType)+"', "
 				+"'"+POut.PBool(doc.IsFlipped)+"', "
-				+"'"+POut.PInt(doc.DegreesRotated)+"', "
+				+"'"+POut.PLong(doc.DegreesRotated)+"', "
 				+"'"+POut.PString(doc.ToothNumbers)+"', "
 				+"'"+POut.PString(doc.Note)+"', "
 				+"'"+POut.PBool(doc.SigIsTopaz)+"', "
 				+"'"+POut.PString(doc.Signature)+"',"
-				+"'"+POut.PInt(doc.CropX)+"',"
-				+"'"+POut.PInt(doc.CropY)+"',"
-				+"'"+POut.PInt(doc.CropW)+"',"
-				+"'"+POut.PInt(doc.CropH)+"',"
-				+"'"+POut.PInt(doc.WindowingMin)+"',"
-				+"'"+POut.PInt(doc.WindowingMax)+"',"
-				+"'"+POut.PInt(doc.MountItemNum)+"')";
+				+"'"+POut.PLong(doc.CropX)+"',"
+				+"'"+POut.PLong(doc.CropY)+"',"
+				+"'"+POut.PLong(doc.CropW)+"',"
+				+"'"+POut.PLong(doc.CropH)+"',"
+				+"'"+POut.PLong(doc.WindowingMin)+"',"
+				+"'"+POut.PLong(doc.WindowingMax)+"',"
+				+"'"+POut.PLong(doc.MountItemNum)+"')";
 				//DateTStamp
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
@@ -148,7 +148,7 @@ namespace OpenDentBusiness {
 				}
 				doc.FileName+=doc.DocNum.ToString()+extension;//ensures unique name
 				//there is still a slight chance that someone manually added a file with this name, so quick fix:
-				command="SELECT FileName FROM document WHERE PatNum="+POut.PInt(doc.PatNum);
+				command="SELECT FileName FROM document WHERE PatNum="+POut.PLong(doc.PatNum);
 				DataTable table=Db.GetTable(command);
 				string[] usedNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -175,25 +175,25 @@ namespace OpenDentBusiness {
 			string command="UPDATE document SET " 
 				+ "Description = '"				+POut.PString(doc.Description)+"'"
 				+ ",DateCreated = "				+POut.PDate(doc.DateCreated)
-				+ ",DocCategory = '"			+POut.PInt(doc.DocCategory)+"'"
-				+ ",PatNum = '"						+POut.PInt(doc.PatNum)+"'"
+				+ ",DocCategory = '"			+POut.PLong(doc.DocCategory)+"'"
+				+ ",PatNum = '"						+POut.PLong(doc.PatNum)+"'"
 				+ ",FileName    = '"			+POut.PString(doc.FileName)+"'"
-				+ ",ImgType    = '"				+POut.PInt((int)doc.ImgType)+"'"
+				+ ",ImgType    = '"				+POut.PLong((int)doc.ImgType)+"'"
 				+ ",IsFlipped   = '"			+POut.PBool(doc.IsFlipped)+"'"
-				+ ",DegreesRotated   = '"	+POut.PInt(doc.DegreesRotated)+"'"
+				+ ",DegreesRotated   = '"	+POut.PLong(doc.DegreesRotated)+"'"
 				+ ",ToothNumbers   = '"		+POut.PString(doc.ToothNumbers)+"'"
 				+ ",Note   = '"						+POut.PString(doc.Note)+"'"
 				+ ",SigIsTopaz    = '"		+POut.PBool(doc.SigIsTopaz)+"'"
 				+ ",Signature   = '"			+POut.PString(doc.Signature)+"'"
-				+ ",CropX       ='"				+POut.PInt(doc.CropX)+"'"
-				+ ",CropY       ='"				+POut.PInt(doc.CropY)+"'"
-				+ ",CropW       ='"				+POut.PInt(doc.CropW)+"'"
-				+ ",CropH       ='"				+POut.PInt(doc.CropH)+"'"
-				+ ",WindowingMin ='"			+POut.PInt(doc.WindowingMin)+"'"
-				+ ",WindowingMax ='"			+POut.PInt(doc.WindowingMax)+"'"
-				+ ",MountItemNum ='"			+POut.PInt(doc.MountItemNum)+"'"
+				+ ",CropX       ='"				+POut.PLong(doc.CropX)+"'"
+				+ ",CropY       ='"				+POut.PLong(doc.CropY)+"'"
+				+ ",CropW       ='"				+POut.PLong(doc.CropW)+"'"
+				+ ",CropH       ='"				+POut.PLong(doc.CropH)+"'"
+				+ ",WindowingMin ='"			+POut.PLong(doc.WindowingMin)+"'"
+				+ ",WindowingMax ='"			+POut.PLong(doc.WindowingMax)+"'"
+				+ ",MountItemNum ='"			+POut.PLong(doc.MountItemNum)+"'"
 				//DateTStamp
-				+" WHERE DocNum = '"			+POut.PInt(doc.DocNum)+"'";
+				+" WHERE DocNum = '"			+POut.PLong(doc.DocNum)+"'";
 			//MessageBox.Show(cmd.CommandText);
 			Db.NonQ(command);
 		}
@@ -232,7 +232,7 @@ namespace OpenDentBusiness {
 				//thumbnails are not visible from the chart module when A to Z are disabled,
 				//making it impossible to launch the form image viewer (the only place this
 				//function is called from.
-				hList.Add(PIn.PInt(table.Rows[i][0].ToString()),
+				hList.Add(PIn.PLong(table.Rows[i][0].ToString()),
 					ODFileUtils.CombinePaths(new string[] {	FileStoreSettings.GetPreferredImagePath,
 																									PIn.PString(table.Rows[i][2].ToString()).Substring(0,1).ToUpper(),
 																									PIn.PString(table.Rows[i][2].ToString()),
@@ -264,8 +264,8 @@ namespace OpenDentBusiness {
 			}
 			//then find 
 			string command="SELECT * FROM document "
-				+"WHERE document.PatNum="+POut.PInt(patNum)
-				+" AND document.DocCategory="+POut.PInt(defNumPicts)
+				+"WHERE document.PatNum="+POut.PLong(patNum)
+				+" AND document.DocCategory="+POut.PLong(defNumPicts)
 				+" ORDER BY DateCreated DESC ";
 			//gets the most recent
 			if(DataSettings.DbType==DatabaseType.Oracle){
@@ -375,7 +375,7 @@ namespace OpenDentBusiness {
 			}
 			Document[] documents=new Document[mountItems.Count];
 			for(int i=0;i<mountItems.Count;i++){
-				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"'";
+				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PLong(mountItems[i].MountItemNum)+"'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count<1){
 					documents[i]=null;
@@ -452,7 +452,7 @@ namespace OpenDentBusiness {
 				command="UPDATE document SET DocCategory='"+DefC.GetList(DefCat.ImageCats)[0].DefNum
 					+"' WHERE PatNum='"+patNum+"' AND (";
 				for(int i=0;i<raw.Rows.Count;i++){
-					command+="DocNum='"+PIn.PInt(raw.Rows[i]["DocNum"].ToString())+"' ";
+					command+="DocNum='"+PIn.PLong(raw.Rows[i]["DocNum"].ToString())+"' ";
 					if(i<raw.Rows.Count-1){
 						command+="OR ";
 					}
@@ -465,22 +465,22 @@ namespace OpenDentBusiness {
 			raw=dcon.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++){
 				//Make sure hidden documents are never added (there is a small possibility that one is added after all are made visible).
-				if(DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0){ 
+				if(DefC.GetOrder(DefCat.ImageCats,PIn.PLong(raw.Rows[i]["DocCategory"].ToString()))<0){ 
 					continue;
 				}
 				//Do not add individual documents which are part of a mount object.
-				if(PIn.PInt(raw.Rows[i]["MountItemNum"].ToString())!=0) {
+				if(PIn.PLong(raw.Rows[i]["MountItemNum"].ToString())!=0) {
 					continue;
 				}
 				row=table.NewRow();
-				row["DocNum"]=PIn.PInt(raw.Rows[i]["DocNum"].ToString());
+				row["DocNum"]=PIn.PLong(raw.Rows[i]["DocNum"].ToString());
 				row["MountNum"]=0;
-				row["DocCategory"]=PIn.PInt(raw.Rows[i]["DocCategory"].ToString());
+				row["DocCategory"]=PIn.PLong(raw.Rows[i]["DocCategory"].ToString());
 				row["DateCreated"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString());
-				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
+				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PLong(raw.Rows[i]["DocCategory"].ToString()));
 				row["description"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString()).ToString("d")+": "
 					+PIn.PString(raw.Rows[i]["Description"].ToString());
-				row["ImgType"]=PIn.PInt(raw.Rows[i]["ImgType"].ToString());
+				row["ImgType"]=PIn.PLong(raw.Rows[i]["ImgType"].ToString());
 				resultSet.Add(row);
 			}
 			//Move all mounts which are invisible to the first document category.
@@ -491,7 +491,7 @@ namespace OpenDentBusiness {
 				command="UPDATE mount SET DocCategory='"+DefC.GetList(DefCat.ImageCats)[0].DefNum
 					+"' WHERE PatNum='"+patNum+"' AND (";
 				for(int i=0;i<raw.Rows.Count;i++) {
-					command+="MountNum='"+PIn.PInt(raw.Rows[i]["MountNum"].ToString())+"' ";
+					command+="MountNum='"+PIn.PLong(raw.Rows[i]["MountNum"].ToString())+"' ";
 					if(i<raw.Rows.Count-1) {
 						command+="OR ";
 					}
@@ -504,18 +504,18 @@ namespace OpenDentBusiness {
 			raw=dcon.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++){
 				//Make sure hidden mounts are never added (there is a small possibility that one is added after all are made visible).
-				if(DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0) {
+				if(DefC.GetOrder(DefCat.ImageCats,PIn.PLong(raw.Rows[i]["DocCategory"].ToString()))<0) {
 					continue;
 				}
 				row=table.NewRow();
 				row["DocNum"]=0;
-				row["MountNum"]=PIn.PInt(raw.Rows[i]["MountNum"].ToString());
-				row["DocCategory"]=PIn.PInt(raw.Rows[i]["DocCategory"].ToString());
+				row["MountNum"]=PIn.PLong(raw.Rows[i]["MountNum"].ToString());
+				row["DocCategory"]=PIn.PLong(raw.Rows[i]["DocCategory"].ToString());
 				row["DateCreated"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString());
-				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
+				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PLong(raw.Rows[i]["DocCategory"].ToString()));
 				row["description"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString()).ToString("d")+": "
 					+PIn.PString(raw.Rows[i]["Description"].ToString());
-				row["ImgType"]=PIn.PInt(raw.Rows[i]["ImgType"].ToString());
+				row["ImgType"]=PIn.PLong(raw.Rows[i]["ImgType"].ToString());
 				resultSet.Add(row);
 			}
 			//We must sort the results after they are returned from the database, because the database software (i.e. MySQL)

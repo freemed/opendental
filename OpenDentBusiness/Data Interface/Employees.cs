@@ -55,13 +55,13 @@ namespace OpenDentBusiness{
 			//Employee temp;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new Employee();
-				ListLong[i].EmployeeNum=PIn.PInt(table.Rows[i][0].ToString());
+				ListLong[i].EmployeeNum=PIn.PLong(table.Rows[i][0].ToString());
 				ListLong[i].LName=PIn.PString(table.Rows[i][1].ToString());
 				ListLong[i].FName=PIn.PString(table.Rows[i][2].ToString());
 				ListLong[i].MiddleI=PIn.PString(table.Rows[i][3].ToString());
 				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][4].ToString());
 				ListLong[i].ClockStatus=PIn.PString(table.Rows[i][5].ToString());
-				ListLong[i].PhoneExt=PIn.PInt(table.Rows[i][6].ToString());
+				ListLong[i].PhoneExt=PIn.PLong(table.Rows[i][6].ToString());
 				if(!ListLong[i].IsHidden) {
 					tempList.Add(ListLong[i]);
 				}
@@ -103,8 +103,8 @@ namespace OpenDentBusiness{
 				+ ",middlei = '"    +POut.PString(Cur.MiddleI)+"' "
 				+ ",ishidden = '"   +POut.PBool  (Cur.IsHidden)+"' "
 				+ ",ClockStatus = '"+POut.PString(Cur.ClockStatus)+"' "
-				+ ",PhoneExt = '"   +POut.PInt   (Cur.PhoneExt)+"' "
-				+"WHERE EmployeeNum = '"+POut.PInt(Cur.EmployeeNum)+"'";
+				+ ",PhoneExt = '"   +POut.PLong   (Cur.PhoneExt)+"' "
+				+"WHERE EmployeeNum = '"+POut.PLong(Cur.EmployeeNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
 		}
@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 			command+="lname,fname,middlei,ishidden"
 				+",ClockStatus,PhoneExt) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.EmployeeNum)+", ";
+				command+=POut.PLong(Cur.EmployeeNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.LName)+"', "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(Cur.MiddleI)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"', "
 				+"'"+POut.PString(Cur.ClockStatus)+"', "
-				+"'"+POut.PInt   (Cur.PhoneExt)+"')";
+				+"'"+POut.PLong   (Cur.PhoneExt)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -154,26 +154,26 @@ namespace OpenDentBusiness{
 			}
 			//appointment.Assistant will not block deletion
 			//schedule.EmployeeNum will not block deletion
-			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum);
+			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PLong(employeeNum);
 			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached clock events."));
 			}
-			command="SELECT COUNT(*) FROM timeadjust WHERE EmployeeNum="+POut.PInt(employeeNum);
+			command="SELECT COUNT(*) FROM timeadjust WHERE EmployeeNum="+POut.PLong(employeeNum);
 			if(Db.GetCount(command)!="0") {
 				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached time adjustments."));
 			}
-			command="SELECT COUNT(*) FROM userod WHERE EmployeeNum="+POut.PInt(employeeNum);
+			command="SELECT COUNT(*) FROM userod WHERE EmployeeNum="+POut.PLong(employeeNum);
 			if(Db.GetCount(command)!="0") {
 				throw new ApplicationException(Lans.g("FormEmployeeSelect",
 					"Not allowed to delete employee because of attached user."));
 			}
-			command="UPDATE appointment SET Assistant=0 WHERE Assistant="+POut.PInt(employeeNum);
+			command="UPDATE appointment SET Assistant=0 WHERE Assistant="+POut.PLong(employeeNum);
 			Db.NonQ(command);
-			command="DELETE FROM schedule WHERE EmployeeNum="+POut.PInt(employeeNum);
+			command="DELETE FROM schedule WHERE EmployeeNum="+POut.PLong(employeeNum);
 			Db.NonQ(command);
-			command= "DELETE FROM employee WHERE EmployeeNum ="+POut.PInt(employeeNum);
+			command= "DELETE FROM employee WHERE EmployeeNum ="+POut.PLong(employeeNum);
 			Db.NonQ(command);
 		}
 
@@ -274,13 +274,13 @@ namespace OpenDentBusiness{
 				IFNULL(IsAvailable,1) isAvail, COUNT(IsAvailable) overridden
 				FROM phone
 				LEFT JOIN phoneoverride ON phone.Extension=phoneoverride.Extension
-				WHERE phone.Extension="+POut.PInt(extens)
+				WHERE phone.Extension="+POut.PLong(extens)
 				+" GROUP BY phone.Extension";
 			DataTable tablePhone=Db.GetTable(command);
 			if(tablePhone.Rows.Count==0){
 				return;
 			}
-			long empNum=PIn.PInt(tablePhone.Rows[0]["EmployeeNum"].ToString());
+			long empNum=PIn.PLong(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			bool isAvailable=PIn.PBool(tablePhone.Rows[0]["isAvail"].ToString());
 			bool overridden=PIn.PBool(tablePhone.Rows[0]["overridden"].ToString());
 			bool isInUse=false;
@@ -300,12 +300,12 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,clockStatus);
 				return;
 			}
-			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.PInt(employeeNum);
+			string command="SELECT Extension,ClockStatus FROM phone WHERE employeeNum="+POut.PLong(employeeNum);
 			DataTable table=Db.GetTable(command);
 			int extension;
 			string curClockStatus;
 			for(int i=0;i<table.Rows.Count;i++){
-				extension=PIn.PInt32(table.Rows[i]["Extension"].ToString());
+				extension=PIn.PInt(table.Rows[i]["Extension"].ToString());
 				curClockStatus=table.Rows[i]["ClockStatus"].ToString();
 				if(curClockStatus=="Unavailable"){
 					continue;//don't change "Unavailable" to anything else.

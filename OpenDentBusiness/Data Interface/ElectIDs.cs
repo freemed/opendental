@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			List=new ElectID[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new ElectID();
-				List[i].ElectIDNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].ElectIDNum   = PIn.PLong   (table.Rows[i][0].ToString());
 				List[i].PayorID      = PIn.PString(table.Rows[i][1].ToString());
 				List[i].CarrierName  = PIn.PString(table.Rows[i][2].ToString());
 				List[i].IsMedicaid   = PIn.PBool  (table.Rows[i][3].ToString());

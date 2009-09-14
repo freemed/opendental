@@ -682,7 +682,7 @@ namespace OpenDental{
 				}*/
 				gridMain.SetSelected(false);
 				for(int i=0;i<PtDataTable.Rows.Count;i++){
-					if(PIn.PInt(PtDataTable.Rows[i][0].ToString())==InitialPatNum) {
+					if(PIn.PLong(PtDataTable.Rows[i][0].ToString())==InitialPatNum) {
 						gridMain.SetSelected(i,true);
 						break;
 					}
@@ -1134,7 +1134,7 @@ namespace OpenDental{
 
 		private void PatSelected(){
 			//SelectedPatNum=PIn.PInt(PtDataTable.Rows[grid2.CurrentRowIndex][0].ToString());
-			SelectedPatNum=PIn.PInt(PtDataTable.Rows[gridMain.GetSelectedIndex()][0].ToString());
+			SelectedPatNum=PIn.PLong(PtDataTable.Rows[gridMain.GetSelectedIndex()][0].ToString());
 			DialogResult=DialogResult.OK;
 		}
 

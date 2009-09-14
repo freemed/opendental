@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<HL7Msg>>(MethodBase.GetCurrentMethod());
 			}
 			//diagnosticMsg=DataConnection.GetCurrentConnectionString();
-			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.PInt((int)HL7MessageStatus.OutPending);
+			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.PLong((int)HL7MessageStatus.OutPending);
 			//diagnosticMsg+=".   "+command;
 			//diagnosticMsg="";
 			Collection<HL7Msg> collection=DataObjectFactory<HL7Msg>.CreateObjects(command);
@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.PInt(aptNum);
+			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.PLong(aptNum);
 			if(Db.GetCount(command)=="0") {
 				return false;
 			}

@@ -27,10 +27,10 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				insFilingCode=new InsFilingCode();
 				insFilingCode.IsNew=false;
-				insFilingCode.InsFilingCodeNum=PIn.PInt(table.Rows[i][0].ToString());
+				insFilingCode.InsFilingCodeNum=PIn.PLong(table.Rows[i][0].ToString());
 				insFilingCode.Descript=PIn.PString(table.Rows[i][1].ToString());
 				insFilingCode.EclaimCode=PIn.PString(table.Rows[i][2].ToString());
-				insFilingCode.ItemOrder=PIn.PInt32(table.Rows[i][3].ToString());
+				insFilingCode.ItemOrder=PIn.PInt(table.Rows[i][3].ToString());
 				InsFilingCodeC.Listt.Add(insFilingCode);
 			}
 		}
@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeNum);
 				return;
 			}
-			string command="SELECT COUNT(*) FROM insplan WHERE FilingCode="+POut.PInt(insFilingCodeNum);
+			string command="SELECT COUNT(*) FROM insplan WHERE FilingCode="+POut.PLong(insFilingCodeNum);
 			if(Db.GetScalar(command) != "0") {
 				throw new ApplicationException(Lans.g("InsFilingCode","Already in use by insplans."));
 			}

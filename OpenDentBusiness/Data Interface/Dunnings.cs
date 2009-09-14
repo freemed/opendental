@@ -18,11 +18,11 @@ namespace OpenDentBusiness{
 			Dunning[] List=new Dunning[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new Dunning();
-				List[i].DunningNum     = PIn.PInt(table.Rows[i][0].ToString());
+				List[i].DunningNum     = PIn.PLong(table.Rows[i][0].ToString());
 				List[i].DunMessage     = PIn.PString(table.Rows[i][1].ToString());
-				List[i].BillingType    = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].AgeAccount     = PIn.PInt32(table.Rows[i][3].ToString());
-				List[i].InsIsPending   = (YN)PIn.PInt(table.Rows[i][4].ToString());
+				List[i].BillingType    = PIn.PLong(table.Rows[i][2].ToString());
+				List[i].AgeAccount     = PIn.PInt(table.Rows[i][3].ToString());
+				List[i].InsIsPending   = (YN)PIn.PLong(table.Rows[i][4].ToString());
 				List[i].MessageBold    = PIn.PString(table.Rows[i][5].ToString());
 			}
 			return List;
@@ -44,13 +44,13 @@ namespace OpenDentBusiness{
 			command+="DunMessage,BillingType,AgeAccount,InsIsPending,"
 				+"MessageBold) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(dun.DunningNum)+", ";
+				command+=POut.PLong(dun.DunningNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(dun.DunMessage)+"', "
-				+"'"+POut.PInt   (dun.BillingType)+"', "
-				+"'"+POut.PInt   (dun.AgeAccount)+"', "
-				+"'"+POut.PInt   ((int)dun.InsIsPending)+"', "
+				+"'"+POut.PLong   (dun.BillingType)+"', "
+				+"'"+POut.PLong   (dun.AgeAccount)+"', "
+				+"'"+POut.PLong   ((int)dun.InsIsPending)+"', "
 				+"'"+POut.PString(dun.MessageBold)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -69,11 +69,11 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE dunning SET " 
 				+ "DunMessage = '"       +POut.PString(dun.DunMessage)+"'"
-				+ ",BillingType = '"     +POut.PInt   (dun.BillingType)+"'"
-				+ ",AgeAccount = '"      +POut.PInt   (dun.AgeAccount)+"'"
-				+ ",InsIsPending = '"    +POut.PInt   ((int)dun.InsIsPending)+"'"
+				+ ",BillingType = '"     +POut.PLong   (dun.BillingType)+"'"
+				+ ",AgeAccount = '"      +POut.PLong   (dun.AgeAccount)+"'"
+				+ ",InsIsPending = '"    +POut.PLong   ((int)dun.InsIsPending)+"'"
 				+ ",MessageBold = '"     +POut.PString(dun.MessageBold)+"'"
-				+" WHERE DunningNum = '" +POut.PInt   (dun.DunningNum)+"'";
+				+" WHERE DunningNum = '" +POut.PLong   (dun.DunningNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM dunning" 
-				+" WHERE DunningNum = "+POut.PInt(dun.DunningNum);
+				+" WHERE DunningNum = "+POut.PLong(dun.DunningNum);
  			Db.NonQ(command);
 		}
 

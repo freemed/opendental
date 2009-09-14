@@ -30,40 +30,40 @@ namespace OpenDentBusiness {
 				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype"
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(plan.PlanNum)+"', ";
+				command+="'"+POut.PLong(plan.PlanNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(plan.Subscriber)+"', "
+				 "'"+POut.PLong(plan.Subscriber)+"', "
 				+POut.PDate(plan.DateEffective)+", "
 				+POut.PDate(plan.DateTerm)+", "
 				+"'"+POut.PString(plan.GroupName)+"', "
 				+"'"+POut.PString(plan.GroupNum)+"', "
 				+"'"+POut.PString(plan.PlanNote)+"', "
-				+"'"+POut.PInt(plan.FeeSched)+"', "
+				+"'"+POut.PLong(plan.FeeSched)+"', "
 				+"'"+POut.PBool(plan.ReleaseInfo)+"', "
 				+"'"+POut.PBool(plan.AssignBen)+"', "
 				+"'"+POut.PString(plan.PlanType)+"', "
-				+"'"+POut.PInt(plan.ClaimFormNum)+"', "
+				+"'"+POut.PLong(plan.ClaimFormNum)+"', "
 				+"'"+POut.PBool(plan.UseAltCode)+"', "
 				+"'"+POut.PBool(plan.ClaimsUseUCR)+"', "
-				+"'"+POut.PInt(plan.CopayFeeSched)+"', "
+				+"'"+POut.PLong(plan.CopayFeeSched)+"', "
 				+"'"+POut.PString(plan.SubscriberID)+"', "
-				+"'"+POut.PInt(plan.EmployerNum)+"', "
-				+"'"+POut.PInt(plan.CarrierNum)+"', "
-				+"'"+POut.PInt(plan.AllowedFeeSched)+"', "
+				+"'"+POut.PLong(plan.EmployerNum)+"', "
+				+"'"+POut.PLong(plan.CarrierNum)+"', "
+				+"'"+POut.PLong(plan.AllowedFeeSched)+"', "
 				+"'"+POut.PString(plan.TrojanID)+"', "
 				+"'"+POut.PString(plan.DivisionNo)+"', "
 				+"'"+POut.PString(plan.BenefitNotes)+"', "
 				+"'"+POut.PBool(plan.IsMedical)+"', "
 				+"'"+POut.PString(plan.SubscNote)+"', "
-				+"'"+POut.PInt(plan.FilingCode)+"', "
-				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
+				+"'"+POut.PLong(plan.FilingCode)+"', "
+				+"'"+POut.PLong((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
 				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
 				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
 				+"'"+POut.PBool(plan.IsHidden)+"', "
-				+"'"+POut.PInt(plan.MonthRenew)+"',"
-				+"'"+POut.PInt(plan.FilingCodeSubtype)+"')";
+				+"'"+POut.PLong(plan.MonthRenew)+"',"
+				+"'"+POut.PLong(plan.FilingCodeSubtype)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -80,38 +80,38 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE insplan SET "
-				+"Subscriber = '"    +POut.PInt   (plan.Subscriber)+"'"
+				+"Subscriber = '"    +POut.PLong   (plan.Subscriber)+"'"
 				+",DateEffective = "+POut.PDate  (plan.DateEffective)
 				+",DateTerm = "     +POut.PDate  (plan.DateTerm)
 				+",GroupName = '"    +POut.PString(plan.GroupName)+"'"
 				+",GroupNum = '"     +POut.PString(plan.GroupNum)+"'"
 				+",PlanNote = '"     +POut.PString(plan.PlanNote)+"'"
-				+",FeeSched = '"     +POut.PInt   (plan.FeeSched)+"'"
+				+",FeeSched = '"     +POut.PLong   (plan.FeeSched)+"'"
 				+",ReleaseInfo = '"  +POut.PBool  (plan.ReleaseInfo)+"'"
 				+",AssignBen = '"    +POut.PBool  (plan.AssignBen)+"'"
 				+",PlanType = '"     +POut.PString(plan.PlanType)+"'"
-				+",ClaimFormNum = '" +POut.PInt   (plan.ClaimFormNum)+"'"
+				+",ClaimFormNum = '" +POut.PLong   (plan.ClaimFormNum)+"'"
 				+",UseAltcode = '"   +POut.PBool  (plan.UseAltCode)+"'"
 				+",ClaimsUseUCR = '" +POut.PBool  (plan.ClaimsUseUCR)+"'"
-				+",CopayFeeSched = '"+POut.PInt   (plan.CopayFeeSched)+"'"
+				+",CopayFeeSched = '"+POut.PLong   (plan.CopayFeeSched)+"'"
 				+",SubscriberID = '" +POut.PString(plan.SubscriberID)+"'"
-				+",EmployerNum = '"  +POut.PInt   (plan.EmployerNum)+"'"
-				+",CarrierNum = '"   +POut.PInt   (plan.CarrierNum)+"'"
-				+",AllowedFeeSched='"+POut.PInt   (plan.AllowedFeeSched)+"'"
+				+",EmployerNum = '"  +POut.PLong   (plan.EmployerNum)+"'"
+				+",CarrierNum = '"   +POut.PLong   (plan.CarrierNum)+"'"
+				+",AllowedFeeSched='"+POut.PLong   (plan.AllowedFeeSched)+"'"
 				+",TrojanID='"       +POut.PString(plan.TrojanID)+"'"
 				+",DivisionNo='"     +POut.PString(plan.DivisionNo)+"'"
 				+",BenefitNotes='"   +POut.PString(plan.BenefitNotes)+"'"
 				+",IsMedical='"      +POut.PBool  (plan.IsMedical)+"'"
 				+",SubscNote='"      +POut.PString(plan.SubscNote)+"'"
-				+",FilingCode='"     +POut.PInt(plan.FilingCode)+"'"
-				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
+				+",FilingCode='"     +POut.PLong(plan.FilingCode)+"'"
+				+",DentaideCardSequence='" +POut.PLong(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
-				+",MonthRenew='"     +POut.PInt(plan.MonthRenew)+"'"
-				+",FilingCodeSubtype='"		+POut.PInt(plan.FilingCodeSubtype)+"'"
-				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
+				+",MonthRenew='"     +POut.PLong(plan.MonthRenew)+"'"
+				+",FilingCodeSubtype='"		+POut.PLong(plan.FilingCodeSubtype)+"'"
+				+" WHERE PlanNum = '"+POut.PLong   (plan.PlanNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -122,32 +122,32 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "UPDATE insplan SET "
-				+"EmployerNum = '"     +POut.PInt   (plan.EmployerNum)+"'"
+				+"EmployerNum = '"     +POut.PLong   (plan.EmployerNum)+"'"
 				+",GroupName = '"      +POut.PString(plan.GroupName)+"'"
 				+",GroupNum = '"       +POut.PString(plan.GroupNum)+"'"
 				+",DivisionNo = '"     +POut.PString(plan.DivisionNo)+"'"
-				+",CarrierNum = '"     +POut.PInt   (plan.CarrierNum)+"'"
+				+",CarrierNum = '"     +POut.PLong   (plan.CarrierNum)+"'"
 				+",PlanType = '"       +POut.PString(plan.PlanType)+"'"
 				+",UseAltCode = '"     +POut.PBool  (plan.UseAltCode)+"'"
 				+",IsMedical = '"      +POut.PBool  (plan.IsMedical)+"'"
 				+",ClaimsUseUCR = '"   +POut.PBool  (plan.ClaimsUseUCR)+"'"
-				+",FeeSched = '"       +POut.PInt   (plan.FeeSched)+"'"
-				+",CopayFeeSched = '"  +POut.PInt   (plan.CopayFeeSched)+"'"
-				+",ClaimFormNum = '"   +POut.PInt   (plan.ClaimFormNum)+"'"
-				+",AllowedFeeSched= '" +POut.PInt   (plan.AllowedFeeSched)+"'"
+				+",FeeSched = '"       +POut.PLong   (plan.FeeSched)+"'"
+				+",CopayFeeSched = '"  +POut.PLong   (plan.CopayFeeSched)+"'"
+				+",ClaimFormNum = '"   +POut.PLong   (plan.ClaimFormNum)+"'"
+				+",AllowedFeeSched= '" +POut.PLong   (plan.AllowedFeeSched)+"'"
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
-				+",FilingCode = '"     +POut.PInt   (plan.FilingCode)+"'"
+				+",FilingCode = '"     +POut.PLong   (plan.FilingCode)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
 				+",IsHidden='"         +POut.PBool  (plan.IsHidden)+"'"
 				//MonthRenew would be different between similar plans
 				+" WHERE "
-				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
+				+"EmployerNum = '"        +POut.PLong   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
 				+"AND GroupNum = '"       +POut.PString(like.GroupNum)+"' "
 				+"AND DivisionNo = '"     +POut.PString(like.DivisionNo)+"'"
-				+"AND CarrierNum = '"     +POut.PInt   (like.CarrierNum)+"' "
+				+"AND CarrierNum = '"     +POut.PLong   (like.CarrierNum)+"' "
 				+"AND IsMedical = '"      +POut.PBool  (like.IsMedical)+"'";
 			Db.NonQ(command);
 		}
@@ -206,7 +206,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return MiscUtils.ArrayToList(Meth.GetObject<InsPlan[]>(MethodBase.GetCurrentMethod(),subscriber));
 			} 
-			string command="SELECT * FROM insplan WHERE Subscriber="+POut.PInt(subscriber);
+			string command="SELECT * FROM insplan WHERE Subscriber="+POut.PLong(subscriber);
 			DataTable table=Db.GetTable(command);
 			return RefreshFill(table);
 		}
@@ -242,7 +242,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" Subscriber="+POut.PInt(Fam.ListPats[i].PatNum);
+				command+=" Subscriber="+POut.PLong(Fam.ListPats[i].PatNum);
 			}
 			//in union, distinct is implied
 			command+=") UNION (SELECT insplan.* FROM insplan,patplan WHERE insplan.PlanNum=patplan.PlanNum AND (";
@@ -250,7 +250,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					command+=" OR";
 				}
-				command+=" patplan.PatNum="+POut.PInt(Fam.ListPats[i].PatNum);
+				command+=" patplan.PatNum="+POut.PLong(Fam.ListPats[i].PatNum);
 			}
 			//command+=")) ORDER BY DateEffective";//FIXME:UNION-ORDER-BY
 			command+=")) ORDER BY 3";//***ORACLE ORDINAL
@@ -265,38 +265,38 @@ namespace OpenDentBusiness {
 			InsPlan plan;
 			for(int i=0;i<table.Rows.Count;i++) {
 				plan=new InsPlan();
-				plan.PlanNum        = PIn.PInt   (table.Rows[i][0].ToString());
-				plan.Subscriber     = PIn.PInt   (table.Rows[i][1].ToString());
+				plan.PlanNum        = PIn.PLong   (table.Rows[i][0].ToString());
+				plan.Subscriber     = PIn.PLong   (table.Rows[i][1].ToString());
 				plan.DateEffective  = PIn.PDate  (table.Rows[i][2].ToString());
 				plan.DateTerm       = PIn.PDate  (table.Rows[i][3].ToString());
 				plan.GroupName      = PIn.PString(table.Rows[i][4].ToString());
 				plan.GroupNum       = PIn.PString(table.Rows[i][5].ToString());
 				plan.PlanNote       = PIn.PString(table.Rows[i][6].ToString());
-				plan.FeeSched       = PIn.PInt   (table.Rows[i][7].ToString());
+				plan.FeeSched       = PIn.PLong   (table.Rows[i][7].ToString());
 				plan.ReleaseInfo    = PIn.PBool  (table.Rows[i][8].ToString());
 				plan.AssignBen      = PIn.PBool  (table.Rows[i][9].ToString());
 				plan.PlanType       = PIn.PString(table.Rows[i][10].ToString());
-				plan.ClaimFormNum   = PIn.PInt   (table.Rows[i][11].ToString());
+				plan.ClaimFormNum   = PIn.PLong   (table.Rows[i][11].ToString());
 				plan.UseAltCode     = PIn.PBool  (table.Rows[i][12].ToString());
 				plan.ClaimsUseUCR   = PIn.PBool  (table.Rows[i][13].ToString());
-				plan.CopayFeeSched  = PIn.PInt   (table.Rows[i][14].ToString());
+				plan.CopayFeeSched  = PIn.PLong   (table.Rows[i][14].ToString());
 				plan.SubscriberID   = PIn.PString(table.Rows[i][15].ToString());
-				plan.EmployerNum    = PIn.PInt   (table.Rows[i][16].ToString());
-				plan.CarrierNum     = PIn.PInt   (table.Rows[i][17].ToString());
-				plan.AllowedFeeSched= PIn.PInt   (table.Rows[i][18].ToString());
+				plan.EmployerNum    = PIn.PLong   (table.Rows[i][16].ToString());
+				plan.CarrierNum     = PIn.PLong   (table.Rows[i][17].ToString());
+				plan.AllowedFeeSched= PIn.PLong   (table.Rows[i][18].ToString());
 				plan.TrojanID       = PIn.PString(table.Rows[i][19].ToString());
 				plan.DivisionNo     = PIn.PString(table.Rows[i][20].ToString());
 				plan.BenefitNotes   = PIn.PString(table.Rows[i][21].ToString());
 				plan.IsMedical      = PIn.PBool  (table.Rows[i][22].ToString());
 				plan.SubscNote      = PIn.PString(table.Rows[i][23].ToString());
-				plan.FilingCode     = PIn.PInt   (table.Rows[i][24].ToString());
-				plan.DentaideCardSequence= PIn.PInt32(table.Rows[i][25].ToString());
+				plan.FilingCode     = PIn.PLong   (table.Rows[i][24].ToString());
+				plan.DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 				plan.CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
 				plan.IsHidden       = PIn.PBool(table.Rows[i][29].ToString());
-				plan.MonthRenew     = PIn.PInt32(table.Rows[i][30].ToString());
-				plan.FilingCodeSubtype = PIn.PInt(table.Rows[i][31].ToString());
+				plan.MonthRenew     = PIn.PInt(table.Rows[i][30].ToString());
+				plan.FilingCodeSubtype = PIn.PLong(table.Rows[i][31].ToString());
 				planList.Add(plan);
 			}
 			return planList;
@@ -482,7 +482,7 @@ namespace OpenDentBusiness {
 			long plannum;
 			string carrierName;
 			for(int i=0;i<table.Rows.Count;i++){
-				plannum=PIn.PInt(table.Rows[i][0].ToString());
+				plannum=PIn.PLong(table.Rows[i][0].ToString());
 				carrierName=PIn.PString(table.Rows[i][1].ToString());
 				HListAll.Add(plannum,carrierName);
 			}
@@ -518,7 +518,7 @@ namespace OpenDentBusiness {
 				if(s!="") {
 					s+=" OR";
 				}
-				s+=" PlanNum="+POut.PInt(planNums[i]);
+				s+=" PlanNum="+POut.PLong(planNums[i]);
 			}
 			string command="SELECT DISTINCT PlanNote FROM insplan WHERE"+s;
 			DataTable table=Db.GetTable(command);
@@ -543,7 +543,7 @@ namespace OpenDentBusiness {
 				if(i>0){
 					s+=" OR";
 				}
-				s+=" PlanNum="+POut.PInt(planNums[i]);
+				s+=" PlanNum="+POut.PLong(planNums[i]);
 			}
 			string command="UPDATE insplan SET PlanNote='"+POut.PString(newNote)+"' "
 				+"WHERE"+s;
@@ -563,7 +563,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					s+=" OR";
 				}
-				s+=" PlanNum="+POut.PInt(planNums[i]);
+				s+=" PlanNum="+POut.PLong(planNums[i]);
 			}
 			string command="SELECT BenefitNotes FROM insplan WHERE BenefitNotes != '' AND ("+s+") ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -602,7 +602,7 @@ namespace OpenDentBusiness {
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
 				+"AND insplan.IsMedical = '"  +POut.PBool(isMedical)+"' "
-				+"AND insplan.PlanNum != "    +POut.PInt(excludePlan)
+				+"AND insplan.PlanNum != "    +POut.PLong(excludePlan)
 				+" ORDER BY LName,FName";
 			DataTable table=Db.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
@@ -632,7 +632,7 @@ namespace OpenDentBusiness {
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
 				+"AND insplan.IsMedical = '"  +POut.PBool  (isMedical)+"'"
-				+"AND insplan.PlanNum != "+POut.PInt(planNum);
+				+"AND insplan.PlanNum != "+POut.PLong(planNum);
 			DataTable table=Db.GetTable(command);
 			List<long> retVal=new List<long>();
 			//if(includePlanNum){
@@ -642,7 +642,7 @@ namespace OpenDentBusiness {
 			//	retVal=new int[table.Rows.Count];
 			//}
 			for(int i=0;i<table.Rows.Count;i++) {
-				retVal.Add(PIn.PInt(table.Rows[i][0].ToString()));
+				retVal.Add(PIn.PLong(table.Rows[i][0].ToString()));
 			}
 			if(includePlanNum){
 				retVal.Add(planNum);
@@ -761,10 +761,10 @@ namespace OpenDentBusiness {
 				command+="AND carrier.CarrierName NOT LIKE '%"+POut.PString(carrierNameNot)+"%' ";
 			}
 			if(feeSchedWithout!=0){
-				command+="AND insplan."+pFeeSched+" !="+POut.PInt(feeSchedWithout)+" ";
+				command+="AND insplan."+pFeeSched+" !="+POut.PLong(feeSchedWithout)+" ";
 			}
 			if(feeSchedWith!=0) {
-				command+="AND insplan."+pFeeSched+" ="+POut.PInt(feeSchedWith)+" ";
+				command+="AND insplan."+pFeeSched+" ="+POut.PLong(feeSchedWith)+" ";
 			}
 			command+="GROUP BY insplan.EmployerNum,insplan.GroupName,insplan.GroupNum,carrier.CarrierName,insplan.PlanType,"
 				+"insplan."+pFeeSched+" "
@@ -791,7 +791,7 @@ namespace OpenDentBusiness {
 			//Code rewritten so that it is not only MySQL compatible, but Oracle compatible as well.
 			string command="SELECT insplan.PlanNum FROM insplan,carrier "
 				+"WHERE carrier.CarrierNum = insplan.CarrierNum "//employer.EmployerNum = insplan.EmployerNum "
-				+"AND insplan.EmployerNum='"+POut.PInt(employerNum)+"' "
+				+"AND insplan.EmployerNum='"+POut.PLong(employerNum)+"' "
 				+"AND carrier.CarrierName='"+POut.PString(carrierName)+"' "
 				+"AND insplan.GroupNum='"+POut.PString(groupNum)+"' "
 				+"AND insplan.GroupName='"+POut.PString(groupName)+"'";
@@ -801,16 +801,16 @@ namespace OpenDentBusiness {
 			}
 			command="UPDATE insplan SET ";
 			if(feeSchedType==FeeScheduleType.Normal){
-				command+="insplan.FeeSched ="+POut.PInt(feeSchedNum)
-					+" WHERE insplan.FeeSched !="+POut.PInt(feeSchedNum);
+				command+="insplan.FeeSched ="+POut.PLong(feeSchedNum)
+					+" WHERE insplan.FeeSched !="+POut.PLong(feeSchedNum);
 			}
 			else if(feeSchedType==FeeScheduleType.Allowed){
-				command+="insplan.AllowedFeeSched ="+POut.PInt(feeSchedNum)
-					+" WHERE insplan.AllowedFeeSched !="+POut.PInt(feeSchedNum);
+				command+="insplan.AllowedFeeSched ="+POut.PLong(feeSchedNum)
+					+" WHERE insplan.AllowedFeeSched !="+POut.PLong(feeSchedNum);
 			}
 			else if(feeSchedType==FeeScheduleType.CoPay){
-				command+="insplan.CopayFeeSched ="+POut.PInt(feeSchedNum)
-					+" WHERE insplan.CopayFeeSched !="+POut.PInt(feeSchedNum);
+				command+="insplan.CopayFeeSched ="+POut.PLong(feeSchedNum)
+					+" WHERE insplan.CopayFeeSched !="+POut.PLong(feeSchedNum);
 			}
 			command+=" AND (";
 			for(int i=0;i<table.Rows.Count;i++){
@@ -828,8 +828,8 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
-			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
-				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
+			string command="UPDATE insplan SET ClaimFormNum="+POut.PLong(newClaimFormNum)
+				+" WHERE ClaimFormNum="+POut.PLong(oldClaimFormNum);
 			return Db.NonQ(command);
 		}
 
@@ -876,7 +876,7 @@ namespace OpenDentBusiness {
 					continue;//I don't see how this could happen
 				}
 				command="UPDATE insplan "
-					+"SET AllowedFeeSched="+POut.PInt(sched.FeeSchedNum)+" "
+					+"SET AllowedFeeSched="+POut.PLong(sched.FeeSchedNum)+" "
 					+"WHERE AllowedFeeSched=0 "
 					+"AND PlanType='' "
 					+"AND (";
@@ -898,7 +898,7 @@ namespace OpenDentBusiness {
 			}
 			string command="SELECT COUNT(*) FROM insplan WHERE IsHidden=0 "
 				+"AND NOT EXISTS (SELECT * FROM patplan WHERE patplan.PlanNum=insplan.PlanNum)";
-			int count=PIn.PInt32(Db.GetCount(command));
+			int count=PIn.PInt(Db.GetCount(command));
 			return count;
 		}
 
@@ -1001,11 +1001,11 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
 				return;
 			}
-			string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.PInt(planNum);
+			string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.PLong(planNum);
 			DataTable table=Db.GetTable(command);
 			long patNum=0;
 			for(int i=0;i<table.Rows.Count;i++) {
-				patNum=PIn.PInt(table.Rows[i][0].ToString());
+				patNum=PIn.PLong(table.Rows[i][0].ToString());
 				Family fam=Patients.GetFamily(patNum);
 				Patient pat=fam.GetPatient(patNum);
 				List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
@@ -1039,7 +1039,7 @@ namespace OpenDentBusiness {
 			}
 			//then, check claimprocs
 			command="SELECT PatNum FROM claimproc "
-				+"WHERE PlanNum = "+POut.PInt(plan.PlanNum)
+				+"WHERE PlanNum = "+POut.PLong(plan.PlanNum)
 				+" AND Status != 6 ";//ignore estimates
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+="AND ROWNUM<=1";
@@ -1057,11 +1057,11 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
 				//benefits with this PatPlanNum are also deleted here
-				PatPlans.Delete(PIn.PInt(table.Rows[i][0].ToString()));
+				PatPlans.Delete(PIn.PLong(table.Rows[i][0].ToString()));
 			}
-			command="DELETE FROM benefit WHERE PlanNum="+POut.PInt(plan.PlanNum);
+			command="DELETE FROM benefit WHERE PlanNum="+POut.PLong(plan.PlanNum);
 			Db.NonQ(command);
-			command="DELETE FROM claimproc WHERE PlanNum="+POut.PInt(plan.PlanNum);//just estimates
+			command="DELETE FROM claimproc WHERE PlanNum="+POut.PLong(plan.PlanNum);//just estimates
 			Db.NonQ(command);
 			command="DELETE FROM insplan "
 				+"WHERE PlanNum = '"+plan.PlanNum.ToString()+"'";

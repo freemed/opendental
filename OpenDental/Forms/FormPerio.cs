@@ -1166,7 +1166,7 @@ namespace OpenDental{
 					if(((string)MissingTeeth[i]).CompareTo("A")<0//if a number
 						|| ((string)MissingTeeth[i]).CompareTo("Z")>0)
 					{
-						skippedTeeth.Add(PIn.PInt((string)MissingTeeth[i]));
+						skippedTeeth.Add(PIn.PLong((string)MissingTeeth[i]));
 					}
 				}
 			}

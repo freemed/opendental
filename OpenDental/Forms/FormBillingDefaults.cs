@@ -66,7 +66,7 @@ namespace OpenDental {
 				}
 				cc+="A";
 			}
-			if(Prefs.UpdateInt("BillingDefaultsLastDays",PIn.PInt(textDays.Text))
+			if(Prefs.UpdateInt("BillingDefaultsLastDays",PIn.PLong(textDays.Text))
 				| Prefs.UpdateBool("BillingDefaultsIntermingle",checkIntermingled.Checked)
 				| Prefs.UpdateString("BillingDefaultsNote",textNote.Text)
 				| Prefs.UpdateBool("BillingUseElectronic",checkUseElectronic.Checked)

@@ -25,8 +25,8 @@ namespace OpenDentBusiness{
 			CovSpanC.List=new CovSpan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				CovSpanC.List[i]=new CovSpan();
-				CovSpanC.List[i].CovSpanNum  = PIn.PInt(table.Rows[i][0].ToString());
-				CovSpanC.List[i].CovCatNum   = PIn.PInt(table.Rows[i][1].ToString());
+				CovSpanC.List[i].CovSpanNum  = PIn.PLong(table.Rows[i][0].ToString());
+				CovSpanC.List[i].CovCatNum   = PIn.PLong(table.Rows[i][1].ToString());
 				CovSpanC.List[i].FromCode    = PIn.PString(table.Rows[i][2].ToString());
 				CovSpanC.List[i].ToCode      = PIn.PString(table.Rows[i][3].ToString());
 			}
@@ -40,10 +40,10 @@ namespace OpenDentBusiness{
 			}
 			Validate(span);
 			string command="UPDATE covspan SET "
-				+"CovCatNum = '"+POut.PInt   (span.CovCatNum)+"'"
+				+"CovCatNum = '"+POut.PLong   (span.CovCatNum)+"'"
 				+",FromCode = '"+POut.PString(span.FromCode)+"'"
 				+",ToCode = '"  +POut.PString(span.ToCode)+"'"
-				+" WHERE CovSpanNum = '"+POut.PInt(span.CovSpanNum)+"'";
+				+" WHERE CovSpanNum = '"+POut.PLong(span.CovSpanNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -64,10 +64,10 @@ namespace OpenDentBusiness{
 			command+="CovCatNum,"
 				+"FromCode,ToCode) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(span.CovSpanNum)+", ";
+				command+=POut.PLong(span.CovSpanNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (span.CovCatNum)+"', "
+				 "'"+POut.PLong   (span.CovCatNum)+"', "
 				+"'"+POut.PString(span.FromCode)+"', "
 				+"'"+POut.PString(span.ToCode)+"')";
 			if(PrefC.RandomKeys) {
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM covspan"
-				+" WHERE CovSpanNum = '"+POut.PInt(span.CovSpanNum)+"'";
+				+" WHERE CovSpanNum = '"+POut.PLong(span.CovSpanNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),covCatNum);
 				return;
 			}
-			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.PInt(covCatNum);
+			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.PLong(covCatNum);
 			Db.NonQ(command);
 		}
 

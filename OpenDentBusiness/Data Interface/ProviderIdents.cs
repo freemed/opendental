@@ -26,10 +26,10 @@ namespace OpenDentBusiness{
 			list=new ProviderIdent[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new ProviderIdent();
-				list[i].ProviderIdentNum= PIn.PInt(table.Rows[i][0].ToString());
-				list[i].ProvNum         = PIn.PInt(table.Rows[i][1].ToString());
+				list[i].ProviderIdentNum= PIn.PLong(table.Rows[i][0].ToString());
+				list[i].ProvNum         = PIn.PLong(table.Rows[i][1].ToString());
 				list[i].PayorID         = PIn.PString(table.Rows[i][2].ToString());
-				list[i].SuppIDType      = (ProviderSupplementalID)PIn.PInt(table.Rows[i][3].ToString());
+				list[i].SuppIDType      = (ProviderSupplementalID)PIn.PLong(table.Rows[i][3].ToString());
 				list[i].IDNumber        = PIn.PString(table.Rows[i][4].ToString());
 			}
 		}
@@ -41,11 +41,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE providerident SET "
-				+ "ProvNum = '"   +POut.PInt   (pi.ProvNum)+"'"
+				+ "ProvNum = '"   +POut.PLong   (pi.ProvNum)+"'"
 				+",PayorID = '"   +POut.PString(pi.PayorID)+"'"
-				+",SuppIDType = '"+POut.PInt   ((int)pi.SuppIDType)+"'"
+				+",SuppIDType = '"+POut.PLong   ((int)pi.SuppIDType)+"'"
 				+",IDNumber = '"  +POut.PString(pi.IDNumber)+"'"
-				+" WHERE ProviderIdentNum = '"+POut.PInt(pi.ProviderIdentNum)+"'";
+				+" WHERE ProviderIdentNum = '"+POut.PLong(pi.ProviderIdentNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -64,12 +64,12 @@ namespace OpenDentBusiness{
 			}
 			command+="ProvNum,PayorID,SuppIDType,IDNumber) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(pi.ProviderIdentNum)+", ";
+				command+=POut.PLong(pi.ProviderIdentNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (pi.ProvNum)+"', "
+				 "'"+POut.PLong   (pi.ProvNum)+"', "
 				+"'"+POut.PString(pi.PayorID)+"', "
-				+"'"+POut.PInt   ((int)pi.SuppIDType)+"', "
+				+"'"+POut.PLong   ((int)pi.SuppIDType)+"', "
 				+"'"+POut.PString(pi.IDNumber)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "DELETE FROM providerident "
-				+"WHERE ProviderIdentNum = "+POut.PInt(pi.ProviderIdentNum);
+				+"WHERE ProviderIdentNum = "+POut.PLong(pi.ProviderIdentNum);
  			Db.NonQ(command);
 		}
 
@@ -137,7 +137,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),provNum);
 				return;
 			}
-			string command= "DELETE from providerident WHERE provnum = '"+POut.PInt(provNum)+"'";
+			string command= "DELETE from providerident WHERE provnum = '"+POut.PLong(provNum)+"'";
  			Db.NonQ(command);
 		}
 

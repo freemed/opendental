@@ -26,12 +26,12 @@ namespace OpenDentBusiness {
 			DisplayField field;
 			for(int i=0;i<table.Rows.Count;i++){
 				field = new DisplayField();
-				field.DisplayFieldNum = PIn.PInt   (table.Rows[i][0].ToString());
+				field.DisplayFieldNum = PIn.PLong   (table.Rows[i][0].ToString());
 				field.InternalName    = PIn.PString(table.Rows[i][1].ToString());
-				field.ItemOrder       = PIn.PInt32   (table.Rows[i][2].ToString());
+				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
 				field.Description     = PIn.PString(table.Rows[i][3].ToString());
-				field.ColumnWidth     = PIn.PInt32   (table.Rows[i][4].ToString());
-				field.Category        = (DisplayFieldCategory)PIn.PInt(table.Rows[i][5].ToString());
+				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
+				field.Category        = (DisplayFieldCategory)PIn.PLong(table.Rows[i][5].ToString());
 				DisplayFieldC.Listt.Add(field);
 			}
 		}
@@ -51,14 +51,14 @@ namespace OpenDentBusiness {
 			}
 			command+="InternalName,ItemOrder,Description,ColumnWidth,Category) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(field.DisplayFieldNum)+", ";
+				command+=POut.PLong(field.DisplayFieldNum)+", ";
 			}
 			command+=	
 				 "'"+POut.PString(field.InternalName)+"'," 
-				+"'"+POut.PInt   (field.ItemOrder)+"',"
+				+"'"+POut.PLong   (field.ItemOrder)+"',"
 				+"'"+POut.PString(field.Description)+"'," 
-				+"'"+POut.PInt   (field.ColumnWidth)+"', "
-				+"'"+POut.PInt   ((int)field.Category)+"')";
+				+"'"+POut.PLong   (field.ColumnWidth)+"', "
+				+"'"+POut.PLong   ((int)field.Category)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -274,7 +274,7 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			string command="DELETE FROM displayfield WHERE Category="+POut.PInt((int)category);
+			string command="DELETE FROM displayfield WHERE Category="+POut.PLong((int)category);
 			Db.NonQ(command);
 			if(isDefault){
 				return;

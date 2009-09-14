@@ -452,7 +452,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e){
-			InsPlan plan=InsPlans.GetPlan(PIn.PInt(table.Rows[e.Row]["PlanNum"].ToString()),null);
+			InsPlan plan=InsPlans.GetPlan(PIn.PLong(table.Rows[e.Row]["PlanNum"].ToString()),null);
 			if(IsSelectMode) {
 				SelectedPlan=plan.Copy();
 				DialogResult=DialogResult.OK;
@@ -505,8 +505,8 @@ namespace OpenDental{
 			}
 			InsPlan[] listSelected=new InsPlan[gridMain.SelectedIndices.Length];
 			for(int i=0;i<listSelected.Length;i++){
-				listSelected[i]=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PlanNum"].ToString()),null);
-				listSelected[i].NumberPlans=PIn.PInt32(table.Rows[gridMain.SelectedIndices[i]]["plans"].ToString());
+				listSelected[i]=InsPlans.GetPlan(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PlanNum"].ToString()),null);
+				listSelected[i].NumberPlans=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["plans"].ToString());
 			}
 			FormInsPlansMerge FormI=new FormInsPlansMerge();
 			FormI.ListAll=listSelected;
@@ -578,7 +578,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select only one item first."));
 				return;
 			}
-			SelectedPlan=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PlanNum"].ToString()),null).Copy();
+			SelectedPlan=InsPlans.GetPlan(PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PlanNum"].ToString()),null).Copy();
 			DialogResult=DialogResult.OK;
 			//}
 			//else{//just editing the list from the main menu

@@ -652,10 +652,10 @@ namespace OpenDental{
 			}
 			RecallCur.Description=textDescription.Text;
 			Interval interval=new Interval(
-				PIn.PInt32(textDays.Text),
-				PIn.PInt32(textWeeks.Text),
-				PIn.PInt32(textMonths.Text),
-				PIn.PInt32(textYears.Text));
+				PIn.PInt(textDays.Text),
+				PIn.PInt(textWeeks.Text),
+				PIn.PInt(textMonths.Text),
+				PIn.PInt(textYears.Text));
 			RecallCur.DefaultInterval=interval;
 			RecallCur.TimePattern=textPattern.Text;
 			if(listProcs.Items.Count==0){

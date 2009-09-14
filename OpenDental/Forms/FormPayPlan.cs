@@ -818,7 +818,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.Cells.Add("");
-				row.ColorText=Color.FromArgb(PIn.PInt32(table.Rows[i]["colorText"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
 				if(i<table.Rows.Count-1//not the last row
 					&& ((DateTime)table.Rows[i]["DateTime"]).Date<=DateTime.Today
 					&& ((DateTime)table.Rows[i+1]["DateTime"]).Date>DateTime.Today)
@@ -994,7 +994,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Payment cannot be 0.");
 				return;
 			}
-			if(textPeriodPayment.Text=="" && PIn.PInt(textTerm.Text)<1){
+			if(textPeriodPayment.Text=="" && PIn.PLong(textTerm.Text)<1){
 				MsgBox.Show(this,"Term cannot be less than 1.");
 				return;
 			}
@@ -1099,7 +1099,7 @@ namespace OpenDental{
 
 		private void gridCharges_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			if(table.Rows[e.Row]["PayPlanChargeNum"].ToString()!="0"){
-				PayPlanCharge charge=PayPlanCharges.GetOne(PIn.PInt(table.Rows[e.Row]["PayPlanChargeNum"].ToString()));
+				PayPlanCharge charge=PayPlanCharges.GetOne(PIn.PLong(table.Rows[e.Row]["PayPlanChargeNum"].ToString()));
 				FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(charge);
 				FormP.ShowDialog();
 				if(FormP.DialogResult==DialogResult.Cancel){
@@ -1107,7 +1107,7 @@ namespace OpenDental{
 				}
 			}
 			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
-				Payment pay=Payments.GetPayment(PIn.PInt(table.Rows[e.Row]["PayNum"].ToString()));
+				Payment pay=Payments.GetPayment(PIn.PLong(table.Rows[e.Row]["PayNum"].ToString()));
 				if(pay.PayType==0){//provider income transfer. I don't think this is possible, but you never know.
 					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
 					FormPIT.PatNum=PatCur.PatNum;

@@ -37,11 +37,11 @@ namespace OpenDentBusiness{
 			List=new ProcButtonItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new ProcButtonItem();
-				List[i].ProcButtonItemNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].ProcButtonNum=PIn.PInt(table.Rows[i][1].ToString());
+				List[i].ProcButtonItemNum=PIn.PLong(table.Rows[i][0].ToString());
+				List[i].ProcButtonNum=PIn.PLong(table.Rows[i][1].ToString());
 				List[i].OldCode=PIn.PString(table.Rows[i][2].ToString());
-				List[i].AutoCodeNum=PIn.PInt(table.Rows[i][3].ToString());
-				List[i].CodeNum=PIn.PInt(table.Rows[i][4].ToString());
+				List[i].AutoCodeNum=PIn.PLong(table.Rows[i][3].ToString());
+				List[i].CodeNum=PIn.PLong(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -60,13 +60,13 @@ namespace OpenDentBusiness{
 			}
 			command+="ProcButtonNum,OldCode,AutoCodeNum,CodeNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(item.ProcButtonItemNum)+", ";
+				command+=POut.PLong(item.ProcButtonItemNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (item.ProcButtonNum)+"', "
+				 "'"+POut.PLong   (item.ProcButtonNum)+"', "
 				+"'"+POut.PString(item.OldCode)+"', "
-				+"'"+POut.PInt   (item.AutoCodeNum)+"', "
-				+"'"+POut.PInt   (item.CodeNum)+"')";
+				+"'"+POut.PLong   (item.AutoCodeNum)+"', "
+				+"'"+POut.PLong   (item.CodeNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -83,11 +83,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE procbuttonitem SET " 
-				+ "ProcButtonNum='"+POut.PInt   (item.ProcButtonNum)+"'"
+				+ "ProcButtonNum='"+POut.PLong   (item.ProcButtonNum)+"'"
 				+ ",OldCode='"     +POut.PString(item.OldCode)+"'"
-				+ ",AutoCodeNum='" +POut.PInt   (item.AutoCodeNum)+"'"
-				+ ",CodeNum='" +POut.PInt   (item.CodeNum)+"'"
-				+" WHERE ProcButtonItemNum = '"+POut.PInt(item.ProcButtonItemNum)+"'";
+				+ ",AutoCodeNum='" +POut.PLong   (item.AutoCodeNum)+"'"
+				+ ",CodeNum='" +POut.PLong   (item.CodeNum)+"'"
+				+" WHERE ProcButtonItemNum = '"+POut.PLong(item.ProcButtonItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),item);
 				return;
 			}
-			string command="DELETE FROM procbuttonitem WHERE ProcButtonItemNum = '"+POut.PInt(item.ProcButtonItemNum)+"'";
+			string command="DELETE FROM procbuttonitem WHERE ProcButtonItemNum = '"+POut.PLong(item.ProcButtonItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -139,7 +139,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procButtonNum);
 				return;
 			}
-			string command= "DELETE from procbuttonitem WHERE procbuttonnum = '"+POut.PInt(procButtonNum)+"'";
+			string command= "DELETE from procbuttonitem WHERE procbuttonnum = '"+POut.PLong(procButtonNum)+"'";
 			Db.NonQ(command);
 		}
 

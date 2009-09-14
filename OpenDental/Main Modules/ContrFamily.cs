@@ -407,7 +407,7 @@ namespace OpenDental{
 				else{//patfield
 					string tag=gridPat.Rows[e.Row].Tag.ToString();
 					tag=tag.Substring(8);//strips off all but the number: PatField1
-					int index=PIn.PInt32(tag);
+					int index=PIn.PInt(tag);
 					PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
 					if(field==null) {
 						field=new PatField();

@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			list=new Clinic[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new Clinic();
-				list[i].ClinicNum       = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].ClinicNum       = PIn.PLong(table.Rows[i][0].ToString());
 				list[i].Description     = PIn.PString(table.Rows[i][1].ToString());
 				list[i].Address         = PIn.PString(table.Rows[i][2].ToString());
 				list[i].Address2        = PIn.PString(table.Rows[i][3].ToString());
@@ -47,8 +47,8 @@ namespace OpenDentBusiness{
 				list[i].Zip             = PIn.PString(table.Rows[i][6].ToString());
 				list[i].Phone           = PIn.PString(table.Rows[i][7].ToString());
 				list[i].BankNumber      = PIn.PString(table.Rows[i][8].ToString());
-				list[i].DefaultPlaceService=(PlaceOfService)PIn.PInt(table.Rows[i][9].ToString());
-				list[i].InsBillingProv  = PIn.PInt(table.Rows[i][10].ToString());
+				list[i].DefaultPlaceService=(PlaceOfService)PIn.PLong(table.Rows[i][9].ToString());
+				list[i].InsBillingProv  = PIn.PLong(table.Rows[i][10].ToString());
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			command+="Description,Address,Address2,City,State,Zip,Phone,"
 				+"BankNumber,DefaultPlaceService,InsBillingProv) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(clinic.ClinicNum)+", ";
+				command+=POut.PLong(clinic.ClinicNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(clinic.Description)+"', "
@@ -79,8 +79,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clinic.Zip)+"', "
 				+"'"+POut.PString(clinic.Phone)+"', "
 				+"'"+POut.PString(clinic.BankNumber)+"', "
-				+"'"+POut.PInt   ((int)clinic.DefaultPlaceService)+"', "
-				+"'"+POut.PInt   (clinic.InsBillingProv)+"')";
+				+"'"+POut.PLong   ((int)clinic.DefaultPlaceService)+"', "
+				+"'"+POut.PLong   (clinic.InsBillingProv)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -105,9 +105,9 @@ namespace OpenDentBusiness{
 				+ ",Zip = '"              +POut.PString(clinic.Zip)+"'"
 				+ ",Phone = '"            +POut.PString(clinic.Phone)+"'"
 				+ ",BankNumber = '"       +POut.PString(clinic.BankNumber)+"'"
-				+ ",DefaultPlaceService='"+POut.PInt   ((int)clinic.DefaultPlaceService)+"'"
-				+ ",InsBillingProv='"     +POut.PInt   (clinic.InsBillingProv)+"'"
-				+" WHERE ClinicNum = '" +POut.PInt(clinic.ClinicNum)+"'";
+				+ ",DefaultPlaceService='"+POut.PLong   ((int)clinic.DefaultPlaceService)+"'"
+				+ ",InsBillingProv='"     +POut.PLong   (clinic.InsBillingProv)+"'"
+				+" WHERE ClinicNum = '" +POut.PLong(clinic.ClinicNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 			}
 			//check patients for dependencies
 			string command="SELECT LName,FName FROM patient WHERE ClinicNum ="
-				+POut.PInt(clinic.ClinicNum);
+				+POut.PLong(clinic.ClinicNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string pats="";
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 			}
 			//check payments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,payment "
-				+"WHERE payment.ClinicNum ="+POut.PInt(clinic.ClinicNum)
+				+"WHERE payment.ClinicNum ="+POut.PLong(clinic.ClinicNum)
 				+" AND patient.PatNum=payment.PatNum";
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
@@ -144,7 +144,7 @@ namespace OpenDentBusiness{
 			}
 			//check claimpayments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,claimproc,claimpayment "
-				+"WHERE claimpayment.ClinicNum ="+POut.PInt(clinic.ClinicNum)
+				+"WHERE claimpayment.ClinicNum ="+POut.PLong(clinic.ClinicNum)
 				+" AND patient.PatNum=claimproc.PatNum"
 				+" AND claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
 				+"GROUP BY claimpayment.ClaimPaymentNum";
@@ -159,7 +159,7 @@ namespace OpenDentBusiness{
 			}
 			//check appointments for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,appointment "
-				+"WHERE appointment.ClinicNum ="+POut.PInt(clinic.ClinicNum)
+				+"WHERE appointment.ClinicNum ="+POut.PLong(clinic.ClinicNum)
 				+" AND patient.PatNum=appointment.PatNum";
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
@@ -172,7 +172,7 @@ namespace OpenDentBusiness{
 			}
 			//check procedures for dependencies
 			command="SELECT patient.LName,patient.FName FROM patient,procedurelog "
-				+"WHERE procedurelog.ClinicNum ="+POut.PInt(clinic.ClinicNum)
+				+"WHERE procedurelog.ClinicNum ="+POut.PLong(clinic.ClinicNum)
 				+" AND patient.PatNum=procedurelog.PatNum";
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
@@ -185,7 +185,7 @@ namespace OpenDentBusiness{
 			}
 			//check operatories for dependencies
 			command="SELECT OpName FROM operatory "
-				+"WHERE ClinicNum ="+POut.PInt(clinic.ClinicNum);
+				+"WHERE ClinicNum ="+POut.PLong(clinic.ClinicNum);
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string ops="";
@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 			}
 			//delete
 			command= "DELETE FROM clinic" 
-				+" WHERE ClinicNum = "+POut.PInt(clinic.ClinicNum);
+				+" WHERE ClinicNum = "+POut.PLong(clinic.ClinicNum);
  			Db.NonQ(command);
 		}
 

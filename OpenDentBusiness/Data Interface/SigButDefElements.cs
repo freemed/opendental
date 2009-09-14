@@ -38,9 +38,9 @@ namespace OpenDentBusiness{
 			list=new SigButDefElement[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new SigButDefElement();
-				list[i].ElementNum      = PIn.PInt(table.Rows[i][0].ToString());
-				list[i].SigButDefNum    = PIn.PInt(table.Rows[i][1].ToString());
-				list[i].SigElementDefNum= PIn.PInt(table.Rows[i][2].ToString());
+				list[i].ElementNum      = PIn.PLong(table.Rows[i][0].ToString());
+				list[i].SigButDefNum    = PIn.PLong(table.Rows[i][1].ToString());
+				list[i].SigElementDefNum= PIn.PLong(table.Rows[i][2].ToString());
 			}
 			//Array.Sort(List);
 		}
@@ -73,11 +73,11 @@ namespace OpenDentBusiness{
 			}
 			command+="SigButDefNum,SigElementDefNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(element.ElementNum)+", ";
+				command+=POut.PLong(element.ElementNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (element.SigButDefNum)+"', "
-				+"'"+POut.PInt   (element.SigElementDefNum)+"')";
+				 "'"+POut.PLong   (element.SigButDefNum)+"', "
+				+"'"+POut.PLong   (element.SigElementDefNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),element);
 				return;
 			}
-			string command= "DELETE from sigbutdefelement WHERE ElementNum = '"+POut.PInt(element.ElementNum)+"'";
+			string command= "DELETE from sigbutdefelement WHERE ElementNum = '"+POut.PLong(element.ElementNum)+"'";
  			Db.NonQ(command);
 		}
 

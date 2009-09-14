@@ -427,7 +427,7 @@ namespace OpenDental{
 
 		private void grid_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			//row selected before this event triggered
-			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
+			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
 			SetFamilyColors();
 			comboStatus.SelectedIndex=-1;
 		}
@@ -440,10 +440,10 @@ namespace OpenDental{
 				grid.Invalidate();
 				return;
 			}
-			long guar=PIn.PInt(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
+			long guar=PIn.PLong(table.Rows[grid.SelectedIndices[0]]["Guarantor"].ToString());
 			int famCount=0;
 			for(int i=0;i<grid.Rows.Count;i++){
-				if(PIn.PInt(table.Rows[i]["Guarantor"].ToString())==guar){
+				if(PIn.PLong(table.Rows[i]["Guarantor"].ToString())==guar){
 					famCount++;
 					grid.Rows[i].ColorText=Color.Red;
 				}
@@ -462,9 +462,9 @@ namespace OpenDental{
 		}
 
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
+			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
 			Cursor=Cursors.WaitCursor;
-			long selectedApt=PIn.PInt(table.Rows[e.Row]["AptNum"].ToString());
+			long selectedApt=PIn.PLong(table.Rows[e.Row]["AptNum"].ToString());
 			//Appointment apt=Appointments.GetOneApt(selectedApt);
 			FormApptEdit FormA=new FormApptEdit(selectedApt);
 			FormA.PinIsVisible=true;
@@ -479,7 +479,7 @@ namespace OpenDental{
 				FillMain();
 			}
 			for(int i=0;i<table.Rows.Count;i++){
-				if(PIn.PInt(table.Rows[i]["AptNum"].ToString())==selectedApt){
+				if(PIn.PLong(table.Rows[i]["AptNum"].ToString())==selectedApt){
 					grid.SetSelected(i,true);
 				}
 			}
@@ -495,10 +495,10 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			long[] selectedApts=new long[grid.SelectedIndices.Length];
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
-				selectedApts[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+				selectedApts[i]=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
 			}
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
-				apt=Appointments.GetOneApt(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+				apt=Appointments.GetOneApt(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
 				Appointment aptOld=apt.Copy();
 				int selectedI=comboStatus.SelectedIndex;
 				apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
@@ -515,7 +515,7 @@ namespace OpenDental{
 			//reselect all the apts
 			for(int i=0;i<table.Rows.Count;i++){
 				for(int j=0;j<selectedApts.Length;j++){
-					if(PIn.PInt(table.Rows[i]["AptNum"].ToString())==selectedApts[j]){
+					if(PIn.PLong(table.Rows[i]["AptNum"].ToString())==selectedApts[j]){
 						grid.SetSelected(i,true);
 					}
 				}
@@ -538,13 +538,13 @@ namespace OpenDental{
       if(grid.SelectedIndices.Length==0){
 				aptNums=new long[table.Rows.Count];
         for(int i=0;i<aptNums.Length;i++){
-          aptNums[i]=PIn.PInt(table.Rows[i]["AptNum"].ToString());
+          aptNums[i]=PIn.PLong(table.Rows[i]["AptNum"].ToString());
         }
       }
       else{
 				aptNums=new long[grid.SelectedIndices.Length];
         for(int i=0;i<aptNums.Length;i++){
-          aptNums[i]=PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
+          aptNums[i]=PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString());
         }
       }
       FormRpConfirm FormC=new FormRpConfirm(aptNums);
@@ -563,7 +563,7 @@ namespace OpenDental{
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
-        aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+        aptNums.Add(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;
@@ -589,7 +589,7 @@ namespace OpenDental{
 			}
 			List<long> aptNums=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++) {
-        aptNums.Add(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
+        aptNums.Add(PIn.PLong(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
       }
 			AddrTable=Appointments.GetAddrTable(aptNums);
 			pagesPrinted=0;

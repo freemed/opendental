@@ -315,7 +315,7 @@ namespace OpenDental{
 			int selectedIndex=gridMain.GetSelectedIndex();
 			if(selectedIndex!=-1){
 				if(table.Rows.Count>selectedIndex){
-					selectedRequestId=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["RequestId"]);
+					selectedRequestId=PIn.PLong(table.Rows[gridMain.GetSelectedIndex()]["RequestId"]);
 				}
 			}
 			gridMain.BeginUpdate();
@@ -373,7 +373,7 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormRequestEdit FormR=new FormRequestEdit();
-			FormR.RequestId=PIn.PInt(table.Rows[e.Row]["RequestId"]);
+			FormR.RequestId=PIn.PLong(table.Rows[e.Row]["RequestId"]);
 			FormR.IsAdminMode=isAdminMode;
 			FormR.ShowDialog();
 			FillGrid();

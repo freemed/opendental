@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * from payment"
-				+" WHERE DepositNum = "+POut.PInt(depositNum);
+				+" WHERE DepositNum = "+POut.PLong(depositNum);
 			return RefreshAndFill(Db.GetTable(command));
 		}
 
@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 				+"WHERE DepositNum = 0 "
 				+"AND PayDate >= "+POut.PDate(dateStart)+" ";
 			if(clinicNum!=0){
-				command+="AND ClinicNum="+POut.PInt(clinicNum);
+				command+="AND ClinicNum="+POut.PLong(clinicNum);
 			}
 			for(int i=0;i<payTypes.Count;i++) {
 				if(i==0) {
@@ -80,7 +80,7 @@ namespace OpenDentBusiness{
 				else {
 					command+=" OR ";
 				}
-				command+="PayType="+POut.PInt(payTypes[i]);
+				command+="PayType="+POut.PLong(payTypes[i]);
 				if(i==payTypes.Count-1) {
 					command+=")";
 				}
@@ -93,18 +93,18 @@ namespace OpenDentBusiness{
 			List <Payment> List=new List <Payment> ();
 			for(int i=0;i<table.Rows.Count;i++) {
 				List.Add(new Payment());
-				List[i].PayNum    =PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PayType   =PIn.PInt(table.Rows[i][1].ToString());
+				List[i].PayNum    =PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PayType   =PIn.PLong(table.Rows[i][1].ToString());
 				List[i].PayDate   =PIn.PDate(table.Rows[i][2].ToString());
 				List[i].PayAmt    =PIn.PDouble(table.Rows[i][3].ToString());
 				List[i].CheckNum  =PIn.PString(table.Rows[i][4].ToString());
 				List[i].BankBranch=PIn.PString(table.Rows[i][5].ToString());
 				List[i].PayNote   =PIn.PString(table.Rows[i][6].ToString());
 				List[i].IsSplit   =PIn.PBool(table.Rows[i][7].ToString());
-				List[i].PatNum    =PIn.PInt(table.Rows[i][8].ToString());
-				List[i].ClinicNum =PIn.PInt(table.Rows[i][9].ToString());
+				List[i].PatNum    =PIn.PLong(table.Rows[i][8].ToString());
+				List[i].ClinicNum =PIn.PLong(table.Rows[i][9].ToString());
 				List[i].DateEntry =PIn.PDate(table.Rows[i][10].ToString());
-				List[i].DepositNum=PIn.PInt(table.Rows[i][11].ToString());
+				List[i].DepositNum=PIn.PLong(table.Rows[i][11].ToString());
 			}
 			return List;
 		}
@@ -135,18 +135,18 @@ namespace OpenDentBusiness{
 				throw new ApplicationException(Lans.g("Payments","Not allowed to change the amount on payments attached to deposits."));
 			}*/
 			string command="UPDATE payment SET " 
-				+ "paytype = '"      +POut.PInt   (pay.PayType)+"'"
+				+ "paytype = '"      +POut.PLong   (pay.PayType)+"'"
 				+ ",paydate = "     +POut.PDate  (pay.PayDate)
 				+ ",payamt = '"      +POut.PDouble(pay.PayAmt)+"'"
 				+ ",checknum = '"    +POut.PString(pay.CheckNum)+"'"
 				+ ",bankbranch = '"  +POut.PString(pay.BankBranch)+"'"
 				+ ",paynote = '"     +POut.PString(pay.PayNote)+"'"
 				+ ",issplit = '"     +POut.PBool  (pay.IsSplit)+"'"
-				+ ",patnum = '"      +POut.PInt   (pay.PatNum)+"'"
-				+ ",ClinicNum = '"   +POut.PInt   (pay.ClinicNum)+"'"
+				+ ",patnum = '"      +POut.PLong   (pay.PatNum)+"'"
+				+ ",ClinicNum = '"   +POut.PLong   (pay.ClinicNum)+"'"
 				//DateEntry not allowed to change
-				+ ",DepositNum = '"  +POut.PInt   (pay.DepositNum)+"'"
-				+" WHERE payNum = '" +POut.PInt   (pay.PayNum)+"'";
+				+ ",DepositNum = '"  +POut.PLong   (pay.DepositNum)+"'"
+				+" WHERE payNum = '" +POut.PLong   (pay.PayNum)+"'";
 			//MessageBox.Show(string command);
  			Db.NonQ(command);
 			/*
@@ -181,20 +181,20 @@ namespace OpenDentBusiness{
 			command+="PayType,PayDate,PayAmt, "
 				+"CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(pay.PayNum)+"', ";
+				command+="'"+POut.PLong(pay.PayNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (pay.PayType)+"', "
+				 "'"+POut.PLong   (pay.PayType)+"', "
 				+POut.PDate  (pay.PayDate)+", "
 				+"'"+POut.PDouble(pay.PayAmt)+"', "
 				+"'"+POut.PString(pay.CheckNum)+"', "
 				+"'"+POut.PString(pay.BankBranch)+"', "
 				+"'"+POut.PString(pay.PayNote)+"', "
 				+"'"+POut.PBool  (pay.IsSplit)+"', "
-				+"'"+POut.PInt   (pay.PatNum)+"', "
-				+"'"+POut.PInt   (pay.ClinicNum)+"', "
+				+"'"+POut.PLong   (pay.PatNum)+"', "
+				+"'"+POut.PLong   (pay.ClinicNum)+"', "
 				+"NOW()"
-				+", '"+POut.PInt   (pay.DepositNum)+"')";
+				+", '"+POut.PLong   (pay.DepositNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pay);
 				return;
 			}
-			string command="SELECT DepositNum FROM payment WHERE PayNum="+POut.PInt(pay.PayNum);
+			string command="SELECT DepositNum FROM payment WHERE PayNum="+POut.PLong(pay.PayNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return;
@@ -237,7 +237,7 @@ namespace OpenDentBusiness{
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),payAmt,patNum);
 			}
 			string command="SELECT EstBalance FROM patient "
-				+"WHERE PatNum = "+POut.PInt(patNum);
+				+"WHERE PatNum = "+POut.PLong(patNum);
 			DataTable table=Db.GetTable(command);
 			double estBal=0;
 			if(table.Rows.Count>0){
@@ -246,7 +246,7 @@ namespace OpenDentBusiness{
 			if(!PrefC.GetBool("BalancesDontSubtractIns")){
 				command=@"SELECT SUM(InsPayEst)+SUM(Writeoff) 
 					FROM claimproc
-					WHERE PatNum="+POut.PInt(patNum)+" "
+					WHERE PatNum="+POut.PLong(patNum)+" "
 					+"AND Status=0"; //NotReceived
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0){
@@ -266,7 +266,7 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT Guarantor FROM patient "
-				+"WHERE PatNum = "+POut.PInt(pay.PatNum);
+				+"WHERE PatNum = "+POut.PLong(pay.PatNum);
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return new List<PaySplit>();
@@ -286,12 +286,12 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++) {
 				if(table.Rows[i]["PatNum"].ToString()==pay.PatNum.ToString()){
 					pat=new Patient();
-					pat.PatNum    = PIn.PInt(table.Rows[i][0].ToString());
+					pat.PatNum    = PIn.PLong(table.Rows[i][0].ToString());
 					pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
 					if(!PrefC.GetBool("BalancesDontSubtractIns")){
 						pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
 					}
-					pat.PriProv   = PIn.PInt(table.Rows[i][2].ToString());
+					pat.PriProv   = PIn.PLong(table.Rows[i][2].ToString());
 					pats.Add(pat.Copy());
 				}
 			}
@@ -301,12 +301,12 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				pat=new Patient();
-				pat.PatNum    = PIn.PInt   (table.Rows[i][0].ToString());
+				pat.PatNum    = PIn.PLong   (table.Rows[i][0].ToString());
 				pat.EstBalance= PIn.PDouble(table.Rows[i][1].ToString());
 				if(!PrefC.GetBool("BalancesDontSubtractIns")){
 					pat.EstBalance-=PIn.PDouble(table.Rows[i]["_insEst"].ToString());
 				}
-				pat.PriProv   = PIn.PInt   (table.Rows[i][2].ToString());
+				pat.PriProv   = PIn.PLong   (table.Rows[i][2].ToString());
 				pats.Add(pat.Copy());
 			}
 			//first calculate all the amounts

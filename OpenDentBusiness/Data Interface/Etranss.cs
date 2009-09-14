@@ -29,9 +29,9 @@ namespace OpenDentBusiness{
 				//	command+="TO_";
 				//}
 				+"DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
-				+"AND Etype!="+POut.PInt((int)EtransType.Acknowledge_997)+" "
-				+"AND Etype!="+POut.PInt((int)EtransType.BenefitInquiry270)+" "
-				+"AND Etype!="+POut.PInt((int)EtransType.BenefitResponse271)+" "
+				+"AND Etype!="+POut.PLong((int)EtransType.Acknowledge_997)+" "
+				+"AND Etype!="+POut.PLong((int)EtransType.BenefitInquiry270)+" "
+				+"AND Etype!="+POut.PLong((int)EtransType.BenefitResponse271)+" "
 				+"ORDER BY DateTimeTrans";
 			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 				row["OfficeSequenceNumber"]=table.Rows[i]["OfficeSequenceNumber"].ToString();
 				row["CarrierTransCounter"]=table.Rows[i]["CarrierTransCounter"].ToString();
 				row["Etype"]=table.Rows[i]["Etype"].ToString();
-				etype=Lans.g("enumEtransType",((EtransType)PIn.PInt(table.Rows[i]["Etype"].ToString())).ToString());
+				etype=Lans.g("enumEtransType",((EtransType)PIn.PLong(table.Rows[i]["Etype"].ToString())).ToString());
 				if(etype.EndsWith("_CA")){
 					etype=etype.Substring(0,etype.Length-3);
 				}
@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Etrans>(MethodBase.GetCurrentMethod(),etransNum);
 			}
-			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PLong(etransNum);
 			DataTable table=Db.GetTable(command);
 			List<Etrans> list=SubmitAndFill(table);
 			if(list.Count==0) {
@@ -96,8 +96,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Etrans>>(MethodBase.GetCurrentMethod(),planNum);
 			}
-			string command="SELECT * FROM etrans WHERE PlanNum="+POut.PInt(planNum)
-				+" AND Etype="+POut.PInt((int)EtransType.BenefitInquiry270);
+			string command="SELECT * FROM etrans WHERE PlanNum="+POut.PLong(planNum)
+				+" AND Etype="+POut.PLong((int)EtransType.BenefitInquiry270);
 			DataTable table=Db.GetTable(command);
 			return SubmitAndFill(table);
 		}
@@ -131,24 +131,24 @@ namespace OpenDentBusiness{
 			Etrans etrans;
 			for(int i=0;i<table.Rows.Count;i++) {
 				etrans=new Etrans();
-				etrans.EtransNum           =PIn.PInt(table.Rows[i][0].ToString());
+				etrans.EtransNum           =PIn.PLong(table.Rows[i][0].ToString());
 				etrans.DateTimeTrans       =PIn.PDateT(table.Rows[i][1].ToString());
-				etrans.ClearinghouseNum    =PIn.PInt(table.Rows[i][2].ToString());
-				etrans.Etype               =(EtransType)PIn.PInt(table.Rows[i][3].ToString());
-				etrans.ClaimNum            =PIn.PInt(table.Rows[i][4].ToString());
-				etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[i][5].ToString());
-				etrans.CarrierTransCounter =PIn.PInt32(table.Rows[i][6].ToString());
-				etrans.CarrierTransCounter2=PIn.PInt32(table.Rows[i][7].ToString());
-				etrans.CarrierNum          =PIn.PInt(table.Rows[i][8].ToString());
-				etrans.CarrierNum2         =PIn.PInt(table.Rows[i][9].ToString());
-				etrans.PatNum              =PIn.PInt(table.Rows[i][10].ToString());
-				etrans.BatchNumber         =PIn.PInt32(table.Rows[i][11].ToString());
+				etrans.ClearinghouseNum    =PIn.PLong(table.Rows[i][2].ToString());
+				etrans.Etype               =(EtransType)PIn.PLong(table.Rows[i][3].ToString());
+				etrans.ClaimNum            =PIn.PLong(table.Rows[i][4].ToString());
+				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[i][5].ToString());
+				etrans.CarrierTransCounter =PIn.PInt(table.Rows[i][6].ToString());
+				etrans.CarrierTransCounter2=PIn.PInt(table.Rows[i][7].ToString());
+				etrans.CarrierNum          =PIn.PLong(table.Rows[i][8].ToString());
+				etrans.CarrierNum2         =PIn.PLong(table.Rows[i][9].ToString());
+				etrans.PatNum              =PIn.PLong(table.Rows[i][10].ToString());
+				etrans.BatchNumber         =PIn.PInt(table.Rows[i][11].ToString());
 				etrans.AckCode             =PIn.PString(table.Rows[i][12].ToString());
-				etrans.TransSetNum         =PIn.PInt32(table.Rows[i][13].ToString());
+				etrans.TransSetNum         =PIn.PInt(table.Rows[i][13].ToString());
 				etrans.Note                =PIn.PString(table.Rows[i][14].ToString());
-				etrans.EtransMessageTextNum=PIn.PInt(table.Rows[i][15].ToString());
-				etrans.AckEtransNum        =PIn.PInt(table.Rows[i][16].ToString());
-				etrans.PlanNum             =PIn.PInt(table.Rows[i][17].ToString());
+				etrans.EtransMessageTextNum=PIn.PLong(table.Rows[i][15].ToString());
+				etrans.AckEtransNum        =PIn.PLong(table.Rows[i][16].ToString());
+				etrans.PlanNum             =PIn.PLong(table.Rows[i][17].ToString());
 				retVal.Add(etrans);
 			}
 			return retVal;
@@ -171,7 +171,7 @@ namespace OpenDentBusiness{
 				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum,"
 				+"AckEtransNum,PlanNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
+				command+="'"+POut.PLong(etrans.EtransNum)+"', ";
 			}
 			if(etrans.DateTimeTrans.Year<1880) {
 				command+="NOW()";
@@ -180,22 +180,22 @@ namespace OpenDentBusiness{
 				command+=POut.PDateT(etrans.DateTimeTrans);
 			}
 			command+=", "
-				+"'"+POut.PInt   (etrans.ClearinghouseNum)+"', "
-				+"'"+POut.PInt   ((int)etrans.Etype)+"', "
-				+"'"+POut.PInt   (etrans.ClaimNum)+"', "
-				+"'"+POut.PInt   (etrans.OfficeSequenceNumber)+"', "
-				+"'"+POut.PInt   (etrans.CarrierTransCounter)+"', "
-				+"'"+POut.PInt   (etrans.CarrierTransCounter2)+"', "
-				+"'"+POut.PInt   (etrans.CarrierNum)+"', "
-				+"'"+POut.PInt   (etrans.CarrierNum2)+"', "
-				+"'"+POut.PInt   (etrans.PatNum)+"', "
-				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
+				+"'"+POut.PLong   (etrans.ClearinghouseNum)+"', "
+				+"'"+POut.PLong   ((int)etrans.Etype)+"', "
+				+"'"+POut.PLong   (etrans.ClaimNum)+"', "
+				+"'"+POut.PLong   (etrans.OfficeSequenceNumber)+"', "
+				+"'"+POut.PLong   (etrans.CarrierTransCounter)+"', "
+				+"'"+POut.PLong   (etrans.CarrierTransCounter2)+"', "
+				+"'"+POut.PLong   (etrans.CarrierNum)+"', "
+				+"'"+POut.PLong   (etrans.CarrierNum2)+"', "
+				+"'"+POut.PLong   (etrans.PatNum)+"', "
+				+"'"+POut.PLong   (etrans.BatchNumber)+"', "
 				+"'"+POut.PString(etrans.AckCode)+"', "
-				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
+				+"'"+POut.PLong   (etrans.TransSetNum)+"', "
 				+"'"+POut.PString(etrans.Note)+"', "
-				+"'"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
-				+"'"+POut.PInt   (etrans.AckEtransNum)+"', "
-				+"'"+POut.PInt   (etrans.PlanNum)+"')";
+				+"'"+POut.PLong   (etrans.EtransMessageTextNum)+"', "
+				+"'"+POut.PLong   (etrans.AckEtransNum)+"', "
+				+"'"+POut.PLong   (etrans.PlanNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -212,23 +212,23 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE etrans SET "
-				+"ClearinghouseNum = '"   +POut.PInt   (etrans.ClearinghouseNum)+"', "
-				+"Etype= '"               +POut.PInt   ((int)etrans.Etype)+"', "
-				+"ClaimNum= '"            +POut.PInt   (etrans.ClaimNum)+"', "
-				+"OfficeSequenceNumber= '"+POut.PInt   (etrans.OfficeSequenceNumber)+"', "
-				+"CarrierTransCounter= '" +POut.PInt   (etrans.CarrierTransCounter)+"', "
-				+"CarrierTransCounter2= '"+POut.PInt   (etrans.CarrierTransCounter2)+"', "
-				+"CarrierNum= '"          +POut.PInt   (etrans.CarrierNum)+"', "
-				+"CarrierNum2= '"         +POut.PInt   (etrans.CarrierNum2)+"', "
-				+"PatNum= '"              +POut.PInt   (etrans.PatNum)+"', "
-				+"BatchNumber= '"         +POut.PInt   (etrans.BatchNumber)+"', "
+				+"ClearinghouseNum = '"   +POut.PLong   (etrans.ClearinghouseNum)+"', "
+				+"Etype= '"               +POut.PLong   ((int)etrans.Etype)+"', "
+				+"ClaimNum= '"            +POut.PLong   (etrans.ClaimNum)+"', "
+				+"OfficeSequenceNumber= '"+POut.PLong   (etrans.OfficeSequenceNumber)+"', "
+				+"CarrierTransCounter= '" +POut.PLong   (etrans.CarrierTransCounter)+"', "
+				+"CarrierTransCounter2= '"+POut.PLong   (etrans.CarrierTransCounter2)+"', "
+				+"CarrierNum= '"          +POut.PLong   (etrans.CarrierNum)+"', "
+				+"CarrierNum2= '"         +POut.PLong   (etrans.CarrierNum2)+"', "
+				+"PatNum= '"              +POut.PLong   (etrans.PatNum)+"', "
+				+"BatchNumber= '"         +POut.PLong   (etrans.BatchNumber)+"', "
 				+"AckCode= '"             +POut.PString(etrans.AckCode)+"', "
-				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
+				+"TransSetNum= '"         +POut.PLong   (etrans.TransSetNum)+"', "
 				+"Note= '"                +POut.PString(etrans.Note)+"', "
-				+"EtransMessageTextNum= '"+POut.PInt   (etrans.EtransMessageTextNum)+"', "
-				+"AckEtransNum= '"         +POut.PInt   (etrans.AckEtransNum)+"', "
-				+"PlanNum= '"             +POut.PInt   (etrans.PlanNum)+"' "
-				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
+				+"EtransMessageTextNum= '"+POut.PLong   (etrans.EtransMessageTextNum)+"', "
+				+"AckEtransNum= '"         +POut.PLong   (etrans.AckEtransNum)+"', "
+				+"PlanNum= '"             +POut.PLong   (etrans.PlanNum)+"' "
+				+"WHERE EtransNum = "+POut.PLong(etrans.EtransNum);
 			Db.NonQ(command);
 		}
 
@@ -261,7 +261,7 @@ namespace OpenDentBusiness{
 			string command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0) {
-				etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[0][0].ToString());
+				etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
 				if(etrans.OfficeSequenceNumber==999999){//if the office has sent > 1 million messages, and has looped back around to 1.
 					//get the date of the most recent max
 					//This works, but it got even more complex for CarrierTransCounter, so we will just throw an exception for now.
@@ -282,20 +282,20 @@ namespace OpenDentBusiness{
 				//find the next CarrierTransCounter------------------------------------------------------------------------------------
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans"
-					+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum);
+					+"WHERE CarrierNum="+POut.PLong(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
 				}
 				command="SELECT MAX(CarrierTransCounter2) FROM etrans "
-					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
+					+"WHERE CarrierNum2="+POut.PLong(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -320,8 +320,8 @@ namespace OpenDentBusiness{
 			msg.MessageText=messageText;
 			EtransMessageTexts.Insert(msg);
 			//string command=
-			string command= "UPDATE etrans SET EtransMessageTextNum="+POut.PInt(msg.EtransMessageTextNum)+" "
-				+"WHERE EtransNum = '"+POut.PInt(etransNum)+"'";
+			string command= "UPDATE etrans SET EtransMessageTextNum="+POut.PLong(msg.EtransMessageTextNum)+" "
+				+"WHERE EtransNum = '"+POut.PLong(etransNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -332,19 +332,19 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//see if it's a claim.
-			string command="SELECT ClaimNum FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			string command="SELECT ClaimNum FROM etrans WHERE EtransNum="+POut.PLong(etransNum);
 			DataTable table=Db.GetTable(command);
-			long claimNum=PIn.PInt(table.Rows[0][0].ToString());
+			long claimNum=PIn.PLong(table.Rows[0][0].ToString());
 			if(claimNum==0){//if no claim
 				return;//for now
 			}
 			//future Canadian check will go here
 
 			//Change the claim back to W.
-			command="UPDATE claim SET ClaimStatus='W' WHERE ClaimNum="+POut.PInt(claimNum);
+			command="UPDATE claim SET ClaimStatus='W' WHERE ClaimNum="+POut.PLong(claimNum);
 			Db.NonQ(command);
 			//Delete this etrans
-			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			command="DELETE FROM etrans WHERE EtransNum="+POut.PLong(etransNum);
 			Db.NonQ(command);
 		}
 
@@ -360,7 +360,7 @@ namespace OpenDentBusiness{
 			//if(table.Rows[0][0].ToString()!="0"){//this throws exception if 0 rows.
 			//	throw new ApplicationException("Error. Etrans must not have messagetext attached yet.");
 			//}
-			command="DELETE FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			command="DELETE FROM etrans WHERE EtransNum="+POut.PLong(etransNum);
 			Db.NonQ(command);
 		}
 
@@ -372,7 +372,7 @@ namespace OpenDentBusiness{
 			}
 			string command="UPDATE claim SET ClaimStatus = 'S',"
 				+"DateSent= "+POut.PDate(MiscData.GetNowDateTime())
-				+" WHERE claimnum = "+POut.PInt(claimNum);
+				+" WHERE claimnum = "+POut.PLong(claimNum);
 			Db.NonQ(command);
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
@@ -386,10 +386,10 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN carrier carrier1 ON carrier1.CarrierNum=insplan1.CarrierNum "
 				+"LEFT JOIN insplan insplan2 ON insplan2.PlanNum=claim.PlanNum2 "
 				+"LEFT JOIN carrier carrier2 ON carrier2.CarrierNum=insplan2.CarrierNum "
-				+"WHERE claim.ClaimNum="+POut.PInt(claimNum);
+				+"WHERE claim.ClaimNum="+POut.PLong(claimNum);
 			DataTable table=Db.GetTable(command);
-			etrans.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
-			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
+			etrans.CarrierNum=PIn.PLong(table.Rows[0][0].ToString());
+			etrans.CarrierNum2=PIn.PLong(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
 			etrans.BatchNumber=batchNumber;
 			if(X837.IsX12(messageText)) {
 				X837 x837=new X837(messageText);
@@ -401,7 +401,7 @@ namespace OpenDentBusiness{
 				command="SELECT MAX(OfficeSequenceNumber) FROM etrans";
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					etrans.OfficeSequenceNumber=PIn.PInt32(table.Rows[0][0].ToString());
+					etrans.OfficeSequenceNumber=PIn.PInt(table.Rows[0][0].ToString());
 					if(etrans.OfficeSequenceNumber==999999) {//if the office has sent > 1 million messages, and has looped back around to 1.
 						throw new ApplicationException
 							("OfficeSequenceNumber has maxed out at 999999.  This program will need to be enhanced.");
@@ -411,20 +411,20 @@ namespace OpenDentBusiness{
 				//find the next CarrierTransCounter for the primary carrier
 				etrans.CarrierTransCounter=0;
 				command="SELECT MAX(CarrierTransCounter) FROM etrans "
-					+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum);
+					+"WHERE CarrierNum="+POut.PLong(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				int tempcounter=0;
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
 				}
 				command="SELECT MAX(CarrierTransCounter2) FROM etrans "
-					+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum);
+					+"WHERE CarrierNum2="+POut.PLong(etrans.CarrierNum);
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+					tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 				}
 				if(tempcounter>etrans.CarrierTransCounter) {
 					etrans.CarrierTransCounter=tempcounter;
@@ -436,19 +436,19 @@ namespace OpenDentBusiness{
 				if(etrans.CarrierNum2>0) {//if there is secondary coverage on this claim
 					etrans.CarrierTransCounter2=1;
 					command="SELECT MAX(CarrierTransCounter) FROM etrans "
-						+"WHERE CarrierNum="+POut.PInt(etrans.CarrierNum2);
+						+"WHERE CarrierNum="+POut.PLong(etrans.CarrierNum2);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
-						tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 					}
 					if(tempcounter>etrans.CarrierTransCounter2) {
 						etrans.CarrierTransCounter2=tempcounter;
 					}
 					command="SELECT MAX(CarrierTransCounter2) FROM etrans "
-						+"WHERE CarrierNum2="+POut.PInt(etrans.CarrierNum2);
+						+"WHERE CarrierNum2="+POut.PLong(etrans.CarrierNum2);
 					table=Db.GetTable(command);
 					if(table.Rows.Count>0) {
-						tempcounter=PIn.PInt32(table.Rows[0][0].ToString());
+						tempcounter=PIn.PInt(table.Rows[0][0].ToString());
 					}
 					if(tempcounter>etrans.CarrierTransCounter2) {
 						etrans.CarrierTransCounter2=tempcounter;
@@ -491,9 +491,9 @@ namespace OpenDentBusiness{
 					string batchack=x997.GetBatchAckCode();
 					if(batchack=="A"||batchack=="R") {//accepted or rejected
 						command="UPDATE etrans SET AckCode='"+batchack+"', "
-							+"AckEtransNum="+POut.PInt(etrans.EtransNum)
-							+" WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
-							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
+							+"AckEtransNum="+POut.PLong(etrans.EtransNum)
+							+" WHERE BatchNumber="+POut.PLong(etrans.BatchNumber)
+							+" AND ClearinghouseNum="+POut.PLong(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1))
 							+" AND AckEtransNum=0";
@@ -506,10 +506,10 @@ namespace OpenDentBusiness{
 							ack=x997.GetAckForTrans(transNums[i]);
 							if(ack=="A"||ack=="R") {//accepted or rejected
 								command="UPDATE etrans SET AckCode='"+ack+"' "
-									+"AckEtransNum="+POut.PInt(etrans.EtransNum)
-									+"WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
-									+" AND TransSetNum="+POut.PInt(transNums[i])
-									+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
+									+"AckEtransNum="+POut.PLong(etrans.EtransNum)
+									+"WHERE BatchNumber="+POut.PLong(etrans.BatchNumber)
+									+" AND TransSetNum="+POut.PLong(transNums[i])
+									+" AND ClearinghouseNum="+POut.PLong(clearinghouseNum)
 									+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 									+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1))
 									+" AND AckEtransNum=0";
@@ -540,8 +540,8 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod(),planNum);
 			}
 			string command="SELECT MAX(DateTimeTrans) FROM etrans "
-				+"WHERE Etype="+POut.PInt((int)EtransType.BenefitInquiry270)
-				+" AND PlanNum="+POut.PInt(planNum);
+				+"WHERE Etype="+POut.PLong((int)EtransType.BenefitInquiry270)
+				+" AND PlanNum="+POut.PLong(planNum);
 			return PIn.PDate(Db.GetScalar(command));
 		}
 

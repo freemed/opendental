@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM registrationkey WHERE ";
 			Family fam=Patients.GetFamily(patNum);
 			for(int i=0;i<fam.ListPats.Length;i++){
-				command+="PatNum="+POut.PInt(fam.ListPats[i].PatNum)+" ";
+				command+="PatNum="+POut.PLong(fam.ListPats[i].PatNum)+" ";
 				if(i<fam.ListPats.Length-1){
 					command+="OR ";
 				}
@@ -29,8 +29,8 @@ namespace OpenDentBusiness {
 			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
 			for(int i=0;i<keys.Length;i++){
 				keys[i]=new RegistrationKey();
-				keys[i].RegistrationKeyNum	=PIn.PInt(table.Rows[i][0].ToString());
-				keys[i].PatNum							=PIn.PInt(table.Rows[i][1].ToString());
+				keys[i].RegistrationKeyNum	=PIn.PLong(table.Rows[i][0].ToString());
+				keys[i].PatNum							=PIn.PLong(table.Rows[i][1].ToString());
 				keys[i].RegKey							=PIn.PString(table.Rows[i][2].ToString());
 				keys[i].Note								=PIn.PString(table.Rows[i][3].ToString());
 				keys[i].DateStarted 				=PIn.PDate(table.Rows[i][4].ToString());
@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE registrationkey SET "
-				+"PatNum='"+POut.PInt(registrationKey.PatNum)+"' "
+				+"PatNum='"+POut.PLong(registrationKey.PatNum)+"' "
 				+",RegKey='"+POut.PString(registrationKey.RegKey)+"' "
 				+",Note='"+POut.PString(registrationKey.Note)+"' "
 				+",DateStarted="+POut.PDate(registrationKey.DateStarted)+" "
@@ -61,7 +61,7 @@ namespace OpenDentBusiness {
 				+",UsesServerVersion='"+POut.PBool(registrationKey.UsesServerVersion)+"' "
 				+",IsFreeVersion='"+POut.PBool(registrationKey.IsFreeVersion)+"' "
 				+",IsOnlyForTesting='"+POut.PBool(registrationKey.IsOnlyForTesting)+"' "
-				+" WHERE RegistrationKeyNum='"+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
+				+" WHERE RegistrationKeyNum='"+POut.PLong(registrationKey.RegistrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -105,10 +105,10 @@ namespace OpenDentBusiness {
 			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
 				+"IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(registrationKey.RegistrationKeyNum)+", ";
+				command+=POut.PLong(registrationKey.RegistrationKeyNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt(registrationKey.PatNum)+"',"
+				 "'"+POut.PLong(registrationKey.PatNum)+"',"
 				+"'"+POut.PString(registrationKey.RegKey)+"',"
 				+"'"+POut.PString(registrationKey.Note)+"',"
 				+POut.PDate(registrationKey.DateStarted)+","
@@ -133,7 +133,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
-				+POut.PInt(registrationKeyNum)+"'";
+				+POut.PLong(registrationKeyNum)+"'";
 			Db.NonQ(command);
 		}
 

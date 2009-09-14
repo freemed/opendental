@@ -47,16 +47,16 @@ namespace OpenDentBusiness{
 				return PFloat((float)value);
 			}
 			else if (dataType == typeof(long)) {
-				return PInt((long)value);
+				return PLong((long)value);
 			}
 			else if(dataType == typeof(int)) {
-				return PInt32((int)value);
+				return PInt((int)value);
 			}
 			else if(dataType == typeof(short)) {
 				return PShort((short)value);
 			}
 			else if(dataType == typeof(Interval)) {
-				return PInt(((Interval)value).ToInt());
+				return PLong(((Interval)value).ToInt());
 			}
 			else {
 				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
@@ -171,12 +171,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string PInt (long myLong){
+		public static string PLong (long myLong){
 			return myLong.ToString();
 		}
 
 		///<summary></summary>
-		public static string PInt32(int myInt) {
+		public static string PInt(int myInt) {
 			return myInt.ToString();
 		}
 

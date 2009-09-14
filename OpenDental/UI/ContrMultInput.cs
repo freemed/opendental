@@ -424,7 +424,7 @@ namespace OpenDental.UI
 				}
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Integer){
-				retVal.Add(PIn.PInt(inputs[item].Text));
+				retVal.Add(PIn.PLong(inputs[item].Text));
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Number){
 				retVal.Add(PIn.PDouble(inputs[item].Text));

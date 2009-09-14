@@ -477,7 +477,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="DELETE FROM claim WHERE ClaimNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
-				Lim=Patients.GetLim(PIn.PInt(table.Rows[i][1].ToString()));
+				Lim=Patients.GetLim(PIn.PLong(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Claim with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
@@ -601,7 +601,7 @@ namespace OpenDentBusiness {
 					WHERE cp.ClaimPaymentNum IN (SELECT tcp.ClaimPaymentNum FROM tempclaimpaymenttest tcp)";
 				Db.NonQ(command);
 				command="SELECT COUNT(*) FROM tempclaimpaymenttest";
-				numberFixed=PIn.PInt32(Db.GetTable(command).Rows[0][0].ToString());
+				numberFixed=PIn.PInt(Db.GetTable(command).Rows[0][0].ToString());
 				command="DROP TABLE tempclaimpaymenttest PURGE";
 				Db.NonQ(command);
 				if(numberFixed>0||verbose) {
@@ -734,7 +734,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="DELETE FROM claimproc WHERE ClaimProcNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
-				Lim=Patients.GetLim(PIn.PInt(table.Rows[i][1].ToString()));
+				Lim=Patients.GetLim(PIn.PLong(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Claimproc with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
@@ -885,7 +885,7 @@ namespace OpenDentBusiness {
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="UPDATE document SET DocCategory="+POut.PInt(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
+				command="UPDATE document SET DocCategory="+POut.PLong(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
 					+" WHERE DocNum="+table.Rows[i][0].ToString();
 				Db.NonQ(command);
 			}
@@ -935,7 +935,7 @@ namespace OpenDentBusiness {
 				Carrier carrier=new Carrier();
 				carrier.CarrierName="unknown";
 				Carriers.Insert(carrier);
-				command="UPDATE insplan SET CarrierNum="+POut.PInt(carrier.CarrierNum)
+				command="UPDATE insplan SET CarrierNum="+POut.PLong(carrier.CarrierNum)
 					+" WHERE CarrierNum=0";
 				Db.NonQ(command);
 			}
@@ -951,7 +951,7 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose);
 			}
 			string log="";
-			command="UPDATE insplan SET ClaimFormNum="+POut.PInt(PrefC.GetInt("DefaultClaimForm"))
+			command="UPDATE insplan SET ClaimFormNum="+POut.PLong(PrefC.GetInt("DefaultClaimForm"))
 				+" WHERE ClaimFormNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1022,7 +1022,7 @@ namespace OpenDentBusiness {
 			Patient pat;
 			Patient old;
 			for(int i=0;i<table.Rows.Count;i++) {
-				pat=Patients.GetPat(PIn.PInt(table.Rows[i][0].ToString()));
+				pat=Patients.GetPat(PIn.PLong(table.Rows[i][0].ToString()));
 				old=pat.Copy();
 				pat.LName=pat.LName+Lans.g("FormDatabaseMaintenance","DELETED");
 				pat.PatStatus=PatientStatus.Archived;
@@ -1082,7 +1082,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//I would rather set the provnum to that of the patient, but it's more complex.
-			command="UPDATE payplancharge SET ProvNum="+POut.PInt(PrefC.GetInt("PracticeDefaultProv"))
+			command="UPDATE payplancharge SET ProvNum="+POut.PLong(PrefC.GetInt("PracticeDefaultProv"))
 				+" WHERE ProvNum=0";
 			int numberFixed=Db.NonQ32(command);
 			if(numberFixed>0 || verbose) {
@@ -1346,7 +1346,7 @@ namespace OpenDentBusiness {
 			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
 				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claim.ClaimNum=claimproc.ClaimNum "
-				+"AND procedurelog.ProcStatus!="+POut.PInt((int)ProcStat.C)+" "//procedure not complete
+				+"AND procedurelog.ProcStatus!="+POut.PLong((int)ProcStat.C)+" "//procedure not complete
 				+"AND (claim.ClaimStatus='W' OR claim.ClaimStatus='S' OR claim.ClaimStatus='R') "//waiting, sent, or received
 				+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
 			table=Db.GetTable(command);
@@ -1417,7 +1417,7 @@ namespace OpenDentBusiness {
 			}
 			Provider prov;
 			for(int i=0;i<table.Rows.Count;i++) {
-				prov=Providers.GetProv(PIn.PInt(table.Rows[i][1].ToString()));
+				prov=Providers.GetProv(PIn.PLong(table.Rows[i][1].ToString()));
 				log+=Lans.g("FormDatabaseMaintenance","Warning!  Hidden provider ")+" "+prov.Abbr+" "
 					+Lans.g("FormDatabaseMaintenance","has claim payments entered as recently as ")
 					+PIn.PDate(table.Rows[i][0].ToString()).ToShortDateString()
@@ -1436,8 +1436,8 @@ namespace OpenDentBusiness {
 				return log;
 			}
 			command="SELECT FName,LName,COUNT(*) countDups FROM patient LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-				+"AND (recall.RecallTypeNum="+POut.PInt(RecallTypes.PerioType)+" "
-				+"OR recall.RecallTypeNum="+POut.PInt(RecallTypes.ProphyType)+") "
+				+"AND (recall.RecallTypeNum="+POut.PLong(RecallTypes.PerioType)+" "
+				+"OR recall.RecallTypeNum="+POut.PLong(RecallTypes.ProphyType)+") "
 				+"GROUP BY patient.PatNum HAVING countDups>1";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0) {

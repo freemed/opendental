@@ -334,7 +334,7 @@ ORDER BY PayDate, plfname
 					}
 					else{
 						cmd+="AND payment.ClinicNum="
-							+POut.PInt(Clinics.List[comboClinic.SelectedIndex-1].ClinicNum)+" ";
+							+POut.PLong(Clinics.List[comboClinic.SelectedIndex-1].ClinicNum)+" ";
 					}
 				}
       }
@@ -358,7 +358,7 @@ ORDER BY PayDate, plfname
 					}
 					else{
 						cmd+="AND claimpayment.ClinicNum="
-							+POut.PInt(Clinics.List[comboClinic.SelectedIndex-1].ClinicNum)+" ";
+							+POut.PLong(Clinics.List[comboClinic.SelectedIndex-1].ClinicNum)+" ";
 					}
 				}
 				cmd+="GROUP BY claimpayment.ClaimPaymentNum ";

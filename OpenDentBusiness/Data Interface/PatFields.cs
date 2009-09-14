@@ -12,13 +12,13 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatField[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM patfield WHERE PatNum="+POut.PInt(patNum);
+			string command="SELECT * FROM patfield WHERE PatNum="+POut.PLong(patNum);
 			DataTable table=Db.GetTable(command);
 			PatField[] List=new PatField[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatField();
-				List[i].PatFieldNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum     = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].PatFieldNum= PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PatNum     = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].FieldName  = PIn.PString(table.Rows[i][2].ToString());
 				List[i].FieldValue = PIn.PString(table.Rows[i][3].ToString());
 			}
@@ -32,10 +32,10 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE patfield SET " 
-				+"PatNum = '"            +POut.PInt   (pf.PatNum)+"'"
+				+"PatNum = '"            +POut.PLong   (pf.PatNum)+"'"
 				+",FieldName = '"        +POut.PString(pf.FieldName)+"'"
 				+",FieldValue = '"       +POut.PString(pf.FieldValue)+"'"
-				+" WHERE PatFieldNum  ='"+POut.PInt   (pf.PatFieldNum)+"'";
+				+" WHERE PatFieldNum  ='"+POut.PLong   (pf.PatFieldNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -54,10 +54,10 @@ namespace OpenDentBusiness {
 			}
 			command+="PatNum,FieldName,FieldValue) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(pf.PatFieldNum)+"', ";
+				command+="'"+POut.PLong(pf.PatFieldNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (pf.PatNum)+"', "
+				 "'"+POut.PLong   (pf.PatNum)+"', "
 				+"'"+POut.PString(pf.FieldName)+"', "
 				+"'"+POut.PString(pf.FieldValue)+"')";
 			if(PrefC.RandomKeys) {
@@ -75,7 +75,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pf);
 				return;
 			}
-			string command="DELETE FROM patfield WHERE PatFieldNum ="+POut.PInt(pf.PatFieldNum);
+			string command="DELETE FROM patfield WHERE PatFieldNum ="+POut.PLong(pf.PatFieldNum);
 			Db.NonQ(command);
 		}
 

@@ -3911,7 +3911,7 @@ namespace OpenDental{
 				}
 			}
 			//eCW bridge values-------------------------------------------------------------
-			Bridges.ECW.AptNum=PIn.PInt(aptNum);
+			Bridges.ECW.AptNum=PIn.PLong(aptNum);
 			Bridges.ECW.EcwConfigPath=ecwConfigPath;
 			Bridges.ECW.UserId=userId;
 			//Username and password-----------------------------------------------------
@@ -3929,7 +3929,7 @@ namespace OpenDental{
 					if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
 						user=new Userod();
 						user.UserName=userName;
-						user.UserGroupNum=PIn.PInt(ProgramProperties.GetPropVal("eClinicalWorks","DefaultUserGroup"));
+						user.UserGroupNum=PIn.PLong(ProgramProperties.GetPropVal("eClinicalWorks","DefaultUserGroup"));
 						if(passHash=="") {
 							user.Password="";
 						}

@@ -136,7 +136,7 @@ namespace OpenDental
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
 				AND ChargeDate <= "+datesql+@") _accumDue,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= ADDDATE("+datesql+","+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
+				AND ChargeDate <= ADDDATE("+datesql+","+POut.PLong(PrefC.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
 				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) _paid,
 				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal
 				FROM payplan

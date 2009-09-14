@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 			AppointmentRuleC.List=new AppointmentRule[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				AppointmentRuleC.List[i]=new AppointmentRule();
-				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.PInt(table.Rows[i][0].ToString());
+				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.PLong(table.Rows[i][0].ToString());
 				AppointmentRuleC.List[i].RuleDesc           = PIn.PString(table.Rows[i][1].ToString());
 				AppointmentRuleC.List[i].CodeStart          = PIn.PString(table.Rows[i][2].ToString());
 				AppointmentRuleC.List[i].CodeEnd            = PIn.PString(table.Rows[i][3].ToString());
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 			}
 			command+="RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(rule.AppointmentRuleNum)+", ";
+				command+=POut.PLong(rule.AppointmentRuleNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(rule.RuleDesc)+"', "
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 				+ ",CodeStart = '" +POut.PString(rule.CodeStart)+"'"
 				+ ",CodeEnd = '"   +POut.PString(rule.CodeEnd)+"'"
 				+ ",IsEnabled = '"    +POut.PBool  (rule.IsEnabled)+"'"
-				+" WHERE AppointmentRuleNum = '" +POut.PInt   (rule.AppointmentRuleNum)+"'";
+				+" WHERE AppointmentRuleNum = '" +POut.PLong   (rule.AppointmentRuleNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM appointmentrule" 
-				+" WHERE AppointmentRuleNum = "+POut.PInt(rule.AppointmentRuleNum);
+				+" WHERE AppointmentRuleNum = "+POut.PLong(rule.AppointmentRuleNum);
  			Db.NonQ(command);
 		}
 

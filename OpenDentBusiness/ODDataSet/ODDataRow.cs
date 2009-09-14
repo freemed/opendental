@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 						continue;
 					}
 					if(propertyInfo[f].PropertyType==typeof(int)){
-						propertyInfo[f].SetValue(obj,PIn.PInt(this[propertyInfo[f].Name]),null);
+						propertyInfo[f].SetValue(obj,PIn.PLong(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(bool)){
 						propertyInfo[f].SetValue(obj,PIn.PBool(this[propertyInfo[f].Name]),null);
@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 						propertyInfo[f].SetValue(obj,PIn.PDateT(this[propertyInfo[f].Name]),null);
 					}
 					else if(propertyInfo[f].PropertyType.IsEnum){
-						object val=((object[])Enum.GetValues(propertyInfo[f].PropertyType))[PIn.PInt(this[propertyInfo[f].Name])];
+						object val=((object[])Enum.GetValues(propertyInfo[f].PropertyType))[PIn.PLong(this[propertyInfo[f].Name])];
 						propertyInfo[f].SetValue(obj,val,null);
 					}
 					else if(propertyInfo[f].PropertyType==typeof(double)){
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				FieldInfo[] fieldInfo=objectType.GetFields();
 				for(int f=0;f<fieldInfo.Length;f++){
 					if(fieldInfo[f].FieldType==typeof(int)){
-						fieldInfo[f].SetValue(obj,PIn.PInt(this[f]));
+						fieldInfo[f].SetValue(obj,PIn.PLong(this[f]));
 					}
 					else if(fieldInfo[f].FieldType==typeof(bool)){
 						fieldInfo[f].SetValue(obj,PIn.PBool(this[f]));
@@ -71,7 +71,7 @@ namespace OpenDentBusiness {
 						fieldInfo[f].SetValue(obj,PIn.PString(this[f]));
 					}
 					else if(fieldInfo[f].FieldType.IsEnum){
-						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.PInt(this[f])];
+						object val=((object[])Enum.GetValues(fieldInfo[f].FieldType))[PIn.PLong(this[f])];
 						fieldInfo[f].SetValue(obj,val);
 					}
 					else{

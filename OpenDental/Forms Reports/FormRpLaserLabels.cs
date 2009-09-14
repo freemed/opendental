@@ -1005,7 +1005,7 @@ namespace OpenDental {
 						if(i > 0) {
 							whereProv += ",";
 						}
-						whereProv += "'" + POut.PInt(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
+						whereProv += "'" + POut.PLong(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
 					}
 					whereProv += ") ";
 					patStat = BuildPatStatList(checkActiveOnly.Checked);

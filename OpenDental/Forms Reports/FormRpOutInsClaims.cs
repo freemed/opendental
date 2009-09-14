@@ -207,7 +207,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			int daysOld=PIn.PInt32(textDaysOld.Text);
+			int daysOld=PIn.PInt(textDaysOld.Text);
 			//FormQuery2.ResetGrid();//this is a method in FormQuery2;
 			Queries.CurReport=new ReportOld();
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);
@@ -231,8 +231,8 @@ namespace OpenDental{
 					else {
 						Queries.CurReport.Query+=" OR ";
 					}
-					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
-						+" OR claim.ProvTreat="+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
+					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
+						+" OR claim.ProvTreat="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
 				}
 				Queries.CurReport.Query+=") ";
 			}

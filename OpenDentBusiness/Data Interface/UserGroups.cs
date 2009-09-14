@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			list=new UserGroup[table.Rows.Count];
 			for(int i=0;i<list.Length;i++) {
 				list[i]=new UserGroup();
-				list[i].UserGroupNum  = PIn.PInt(table.Rows[i][0].ToString());
+				list[i].UserGroupNum  = PIn.PLong(table.Rows[i][0].ToString());
 				list[i].Description   = PIn.PString(table.Rows[i][1].ToString());
 			}
 		}
@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE usergroup SET " 
 				+"Description = '"  +POut.PString(group.Description)+"'"
-				+" WHERE UserGroupNum = '"+POut.PInt(group.UserGroupNum)+"'";
+				+" WHERE UserGroupNum = '"+POut.PLong(group.UserGroupNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 			}
 			command+="Description) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(group.UserGroupNum)+", ";
+				command+=POut.PLong(group.UserGroupNum)+", ";
 			}
 			command+=
 				"'"+POut.PString(group.Description)+"')";
@@ -90,13 +90,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="SELECT COUNT(*) FROM userod WHERE UserGroupNum='"
-				+POut.PInt(group.UserGroupNum)+"'";
+				+POut.PLong(group.UserGroupNum)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lans.g("UserGroups","Must move users to another group first."));
 			}
 			command= "DELETE FROM usergroup WHERE UserGroupNum='"
-				+POut.PInt(group.UserGroupNum)+"'";
+				+POut.PLong(group.UserGroupNum)+"'";
  			Db.NonQ(command);
 		}
 

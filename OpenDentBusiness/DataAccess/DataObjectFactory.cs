@@ -270,10 +270,10 @@ namespace OpenDentBusiness.DataAccess {
 						dataValue = PIn.PFloat((string)dataValue);
 					}
 					else if (dataType == typeof(int)) {
-						dataValue = PIn.PInt32((string)dataValue);
+						dataValue = PIn.PInt((string)dataValue);
 					}
 					else if(dataType == typeof(long)) {
-						dataValue = PIn.PInt((string)dataValue);
+						dataValue = PIn.PLong((string)dataValue);
 					}
 					else {
 						// NOTE: Support for "Sound" is not here yet. Maybe it should be exported
@@ -630,7 +630,7 @@ namespace OpenDentBusiness.DataAccess {
 				query = string.Format("DELETE FROM {0} WHERE {1} = {2}{1}", tableName, primaryKeyFieldName, ParameterPrefix);
 			}
 			else {
-				query = string.Format("DELETE FROM {0} WHERE {1} = '{2}'", tableName, primaryKeyFieldName, POut.PInt(id));
+				query = string.Format("DELETE FROM {0} WHERE {1} = '{2}'", tableName, primaryKeyFieldName, POut.PLong(id));
 			}
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {

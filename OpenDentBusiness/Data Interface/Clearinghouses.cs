@@ -41,12 +41,12 @@ namespace OpenDentBusiness{
 			string[] payors;
 			for(int i=0;i<table.Rows.Count;i++) {
 				list[i]=new Clearinghouse();
-				list[i].ClearinghouseNum= PIn.PInt(table.Rows[i][0].ToString());
+				list[i].ClearinghouseNum= PIn.PLong(table.Rows[i][0].ToString());
 				list[i].Description     = PIn.PString(table.Rows[i][1].ToString());
 				list[i].ExportPath      = PIn.PString(table.Rows[i][2].ToString());
 				list[i].IsDefault       = PIn.PBool(table.Rows[i][3].ToString());
 				list[i].Payors          = PIn.PString(table.Rows[i][4].ToString());
-				list[i].Eformat         = (ElectronicClaimFormat)PIn.PInt(table.Rows[i][5].ToString());
+				list[i].Eformat         = (ElectronicClaimFormat)PIn.PLong(table.Rows[i][5].ToString());
 				list[i].ISA05           = PIn.PString(table.Rows[i][6].ToString());
 				list[i].SenderTIN       = PIn.PString(table.Rows[i][7].ToString());
 				list[i].ISA07           = PIn.PString(table.Rows[i][8].ToString());
@@ -54,10 +54,10 @@ namespace OpenDentBusiness{
 				list[i].ISA15           = PIn.PString(table.Rows[i][10].ToString());
 				list[i].Password        = PIn.PString(table.Rows[i][11].ToString());
 				list[i].ResponsePath    = PIn.PString(table.Rows[i][12].ToString());
-				list[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][13].ToString());
+				list[i].CommBridge      = (EclaimsCommBridge)PIn.PLong(table.Rows[i][13].ToString());
 				list[i].ClientProgram   = PIn.PString(table.Rows[i][14].ToString());
 				//15: LastBatchNumber
-				list[i].ModemPort       = PIn.PInt32(table.Rows[i][16].ToString());
+				list[i].ModemPort       = PIn.PInt(table.Rows[i][16].ToString());
 				list[i].LoginID         = PIn.PString(table.Rows[i][17].ToString());
 				list[i].SenderName      = PIn.PString(table.Rows[i][18].ToString());
 				list[i].SenderTelephone = PIn.PString(table.Rows[i][19].ToString());
@@ -88,14 +88,14 @@ namespace OpenDentBusiness{
 				+",Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,"
 				+"LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(clearhouse.ClearinghouseNum)+", ";
+				command+=POut.PLong(clearhouse.ClearinghouseNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(clearhouse.Description)+"', "
 				+"'"+POut.PString(clearhouse.ExportPath)+"', "
 				+"'"+POut.PBool  (clearhouse.IsDefault)+"', "
 				+"'"+POut.PString(clearhouse.Payors)+"', "
-				+"'"+POut.PInt   ((int)clearhouse.Eformat)+"', "
+				+"'"+POut.PLong   ((int)clearhouse.Eformat)+"', "
 				+"'"+POut.PString(clearhouse.ISA05)+"', "
 				+"'"+POut.PString(clearhouse.SenderTIN)+"', "
 				+"'"+POut.PString(clearhouse.ISA07)+"', "
@@ -103,10 +103,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(clearhouse.ISA15)+"', "
 				+"'"+POut.PString(clearhouse.Password)+"', "
 				+"'"+POut.PString(clearhouse.ResponsePath)+"', "
-				+"'"+POut.PInt   ((int)clearhouse.CommBridge)+"', "
+				+"'"+POut.PLong   ((int)clearhouse.CommBridge)+"', "
 				+"'"+POut.PString(clearhouse.ClientProgram)+"', "
 				+"'0', "//LastBatchNumber
-				+"'"+POut.PInt   (clearhouse.ModemPort)+"', "
+				+"'"+POut.PLong   (clearhouse.ModemPort)+"', "
 				+"'"+POut.PString(clearhouse.LoginID)+"', "
 				+"'"+POut.PString(clearhouse.SenderName)+"', "
 				+"'"+POut.PString(clearhouse.SenderTelephone)+"', "
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 				+",ExportPath = '"  +POut.PString(clearhouse.ExportPath)+"' "
 				+",IsDefault = '"   +POut.PBool  (clearhouse.IsDefault)+"' "
 				+",Payors = '"      +POut.PString(clearhouse.Payors)+"' "
-				+",Eformat = '"     +POut.PInt   ((int)clearhouse.Eformat)+"' "
+				+",Eformat = '"     +POut.PLong   ((int)clearhouse.Eformat)+"' "
 				+",ISA05 = '"       +POut.PString(clearhouse.ISA05)+"' "
 				+",SenderTIN = '"   +POut.PString(clearhouse.SenderTIN)+"' "
 				+",ISA07 = '"       +POut.PString(clearhouse.ISA07)+"' "
@@ -139,15 +139,15 @@ namespace OpenDentBusiness{
 				+",ISA15 = '"       +POut.PString(clearhouse.ISA15)+"' "
 				+",Password = '"    +POut.PString(clearhouse.Password)+"' "
 				+",ResponsePath = '"+POut.PString(clearhouse.ResponsePath)+"' "
-				+",CommBridge = '"  +POut.PInt   ((int)clearhouse.CommBridge)+"' "
+				+",CommBridge = '"  +POut.PLong   ((int)clearhouse.CommBridge)+"' "
 				+",ClientProgram ='"+POut.PString(clearhouse.ClientProgram)+"' "
 				//LastBatchNumber
-				+",ModemPort ='"    +POut.PInt   (clearhouse.ModemPort)+"' "
+				+",ModemPort ='"    +POut.PLong   (clearhouse.ModemPort)+"' "
 				+",LoginID ='"      +POut.PString(clearhouse.LoginID)+"' "
 				+",SenderName = '"  +POut.PString(clearhouse.SenderName)+"' "
 				+",SenderTelephone='"+POut.PString(clearhouse.SenderTelephone)+"' "
 				+",GS03 = '"         +POut.PString(clearhouse.GS03)+"' "
-				+"WHERE ClearinghouseNum = '"+POut.PInt   (clearhouse.ClearinghouseNum)+"'";
+				+"WHERE ClearinghouseNum = '"+POut.PLong   (clearhouse.ClearinghouseNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -158,7 +158,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM clearinghouse "
-				+"WHERE ClearinghouseNum = '"+POut.PInt(clearhouse.ClearinghouseNum)+"'";
+				+"WHERE ClearinghouseNum = '"+POut.PLong(clearhouse.ClearinghouseNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -169,9 +169,9 @@ namespace OpenDentBusiness{
 			}
 			//get last batch number
 			string command="SELECT LastBatchNumber FROM clearinghouse "
-				+"WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
+				+"WHERE ClearinghouseNum = "+POut.PLong(clearhouse.ClearinghouseNum);
  			DataTable table=Db.GetTable(command);
-			int batchNum=PIn.PInt32(table.Rows[0][0].ToString());
+			int batchNum=PIn.PInt(table.Rows[0][0].ToString());
 			//and increment it by one
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian){
 				if(batchNum==999999)
@@ -187,7 +187,7 @@ namespace OpenDentBusiness{
 			}
 			//save the new batch number. Even if user cancels, it will have incremented.
 			command="UPDATE clearinghouse SET LastBatchNumber="+batchNum.ToString()
-				+" WHERE ClearinghouseNum = "+POut.PInt(clearhouse.ClearinghouseNum);
+				+" WHERE ClearinghouseNum = "+POut.PLong(clearhouse.ClearinghouseNum);
 			Db.NonQ(command);
 			return batchNum;
 		}

@@ -561,7 +561,7 @@ namespace OpenDental{
 				e.Cancel=true;
 				return;
 			}
-			if(PIn.PInt(textRowsPerIncr.Text)<1 || PIn.PInt(textRowsPerIncr.Text)>3){
+			if(PIn.PLong(textRowsPerIncr.Text)<1 || PIn.PLong(textRowsPerIncr.Text)>3){
 				MessageBox.Show(Lan.g(this,"Must be a number between 1 and 3."));
 				e.Cancel=true;
 			}
@@ -620,7 +620,7 @@ namespace OpenDental{
 				ApptViewItems.Insert(ApptViewItemCur);
 			}
 			ApptViewCur.Description=textDescription.Text;
-			ApptViewCur.RowsPerIncr=PIn.PInt32(textRowsPerIncr.Text);
+			ApptViewCur.RowsPerIncr=PIn.PInt(textRowsPerIncr.Text);
 			ApptViewCur.OnlyScheduledProvs=checkOnlyScheduledProvs.Checked;
 			ApptViews.Update(ApptViewCur);//same whether isnew or not
 			DialogResult=DialogResult.OK;

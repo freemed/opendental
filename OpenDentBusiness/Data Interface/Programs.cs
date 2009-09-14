@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 			ProgramC.Listt=new List<Program>();
 			for (int i=0;i<table.Rows.Count;i++){
 				prog=new Program();
-				prog.ProgramNum =PIn.PInt(table.Rows[i][0].ToString());
+				prog.ProgramNum =PIn.PLong(table.Rows[i][0].ToString());
 				prog.ProgName   =PIn.PString(table.Rows[i][1].ToString());
 				prog.ProgDesc   =PIn.PString(table.Rows[i][2].ToString());
 				prog.Enabled    =PIn.PBool(table.Rows[i][3].ToString());
@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 				+",Path = '"        +POut.PString(Cur.Path)+"'"
 				+",CommandLine  = '"+POut.PString(Cur.CommandLine)+"'"
 				+",Note  = '"       +POut.PString(Cur.Note)+"'"
-				+" WHERE programnum = '"+POut.PInt(Cur.ProgramNum)+"'";
+				+" WHERE programnum = '"+POut.PLong(Cur.ProgramNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 			}
 			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.ProgramNum)+", ";
+				command+=POut.PLong(Cur.ProgramNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.ProgName)+"', "
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),prog);
 				return;
 			}
-			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.PInt(prog.ProgramNum);
+			string command = "DELETE from toolbutitem WHERE ProgramNum = "+POut.PLong(prog.ProgramNum);
 			Db.NonQ(command);
 			command = "DELETE from program WHERE ProgramNum = '"+prog.ProgramNum.ToString()+"'";
 			Db.NonQ(command);

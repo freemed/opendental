@@ -874,7 +874,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<tableBalances.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Providers.GetAbbr(PIn.PInt(tableBalances.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Providers.GetAbbr(PIn.PLong(tableBalances.Rows[i]["ProvNum"].ToString())));
 				if(tableBalances.Rows[i]["Preferred"].ToString()==""){
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}
@@ -944,11 +944,11 @@ namespace OpenDental{
 					continue;
 				}
 				split=new PaySplit();
-				split.PatNum=PIn.PInt(tableBalances.Rows[gridBal.SelectedIndices[i]]["PatNum"].ToString());
+				split.PatNum=PIn.PLong(tableBalances.Rows[gridBal.SelectedIndices[i]]["PatNum"].ToString());
 				split.PayNum=PaymentCur.PayNum;
 				split.ProcDate=PaymentCur.PayDate;//this may be updated upon closing
 				split.DatePay=PaymentCur.PayDate;//this may be updated upon closing
-				split.ProvNum=PIn.PInt(tableBalances.Rows[gridBal.SelectedIndices[i]]["ProvNum"].ToString());
+				split.ProvNum=PIn.PLong(tableBalances.Rows[gridBal.SelectedIndices[i]]["ProvNum"].ToString());
 				split.SplitAmt=amt;
 				SplitList.Add(split);
 			}
@@ -1090,7 +1090,7 @@ namespace OpenDental{
 			}
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
-			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.PInt(prop.PropertyValue));
+			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.PLong(prop.PropertyValue));
 			SetComboDepositAccounts();
 			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
 				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]

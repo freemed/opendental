@@ -35,19 +35,19 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<RxPat>(MethodBase.GetCurrentMethod(),rxNum);
 			}
 			string command="SELECT * FROM rxpat"
-				+" WHERE RxNum = "+POut.PInt(rxNum);
+				+" WHERE RxNum = "+POut.PLong(rxNum);
 			DataTable table=Db.GetTable(command);
 			RxPat rx=new RxPat();
-			rx.RxNum       = PIn.PInt(table.Rows[0][0].ToString());
-			rx.PatNum      = PIn.PInt(table.Rows[0][1].ToString());
+			rx.RxNum       = PIn.PLong(table.Rows[0][0].ToString());
+			rx.PatNum      = PIn.PLong(table.Rows[0][1].ToString());
 			rx.RxDate      = PIn.PDate(table.Rows[0][2].ToString());
 			rx.Drug        = PIn.PString(table.Rows[0][3].ToString());
 			rx.Sig         = PIn.PString(table.Rows[0][4].ToString());
 			rx.Disp        = PIn.PString(table.Rows[0][5].ToString());
 			rx.Refills     = PIn.PString(table.Rows[0][6].ToString());
-			rx.ProvNum     = PIn.PInt(table.Rows[0][7].ToString());
+			rx.ProvNum     = PIn.PLong(table.Rows[0][7].ToString());
 			rx.Notes       = PIn.PString(table.Rows[0][8].ToString());
-			rx.PharmacyNum = PIn.PInt   (table.Rows[0][9].ToString());
+			rx.PharmacyNum = PIn.PLong   (table.Rows[0][9].ToString());
 			rx.IsControlled= PIn.PBool  (table.Rows[0][10].ToString());
 			return rx;
 		}
@@ -59,17 +59,17 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE rxpat SET " 
-				+ "PatNum = '"      +POut.PInt   (rx.PatNum)+"'"
+				+ "PatNum = '"      +POut.PLong   (rx.PatNum)+"'"
 				+ ",RxDate = "      +POut.PDate  (rx.RxDate)
 				+ ",Drug = '"       +POut.PString(rx.Drug)+"'"
 				+ ",Sig = '"        +POut.PString(rx.Sig)+"'"
 				+ ",Disp = '"       +POut.PString(rx.Disp)+"'"
 				+ ",Refills = '"    +POut.PString(rx.Refills)+"'"
-				+ ",ProvNum = '"    +POut.PInt   (rx.ProvNum)+"'"
+				+ ",ProvNum = '"    +POut.PLong   (rx.ProvNum)+"'"
 				+ ",Notes = '"      +POut.PString(rx.Notes)+"'"
-				+ ",PharmacyNum = '"+POut.PInt   (rx.PharmacyNum)+"'"
+				+ ",PharmacyNum = '"+POut.PLong   (rx.PharmacyNum)+"'"
 				+ ",IsControlled='" +POut.PBool  (rx.IsControlled)+"'"
-				+" WHERE RxNum = '" +POut.PInt   (rx.RxNum)+"'";
+				+" WHERE RxNum = '" +POut.PLong   (rx.RxNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -88,18 +88,18 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(rx.RxNum)+"', ";
+				command+="'"+POut.PLong(rx.RxNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (rx.PatNum)+"', "
+				 "'"+POut.PLong   (rx.PatNum)+"', "
 				+POut.PDate  (rx.RxDate)+", "
 				+"'"+POut.PString(rx.Drug)+"', "
 				+"'"+POut.PString(rx.Sig)+"', "
 				+"'"+POut.PString(rx.Disp)+"', "
 				+"'"+POut.PString(rx.Refills)+"', "
-				+"'"+POut.PInt   (rx.ProvNum)+"', "
+				+"'"+POut.PLong   (rx.ProvNum)+"', "
 				+"'"+POut.PString(rx.Notes)+"', "
-				+"'"+POut.PInt   (rx.PharmacyNum)+"', "
+				+"'"+POut.PLong   (rx.PharmacyNum)+"', "
 				+"'"+POut.PBool  (rx.IsControlled)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),rxNum);
 				return;
 			}
-			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.PInt(rxNum)+"'";
+			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.PLong(rxNum)+"'";
 			Db.NonQ(command);
 		}
 

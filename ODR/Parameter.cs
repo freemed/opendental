@@ -140,10 +140,10 @@ namespace ODR
 					outputValue+=Regex.Replace(snippet,@"\?",POut.PDate((DateTime)currentValues[i],false));
 				}
 				else if(valueType==ParamValueType.Enum){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PInt((int)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.Integer){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PInt((int)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.PLong((int)currentValues[i]));
 				}
 				else if(valueType==ParamValueType.String){
 					outputValue+=Regex.Replace(snippet,@"\?",POut.PString((string)currentValues[i]));

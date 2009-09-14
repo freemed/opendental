@@ -27,9 +27,9 @@ namespace OpenDentBusiness{
 			List=new QuickPasteNote[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new QuickPasteNote();
-				List[i].QuickPasteNoteNum=PIn.PInt(table.Rows[i][0].ToString());
-				List[i].QuickPasteCatNum=PIn.PInt(table.Rows[i][1].ToString());
-				List[i].ItemOrder=PIn.PInt32(table.Rows[i][2].ToString());
+				List[i].QuickPasteNoteNum=PIn.PLong(table.Rows[i][0].ToString());
+				List[i].QuickPasteCatNum=PIn.PLong(table.Rows[i][1].ToString());
+				List[i].ItemOrder=PIn.PInt(table.Rows[i][2].ToString());
 				List[i].Note=PIn.PString(table.Rows[i][3].ToString());
 				List[i].Abbreviation=PIn.PString(table.Rows[i][4].ToString());
 			}
@@ -50,11 +50,11 @@ namespace OpenDentBusiness{
 			}
 			command+="QuickPasteCatNum,ItemOrder,Note,Abbreviation) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(note.QuickPasteNoteNum)+"', ";
+				command+="'"+POut.PLong(note.QuickPasteNoteNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (note.QuickPasteCatNum)+"', "
-				+"'"+POut.PInt   (note.ItemOrder)+"', "
+				 "'"+POut.PLong   (note.QuickPasteCatNum)+"', "
+				+"'"+POut.PLong   (note.ItemOrder)+"', "
 				+"'"+POut.PString(note.Note)+"', "
 				+"'"+POut.PString(note.Abbreviation)+"')";
  			if(PrefC.RandomKeys){
@@ -73,11 +73,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE quickpastenote SET "
-				+"QuickPasteCatNum='" +POut.PInt   (note.QuickPasteCatNum)+"'"
-				+",ItemOrder = '"     +POut.PInt   (note.ItemOrder)+"'"
+				+"QuickPasteCatNum='" +POut.PLong   (note.QuickPasteCatNum)+"'"
+				+",ItemOrder = '"     +POut.PLong   (note.ItemOrder)+"'"
 				+",Note = '"          +POut.PString(note.Note)+"'"
 				+",Abbreviation = '"  +POut.PString(note.Abbreviation)+"'"
-				+" WHERE QuickPasteNoteNum = '"+POut.PInt (note.QuickPasteNoteNum)+"'";
+				+" WHERE QuickPasteNoteNum = '"+POut.PLong (note.QuickPasteNoteNum)+"'";
  			Db.NonQ(command);
 		}
 		
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE from quickpastenote WHERE QuickPasteNoteNum = '"
-				+POut.PInt(note.QuickPasteNoteNum)+"'";
+				+POut.PLong(note.QuickPasteNoteNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM quickpastenote WHERE "
 				+"Abbreviation='"+POut.PString(note.Abbreviation)+"' "
-				+"AND QuickPasteNoteNum != '"+POut.PInt (note.QuickPasteNoteNum)+"'";
+				+"AND QuickPasteNoteNum != '"+POut.PLong (note.QuickPasteNoteNum)+"'";
  			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return false;

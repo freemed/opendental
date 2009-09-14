@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long PInt (string myString){
+		public static long PLong (string myString){
 			if(myString==""){
 				return 0;
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static int PInt32(string myString) {
+		public static int PInt(string myString) {
 			if(myString=="") {
 				return 0;
 			}

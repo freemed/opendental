@@ -58,7 +58,7 @@ namespace OpenDentBusiness {
 		public static long ProcessGetInt(DtoGetInt dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
-				return PIn.PInt(result);
+				return PIn.PLong(result);
 			}
 			catch {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
@@ -70,7 +70,7 @@ namespace OpenDentBusiness {
 		public static int ProcessGetInt32(DtoGetInt32 dto) {
 			string result=SendAndReceive(dto);//this might throw an exception if server unavailable
 			try {
-				return PIn.PInt32(result);
+				return PIn.PInt(result);
 			}
 			catch {
 				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);

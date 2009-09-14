@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				pharm=new Pharmacy();
 				pharm.IsNew=false;
-				pharm.PharmacyNum= PIn.PInt   (table.Rows[i][0].ToString());
+				pharm.PharmacyNum= PIn.PLong   (table.Rows[i][0].ToString());
 				pharm.PharmID    = PIn.PString(table.Rows[i][1].ToString());
 				pharm.StoreName  = PIn.PString(table.Rows[i][2].ToString());
 				pharm.Phone      = PIn.PString(table.Rows[i][3].ToString());

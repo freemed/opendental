@@ -425,7 +425,7 @@ namespace OpenDental{
 					else {
 						Queries.CurReport.Query+=" OR billingtype = ";
 					}
-					Queries.CurReport.Query+=POut.PInt(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
+					Queries.CurReport.Query+=POut.PLong(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
 				}
 				Queries.CurReport.Query+=") ";
 			}
@@ -437,7 +437,7 @@ namespace OpenDental{
 					else {
 						Queries.CurReport.Query+=" OR PriProv = ";
 					}
-					Queries.CurReport.Query+=POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
+					Queries.CurReport.Query+=POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 				}
 				Queries.CurReport.Query+=") ";
 			}

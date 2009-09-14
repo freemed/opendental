@@ -56,15 +56,15 @@ namespace OpenDentBusiness{
 			ArrayList tempAL=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++) {
 				ListLong[i]=new ClaimForm();
-				ListLong[i].ClaimFormNum=PIn.PInt(table.Rows[i][0].ToString());
+				ListLong[i].ClaimFormNum=PIn.PLong(table.Rows[i][0].ToString());
 				ListLong[i].Description=PIn.PString(table.Rows[i][1].ToString());
 				ListLong[i].IsHidden=PIn.PBool(table.Rows[i][2].ToString());
 				ListLong[i].FontName=PIn.PString(table.Rows[i][3].ToString());
 				ListLong[i].FontSize=PIn.PFloat(table.Rows[i][4].ToString());
 				ListLong[i].UniqueID=PIn.PString(table.Rows[i][5].ToString());
 				ListLong[i].PrintImages=PIn.PBool(table.Rows[i][6].ToString());
-				ListLong[i].OffsetX=PIn.PInt32(table.Rows[i][7].ToString());
-				ListLong[i].OffsetY=PIn.PInt32(table.Rows[i][8].ToString());
+				ListLong[i].OffsetX=PIn.PInt(table.Rows[i][7].ToString());
+				ListLong[i].OffsetY=PIn.PInt(table.Rows[i][8].ToString());
 				ListLong[i].Items=ClaimFormItems.GetListForForm(ListLong[i].ClaimFormNum);
 				if(!ListLong[i].IsHidden)
 					tempAL.Add(ListLong[i]);
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			command+="Description,IsHidden,FontName,FontSize"
 				+",UniqueId,PrintImages,OffsetX,OffsetY) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(cf.ClaimFormNum)+", ";
+				command+=POut.PLong(cf.ClaimFormNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(cf.Description)+"', "
@@ -100,8 +100,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PFloat (cf.FontSize)+"', "
 				+"'"+POut.PString(cf.UniqueID)+"', "
 				+"'"+POut.PBool  (cf.PrintImages)+"', "
-				+"'"+POut.PInt   (cf.OffsetX)+"', "
-				+"'"+POut.PInt   (cf.OffsetY)+"')";
+				+"'"+POut.PLong   (cf.OffsetX)+"', "
+				+"'"+POut.PLong   (cf.OffsetY)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,9 +124,9 @@ namespace OpenDentBusiness{
 				+",FontSize = '"    +POut.PFloat (cf.FontSize)+"' "
 				+",UniqueID = '"    +POut.PString(cf.UniqueID)+"' "
 				+",PrintImages = '" +POut.PBool  (cf.PrintImages)+"' "
-				+",OffsetX = '"     +POut.PInt   (cf.OffsetX)+"' "
-				+",OffsetY = '"     +POut.PInt   (cf.OffsetY)+"' "
-				+"WHERE ClaimFormNum = '"+POut.PInt   (cf.ClaimFormNum)+"'";
+				+",OffsetX = '"     +POut.PLong   (cf.OffsetX)+"' "
+				+",OffsetY = '"     +POut.PLong   (cf.OffsetY)+"' "
+				+"WHERE ClaimFormNum = '"+POut.PLong   (cf.ClaimFormNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -149,10 +149,10 @@ namespace OpenDentBusiness{
 			}
 			//Then, delete the claimform
 			command="DELETE FROM claimform "
-				+"WHERE ClaimFormNum = '"+POut.PInt(cf.ClaimFormNum)+"'";
+				+"WHERE ClaimFormNum = '"+POut.PLong(cf.ClaimFormNum)+"'";
 			Db.NonQ(command);
 			command="DELETE FROM claimformitem "
-				+"WHERE ClaimFormNum = '"+POut.PInt(cf.ClaimFormNum)+"'";
+				+"WHERE ClaimFormNum = '"+POut.PLong(cf.ClaimFormNum)+"'";
 			Db.NonQ(command);
 			return true;
 		}
@@ -169,14 +169,14 @@ namespace OpenDentBusiness{
  			DataTable table=Db.GetTable(command);
 			long[] claimFormNums=new long[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				claimFormNums[i]=PIn.PInt   (table.Rows[i][0].ToString());
+				claimFormNums[i]=PIn.PLong   (table.Rows[i][0].ToString());
 			}
 			//loop through each matching claimform
 			for(int i=0;i<claimFormNums.Length;i++){
 				cf.ClaimFormNum=claimFormNums[i];
 				Update(cf);
 				command="DELETE FROM claimformitem "
-					+"WHERE ClaimFormNum = '"+POut.PInt(claimFormNums[i])+"'";
+					+"WHERE ClaimFormNum = '"+POut.PLong(claimFormNums[i])+"'";
 				Db.NonQ(command);
 				for(int j=0;j<cf.Items.Length;j++){
 					cf.Items[j].ClaimFormNum=claimFormNums[i];
@@ -215,8 +215,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),oldClaimFormNum,newClaimFormNum);
 			}
-			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
-				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
+			string command="UPDATE insplan SET ClaimFormNum="+POut.PLong(newClaimFormNum)
+				+" WHERE ClaimFormNum="+POut.PLong(oldClaimFormNum);
 			return Db.NonQ(command);
 		}
 

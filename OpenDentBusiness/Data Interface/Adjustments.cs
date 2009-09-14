@@ -17,14 +17,14 @@ namespace OpenDentBusiness{
 			string command="UPDATE adjustment SET " 
 				+ "adjdate = "      +POut.PDate  (adj.AdjDate)
 				+ ",adjamt = '"      +POut.PDouble(adj.AdjAmt)+"'"
-				+ ",patnum = '"      +POut.PInt   (adj.PatNum)+"'"
-				+ ",adjtype = '"     +POut.PInt   (adj.AdjType)+"'"
-				+ ",provnum = '"     +POut.PInt   (adj.ProvNum)+"'"
+				+ ",patnum = '"      +POut.PLong   (adj.PatNum)+"'"
+				+ ",adjtype = '"     +POut.PLong   (adj.AdjType)+"'"
+				+ ",provnum = '"     +POut.PLong   (adj.ProvNum)+"'"
 				+ ",adjnote = '"     +POut.PString(adj.AdjNote)+"'"
 				+ ",ProcDate = "    +POut.PDate  (adj.ProcDate)
-				+ ",ProcNum = '"     +POut.PInt   (adj.ProcNum)+"'"
+				+ ",ProcNum = '"     +POut.PLong   (adj.ProcNum)+"'"
 				//DateEntry not allowed to change
-				+" WHERE adjNum = '" +POut.PInt   (adj.AdjNum)+"'";
+				+" WHERE adjNum = '" +POut.PLong   (adj.AdjNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -44,17 +44,17 @@ namespace OpenDentBusiness{
 			command+="AdjDate,AdjAmt,PatNum, "
 				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(adj.AdjNum)+"', ";
+				command+="'"+POut.PLong(adj.AdjNum)+"', ";
 			}
 			command+=
 				 POut.PDate  (adj.AdjDate)+", "
 				+"'"+POut.PDouble(adj.AdjAmt)+"', "
-				+"'"+POut.PInt   (adj.PatNum)+"', "
-				+"'"+POut.PInt   (adj.AdjType)+"', "
-				+"'"+POut.PInt   (adj.ProvNum)+"', "
+				+"'"+POut.PLong   (adj.PatNum)+"', "
+				+"'"+POut.PLong   (adj.AdjType)+"', "
+				+"'"+POut.PLong   (adj.ProvNum)+"', "
 				+"'"+POut.PString(adj.AdjNote)+"', "
 				+POut.PDate  (adj.ProcDate)+", "
-				+"'"+POut.PInt   (adj.ProcNum)+"', ";
+				+"'"+POut.PLong   (adj.ProcNum)+"', ";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
@@ -102,7 +102,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM adjustment"
-				+" WHERE PatNum = "+POut.PInt(patNum)+" ORDER BY AdjDate";
+				+" WHERE PatNum = "+POut.PLong(patNum)+" ORDER BY AdjDate";
 			return RefreshAndFill(Db.GetTable(command)).ToArray();
 		}
 
@@ -113,7 +113,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM adjustment"
-				+" WHERE AdjNum = "+POut.PInt(adjNum);
+				+" WHERE AdjNum = "+POut.PLong(adjNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -123,15 +123,15 @@ namespace OpenDentBusiness{
 			Adjustment adj;
 			for(int i=0;i<table.Rows.Count;i++){
 				adj=new Adjustment();
-				adj.AdjNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				adj.AdjNum   = PIn.PLong   (table.Rows[i][0].ToString());
 				adj.AdjDate  = PIn.PDate  (table.Rows[i][1].ToString());
 				adj.AdjAmt   = PIn.PDouble(table.Rows[i][2].ToString());
-				adj.PatNum   = PIn.PInt   (table.Rows[i][3].ToString());
-				adj.AdjType  = PIn.PInt   (table.Rows[i][4].ToString());
-				adj.ProvNum  = PIn.PInt   (table.Rows[i][5].ToString());
+				adj.PatNum   = PIn.PLong   (table.Rows[i][3].ToString());
+				adj.AdjType  = PIn.PLong   (table.Rows[i][4].ToString());
+				adj.ProvNum  = PIn.PLong   (table.Rows[i][5].ToString());
 				adj.AdjNote  = PIn.PString(table.Rows[i][6].ToString());
 				adj.ProcDate = PIn.PDate  (table.Rows[i][7].ToString());
-				adj.ProcNum  = PIn.PInt   (table.Rows[i][8].ToString());
+				adj.ProcNum  = PIn.PLong   (table.Rows[i][8].ToString());
 				adj.DateEntry= PIn.PDate  (table.Rows[i][9].ToString());
 				retVal.Add(adj);
 			}
@@ -182,9 +182,9 @@ namespace OpenDentBusiness{
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'FinanceChargeAdjustmentType'";
 			table=Db.GetTable(command);
-			numAdj=PIn.PInt(table.Rows[0][0].ToString());
+			numAdj=PIn.PLong(table.Rows[0][0].ToString());
 			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
-				+" AND AdjType="+POut.PInt(numAdj);
+				+" AND AdjType="+POut.PLong(numAdj);
 			return Db.NonQ(command);
 		}
 
@@ -198,9 +198,9 @@ namespace OpenDentBusiness{
 			DataTable table;
 			command="SELECT ValueString FROM preference WHERE PrefName = 'BillingChargeAdjustmentType'";
 			table=Db.GetTable(command);
-			numAdj=PIn.PInt(table.Rows[0][0].ToString());
+			numAdj=PIn.PLong(table.Rows[0][0].ToString());
 			command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo)
-				+" AND AdjType="+POut.PInt(numAdj);
+				+" AND AdjType="+POut.PLong(numAdj);
 			return Db.NonQ(command);
 		}
 

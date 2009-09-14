@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PInt(((Pref)HList[prefName]).ValueString);
+			return PIn.PLong(((Pref)HList[prefName]).ValueString);
 		}
 
 		///<summary>Gets a pref of type int32.  Used when the pref is an enumeration, itemorder, etc.  Also used for historical queries in ConvertDatabase.</summary>
@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
-			return PIn.PInt32(((Pref)HList[prefName]).ValueString);
+			return PIn.PInt(((Pref)HList[prefName]).ValueString);
 		}
 
 		///<summary>Gets a pref of type double.</summary>

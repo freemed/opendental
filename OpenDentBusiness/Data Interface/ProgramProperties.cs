@@ -25,8 +25,8 @@ namespace OpenDentBusiness {
 			ProgramProperty progprop;
 			for (int i=0;i<table.Rows.Count;i++){
 				progprop=new ProgramProperty();
-				progprop.ProgramPropertyNum =PIn.PInt(table.Rows[i][0].ToString());
-				progprop.ProgramNum         =PIn.PInt(table.Rows[i][1].ToString());
+				progprop.ProgramPropertyNum =PIn.PLong(table.Rows[i][0].ToString());
+				progprop.ProgramNum         =PIn.PLong(table.Rows[i][1].ToString());
 				progprop.PropertyDesc       =PIn.PString(table.Rows[i][2].ToString());
 				progprop.PropertyValue      =PIn.PString(table.Rows[i][3].ToString());
 				ProgramPropertyC.Listt.Add(progprop);
@@ -42,10 +42,10 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command= "UPDATE programproperty SET "
-				+"ProgramNum = '"     +POut.PInt   (Cur.ProgramNum)+"'"
+				+"ProgramNum = '"     +POut.PLong   (Cur.ProgramNum)+"'"
 				+",PropertyDesc  = '" +POut.PString(Cur.PropertyDesc)+"'"
 				+",PropertyValue = '" +POut.PString(Cur.PropertyValue)+"'"
-				+" WHERE ProgramPropertyNum = '"+POut.PInt(Cur.ProgramPropertyNum)+"'";
+				+" WHERE ProgramPropertyNum = '"+POut.PLong(Cur.ProgramPropertyNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -64,10 +64,10 @@ namespace OpenDentBusiness {
 			}
 			command+="ProgramNum,PropertyDesc,PropertyValue) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.ProgramPropertyNum)+", ";
+				command+=POut.PLong(Cur.ProgramPropertyNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (Cur.ProgramNum)+"', "
+				 "'"+POut.PLong   (Cur.ProgramNum)+"', "
 				+"'"+POut.PString(Cur.PropertyDesc)+"', "
 				+"'"+POut.PString(Cur.PropertyValue)+"')";
 			if(PrefC.RandomKeys) {
@@ -120,7 +120,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE programproperty SET PropertyValue='"+POut.PString(propval)+"' "
-				+"WHERE ProgramNum="+POut.PInt(programNum)+" "
+				+"WHERE ProgramNum="+POut.PLong(programNum)+" "
 				+"AND PropertyDesc='"+POut.PString(desc)+"'";
 			Db.NonQ(command);
 		}
@@ -170,7 +170,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),programNum,desc);
 			}
-			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)
+			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PLong(programNum)
 				+" AND PropertyDesc='"+POut.PString(desc)+"'";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){

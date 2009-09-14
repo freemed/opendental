@@ -487,7 +487,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to check the Pat box because no patient is available.");
 				return;
 			}
-			if(listType.SelectedIndex != (int)InsBenefitType.CoInsurance && PIn.PInt(textPercent.Text)!=0){
+			if(listType.SelectedIndex != (int)InsBenefitType.CoInsurance && PIn.PLong(textPercent.Text)!=0){
 				MsgBox.Show(this,"Not allowed to enter a percentage unless type is CoInsurance.");
 				return;
 			}
@@ -515,7 +515,7 @@ namespace OpenDental{
 				BenCur.Percent=-1;
 			}
 			else {
-				BenCur.Percent=PIn.PInt32(textPercent.Text);
+				BenCur.Percent=PIn.PInt(textPercent.Text);
 			}
 			if(textAmount.Text=="") {
 				BenCur.MonetaryAmt=-1;
@@ -534,7 +534,7 @@ namespace OpenDental{
 			else{*/
 			BenCur.TimePeriod=(BenefitTimePeriod)listTimePeriod.SelectedIndex;
 			//}
-			BenCur.Quantity=PIn.PInt32(textQuantity.Text);
+			BenCur.Quantity=PIn.PInt(textQuantity.Text);
 			BenCur.QuantityQualifier=(BenefitQuantity)listQuantityQualifier.SelectedIndex;
 			BenCur.CoverageLevel=(BenefitCoverageLevel)listCoverageLevel.SelectedIndex;
 			//if(IsNew){

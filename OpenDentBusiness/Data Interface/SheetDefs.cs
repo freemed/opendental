@@ -26,13 +26,13 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				sheetdef=new SheetDef();
 				sheetdef.IsNew=false;
-				sheetdef.SheetDefNum = PIn.PInt   (table.Rows[i][0].ToString());
+				sheetdef.SheetDefNum = PIn.PLong   (table.Rows[i][0].ToString());
 				sheetdef.Description = PIn.PString(table.Rows[i][1].ToString());
-				sheetdef.SheetType   = (SheetTypeEnum)PIn.PInt(table.Rows[i][2].ToString());
+				sheetdef.SheetType   = (SheetTypeEnum)PIn.PLong(table.Rows[i][2].ToString());
 				sheetdef.FontSize    = PIn.PFloat (table.Rows[i][3].ToString());
 				sheetdef.FontName    = PIn.PString(table.Rows[i][4].ToString());
-				sheetdef.Width       = PIn.PInt32 (table.Rows[i][5].ToString());
-				sheetdef.Height      = PIn.PInt32   (table.Rows[i][6].ToString());
+				sheetdef.Width       = PIn.PInt (table.Rows[i][5].ToString());
+				sheetdef.Height      = PIn.PInt   (table.Rows[i][6].ToString());
 				sheetdef.IsLandscape = PIn.PBool  (table.Rows[i][7].ToString());
 				SheetDefC.Listt.Add(sheetdef);
 			}
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			if(!sheetDef.IsNew){
-				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDef.SheetDefNum);
+				command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PLong(sheetDef.SheetDefNum);
 				Db.NonQ(command);
 			}
 			DataObjectFactory<SheetDef>.WriteObject(sheetDef);
@@ -92,7 +92,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//validate that not already in use by a refferral.
-			string command="SELECT LName,FName FROM referral WHERE Slip="+POut.PInt(sheetDefNum);
+			string command="SELECT LName,FName FROM referral WHERE Slip="+POut.PLong(sheetDefNum);
 			DataTable table=Db.GetTable(command);
 			//int count=PIn.PInt(Db.GetCount(command));
 			string names="";
@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lans.g("sheetDefs","SheetDef is already in use by referrals(s). Not allowed to delete. ")+names);
 			}
-			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDefNum);
+			command="DELETE FROM sheetfielddef WHERE SheetDefNum="+POut.PLong(sheetDefNum);
 			Db.NonQ(command);
 			DataObjectFactory<SheetDef>.DeleteObject(sheetDefNum);
 		}

@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			AutoNoteControl noteCont;
 			for (int i=0;i<table.Rows.Count;i++){
 				noteCont = new AutoNoteControl();
-				noteCont.AutoNoteControlNum = PIn.PInt(table.Rows[i][0].ToString());
+				noteCont.AutoNoteControlNum = PIn.PLong(table.Rows[i][0].ToString());
 				noteCont.Descript = PIn.PString(table.Rows[i]["Descript"].ToString());
 				noteCont.ControlType = PIn.PString(table.Rows[i]["ControlType"].ToString());
 				noteCont.ControlLabel =PIn.PString(table.Rows[i]["ControlLabel"].ToString());
@@ -50,7 +50,7 @@ namespace OpenDentBusiness {
 			}
 			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(autonotecontrol.AutoNoteControlNum)+", ";
+				command+=POut.PLong(autonotecontrol.AutoNoteControlNum)+", ";
 			}
 			command+=		
 				 "'"+POut.PString(autonotecontrol.Descript)+"', " 
@@ -77,7 +77,7 @@ namespace OpenDentBusiness {
 				+"Descript = '"+POut.PString(autonotecontrol.Descript)+"', "
 				+"ControlLabel = '"+POut.PString(autonotecontrol.ControlLabel)+"', "
 				+"ControlOptions = '"+POut.PString(autonotecontrol.ControlOptions)+"' "
-				+"WHERE AutoNoteControlNum = '"+POut.PInt(autonotecontrol.AutoNoteControlNum)+"'";
+				+"WHERE AutoNoteControlNum = '"+POut.PLong(autonotecontrol.AutoNoteControlNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -87,7 +87,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			//no validation for now.
-			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.PInt(autoNoteControlNum);
+			string command="DELETE FROM autonotecontrol WHERE AutoNoteControlNum="+POut.PLong(autoNoteControlNum);
 			Db.NonQ(command);
 		}
 

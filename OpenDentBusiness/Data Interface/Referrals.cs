@@ -38,13 +38,13 @@ namespace OpenDentBusiness{
 			list=new Referral[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				list[i]=new Referral();
-				list[i].ReferralNum= PIn.PInt   (table.Rows[i][0].ToString());
+				list[i].ReferralNum= PIn.PLong   (table.Rows[i][0].ToString());
 				list[i].LName      = PIn.PString(table.Rows[i][1].ToString());
 				list[i].FName      = PIn.PString(table.Rows[i][2].ToString());
 				list[i].MName      = PIn.PString(table.Rows[i][3].ToString());
 				list[i].SSN        = PIn.PString(table.Rows[i][4].ToString());
 				list[i].UsingTIN   = PIn.PBool  (table.Rows[i][5].ToString());
-				list[i].Specialty  = (DentalSpecialty)PIn.PInt(table.Rows[i][6].ToString());
+				list[i].Specialty  = (DentalSpecialty)PIn.PLong(table.Rows[i][6].ToString());
 				list[i].ST         = PIn.PString(table.Rows[i][7].ToString());
 				list[i].Telephone  = PIn.PString(table.Rows[i][8].ToString());
 				list[i].Address    = PIn.PString(table.Rows[i][9].ToString());
@@ -57,9 +57,9 @@ namespace OpenDentBusiness{
 				list[i].NotPerson  = PIn.PBool  (table.Rows[i][16].ToString());
 				list[i].Title      = PIn.PString(table.Rows[i][17].ToString());
 				list[i].EMail      = PIn.PString(table.Rows[i][18].ToString());
-				list[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
+				list[i].PatNum     = PIn.PLong   (table.Rows[i][19].ToString());
 				list[i].NationalProvID     = PIn.PString   (table.Rows[i][20].ToString());
-				list[i].Slip       = PIn.PInt   (table.Rows[i][21].ToString());
+				list[i].Slip       = PIn.PLong   (table.Rows[i][21].ToString());
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 				+ ",MName = '"     +POut.PString(refer.MName)+"'"
 				+ ",SSN = '"       +POut.PString(refer.SSN)+"'"
 				+ ",UsingTIN = '"  +POut.PBool(refer.UsingTIN)+"'"
-				+ ",Specialty = '" +POut.PInt((int)refer.Specialty)+"'"
+				+ ",Specialty = '" +POut.PLong((int)refer.Specialty)+"'"
 				+ ",ST = '"        +POut.PString(refer.ST)+"'"
 				+ ",Telephone = '" +POut.PString(refer.Telephone)+"'"
 				+ ",Address = '"   +POut.PString(refer.Address)+"'"
@@ -88,10 +88,10 @@ namespace OpenDentBusiness{
 				+ ",NotPerson = '" +POut.PBool(refer.NotPerson)+"'"
 				+ ",Title = '"     +POut.PString(refer.Title)+"'"
 				+ ",EMail = '"     +POut.PString(refer.EMail)+"'"
-				+ ",PatNum = '"    +POut.PInt(refer.PatNum)+"'"
+				+ ",PatNum = '"    +POut.PLong(refer.PatNum)+"'"
 				+ ",NationalProvID='"+POut.PString(refer.NationalProvID)+"'"
-				+ ",Slip = '"      +POut.PInt(refer.Slip)+"'"
-				+" WHERE ReferralNum = '" +POut.PInt(refer.ReferralNum)+"'";
+				+ ",Slip = '"      +POut.PLong(refer.Slip)+"'"
+				+" WHERE ReferralNum = '" +POut.PLong(refer.ReferralNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 				+"Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,Email,PatNum,"
 				+"NationalProvID,Slip) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(refer.ReferralNum)+"', ";
+				command+="'"+POut.PLong(refer.ReferralNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(refer.LName)+"', "
@@ -120,7 +120,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(refer.MName)+"', "
 				+"'"+POut.PString(refer.SSN)+"', "
 				+"'"+POut.PBool(refer.UsingTIN)+"', "
-				+"'"+POut.PInt((int)refer.Specialty)+"', "
+				+"'"+POut.PLong((int)refer.Specialty)+"', "
 				+"'"+POut.PString(refer.ST)+"', "
 				+"'"+POut.PString(refer.Telephone)+"', "    
 				+"'"+POut.PString(refer.Address)+"', "
@@ -133,9 +133,9 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool(refer.NotPerson)+"', "
 				+"'"+POut.PString(refer.Title)+"', "
 				+"'"+POut.PString(refer.EMail)+"', "
-				+"'"+POut.PInt(refer.PatNum)+"', "
+				+"'"+POut.PLong(refer.PatNum)+"', "
 				+"'"+POut.PString(refer.NationalProvID)+"', "
-				+"'"+POut.PInt   (refer.Slip)+"')";
+				+"'"+POut.PLong   (refer.Slip)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}

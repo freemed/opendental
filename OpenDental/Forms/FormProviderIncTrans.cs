@@ -472,7 +472,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(Providers.GetAbbr(PIn.PInt(tableBalances.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Providers.GetAbbr(PIn.PLong(tableBalances.Rows[i]["ProvNum"].ToString())));
 				if(tableBalances.Rows[i]["Preferred"].ToString()=="") {
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}
@@ -531,7 +531,7 @@ namespace OpenDental{
 			split.PayNum=PaymentCur.PayNum;
 			split.ProcDate=PIn.PDate(textDate.Text);//this may be updated upon closing
 			split.DatePay=PIn.PDate(textDate.Text);//this may be updated upon closing
-			split.ProvNum=PIn.PInt(tableBalances.Rows[gridBal.GetSelectedIndex()]["ProvNum"].ToString());
+			split.ProvNum=PIn.PLong(tableBalances.Rows[gridBal.GetSelectedIndex()]["ProvNum"].ToString());
 			split.SplitAmt=amt;
 			SplitList.Add(split);
 			//To-----------------------------------------------------------------------------------
@@ -555,7 +555,7 @@ namespace OpenDental{
 				PaySplitCur.ProvNum=Patients.GetProvNum(PatCur);
 			}
 			else{
-				PaySplitCur.ProvNum=PIn.PInt(tableBalances.Rows[gridBal.GetSelectedIndex()]["ProvNum"].ToString());
+				PaySplitCur.ProvNum=PIn.PLong(tableBalances.Rows[gridBal.GetSelectedIndex()]["ProvNum"].ToString());
 				PaySplitCur.SplitAmt=-PIn.PDouble(tableBalances.Rows[gridBal.GetSelectedIndex()]["StartBal"].ToString());
 			}
 			PaySplitCur.PatNum=PatCur.PatNum;

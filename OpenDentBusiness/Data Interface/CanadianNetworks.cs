@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 			CanadianNetwork network;
 			for(int i=0;i<table.Rows.Count;i++){
 				network=new CanadianNetwork();
-				network.CanadianNetworkNum=PIn.PInt   (table.Rows[i][0].ToString());
+				network.CanadianNetworkNum=PIn.PLong   (table.Rows[i][0].ToString());
 				network.Abbrev            =PIn.PString(table.Rows[i][1].ToString());
 				network.Descript          =PIn.PString(table.Rows[i][2].ToString());
 				listt.Add(network);
@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 			}
 			command+="Abbrev, Descript) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(network.CanadianNetworkNum)+"', ";
+				command+="'"+POut.PLong(network.CanadianNetworkNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(network.Abbrev)+"', "
@@ -77,7 +77,7 @@ namespace OpenDentBusiness{
 			string command="UPDATE canadiannetwork SET "
 				+ "Abbrev = '"+POut.PString(Cur.Abbrev)+"' "
 				+ ",Descript='"+POut.PString(Cur.Descript)+"' "
-				+"WHERE CanadianNetworkNum = '"+POut.PInt(Cur.CanadianNetworkNum)+"'";
+				+"WHERE CanadianNetworkNum = '"+POut.PLong(Cur.CanadianNetworkNum)+"'";
 			Db.NonQ(command);
 		}
 

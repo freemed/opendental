@@ -572,9 +572,9 @@ namespace OpenDental.ReportingOld2
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.Integer){
-								displayText=PIn.PInt(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+								displayText=PIn.PLong(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								if(i>0 && fieldObject.SuppressIfDuplicate){
-									prevDisplayText=PIn.PInt(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
+									prevDisplayText=PIn.PLong(MyReport.ReportTable.Rows[i-1][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString(fieldObject.FormatString);
 								}
 							}
 							else if(fieldObject.ValueType==FieldValueType.Number){

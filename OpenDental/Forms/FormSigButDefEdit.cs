@@ -398,7 +398,7 @@ namespace OpenDental{
 				textSynchIcon.Text="0";
 			}
 			ButtonCur.ButtonText=textButtonText.Text;
-			ButtonCur.SynchIcon=PIn.PInt32(textSynchIcon.Text);
+			ButtonCur.SynchIcon=PIn.PInt(textSynchIcon.Text);
 			if(IsNew){
 				SigButDefs.Insert(ButtonCur);
 			}

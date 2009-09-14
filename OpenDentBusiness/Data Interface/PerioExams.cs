@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 			PerioExam exam;
 			for(int i=0;i<table.Rows.Count;i++){
 				exam=new PerioExam();
-				exam.PerioExamNum= PIn.PInt   (table.Rows[i][0].ToString());
-				exam.PatNum      = PIn.PInt(table.Rows[i][1].ToString());
+				exam.PerioExamNum= PIn.PLong   (table.Rows[i][0].ToString());
+				exam.PatNum      = PIn.PLong(table.Rows[i][1].ToString());
 				exam.ExamDate    = PIn.PDate(table.Rows[i][2].ToString());
-				exam.ProvNum     = PIn.PInt(table.Rows[i][3].ToString());
+				exam.ProvNum     = PIn.PLong(table.Rows[i][3].ToString());
 				ListExams.Add(exam);
 			}
 			//return list;
@@ -48,10 +48,10 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE perioexam SET "
-				+ "PatNum = '"     +POut.PInt   (Cur.PatNum)+"'"
+				+ "PatNum = '"     +POut.PLong   (Cur.PatNum)+"'"
 				+",ExamDate = "    +POut.PDate  (Cur.ExamDate)
-				+",ProvNum = '"    +POut.PInt   (Cur.ProvNum)+"'"
-				+" WHERE PerioExamNum = '"+POut.PInt(Cur.PerioExamNum)+"'";
+				+",ProvNum = '"    +POut.PLong   (Cur.ProvNum)+"'"
+				+" WHERE PerioExamNum = '"+POut.PLong(Cur.PerioExamNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -71,12 +71,12 @@ namespace OpenDentBusiness{
 			command+="PatNum,ExamDate,ProvNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(Cur.PerioExamNum)+"', ";
+				command+="'"+POut.PLong(Cur.PerioExamNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (Cur.PatNum)+"', "
+				 "'"+POut.PLong   (Cur.PatNum)+"', "
 				+POut.PDate  (Cur.ExamDate)+", "
-				+"'"+POut.PInt   (Cur.ProvNum)+"')";
+				+"'"+POut.PLong   (Cur.ProvNum)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}

@@ -473,7 +473,7 @@ namespace OpenDental{
 			string[] typearray=PrefC.GetString("RecallTypesShowingInList").Split(',');
 			if(typearray.Length>0){
 				for(int i=0;i<typearray.Length;i++){
-					recalltypes.Add(PIn.PInt(typearray[i]));
+					recalltypes.Add(PIn.PLong(typearray[i]));
 				}
 			}
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
@@ -690,13 +690,13 @@ namespace OpenDental{
 				Prefs.UpdateInt("RecallDaysPast",-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallDaysPast",PIn.PInt(textDaysPast.Text));
+				Prefs.UpdateInt("RecallDaysPast",PIn.PLong(textDaysPast.Text));
 			}
 			if(textDaysFuture.Text=="") {
 				Prefs.UpdateInt("RecallDaysFuture",-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallDaysFuture",PIn.PInt(textDaysFuture.Text));
+				Prefs.UpdateInt("RecallDaysFuture",PIn.PLong(textDaysFuture.Text));
 			}
 			Prefs.UpdateDouble("RecallAdjustRight",PIn.PDouble(textRight.Text));
 			Prefs.UpdateDouble("RecallAdjustDown",PIn.PDouble(textDown.Text));
@@ -724,13 +724,13 @@ namespace OpenDental{
 				Prefs.UpdateInt("RecallShowIfDaysFirstReminder",-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallShowIfDaysFirstReminder",PIn.PInt(textDaysFirstReminder.Text));
+				Prefs.UpdateInt("RecallShowIfDaysFirstReminder",PIn.PLong(textDaysFirstReminder.Text));
 			}
 			if(textDaysSecondReminder.Text=="") {
 				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",-1);
 			}
 			else {
-				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",PIn.PInt(textDaysSecondReminder.Text));
+				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",PIn.PLong(textDaysSecondReminder.Text));
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

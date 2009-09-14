@@ -18,10 +18,10 @@ namespace OpenDentBusiness {
 			QuestionDef[] List=new QuestionDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new QuestionDef();
-				List[i].QuestionDefNum= PIn.PInt(table.Rows[i][0].ToString());
+				List[i].QuestionDefNum= PIn.PLong(table.Rows[i][0].ToString());
 				List[i].Description   = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder     = PIn.PInt32(table.Rows[i][2].ToString());
-				List[i].QuestType     = (QuestionType)PIn.PInt(table.Rows[i][3].ToString());
+				List[i].ItemOrder     = PIn.PInt(table.Rows[i][2].ToString());
+				List[i].QuestType     = (QuestionType)PIn.PLong(table.Rows[i][3].ToString());
 			}
 			return List;
 		}
@@ -33,11 +33,11 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE questiondef SET " 
-				+"QuestionDefNum = '"+POut.PInt   (def.QuestionDefNum)+"'"
+				+"QuestionDefNum = '"+POut.PLong   (def.QuestionDefNum)+"'"
 				+",Description = '"  +POut.PString(def.Description)+"'"
-				+",ItemOrder = '"    +POut.PInt   (def.ItemOrder)+"'"
-				+",QuestType = '"    +POut.PInt   ((int)def.QuestType)+"'"
-				+" WHERE QuestionDefNum  ='"+POut.PInt   (def.QuestionDefNum)+"'";
+				+",ItemOrder = '"    +POut.PLong   (def.ItemOrder)+"'"
+				+",QuestType = '"    +POut.PLong   ((int)def.QuestType)+"'"
+				+" WHERE QuestionDefNum  ='"+POut.PLong   (def.QuestionDefNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -56,12 +56,12 @@ namespace OpenDentBusiness {
 			}
 			command+="Description,ItemOrder,QuestType) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(def.QuestionDefNum)+", ";
+				command+=POut.PLong(def.QuestionDefNum)+", ";
 			}
 			command+=
 				 "'"+POut.PString(def.Description)+"', "
-				+"'"+POut.PInt   (def.ItemOrder)+"', "
-				+"'"+POut.PInt   ((int)def.QuestType)+"')";
+				+"'"+POut.PLong   (def.ItemOrder)+"', "
+				+"'"+POut.PLong   ((int)def.QuestType)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -77,7 +77,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
-			string command="DELETE FROM questiondef WHERE QuestionDefNum ="+POut.PInt(def.QuestionDefNum);
+			string command="DELETE FROM questiondef WHERE QuestionDefNum ="+POut.PLong(def.QuestionDefNum);
 			Db.NonQ(command);
 		}
 

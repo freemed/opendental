@@ -13,14 +13,14 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<RxAlert[]>(MethodBase.GetCurrentMethod(),rxDefNum);
 			}
-			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.PInt(rxDefNum);
+			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.PLong(rxDefNum);
 			DataTable table=Db.GetTable(command);
 			RxAlert[] List=new RxAlert[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RxAlert();
-				List[i].RxAlertNum   = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].RxDefNum     = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].DiseaseDefNum= PIn.PInt(table.Rows[i][2].ToString());
+				List[i].RxAlertNum   = PIn.PLong(table.Rows[i][0].ToString());
+				List[i].RxDefNum     = PIn.PLong(table.Rows[i][1].ToString());
+				List[i].DiseaseDefNum= PIn.PLong(table.Rows[i][2].ToString());
 			}
 			return List;
 		}
@@ -33,9 +33,9 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="UPDATE rxalert SET " 
-				+"RxDefNum = '"      +POut.PInt   (alert.RxDefNum)+"'"
-				+",DiseaseDefNum = '"+POut.PInt   (alert.DiseaseDefNum)+"'"
-				+" WHERE RxAlertNum  ='"+POut.PInt   (alert.RxAlertNum)+"'";
+				+"RxDefNum = '"      +POut.PLong   (alert.RxDefNum)+"'"
+				+",DiseaseDefNum = '"+POut.PLong   (alert.DiseaseDefNum)+"'"
+				+" WHERE RxAlertNum  ='"+POut.PLong   (alert.RxAlertNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -54,11 +54,11 @@ namespace OpenDentBusiness {
 			}
 			command+="RxDefNum,DiseaseDefNum) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(alert.RxAlertNum)+", ";
+				command+=POut.PLong(alert.RxAlertNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (alert.RxDefNum)+"', "
-				+"'"+POut.PInt   (alert.DiseaseDefNum)+"')";
+				 "'"+POut.PLong   (alert.RxDefNum)+"', "
+				+"'"+POut.PLong   (alert.DiseaseDefNum)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),alert);
 				return;
 			}
-			string command="DELETE FROM rxalert WHERE RxAlertNum ="+POut.PInt(alert.RxAlertNum);
+			string command="DELETE FROM rxalert WHERE RxAlertNum ="+POut.PLong(alert.RxAlertNum);
 			Db.NonQ(command);
 		}
 

@@ -67,7 +67,7 @@ namespace OpenDental.Bridges{
 			for(int i=0;i<fieldVals.Length;i++) {
 				fieldVals[i]=fieldVals[i].Replace("\"","");//remove quotes
 			}
-			long patNum=PIn.PInt(GetVal("PAT_OTHID"));
+			long patNum=PIn.PLong(GetVal("PAT_OTHID"));
 			if(patNum==0){
 				MessageBox.Show(patNum.ToString()+" is not a recognized PatNum.");
 				return;

@@ -256,7 +256,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long selectedLabCase=PIn.PInt(table.Rows[e.Row]["LabCaseNum"].ToString());
+			long selectedLabCase=PIn.PLong(table.Rows[e.Row]["LabCaseNum"].ToString());
 			FormLabCaseEdit FormL=new FormLabCaseEdit();
 			FormL.CaseCur=LabCases.GetOne(selectedLabCase);
 			FormL.ShowDialog();
@@ -284,7 +284,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a lab case first.");
 				return;
 			}
-			Appointment apt=Appointments.GetOneApt(PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
+			Appointment apt=Appointments.GetOneApt(PIn.PLong(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
 			if(apt.AptStatus==ApptStatus.UnschedList){
 				MsgBox.Show(this,"Cannot go to an unscheduled appointment");
 				return;

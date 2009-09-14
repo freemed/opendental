@@ -368,7 +368,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="patient.PriProv = "
-						+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
+						+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]-1].ProvNum)+" ";
 				}
 				whereProv+=") ";
 			}

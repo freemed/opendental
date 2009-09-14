@@ -25,13 +25,13 @@ namespace OpenDentBusiness{
 			ApptViewItemC.List=new ApptViewItem[table.Rows.Count];
 			for(int i=0;i<ApptViewItemC.List.Length;i++){
 				ApptViewItemC.List[i]=new ApptViewItem();
-				ApptViewItemC.List[i].ApptViewItemNum = PIn.PInt   (table.Rows[i][0].ToString());
-				ApptViewItemC.List[i].ApptViewNum     = PIn.PInt   (table.Rows[i][1].ToString());
-				ApptViewItemC.List[i].OpNum           = PIn.PInt   (table.Rows[i][2].ToString());
-				ApptViewItemC.List[i].ProvNum         = PIn.PInt   (table.Rows[i][3].ToString());
+				ApptViewItemC.List[i].ApptViewItemNum = PIn.PLong   (table.Rows[i][0].ToString());
+				ApptViewItemC.List[i].ApptViewNum     = PIn.PLong   (table.Rows[i][1].ToString());
+				ApptViewItemC.List[i].OpNum           = PIn.PLong   (table.Rows[i][2].ToString());
+				ApptViewItemC.List[i].ProvNum         = PIn.PLong   (table.Rows[i][3].ToString());
 				ApptViewItemC.List[i].ElementDesc     = PIn.PString(table.Rows[i][4].ToString());
-				ApptViewItemC.List[i].ElementOrder    = PIn.PInt32   (table.Rows[i][5].ToString());
-				ApptViewItemC.List[i].ElementColor    = Color.FromArgb(PIn.PInt32(table.Rows[i][6].ToString()));
+				ApptViewItemC.List[i].ElementOrder    = PIn.PInt   (table.Rows[i][5].ToString());
+				ApptViewItemC.List[i].ElementColor    = Color.FromArgb(PIn.PInt(table.Rows[i][6].ToString()));
 			}
 		}
 
@@ -51,15 +51,15 @@ namespace OpenDentBusiness{
 			command+="ApptViewNum,OpNum,ProvNum,ElementDesc,"
 				+"ElementOrder,ElementColor) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(Cur.ApptViewItemNum)+", ";
+				command+=POut.PLong(Cur.ApptViewItemNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt   (Cur.ApptViewNum)+"', "
-				+"'"+POut.PInt   (Cur.OpNum)+"', "
-				+"'"+POut.PInt   (Cur.ProvNum)+"', "
+				 "'"+POut.PLong   (Cur.ApptViewNum)+"', "
+				+"'"+POut.PLong   (Cur.OpNum)+"', "
+				+"'"+POut.PLong   (Cur.ProvNum)+"', "
 				+"'"+POut.PString(Cur.ElementDesc)+"', "
-				+"'"+POut.PInt   (Cur.ElementOrder)+"', "
-				+"'"+POut.PInt   (Cur.ElementColor.ToArgb())+"')";
+				+"'"+POut.PLong   (Cur.ElementOrder)+"', "
+				+"'"+POut.PLong   (Cur.ElementColor.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -76,13 +76,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE apptviewitem SET "
-				+"ApptViewNum='"    +POut.PInt   (Cur.ApptViewNum)+"'"
-				+",OpNum = '"       +POut.PInt   (Cur.OpNum)+"'"
-				+",ProvNum = '"     +POut.PInt   (Cur.ProvNum)+"'"
+				+"ApptViewNum='"    +POut.PLong   (Cur.ApptViewNum)+"'"
+				+",OpNum = '"       +POut.PLong   (Cur.OpNum)+"'"
+				+",ProvNum = '"     +POut.PLong   (Cur.ProvNum)+"'"
 				+",ElementDesc = '" +POut.PString(Cur.ElementDesc)+"'"
-				+",ElementOrder = '"+POut.PInt   (Cur.ElementOrder)+"'"
-				+",ElementColor = '"+POut.PInt   (Cur.ElementColor.ToArgb())+"'"
-				+" WHERE ApptViewItemNum = '"+POut.PInt(Cur.ApptViewItemNum)+"'";
+				+",ElementOrder = '"+POut.PLong   (Cur.ElementOrder)+"'"
+				+",ElementColor = '"+POut.PLong   (Cur.ElementColor.ToArgb())+"'"
+				+" WHERE ApptViewItemNum = '"+POut.PLong(Cur.ApptViewItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE from apptviewitem WHERE ApptViewItemNum = '"
-				+POut.PInt(Cur.ApptViewItemNum)+"'";
+				+POut.PLong(Cur.ApptViewItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -104,7 +104,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string c="DELETE from apptviewitem WHERE ApptViewNum = '"
-				+POut.PInt(view.ApptViewNum)+"'";
+				+POut.PLong(view.ApptViewNum)+"'";
 			Db.NonQ(c);
 		}
 

@@ -34,9 +34,9 @@ namespace OpenDentBusiness{
 			Medication med;
 			for(int i=0;i<table.Rows.Count;i++) {
 				med=new Medication();
-				med.MedicationNum=PIn.PInt(table.Rows[i][0].ToString());
+				med.MedicationNum=PIn.PLong(table.Rows[i][0].ToString());
 				med.MedName      =PIn.PString(table.Rows[i][1].ToString());
-				med.GenericNum   =PIn.PInt(table.Rows[i][2].ToString());
+				med.GenericNum   =PIn.PLong(table.Rows[i][2].ToString());
 				med.Notes        =PIn.PString(table.Rows[i][3].ToString());
 				retVal.Add(med);
 			}
@@ -51,9 +51,9 @@ namespace OpenDentBusiness{
 			}
 			string command = "UPDATE medication SET " 
 				+ "medname = '"      +POut.PString(Cur.MedName)+"'"
-				+ ",genericnum = '"  +POut.PInt   (Cur.GenericNum)+"'"
+				+ ",genericnum = '"  +POut.PLong   (Cur.GenericNum)+"'"
 				+ ",notes = '"       +POut.PString(Cur.Notes)+"'"
-				+" WHERE medicationnum = '" +POut.PInt   (Cur.MedicationNum)+"'";
+				+" WHERE medicationnum = '" +POut.PLong   (Cur.MedicationNum)+"'";
 			//MessageBox.Show(command);
 			Db.NonQ(command);
 		}
@@ -74,11 +74,11 @@ namespace OpenDentBusiness{
 			command+="medname,genericnum,notes"
 				+") VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(Cur.MedicationNum)+"', ";
+				command+="'"+POut.PLong(Cur.MedicationNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.MedName)+"', "
-				+"'"+POut.PInt   (Cur.GenericNum)+"', "
+				+"'"+POut.PLong   (Cur.GenericNum)+"', "
 				+"'"+POut.PString(Cur.Notes)+"')";
 			if(PrefC.RandomKeys){
 				Db.NonQ(command);

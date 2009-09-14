@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				return false;//no change needed
 			}
 			string command= "UPDATE preference SET "
-				+"ValueString = '"+POut.PInt(newValue)+"' "
+				+"ValueString = '"+POut.PLong(newValue)+"' "
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
 			bool retVal=true;
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

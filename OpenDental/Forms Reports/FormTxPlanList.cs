@@ -258,7 +258,7 @@ namespace OpenDental {
 						whereProv += "OR ";
 					}
 					whereProv += "procedurelog.ProvNum = '"
-                    + POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum) + "' ";
+                    + POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum) + "' ";
 				}
 				whereProv += ")";
 			}
@@ -305,7 +305,7 @@ namespace OpenDental {
 			gridTxPlanList.Rows.Clear();
 			for(int i = 0;i <= AddrTable.Rows.Count - 1;i++) // changed < to <= , SPK
             {
-				PatNum = PIn.PInt(AddrTable.Rows[i]["PatNum"].ToString());
+				PatNum = PIn.PLong(AddrTable.Rows[i]["PatNum"].ToString());
 				PriMax = 0;
 				PriPend = 0;
 				PriUsed = 0;

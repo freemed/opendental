@@ -26,8 +26,8 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {
 				insFilingCodeSubtype=new InsFilingCodeSubtype();
 				insFilingCodeSubtype.IsNew=false;
-				insFilingCodeSubtype.InsFilingCodeSubtypeNum=PIn.PInt(table.Rows[i][0].ToString());
-				insFilingCodeSubtype.InsFilingCodeNum=PIn.PInt(table.Rows[i][1].ToString());
+				insFilingCodeSubtype.InsFilingCodeSubtypeNum=PIn.PLong(table.Rows[i][0].ToString());
+				insFilingCodeSubtype.InsFilingCodeNum=PIn.PLong(table.Rows[i][1].ToString());
 				insFilingCodeSubtype.Descript=PIn.PString(table.Rows[i][2].ToString());
 				InsFilingCodeSubtypeC.Listt.Add(insFilingCodeSubtype);
 			}
@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),insFilingCodeSubtypeNum);
 				return;
 			}
-			string command="SELECT COUNT(*) FROM insplan WHERE FilingCodeSubtype="+POut.PInt(insFilingCodeSubtypeNum);
+			string command="SELECT COUNT(*) FROM insplan WHERE FilingCodeSubtype="+POut.PLong(insFilingCodeSubtypeNum);
 			if(Db.GetScalar(command) != "0") {
 				throw new ApplicationException(Lans.g("InsFilingCodeSubtype","Already in use by insplans."));
 			}
@@ -80,7 +80,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			string command="DELETE FROM insfilingcodesubtype "+
-				"WHERE InsFilingCodeNum="+POut.PInt(insFilingCodeNum);
+				"WHERE InsFilingCodeNum="+POut.PLong(insFilingCodeNum);
 			Db.NonQ(command);
 		}
 

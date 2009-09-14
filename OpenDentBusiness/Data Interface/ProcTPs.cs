@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<ProcTP[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM proctp "
-				+"WHERE PatNum="+POut.PInt(patNum)
+				+"WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table).ToArray();
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ProcTP>>(MethodBase.GetCurrentMethod(),tpNum);
 			}
 			string command="SELECT * FROM proctp "
-				+"WHERE TreatPlanNum="+POut.PInt(tpNum)
+				+"WHERE TreatPlanNum="+POut.PLong(tpNum)
 				+" ORDER BY ItemOrder";
 			DataTable table=Db.GetTable(command);
 			return RefreshAndFill(table);
@@ -37,12 +37,12 @@ namespace OpenDentBusiness{
 			ProcTP proc;
 			for(int i=0;i<table.Rows.Count;i++) {
 				proc=new ProcTP();
-				proc.ProcTPNum   = PIn.PInt(table.Rows[i][0].ToString());
-				proc.TreatPlanNum= PIn.PInt(table.Rows[i][1].ToString());
-				proc.PatNum      = PIn.PInt(table.Rows[i][2].ToString());
-				proc.ProcNumOrig = PIn.PInt(table.Rows[i][3].ToString());
-				proc.ItemOrder   = PIn.PInt32(table.Rows[i][4].ToString());
-				proc.Priority    = PIn.PInt(table.Rows[i][5].ToString());
+				proc.ProcTPNum   = PIn.PLong(table.Rows[i][0].ToString());
+				proc.TreatPlanNum= PIn.PLong(table.Rows[i][1].ToString());
+				proc.PatNum      = PIn.PLong(table.Rows[i][2].ToString());
+				proc.ProcNumOrig = PIn.PLong(table.Rows[i][3].ToString());
+				proc.ItemOrder   = PIn.PInt(table.Rows[i][4].ToString());
+				proc.Priority    = PIn.PLong(table.Rows[i][5].ToString());
 				proc.ToothNumTP  = PIn.PString(table.Rows[i][6].ToString());
 				proc.Surf        = PIn.PString(table.Rows[i][7].ToString());
 				proc.ProcCode    = PIn.PString(table.Rows[i][8].ToString());
@@ -64,11 +64,11 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE proctp SET "
-				+"TreatPlanNum = '"+POut.PInt   (proc.TreatPlanNum)+"'"
-				+",PatNum = '"     +POut.PInt   (proc.PatNum)+"'"
-				+",ProcNumOrig = '"+POut.PInt   (proc.ProcNumOrig)+"'"
-				+",ItemOrder = '"  +POut.PInt   (proc.ItemOrder)+"'"
-				+",Priority = '"   +POut.PInt   (proc.Priority)+"'"
+				+"TreatPlanNum = '"+POut.PLong   (proc.TreatPlanNum)+"'"
+				+",PatNum = '"     +POut.PLong   (proc.PatNum)+"'"
+				+",ProcNumOrig = '"+POut.PLong   (proc.ProcNumOrig)+"'"
+				+",ItemOrder = '"  +POut.PLong   (proc.ItemOrder)+"'"
+				+",Priority = '"   +POut.PLong   (proc.Priority)+"'"
 				+",ToothNumTP = '" +POut.PString(proc.ToothNumTP)+"'"
 				+",Surf = '"       +POut.PString(proc.Surf)+"'"
 				+",ProcCode = '"   +POut.PString(proc.ProcCode)+"'"
@@ -78,7 +78,7 @@ namespace OpenDentBusiness{
 				+",SecInsAmt = '"  +POut.PDouble(proc.SecInsAmt)+"'"
 				+",PatAmt = '"     +POut.PDouble(proc.PatAmt)+"'"
 				+",Discount = '"   +POut.PDouble(proc.Discount)+"'"
-				+" WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
+				+" WHERE ProcTPNum = '"+POut.PLong(proc.ProcTPNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -98,14 +98,14 @@ namespace OpenDentBusiness{
 			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,"
 				+"PriInsAmt,SecInsAmt,PatAmt,Discount) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(proc.ProcTPNum)+"', ";
+				command+="'"+POut.PLong(proc.ProcTPNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (proc.TreatPlanNum)+"', "
-				+"'"+POut.PInt   (proc.PatNum)+"', "
-				+"'"+POut.PInt   (proc.ProcNumOrig)+"', "
-				+"'"+POut.PInt   (proc.ItemOrder)+"', "
-				+"'"+POut.PInt   (proc.Priority)+"', "
+				 "'"+POut.PLong   (proc.TreatPlanNum)+"', "
+				+"'"+POut.PLong   (proc.PatNum)+"', "
+				+"'"+POut.PLong   (proc.ProcNumOrig)+"', "
+				+"'"+POut.PLong   (proc.ItemOrder)+"', "
+				+"'"+POut.PLong   (proc.Priority)+"', "
 				+"'"+POut.PString(proc.ToothNumTP)+"', "
 				+"'"+POut.PString(proc.Surf)+"', "
 				+"'"+POut.PString(proc.ProcCode)+"', "
@@ -141,7 +141,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
 				return;
 			}
-			string command= "DELETE from proctp WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
+			string command= "DELETE from proctp WHERE ProcTPNum = '"+POut.PLong(proc.ProcTPNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -169,7 +169,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DELETE FROM proctp "
-				+"WHERE TreatPlanNum="+POut.PInt(treatPlanNum);
+				+"WHERE TreatPlanNum="+POut.PLong(treatPlanNum);
 			Db.NonQ(command);
 		}
 

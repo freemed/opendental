@@ -13,15 +13,15 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM repeatcharge";
 			if(patNum!=0) {
-				command+=" WHERE PatNum = "+POut.PInt(patNum);
+				command+=" WHERE PatNum = "+POut.PLong(patNum);
 			}
 			command+=" ORDER BY DateStart";
 			DataTable table=Db.GetTable(command);
 			RepeatCharge[] List=new RepeatCharge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new RepeatCharge();
-				List[i].RepeatChargeNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].RepeatChargeNum= PIn.PLong(table.Rows[i][0].ToString());
+				List[i].PatNum         = PIn.PLong(table.Rows[i][1].ToString());
 				List[i].ProcCode       = PIn.PString(table.Rows[i][2].ToString());
 				List[i].ChargeAmt      = PIn.PDouble(table.Rows[i][3].ToString());
 				List[i].DateStart      = PIn.PDate(table.Rows[i][4].ToString());
@@ -38,13 +38,13 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE repeatcharge SET " 
-				+"PatNum = '"    +POut.PInt   (charge.PatNum)+"'"
+				+"PatNum = '"    +POut.PLong   (charge.PatNum)+"'"
 				+",ProcCode = '" +POut.PString(charge.ProcCode)+"'"
 				+",ChargeAmt = '"+POut.PDouble(charge.ChargeAmt)+"'"
 				+",DateStart = "+POut.PDate  (charge.DateStart)
 				+",DateStop = " +POut.PDate  (charge.DateStop)
 				+",Note = '"     +POut.PString(charge.Note)+"'"
-				+" WHERE RepeatChargeNum = '" +POut.PInt(charge.RepeatChargeNum)+"'";
+				+" WHERE RepeatChargeNum = '" +POut.PLong(charge.RepeatChargeNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -63,10 +63,10 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(charge.RepeatChargeNum)+"', ";
+				command+="'"+POut.PLong(charge.RepeatChargeNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (charge.PatNum)+"', "
+				 "'"+POut.PLong   (charge.PatNum)+"', "
 				+"'"+POut.PString(charge.ProcCode)+"', "
 				+"'"+POut.PDouble(charge.ChargeAmt)+"', "
 				+POut.PDate  (charge.DateStart)+", "
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
 				return;
 			}
-			string command="DELETE FROM repeatcharge WHERE RepeatChargeNum ="+POut.PInt(charge.RepeatChargeNum);
+			string command="DELETE FROM repeatcharge WHERE RepeatChargeNum ="+POut.PLong(charge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
 
@@ -98,8 +98,8 @@ namespace OpenDentBusiness{
 			}
 			ArrayList retVal=new ArrayList();
 			string command="SELECT ProcDate FROM procedurelog "
-				+"WHERE PatNum="+POut.PInt(patNum)
-				+" AND CodeNum="+POut.PInt(codeNum)
+				+"WHERE PatNum="+POut.PLong(patNum)
+				+" AND CodeNum="+POut.PLong(codeNum)
 				+" AND ProcStatus=2";//complete
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){

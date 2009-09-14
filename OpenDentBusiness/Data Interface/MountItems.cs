@@ -23,16 +23,16 @@ namespace OpenDentBusiness {
 			}
 			command+="MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(mountItem.MountItemNum)+", ";
+				command+=POut.PLong(mountItem.MountItemNum)+", ";
 			}
 			command+=
-				 "'"+POut.PInt(mountItem.MountItemNum)+"',"
-				+"'"+POut.PInt(mountItem.MountNum)+"',"
-				+"'"+POut.PInt(mountItem.Xpos)+"',"
-				+"'"+POut.PInt(mountItem.Ypos)+"',"
-				+"'"+POut.PInt(mountItem.OrdinalPos)+"',"
-				+"'"+POut.PInt(mountItem.Width)+"',"
-				+"'"+POut.PInt(mountItem.Height)+"')";
+				 "'"+POut.PLong(mountItem.MountItemNum)+"',"
+				+"'"+POut.PLong(mountItem.MountNum)+"',"
+				+"'"+POut.PLong(mountItem.Xpos)+"',"
+				+"'"+POut.PLong(mountItem.Ypos)+"',"
+				+"'"+POut.PLong(mountItem.OrdinalPos)+"',"
+				+"'"+POut.PLong(mountItem.Width)+"',"
+				+"'"+POut.PLong(mountItem.Height)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -47,13 +47,13 @@ namespace OpenDentBusiness {
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),mountItem);
 			}
 			string command="UPDATE mountitem SET "
-				+"MountNum='"+POut.PInt(mountItem.MountNum)+"',"
-				+"Xpos='"+POut.PInt(mountItem.Xpos)+"',"
-				+"Ypos='"+POut.PInt(mountItem.Ypos)+"',"
-				+"OrdinalPos='"+POut.PInt(mountItem.OrdinalPos)+"',"
-				+"Width='"+POut.PInt(mountItem.Width)+"',"
-				+"Height='"+POut.PInt(mountItem.Height)+"' "
-				+"WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
+				+"MountNum='"+POut.PLong(mountItem.MountNum)+"',"
+				+"Xpos='"+POut.PLong(mountItem.Xpos)+"',"
+				+"Ypos='"+POut.PLong(mountItem.Ypos)+"',"
+				+"OrdinalPos='"+POut.PLong(mountItem.OrdinalPos)+"',"
+				+"Width='"+POut.PLong(mountItem.Width)+"',"
+				+"Height='"+POut.PLong(mountItem.Height)+"' "
+				+"WHERE MountItemNum='"+POut.PLong(mountItem.MountItemNum)+"'";
 			return Db.NonQ(command);
 		}
 
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),mountItem);
 				return;
 			}
-			string command="DELETE FROM mountitem WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
+			string command="DELETE FROM mountitem WHERE MountItemNum='"+POut.PLong(mountItem.MountItemNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -70,13 +70,13 @@ namespace OpenDentBusiness {
 		public static MountItem Fill(DataRow mountItemRow){
 			//No need to check RemotingRole; no call to db.
 			MountItem mountItem=new MountItem();
-			mountItem.MountItemNum=PIn.PInt(mountItemRow["MountItemNum"].ToString());
-			mountItem.MountNum=PIn.PInt(mountItemRow["MountNum"].ToString());
-			mountItem.Xpos=PIn.PInt32(mountItemRow["Xpos"].ToString());
-			mountItem.Ypos=PIn.PInt32(mountItemRow["Ypos"].ToString());
-			mountItem.OrdinalPos=PIn.PInt32(mountItemRow["OrdinalPos"].ToString());
-			mountItem.Width=PIn.PInt32(mountItemRow["Width"].ToString());
-			mountItem.Height=PIn.PInt32(mountItemRow["Height"].ToString());
+			mountItem.MountItemNum=PIn.PLong(mountItemRow["MountItemNum"].ToString());
+			mountItem.MountNum=PIn.PLong(mountItemRow["MountNum"].ToString());
+			mountItem.Xpos=PIn.PInt(mountItemRow["Xpos"].ToString());
+			mountItem.Ypos=PIn.PInt(mountItemRow["Ypos"].ToString());
+			mountItem.OrdinalPos=PIn.PInt(mountItemRow["OrdinalPos"].ToString());
+			mountItem.Width=PIn.PInt(mountItemRow["Width"].ToString());
+			mountItem.Height=PIn.PInt(mountItemRow["Height"].ToString());
 			return mountItem;
 		}
 
@@ -85,7 +85,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <MountItem>>(MethodBase.GetCurrentMethod(),mountNum);
 			}
-			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"' ORDER BY OrdinalPos";
+			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PLong(mountNum)+"' ORDER BY OrdinalPos";
 			DataTable result=Db.GetTable(command);
 			List <MountItem> mountItems=new List <MountItem> ();
 			for(int i=0;i<result.Rows.Count;i++) {

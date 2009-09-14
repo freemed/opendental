@@ -28,12 +28,12 @@ namespace OpenDentBusiness{
 			ArrayList AL=new ArrayList();
 			for(int i=0;i<AccountC.ListLong.Length;i++) {
 				AccountC.ListLong[i]=new Account();
-				AccountC.ListLong[i].AccountNum  = PIn.PInt(table.Rows[i][0].ToString());
+				AccountC.ListLong[i].AccountNum  = PIn.PLong(table.Rows[i][0].ToString());
 				AccountC.ListLong[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				AccountC.ListLong[i].AcctType    = (AccountType)PIn.PInt(table.Rows[i][2].ToString());
+				AccountC.ListLong[i].AcctType    = (AccountType)PIn.PLong(table.Rows[i][2].ToString());
 				AccountC.ListLong[i].BankNumber  = PIn.PString(table.Rows[i][3].ToString());
 				AccountC.ListLong[i].Inactive    = PIn.PBool(table.Rows[i][4].ToString());
-				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.PInt32(table.Rows[i][5].ToString()));
+				AccountC.ListLong[i].AccountColor= Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
 				if(!AccountC.ListLong[i].Inactive) {
 					AL.Add(AccountC.ListLong[i].Copy());
 				}
@@ -57,14 +57,14 @@ namespace OpenDentBusiness{
 			}
 			command+="Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+="'"+POut.PInt(acct.AccountNum)+"', ";
+				command+="'"+POut.PLong(acct.AccountNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(acct.Description)+"', "
-				+"'"+POut.PInt   ((int)acct.AcctType)+"', "
+				+"'"+POut.PLong   ((int)acct.AcctType)+"', "
 				+"'"+POut.PString(acct.BankNumber)+"', "
 				+"'"+POut.PBool  (acct.Inactive)+"', "
-				+"'"+POut.PInt   (acct.AccountColor.ToArgb())+"')";
+				+"'"+POut.PLong   (acct.AccountColor.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -82,11 +82,11 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE account SET "
 				+"Description = '"  +POut.PString(acct.Description)+"' "
-				+",AcctType = '"    +POut.PInt   ((int)acct.AcctType)+"' "
+				+",AcctType = '"    +POut.PLong   ((int)acct.AcctType)+"' "
 				+",BankNumber = '"  +POut.PString(acct.BankNumber)+"' "
 				+",Inactive = '"    +POut.PBool  (acct.Inactive)+"' "
-				+",AccountColor = '"+POut.PInt   (acct.AccountColor.ToArgb())+"' "
-				+"WHERE AccountNum = '"+POut.PInt(acct.AccountNum)+"'";
+				+",AccountColor = '"+POut.PLong   (acct.AccountColor.ToArgb())+"' "
+				+"WHERE AccountNum = '"+POut.PLong(acct.AccountNum)+"'";
 			Db.NonQ(command);
 		}
 
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//check to see if account has any journal entries
-			string command="SELECT COUNT(*) FROM journalentry WHERE AccountNum="+POut.PInt(acct.AccountNum);
+			string command="SELECT COUNT(*) FROM journalentry WHERE AccountNum="+POut.PLong(acct.AccountNum);
 			if(Db.GetCount(command)!="0"){
 				throw new ApplicationException(Lans.g("FormAccountEdit",
 					"Not allowed to delete an account with existing journal entries."));
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			command="DELETE FROM account WHERE AccountNum = "+POut.PInt(acct.AccountNum);
+			command="DELETE FROM account WHERE AccountNum = "+POut.PLong(acct.AccountNum);
 			Db.NonQ(command);
 		}
 
@@ -155,7 +155,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),accountNum,acctType);
 			}
 			string command="SELECT SUM(DebitAmt),SUM(CreditAmt) FROM journalentry "
-				+"WHERE AccountNum="+POut.PInt(accountNum)
+				+"WHERE AccountNum="+POut.PLong(accountNum)
 				+" GROUP BY AccountNum";
 			DataTable table=Db.GetTable(command);
 			double debit=0;
@@ -215,7 +215,7 @@ namespace OpenDentBusiness{
 				if(depStrArray[i]=="") {
 					continue;
 				}
-				depAL.Add(PIn.PInt(depStrArray[i]));
+				depAL.Add(PIn.PLong(depStrArray[i]));
 			}
 			int[] retVal=new int[depAL.Count];
 			depAL.CopyTo(retVal);
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 			double credit=0;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
-				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
+				aType=(AccountType)PIn.PLong(rawTable.Rows[i]["AcctType"].ToString());
 				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
 				debit=PIn.PDouble(rawTable.Rows[i]["SumDebit"].ToString());
@@ -289,7 +289,7 @@ namespace OpenDentBusiness{
 			rawTable=Db.GetTable(command);
 			double balance=0;
 			for(int i=0;i<rawTable.Rows.Count;i++){
-				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
+				aType=(AccountType)PIn.PLong(rawTable.Rows[i]["AcctType"].ToString());
 				debit=PIn.PDouble(rawTable.Rows[i]["SumDebit"].ToString());
 				credit=PIn.PDouble(rawTable.Rows[i]["SumCredit"].ToString());
 				//this works for both income and expenses, because we are subracting expenses, so signs cancel
@@ -319,7 +319,7 @@ namespace OpenDentBusiness{
 			rawTable=Db.GetTable(command);
 			for(int i=0;i<rawTable.Rows.Count;i++) {
 				row=table.NewRow();
-				aType=(AccountType)PIn.PInt(rawTable.Rows[i]["AcctType"].ToString());
+				aType=(AccountType)PIn.PLong(rawTable.Rows[i]["AcctType"].ToString());
 				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
 				debit=PIn.PDouble(rawTable.Rows[i]["SumDebit"].ToString());

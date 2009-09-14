@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 			List=new PatFieldDef[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				List[i]=new PatFieldDef();
-				List[i].PatFieldDefNum=PIn.PInt(table.Rows[i][0].ToString());
+				List[i].PatFieldDefNum=PIn.PLong(table.Rows[i][0].ToString());
 				List[i].FieldName=PIn.PString(table.Rows[i][1].ToString());
 			}
 		}
@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 			}
 			string command="UPDATE patfielddef SET " 
 				+"FieldName = '"        +POut.PString(p.FieldName)+"'"
-				+" WHERE PatFieldDefNum  ='"+POut.PInt   (p.PatFieldDefNum)+"'";
+				+" WHERE PatFieldDefNum  ='"+POut.PLong   (p.PatFieldDefNum)+"'";
 			Db.NonQ(command);
 			command="UPDATE patfield SET FieldName='"+POut.PString(p.FieldName)+"'"
 				+" WHERE FieldName='"+POut.PString(oldFieldName)+"'";
@@ -73,7 +73,7 @@ namespace OpenDentBusiness {
 			}
 			command+="FieldName) VALUES(";
 			if(PrefC.RandomKeys) {
-				command+=POut.PInt(p.PatFieldDefNum)+", ";
+				command+=POut.PLong(p.PatFieldDefNum)+", ";
 			}
 			command+=
 				"'"+POut.PString(p.FieldName)+"')";
@@ -107,7 +107,7 @@ namespace OpenDentBusiness {
 				}
 				throw new ApplicationException(s);
 			}
-			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.PInt(p.PatFieldDefNum);
+			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.PLong(p.PatFieldDefNum);
 			Db.NonQ(command);
 		}
 				

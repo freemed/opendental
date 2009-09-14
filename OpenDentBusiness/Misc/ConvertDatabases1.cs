@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count==0) {
 				return 0;//this code is not in any category, so coverage=0
 			}
-			int covCatNum=PIn.PInt32(table.Rows[0][0].ToString());
+			int covCatNum=PIn.PInt(table.Rows[0][0].ToString());
 			command="SELECT PlanNum,PriPatNum,SecPatNum,Percent FROM covpat WHERE "
 				+"CovCatNum = '"+covCatNum.ToString()+"' "
 				+"AND (PlanNum = '"+priPlanNum.ToString()+"' "
@@ -269,18 +269,18 @@ namespace OpenDentBusiness{
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
 				//first handle the patient overrides
-				if(priORsec=="pri" && PIn.PInt(table.Rows[i][1].ToString())==patNum) {
-					return PIn.PInt32(table.Rows[i][3].ToString());
+				if(priORsec=="pri" && PIn.PLong(table.Rows[i][1].ToString())==patNum) {
+					return PIn.PInt(table.Rows[i][3].ToString());
 				}
-				if(priORsec=="sec" && PIn.PInt(table.Rows[i][2].ToString())==patNum) {
-					return PIn.PInt32(table.Rows[i][3].ToString());
+				if(priORsec=="sec" && PIn.PLong(table.Rows[i][2].ToString())==patNum) {
+					return PIn.PInt(table.Rows[i][3].ToString());
 				}
 				//then handle the percentages attached to plans(much more common)
-				if(priORsec=="pri" && PIn.PInt(table.Rows[i][0].ToString())==priPlanNum) {
-					return PIn.PInt32(table.Rows[i][3].ToString());
+				if(priORsec=="pri" && PIn.PLong(table.Rows[i][0].ToString())==priPlanNum) {
+					return PIn.PInt(table.Rows[i][3].ToString());
 				}
-				if(priORsec=="sec" && PIn.PInt(table.Rows[i][0].ToString())==secPlanNum) {
-					return PIn.PInt32(table.Rows[i][3].ToString());
+				if(priORsec=="sec" && PIn.PLong(table.Rows[i][0].ToString())==secPlanNum) {
+					return PIn.PInt(table.Rows[i][3].ToString());
 				}
 			}
 			return 0;
@@ -361,21 +361,21 @@ namespace OpenDentBusiness{
 				table=Db.GetTable(command);
 				procTable=table.Copy();//so that we can perform other queries
 				for(int i=0;i<procTable.Rows.Count;i++) {
-					planNum=PIn.PInt32(procTable.Rows[i][4].ToString());//claimproc.PlanNum
+					planNum=PIn.PInt(procTable.Rows[i][4].ToString());//claimproc.PlanNum
 					//if primary
-					if(planNum==PIn.PInt(procTable.Rows[i][1].ToString())) {//priPlanNum
-						percentage=GetPercent(PIn.PInt32(procTable.Rows[i][3].ToString()),//patNum
-							PIn.PInt32(procTable.Rows[i][1].ToString()),//priPlanNum
-							PIn.PInt32(procTable.Rows[i][2].ToString()),//secPlanNum
+					if(planNum==PIn.PLong(procTable.Rows[i][1].ToString())) {//priPlanNum
+						percentage=GetPercent(PIn.PInt(procTable.Rows[i][3].ToString()),//patNum
+							PIn.PInt(procTable.Rows[i][1].ToString()),//priPlanNum
+							PIn.PInt(procTable.Rows[i][2].ToString()),//secPlanNum
 							PIn.PString(procTable.Rows[i][5].ToString()),//ADACode
 							"pri");
 						overrideAmt=PIn.PDouble(procTable.Rows[i][6].ToString());
 					}
 					//else if secondary
-					else if(planNum==PIn.PInt(procTable.Rows[i][2].ToString())) {//priPlanNum
-						percentage=GetPercent(PIn.PInt32(procTable.Rows[i][3].ToString()),//patNum
-							PIn.PInt32(procTable.Rows[i][1].ToString()),//priPlanNum
-							PIn.PInt32(procTable.Rows[i][2].ToString()),//secPlanNum
+					else if(planNum==PIn.PLong(procTable.Rows[i][2].ToString())) {//priPlanNum
+						percentage=GetPercent(PIn.PInt(procTable.Rows[i][3].ToString()),//patNum
+							PIn.PInt(procTable.Rows[i][1].ToString()),//priPlanNum
+							PIn.PInt(procTable.Rows[i][2].ToString()),//secPlanNum
 							PIn.PString(procTable.Rows[i][5].ToString()),//ADACode
 							"sec");
 						overrideAmt=PIn.PDouble(procTable.Rows[i][7].ToString());
@@ -429,7 +429,7 @@ namespace OpenDentBusiness{
 					if(PIn.PBool(procTable.Rows[i][10].ToString())//if noBillIns
 						&& PIn.PDouble(procTable.Rows[i][11].ToString()) ==-1) {//and not a cap procedure
 						//primary
-						if(PIn.PInt(procTable.Rows[i][3].ToString())!=0) {//if has pri ins
+						if(PIn.PLong(procTable.Rows[i][3].ToString())!=0) {//if has pri ins
 							command="INSERT INTO claimproc(ProcNum,PatNum,ProvNum,Status,PlanNum,"
 								+"DateCP,AllowedAmt,Percentage,PercentOverride,CopayAmt,OverrideInsEst,"
 								+"NoBillIns,OverAnnualMax,PaidOtherIns) "
@@ -453,7 +453,7 @@ namespace OpenDentBusiness{
 							Db.NonQ32(command);
 						}
 						//secondary
-						if(PIn.PInt(procTable.Rows[i][4].ToString())!=0) {//if has sec ins
+						if(PIn.PLong(procTable.Rows[i][4].ToString())!=0) {//if has sec ins
 							command="INSERT INTO claimproc(ProcNum,PatNum,ProvNum,Status,PlanNum,"
 								+"DateCP,AllowedAmt,Percentage,PercentOverride,CopayAmt,OverrideInsEst,"
 								+"NoBillIns,OverAnnualMax,PaidOtherIns) "
@@ -482,10 +482,10 @@ namespace OpenDentBusiness{
 					copay=PIn.PDouble(procTable.Rows[i][11].ToString());
 					//if CapCoPay not -1, and priIns is cap, then this is a cap proc
 					if(copay!=-1 && PIn.PString(procTable.Rows[i][14].ToString())=="c") {
-						if(PIn.PInt(procTable.Rows[i][12].ToString())==1) {//proc status =tp
+						if(PIn.PLong(procTable.Rows[i][12].ToString())==1) {//proc status =tp
 							status=8;//claimProc status=CapEstimate
 						}
-						if(PIn.PInt(procTable.Rows[i][12].ToString())==2) {//proc status =c
+						if(PIn.PLong(procTable.Rows[i][12].ToString())==2) {//proc status =c
 							status=7;//claimProc status=CapComplete
 						}
 						writeoff=PIn.PDouble(procTable.Rows[i][13].ToString())//procFee
@@ -515,10 +515,10 @@ namespace OpenDentBusiness{
 					}
 					//3. standard primary estimate:
 					//always a primary estimate because original query excluded patients with no ins.
-					planNum=PIn.PInt32(procTable.Rows[i][3].ToString());//priPlanNum
-					percentage=GetPercent(PIn.PInt32(procTable.Rows[i][1].ToString()),//patNum
-						PIn.PInt32(procTable.Rows[i][3].ToString()),//priPlanNum
-						PIn.PInt32(procTable.Rows[i][4].ToString()),//secPlanNum
+					planNum=PIn.PInt(procTable.Rows[i][3].ToString());//priPlanNum
+					percentage=GetPercent(PIn.PInt(procTable.Rows[i][1].ToString()),//patNum
+						PIn.PInt(procTable.Rows[i][3].ToString()),//priPlanNum
+						PIn.PInt(procTable.Rows[i][4].ToString()),//secPlanNum
 						PIn.PString(procTable.Rows[i][6].ToString()),//ADACode
 						"pri");
 					baseEst=PIn.PDouble(procTable.Rows[i][13].ToString())*(double)percentage/100;
@@ -546,13 +546,13 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					//4. standard secondary estimate
 					//secondary can be in addition to primary, or not at all
-					planNum=PIn.PInt32(procTable.Rows[i][4].ToString());//secPlanNum
+					planNum=PIn.PInt(procTable.Rows[i][4].ToString());//secPlanNum
 					if(planNum==0) {
 						continue;
 					}
-					percentage=GetPercent(PIn.PInt32(procTable.Rows[i][1].ToString()),//patNum
-						PIn.PInt32(procTable.Rows[i][3].ToString()),//priPlanNum
-						PIn.PInt32(procTable.Rows[i][4].ToString()),//secPlanNum
+					percentage=GetPercent(PIn.PInt(procTable.Rows[i][1].ToString()),//patNum
+						PIn.PInt(procTable.Rows[i][3].ToString()),//priPlanNum
+						PIn.PInt(procTable.Rows[i][4].ToString()),//secPlanNum
 						PIn.PString(procTable.Rows[i][6].ToString()),//ADACode
 						"sec");
 					baseEst=PIn.PDouble(procTable.Rows[i][13].ToString())*(double)percentage/100;
@@ -628,17 +628,17 @@ namespace OpenDentBusiness{
 				//add image categories to the chart module-----------------------------------------------
 				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
 				table=Db.GetTable(command);
-				int lastI=PIn.PInt32(table.Rows[0][0].ToString());
+				int lastI=PIn.PInt(table.Rows[0][0].ToString());
 				commands=new string[]
 				{
 					"INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
-						+"VALUES(18,"+POut.PInt(lastI+1)+",'BWs','X')"
+						+"VALUES(18,"+POut.PLong(lastI+1)+",'BWs','X')"
 					,"INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
-						+"VALUES(18,"+POut.PInt(lastI+2)+",'FMXs','X')"
+						+"VALUES(18,"+POut.PLong(lastI+2)+",'FMXs','X')"
 					,"INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
-						+"VALUES(18,"+POut.PInt(lastI+3)+",'Panos','X')"
+						+"VALUES(18,"+POut.PLong(lastI+3)+",'Panos','X')"
 					,"INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
-						+"VALUES(18,"+POut.PInt(lastI+4)+",'Photos','X')"
+						+"VALUES(18,"+POut.PLong(lastI+4)+",'Photos','X')"
 					,"UPDATE preference SET ValueString = '3.0.1.0' WHERE PrefName = 'DataBaseVersion'"
 				};
 				Db.NonQ32(commands);
@@ -785,9 +785,9 @@ namespace OpenDentBusiness{
 				int interval;
 				Interval newInterval;
 				for(int i=0;i<patTable.Rows.Count;i++) {
-					patNum=PIn.PInt32(patTable.Rows[i][0].ToString());
-					status=PIn.PInt32(patTable.Rows[i][1].ToString());
-					interval=PIn.PInt32(patTable.Rows[i][2].ToString());
+					patNum=PIn.PInt(patTable.Rows[i][0].ToString());
+					status=PIn.PInt(patTable.Rows[i][1].ToString());
+					interval=PIn.PInt(patTable.Rows[i][2].ToString());
 					//get previous date
 					command="SELECT MAX(procedurelog.procdate) "
 						+"FROM procedurelog,procedurecode "
@@ -826,12 +826,12 @@ namespace OpenDentBusiness{
 					command="INSERT INTO recall (PatNum,DateDueCalc,DateDue,DatePrevious,"
 						+"RecallInterval,RecallStatus"
 						+") VALUES ("
-						+"'"+POut.PInt(patNum)+"', "
+						+"'"+POut.PLong(patNum)+"', "
 						+POut.PDate(dueDate)+", "
 						+POut.PDate(dueDate)+", "
 						+POut.PDate(previousDate)+", "
-						+"'"+POut.PInt(newInterval.ToInt())+"', "
-						+"'"+POut.PInt(status)+"')";
+						+"'"+POut.PLong(newInterval.ToInt())+"', "
+						+"'"+POut.PLong(status)+"')";
 					Db.NonQ32(command);
 				}//for int i<patTable
 				command="UPDATE preference SET ValueString = '3.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -1008,7 +1008,7 @@ namespace OpenDentBusiness{
 				//add adjustment categories.
 				command="SELECT Max(ItemOrder) FROM definition WHERE Category=1";
 				table=Db.GetTable(command);
-				int firstItemOrder=PIn.PInt32(table.Rows[0][0].ToString())+1;
+				int firstItemOrder=PIn.PInt(table.Rows[0][0].ToString())+1;
 				command="SELECT * FROM definition WHERE Category=15 ORDER BY ItemOrder";//cat=DiscountTypes
 				table=Db.GetTable(command);
 				Hashtable HDiscToAdj=new Hashtable();//key=original defNum(discountType. value=new defNum(AdjType)
@@ -1016,12 +1016,12 @@ namespace OpenDentBusiness{
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO definition (category,itemorder,itemname,itemvalue,ishidden) VALUES("
 					+"1, "//category=AdjTypes
-					+"'"+POut.PInt(firstItemOrder+i)+"', "//itemOrder
+					+"'"+POut.PLong(firstItemOrder+i)+"', "//itemOrder
 					+"'"+POut.PString(PIn.PString(table.Rows[i][3].ToString()))+"', "//item name
 					+"'-', "//itemValue. All discounts are negative
 					+"'"+table.Rows[i][6].ToString()+"')";//is hidden
 					numAdj=Db.NonQ32(command,true);
-					HDiscToAdj.Add(PIn.PInt(table.Rows[i][0].ToString()),//defNum of disc
+					HDiscToAdj.Add(PIn.PLong(table.Rows[i][0].ToString()),//defNum of disc
 						numAdj);//defNum of adj
 				}
 				//handle 0:
@@ -1036,9 +1036,9 @@ namespace OpenDentBusiness{
 					+"VALUES("
 					+POut.PDate(PIn.PDate(table.Rows[i][9].ToString()))+", "//entryDate
 					+"'"+POut.PDouble(-PIn.PDouble(table.Rows[i][1].ToString()))+"', "//amt
-					+"'"+POut.PInt(PIn.PInt(table.Rows[i][2].ToString()))+"', "//patNum
-					+"'"+POut.PInt((int)HDiscToAdj[PIn.PInt(table.Rows[i][6].ToString())])+"', "//type
-					+"'"+POut.PInt(PIn.PInt(table.Rows[i][7].ToString()))+"', "//provNum
+					+"'"+POut.PLong(PIn.PLong(table.Rows[i][2].ToString()))+"', "//patNum
+					+"'"+POut.PLong((int)HDiscToAdj[PIn.PLong(table.Rows[i][6].ToString())])+"', "//type
+					+"'"+POut.PLong(PIn.PLong(table.Rows[i][7].ToString()))+"', "//provNum
 					+POut.PDate(PIn.PDate(table.Rows[i][3].ToString()))+")";//procDate
 					//note
 					Db.NonQ32(command);
@@ -1052,8 +1052,8 @@ namespace OpenDentBusiness{
 					command="INSERT INTO printer (ComputerNum,PrintSit,PrinterName,"
 					+"DisplayPrompt) "
 					+"VALUES("
-					+"'"+POut.PInt(PIn.PInt(table.Rows[i][0].ToString()))+"', "
-					+"'"+POut.PInt((int)PrintSituation.Default)+"', "
+					+"'"+POut.PLong(PIn.PLong(table.Rows[i][0].ToString()))+"', "
+					+"'"+POut.PLong((int)PrintSituation.Default)+"', "
 					+"'"+POut.PString(PIn.PString(table.Rows[i][2].ToString()))+"', "
 					+"'1')";
 					Db.NonQ32(command);
@@ -1234,9 +1234,9 @@ namespace OpenDentBusiness{
 				//Add patient picture category to images
 				string command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
 				DataTable table=Db.GetTable(command);
-				int lastI=PIn.PInt32(table.Rows[0][0].ToString());
+				int lastI=PIn.PInt(table.Rows[0][0].ToString());
 				command="INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
-					+"VALUES(18,"+POut.PInt(lastI+1)+",'Patient Pictures','P')";
+					+"VALUES(18,"+POut.PLong(lastI+1)+",'Patient Pictures','P')";
 				Db.NonQ32(command);
 				//ImageFX link-----------------------------------------------------------------------
 				command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -1433,14 +1433,14 @@ namespace OpenDentBusiness{
 				double interest;
 				double monthlyRate;
 				for(int i=0;i<table.Rows.Count;i++) {
-					payPlanNum=    PIn.PInt32(table.Rows[i][0].ToString());
-					patNum=        PIn.PInt32(table.Rows[i][1].ToString());
-					guarantor=     PIn.PInt32(table.Rows[i][2].ToString());
+					payPlanNum=    PIn.PInt(table.Rows[i][0].ToString());
+					patNum=        PIn.PInt(table.Rows[i][1].ToString());
+					guarantor=     PIn.PInt(table.Rows[i][2].ToString());
 					payPlanDate=   PIn.PDate(table.Rows[i][3].ToString());
 					totalAmount=   PIn.PDouble(table.Rows[i][4].ToString());
 					APR=           PIn.PDouble(table.Rows[i][5].ToString());
 					monthlyPayment=PIn.PDouble(table.Rows[i][6].ToString());
-					term=          PIn.PInt32(table.Rows[i][7].ToString());
+					term=          PIn.PInt(table.Rows[i][7].ToString());
 					dateFirstPay=  PIn.PDate(table.Rows[i][9].ToString());
 					downPayment=   PIn.PDouble(table.Rows[i][10].ToString());
 					totalCost=     PIn.PDouble(table.Rows[i][12].ToString());
@@ -1453,9 +1453,9 @@ namespace OpenDentBusiness{
 						totalAmount-=downPayment;
 						interest=0;
 						command="INSERT INTO payplancharge (PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note) VALUES("
-							+"'"+POut.PInt(payPlanNum)+"', "
-							+"'"+POut.PInt(guarantor)+"', "
-							+"'"+POut.PInt(patNum)+"', "
+							+"'"+POut.PLong(payPlanNum)+"', "
+							+"'"+POut.PLong(guarantor)+"', "
+							+"'"+POut.PLong(patNum)+"', "
 							+POut.PDate(chargeDate)+", "
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"', "
@@ -1492,9 +1492,9 @@ namespace OpenDentBusiness{
 							interest=0;
 						}
 						command="INSERT INTO payplancharge (PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest) VALUES("
-							+"'"+POut.PInt(payPlanNum)+"', "
-							+"'"+POut.PInt(guarantor)+"', "
-							+"'"+POut.PInt(patNum)+"', "
+							+"'"+POut.PLong(payPlanNum)+"', "
+							+"'"+POut.PLong(guarantor)+"', "
+							+"'"+POut.PLong(patNum)+"', "
 							+POut.PDate(chargeDate)+", "
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"')";
@@ -1511,9 +1511,9 @@ namespace OpenDentBusiness{
 						interest=totalCost;
 						totalCost=0;
 						command="INSERT INTO payplancharge (PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest) VALUES("
-							+"'"+POut.PInt(payPlanNum)+"', "
-							+"'"+POut.PInt(guarantor)+"', "
-							+"'"+POut.PInt(patNum)+"', "
+							+"'"+POut.PLong(payPlanNum)+"', "
+							+"'"+POut.PLong(guarantor)+"', "
+							+"'"+POut.PLong(patNum)+"', "
 							+POut.PDate(chargeDate)+", "
 							+"'"+POut.PDouble(principal)+"', "
 							+"'"+POut.PDouble(interest)+"')";
@@ -1542,7 +1542,7 @@ namespace OpenDentBusiness{
 				string itemName;
 				string itemValue;
 				for(int i=0;i<table.Rows.Count;i++) {
-					defNum=PIn.PInt32(table.Rows[i][0].ToString());
+					defNum=PIn.PInt(table.Rows[i][0].ToString());
 					itemName=PIn.PString(table.Rows[i][2].ToString());
 					itemValue=PIn.PString(table.Rows[i][3].ToString());
 					command="INSERT INTO operatory (OpName,Abbrev,ItemOrder,IsHidden) VALUES("
@@ -1551,11 +1551,11 @@ namespace OpenDentBusiness{
 						+"'"+table.Rows[i][1].ToString()+"', "
 						+"'"+table.Rows[i][4].ToString()+"')";
 					opNum=Db.NonQ32(command,true);
-					command="UPDATE appointment SET Op="+POut.PInt(opNum)+" WHERE Op="+POut.PInt(defNum);
+					command="UPDATE appointment SET Op="+POut.PLong(opNum)+" WHERE Op="+POut.PLong(defNum);
 					Db.NonQ32(command);
-					command="UPDATE scheddefault SET Op="+POut.PInt(opNum)+" WHERE Op="+POut.PInt(defNum);
+					command="UPDATE scheddefault SET Op="+POut.PLong(opNum)+" WHERE Op="+POut.PLong(defNum);
 					Db.NonQ32(command);
-					command="UPDATE apptviewitem SET OpNum="+POut.PInt(opNum)+" WHERE OpNum="+POut.PInt(defNum);
+					command="UPDATE apptviewitem SET OpNum="+POut.PLong(opNum)+" WHERE OpNum="+POut.PLong(defNum);
 					Db.NonQ32(command);
 				}
 				command="DELETE FROM definition WHERE Category=9";
@@ -1575,12 +1575,12 @@ namespace OpenDentBusiness{
 				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
-					groupNum=PIn.PInt32(table.Rows[i][0].ToString());
-					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",25)";
+					groupNum=PIn.PInt(table.Rows[i][0].ToString());
+					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PLong(groupNum)+",25)";
 					Db.NonQ32(command);
-					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",26)";
+					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PLong(groupNum)+",26)";
 					Db.NonQ32(command);
-					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",27)";
+					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PLong(groupNum)+",27)";
 					Db.NonQ32(command);
 					//by default, nobody will have permission to backup
 					//command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",28)";
@@ -1662,8 +1662,8 @@ namespace OpenDentBusiness{
 				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
-					groupNum=PIn.PInt32(table.Rows[i][0].ToString());
-					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PInt(groupNum)+",30)";
+					groupNum=PIn.PInt(table.Rows[i][0].ToString());
+					command="INSERT INTO grouppermission (UserGroupNum,PermType) VALUES("+POut.PLong(groupNum)+",30)";
 					Db.NonQ32(command);
 				}
 				//Populate the new column: claimpayment.CarrierName
@@ -1889,47 +1889,47 @@ namespace OpenDentBusiness{
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD4'";
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					claimFormNum=PIn.PInt32(table.Rows[0][0].ToString());
+					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
+						+POut.PLong(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
+						+POut.PLong(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
+						+POut.PLong(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
+						+POut.PLong(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
+						+POut.PLong(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
+						+POut.PLong(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
 					Db.NonQ32(command);
 				}
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD5'";
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					claimFormNum=PIn.PInt32(table.Rows[0][0].ToString());
+					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
+						+POut.PLong(claimFormNum)+",'P1Diagnosis',446,749,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
+						+POut.PLong(claimFormNum)+",'P2Diagnosis',446,781,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
+						+POut.PLong(claimFormNum)+",'P3Diagnosis',446,816,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
+						+POut.PLong(claimFormNum)+",'P4Diagnosis',446,849,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
+						+POut.PLong(claimFormNum)+",'P5Diagnosis',446,882,75,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
+						+POut.PLong(claimFormNum)+",'P6Diagnosis',446,915,75,16)";
 					Db.NonQ32(command);
 				}
 				command="ALTER TABLE procedurelog ADD IsPrincDiag tinyint unsigned NOT NULL";
@@ -2117,7 +2117,7 @@ namespace OpenDentBusiness{
 				command="INSERT INTO covcat (Description,DefaultPercent,IsPreventive,"
 					+"CovOrder,IsHidden) VALUES('General',-1,0,0,0)";
 				int covCatNumGeneral=Db.NonQ32(command,true);
-				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNumGeneral)+",'D0000','D9999')";
+				command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNumGeneral)+",'D0000','D9999')";
 				Db.NonQ32(command);
 				//Add a note to all InsPlans that do not renew in Jan----------------------------------------------------------
 				command="SELECT PlanNum,RenewMonth FROM insplan WHERE RenewMonth != '1'";
@@ -2192,15 +2192,15 @@ namespace OpenDentBusiness{
 							+") VALUES("
 							+"'"+table.Rows[i][0].ToString()+"', "//planNum
 							+"'0',"//patPlanNum
-							+"'"+POut.PInt(covCatNumGeneral)+"',"//CovCatNum
-							+"'"+POut.PInt((int)InsBenefitType.Limitations)+"', "
+							+"'"+POut.PLong(covCatNumGeneral)+"',"//CovCatNum
+							+"'"+POut.PLong((int)InsBenefitType.Limitations)+"', "
 							+"'0',"//percent
 							+"'"+table.Rows[i][1].ToString()+"', ";//max
 						if(table.Rows[i][7].ToString()=="1") {//RenewMonth=Jan
-							command+="'"+POut.PInt((int)BenefitTimePeriod.CalendarYear)+"')";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.CalendarYear)+"')";
 						}
 						else {
-							command+="'"+POut.PInt((int)BenefitTimePeriod.ServiceYear)+"')";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.ServiceYear)+"')";
 						}
 						Db.NonQ32(command);
 					}
@@ -2210,15 +2210,15 @@ namespace OpenDentBusiness{
 							+") VALUES("
 							+"'"+table.Rows[i][0].ToString()+"', "//planNum
 							+"'0',"//patPlanNum
-							+"'"+POut.PInt(covCatNumGeneral)+"',"//CovCatNum
-							+"'"+POut.PInt((int)InsBenefitType.Deductible)+"', "
+							+"'"+POut.PLong(covCatNumGeneral)+"',"//CovCatNum
+							+"'"+POut.PLong((int)InsBenefitType.Deductible)+"', "
 							+"'0',"//percent
 							+"'"+table.Rows[i][2].ToString()+"', ";//deductible amt
 						if(table.Rows[i][7].ToString()=="1") {//RenewMonth=Jan
-							command+="'"+POut.PInt((int)BenefitTimePeriod.CalendarYear)+"')";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.CalendarYear)+"')";
 						}
 						else {
-							command+="'"+POut.PInt((int)BenefitTimePeriod.ServiceYear)+"')";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.ServiceYear)+"')";
 						}
 						Db.NonQ32(command);
 					}
@@ -2228,25 +2228,25 @@ namespace OpenDentBusiness{
 							+"TimePeriod,QuantityQualifier,Quantity) VALUES("
 							+"'"+table.Rows[i][0].ToString()+"', "//planNum
 							+"'0',"//patPlanNum
-							+"'"+POut.PInt(covCatNumGeneral)+"',"//CovCatNum=general. But ignored because of ADACode
+							+"'"+POut.PLong(covCatNumGeneral)+"',"//CovCatNum=general. But ignored because of ADACode
 							+"'D1204',"//ADACode for Adult Flo
-							+"'"+POut.PInt((int)InsBenefitType.Limitations)+"', "
+							+"'"+POut.PLong((int)InsBenefitType.Limitations)+"', "
 							+"'0',"//percent
 							+"'0', ";//amt
 						if(table.Rows[i][7].ToString()=="1") {//RenewMonth=Jan
-							command+="'"+POut.PInt((int)BenefitTimePeriod.CalendarYear)+"', ";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.CalendarYear)+"', ";
 						}
 						else {
-							command+="'"+POut.PInt((int)BenefitTimePeriod.ServiceYear)+"', ";
+							command+="'"+POut.PLong((int)BenefitTimePeriod.ServiceYear)+"', ";
 						}
-						command+="'"+POut.PInt((int)BenefitQuantity.AgeLimit)+"', "
+						command+="'"+POut.PLong((int)BenefitQuantity.AgeLimit)+"', "
 							+"'"+table.Rows[i][3].ToString()+"')";//this should work for 0,18, and 99
 						Db.NonQ32(command);
 					}
 					//MissToothExcl
 					if(table.Rows[i][4].ToString()!="0") {//if it's not unknown
 						command="UPDATE insplan SET "
-							+"PlanNote = CONCAT('Missing tooth exclusion: "+((YN)PIn.PInt(table.Rows[i][4].ToString())).ToString()
+							+"PlanNote = CONCAT('Missing tooth exclusion: "+((YN)PIn.PLong(table.Rows[i][4].ToString())).ToString()
 							+". ',PlanNote) "
 							+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
 						Db.NonQ32(command);
@@ -2254,13 +2254,13 @@ namespace OpenDentBusiness{
 					//MajorWait
 					if(table.Rows[i][5].ToString()!="0") {//if it's not unknown
 						command="UPDATE insplan SET "
-							+"PlanNote = CONCAT('Wait on major: "+((YN)PIn.PInt(table.Rows[i][5].ToString())).ToString()
+							+"PlanNote = CONCAT('Wait on major: "+((YN)PIn.PLong(table.Rows[i][5].ToString())).ToString()
 							+". ',PlanNote) "
 							+"WHERE PlanNum='"+table.Rows[i][0].ToString()+"'";
 						Db.NonQ32(command);
 					}
 					//OrthoMax
-					if(PIn.PInt(table.Rows[i][6].ToString())>0) {//not -1 or 0
+					if(PIn.PLong(table.Rows[i][6].ToString())>0) {//not -1 or 0
 						command="UPDATE insplan SET "
 							+"PlanNote = CONCAT('Ortho Max: "+table.Rows[i][6].ToString()
 							+". ',PlanNote) "
@@ -2335,77 +2335,77 @@ namespace OpenDentBusiness{
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD6'";
 				table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
-					claimFormNum=PIn.PInt32(table.Rows[0][0].ToString());
+					claimFormNum=PIn.PInt(table.Rows[0][0].ToString());
 					//get rid of the existing dentist fee column.
-					command="DELETE FROM claimformitem WHERE ClaimFormNum='"+POut.PInt(claimFormNum)
+					command="DELETE FROM claimformitem WHERE ClaimFormNum='"+POut.PLong(claimFormNum)
 						+"' AND XPos=342 AND FieldName LIKE '%Fee'";
 					Db.NonQ32(command);
 					//add the lab fee column
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P1Lab',440,394,66,16)";
+						+POut.PLong(claimFormNum)+",'P1Lab',440,394,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P2Lab',440,411,66,16)";
+						+POut.PLong(claimFormNum)+",'P2Lab',440,411,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P3Lab',440,428,66,16)";
+						+POut.PLong(claimFormNum)+",'P3Lab',440,428,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P4Lab',440,445,66,16)";
+						+POut.PLong(claimFormNum)+",'P4Lab',440,445,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P5Lab',440,462,66,16)";
+						+POut.PLong(claimFormNum)+",'P5Lab',440,462,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P6Lab',440,479,66,16)";
+						+POut.PLong(claimFormNum)+",'P6Lab',440,479,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P7Lab',440,496,66,16)";
+						+POut.PLong(claimFormNum)+",'P7Lab',440,496,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P8Lab',440,513,66,16)";
+						+POut.PLong(claimFormNum)+",'P8Lab',440,513,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P9Lab',440,530,66,16)";
+						+POut.PLong(claimFormNum)+",'P9Lab',440,530,66,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P10Lab',440,547,66,16)";
+						+POut.PLong(claimFormNum)+",'P10Lab',440,547,66,16)";
 					Db.NonQ32(command);
 					//add the dentist fee column (fee-lab)
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P1FeeMinusLab',342,394,62,16)";
+						+POut.PLong(claimFormNum)+",'P1FeeMinusLab',342,394,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P2FeeMinusLab',342,411,62,16)";
+						+POut.PLong(claimFormNum)+",'P2FeeMinusLab',342,411,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P3FeeMinusLab',342,428,62,16)";
+						+POut.PLong(claimFormNum)+",'P3FeeMinusLab',342,428,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P4FeeMinusLab',342,445,62,16)";
+						+POut.PLong(claimFormNum)+",'P4FeeMinusLab',342,445,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P5FeeMinusLab',342,462,62,16)";
+						+POut.PLong(claimFormNum)+",'P5FeeMinusLab',342,462,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P6FeeMinusLab',342,479,62,16)";
+						+POut.PLong(claimFormNum)+",'P6FeeMinusLab',342,479,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P7FeeMinusLab',342,496,62,16)";
+						+POut.PLong(claimFormNum)+",'P7FeeMinusLab',342,496,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P8FeeMinusLab',342,513,62,16)";
+						+POut.PLong(claimFormNum)+",'P8FeeMinusLab',342,513,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P9FeeMinusLab',342,530,62,16)";
+						+POut.PLong(claimFormNum)+",'P9FeeMinusLab',342,530,62,16)";
 					Db.NonQ32(command);
 					command="INSERT INTO claimformitem (ClaimFormNum,FieldName,XPos,YPos,Width,Height) VALUES("
-						+POut.PInt(claimFormNum)+",'P10FeeMinusLab',342,547,62,16)";
+						+POut.PLong(claimFormNum)+",'P10FeeMinusLab',342,547,62,16)";
 					Db.NonQ32(command);
 					//make dates wider so the year doesn't get cut off
 					command="UPDATE claimformitem SET Width=85,XPos=28 "
 						+"WHERE FieldName LIKE 'P%Date' AND XPos=38 "
-						+"AND ClaimFormNum="+POut.PInt(claimFormNum);
+						+"AND ClaimFormNum="+POut.PLong(claimFormNum);
 					Db.NonQ32(command);
 				}
 				//add chart of accounts-----------------------------------------------------------------
@@ -2438,16 +2438,16 @@ namespace OpenDentBusiness{
 				Db.NonQ32(command);
 				//add accounting permission to each admin group------------------------------------------------------
 				command="SELECT UserGroupNum FROM grouppermission "
-					+"WHERE PermType="+POut.PInt((int)Permissions.SecurityAdmin);
+					+"WHERE PermType="+POut.PLong((int)Permissions.SecurityAdmin);
 				DataTable table=Db.GetTable(command);
 				int groupNum;
 				for(int i=0;i<table.Rows.Count;i++) {
-					groupNum=PIn.PInt32(table.Rows[i][0].ToString());
+					groupNum=PIn.PInt(table.Rows[i][0].ToString());
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-						+"VALUES("+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.AccountingCreate)+")";
+						+"VALUES("+POut.PLong(groupNum)+","+POut.PLong((int)Permissions.AccountingCreate)+")";
 					Db.NonQ32(command);
 					command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-						+"VALUES("+POut.PInt(groupNum)+","+POut.PInt((int)Permissions.AccountingEdit)+")";
+						+"VALUES("+POut.PLong(groupNum)+","+POut.PLong((int)Permissions.AccountingEdit)+")";
 					Db.NonQ32(command);
 				}
 				//fix the planned appointment 'done' feature--------------------------------------------------------------
@@ -2619,87 +2619,87 @@ namespace OpenDentBusiness{
 					int covCatNum;
 					//Diagnostic
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Diagnostic','100','"
-						+POut.PInt((int)EbenefitCategory.Diagnostic)+"')";
+						+POut.PLong((int)EbenefitCategory.Diagnostic)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D0000','D0999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D0000','D0999')";
 					Db.NonQ32(command);
 					//RoutinePreventive
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Preventive','100','"
-						+POut.PInt((int)EbenefitCategory.RoutinePreventive)+"')";
+						+POut.PLong((int)EbenefitCategory.RoutinePreventive)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D1000','D1999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D1000','D1999')";
 					Db.NonQ32(command);
 					//Restorative
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Restorative','80','"
-						+POut.PInt((int)EbenefitCategory.Restorative)+"')";
+						+POut.PLong((int)EbenefitCategory.Restorative)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D2000','D2999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D2000','D2999')";
 					Db.NonQ32(command);
 					//Endo
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Endo','80','"
-						+POut.PInt((int)EbenefitCategory.Endodontics)+"')";
+						+POut.PLong((int)EbenefitCategory.Endodontics)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D3000','D3999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D3000','D3999')";
 					Db.NonQ32(command);
 					//Perio
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Perio','80','"
-						+POut.PInt((int)EbenefitCategory.Periodontics)+"')";
+						+POut.PLong((int)EbenefitCategory.Periodontics)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D4000','D4999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D4000','D4999')";
 					Db.NonQ32(command);
 					//OralSurgery
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Oral Surgery','80','"
-						+POut.PInt((int)EbenefitCategory.OralSurgery)+"')";
+						+POut.PLong((int)EbenefitCategory.OralSurgery)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D7000','D7999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D7000','D7999')";
 					Db.NonQ32(command);
 					//Crowns
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Crowns','50','"
-						+POut.PInt((int)EbenefitCategory.Crowns)+"')";
+						+POut.PLong((int)EbenefitCategory.Crowns)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D2700','D2799')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D2700','D2799')";
 					Db.NonQ32(command);
 					//Prosth
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Prosth','50','"
-						+POut.PInt((int)EbenefitCategory.Prosthodontics)+"')";
+						+POut.PLong((int)EbenefitCategory.Prosthodontics)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D5000','D5899')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D5000','D5899')";
 					Db.NonQ32(command);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D6200','D6899')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D6200','D6899')";
 					Db.NonQ32(command);
 					//MaxProsth
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Maxillofacial Prosth','-1','"
-						+POut.PInt((int)EbenefitCategory.MaxillofacialProsth)+"')";
+						+POut.PLong((int)EbenefitCategory.MaxillofacialProsth)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D5900','D5999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D5900','D5999')";
 					Db.NonQ32(command);
 					//Accident
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Accident','-1','"
-						+POut.PInt((int)EbenefitCategory.Accident)+"')";
+						+POut.PLong((int)EbenefitCategory.Accident)+"')";
 					covCatNum=Db.NonQ32(command,true);
 					//Ortho
 					command="INSERT INTO covcat (Description,DefaultPercent,EbenefitCat) VALUES('Ortho','-1','"
-						+POut.PInt((int)EbenefitCategory.Orthodontics)+"')";
+						+POut.PLong((int)EbenefitCategory.Orthodontics)+"')";
 					covCatNum=Db.NonQ32(command,true);
-					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PInt(covCatNum)+",'D8000','D8999')";
+					command="INSERT INTO covspan (CovCatNum,FromCode,ToCode) VALUES("+POut.PLong(covCatNum)+",'D8000','D8999')";
 					Db.NonQ32(command);
 					//Then, order everything
 					command="SELECT * FROM covcat ORDER BY "
-						+"EbenefitCat != "+POut.PInt((int)EbenefitCategory.General)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Diagnostic)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.RoutinePreventive)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Restorative)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Endodontics)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Periodontics)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.OralSurgery)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Crowns)//subcategory of Restorative
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Prosthodontics)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.MaxillofacialProsth)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Accident)
-						+",EbenefitCat != "+POut.PInt((int)EbenefitCategory.Orthodontics);
+						+"EbenefitCat != "+POut.PLong((int)EbenefitCategory.General)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Diagnostic)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.RoutinePreventive)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Restorative)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Endodontics)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Periodontics)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.OralSurgery)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Crowns)//subcategory of Restorative
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Prosthodontics)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.MaxillofacialProsth)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Accident)
+						+",EbenefitCat != "+POut.PLong((int)EbenefitCategory.Orthodontics);
 					DataTable table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++){
-						command="UPDATE covcat SET CovOrder="+POut.PInt(i)+" WHERE CovCatNum="+table.Rows[i][0].ToString();
+						command="UPDATE covcat SET CovOrder="+POut.PLong(i)+" WHERE CovCatNum="+table.Rows[i][0].ToString();
 						Db.NonQ32(command);
 					}
 				}
@@ -2712,7 +2712,7 @@ namespace OpenDentBusiness{
 				Db.NonQ32(command);
 				command="INSERT INTO definition (category,itemorder,itemname) VALUES(26,0,'All')";
 				int defNum=Db.NonQ32(command,true);
-				command="UPDATE procbutton SET Category="+POut.PInt(defNum);
+				command="UPDATE procbutton SET Category="+POut.PLong(defNum);
 				Db.NonQ32(command);
 				command="ALTER TABLE procbutton ADD ButtonImage text NOT NULL";
 				Db.NonQ32(command);
@@ -2748,54 +2748,54 @@ namespace OpenDentBusiness{
 				Color cDark;
 				Color cLight;
 				for(int i=0;i<table.Rows.Count;i++){
-					cDark=Color.FromArgb(PIn.PInt32(table.Rows[i][5].ToString()));
+					cDark=Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
 					cLight=Color.FromArgb((cDark.R+255)/2,(cDark.G+255)/2,(cDark.B+255)/2);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(22,"
-						+POut.PInt(i+5)+",'"+POut.PString(PIn.PString(table.Rows[i][3].ToString())+" (light)")
-						+"','" +POut.PInt(cLight.ToArgb())+"')";
+						+POut.PLong(i+5)+",'"+POut.PString(PIn.PString(table.Rows[i][3].ToString())+" (light)")
+						+"','" +POut.PLong(cLight.ToArgb())+"')";
 					Db.NonQ32(command);
 				}
 				//Conversions to painting type are listed in order previously displayed.
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.Extraction)+" WHERE GTypeNum=1";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.Extraction)+" WHERE GTypeNum=1";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.Implant)+" WHERE GTypeNum=10";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.Implant)+" WHERE GTypeNum=10";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.RCT)+" WHERE GTypeNum=4";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.RCT)+" WHERE GTypeNum=4";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.PostBU)+" WHERE GTypeNum=5";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.PostBU)+" WHERE GTypeNum=5";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingDark)+" WHERE GTypeNum=2";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.FillingDark)+" WHERE GTypeNum=2";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=3";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=3";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=19";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=19";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=11";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.FillingLight)+" WHERE GTypeNum=11";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownDark)+" WHERE GTypeNum=6";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.CrownDark)+" WHERE GTypeNum=6";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=7";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=7";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=20";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=20";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=9";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.CrownLight)+" WHERE GTypeNum=9";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeDark)+" WHERE GTypeNum=12";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.BridgeDark)+" WHERE GTypeNum=12";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=13";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=13";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=21";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=21";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=14";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.BridgeLight)+" WHERE GTypeNum=14";
 				Db.NonQ32(command);
 				//veneer not painted
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureDark)+" WHERE GTypeNum=24";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.DentureDark)+" WHERE GTypeNum=24";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=25";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=25";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=26";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=26";
 				Db.NonQ32(command);
-				command="UPDATE procedurecode SET PaintType="+POut.PInt((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=27";
+				command="UPDATE procedurecode SET PaintType="+POut.PLong((int)ToothPaintingType.DentureLight)+" WHERE GTypeNum=27";
 				Db.NonQ32(command);
 				command=@"CREATE TABLE toothinitial(
 					ToothInitialNum mediumint unsigned NOT NULL auto_increment,
@@ -3269,7 +3269,7 @@ namespace OpenDentBusiness{
 					command="INSERT INTO formpat (PatNum,FormDateTime) VALUES("
 						+"'"+table.Rows[i][0].ToString()+"', NOW())";
 					formPatNum=Db.NonQ32(command,true);
-					command="UPDATE question SET FormPatNum="+POut.PInt(formPatNum)+" WHERE PatNum="+table.Rows[i][0].ToString();
+					command="UPDATE question SET FormPatNum="+POut.PLong(formPatNum)+" WHERE PatNum="+table.Rows[i][0].ToString();
 					Db.NonQ32(command);
 				}
 				command="DROP TABLE IF EXISTS etrans";
@@ -3814,8 +3814,8 @@ namespace OpenDentBusiness{
 				int programNum =Db.NonQ32(command,true);//we now have a ProgramNum to work with
 				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+ "VALUES ("
-					+ "'" + POut.PInt(programNum) + "', "
-					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
+					+ "'" + POut.PLong(programNum) + "', "
+					+ "'" + POut.PLong((int)ToolBarsAvail.ChartModule) + "', "
 					+ "'Owandy')";
 				Db.NonQ32(command);
 				//Vipersoft bridge:
@@ -3968,8 +3968,8 @@ namespace OpenDentBusiness{
 				int programNum =Db.NonQ32(command,true);//we now have a ProgramNum to work with
 				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+ "VALUES ("
-					+ "'" + POut.PInt(programNum) + "', "
-					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
+					+ "'" + POut.PLong(programNum) + "', "
+					+ "'" + POut.PLong((int)ToolBarsAvail.ChartModule) + "', "
 					+ "'DXIS')";
 				Db.NonQ32(command);
 				//Added after r25:
@@ -4042,7 +4042,7 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
 					Db.NonQ32(command);
-					command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+					command="SELECT SSN FROM provider WHERE ProvNum="+POut.PLong(practiceDefaultProv);
 					string defProvSSN=Db.GetTable(command).Rows[0][0].ToString().Replace("-","");
 					command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
 						+"WHERE ReceiverID='660610220' OR ReceiverID='AOS' OR ReceiverID='113504607'";//Inmediata,AOS, or Tesia
@@ -4067,7 +4067,7 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="ALTER TABLE clearinghouse ADD GS03 varchar(255)";
 					Db.NonQ32(command);
-					command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+					command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PLong(practiceDefaultProv);
 					string AOSnumber=Db.GetTable(command).Rows[0][0].ToString();
 					command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
 					Db.NonQ32(command);
@@ -4697,7 +4697,7 @@ namespace OpenDentBusiness{
 							+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
 							+"'"+(i+1)+"', "
 							+table.Rows[i]["PatNum"].ToString()+", "
-							+POut.PInt(laboratoryNum)+", ";
+							+POut.PLong(laboratoryNum)+", ";
 						if(table.Rows[i]["AptStatus"].ToString()=="6") {//if planned apt
 							command+="0, "//AptNum
 								+table.Rows[i]["AptNum"].ToString()+", ";//PlannedAptNum
@@ -4884,28 +4884,28 @@ namespace OpenDentBusiness{
 							+"ProcCat,TreatArea,RemoveTooth,SetRecall,NoBillIns,IsProsth,DefaultNote,"
 							+"IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,"
 							+"GraphicColor,LaymanTerm,IsCanadianLab,PreExisting) VALUES ("
-							+"'"+POut.PInt(i+1)+"',"
+							+"'"+POut.PLong(i+1)+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["ProcCode"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["Descript"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["AbbrDesc"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["ProcTime"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["ProcCat"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["TreatArea"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["RemoveTooth"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["SetRecall"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["NoBillIns"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["ProcCat"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["TreatArea"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["RemoveTooth"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["SetRecall"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["NoBillIns"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["IsProsth"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["DefaultNote"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsHygiene"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["DefaultNote"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["IsHygiene"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["GTypeNum"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["AlternateCode1"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["MedicalCode"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsTaxed"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["PaintType"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["GraphicColor"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["IsTaxed"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["PaintType"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["GraphicColor"].ToString()))+"',"
 							+"'"+POut.PString(PIn.PString(table.Rows[i]["LaymanTerm"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsCanadianLab"].ToString()))+"',"
-							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["PreExisting"].ToString()))+"')";
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["IsCanadianLab"].ToString()))+"',"
+							+"'"+POut.PLong(PIn.PLong(table.Rows[i]["PreExisting"].ToString()))+"')";
 						Db.NonQ32(command);
 					}
 					command="ALTER TABLE procedurelog ADD CodeNum int default '0' NOT NULL";
@@ -6168,27 +6168,27 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,0,'ApptRelated','APPT')";
 					int defNum=Db.NonQ32(command,true);
-					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=2";
+					command="UPDATE commlog SET CommType="+POut.PLong(defNum)+" WHERE CommType=2";
 					Db.NonQ32(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,1,'Insurance','')";
 					defNum=Db.NonQ32(command,true);
-					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=3";
+					command="UPDATE commlog SET CommType="+POut.PLong(defNum)+" WHERE CommType=3";
 					Db.NonQ32(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,2,'Financial','FIN')";
 					defNum=Db.NonQ32(command,true);
-					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=4";
+					command="UPDATE commlog SET CommType="+POut.PLong(defNum)+" WHERE CommType=4";
 					Db.NonQ32(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,3,'Recall','RECALL')";
 					defNum=Db.NonQ32(command,true);
-					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=5";
+					command="UPDATE commlog SET CommType="+POut.PLong(defNum)+" WHERE CommType=5";
 					Db.NonQ32(command);
 					//-----------------
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,4,'Misc','MISC')";
 					defNum=Db.NonQ32(command,true);
-					command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=6";
+					command="UPDATE commlog SET CommType="+POut.PLong(defNum)+" WHERE CommType=6";
 					Db.NonQ32(command);
 					command="UPDATE commlog SET CommType=0 WHERE CommType=1";
 					Db.NonQ32(command);
@@ -6447,8 +6447,8 @@ namespace OpenDentBusiness{
 					int programNum=Db.NonQ32(command,true);//we now have a ProgramNum to work with
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
-						+"'"+POut.PInt(programNum)+"', "
-						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Dental')";
 					Db.NonQ32(command);
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -6462,8 +6462,8 @@ namespace OpenDentBusiness{
 					programNum=Db.NonQ32(command,true);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
-						+"'"+POut.PInt(programNum)+"', "
-						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Update')";
 					Db.NonQ32(command);
 					command="ALTER TABLE patient ADD Title VARCHAR(15)";
@@ -6557,7 +6557,7 @@ namespace OpenDentBusiness{
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
-						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Dental')";
 					Db.NonQ32(command);
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -6574,7 +6574,7 @@ namespace OpenDentBusiness{
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
-						+"'"+POut.PInt((int)ToolBarsAvail.FamilyModule)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.FamilyModule)+"', "
 						+"'PT Update')";
 					Db.NonQ32(command);
 					command="ALTER TABLE patient ADD Title VARCHAR2(15)";
@@ -7024,9 +7024,9 @@ namespace OpenDentBusiness{
 					command="DROP TABLE IF EXISTS docattach";
 					Db.NonQ32(command);
 					command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
-					int defnum=PIn.PInt32(Db.GetCount(command));
+					int defnum=PIn.PInt(Db.GetCount(command));
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
-						+"VALUES(18,"+POut.PInt(defnum+1)+",'Statements','S',0,0)";
+						+"VALUES(18,"+POut.PLong(defnum+1)+",'Statements','S',0,0)";
 					Db.NonQ32(command);
 					command="INSERT INTO preference (PrefName,ValueString) VALUES ('AutoResetTPEntryStatus','1')";
 					Db.NonQ32(command);
@@ -7279,8 +7279,8 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
-						+"'"+POut.PInt(programNum)+"', "
-						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Digora')";
 					Db.NonQ32(command);
 				} else {//oracle
@@ -7305,7 +7305,7 @@ namespace OpenDentBusiness{
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"(SELECT MAX(ProgramNum) FROM program), "
-						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Digora')";
 					Db.NonQ32(command);
 				}
@@ -7560,7 +7560,7 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="SELECT ValueString FROM preference WHERE PrefName= 'InsBillingProv'";
 					DataTable table=Db.GetTable(command);
-					int practiceBillingProv=PIn.PInt32(table.Rows[0][0].ToString());
+					int practiceBillingProv=PIn.PInt(table.Rows[0][0].ToString());
 					command="UPDATE clinic SET InsBillingProv='"+practiceBillingProv.ToString()+"'";
 					Db.NonQ32(command);
 					command="ALTER TABLE displayfield ADD Category int default '0' NOT NULL";
@@ -7704,37 +7704,37 @@ namespace OpenDentBusiness{
 					int programNum=Db.NonQ32(command,true);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'Username', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'Password', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'WorkstationName', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'IntervalSeconds', "
 						+"'15')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'DateTimeLastUploaded', "
 						+"'')";
 					Db.NonQ32(command);
 					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 						+") VALUES("
-						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PLong(programNum)+"', "
 						+"'SynchStatus', "
 						+"'')";
 					Db.NonQ32(command);
@@ -7853,8 +7853,8 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
-						+"'"+POut.PInt(programNum)+"', "
-						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+						+"'"+POut.PLong(programNum)+"', "
+						+"'"+POut.PLong((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Dolphin')";
 					Db.NonQ32(command);
 					command="ALTER TABLE appointment ADD DateTimeArrived DateTime NOT NULL";
@@ -8104,15 +8104,15 @@ namespace OpenDentBusiness{
 					Db.NonQ32(command);
 					command="SELECT Max(ItemOrder) FROM definition WHERE Category=1";
 					table=Db.GetTable(command);
-					int billingchargeItemOrder=PIn.PInt32(table.Rows[0][0].ToString())+1;
+					int billingchargeItemOrder=PIn.PInt(table.Rows[0][0].ToString())+1;
 					command="INSERT INTO definition (category,itemorder,itemname,itemvalue) VALUES("
 						+"1, "//category=AdjTypes
-						+"'"+POut.PInt(billingchargeItemOrder)+"', "//itemOrder
+						+"'"+POut.PLong(billingchargeItemOrder)+"', "//itemOrder
 						+"'Billing Charge', "//itemname
 						+"'+')";//itemValue
 					int numAdj=Db.NonQ32(command,true);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeAdjustmentType', "
-						+"'"+POut.PInt(numAdj)+"','')";
+						+"'"+POut.PLong(numAdj)+"','')";
 					Db.NonQ32(command);
 					command="INSERT INTO preference (PrefName, ValueString,Comments) VALUES ('BillingChargeLastRun', '0001-01-01','')";
 					Db.NonQ32(command);
@@ -8135,7 +8135,7 @@ namespace OpenDentBusiness{
 					table=Db.GetTable(command);
 					List<int> visibleOps=new List<int>();
 					for(int i=0;i<table.Rows.Count;i++) {
-						visibleOps.Add(PIn.PInt32(table.Rows[i]["OperatoryNum"].ToString()));
+						visibleOps.Add(PIn.PInt(table.Rows[i]["OperatoryNum"].ToString()));
 					}
 					//convert blockouts with op=0
 					command="SELECT ScheduleNum FROM schedule WHERE SchedType=2 "//blockout
@@ -8146,7 +8146,7 @@ namespace OpenDentBusiness{
 						for(int o=0;o<visibleOps.Count;o++) {
 							command="INSERT INTO scheduleop(ScheduleNum,OperatoryNum) VALUES("
 								+table.Rows[i]["ScheduleNum"].ToString()+","
-								+POut.PInt(visibleOps[o])+")";
+								+POut.PLong(visibleOps[o])+")";
 							Db.NonQ32(command);
 						}
 					}
@@ -8181,13 +8181,13 @@ namespace OpenDentBusiness{
 							+table.Rows[i]["DefNum"].ToString()+","
 							+"'"+POut.PString(table.Rows[i]["ItemName"].ToString())+"',";
 						if(table.Rows[i]["ItemValue"].ToString()=="A") {
-							command+=POut.PInt((int)FeeScheduleType.Allowed)+",";
+							command+=POut.PLong((int)FeeScheduleType.Allowed)+",";
 						}
 						else if(table.Rows[i]["ItemValue"].ToString()=="C") {
-							command+=POut.PInt((int)FeeScheduleType.CoPay)+",";
+							command+=POut.PLong((int)FeeScheduleType.CoPay)+",";
 						}
 						else {
-							command+=POut.PInt((int)FeeScheduleType.Normal)+",";
+							command+=POut.PLong((int)FeeScheduleType.Normal)+",";
 						}
 						command+=table.Rows[i]["ItemOrder"].ToString()+","//although this will be reset in the UI
 							+table.Rows[i]["IsHidden"].ToString()+")";
@@ -8398,7 +8398,7 @@ namespace OpenDentBusiness{
 			if(FromVersion<new Version("6.1.8.0")) {
 				string command="UPDATE userod SET IsHidden=0 WHERE IsHidden=1 "
 					+"AND EXISTS(SELECT * FROM grouppermission "
-					+"WHERE PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"' "//24
+					+"WHERE PermType='"+POut.PLong((int)Permissions.SecurityAdmin)+"' "//24
 					+"AND grouppermission.UserGroupNum=userod.UserGroupNum)";
 				Db.NonQ32(command);
 				command="UPDATE preference SET ValueString = '6.1.8.0' WHERE PrefName = 'DataBaseVersion'";

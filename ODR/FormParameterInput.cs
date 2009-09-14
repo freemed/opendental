@@ -373,7 +373,7 @@ namespace ODR{
 					}
 				}
 				else if(Parameters[i].ValueType==ParamValueType.Integer){
-					Parameters[i].CurrentValues.Add(PIn.PInt(inputs[i].Text));
+					Parameters[i].CurrentValues.Add(PIn.PLong(inputs[i].Text));
 				}
 				else if(Parameters[i].ValueType==ParamValueType.Number){
 					Parameters[i].CurrentValues.Add(PIn.PDouble(inputs[i].Text));

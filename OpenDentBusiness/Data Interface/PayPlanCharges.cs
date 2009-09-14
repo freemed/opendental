@@ -14,8 +14,8 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM payplancharge "
-				+"WHERE Guarantor='"+POut.PInt(patNum)+"' "
-				+"OR PatNum='"+POut.PInt(patNum)+"' "
+				+"WHERE Guarantor='"+POut.PLong(patNum)+"' "
+				+"OR PatNum='"+POut.PLong(patNum)+"' "
 				+"ORDER BY ChargeDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM payplancharge "
-				+"WHERE PayPlanNum="+POut.PInt(payPlanNum)
+				+"WHERE PayPlanNum="+POut.PLong(payPlanNum)
 				+" ORDER BY ChargeDate";
 			return RefreshAndFill(Db.GetTable(command));
 		}
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM payplancharge "
-				+"WHERE PayPlanChargeNum="+POut.PInt(payPlanChargeNum);
+				+"WHERE PayPlanChargeNum="+POut.PLong(payPlanChargeNum);
 			return RefreshAndFill(Db.GetTable(command))[0];
 		}
 
@@ -49,15 +49,15 @@ namespace OpenDentBusiness{
 			PayPlanCharge ppcharge;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ppcharge=new PayPlanCharge();
-				ppcharge.PayPlanChargeNum= PIn.PInt(table.Rows[i][0].ToString());
-				ppcharge.PayPlanNum      = PIn.PInt(table.Rows[i][1].ToString());
-				ppcharge.Guarantor       = PIn.PInt(table.Rows[i][2].ToString());
-				ppcharge.PatNum          = PIn.PInt(table.Rows[i][3].ToString());
+				ppcharge.PayPlanChargeNum= PIn.PLong(table.Rows[i][0].ToString());
+				ppcharge.PayPlanNum      = PIn.PLong(table.Rows[i][1].ToString());
+				ppcharge.Guarantor       = PIn.PLong(table.Rows[i][2].ToString());
+				ppcharge.PatNum          = PIn.PLong(table.Rows[i][3].ToString());
 				ppcharge.ChargeDate      = PIn.PDate(table.Rows[i][4].ToString());
 				ppcharge.Principal       = PIn.PDouble(table.Rows[i][5].ToString());
 				ppcharge.Interest        = PIn.PDouble(table.Rows[i][6].ToString());
 				ppcharge.Note            = PIn.PString(table.Rows[i][7].ToString());
-				ppcharge.ProvNum         = PIn.PInt(table.Rows[i][8].ToString());
+				ppcharge.ProvNum         = PIn.PLong(table.Rows[i][8].ToString());
 				retVal.Add(ppcharge);
 			}
 			return retVal;
@@ -70,16 +70,16 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "UPDATE payplancharge SET " 
-				+"PayPlanChargeNum = '"+POut.PInt   (charge.PayPlanChargeNum)+"'"
-				+",PayPlanNum = '"     +POut.PInt   (charge.PayPlanNum)+"'"
-				+",Guarantor = '"      +POut.PInt   (charge.Guarantor)+"'"
-				+",PatNum = '"         +POut.PInt   (charge.PatNum)+"'"
+				+"PayPlanChargeNum = '"+POut.PLong   (charge.PayPlanChargeNum)+"'"
+				+",PayPlanNum = '"     +POut.PLong   (charge.PayPlanNum)+"'"
+				+",Guarantor = '"      +POut.PLong   (charge.Guarantor)+"'"
+				+",PatNum = '"         +POut.PLong   (charge.PatNum)+"'"
 				+",ChargeDate = "     +POut.PDate  (charge.ChargeDate)
 				+",Principal = '"      +POut.PDouble(charge.Principal)+"'"
 				+",Interest = '"       +POut.PDouble(charge.Interest)+"'"
 				+",Note = '"           +POut.PString(charge.Note)+"'"
-				+",ProvNum = '"        +POut.PInt   (charge.ProvNum)+"'"
-				+" WHERE PayPlanChargeNum = '"+POut.PInt(charge.PayPlanChargeNum)+"'";
+				+",ProvNum = '"        +POut.PLong   (charge.ProvNum)+"'"
+				+" WHERE PayPlanChargeNum = '"+POut.PLong(charge.PayPlanChargeNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -98,17 +98,17 @@ namespace OpenDentBusiness{
 			}
 			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum) VALUES(";
 			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(charge.PayPlanChargeNum)+"', ";
+				command+="'"+POut.PLong(charge.PayPlanChargeNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (charge.PayPlanNum)+"', "
-				+"'"+POut.PInt   (charge.Guarantor)+"', "
-				+"'"+POut.PInt   (charge.PatNum)+"', "
+				 "'"+POut.PLong   (charge.PayPlanNum)+"', "
+				+"'"+POut.PLong   (charge.Guarantor)+"', "
+				+"'"+POut.PLong   (charge.PatNum)+"', "
 				+POut.PDate  (charge.ChargeDate)+", "
 				+"'"+POut.PDouble(charge.Principal)+"', "
 				+"'"+POut.PDouble(charge.Interest)+"', "
 				+"'"+POut.PString(charge.Note)+"', "
-				+"'"+POut.PInt   (charge.ProvNum)+"')";
+				+"'"+POut.PLong   (charge.ProvNum)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command= "DELETE from payplancharge WHERE PayPlanChargeNum = '"
-				+POut.PInt(charge.PayPlanChargeNum)+"'";
+				+POut.PLong(charge.PayPlanChargeNum)+"'";
  			Db.NonQ(command);
 		}	
 
