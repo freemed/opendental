@@ -283,7 +283,7 @@ namespace OpenDental.Eclaims
 						+Sout(billProv.LName,35)+"*"//NM103: Last name
 						//NM103 allowable length increased to 60
 						+Sout(billProv.FName,25)+"*"//NM104: First name
-						+Sout(billProv.MI,25,1)+"*"//NM105: Middle name
+						+Sout(billProv.MI,25)+"*"//NM105: Middle name. Since this is optional, there is no min length.
 						+"*"//NM106: not used
 						+"*");//NM107: Name suffix. not used
 					//It's after the NPI date now, so only one choice here:
