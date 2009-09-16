@@ -108,8 +108,8 @@ namespace OpenDentBusiness{
 			command="DROP TABLE IF EXISTS "+tempAgingTableName+", "+tempOdAgingTransTableName;
 			Db.NonQ(command);
 			command="CREATE TEMPORARY TABLE "+tempAgingTableName+" ("+
-				"PatNum INT DEFAULT 0,"+
-				"Guarantor INT DEFAULT 0,"+
+				"PatNum long DEFAULT 0,"+
+				"Guarantor long DEFAULT 0,"+
 				"Charges_0_30 DOUBLE DEFAULT 0,"+
 				"Charges_31_60 DOUBLE DEFAULT 0,"+
 				"Charges_61_90 DOUBLE DEFAULT 0,"+
@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 			//Since we are recreating a temporary table with the same name as last time aging was run,
 			//the old temporary table gets wiped out.
 			command+="CREATE TEMPORARY TABLE "+tempOdAgingTransTableName+" ("+
-					"PatNum INT DEFAULT 0,"+
+					"PatNum long DEFAULT 0,"+
 					"TranDate DATE DEFAULT '0001-01-01',"+
 					"TranAmount DOUBLE DEFAULT 0"+
 				");";
