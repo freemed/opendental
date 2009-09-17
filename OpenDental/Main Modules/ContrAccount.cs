@@ -2633,21 +2633,9 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			//bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-			//bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			//List<ClaimProc> claimProcsFam=null;			
-			//if(isFamMax || isFamDed){
-			//	claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-			//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-			//}
-			//else{
 			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
-			//}
-			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
@@ -2655,7 +2643,6 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;//will have already been deleted
 			}
-			//Claim priClaim=Claims.Cur;//for use a few lines down to display dialog
 			if(PatPlans.GetPlanNum(PatPlanList,2)>0){
 				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
 				if(!plan.IsMedical){
@@ -2666,16 +2653,7 @@ namespace OpenDental {
 					}
 					ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 					ClaimCur.ClaimStatus="H";
-					//isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
-					//isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-					//if(isFamMax || isFamDed) {
-					//	claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-					//	ClaimL.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
-					//}
-					//else {
 					ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age);
-					//}
-					//Claims.Cur=ClaimCur;
 				}
 			}
 			ModuleSelected(PatCur.PatNum);
@@ -2851,7 +2829,7 @@ namespace OpenDental {
 				claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
 				//ClaimProcCur.PatNum=Patients.Cur.PatNum;
 				//ClaimProcCur.ProvNum=ProcCur.ProvNum;
-				//ClaimProcs.Cur.FeeBilled=;//handle in call to FormClaimEdit.CalculateEstimates
+				//ClaimProcs.Cur.FeeBilled=;//handle in call to ClaimL.CalculateAndUpdate()
 				//inspayest ''
 				//dedapplied ''
 				if(PlanCur.PlanType=="c")//if capitation
@@ -2863,7 +2841,9 @@ namespace OpenDental {
 				//claimpaymentnum=0
 				//ClaimProcCur.PlanNum=Claims.Cur.PlanNum;
 				//ClaimProcCur.DateCP=ProcCur.ProcDate;
-				//writeoff
+				//The problem with setting the writeoff here is that it would be like setting the inspay amount.
+				//This shouldn't be done before claim actually received unless all the logic is reviewed.
+				claimProcs[i].WriteOff=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
 				if(PlanCur.UseAltCode && (ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1!="")){
 					claimProcs[i].CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1;
 				}

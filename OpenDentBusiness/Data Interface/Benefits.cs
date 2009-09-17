@@ -984,22 +984,22 @@ namespace OpenDentBusiness {
 			//if the family max has all been used up on other procs
 			if(maxFam<=0) {
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over family lifetime max.");
+					note+=Lans.g("Benefits","Over family lifetime max");
 				}
 				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-					note+=Lans.g("Benefits","Over family annual max.");
+					note+=Lans.g("Benefits","Over family annual max");
 				}
 				return 0;//then no coverage, regardless of what we computed for individual
 			}
 			if(maxFam > maxInd) {//restrict by maxInd
 				//which we already calculated
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over lifetime max.");
+					note+=Lans.g("Benefits","Over lifetime max");
 				}
 				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-					note+=Lans.g("Benefits","Over annual max.");
+					note+=Lans.g("Benefits","Over annual max");
 				}
 				return retVal;
 			}
@@ -1007,22 +1007,22 @@ namespace OpenDentBusiness {
 				if(maxFam < retVal) {//if there's not enough left in the annual max to cover this proc.
 					//example. retVal=$70.  But 2970 of 3000 family max has been used.  maxFam=30.  We need to return 30.
 					if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-						note+=Lans.g("Benefits","Over family lifetime max.");
+						note+=Lans.g("Benefits","Over family lifetime max");
 					}
 					else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-						note+=Lans.g("Benefits","Over family annual max.");
+						note+=Lans.g("Benefits","Over family annual max");
 					}
 					return maxFam;//insurance will only cover up to the remaining annual max
 				}
 			}
 			if(retVal<insEstTotal) {//must have been an individual restriction
 				if(benInd.TimePeriod==BenefitTimePeriod.Lifetime) {
-					note+=Lans.g("Benefits","Over lifetime max.");
+					note+=Lans.g("Benefits","Over lifetime max");
 				}
 				else if(benInd.TimePeriod==BenefitTimePeriod.CalendarYear
 					|| benInd.TimePeriod==BenefitTimePeriod.ServiceYear) {
-					note+=Lans.g("Benefits","Over annual max.");
+					note+=Lans.g("Benefits","Over annual max");
 				}
 			}
 			return retVal;

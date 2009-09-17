@@ -2328,7 +2328,7 @@ namespace OpenDental{
 				row.Cells.Add(ClaimProcs.GetEstimateDisplay(ClaimProcsForProc[i]));
 				if(ClaimProcsForProc[i].Status==ClaimProcStatus.Estimate) {
 					row.Cells.Add("");
-					row.Cells.Add("");
+					row.Cells.Add(ClaimProcs.GetWriteOffEstimateDisplay(ClaimProcsForProc[i]));
 				}
 				else {
 					row.Cells.Add(ClaimProcsForProc[i].InsPayAmt.ToString("n"));
@@ -2368,8 +2368,9 @@ namespace OpenDental{
 			long patPlanNum=PatPlans.GetPatPlanNum(PatPlanList,FormIS.SelectedPlan.PlanNum);
 			if(patPlanNum > 0){
 				double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(cp,PatPlanList);
+				double writeOffEstOtherIns=ClaimProcs.GetWriteOffEstOtherIns(cp,PatPlanList);
 				ClaimProcs.ComputeBaseEst(cp,ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,FormIS.SelectedPlan,patPlanNum,benList,
-					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age);	
+					HistList,LoopList,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age,writeOffEstOtherIns);	
 			}
 			FormClaimProc FormC=new FormClaimProc(cp,ProcCur,FamCur,PatCur,PlanList,HistList,ref LoopList,PatPlanList);
 			//FormC.NoPermission not needed because butAddEstimate not enabled

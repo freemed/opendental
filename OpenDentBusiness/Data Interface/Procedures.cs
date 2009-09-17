@@ -838,6 +838,7 @@ namespace OpenDentBusiness {
 			return 0;//retVal;
 		}*/
 
+		/*
 		///<summary>Gets total writeoff for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOff(Procedure proc,List<ClaimProc> claimProcs) {
 			//No need to check RemotingRole; no call to db.
@@ -848,7 +849,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>WriteOff'Complete'. Only used in main Account module. Gets writeoff for this procedure based on supplied claimprocs. Only includes claimprocs with status of CapComplete,CapClaim,NotReceived,Received,or Supplemental. Used to ONLY include Writeoffs not attached to claims, because those would display on the claim line, but now they show on each procedure instead.  /*In practice, this means only writeoffs with CapComplete status get returned because they are to be subtracted from the patient portion on the proc line*/. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOffC(Procedure proc,ClaimProc[] claimProcs) {
@@ -1356,6 +1357,8 @@ namespace OpenDentBusiness {
 				cp.DedEst=-1;
 				cp.DedEstOverride=-1;
 				cp.PaidOtherInsOverride=-1;
+				cp.WriteOffEst=-1;
+				cp.WriteOffEstOverride=-1;
 				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
 				if(saveToDb) {
 					ClaimProcs.Insert(cp);
@@ -1369,28 +1372,90 @@ namespace OpenDentBusiness {
 			if(cpAdded && saveToDb) {//no need to refresh the list if !saveToDb, because list already made current.
 				claimProcs=ClaimProcs.Refresh(patNum);
 			}
-			//int ordinal;
-			//int patPlanNum;
-			double priEstTotal=0;
-			double secEstTotal=0;
-			double tertEstTotal=0;
-			double priBaseEst=0;
-			double secBaseEst=0;
-			double tertBaseEst=0;
+			double paidOtherInsEstTotal=0;
+			double paidOtherInsBaseEst=0;
+			double writeOffEstOtherIns=0;
+			//because secondary claimproc might come before primary claimproc in the list, we cannot simply loop through the claimprocs
+			ComputeForOrdinal(1,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
+			ComputeForOrdinal(2,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
+			ComputeForOrdinal(3,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
+			ComputeForOrdinal(4,claimProcs,proc,PlanList,isInitialEntry,ref paidOtherInsEstTotal,ref paidOtherInsBaseEst,ref writeOffEstOtherIns,
+				patPlans,benefitList,histList,loopList,saveToDb,patientAge);
+		}
+
+		///<summary>Passing in 4 will compute for 4 as well as any other situation such as dropped plan.</summary>
+		private static void ComputeForOrdinal(int ordinal,List<ClaimProc> claimProcs,Procedure proc,List<InsPlan> PlanList,bool isInitialEntry,
+			ref double paidOtherInsEstTotal,ref double paidOtherInsBaseEst,ref double writeOffEstOtherIns,
+			List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge) {
+			//No need to check RemotingRole; no call to db.
+			InsPlan PlanCur;
 			PatPlan patplan;
 			for(int i=0;i<claimProcs.Count;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
 				}
+				PlanCur=InsPlans.GetPlan(claimProcs[i].PlanNum,PlanList);
+				if(PlanCur==null) {
+					continue;//in older versions it still did a couple of small things even if plan was null, but don't know why
+					//example:cap estimate changed to cap complete, and if estimate, then provnum set
+					//but I don't see how PlanCur could ever be null
+				}
+				patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum);
+				//the cp is altered within ComputeBaseEst, but not saved.
+				if(patplan==null) {//the plan for this claimproc was dropped 
+					if(ordinal!=4) {//only process on the fourth round
+						continue;
+					}
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+						benefitList,histList,loopList,patPlans,0,0,patientAge,0);
+				}
+				else if(patplan.Ordinal==1){
+					if(ordinal!=1) {
+						continue;
+					}
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
+					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
+					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+				}
+				else if(patplan.Ordinal==2){
+					if(ordinal!=2) {
+						continue;
+					}
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
+					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
+					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+				}
+				else if(patplan.Ordinal==3) {
+					if(ordinal!=3) {
+						continue;
+					}
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+					paidOtherInsEstTotal+=claimProcs[i].InsEstTotal;
+					paidOtherInsBaseEst+=claimProcs[i].BaseEst;
+					writeOffEstOtherIns+=ClaimProcs.GetWriteOffEstimate(claimProcs[i]);
+				}
+				else{//patplan.Ordinal is 4 or greater.  Estimate won't be accurate if more than 4 insurances.
+					if(ordinal!=4) {
+						continue;
+					}
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+						benefitList,histList,loopList,patPlans,paidOtherInsEstTotal,paidOtherInsBaseEst,patientAge,writeOffEstOtherIns);
+				}
 				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
 				//claimProcs[i].DateCP=proc.ProcDate;
 				claimProcs[i].ProcDate=proc.ProcDate;
 				//capitation estimates are always forced to follow the status of the procedure
-				PlanCur=InsPlans.GetPlan(claimProcs[i].PlanNum,PlanList);
-				if(PlanCur!=null
-					&&PlanCur.PlanType=="c"
-					&&(claimProcs[i].Status==ClaimProcStatus.CapComplete
-					||claimProcs[i].Status==ClaimProcStatus.CapEstimate)) {
+				if(PlanCur.PlanType=="c"
+					&& (claimProcs[i].Status==ClaimProcStatus.CapComplete	|| claimProcs[i].Status==ClaimProcStatus.CapEstimate)) 
+				{
 					if(isInitialEntry) {
 						//this will be switched to CapComplete further down if applicable.
 						//This makes ComputeBaseEst work properly on new cap procs w status Complete
@@ -1406,34 +1471,6 @@ namespace OpenDentBusiness {
 				//ignored: adjustment
 				//ComputeBaseEst automatically skips: capComplete,Preauth,capClaim,Supplemental
 				//does recalc est on: CapEstimate,Estimate,NotReceived,Received
-				if(claimProcs[i].PlanNum>0) {
-					patplan=PatPlans.GetFromList(patPlans,claimProcs[i].PlanNum);
-					if(patplan != null) {
-						//the cp is altered within ComputeBaseEst, but not saved.
-						if(patplan.Ordinal==1) {
-							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-								benefitList,histList,loopList,patPlans,0,0,patientAge);
-							priEstTotal+=claimProcs[i].InsEstTotal;
-							priBaseEst+=claimProcs[i].BaseEst;
-						}
-						else if(patplan.Ordinal==2) {
-							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-								benefitList,histList,loopList,patPlans,priEstTotal,priBaseEst,patientAge);
-							secEstTotal+=claimProcs[i].InsEstTotal;
-							secBaseEst+=claimProcs[i].BaseEst;
-						}
-						else if(patplan.Ordinal==3) {
-							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-								benefitList,histList,loopList,patPlans,priEstTotal+secEstTotal,priBaseEst+secBaseEst,patientAge);
-							tertEstTotal+=claimProcs[i].InsEstTotal;
-							tertBaseEst+=claimProcs[i].BaseEst;
-						}
-						else {//estimate will malfunction if more than 4 insurances.
-							ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
-								benefitList,histList,loopList,patPlans,priEstTotal+secEstTotal+tertEstTotal,priBaseEst+secBaseEst+tertBaseEst,patientAge);
-						}
-					}
-				}
 				if(isInitialEntry
 					&&claimProcs[i].Status==ClaimProcStatus.CapEstimate
 					&&proc.ProcStatus==ProcStat.C) 

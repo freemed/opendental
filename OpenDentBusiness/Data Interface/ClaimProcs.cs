@@ -110,6 +110,8 @@ namespace OpenDentBusiness{
 				cp.InsEstTotalOverride= PIn.PDouble(table.Rows[i][30].ToString());
 				cp.PaidOtherInsOverride=PIn.PDouble(table.Rows[i][31].ToString());
 				cp.EstimateNote    =PIn.PString(table.Rows[i][32].ToString());
+				cp.WriteOffEst     = PIn.PDouble(table.Rows[i][33].ToString());
+				cp.WriteOffEstOverride= PIn.PDouble(table.Rows[i][34].ToString());
 				retVal.Add(cp);
 			}
 			return retVal;
@@ -133,7 +135,8 @@ namespace OpenDentBusiness{
 				+"PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride,"
 				+"CopayAmt,NoBillIns,PaidOtherIns,BaseEst,CopayOverride,"
 				+"ProcDate,DateEntry,LineNumber,DedEst,DedEstOverride,InsEstTotal,"
-				+"InsEstTotalOverride,PaidOtherInsOverride,EstimateNote) VALUES(";
+				+"InsEstTotalOverride,PaidOtherInsOverride,EstimateNote,WriteOffEst,"
+				+"WriteOffEstOverride) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PLong(cp.ClaimProcNum)+"', ";
 			}
@@ -169,7 +172,9 @@ namespace OpenDentBusiness{
 				+"'"+POut.PDouble(cp.InsEstTotal)+"', "
 				+"'"+POut.PDouble(cp.InsEstTotalOverride)+"', "
 				+"'"+POut.PDouble(cp.PaidOtherInsOverride)+"',"
-				+"'"+POut.PString(cp.EstimateNote)+"')";
+				+"'"+POut.PString(cp.EstimateNote)+"', "
+				+"'"+POut.PDouble(cp.WriteOffEst)+"', "
+				+"'"+POut.PDouble(cp.WriteOffEstOverride)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -218,6 +223,8 @@ namespace OpenDentBusiness{
 				+",InsEstTotalOverride= '"+POut.PDouble(cp.InsEstTotalOverride)+"'"
 				+",PaidOtherInsOverride= '"+POut.PDouble(cp.PaidOtherInsOverride)+"'"
 				+",EstimateNote= '"   +POut.PString(cp.EstimateNote)+"'"
+				+",WriteOffEst= '"    +POut.PDouble(cp.WriteOffEst)+"'"
+				+",WriteOffEstOverride= '"+POut.PDouble(cp.WriteOffEstOverride)+"'"
 				+" WHERE claimprocnum = '"+POut.PLong(cp.ClaimProcNum)+"'";
 			//MessageBox.Show(string command);
 			Db.NonQ(command);
@@ -268,6 +275,8 @@ namespace OpenDentBusiness{
 			cp.CopayOverride=-1;
 			cp.PaidOtherInsOverride=-1;
 			cp.ProcDate=proc.ProcDate;
+			cp.WriteOffEst=-1;
+			cp.WriteOffEstOverride=-1;
 			Insert(cp);
 		}
 
@@ -565,7 +574,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Calculates the Base estimate, InsEstTotal, and all the other insurance numbers for a single claimproc.  This is is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function replaces all of the upper estimating logic that was within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride).  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the overrides.  histList and loopList can be null.  If so, then deductible and annual max will not be recalculated.  histList and loopList may only make sense in TP module and claimEdit.  loopList contains all claimprocs in the current list (TP or claim) that come before this procedure.  PaidOtherInsEstTotal should only contain sum of InsEstTotal/Override, not any paid or pending payments.  PaidOtherInsBaseEst</summary>
-		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge) {
+		public static void ComputeBaseEst(ClaimProc cp,double procFee,string toothNum,long codeNum,InsPlan plan,long patPlanNum,List<Benefit> benList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,List<PatPlan> patPlanList,double paidOtherInsEstTotal,double paidOtherInsBaseEst,int patientAge,double writeOffEstOtherIns) {
 			//No need to check RemotingRole; no call to db.
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -589,6 +598,8 @@ namespace OpenDentBusiness{
 				cp.InsEstTotalOverride=-1;
 				cp.WriteOff=0;
 				cp.PaidOtherInsOverride=-1;
+				cp.WriteOffEst=-1;
+				cp.WriteOffEstOverride=-1;
 				return;
 			}
 			cp.EstimateNote="";
@@ -721,7 +732,10 @@ namespace OpenDentBusiness{
 				//Since BaseEst is greater than MaxPtoP, BaseEst changed to 90.
 				if(paidOtherInsTotal != -1) {
 					double maxPossibleToPay=allowed-paidOtherInsTotal;
-					if(maxPossibleToPay >= 0 && cp.InsEstTotal > maxPossibleToPay) {
+					if(maxPossibleToPay<0) {
+						maxPossibleToPay=0;
+					}
+					if(cp.InsEstTotal > maxPossibleToPay) {
 						cp.InsEstTotal=maxPossibleToPay;//reduce the estimate
 					}
 				}
@@ -732,7 +746,10 @@ namespace OpenDentBusiness{
 				}
 				if(paidOtherInsBase != -1) {
 					double maxPossibleToPay=allowed-paidOtherInsBase;
-					if(maxPossibleToPay >= 0 && cp.BaseEst > maxPossibleToPay) {
+					if(maxPossibleToPay<0) {
+						maxPossibleToPay=0;
+					}
+					if(cp.BaseEst > maxPossibleToPay) {
 						cp.BaseEst=maxPossibleToPay;//reduce the base est
 					}
 				}
@@ -749,11 +766,6 @@ namespace OpenDentBusiness{
 			}
 			//base estimate is now done and will not be altered further.  From here out, we are only altering insEstTotal
 			//annual max and other limitations--------------------------------------------------------------------------------
-//todo: calculate
-			//double limitation=34;
-			//cp.InsEstTotal-=limitation;
-			//cp.EstimateNote+="\r\nOver annual max: $34";
-			//procDate;//was already calculated in the deductible section.
 			if(loopList!=null && histList!=null) {
 				string note="";
 				cp.InsEstTotal=Benefits.GetLimitationByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum,out note,cp.InsEstTotal,patientAge);
@@ -764,7 +776,34 @@ namespace OpenDentBusiness{
 					cp.EstimateNote+=note;
 				}
 			}
-			
+			//procDate;//was already calculated in the deductible section.
+			//Writeoff Estimate------------------------------------------------------------------------------------------
+			if(plan.PlanType=="p") {//PPO
+				double normalWriteOff=procFee-allowed;//This is what the normal writeoff would be if no other insurance was involved.
+				if(normalWriteOff<0) {
+					normalWriteOff=0;
+				}
+				double remainingWriteOff=procFee-paidOtherInsEstTotal-writeOffEstOtherIns;//This is the fee minus whatever other ins has already paid or written off.
+				if(remainingWriteOff<0) {
+					remainingWriteOff=0;
+				}
+				//We can't go over either number.  We must use the smaller of the two.  If one of them is zero, then the writeoff is zero.
+				if(remainingWriteOff==0 || normalWriteOff==0){
+					cp.WriteOffEst=0;
+				}
+				else if(remainingWriteOff<=normalWriteOff) {
+					cp.WriteOffEst=remainingWriteOff;
+				}
+				else {
+					cp.WriteOffEst=normalWriteOff;
+				}
+			}
+			else if(plan.PlanType=="c") {//capitation
+				cp.WriteOffEst=cp.WriteOff;//this probably needs to change
+			}
+			else {
+				cp.WriteOffEst=-1;
+			}
 		}
 
 		///<summary>We don't care about a looplist because those would be for different procedures.  So this calculation really only makes sense when calculating secondary insurance in the claim edit window or when calculating secondary estimates in the TP module.  HistList will include actual payments and estimated pending payments for this proc, but it will not include primary estimates.  Estimates are not handled here, but are instead passed in to ComputeBaseEst</summary>
@@ -858,6 +897,43 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Only useful if secondary ins or greater.  For one procedure, it gets the sum of WriteOffEstimates/Override for other insurances with lower ordinals.  Estimates only.  No actual writeoffs.  Will return 0 if ordinal of this claimproc is 1.</summary>
+		public static double GetWriteOffEstOtherIns(ClaimProc cp,List<PatPlan> patPlanList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<double>(MethodBase.GetCurrentMethod(),cp,patPlanList);
+			}
+			if(cp.ProcNum==0) {
+				return 0;
+			}
+			int thisOrdinal=PatPlans.GetOrdinal(patPlanList,cp.PlanNum);
+			if(thisOrdinal==1) {
+				return 0;
+			}
+			string command="SELECT PlanNum,WriteOffEst,WriteOffEstOverride FROM claimproc WHERE ProcNum="+POut.PLong(cp.ProcNum);
+			DataTable table=Db.GetTable(command);
+			double retVal=0;
+			long planNum;
+			int ordinal;
+			double writeOffEst;
+			double writeOffEstOverride;
+			for(int i=0;i<table.Rows.Count;i++) {
+				planNum=PIn.PLong(table.Rows[i]["PlanNum"].ToString());
+				ordinal=PatPlans.GetOrdinal(patPlanList,planNum);
+				if(ordinal >= thisOrdinal) {
+					continue;
+				}
+				writeOffEst=PIn.PDouble(table.Rows[i]["WriteOffEst"].ToString());
+				writeOffEstOverride=PIn.PDouble(table.Rows[i]["WriteOffEstOverride"].ToString());
+				if(writeOffEstOverride != -1) {
+					retVal+=writeOffEstOverride;
+				}
+				else if(writeOffEst !=-1){
+					retVal+=writeOffEst;
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>Simply gets insEstTotal or its override if applicable.</summary>
 		public static double GetInsEstTotal(ClaimProc cp) {
 			//No need to check RemotingRole; no call to db.
@@ -875,6 +951,18 @@ namespace OpenDentBusiness{
 			}
 			else if(cp.DedEst!=-1) {
 				return cp.DedEst;
+			}
+			return 0;
+		}
+
+		///<summary>Gets either the override or the calculated writeoff estimate.  Or zero if neither.</summary>
+		public static double GetWriteOffEstimate(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
+			if(cp.WriteOffEstOverride!=-1) {
+				return cp.WriteOffEstOverride;
+			}
+			else if(cp.WriteOffEst!=-1) {
+				return cp.WriteOffEst;
 			}
 			return 0;
 		}
@@ -900,6 +988,18 @@ namespace OpenDentBusiness{
 			}
 			else if(cp.CopayAmt!=-1) {
 				return cp.CopayAmt.ToString("f");
+			}
+			return "";
+		}
+
+		///<summary></summary>
+		public static string GetWriteOffEstimateDisplay(ClaimProc cp) {
+			//No need to check RemotingRole; no call to db.
+			if(cp.WriteOffEstOverride!=-1) {
+				return cp.WriteOffEstOverride.ToString("f");
+			}
+			else if(cp.WriteOffEst!=-1) {
+				return cp.WriteOffEst.ToString("f");
 			}
 			return "";
 		}
@@ -954,6 +1054,23 @@ namespace OpenDentBusiness{
 					retVal+=", ";
 				}
 				retVal+=cpList[i].EstimateNote;
+			}
+			return retVal;
+		}
+
+		public static double GetTotalWriteOffEstimateDisplay(List<ClaimProc> cpList,long procNum) {
+			//No need to check RemotingRole; no call to db.
+			double retVal=0;
+			for(int i=0;i<cpList.Count;i++) {
+				if(cpList[i].ProcNum!=procNum) {
+					continue;
+				}
+				if(cpList[i].WriteOffEstOverride!=-1) {
+					retVal+=cpList[i].WriteOffEstOverride;
+				}
+				else if(cpList[i].WriteOffEst!=-1) {
+					retVal+=cpList[i].WriteOffEst;
+				}
 			}
 			return retVal;
 		}

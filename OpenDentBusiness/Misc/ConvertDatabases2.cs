@@ -1659,11 +1659,14 @@ DROP TABLE IF EXISTS etAck";
 					PRIMARY KEY(ReplicationServerNum)
 					)";
 				Db.NonQ32(command);
-
-
-
-
-
+				command="ALTER TABLE claimproc ADD WriteOffEst double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE claimproc ADD WriteOffEstOverride double NOT NULL";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET WriteOffEst = -1";
+				Db.NonQ(command);
+				command="UPDATE claimproc SET WriteOffEstOverride = -1";
+				Db.NonQ(command);
 
 
 

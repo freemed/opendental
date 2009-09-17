@@ -246,6 +246,7 @@ namespace OpenDental{
 		private RadioButton radioAttachElect;
 		private Label label65;
 		private List<Claim> ClaimList;
+		private bool doubleClickWarningAlreadyDisplayed=false;
 
 		///<summary></summary>
 		public FormClaimEdit(Claim claimCur, Patient patCur,Family famCur){
@@ -3164,8 +3165,11 @@ namespace OpenDental{
 		}
 		
 		private void gridProc_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.\r\nThen, don't forget to finish by creating the check using the button below this section.\r\nYou should probably click cancel unless you are just editing estimates.\r\nContinue anyway?")){
-				return;
+			if(!doubleClickWarningAlreadyDisplayed){
+				doubleClickWarningAlreadyDisplayed=true;
+				if(!MsgBox.Show(this,true,"If you are trying to enter payment information, please use the payments buttons at the upper right.\r\nThen, don't forget to finish by creating the check using the button below this section.\r\nYou should probably click cancel unless you are just editing estimates.\r\nContinue anyway?")){
+					return;
+				}
 			}
 			List<ClaimProcHist> histList=null;
 			List<ClaimProcHist> loopList=null;
@@ -3873,11 +3877,12 @@ namespace OpenDental{
 					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					//We're not going to bother to also get paidOtherInsBaseEst:
 					double paidOtherInsEstTotal=ClaimProcs.GetPaidOtherInsEstTotal(ClaimProcsForClaim[i],PatPlanList);
+					double writeOffEstOtherIns=ClaimProcs.GetWriteOffEstOtherIns(ClaimProcsForClaim[i],PatPlanList);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Count>0){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age);
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[0].PatPlanNum,benList,null,null,PatPlanList,0,0,PatCur.Age,0);
 					}
 					else if(ClaimCur.ClaimType=="S" && PatPlanList.Count>1){
-						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age);//paidOtherInsEstTotal is a dummy value.
+						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,plan,PatPlanList[1].PatPlanNum,benList,null,null,PatPlanList,paidOtherInsEstTotal,paidOtherInsEstTotal,PatCur.Age,writeOffEstOtherIns);
 					}
 					ClaimProcsForClaim[i].InsPayEst=0;
 					ClaimProcs.Update(ClaimProcsForClaim[i]);

@@ -1014,7 +1014,6 @@ namespace OpenDental{
 					subfee+=fee;
 					totFee+=fee;
 					#region ShowMaxDed
-					//if(checkShowMaxDed.Checked){//whether visible or not
 					if(PatPlanList.Count>0){//Primary
 						claimproc=ClaimProcs.GetEstimate(ClaimProcList,ProcListTP[i].ProcNum,PriPlanCur.PlanNum);
 						if(claimproc==null){
@@ -1057,36 +1056,15 @@ namespace OpenDental{
 					else{//no secondary ins
 						secIns=0;
 					}
-					//}//showMaxDed
-					//else{
-					//	priIns=Procedures.GetInsEstTotal(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList);
-					//	secIns=Procedures.GetInsEstTotal(ProcListTP[i],ClaimProcList,PriSecTot.Sec,PatPlanList);
-					//}
 					#endregion ShowMaxDed
 					subpriIns+=priIns;
 					totPriIns+=priIns;
 					subsecIns+=secIns;
 					totSecIns+=secIns;
-					discount=0;
-					if(PriPlanCur!=null && PriPlanCur.PlanType=="p"){//PPO
-						double insplanAllowed=Fees.GetAmount(ProcListTP[i].CodeNum,PriPlanCur.FeeSched);
-						if(insplanAllowed!=-1){
-							if(insplanAllowed > fee) {
-								discount=0;
-							}
-							else {
-								discount=fee-insplanAllowed;
-							}
-						}
-						//else, if -1 fee not found, then do not show a discount. User can override estimate if they disagree.
-					}
-					if(PriPlanCur!=null && PriPlanCur.PlanType=="c"){//capitation
-						discount=Procedures.GetWriteOff(ProcListTP[i],ClaimProcList);
-					}
+					discount=ClaimProcs.GetTotalWriteOffEstimateDisplay(ClaimProcList,ProcListTP[i].ProcNum);
 					subdiscount+=discount;
 					totDiscount+=discount;
-					//this writeoff had been in here for quite a while. Don't know why. Capitation?  Revisit:
-					pat=fee-priIns-secIns-discount;//-Procedures.GetWriteOff(ProcListTP[i],ClaimProcList);
+					pat=fee-priIns-secIns-discount;
 					if(pat<0){
 						pat=0;
 					}
