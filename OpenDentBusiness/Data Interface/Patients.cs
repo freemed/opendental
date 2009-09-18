@@ -1340,10 +1340,21 @@ namespace OpenDentBusiness{
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
 			}
-			command+="(BalTotal - InsEst > '"+(excludeLessThan+.005).ToString()+"'"//add half a penny for rounding error
+			if(PrefC.GetBool("BalancesDontSubtractIns")) {
+				command+="(BalTotal";
+			}
+			else {
+				command+="(BalTotal - InsEst";
+			}
+			command+=" > '"+(excludeLessThan+.005).ToString()+"'"//add half a penny for rounding error
 				+" OR PayPlanDue > 0";
 			if(!excludeNeg){
-				command+=" OR BalTotal - InsEst < '0')";
+				if(PrefC.GetBool("BalancesDontSubtractIns")) {
+					command+=" OR BalTotal < '0')";
+				}
+				else {
+					command+=" OR BalTotal - InsEst < '0')";
+				}
 			}
 			else{
 				command+=")";

@@ -520,7 +520,12 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["lastStatement"].ToString());
 				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
 				row.Cells.Add(table.Rows[i]["insEst"].ToString());
-				row.Cells.Add(table.Rows[i]["amountDue"].ToString());
+				if(PrefC.GetBool("BalancesDontSubtractIns")) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(table.Rows[i]["amountDue"].ToString());
+				}
 				row.Cells.Add(table.Rows[i]["payPlanDue"].ToString());
 				gridBill.Rows.Add(row);
 			}
