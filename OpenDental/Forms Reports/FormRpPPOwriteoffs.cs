@@ -265,7 +265,7 @@ namespace OpenDental{
 		}
 
 		private void ExecuteIndividual(){
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
 			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
@@ -336,7 +336,7 @@ namespace OpenDental{
 		}
 
 		private void ExecuteGroup() {
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
 			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());

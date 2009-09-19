@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows.Forms;
 
@@ -52,6 +53,9 @@ namespace OpenDental.UI {
 
 		protected override void OnDrawItem(DrawItemEventArgs e) {
 			base.OnDrawItem(e);
+			//can't seem to make font smooth.  
+			e.Graphics.SmoothingMode=SmoothingMode.HighQuality;
+			e.Graphics.TextRenderingHint=System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 			e.Graphics.FillRectangle(new SolidBrush(Color.White),e.Bounds);
 			SolidBrush brush=new SolidBrush(Color.Black);
 			if(hotItem==e.Index) {

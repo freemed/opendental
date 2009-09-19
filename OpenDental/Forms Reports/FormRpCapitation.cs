@@ -123,7 +123,7 @@ namespace OpenDental{
 		}
 
 		private void ExecuteReport(){
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.IsLandscape=true;
 			report.AddTitle("CAPITATION UTILIZATION");
 			report.AddSubTitle(((Pref)PrefC.HList["PracticeTitle"]).ValueString);

@@ -989,7 +989,7 @@ namespace OpenDental {
 			// menuItemProvIncTrans
 			// 
 			this.menuItemProvIncTrans.Index = 0;
-			this.menuItemProvIncTrans.Text = "Provider Income Transfer";
+			this.menuItemProvIncTrans.Text = "Income Transfer";
 			this.menuItemProvIncTrans.Click += new System.EventHandler(this.menuItemProvIncTrans_Click);
 			// 
 			// tabControlShow

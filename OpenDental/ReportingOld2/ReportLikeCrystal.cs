@@ -12,7 +12,7 @@ namespace OpenDental.ReportingOld2
 
 
 	/// <summary>This class is loosely modeled after CrystalReports.ReportDocument, but with less inheritence and heirarchy.</summary>
-	public class ReportOld2{
+	public class ReportLikeCrystal{
 		private ArrayList dataFields;
 		private SectionCollection sections;
 		private ReportObjectCollection reportObjects;
@@ -139,7 +139,7 @@ namespace OpenDental.ReportingOld2
 		#endregion
 
 		///<summary>When a new Report is created, the only section that is added is the details. This makes the logic a little more complicated, but it will minimize calls to the database for unused sections. This also makes the act of adding groups more natural.</summary>
-		public ReportOld2(){
+		public ReportLikeCrystal(){
 			//ReportMargins=new Margins(50,50,30,30);//this should work for almost all printers.
 			sections=new SectionCollection();
 			//sections.Add(new Section(AreaSectionKind.ReportHeader,"Report Header",0));

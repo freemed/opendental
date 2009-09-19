@@ -114,7 +114,7 @@ namespace OpenDental
 			//	MsgBox.Show(this,"To date cannot be before From date.");
 			//	return;
 			//}
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.ReportName=Lan.g(this,"PaymentPlans");
 			report.AddTitle(Lan.g(this,"Payment Plans"));
 			report.AddSubTitle(PrefC.GetString("PracticeTitle"));

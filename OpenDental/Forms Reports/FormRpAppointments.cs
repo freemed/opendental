@@ -304,7 +304,7 @@ namespace OpenDental
 			}
 			whereProv += ") ";
 			//create the report
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.IsLandscape=true;
 			report.ReportName="Appointments";
 			report.AddTitle("Appointments");

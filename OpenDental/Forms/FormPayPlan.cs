@@ -1157,7 +1157,7 @@ namespace OpenDental{
 			if(!SaveData()){
 				return;
 			}
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle("Payment Plan Terms");
 			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(DateTime.Today.ToShortDateString());

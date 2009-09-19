@@ -3207,7 +3207,7 @@
     <Compile Include="ReportingOld2\ParameterFieldCollection.cs" />
     <Compile Include="ReportingOld2\ReportObject.cs" />
     <Compile Include="ReportingOld2\ReportObjectCollection.cs" />
-    <Compile Include="ReportingOld2\ReportOld2.cs" />
+    <Compile Include="ReportingOld2\ReportLikeCrystal.cs" />
     <Compile Include="ReportingOld2\Section.cs" />
     <Compile Include="ReportingOld2\SectionCollection.cs" />
     <Compile Include="Reporting\Allocators\Allocator.cs" />

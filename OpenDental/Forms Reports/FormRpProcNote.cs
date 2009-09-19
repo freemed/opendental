@@ -123,7 +123,7 @@ namespace OpenDental{
 		}
 
 		private void ExecuteReport(){
-			ReportOld2 report=new ReportOld2();
+			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle("INCOMPLETE PROCEDURE NOTES");
 			report.AddSubTitle(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 			report.Query=@"SELECT procedurelog.ProcDate,

@@ -23,7 +23,7 @@ namespace OpenDental.ReportingOld2
 		private OpenDental.UI.Button butPrint;
 		private System.Drawing.Printing.PrintDocument pd2;
 		///<summary>The report to display.</summary>
-		private ReportOld2 MyReport;
+		private ReportLikeCrystal MyReport;
 		private OpenDental.UI.Button butSetup;
 		private System.Windows.Forms.PageSetupDialog setupDialog2;
 		///<summary>The y position printed through so far in the current section.</summary>
@@ -42,7 +42,7 @@ namespace OpenDental.ReportingOld2
 		private int pagesPrinted;
 
 		///<summary></summary>
-		public FormReportOld2(ReportOld2 myReport){
+		public FormReportOld2(ReportLikeCrystal myReport){
 			InitializeComponent();// Required for Windows Form Designer support
 			MyReport=myReport;
 		}

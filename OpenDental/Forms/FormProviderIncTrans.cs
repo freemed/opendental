@@ -92,10 +92,10 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
-			this.butAdd = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.butTransfer = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.textDate = new OpenDental.ValidDate();
 			this.textNote = new OpenDental.ODtextBox();
@@ -117,7 +117,7 @@ namespace OpenDental{
 			// 
 			// textFamEnd
 			// 
-			this.textFamEnd.Location = new System.Drawing.Point(653,390);
+			this.textFamEnd.Location = new System.Drawing.Point(736,390);
 			this.textFamEnd.Name = "textFamEnd";
 			this.textFamEnd.ReadOnly = true;
 			this.textFamEnd.Size = new System.Drawing.Size(56,20);
@@ -126,7 +126,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(491,393);
+			this.label10.Location = new System.Drawing.Point(574,393);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(100,16);
 			this.label10.TabIndex = 126;
@@ -135,7 +135,7 @@ namespace OpenDental{
 			// 
 			// textFamStart
 			// 
-			this.textFamStart.Location = new System.Drawing.Point(592,390);
+			this.textFamStart.Location = new System.Drawing.Point(675,390);
 			this.textFamStart.Name = "textFamStart";
 			this.textFamStart.ReadOnly = true;
 			this.textFamStart.Size = new System.Drawing.Size(61,20);
@@ -174,21 +174,12 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.comboProv);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.butTransfer);
-			this.groupBox1.Location = new System.Drawing.Point(464,94);
+			this.groupBox1.Location = new System.Drawing.Point(547,94);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(265,88);
 			this.groupBox1.TabIndex = 137;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Transfer";
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(4,18);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(260,33);
-			this.label3.TabIndex = 137;
-			this.label3.Text = "Highlight a row in the grid below.  Select the provider to transfer that amount t" +
-    "o.  Click Transfer.";
 			// 
 			// comboProv
 			// 
@@ -200,21 +191,14 @@ namespace OpenDental{
 			this.comboProv.Size = new System.Drawing.Size(160,21);
 			this.comboProv.TabIndex = 138;
 			// 
-			// butAdd
+			// label3
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(98,390);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(92,24);
-			this.butAdd.TabIndex = 138;
-			this.butAdd.Text = "&Add Split";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.label3.Location = new System.Drawing.Point(4,18);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(260,33);
+			this.label3.TabIndex = 137;
+			this.label3.Text = "Highlight a row in the grid below.  Select the provider to transfer that amount t" +
+    "o.  Click Transfer.";
 			// 
 			// butTransfer
 			// 
@@ -232,6 +216,22 @@ namespace OpenDental{
 			this.butTransfer.TabIndex = 129;
 			this.butTransfer.Text = "Transfer";
 			this.butTransfer.Click += new System.EventHandler(this.butTransfer_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(98,390);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(92,24);
+			this.butAdd.TabIndex = 138;
+			this.butAdd.Text = "&Add Split";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// textDateEntry
 			// 
@@ -283,7 +283,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(98,186);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(365,198);
+			this.gridMain.Size = new System.Drawing.Size(448,198);
 			this.gridMain.TabIndex = 129;
 			this.gridMain.Title = "Transfers";
 			this.gridMain.TranslationName = "FormProviderIncTrans";
@@ -292,7 +292,7 @@ namespace OpenDental{
 			// gridBal
 			// 
 			this.gridBal.HScrollVisible = false;
-			this.gridBal.Location = new System.Drawing.Point(469,186);
+			this.gridBal.Location = new System.Drawing.Point(552,186);
 			this.gridBal.Name = "gridBal";
 			this.gridBal.ScrollValue = 0;
 			this.gridBal.Size = new System.Drawing.Size(254,198);
@@ -308,7 +308,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(648,476);
+			this.butOK.Location = new System.Drawing.Point(733,476);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -323,7 +323,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(648,517);
+			this.butCancel.Location = new System.Drawing.Point(733,517);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -333,7 +333,7 @@ namespace OpenDental{
 			// FormProviderIncTrans
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(769,564);
+			this.ClientSize = new System.Drawing.Size(854,564);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textDateEntry);
@@ -357,9 +357,9 @@ namespace OpenDental{
 			this.Name = "FormProviderIncTrans";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Provider Income Transfer";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProviderIncTrans_FormClosing);
+			this.Text = "Income Transfer";
 			this.Load += new System.EventHandler(this.FormProviderIncTrans_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProviderIncTrans_FormClosing);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -413,6 +413,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Amount"),60,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormProviderIncTrans","Unearned"),100);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			//Procedure proc;
@@ -422,6 +424,7 @@ namespace OpenDental{
 				row.Cells.Add(Providers.GetAbbr(SplitList[i].ProvNum));
 				row.Cells.Add(FamCur.GetNameInFamFL(SplitList[i].PatNum));
 				row.Cells.Add(SplitList[i].SplitAmt.ToString("F"));
+				row.Cells.Add(DefC.GetName(DefCat.PaySplitUnearnedType,SplitList[i].UnearnedType));//handles 0 just fine
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
