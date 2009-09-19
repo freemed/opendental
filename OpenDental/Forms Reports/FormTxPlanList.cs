@@ -552,19 +552,18 @@ namespace OpenDental {
                 != DialogResult.OK) {
 				return;
 			}
-			FormQuery FormQuery2 = new FormQuery();
-			FormQuery2.IsReport = true;
-			Queries.CurReport = new ReportOld();
-			Queries.TableQ = new DataTable(null);
+
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.TableQ = new DataTable(null);
 			for(int i = 0;i < 12;i++) {//add columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport.ColTotal = new double[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColWidth = new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos = new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0] = 0;
-			Queries.CurReport.ColCaption = new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign = new HorizontalAlignment[Queries.TableQ.Columns.Count];
+			report.ColTotal = new double[report.TableQ.Columns.Count];
+			report.ColWidth = new int[report.TableQ.Columns.Count];
+			report.ColPos = new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0] = 0;
+			report.ColCaption = new string[report.TableQ.Columns.Count];
+			report.ColAlign = new HorizontalAlignment[report.TableQ.Columns.Count];
 			// Add all Rows
 			// 11/1/08 HINA/SPK Add Logic to Print Patient Total
 			string currentPatient = System.Text.RegularExpressions.Regex.Replace(gridTxPlanList.Rows[0].Cells[1].Text," \r\n"," ");
@@ -577,7 +576,7 @@ namespace OpenDental {
 			// 11/1/08 HINA/SPK Add Logic to Print Patient Total
 
 			foreach(OpenDental.UI.ODGridRow gridRow in gridTxPlanList.Rows) {
-				DataRow row = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+				DataRow row = report.TableQ.NewRow();//add first row by hand to get value for temp
 				row[0] = gridRow.Cells[0].Text; // Chart #
 				row[1] = System.Text.RegularExpressions.Regex.Replace(gridRow.Cells[1].Text," \r\n"," "); // gridRow.Cells[1].Text; // Patient Name
 				row[2] = gridRow.Cells[2].Text; // TxPlan Date
@@ -590,11 +589,11 @@ namespace OpenDental {
 				row[9] = gridRow.Cells[9].Text.PadLeft(6); // Insurance Pays
 				row[10] = gridRow.Cells[10].Text.PadLeft(7); // Unused Primary
 				row[11] = gridRow.Cells[11].Text.PadLeft(7); // Unused Secondary
-				Queries.CurReport.ColTotal[7] += PIn.PDouble(row[7].ToString());
-				Queries.CurReport.ColTotal[8] += PIn.PDouble(row[8].ToString());
-				Queries.CurReport.ColTotal[9] += PIn.PDouble(row[9].ToString()); //gridRow.Cells[9].ToString()
-				Queries.CurReport.ColTotal[10] += PIn.PDouble(row[10].ToString());
-				Queries.CurReport.ColTotal[11] += PIn.PDouble(row[11].ToString());
+				report.ColTotal[7] += PIn.PDouble(row[7].ToString());
+				report.ColTotal[8] += PIn.PDouble(row[8].ToString());
+				report.ColTotal[9] += PIn.PDouble(row[9].ToString()); //gridRow.Cells[9].ToString()
+				report.ColTotal[10] += PIn.PDouble(row[10].ToString());
+				report.ColTotal[11] += PIn.PDouble(row[11].ToString());
 				// 11/1/08 HINA/SPK Add Logic to Print Patient Total
 				if(row[1].ToString() == "") {
 					patRecordCount += 1;
@@ -607,32 +606,32 @@ namespace OpenDental {
 				else {
 					if(row[1].ToString() != currentPatient) {
 						// Add Row for Patient Total
-						DataRow blanktoprow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+						DataRow blanktoprow = report.TableQ.NewRow();//add first row by hand to get value for temp
 						blanktoprow[6] = "___________________";
 						blanktoprow[7] = "___________________";  // Fee
 						blanktoprow[8] = "___________________"; // Patient Pays
 						blanktoprow[9] = "___________________"; // Insurance Pays
 						blanktoprow[10] = "______________"; // Unused Primary
 						blanktoprow[11] = "___________________"; // Unused Secondary
-						Queries.TableQ.Rows.Add(blanktoprow);
+						report.TableQ.Rows.Add(blanktoprow);
 
-						DataRow patrow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+						DataRow patrow = report.TableQ.NewRow();//add first row by hand to get value for temp
 						patrow[6] = "Total:"; // Patient Name
 						patrow[7] = patFee; // Fee
 						patrow[8] = patPays; // Patient Pays
 						patrow[9] = patInsPays; // Insurance Pays
 						patrow[10] = payUnusesPrimary; // Unused Primary
 						patrow[11] = payUnusesSecondary; // Unused Secondary
-						Queries.TableQ.Rows.Add(patrow);
+						report.TableQ.Rows.Add(patrow);
 
-						DataRow blankbottomrow = Queries.TableQ.NewRow();//add first row by hand to get value for temp
+						DataRow blankbottomrow = report.TableQ.NewRow();//add first row by hand to get value for temp
 						blankbottomrow[6] = "___________________";
 						blankbottomrow[7] = "___________________";  // Fee
 						blankbottomrow[8] = "___________________"; // Patient Pays
 						blankbottomrow[9] = "___________________"; // Insurance Pays
 						blankbottomrow[10] = "______________"; // Unused Primary
 						blankbottomrow[11] = "___________________"; // Unused Secondary
-						Queries.TableQ.Rows.Add(blankbottomrow);
+						report.TableQ.Rows.Add(blankbottomrow);
 
 						// Reset All total
 						patFee = 0;
@@ -651,54 +650,56 @@ namespace OpenDental {
 					payUnusesPrimary += PIn.PDouble(row[10].ToString());
 					payUnusesSecondary += PIn.PDouble(row[11].ToString());
 				}
-				Queries.TableQ.Rows.Add(row);
+				report.TableQ.Rows.Add(row);
+				
 			};
-
+			FormQuery FormQuery2 = new FormQuery(report);
+			FormQuery2.IsReport = true;
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;
-			Queries.CurReport.Summary = new string[0];
-			Queries.CurReport.Title = "Treatment Plans Analyzer Report";
-			Queries.CurReport.SubTitle = new string[2];
-			Queries.CurReport.SubTitle[0] = ((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1] = "(by Name and Unused Benefits)";
-			Queries.CurReport.ColPos[0] = 00;
-			Queries.CurReport.ColPos[1] = 40;
-			Queries.CurReport.ColPos[2] = 197;      // TxPlan date
-			Queries.CurReport.ColPos[3] = 265;
-			Queries.CurReport.ColPos[4] = 290;
-			Queries.CurReport.ColPos[5] = 320;
-			Queries.CurReport.ColPos[6] = 365;
-			Queries.CurReport.ColPos[7] = 525;
-			Queries.CurReport.ColPos[8] = 560;
-			Queries.CurReport.ColPos[9] = 614;
-			Queries.CurReport.ColPos[10] = 668;
-			Queries.CurReport.ColPos[11] = 735;
-			Queries.CurReport.ColPos[12] = 795;
+			report.Summary = new string[0];
+			report.Title = "Treatment Plans Analyzer Report";
+			report.SubTitle = new string[2];
+			report.SubTitle[0] = ((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1] = "(by Name and Unused Benefits)";
+			report.ColPos[0] = 00;
+			report.ColPos[1] = 40;
+			report.ColPos[2] = 197;      // TxPlan date
+			report.ColPos[3] = 265;
+			report.ColPos[4] = 290;
+			report.ColPos[5] = 320;
+			report.ColPos[6] = 365;
+			report.ColPos[7] = 525;
+			report.ColPos[8] = 560;
+			report.ColPos[9] = 614;
+			report.ColPos[10] = 668;
+			report.ColPos[11] = 735;
+			report.ColPos[12] = 795;
 			// Set Report Heading
-			Queries.CurReport.ColCaption[0] = "Chart#";
-			Queries.CurReport.ColCaption[1] = "Patient Name";
-			Queries.CurReport.ColCaption[2] = "TxPln Date";
-			Queries.CurReport.ColCaption[3] = "Th#";
-			Queries.CurReport.ColCaption[4] = "Surf";
-			Queries.CurReport.ColCaption[5] = "Code";
-			Queries.CurReport.ColCaption[6] = "Description";
-			Queries.CurReport.ColCaption[7] = "Fee ";
-			Queries.CurReport.ColCaption[8] = "Pat Pays";
-			Queries.CurReport.ColCaption[9] = "Ins Pays ";
-			Queries.CurReport.ColCaption[10] = "Unused Pri";
-			Queries.CurReport.ColCaption[11] = "Unusd Sec";
+			report.ColCaption[0] = "Chart#";
+			report.ColCaption[1] = "Patient Name";
+			report.ColCaption[2] = "TxPln Date";
+			report.ColCaption[3] = "Th#";
+			report.ColCaption[4] = "Surf";
+			report.ColCaption[5] = "Code";
+			report.ColCaption[6] = "Description";
+			report.ColCaption[7] = "Fee ";
+			report.ColCaption[8] = "Pat Pays";
+			report.ColCaption[9] = "Ins Pays ";
+			report.ColCaption[10] = "Unused Pri";
+			report.ColCaption[11] = "Unusd Sec";
 			// Set Alignments
-			Queries.CurReport.ColAlign[0] = HorizontalAlignment.Left;
-			Queries.CurReport.ColAlign[1] = HorizontalAlignment.Left;
-			Queries.CurReport.ColAlign[2] = HorizontalAlignment.Left;
-			Queries.CurReport.ColAlign[3] = HorizontalAlignment.Center;
-			Queries.CurReport.ColAlign[4] = HorizontalAlignment.Center;
-			Queries.CurReport.ColAlign[5] = HorizontalAlignment.Center;
-			Queries.CurReport.ColAlign[6] = HorizontalAlignment.Left;
-			Queries.CurReport.ColAlign[7] = HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[8] = HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[9] = HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[10] = HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[11] = HorizontalAlignment.Right;
+			report.ColAlign[0] = HorizontalAlignment.Left;
+			report.ColAlign[1] = HorizontalAlignment.Left;
+			report.ColAlign[2] = HorizontalAlignment.Left;
+			report.ColAlign[3] = HorizontalAlignment.Center;
+			report.ColAlign[4] = HorizontalAlignment.Center;
+			report.ColAlign[5] = HorizontalAlignment.Center;
+			report.ColAlign[6] = HorizontalAlignment.Left;
+			report.ColAlign[7] = HorizontalAlignment.Right;
+			report.ColAlign[8] = HorizontalAlignment.Right;
+			report.ColAlign[9] = HorizontalAlignment.Right;
+			report.ColAlign[10] = HorizontalAlignment.Right;
+			report.ColAlign[11] = HorizontalAlignment.Right;
 
 			FormQuery2.ShowDialog();
 			//DialogResult = DialogResult.OK;

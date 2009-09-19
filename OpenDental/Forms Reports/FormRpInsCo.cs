@@ -113,7 +113,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			carrier= PIn.PString(textBoxCarrier.Text);
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 
 /*
 SELECT insplan.subscriber,insplan.carrier,patient.hmphone,
@@ -122,7 +122,7 @@ insplan.groupname FROM insplan,patient WHERE insplan.subscriber=patient.patnum
 Order By patient.lname,patient.fname
 
 */
-			Queries.CurReport.Query= "SELECT carrier.CarrierName"
+			report.Query= "SELECT carrier.CarrierName"
 				+",CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),carrier.Phone,"
 				+"insplan.Groupname "
 				+"FROM insplan,patient,carrier,patplan "
@@ -133,28 +133,28 @@ Order By patient.lname,patient.fname
 				+"AND carrier.CarrierNum=insplan.CarrierNum "
 				+"AND carrier.CarrierName LIKE '"+carrier+"%' "
 				+"ORDER BY carrier.CarrierName,patient.LName";
-			//Debug.WriteLine(Queries.CurReport.Query);
-			FormQuery2=new FormQuery();
+			//Debug.WriteLine(report.Query);
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Insurance Plan List";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.Title="Insurance Plan List";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 
-			Queries.CurReport.ColPos=new int[5];
-			Queries.CurReport.ColCaption=new string[4];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[4];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=250;
-			Queries.CurReport.ColPos[2]=425;
-			Queries.CurReport.ColPos[3]=600;
-			Queries.CurReport.ColPos[4]=765;
-			Queries.CurReport.ColCaption[0]="Carrier Name";
-			Queries.CurReport.ColCaption[1]="Subscriber Name";
-			Queries.CurReport.ColCaption[2]="Carrier Phone#";
-			Queries.CurReport.ColCaption[3]="Group Name";
-			Queries.CurReport.Summary=new string[1];
-			Queries.CurReport.Summary[0]=Lan.g(this,"Total: ")+Queries.TableQ.Rows.Count.ToString();
+			report.ColPos=new int[5];
+			report.ColCaption=new string[4];
+			report.ColAlign=new HorizontalAlignment[4];
+			report.ColPos[0]=20;
+			report.ColPos[1]=250;
+			report.ColPos[2]=425;
+			report.ColPos[3]=600;
+			report.ColPos[4]=765;
+			report.ColCaption[0]="Carrier Name";
+			report.ColCaption[1]="Subscriber Name";
+			report.ColCaption[2]="Carrier Phone#";
+			report.ColCaption[3]="Group Name";
+			report.Summary=new string[1];
+			report.Summary[0]=Lan.g(this,"Total: ")+report.TableQ.Rows.Count.ToString();
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}

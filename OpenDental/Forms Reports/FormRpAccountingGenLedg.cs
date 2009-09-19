@@ -135,7 +135,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			FormReport FormR=new FormReport();
+			FormReportForRdl FormR=new FormReportForRdl();
 			string s=Properties.Resources.ReportAccountingGenLedger;
 			s=s.Replace("1/1/2007 - 12/31/2007",date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			s=s.Replace("2007-01-01",POut.PDate(date1.SelectionStart,false));

@@ -170,85 +170,85 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			// replaced insplan.carrier by carrier.carrierName, SPK 7/15/04
-			Queries.CurReport.Query="SELECT claim.dateservice,claim.claimnum,claim.claimtype,claim.claimstatus,"
+			report.Query="SELECT claim.dateservice,claim.claimnum,claim.claimtype,claim.claimstatus,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),carrier.CarrierName,claim.claimfee "
 				+"FROM patient,claim,insplan,carrier "
 				+"WHERE patient.patnum=claim.patnum AND insplan.plannum=claim.plannum "
 				+"AND insplan.CarrierNum=carrier.CarrierNum "	// added SPK 
 				+"AND (claim.claimstatus = 'U' OR claim.claimstatus = 'H' OR  claim.claimstatus = 'W')";
 			if(radioRange.Checked==true){			// added 'W', SPK 7/15/04
-				Queries.CurReport.Query
+				report.Query
 					+=" AND claim.dateservice >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 					+"AND claim.dateservice <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"'";
 			}
 			else{
-				Queries.CurReport.Query
+				report.Query
 					+=" AND claim.dateservice = '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"'";
 			}
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
-			Queries.SubmitTemp();//create TableTemp
-			Queries.TableQ=new DataTable(null);//new table no name
+			report.SubmitTemp();//create TableTemp
+			report.TableQ=new DataTable(null);//new table no name
 			for(int i=0;i<6;i++){//add columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
-			for(int i=0;i<Queries.TableTemp.Rows.Count;i++){//loop through data rows
-				DataRow row=Queries.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-				row[0]=(PIn.PDate(Queries.TableTemp.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
-        if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="P")
+			report.ColTotal=new double[report.TableQ.Columns.Count];
+			for(int i=0;i<report.TableTemp.Rows.Count;i++){//loop through data rows
+				DataRow row=report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
+				row[0]=(PIn.PDate(report.TableTemp.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="P")
           row[1]="Primary";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="S")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="S")
           row[1]="Secondary";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="PreAuth")
           row[1]="PreAuth";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="Other")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="Other")
           row[1]="Other";
-				if (Queries.TableTemp.Rows[i][3].ToString().Equals("H"))
+				if(report.TableTemp.Rows[i][3].ToString().Equals("H"))
 				  row[2]="Holding";//Claim Status
-				else if (Queries.TableTemp.Rows[i][3].ToString().Equals("W"))
+				else if(report.TableTemp.Rows[i][3].ToString().Equals("W"))
 					row[2]="WaitQ";//Claim Status, added SPK 7/15/04
 				else
 				  row[2]="Unsent";//Claim Status
-				row[3]=Queries.TableTemp.Rows[i][4];//Patient name
-				row[4]=Queries.TableTemp.Rows[i][5];//Ins Carrier
-				row[5]=PIn.PDouble(Queries.TableTemp.Rows[i][6].ToString()).ToString("F");//claim fee
-				Queries.CurReport.ColTotal[5]+=PIn.PDouble(Queries.TableTemp.Rows[i][6].ToString());
-				Queries.TableQ.Rows.Add(row);
+				row[3]=report.TableTemp.Rows[i][4];//Patient name
+				row[4]=report.TableTemp.Rows[i][5];//Ins Carrier
+				row[5]=PIn.PDouble(report.TableTemp.Rows[i][6].ToString()).ToString("F");//claim fee
+				report.ColTotal[5]+=PIn.PDouble(report.TableTemp.Rows[i][6].ToString());
+				report.TableQ.Rows.Add(row);
       }
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;
 			
-			Queries.CurReport.Title="Claims Not Sent";
-			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.Title="Claims Not Sent";
+			report.SubTitle=new string[3];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			if(radioRange.Checked==true){
-				Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");
+				report.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");
 			}
 			else{
-				Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d");
+				report.SubTitle[1]=date1.SelectionStart.ToString("d");
 			}
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=145;
-			Queries.CurReport.ColPos[2]=270;
-			Queries.CurReport.ColPos[3]=395;
-			Queries.CurReport.ColPos[4]=520;
-	    Queries.CurReport.ColPos[5]=645;
-			Queries.CurReport.ColPos[6]=770;
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Type";
-			Queries.CurReport.ColCaption[2]="Claim Status";
-			Queries.CurReport.ColCaption[3]="Patient Name";
-			Queries.CurReport.ColCaption[4]="Insurance Carrier";
-			Queries.CurReport.ColCaption[5]="Amount";
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[3];
+			report.ColPos[0]=20;
+			report.ColPos[1]=145;
+			report.ColPos[2]=270;
+			report.ColPos[3]=395;
+			report.ColPos[4]=520;
+	    report.ColPos[5]=645;
+			report.ColPos[6]=770;
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Type";
+			report.ColCaption[2]="Claim Status";
+			report.ColCaption[3]="Patient Name";
+			report.ColCaption[4]="Insurance Carrier";
+			report.ColCaption[5]="Amount";
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.Summary=new string[3];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

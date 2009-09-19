@@ -381,7 +381,7 @@ namespace OpenDental{
 
 		private bool CreateDataFile(string fileName,LetterMerge letter){
  			DataTable table=LetterMergesQueries.GetLetterMergeInfo(PatCur,letter);
-			table=FormQuery.MakeReadable(table);
+			table=FormQuery.MakeReadable(table,null);
 			try{
 			  using(StreamWriter sw=new StreamWriter(fileName,false)){
 					string line="";  

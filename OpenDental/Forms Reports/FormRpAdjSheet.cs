@@ -249,8 +249,8 @@ namespace OpenDental{
 					+POut.PLong(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
 			}
 			whereType+=")";
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="SELECT adjustment.AdjDate,"
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query="SELECT adjustment.AdjDate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"definition.ItemName,adjustment.AdjNote,adjustment.AdjAmt FROM "
 				+"adjustment,patient,definition WHERE adjustment.AdjType=definition.DefNum "
@@ -259,30 +259,30 @@ namespace OpenDental{
 				+"AND "+whereType+" "
 				+"AND adjustment.AdjDate >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND adjustment.AdjDate <= "+POut.PDate(date2.SelectionStart);
-			Queries.CurReport.Query += " ORDER BY adjustment.AdjDate";
-			FormQuery2=new FormQuery();
+			report.Query += " ORDER BY adjustment.AdjDate";
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Daily Adjustments";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");	
-			Queries.CurReport.ColPos=new int[6];
-			Queries.CurReport.ColCaption=new string[5];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[5];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=120;
-			Queries.CurReport.ColPos[2]=270;
-			Queries.CurReport.ColPos[3]=495;
-			Queries.CurReport.ColPos[4]=645;
-			Queries.CurReport.ColPos[5]=720;
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient Name";			
-			Queries.CurReport.ColCaption[2]="Adjustment Type";
-			Queries.CurReport.ColCaption[3]="Adjustment Note";
-			Queries.CurReport.ColCaption[4]="Amount";
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[0];
+			report.Title="Daily Adjustments";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");	
+			report.ColPos=new int[6];
+			report.ColCaption=new string[5];
+			report.ColAlign=new HorizontalAlignment[5];
+			report.ColPos[0]=20;
+			report.ColPos[1]=120;
+			report.ColPos[2]=270;
+			report.ColPos[3]=495;
+			report.ColPos[4]=645;
+			report.ColPos[5]=720;
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Patient Name";			
+			report.ColCaption[2]="Adjustment Type";
+			report.ColCaption[3]="Adjustment Note";
+			report.ColCaption[4]="Amount";
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

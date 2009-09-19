@@ -567,12 +567,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=textSQL.Text;
-			FormQuery2=new FormQuery();
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=textSQL.Text;
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=false;
 			FormQuery2.SubmitQuery();	
-      FormQuery2.textQuery.Text=Queries.CurReport.Query;					
+      FormQuery2.textQuery.Text=report.Query;					
 			FormQuery2.ShowDialog();
 			//DialogResult=DialogResult.OK;				
 

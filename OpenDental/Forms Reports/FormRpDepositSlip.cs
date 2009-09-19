@@ -308,7 +308,7 @@ ORDER BY PayDate, plfname
 				MessageBox.Show("Must either select a payment type and/or include insurance checks.");
 				return;
 			}
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			string cmd="";
 			//if(checkBoxIns.Checked){
 			cmd="SELECT PayDate,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),"
@@ -362,76 +362,76 @@ ORDER BY PayDate, plfname
 					}
 				}
 				cmd+="GROUP BY claimpayment.ClaimPaymentNum ";
-				//MessageBox.Show(Queries.CurReport.Query);
+				//MessageBox.Show(report.Query);
       }
 			//cmd+="ORDER BY PayDate, plfname";//FIXME:UNION-ORDER-BY
 			cmd+="ORDER BY 1, 2";
-			Queries.CurReport.Query=cmd;
-			FormQuery2=new FormQuery();
+			report.Query=cmd;
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
-			Queries.CurReport.Title="Deposit Slip";
-			Queries.CurReport.SubTitle=new string[3];
+			report.Title="Deposit Slip";
+			report.SubTitle=new string[3];
 			if(!PrefC.GetBool("EasyNoClinics")){
-				Queries.CurReport.SubTitle=new string[4];
+				report.SubTitle=new string[4];
 				if(comboClinic.SelectedIndex==0){
-					Queries.CurReport.SubTitle[3]=Lan.g(this,"Clinic")+": none";
+					report.SubTitle[3]=Lan.g(this,"Clinic")+": none";
 				}
 				else{
-					Queries.CurReport.SubTitle[3]=Lan.g(this,"Clinic")+": "
+					report.SubTitle[3]=Lan.g(this,"Clinic")+": "
 						+Clinics.List[comboClinic.SelectedIndex-1].Description;
 				}
 			}
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=monthCal1.SelectionStart.ToShortDateString()+" - "
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=monthCal1.SelectionStart.ToShortDateString()+" - "
 				+monthCal2.SelectionStart.ToShortDateString();
 			if(listPayType.SelectedIndices.Count>0)  {
-			  Queries.CurReport.SubTitle[2]="Payment Type(s): ";
+			  report.SubTitle[2]="Payment Type(s): ";
 					for(int i=0;i<listPayType.SelectedIndices.Count;i++){
-						if(i>0) Queries.CurReport.SubTitle[2]+=", ";
-						Queries.CurReport.SubTitle[2]
+						if(i>0) report.SubTitle[2]+=", ";
+						report.SubTitle[2]
 							+=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
 					}
 				if(checkBoxIns.Checked)
-					Queries.CurReport.SubTitle[2]+=" Insurance Claim Checks";
+					report.SubTitle[2]+=" Insurance Claim Checks";
 			}
 			else  {
 				if(checkBoxIns.Checked)  {
-				 Queries.CurReport.SubTitle[2]="Payment Type: Insurance Claim Checks";
+				 report.SubTitle[2]="Payment Type: Insurance Claim Checks";
 			  }
 			}
-			Queries.CurReport.ColPos=new int[9];
-			Queries.CurReport.ColCaption=new string[8];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[8];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=100;
-			Queries.CurReport.ColPos[2]=210;
-			Queries.CurReport.ColPos[3]=320;
-			Queries.CurReport.ColPos[4]=420;
-			Queries.CurReport.ColPos[5]=480;
-			Queries.CurReport.ColPos[6]=590;
-			Queries.CurReport.ColPos[7]=680;
-			Queries.CurReport.ColPos[8]=760;
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient";
-			Queries.CurReport.ColCaption[2]="Carrier";
-			Queries.CurReport.ColCaption[3]="Type";
+			report.ColPos=new int[9];
+			report.ColCaption=new string[8];
+			report.ColAlign=new HorizontalAlignment[8];
+			report.ColPos[0]=20;
+			report.ColPos[1]=100;
+			report.ColPos[2]=210;
+			report.ColPos[3]=320;
+			report.ColPos[4]=420;
+			report.ColPos[5]=480;
+			report.ColPos[6]=590;
+			report.ColPos[7]=680;
+			report.ColPos[8]=760;
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Patient";
+			report.ColCaption[2]="Carrier";
+			report.ColCaption[3]="Type";
 			//this column can be eliminated when the new reporting framework is complete:
-			Queries.CurReport.ColCaption[4]="Pay #";
-			Queries.CurReport.ColCaption[5]="Check Number";
-			Queries.CurReport.ColCaption[6]="Bank-Branch";
-			Queries.CurReport.ColCaption[7]="Amount";
-			//Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
+			report.ColCaption[4]="Pay #";
+			report.ColCaption[5]="Check Number";
+			report.ColCaption[6]="Bank-Branch";
+			report.ColCaption[7]="Amount";
+			//report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[7]=HorizontalAlignment.Right;
 			if(PrefC.GetBool("EasyNoClinics") || comboClinic.SelectedIndex==0){
-				Queries.CurReport.Summary=new string[3];
-				Queries.CurReport.Summary[0]="For Deposit to Account of "+((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.Summary[2]="Account number: "+((Pref)PrefC.HList["PracticeBankNumber"]).ValueString;
+				report.Summary=new string[3];
+				report.Summary[0]="For Deposit to Account of "+((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.Summary[2]="Account number: "+((Pref)PrefC.HList["PracticeBankNumber"]).ValueString;
 			}
 			else{
-				Queries.CurReport.Summary=new string[3];
-				Queries.CurReport.Summary[0]="For Deposit to Account of "+Clinics.List[comboClinic.SelectedIndex-1].Description;
-				Queries.CurReport.Summary[2]="Account number: "+Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
+				report.Summary=new string[3];
+				report.Summary[0]="For Deposit to Account of "+Clinics.List[comboClinic.SelectedIndex-1].Description;
+				report.Summary[2]="Account number: "+Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
 			}
 			FormQuery2.ShowDialog();
 

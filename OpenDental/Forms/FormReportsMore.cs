@@ -403,7 +403,7 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.UserQuery)) {
 				return;
 			}
-			FormQuery FormQuery2=new FormQuery();
+			FormQuery FormQuery2=new FormQuery(null);
 			FormQuery2.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.UserQuery,0,"");
 		}

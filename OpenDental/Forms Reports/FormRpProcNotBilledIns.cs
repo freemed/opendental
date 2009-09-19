@@ -128,9 +128,9 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			//if(radioRange.Checked){
-			Queries.CurReport.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+			report.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
 				+"FROM patient,procedurecode,procedurelog,claimproc "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
@@ -145,7 +145,7 @@ namespace OpenDental{
 				+"GROUP BY procedurelog.ProcNum";
 			/*}
 			else{
-				Queries.CurReport.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
+				report.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
 					+"procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee FROM patient,procedurecode,"
 					+"procedurelog LEFT JOIN claimproc ON claimproc.procnum = procedurelog.procnum "
 					+"WHERE claimproc.procnum IS NULL "
@@ -154,28 +154,28 @@ namespace OpenDental{
 					+"&& procedurelog.nobillins = 0 && procedurelog.procstatus = 2 "
 					+"&& procedurelog.ProcDate = '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"'";
 			}*/
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
-			Queries.CurReport.Title="Procedures Not Billed to Insurance";
-			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")
+			report.Title="Procedures Not Billed to Insurance";
+			report.SubTitle=new string[3];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle[1]=date1.SelectionStart.ToString("d")
 					+" - "+date2.SelectionStart.ToString("d");
-			Queries.CurReport.ColPos=new int[5];
-			Queries.CurReport.ColCaption=new string[4];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[4];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=205;
-			Queries.CurReport.ColPos[2]=390;
-			Queries.CurReport.ColPos[3]=575;
-			Queries.CurReport.ColPos[4]=760;
-			Queries.CurReport.ColCaption[0]="Patient Name";
-			Queries.CurReport.ColCaption[1]="Procedure Date";
-			Queries.CurReport.ColCaption[2]="Procedure Description";
-			Queries.CurReport.ColCaption[3]="Procedure Amount";
-			Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[3];
+			report.ColPos=new int[5];
+			report.ColCaption=new string[4];
+			report.ColAlign=new HorizontalAlignment[4];
+			report.ColPos[0]=20;
+			report.ColPos[1]=205;
+			report.ColPos[2]=390;
+			report.ColPos[3]=575;
+			report.ColPos[4]=760;
+			report.ColCaption[0]="Patient Name";
+			report.ColCaption[1]="Procedure Date";
+			report.ColCaption[2]="Procedure Description";
+			report.ColCaption[3]="Procedure Amount";
+			report.ColAlign[3]=HorizontalAlignment.Right;
+			report.Summary=new string[3];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

@@ -156,7 +156,7 @@ namespace OpenDental{
 				MessageBox.Show("At least one adjustment type must be selected.");
 				return;
 			}
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			string types="";
 			for(int i=0;i<listAdjType.SelectedIndices.Count;i++){
 				if(i==0){
@@ -170,7 +170,7 @@ namespace OpenDental{
 					+"' ";
 			}
 			types+=")";
-			Queries.CurReport.Query=@"
+			report.Query=@"
 				CREATE TEMPORARY TABLE tempbroken(
 					PatNum mediumint unsigned NOT NULL,
 					NumberBroken smallint NOT NULL,
@@ -231,7 +231,7 @@ DROP TABLE tempbroken;
 
 
 */
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.textTitle.Text="RawPopulationData"+DateTime.Today.ToString("MMddyyyy");
 			//FormQuery2.IsReport=true;
 			//FormQuery2.SubmitReportQuery();			

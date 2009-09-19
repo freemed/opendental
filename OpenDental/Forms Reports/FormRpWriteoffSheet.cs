@@ -228,10 +228,10 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="SET @FromDate="+POut.PDate(date1.SelectionStart)+", @ToDate="+POut.PDate(date2.SelectionStart)+";";
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query="SET @FromDate="+POut.PDate(date1.SelectionStart)+", @ToDate="+POut.PDate(date2.SelectionStart)+";";
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query+=@"SELECT DATE(claimproc.DateCP) date,
+				report.Query+=@"SELECT DATE(claimproc.DateCP) date,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
 					carrier.CarrierName,
 					provider.Abbr,
@@ -251,7 +251,7 @@ namespace OpenDental{
 					ORDER BY claimproc.DateCP";
 			}
 			else{//using procedure date
-				Queries.CurReport.Query+=@"SELECT Date(claimproc.ProcDate) date,
+				report.Query+=@"SELECT Date(claimproc.ProcDate) date,
 					CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
 					carrier.CarrierName,
 					provider.Abbr,
@@ -270,32 +270,32 @@ namespace OpenDental{
 					GROUP BY claimproc.ClaimNum 
 					ORDER BY claimproc.ProcDate";
 			}
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Daily Writeoffs";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");	
-			Queries.CurReport.ColPos=new int[7];
-			Queries.CurReport.ColCaption=new string[6];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[6];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=120;
-			Queries.CurReport.ColPos[2]=270;
-			Queries.CurReport.ColPos[3]=495;
-			Queries.CurReport.ColPos[4]=645;
-			Queries.CurReport.ColPos[5]=720;
-			Queries.CurReport.ColPos[6]=900;//off the right side
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient Name";			
-			Queries.CurReport.ColCaption[2]="Carrier";
-			Queries.CurReport.ColCaption[3]="Provider";
-			Queries.CurReport.ColCaption[4]="Amount";
-			Queries.CurReport.ColCaption[5]="";
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[0];
+			report.Title="Daily Writeoffs";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");	
+			report.ColPos=new int[7];
+			report.ColCaption=new string[6];
+			report.ColAlign=new HorizontalAlignment[6];
+			report.ColPos[0]=20;
+			report.ColPos[1]=120;
+			report.ColPos[2]=270;
+			report.ColPos[3]=495;
+			report.ColPos[4]=645;
+			report.ColPos[5]=720;
+			report.ColPos[6]=900;//off the right side
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Patient Name";			
+			report.ColCaption[2]="Carrier";
+			report.ColCaption[3]="Provider";
+			report.ColCaption[4]="Amount";
+			report.ColCaption[5]="";
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

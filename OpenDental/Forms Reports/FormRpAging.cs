@@ -381,68 +381,69 @@ namespace OpenDental{
 			DateTime asOfDate=PIn.PDate(textDate.Text);
 			//The aging report always show historical numbers based on the date entered.
 			Ledgers.ComputeAging(0,asOfDate,true);
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI)"
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			string cmd="SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),MiddleI)"
 				+",Bal_0_30,Bal_31_60,Bal_61_90,BalOver90"
 				+",BalTotal "
 				+",InsEst"
 				+",BalTotal-InsEst AS $pat "
 				+"FROM patient ";
 			if(checkOnlyNeg.Checked){
-				Queries.CurReport.Query+="WHERE BalTotal < '-.005'";
+				cmd+="WHERE BalTotal < '-.005'";
 			}
 			else{
-				Queries.CurReport.Query+="WHERE ";
+				cmd+="WHERE ";
 				if(checkExcludeInactive.Checked){
-					Queries.CurReport.Query+="(patstatus != 2) AND ";
+					cmd+="(patstatus != 2) AND ";
 				}
 				if(radioAny.Checked){
-					Queries.CurReport.Query+=
+					cmd+=
 						"(Bal_0_30 > '.005' OR Bal_31_60 > '.005' OR Bal_61_90 > '.005' OR BalOver90 > '.005'";
 				}
 				else if(radio30.Checked){
-					Queries.CurReport.Query+=
+					cmd+=
 						"(Bal_31_60 > '.005' OR Bal_61_90 > '.005' OR BalOver90 > '.005'";
 				}
 				else if(radio60.Checked){
-					Queries.CurReport.Query+=
+					cmd+=
 						"(Bal_61_90 > '.005' OR BalOver90 > '.005'";
 				}
 				else if(radio90.Checked){
-					Queries.CurReport.Query+=
+					cmd+=
 						"(BalOver90 > '.005'";
 				}
 				if(checkIncludeNeg.Checked){
-					Queries.CurReport.Query+=" OR BalTotal < '-.005'";
+					cmd+=" OR BalTotal < '-.005'";
 				}
-				Queries.CurReport.Query+=") ";
+				cmd+=") ";
 			}
 			if(!checkBillTypesAll.Checked){
 				for(int i=0;i<listBillType.SelectedIndices.Count;i++) {
 					if(i==0) {
-						Queries.CurReport.Query+=" AND (billingtype = ";
+						cmd+=" AND (billingtype = ";
 					}
 					else {
-						Queries.CurReport.Query+=" OR billingtype = ";
+						cmd+=" OR billingtype = ";
 					}
-					Queries.CurReport.Query+=POut.PLong(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
+					cmd+=POut.PLong(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
 				}
-				Queries.CurReport.Query+=") ";
+				cmd+=") ";
 			}
 			if(!checkProvAll.Checked) {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 					if(i==0) {
-						Queries.CurReport.Query+=" AND (PriProv = ";
+						cmd+=" AND (PriProv = ";
 					}
 					else {
-						Queries.CurReport.Query+=" OR PriProv = ";
+						cmd+=" OR PriProv = ";
 					}
-					Queries.CurReport.Query+=POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
+					cmd+=POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 				}
-				Queries.CurReport.Query+=") ";
+				cmd+=") ";
 			}
-			Queries.CurReport.Query+="ORDER BY LName,FName";
-			FormQuery2=new FormQuery();
+			cmd+="ORDER BY LName,FName";
+			report.Query=cmd;
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
 			//Recompute aging in a non-historical way, so that the numbers are returned to the way they
@@ -451,63 +452,63 @@ namespace OpenDental{
 			//if(Prefs.UpdateString("DateLastAging",POut.PDate(asOfDate,false))) {
 			//	DataValid.SetInvalid(InvalidType.Prefs);
 			//}
-			Queries.CurReport.Title="AGING REPORT";
-			Queries.CurReport.SubTitle=new string[4];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]="As of "+textDate.Text;
+			report.Title="AGING REPORT";
+			report.SubTitle=new string[4];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]="As of "+textDate.Text;
 			if(radioAny.Checked){
-				Queries.CurReport.SubTitle[2]="Any Balance";
+				report.SubTitle[2]="Any Balance";
 			}
 			if(radio30.Checked){
-				Queries.CurReport.SubTitle[2]="Over 30 Days";
+				report.SubTitle[2]="Over 30 Days";
 			}
 			if(radio60.Checked){
-				Queries.CurReport.SubTitle[2]="Over 60 Days";
+				report.SubTitle[2]="Over 60 Days";
 			}
 			if(radio90.Checked){
-				Queries.CurReport.SubTitle[2]="Over 90 Days";
+				report.SubTitle[2]="Over 90 Days";
 			}
 			if(checkBillTypesAll.Checked){
-				Queries.CurReport.SubTitle[3]="All Billing Types";
+				report.SubTitle[3]="All Billing Types";
 			}
 			else{
-				Queries.CurReport.SubTitle[3]=DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[0]].ItemName;
+				report.SubTitle[3]=DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[0]].ItemName;
 				for(int i=1;i<listBillType.SelectedIndices.Count;i++){
-					Queries.CurReport.SubTitle[3]+=", "+DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].ItemName;
+					report.SubTitle[3]+=", "+DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].ItemName;
 				}
 			}
-			Queries.CurReport.ColPos=new int[9];
-			Queries.CurReport.ColCaption=new string[8];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[8];
+			report.ColPos=new int[9];
+			report.ColCaption=new string[8];
+			report.ColAlign=new HorizontalAlignment[8];
 
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=180;
-			Queries.CurReport.ColPos[2]=260;
-			Queries.CurReport.ColPos[3]=340;
-			Queries.CurReport.ColPos[4]=420;
-			Queries.CurReport.ColPos[5]=500;
-			Queries.CurReport.ColPos[6]=585;
-			Queries.CurReport.ColPos[7]=670;
-			Queries.CurReport.ColPos[8]=755;
+			report.ColPos[0]=20;
+			report.ColPos[1]=180;
+			report.ColPos[2]=260;
+			report.ColPos[3]=340;
+			report.ColPos[4]=420;
+			report.ColPos[5]=500;
+			report.ColPos[6]=585;
+			report.ColPos[7]=670;
+			report.ColPos[8]=755;
 
-			Queries.CurReport.ColCaption[0]="GUARANTOR";
-			Queries.CurReport.ColCaption[1]="0-30 DAYS";
-			Queries.CurReport.ColCaption[2]="30-60 DAYS";
-			Queries.CurReport.ColCaption[3]="60-90 DAYS";
-			Queries.CurReport.ColCaption[4]="> 90 DAYS";
-			Queries.CurReport.ColCaption[5]="TOTAL";
-			Queries.CurReport.ColCaption[6]="-INS EST";
-			Queries.CurReport.ColCaption[7]="=PATIENT";
+			report.ColCaption[0]="GUARANTOR";
+			report.ColCaption[1]="0-30 DAYS";
+			report.ColCaption[2]="30-60 DAYS";
+			report.ColCaption[3]="60-90 DAYS";
+			report.ColCaption[4]="> 90 DAYS";
+			report.ColCaption[5]="TOTAL";
+			report.ColCaption[6]="-INS EST";
+			report.ColCaption[7]="=PATIENT";
 
-			Queries.CurReport.ColAlign[1]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[2]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
+			report.ColAlign[1]=HorizontalAlignment.Right;
+			report.ColAlign[2]=HorizontalAlignment.Right;
+			report.ColAlign[3]=HorizontalAlignment.Right;
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.ColAlign[6]=HorizontalAlignment.Right;
+			report.ColAlign[7]=HorizontalAlignment.Right;
 
-			Queries.CurReport.Summary=new string[0];
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

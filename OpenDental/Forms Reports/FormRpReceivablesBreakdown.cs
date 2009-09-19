@@ -266,7 +266,7 @@ namespace OpenDental
             }
             wDate = wYear +"-"+ wMonth +"-"+ wDay;
 
-            Queries.CurReport = new ReportOld();
+						ReportSimpleGrid report = new ReportSimpleGrid();
             //
             // Create temperary tables for sorting data
             //
@@ -314,7 +314,7 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT procedurelog.ProcDate, "
+                report.Query = "SELECT procedurelog.ProcDate, "
                 + "SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)) "
                 + "FROM procedurelog "
                 + "WHERE procedurelog.ProcDate >= '" + bDate + "' "
@@ -323,8 +323,8 @@ namespace OpenDental
                 + whereProv
                 + "GROUP BY procedurelog.ProcDate "
                 + "ORDER BY procedurelog.ProcDate";
-                Queries.SubmitTemp(); //create TableTemp
-                TableCharge = Queries.TableTemp; //must create datatable obj since Queries.TempTable is static
+                report.SubmitTemp(); //create TableTemp
+                TableCharge = report.TableTemp; //must create datatable obj since Queries.TempTable is static
                 whereProv = "";
                 if (listProv.SelectedIndices[0] != 0)
                 {
@@ -345,7 +345,7 @@ namespace OpenDental
                 }
                 if (radioWriteoffPay.Checked)
                 {
-                    Queries.CurReport.Query = "SELECT DateCP, "
+                    report.Query = "SELECT DateCP, "
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "DateCP >= '" + bDate + "' "
                     + "AND DateCP < '" + eDate + "' "
@@ -356,7 +356,7 @@ namespace OpenDental
                 }
                 else
                 {
-                    Queries.CurReport.Query = "SELECT ProcDate, "
+                    report.Query = "SELECT ProcDate, "
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "ProcDate >= '" + bDate + "' "
                     + "AND ProcDate < '" + eDate + "' "
@@ -366,8 +366,8 @@ namespace OpenDental
                     + "ORDER BY ProcDate";
                 }
 
-                Queries.SubmitTemp(); //create TableTemp
-                TableCapWriteoff = Queries.TableTemp.Copy();
+                report.SubmitTemp(); //create TableTemp
+                TableCapWriteoff = report.TableTemp.Copy();
                 whereProv = "";
                 if (listProv.SelectedIndices[0] != 0)
                 {
@@ -388,7 +388,7 @@ namespace OpenDental
                 }
                 if (radioWriteoffPay.Checked)
                 {
-                    Queries.CurReport.Query = "SELECT DateCP, "
+                    report.Query = "SELECT DateCP, "
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "DateCP >= '" + bDate + "' "
                     + "AND DateCP < '" + eDate + "' "
@@ -399,7 +399,7 @@ namespace OpenDental
                 }
                 else
                 {
-                    Queries.CurReport.Query = "SELECT ProcDate, "
+                    report.Query = "SELECT ProcDate, "
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "ProcDate >= '" + bDate + "' "
                     + "AND ProcDate < '" + eDate + "' "
@@ -408,8 +408,8 @@ namespace OpenDental
                     + " GROUP BY ProcDate "
                     + "ORDER BY ProcDate";
                 }
-                Queries.SubmitTemp(); //create TableTemp
-                TableInsWriteoff = Queries.TableTemp.Copy();
+                report.SubmitTemp(); //create TableTemp
+                TableInsWriteoff = report.TableTemp.Copy();
                 whereProv = "";
                 if (listProv.SelectedIndices[0] != 0)
                 {
@@ -428,14 +428,14 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
+                report.Query = "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
                 + "WHERE paysplit.IsDiscount = '0' "
                 + "AND paysplit.DatePay >= '" + bDate + "' "
                 + "AND paysplit.DatePay < '" + eDate + "' "
                 + whereProv
                 + " GROUP BY paysplit.DatePay ORDER BY DatePay";
-                Queries.SubmitTemp(); //create TableTemp
-                TablePay = Queries.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
+                report.SubmitTemp(); //create TableTemp
+                TablePay = report.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
                 whereProv = "";
                 if (listProv.SelectedIndices[0] != 0)
                 {
@@ -454,7 +454,7 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
+                report.Query = "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
                 + "FROM claimpayment,claimproc WHERE "
                 + "claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
                 + "AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
@@ -462,8 +462,8 @@ namespace OpenDental
                 + "AND claimpayment.CheckDate < '" + eDate + "' "
                 + whereProv
                 + " GROUP BY claimpayment.CheckDate ORDER BY checkdate";
-                Queries.SubmitTemp(); //create TableIns
-                TableIns = Queries.TableTemp; //must create datatable obj since Queries.TempTable is static
+                report.SubmitTemp(); //create TableIns
+                TableIns = report.TableTemp; //must create datatable obj since Queries.TempTable is static
                 whereProv = "";
                 if (listProv.SelectedIndices[0] != 0)
                 {
@@ -482,13 +482,13 @@ namespace OpenDental
                     }
                     whereProv += ") ";
                 }
-                Queries.CurReport.Query = "SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
+                report.Query = "SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
                 + "adjdate >= '" + bDate + "' "
                 + "AND adjdate < '" + eDate + "' "
                 + whereProv
                 + " GROUP BY adjdate ORDER BY adjdate";
-                Queries.SubmitTemp(); //create TableTemp
-                TableAdj = Queries.TableTemp; //must create datatable obj since Queries.TempTable is static 
+                report.SubmitTemp(); //create TableTemp
+                TableAdj = report.TableTemp; //must create datatable obj since Queries.TempTable is static 
 
                 //1st Loop Calculate running Accounts Receivable upto the 1st of the Month Selected
                 //2nd Loop Calculate the Daily Accounts Receivable upto the Date Selected
@@ -536,19 +536,19 @@ namespace OpenDental
                     rcvWriteoff = 0.0;
                     rcvDaily = 0.0;
                     runningRcv = rcvStart;
-                    Queries.TableQ = new DataTable(null);//new table with 7 columns
+                    report.TableQ = new DataTable(null);//new table with 7 columns
                     for (int l = 0; l < 8; l++)
                     { //add columns
-                        Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+                        report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
                     }
-                    Queries.CurReport.ColTotal = new double[Queries.TableQ.Columns.Count];
+                    report.ColTotal = new double[report.TableQ.Columns.Count];
                     eDate = POut.PDate(date1.SelectionStart).Substring(1, 10);// Reset EndDate to Selected Date
                     DateTime[] dates = new DateTime[(PIn.PDate(eDate) - PIn.PDate(bDate)).Days + 1];
                     for (int i = 0; i < dates.Length; i++)
                     {//usually 31 days in loop
                         dates[i] = PIn.PDate(bDate).AddDays(i);
                         //create new row called 'row' based on structure of TableQ
-                        DataRow row = Queries.TableQ.NewRow();
+                        DataRow row = report.TableQ.NewRow();
                         row[0] = dates[i].ToShortDateString();
                         for (int k = 0; k < TableCharge.Rows.Count; k++)
                         {
@@ -601,31 +601,31 @@ namespace OpenDental
                         row[5] = rcvInsPayment.ToString("n");
                         row[6] = rcvDaily.ToString("n");
                         row[7] = runningRcv.ToString("n");
-                        Queries.CurReport.ColTotal[1] += rcvProd;
-                        Queries.CurReport.ColTotal[2] += rcvAdj;
-                        Queries.CurReport.ColTotal[3] += rcvWriteoff;		
-                        Queries.CurReport.ColTotal[4] += rcvPayment;
-                        Queries.CurReport.ColTotal[5] += rcvInsPayment;
-                        Queries.CurReport.ColTotal[6] += rcvDaily;
-                        Queries.CurReport.ColTotal[7] = runningRcv;
-                        Queries.TableQ.Rows.Add(row);  //adds row to table Q
+                        report.ColTotal[1] += rcvProd;
+                        report.ColTotal[2] += rcvAdj;
+                        report.ColTotal[3] += rcvWriteoff;		
+                        report.ColTotal[4] += rcvPayment;
+                        report.ColTotal[5] += rcvInsPayment;
+                        report.ColTotal[6] += rcvDaily;
+                        report.ColTotal[7] = runningRcv;
+                        report.TableQ.Rows.Add(row);  //adds row to table Q
                         rcvAdj = 0.0;
                         rcvInsPayment = 0.0;
                         rcvPayment = 0.0;
                         rcvProd = 0.0;
                         rcvWriteoff = 0.0;
                     }//END For Loop
-                    Queries.CurReport.ColWidth = new int[Queries.TableQ.Columns.Count];
-                    Queries.CurReport.ColPos = new int[Queries.TableQ.Columns.Count + 1];
-                    Queries.CurReport.ColPos[0] = 0;
-                    Queries.CurReport.ColCaption = new string[Queries.TableQ.Columns.Count];
-                    Queries.CurReport.ColAlign = new HorizontalAlignment[Queries.TableQ.Columns.Count];
-                    FormQuery2 = new FormQuery();
+                    report.ColWidth = new int[report.TableQ.Columns.Count];
+                    report.ColPos = new int[report.TableQ.Columns.Count + 1];
+                    report.ColPos[0] = 0;
+                    report.ColCaption = new string[report.TableQ.Columns.Count];
+                    report.ColAlign = new HorizontalAlignment[report.TableQ.Columns.Count];
+                    FormQuery2 = new FormQuery(report);
                     FormQuery2.IsReport = true;
                     FormQuery2.ResetGrid();
-                    Queries.CurReport.Title = "Receivables Breakdown Report";
-                    Queries.CurReport.SubTitle = new string[3];
-                    Queries.CurReport.SubTitle[0] = ((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+                    report.Title = "Receivables Breakdown Report";
+                    report.SubTitle = new string[3];
+                    report.SubTitle[0] = ((Pref)PrefC.HList["PracticeTitle"]).ValueString;
                     whereProv = "Report for: Practice";
                     whereProvx = "";
                     if (listProv.SelectedIndices[0] != 0)
@@ -650,37 +650,37 @@ namespace OpenDental
                             whereProvx = whereProvx.Substring(0, whereProvx.Length-1);
                         }
                     }
-                    Queries.CurReport.SubTitle[1] = whereProv;
-                    Queries.CurReport.SubTitle[2] = whereProvx;
-                    Queries.CurReport.ColPos = new int[9];
-                    Queries.CurReport.ColCaption = new string[8];
-                    Queries.CurReport.ColAlign = new HorizontalAlignment[Queries.TableQ.Columns.Count];
-                    Queries.CurReport.ColPos[0] = 1;
-                    Queries.CurReport.ColPos[1] = 80;
-                    Queries.CurReport.ColPos[2] = 160;
-                    Queries.CurReport.ColPos[3] = 260;
-                    Queries.CurReport.ColPos[4] = 360;
-                    Queries.CurReport.ColPos[5] = 470;
-                    Queries.CurReport.ColPos[6] = 570;
-                    Queries.CurReport.ColPos[7] = 680;
-                    Queries.CurReport.ColPos[8] = 779;
-                    Queries.CurReport.ColCaption[0] = "Day";
-                    Queries.CurReport.ColCaption[1] = "Production";
-                    Queries.CurReport.ColCaption[2] = "Adjustment";
-                    Queries.CurReport.ColCaption[3] = "Writeoff";
-                    Queries.CurReport.ColCaption[4] = "Payment";
-                    Queries.CurReport.ColCaption[5] = "InsPayment";
-                    Queries.CurReport.ColCaption[6] = "Daily A/R";
-                    Queries.CurReport.ColCaption[7] = "Ending A/R";
-                    Queries.CurReport.ColAlign[1] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[2] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[3] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[4] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[5] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[6] = HorizontalAlignment.Right;
-                    Queries.CurReport.ColAlign[7] = HorizontalAlignment.Right;
-                    Queries.CurReport.Summary = new string[1];
-                    Queries.CurReport.Summary[0]
+                    report.SubTitle[1] = whereProv;
+                    report.SubTitle[2] = whereProvx;
+                    report.ColPos = new int[9];
+                    report.ColCaption = new string[8];
+                    report.ColAlign = new HorizontalAlignment[report.TableQ.Columns.Count];
+                    report.ColPos[0] = 1;
+                    report.ColPos[1] = 80;
+                    report.ColPos[2] = 160;
+                    report.ColPos[3] = 260;
+                    report.ColPos[4] = 360;
+                    report.ColPos[5] = 470;
+                    report.ColPos[6] = 570;
+                    report.ColPos[7] = 680;
+                    report.ColPos[8] = 779;
+                    report.ColCaption[0] = "Day";
+                    report.ColCaption[1] = "Production";
+                    report.ColCaption[2] = "Adjustment";
+                    report.ColCaption[3] = "Writeoff";
+                    report.ColCaption[4] = "Payment";
+                    report.ColCaption[5] = "InsPayment";
+                    report.ColCaption[6] = "Daily A/R";
+                    report.ColCaption[7] = "Ending A/R";
+                    report.ColAlign[1] = HorizontalAlignment.Right;
+                    report.ColAlign[2] = HorizontalAlignment.Right;
+                    report.ColAlign[3] = HorizontalAlignment.Right;
+                    report.ColAlign[4] = HorizontalAlignment.Right;
+                    report.ColAlign[5] = HorizontalAlignment.Right;
+                    report.ColAlign[6] = HorizontalAlignment.Right;
+                    report.ColAlign[7] = HorizontalAlignment.Right;
+                    report.Summary = new string[1];
+                    report.Summary[0]
                     = Lan.g(this, "Receivables Calculation: (Production + Adjustments - Writeoffs) - (Payments + Insurance Payments)");
                     FormQuery2.ShowDialog();
                     DialogResult = DialogResult.OK;

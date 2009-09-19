@@ -45,23 +45,23 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			#region Method needs to be added to FormQuery.cs
 			/// <summary>
 		/// You call the Queries.SubmitCur() first.  This allows you to alter or set
-		/// the Queries.TableQ first to your liking and not be limited to the query.
+		/// the report.TableQ first to your liking and not be limited to the query.
 		/// </summary>
 		//public void SetupReport(bool autosizecols)
 		//{
 		//    //Queries.SubmitCur();
-		//    Queries.CurReport.ColWidth = new int[Queries.TableQ.Columns.Count];
-		//    Queries.CurReport.ColPos = new int[Queries.TableQ.Columns.Count + 1];
-		//    Queries.CurReport.ColPos[0] = 0;
-		//    Queries.CurReport.ColCaption = new string[Queries.TableQ.Columns.Count];
-		//    Queries.CurReport.ColAlign = new HorizontalAlignment[Queries.TableQ.Columns.Count];
-		//    Queries.CurReport.ColTotal = new double[Queries.TableQ.Columns.Count];
+		//    report.ColWidth = new int[report.TableQ.Columns.Count];
+		//    report.ColPos = new int[report.TableQ.Columns.Count + 1];
+		//    report.ColPos[0] = 0;
+		//    report.ColCaption = new string[report.TableQ.Columns.Count];
+		//    report.ColAlign = new HorizontalAlignment[report.TableQ.Columns.Count];
+		//    report.ColTotal = new double[report.TableQ.Columns.Count];
 		//    grid2.TableStyles.Clear();
-		//    grid2.SetDataBinding(Queries.TableQ, "");//why set the binding Here?
+		//    grid2.SetDataBinding(report.TableQ, "");//why set the binding Here?
 		//    myGridTS = new DataGridTableStyle();
 		//    grid2.TableStyles.Add(myGridTS);
-		//    //Queries.TableQ = MakeReadable(Queries.TableQ);//?
-		//    grid2.SetDataBinding(Queries.TableQ, "");//because MakeReadable trashes the TableQ
+		//    //report.TableQ = MakeReadable(report.TableQ);//?
+		//    grid2.SetDataBinding(report.TableQ, "");//because MakeReadable trashes the TableQ
 		//    if (autosizecols)
 		//        AutoSizeColumns(); 
 			//}
@@ -71,21 +71,21 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		#endregion
 		private void Set_Queries_CurReport(int Guarantor)
 		{
-			Queries.CurReport = new ReportOld();
-			Queries.CurReport.Query = DetailReport(Guarantor);
-			Queries.SubmitCur(); // Fill the Queries.TableQ
-			Queries.TableQ = (new Report1_GuarantorAllocation()).ConvertTableToAllStrings(Queries.TableQ);
-			AddColBalance();// Calculates and Adds the Balance Column to the Query. // Also Adds Providers Abbreviations
-			Queries.CurReport.Title = "Allocation to Guarantor ";
+			ReportSimpleGrid report = new ReportSimpleGrid();
+			report.Query = DetailReport(Guarantor);
+			report.SubmitQuery(); // Fill the report.TableQ
+			report.TableQ = (new Report1_GuarantorAllocation()).ConvertTableToAllStrings(report.TableQ);
+			AddColBalance(report);// Calculates and Adds the Balance Column to the Query. // Also Adds Providers Abbreviations
+			report.Title = "Allocation to Guarantor ";
 
 			DataTable dtGuarantorName = Db.GetTableOld("SELECT CONCAT(LName,' ', FName) FROM Patient WHERE PatNum = " + Guarantor);
 			string GuarantorName = dtGuarantorName.Rows[0][0].ToString();
-			Queries.CurReport.SubTitle = new string[1];
-			Queries.CurReport.SubTitle[0] = "Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString();
-			this._MainReportTable = Queries.TableQ;
-			this._Title = Queries.CurReport.Title + "\n" + Queries.CurReport.SubTitle[0];
+			report.SubTitle = new string[1];
+			report.SubTitle[0] = "Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString();
+			this._MainReportTable = report.TableQ;
+			this._Title = report.Title + "\n" + report.SubTitle[0];
 			BuildSummaryTable(Guarantor, DateTime.MinValue, DateTime.MaxValue);
-			Queries.CurReport.Summary = SummaryTable_as_Strings(); // No Summary Table until built
+			report.Summary = SummaryTable_as_Strings(); // No Summary Table until built
 			
 				//DataTable dtSummary = Db.GetTable(ProviderRevenueByGuarantor(Guarantor));
 			
@@ -94,12 +94,12 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		/// This expects that the last column will be Amount.  If not It will do nothing.
 		/// RunDetialReport(Guarantor) query first.  // Adds Provider's abbreviations to Table as well
 		/// 
-		/// Adds a column to Queries.TableQ
+		/// Adds a column to report.TableQ
 		/// </summary>
-		private static void AddColBalance() //to Queries.TableQ
+		private static void AddColBalance(ReportSimpleGrid report) //to report.TableQ
 		{
-			if (Queries.TableQ != null && Queries.TableQ.Columns.Count == 10)
-				if (Queries.TableQ.Columns[8].ColumnName == "Amount")
+			if (report.TableQ != null && report.TableQ.Columns.Count == 10)
+				if (report.TableQ.Columns[8].ColumnName == "Amount")
 				{
 
 					decimal RunningBalance = 0;
@@ -121,7 +121,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 					{
 					}
 
-					for (int i = 0; i < Queries.TableQ.Rows.Count; i++)
+					for (int i = 0; i < report.TableQ.Rows.Count; i++)
 					{
 						try
 						{
@@ -129,7 +129,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 							decimal amount = 0;
 							try
 							{
-								amount = decimal.Parse(Queries.TableQ.Rows[i][8].ToString());
+								amount = decimal.Parse(report.TableQ.Rows[i][8].ToString());
 							}
 							catch { }
 
@@ -137,40 +137,40 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 
 							if (amount > 0)
 							{
-								Queries.TableQ.Rows[i][5] = amount.ToString("F2");
-								Queries.TableQ.Rows[i][6] = "";
+								report.TableQ.Rows[i][5] = amount.ToString("F2");
+								report.TableQ.Rows[i][6] = "";
 							}
 							else
 							{
-								Queries.TableQ.Rows[i][5] = "";
-								Queries.TableQ.Rows[i][6] = amount.ToString("F2");
+								report.TableQ.Rows[i][5] = "";
+								report.TableQ.Rows[i][6] = amount.ToString("F2");
 							}
-							Queries.TableQ.Rows[i][7] = RunningBalance.ToString("F2");
+							report.TableQ.Rows[i][7] = RunningBalance.ToString("F2");
 							// Fix Provider Column From # to Abreviation,  Need to do it here
 							// because Prov# = 0 is undefined
 							if (htProvs.Count != 0)
-								if (htProvs.ContainsKey(Queries.TableQ.Rows[i][9].ToString()))
-									Queries.TableQ.Rows[i][4] = htProvs[Queries.TableQ.Rows[i][9].ToString()].ToString();
+								if (htProvs.ContainsKey(report.TableQ.Rows[i][9].ToString()))
+									report.TableQ.Rows[i][4] = htProvs[report.TableQ.Rows[i][9].ToString()].ToString();
 							// Change Column 0 Date Display if Date on previous row has been displayed
 							if (i > 0)
-								if (Queries.TableQ.Rows[i][0].ToString() == Queries.TableQ.Rows[i - 1][0].ToString())
-									Queries.TableQ.Rows[i][0] = ""; // makes Dates more readable if not redundant.
+								if (report.TableQ.Rows[i][0].ToString() == report.TableQ.Rows[i - 1][0].ToString())
+									report.TableQ.Rows[i][0] = ""; // makes Dates more readable if not redundant.
 						}
 						catch
 						{
-							Queries.TableQ.Rows[i][7] = "ERROR";
+							report.TableQ.Rows[i][7] = "ERROR";
 						}
 					}
 
 
-					Queries.TableQ.Columns.RemoveAt(8);// Remove Amount
-					Queries.TableQ.Columns.RemoveAt(8); // Remove ProvNums
-					DataRow dr2 = Queries.TableQ.NewRow();
-					Queries.TableQ.Rows.Add(dr2); // add blank row
-					dr2 = Queries.TableQ.NewRow();
+					report.TableQ.Columns.RemoveAt(8);// Remove Amount
+					report.TableQ.Columns.RemoveAt(8); // Remove ProvNums
+					DataRow dr2 = report.TableQ.NewRow();
+					report.TableQ.Rows.Add(dr2); // add blank row
+					dr2 = report.TableQ.NewRow();
 					dr2[6] = "Total";
 					dr2[7] = RunningBalance.ToString("F");
-					Queries.TableQ.Rows.Add(dr2);
+					report.TableQ.Rows.Add(dr2);
 				}
 
 		}
@@ -178,26 +178,26 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		/// <summary>
 		/// Need to have the CurReport.ColWidth,ColCaption, and ColPos arrays initialized.
 		/// </summary>
-		private static void SetCurReportProperties()
+		private static void SetCurReportProperties(ReportSimpleGrid report)//jsparks This doesn't even seem to be used
 		{
-			if (Queries.CurReport.ColCaption != null && Queries.TableQ.Columns.Count == Queries.CurReport.ColCaption.Length)
-				for (int i = 0; i < Queries.CurReport.ColCaption.Length; i++ )
+			if (report.ColCaption != null && report.TableQ.Columns.Count == report.ColCaption.Length)
+				for (int i = 0; i < report.ColCaption.Length; i++ )
 				{
-					Queries.CurReport.ColCaption[i] = Queries.TableQ.Columns[i].ColumnName;
+					report.ColCaption[i] = report.TableQ.Columns[i].ColumnName;
 					
 				}
 			// This Report should have 7 columns
-			Queries.CurReport.ColWidth[0] = 70; Queries.CurReport.ColAlign[0] = System.Windows.Forms.HorizontalAlignment.Center;
-			Queries.CurReport.ColWidth[1] = 206; Queries.CurReport.ColAlign[1] = System.Windows.Forms.HorizontalAlignment.Left;
-			Queries.CurReport.ColWidth[2] = 90; Queries.CurReport.ColAlign[2] = System.Windows.Forms.HorizontalAlignment.Center;
-			Queries.CurReport.ColWidth[3] = 85; Queries.CurReport.ColAlign[3] = System.Windows.Forms.HorizontalAlignment.Center;
-			Queries.CurReport.ColWidth[4] = 51; Queries.CurReport.ColAlign[4] = System.Windows.Forms.HorizontalAlignment.Center;
-			Queries.CurReport.ColWidth[5] = 48; Queries.CurReport.ColAlign[5] = System.Windows.Forms.HorizontalAlignment.Right;
-			Queries.CurReport.ColWidth[6] = 45; Queries.CurReport.ColAlign[6] = System.Windows.Forms.HorizontalAlignment.Right;
-			Queries.CurReport.ColWidth[7] = 50; Queries.CurReport.ColAlign[7] = System.Windows.Forms.HorizontalAlignment.Right;
-			//Queries.CurReport.ColWidth[] = ;
-			for (int i = 1; i < Queries.CurReport.ColPos.Length; i++)
-				Queries.CurReport.ColPos[i] = Queries.CurReport.ColPos[i - 1] + Queries.CurReport.ColWidth[i - 1];
+			report.ColWidth[0] = 70; report.ColAlign[0] = System.Windows.Forms.HorizontalAlignment.Center;
+			report.ColWidth[1] = 206; report.ColAlign[1] = System.Windows.Forms.HorizontalAlignment.Left;
+			report.ColWidth[2] = 90; report.ColAlign[2] = System.Windows.Forms.HorizontalAlignment.Center;
+			report.ColWidth[3] = 85; report.ColAlign[3] = System.Windows.Forms.HorizontalAlignment.Center;
+			report.ColWidth[4] = 51; report.ColAlign[4] = System.Windows.Forms.HorizontalAlignment.Center;
+			report.ColWidth[5] = 48; report.ColAlign[5] = System.Windows.Forms.HorizontalAlignment.Right;
+			report.ColWidth[6] = 45; report.ColAlign[6] = System.Windows.Forms.HorizontalAlignment.Right;
+			report.ColWidth[7] = 50; report.ColAlign[7] = System.Windows.Forms.HorizontalAlignment.Right;
+			//report.ColWidth[] = ;
+			for (int i = 1; i < report.ColPos.Length; i++)
+				report.ColPos[i] = report.ColPos[i - 1] + report.ColWidth[i - 1];
 
 		}
 

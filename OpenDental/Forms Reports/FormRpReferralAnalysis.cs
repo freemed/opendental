@@ -384,15 +384,15 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=@"SELECT referral.LName,referral.FName,
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=@"SELECT referral.LName,referral.FName,
 COUNT(DISTINCT refattach.PatNum) HowMany,
 SUM(procedurelog.ProcFee) $HowMuch";
 			if(checkAddress.Checked){
-				Queries.CurReport.Query+=",referral.Title,referral.Address,referral.Address2,referral.City,"
+				report.Query+=",referral.Title,referral.Address,referral.Address2,referral.City,"
 					+"referral.ST,referral.Zip,referral.Specialty";
 			}
-			Queries.CurReport.Query+=@" FROM referral,refattach,procedurelog,patient
+			report.Query+=@" FROM referral,refattach,procedurelog,patient
 WHERE referral.ReferralNum=refattach.ReferralNum
 AND procedurelog.PatNum=refattach.PatNum
 AND procedurelog.PatNum=patient.PatNum
@@ -402,79 +402,79 @@ AND procedurelog.ProcDate >= "+POut.PDate(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= "+POut.PDate(dateTo)+" "
 				+whereProv;
 			if(checkNewPat.Checked){
-				Queries.CurReport.Query+="AND patient.DateFirstVisit >= "+POut.PDate(dateFrom)+" "
+				report.Query+="AND patient.DateFirstVisit >= "+POut.PDate(dateFrom)+" "
 					+"AND patient.DateFirstVisit <= "+POut.PDate(dateTo)+" ";
 			}
-			Queries.CurReport.Query+=@"GROUP BY referral.ReferralNum
+			report.Query+=@"GROUP BY referral.ReferralNum
 ORDER BY HowMany Desc";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Referral Analysis";
+			report.Title="Referral Analysis";
 			if(listProv.SelectedIndices[0]==0){
-				Queries.CurReport.SubTitle=new string[3];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=Lan.g(this,"All Providers");
-				Queries.CurReport.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle=new string[3];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle[1]=Lan.g(this,"All Providers");
+				report.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
 			}
 			else if(listProv.SelectedIndices.Count==1){
-				Queries.CurReport.SubTitle=new string[3];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=Lan.g(this,"Prov: ")+ProviderC.List[listProv.SelectedIndices[0]-1].GetLongDesc();;
-				Queries.CurReport.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle=new string[3];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle[1]=Lan.g(this,"Prov: ")+ProviderC.List[listProv.SelectedIndices[0]-1].GetLongDesc();;
+				report.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
 			}
 			else{
-				Queries.CurReport.SubTitle=new string[2];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle=new string[2];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				//I'm too lazy to build a description for multiple providers as well as ensure that it fits the space.
-				Queries.CurReport.SubTitle[1]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle[1]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
 			}
 			if(checkAddress.Checked){
-				Queries.CurReport.ColPos=new int[12];
-				Queries.CurReport.ColCaption=new string[11];
-				Queries.CurReport.ColAlign=new HorizontalAlignment[11];
-				Queries.CurReport.ColPos[0]=20;
-				Queries.CurReport.ColPos[1]=120;
-				Queries.CurReport.ColPos[2]=220;
-				Queries.CurReport.ColPos[3]=290;
-				Queries.CurReport.ColPos[4]=370;
-				Queries.CurReport.ColPos[5]=410;
-				Queries.CurReport.ColPos[6]=510;
-				Queries.CurReport.ColPos[7]=550;
-				Queries.CurReport.ColPos[8]=610;
-				Queries.CurReport.ColPos[9]=650;
-				Queries.CurReport.ColPos[10]=700;
-				Queries.CurReport.ColPos[11]=900;//off the right side
-				Queries.CurReport.ColCaption[0]="Last Name";
-				Queries.CurReport.ColCaption[1]="First Name";			
-				Queries.CurReport.ColCaption[2]="Count";
-				Queries.CurReport.ColCaption[3]="Production";
-				Queries.CurReport.ColCaption[4]="Title";
-				Queries.CurReport.ColCaption[5]="Address";
-				Queries.CurReport.ColCaption[6]="Add2";
-				Queries.CurReport.ColCaption[7]="City";
-				Queries.CurReport.ColCaption[8]="ST";
-				Queries.CurReport.ColCaption[9]="Zip";
-				Queries.CurReport.ColCaption[10]="Specialty";
-				Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
+				report.ColPos=new int[12];
+				report.ColCaption=new string[11];
+				report.ColAlign=new HorizontalAlignment[11];
+				report.ColPos[0]=20;
+				report.ColPos[1]=120;
+				report.ColPos[2]=220;
+				report.ColPos[3]=290;
+				report.ColPos[4]=370;
+				report.ColPos[5]=410;
+				report.ColPos[6]=510;
+				report.ColPos[7]=550;
+				report.ColPos[8]=610;
+				report.ColPos[9]=650;
+				report.ColPos[10]=700;
+				report.ColPos[11]=900;//off the right side
+				report.ColCaption[0]="Last Name";
+				report.ColCaption[1]="First Name";			
+				report.ColCaption[2]="Count";
+				report.ColCaption[3]="Production";
+				report.ColCaption[4]="Title";
+				report.ColCaption[5]="Address";
+				report.ColCaption[6]="Add2";
+				report.ColCaption[7]="City";
+				report.ColCaption[8]="ST";
+				report.ColCaption[9]="Zip";
+				report.ColCaption[10]="Specialty";
+				report.ColAlign[3]=HorizontalAlignment.Right;
 			}
 			else{
-				Queries.CurReport.ColPos=new int[5];
-				Queries.CurReport.ColCaption=new string[4];
-				Queries.CurReport.ColAlign=new HorizontalAlignment[4];
-				Queries.CurReport.ColPos[0]=20;
-				Queries.CurReport.ColPos[1]=120;
-				Queries.CurReport.ColPos[2]=220;
-				Queries.CurReport.ColPos[3]=290;
-				Queries.CurReport.ColPos[4]=370;
-				//Queries.CurReport.ColPos[5]=900;//off the right side
-				Queries.CurReport.ColCaption[0]="Last Name";
-				Queries.CurReport.ColCaption[1]="First Name";			
-				Queries.CurReport.ColCaption[2]="Count";
-				Queries.CurReport.ColCaption[3]="Production";
-				Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
+				report.ColPos=new int[5];
+				report.ColCaption=new string[4];
+				report.ColAlign=new HorizontalAlignment[4];
+				report.ColPos[0]=20;
+				report.ColPos[1]=120;
+				report.ColPos[2]=220;
+				report.ColPos[3]=290;
+				report.ColPos[4]=370;
+				//report.ColPos[5]=900;//off the right side
+				report.ColCaption[0]="Last Name";
+				report.ColCaption[1]="First Name";			
+				report.ColCaption[2]="Count";
+				report.ColCaption[3]="Production";
+				report.ColAlign[3]=HorizontalAlignment.Right;
 			}
-			Queries.CurReport.Summary=new string[0];
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

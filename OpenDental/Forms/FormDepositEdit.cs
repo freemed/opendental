@@ -658,12 +658,12 @@ namespace OpenDental{
 			//refresh the lists because some items may not be highlighted
 			PatPayList=Payments.GetForDeposit(DepositCur.DepositNum);
 			ClaimPayList=ClaimPayments.GetForDeposit(DepositCur.DepositNum);
-			Queries.TableQ=new DataTable();
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.TableQ=new DataTable();
 			for(int i=0;i<5;i++){ //add 5 columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			DataRow row;
 			List<long> patNums=new List<long>();
 			for(int i=0;i<PatPayList.Count;i++){
@@ -671,55 +671,55 @@ namespace OpenDental{
 			}
 			Patient[] pats=Patients.GetMultPats(patNums);
 			for(int i=0;i<PatPayList.Count;i++){
-				row=Queries.TableQ.NewRow();
+				row=report.TableQ.NewRow();
 				row[0]=PatPayList[i].PayDate.ToShortDateString();
 				row[1]=Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF();
 				row[2]=PatPayList[i].CheckNum;
 				row[3]=PatPayList[i].BankBranch;
 				row[4]=PatPayList[i].PayAmt.ToString("F");
-				Queries.TableQ.Rows.Add(row);
-				Queries.CurReport.ColTotal[4]+=PatPayList[i].PayAmt;
+				report.TableQ.Rows.Add(row);
+				report.ColTotal[4]+=PatPayList[i].PayAmt;
 			}
 			for(int i=0;i<ClaimPayList.Length;i++){
-				row=Queries.TableQ.NewRow();
+				row=report.TableQ.NewRow();
 				row[0]=ClaimPayList[i].CheckDate.ToShortDateString();
 				row[1]=ClaimPayList[i].CarrierName;
 				row[2]=ClaimPayList[i].CheckNum;
 				row[3]=ClaimPayList[i].BankBranch;
 				row[4]=ClaimPayList[i].CheckAmt.ToString("F");
-				Queries.TableQ.Rows.Add(row);
-				Queries.CurReport.ColTotal[4]+=ClaimPayList[i].CheckAmt;
+				report.TableQ.Rows.Add(row);
+				report.ColTotal[4]+=ClaimPayList[i].CheckAmt;
 			}
 			//done filling now set up table
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			FormQuery FormQuery2=new FormQuery();
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
-			Queries.CurReport.Title="Deposit Slip";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=DepositCur.DateDeposit.ToShortDateString();
-			Queries.CurReport.Summary=new string[1];
-			Queries.CurReport.Summary[0]=DepositCur.BankAccountInfo;
+			report.Title="Deposit Slip";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=DepositCur.DateDeposit.ToShortDateString();
+			report.Summary=new string[1];
+			report.Summary[0]=DepositCur.BankAccountInfo;
 			if(DepositCur.BankAccountInfo.StartsWith("A")){
-				Queries.CurReport.SummaryFont="GnuMICR";
+				report.SummaryFont="GnuMICR";
 			}
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=110;
-			Queries.CurReport.ColPos[2]=260;
-			Queries.CurReport.ColPos[3]=350;
-			Queries.CurReport.ColPos[4]=440;
-			Queries.CurReport.ColPos[5]=530;
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Name";
-			Queries.CurReport.ColCaption[2]="Check Number";
-			Queries.CurReport.ColCaption[3]="Bank-Branch";
-			Queries.CurReport.ColCaption[4]="Amount";
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColPos[0]=20;
+			report.ColPos[1]=110;
+			report.ColPos[2]=260;
+			report.ColPos[3]=350;
+			report.ColPos[4]=440;
+			report.ColPos[5]=530;
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Name";
+			report.ColCaption[2]="Check Number";
+			report.ColCaption[3]="Bank-Branch";
+			report.ColCaption[4]="Amount";
+			report.ColAlign[4]=HorizontalAlignment.Right;
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;//this is imporant, since we don't want to insert the deposit slip twice.
 		}

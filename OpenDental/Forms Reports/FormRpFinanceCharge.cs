@@ -131,37 +131,37 @@ namespace OpenDental{
 			//	MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 			//	return;
 			//}
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=
 				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),adjamt "
 				+"FROM patient,adjustment "
 				+"WHERE patient.patnum=adjustment.patnum "
 				+"AND adjustment.adjdate = '"+((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString+"'"
 				+"AND adjustment.adjtype = '"+((Pref)PrefC.HList["FinanceChargeAdjustmentType"]).ValueString+"'";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();		
-			Queries.CurReport.Title="FINANCE CHARGE REPORT";
-			Queries.CurReport.SubTitle=new string[4];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]="Date of Charges: "
+			report.Title="FINANCE CHARGE REPORT";
+			report.SubTitle=new string[4];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]="Date of Charges: "
 				+PIn.PDate(((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString).ToShortDateString();
-			//Queries.CurReport.SubTitle[2]="Adjustment type: "+PIn.PDate(textDate.Text).ToShortDateString();
+			//report.SubTitle[2]="Adjustment type: "+PIn.PDate(textDate.Text).ToShortDateString();
 
-			Queries.CurReport.ColPos=new int[3];
-			Queries.CurReport.ColCaption=new string[2];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[2];
+			report.ColPos=new int[3];
+			report.ColCaption=new string[2];
+			report.ColAlign=new HorizontalAlignment[2];
 
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=200;
-			Queries.CurReport.ColPos[2]=300;
+			report.ColPos[0]=20;
+			report.ColPos[1]=200;
+			report.ColPos[2]=300;
 
-			Queries.CurReport.ColCaption[0]="Patient Name";
-			Queries.CurReport.ColCaption[1]="Amount";
+			report.ColCaption[0]="Patient Name";
+			report.ColCaption[1]="Amount";
 
-			Queries.CurReport.ColAlign[1]=HorizontalAlignment.Right;
+			report.ColAlign[1]=HorizontalAlignment.Right;
 
-			Queries.CurReport.Summary=new string[0];
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();		
 			DialogResult=DialogResult.OK;
 		}

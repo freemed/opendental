@@ -119,8 +119,9 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=@"
+
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=@"
 DROP TABLE IF EXISTS tempused;
 DROP TABLE IF EXISTS tempplanned;
 DROP TABLE IF EXISTS tempannualmax;
@@ -181,15 +182,15 @@ LEFT JOIN tempannualmax ON tempannualmax.PlanNum=patplan.PlanNum
 	/*AND tempannualmax.AnnualMax-tempused.AmtUsed>0*/
 WHERE tempplanned.AmtPlanned>0 ";
 			if(!checkIncludeNoIns.Checked){//if we don't want patients without insurance
-				Queries.CurReport.Query+="AND AnnualMax > 0 ";
+				report.Query+="AND AnnualMax > 0 ";
 			}
-			Queries.CurReport.Query+=@"
+			report.Query+=@"
 AND patient.PatStatus =0
 ORDER BY tempplanned.AmtPlanned DESC;
 DROP TABLE tempused;
 DROP TABLE tempplanned;
 DROP TABLE tempannualmax;";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.textTitle.Text="Treatment Finder";
 			//FormQuery2.IsReport=true;
 			//FormQuery2.SubmitReportQuery();			

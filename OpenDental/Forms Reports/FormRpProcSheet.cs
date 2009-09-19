@@ -259,18 +259,18 @@ namespace OpenDental{
 					+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			if(radioIndividual.Checked){
-				CreateIndividual();
+				CreateIndividual(report);
 			}
 			else{
-				CreateGrouped();
+				CreateGrouped(report);
 			}
 		}
 
-		private void CreateIndividual(){
+		private void CreateIndividual(ReportSimpleGrid report) {
 			//added Procnum to retrieve all codes
-			Queries.CurReport.Query="SELECT procedurelog.ProcDate,CONCAT(CONCAT(CONCAT(CONCAT"
+			report.Query="SELECT procedurelog.ProcDate,CONCAT(CONCAT(CONCAT(CONCAT"
 				+"(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname, procedurecode.ProcCode,"
 				//+"CASE WHEN (SELECT procedurelog.ToothNum REGEXP '^[0-9]$')=1 THEN CONCAT('0',procedurelog.ToothNum) "
 				//+"ELSE procedurelog.ToothNum END as ToothNum,procedurecode.Descript,provider.Abbr,"
@@ -289,44 +289,44 @@ namespace OpenDental{
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
 				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode,ToothNum";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Daily Procedures";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")
+			report.Title="Daily Procedures";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=date1.SelectionStart.ToString("d")
 				+" - "+date2.SelectionStart.ToString("d");	
 			// col[5] from 590 to 640, 680, 770, spk 7/20/04
-			Queries.CurReport.ColPos=new int[9];
-			Queries.CurReport.ColCaption=new string[8];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[8];			
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=100;
-			Queries.CurReport.ColPos[2]=250;
-			Queries.CurReport.ColPos[3]=325;
-			Queries.CurReport.ColPos[4]=370;
-			Queries.CurReport.ColPos[5]=640;
-			Queries.CurReport.ColPos[6]=680;
-			Queries.CurReport.ColPos[7]=770;
-			Queries.CurReport.ColPos[8]=820;		// spk
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient Name";			
-			Queries.CurReport.ColCaption[2]="ADA Code";
-			Queries.CurReport.ColCaption[3]="Tooth";
-			Queries.CurReport.ColCaption[4]="Description";
-			Queries.CurReport.ColCaption[5]="Provider";
-			Queries.CurReport.ColCaption[6]="Fee";
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColCaption[7]=" ";	// spk
-			Queries.CurReport.Summary=new string[0];
+			report.ColPos=new int[9];
+			report.ColCaption=new string[8];
+			report.ColAlign=new HorizontalAlignment[8];			
+			report.ColPos[0]=20;
+			report.ColPos[1]=100;
+			report.ColPos[2]=250;
+			report.ColPos[3]=325;
+			report.ColPos[4]=370;
+			report.ColPos[5]=640;
+			report.ColPos[6]=680;
+			report.ColPos[7]=770;
+			report.ColPos[8]=820;		// spk
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Patient Name";			
+			report.ColCaption[2]="ADA Code";
+			report.ColCaption[3]="Tooth";
+			report.ColCaption[4]="Description";
+			report.ColCaption[5]="Provider";
+			report.ColCaption[6]="Fee";
+			report.ColAlign[6]=HorizontalAlignment.Right;
+			report.ColCaption[7]=" ";	// spk
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
 
-		private void CreateGrouped(){
+		private void CreateGrouped(ReportSimpleGrid report) {
 			//this would require a temporary table to be able to handle capitation.
-			Queries.CurReport.Query="SELECT definition.ItemName,procedurecode.ProcCode,procedurecode.Descript,"
+			report.Query="SELECT definition.ItemName,procedurecode.ProcCode,procedurecode.Descript,"
         +"Count(*),AVG(procedurelog.ProcFee) $AvgFee,SUM(procedurelog.ProcFee) AS $TotFee "
 				+"FROM procedurelog,procedurecode,definition "
 				+"WHERE procedurelog.ProcStatus = '2' "
@@ -338,35 +338,35 @@ namespace OpenDental{
 				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"GROUP BY procedurecode.ProcCode "
 				+"ORDER BY definition.ItemOrder,procedurecode.ProcCode";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Procedures By Procedure Code";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")
+			report.Title="Procedures By Procedure Code";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=date1.SelectionStart.ToString("d")
 				+" - "+date2.SelectionStart.ToString("d");	
-			Queries.CurReport.ColPos=new int[7];
-			Queries.CurReport.ColCaption=new string[6];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[6];			
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=170;
-			Queries.CurReport.ColPos[2]=260;
-			Queries.CurReport.ColPos[3]=440;
-			Queries.CurReport.ColPos[4]=490;
-			Queries.CurReport.ColPos[5]=600;
-			Queries.CurReport.ColPos[6]=700;
-			Queries.CurReport.ColCaption[0]="Category";
-			Queries.CurReport.ColCaption[1]="Code";			
-			Queries.CurReport.ColCaption[2]="Description";
-			Queries.CurReport.ColCaption[3]="Quantity";
-			Queries.CurReport.ColCaption[4]="Average Fee";
-			Queries.CurReport.ColCaption[5]="Total Fees";
-			Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			//Queries.CurReport.ColCaption[7]=" ";
-			Queries.CurReport.Summary=new string[0];
+			report.ColPos=new int[7];
+			report.ColCaption=new string[6];
+			report.ColAlign=new HorizontalAlignment[6];			
+			report.ColPos[0]=20;
+			report.ColPos[1]=170;
+			report.ColPos[2]=260;
+			report.ColPos[3]=440;
+			report.ColPos[4]=490;
+			report.ColPos[5]=600;
+			report.ColPos[6]=700;
+			report.ColCaption[0]="Category";
+			report.ColCaption[1]="Code";			
+			report.ColCaption[2]="Description";
+			report.ColCaption[3]="Quantity";
+			report.ColCaption[4]="Average Fee";
+			report.ColCaption[5]="Total Fees";
+			report.ColAlign[3]=HorizontalAlignment.Right;
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			//report.ColCaption[7]=" ";
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

@@ -7,7 +7,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 ///<summary></summary>
-	public class FormQueryFormulate : System.Windows.Forms.Form{
+	public class FormQueryFavorites:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.ListBox list2;
@@ -23,7 +23,7 @@ namespace OpenDental{
 		public UserQuery UserQueryCur;
 
 		///<summary></summary>
-		public FormQueryFormulate(){
+		public FormQueryFavorites() {
 			InitializeComponent();
 			Lan.F(this);
 		}
@@ -45,7 +45,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormQueryFormulate));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormQueryFavorites));
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.list2 = new System.Windows.Forms.ListBox();
@@ -183,7 +183,7 @@ namespace OpenDental{
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// FormQueryFormulate
+			// FormQueryFavorites
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -203,7 +203,7 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormQueryFormulate";
+			this.Name = "FormQueryFavorites";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Query Favorites";
@@ -267,8 +267,8 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a query first."));
 				return;
 			}
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=UserQueryCur.QueryText;
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=UserQueryCur.QueryText;
 			DialogResult=DialogResult.OK;
 		}
 

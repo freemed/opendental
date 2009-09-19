@@ -365,7 +365,7 @@ namespace OpenDental{
 			DataTable tableIns=Reports.GetTable(queryIns);
 			DataTable tablePat=Reports.GetTable(queryPat);
 			DataTable tablePref=Reports.GetTable("SELECT ValueString FROM preference WHERE PrefName='PracticeTitle'");
-			FormReport FormR=new FormReport();
+			FormReportForRdl FormR=new FormReportForRdl();
 			FormR.SourceRdlString=Properties.Resources.PaymentsRDL;
 			FormR.RdlReport.DataSets["Data"].SetData(tableIns);
 			FormR.RdlReport.DataSets["DataPatPay"].SetData(tablePat);

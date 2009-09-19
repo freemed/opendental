@@ -163,59 +163,58 @@ namespace OpenDental{
 			long feeSched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;	
       string catName="";  //string to hold current category name
 			Fees fee=new Fees();
-			Queries.CurReport=new ReportOld();
-			
-			Queries.CurReport.Query= "SELECT procedurecode.ProcCode,fee.Amount,'     ',procedurecode.Descript,"
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query= "SELECT procedurecode.ProcCode,fee.Amount,'     ',procedurecode.Descript,"
 			  +"procedurecode.AbbrDesc FROM procedurecode,fee "
 				+"WHERE procedurecode.CodeNum=fee.CodeNum AND fee.FeeSched='"+feeSched.ToString()
          +"' ORDER BY procedurecode.ProcCode";
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
       if (radioCode.Checked==true)  {
 			  FormQuery2.SubmitReportQuery();			      
-				Queries.CurReport.Title="Procedure Codes";
-				Queries.CurReport.SubTitle=new string[2];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=FeeScheds.GetDescription(feeSched);
-				Queries.CurReport.ColPos=new int[6];
-				Queries.CurReport.ColCaption=new string[5];
-				Queries.CurReport.ColAlign=new HorizontalAlignment[5];
-				Queries.CurReport.ColPos[0]=60;
-				Queries.CurReport.ColPos[1]=130;
-				Queries.CurReport.ColPos[2]=200;
-				Queries.CurReport.ColPos[3]=220;
-				Queries.CurReport.ColPos[4]=420;
-				Queries.CurReport.ColPos[5]=620;
-				Queries.CurReport.ColCaption[0]="Code";
-				Queries.CurReport.ColCaption[1]="Fee Amount";
-				Queries.CurReport.ColCaption[2]=" ";//otherwise, the amount gets bunched up next to the description.
-				Queries.CurReport.ColCaption[3]="Description";
-				Queries.CurReport.ColCaption[4]="Abbr Description";
-				//Queries.CurReport.ColCaption[3]="Fee Amount";
-				Queries.CurReport.ColAlign[1]=HorizontalAlignment.Right;
-				Queries.CurReport.Summary=new string[0];
+				report.Title="Procedure Codes";
+				report.SubTitle=new string[2];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle[1]=FeeScheds.GetDescription(feeSched);
+				report.ColPos=new int[6];
+				report.ColCaption=new string[5];
+				report.ColAlign=new HorizontalAlignment[5];
+				report.ColPos[0]=60;
+				report.ColPos[1]=130;
+				report.ColPos[2]=200;
+				report.ColPos[3]=220;
+				report.ColPos[4]=420;
+				report.ColPos[5]=620;
+				report.ColCaption[0]="Code";
+				report.ColCaption[1]="Fee Amount";
+				report.ColCaption[2]=" ";//otherwise, the amount gets bunched up next to the description.
+				report.ColCaption[3]="Description";
+				report.ColCaption[4]="Abbr Description";
+				//report.ColCaption[3]="Fee Amount";
+				report.ColAlign[1]=HorizontalAlignment.Right;
+				report.Summary=new string[0];
 				FormQuery2.ShowDialog();
 				DialogResult=DialogResult.OK;		
       }
 			else {//categories
-			  Queries.SubmitTemp();//create TableTemp which is not actually used
+			  report.SubmitTemp();//create TableTemp which is not actually used
 	      ProcedureCode[] ProcList=ProcedureCodes.GetProcList();
-				Queries.TableQ=new DataTable(null);
+				report.TableQ=new DataTable(null);
 			  for(int i=0;i<5;i++){//add columns
-				  Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				  report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			  }
-				Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
-        DataRow row=Queries.TableQ.NewRow();//add first row by hand to get value for temp
+				report.ColTotal=new double[report.TableQ.Columns.Count];
+        DataRow row=report.TableQ.NewRow();//add first row by hand to get value for temp
 				row[0]=DefC.GetName(DefCat.ProcCodeCats,ProcList[0].ProcCat);
 				catName=row[0].ToString();
 				row[1]=ProcList[0].ProcCode;
 				row[2]=ProcList[0].Descript;
 				row[3]=ProcList[0].AbbrDesc;
 			  row[4]=((double)Fees.GetAmount0(ProcList[0].CodeNum,feeSched)).ToString("F");
-				Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
-				Queries.TableQ.Rows.Add(row);
+				report.ColTotal[4]+=PIn.PDouble(row[4].ToString());
+				report.TableQ.Rows.Add(row);
 				for(int i=1;i<ProcList.Length;i++){//loop through data rows
-					row=Queries.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
+					row=report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 					row[0]=DefC.GetName(DefCat.ProcCodeCats,ProcList[i].ProcCat);
 					if(catName==row[0].ToString()){
             row[0]=""; 
@@ -227,33 +226,33 @@ namespace OpenDental{
 					row[2]=ProcList[i].Descript;
 					row[3]=ProcList[i].AbbrDesc.ToString();
 					row[4]=((double)Fees.GetAmount0(ProcList[i].CodeNum,feeSched)).ToString("F");
-  				//Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
-					Queries.TableQ.Rows.Add(row);
+  				//report.ColTotal[4]+=PIn.PDouble(row[4].ToString());
+					report.TableQ.Rows.Add(row);
 				}
-        Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-				Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-				Queries.CurReport.ColPos[0]=0;
-				Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-				Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
+        report.ColWidth=new int[report.TableQ.Columns.Count];
+				report.ColPos=new int[report.TableQ.Columns.Count+1];
+				report.ColPos[0]=0;
+				report.ColCaption=new string[report.TableQ.Columns.Count];
+				report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
 				FormQuery2.ResetGrid();//this is a method in FormQuery2;
 				
-				Queries.CurReport.Title="Procedure Codes";
-				Queries.CurReport.SubTitle=new string[5];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=FeeScheds.GetDescription(feeSched);
-				Queries.CurReport.ColPos[0]=20;
-				Queries.CurReport.ColPos[1]=120;
-				Queries.CurReport.ColPos[2]=270;
-				Queries.CurReport.ColPos[3]=470;
-				Queries.CurReport.ColPos[4]=620;
-				Queries.CurReport.ColPos[5]=770;
-				Queries.CurReport.ColCaption[0]="Category";
-				Queries.CurReport.ColCaption[1]="Code";
-				Queries.CurReport.ColCaption[2]="Description";
-				Queries.CurReport.ColCaption[3]="Abbr Description";
-				Queries.CurReport.ColCaption[4]="Fee Amount";
-				Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-				Queries.CurReport.Summary=new string[5];
+				report.Title="Procedure Codes";
+				report.SubTitle=new string[5];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle[1]=FeeScheds.GetDescription(feeSched);
+				report.ColPos[0]=20;
+				report.ColPos[1]=120;
+				report.ColPos[2]=270;
+				report.ColPos[3]=470;
+				report.ColPos[4]=620;
+				report.ColPos[5]=770;
+				report.ColCaption[0]="Category";
+				report.ColCaption[1]="Code";
+				report.ColCaption[2]="Description";
+				report.ColCaption[3]="Abbr Description";
+				report.ColCaption[4]="Fee Amount";
+				report.ColAlign[4]=HorizontalAlignment.Right;
+				report.Summary=new string[5];
 				FormQuery2.ShowDialog();
 				DialogResult=DialogResult.OK;
 			}

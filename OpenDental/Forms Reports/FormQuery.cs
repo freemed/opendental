@@ -16,7 +16,7 @@ using System.Threading;
 using OpenDentBusiness;
 
 namespace OpenDental{
-///<summary>This is getting very outdated.  I realize it is difficult to use and will be phased out soon. The report displayed will be based on Queries.TableQ and Queries.CurReport.</summary>
+///<summary>This is getting very outdated.  I realize it is difficult to use and will be phased out soon. The report displayed will be based on report.TableQ and report.</summary>
 	public class FormQuery : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.DataGrid grid2;
@@ -68,14 +68,16 @@ namespace OpenDental{
 		private static Hashtable hListPlans;
 		private UserQuery UserQueryCur;//never gets used.  It's a holdover.
 		private static Dictionary<long,string> patientNames;
+		private ReportSimpleGrid report;
 
-		///<summary></summary>
-		public FormQuery(){
+		///<summary>Can pass in null if not a report.</summary>
+		public FormQuery(ReportSimpleGrid report){
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this,new System.Windows.Forms.Control[] {
 				//exclude:
 				labelTotPages,
 			});
+			this.report=report;
 		}
 
 		///<summary></summary>
@@ -543,7 +545,7 @@ namespace OpenDental{
 		}
 
 		private void FormQuery_Load(object sender, System.EventArgs e) {
-			//Queries.TableQ=null;//this will crash the program
+			//report.TableQ=null;//this will crash the program
 			grid2.Font=bodyFont;
 			if(IsReport){
 				printPreviewControl2.Visible=true;
@@ -569,8 +571,8 @@ namespace OpenDental{
 		}
 
 		private void butSubmit_Click(object sender, System.EventArgs e) {	
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=textQuery.Text;
+			report=new ReportSimpleGrid();
+			report.Query=textQuery.Text;
 			SubmitQuery();
 		}
 
@@ -579,7 +581,7 @@ namespace OpenDental{
 			patientNames=Patients.GetAllPatientNames();
       //hListPlans=InsPlans.GetHListAll();
 			try{
-				Queries.SubmitCur();
+				report.SubmitQuery();
 			}
 			catch(Exception ex){
 				MsgBox.Show(this,"Invalid query: "+ex.Message);
@@ -606,42 +608,42 @@ namespace OpenDental{
 			//if(MessageBox.Show("Waiting for Server","",MessageBoxButtons.
 			//Wait for dialog result
 			//If abort, then skip the rest of this.*/
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			grid2.TableStyles.Clear();
-			grid2.SetDataBinding(Queries.TableQ,"");
+			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
 			grid2.TableStyles.Add(myGridTS);
 			if(radioHuman.Checked){
-				Queries.TableQ=MakeReadable(Queries.TableQ);
+				report.TableQ=MakeReadable(report.TableQ,report);
 				grid2.TableStyles.Clear();
-				grid2.SetDataBinding(Queries.TableQ,"");
+				grid2.SetDataBinding(report.TableQ,"");
 				grid2.TableStyles.Add(myGridTS);
 			}
 			//if(!IsReport){
 				AutoSizeColumns();
 				/*for(int i=0;i<doubleCount;i++){
 					int colTotal=0;
-					for(int iRow=0;iRow<Queries.TableQ.Rows.Count;i++){
+					for(int iRow=0;iRow<report.TableQ.Rows.Count;i++){
 						
 					}
-					Queries.CurReport.Summary[i]="TOTAL :"+;
+					report.Summary[i]="TOTAL :"+;
 				}*/
-				Queries.CurReport.Title=textTitle.Text;
-				Queries.CurReport.SubTitle=new string[1];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				for(int iCol=0;iCol<Queries.TableQ.Columns.Count;iCol++){
-					Queries.CurReport.ColCaption[iCol]=Queries.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
+				report.Title=textTitle.Text;
+				report.SubTitle=new string[1];
+				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
+					report.ColCaption[iCol]=report.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
 					//again, I don't know why this would fail, so here's a check:
 					if(myGridTS.GridColumnStyles.Count >= iCol+1) {
-						myGridTS.GridColumnStyles[iCol].Alignment=Queries.CurReport.ColAlign[iCol];
+						myGridTS.GridColumnStyles[iCol].Alignment=report.ColAlign[iCol];
 					}
 				}
-				Queries.CurReport.Summary=new string[0];
+				report.Summary=new string[0];
 			//}		
 		}
 
@@ -650,44 +652,45 @@ namespace OpenDental{
 		//}
 
 		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
-		public void SubmitReportQuery(){	
-			Queries.SubmitCur();
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+		public void SubmitReportQuery(){
+			report.SubmitQuery();
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			grid2.TableStyles.Clear();
-			grid2.SetDataBinding(Queries.TableQ,"");
+			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
 			grid2.TableStyles.Add(myGridTS);
-			Queries.TableQ=MakeReadable(Queries.TableQ);//?
-			grid2.SetDataBinding(Queries.TableQ,"");//because MakeReadable trashes the TableQ
+			report.TableQ=MakeReadable(report.TableQ,report);//?
+			grid2.SetDataBinding(report.TableQ,"");//because MakeReadable trashes the TableQ
+			this.report=report;
 		}
 
 		/*
 		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
 		public void SubmitReportQuery(DataTable table) {
-			Queries.TableQ=table;
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			report.TableQ=table;
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			grid2.TableStyles.Clear();
-			grid2.SetDataBinding(Queries.TableQ,"");
+			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
 			grid2.TableStyles.Add(myGridTS);
-			Queries.TableQ=MakeReadable(Queries.TableQ);//?
-			grid2.SetDataBinding(Queries.TableQ,"");//because MakeReadable trashes the TableQ
+			report.TableQ=MakeReadable(report.TableQ);//?
+			grid2.SetDataBinding(report.TableQ,"");//because MakeReadable trashes the TableQ
 		}*/
 
 		///<summary></summary>
 		public void ResetGrid(){
 			grid2.TableStyles.Clear();
-			grid2.SetDataBinding(Queries.TableQ,"");
+			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
 			grid2.TableStyles.Add(myGridTS);
 		}
@@ -697,29 +700,29 @@ namespace OpenDental{
 			//int colWidth;
 			int tempWidth;
 			//for(int i=0;i<myGridTS.GridColumnStyles.Count;i++){
-			for(int i=0;i<Queries.CurReport.ColWidth.Length;i++){
-				Queries.CurReport.ColWidth[i]
-					=(int)grfx.MeasureString(Queries.TableQ.Columns[i].Caption,grid2.Font).Width;
+			for(int i=0;i<report.ColWidth.Length;i++){
+				report.ColWidth[i]
+					=(int)grfx.MeasureString(report.TableQ.Columns[i].Caption,grid2.Font).Width;
 					//myGridTS.GridColumnStyles[i].HeaderText,grid2.Font).Width;
-				for(int j=0;j<Queries.TableQ.Rows.Count;j++){
-					tempWidth=(int)grfx.MeasureString(Queries.TableQ.Rows[j][i].ToString(),grid2.Font).Width;
-					if(tempWidth>Queries.CurReport.ColWidth[i])
-						Queries.CurReport.ColWidth[i]=tempWidth;
+				for(int j=0;j<report.TableQ.Rows.Count;j++){
+					tempWidth=(int)grfx.MeasureString(report.TableQ.Rows[j][i].ToString(),grid2.Font).Width;
+					if(tempWidth>report.ColWidth[i])
+						report.ColWidth[i]=tempWidth;
 				}
-				if(Queries.CurReport.ColWidth[i]>400) {
-					Queries.CurReport.ColWidth[i]=400;
+				if(report.ColWidth[i]>400) {
+					report.ColWidth[i]=400;
 				}
 				//I have no idea why this is failing, so we'll just do a check:
 				if(myGridTS.GridColumnStyles.Count >= i+1) {
-					myGridTS.GridColumnStyles[i].Width=Queries.CurReport.ColWidth[i]+12;
+					myGridTS.GridColumnStyles[i].Width=report.ColWidth[i]+12;
 				}
-				Queries.CurReport.ColWidth[i]+=6;//so the columns don't touch
-				Queries.CurReport.ColPos[i+1]=Queries.CurReport.ColPos[i]+Queries.CurReport.ColWidth[i];
+				report.ColWidth[i]+=6;//so the columns don't touch
+				report.ColPos[i+1]=report.ColPos[i]+report.ColWidth[i];
 			}
 		}
 
-		///<summary>Starting to use this externally as well.</summary>
-		public static DataTable MakeReadable(DataTable tableIn){
+		///<summary>Starting to use this externally as well.  OK to pass in a null report.</summary>
+		public static DataTable MakeReadable(DataTable tableIn,ReportSimpleGrid reportIn){
 			//this can probably be improved upon later for speed
 			if(hListPlans==null){
 				hListPlans=InsPlans.GetHListAll();
@@ -747,8 +750,10 @@ namespace OpenDental{
 					try{
 					if(tableOut.Columns[j].Caption.Substring(0,1)=="$"){
 						tableOut.Rows[i][j]=PIn.PDouble(tableOut.Rows[i][j].ToString()).ToString("F");
-						Queries.CurReport.ColAlign[j]=HorizontalAlignment.Right;
-						Queries.CurReport.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+						if(reportIn!=null) {
+							reportIn.ColAlign[j]=HorizontalAlignment.Right;
+							reportIn.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+						}
 					}
 					else if(tableOut.Columns[j].Caption.ToLower().StartsWith("date")){
 						date=PIn.PDate(tableOut.Rows[i][j].ToString());
@@ -851,9 +856,10 @@ namespace OpenDental{
 						case "balover90":
 						case "baltotal":
 							tableOut.Rows[i][j]=PIn.PDouble(tableOut.Rows[i][j].ToString()).ToString("F");
-							Queries.CurReport.ColAlign[j]=HorizontalAlignment.Right;
-							//myGridTS.GridColumnStyles[j].Alignment=HorizontalAlignment.Right;
-							Queries.CurReport.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+							if(reportIn!=null) {
+								reportIn.ColAlign[j]=HorizontalAlignment.Right;
+								reportIn.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
+							}
 							break;
 						case "toothnum":
 							tableOut.Rows[i][j]=Tooth.ToInternat(tableOut.Rows[i][j].ToString());
@@ -1051,7 +1057,7 @@ namespace OpenDental{
 		}
 
 		private void butFormulate_Click(object sender, System.EventArgs e) {//is now the 'Favorites' button
-			FormQueryFormulate FormQF=new FormQueryFormulate();
+			FormQueryFavorites FormQF=new FormQueryFavorites();
 			FormQF.UserQueryCur=UserQueryCur;
 			FormQF.ShowDialog();
 			if(FormQF.DialogResult==DialogResult.OK){
@@ -1088,7 +1094,7 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
-			if(Queries.TableQ==null){
+			if(report.TableQ==null){
 				MessageBox.Show(Lan.g(this,"Please run query first"));
 				return;
 			}
@@ -1099,7 +1105,7 @@ namespace OpenDental{
 		}
 
 		private void butPrintPreview_Click(object sender, System.EventArgs e) {
-			if(Queries.TableQ==null){
+			if(report.TableQ==null){
 				MessageBox.Show(Lan.g(this,"Please run query first"));
 				return;
 			}
@@ -1151,16 +1157,16 @@ namespace OpenDental{
 			Rectangle bounds=ev.MarginBounds;
 			float yPos = bounds.Top;
 			if(!headerPrinted){
-				ev.Graphics.DrawString(Queries.CurReport.Title
+				ev.Graphics.DrawString(report.Title
 					,titleFont,Brushes.Black
 					,bounds.Width/2
-					-ev.Graphics.MeasureString(Queries.CurReport.Title,titleFont).Width/2,yPos);
+					-ev.Graphics.MeasureString(report.Title,titleFont).Width/2,yPos);
 				yPos+=titleFont.GetHeight(ev.Graphics);
-				for(int i=0;i<Queries.CurReport.SubTitle.Length;i++){
-					ev.Graphics.DrawString(Queries.CurReport.SubTitle[i]
+				for(int i=0;i<report.SubTitle.Length;i++){
+					ev.Graphics.DrawString(report.SubTitle[i]
 						,subtitleFont,Brushes.Black
 						,bounds.Width/2
-						-ev.Graphics.MeasureString(Queries.CurReport.SubTitle[i],subtitleFont).Width/2,yPos);
+						-ev.Graphics.MeasureString(report.SubTitle[i],subtitleFont).Width/2,yPos);
 					yPos+=subtitleFont.GetHeight(ev.Graphics)+2;
 				}
 				headerPrinted=true;
@@ -1186,47 +1192,47 @@ namespace OpenDental{
 			yPos+=bodyFont.GetHeight(ev.Graphics)+10;
 			ev.Graphics.DrawLine(new Pen(Color.Black),bounds.Left,yPos-5,bounds.Right,yPos-5);
 			//column captions:
-			for(int i=0;i<Queries.CurReport.ColCaption.Length;i++){
-				if(Queries.CurReport.ColAlign[i]==HorizontalAlignment.Right){
-					ev.Graphics.DrawString(Queries.CurReport.ColCaption[i]
+			for(int i=0;i<report.ColCaption.Length;i++){
+				if(report.ColAlign[i]==HorizontalAlignment.Right){
+					ev.Graphics.DrawString(report.ColCaption[i]
 						,colCaptFont,Brushes.Black,new RectangleF(
-						bounds.Left+Queries.CurReport.ColPos[i+1]
-						-ev.Graphics.MeasureString(Queries.CurReport.ColCaption[i],colCaptFont).Width,yPos
-						,Queries.CurReport.ColWidth[i],colCaptFont.GetHeight(ev.Graphics)));
+						bounds.Left+report.ColPos[i+1]
+						-ev.Graphics.MeasureString(report.ColCaption[i],colCaptFont).Width,yPos
+						,report.ColWidth[i],colCaptFont.GetHeight(ev.Graphics)));
 				}
 				else{
-					ev.Graphics.DrawString(Queries.CurReport.ColCaption[i]
-						,colCaptFont,Brushes.Black,bounds.Left+Queries.CurReport.ColPos[i],yPos);
+					ev.Graphics.DrawString(report.ColCaption[i]
+						,colCaptFont,Brushes.Black,bounds.Left+report.ColPos[i],yPos);
 				}
 			}
 			yPos+=bodyFont.GetHeight(ev.Graphics)+5;
 			//table:
 			while(yPos<bounds.Top+bounds.Height-18//The 18 is allowance for the line about to print. 
-				&& linesPrinted < Queries.TableQ.Rows.Count)
+				&& linesPrinted < report.TableQ.Rows.Count)
 			{
-				for(int iCol=0;iCol<Queries.TableQ.Columns.Count;iCol++){
-					if(Queries.CurReport.ColAlign[iCol]==HorizontalAlignment.Right){
+				for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
+					if(report.ColAlign[iCol]==HorizontalAlignment.Right){
 						ev.Graphics.DrawString(grid2[linesPrinted,iCol].ToString()
 							,bodyFont,Brushes.Black,new RectangleF(
-							bounds.Left+Queries.CurReport.ColPos[iCol+1]
+							bounds.Left+report.ColPos[iCol+1]
 							-ev.Graphics.MeasureString(grid2[linesPrinted,iCol].ToString(),bodyFont).Width-1,yPos
-							,Queries.CurReport.ColWidth[iCol],bodyFont.GetHeight(ev.Graphics)));
+							,report.ColWidth[iCol],bodyFont.GetHeight(ev.Graphics)));
 					}
 					else{
 						ev.Graphics.DrawString(grid2[linesPrinted,iCol].ToString()
 							,bodyFont,Brushes.Black,new RectangleF(
-							bounds.Left+Queries.CurReport.ColPos[iCol],yPos
-							,Queries.CurReport.ColPos[iCol+1]-Queries.CurReport.ColPos[iCol]+6
+							bounds.Left+report.ColPos[iCol],yPos
+							,report.ColPos[iCol+1]-report.ColPos[iCol]+6
 							,bodyFont.GetHeight(ev.Graphics)));
 					}
 				}
 				yPos+=bodyFont.GetHeight(ev.Graphics);
 				linesPrinted++;
-				if(linesPrinted==Queries.TableQ.Rows.Count){
+				if(linesPrinted==report.TableQ.Rows.Count){
 					tablePrinted=true;
 				}
 			}
-			if(Queries.TableQ.Rows.Count==0){
+			if(report.TableQ.Rows.Count==0){
 				tablePrinted=true;
 			}
 			//totals:
@@ -1234,20 +1240,20 @@ namespace OpenDental{
 				if(yPos<bounds.Bottom){
 					ev.Graphics.DrawLine(new Pen(Color.Black),bounds.Left,yPos+3,bounds.Right,yPos+3);
 					yPos+=4;
-					for(int iCol=0;iCol<Queries.TableQ.Columns.Count;iCol++){
-						if(Queries.CurReport.ColAlign[iCol]==HorizontalAlignment.Right){
+					for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
+						if(report.ColAlign[iCol]==HorizontalAlignment.Right){
 							float textWidth=(float)(ev.Graphics.MeasureString
-								(Queries.CurReport.ColTotal[iCol].ToString("n"),subtitleFont).Width);
-							ev.Graphics.DrawString(Queries.CurReport.ColTotal[iCol].ToString("n")
+								(report.ColTotal[iCol].ToString("n"),subtitleFont).Width);
+							ev.Graphics.DrawString(report.ColTotal[iCol].ToString("n")
 								,subtitleFont,Brushes.Black,new RectangleF(
-								bounds.Left+Queries.CurReport.ColPos[iCol+1]-textWidth+3,yPos//the 3 is arbitrary
+								bounds.Left+report.ColPos[iCol+1]-textWidth+3,yPos//the 3 is arbitrary
 								,textWidth,subtitleFont.GetHeight(ev.Graphics)));
 						}
 						//else{
 						//	ev.Graphics.DrawString(grid2[linesPrinted,iCol].ToString()
 						//		,bodyFont,Brushes.Black,new RectangleF(
-						//		bounds.Left+Queries.CurReport.ColPos[iCol],yPos
-						//		,Queries.CurReport.ColPos[iCol+1]-Queries.CurReport.ColPos[iCol]
+						//		bounds.Left+report.ColPos[iCol],yPos
+						//		,report.ColPos[iCol+1]-report.ColPos[iCol]
 						//,bodyFont.GetHeight(ev.Graphics)));
 						//}
 					}
@@ -1257,24 +1263,24 @@ namespace OpenDental{
 			}
 			//Summary
 			if(totalsPrinted){
-				if(yPos+Queries.CurReport.Summary.Length*subtitleFont.GetHeight(ev.Graphics)< bounds.Top+bounds.Height){
+				if(yPos+report.Summary.Length*subtitleFont.GetHeight(ev.Graphics)< bounds.Top+bounds.Height){
 					ev.Graphics.DrawLine(new Pen(Color.Black),bounds.Left,yPos+2,bounds.Right,yPos+2);
 					yPos+=bodyFont.GetHeight(ev.Graphics);
-					for(int i=0;i<Queries.CurReport.Summary.Length;i++){
-						if(Queries.CurReport.SummaryFont!=null && Queries.CurReport.SummaryFont!=""){
-							Font acctnumFont=new Font(Queries.CurReport.SummaryFont,12);
-							ev.Graphics.DrawString(Queries.CurReport.Summary[i],acctnumFont,Brushes.Black,bounds.Left,yPos);
+					for(int i=0;i<report.Summary.Length;i++){
+						if(report.SummaryFont!=null && report.SummaryFont!=""){
+							Font acctnumFont=new Font(report.SummaryFont,12);
+							ev.Graphics.DrawString(report.Summary[i],acctnumFont,Brushes.Black,bounds.Left,yPos);
 							yPos+=acctnumFont.GetHeight(ev.Graphics);
 						}
 						else{
-							ev.Graphics.DrawString(Queries.CurReport.Summary[i],subtitleFont,Brushes.Black,bounds.Left,yPos);
+							ev.Graphics.DrawString(report.Summary[i],subtitleFont,Brushes.Black,bounds.Left,yPos);
 							yPos+=subtitleFont.GetHeight(ev.Graphics);
 						}
 					}
 					summaryPrinted=true;
 				}
 			}
-			if(!summaryPrinted){//linesPrinted < Queries.TableQ.Rows.Count){
+			if(!summaryPrinted){//linesPrinted < report.TableQ.Rows.Count){
 				ev.HasMorePages = true;
 				pagesPrinted++;
 			}
@@ -1325,7 +1331,7 @@ namespace OpenDental{
       saveFileDialog2.AddExtension=true;
 			saveFileDialog2.Title=Lan.g(this,"Select Folder to Save File To");
 		  if(IsReport){
-				saveFileDialog2.FileName=Queries.CurReport.Title;
+				saveFileDialog2.FileName=report.Title;
 			}
       else{
         saveFileDialog2.FileName=UserQueries.Cur.FileName;
@@ -1366,11 +1372,11 @@ namespace OpenDental{
       saveFileDialog2.AddExtension=true;
 			//saveFileDialog2.Title=Lan.g(this,"Select Folder to Save File To");
 		  if(IsReport){
-				saveFileDialog2.FileName=Queries.CurReport.Title;
+				saveFileDialog2.FileName=report.Title;
 			}
       else{
 				if(UserQueryCur==null || UserQueryCur.FileName==null || UserQueryCur.FileName=="")//.FileName==null)
-					saveFileDialog2.FileName=Queries.CurReport.Title;
+					saveFileDialog2.FileName=report.Title;
 				else
 					saveFileDialog2.FileName=UserQueryCur.FileName;
 			}
@@ -1395,24 +1401,24 @@ namespace OpenDental{
 					//new FileStream(,FileMode.Create,FileAccess.Write,FileShare.Read)))
 				{
 					String line="";  
-					for(int i=0;i<Queries.CurReport.ColCaption.Length;i++){
-						line+=Queries.CurReport.ColCaption[i];
-						if(i<Queries.TableQ.Columns.Count-1){
+					for(int i=0;i<report.ColCaption.Length;i++){
+						line+=report.ColCaption[i];
+						if(i<report.TableQ.Columns.Count-1){
 							line+="\t";
 						}
 					}
 					sw.WriteLine(line);
 					string cell;
-					for(int i=0;i<Queries.TableQ.Rows.Count;i++){
+					for(int i=0;i<report.TableQ.Rows.Count;i++){
 						line="";
-						for(int j=0;j<Queries.TableQ.Columns.Count;j++){
-							cell=Queries.TableQ.Rows[i][j].ToString();
+						for(int j=0;j<report.TableQ.Columns.Count;j++){
+							cell=report.TableQ.Rows[i][j].ToString();
 							cell=cell.Replace("\r","");
 							cell=cell.Replace("\n","");
 							cell=cell.Replace("\t","");
 							cell=cell.Replace("\"","");
 							line+=cell;
-							if(j<Queries.TableQ.Columns.Count-1){
+							if(j<report.TableQ.Columns.Count-1){
 								line+="\t";
 							}
 						}

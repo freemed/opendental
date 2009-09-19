@@ -567,9 +567,9 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			//Procedures------------------------------------------------------------------------------
-			Queries.CurReport.Query="(SELECT "
+			report.Query="(SELECT "
 				+"procedurelog.ProcDate AS procdate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS namelf,"
 				+"procedurecode.Descript,"
@@ -607,7 +607,7 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query+="SELECT "
+			report.Query+="SELECT "
 				+"adjustment.AdjDate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"definition.ItemName,"
@@ -642,7 +642,7 @@ namespace OpenDental{
 				whereProv+=") ";
 			}
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query+="SELECT claimproc.DateCP,"
+				report.Query+="SELECT claimproc.DateCP,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 					+"carrier.CarrierName,"
 					+"provider.Abbr,"
@@ -664,7 +664,7 @@ namespace OpenDental{
 					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" ";
 			}
 			else{
-				Queries.CurReport.Query+="SELECT claimproc.ProcDate,"
+				report.Query+="SELECT claimproc.ProcDate,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 					+"carrier.CarrierName,"
 					+"provider.Abbr,"
@@ -685,7 +685,7 @@ namespace OpenDental{
 					+"AND claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" ";
 			}
-			Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum"
+			report.Query+="GROUP BY claimproc.ClaimNum"
 				+") UNION (";
 			//Patient Income------------------------------------------------------------------------------
 			whereProv="";
@@ -702,7 +702,7 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query+="SELECT "
+			report.Query+="SELECT "
 				+"paysplit.DatePay,"
 				+"GROUP_CONCAT(DISTINCT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI)),"
 				+"definition.ItemName,"
@@ -739,7 +739,7 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query+="SELECT "
+			report.Query+="SELECT "
 				+"claimpayment.CheckDate,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"carrier.CarrierName,"
@@ -764,56 +764,56 @@ namespace OpenDental{
 				+"GROUP BY claimproc.ClaimNum"
 				//+") ORDER BY procdate,namelf";//FIXME:UNION-ORDER-BY
 				+") ORDER BY 1,2";
-			//MessageBox.Show(Queries.CurReport.Query);
-			FormQuery2=new FormQuery();
+			//MessageBox.Show(report.Query);
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Daily Production and Income";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=dateFrom.ToString("d")
+			report.Title="Daily Production and Income";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=dateFrom.ToString("d")
 				+" - "+dateTo.ToString("d");	
-			Queries.CurReport.ColPos=new int[11];
-			Queries.CurReport.ColCaption=new string[10];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[10];
-			Queries.CurReport.ColPos[0]=10;
-			Queries.CurReport.ColPos[1]=90;
-			Queries.CurReport.ColPos[2]=220;
-			Queries.CurReport.ColPos[3]=385;
-			Queries.CurReport.ColPos[4]=440;
-			Queries.CurReport.ColPos[5]=505;
-			Queries.CurReport.ColPos[6]=575;
-			Queries.CurReport.ColPos[7]=640;
-			Queries.CurReport.ColPos[8]=705;
-			Queries.CurReport.ColPos[9]=770;  // added spk 5/19/05	
-			Queries.CurReport.ColPos[10]=1050;// way off the righthand side
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient Name";			
-			Queries.CurReport.ColCaption[2]="Description";
-			Queries.CurReport.ColCaption[3]="Prov";
-			Queries.CurReport.ColCaption[4]="Production";
-			Queries.CurReport.ColCaption[5]="Adjustments";
-			Queries.CurReport.ColCaption[6]="Writeoff";	// added spk 
-			Queries.CurReport.ColCaption[7]="Pt Income";
-			Queries.CurReport.ColCaption[8]="Ins Income";
-			Queries.CurReport.ColCaption[9]="";
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[8]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[9]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[3];
-			Queries.CurReport.Summary[0]
+			report.ColPos=new int[11];
+			report.ColCaption=new string[10];
+			report.ColAlign=new HorizontalAlignment[10];
+			report.ColPos[0]=10;
+			report.ColPos[1]=90;
+			report.ColPos[2]=220;
+			report.ColPos[3]=385;
+			report.ColPos[4]=440;
+			report.ColPos[5]=505;
+			report.ColPos[6]=575;
+			report.ColPos[7]=640;
+			report.ColPos[8]=705;
+			report.ColPos[9]=770;  // added spk 5/19/05	
+			report.ColPos[10]=1050;// way off the righthand side
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Patient Name";			
+			report.ColCaption[2]="Description";
+			report.ColCaption[3]="Prov";
+			report.ColCaption[4]="Production";
+			report.ColCaption[5]="Adjustments";
+			report.ColCaption[6]="Writeoff";	// added spk 
+			report.ColCaption[7]="Pt Income";
+			report.ColCaption[8]="Ins Income";
+			report.ColCaption[9]="";
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.ColAlign[6]=HorizontalAlignment.Right;
+			report.ColAlign[7]=HorizontalAlignment.Right;
+			report.ColAlign[8]=HorizontalAlignment.Right;
+			report.ColAlign[9]=HorizontalAlignment.Right;
+			report.Summary=new string[3];
+			report.Summary[0]
 				//=Lan.g(this,"Total Production (Production + Adjustments):")+" "
-				//+(Queries.CurReport.ColTotal[4]+Queries.CurReport.ColTotal[5]).ToString("c");
+				//+(report.ColTotal[4]+report.ColTotal[5]).ToString("c");
 				// added spk 5/19/05
 				=Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "
-				+(Queries.CurReport.ColTotal[4]+Queries.CurReport.ColTotal[5]+Queries.CurReport.ColTotal[6])
+				+(report.ColTotal[4]+report.ColTotal[5]+report.ColTotal[6])
 				.ToString("c");
-			Queries.CurReport.Summary[2]
+			report.Summary[2]
 				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(Queries.CurReport.ColTotal[7]+Queries.CurReport.ColTotal[8]).ToString("c");
+				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c");
 			FormQuery2.ShowDialog();
 
 		}
@@ -845,7 +845,7 @@ namespace OpenDental{
 Select procdate, sum(procfee) From procedurelog
 Group By procdate Order by procdate desc  
 */
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			string whereProv;//used as the provider portion of the where clauses.
 				//each whereProv needs to be set up separately for each query
 			whereProv="";
@@ -862,7 +862,7 @@ Group By procdate Order by procdate desc
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT procedurelog.ProcDate, "
+			report.Query="SELECT procedurelog.ProcDate, "
 				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)) "
 				+"FROM procedurelog "
 				+"WHERE procedurelog.ProcDate >= "+POut.PDate(dateFrom)+" "
@@ -871,8 +871,8 @@ Group By procdate Order by procdate desc
 				+whereProv
 				+"GROUP BY procedurelog.ProcDate "
 				+"ORDER BY procedurelog.ProcDate"; 
-			Queries.SubmitTemp(); //create TableTemp
-      TableCharge=Queries.TableTemp; //must create datatable obj since Queries.TempTable is static
+			report.SubmitTemp(); //create TableTemp
+      TableCharge=report.TableTemp; //must create datatable obj since Queries.TempTable is static
 
 //NEXT is TableCapWriteoff--------------------------------------------------------------------------
 /*
@@ -880,7 +880,7 @@ SELECT DateCP, SUM(WriteOff) From claimproc
 WHERE Status='7'
 GROUP BY DateCP Order by DateCP  
 */
-			Queries.CurReport=new ReportOld();
+			report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -895,15 +895,15 @@ GROUP BY DateCP Order by DateCP
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
+			report.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
 				+"DateCP >= "+POut.PDate(dateFrom)+" "
 				+"AND DateCP <= "+POut.PDate(dateTo)+" "
 				+"AND Status = '7' "//CapComplete
 				+whereProv
 				+" GROUP BY DateCP "
 				+"ORDER BY DateCP"; 
-			Queries.SubmitTemp(); //create TableTemp
-      TableCapWriteoff=Queries.TableTemp.Copy();
+			report.SubmitTemp(); //create TableTemp
+      TableCapWriteoff=report.TableTemp.Copy();
 
 //NEXT is TableInsWriteoff--------------------------------------------------------------------------
 /*
@@ -911,7 +911,7 @@ SELECT DateCP, SUM(WriteOff) From claimproc
 WHERE Status='1'
 GROUP BY DateCP Order by DateCP  
 */
-			Queries.CurReport=new ReportOld();
+			report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -927,7 +927,7 @@ GROUP BY DateCP Order by DateCP
 				whereProv+=") ";
 			}
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query="SELECT DateCP,SUM(WriteOff) FROM claimproc WHERE "
+				report.Query="SELECT DateCP,SUM(WriteOff) FROM claimproc WHERE "
 					+"DateCP >= "+POut.PDate(dateFrom)+" "
 					+"AND DateCP <= "+POut.PDate(dateTo)+" "
 					+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
@@ -936,7 +936,7 @@ GROUP BY DateCP Order by DateCP
 					+"ORDER BY DateCP"; 
 			}
 			else{
-				Queries.CurReport.Query="SELECT ProcDate,SUM(WriteOff) FROM claimproc WHERE "
+				report.Query="SELECT ProcDate,SUM(WriteOff) FROM claimproc WHERE "
 					+"ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND ProcDate <= "+POut.PDate(dateTo)+" "
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
@@ -944,8 +944,8 @@ GROUP BY DateCP Order by DateCP
 					+" GROUP BY ProcDate "
 					+"ORDER BY ProcDate"; 
 			}
-			Queries.SubmitTemp(); //create TableTemp
-      TableInsWriteoff=Queries.TableTemp.Copy();
+			report.SubmitTemp(); //create TableTemp
+      TableInsWriteoff=report.TableTemp.Copy();
 
 // NEXT is TableSched------------------------------------------------------------------------------
 /*
@@ -955,7 +955,7 @@ Where Appointment.aptnum = Procedurelog.aptnum && Appointment.AptStatus = 1
 || Appointment.AptStatus=4 && FROM_DAYS(TO_DAYS(Appointment.AptDateTime)) <= '2003-05-12'    
 GROUP BY SchedDate
 */
-			Queries.CurReport=new ReportOld();
+			report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -970,7 +970,7 @@ GROUP BY SchedDate
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query= "SELECT FROM_DAYS(TO_DAYS(appointment.AptDateTime)) "//gets rid of time
+			report.Query= "SELECT FROM_DAYS(TO_DAYS(appointment.AptDateTime)) "//gets rid of time
 			  +"SchedDate,SUM(procedurelog.ProcFee) FROM appointment,procedurelog WHERE "
         +"appointment.AptNum = procedurelog.AptNum "
 				+"AND (appointment.AptStatus = 1 OR "//stat=scheduled
@@ -982,8 +982,8 @@ GROUP BY SchedDate
 				+whereProv
 				+" GROUP BY SchedDate "
 				+"ORDER BY SchedDate"; 
-			Queries.SubmitTemp(); //create TableTemp
-      TableSched=Queries.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
+			report.SubmitTemp(); //create TableTemp
+      TableSched=report.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
 
 // NEXT is TablePay----------------------------------------------------------------------------------
 //must join the paysplit to the payment to eliminate the discounts.
@@ -996,7 +996,7 @@ claimproc.claimpaymentnum = claimpayment.claimpaymentnum
 && claimpayment.checkdate < '2003-08-12'
 group by claimpayment.checkdate order by procdate
 */
-			Queries.CurReport=new ReportOld();
+			report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -1011,14 +1011,14 @@ group by claimpayment.checkdate order by procdate
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query= "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
+			report.Query= "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
 				+"WHERE paysplit.IsDiscount = '0' "
 				+"AND paysplit.DatePay >= "+POut.PDate(dateFrom)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY paysplit.DatePay ORDER BY DatePay";
-			Queries.SubmitTemp(); //create TableTemp
-      TablePay=Queries.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
+			report.SubmitTemp(); //create TableTemp
+      TablePay=report.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
 
 // NEXT is TableIns, added by SPK 3/16/04-----------------------------------------------------------
 /*
@@ -1027,7 +1027,7 @@ claimproc.claimpaymentnum = claimpayment.claimpaymentnum
 && claimpayment.checkdate < '2003-08-12'
 group by claimpayment.checkdate order by procdate
 */
-			Queries.CurReport=new ReportOld();
+			report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -1042,7 +1042,7 @@ group by claimpayment.checkdate order by procdate
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
+			report.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
 				+"FROM claimpayment,claimproc WHERE "
 				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
 				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
@@ -1050,8 +1050,8 @@ group by claimpayment.checkdate order by procdate
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";			
-			Queries.SubmitTemp(); //create TableIns
-			TableIns=Queries.TableTemp; //must create datatable obj since Queries.TempTable is static
+			report.SubmitTemp(); //create TableIns
+			TableIns=report.TableTemp; //must create datatable obj since Queries.TempTable is static
 // End TableIns, SPK 3/16/04
 
 
@@ -1062,7 +1062,7 @@ FROM adjustment,patient,definition
 WHERE adjustment.adjtype=definition.defnum && patient.patnum=adjustment.patnum
 ORDER BY adjdate DESC
 */ 
-  		Queries.CurReport=new ReportOld();
+  		report=new ReportSimpleGrid();
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -1077,20 +1077,20 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
+			report.Query="SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
 				+"adjdate >= "+POut.PDate(dateFrom)+" "
 				+"AND adjdate <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY adjdate ORDER BY adjdate"; 
-			Queries.SubmitTemp(); //create TableTemp
-      TableAdj=Queries.TableTemp; //must create datatable obj since Queries.TempTable is static 
+			report.SubmitTemp(); //create TableTemp
+      TableAdj=report.TableTemp; //must create datatable obj since Queries.TempTable is static 
 
 //Now to fill Table Q from the temp tables
-			Queries.TableQ=new DataTable(null);//new table with 10 columns
+			report.TableQ=new DataTable(null);//new table with 10 columns
 			for(int i=0;i<10;i++){ //add columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			double production;
 			double scheduled;
 			double adjust;
@@ -1106,7 +1106,7 @@ ORDER BY adjdate DESC
 			for(int i=0;i<dates.Length;i++){//usually 31 days in loop
 				dates[i]=dateFrom.AddDays(i);
 				//create new row called 'row' based on structure of TableQ
-				DataRow row = Queries.TableQ.NewRow();
+				DataRow row = report.TableQ.NewRow();
 				row[0]=dates[i].ToShortDateString();
 				row[1]=dates[i].DayOfWeek.ToString();
 				production=0;
@@ -1163,80 +1163,80 @@ ORDER BY adjdate DESC
 				row[7]=ptincome.ToString("n");				// spk
 				row[8]=insincome.ToString("n");				// spk
 				row[9]=totalincome.ToString("n");
-				Queries.CurReport.ColTotal[2]+=production;
-				Queries.CurReport.ColTotal[3]+=scheduled;
-				Queries.CurReport.ColTotal[4]+=adjust;
-				Queries.CurReport.ColTotal[5]+=inswriteoff; //spk 5/19/05
-				Queries.CurReport.ColTotal[6]+=totalproduction;
-				Queries.CurReport.ColTotal[7]+=ptincome;	// spk
-				Queries.CurReport.ColTotal[8]+=insincome;	// spk
-				Queries.CurReport.ColTotal[9]+=totalincome;
-				Queries.TableQ.Rows.Add(row);  //adds row to table Q
+				report.ColTotal[2]+=production;
+				report.ColTotal[3]+=scheduled;
+				report.ColTotal[4]+=adjust;
+				report.ColTotal[5]+=inswriteoff; //spk 5/19/05
+				report.ColTotal[6]+=totalproduction;
+				report.ColTotal[7]+=ptincome;	// spk
+				report.ColTotal[8]+=insincome;	// spk
+				report.ColTotal[9]+=totalincome;
+				report.TableQ.Rows.Add(row);  //adds row to table Q
       }//end for row
 			//done filling now set up table
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			FormQuery2=new FormQuery();
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
-			Queries.CurReport.Title="Production and Income";
-			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
+			report.Title="Production and Income";
+			report.SubTitle=new string[3];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
 			if(listProv.SelectedIndices[0]==0){//allProv){
-				Queries.CurReport.SubTitle[2]=Lan.g(this,"All Providers");
+				report.SubTitle[2]=Lan.g(this,"All Providers");
 			}
 			else{
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i>0){
-						Queries.CurReport.SubTitle[2]+=", ";
+						report.SubTitle[2]+=", ";
 					}
-					Queries.CurReport.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					report.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
 				}
 			}
-			Queries.CurReport.Summary=new string[3];
-			Queries.CurReport.Summary[0]
+			report.Summary=new string[3];
+			report.Summary[0]
 				//=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
-				//+(Queries.CurReport.ColTotal[2]+Queries.CurReport.ColTotal[3]
-				//+Queries.CurReport.ColTotal[4]).ToString("c"); //spk 5/19/05
+				//+(report.ColTotal[2]+report.ColTotal[3]
+				//+report.ColTotal[4]).ToString("c"); //spk 5/19/05
 				=Lan.g(this,"Total Production (Production + Scheduled + Adj - Writeoff):")+" "
-				+(Queries.CurReport.ColTotal[2]+Queries.CurReport.ColTotal[3]+Queries.CurReport.ColTotal[4]
-				+Queries.CurReport.ColTotal[5]).ToString("c");
-			Queries.CurReport.Summary[2]
+				+(report.ColTotal[2]+report.ColTotal[3]+report.ColTotal[4]
+				+report.ColTotal[5]).ToString("c");
+			report.Summary[2]
 				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(Queries.CurReport.ColTotal[7]+Queries.CurReport.ColTotal[8]).ToString("c");
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=110;
-			Queries.CurReport.ColPos[2]=190;
-			Queries.CurReport.ColPos[3]=270;
-			Queries.CurReport.ColPos[4]=350;
-			Queries.CurReport.ColPos[5]=420;
-			Queries.CurReport.ColPos[6]=490;
-			Queries.CurReport.ColPos[7]=560;
-			Queries.CurReport.ColPos[8]=630;
-			Queries.CurReport.ColPos[9]=700;
-			Queries.CurReport.ColPos[10]=770;
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Weekday";
-			Queries.CurReport.ColCaption[2]="Production";
-			Queries.CurReport.ColCaption[3]="Sched";
-			Queries.CurReport.ColCaption[4]="Adj";
-			Queries.CurReport.ColCaption[5]="Writeoff";		//spk 5/19/05
-			Queries.CurReport.ColCaption[6]="Tot Prod";
-			Queries.CurReport.ColCaption[7]="Pt Income";		// spk
-			Queries.CurReport.ColCaption[8]="Ins Income";		// spk
-			Queries.CurReport.ColCaption[9]="Tot Income";
-      Queries.CurReport.ColAlign[2]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[8]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[9]=HorizontalAlignment.Right;
+				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c");
+			report.ColPos[0]=20;
+			report.ColPos[1]=110;
+			report.ColPos[2]=190;
+			report.ColPos[3]=270;
+			report.ColPos[4]=350;
+			report.ColPos[5]=420;
+			report.ColPos[6]=490;
+			report.ColPos[7]=560;
+			report.ColPos[8]=630;
+			report.ColPos[9]=700;
+			report.ColPos[10]=770;
+			report.ColCaption[0]="Date";
+			report.ColCaption[1]="Weekday";
+			report.ColCaption[2]="Production";
+			report.ColCaption[3]="Sched";
+			report.ColCaption[4]="Adj";
+			report.ColCaption[5]="Writeoff";		//spk 5/19/05
+			report.ColCaption[6]="Tot Prod";
+			report.ColCaption[7]="Pt Income";		// spk
+			report.ColCaption[8]="Ins Income";		// spk
+			report.ColCaption[9]="Tot Income";
+      report.ColAlign[2]=HorizontalAlignment.Right;
+			report.ColAlign[3]=HorizontalAlignment.Right;
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.ColAlign[6]=HorizontalAlignment.Right;
+			report.ColAlign[7]=HorizontalAlignment.Right;
+			report.ColAlign[8]=HorizontalAlignment.Right;
+			report.ColAlign[9]=HorizontalAlignment.Right;
 			FormQuery2.ShowDialog();
 		}
 
@@ -1263,7 +1263,7 @@ ORDER BY adjdate DESC
 			//Pt Income
 			//Ins Income
 			//Total Income
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			//Procedures------------------------------------------------------------------------------
 			string whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1279,7 +1279,7 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT "
+			report.Query="SELECT "
 				+"procedurelog.ProcDate,"
 				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END))-IFNULL(SUM(claimproc.WriteOff),0) "
 				+"FROM procedurelog "
@@ -1290,9 +1290,9 @@ ORDER BY adjdate DESC
 				+"AND procedurelog.ProcDate >= " +POut.PDate(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(procedurelog.ProcDate)";
-			//MessageBox.Show(Queries.CurReport.Query);
-			Queries.SubmitTemp(); //create TableTemp
-      TableProduction=Queries.TableTemp.Copy(); 
+			//MessageBox.Show(report.Query);
+			report.SubmitTemp(); //create TableTemp
+			TableProduction=report.TableTemp.Copy(); 
 			//Adjustments----------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1308,7 +1308,7 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT "
+			report.Query="SELECT "
 				+"adjustment.AdjDate,"
 				+"SUM(adjustment.AdjAmt) "
 				+"FROM adjustment "
@@ -1316,8 +1316,8 @@ ORDER BY adjdate DESC
 				+"AND adjustment.AdjDate <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+"GROUP BY MONTH(adjustment.AdjDate)";
-			Queries.SubmitTemp();
-      TableAdj=Queries.TableTemp.Copy();
+			report.SubmitTemp();
+			TableAdj=report.TableTemp.Copy();
 			//TableInsWriteoff--------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1334,7 +1334,7 @@ ORDER BY adjdate DESC
 				whereProv+=") ";
 			}
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query="SELECT "
+				report.Query="SELECT "
 					+"claimproc.DateCP," 
 					+"SUM(claimproc.WriteOff) "
 					+"FROM claimproc "
@@ -1345,7 +1345,7 @@ ORDER BY adjdate DESC
 					+"GROUP BY MONTH(claimproc.DateCP)";
 			}
 			else{
-				Queries.CurReport.Query="SELECT "
+				report.Query="SELECT "
 					+"claimproc.ProcDate," 
 					+"SUM(claimproc.WriteOff) "
 					+"FROM claimproc "
@@ -1355,8 +1355,8 @@ ORDER BY adjdate DESC
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+"GROUP BY MONTH(claimproc.ProcDate)";
 			}
-			Queries.SubmitTemp(); //create TableTemp
-			TableInsWriteoff=Queries.TableTemp.Copy();
+			report.SubmitTemp(); //create TableTemp
+			TableInsWriteoff=report.TableTemp.Copy();
 			//PtIncome--------------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1372,7 +1372,7 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT "
+			report.Query="SELECT "
 				+"paysplit.DatePay,"
 				+"SUM(paysplit.SplitAmt) "
 				+"FROM paysplit "
@@ -1381,8 +1381,8 @@ ORDER BY adjdate DESC
 				+"AND paysplit.DatePay >= "+POut.PDate(dateFrom)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(paysplit.DatePay)";
-			Queries.SubmitTemp();
-      TablePay=Queries.TableTemp.Copy(); 
+			report.SubmitTemp();
+			TablePay=report.TableTemp.Copy(); 
 			//InsIncome---------------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1398,20 +1398,20 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
+			report.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
 				+"FROM claimpayment,claimproc WHERE "
 				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
 				+"AND claimpayment.CheckDate >= " + POut.PDate(dateFrom)+" "
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
-				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";	
-			Queries.SubmitTemp();
-      TableIns=Queries.TableTemp.Copy(); 
-			Queries.TableQ=new DataTable(null);//new table with 7 columns
+				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
+			report.SubmitTemp();
+			TableIns=report.TableTemp.Copy(); 
+			report.TableQ=new DataTable(null);//new table with 7 columns
 			for(int i=0;i<8;i++){ //add columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
+			report.ColTotal=new double[report.TableQ.Columns.Count];
 			double production;
 			double adjust;
 			double inswriteoff;	//spk 5/19/05
@@ -1428,7 +1428,7 @@ ORDER BY adjdate DESC
 			for(int i=0;i<dates.Length;i++){//usually 12 months in loop
 				dates[i]=dateFrom.AddMonths(i);//only the month and year are important
 				//create new row called 'row' based on structure of TableQ
-				DataRow row=Queries.TableQ.NewRow();
+				DataRow row=report.TableQ.NewRow();
 				row[0]=dates[i].ToString("MMM yy");
 				production=0;
 				adjust=0;
@@ -1477,56 +1477,56 @@ ORDER BY adjdate DESC
 				row[5]=ptincome.ToString("n");
 				row[6]=insincome.ToString("n");		
 				row[7]=totalincome.ToString("n");
-				Queries.CurReport.ColTotal[1]+=production;
-				Queries.CurReport.ColTotal[2]+=adjust;	
-				Queries.CurReport.ColTotal[3]+=inswriteoff;	//spk	
-				Queries.CurReport.ColTotal[4]+=totalproduction;	
-				Queries.CurReport.ColTotal[5]+=ptincome;	
-				Queries.CurReport.ColTotal[6]+=insincome;	
-				Queries.CurReport.ColTotal[7]+=totalincome;
-				Queries.TableQ.Rows.Add(row);  //adds row to table Q
+				report.ColTotal[1]+=production;
+				report.ColTotal[2]+=adjust;	
+				report.ColTotal[3]+=inswriteoff;	//spk	
+				report.ColTotal[4]+=totalproduction;	
+				report.ColTotal[5]+=ptincome;	
+				report.ColTotal[6]+=insincome;	
+				report.ColTotal[7]+=totalincome;
+				report.TableQ.Rows.Add(row);  //adds row to table Q
       }//end for row
 			//done filling now set up table
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
-			FormQuery2=new FormQuery();
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
-			Queries.CurReport.Title="Annual Production and Income";
-			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
+			report.Title="Annual Production and Income";
+			report.SubTitle=new string[3];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
 			if(listProv.SelectedIndices[0]==0){//allProv){
-				Queries.CurReport.SubTitle[2]=Lan.g(this,"All Providers");
+				report.SubTitle[2]=Lan.g(this,"All Providers");
 			}
 			else{
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i>0){
-						Queries.CurReport.SubTitle[2]+=", ";
+						report.SubTitle[2]+=", ";
 					}
-					Queries.CurReport.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					report.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
 				}
 			}
-			Queries.CurReport.Summary=new string[0];
-			/*Queries.CurReport.Summary[0]
+			report.Summary=new string[0];
+			/*report.Summary[0]
 				=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
-				+(Queries.CurReport.ColTotal[2]+Queries.CurReport.ColTotal[3]
-				+Queries.CurReport.ColTotal[4]).ToString("c");
-			Queries.CurReport.Summary[2]
+				+(report.ColTotal[2]+report.ColTotal[3]
+				+report.ColTotal[4]).ToString("c");
+			report.Summary[2]
 				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(Queries.CurReport.ColTotal[5]+Queries.CurReport.ColTotal[6]).ToString("c");*/
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=120;
-			Queries.CurReport.ColPos[2]=210;
-			Queries.CurReport.ColPos[3]=300;
-			Queries.CurReport.ColPos[4]=390;
-			Queries.CurReport.ColPos[5]=480;
-			Queries.CurReport.ColPos[6]=570;
-			Queries.CurReport.ColPos[7]=660;
-			Queries.CurReport.ColPos[8]=750;
+				+(report.ColTotal[5]+report.ColTotal[6]).ToString("c");*/
+			report.ColPos[0]=20;
+			report.ColPos[1]=120;
+			report.ColPos[2]=210;
+			report.ColPos[3]=300;
+			report.ColPos[4]=390;
+			report.ColPos[5]=480;
+			report.ColPos[6]=570;
+			report.ColPos[7]=660;
+			report.ColPos[8]=750;
 			//Month
 			//Production
 			//Adjustments
@@ -1534,21 +1534,21 @@ ORDER BY adjdate DESC
 			//Pt Income
 			//Ins Income
 			//Total Income
-			Queries.CurReport.ColCaption[0]="Month";
-			Queries.CurReport.ColCaption[1]="Production";
-			Queries.CurReport.ColCaption[2]="Adjustments";
-			Queries.CurReport.ColCaption[3]="Writeoff";	//spk
-			Queries.CurReport.ColCaption[4]="Tot Prod";
-			Queries.CurReport.ColCaption[5]="Pt Income";
-			Queries.CurReport.ColCaption[6]="Ins Income";
-			Queries.CurReport.ColCaption[7]="Total Income";
-			Queries.CurReport.ColAlign[1]=HorizontalAlignment.Right;
-      Queries.CurReport.ColAlign[2]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[3]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[4]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
+			report.ColCaption[0]="Month";
+			report.ColCaption[1]="Production";
+			report.ColCaption[2]="Adjustments";
+			report.ColCaption[3]="Writeoff";	//spk
+			report.ColCaption[4]="Tot Prod";
+			report.ColCaption[5]="Pt Income";
+			report.ColCaption[6]="Ins Income";
+			report.ColCaption[7]="Total Income";
+			report.ColAlign[1]=HorizontalAlignment.Right;
+      report.ColAlign[2]=HorizontalAlignment.Right;
+			report.ColAlign[3]=HorizontalAlignment.Right;
+			report.ColAlign[4]=HorizontalAlignment.Right;
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.ColAlign[6]=HorizontalAlignment.Right;
+			report.ColAlign[7]=HorizontalAlignment.Right;
 			FormQuery2.ShowDialog();
 		}
 

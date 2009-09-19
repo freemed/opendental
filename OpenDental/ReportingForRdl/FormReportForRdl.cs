@@ -16,7 +16,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	/// <summary></summary>
-	public class FormReport : System.Windows.Forms.Form{
+	public class FormReportForRdl:System.Windows.Forms.Form {
 		private fyiReporting.RdlViewer.RdlViewer viewer;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.ImageList imageListMain;
@@ -28,7 +28,7 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 
 		///<summary></summary>
-		public FormReport()
+		public FormReportForRdl()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -62,7 +62,7 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReport));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportForRdl));
 			this.viewer = new fyiReporting.RdlViewer.RdlViewer();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
@@ -98,7 +98,7 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(987,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(987,25);
 			this.ToolBarMain.TabIndex = 5;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -146,20 +146,20 @@ namespace OpenDental{
 			this.menuItemSinglePage.Text = "Single Page";
 			this.menuItemSinglePage.Click += new System.EventHandler(this.menuItemSinglePage_Click);
 			// 
-			// FormReport
+			// FormReportForRdl
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(987,712);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.viewer);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormReport";
+			this.Name = "FormReportForRdl";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Report";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.Load += new System.EventHandler(this.FormRDLreport_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.ResumeLayout(false);
 
 		}

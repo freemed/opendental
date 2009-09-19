@@ -786,7 +786,7 @@
     <Compile Include="Forms Reports\FormRpStatement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms Reports\Queries.cs" />
+    <Compile Include="Forms Reports\ReportSimpleGrid.cs" />
     <Compile Include="Forms\FormLicense.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1384,7 +1384,7 @@
     <Compile Include="Forms\FormQueryEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormQueryFormulate.cs">
+    <Compile Include="Forms\FormQueryFavorites.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormQuestionDefEdit.cs">
@@ -1672,10 +1672,7 @@
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\PP_ODSQLPullStrings_LedgerItem.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\PP_PaySplitItem.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\PU.cs" />
-    <Compile Include="ReportingForRdl\FormReport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReportingForRdl\FormReportCustom.cs">
+    <Compile Include="ReportingForRdl\FormReportForRdl.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ReportingLikeCrystal\BoxObject.cs" />
@@ -2698,8 +2695,8 @@
       <DependentUpon>FormQueryEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormQueryFormulate.resx">
-      <DependentUpon>FormQueryFormulate.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormQueryFavorites.resx">
+      <DependentUpon>FormQueryFavorites.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormQuestionDefEdit.resx">
@@ -3861,12 +3858,8 @@
       <DependentUpon>ImageAnimator.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportingForRdl\FormReport.resx">
-      <DependentUpon>FormReport.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ReportingForRdl\FormReportCustom.resx">
-      <DependentUpon>FormReportCustom.cs</DependentUpon>
+    <EmbeddedResource Include="ReportingForRdl\FormReportForRdl.resx">
+      <DependentUpon>FormReportForRdl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportingLikeCrystal\FormParameterInput.resx">

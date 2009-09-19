@@ -209,9 +209,9 @@ namespace OpenDental{
 			}
 			int daysOld=PIn.PInt(textDaysOld.Text);
 			//FormQuery2.ResetGrid();//this is a method in FormQuery2;
-			Queries.CurReport=new ReportOld();
+			ReportSimpleGrid report=new ReportSimpleGrid();
 			DateTime startQDate = DateTime.Today.AddDays(-daysOld);
-			Queries.CurReport.Query = "SELECT carrier.CarrierName,claim.ClaimNum"
+			report.Query = "SELECT carrier.CarrierName,claim.ClaimNum"
 				+",claim.ClaimType,claim.DateService,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI), claim.DateSent"
 				+",claim.ClaimFee,carrier.Phone "
@@ -221,79 +221,79 @@ namespace OpenDental{
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
 				+"AND claim.ClaimStatus='S' && claim.DateSent <= "+POut.PDate(startQDate)+" ";
 			if(!checkPreauth.Checked){
-				Queries.CurReport.Query+="AND claim.ClaimType != 'PreAuth' ";
+				report.Query+="AND claim.ClaimType != 'PreAuth' ";
 			}
 			if(!checkProvAll.Checked){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 					if(i==0) {
-						Queries.CurReport.Query+=" AND (";
+						report.Query+=" AND (";
 					}
 					else {
-						Queries.CurReport.Query+=" OR ";
+						report.Query+=" OR ";
 					}
-					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
+					report.Query+=	"(claim.ProvBill="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
 						+" OR claim.ProvTreat="+POut.PLong(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
 				}
-				Queries.CurReport.Query+=") ";
+				report.Query+=") ";
 			}
-			Queries.CurReport.Query+="ORDER BY carrier.Phone,insplan.PlanNum";
-			FormQuery2=new FormQuery();
+			report.Query+="ORDER BY carrier.Phone,insplan.PlanNum";
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
-			Queries.SubmitTemp();//create TableTemp
-			Queries.TableQ=new DataTable(null);//new table no name
+			report.SubmitTemp();//create TableTemp
+			report.TableQ=new DataTable(null);//new table no name
 			for(int i=0;i<6;i++){//add columns
-				Queries.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
+				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
-			for(int i=0;i<Queries.TableTemp.Rows.Count;i++){//loop through data rows
-				DataRow row = Queries.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
+			report.ColTotal=new double[report.TableQ.Columns.Count];
+			for(int i=0;i<report.TableTemp.Rows.Count;i++){//loop through data rows
+				DataRow row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 				//start filling 'row'. First column is carrier:
-				row[0]=Queries.TableTemp.Rows[i][0];
-				row[1]=Queries.TableTemp.Rows[i][7];
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="P")
+				row[0]=report.TableTemp.Rows[i][0];
+				row[1]=report.TableTemp.Rows[i][7];
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="P")
           row[2]="Primary";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="S")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="S")
           row[2]="Secondary";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="PreAuth")
           row[2]="PreAuth";
-				if(PIn.PString(Queries.TableTemp.Rows[i][2].ToString())=="Other")
+				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="Other")
           row[2]="Other";
-				row[3]=Queries.TableTemp.Rows[i][4];
-				row[4]=(PIn.PDate(Queries.TableTemp.Rows[i][3].ToString())).ToString("d");
-				row[5]=PIn.PDouble(Queries.TableTemp.Rows[i][6].ToString()).ToString("F");
-        //TimeSpan d = DateTime.Today.Subtract((PIn.PDate(Queries.TableTemp.Rows[i][5].ToString())));
+				row[3]=report.TableTemp.Rows[i][4];
+				row[4]=(PIn.PDate(report.TableTemp.Rows[i][3].ToString())).ToString("d");
+				row[5]=PIn.PDouble(report.TableTemp.Rows[i][6].ToString()).ToString("F");
+        //TimeSpan d = DateTime.Today.Subtract((PIn.PDate(report.TableTemp.Rows[i][5].ToString())));
 				//if(d.Days>5000)
 				//	row[4]="";
 				//else
 				//	row[4]=d.Days.ToString();
-				Queries.CurReport.ColTotal[5]+=PIn.PDouble(Queries.TableTemp.Rows[i][6].ToString());
-				Queries.TableQ.Rows.Add(row);
+				report.ColTotal[5]+=PIn.PDouble(report.TableTemp.Rows[i][6].ToString());
+				report.TableQ.Rows.Add(row);
       }
-			Queries.CurReport.ColWidth=new int[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColPos=new int[Queries.TableQ.Columns.Count+1];
-			Queries.CurReport.ColPos[0]=0;
-			Queries.CurReport.ColCaption=new string[Queries.TableQ.Columns.Count];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[Queries.TableQ.Columns.Count];
+			report.ColWidth=new int[report.TableQ.Columns.Count];
+			report.ColPos=new int[report.TableQ.Columns.Count+1];
+			report.ColPos[0]=0;
+			report.ColCaption=new string[report.TableQ.Columns.Count];
+			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;
-			Queries.CurReport.Title="OUTSTANDING INSURANCE CLAIMS";
-			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]="Days Outstanding: " + daysOld;			
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=210;
-			Queries.CurReport.ColPos[2]=330;
-			Queries.CurReport.ColPos[3]=430;
-			Queries.CurReport.ColPos[4]=600;
-			Queries.CurReport.ColPos[5]=690;
-			Queries.CurReport.ColPos[6]=770;
-			Queries.CurReport.ColCaption[0]=Lan.g(this,"Carrier");
-			Queries.CurReport.ColCaption[1]=Lan.g(this,"Phone");
-			Queries.CurReport.ColCaption[2]=Lan.g(this,"Type");
-			Queries.CurReport.ColCaption[3]=Lan.g(this,"Patient Name");
-			Queries.CurReport.ColCaption[4]=Lan.g(this,"Date of Service");
-			Queries.CurReport.ColCaption[5]=Lan.g(this,"Amount");
-			Queries.CurReport.ColAlign[5]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[3];
+			report.Title="OUTSTANDING INSURANCE CLAIMS";
+			report.SubTitle=new string[3];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle[1]="Days Outstanding: " + daysOld;			
+			report.ColPos[0]=20;
+			report.ColPos[1]=210;
+			report.ColPos[2]=330;
+			report.ColPos[3]=430;
+			report.ColPos[4]=600;
+			report.ColPos[5]=690;
+			report.ColPos[6]=770;
+			report.ColCaption[0]=Lan.g(this,"Carrier");
+			report.ColCaption[1]=Lan.g(this,"Phone");
+			report.ColCaption[2]=Lan.g(this,"Type");
+			report.ColCaption[3]=Lan.g(this,"Patient Name");
+			report.ColCaption[4]=Lan.g(this,"Date of Service");
+			report.ColCaption[5]=Lan.g(this,"Amount");
+			report.ColAlign[5]=HorizontalAlignment.Right;
+			report.Summary=new string[3];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

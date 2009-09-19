@@ -157,56 +157,56 @@ SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),rxpat.rxdate
 rxpat.drug,rxpat.sig,rxpat.disp,provider.abbr FROM patient,rxpat,provider
 WHERE patient.patnum=rxpat.patnum && provider.provnum=rxpat.provnum		
 */
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),"+
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),"+
 				"' '),patient.MiddleI),rxpat.rxdate,"
 				+"rxpat.drug,rxpat.sig,rxpat.disp,provider.abbr FROM patient,rxpat,provider "
 				+"WHERE patient.patnum=rxpat.patnum AND provider.provnum=rxpat.provnum ";
 
 			if(radioPatient.Checked==true){
-				Queries.CurReport.Query
+				report.Query
 					+="AND patient.lname like '"+textBoxInput.Text+"%'"
 	        +" ORDER BY patient.lname,patient.fname,rxpat.rxdate";		
 			}
 			else{
-				Queries.CurReport.Query
+				report.Query
 					+="AND rxpat.drug like '"+textBoxInput.Text+"%'"
 			    +" ORDER BY patient.lname,rxpat.drug,rxpat.rxdate";
 			}
 
-			FormQuery2=new FormQuery();
+			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 
-			Queries.CurReport.Title="Prescriptions";
-			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.Title="Prescriptions";
+			report.SubTitle=new string[2];
+			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			if(radioPatient.Checked==true){
-				Queries.CurReport.SubTitle[1]="By Patient";
+				report.SubTitle[1]="By Patient";
 			}
 			else{
-				Queries.CurReport.SubTitle[1]="By Drug";
+				report.SubTitle[1]="By Drug";
 			}			
-			Queries.CurReport.ColPos=new int[7];
-			Queries.CurReport.ColCaption=new string[6];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[6];
+			report.ColPos=new int[7];
+			report.ColCaption=new string[6];
+			report.ColAlign=new HorizontalAlignment[6];
 
-			Queries.CurReport.ColPos[0]=10;
-			Queries.CurReport.ColPos[1]=130;
-			Queries.CurReport.ColPos[2]=225;
-			Queries.CurReport.ColPos[3]=325;
-			Queries.CurReport.ColPos[4]=625;
-			Queries.CurReport.ColPos[5]=725;
-			Queries.CurReport.ColPos[6]=825;
+			report.ColPos[0]=10;
+			report.ColPos[1]=130;
+			report.ColPos[2]=225;
+			report.ColPos[3]=325;
+			report.ColPos[4]=625;
+			report.ColPos[5]=725;
+			report.ColPos[6]=825;
 
-			Queries.CurReport.ColCaption[0]="Patient Name";
-			Queries.CurReport.ColCaption[1]="Date";			
-			Queries.CurReport.ColCaption[2]="Drug Name";
-			Queries.CurReport.ColCaption[3]="Sig";
-			Queries.CurReport.ColCaption[4]="Disp";
-			Queries.CurReport.ColCaption[5]="Prov Name";
+			report.ColCaption[0]="Patient Name";
+			report.ColCaption[1]="Date";			
+			report.ColCaption[2]="Drug Name";
+			report.ColCaption[3]="Sig";
+			report.ColCaption[4]="Disp";
+			report.ColCaption[5]="Prov Name";
 
-			Queries.CurReport.Summary=new string[0];
+			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

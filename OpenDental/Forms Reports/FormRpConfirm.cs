@@ -230,12 +230,12 @@ namespace OpenDental{
 				command+=" appointment.AptNum='"+AptNums[i]+"'";
 			}
 			command+=")";
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=command;
-			FormQuery FormQ=new FormQuery();
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=command;
+			FormQuery FormQ=new FormQuery(report);
 			FormQ.IsReport=false;
 			FormQ.SubmitQuery();	
-      FormQ.textQuery.Text=Queries.CurReport.Query;					
+      FormQ.textQuery.Text=report.Query;					
 			FormQ.ShowDialog();		
       DialogResult=DialogResult.OK; 
 		}

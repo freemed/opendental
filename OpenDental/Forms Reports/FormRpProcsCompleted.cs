@@ -15,7 +15,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MonthCalendar date1;
 		private System.Windows.Forms.Label labelTO;
 		private System.ComponentModel.Container components = null;
-		private FormQuery FormQuery2;
 
 		///<summary></summary>
 		public FormRpPHRawProc(){
@@ -126,8 +125,8 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query=@"SELECT ScreenDate,ProvName,County,county.CountyCode,
+			ReportSimpleGrid report=new ReportSimpleGrid();
+			report.Query=@"SELECT ScreenDate,ProvName,County,county.CountyCode,
 				GradeSchool,school.SchoolCode,PlaceService,GradeLevel,Age,Birthdate,Race,Gender,Urgency,
 				HasCaries,EarlyChildCaries,CariesExperience,ExistingSealants,NeedsSealants,MissingAllTeeth,
 				Comments FROM screen
@@ -135,7 +134,7 @@ namespace OpenDental{
 				LEFT JOIN county ON screen.County=county.CountyName
 				WHERE ScreenDate >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND ScreenDate <= " +POut.PDate(date2.SelectionStart);
-			FormQuery2=new FormQuery();
+			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.textTitle.Text="RawProcedureData"+DateTime.Today.ToString("MMddyyyy");
 			//FormQuery2.IsReport=true;
 			//FormQuery2.SubmitReportQuery();			
