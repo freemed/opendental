@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(671,638);
+			this.butClose.Location = new System.Drawing.Point(686,638);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 3;
@@ -91,7 +91,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(76,604);
+			this.label14.Location = new System.Drawing.Point(92,604);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(100,18);
 			this.label14.TabIndex = 22;
@@ -100,7 +100,7 @@ namespace OpenDental{
 			// 
 			// textGuide
 			// 
-			this.textGuide.Location = new System.Drawing.Point(182,604);
+			this.textGuide.Location = new System.Drawing.Point(198,604);
 			this.textGuide.Multiline = true;
 			this.textGuide.Name = "textGuide";
 			this.textGuide.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.groupEdit.Controls.Add(this.butUp);
 			this.groupEdit.Controls.Add(this.butAdd);
 			this.groupEdit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupEdit.Location = new System.Drawing.Point(182,549);
+			this.groupEdit.Location = new System.Drawing.Point(198,549);
 			this.groupEdit.Name = "groupEdit";
 			this.groupEdit.Size = new System.Drawing.Size(460,51);
 			this.groupEdit.TabIndex = 1;
@@ -186,7 +186,7 @@ namespace OpenDental{
 			// tbDefs
 			// 
 			this.tbDefs.BackColor = System.Drawing.SystemColors.Window;
-			this.tbDefs.Location = new System.Drawing.Point(183,6);
+			this.tbDefs.Location = new System.Drawing.Point(199,6);
 			this.tbDefs.Name = "tbDefs";
 			this.tbDefs.ScrollValue = 1;
 			this.tbDefs.SelectedIndices = new int[0];
@@ -212,6 +212,7 @@ namespace OpenDental{
             "Letter Merge Cats",
             "Misc Colors",
             "Payment Types",
+            "PaySplit Unearned Types",
             "Proc Button Categories",
             "Proc Code Categories",
             "Prog Notes Colors",
@@ -220,7 +221,7 @@ namespace OpenDental{
             "Treat\' Plan Priorities"});
 			this.listCategory.Location = new System.Drawing.Point(22,36);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(133,277);
+			this.listCategory.Size = new System.Drawing.Size(147,290);
 			this.listCategory.TabIndex = 0;
 			this.listCategory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listCategory_MouseDown);
 			// 
@@ -237,7 +238,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(774,675);
+			this.ClientSize = new System.Drawing.Size(789,675);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.textGuide);
 			this.Controls.Add(this.butClose);
@@ -286,12 +287,13 @@ namespace OpenDental{
 			lookupCat[12]=DefCat.LetterMergeCats;
 			lookupCat[13]=DefCat.MiscColors;
 			lookupCat[14]=DefCat.PaymentTypes;
-			lookupCat[15]=DefCat.ProcButtonCats;
-			lookupCat[16]=DefCat.ProcCodeCats;
-			lookupCat[17]=DefCat.ProgNoteColors;
-			lookupCat[18]=DefCat.RecallUnschedStatus;
-			lookupCat[19]=DefCat.SupplyCats;
-			lookupCat[20]=DefCat.TxPriorities;
+			lookupCat[15]=DefCat.PaySplitUnearnedType;
+			lookupCat[16]=DefCat.ProcButtonCats;
+			lookupCat[17]=DefCat.ProcCodeCats;
+			lookupCat[18]=DefCat.ProgNoteColors;
+			lookupCat[19]=DefCat.RecallUnschedStatus;
+			lookupCat[20]=DefCat.SupplyCats;
+			lookupCat[21]=DefCat.TxPriorities;
 			for(int i=0;i<listCategory.Items.Count;i++){
 				listCategory.Items[i]=Lan.g(this,(string)listCategory.Items[i]);
 				if((int)lookupCat[i]==SelectedCat){
@@ -404,32 +406,35 @@ namespace OpenDental{
 					//SelectedCat=10;
 					FormDefEdit.HelpText=Lan.g(this,"Types of payments that patients might make. Any changes will affect all patients.");
 					break;
-				case 15://"Proc Button Categories":
+				case 15://paysplit unearned types
+					FormDefEdit.HelpText=Lan.g(this,"Usually only used by offices that use accrual basis accounting instead of cash basis accounting. Any changes will affect all patients.");
+					break;
+				case 16://"Proc Button Categories":
 					FormDefEdit.HelpText=Lan.g(this,"These are similar to the procedure code categories, but are only used for organizing and grouping the procedure buttons in the Chart module.");
 					break;
-				case 16://"Proc Code Categories":
+				case 17://"Proc Code Categories":
 					//SelectedCat=11;
 					FormDefEdit.HelpText=Lan.g(this,"These are the categories for organizing procedure codes. They do not have to follow ADA categories.  There is no relationship to insurance categories which are setup in the Ins Categories section.  Does not affect any patient records.");
 					break;
-				case 17://"Prog Notes Colors":
+				case 18://"Prog Notes Colors":
 					//SelectedCat=12;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.CanEditName=false;
 					FormDefEdit.HelpText=Lan.g(this,"Changes color of text for different types of entries in the Chart Module Progress Notes.");
 					break;
-				case 18://"Recall/Unsch Status":
+				case 19://"Recall/Unsch Status":
 					//SelectedCat=13;
 					FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"Abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"Recall/Unsched Status.  Abbreviation must be 7 characters or less.  Changes affect all patients.");
 					break;
-				case 19://Supply Categories
+				case 20://Supply Categories
 					butHide.Visible=false;
 					FormDefEdit.CanDelete=true;
 					FormDefEdit.CanHide=false;
 					FormDefEdit.HelpText=Lan.g(this,"The categories for inventory supplies.");
 					break;
-				case 20://"Treat' Plan Priorities":
+				case 21://"Treat' Plan Priorities":
 					//SelectedCat=20;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.HelpText=Lan.g(this,"Priorities available for selection in the Treatment Plan module.  They can be simple numbers or descriptive abbreviations 7 letters or less.  Changes affect all procedures where the definition is used.");

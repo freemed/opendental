@@ -29,6 +29,8 @@ namespace OpenDentBusiness{
 		public long ProcNum;
 		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
 		public DateTime DateEntry;
+		///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
+		public long UnearnedType;
 
 		///<summary>Returns a copy of this PaySplit.</summary>
 		public PaySplit Copy(){

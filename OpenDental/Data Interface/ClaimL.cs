@@ -96,7 +96,10 @@ namespace OpenDental{
 				//ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur.ProcFee,ProcCur.ToothNum,ProcCur.CodeNum,plan,patPlanNum,benefitList,histList,loopList);
 				ClaimProcsForClaim[i].InsPayEst=ClaimProcs.GetInsEstTotal(ClaimProcsForClaim[i]);
 				ClaimProcsForClaim[i].DedApplied=ClaimProcs.GetDedEst(ClaimProcsForClaim[i]);
-				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
+				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){//(vs preauth)
+					ClaimProcsForClaim[i].WriteOff=ClaimProcs.GetWriteOffEstimate(ClaimProcsForClaim[i]);
+					writeoff+=ClaimProcsForClaim[i].WriteOff;
+					/*
 					ClaimProcsForClaim[i].WriteOff=0;
 					if(claimCur.ClaimType=="P" && plan.PlanType=="p") {//Primary && PPO
 						double insplanAllowed=Fees.GetAmount(ProcCur.CodeNum,plan.FeeSched);
@@ -105,7 +108,7 @@ namespace OpenDental{
 						}
 						//else, if -1 fee not found, then do not show a writeoff. User can change writeoff if they disagree.
 					}
-					writeoff+=ClaimProcsForClaim[i].WriteOff;
+					writeoff+=ClaimProcsForClaim[i].WriteOff;*/
 				}
 				dedApplied+=ClaimProcsForClaim[i].DedApplied;
 				insPayEst+=ClaimProcsForClaim[i].InsPayEst;

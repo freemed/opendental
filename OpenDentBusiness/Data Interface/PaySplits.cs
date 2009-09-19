@@ -38,6 +38,7 @@ namespace OpenDentBusiness{
 				split.DatePay     = PIn.PDate(table.Rows[i][9].ToString());
 				split.ProcNum     = PIn.PLong(table.Rows[i][10].ToString());
 				split.DateEntry   = PIn.PDate(table.Rows[i][11].ToString());
+				split.UnearnedType= PIn.PLong(table.Rows[i][12].ToString());
 				retVal.Add(split);
 			}
 			return retVal;
@@ -70,7 +71,8 @@ namespace OpenDentBusiness{
 				+ ",DatePay = "     +POut.PDate  (split.DatePay)
 				+ ",ProcNum = '"     +POut.PLong   (split.ProcNum)+"'"
 				//+ ",DateEntry = '"   +POut.PDate  (DateEntry)+"'"//not allowed to change
-				+" WHERE splitNum = '" +POut.PLong (split.SplitNum)+"'";
+				+ ",UnearnedType = '" +POut.PLong(split.UnearnedType)+"'"
+				+" WHERE splitNum = '"+POut.PLong (split.SplitNum)+"'";
  			Db.NonQ(command);
 		}
 
@@ -88,22 +90,23 @@ namespace OpenDentBusiness{
 				command+="SplitNum,";
 			}
 			command+="SplitAmt,PatNum,ProcDate, "
-				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry) VALUES(";
+				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry,UnearnedType) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PLong(split.SplitNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PDouble(split.SplitAmt)+"', "
-				+"'"+POut.PLong   (split.PatNum)+"', "
-				+POut.PDate  (split.ProcDate)+", "
-				+"'"+POut.PLong   (split.PayNum)+"', "
+				+"'"+POut.PLong(split.PatNum)+"', "
+				+POut.PDate(split.ProcDate)+", "
+				+"'"+POut.PLong(split.PayNum)+"', "
 				+"'0', "//IsDiscount
 				+"'0', "//DiscountType
-				+"'"+POut.PLong   (split.ProvNum)+"', "
-				+"'"+POut.PLong   (split.PayPlanNum)+"', "
-				+POut.PDate  (split.DatePay)+", "
-				+"'"+POut.PLong   (split.ProcNum)+"', "
-				+"NOW() )";//DateEntry: date of server
+				+"'"+POut.PLong(split.ProvNum)+"', "
+				+"'"+POut.PLong(split.PayPlanNum)+"', "
+				+POut.PDate(split.DatePay)+", "
+				+"'"+POut.PLong(split.ProcNum)+"', "
+				+"NOW(), "//DateEntry: date of server
+				+"'"+POut.PLong(split.UnearnedType)+"')";
  			if(PrefC.RandomKeys){
 				Db.NonQ(command);
 			}
@@ -278,7 +281,8 @@ namespace OpenDentBusiness{
 					|| newPaySplit.ProcDate != oldSplitList[i].ProcDate
 					|| newPaySplit.ProcNum != oldSplitList[i].ProcNum
 					|| newPaySplit.ProvNum != oldSplitList[i].ProvNum
-					|| newPaySplit.SplitAmt != oldSplitList[i].SplitAmt) 
+					|| newPaySplit.SplitAmt != oldSplitList[i].SplitAmt
+					|| newPaySplit.UnearnedType != oldSplitList[i].UnearnedType) 
 				{
 					PaySplits.Update(newPaySplit);
 				}

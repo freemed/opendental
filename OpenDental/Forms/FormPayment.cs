@@ -433,7 +433,7 @@ namespace OpenDental{
 			this.butPay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPay.Location = new System.Drawing.Point(556,205);
 			this.butPay.Name = "butPay";
-			this.butPay.Size = new System.Drawing.Size(70,26);
+			this.butPay.Size = new System.Drawing.Size(70,24);
 			this.butPay.TabIndex = 124;
 			this.butPay.Text = "Pay";
 			this.butPay.Click += new System.EventHandler(this.butPay_Click);
@@ -508,7 +508,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(804,536);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -523,7 +523,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(804,500);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -540,7 +540,7 @@ namespace OpenDental{
 			this.butDeleteAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDeleteAll.Location = new System.Drawing.Point(35,536);
 			this.butDeleteAll.Name = "butDeleteAll";
-			this.butDeleteAll.Size = new System.Drawing.Size(84,26);
+			this.butDeleteAll.Size = new System.Drawing.Size(84,24);
 			this.butDeleteAll.TabIndex = 7;
 			this.butDeleteAll.Text = "&Delete";
 			this.butDeleteAll.Click += new System.EventHandler(this.butDeleteAll_Click);
@@ -765,16 +765,17 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaySplits","Patient"),130);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaySplits","Tth"),40,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaySplits","Procedure"),140);
+			col=new ODGridColumn(Lan.g("TablePaySplits","Procedure"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaySplits","Amount"),60,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaySplits","Unearned"),50);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			tot=0;
 			Procedure proc;
+			string procDesc;
 			for(int i=0;i<SplitList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(SplitList[i].ProcDate.ToShortDateString());
@@ -782,14 +783,14 @@ namespace OpenDental{
 				row.Cells.Add(FamCur.GetNameInFamFL(SplitList[i].PatNum));
 				if(SplitList[i].ProcNum>0){
 					proc=Procedures.GetOneProc(SplitList[i].ProcNum,false);
-					row.Cells.Add(Tooth.ToInternat(proc.ToothNum));
-					row.Cells.Add(ProcedureCodes.GetProcCode(proc.CodeNum).Descript);
+					procDesc=Procedures.GetDescription(proc);
+					row.Cells.Add(procDesc);
 				}
 				else{
 					row.Cells.Add("");
-					row.Cells.Add("");
 				}
 				row.Cells.Add(SplitList[i].SplitAmt.ToString("F"));
+				row.Cells.Add(DefC.GetName(DefCat.PaySplitUnearnedType,SplitList[i].UnearnedType));//handles 0 just fine
 				tot+=SplitList[i].SplitAmt;
 				gridMain.Rows.Add(row);
 			}

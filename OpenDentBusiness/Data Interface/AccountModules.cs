@@ -573,10 +573,6 @@ namespace OpenDentBusiness {
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
 				+") GROUP BY procedurelog.ProcNum ";
-			//if(DataConnection.DBtype==DatabaseType.Oracle){
-			//	command+=",procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,"
-			//		+"ProcCode,procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty ";
-			//}
 			command+="ORDER BY ProcDate";
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
@@ -747,7 +743,7 @@ namespace OpenDentBusiness {
 			command="SELECT CheckNum,DatePay,paysplit.PatNum,payment.PatNum patNumPayment_,PayAmt,"
 				+"paysplit.PayNum,PayPlanNum,"
 				+"PayType,ProcDate,GROUP_CONCAT(ProcNum) ProcNums_, "
-				+"ProvNum,SUM(SplitAmt) splitAmt_,payment.PayNote "
+				+"ProvNum,SUM(SplitAmt) splitAmt_,payment.PayNote,paysplit.UnearnedType "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -792,6 +788,9 @@ namespace OpenDentBusiness {
 				}
 				if(payamt!=amt){
 					row["description"]+=" "+Lans.g("ContrAccount","(split)");
+				}
+				if(rawPay.Rows[i]["UnearnedType"].ToString()!="0") {
+					row["description"]+=" - "+DefC.GetName(DefCat.PaySplitUnearnedType,PIn.PLong(rawPay.Rows[i]["UnearnedType"].ToString()));
 				}
 				//we might use DatePay here to add to description
 				if(rawPay.Rows[i]["PayNote"].ToString() !="" && showNotes) {
@@ -1568,11 +1567,11 @@ namespace OpenDentBusiness {
 			table.Columns.Add("descript");
 			table.Columns.Add("value");
 			List<DataRow> rows=new List<DataRow>();
+			//FamFinancial note--------------------
 			string command = 
 				"SELECT FamFinancial "
 				+"FROM patientnote WHERE patnum ="+POut.PLong(fam.ListPats[0].PatNum);
 			DataTable raw=Db.GetTable(command);
-			//for(int i=0;i<raw.Rows.Count;i++){
 			row=table.NewRow();
 			row["descript"]="FamFinancial";
 			row["value"]="";
@@ -1580,7 +1579,7 @@ namespace OpenDentBusiness {
 				row["value"]=PIn.PString(raw.Rows[0][0].ToString());
 			}
 			rows.Add(row);
-			//payPlanDue-----------------------
+			//payPlanDue---------------------------
 			row=table.NewRow();
 			row["descript"]="payPlanDue";
 			row["value"]=POut.PDouble(payPlanDue);
@@ -1590,7 +1589,7 @@ namespace OpenDentBusiness {
 			row["descript"]="balanceForward";
 			row["value"]=POut.PDouble(balanceForward);
 			rows.Add(row);
-			//patInsEst
+			//patInsEst----------------------------
 			command="SELECT SUM(inspayest+writeoff) FROM claimproc "
 				+"WHERE status = 0 "//not received
 				+"AND PatNum="+POut.PLong(patNum);
@@ -1598,6 +1597,21 @@ namespace OpenDentBusiness {
 			row=table.NewRow();
 			row["descript"]="patInsEst";
 			row["value"]=raw.Rows[0][0].ToString();
+			rows.Add(row);
+			//Unearned income----------------------
+			command="SELECT SUM(SplitAmt) FROM paysplit WHERE "
+				+"UnearnedType>0 AND (";
+			for(int i=0;i<fam.ListPats.Length;i++) {
+				if(i>0) {
+					command+="OR ";
+				}
+				command+="PatNum= "+POut.PLong(fam.ListPats[i].PatNum);
+			}
+			command+=")";
+			double unearnedAmt=PIn.PDouble(Db.GetScalar(command));
+			row=table.NewRow();
+			row["descript"]="unearnedIncome";
+			row["value"]=unearnedAmt;
 			rows.Add(row);
 			//final prep:
 			for(int i=0;i<rows.Count;i++) {
