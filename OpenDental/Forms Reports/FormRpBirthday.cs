@@ -538,7 +538,7 @@ namespace OpenDental
 			//if(!report.SubmitQuery()){
 			//	return;
 			//}
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

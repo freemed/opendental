@@ -330,7 +330,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
@@ -390,7 +390,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

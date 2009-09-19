@@ -1620,8 +1620,12 @@
     <Compile Include="Misc\MigraDocHelper.cs" />
     <Compile Include="ReportingLikeCrystal\BoxObject.cs" />
     <Compile Include="ReportingLikeCrystal\DrawingObject.cs" />
-    <Compile Include="ReportingLikeCrystal\FormParameterInput.cs" />
-    <Compile Include="ReportingLikeCrystal\FormReportOld2.cs" />
+    <Compile Include="ReportingLikeCrystal\FormParameterInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportingLikeCrystal\FormReportLikeCrystal.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ReportingLikeCrystal\LineObject.cs" />
     <Compile Include="ReportingLikeCrystal\ParameterField.cs" />
     <Compile Include="ReportingLikeCrystal\ParameterFieldCollection.cs" />
@@ -3861,8 +3865,8 @@
     <EmbeddedResource Include="ReportingLikeCrystal\FormParameterInput.resx">
       <DependentUpon>FormParameterInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportingLikeCrystal\FormReportOld2.resx">
-      <DependentUpon>FormReportOld2.cs</DependentUpon>
+    <EmbeddedResource Include="ReportingLikeCrystal\FormReportLikeCrystal.resx">
+      <DependentUpon>FormReportLikeCrystal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.resx">
       <SubType>Designer</SubType>

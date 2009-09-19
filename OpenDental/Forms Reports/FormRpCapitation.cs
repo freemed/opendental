@@ -187,7 +187,7 @@ namespace OpenDental{
 					report.ReportTable.Rows[i][11]="0";
 				}
 			}
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			//FormR.MyReport=report;
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;

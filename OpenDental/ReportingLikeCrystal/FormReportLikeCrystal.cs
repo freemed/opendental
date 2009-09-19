@@ -16,7 +16,7 @@ using OpenDentBusiness;
 namespace OpenDental.ReportingOld2
 {
 	///<summary></summary>
-	public class FormReportOld2 : System.Windows.Forms.Form{
+	public class FormReportLikeCrystal : System.Windows.Forms.Form{
 		private System.Windows.Forms.Panel panel1;
 		private System.ComponentModel.IContainer components;
 		private OpenDental.UI.Button butClose;
@@ -42,7 +42,7 @@ namespace OpenDental.ReportingOld2
 		private int pagesPrinted;
 
 		///<summary></summary>
-		public FormReportOld2(ReportLikeCrystal myReport){
+		public FormReportLikeCrystal(ReportLikeCrystal myReport){
 			InitializeComponent();// Required for Windows Form Designer support
 			MyReport=myReport;
 		}
@@ -68,7 +68,7 @@ namespace OpenDental.ReportingOld2
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportOld2));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportLikeCrystal));
 			this.butClose = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -220,7 +220,7 @@ namespace OpenDental.ReportingOld2
 			this.printPreviewControl2.Size = new System.Drawing.Size(831,570);
 			this.printPreviewControl2.TabIndex = 6;
 			// 
-			// FormReportOld2
+			// FormReportLikeCrystal
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(831,570);

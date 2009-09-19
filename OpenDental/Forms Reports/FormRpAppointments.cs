@@ -360,7 +360,7 @@ namespace OpenDental
 				return;
 			}
 			// display report
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			//FormR.MyReport=report;
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;

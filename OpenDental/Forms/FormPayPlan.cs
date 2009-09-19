@@ -1248,7 +1248,7 @@ namespace OpenDental{
 			//yPos+=60;
 			report.ReportObjects.Add(new ReportObject
 				("Report Footer",new Point(x1,70),size,"Signature of Guarantor:",font,alignL));
-			FormReportOld2 FormR=new FormReportOld2(report);
+			FormReportLikeCrystal FormR=new FormReportLikeCrystal(report);
 			FormR.ShowDialog();
 		}
 
