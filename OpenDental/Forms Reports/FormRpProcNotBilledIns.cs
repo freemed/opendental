@@ -158,24 +158,12 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
 			report.Title="Procedures Not Billed to Insurance";
-			report.SubTitle=new string[3];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.SubTitle[1]=date1.SelectionStart.ToString("d")
-					+" - "+date2.SelectionStart.ToString("d");
-			report.ColPos=new int[5];
-			report.ColCaption=new string[4];
-			report.ColAlign=new HorizontalAlignment[4];
-			report.ColPos[0]=20;
-			report.ColPos[1]=205;
-			report.ColPos[2]=390;
-			report.ColPos[3]=575;
-			report.ColPos[4]=760;
-			report.ColCaption[0]="Patient Name";
-			report.ColCaption[1]="Procedure Date";
-			report.ColCaption[2]="Procedure Description";
-			report.ColCaption[3]="Procedure Amount";
-			report.ColAlign[3]=HorizontalAlignment.Right;
-			report.Summary=new string[3];
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
+			report.SetColumn(this,0,"Patient Name",185);
+			report.SetColumn(this,1,"Procedure Date",185);
+			report.SetColumn(this,2,"Procedure Description",185);
+			report.SetColumn(this,3,"Procedure Amount",185,HorizontalAlignment.Right);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

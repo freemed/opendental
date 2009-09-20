@@ -171,14 +171,13 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			// replaced insplan.carrier by carrier.carrierName, SPK 7/15/04
 			report.Query="SELECT claim.dateservice,claim.claimnum,claim.claimtype,claim.claimstatus,"
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),carrier.CarrierName,claim.claimfee "
 				+"FROM patient,claim,insplan,carrier "
 				+"WHERE patient.patnum=claim.patnum AND insplan.plannum=claim.plannum "
-				+"AND insplan.CarrierNum=carrier.CarrierNum "	// added SPK 
+				+"AND insplan.CarrierNum=carrier.CarrierNum "	
 				+"AND (claim.claimstatus = 'U' OR claim.claimstatus = 'H' OR  claim.claimstatus = 'W')";
-			if(radioRange.Checked==true){			// added 'W', SPK 7/15/04
+			if(radioRange.Checked==true){	
 				report.Query
 					+=" AND claim.dateservice >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 					+"AND claim.dateservice <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"'";
@@ -189,50 +188,43 @@ namespace OpenDental{
 			}
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
-			report.SubmitTemp();//create TableTemp
+			DataTable tempT=report.GetTempTable();
 			report.TableQ=new DataTable(null);//new table no name
 			for(int i=0;i<6;i++){//add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal=new double[report.TableQ.Columns.Count];
-			for(int i=0;i<report.TableTemp.Rows.Count;i++){//loop through data rows
+			report.InitializeColumns();
+			for(int i=0;i<tempT.Rows.Count;i++) {//loop through data rows
 				DataRow row=report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-				row[0]=(PIn.PDate(report.TableTemp.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="P")
+				row[0]=(PIn.PDate(tempT.Rows[i][0].ToString())).ToShortDateString();//claim dateservice
+				if(PIn.PString(tempT.Rows[i][2].ToString())=="P")
           row[1]="Primary";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="S")
+				if(PIn.PString(tempT.Rows[i][2].ToString())=="S")
           row[1]="Secondary";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.PString(tempT.Rows[i][2].ToString())=="PreAuth")
           row[1]="PreAuth";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="Other")
+				if(PIn.PString(tempT.Rows[i][2].ToString())=="Other")
           row[1]="Other";
-				if(report.TableTemp.Rows[i][3].ToString().Equals("H"))
+				if(tempT.Rows[i][3].ToString().Equals("H"))
 				  row[2]="Holding";//Claim Status
-				else if(report.TableTemp.Rows[i][3].ToString().Equals("W"))
+				else if(tempT.Rows[i][3].ToString().Equals("W"))
 					row[2]="WaitQ";//Claim Status, added SPK 7/15/04
 				else
 				  row[2]="Unsent";//Claim Status
-				row[3]=report.TableTemp.Rows[i][4];//Patient name
-				row[4]=report.TableTemp.Rows[i][5];//Ins Carrier
-				row[5]=PIn.PDouble(report.TableTemp.Rows[i][6].ToString()).ToString("F");//claim fee
-				report.ColTotal[5]+=PIn.PDouble(report.TableTemp.Rows[i][6].ToString());
+				row[3]=tempT.Rows[i][4];//Patient name
+				row[4]=tempT.Rows[i][5];//Ins Carrier
+				row[5]=PIn.PDouble(tempT.Rows[i][6].ToString()).ToString("F");//claim fee
+				report.ColTotal[5]+=PIn.PDouble(tempT.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
-			FormQuery2.ResetGrid();//this is a method in FormQuery2;
-			
+			FormQuery2.ResetGrid();//this is a method in FormQuery2;	
 			report.Title="Claims Not Sent";
-			report.SubTitle=new string[3];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 			if(radioRange.Checked==true){
-				report.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");
+				report.SubTitle.Add(date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"));
 			}
 			else{
-				report.SubTitle[1]=date1.SelectionStart.ToString("d");
+				report.SubTitle.Add(date1.SelectionStart.ToString("d"));
 			}
 			report.ColPos[0]=20;
 			report.ColPos[1]=145;
@@ -248,7 +240,6 @@ namespace OpenDental{
 			report.ColCaption[4]="Insurance Carrier";
 			report.ColCaption[5]="Amount";
 			report.ColAlign[5]=HorizontalAlignment.Right;
-			report.Summary=new string[3];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

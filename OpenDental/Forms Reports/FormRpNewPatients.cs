@@ -398,77 +398,33 @@ CONCAT(referral.LName,IF(referral.FName='','',','),referral.FName) refname,SUM(p
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="New Patients";
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 			if(listProv.SelectedIndices[0]==0){
-				report.SubTitle=new string[3];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.SubTitle[1]=Lan.g(this,"All Providers");
-				report.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
+				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
 			}
 			else if(listProv.SelectedIndices.Count==1){
-				report.SubTitle=new string[3];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.SubTitle[1]=Lan.g(this,"Prov: ")+ProviderC.List[listProv.SelectedIndices[0]-1].GetLongDesc();;
-				report.SubTitle[2]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle.Add(Lan.g(this,"Prov: ")+ProviderC.List[listProv.SelectedIndices[0]-1].GetLongDesc());
+				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
 			}
 			else{
-				report.SubTitle=new string[2];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				//I'm too lazy to build a description for multiple providers as well as ensure that it fits the space.
-				report.SubTitle[1]=dateFrom.ToString("d")+" - "+dateTo.ToString("d");
+				report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));
 			}
+			report.SetColumnPos(this,0,"#",40);
+			report.SetColumnPos(this,1,"Date",120);
+			report.SetColumnPos(this,2,"Last Name",210);
+			report.SetColumnPos(this,3,"First Name",300);
+			report.SetColumnPos(this,4,"Referral",380);
+			report.SetColumnPos(this,5,"Production",450,HorizontalAlignment.Right);
 			if(checkAddress.Checked){
-				report.ColPos=new int[13];
-				report.ColCaption=new string[12];
-				report.ColAlign=new HorizontalAlignment[12];
-				report.ColPos[0]=20;
-				report.ColPos[1]=60;
-				report.ColPos[2]=140;
-				report.ColPos[3]=230;
-				report.ColPos[4]=320;
-				report.ColPos[5]=400;
-				report.ColPos[6]=470;
-
-				report.ColPos[7]=520;
-				report.ColPos[8]=590;
-				report.ColPos[9]=650;
-				report.ColPos[10]=700;
-				report.ColPos[11]=750;
-				report.ColPos[12]=900;//off the right side
-				report.ColCaption[0]="#";
-				report.ColCaption[1]="Date";	
-				report.ColCaption[2]="Last Name";			
-				report.ColCaption[3]="First Name";
-				report.ColCaption[4]="Referral";
-				report.ColCaption[5]="Production";
-				report.ColCaption[6]="Pref'd";
-				report.ColCaption[7]="Address";
-				report.ColCaption[8]="Add2";
-				report.ColCaption[9]="City";
-				report.ColCaption[10]="ST";
-				report.ColCaption[11]="Zip";
-				report.ColAlign[5]=HorizontalAlignment.Right;
+				report.SetColumnPos(this,6,"Pref'd",500);
+				report.SetColumnPos(this,7,"Address",570);
+				report.SetColumnPos(this,8,"Add2",630);
+				report.SetColumnPos(this,9,"City",680);
+				report.SetColumnPos(this,10,"ST",730);
+				report.SetColumnPos(this,11,"Zip",880);//off the right side
 			}
-			else{
-				report.ColPos=new int[7];
-				report.ColCaption=new string[6];
-				report.ColAlign=new HorizontalAlignment[6];
-				report.ColPos[0]=20;
-				report.ColPos[1]=60;
-				report.ColPos[2]=140;
-				report.ColPos[3]=230;
-				report.ColPos[4]=320;
-				report.ColPos[5]=400;
-				report.ColPos[6]=470;
-				//report.ColPos[5]=900;//off the right side
-				report.ColCaption[0]="#";
-				report.ColCaption[1]="Date";	
-				report.ColCaption[2]="Last Name";			
-				report.ColCaption[3]="First Name";
-				report.ColCaption[4]="Referral";
-				report.ColCaption[5]="Production";
-				report.ColAlign[5]=HorizontalAlignment.Right;
-			}
-			report.Summary=new string[0];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

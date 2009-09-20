@@ -239,46 +239,40 @@ namespace OpenDental{
 			report.Query+="ORDER BY carrier.Phone,insplan.PlanNum";
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
-			report.SubmitTemp();//create TableTemp
+			DataTable tableTemp= report.GetTempTable();
 			report.TableQ=new DataTable(null);//new table no name
 			for(int i=0;i<6;i++){//add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal=new double[report.TableQ.Columns.Count];
-			for(int i=0;i<report.TableTemp.Rows.Count;i++){//loop through data rows
+			for(int i=0;i<tableTemp.Rows.Count;i++){//loop through data rows
 				DataRow row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 				//start filling 'row'. First column is carrier:
-				row[0]=report.TableTemp.Rows[i][0];
-				row[1]=report.TableTemp.Rows[i][7];
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="P")
+				row[0]=tableTemp.Rows[i][0];
+				row[1]=tableTemp.Rows[i][7];
+				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="P")
           row[2]="Primary";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="S")
+				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="S")
           row[2]="Secondary";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="PreAuth")
+				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="PreAuth")
           row[2]="PreAuth";
-				if(PIn.PString(report.TableTemp.Rows[i][2].ToString())=="Other")
+				if(PIn.PString(tableTemp.Rows[i][2].ToString())=="Other")
           row[2]="Other";
-				row[3]=report.TableTemp.Rows[i][4];
-				row[4]=(PIn.PDate(report.TableTemp.Rows[i][3].ToString())).ToString("d");
-				row[5]=PIn.PDouble(report.TableTemp.Rows[i][6].ToString()).ToString("F");
-        //TimeSpan d = DateTime.Today.Subtract((PIn.PDate(report.TableTemp.Rows[i][5].ToString())));
+				row[3]=tableTemp.Rows[i][4];
+				row[4]=(PIn.PDate(tableTemp.Rows[i][3].ToString())).ToString("d");
+				row[5]=PIn.PDouble(tableTemp.Rows[i][6].ToString()).ToString("F");
+        //TimeSpan d = DateTime.Today.Subtract((PIn.PDate(tableTemp.Rows[i][5].ToString())));
 				//if(d.Days>5000)
 				//	row[4]="";
 				//else
 				//	row[4]=d.Days.ToString();
-				report.ColTotal[5]+=PIn.PDouble(report.TableTemp.Rows[i][6].ToString());
+				report.ColTotal[5]+=PIn.PDouble(tableTemp.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
-			FormQuery2.ResetGrid();//this is a method in FormQuery2;
+			report.InitializeColumns();
+			FormQuery2.ResetGrid();//this is a method in FormQuery;
 			report.Title="OUTSTANDING INSURANCE CLAIMS";
-			report.SubTitle=new string[3];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]="Days Outstanding: " + daysOld;			
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add("Days Outstanding: " + daysOld);			
 			report.ColPos[0]=20;
 			report.ColPos[1]=210;
 			report.ColPos[2]=330;
@@ -293,7 +287,6 @@ namespace OpenDental{
 			report.ColCaption[4]=Lan.g(this,"Date of Service");
 			report.ColCaption[5]=Lan.g(this,"Amount");
 			report.ColAlign[5]=HorizontalAlignment.Right;
-			report.Summary=new string[3];
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

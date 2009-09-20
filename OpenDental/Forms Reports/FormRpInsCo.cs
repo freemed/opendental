@@ -138,23 +138,12 @@ Order By patient.lname,patient.fname
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Insurance Plan List";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-
-			report.ColPos=new int[5];
-			report.ColCaption=new string[4];
-			report.ColAlign=new HorizontalAlignment[4];
-			report.ColPos[0]=20;
-			report.ColPos[1]=250;
-			report.ColPos[2]=425;
-			report.ColPos[3]=600;
-			report.ColPos[4]=765;
-			report.ColCaption[0]="Carrier Name";
-			report.ColCaption[1]="Subscriber Name";
-			report.ColCaption[2]="Carrier Phone#";
-			report.ColCaption[3]="Group Name";
-			report.Summary=new string[1];
-			report.Summary[0]=Lan.g(this,"Total: ")+report.TableQ.Rows.Count.ToString();
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SetColumn(this,0,"Carrier Name",230);
+			report.SetColumn(this,1,"Subscriber Name",175);
+			report.SetColumn(this,2,"Carrier Phone#",175);
+			report.SetColumn(this,3,"Group Name",165);
+			report.Summary.Add(Lan.g(this,"Total: ")+report.TableQ.Rows.Count.ToString());
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}

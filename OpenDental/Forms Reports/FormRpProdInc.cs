@@ -769,51 +769,29 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Daily Production and Income";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=dateFrom.ToString("d")
-				+" - "+dateTo.ToString("d");	
-			report.ColPos=new int[11];
-			report.ColCaption=new string[10];
-			report.ColAlign=new HorizontalAlignment[10];
-			report.ColPos[0]=10;
-			report.ColPos[1]=90;
-			report.ColPos[2]=220;
-			report.ColPos[3]=385;
-			report.ColPos[4]=440;
-			report.ColPos[5]=505;
-			report.ColPos[6]=575;
-			report.ColPos[7]=640;
-			report.ColPos[8]=705;
-			report.ColPos[9]=770;  // added spk 5/19/05	
-			report.ColPos[10]=1050;// way off the righthand side
-			report.ColCaption[0]="Date";
-			report.ColCaption[1]="Patient Name";			
-			report.ColCaption[2]="Description";
-			report.ColCaption[3]="Prov";
-			report.ColCaption[4]="Production";
-			report.ColCaption[5]="Adjustments";
-			report.ColCaption[6]="Writeoff";	// added spk 
-			report.ColCaption[7]="Pt Income";
-			report.ColCaption[8]="Ins Income";
-			report.ColCaption[9]="";
-			report.ColAlign[4]=HorizontalAlignment.Right;
-			report.ColAlign[5]=HorizontalAlignment.Right;
-			report.ColAlign[6]=HorizontalAlignment.Right;
-			report.ColAlign[7]=HorizontalAlignment.Right;
-			report.ColAlign[8]=HorizontalAlignment.Right;
-			report.ColAlign[9]=HorizontalAlignment.Right;
-			report.Summary=new string[3];
-			report.Summary[0]
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(dateFrom.ToString("d")+" - "+dateTo.ToString("d"));	
+			report.SetColumnPos(this,0,"Date",80);
+			report.SetColumnPos(this,1,"Patient Name",210);
+			report.SetColumnPos(this,2,"Description",375);
+			report.SetColumnPos(this,3,"Prov",430);
+			report.SetColumnPos(this,4,"Production",495,HorizontalAlignment.Right);
+			report.SetColumnPos(this,5,"Adjustments",565,HorizontalAlignment.Right);
+			report.SetColumnPos(this,6,"Writeoff",630,HorizontalAlignment.Right);
+			report.SetColumnPos(this,7,"Pt Income",695,HorizontalAlignment.Right);
+			report.SetColumnPos(this,8,"Ins Income",760,HorizontalAlignment.Right);
+			report.SetColumnPos(this,9,"",1040,HorizontalAlignment.Right);
+			report.Summary.Add(
 				//=Lan.g(this,"Total Production (Production + Adjustments):")+" "
 				//+(report.ColTotal[4]+report.ColTotal[5]).ToString("c");
 				// added spk 5/19/05
-				=Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "
+				Lan.g(this,"Total Production (Production + Adjustments - Writeoffs):")+" "
 				+(report.ColTotal[4]+report.ColTotal[5]+report.ColTotal[6])
-				.ToString("c");
-			report.Summary[2]
-				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c");
+				.ToString("c"));
+			report.Summary.Add("");
+			report.Summary.Add(
+				Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
+				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c"));
 			FormQuery2.ShowDialog();
 
 		}
@@ -870,9 +848,8 @@ Group By procdate Order by procdate desc
 				+"AND procedurelog.ProcStatus = '2' "//complete
 				+whereProv
 				+"GROUP BY procedurelog.ProcDate "
-				+"ORDER BY procedurelog.ProcDate"; 
-			report.SubmitTemp(); //create TableTemp
-      TableCharge=report.TableTemp; //must create datatable obj since Queries.TempTable is static
+				+"ORDER BY procedurelog.ProcDate";
+			TableCharge=report.GetTempTable();
 
 //NEXT is TableCapWriteoff--------------------------------------------------------------------------
 /*
@@ -902,8 +879,7 @@ GROUP BY DateCP Order by DateCP
 				+whereProv
 				+" GROUP BY DateCP "
 				+"ORDER BY DateCP"; 
-			report.SubmitTemp(); //create TableTemp
-      TableCapWriteoff=report.TableTemp.Copy();
+			TableCapWriteoff=report.GetTempTable();
 
 //NEXT is TableInsWriteoff--------------------------------------------------------------------------
 /*
@@ -944,8 +920,7 @@ GROUP BY DateCP Order by DateCP
 					+" GROUP BY ProcDate "
 					+"ORDER BY ProcDate"; 
 			}
-			report.SubmitTemp(); //create TableTemp
-      TableInsWriteoff=report.TableTemp.Copy();
+			TableInsWriteoff=report.GetTempTable();
 
 // NEXT is TableSched------------------------------------------------------------------------------
 /*
@@ -982,8 +957,7 @@ GROUP BY SchedDate
 				+whereProv
 				+" GROUP BY SchedDate "
 				+"ORDER BY SchedDate"; 
-			report.SubmitTemp(); //create TableTemp
-      TableSched=report.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
+			TableSched=report.GetTempTable();
 
 // NEXT is TablePay----------------------------------------------------------------------------------
 //must join the paysplit to the payment to eliminate the discounts.
@@ -1017,8 +991,7 @@ group by claimpayment.checkdate order by procdate
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY paysplit.DatePay ORDER BY DatePay";
-			report.SubmitTemp(); //create TableTemp
-      TablePay=report.TableTemp.Copy(); //must create datatable obj since Queries.TempTable is static
+			TablePay=report.GetTempTable();
 
 // NEXT is TableIns, added by SPK 3/16/04-----------------------------------------------------------
 /*
@@ -1050,8 +1023,7 @@ group by claimpayment.checkdate order by procdate
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";			
-			report.SubmitTemp(); //create TableIns
-			TableIns=report.TableTemp; //must create datatable obj since Queries.TempTable is static
+			TableIns=report.GetTempTable();
 // End TableIns, SPK 3/16/04
 
 
@@ -1082,15 +1054,14 @@ ORDER BY adjdate DESC
 				+"AND adjdate <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY adjdate ORDER BY adjdate"; 
-			report.SubmitTemp(); //create TableTemp
-      TableAdj=report.TableTemp; //must create datatable obj since Queries.TempTable is static 
+			TableAdj=report.GetTempTable();
 
 //Now to fill Table Q from the temp tables
 			report.TableQ=new DataTable(null);//new table with 10 columns
 			for(int i=0;i<10;i++){ //add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal=new double[report.TableQ.Columns.Count];
+			report.InitializeColumns();
 			double production;
 			double scheduled;
 			double adjust;
@@ -1172,42 +1143,37 @@ ORDER BY adjdate DESC
 				report.ColTotal[8]+=insincome;	// spk
 				report.ColTotal[9]+=totalincome;
 				report.TableQ.Rows.Add(row);  //adds row to table Q
-      }//end for row
-			//done filling now set up table
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+      }
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Production and Income";
-			report.SubTitle=new string[3];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
 			if(listProv.SelectedIndices[0]==0){//allProv){
-				report.SubTitle[2]=Lan.g(this,"All Providers");
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
 			}
 			else{
+				string str="";
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i>0){
-						report.SubTitle[2]+=", ";
+						str+=", ";
 					}
-					report.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					str+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
 				}
+				report.SubTitle.Add(str);
 			}
-			report.Summary=new string[3];
-			report.Summary[0]
+			report.Summary.Add(
 				//=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
 				//+(report.ColTotal[2]+report.ColTotal[3]
 				//+report.ColTotal[4]).ToString("c"); //spk 5/19/05
-				=Lan.g(this,"Total Production (Production + Scheduled + Adj - Writeoff):")+" "
+				Lan.g(this,"Total Production (Production + Scheduled + Adj - Writeoff):")+" "
 				+(report.ColTotal[2]+report.ColTotal[3]+report.ColTotal[4]
-				+report.ColTotal[5]).ToString("c");
-			report.Summary[2]
-				=Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
-				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c");
+				+report.ColTotal[5]).ToString("c"));
+			report.Summary.Add("");
+			report.Summary.Add(
+				Lan.g(this,"Total Income (Pt Income + Ins Income):")+" "
+				+(report.ColTotal[7]+report.ColTotal[8]).ToString("c"));
 			report.ColPos[0]=20;
 			report.ColPos[1]=110;
 			report.ColPos[2]=190;
@@ -1291,8 +1257,7 @@ ORDER BY adjdate DESC
 				+"AND procedurelog.ProcDate <= " +POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(procedurelog.ProcDate)";
 			//MessageBox.Show(report.Query);
-			report.SubmitTemp(); //create TableTemp
-			TableProduction=report.TableTemp.Copy(); 
+			TableProduction=report.GetTempTable();
 			//Adjustments----------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1316,8 +1281,7 @@ ORDER BY adjdate DESC
 				+"AND adjustment.AdjDate <= "+POut.PDate(dateTo)+" "
 				+whereProv
 				+"GROUP BY MONTH(adjustment.AdjDate)";
-			report.SubmitTemp();
-			TableAdj=report.TableTemp.Copy();
+			TableAdj=report.GetTempTable();
 			//TableInsWriteoff--------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1355,8 +1319,7 @@ ORDER BY adjdate DESC
 					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+"GROUP BY MONTH(claimproc.ProcDate)";
 			}
-			report.SubmitTemp(); //create TableTemp
-			TableInsWriteoff=report.TableTemp.Copy();
+			TableInsWriteoff=report.GetTempTable();
 			//PtIncome--------------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1381,8 +1344,7 @@ ORDER BY adjdate DESC
 				+"AND paysplit.DatePay >= "+POut.PDate(dateFrom)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(dateTo)+" "
 				+"GROUP BY MONTH(paysplit.DatePay)";
-			report.SubmitTemp();
-			TablePay=report.TableTemp.Copy(); 
+			TablePay=report.GetTempTable();
 			//InsIncome---------------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1405,13 +1367,12 @@ ORDER BY adjdate DESC
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
 				+" GROUP BY claimpayment.CheckDate ORDER BY checkdate";
-			report.SubmitTemp();
-			TableIns=report.TableTemp.Copy(); 
+			TableIns=report.GetTempTable(); 
 			report.TableQ=new DataTable(null);//new table with 7 columns
 			for(int i=0;i<8;i++){ //add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal=new double[report.TableQ.Columns.Count];
+			report.InitializeColumns();
 			double production;
 			double adjust;
 			double inswriteoff;	//spk 5/19/05
@@ -1485,32 +1446,26 @@ ORDER BY adjdate DESC
 				report.ColTotal[6]+=insincome;	
 				report.ColTotal[7]+=totalincome;
 				report.TableQ.Rows.Add(row);  //adds row to table Q
-      }//end for row
-			//done filling now set up table
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
+      }
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Annual Production and Income";
-			report.SubTitle=new string[3];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=textDateFrom.Text+" - "+textDateTo.Text;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(textDateFrom.Text+" - "+textDateTo.Text);
 			if(listProv.SelectedIndices[0]==0){//allProv){
-				report.SubTitle[2]=Lan.g(this,"All Providers");
+				report.SubTitle.Add(Lan.g(this,"All Providers"));
 			}
 			else{
+				string str="";
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i>0){
-						report.SubTitle[2]+=", ";
+						str+=", ";
 					}
-					report.SubTitle[2]+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
+					str+=ProviderC.List[listProv.SelectedIndices[i]-1].Abbr;
 				}
+				report.SubTitle.Add(str);
 			}
-			report.Summary=new string[0];
 			/*report.Summary[0]
 				=Lan.g(this,"Total Production (Production + Scheduled + Adjustments):")+" "
 				+(report.ColTotal[2]+report.ColTotal[3]

@@ -177,36 +177,20 @@ WHERE patient.patnum=rxpat.patnum && provider.provnum=rxpat.provnum
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
-
 			report.Title="Prescriptions";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 			if(radioPatient.Checked==true){
-				report.SubTitle[1]="By Patient";
+				report.SubTitle.Add("By Patient");
 			}
 			else{
-				report.SubTitle[1]="By Drug";
+				report.SubTitle.Add("By Drug");
 			}			
-			report.ColPos=new int[7];
-			report.ColCaption=new string[6];
-			report.ColAlign=new HorizontalAlignment[6];
-
-			report.ColPos[0]=10;
-			report.ColPos[1]=130;
-			report.ColPos[2]=225;
-			report.ColPos[3]=325;
-			report.ColPos[4]=625;
-			report.ColPos[5]=725;
-			report.ColPos[6]=825;
-
-			report.ColCaption[0]="Patient Name";
-			report.ColCaption[1]="Date";			
-			report.ColCaption[2]="Drug Name";
-			report.ColCaption[3]="Sig";
-			report.ColCaption[4]="Disp";
-			report.ColCaption[5]="Prov Name";
-
-			report.Summary=new string[0];
+			report.SetColumn(this,0,"Patient Name",120);
+			report.SetColumn(this,1,"Date",95);
+			report.SetColumn(this,2,"Drug Name",100);
+			report.SetColumn(this,3,"Sig",300);
+			report.SetColumn(this,4,"Disp",100);
+			report.SetColumn(this,5,"Prov Name",100);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

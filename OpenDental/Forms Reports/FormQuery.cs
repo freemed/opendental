@@ -41,10 +41,10 @@ namespace OpenDental{
 		private bool headerPrinted;
 		private System.Windows.Forms.PrintPreviewControl printPreviewControl2;
 		private bool tablePrinted;
-		private System.Drawing.Font titleFont = new System.Drawing.Font("Arial",17,FontStyle.Bold);
-		private System.Drawing.Font subtitleFont=new System.Drawing.Font("Arial",10,FontStyle.Bold);
+		private System.Drawing.Font titleFont = new System.Drawing.Font("Arial",14,FontStyle.Bold);
+		private System.Drawing.Font subtitleFont=new System.Drawing.Font("Arial",9,FontStyle.Bold);
 		private System.Drawing.Font colCaptFont=new System.Drawing.Font("Arial",8,FontStyle.Bold);
-		private System.Drawing.Font bodyFont = new System.Drawing.Font("Arial", 9);
+		private System.Drawing.Font bodyFont = new System.Drawing.Font("Arial", 8);
 		private OpenDental.UI.Button butFullPage;
 		private System.Windows.Forms.Panel panelZoom;
 		private System.Windows.Forms.Label labelTotPages;
@@ -608,12 +608,6 @@ namespace OpenDental{
 			//if(MessageBox.Show("Waiting for Server","",MessageBoxButtons.
 			//Wait for dialog result
 			//If abort, then skip the rest of this.*/
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
-			report.ColTotal=new double[report.TableQ.Columns.Count];
 			grid2.TableStyles.Clear();
 			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
@@ -634,8 +628,7 @@ namespace OpenDental{
 					report.Summary[i]="TOTAL :"+;
 				}*/
 				report.Title=textTitle.Text;
-				report.SubTitle=new string[1];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
+				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 				for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
 					report.ColCaption[iCol]=report.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
 					//again, I don't know why this would fail, so here's a check:
@@ -643,7 +636,6 @@ namespace OpenDental{
 						myGridTS.GridColumnStyles[iCol].Alignment=report.ColAlign[iCol];
 					}
 				}
-				report.Summary=new string[0];
 			//}		
 		}
 
@@ -651,22 +643,15 @@ namespace OpenDental{
 			//Queries.SubmitCur();
 		//}
 
-		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names will be handled manually by the external form calling this report.</summary>
+		///<summary>When used as a report, this is called externally. Used instead of SubmitQuery(). Column names can be handled manually by the external form calling this report.</summary>
 		public void SubmitReportQuery(){
 			report.SubmitQuery();
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
-			report.ColTotal=new double[report.TableQ.Columns.Count];
 			grid2.TableStyles.Clear();
 			grid2.SetDataBinding(report.TableQ,"");
 			myGridTS = new DataGridTableStyle();
 			grid2.TableStyles.Add(myGridTS);
 			report.TableQ=MakeReadable(report.TableQ,report);//?
 			grid2.SetDataBinding(report.TableQ,"");//because MakeReadable trashes the TableQ
-			this.report=report;
 		}
 
 		/*
@@ -1162,7 +1147,7 @@ namespace OpenDental{
 					,bounds.Width/2
 					-ev.Graphics.MeasureString(report.Title,titleFont).Width/2,yPos);
 				yPos+=titleFont.GetHeight(ev.Graphics);
-				for(int i=0;i<report.SubTitle.Length;i++){
+				for(int i=0;i<report.SubTitle.Count;i++){
 					ev.Graphics.DrawString(report.SubTitle[i]
 						,subtitleFont,Brushes.Black
 						,bounds.Width/2
@@ -1263,10 +1248,10 @@ namespace OpenDental{
 			}
 			//Summary
 			if(totalsPrinted){
-				if(yPos+report.Summary.Length*subtitleFont.GetHeight(ev.Graphics)< bounds.Top+bounds.Height){
+				if(yPos+report.Summary.Count*subtitleFont.GetHeight(ev.Graphics)< bounds.Top+bounds.Height){
 					ev.Graphics.DrawLine(new Pen(Color.Black),bounds.Left,yPos+2,bounds.Right,yPos+2);
 					yPos+=bodyFont.GetHeight(ev.Graphics);
-					for(int i=0;i<report.Summary.Length;i++){
+					for(int i=0;i<report.Summary.Count;i++){
 						if(report.SummaryFont!=null && report.SummaryFont!=""){
 							Font acctnumFont=new Font(report.SummaryFont,12);
 							ev.Graphics.DrawString(report.Summary[i],acctnumFont,Brushes.Black,bounds.Left,yPos);

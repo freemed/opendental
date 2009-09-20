@@ -173,37 +173,24 @@ namespace OpenDental{
       if (radioCode.Checked==true)  {
 			  FormQuery2.SubmitReportQuery();			      
 				report.Title="Procedure Codes";
-				report.SubTitle=new string[2];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.SubTitle[1]=FeeScheds.GetDescription(feeSched);
-				report.ColPos=new int[6];
-				report.ColCaption=new string[5];
-				report.ColAlign=new HorizontalAlignment[5];
-				report.ColPos[0]=60;
-				report.ColPos[1]=130;
-				report.ColPos[2]=200;
-				report.ColPos[3]=220;
-				report.ColPos[4]=420;
-				report.ColPos[5]=620;
-				report.ColCaption[0]="Code";
-				report.ColCaption[1]="Fee Amount";
-				report.ColCaption[2]=" ";//otherwise, the amount gets bunched up next to the description.
-				report.ColCaption[3]="Description";
-				report.ColCaption[4]="Abbr Description";
-				//report.ColCaption[3]="Fee Amount";
-				report.ColAlign[1]=HorizontalAlignment.Right;
-				report.Summary=new string[0];
+				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(FeeScheds.GetDescription(feeSched));
+				report.SetColumn(this,0,"Code",70);
+				report.SetColumn(this,1,"Fee Amount",70,HorizontalAlignment.Right);
+				report.SetColumn(this,2," ",80);//otherwise, the amount gets bunched up next to the description.
+				report.SetColumn(this,3,"Description",200);
+				report.SetColumn(this,4,"Abbr Description",200);
 				FormQuery2.ShowDialog();
 				DialogResult=DialogResult.OK;		
       }
 			else {//categories
-			  report.SubmitTemp();//create TableTemp which is not actually used
+			  //report.SubmitTemp();//create TableTemp which is not actually used
 	      ProcedureCode[] ProcList=ProcedureCodes.GetProcList();
 				report.TableQ=new DataTable(null);
 			  for(int i=0;i<5;i++){//add columns
 				  report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			  }
-				report.ColTotal=new double[report.TableQ.Columns.Count];
+				report.InitializeColumns();
         DataRow row=report.TableQ.NewRow();//add first row by hand to get value for temp
 				row[0]=DefC.GetName(DefCat.ProcCodeCats,ProcList[0].ProcCat);
 				catName=row[0].ToString();
@@ -229,17 +216,10 @@ namespace OpenDental{
   				//report.ColTotal[4]+=PIn.PDouble(row[4].ToString());
 					report.TableQ.Rows.Add(row);
 				}
-        report.ColWidth=new int[report.TableQ.Columns.Count];
-				report.ColPos=new int[report.TableQ.Columns.Count+1];
-				report.ColPos[0]=0;
-				report.ColCaption=new string[report.TableQ.Columns.Count];
-				report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
 				FormQuery2.ResetGrid();//this is a method in FormQuery2;
-				
 				report.Title="Procedure Codes";
-				report.SubTitle=new string[5];
-				report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.SubTitle[1]=FeeScheds.GetDescription(feeSched);
+				report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.SubTitle.Add(FeeScheds.GetDescription(feeSched));
 				report.ColPos[0]=20;
 				report.ColPos[1]=120;
 				report.ColPos[2]=270;
@@ -252,7 +232,6 @@ namespace OpenDental{
 				report.ColCaption[3]="Abbr Description";
 				report.ColCaption[4]="Fee Amount";
 				report.ColAlign[4]=HorizontalAlignment.Right;
-				report.Summary=new string[5];
 				FormQuery2.ShowDialog();
 				DialogResult=DialogResult.OK;
 			}

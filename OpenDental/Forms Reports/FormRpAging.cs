@@ -453,62 +453,39 @@ namespace OpenDental{
 			//	DataValid.SetInvalid(InvalidType.Prefs);
 			//}
 			report.Title="AGING REPORT";
-			report.SubTitle=new string[4];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]="As of "+textDate.Text;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add("As of "+textDate.Text);
 			if(radioAny.Checked){
-				report.SubTitle[2]="Any Balance";
+				report.SubTitle.Add("Any Balance");
 			}
 			if(radio30.Checked){
-				report.SubTitle[2]="Over 30 Days";
+				report.SubTitle.Add("Over 30 Days");
 			}
 			if(radio60.Checked){
-				report.SubTitle[2]="Over 60 Days";
+				report.SubTitle.Add("Over 60 Days");
 			}
 			if(radio90.Checked){
-				report.SubTitle[2]="Over 90 Days";
+				report.SubTitle.Add("Over 90 Days");
 			}
 			if(checkBillTypesAll.Checked){
-				report.SubTitle[3]="All Billing Types";
+				report.SubTitle.Add("All Billing Types");
 			}
 			else{
-				report.SubTitle[3]=DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[0]].ItemName;
+				string subt=DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[0]].ItemName;
 				for(int i=1;i<listBillType.SelectedIndices.Count;i++){
-					report.SubTitle[3]+=", "+DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].ItemName;
+					subt+=", "+DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].ItemName;
 				}
+				report.SubTitle.Add(subt);
 			}
-			report.ColPos=new int[9];
-			report.ColCaption=new string[8];
-			report.ColAlign=new HorizontalAlignment[8];
-
-			report.ColPos[0]=20;
-			report.ColPos[1]=180;
-			report.ColPos[2]=260;
-			report.ColPos[3]=340;
-			report.ColPos[4]=420;
-			report.ColPos[5]=500;
-			report.ColPos[6]=585;
-			report.ColPos[7]=670;
-			report.ColPos[8]=755;
-
-			report.ColCaption[0]="GUARANTOR";
-			report.ColCaption[1]="0-30 DAYS";
-			report.ColCaption[2]="30-60 DAYS";
-			report.ColCaption[3]="60-90 DAYS";
-			report.ColCaption[4]="> 90 DAYS";
-			report.ColCaption[5]="TOTAL";
-			report.ColCaption[6]="-INS EST";
-			report.ColCaption[7]="=PATIENT";
-
-			report.ColAlign[1]=HorizontalAlignment.Right;
-			report.ColAlign[2]=HorizontalAlignment.Right;
-			report.ColAlign[3]=HorizontalAlignment.Right;
-			report.ColAlign[4]=HorizontalAlignment.Right;
-			report.ColAlign[5]=HorizontalAlignment.Right;
-			report.ColAlign[6]=HorizontalAlignment.Right;
-			report.ColAlign[7]=HorizontalAlignment.Right;
-
-			report.Summary=new string[0];
+			report.InitializeColumns(8);
+			report.SetColumn(this,0,"GUARANTOR",160);
+			report.SetColumn(this,1,"0-30 DAYS",80,HorizontalAlignment.Right);
+			report.SetColumn(this,2,"30-60 DAYS",80,HorizontalAlignment.Right);
+			report.SetColumn(this,3,"60-90 DAYS",80,HorizontalAlignment.Right);
+			report.SetColumn(this,4,"> 90 DAYS",80,HorizontalAlignment.Right);
+			report.SetColumn(this,5,"TOTAL",85,HorizontalAlignment.Right);
+			report.SetColumn(this,6,"-INS EST",85,HorizontalAlignment.Right);
+			report.SetColumn(this,7,"=PATIENT",85,HorizontalAlignment.Right);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

@@ -293,33 +293,17 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Daily Procedures";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=date1.SelectionStart.ToString("d")
-				+" - "+date2.SelectionStart.ToString("d");	
-			// col[5] from 590 to 640, 680, 770, spk 7/20/04
-			report.ColPos=new int[9];
-			report.ColCaption=new string[8];
-			report.ColAlign=new HorizontalAlignment[8];			
-			report.ColPos[0]=20;
-			report.ColPos[1]=100;
-			report.ColPos[2]=250;
-			report.ColPos[3]=325;
-			report.ColPos[4]=370;
-			report.ColPos[5]=640;
-			report.ColPos[6]=680;
-			report.ColPos[7]=770;
-			report.ColPos[8]=820;		// spk
-			report.ColCaption[0]="Date";
-			report.ColCaption[1]="Patient Name";			
-			report.ColCaption[2]="ADA Code";
-			report.ColCaption[3]="Tooth";
-			report.ColCaption[4]="Description";
-			report.ColCaption[5]="Provider";
-			report.ColCaption[6]="Fee";
-			report.ColAlign[6]=HorizontalAlignment.Right;
-			report.ColCaption[7]=" ";	// spk
-			report.Summary=new string[0];
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(date1.SelectionStart.ToString("d")
+				+" - "+date2.SelectionStart.ToString("d"));	
+			report.SetColumnPos(this,0,"Date",80);
+			report.SetColumnPos(this,1,"Patient Name",230);
+			report.SetColumnPos(this,2,"ADA Code",305);
+			report.SetColumnPos(this,3,"Tooth",350);
+			report.SetColumnPos(this,4,"Description",620);
+			report.SetColumnPos(this,5,"Provider",660);
+			report.SetColumnPos(this,6,"Fee",750,HorizontalAlignment.Right);
+			report.SetColumnPos(this,7," ",800);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
@@ -342,31 +326,15 @@ namespace OpenDental{
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
 			report.Title="Procedures By Procedure Code";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=date1.SelectionStart.ToString("d")
-				+" - "+date2.SelectionStart.ToString("d");	
-			report.ColPos=new int[7];
-			report.ColCaption=new string[6];
-			report.ColAlign=new HorizontalAlignment[6];			
-			report.ColPos[0]=20;
-			report.ColPos[1]=170;
-			report.ColPos[2]=260;
-			report.ColPos[3]=440;
-			report.ColPos[4]=490;
-			report.ColPos[5]=600;
-			report.ColPos[6]=700;
-			report.ColCaption[0]="Category";
-			report.ColCaption[1]="Code";			
-			report.ColCaption[2]="Description";
-			report.ColCaption[3]="Quantity";
-			report.ColCaption[4]="Average Fee";
-			report.ColCaption[5]="Total Fees";
-			report.ColAlign[3]=HorizontalAlignment.Right;
-			report.ColAlign[4]=HorizontalAlignment.Right;
-			report.ColAlign[5]=HorizontalAlignment.Right;
-			//report.ColCaption[7]=" ";
-			report.Summary=new string[0];
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(date1.SelectionStart.ToString("d")
+				+" - "+date2.SelectionStart.ToString("d"));
+			report.SetColumnPos(this,0,"Category",150);
+			report.SetColumnPos(this,1,"Code",240);
+			report.SetColumnPos(this,2,"Description",420);
+			report.SetColumnPos(this,3,"Quantity",470,HorizontalAlignment.Right);
+			report.SetColumnPos(this,4,"Average Fee",580,HorizontalAlignment.Right);
+			report.SetColumnPos(this,5,"Total Fees",680,HorizontalAlignment.Right);
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}

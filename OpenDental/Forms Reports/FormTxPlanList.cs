@@ -558,12 +558,7 @@ namespace OpenDental {
 			for(int i = 0;i < 12;i++) {//add columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal = new double[report.TableQ.Columns.Count];
-			report.ColWidth = new int[report.TableQ.Columns.Count];
-			report.ColPos = new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0] = 0;
-			report.ColCaption = new string[report.TableQ.Columns.Count];
-			report.ColAlign = new HorizontalAlignment[report.TableQ.Columns.Count];
+			report.InitializeColumns();
 			// Add all Rows
 			// 11/1/08 HINA/SPK Add Logic to Print Patient Total
 			string currentPatient = System.Text.RegularExpressions.Regex.Replace(gridTxPlanList.Rows[0].Cells[1].Text," \r\n"," ");
@@ -656,11 +651,9 @@ namespace OpenDental {
 			FormQuery FormQuery2 = new FormQuery(report);
 			FormQuery2.IsReport = true;
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;
-			report.Summary = new string[0];
 			report.Title = "Treatment Plans Analyzer Report";
-			report.SubTitle = new string[2];
-			report.SubTitle[0] = ((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1] = "(by Name and Unused Benefits)";
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add("(by Name and Unused Benefits)");
 			report.ColPos[0] = 00;
 			report.ColPos[1] = 40;
 			report.ColPos[2] = 197;      // TxPlan date

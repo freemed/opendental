@@ -663,7 +663,7 @@ namespace OpenDental{
 			for(int i=0;i<5;i++){ //add 5 columns
 				report.TableQ.Columns.Add(new System.Data.DataColumn());//blank columns
 			}
-			report.ColTotal=new double[report.TableQ.Columns.Count];
+			report.InitializeColumns();
 			DataRow row;
 			List<long> patNums=new List<long>();
 			for(int i=0;i<PatPayList.Count;i++){
@@ -690,21 +690,13 @@ namespace OpenDental{
 				report.TableQ.Rows.Add(row);
 				report.ColTotal[4]+=ClaimPayList[i].CheckAmt;
 			}
-			//done filling now set up table
-			report.ColWidth=new int[report.TableQ.Columns.Count];
-			report.ColPos=new int[report.TableQ.Columns.Count+1];
-			report.ColPos[0]=0;
-			report.ColCaption=new string[report.TableQ.Columns.Count];
-			report.ColAlign=new HorizontalAlignment[report.TableQ.Columns.Count];
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.ResetGrid();//necessary won't work without
 			report.Title="Deposit Slip";
-			report.SubTitle=new string[2];
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=DepositCur.DateDeposit.ToShortDateString();
-			report.Summary=new string[1];
-			report.Summary[0]=DepositCur.BankAccountInfo;
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(DepositCur.DateDeposit.ToShortDateString());
+			report.Summary.Add(DepositCur.BankAccountInfo);
 			if(DepositCur.BankAccountInfo.StartsWith("A")){
 				report.SummaryFont="GnuMICR";
 			}

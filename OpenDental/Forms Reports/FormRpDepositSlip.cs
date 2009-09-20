@@ -371,67 +371,56 @@ ORDER BY PayDate, plfname
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
 			report.Title="Deposit Slip";
-			report.SubTitle=new string[3];
-			if(!PrefC.GetBool("EasyNoClinics")){
-				report.SubTitle=new string[4];
-				if(comboClinic.SelectedIndex==0){
-					report.SubTitle[3]=Lan.g(this,"Clinic")+": none";
-				}
-				else{
-					report.SubTitle[3]=Lan.g(this,"Clinic")+": "
-						+Clinics.List[comboClinic.SelectedIndex-1].Description;
-				}
-			}
-			report.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-			report.SubTitle[1]=monthCal1.SelectionStart.ToShortDateString()+" - "
-				+monthCal2.SelectionStart.ToShortDateString();
+			report.SubTitle.Add(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+			report.SubTitle.Add(monthCal1.SelectionStart.ToShortDateString()+" - "
+				+monthCal2.SelectionStart.ToShortDateString());
 			if(listPayType.SelectedIndices.Count>0)  {
-			  report.SubTitle[2]="Payment Type(s): ";
-					for(int i=0;i<listPayType.SelectedIndices.Count;i++){
-						if(i>0) report.SubTitle[2]+=", ";
-						report.SubTitle[2]
-							+=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
+				string str="Payment Type(s): ";
+				for(int i=0;i<listPayType.SelectedIndices.Count;i++){
+					if(i>0) {
+						str+=", ";
 					}
-				if(checkBoxIns.Checked)
-					report.SubTitle[2]+=" Insurance Claim Checks";
+					str+=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
+				}
+				if(checkBoxIns.Checked) {
+					if(listPayType.SelectedIndices.Count>0) {
+						str+=", ";
+					}
+					str+=" Insurance Claim Checks";
+				}
+				report.SubTitle.Add(str);
 			}
 			else  {
 				if(checkBoxIns.Checked)  {
-				 report.SubTitle[2]="Payment Type: Insurance Claim Checks";
+					report.SubTitle.Add("Payment Type: Insurance Claim Checks");
 			  }
 			}
-			report.ColPos=new int[9];
-			report.ColCaption=new string[8];
-			report.ColAlign=new HorizontalAlignment[8];
-			report.ColPos[0]=20;
-			report.ColPos[1]=100;
-			report.ColPos[2]=210;
-			report.ColPos[3]=320;
-			report.ColPos[4]=420;
-			report.ColPos[5]=480;
-			report.ColPos[6]=590;
-			report.ColPos[7]=680;
-			report.ColPos[8]=760;
-			report.ColCaption[0]="Date";
-			report.ColCaption[1]="Patient";
-			report.ColCaption[2]="Carrier";
-			report.ColCaption[3]="Type";
+			if(!PrefC.GetBool("EasyNoClinics")){
+				if(comboClinic.SelectedIndex==0){
+					report.SubTitle.Add(Lan.g(this,"Clinic")+": none");
+				}
+				else{
+					report.SubTitle.Add(Lan.g(this,"Clinic")+": "+Clinics.List[comboClinic.SelectedIndex-1].Description);
+				}
+			}
+			report.SetColumn(this,0,"Date",80);
+			report.SetColumn(this,1,"Patient",80);
+			report.SetColumn(this,2,"Carrier",80);
+			report.SetColumn(this,3,"Type",100);
 			//this column can be eliminated when the new reporting framework is complete:
-			report.ColCaption[4]="Pay #";
-			report.ColCaption[5]="Check Number";
-			report.ColCaption[6]="Bank-Branch";
-			report.ColCaption[7]="Amount";
-			//report.ColAlign[4]=HorizontalAlignment.Right;
-			report.ColAlign[7]=HorizontalAlignment.Right;
+			report.SetColumn(this,4,"Pay #",60);
+			report.SetColumn(this,5,"Check Number",110);
+			report.SetColumn(this,6,"Bank-Branch",90);
+			report.SetColumn(this,7,"Amount",80,HorizontalAlignment.Right);
 			if(PrefC.GetBool("EasyNoClinics") || comboClinic.SelectedIndex==0){
-				report.Summary=new string[3];
-				report.Summary[0]="For Deposit to Account of "+((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				report.Summary[2]="Account number: "+((Pref)PrefC.HList["PracticeBankNumber"]).ValueString;
+				report.Summary.Add("For Deposit to Account of "+((Pref)PrefC.HList["PracticeTitle"]).ValueString);
+				report.Summary.Add("");
+				report.Summary.Add("Account number: "+((Pref)PrefC.HList["PracticeBankNumber"]).ValueString);
 			}
 			else{
-				report.Summary=new string[3];
-				report.Summary[0]="For Deposit to Account of "+Clinics.List[comboClinic.SelectedIndex-1].Description;
-				report.Summary[2]="Account number: "+Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
+				report.Summary.Add("For Deposit to Account of "+Clinics.List[comboClinic.SelectedIndex-1].Description);
+				report.Summary.Add("");
+				report.Summary.Add("Account number: "+Clinics.List[comboClinic.SelectedIndex-1].BankNumber);
 			}
 			FormQuery2.ShowDialog();
 

@@ -17,7 +17,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		/// <summary>
 		/// The description used for the _SummaryTable
 		/// </summary>
-		private string [] _SummaryTableHeader = null;
+		private List<string> _SummaryTableHeader = null;
 		private DataTable _SummaryTable = null;
 		public string TITLE { get { return this._Title; } }
 		public DataTable MAIN_REPORT { get { return this._MainReportTable; } }
@@ -80,8 +80,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 
 			DataTable dtGuarantorName = Db.GetTableOld("SELECT CONCAT(LName,' ', FName) FROM Patient WHERE PatNum = " + Guarantor);
 			string GuarantorName = dtGuarantorName.Rows[0][0].ToString();
-			report.SubTitle = new string[1];
-			report.SubTitle[0] = "Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString();
+			report.SubTitle.Add("Guarantor Account: " + GuarantorName + " " + DateTime.Now.ToShortDateString());
 			this._MainReportTable = report.TableQ;
 			this._Title = report.Title + "\n" + report.SubTitle[0];
 			BuildSummaryTable(Guarantor, DateTime.MinValue, DateTime.MaxValue);
@@ -175,6 +174,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 
 		}
 		
+		/*
 		/// <summary>
 		/// Need to have the CurReport.ColWidth,ColCaption, and ColPos arrays initialized.
 		/// </summary>
@@ -199,7 +199,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 			for (int i = 1; i < report.ColPos.Length; i++)
 				report.ColPos[i] = report.ColPos[i - 1] + report.ColWidth[i - 1];
 
-		}
+		}*/
 
 
 		/// <summary>
@@ -680,33 +680,33 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 		/// <summary>
 		/// Just looks at _SummaryTable and pulls off the values in a nice orderly manner to build a string[]
 		/// </summary>
-		private string[] SummaryTable_as_Strings()
+		private List<string> SummaryTable_as_Strings()
 		{
-			string[] outstrings = null;
-			if (_SummaryTable != null)
-				outstrings = new string[_SummaryTable.Rows.Count + 3];// 3 headers 
-			else
-				outstrings = new string[4];
+			List<string> outstrings = new List<string>();
+			//if (_SummaryTable != null)
+			//	outstrings = new string[_SummaryTable.Rows.Count + 3];// 3 headers 
+			//else
+			//	outstrings = new string[4];
 
 			DateTime nt = DateTime.Now; // nt = now time
 			int nt_leftSpaces = 40 - nt.ToShortDateString().Length / 2;
 			
 
-			outstrings[0] = String.Format("{0,29}", "Provider Revenue Report");
-			outstrings[1] = String.Format("{0," + nt_leftSpaces + "}{1," + (79 - nt_leftSpaces) + "}", nt.ToShortDateString(), " ");
+			outstrings.Add( String.Format("{0,29}", "Provider Revenue Report"));
+			outstrings.Add( String.Format("{0," + nt_leftSpaces + "}{1," + (79 - nt_leftSpaces) + "}", nt.ToShortDateString(), " "));
 			string format = "{0,-16}  {1,16}{2,16}{3,16}{4,14}";// I added 2 spaces just to give the illusion of the numbers being centered.
-			outstrings[2] = String.Format(format, "Provider", "Charges", "Adjustments", "Revenue", "Balance");
+			outstrings.Add( String.Format(format, "Provider", "Charges", "Adjustments", "Revenue", "Balance"));
 			if (_SummaryTable != null)
 				for (int i = 0; i < this._SummaryTable.Rows.Count; i++)
 				{
-					outstrings[i + 3] = String.Format(format, _SummaryTable.Rows[i][0],
+					outstrings.Add( String.Format(format, _SummaryTable.Rows[i][0],
 						_SummaryTable.Rows[i][1],
 						_SummaryTable.Rows[i][2],
 						_SummaryTable.Rows[i][3],
-						_SummaryTable.Rows[i][4]);
+						_SummaryTable.Rows[i][4]));
 				}
 			else
-				outstrings[4] = "ERROR - No Summary Table Found";
+				outstrings.Add("ERROR - No Summary Table Found");
 			return outstrings;
 		}
 
