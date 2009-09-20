@@ -133,7 +133,7 @@ namespace OpenDental{
 			//}
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=
-				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),adjamt "
+				"SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),adjamt "
 				+"FROM patient,adjustment "
 				+"WHERE patient.patnum=adjustment.patnum "
 				+"AND adjustment.adjdate = '"+((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString+"'"

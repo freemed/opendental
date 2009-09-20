@@ -129,7 +129,7 @@ namespace OpenDental {
 			// label6
 			// 
 			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label6.Location = new System.Drawing.Point(9,465);
+			this.label6.Location = new System.Drawing.Point(9,464);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(479,100);
 			this.label6.TabIndex = 17;
@@ -269,7 +269,7 @@ namespace OpenDental {
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(554,512);
+			this.butClose.Location = new System.Drawing.Point(558,511);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -279,7 +279,7 @@ namespace OpenDental {
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(676,574);
+			this.ClientSize = new System.Drawing.Size(680,573);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
 			this.Controls.Add(this.listArizonaPrimaryCare);
 			this.Controls.Add(this.butLaserLabels);
@@ -339,7 +339,7 @@ namespace OpenDental {
 				Lan.g(this,"PPO Writeoffs"),
 				Lan.g(this,"Payment Plans"),
 				Lan.g(this,"Receivable Breakdown"),
-				Lan.g(this,"Unearned Income")
+				Lan.g(this,"Unearned Income"),
 			});
 			listLists.Items.AddRange(new string[] {
 				Lan.g(this,"Appointments"),
