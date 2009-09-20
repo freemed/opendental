@@ -48,18 +48,12 @@ namespace OpenDental{
 			get {
 				return colPos;
 			}
-			//set {
-			//	colPos=value;
-			//}
 		}
 
 		public string[] ColCaption {
 			get {
 				return colCaption;
 			}
-			//set {
-			//	colCaption=value;
-			//}
 		}
 
 		public HorizontalAlignment[] ColAlign {

@@ -554,12 +554,12 @@ namespace OpenDental {
 				case 8://Receivable Breakdown
 					FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
 					FormRcv.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown Report.");
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown.");
 					break;
 				case 9://Unearned Income
-					//FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
-					//FormRcv.ShowDialog();
-					//SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Receivable Breakdown Report.");
+					FormRpUnearnedIncome FormU=new FormRpUnearnedIncome();
+					FormU.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Unearned Income.");
 					break;
 			}
 		}
