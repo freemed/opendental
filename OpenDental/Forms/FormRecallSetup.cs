@@ -38,9 +38,10 @@ namespace OpenDental{
 		private ValidNumber textDaysFirstReminder;
 		private Label label2;
 		private Label label3;
-		private Label label5;
 		private OpenDental.UI.ODGrid gridMain;
 		private System.ComponentModel.Container components = null;
+		private ValidNumber textMaxReminders;
+		private Label label4;
 		private bool changed;
 
 		///<summary></summary>
@@ -88,10 +89,11 @@ namespace OpenDental{
 			this.listTypes = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label5 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textMaxReminders = new OpenDental.ValidNumber();
 			this.textDaysSecondReminder = new OpenDental.ValidNumber();
 			this.textDaysFirstReminder = new OpenDental.ValidNumber();
 			this.textDaysFuture = new OpenDental.ValidNumber();
@@ -138,16 +140,16 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label12);
 			this.groupBox2.Controls.Add(this.textRight);
 			this.groupBox2.Controls.Add(this.label13);
-			this.groupBox2.Location = new System.Drawing.Point(657,442);
+			this.groupBox2.Location = new System.Drawing.Point(687,441);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(205,74);
+			this.groupBox2.Size = new System.Drawing.Size(191,79);
 			this.groupBox2.TabIndex = 48;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Adjust Postcard Position in Inches";
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(57,45);
+			this.label12.Location = new System.Drawing.Point(48,45);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(60,20);
 			this.label12.TabIndex = 5;
@@ -156,7 +158,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(57,20);
+			this.label13.Location = new System.Drawing.Point(48,20);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(60,20);
 			this.label13.TabIndex = 4;
@@ -166,7 +168,7 @@ namespace OpenDental{
 			// checkGroupFamilies
 			// 
 			this.checkGroupFamilies.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkGroupFamilies.Location = new System.Drawing.Point(44,15);
+			this.checkGroupFamilies.Location = new System.Drawing.Point(85,15);
 			this.checkGroupFamilies.Name = "checkGroupFamilies";
 			this.checkGroupFamilies.Size = new System.Drawing.Size(121,18);
 			this.checkGroupFamilies.TabIndex = 49;
@@ -176,20 +178,20 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(16,32);
+			this.label14.Location = new System.Drawing.Point(6,32);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(133,20);
+			this.label14.Size = new System.Drawing.Size(184,20);
 			this.label14.TabIndex = 50;
-			this.label14.Text = "Days Past (usually blank)";
+			this.label14.Text = "Days Past (e.g. 1095, blank, etc)";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(51,53);
+			this.label15.Location = new System.Drawing.Point(9,53);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(98,20);
+			this.label15.Size = new System.Drawing.Size(181,20);
 			this.label15.TabIndex = 52;
-			this.label15.Text = "Days Future";
+			this.label15.Text = "Days Future (e.g. 7)";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox3
@@ -201,7 +203,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.label15);
 			this.groupBox3.Location = new System.Drawing.Point(415,442);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(213,78);
+			this.groupBox3.Size = new System.Drawing.Size(253,78);
 			this.groupBox3.TabIndex = 54;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Recall List Default View";
@@ -265,30 +267,22 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.textMaxReminders);
+			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textDaysSecondReminder);
 			this.groupBox1.Controls.Add(this.textDaysFirstReminder);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(415,543);
+			this.groupBox1.Location = new System.Drawing.Point(415,533);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(213,91);
+			this.groupBox1.Size = new System.Drawing.Size(253,99);
 			this.groupBox1.TabIndex = 65;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Also show in list if # of days since";
 			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(7,67);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(201,17);
-			this.label5.TabIndex = 69;
-			this.label5.Text = "(a very large number is recommended)";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(48,19);
+			this.label2.Location = new System.Drawing.Point(89,21);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(101,20);
 			this.label2.TabIndex = 50;
@@ -297,12 +291,21 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(3,41);
+			this.label3.Location = new System.Drawing.Point(44,43);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(146,20);
 			this.label3.TabIndex = 52;
 			this.label3.Text = "Second (or more) Reminder";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(44,65);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(146,20);
+			this.label4.TabIndex = 67;
+			this.label4.Text = "Max # Reminders (e.g. 4)";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// gridMain
 			// 
@@ -318,9 +321,18 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableRecallMsgs";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// textMaxReminders
+			// 
+			this.textMaxReminders.Location = new System.Drawing.Point(192,66);
+			this.textMaxReminders.MaxVal = 10000;
+			this.textMaxReminders.MinVal = 0;
+			this.textMaxReminders.Name = "textMaxReminders";
+			this.textMaxReminders.Size = new System.Drawing.Size(53,20);
+			this.textMaxReminders.TabIndex = 68;
+			// 
 			// textDaysSecondReminder
 			// 
-			this.textDaysSecondReminder.Location = new System.Drawing.Point(151,42);
+			this.textDaysSecondReminder.Location = new System.Drawing.Point(192,44);
 			this.textDaysSecondReminder.MaxVal = 10000;
 			this.textDaysSecondReminder.MinVal = 0;
 			this.textDaysSecondReminder.Name = "textDaysSecondReminder";
@@ -329,7 +341,7 @@ namespace OpenDental{
 			// 
 			// textDaysFirstReminder
 			// 
-			this.textDaysFirstReminder.Location = new System.Drawing.Point(151,20);
+			this.textDaysFirstReminder.Location = new System.Drawing.Point(192,22);
 			this.textDaysFirstReminder.MaxVal = 10000;
 			this.textDaysFirstReminder.MinVal = 0;
 			this.textDaysFirstReminder.Name = "textDaysFirstReminder";
@@ -338,7 +350,7 @@ namespace OpenDental{
 			// 
 			// textDaysFuture
 			// 
-			this.textDaysFuture.Location = new System.Drawing.Point(151,54);
+			this.textDaysFuture.Location = new System.Drawing.Point(192,54);
 			this.textDaysFuture.MaxVal = 10000;
 			this.textDaysFuture.MinVal = 0;
 			this.textDaysFuture.Name = "textDaysFuture";
@@ -347,7 +359,7 @@ namespace OpenDental{
 			// 
 			// textDaysPast
 			// 
-			this.textDaysPast.Location = new System.Drawing.Point(151,32);
+			this.textDaysPast.Location = new System.Drawing.Point(192,32);
 			this.textDaysPast.MaxVal = 10000;
 			this.textDaysPast.MinVal = 0;
 			this.textDaysPast.Name = "textDaysPast";
@@ -356,14 +368,14 @@ namespace OpenDental{
 			// 
 			// textDown
 			// 
-			this.textDown.Location = new System.Drawing.Point(119,46);
+			this.textDown.Location = new System.Drawing.Point(110,46);
 			this.textDown.Name = "textDown";
 			this.textDown.Size = new System.Drawing.Size(73,20);
 			this.textDown.TabIndex = 6;
 			// 
 			// textRight
 			// 
-			this.textRight.Location = new System.Drawing.Point(119,21);
+			this.textRight.Location = new System.Drawing.Point(110,21);
 			this.textRight.Name = "textRight";
 			this.textRight.Size = new System.Drawing.Size(73,20);
 			this.textRight.TabIndex = 4;
@@ -493,6 +505,12 @@ namespace OpenDental{
 			}
 			else {
 				textDaysSecondReminder.Text=PrefC.GetInt("RecallShowIfDaysSecondReminder").ToString();
+			}
+			if(PrefC.GetInt("RecallMaxNumberReminders")==-1) {
+				textMaxReminders.Text="";
+			}
+			else {
+				textMaxReminders.Text=PrefC.GetInt("RecallMaxNumberReminders").ToString();
 			}
 			FillGrid();
 		}
@@ -664,7 +682,8 @@ namespace OpenDental{
 				|| textDaysPast.errorProvider1.GetError(textDaysPast)!=""
 				|| textDaysFuture.errorProvider1.GetError(textDaysFuture)!=""
 				|| textDaysFirstReminder.errorProvider1.GetError(textDaysFirstReminder)!=""
-				|| textDaysSecondReminder.errorProvider1.GetError(textDaysSecondReminder)!="")
+				|| textDaysSecondReminder.errorProvider1.GetError(textDaysSecondReminder)!=""
+				|| textMaxReminders.errorProvider1.GetError(textMaxReminders)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -731,6 +750,12 @@ namespace OpenDental{
 			}
 			else {
 				Prefs.UpdateInt("RecallShowIfDaysSecondReminder",PIn.PLong(textDaysSecondReminder.Text));
+			}
+			if(textMaxReminders.Text=="") {
+				Prefs.UpdateInt("RecallMaxNumberReminders",-1);
+			}
+			else {
+				Prefs.UpdateInt("RecallMaxNumberReminders",PIn.PLong(textMaxReminders.Text));
 			}
 			changed=true;
 			DialogResult=DialogResult.OK;

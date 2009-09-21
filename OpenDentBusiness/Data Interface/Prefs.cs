@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
+		///<summary>Updates a pref of type int or long.  Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateInt(string prefName,long newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			if(!PrefC.HList.ContainsKey(prefName)) {

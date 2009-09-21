@@ -145,6 +145,7 @@ namespace OpenDental{
 		private RadioButton radioWeek;
 		private bool InitializedOnStartup;
 		private Patient PatCur;
+		private FormRecallList FormRecallL;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -3239,18 +3240,18 @@ namespace OpenDental{
 		}
 
 		private void OnRecall_Click() {
-			Cursor=Cursors.WaitCursor;
-			FormRecallList FormRL=new FormRecallList();
-			FormRL.ShowDialog();
-			if(FormRL.PinClicked){
-				SendToPinBoard(FormRL.AptNumsSelected);
-			}
-			if(FormRL.SelectedPatNum!=0){
-				RefreshModuleDataPatient(FormRL.SelectedPatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			//Cursor=Cursors.WaitCursor;
+			FormRecallL=new FormRecallList();
+			FormRecallL.Show();
+			//if(FormRL.PinClicked){
+			//	SendToPinBoard(FormRL.AptNumsSelected);
+			//}
+			//if(FormRL.SelectedPatNum!=0){
+			//	RefreshModuleDataPatient(FormRL.SelectedPatNum);
+			//	OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				//RefreshModulePatient(FormRL.SelectedPatNum);
-			}
-			Cursor=Cursors.Default;
+			//}
+			//Cursor=Cursors.Default;
 		}
 
 		private void OnConfirm_Click() {

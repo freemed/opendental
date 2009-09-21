@@ -1669,7 +1669,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE paysplit ADD UnearnedType bigint NOT NULL";
 				Db.NonQ(command);
-
+				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallMaxNumberReminders','-1','')";
+				Db.NonQ(command);
 
 
 

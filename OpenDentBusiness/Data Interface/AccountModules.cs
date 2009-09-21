@@ -1603,7 +1603,7 @@ namespace OpenDentBusiness {
 				+"UnearnedType>0 AND (";
 			for(int i=0;i<fam.ListPats.Length;i++) {
 				if(i>0) {
-					command+="OR ";
+					command+=" OR ";
 				}
 				command+="PatNum= "+POut.PLong(fam.ListPats[i].PatNum);
 			}

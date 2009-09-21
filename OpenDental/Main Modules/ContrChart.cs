@@ -5990,7 +5990,7 @@ namespace OpenDental{
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
 				aptNums.Add(PIn.PLong(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
-			GotoModule.PinToAppt(aptNums);
+			GotoModule.PinToAppt(aptNums,0);
 		}
 
 		private void gridPlanned_CellDoubleClick(object sender,ODGridClickEventArgs e) {

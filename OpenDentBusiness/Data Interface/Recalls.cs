@@ -115,10 +115,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.  If sortAlph is false, it will sort by dueDate.</summary>
 		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,long provNum,long clinicNum,
-			long siteNum,bool sortAlph)
+			long siteNum,bool sortAlph,RecallListShowNumberReminders showReminders,List<long> excludePatNums)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortAlph);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),fromDate,toDate,groupByFamilies,provNum,clinicNum,siteNum,sortAlph,showReminders,excludePatNums);
 			}
 			DataTable table=new DataTable();
 			DataRow row;
@@ -235,15 +235,17 @@ namespace OpenDentBusiness{
 			Patient pat;
 			ContactMethod contmeth;
 			long guarNum;
-			string numberOfReminders;
+			int numberOfReminders;
+			int maxNumberReminders=(int)PrefC.GetInt("RecallMaxNumberReminders");
+			long patNum;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
-				numberOfReminders=rawtable.Rows[i]["_numberOfReminders"].ToString();
-				if(numberOfReminders=="0" || numberOfReminders=="") {
+				numberOfReminders=PIn.PInt(rawtable.Rows[i]["_numberOfReminders"].ToString());
+				if(numberOfReminders==0) {
 					//always show
 				}
-				else if(numberOfReminders=="1") {
+				else if(numberOfReminders==1) {
 					if(PrefC.GetInt("RecallShowIfDaysFirstReminder")==-1) {
 						continue;
 					}
@@ -258,6 +260,48 @@ namespace OpenDentBusiness{
 					if(dateRemind.AddDays(PrefC.GetInt("RecallShowIfDaysSecondReminder")) > DateTime.Today) {
 						continue;
 					}
+				}
+				if(maxNumberReminders != -1 && numberOfReminders > maxNumberReminders) {
+					continue;
+				}
+				if(showReminders==RecallListShowNumberReminders.Zero) {
+					if(numberOfReminders != 0) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.One) {
+					if(numberOfReminders != 1) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.Two) {
+					if(numberOfReminders != 2) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.Three) {
+					if(numberOfReminders != 3) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.Four) {
+					if(numberOfReminders != 4) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.Five) {
+					if(numberOfReminders != 5) {
+						continue;
+					}
+				}
+				else if(showReminders==RecallListShowNumberReminders.SixPlus) {
+					if(numberOfReminders < 6 ) {
+						continue;
+					}
+				}
+				patNum=PIn.PLong(rawtable.Rows[i]["PatNum"].ToString());
+				if(excludePatNums.Contains(patNum)){
+					continue;
 				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
@@ -336,11 +380,11 @@ namespace OpenDentBusiness{
 					row["maxDateDue"]=DateTime.MinValue;
 				}
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
-				if(numberOfReminders=="0") {
+				if(numberOfReminders==0) {
 					row["numberOfReminders"]="";
 				}
 				else {
-					row["numberOfReminders"]=numberOfReminders;
+					row["numberOfReminders"]=numberOfReminders.ToString();
 				}
 				pat=new Patient();
 				pat.LName=rawtable.Rows[i]["LName"].ToString();
@@ -947,7 +991,16 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	
+	public enum RecallListShowNumberReminders {
+		All,
+		Zero,
+		One,
+		Two,
+		Three,
+		Four,
+		Five,
+		SixPlus
+	}
 	
 
 }

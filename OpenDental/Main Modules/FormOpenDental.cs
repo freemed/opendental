@@ -2313,8 +2313,12 @@ namespace OpenDental{
 			if(e.SelectedAptNum>0){
 				ContrApptSingle.SelectedAptNum=e.SelectedAptNum;
 			}
-			//patient would have been set separately ahead of time
-			//CurPatNum=Appointments.Cur.PatNum;
+			//patient can also be set separately ahead of time instead of doing it this way:
+			if(e.PatNum !=0) {
+				CurPatNum=e.PatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+			}
 			UnselectActive();
 			allNeutral();
 			if(e.ClaimNum>0){

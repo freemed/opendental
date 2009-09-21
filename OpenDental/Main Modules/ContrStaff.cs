@@ -749,7 +749,7 @@ namespace OpenDental{
 
 		private void formBilling_GoToChanged(object sender,PatientSelectedEventArgs e) {
 			OnPatientSelected(e.PatNum,e.PatName,e.HasEmail,e.ChartNumber);
-			GotoModule.GotoAccount();
+			GotoModule.GotoAccount(0);
 		}
 
 		private void butDeposit_Click(object sender, System.EventArgs e) {
@@ -791,7 +791,7 @@ namespace OpenDental{
 				if(FormT.GotoKeyNum!=0){
 					Patient pat=Patients.GetPat(FormT.GotoKeyNum);
 					OnPatientSelected(FormT.GotoKeyNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
-					GotoModule.GotoAccount();
+					GotoModule.GotoAccount(0);
 				}
 			}
 			if(FormT.GotoType==TaskObjectType.Appointment){
