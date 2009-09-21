@@ -4680,6 +4680,16 @@ namespace OpenDental{
 					return;
 				}
 			}
+			else if(row["FormPatNum"].ToString()!="0"){
+				FormPat form=FormPats.GetOne(PIn.PLong(row["FormPatNum"].ToString()));
+				FormFormPatEdit FormP=new FormFormPatEdit();
+				FormP.FormPatCur=form;
+				FormP.ShowDialog();
+				if(FormP.DialogResult==DialogResult.OK)
+				{
+					ModuleSelected(PatCur.PatNum);
+				}
+			}
 			ModuleSelected(PatCur.PatNum);
 			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}

@@ -60,6 +60,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("toothNum");
 			table.Columns.Add("ToothNum");
 			table.Columns.Add("ToothRange");
+			table.Columns.Add("FormPatNum");
 			table.Columns.Add("user");
 			//table.Columns.Add("");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
@@ -204,7 +205,9 @@ namespace OpenDentBusiness {
 				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
-				if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0") {//normal proc
+				row["FormPatNum"]=0;
+				if(rawProcs.Rows[i]["ProcNumLab"].ToString()=="0")
+				{//normal proc
 					rows.Add(row);
 				}
 				else {
@@ -272,8 +275,88 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]=Userods.GetName(PIn.PLong(rawComm.Rows[i]["UserNum"].ToString()));
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
+            //formpat---------------------------------------------------------------------------------------
+            command = "SELECT FormDateTime,FormPatNum "
+                + "FROM formpat WHERE PatNum ='" + POut.PLong(patNum) + "' ORDER BY FormDateTime";
+            DataTable rawForm = dcon.GetTable(command);
+            for (int i = 0; i < rawForm.Rows.Count; i++)
+            {
+                row = table.NewRow();
+                row["aptDateTime"] = DateTime.MinValue;
+                row["AptNum"] = 0;
+                row["CodeNum"] = "";
+                row["colorBackG"] = Color.White.ToArgb();
+                row["colorText"] = DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
+				row["CommlogNum"] =0;
+                row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
+                row["description"] = Lans.g("ChartModule", "Questionnaire");
+                row["dx"] = "";
+                row["Dx"] = "";
+                row["EmailMessageNum"] = 0;
+                row["LabCaseNum"] = 0;
+                row["note"] = "";
+                row["PatNum"] = "";
+                row["Priority"] = "";
+                row["ProcCode"] = "";
+                dateT = PIn.PDateT(rawForm.Rows[i]["FormDateTime"].ToString());
+                row["ProcDate"] = dateT.ToShortDateString();
+                if (dateT.TimeOfDay != TimeSpan.Zero)
+                {
+                    row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
+                }
+                if (dateT.Year < 1880)
+                {
+                    row["procDate"] = "";
+                }
+                else
+                {
+                    row["procDate"] = dateT.ToString(Lans.GetShortDateTimeFormat());
+                }
+                if (dateT.TimeOfDay != TimeSpan.Zero)
+                {
+                    row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
+                }
+                row["procFee"] = "";
+                row["ProcNum"] = 0;
+                row["ProcNumLab"] = "";
+                row["procStatus"] = "";
+                row["ProcStatus"] = "";
+                row["prov"] = "";
+                row["RxNum"] = 0;
+                row["SheetNum"] = 0;
+                row["signature"] = "";
+                row["Surf"] = "";
+                row["TaskNum"] = 0;
+                row["toothNum"] = "";
+                row["ToothNum"] = "";
+                row["ToothRange"] = "";
+				row["user"] = "";
+
+                /*commlog code
+                dateT = PIn.PDateT(rawForm.Rows[i]["FormDateTime"].ToString());
+                row["CommDateTime"] = dateT;
+                row["commDate"] = dateT.ToShortDateString();
+                if (dateT.TimeOfDay != TimeSpan.Zero)
+                {
+                    row["commTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
+                }
+                row["CommlogNum"] = "0";
+                row["commType"] = Lans.g("AccountModule", "Questionnaire");
+                row["EmailMessageNum"] = "0";
+                row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
+                row["mode"] = "";
+                row["Note"] = "";
+                row["patName"] = "";
+                row["SheetNum"] = "0";
+                //row["sentOrReceived"]="";
+                
+                */
+                rows.Add(row);
+            }
+
 			//Rx------------------------------------------------------------------------------------------------------------------
 			command="SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes,PharmacyNum FROM rxpat WHERE PatNum="+POut.PLong(patNum)
 				+" ORDER BY RxDate";
@@ -323,6 +406,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//LabCase------------------------------------------------------------------------------------------------------------------
@@ -391,6 +475,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//Task------------------------------------------------------------------------------------------------------------------
@@ -473,6 +558,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//Appointments---------------------------------------------------------------------------------------------------------
@@ -567,6 +653,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//email------------------------------------------------------------------------------------------------------------------------------
@@ -624,6 +711,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//sheet-----------------------------------------------------------------------------------------------------------------
@@ -679,6 +767,7 @@ namespace OpenDentBusiness {
 				row["ToothNum"]="";
 				row["ToothRange"]="";
 				row["user"]="";
+				row["FormPatNum"]=0;
 				rows.Add(row);
 			}
 			//Sorting
