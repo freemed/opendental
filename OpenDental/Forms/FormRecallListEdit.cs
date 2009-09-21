@@ -444,9 +444,9 @@ namespace OpenDental{
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPin.Location = new System.Drawing.Point(574,647);
 			this.butPin.Name = "butPin";
-			this.butPin.Size = new System.Drawing.Size(98,24);
+			this.butPin.Size = new System.Drawing.Size(110,24);
 			this.butPin.TabIndex = 57;
-			this.butPin.Text = "&Pinboard";
+			this.butPin.Text = "Sched Patient";
 			this.butPin.Click += new System.EventHandler(this.butPin_Click);
 			// 
 			// comboStatus

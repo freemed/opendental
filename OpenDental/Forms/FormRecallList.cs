@@ -66,6 +66,7 @@ namespace OpenDental{
 		private Label label3;
 		private ContextMenu menuRightClick;
 		private OpenDental.UI.Button butGotoAccount;
+		private OpenDental.UI.Button butCommlog;
 		private MenuItem menuItemGotoAccount;
 		//<summary>Only used if PinClicked=true</summary>
 		//public List<long> AptNumsSelected;
@@ -130,6 +131,7 @@ namespace OpenDental{
 			this.menuRightClick = new System.Windows.Forms.ContextMenu();
 			this.menuItemGotoAccount = new System.Windows.Forms.MenuItem();
 			this.butGotoAccount = new OpenDental.UI.Button();
+			this.butCommlog = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -448,10 +450,11 @@ namespace OpenDental{
 			this.butSchedPat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSchedPat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSchedPat.CornerRadius = 4F;
+			this.butSchedPat.Image = global::OpenDental.Properties.Resources.butPin;
 			this.butSchedPat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSchedPat.Location = new System.Drawing.Point(548,637);
+			this.butSchedPat.Location = new System.Drawing.Point(642,637);
 			this.butSchedPat.Name = "butSchedPat";
-			this.butSchedPat.Size = new System.Drawing.Size(96,24);
+			this.butSchedPat.Size = new System.Drawing.Size(114,24);
 			this.butSchedPat.TabIndex = 58;
 			this.butSchedPat.Text = "Sched Patient";
 			this.butSchedPat.Click += new System.EventHandler(this.butSchedPat_Click);
@@ -463,10 +466,11 @@ namespace OpenDental{
 			this.butSchedFam.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSchedFam.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSchedFam.CornerRadius = 4F;
+			this.butSchedFam.Image = global::OpenDental.Properties.Resources.butPin;
 			this.butSchedFam.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSchedFam.Location = new System.Drawing.Point(548,663);
+			this.butSchedFam.Location = new System.Drawing.Point(642,663);
 			this.butSchedFam.Name = "butSchedFam";
-			this.butSchedFam.Size = new System.Drawing.Size(96,24);
+			this.butSchedFam.Size = new System.Drawing.Size(114,24);
 			this.butSchedFam.TabIndex = 59;
 			this.butSchedFam.Text = "Sched Family";
 			this.butSchedFam.Click += new System.EventHandler(this.butSchedFam_Click);
@@ -490,9 +494,9 @@ namespace OpenDental{
 			// 
 			// labelPatientCount
 			// 
-			this.labelPatientCount.Location = new System.Drawing.Point(726,668);
+			this.labelPatientCount.Location = new System.Drawing.Point(759,669);
 			this.labelPatientCount.Name = "labelPatientCount";
-			this.labelPatientCount.Size = new System.Drawing.Size(130,14);
+			this.labelPatientCount.Size = new System.Drawing.Size(114,14);
 			this.labelPatientCount.TabIndex = 61;
 			this.labelPatientCount.Text = "Patient Count:";
 			this.labelPatientCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -507,11 +511,11 @@ namespace OpenDental{
 			this.butLabelOne.CornerRadius = 4F;
 			this.butLabelOne.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabelOne.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabelOne.Location = new System.Drawing.Point(158,637);
+			this.butLabelOne.Location = new System.Drawing.Point(131,637);
 			this.butLabelOne.Name = "butLabelOne";
-			this.butLabelOne.Size = new System.Drawing.Size(92,24);
+			this.butLabelOne.Size = new System.Drawing.Size(119,24);
 			this.butLabelOne.TabIndex = 63;
-			this.butLabelOne.Text = "One Label";
+			this.butLabelOne.Text = "Single Labels";
 			this.butLabelOne.Click += new System.EventHandler(this.butLabelOne_Click);
 			// 
 			// menuRightClick
@@ -540,11 +544,28 @@ namespace OpenDental{
 			this.butGotoAccount.Text = "Go to Account";
 			this.butGotoAccount.Click += new System.EventHandler(this.butGotoAccount_Click);
 			// 
+			// butCommlog
+			// 
+			this.butCommlog.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCommlog.Autosize = true;
+			this.butCommlog.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCommlog.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCommlog.CornerRadius = 4F;
+			this.butCommlog.Image = global::OpenDental.Properties.Resources.commlog;
+			this.butCommlog.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCommlog.Location = new System.Drawing.Point(548,663);
+			this.butCommlog.Name = "butCommlog";
+			this.butCommlog.Size = new System.Drawing.Size(88,24);
+			this.butCommlog.TabIndex = 65;
+			this.butCommlog.Text = "Comm";
+			this.butCommlog.Click += new System.EventHandler(this.butCommlog_Click);
+			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,691);
+			this.Controls.Add(this.butCommlog);
 			this.Controls.Add(this.butGotoAccount);
 			this.Controls.Add(this.butSchedFam);
 			this.Controls.Add(this.butLabelOne);
@@ -964,7 +985,7 @@ namespace OpenDental{
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
 					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					Recalls.UpdateStatus(
@@ -988,7 +1009,7 @@ namespace OpenDental{
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
 					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					Recalls.UpdateStatus(
@@ -1062,7 +1083,7 @@ namespace OpenDental{
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					//make commlog entries for each patient
 					Commlogs.InsertForRecall(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
-						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()));
+						PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetInt("RecallStatusMailed"));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 					Recalls.UpdateStatus(
@@ -1190,7 +1211,8 @@ namespace OpenDental{
 				recallNumArray=AddrTable.Rows[i]["recallNums"].ToString().Split(',');
 				patNumArray=AddrTable.Rows[i]["patNums"].ToString().Split(',');
 				for(int r=0;r<recallNumArray.Length;r++){
-					Commlogs.InsertForRecall(PIn.PLong(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()));
+					Commlogs.InsertForRecall(PIn.PLong(patNumArray[r]),CommItemMode.Email,PIn.PInt(AddrTable.Rows[i]["numberOfReminders"].ToString()),
+						PrefC.GetInt("RecallStatusEmailed"));
 					Recalls.UpdateStatus(PIn.PLong(recallNumArray[r]),PrefC.GetInt("RecallStatusEmailed"));
 				}
 			}
@@ -1328,14 +1350,43 @@ namespace OpenDental{
 		}
 
 		private void butSetStatus_Click(object sender, System.EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			//bool makeCommEntries=MsgBox.Show(this,MsgBoxButtons.OKCancel,"Add Commlog (reminder) entries for each patient?");
+			long newStatus=0;
+			if(comboStatus.SelectedIndex>0) {
+				newStatus=DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].DefNum;
+			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				if(comboStatus.SelectedIndex==0){
-					Recalls.UpdateStatus(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),0);
-				}
-				else{
-					Recalls.UpdateStatus(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),
-						DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].DefNum);
-				}
+				Recalls.UpdateStatus(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),newStatus);
+			}
+			//show the first one, and then make all the others very similar
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.PatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
+			CommlogCur.Mode_=CommItemMode.Phone;//user can change this, of course.
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			CommlogCur.Note=Lan.g(this,"Recall reminder.");
+			if(comboStatus.SelectedIndex>0) {
+				CommlogCur.Note+="  "+DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].ItemName;
+			}
+			else{
+				CommlogCur.Note+="  "+Lan.g(this,"Status None");
+			}
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+			FormCI.IsNew=true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult!=DialogResult.OK) {//if user cancels, then the other comm entries won't go in either
+				FillMain(null);
+				return;
+			}
+			for(int i=1;i<gridMain.SelectedIndices.Length;i++) {
+				CommlogCur.PatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
+				Commlogs.Insert(CommlogCur);
 			}
 			FillMain(null);
 		}
@@ -1357,6 +1408,63 @@ namespace OpenDental{
 			long patNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			GotoModule.GotoAccount(patNum);
 		}
+
+		private void butCommlog_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			//show the first one, and then make all the others very similar
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.PatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
+			CommlogCur.Mode_=CommItemMode.Phone;//user can change this, of course.
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+			FormCI.IsNew=true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			for(int i=1;i<gridMain.SelectedIndices.Length;i++) {
+				CommlogCur.PatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
+				Commlogs.Insert(CommlogCur);
+			}
+			FillMain(null);
+		}
+
+		/*
+		private void MakeCommlogNoDisplay(long patNum,long newStatus) {
+			//unless there is an existing recall commlog entry for today
+			Commlog[] CommlogList=Commlogs.Refresh(patNum);
+			for(int i=0;i<CommlogList.Length;i++){
+				if(CommlogList[i].CommDateTime.Date==DateTime.Today	
+					&& CommlogList[i].CommType==Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))
+				{
+					return;
+				}
+			}
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+			CommlogCur.PatNum=patNum;
+			//if(newStatus!=RecallCur.RecallStatus){
+			//Commlogs.Cur.Note+=Lan.g(this,"Status changed to")+" ";
+			if(newStatus==0) {
+				CommlogCur.Note=Lan.g(this,"Status None");
+			}
+			else {
+				CommlogCur.Note=DefC.GetName(DefCat.RecallUnschedStatus,newStatus);
+			}
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			//FormCommItem FormCI=new FormCommItem(CommlogCur);
+			//FormCI.IsNew=true;
+			//forces user to at least consider a commlog entry
+			//FormCI.ShowDialog();//typically saved in this window.
+			Commlogs.InsertForRecall(			
+		}*/
 
 		/*private void butSave_Click(object sender, System.EventArgs e) {
 			if(  textDateStart.errorProvider1.GetError(textDateStart)!=""
@@ -1444,6 +1552,8 @@ namespace OpenDental{
 				SelectedPatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			}
 		}
+
+		
 
 		
 

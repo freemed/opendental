@@ -1018,11 +1018,13 @@ namespace OpenDental{
 			gridRecall.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRecall","Type"),90);
 			gridRecall.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecall","PreviousDate"),80);
-			gridRecall.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableRecall","PreviousDate"),80);
+			//gridRecall.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecall","Due Date"),80);
 			gridRecall.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecall","Sched Date"),80);
+			gridRecall.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecall","Notes"),80);
 			gridRecall.Columns.Add(col);
 			gridRecall.Rows.Clear();
 			if(PatCur==null){
@@ -1044,12 +1046,12 @@ namespace OpenDental{
 					cellStr+=" - "+Lan.g(this,"disabled");
 				}
 				row.Cells.Add(cellStr);
-				if(recallListPat[i].DatePrevious.Year<1880){
-					row.Cells.Add("");
-				}
-				else{
-					row.Cells.Add(recallListPat[i].DatePrevious.ToShortDateString());
-				}
+				//if(recallListPat[i].DatePrevious.Year<1880){
+				//	row.Cells.Add("");
+				//}
+				//else{
+				//	row.Cells.Add(recallListPat[i].DatePrevious.ToShortDateString());
+				//}
 				if(recallListPat[i].DateDue.Year<1880){
 					row.Cells.Add("");
 				}
@@ -1067,6 +1069,17 @@ namespace OpenDental{
 				else{
 					row.Cells.Add("");
 				}
+				cellStr="";
+				if(recallListPat[i].RecallStatus!=0) {
+					cellStr+=DefC.GetName(DefCat.RecallUnschedStatus,recallListPat[i].RecallStatus);
+				}
+				if(recallListPat[i].Note!="") {
+					if(cellStr!="") {
+						cellStr+=", ";
+					}
+					cellStr+=recallListPat[i].Note;
+				}
+				row.Cells.Add(cellStr);
 				gridRecall.Rows.Add(row);
 			}
 			gridRecall.EndUpdate();

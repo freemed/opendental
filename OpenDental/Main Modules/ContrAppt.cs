@@ -3241,8 +3241,14 @@ namespace OpenDental{
 
 		private void OnRecall_Click() {
 			//Cursor=Cursors.WaitCursor;
-			FormRecallL=new FormRecallList();
+			if(FormRecallL==null) {
+				FormRecallL=new FormRecallList();
+			}
 			FormRecallL.Show();
+			if(FormRecallL.WindowState==FormWindowState.Minimized) {
+				FormRecallL.WindowState=FormWindowState.Normal;
+			}
+			FormRecallL.BringToFront();
 			//if(FormRL.PinClicked){
 			//	SendToPinBoard(FormRL.AptNumsSelected);
 			//}

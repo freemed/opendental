@@ -116,10 +116,10 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
-		public static void InsertForRecall(long patNum,CommItemMode _mode,int numberOfReminders) {
+		///<summary>Used when printing or emailing recall to make a commlog entry without any display.</summary>
+		public static void InsertForRecall(long patNum,CommItemMode _mode,int numberOfReminders,long defNumNewStatus) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,_mode,numberOfReminders);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,_mode,numberOfReminders,defNumNewStatus);
 				return;
 			}
 			long recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
@@ -147,16 +147,22 @@ namespace OpenDentBusiness{
 			com.SentOrReceived=CommSentOrReceived.Sent;
 			com.Note="";
 			if(numberOfReminders==0){
-				com.Note=Lans.g("FormRecallList","Sent recall notice.");
+				com.Note=Lans.g("FormRecallList","Recall reminder.");
 			}
 			else if(numberOfReminders==1) {
-				com.Note=Lans.g("FormRecallList","Sent second recall notice.");
+				com.Note=Lans.g("FormRecallList","Second recall reminder.");
 			}
 			else if(numberOfReminders==2) {
-				com.Note=Lans.g("FormRecallList","Sent third recall notice.");
+				com.Note=Lans.g("FormRecallList","Third recall reminder.");
 			}
 			else {
-				com.Note=Lans.g("FormRecallList","Sent recall notice:")+" "+(numberOfReminders+1).ToString();
+				com.Note=Lans.g("FormRecallList","Recall reminder:")+" "+(numberOfReminders+1).ToString();
+			}
+			if(defNumNewStatus==0) {
+				com.Note+="  "+Lans.g("Commlogs","Status None");
+			}
+			else {
+				com.Note+="  "+DefC.GetName(DefCat.RecallUnschedStatus,defNumNewStatus);
 			}
 			com.UserNum=Security.CurUser.UserNum;
 			Insert(com);
