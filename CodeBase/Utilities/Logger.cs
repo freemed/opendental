@@ -23,7 +23,7 @@ namespace CodeBase {
 		public static Logger openlog=new Logger(ODFileUtils.GetProgramDirectory()+"openlog.txt");
 		
 		private string logFile="";
-		///<summary>Specifies the current logging level. Any severity less than the given level is not logged.</summary>
+		///<summary>Specifies the current logging level. Any severity less than the given level is not logged.</summary> 
 #if(DEBUG)
 		public Severity level=Severity.DEBUG;
 #else
