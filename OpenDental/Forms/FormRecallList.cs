@@ -1039,7 +1039,7 @@ namespace OpenDental{
 			if(comboSort.SelectedIndex==1){
 				sortAlph=true;
 			}
-			AddrTable=Recalls.GetAddrTable(recallNums,false,sortAlph);//can never group by family because there's no room to display the list.
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
@@ -1072,8 +1072,29 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select patient(s) first.");
 				return;
 			}
+			List<long> recallNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				LabelSingle.PrintPat(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()));
+				recallNums.Add(PIn.PLong(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+			}
+			bool sortAlph=false;
+			if(comboSort.SelectedIndex==1) {
+				sortAlph=true;
+			}
+			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortAlph);
+			patientsPrinted=0;
+			string text;
+			while(patientsPrinted<AddrTable.Rows.Count) {
+				text="";
+				if(checkGroupFamilies.Checked && AddrTable.Rows[patientsPrinted]["famList"].ToString()!="") {//print family label
+					text=AddrTable.Rows[patientsPrinted]["guarLName"].ToString()+" "+Lan.g(this,"Household")+"\r\n";
+				}
+				else {//print single label
+					text=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
+				}
+				text+=AddrTable.Rows[patientsPrinted]["address"].ToString()+"\r\n";
+				text+=AddrTable.Rows[patientsPrinted]["cityStZip"].ToString()+"\r\n";
+				LabelSingle.PrintText(0,text);
+				patientsPrinted++;
 			}
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the labels finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if labels printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
@@ -1299,7 +1320,13 @@ namespace OpenDental{
 			float xPos=50;
 			string text="";
 			while(yPos<1000 && patientsPrinted<AddrTable.Rows.Count){
-				text=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
+				text="";
+				if(checkGroupFamilies.Checked && AddrTable.Rows[patientsPrinted]["famList"].ToString()!=""){//print family label
+					text=AddrTable.Rows[patientsPrinted]["guarLName"].ToString()+" "+Lan.g(this,"Household")+"\r\n";
+				}
+				else {//print single label
+					text=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
+				}
 				text+=AddrTable.Rows[patientsPrinted]["address"].ToString()+"\r\n";
 				text+=AddrTable.Rows[patientsPrinted]["cityStZip"].ToString()+"\r\n";
 				g.DrawString(text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos,yPos);

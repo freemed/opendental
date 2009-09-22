@@ -18,6 +18,8 @@ namespace OpenDentBusiness{
 					return LabelPatientLFPatNum();
 				case SheetInternalType.LabelPatientRadiograph:
 					return LabelPatientRadiograph();
+				case SheetInternalType.LabelText:
+					return LabelText();
 				case SheetInternalType.LabelCarrier:
 					return LabelCarrier();
 				case SheetInternalType.LabelReferral:
@@ -133,6 +135,20 @@ namespace OpenDentBusiness{
 			//smallfont:
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput( "birthdate",9,sheet.FontName,false,25,yPos,105,rowH, GrowthBehaviorEnum.None));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput( "priProvName",9,sheet.FontName,false,130,yPos,150,rowH, GrowthBehaviorEnum.None));
+			return sheet;
+		}
+
+		private static SheetDef LabelText() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelPatient);
+			sheet.Description="LabelText";
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=12f;
+			sheet.Width=108;
+			sheet.Height=346;
+			sheet.IsLandscape=true;
+			int rowH=19;
+			int yPos=30;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("text",sheet.FontSize,sheet.FontName,false,25,yPos,300,315,GrowthBehaviorEnum.None));
 			return sheet;
 		}
 

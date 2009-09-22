@@ -103,6 +103,21 @@ namespace OpenDental{
 			}
 		}
 
+		public static void PrintText(long patNum,string text) {
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelText);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
+			SheetParameter.SetParameter(sheet,"PatNum",patNum);
+			sheet.Parameters.Add(new SheetParameter(false,"text"));
+			SheetParameter.SetParameter(sheet,"text",text);
+			SheetFiller.FillFields(sheet);
+			try {
+				SheetPrinting.Print(sheet);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		///<summary></summary>
 		public static void PrintCarriers(List<long> carrierNums) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
@@ -180,6 +195,8 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 		}
+
+		
 
 		
 

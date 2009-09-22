@@ -170,10 +170,11 @@ namespace OpenDentBusiness{
 				dictMaxDateDue.Add(PIn.PLong(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
 			}
 			command=
-				@"SELECT patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
+				@"SELECT patguar.BalTotal,patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
+				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email _guarEmail,patguar.FName _guarFName,
 				patguar.LName _guarLName,patient.FName,
-				patient.Guarantor,patient.HmPhone,patient.LName,recall.Note,
+				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
 				COUNT(commlog.CommlogNum) _numberOfReminders,
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
 				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
@@ -240,6 +241,9 @@ namespace OpenDentBusiness{
 			int numberOfReminders;
 			int maxNumberReminders=(int)PrefC.GetInt("RecallMaxNumberReminders");
 			long patNum;
+			DateTime disableUntilDate;
+			double disableUntilBalance;
+			double familyBalance;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
@@ -304,6 +308,20 @@ namespace OpenDentBusiness{
 				patNum=PIn.PLong(rawtable.Rows[i]["PatNum"].ToString());
 				if(excludePatNums.Contains(patNum)){
 					continue;
+				}
+				disableUntilDate=PIn.PDate(rawtable.Rows[i]["DisableUntilDate"].ToString());
+				if(disableUntilDate.Year>1880 && disableUntilDate > DateTime.Today) {
+					continue;
+				}
+				disableUntilBalance=PIn.PDouble(rawtable.Rows[i]["DisableUntilBalance"].ToString());
+				if(disableUntilBalance>0) {
+					familyBalance=PIn.PDouble(rawtable.Rows[i]["BalTotal"].ToString());
+					if(!PrefC.GetBool("BalancesDontSubtractIns")) {//typical
+						familyBalance-=PIn.PDouble(rawtable.Rows[i]["InsEst"].ToString());
+					}
+					if(familyBalance > disableUntilBalance) {
+						continue;
+					}
 				}
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.

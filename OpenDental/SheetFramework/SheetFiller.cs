@@ -295,8 +295,13 @@ namespace OpenDental{
 					case "priProvName":
 						field.FieldValue=Providers.GetLongDesc(pat.PriProv);
 						break;
+					case "text":
+						field.FieldValue=GetParamByName(sheet,"text").ParamValue.ToString();
+						break;
 				}
 			}
+
+			
 		}
 
 		private static void FillFieldsForLabelCarrier(Sheet sheet,Carrier carrier) {

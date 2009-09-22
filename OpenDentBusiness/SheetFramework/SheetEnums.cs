@@ -77,6 +77,7 @@ namespace OpenDentBusiness {
 		LabelPatientLFChartNumber,
 		LabelPatientLFPatNum,
 		LabelPatientRadiograph,
+		LabelText,
 		LabelCarrier,
 		LabelReferral,
 		ReferralSlip,
