@@ -8,7 +8,7 @@ using System.IO;
 namespace CodeBase {
 	///<summary>Used to log messages to our internal log file, or to other resources, such as message boxes.</summary>
 	public class Logger{
-		///<summary>Levels of logging severity to indicate importance.</summary>
+		///<summary>Levels of logging severity to indicate importance.</summary> 
 		public enum Severity{
 			NONE=0,//Must be first.
 			DEBUG=1,
