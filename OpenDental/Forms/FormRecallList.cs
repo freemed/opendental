@@ -67,7 +67,9 @@ namespace OpenDental{
 		private ContextMenu menuRightClick;
 		private OpenDental.UI.Button butGotoAccount;
 		private OpenDental.UI.Button butCommlog;
-		private MenuItem menuItemGotoAccount;
+		private MenuItem menuItemSeeFamily;
+		private OpenDental.UI.Button butGotoFamily;
+		private MenuItem menuItemSeeAccount;
 		//<summary>Only used if PinClicked=true</summary>
 		//public List<long> AptNumsSelected;
 
@@ -129,9 +131,11 @@ namespace OpenDental{
 			this.labelPatientCount = new System.Windows.Forms.Label();
 			this.butLabelOne = new OpenDental.UI.Button();
 			this.menuRightClick = new System.Windows.Forms.ContextMenu();
-			this.menuItemGotoAccount = new System.Windows.Forms.MenuItem();
+			this.menuItemSeeAccount = new System.Windows.Forms.MenuItem();
+			this.menuItemSeeFamily = new System.Windows.Forms.MenuItem();
 			this.butGotoAccount = new OpenDental.UI.Button();
 			this.butCommlog = new OpenDental.UI.Button();
+			this.butGotoFamily = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -521,13 +525,20 @@ namespace OpenDental{
 			// menuRightClick
 			// 
 			this.menuRightClick.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemGotoAccount});
+            this.menuItemSeeFamily,
+            this.menuItemSeeAccount});
 			// 
-			// menuItemGotoAccount
+			// menuItemSeeAccount
 			// 
-			this.menuItemGotoAccount.Index = 0;
-			this.menuItemGotoAccount.Text = "Go To Account";
-			this.menuItemGotoAccount.Click += new System.EventHandler(this.menuItemGotoAccount_Click);
+			this.menuItemSeeAccount.Index = 1;
+			this.menuItemSeeAccount.Text = "See Account";
+			this.menuItemSeeAccount.Click += new System.EventHandler(this.menuItemSeeAccount_Click);
+			// 
+			// menuItemSeeFamily
+			// 
+			this.menuItemSeeFamily.Index = 0;
+			this.menuItemSeeFamily.Text = "See Family";
+			this.menuItemSeeFamily.Click += new System.EventHandler(this.menuItemSeeFamily_Click);
 			// 
 			// butGotoAccount
 			// 
@@ -560,11 +571,27 @@ namespace OpenDental{
 			this.butCommlog.Text = "Comm";
 			this.butCommlog.Click += new System.EventHandler(this.butCommlog_Click);
 			// 
+			// butGotoFamily
+			// 
+			this.butGotoFamily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGotoFamily.Autosize = true;
+			this.butGotoFamily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGotoFamily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGotoFamily.CornerRadius = 4F;
+			this.butGotoFamily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butGotoFamily.Location = new System.Drawing.Point(446,637);
+			this.butGotoFamily.Name = "butGotoFamily";
+			this.butGotoFamily.Size = new System.Drawing.Size(96,24);
+			this.butGotoFamily.TabIndex = 66;
+			this.butGotoFamily.Text = "Go to Family";
+			this.butGotoFamily.Click += new System.EventHandler(this.butGotoFamily_Click);
+			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975,691);
+			this.Controls.Add(this.butGotoFamily);
 			this.Controls.Add(this.butCommlog);
 			this.Controls.Add(this.butGotoAccount);
 			this.Controls.Add(this.butSchedFam);
@@ -660,6 +687,7 @@ namespace OpenDental{
 			FillMain(null);
 		}
 
+		///<summary>OK to pass in null for excludePatNums.</summary>
 		private void FillMain(List<long> excludePatNums){
 			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="")
@@ -791,26 +819,69 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			SelectedPatNum=PIn.PLong(table.Rows[e.Row]["PatNum"].ToString());
 			Recall recall=Recalls.GetRecall(PIn.PLong(table.Rows[e.Row]["RecallNum"].ToString()));
-			FormRecallListEdit FormRE=new FormRecallListEdit(recall);
-			FormRE.ShowDialog();
-			if(FormRE.PinClicked){
-				//long patNum=0;
-				//if(gridMain.SelectedIndices.Length>0) {
-				//	patNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
-				//}
-				WindowState=FormWindowState.Minimized;
-				List<long> pinAptNums=new List<long>();
-				pinAptNums.Add(FormRE.AptSelected);
-				GotoModule.PinToAppt(pinAptNums,SelectedPatNum);
-				gridMain.SetSelected(false);
-				List<long> excludePatNums=new List<long>();
-				excludePatNums.Add(SelectedPatNum);
-				FillMain(excludePatNums);
+			FormRecallEdit FormR=new FormRecallEdit();
+			FormR.RecallCur=recall.Copy();
+			FormR.ShowDialog();
+			if(FormR.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			else{
-				FillMain(null);
+			if(recall.RecallStatus!=FormR.RecallCur.RecallStatus//if the status has changed
+				|| (recall.IsDisabled != FormR.RecallCur.IsDisabled)//or any of the three disabled fields was changed
+				|| (recall.DisableUntilDate != FormR.RecallCur.DisableUntilDate)
+				|| (recall.DisableUntilBalance != FormR.RecallCur.DisableUntilBalance)
+				|| (recall.Note != FormR.RecallCur.Note))//or a note was added
+			{
+				//make a commlog entry
+				//unless there is an existing recall commlog entry for today
+				bool recallEntryToday=false;
+				Commlog[] CommlogList=Commlogs.Refresh(SelectedPatNum);
+				for(int i=0;i<CommlogList.Length;i++) {
+					if(CommlogList[i].CommDateTime.Date==DateTime.Today	
+						&& CommlogList[i].CommType==Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL)) {
+						recallEntryToday=true;
+					}
+				}
+				if(!recallEntryToday) {
+					Commlog CommlogCur=new Commlog();
+					CommlogCur.CommDateTime=DateTime.Now;
+					CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
+					CommlogCur.PatNum=SelectedPatNum;
+					CommlogCur.Note="";
+					if(recall.RecallStatus!=FormR.RecallCur.RecallStatus) {
+						if(FormR.RecallCur.RecallStatus==0) {
+							CommlogCur.Note+=Lan.g(this,"Status None");
+						}
+						else {
+							CommlogCur.Note+=DefC.GetName(DefCat.RecallUnschedStatus,FormR.RecallCur.RecallStatus);
+						}
+					}
+					if(recall.DisableUntilDate!=FormR.RecallCur.DisableUntilDate && FormR.RecallCur.DisableUntilDate.Year>1880) {
+						if(CommlogCur.Note!="") {
+							CommlogCur.Note+=",  ";
+						}
+						CommlogCur.Note+=Lan.g(this,"Disabled until ")+FormR.RecallCur.DisableUntilDate.ToShortDateString();
+					}
+					if(recall.DisableUntilBalance!=FormR.RecallCur.DisableUntilBalance && FormR.RecallCur.DisableUntilBalance>0) {
+						if(CommlogCur.Note!="") {
+							CommlogCur.Note+=",  ";
+						}
+						CommlogCur.Note+=Lan.g(this,"Disabled until balance below ")+FormR.RecallCur.DisableUntilBalance.ToString("c");
+					}
+					if(recall.Note!=FormR.RecallCur.Note) {
+						if(CommlogCur.Note!="") {
+							CommlogCur.Note+=",  ";
+						}
+						CommlogCur.Note+=FormR.RecallCur.Note;
+					}
+					CommlogCur.Note+=".  ";
+					CommlogCur.UserNum=Security.CurUser.UserNum;
+					FormCommItem FormCI=new FormCommItem(CommlogCur);
+					FormCI.IsNew=true;
+					//forces user to at least consider a commlog entry
+					FormCI.ShowDialog();//typically saved in this window.
+				}
 			}
+			FillMain(null);
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				if(PIn.PLong(table.Rows[i]["PatNum"].ToString())==SelectedPatNum){
 					gridMain.SetSelected(i,true);
@@ -1391,15 +1462,36 @@ namespace OpenDental{
 			FillMain(null);
 		}
 
-		private void menuItemGotoAccount_Click(object sender,EventArgs e) {
-			GotoAccount();
+		private void menuItemSeeFamily_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			long patNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoFamily(patNum);
+		}
+
+		private void menuItemSeeAccount_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			//WindowState=FormWindowState.Minimized;
+			long patNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoAccount(patNum);
+		}
+
+		private void butGotoFamily_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select a patient first.");
+				return;
+			}
+			WindowState=FormWindowState.Minimized;
+			long patNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
+			GotoModule.GotoFamily(patNum);
 		}
 
 		private void butGotoAccount_Click(object sender,EventArgs e) {
-			GotoAccount();
-		}
-
-		private void GotoAccount() {
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
@@ -1552,6 +1644,10 @@ namespace OpenDental{
 				SelectedPatNum=PIn.PLong(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			}
 		}
+
+		
+
+	
 
 		
 

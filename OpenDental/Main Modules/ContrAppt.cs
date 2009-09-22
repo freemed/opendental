@@ -3241,7 +3241,7 @@ namespace OpenDental{
 
 		private void OnRecall_Click() {
 			//Cursor=Cursors.WaitCursor;
-			if(FormRecallL==null) {
+			if(FormRecallL==null || FormRecallL.IsDisposed) {
 				FormRecallL=new FormRecallList();
 			}
 			FormRecallL.Show();

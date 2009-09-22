@@ -354,6 +354,7 @@ namespace OpenDentBusiness {
 				,"UPDATE recall SET DateDueCalc='0001-01-01' WHERE DateDueCalc='0000-00-00'"
 				,"UPDATE recall SET DateDue='0001-01-01' WHERE DateDue='0000-00-00'"
 				,"UPDATE recall SET DatePrevious='0001-01-01' WHERE DatePrevious='0000-00-00'"
+				,"UPDATE recall SET DisableUntilDate='0001-01-01' WHERE DisableUntilDate='0000-00-00'"
 				,"UPDATE schedule SET SchedDate='0001-01-01' WHERE SchedDate='0000-00-00'"
 				,"UPDATE signal SET DateViewing='0001-01-01' WHERE DateViewing='0000-00-00'"
 				,"UPDATE signal SET SigDateTime='0001-01-01 00:00:00' WHERE SigDateTime LIKE '0000-00-00%'"

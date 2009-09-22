@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.gridRecall.Name = "gridRecall";
 			this.gridRecall.ScrollValue = 0;
 			this.gridRecall.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridRecall.Size = new System.Drawing.Size(354,100);
+			this.gridRecall.Size = new System.Drawing.Size(525,100);
 			this.gridRecall.TabIndex = 32;
 			this.gridRecall.Title = "Recall";
 			this.gridRecall.TranslationName = "TableRecall";
@@ -1015,11 +1015,20 @@ namespace OpenDental{
 		#region gridRecall
 		private void FillGridRecall(){
 			gridRecall.BeginUpdate();
+			//standard width is 354.  Nice to grow it to 525 if space allows.
+			int maxWidth=Width-gridRecall.Left;
+			if(maxWidth>525){
+				maxWidth=525;
+			}
+			if(maxWidth>354) {
+				gridRecall.Width=maxWidth;
+			}
+			else {
+				gridRecall.Width=354;
+			}
 			gridRecall.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRecall","Type"),90);
 			gridRecall.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TableRecall","PreviousDate"),80);
-			//gridRecall.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecall","Due Date"),80);
 			gridRecall.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecall","Sched Date"),80);
@@ -1042,16 +1051,8 @@ namespace OpenDental{
 			for(int i=0;i<recallListPat.Count;i++){
 				row=new ODGridRow();
 				string cellStr=RecallTypes.GetDescription(recallListPat[i].RecallTypeNum);
-				if(recallListPat[i].IsDisabled) {
-					cellStr+=" - "+Lan.g(this,"disabled");
-				}
+				
 				row.Cells.Add(cellStr);
-				//if(recallListPat[i].DatePrevious.Year<1880){
-				//	row.Cells.Add("");
-				//}
-				//else{
-				//	row.Cells.Add(recallListPat[i].DatePrevious.ToShortDateString());
-				//}
 				if(recallListPat[i].DateDue.Year<1880){
 					row.Cells.Add("");
 				}
@@ -1070,7 +1071,25 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				cellStr="";
+				if(recallListPat[i].IsDisabled) {
+					cellStr+=Lan.g(this,"Disabled");
+				}
+				if(recallListPat[i].DisableUntilDate.Year>1880) {
+					if(cellStr!="") {
+						cellStr+=", ";
+					}
+					cellStr+=Lan.g(this,"Disabled until ")+recallListPat[i].DisableUntilDate.ToShortDateString();
+				}
+				if(recallListPat[i].DisableUntilBalance>0) {
+					if(cellStr!="") {
+						cellStr+=", ";
+					}
+					cellStr+=Lan.g(this,"Disabled until balance ")+recallListPat[i].DisableUntilBalance.ToString("c");
+				}
 				if(recallListPat[i].RecallStatus!=0) {
+					if(cellStr!="") {
+						cellStr+=", ";
+					}
 					cellStr+=DefC.GetName(DefCat.RecallUnschedStatus,recallListPat[i].RecallStatus);
 				}
 				if(recallListPat[i].Note!="") {

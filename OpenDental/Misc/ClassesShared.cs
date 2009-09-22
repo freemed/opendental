@@ -179,6 +179,11 @@ namespace OpenDental{
 		public static void GotoAccount(long patNum) {
 			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,2,0,patNum));
 		}
+		
+		///<summary>Goes directly to Family module.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
+		public static void GotoFamily(long patNum) {
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,new List<long>(),0,1,0,patNum));
+		}
 
 		///<summary>Puts appointment on pinboard, then jumps to Appointments module.  Sometimes, patient is selected some other way instead of being passed in here, so OK to pass in a patNum of zero.</summary>
 		public static void PinToAppt(List<long> pinAptNums,long patNum) {

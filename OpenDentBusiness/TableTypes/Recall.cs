@@ -28,6 +28,11 @@ namespace OpenDentBusiness{
 		//DateTStamp
 		///<summary>FK to recalltype.RecallTypeNum.</summary>
 		public long RecallTypeNum;
+		///<summary>Default is 0.  If a positive number is entered, then the family balance must be less in order for this recall to show in the recall list.</summary>
+		public double DisableUntilBalance;
+		///<summary>If a date is entered, then this recall will be disabled until that date.</summary>
+		public DateTime DisableUntilDate;
+
 		///<summary>Not a database column.  Just used internally.</summary>
 		public DateTime DateScheduled;
 

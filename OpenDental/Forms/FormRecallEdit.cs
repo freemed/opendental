@@ -42,6 +42,11 @@ namespace OpenDental{
 		public bool IsNew;
 		private OpenDental.ODtextBox textNote;
 		private ComboBox comboType;
+		private GroupBox groupBox2;
+		private Label label11;
+		private ValidDate textDisableDate;
+		private Label label12;
+		private ValidDouble textBalance;
 		private Label label10;
 		//private Patient PatCur;
 
@@ -102,12 +107,18 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.textDateDue = new OpenDental.ValidDate();
 			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textDisableDate = new OpenDental.ValidDate();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.textBalance = new OpenDental.ValidDouble();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textDatePrevious
 			// 
-			this.textDatePrevious.Location = new System.Drawing.Point(184,65);
+			this.textDatePrevious.Location = new System.Drawing.Point(184,171);
 			this.textDatePrevious.Name = "textDatePrevious";
 			this.textDatePrevious.ReadOnly = true;
 			this.textDatePrevious.Size = new System.Drawing.Size(85,20);
@@ -115,7 +126,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,64);
+			this.label1.Location = new System.Drawing.Point(11,170);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(170,19);
 			this.label1.TabIndex = 2;
@@ -124,7 +135,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11,90);
+			this.label2.Location = new System.Drawing.Point(11,196);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(170,19);
 			this.label2.TabIndex = 4;
@@ -133,7 +144,7 @@ namespace OpenDental{
 			// 
 			// textDateDueCalc
 			// 
-			this.textDateDueCalc.Location = new System.Drawing.Point(184,91);
+			this.textDateDueCalc.Location = new System.Drawing.Point(184,197);
 			this.textDateDueCalc.Name = "textDateDueCalc";
 			this.textDateDueCalc.ReadOnly = true;
 			this.textDateDueCalc.Size = new System.Drawing.Size(85,20);
@@ -141,7 +152,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(12,117);
+			this.label3.Location = new System.Drawing.Point(12,223);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(170,19);
 			this.label3.TabIndex = 5;
@@ -159,7 +170,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textYears);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(79,146);
+			this.groupBox1.Location = new System.Drawing.Point(78,50);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(170,115);
 			this.groupBox1.TabIndex = 7;
@@ -240,7 +251,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,266);
+			this.label8.Location = new System.Drawing.Point(12,249);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(170,19);
 			this.label8.TabIndex = 8;
@@ -250,7 +261,7 @@ namespace OpenDental{
 			// comboStatus
 			// 
 			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.Location = new System.Drawing.Point(184,266);
+			this.comboStatus.Location = new System.Drawing.Point(184,249);
 			this.comboStatus.MaxDropDownItems = 50;
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(188,21);
@@ -260,17 +271,17 @@ namespace OpenDental{
 			// 
 			this.checkIsDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsDisabled.Location = new System.Drawing.Point(29,40);
+			this.checkIsDisabled.Location = new System.Drawing.Point(24,20);
 			this.checkIsDisabled.Name = "checkIsDisabled";
-			this.checkIsDisabled.Size = new System.Drawing.Size(169,18);
+			this.checkIsDisabled.Size = new System.Drawing.Size(132,18);
 			this.checkIsDisabled.TabIndex = 10;
-			this.checkIsDisabled.Text = "Disabled";
+			this.checkIsDisabled.Text = "Always Disabled";
 			this.checkIsDisabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsDisabled.Click += new System.EventHandler(this.checkIsDisabled_Click);
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(65,292);
+			this.label9.Location = new System.Drawing.Point(65,275);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(117,92);
 			this.label9.TabIndex = 11;
@@ -280,7 +291,7 @@ namespace OpenDental{
 			// comboType
 			// 
 			this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboType.Location = new System.Drawing.Point(184,12);
+			this.comboType.Location = new System.Drawing.Point(184,18);
 			this.comboType.MaxDropDownItems = 50;
 			this.comboType.Name = "comboType";
 			this.comboType.Size = new System.Drawing.Size(188,21);
@@ -289,7 +300,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(12,12);
+			this.label10.Location = new System.Drawing.Point(12,18);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(170,19);
 			this.label10.TabIndex = 16;
@@ -299,7 +310,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(184,294);
+			this.textNote.Location = new System.Drawing.Point(184,277);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Recall;
@@ -310,14 +321,14 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31,454);
+			this.butDelete.Location = new System.Drawing.Point(26,424);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83,24);
 			this.butDelete.TabIndex = 14;
@@ -332,7 +343,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(589,411);
+			this.butOK.Location = new System.Drawing.Point(640,382);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
@@ -341,7 +352,7 @@ namespace OpenDental{
 			// 
 			// textDateDue
 			// 
-			this.textDateDue.Location = new System.Drawing.Point(184,117);
+			this.textDateDue.Location = new System.Drawing.Point(184,223);
 			this.textDateDue.Name = "textDateDue";
 			this.textDateDue.Size = new System.Drawing.Size(86,20);
 			this.textDateDue.TabIndex = 6;
@@ -354,17 +365,66 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(589,453);
+			this.butCancel.Location = new System.Drawing.Point(640,424);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.textBalance);
+			this.groupBox2.Controls.Add(this.textDisableDate);
+			this.groupBox2.Controls.Add(this.label12);
+			this.groupBox2.Controls.Add(this.label11);
+			this.groupBox2.Controls.Add(this.checkIsDisabled);
+			this.groupBox2.Location = new System.Drawing.Point(423,50);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(243,115);
+			this.groupBox2.TabIndex = 18;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Disable Recall";
+			// 
+			// textDisableDate
+			// 
+			this.textDisableDate.Location = new System.Drawing.Point(141,80);
+			this.textDisableDate.Name = "textDisableDate";
+			this.textDisableDate.Size = new System.Drawing.Size(86,20);
+			this.textDisableDate.TabIndex = 13;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(40,80);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(101,18);
+			this.label12.TabIndex = 12;
+			this.label12.Text = "Until Date";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(3,39);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(138,37);
+			this.label11.TabIndex = 11;
+			this.label11.Text = "Until family Account balance is below";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBalance
+			// 
+			this.textBalance.BackColor = System.Drawing.SystemColors.Window;
+			this.textBalance.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textBalance.Location = new System.Drawing.Point(141,48);
+			this.textBalance.Name = "textBalance";
+			this.textBalance.Size = new System.Drawing.Size(86,20);
+			this.textBalance.TabIndex = 19;
+			// 
 			// FormRecallEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(685,502);
+			this.ClientSize = new System.Drawing.Size(736,473);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.comboType);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.textNote);
@@ -375,7 +435,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textDatePrevious);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label9);
-			this.Controls.Add(this.checkIsDisabled);
 			this.Controls.Add(this.comboStatus);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.groupBox1);
@@ -392,6 +451,8 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormRecallEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -411,6 +472,18 @@ namespace OpenDental{
 			checkIsDisabled.Checked=RecallCur.IsDisabled;
 			if(checkIsDisabled.Checked){
 				textDateDue.ReadOnly=true;
+			}
+			if(RecallCur.DisableUntilBalance==0) {
+				textBalance.Text="";
+			}
+			else {
+				textBalance.Text=RecallCur.DisableUntilBalance.ToString("f");
+			}
+			if(RecallCur.DisableUntilDate.Year<1880) {
+				textDisableDate.Text="";
+			}
+			else {
+				textDisableDate.Text=RecallCur.DisableUntilDate.ToShortDateString();
 			}
 			if(RecallCur.DatePrevious.Year>1880){
 				textDatePrevious.Text=RecallCur.DatePrevious.ToShortDateString();
@@ -482,12 +555,21 @@ namespace OpenDental{
 				|| textMonths.errorProvider1.GetError(textMonths)!=""
 				|| textWeeks.errorProvider1.GetError(textWeeks)!=""
 				|| textDays.errorProvider1.GetError(textDays)!=""
-				){
+				|| textBalance.errorProvider1.GetError(textBalance)!=""
+				|| textDisableDate.errorProvider1.GetError(textDisableDate)!="")
+			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			double disableUntilBalance=PIn.PDouble(textBalance.Text);
+			if(disableUntilBalance<0){
+				MsgBox.Show(this,"Disabled balance must be greater than zero.");
 				return;
 			}
 			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
+			RecallCur.DisableUntilBalance=disableUntilBalance;
+			RecallCur.DisableUntilDate=PIn.PDate(textDisableDate.Text);
 			RecallCur.DateDue=PIn.PDate(textDateDue.Text);
 			RecallCur.RecallInterval.Years=PIn.PInt(textYears.Text);
 			RecallCur.RecallInterval.Months=PIn.PInt(textMonths.Text);

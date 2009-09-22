@@ -1671,9 +1671,10 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallMaxNumberReminders','-1','')";
 				Db.NonQ(command);
-
-
-
+				command="ALTER TABLE recall ADD DisableUntilBalance double NOT NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE recall ADD DisableUntilDate date NOT NULL default '0001-01-01'";
+				Db.NonQ(command);
 
 
 

@@ -96,7 +96,9 @@ namespace OpenDentBusiness{
 				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
 				//DateTStamp
 				recall.RecallTypeNum  = PIn.PLong   (table.Rows[i][10].ToString());
-				if(table.Columns.Count>11){
+				recall.DisableUntilBalance= PIn.PDouble(table.Rows[i][11].ToString());
+				recall.DisableUntilDate   = PIn.PDate  (table.Rows[i][12].ToString());
+				if(table.Columns.Count>13){
 					recall.DateScheduled= PIn.PDate  (table.Rows[i][11].ToString());
 				}
 				list.Add(recall);
@@ -445,7 +447,7 @@ namespace OpenDentBusiness{
 			}
 			command+="PatNum,DateDueCalc,DateDue,DatePrevious,"
 				+"RecallInterval,RecallStatus,Note,IsDisabled,"//DateTStamp
-				+"RecallTypeNum"
+				+"RecallTypeNum,DisableUntilBalance,DisableUntilDate"
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PLong(recall.RecallNum)+"', ";
@@ -460,7 +462,9 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(recall.Note)+"', "
 				+"'"+POut.PBool  (recall.IsDisabled)+"', "
 				//DateTStamp
-				+"'"+POut.PLong   (recall.RecallTypeNum)+"')";
+				+"'"+POut.PLong   (recall.RecallTypeNum)+"', "
+				+"'"+POut.PDouble(recall.DisableUntilBalance)+"', "
+				    +POut.PDate  (recall.DisableUntilDate)+")";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -487,6 +491,8 @@ namespace OpenDentBusiness{
 				+",IsDisabled = '"     +POut.PBool  (recall.IsDisabled)+"' "
 				//DateTStamp
 				+",RecallTypeNum = '"  +POut.PLong   (recall.RecallTypeNum)+"' "
+				+",DisableUntilBalance = '"+POut.PDouble(recall.DisableUntilBalance)+"' "
+				+",DisableUntilDate = "    +POut.PDate(recall.DisableUntilDate)
 				+" WHERE RecallNum = '"+POut.PLong   (recall.RecallNum)+"'";
 			Db.NonQ(command);
 		}
@@ -642,6 +648,8 @@ namespace OpenDentBusiness{
 				}
 				else{//alter the existing recall
 					if(!matchingRecall.IsDisabled
+						&& matchingRecall.DisableUntilBalance==0
+						&& matchingRecall.DisableUntilDate.Year<1880
 						&& prevDate.Year>1880//this protects recalls that were manually added as part of a conversion
 						&& prevDate != matchingRecall.DatePrevious) 
 					{//if datePrevious has changed, reset
