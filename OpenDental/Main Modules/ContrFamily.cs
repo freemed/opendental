@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -377,8 +378,8 @@ namespace OpenDental{
 						break;
 				}
 			}
-			else if(e.Button.Tag.GetType()==typeof(int)){
-				ProgramL.Execute((int)e.Button.Tag,PatCur);
+			else if(e.Button.Tag.GetType()==typeof(long)) {
+				ProgramL.Execute((long)e.Button.Tag,PatCur);
 			}
 		}
 
@@ -393,6 +394,9 @@ namespace OpenDental{
 		#region gridPatient
 
 		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(Plugins.Active && Plugins.HookMethod(this,"ContrFamily.gridPat_CellDoubleClick",PatCur)) {
+				return;
+			}
 			if(TerminalActives.PatIsInUse(PatCur.PatNum)){
 				MsgBox.Show(this,"Patient is currently entering info at a reception terminal.  Please try again later.");
 				return;

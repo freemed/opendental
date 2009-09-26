@@ -1272,7 +1272,7 @@ namespace OpenDental{
 			//RefreshLocalData(InvalidType.AllLocal);
 			RefreshLocalData(InvalidType.Prefs,InvalidType.Defs,InvalidType.Providers,//obviously heavily used
 				InvalidType.Signals,//so when mouse moves over light buttons, it won't crash
-				InvalidType.Programs,//so it can check eCW for which modules to show
+				//InvalidType.Programs,//already done above
 				InvalidType.ToolBut);//so program buttons will show in all the toolbars
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.
@@ -1356,6 +1356,7 @@ namespace OpenDental{
 			Bridges.Trojan.StartupCheck();
 			FormUAppoint.StartThreadIfEnabled();
 			Bridges.ICat.StartFileWatcher();
+			Plugins.LoadAllPlugins(this);
 			#if !TRIALONLY
 				if(PrefC.GetDate("BackupReminderLastDateRun").AddMonths(1)<DateTime.Today) {
 					FormBackupReminder FormBR=new FormBackupReminder();
@@ -1696,8 +1697,8 @@ namespace OpenDental{
 						break;
 				}
 			}
-			else if(e.Button.Tag.GetType()==typeof(int)) {
-				ProgramL.Execute((int)e.Button.Tag,Patients.GetPat(CurPatNum));
+			else if(e.Button.Tag.GetType()==typeof(long)) {
+				ProgramL.Execute((long)e.Button.Tag,Patients.GetPat(CurPatNum));
 			}
 		}
 

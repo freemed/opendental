@@ -1675,6 +1675,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				command="ALTER TABLE recall ADD DisableUntilDate date NOT NULL default '0001-01-01'";
 				Db.NonQ(command);
+				command="ALTER TABLE program ADD PluginDllName varchar(255) NOT NULL";
+				Db.NonQ(command);
 
 
 

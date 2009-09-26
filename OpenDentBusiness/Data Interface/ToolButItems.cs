@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="ToolButItemNum,";
 			}
-			command+=") VALUES(";
+			command+="ProgramNum,ToolBar,ButtonText) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.PLong(Cur.ToolButItemNum)+", ";
 			}

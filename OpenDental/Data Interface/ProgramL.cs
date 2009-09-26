@@ -25,6 +25,12 @@ namespace OpenDental{
 				MessageBox.Show("Error, program entry not found in database.");
 				return;
 			}
+			if(prog.PluginDllName!="") {
+				if(pat!=null) {
+					Plugins.LaunchToolbarButton(programNum,pat.PatNum);
+				}
+				return;
+			}
 			if(prog.ProgName=="Apteryx") {
 				Apteryx.SendData(prog,pat);
 				return;

@@ -3577,6 +3577,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEtrans270EBraw.resx">
       <DependentUpon>FormEtrans270EBraw.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReplicationEdit.resx">
       <DependentUpon>FormReplicationEdit.cs</DependentUpon>
@@ -3864,9 +3865,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ReportingLikeCrystal\FormParameterInput.resx">
       <DependentUpon>FormParameterInput.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportingLikeCrystal\FormReportLikeCrystal.resx">
       <DependentUpon>FormReportLikeCrystal.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SignatureBoxWrapper.resx">
       <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>

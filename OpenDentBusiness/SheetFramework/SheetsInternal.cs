@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=19;
+			//int rowH=19;
 			int yPos=30;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("text",sheet.FontSize,sheet.FontName,false,25,yPos,300,315,GrowthBehaviorEnum.None));
 			return sheet;

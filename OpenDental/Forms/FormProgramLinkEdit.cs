@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary> </summary>
@@ -34,6 +36,8 @@ namespace OpenDental{
 		public bool IsNew;
 		public Program ProgramCur;
 		private OpenDental.UI.ODGrid gridMain;
+		private TextBox textPluginDllName;
+		private Label label5;
 		private ArrayList ProgramPropertiesForProgram;
 
 		///<summary></summary>
@@ -88,6 +92,8 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textPluginDllName = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -99,7 +105,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(702,409);
+			this.butCancel.Location = new System.Drawing.Point(702,494);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -114,7 +120,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(702,368);
+			this.butOK.Location = new System.Drawing.Point(702,453);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -142,7 +148,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(17,409);
+			this.butDelete.Location = new System.Drawing.Point(17,494);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,26);
 			this.butDelete.TabIndex = 43;
@@ -216,7 +222,7 @@ namespace OpenDental{
 			// 
 			// listToolBars
 			// 
-			this.listToolBars.Location = new System.Drawing.Point(15,231);
+			this.listToolBars.Location = new System.Drawing.Point(15,245);
 			this.listToolBars.Name = "listToolBars";
 			this.listToolBars.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listToolBars.Size = new System.Drawing.Size(147,108);
@@ -224,7 +230,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(14,197);
+			this.label6.Location = new System.Drawing.Point(14,211);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(223,30);
 			this.label6.TabIndex = 56;
@@ -249,7 +255,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(246,353);
+			this.textNote.Location = new System.Drawing.Point(246,367);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
@@ -258,7 +264,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(246,333);
+			this.label8.Location = new System.Drawing.Point(246,347);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(221,17);
 			this.label8.TabIndex = 60;
@@ -277,7 +283,7 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(246,197);
+			this.gridMain.Location = new System.Drawing.Point(246,211);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(410,133);
@@ -286,11 +292,29 @@ namespace OpenDental{
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// textPluginDllName
+			// 
+			this.textPluginDllName.Location = new System.Drawing.Point(246,185);
+			this.textPluginDllName.Name = "textPluginDllName";
+			this.textPluginDllName.Size = new System.Drawing.Size(195,20);
+			this.textPluginDllName.TabIndex = 64;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(13,186);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(232,18);
+			this.label5.TabIndex = 63;
+			this.label5.Text = "Plug-in dll name";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormProgramLinkEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(797,455);
+			this.ClientSize = new System.Drawing.Size(797,540);
+			this.Controls.Add(this.textPluginDllName);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
@@ -344,6 +368,7 @@ namespace OpenDental{
 			checkEnabled.Checked=ProgramCur.Enabled;
 			textPath.Text=ProgramCur.Path;
 			textCommandLine.Text=ProgramCur.CommandLine;
+			textPluginDllName.Text=ProgramCur.PluginDllName;
 			textNote.Text=ProgramCur.Note;
 			List<ToolButItem> itemsForProgram=ToolButItems.GetForProgram(ProgramCur.ProgramNum);
 			listToolBars.Items.Clear();
@@ -407,11 +432,24 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(checkEnabled.Checked && textPluginDllName.Text!=""){
+				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,textPluginDllName.Text);
+				if(!File.Exists(dllPath)) {
+					MessageBox.Show(Lan.g(this,"Dll file not found:")+" "+dllPath);
+					return;
+				}
+			}
+			if(textPluginDllName.Text!="" && textPath.Text!="") {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"If both a path and a plug-in are specified, the path will be ignored.  Continue anyway?")) {
+					return;
+				}
+			}
 			ProgramCur.ProgName=textProgName.Text;
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			ProgramCur.Path=textPath.Text;
 			ProgramCur.CommandLine=textCommandLine.Text;
+			ProgramCur.PluginDllName=textPluginDllName.Text;
 			ProgramCur.Note=textNote.Text;
 			if(IsNew){
 				Programs.Insert(ProgramCur);

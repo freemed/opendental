@@ -18,6 +18,8 @@ namespace OpenDentBusiness{
 		public string CommandLine;
 		///<summary>Notes about this program link. Peculiarities, etc.</summary>
 		public string Note;
+		///<summary>If this is a Plugin, then this is the filename of the dll.  The dll must be located in the application directory.</summary>
+		public string PluginDllName;
 
 		public Program Copy(){
 			return (Program)this.MemberwiseClone();

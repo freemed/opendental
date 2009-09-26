@@ -36,6 +36,7 @@ namespace OpenDentBusiness{
 				prog.Path       =PIn.PString(table.Rows[i][4].ToString());
 				prog.CommandLine=PIn.PString(table.Rows[i][5].ToString());
 				prog.Note       =PIn.PString(table.Rows[i][6].ToString());
+				prog.PluginDllName=PIn.PString(table.Rows[i][7].ToString());
 				ProgramC.Listt.Add(prog);
 				if(!ProgramC.HList.ContainsKey(prog.ProgName)) {
 					ProgramC.HList.Add(prog.ProgName,prog);
@@ -56,6 +57,7 @@ namespace OpenDentBusiness{
 				+",Path = '"        +POut.PString(Cur.Path)+"'"
 				+",CommandLine  = '"+POut.PString(Cur.CommandLine)+"'"
 				+",Note  = '"       +POut.PString(Cur.Note)+"'"
+				+",PluginDllName  = '"+POut.PString(Cur.PluginDllName)+"'"
 				+" WHERE programnum = '"+POut.PLong(Cur.ProgramNum)+"'";
 			Db.NonQ(command);
 		}
@@ -73,7 +75,7 @@ namespace OpenDentBusiness{
 			if(PrefC.RandomKeys) {
 				command+="ProgramNum,";
 			}
-			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note) VALUES(";
+			command+="ProgName,ProgDesc,Enabled,Path,CommandLine,Note,PluginDllName) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+=POut.PLong(Cur.ProgramNum)+", ";
 			}
@@ -83,7 +85,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (Cur.Enabled)+"', "
 				+"'"+POut.PString(Cur.Path)+"', "
 				+"'"+POut.PString(Cur.CommandLine)+"', "
-				+"'"+POut.PString(Cur.Note)+"')";
+				+"'"+POut.PString(Cur.Note)+"', "
+				+"'"+POut.PString(Cur.PluginDllName)+"')";
 			if(PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -151,6 +154,7 @@ namespace OpenDentBusiness{
 		}
 
 		
+
 
 
 
