@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype"
+				+"DentaideCardSequence,ShowBaseUnits,CodeSubstNone,IsHidden,MonthRenew,FilingCodeSubtype"
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PLong(plan.PlanNum)+"', ";
@@ -59,7 +59,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PLong(plan.FilingCode)+"', "
 				+"'"+POut.PLong((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
-				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
+				//+"'"+POut.PBool(plan.DedBeforePercOld)+"', "
 				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
 				+"'"+POut.PBool(plan.IsHidden)+"', "
 				+"'"+POut.PLong(plan.MonthRenew)+"',"
@@ -106,7 +106,7 @@ namespace OpenDentBusiness {
 				+",FilingCode='"     +POut.PLong(plan.FilingCode)+"'"
 				+",DentaideCardSequence='" +POut.PLong(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
-				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
+				//+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
 				+",MonthRenew='"     +POut.PLong(plan.MonthRenew)+"'"
@@ -138,7 +138,7 @@ namespace OpenDentBusiness {
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
 				+",FilingCode = '"     +POut.PLong   (plan.FilingCode)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
-				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
+				//+",DedBeforePerc = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
 				+",IsHidden='"         +POut.PBool  (plan.IsHidden)+"'"
 				//MonthRenew would be different between similar plans
@@ -292,7 +292,7 @@ namespace OpenDentBusiness {
 				plan.FilingCode     = PIn.PLong   (table.Rows[i][24].ToString());
 				plan.DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				plan.ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
-				plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
+				//plan.DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 				plan.CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
 				plan.IsHidden       = PIn.PBool(table.Rows[i][29].ToString());
 				plan.MonthRenew     = PIn.PInt(table.Rows[i][30].ToString());
@@ -1068,20 +1068,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static long SetDeductBeforePercentAll(bool checkDeductibleBeforePercentChecked) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),checkDeductibleBeforePercentChecked);
-			}
-			string command="UPDATE insplan SET DedBeforePerc=";
-			if(checkDeductibleBeforePercentChecked) {
-				command+="1";
-			}
-			else {
-				command+="0";
-			}
-			long result=Db.NonQ(command);
-			return result;
-		}
+		
 
 	}
 }

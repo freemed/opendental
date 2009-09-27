@@ -59,8 +59,8 @@ namespace OpenDentBusiness{
 		public int DentaideCardSequence;
 		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
 		public bool ShowBaseUnits;
-		///<summary>Apply deductible before percentage when calculating estimates.</summary>
-		public bool DedBeforePerc;
+		///<summary>No longer used. Apply deductible before percentage when calculating estimates.</summary>
+		public bool DedBeforePercOld;
 		///<summary>Set to true to not allow procedure code downgrade substitution on this insurance plan.</summary>
 		public bool CodeSubstNone;
 		///<summary>Set to true to hide it from the pick list and from the main list.</summary>

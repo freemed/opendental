@@ -3063,9 +3063,6 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-			if(PrefC.GetBoolSilent("EnableAnesthMod",true)){
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","Anesthesia"));
-			}
 			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
@@ -3188,9 +3185,6 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
-				if(PrefC.GetBoolSilent("EnableAnesthMod", false)){
-					ToolBarMain.Buttons["Anesthesia"].Enabled = false;
-				}
 				ToolBarMain.Buttons["Consent"].Enabled = false;
 				ToolBarMain.Buttons["ToothChart"].Enabled = false;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {
@@ -3210,10 +3204,6 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
-				//turns off Anesthesia Module button if pref is not checked in Module Setup
-				if(PrefC.GetBoolSilent("EnableAnesthMod", true)){
-					ToolBarMain.Buttons["Anesthesia"].Enabled=true;
-				}
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				if(Programs.IsEnabled("eClinicalWorks") && ProgramProperties.GetPropVal("eClinicalWorks","IsStandalone")=="0") {

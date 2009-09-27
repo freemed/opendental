@@ -721,12 +721,7 @@ namespace OpenDental{
 				labelSchoolClass.Visible=false;
 				comboSchoolClass.Visible=false;
 			}
-			//hides these prefs if the user does not have the Anesthesia Module enabled
-			if (!PrefC.GetBoolSilent("EnableAnesthMod", true))
-			{
-				groupAnesthProvType.Visible = false;
-
-			}
+			//We'll just always show the Anesthesia fields since they are part of the standard database.
 			textAbbr.Text=ProvCur.Abbr;
 			textLName.Text=ProvCur.LName;
 			textFName.Text=ProvCur.FName;
@@ -949,10 +944,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void checkAnesthetist_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
+	
 
 		
 

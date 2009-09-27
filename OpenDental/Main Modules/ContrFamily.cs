@@ -1182,7 +1182,7 @@ namespace OpenDental{
 				}
 				plan.ReleaseInfo=true;
 				plan.AssignBen=true;
-				plan.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+				//plan.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
 				plan.PlanType="";
 				InsPlans.Insert(plan);
 				Benefit ben;

@@ -1548,7 +1548,7 @@ namespace OpenDental {
 					selectedPlan1.GroupNum=textGroupNum1.Text;
 					selectedPlan1.ReleaseInfo=true;
 					selectedPlan1.AssignBen=true;
-					selectedPlan1.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+					//selectedPlan1.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
 					selectedPlan1.PlanType="";
 					InsPlans.Insert(selectedPlan1);
 					Benefit ben;
@@ -1606,7 +1606,7 @@ namespace OpenDental {
 					selectedPlan2.GroupNum=textGroupNum2.Text;
 					selectedPlan2.ReleaseInfo=true;
 					selectedPlan2.AssignBen=true;
-					selectedPlan2.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+					//selectedPlan2.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
 					selectedPlan2.PlanType="";
 					InsPlans.Insert(selectedPlan2);
 					Benefit ben;

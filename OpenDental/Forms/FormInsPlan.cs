@@ -1934,7 +1934,7 @@ namespace OpenDental{
 			PlanCur.CodeSubstNone  =FormIP.SelectedPlan.CodeSubstNone;
 			PlanCur.IsMedical      =FormIP.SelectedPlan.IsMedical;
 			PlanCur.ClaimsUseUCR   =FormIP.SelectedPlan.ClaimsUseUCR;
-			PlanCur.DedBeforePerc  =FormIP.SelectedPlan.DedBeforePerc;
+			//PlanCur.DedBeforePerc  =FormIP.SelectedPlan.DedBeforePerc;
 			PlanCur.IsHidden       =FormIP.SelectedPlan.IsHidden;
 			PlanCur.ShowBaseUnits = FormIP.SelectedPlan.ShowBaseUnits;
 			PlanCur.FeeSched       =FormIP.SelectedPlan.FeeSched;

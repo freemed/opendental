@@ -24,7 +24,6 @@ namespace OpenDental{
 		private CheckBox checkInsurance;
 		private CheckBox checkHospitals;
 		private CheckBox checkMedicalIns;
-		private CheckBox checkAnesthesia;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -77,7 +76,6 @@ namespace OpenDental{
 			this.checkInsurance = new System.Windows.Forms.CheckBox();
 			this.checkHospitals = new System.Windows.Forms.CheckBox();
 			this.checkMedicalIns = new System.Windows.Forms.CheckBox();
-			this.checkAnesthesia = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -243,23 +241,11 @@ namespace OpenDental{
 			this.checkMedicalIns.Text = "Medical Insurance";
 			this.checkMedicalIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkAnesthesia
-			// 
-			this.checkAnesthesia.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAnesthesia.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAnesthesia.Location = new System.Drawing.Point(12,303);
-			this.checkAnesthesia.Name = "checkAnesthesia";
-			this.checkAnesthesia.Size = new System.Drawing.Size(258,19);
-			this.checkAnesthesia.TabIndex = 14;
-			this.checkAnesthesia.Text = "Anesthesia";
-			this.checkAnesthesia.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormEasy
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(467,362);
-			this.Controls.Add(this.checkAnesthesia);
 			this.Controls.Add(this.checkMedicalIns);
 			this.Controls.Add(this.checkHospitals);
 			this.Controls.Add(this.checkInsurance);
@@ -300,7 +286,6 @@ namespace OpenDental{
 			checkNoClinics.Checked=!PrefC.GetBool("EasyNoClinics");
 			checkRepeatCharges.Checked=!PrefC.GetBool("EasyHideRepeatCharges");
 			checkMedicalIns.Checked=PrefC.GetBool("ShowFeatureMedicalInsurance");
-			checkAnesthesia.Checked=PrefC.GetBool("EnableAnesthMod");
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -327,8 +312,6 @@ namespace OpenDental{
 			Prefs.UpdateBool("EasyHideRepeatCharges",!checkRepeatCharges.Checked);
 
 			Prefs.UpdateBool("ShowFeatureMedicalInsurance",checkMedicalIns.Checked);
-
-			Prefs.UpdateBool("EnableAnesthMod",checkAnesthesia.Checked);
 
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;

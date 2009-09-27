@@ -1330,7 +1330,7 @@ namespace OpenDentBusiness{
 		TextReport,
 		///<summary>24 X12-270.</summary>
 		BenefitInquiry270,
-		///<summary></summary>
+		///<summary>25 X12-271</summary>
 		BenefitResponse271
 	}
 

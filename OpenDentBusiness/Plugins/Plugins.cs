@@ -19,29 +19,33 @@ namespace OpenDentBusiness{
 				return;//no plugins will load.  So from now on, we can assume a direct connection.
 			}
 			for(int i=0;i<ProgramC.Listt.Count;i++) {
-				if(ProgramC.Listt[i].PluginDllName!="") {
-					string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,ProgramC.Listt[i].PluginDllName);
-					if(!File.Exists(dllPath)) {
-						continue;
-					}
-					PluginBase plugin=null;
-					try {
-						Assembly ass=Assembly.LoadFile(dllPath);
-						string typeName=Path.GetFileNameWithoutExtension(dllPath)+".Plugin";
-						Type type=ass.GetType(typeName);
-						plugin=(PluginBase)Activator.CreateInstance(type);
-						plugin.Host=host;
-					}
-					catch(Exception ex) {
-						MessageBox.Show(ex.Message);
-						continue;//don't add it to plugin list.
-					}
-					PluginContainer container=new PluginContainer();
-					container.Plugin=plugin;
-					container.ProgramNum=ProgramC.Listt[i].ProgramNum;
-					PluginList.Add(container);
-					Active=true;
+				if(!ProgramC.Listt[i].Enabled) {
+					continue;
 				}
+				if(ProgramC.Listt[i].PluginDllName=="") {
+					continue;
+				}
+				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,ProgramC.Listt[i].PluginDllName);
+				if(!File.Exists(dllPath)) {
+					continue;
+				}
+				PluginBase plugin=null;
+				try {
+					Assembly ass=Assembly.LoadFile(dllPath);
+					string typeName=Path.GetFileNameWithoutExtension(dllPath)+".Plugin";
+					Type type=ass.GetType(typeName);
+					plugin=(PluginBase)Activator.CreateInstance(type);
+					plugin.Host=host;
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+					continue;//don't add it to plugin list.
+				}
+				PluginContainer container=new PluginContainer();
+				container.Plugin=plugin;
+				container.ProgramNum=ProgramC.Listt[i].ProgramNum;
+				PluginList.Add(container);
+				Active=true;
 			}
 		}
 
