@@ -199,8 +199,8 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),0,"","Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save PDF"),4,"Save as Adobe PDF","PDF"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),3,"","Export"));
+//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save PDF"),4,"Save as Adobe PDF","PDF"));
+//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),3,"","Export"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton("",1,"Go Back One Page","Back"));
 			//ODToolBarButton button=new ODToolBarButton("",-1,"","PageNum");
