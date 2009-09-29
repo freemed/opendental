@@ -211,6 +211,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Incorrect password");
 				return;
 			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb && selectedUser.Password=="" && textPassword.Text=="") {
+				MsgBox.Show(this,"When using the web service, not allowed to log in with no password.  A password should be added for this user.");
+				return;
+			}
 			Security.CurUser = selectedUser.Copy();
 			if(PrefC.GetBool("TasksCheckOnStartup")){
 				int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
