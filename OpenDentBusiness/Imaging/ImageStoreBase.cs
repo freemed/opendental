@@ -293,7 +293,7 @@ namespace OpenDental.Imaging {
 			DocCur.Description = "New Patient Form";
 			DocCur.PatNum = Patient.PatNum;
 			Documents.Insert(DocCur, Patient);//this assigns a filename and saves to db
-			doc=Documents.GetByNum(doc.DocNum);
+			DocCur=Documents.GetByNum(DocCur.DocNum);
 			// Save the PDF to a temporary file, then import that file.
 			string tempFileName = Path.GetTempFileName();
 			try {

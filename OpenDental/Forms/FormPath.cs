@@ -344,7 +344,7 @@ namespace OpenDental{
 			textLetterMergePath.Text=PrefC.GetString("LetterMergePath");
 			if(PrefC.GetBool("AtoZfolderNotRequired")) {
 				optDisableFolders.Checked = true;
-			} else if(ImageStore.ImageStoreTypeName == typeof(SqlStore).FullName) {
+			} else if(ImageStoreBase.ImageStoreTypeName == typeof(SqlStore).FullName) {
 				optUseDatabase.Checked = true;
 			} else {
 				optUseFolder.Checked = true;
