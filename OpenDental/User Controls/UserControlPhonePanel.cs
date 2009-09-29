@@ -62,6 +62,9 @@ namespace OpenDental {
 		}*/
 
 		private void SetLabelMsg() {
+			#if DEBUG
+				return;
+			#endif
 			if(!Directory.Exists(pathPhoneMsg)) {
 				labelMsg.Text="msg path not found";
 				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
