@@ -11,30 +11,17 @@ namespace OpenDental.Eclaims {
 
 		///<summary>The insplan that's passed in need not be properly updated to the database first.</summary>
 		public static void RequestBenefits(Clearinghouse clearhouse,InsPlan plan,long patNum,Carrier carrier,List<Benefit> benList,long patPlanNum) {
-			//throw exception if missing info
 			Patient pat=Patients.GetPat(patNum);
 			Patient subsc=Patients.GetPat(plan.Subscriber);
 			Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
-			//int clinicInsBillingProv=0;
-			//bool useClinic=false;
-			//if(pat.ClinicNum>0){
-			//	useClinic=true;
-			//	clinicInsBillingProv=Clinics.GetClinic(pat.ClinicNum).InsBillingProv;
-			//}
 			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(pat.PriProv,pat.ClinicNum));
-			//validation-----------------------------------------------------------------------
+			//validation.  Throw exception if missing info----------------------------------------
 			string validationResult=X270.Validate(clearhouse,carrier,billProv,clinic,plan,subsc);
 			if(validationResult != "") {
-				throw new Exception(validationResult);
+				throw new Exception(Lan.g("FormInsPlan","Please fix the following errors first:")+"\r\n"+validationResult);
 			}
 			//create a 270 message---------------------------------------------------------------
-			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste("");
-			//msgbox.Text="Enter X12 msg to test:";
-			//msgbox.ShowDialog();
 			string x12message=X270.GenerateMessageText(clearhouse,carrier,billProv,clinic,plan,subsc);
-				//msgbox.textMain.Text;
-			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(x12message);
-			//msgbox.ShowDialog();
 			EtransMessageText etransMessageText=new EtransMessageText();
 			etransMessageText.MessageText=x12message;
 			EtransMessageTexts.Insert(etransMessageText);
@@ -57,7 +44,7 @@ namespace OpenDental.Eclaims {
 			catch(Exception ex) {
 				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
 				Etranss.Delete(etrans.EtransNum);
-				throw ex;
+				throw new ApplicationException(Lan.g("FormInsPlan","Connection Error:")+"\r\n"+ex.GetType().Name+"\r\n"+ex.Message);
 			}
 			//start to process the 271----------------------------------------------------------
 			X271 x271=null;
@@ -70,7 +57,7 @@ namespace OpenDental.Eclaims {
 			else {//neither a 997 nor a 271
 				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
 				Etranss.Delete(etrans.EtransNum);
-				throw new ApplicationException(x12response);
+				throw new ApplicationException(Lan.g("FormInsPlan","Clearinghouse server sent this error:")+"\r\n"+x12response);
 			}
 			/*
 			//In realtime mode, X12 limits the request to one patient.

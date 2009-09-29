@@ -3317,8 +3317,7 @@ namespace OpenDental{
 			catch(Exception ex) {//although many errors will be caught and result in a response etrans.
 				//this also catches validation errors such as missing info.
 				Cursor=Cursors.Default;
-				string displayMsg=Lan.g(this,"Please fix the following errors first:\r\n")+ex.Message;
-				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(displayMsg);
+				CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(ex.Message);
 				msgbox.ShowDialog();
 			}
 			Cursor=Cursors.Default;
