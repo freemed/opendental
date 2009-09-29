@@ -40,7 +40,7 @@ namespace OpenDental{
 		///<summary>Holds the data for one statement.</summary>
 		private DataSet dataSett;
 		private Statement Stmt;
-		private IImageStore imageStore;
+		private ImageStoreBase imageStore;
 
 		///<summary></summary>
 		public FormRpStatement(){

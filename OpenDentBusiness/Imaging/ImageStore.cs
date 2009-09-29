@@ -7,16 +7,14 @@ namespace OpenDental.Imaging {
 	public static class ImageStore {
 		public static FileStore.UpdatePatientDelegate UpdatePatient;
 
-		public static string ImageStoreTypeName {
-			get { return PrefC.GetString("ImageStore"); }
-		}
+		
 
-		public static IImageStore GetImageStore(Patient patient) {
+		public static ImageStoreBase GetImageStore(Patient patient) {
 			Type imageStoreType = Type.GetType(ImageStoreTypeName, false);
-			if(imageStoreType == null || !typeof(IImageStore).IsAssignableFrom(imageStoreType)){
+			if(imageStoreType == null || !typeof(ImageStoreBase).IsAssignableFrom(imageStoreType)) {
 				imageStoreType = typeof(FileStore);
 			}
-			IImageStore store = (IImageStore)Activator.CreateInstance(imageStoreType);
+			ImageStoreBase store = (ImageStoreBase)Activator.CreateInstance(imageStoreType);
 			store.OpenPatientStore(patient);
 			return store;
 		}

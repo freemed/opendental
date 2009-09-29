@@ -2872,7 +2872,7 @@ namespace OpenDental {
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}
 			Patient guar=Patients.GetPat(stmt.PatNum);
-			OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
+			OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
 			if(stmt.Mode_==StatementMode.Email){
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();

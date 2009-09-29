@@ -3481,7 +3481,7 @@ namespace OpenDental{
 			g.CopyFromScreen(origin,new Point(0,0),toothChart.Size,CopyPixelOperation.SourceCopy);
 			g.Dispose();
 			try {
-				OpenDental.Imaging.IImageStore imageStore=OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+				OpenDental.Imaging.ImageStoreBase imageStore=OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
 				imageStore.Import(chartBitmap,defNum,ImageType.Photo);
 			}
 			catch(Exception ex) {

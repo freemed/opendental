@@ -771,7 +771,7 @@ namespace OpenDental{
 						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 					}
 					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
 					imageStore.DeleteImage(listdocs);
@@ -798,7 +798,7 @@ namespace OpenDental{
 					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 				}
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
 				Cursor=Cursors.Default;
 			}
@@ -905,7 +905,7 @@ namespace OpenDental{
 					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 				}
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
 				Cursor=Cursors.Default;
 			}
@@ -945,7 +945,7 @@ namespace OpenDental{
 						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 					}
 					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
 					imageStore.DeleteImage(listdocs);
@@ -961,7 +961,7 @@ namespace OpenDental{
 							ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 						}
 						Patient pat=Patients.GetPat(StmtList[i].PatNum);
-						OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+						OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
 						imageStore.DeleteImage(listdocs);

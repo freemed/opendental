@@ -13,21 +13,20 @@ using OpenDentBusiness.Imaging;
 using System.Diagnostics;
 
 namespace OpenDental.Imaging {
-	/// <summary>
-	/// Provide a standard base class for image (and file) stores.
-	/// </summary>
-	public abstract class ImageStoreBase : IImageStore {
+	/// <summary>Provide a standard base class for image (and file) stores.</summary>
+	public abstract class ImageStoreBase  {
+
+		public static string ImageStoreTypeName {
+			get { return PrefC.GetString("ImageStore"); }
+		}
 
 		public static bool verbose=false;
 
-		#region Properties
 		private Patient patient;
 		public Patient Patient {
 			get { return patient; }
 		}
-		#endregion
 
-		#region Open/Close methods
 		public void OpenPatientStore(Patient patient) {
 			if(patient == null) {
 				ClosePatientStore();
@@ -41,17 +40,13 @@ namespace OpenDental.Imaging {
 			this.patient = null;
 			OnPatientStoreClosed(EventArgs.Empty, this);
 		}
-		#endregion
 
-		#region Protected Open/Close methods
 		protected virtual void OnPatientStoreOpened(EventArgs e, object sender) {
 		}
 
 		protected virtual void OnPatientStoreClosed(EventArgs e, object sender) {
 		}
-		#endregion
 
-		#region Open (and Hash) methods
 		public string GetHashString(Document doc) {
 			//the key data is the bytes of the file, concatenated with the bytes of the note.
 			byte[] textbytes;
@@ -126,14 +121,10 @@ namespace OpenDental.Imaging {
 			ImageHelper.RenderMountImage(mountImage, originalImages, mountItems, documents, -1);
 			return mountImage;
 		}
-		#endregion
 
-		#region Abstract Open methods
 		protected abstract Bitmap OpenImage(Document doc);
 		protected abstract byte[] GetBytes(Document doc);
-		#endregion
 
-		#region Import methods
 		public Document Import(string path,long docCategory) {
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
@@ -143,6 +134,7 @@ namespace OpenDental.Imaging {
 			doc.ImgType = (HasImageExtension(path) || Path.GetExtension(path) == "") ? ImageType.Photo : ImageType.Document;
 			doc.DocCategory = docCategory;
 			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			try {
 				// If the file has no extension, try to open it as a image. If it is an image,
 				// save it as a JPEG file.
@@ -172,6 +164,7 @@ namespace OpenDental.Imaging {
 			doc.PatNum = Patient.PatNum;
 			doc.ImgType = ImageType.Photo;
 			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			try {
 				SaveDocument(doc, image);
 			}
@@ -191,12 +184,13 @@ namespace OpenDental.Imaging {
 			doc.PatNum = Patient.PatNum;
 			doc.DocCategory = docCategory;
 			Documents.Insert(doc, Patient);//creates filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			long qualityL = 0;
 			if(imageType == ImageType.Radiograph) {
-				qualityL=100; //Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
+				qualityL=100;//Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
 			}
 			else if(imageType == ImageType.Photo) {
-				qualityL=100;// Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
+				qualityL=100;//Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
 			}
 			else {//Assume document
 				//Possible values 0-100?
@@ -238,6 +232,7 @@ namespace OpenDental.Imaging {
 			doc.PatNum = Patient.PatNum;
 			doc.ImgType = ImageType.Document;
 			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			try {
 				SaveDocument(doc, fileName);
 			}
@@ -261,6 +256,7 @@ namespace OpenDental.Imaging {
 			doc.WindowingMin = PrefC.GetInt32("ImageWindowingMin");
 			doc.WindowingMax = PrefC.GetInt32("ImageWindowingMax");
 			Documents.Insert(doc, Patient);//creates filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			try {
 				SaveDocument(doc, image, ImageFormat.Bmp);
 			}
@@ -297,6 +293,7 @@ namespace OpenDental.Imaging {
 			DocCur.Description = "New Patient Form";
 			DocCur.PatNum = Patient.PatNum;
 			Documents.Insert(DocCur, Patient);//this assigns a filename and saves to db
+			doc=Documents.GetByNum(doc.DocNum);
 			// Save the PDF to a temporary file, then import that file.
 			string tempFileName = Path.GetTempFileName();
 			try {
@@ -319,16 +316,12 @@ namespace OpenDental.Imaging {
 					File.Delete(tempFileName);
 			}
 		}
-		#endregion
-
-		#region Abstract import methods
+		
 		protected abstract void SaveDocument(Document doc, Bitmap image);
 		protected abstract void SaveDocument(Document doc, Bitmap image, ImageFormat format);
 		protected abstract void SaveDocument(Document doc, Bitmap image, ImageCodecInfo codec, EncoderParameters encoderParameters);
 		protected abstract void SaveDocument(Document doc, string filename);
-		#endregion
-
-		#region Delete methods
+		
 		public void DeleteThumbnailImage(Document doc) {
 			DeleteThumbnailImageInternal(doc);
 		}
@@ -349,14 +342,10 @@ namespace OpenDental.Imaging {
 				Documents.Delete(documents[i]);
 			}
 		}
-		#endregion
-
-		#region Abstract delete methods
+		
 		protected abstract void DeleteThumbnailImageInternal(Document doc);
 		protected abstract void DeleteDocument(Document doc);
-		#endregion
-
-		#region Misc methods
+	
 		public string GetExtension(Document doc) {
 			return Path.GetExtension(doc.FileName).ToLower();
 		}
@@ -369,10 +358,6 @@ namespace OpenDental.Imaging {
 			get { throw new NotSupportedException(); }
 		}
 
-		public virtual bool FolderPathSupported {
-			get { return false; }
-		}
-
 		public virtual bool FilePathSupported {
 			get { return false; }
 		}
@@ -380,8 +365,7 @@ namespace OpenDental.Imaging {
 		public virtual string GetFilePath(Document doc) {
 			throw new NotSupportedException();
 		}
-		#endregion
-		#region Static methods
+		
 		public static bool IsImageFile(string filename) {
 			try {
 				Bitmap bitmap = new Bitmap(filename);
@@ -400,6 +384,6 @@ namespace OpenDental.Imaging {
 			return (ext == ".jpg" || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" || ext == ".tif" ||
 				ext == ".tiff" || ext == ".gif" || ext == ".emf" || ext == ".exif" || ext == ".ico" || ext == ".png" || ext == ".wmf");
 		}
-		#endregion
+	
 	}
 }

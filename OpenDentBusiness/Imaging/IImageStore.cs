@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +7,7 @@ using System.Collections.ObjectModel;
 using OpenDentBusiness;
 
 namespace OpenDental.Imaging {
-	/// <summary>
-	/// Provides a common interface for all methods of storing images in Open Dental.
-	/// </summary>
+	/// <summary>This interface was to be deleted and rolled into ImageStoreBase.  It was stupid to have an interface that was only implemented by one class.</summary>
 	public interface IImageStore {
 		Patient Patient { get; }
 
@@ -41,3 +40,4 @@ namespace OpenDental.Imaging {
 		string GetFilePath(Document doc);
 	}
 }
+*/

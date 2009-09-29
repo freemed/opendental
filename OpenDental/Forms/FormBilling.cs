@@ -726,7 +726,7 @@ namespace OpenDental{
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}
-			OpenDental.Imaging.IImageStore imageStore;
+			OpenDental.Imaging.ImageStoreBase imageStore;
 			//Concat all the pdf's together to create one print job.
 			//Also, if a statement is to be emailed, it does that here and does not attach it to the print job.
 			//If something fails badly, it's no big deal, because we can click the radio button to see "sent" bills, and unsend them from there.

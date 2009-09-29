@@ -35,7 +35,7 @@ namespace OpenDental{
 		private Document DocCur;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
-		private IImageStore imageStore;
+		private ImageStoreBase imageStore;
 		private Label labelInvalidSig;
 		private bool SigChanged;
 		///<summary>To allow tablet signatures on Windows. Must be added dynamically when the program is not running on Unix so that MONO does not crash.</summary>
@@ -43,7 +43,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butTopazSign;
 		
 		///<summary></summary>
-		public FormDocSign(Document docCur,IImageStore imageStore){
+		public FormDocSign(Document docCur,ImageStoreBase imageStore) {
 			InitializeComponent();
 			//Can only allow tablet signatures on Windows, since we use a native dll to handle the tablet interaction.
 			if(Environment.OSVersion.Platform==PlatformID.Unix){
