@@ -1409,7 +1409,7 @@ namespace OpenDentBusiness {
 					if(ordinal!=4) {//only process on the fourth round
 						continue;
 					}
-					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,patplan.PatPlanNum,
+					ClaimProcs.ComputeBaseEst(claimProcs[i],proc.ProcFee,proc.ToothNum,proc.CodeNum,PlanCur,0,
 						benefitList,histList,loopList,patPlans,0,0,patientAge,0);
 				}
 				else if(patplan.Ordinal==1){
