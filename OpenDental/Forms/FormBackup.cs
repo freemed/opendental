@@ -590,7 +590,7 @@ namespace OpenDental{
 			}
 			//A to Z folder------------------------------------------------------------------------------------
 			if(ShouldUseAtoZFolder()) {
-				string atozFull=ODFileUtils.RemoveTrailingSeparators(FormPath.GetPreferredImagePath());
+				string atozFull=ODFileUtils.RemoveTrailingSeparators(ImageStore.GetPreferredImagePath());
 				string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);//OpenDentalData
 				Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,
 					Lan.g(this,"Calculating size of files in A to Z folder."),

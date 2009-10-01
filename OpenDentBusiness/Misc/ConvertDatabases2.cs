@@ -1681,11 +1681,8 @@ DROP TABLE IF EXISTS etAck";
 				Db.NonQ(command);
 				//We will not delete this pref just in case it's needed later.  It's not used anywhere right now.
 				//command = "DELETE FROM preference WHERE PrefName='EnableAnesthMod'";
-				command="UPDATE";
-
-				command="UPDATE preference SET ValueString='1' WHERE PrefName='ImageStore' AND ValueString=''";
-
-
+				command="DELETE FROM preference WHERE PrefName='ImageStore'";//this option is no longer supported.
+				Db.NonQ(command);
 				
 
 

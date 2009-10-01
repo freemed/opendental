@@ -16,7 +16,6 @@ using System.Security.Cryptography;
 using System.Text;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -35,15 +34,16 @@ namespace OpenDental{
 		private Document DocCur;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
-		private ImageStoreBase imageStore;
 		private Label labelInvalidSig;
 		private bool SigChanged;
 		///<summary>To allow tablet signatures on Windows. Must be added dynamically when the program is not running on Unix so that MONO does not crash.</summary>
 		private Topaz.SigPlusNET sigBoxTopaz;
 		private OpenDental.UI.Button butTopazSign;
+		private Patient PatCur;
+		private string PatFolder;
 		
 		///<summary></summary>
-		public FormDocSign(Document docCur,ImageStoreBase imageStore) {
+		public FormDocSign(Document docCur,Patient pat) {
 			InitializeComponent();
 			//Can only allow tablet signatures on Windows, since we use a native dll to handle the tablet interaction.
 			if(Environment.OSVersion.Platform==PlatformID.Unix){
@@ -62,7 +62,8 @@ namespace OpenDental{
 				sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 			}
 			DocCur=docCur;
-			this.imageStore=imageStore;
+			PatCur=pat;
+			PatFolder=ImageStore.GetPatientFolder(pat);
 			Lan.F(this);
 		}
 
@@ -246,7 +247,7 @@ namespace OpenDental{
 						sigBoxTopaz.ClearTablet();
 						sigBoxTopaz.SetSigCompressionMode(0);
 						sigBoxTopaz.SetEncryptionMode(0);
-						sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
+						sigBoxTopaz.SetKeyString(ImageStore.GetHashString(DocCur,PatFolder));
 							//"0000000000000000");
 						//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 						sigBoxTopaz.SetEncryptionMode(2);//high encryption
@@ -266,7 +267,7 @@ namespace OpenDental{
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
-					sigBox.SetKeyString(imageStore.GetHashString(DocCur));
+					sigBox.SetKeyString(ImageStore.GetHashString(DocCur,PatFolder));
 						//"0000000000000000");
 					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					//sigBox.SetEncryptionMode(2);//high encryption
@@ -338,7 +339,7 @@ namespace OpenDental{
 					}
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
+					sigBoxTopaz.SetKeyString(ImageStore.GetHashString(DocCur,PatFolder));
 						//"0000000000000000");
 					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					sigBoxTopaz.SetEncryptionMode(2);
@@ -353,7 +354,7 @@ namespace OpenDental{
 					}
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
-					sigBox.SetKeyString(imageStore.GetHashString(DocCur));
+					sigBox.SetKeyString(ImageStore.GetHashString(DocCur,PatFolder));
 						//"0000000000000000");
 					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					//sigBox.SetEncryptionMode(2);

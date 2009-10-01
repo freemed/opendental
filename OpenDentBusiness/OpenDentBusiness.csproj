@@ -294,17 +294,8 @@
     <Compile Include="HL7\SegmentHL7.cs" />
     <Compile Include="HL7\SegmentPID.cs" />
     <Compile Include="HL7\SIU.cs" />
-    <Compile Include="Imaging\ApplySettings.cs" />
-    <Compile Include="Imaging\FileStore.cs" />
-    <Compile Include="Imaging\FileStoreSettings.cs" />
-    <Compile Include="Imaging\IImageStore.cs" />
     <Compile Include="Imaging\ImageHelper.cs" />
-    <Compile Include="Imaging\ImageNotFoundException.cs" />
     <Compile Include="Imaging\ImageStore.cs" />
-    <Compile Include="Imaging\ImageStoreBase.cs" />
-    <Compile Include="Imaging\ImageStoreCreationException.cs" />
-    <Compile Include="Imaging\ImageStoreRemovalException.cs" />
-    <Compile Include="Imaging\NoActivePatientException.cs" />
     <Compile Include="Data Interface\MiscData.cs" />
     <Compile Include="DataAccess\DataCommand.cs" />
     <Compile Include="DataAccess\DataFieldAttribute.cs" />
@@ -325,7 +316,6 @@
     <Compile Include="DataAccess\TimeSpanSerializer.cs" />
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Data Interface\Lans.cs" />
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />

@@ -607,7 +607,7 @@ namespace OpenDental{
 						extension=".gif";
 					}
 					else{
-						string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
+						string fileName=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
 						if(!File.Exists(fileName)){
 							grfx.DrawString("IMAGE FILE NOT FOUND",new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold)
 								,Brushes.DarkRed,0,0);
@@ -1208,7 +1208,7 @@ namespace OpenDental{
 					if(!ClaimFormCur.PrintImages){
 						continue;
 					}
-					string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
+					string fileName=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
 					Image thisImage=null;
 					if(ClaimFormCur.Items[i].ImageFileName=="ADA2006.gif"){
 						thisImage=CDT.Class1.GetADA2006();

@@ -10,8 +10,6 @@ using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using CodeBase;
 using OpenDentBusiness.DataAccess;
-using OpenDentBusiness.Imaging;
-using OpenDental.Imaging;
 
 namespace OpenDentBusiness {
 	///<summary>Handles documents and images for the Images module</summary>
@@ -233,7 +231,7 @@ namespace OpenDentBusiness {
 				//making it impossible to launch the form image viewer (the only place this
 				//function is called from.
 				hList.Add(PIn.PLong(table.Rows[i][0].ToString()),
-					ODFileUtils.CombinePaths(new string[] {	FileStoreSettings.GetPreferredImagePath,
+					ODFileUtils.CombinePaths(new string[] {	ImageStore.GetPreferredImagePath(),
 																									PIn.PString(table.Rows[i][2].ToString()).Substring(0,1).ToUpper(),
 																									PIn.PString(table.Rows[i][2].ToString()),
 																									PIn.PString(table.Rows[i][1].ToString()),}));
@@ -318,8 +316,7 @@ namespace OpenDentBusiness {
 					Directory.CreateDirectory(thumbPath);
 				} 
 				catch {
-					throw new ImageStoreCreationException(Lans.g("Documents","Error: Could not create "+
-						"'Thumbnails' folder for patient."));
+					throw new ApplicationException(Lans.g("Documents","Error: Could not create 'Thumbnails' folder for patient: ")+thumbPath);
 				}
 			}
 			string thumbFileExt=Path.GetExtension(shortFileName);
@@ -337,7 +334,7 @@ namespace OpenDentBusiness {
 			Bitmap thumbBitmap;
 			//Gets the cropped/flipped/rotated image with any color filtering applied.
 			Bitmap sourceImage=new Bitmap(fullName);
-			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(doc,sourceImage,ApplySettings.ALL);
+			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(doc,sourceImage,ApplyImageSettings.ALL);
 			sourceImage.Dispose();
 			thumbBitmap=ImageHelper.GetThumbnail(fullImage,size);
 			fullImage.Dispose();

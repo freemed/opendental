@@ -28,9 +28,7 @@ using OpenDentBusiness;
 using Tao.OpenGl;
 using CodeBase;
 using xImageDeviceManager;
-using OpenDentBusiness.Imaging;
 using System.Text.RegularExpressions;
-using OpenDental.Imaging;
 
 namespace OpenDental{
 
@@ -106,7 +104,7 @@ namespace OpenDental{
 		SuniDeviceControl xRayImageController=null;
 		///<summary>Thread to handle updating the graphical image to the screen when the current document is an image.</summary>
 		Thread myThread=null;
-		ApplySettings InvalidatedSettingsFlag;
+		ApplyImageSettings InvalidatedSettingsFlag;
 		///<summary>Used as a thread-safe communication device between the main and worker threads.</summary>
 		EventWaitHandle settingHandle=new EventWaitHandle(false,EventResetMode.AutoReset);
 		///<summary>Edited by the main thread to reflect selection changes. Read by worker thread.</summary>
@@ -116,7 +114,7 @@ namespace OpenDental{
 		///<summary>List of documents to update in the image worker thread. This variable must be locked before accessing it and it must also be the same length as mountDocs at all times.</summary>
 		bool[] documentsToUpdate=null;
 		///<summary>Set by the main thread and read by the image worker thread. Specifies which image processing tasks are to be performed by the worker thread.</summary>
-		ApplySettings settingFlags=ApplySettings.NONE;
+		ApplyImageSettings settingFlags=ApplyImageSettings.NONE;
 		///<summary>Used to perform mouse selections in the TreeDocuments list.</summary>
 		string treeIdNumDown="";
 		///<summary>Used to keep track of the old document selection by document number (the only guaranteed unique idenifier). This is to help the code be compatible with both Windows and MONO.</summary>
@@ -126,7 +124,7 @@ namespace OpenDental{
 		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
 		delegate void CaptureCallback(object sender,EventArgs e);
 		///<summary>Used to protect against multi-threading issues when refreshing a mount during an image capture.</summary>
-		delegate void InvalidatesettingsCallback(ApplySettings settings,bool reloadZoomTransCrop);
+		delegate void InvalidatesettingsCallback(ApplyImageSettings settings,bool reloadZoomTransCrop);
 		///<summary>Keeps track of the document settings for the currently selected document or mount.</summary>
 		Document selectionDoc=new Document();
 		///<summary>Keeps track of the currently selected mount object (only when a mount is selected).</summary>
@@ -139,12 +137,13 @@ namespace OpenDental{
 		Document[] mountDocs=null;
 		///<summary>The hot document number of a mount image when it is copied.</summary>
 		int copyDocumentNumber=-1;
-		private ImageStoreBase imageStore;
     private bool allowTopaz;
 		DateTime treeDocumentMouseMoveTime=new DateTime(1,1,1);
 		///<summary></summary>
-		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
+		private Patient PatCur;
 		private bool InitializedOnStartup;
+		///<summary>Set with each module refresh, and that's where it's set if it doesn't yet exist.  For now, we are not using ImageStore.GetPatientFolder(), because we haven't tested whether it properly updates the patient object.  We don't want to risk using an outdated patient folder path.  And we don't want to waste time refreshing PatCur after every ImageStore.GetPatientFolder().</summary>
+		private string PatFolder;
 		#endregion ManuallyCreatedVariables
 
 		///<summary></summary>
@@ -557,7 +556,7 @@ namespace OpenDental{
 			button=new ODToolBarButton(Lan.g(this,"Forms"),-1,"","Forms");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			menuForms=new ContextMenu();
-			string formDir=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Forms");
+			string formDir=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"Forms");
 			if(Directory.Exists(formDir)) {
 				DirectoryInfo dirInfo=new DirectoryInfo(formDir);
 				FileInfo[] fileInfos=dirInfo.GetFiles();
@@ -615,7 +614,6 @@ namespace OpenDental{
 		///<summary></summary>
 		public void ModuleUnselected(){
 			FamCur=null;
-			imageStore=null;
 			//Cancel current image capture.
 			xRayImageController.KillXRayThread();
 		}
@@ -624,20 +622,15 @@ namespace OpenDental{
 		private void RefreshModuleData(long patNum) {
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
-				imageStore=null;
 				FamCur=null;
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
-			if(ImageStore.UpdatePatient == null){
-				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-			}
-			imageStore = ImageStore.GetImageStore(FamCur.GetPatient(patNum));
-			//ParentForm.Text=Patients.GetMainTitle(PatCur);
+			PatCur=FamCur.GetPatient(patNum);
+			PatFolder=ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
 		}
 
 		private void RefreshModuleScreen(){
-			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(this.Enabled && PatCur!=null){
 				//Enable tools which must always be accessible when a valid patient is selected.
 				EnableAllTools(true);
@@ -724,8 +717,6 @@ namespace OpenDental{
 			//the current image has been erased. This will also avoid concurrent access to the the currently loaded images by
 			//the main and worker threads.
 			EraseCurrentImages();
-			//selectionDoc=null;
-			//selectionMount=null;
 			if(identifier.Length<1){//A folder was selected (or unselection, but I am not sure unselection would be possible here).
 				//The panel note control is made invisible to start and then made visible for the appropriate documents. This
 				//line prevents the possibility of showing a signature box after selecting a folder node.
@@ -743,7 +734,7 @@ namespace OpenDental{
 					selectionMountItems=MountItems.GetItemsForMount(mountNum);
 					mountDocs=Documents.GetDocumentsForMountItems(selectionMountItems);
 					hotDocument=-1;//No selection to start.
-					currentImages=imageStore.RetrieveImage(mountDocs);
+					currentImages=ImageStore.OpenImages(mountDocs,PatFolder);
 					selectionMount=Mounts.GetByNum(mountNum);
 					renderImage=new Bitmap(selectionMount.Width,selectionMount.Height);
 					ImageHelper.RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
@@ -754,7 +745,7 @@ namespace OpenDental{
 					//more stale with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
 					hotDocument=0;
-					currentImages=imageStore.RetrieveImage(new Document[] { selectionDoc });
+					currentImages=ImageStore.OpenImages(new Document[] {selectionDoc},PatFolder);
 					if(currentImages[0]==null && ImageHelper.HasImageExtension(selectionDoc.FileName)) {
 						MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
 					}
@@ -782,7 +773,7 @@ namespace OpenDental{
 					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom,imageTranslation);
 				}else{//document
 					//Render the initial image within the current bounds of the picturebox (if the document is an image).
-					InvalidateSettings(ApplySettings.ALL,true);
+					InvalidateSettings(ApplyImageSettings.ALL,true);
 				}
 			}
 		}
@@ -1022,9 +1013,10 @@ namespace OpenDental{
 						currentImages[hotDocument].Dispose();
 						currentImages[hotDocument]=null;
 					}
-					InvalidateSettings(ApplySettings.ALL,false);
+					InvalidateSettings(ApplyImageSettings.ALL,false);
 					refreshTree=false;
-				}else{
+				}
+				else{
 					if(verbose) {
 						if(!MsgBox.Show(this,true,"Delete entire mount?")) {
 							return;
@@ -1037,7 +1029,8 @@ namespace OpenDental{
 					}
 					SelectTreeNode(null);//Release access to current image so it may be properly deleted.
 				}				
-			}else{
+			}
+			else{
 				if(verbose) {
 					if(!MsgBox.Show(this,true,"Delete document?")) {
 						return;
@@ -1047,8 +1040,8 @@ namespace OpenDental{
 				SelectTreeNode(null);//Release access to current image so it may be properly deleted.
 			}
 			//Delete all documents involved in deleting this object.
-			ImageStoreBase.verbose=verbose;
-			imageStore.DeleteImage(docs);
+			//ImageStoreBase.verbose=verbose;
+			ImageStore.DeleteImage(docs,PatFolder);
 			if(refreshTree){
 				FillDocList(false);
 			}
@@ -1064,7 +1057,7 @@ namespace OpenDental{
 			panelNote.Visible=true;
 			ResizeAll();
 			//Display the document signature form.
-			FormDocSign docSignForm=new FormDocSign(selectionDoc,imageStore);//Updates our local document and saves changes to db also.
+			FormDocSign docSignForm=new FormDocSign(selectionDoc,PatCur);//Updates our local document and saves changes to db also.
 			int signLeft=TreeDocuments.Left;
 			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
 			docSignForm.Width=Math.Max(0,Math.Min(docSignForm.Width,PictureBox1.Right-signLeft));
@@ -1135,7 +1128,7 @@ namespace OpenDental{
 		}
 
 		private string GetHashString(Document doc) {
-			return imageStore.GetHashString(doc);
+			return ImageStore.GetHashString(doc,PatFolder);
 		}
 
 		///<summary>Valid values for scanType are "doc","xray",and "photo"</summary>
@@ -1177,7 +1170,7 @@ namespace OpenDental{
 			bool saved=true;
 			Document doc = null;
 			try{//Create corresponding image file.
-				doc = imageStore.Import(scannedImage, GetCurrentCategory(), imgType);
+				doc=ImageStore.Import(scannedImage, GetCurrentCategory(),imgType,PatCur);
 			}
 			catch(Exception ex){
 				saved=false;
@@ -1236,7 +1229,7 @@ namespace OpenDental{
 			string nodeId=""; 
 			Document doc=null; 
 			try { 
-				doc = imageStore.Import(filename, GetCurrentCategory()); 
+				doc=ImageStore.Import(filename,GetCurrentCategory(),PatCur); 
 			} 
 			catch(Exception ex) { 
 				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + filename); 
@@ -1274,7 +1267,7 @@ namespace OpenDental{
 			for(int i=0;i<fileNames.Length;i++){
 				bool copied = true;
 				try {
-					doc = imageStore.Import(fileNames[i], GetCurrentCategory());
+					doc=ImageStore.Import(fileNames[i],GetCurrentCategory(),PatCur);
 				}
 				catch(Exception ex) {
 					MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
@@ -1312,14 +1305,14 @@ namespace OpenDental{
 			Bitmap copyImage;
 			if(mountNum!=0){//The current selection is a mount?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null){//A mount item is currently selected.
-					copyImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
+					copyImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplyImageSettings.ALL);
 				}else{//Assume the copy is for the entire mount.
 					copyImage=(Bitmap)renderImage.Clone();
 				}
 			}else{//document
 				//Crop and color function has already been applied to the render image.
 				copyImage=ImageHelper.ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),renderImage,
-					ApplySettings.FLIP|ApplySettings.ROTATE);
+					ApplyImageSettings.FLIP | ApplyImageSettings.ROTATE);
 			}
 			if(copyImage!=null){
 				Clipboard.SetDataObject(copyImage);
@@ -1353,8 +1346,7 @@ namespace OpenDental{
 					DeleteSelection(false);
 				}
 				try {
-					doc=imageStore.ImportCapturedImage(pasteImage,0,selectionMountItems[hotDocument].MountItemNum,
-						GetCurrentCategory());
+					doc=ImageStore.ImportCapturedImage(pasteImage,0,selectionMountItems[hotDocument].MountItemNum,GetCurrentCategory(),PatCur);
 					doc.WindowingMax=255;
 					doc.WindowingMin=0;
 					Documents.Update(doc);
@@ -1365,10 +1357,12 @@ namespace OpenDental{
 				}
 				mountDocs[hotDocument]=doc;
 				currentImages[hotDocument]=pasteImage;
-			} else {//Paste the image as its own unique document.
+			} 
+			else {//Paste the image as its own unique document.
 				try {
-					doc=imageStore.Import(pasteImage,GetCurrentCategory());
-				} catch {
+					doc=ImageStore.Import(pasteImage,GetCurrentCategory(),PatCur);
+				} 
+				catch {
 					MessageBox.Show(Lan.g(this,"Error saving document."));
 					this.Cursor=Cursors.Default;
 					return;
@@ -1383,7 +1377,7 @@ namespace OpenDental{
 					FillDocList(true);
 				}
 			}
-			InvalidateSettings(ApplySettings.ALL,true);
+			InvalidateSettings(ApplyImageSettings.ALL,true);
 			this.Cursor=Cursors.Default;
 		}
 
@@ -1427,7 +1421,7 @@ namespace OpenDental{
 			Bitmap printImage;
 			if(mountNum!=0){//Is this a mount object?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null) {//A mount item is currently selected.
-					printImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
+					printImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplyImageSettings.ALL);
 				}else{//Assume the printout is for the entire mount.
 					printImage=prePrintImage;	//Just print the mount as is, since the mount is always in the same orientation, and
 																		//the images it houses are already flipped and rotated to generate the render image.
@@ -1435,7 +1429,7 @@ namespace OpenDental{
 			}else{//This is a document object.
 				//Crop and color function have already been applied to the render image, now do the rest.
 				printImage=ImageHelper.ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),
-					prePrintImage,ApplySettings.FLIP|ApplySettings.ROTATE);
+					prePrintImage,ApplyImageSettings.FLIP | ApplyImageSettings.ROTATE);
 			}			
 			RectangleF rectf=e.MarginBounds;
 			float ratio=Math.Min(rectf.Width/printImage.Width,rectf.Height/printImage.Height);
@@ -1467,8 +1461,9 @@ namespace OpenDental{
 			bool copied = true;
 			Document doc = null;
 			try {
-				doc = imageStore.ImportForm(formName, GetCurrentCategory());
-			}catch(Exception ex){
+				doc=ImageStore.ImportForm(formName, GetCurrentCategory(),PatCur);
+			}
+			catch(Exception ex){
 				MessageBox.Show(ex.Message);
 				copied=false;
 			}
@@ -1593,7 +1588,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</summary>
-		private void InvalidateSettings(ApplySettings settings,bool reloadZoomTransCrop) {
+		private void InvalidateSettings(ApplyImageSettings settings,bool reloadZoomTransCrop) {
 			bool[] docsToUpdate=new bool[this.currentImages.Length];
 			if(docsToUpdate.Length==1) {//A document is currently selected.
 				docsToUpdate[0]=true;//Always mark the document to be updated.
@@ -1607,7 +1602,7 @@ namespace OpenDental{
 		}		
 
 		///<summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</summary>
-		private void InvalidateSettings(ApplySettings settings,bool reloadZoomTransCrop,bool[] docsToUpdate) {
+		private void InvalidateSettings(ApplyImageSettings settings,bool reloadZoomTransCrop,bool[] docsToUpdate) {
 			if(this.InvokeRequired){
 				InvalidatesettingsCallback c=new InvalidatesettingsCallback(InvalidateSettings);
 				Invoke(c,new object[] {settings,reloadZoomTransCrop});
@@ -1661,7 +1656,7 @@ namespace OpenDental{
 				myThread.IsBackground=true;
 				myThread.Start();
 			}
-			InvalidatedSettingsFlag=ApplySettings.NONE;
+			InvalidatedSettingsFlag=ApplyImageSettings.NONE;
 		}
 
 		///<summary>Applies crop and colors. Then, paints renderImage onto PictureBox1.</summary>
@@ -1681,7 +1676,7 @@ namespace OpenDental{
 					//a single point in time.
 					Document curDocCopy;
 					Mount curMountCopy;
-					ApplySettings applySettings;
+					ApplyImageSettings applySettings;
 					bool[] docsToUpdate;
 					lock(settingHandle){//Does not actually lock the settingHandle object.
 						curDocCopy=settingDoc;
@@ -1692,8 +1687,8 @@ namespace OpenDental{
 					if(settingMount==null){//The current selection is a document.
 						//Perform cropping and colorfunction here if one of the two flags is set. Rotation, flip, zoom and translation are
 						//taken care of in RenderCurrentImage().
-						if(	(applySettings&ApplySettings.COLORFUNCTION)!=ApplySettings.NONE || 
-								(applySettings&ApplySettings.CROP)!=ApplySettings.NONE){
+						if((applySettings & ApplyImageSettings.COLORFUNCTION)!=ApplyImageSettings.NONE || 
+								(applySettings & ApplyImageSettings.CROP)!=ApplyImageSettings.NONE) {
 							//Ensure that memory management for the renderImage is performed in the worker thread, otherwise the main thread
 							//will be slowed when it has to cleanup dozens of old renderImages, which causes a temporary pause in operation.
 							if(renderImage!=null){
@@ -1707,7 +1702,7 @@ namespace OpenDental{
 							//gets aborted with a call to KillMyThread(). The only place currentImages[] is invalid is in a call to 
 							//EraseCurrentImage(), but at that point, this thread has been terminated.
 							renderImage=ImageHelper.ApplyDocumentSettingsToImage(curDocCopy,currentImages[hotDocument],
-								ApplySettings.CROP|ApplySettings.COLORFUNCTION);
+								ApplyImageSettings.CROP | ApplyImageSettings.COLORFUNCTION);
 						}
 						//Make the current renderImage visible in the picture box, and perform rotation, flip, zoom, and translation on
 						//the renderImage.
@@ -1717,7 +1712,7 @@ namespace OpenDental{
 						ImageHelper.RenderMountFrames(renderImage,selectionMountItems,hotDocument);
 						//Render only the modified image over the old mount image.
 						//A null document can happen when a new image frame is selected, but there is no image in that frame.
-						if(curDocCopy!=null&&applySettings!=ApplySettings.NONE) {
+						if(curDocCopy!=null&&applySettings!=ApplyImageSettings.NONE) {
 							for(int i=0;i<docsToUpdate.Length;i++) {
 								if(docsToUpdate[i]) {
 									ImageHelper.RenderImageIntoMount(renderImage,selectionMountItems[i],currentImages[i],curDocCopy);
@@ -1801,7 +1796,7 @@ namespace OpenDental{
 				return;
 			}
 			Document nodeDoc=Documents.GetByNum(docNum);
-			string ext = imageStore.GetExtension(nodeDoc);
+			string ext=ImageStore.GetExtension(nodeDoc);
 			if(ext==".jpg" || ext==".jpeg" || ext==".gif") {
 				return;
 			}
@@ -1809,16 +1804,11 @@ namespace OpenDental{
 			//Specifically, multi-page faxes can be viewed more easily by one of our customers using the fax
 			//viewer. On Unix systems, it is imagined that an equivalent viewer will launch to allow the image
 			//to be viewed.
-			if(imageStore.FilePathSupported) {
-				try {
-					Process.Start(imageStore.GetFilePath(nodeDoc));
-				}
-				catch(Exception ex) {
-					MessageBox.Show(ex.Message);
-				}
+			try {
+				Process.Start(ImageStore.GetFilePath(nodeDoc,PatFolder));
 			}
-			else {
-				MessageBox.Show(Lan.g(this, "Cannot open the document in an external viewer. This is most likely because the images are stored in a database, which cannot be browsed."));
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
 		}
 
@@ -1851,7 +1841,7 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
 			imageTranslation=new PointF(imageTranslation.X-p.X,imageTranslation.Y-p.Y);
 			zoomFactor=(float)Math.Pow(2,zoomLevel);
-			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display.
 		}
 
 		///<summary>This button is disabled for mounts, in which case this code is never called.</summary>
@@ -1861,11 +1851,11 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
 			imageTranslation=new PointF(imageTranslation.X+p.X/2.0f,imageTranslation.Y+p.Y/2.0f);
 			zoomFactor=(float)Math.Pow(2,zoomLevel);
-			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display.
 		}
 
 		private void DeleteThumbnailImage(Document doc){
-			imageStore.DeleteThumbnailImage(doc);
+			ImageStore.DeleteThumbnailImage(doc,PatFolder);
 		}
 
 		private void OnFlip_Click() {
@@ -1886,7 +1876,7 @@ namespace OpenDental{
 			}
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
-			InvalidateSettings(ApplySettings.FLIP,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.FLIP,false);//Refresh display.
 		}
 
 		private void OnRotateL_Click() {
@@ -1899,7 +1889,7 @@ namespace OpenDental{
 			}
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
-			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.ROTATE,false);//Refresh display.
 		}
 
 		private void OnRotateR_Click(){
@@ -1910,12 +1900,12 @@ namespace OpenDental{
 			selectionDoc.DegreesRotated%=360;
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
-			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.ROTATE,false);//Refresh display.
 		}
 
 		///<summary>Keeps the back buffer for the picture box to be the same in dimensions as the picture box itself.</summary>
 		private void PictureBox1_SizeChanged(object sender,EventArgs e) {
-			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display.
 		}
 
 		///<summary></summary>
@@ -1955,7 +1945,7 @@ namespace OpenDental{
 					cropTangle=new Rectangle((int)intersect[0],(int)intersect[1],(int)intersect[2],(int)intersect[3]);
 				}
 			}
-			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
+			InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display.
 		}
 
 		///<summary>Returns the ordinal location in the mountDocs array of the given location (relative to the upper left-hand corner of the PictureBox1 control) or -1 if the location is outside all documents in the current mount. A mount must be currently selected to call this function.</summary>
@@ -2004,7 +1994,7 @@ namespace OpenDental{
 					if(hotDocument<0) {//The current selection was unselected.
 						xRayImageController.KillXRayThread();//Stop xray capture, because it relies on the current selection to place images.
 					}
-					InvalidateSettings(ApplySettings.ALL,false);
+					InvalidateSettings(ApplyImageSettings.ALL,false);
 				}
 			}else{//crop mode
 				if(cropTangle.Width<=0 || cropTangle.Height<=0) {
@@ -2012,7 +2002,7 @@ namespace OpenDental{
 				}
 				if(!MsgBox.Show(this,true,"Crop to Rectangle?")){
 					cropTangle=new Rectangle(0,0,-1,-1);
-					InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
+					InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display (since message box was covering).
 					return;
 				}
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
@@ -2042,7 +2032,7 @@ namespace OpenDental{
 				//if the entire image is cropped away.
 				if(finalCropRect.Length!=4 || finalCropRect[2]<=0 || finalCropRect[3]<=0){
 					cropTangle=new Rectangle(0,0,-1,-1);
-					InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
+					InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh display (since message box was covering).
 					return;
 				}
 				Rectangle prevCropRect=DocCropRect(selectionDoc,curImageWidths[hotDocument],curImageHeights[hotDocument]);
@@ -2068,7 +2058,7 @@ namespace OpenDental{
 																			imageTranslation.Y+(imageCropCenters[1].Y-imageCropCenters[0].Y));
 				}
 				cropTangle=new Rectangle(0,0,-1,-1);
-				InvalidateSettings(ApplySettings.CROP,false);
+				InvalidateSettings(ApplyImageSettings.CROP,false);
 			}
 		}
 
@@ -2097,7 +2087,7 @@ namespace OpenDental{
 			}
 			selectionDoc.WindowingMin=brightnessContrastSlider.MinVal;
 			selectionDoc.WindowingMax=brightnessContrastSlider.MaxVal;
-			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
+			InvalidateSettings(ApplyImageSettings.COLORFUNCTION,false);
 		}
 
 		private void brightnessContrastSlider_ScrollComplete(object sender,EventArgs e) {
@@ -2106,7 +2096,7 @@ namespace OpenDental{
 			}
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
-			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
+			InvalidateSettings(ApplyImageSettings.COLORFUNCTION,false);
 		}
 
 		///<summary>Handles a change in selection of the xRay capture button.</summary>
@@ -2174,7 +2164,7 @@ namespace OpenDental{
 		///<summary>Called when the image capture device is ready for exposure.</summary>
 		private void OnCaptureReady(object sender,EventArgs e) {
 			GetNextUnusedMountItem();
-			InvalidateSettings(ApplySettings.NONE,false);//Refresh the selection box change (does not do any image processing here).
+			InvalidateSettings(ApplyImageSettings.NONE,false);//Refresh the selection box change (does not do any image processing here).
 		}
 
 		///<summary>Called on successful capture of image.</summary>
@@ -2208,7 +2198,7 @@ namespace OpenDental{
 			}
 			//Create the document object in the database for this mount image.
 			Bitmap capturedImage=xRayImageController.capturedImage;
-			Document doc = imageStore.ImportCapturedImage(capturedImage, rotationAngle, selectionMountItems[hotDocument].MountItemNum, GetCurrentCategory());
+			Document doc=ImageStore.ImportCapturedImage(capturedImage,rotationAngle,selectionMountItems[hotDocument].MountItemNum, GetCurrentCategory(),PatCur);
 			currentImages[hotDocument]=capturedImage;
 			curImageWidths[hotDocument]=capturedImage.Width;
 			curImageHeights[hotDocument]=capturedImage.Height;
@@ -2216,7 +2206,7 @@ namespace OpenDental{
 			selectionDoc=doc;
 			SetBrightnessAndContrast();
 			//Refresh image in in picture box.
-			InvalidateSettings(ApplySettings.ALL,false);
+			InvalidateSettings(ApplyImageSettings.ALL,false);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureBegin(), then OnCaptureFinalize().
 			xRayImageController.CaptureXRay();
@@ -2259,7 +2249,7 @@ namespace OpenDental{
 		private void EraseCurrentImages(){
 			KillMyImageThreads();//Stop any current access to the current image and render image so we can dispose them.
 			PictureBox1.Image=null;
-			InvalidatedSettingsFlag=ApplySettings.NONE;
+			InvalidatedSettingsFlag=ApplyImageSettings.NONE;
 			if(currentImages!=null){
 				for(int i=0;i<currentImages.Length;i++){
 					if(currentImages[i]!=null){
@@ -2423,7 +2413,7 @@ namespace OpenDental{
 		public Bitmap CreateMountImage(Mount mount){
 			List <MountItem> mountItems=MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
-			Bitmap[] originalImages=imageStore.RetrieveImage(documents);
+			Bitmap[] originalImages=ImageStore.OpenImages(documents,PatFolder);
 			Bitmap mountImage=new Bitmap(mount.Width,mount.Height);
 			ImageHelper.RenderMountImage(mountImage,originalImages,mountItems,documents,-1);
 			return mountImage;
@@ -2464,7 +2454,7 @@ namespace OpenDental{
 				return;
 			}
 			//Refresh the mount image, since the hot document number may have changed.
-			InvalidateSettings(ApplySettings.ALL,false);
+			InvalidateSettings(ApplyImageSettings.ALL,false);
 		}
 
 		private void MountMenuCopy_Click(object sender,EventArgs e) {
@@ -2494,7 +2484,7 @@ namespace OpenDental{
 			//Make it so that another swap cannot be done without first copying.
 			copyDocumentNumber=-1;
 			//Update the mount image to reflect the swapped images.
-			InvalidateSettings(ApplySettings.ALL,false,docsToUpdate);
+			InvalidateSettings(ApplyImageSettings.ALL,false,docsToUpdate);
 		}
 		
 	}

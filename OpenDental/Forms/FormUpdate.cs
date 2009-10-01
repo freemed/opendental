@@ -807,7 +807,7 @@ namespace OpenDental{
 
 		private void butInstallBuild_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
-			string destDir=FormPath.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredImagePath();
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
@@ -817,7 +817,7 @@ namespace OpenDental{
 
 		private void butInstallStable_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
-			string destDir=FormPath.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredImagePath();
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
@@ -827,7 +827,7 @@ namespace OpenDental{
 
 		private void butInstallBeta_Click(object sender,EventArgs e) {
 			string patchName="Setup.exe";
-			string destDir=FormPath.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredImagePath();
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
@@ -918,7 +918,7 @@ namespace OpenDental{
 
 		private void butDownload_Click(object sender, System.EventArgs e){
 			string patchName="Setup.exe";
-			string destDir=FormPath.GetPreferredImagePath();
+			string destDir=ImageStore.GetPreferredImagePath();
 			if(destDir==null){//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}

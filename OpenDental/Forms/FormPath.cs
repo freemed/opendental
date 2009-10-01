@@ -6,7 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -25,17 +24,12 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textLetterMergePath;
 		private FolderBrowserDialog fb;
 		private CheckBox checkMultiplePaths;
-		private RadioButton optDisableFolders;
-		private RadioButton optUseDatabase;
-		private RadioButton optUseFolder;
+		private RadioButton radioAtoZfolderNotRequired;
+		private RadioButton radioUseFolder;
 		private Label label4;
 		private TextBox textLocalPath;
 		private OpenDental.UI.Button butBrowseLocal;
 		private GroupBox groupbox1;
-    //private bool IsBackup=false;
-		//private User user;
-		///<summary>Remembers the computerpref.AtoZpath.</summary>
-		private static string localAtoZpath=null;
 
 		///<summary></summary>
 		public FormPath(){
@@ -78,9 +72,8 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textLocalPath = new System.Windows.Forms.TextBox();
 			this.butBrowseLocal = new OpenDental.UI.Button();
-			this.optDisableFolders = new System.Windows.Forms.RadioButton();
-			this.optUseDatabase = new System.Windows.Forms.RadioButton();
-			this.optUseFolder = new System.Windows.Forms.RadioButton();
+			this.radioAtoZfolderNotRequired = new System.Windows.Forms.RadioButton();
+			this.radioUseFolder = new System.Windows.Forms.RadioButton();
 			this.groupbox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -92,7 +85,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(440,483);
+			this.butOK.Location = new System.Drawing.Point(440,467);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 2;
@@ -108,7 +101,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(539,483);
+			this.butCancel.Location = new System.Drawing.Point(539,467);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 3;
@@ -124,7 +117,7 @@ namespace OpenDental{
 			// 
 			// textExportPath
 			// 
-			this.textExportPath.Location = new System.Drawing.Point(19,346);
+			this.textExportPath.Location = new System.Drawing.Point(19,332);
 			this.textExportPath.Name = "textExportPath";
 			this.textExportPath.Size = new System.Drawing.Size(515,20);
 			this.textExportPath.TabIndex = 1;
@@ -136,7 +129,7 @@ namespace OpenDental{
 			this.butBrowseExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBrowseExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBrowseExport.CornerRadius = 4F;
-			this.butBrowseExport.Location = new System.Drawing.Point(538,343);
+			this.butBrowseExport.Location = new System.Drawing.Point(538,329);
 			this.butBrowseExport.Name = "butBrowseExport";
 			this.butBrowseExport.Size = new System.Drawing.Size(76,25);
 			this.butBrowseExport.TabIndex = 91;
@@ -163,7 +156,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(20,282);
+			this.label1.Location = new System.Drawing.Point(20,268);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(596,59);
 			this.label1.TabIndex = 92;
@@ -181,7 +174,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(20,372);
+			this.label3.Location = new System.Drawing.Point(20,358);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(596,57);
 			this.label3.TabIndex = 96;
@@ -195,7 +188,7 @@ namespace OpenDental{
 			this.butBrowseLetter.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBrowseLetter.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBrowseLetter.CornerRadius = 4F;
-			this.butBrowseLetter.Location = new System.Drawing.Point(538,432);
+			this.butBrowseLetter.Location = new System.Drawing.Point(538,418);
 			this.butBrowseLetter.Name = "butBrowseLetter";
 			this.butBrowseLetter.Size = new System.Drawing.Size(76,25);
 			this.butBrowseLetter.TabIndex = 95;
@@ -204,7 +197,7 @@ namespace OpenDental{
 			// 
 			// textLetterMergePath
 			// 
-			this.textLetterMergePath.Location = new System.Drawing.Point(19,435);
+			this.textLetterMergePath.Location = new System.Drawing.Point(19,421);
 			this.textLetterMergePath.Name = "textLetterMergePath";
 			this.textLetterMergePath.Size = new System.Drawing.Size(515,20);
 			this.textLetterMergePath.TabIndex = 94;
@@ -225,16 +218,15 @@ namespace OpenDental{
 			this.groupbox1.Controls.Add(this.label4);
 			this.groupbox1.Controls.Add(this.textLocalPath);
 			this.groupbox1.Controls.Add(this.butBrowseLocal);
-			this.groupbox1.Controls.Add(this.optDisableFolders);
-			this.groupbox1.Controls.Add(this.optUseDatabase);
-			this.groupbox1.Controls.Add(this.optUseFolder);
+			this.groupbox1.Controls.Add(this.radioAtoZfolderNotRequired);
+			this.groupbox1.Controls.Add(this.radioUseFolder);
 			this.groupbox1.Controls.Add(this.checkMultiplePaths);
 			this.groupbox1.Controls.Add(this.label2);
 			this.groupbox1.Controls.Add(this.textDocPath);
 			this.groupbox1.Controls.Add(this.butBrowseDoc);
 			this.groupbox1.Location = new System.Drawing.Point(10,12);
 			this.groupbox1.Name = "groupbox1";
-			this.groupbox1.Size = new System.Drawing.Size(654,267);
+			this.groupbox1.Size = new System.Drawing.Size(654,254);
 			this.groupbox1.TabIndex = 99;
 			this.groupbox1.TabStop = false;
 			this.groupbox1.Text = "A to Z Images Folder for storing images and documents";
@@ -269,48 +261,34 @@ namespace OpenDental{
 			this.butBrowseLocal.Text = "Browse";
 			this.butBrowseLocal.Click += new System.EventHandler(this.butBrowseLocal_Click);
 			// 
-			// optDisableFolders
+			// radioAtoZfolderNotRequired
 			// 
-			this.optDisableFolders.Location = new System.Drawing.Point(10,243);
-			this.optDisableFolders.Name = "optDisableFolders";
-			this.optDisableFolders.Size = new System.Drawing.Size(311,17);
-			this.optDisableFolders.TabIndex = 101;
-			this.optDisableFolders.TabStop = true;
-			this.optDisableFolders.Text = "Do not use folder. (Some features will be unavailable)";
-			this.optDisableFolders.UseVisualStyleBackColor = true;
-			this.optDisableFolders.Click += new System.EventHandler(this.optDisableFolders_Click);
-			this.optDisableFolders.CheckedChanged += new System.EventHandler(this.optUseFolder_CheckedChanged);
+			this.radioAtoZfolderNotRequired.Location = new System.Drawing.Point(10,224);
+			this.radioAtoZfolderNotRequired.Name = "radioAtoZfolderNotRequired";
+			this.radioAtoZfolderNotRequired.Size = new System.Drawing.Size(311,17);
+			this.radioAtoZfolderNotRequired.TabIndex = 101;
+			this.radioAtoZfolderNotRequired.TabStop = true;
+			this.radioAtoZfolderNotRequired.Text = "Do not use folder. (Some features will be unavailable)";
+			this.radioAtoZfolderNotRequired.UseVisualStyleBackColor = true;
+			this.radioAtoZfolderNotRequired.Click += new System.EventHandler(this.radioAtoZfolderNotRequired_Click);
 			// 
-			// optUseDatabase
+			// radioUseFolder
 			// 
-			this.optUseDatabase.Location = new System.Drawing.Point(10,220);
-			this.optUseDatabase.Name = "optUseDatabase";
-			this.optUseDatabase.Size = new System.Drawing.Size(596,17);
-			this.optUseDatabase.TabIndex = 100;
-			this.optUseDatabase.TabStop = true;
-			this.optUseDatabase.Text = "Store images and documents in the database. (there is no synching mechanism for a" +
-    "ny current images)";
-			this.optUseDatabase.UseVisualStyleBackColor = true;
-			this.optUseDatabase.Click += new System.EventHandler(this.optUseDatabase_Click);
-			this.optUseDatabase.CheckedChanged += new System.EventHandler(this.optUseFolder_CheckedChanged);
-			// 
-			// optUseFolder
-			// 
-			this.optUseFolder.Location = new System.Drawing.Point(9,19);
-			this.optUseFolder.Name = "optUseFolder";
-			this.optUseFolder.Size = new System.Drawing.Size(333,17);
-			this.optUseFolder.TabIndex = 99;
-			this.optUseFolder.TabStop = true;
-			this.optUseFolder.Text = "Store images and documents on a local or network folder.";
-			this.optUseFolder.UseVisualStyleBackColor = true;
-			this.optUseFolder.CheckedChanged += new System.EventHandler(this.optUseFolder_CheckedChanged);
+			this.radioUseFolder.Location = new System.Drawing.Point(9,19);
+			this.radioUseFolder.Name = "radioUseFolder";
+			this.radioUseFolder.Size = new System.Drawing.Size(333,17);
+			this.radioUseFolder.TabIndex = 99;
+			this.radioUseFolder.TabStop = true;
+			this.radioUseFolder.Text = "Store images and documents on a local or network folder.";
+			this.radioUseFolder.UseVisualStyleBackColor = true;
+			this.radioUseFolder.CheckedChanged += new System.EventHandler(this.radioUseFolder_CheckedChanged);
 			// 
 			// FormPath
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(683,521);
+			this.ClientSize = new System.Drawing.Size(683,505);
 			this.Controls.Add(this.groupbox1);
 			this.Controls.Add(this.butBrowseLetter);
 			this.Controls.Add(this.butBrowseExport);
@@ -339,15 +317,14 @@ namespace OpenDental{
 		private void FormPath_Load(object sender, System.EventArgs e){
 			textDocPath.Text=PrefC.GetString("DocPath");
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
-			textLocalPath.Text=localAtoZpath;//This was set on startup.  //compPref.AtoZpath;
+			textLocalPath.Text=ImageStore.LocalAtoZpath;//This was set on startup.  //compPref.AtoZpath;
 			textExportPath.Text=PrefC.GetString("ExportPath");
 			textLetterMergePath.Text=PrefC.GetString("LetterMergePath");
 			if(PrefC.GetBool("AtoZfolderNotRequired")) {
-				optDisableFolders.Checked = true;
-			} else if(ImageStoreBase.ImageStoreTypeName == typeof(SqlStore).FullName) {
-				optUseDatabase.Checked = true;
-			} else {
-				optUseFolder.Checked = true;
+				radioAtoZfolderNotRequired.Checked = true;
+			}  
+			else {
+				radioUseFolder.Checked = true;
 			}
 			// The opt***_checked event will enable/disable the appropriate UI elements.
 			checkMultiplePaths.Checked=(textDocPath.Text.LastIndexOf(';')!=-1);	//Also set the "multiple paths" checkbox at
@@ -359,7 +336,8 @@ namespace OpenDental{
 		public static string FixDirSeparators(string path){
 			if(Environment.OSVersion.Platform==PlatformID.Unix){
 				path.Replace('\\',Path.DirectorySeparatorChar);
-			}else{//Windows
+			}
+			else{//Windows
 				path.Replace('/',Path.DirectorySeparatorChar);
 			}
 			return path;
@@ -379,14 +357,15 @@ namespace OpenDental{
 						break;
 					case DialogResult.No://Append to existing paths?
 						//Do not append a path which is already present in the list.
-						if(!IsImagePath(path,textDocPath.Text)){
+						if(!IsPathInList(path,textDocPath.Text)) {
 							textDocPath.Text=textDocPath.Text+";"+path;
 						}
 						break;
 					default://Cancel button.
 						break;
 				}
-			}else{
+			}
+			else{
 				textDocPath.Text=path;//Just replace existing paths with new path.
 			}
 		}
@@ -409,37 +388,8 @@ namespace OpenDental{
 			}
 		}
 
-		private static string GetPreferredImagePath(string documentPaths){
-			string[] preferredPathsByOrder=documentPaths.Split(new char[] { ';' });
-			for(int i=0;i<preferredPathsByOrder.Length;i++){
-				string path=preferredPathsByOrder[i];
-				string tryPath=ODFileUtils.CombinePaths(path,"A");
-				if(Directory.Exists(tryPath)) {
-					return path;
-				}
-			}
-			return null;
-		}
-
-		///<summary>Returns the most preferred fully qualified network path or null if no valid paths were found.</summary>
-		public static string GetPreferredImagePath(){
-			if(!PrefC.UsingAtoZfolder) {
-				return null;
-			}
-			//this requires a query to the database each time this method is used.  This might need to be optimized.
-			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
-			if(localAtoZpath==null){//on startup
-				localAtoZpath=ComputerPrefs.GetForLocalComputer().AtoZpath;
-				FileStoreSettings.LocalAtoZpath=localAtoZpath;
-			}
-			if(localAtoZpath!=""){//compPref.AtoZpath!=""){
-				return localAtoZpath;//compPref.AtoZpath;
-			}
-			return GetPreferredImagePath(PrefC.GetString("DocPath"));
-		}
-
 		///<summary>Returns true if the given path is part of the imagePaths list, false otherwise.</summary>
-		public static bool IsImagePath(string path,string imagePaths){
+		private static bool IsPathInList(string path,string imagePaths){
 			string[] pathArray=imagePaths.Split(new char[] { ';' });
 			for(int i=0;i<pathArray.Length;i++){
 				if(pathArray[i]==path){//Case sensitive (since these could be unix paths).
@@ -449,75 +399,52 @@ namespace OpenDental{
 			return false;
 		}
 
-		private void optUseFolder_CheckedChanged(object sender, EventArgs e) {
-			label2.Enabled = optUseFolder.Checked;
-			textDocPath.Enabled = optUseFolder.Checked;
-			butBrowseDoc.Enabled = optUseFolder.Checked;
-			checkMultiplePaths.Enabled = optUseFolder.Checked;
-			textLocalPath.Enabled=optUseFolder.Checked;
-			butBrowseLocal.Enabled=optUseFolder.Checked;
+		private void radioUseFolder_CheckedChanged(object sender,EventArgs e) {
+			label2.Enabled = radioUseFolder.Checked;
+			textDocPath.Enabled = radioUseFolder.Checked;
+			butBrowseDoc.Enabled = radioUseFolder.Checked;
+			checkMultiplePaths.Enabled = radioUseFolder.Checked;
+			textLocalPath.Enabled=radioUseFolder.Checked;
+			butBrowseLocal.Enabled=radioUseFolder.Checked;
 		}
 
-		private void optUseDatabase_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"This is not recommended.  Only for experimental use by advanced users.  Continue anyway?")){
-				optUseFolder.Checked=true;
+		private void radioAtoZfolderNotRequired_Click(object sender,EventArgs e) {
+			if(radioAtoZfolderNotRequired.Checked 
+				&& !MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning! This is not recommended.  Only for advanced users.  Continue anyway?")) 
+			{
+				radioUseFolder.Checked=true;
 				return;
 			}
 		}
 
-		private void optDisableFolders_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"This is not recommended.  Only for experimental use by advanced users.  Continue anyway?")){
-				optUseFolder.Checked=true;
-				return;
-			}
-		}
-
+		/*
 		///<summary>Returns true if the given path is part of the image paths stored in the database list, false otherwise.</summary>
 		public static bool IsImagePath(string path){
 			string imagePaths=PrefC.GetString("DocPath");
 			return IsImagePath(path,imagePaths);
-		}
+		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			/*string remoteUri = "http://www.open-dent.com/languages/";
-			string fileName = CultureInfo.CurrentCulture.TwoLetterISOLanguageName+".sql";//eg. es.sql for spanish
-			//string fileName="bogus.sql";
-			string myStringWebResource = null;
-			WebClient myWebClient = new WebClient();
-			myStringWebResource = remoteUri + fileName;
-			try{
-				//myWebClient.Credentials=new NetworkCredential("username","password","www.open-dent.com");
-				myWebClient.DownloadFile(myStringWebResource,fileName);
-			}
-			catch{
-				MessageBox.Show("Either you do not have internet access, or no translations are available for "+CultureInfo.CurrentCulture.Parent.DisplayName);
-				return;
-			}
-			ClassConvertDatabase ConvertDB=new ClassConvertDatabase();
-			if(!ConvertDB.ExecuteFile(fileName)){
-				MessageBox.Show("Translations not installed properly.");
-				return;
-			}
-			LanguageForeigns.Refresh();
-			MessageBox.Show("Done");*/
 			//remember that user might be using a website or a linux box to store images, therefore must allow forward slashes.
-			if(optUseFolder.Checked && GetPreferredImagePath(textDocPath.Text)==null && GetPreferredImagePath(textLocalPath.Text)==null){
+			if(radioUseFolder.Checked 
+				&& ImageStore.GetValidPathFromString(textDocPath.Text)==null 
+				&& ImageStore.GetValidPathFromString(textLocalPath.Text)==null) 
+			{
 				MsgBox.Show(this,"Please enter a valid path in one of the first two boxes.");
 				return;
     	}
 			if(
-				Prefs.UpdateBool("AtoZfolderNotRequired",optDisableFolders.Checked)
+				Prefs.UpdateBool("AtoZfolderNotRequired",radioAtoZfolderNotRequired.Checked)
 				| Prefs.UpdateString("DocPath",textDocPath.Text)
 				| Prefs.UpdateString("ExportPath",textExportPath.Text)
-				| Prefs.UpdateString("LetterMergePath",textLetterMergePath.Text)
-				| Prefs.UpdateString("ImageStore",optUseDatabase.Checked ? typeof(SqlStore).FullName : typeof(FileStore).FullName))
+				| Prefs.UpdateString("LetterMergePath",textLetterMergePath.Text))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			if(localAtoZpath!=textLocalPath.Text){//if local path changed
-				localAtoZpath=textLocalPath.Text;
+			if(ImageStore.LocalAtoZpath!=textLocalPath.Text) {//if local path changed
+				ImageStore.LocalAtoZpath=textLocalPath.Text;
 				ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
-				compPref.AtoZpath=localAtoZpath;
+				compPref.AtoZpath=ImageStore.LocalAtoZpath;
 				ComputerPrefs.Update(compPref);
 			}
 			DialogResult=DialogResult.OK;
@@ -531,11 +458,18 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK) {
 				return;
 			}
-			if(optUseFolder.Checked && GetPreferredImagePath(textDocPath.Text)==null && GetPreferredImagePath(textLocalPath.Text)==null) {
+			if(radioUseFolder.Checked 
+				&& ImageStore.GetValidPathFromString(textDocPath.Text)==null 
+				&& ImageStore.GetValidPathFromString(textLocalPath.Text)==null) 
+			{
 				MsgBox.Show(this,"Invalid A to Z path.  Closing program.");
 				Application.Exit();
 			}
 		}
+
+		
+
+		
 
 		
 

@@ -155,20 +155,17 @@ namespace OpenDental{
 			//textTest.Text = str.ToString();
 			Clipboard.SetDataObject(str.ToString());
 			try {
-				string patFolder=ODFileUtils.CombinePaths(
-					FormPath.GetPreferredImagePath(),
-					PatCur.ImageFolder.Substring(0, 1),
-					PatCur.ImageFolder);
+				string patFolder=ImageStore.GetPatientFolder(PatCur);
 				//string ProgName = @"C:\Program Files\OpenOffice.org 2.0\program\swriter.exe";
 				//string ProgName = PrefC.GetString("WordProcessorPath");
-				string TheFile=ODFileUtils.CombinePaths(patFolder,"Letter_"+DateTime.Now.ToFileTime()+".doc");
+				string letterFile=ODFileUtils.CombinePaths(patFolder,"Letter_"+DateTime.Now.ToFileTime()+".doc");
 				try{
-					File.Copy(ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefC.GetString("StationaryDocument")),TheFile);
+					File.Copy(ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),PrefC.GetString("StationaryDocument")),letterFile);
 				}
 				catch {
 				}
 				try {
-					Process.Start(TheFile);
+					Process.Start(letterFile);
 				}
 				catch {
 				}

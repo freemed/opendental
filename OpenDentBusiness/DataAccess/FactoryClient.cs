@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDental;
 using System.IO;
 using System.Xml.Serialization;
 using OpenDentBusiness;

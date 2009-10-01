@@ -52,7 +52,7 @@ namespace OpenDental {
 				//This computer just performed an update, but none of the other computers has updated yet.
 				//So attempt to stash all files that are in the Application directory.
 				if(PrefC.UsingAtoZfolder) {
-					string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
+					string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
 					if(Directory.Exists(folderUpdate)) {
 						Directory.Delete(folderUpdate,true);
 						//wait a bit so that CreateDirectory won't malfunction.
@@ -93,7 +93,7 @@ namespace OpenDental {
 					Application.Exit();
 					return false;
 				}
-				string folderUpdate=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"UpdateFiles");
+				string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),"UpdateFiles");
 				//look at the manifest to see if it's the version we need
 				string manifestVersion="";
 				try {
@@ -167,7 +167,7 @@ namespace OpenDental {
 				return;
 			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
-			dlg.SelectedPath=FormPath.GetPreferredImagePath();
+			dlg.SelectedPath=ImageStore.GetPreferredImagePath();
 			dlg.Description=Lan.g("Prefs","Setup.exe will be downloaded to the folder you select below");
 			if(dlg.ShowDialog()!=DialogResult.OK) {
 				return;//app will exit

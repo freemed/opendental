@@ -14,10 +14,8 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using OpenDental.Imaging;
 using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDentBusiness.Imaging;
 using CodeBase;
 
 namespace OpenDental {
@@ -2868,17 +2866,18 @@ namespace OpenDental {
 			FormRpStatement FormST=new FormRpStatement();
 			DataSet dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 			FormST.CreateStatementPdf(stmt,PatCur,FamCur,dataSet);
-			if(ImageStore.UpdatePatient == null){
-				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-			}
+			//if(ImageStore.UpdatePatient == null){
+			//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			//}
 			Patient guar=Patients.GetPat(stmt.PatNum);
-			OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
+			string guarFolder=ImageStore.GetPatientFolder(guar);
+			//OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
 			if(stmt.Mode_==StatementMode.Email){
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-				File.Copy(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)),filePathAndName);
+				File.Copy(ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum),guarFolder),filePathAndName);
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
 				message.PatNum=guar.PatNum;
@@ -2897,7 +2896,7 @@ namespace OpenDental {
 			else{
 				#if DEBUG
 					//don't bother to check valid path because it's just debug.
-					string imgPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
+					string imgPath=ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum),guarFolder);
 					DateTime now=DateTime.Now;
 					while(DateTime.Now<now.AddSeconds(5) && !File.Exists(imgPath)) {//wait up to 5 seconds.
 						Application.DoEvents();

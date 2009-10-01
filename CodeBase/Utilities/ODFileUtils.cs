@@ -24,6 +24,10 @@ namespace CodeBase {
 			return CombinePaths(new string[] { path1,path2,path3 });
 		}
 
+		public static string CombinePaths(string path1,string path2,string path3,string path4) {
+			return CombinePaths(new string[] { path1,path2,path3,path4 });
+		}
+
 		///<summary>OS independent path cominations. Ensures that each of the given path pieces are separated by the correct path separator for the current operating system. There is guaranteed not to be a trailing path separator at the end of the returned string (to accomodate file paths), unless the last specified path piece in the array is the empty string.</summary>
 		public static string CombinePaths(string[] paths){
 			string finalPath="";

@@ -489,7 +489,7 @@ namespace OpenDental{
 				//Letterhead image
 				string fileName;
 				if(PrefC.GetString("StationaryImage") != "") {
-					fileName = ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefC.GetString("StationaryImage"));
+					fileName = ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),PrefC.GetString("StationaryImage"));
 					if(!File.Exists(fileName)){
 						MessageBox.Show(Lan.g(this,"The letter background image was not found")+": "+fileName);
 						ev.Cancel=true;
@@ -504,7 +504,7 @@ namespace OpenDental{
 				}
 				if(ExtraImageToPrint != "") {
 					//handwritten image saved to print
-					fileName =ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ExtraImageToPrint);
+					fileName =ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),ExtraImageToPrint);
 					Image thisImage2 = Image.FromFile(fileName);
 					grfx.DrawImage(thisImage2
 						, 080

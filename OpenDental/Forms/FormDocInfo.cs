@@ -290,10 +290,8 @@ namespace OpenDental{
 			//When the A to Z folders are disabled, the image module is disabled and this
 			//code will never get called. Thus, by the time this point in the code is reached,
 			//there will be a valid image path.
-			textFileName.Text=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																																PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																																PatCur.ImageFolder,
-																																DocCur.FileName});
+			string patFolder=ImageStore.GetPatientFolder(PatCur);
+			textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
 			if(File.Exists(textFileName.Text)){
 				FileInfo fileInfo=new FileInfo(textFileName.Text);
 				textSize.Text=fileInfo.Length.ToString("n0");

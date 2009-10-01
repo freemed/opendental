@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using OpenDental.Imaging;
 using CodeBase;
 using OpenDentBusiness;
 
@@ -767,14 +766,11 @@ namespace OpenDental{
 				SetEnabled(true);
 				//Delete the archived copy of the statement
 				if(StmtCur.DocNum!=0){
-					if(ImageStore.UpdatePatient == null){
-						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-					}
 					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					string patFolder=ImageStore.GetPatientFolder(pat);
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					imageStore.DeleteImage(listdocs);
+					ImageStore.DeleteImage(listdocs,patFolder);
 				}
 			}
 		}
@@ -794,12 +790,9 @@ namespace OpenDental{
 			if(StmtCur.DocNum!=0 && checkIsSent.Checked){
 				//launch existing archive pdf. User can click print from within Acrobat.
 				Cursor=Cursors.WaitCursor;
-				if(ImageStore.UpdatePatient == null){
-					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-				}
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
-				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
+				string patFolder=ImageStore.GetPatientFolder(pat);
+				Process.Start(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder));
 				Cursor=Cursors.Default;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
@@ -874,8 +867,7 @@ namespace OpenDental{
 				return false;
 			}
 			Patient pat=Patients.GetPat(StmtCur.PatNum);
-			string oldPath=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-				pat.ImageFolder.Substring(0,1).ToUpper(),pat.ImageFolder,Documents.GetByNum(StmtCur.DocNum).FileName});
+			string oldPath=ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat),Documents.GetByNum(StmtCur.DocNum).FileName);
 			File.Copy(oldPath,filePathAndName);//
 			//Process.Start(filePathAndName);
 			EmailMessage message=new EmailMessage();
@@ -901,12 +893,9 @@ namespace OpenDental{
 			if(StmtCur.DocNum!=0 && checkIsSent.Checked){//initiallySent && checkIsSent.Checked){
 				//launch existing archive pdf
 				Cursor=Cursors.WaitCursor;
-				if(ImageStore.UpdatePatient == null){
-					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-				}
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
-				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
+				string patFolder=ImageStore.GetPatientFolder(pat);
+				Process.Start(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder));
 				Cursor=Cursors.Default;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
@@ -937,18 +926,16 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
+			Patient pat;
+			string patFolder;
 			if(StmtList==null){
 				if(StmtCur.DocNum!=0){
 					//deleted the pdf
-					//Document doc=Documents.GetByNum(StmtCur.DocNum);
-					if(ImageStore.UpdatePatient == null){
-						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-					}
-					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					pat=Patients.GetPat(StmtCur.PatNum);
+					patFolder=ImageStore.GetPatientFolder(pat);
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					imageStore.DeleteImage(listdocs);
+					ImageStore.DeleteImage(listdocs,patFolder);
 				}
 				Statements.DeleteObject(StmtCur);
 			}
@@ -956,15 +943,11 @@ namespace OpenDental{
 				for(int i=0;i<StmtList.Count;i++){
 					if(StmtList[i].DocNum!=0){
 						//deleted the pdf
-						//Document doc=Documents.GetByNum(StmtCur.DocNum);
-						if(ImageStore.UpdatePatient == null){
-							ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-						}
-						Patient pat=Patients.GetPat(StmtList[i].PatNum);
-						OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+						pat=Patients.GetPat(StmtList[i].PatNum);
+						patFolder=ImageStore.GetPatientFolder(pat);
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
-						imageStore.DeleteImage(listdocs);
+						ImageStore.DeleteImage(listdocs,patFolder);
 					}
 					Statements.DeleteObject(StmtList[i]);
 				}

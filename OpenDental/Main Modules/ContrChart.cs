@@ -20,7 +20,6 @@ using Tao.Platform.Windows;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDentBusiness.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -3117,62 +3116,11 @@ namespace OpenDental{
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
-			GetImageFolder();
+			patFolder=ImageStore.GetPatientFolder(PatCur);//GetImageFolder();
 			DocumentList=Documents.GetAllWithPat(patNum);
 			ApptList=Appointments.GetForPat(patNum);
 			ToothInitialList=ToothInitials.Refresh(patNum);
-		}
-
-		///<summary>Creates the patient image folder if it does not exist, unless the A to Z folders are not being used.</summary>
-		private void GetImageFolder(){
-			if(!PrefC.UsingAtoZfolder){
-				//Not using A to Z folders. Do not create folder.
-				return;
-			}
-			//this is the same code as in the Images module
-			Patient patOld=PatCur.Copy();
-			if(PatCur.ImageFolder==""){//creates new folder for patient if none present
-				string name=PatCur.LName+PatCur.FName;
-				string folder="";
-				for(int i=0;i<name.Length;i++){
-					if(Char.IsLetter(name,i)){
-						folder+=name.Substring(i,1);
-					}
-				}
-				folder+=PatCur.PatNum.ToString();//ensures unique name
-				try{
-					PatCur.ImageFolder=folder;
-					patFolder=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																														PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																														PatCur.ImageFolder});
-					Directory.CreateDirectory(patFolder);
-					Patients.Update(PatCur,patOld);
-					//ModuleSelected(PatCur.PatNum);
-				}
-				catch(Exception ex){
-					MessageBox.Show(ex.Message);
-					//MessageBox.Show(Lan.g(this,"Error.  Could not create folder for patient. "));
-					patFolder="";
-					return;
-				}
-			}
-			else{//patient folder already created once
-				patFolder=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																													PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																													PatCur.ImageFolder});
-			}
-			if(!Directory.Exists(patFolder)){//this makes it more resiliant and allows copies
-					//of the opendentaldata folder to be used in read-only situations.
-				try{
-					Directory.CreateDirectory(patFolder);
-				}
-				catch{
-					MessageBox.Show(Lan.g(this,"Error.  Could not create folder for patient. "));
-					patFolder="";
-					return;
-				}
-			}
-		}
+		}		
 
 		private void RefreshModuleScreen(){
 			//ParentForm.Text=Patients.GetMainTitle(PatCur);
@@ -3481,8 +3429,8 @@ namespace OpenDental{
 			g.CopyFromScreen(origin,new Point(0,0),toothChart.Size,CopyPixelOperation.SourceCopy);
 			g.Dispose();
 			try {
-				OpenDental.Imaging.ImageStoreBase imageStore=OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
-				imageStore.Import(chartBitmap,defNum,ImageType.Photo);
+				//OpenDental.Imaging.ImageStoreBase imageStore=OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+				ImageStore.Import(chartBitmap,defNum,ImageType.Photo,PatCur);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Unable to save file: ") + ex.Message);
@@ -6770,36 +6718,10 @@ namespace OpenDental{
 				text="Ward: "+PatCur.Ward;
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=20;
-				/*string fileName=Documents.GetPatPict(PatCur.PatNum);
-				if(fileName!="") {
-					Image picturePat=null;
-					string fullName=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																													PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																													PatCur.ImageFolder,
-																													fileName})
-					if(File.Exists(fullName)) {
-						try {
-							picturePat=Image.FromFile(fullName);
-						}
-						catch {
-							;
-						}
-					}
-					if(picturePat!=null){
-						//Image.GetThumbnailImageAbort myCallback=new Image.GetThumbnailImageAbort(ThumbnailCallback);
-						//Image myThumbnail=picturePat.GetThumbnailImage(80,80,myCallback,IntPtr.Zero);
-						g.DrawImage(GetThumbnail(picturePat,80),center-40,yPos);
-					}
-					yPos+=80;
-				}*/
 				//Patient images are not shown when the A to Z folders are disabled.
 				if(PrefC.UsingAtoZfolder){
 					Bitmap picturePat;
-					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,
-						ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																										PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																										PatCur.ImageFolder}),
-						out picturePat);
+					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,ImageStore.GetPatientFolder(PatCur),out picturePat);
 					if(picturePat!=null){//Successfully loaded a patient picture?
 						Bitmap thumbnail=ImageHelper.GetThumbnail(picturePat,80);
 						g.DrawImage(thumbnail,center-40,yPos);

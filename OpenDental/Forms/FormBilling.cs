@@ -13,7 +13,6 @@ using System.Xml;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDental.Imaging;
 using PdfSharp;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
@@ -718,15 +717,16 @@ namespace OpenDental{
 			EmailAttach attach;
 			Family fam;
 			Patient pat;
+			string patFolder;
 			int skipped=0;
 			int emailed=0;
 			int printed=0;
 			int sentelect=0;
 			//FormEmailMessageEdit FormEME=new FormEmailMessageEdit();
-			if(ImageStore.UpdatePatient == null){
-				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-			}
-			OpenDental.Imaging.ImageStoreBase imageStore;
+			//if(ImageStore.UpdatePatient == null){
+			//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			//}
+			//OpenDental.Imaging.ImageStoreBase imageStore;
 			//Concat all the pdf's together to create one print job.
 			//Also, if a statement is to be emailed, it does that here and does not attach it to the print job.
 			//If something fails badly, it's no big deal, because we can click the radio button to see "sent" bills, and unsend them from there.
@@ -750,6 +750,7 @@ namespace OpenDental{
 				stmt=Statements.CreateObject(PIn.PLong(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				fam=Patients.GetFamily(stmt.PatNum);
 				pat=fam.GetPatient(stmt.PatNum);
+				patFolder=ImageStore.GetPatientFolder(pat);
 				dataSet=AccountModules.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled);
 				if(stmt.Mode_==StatementMode.Email){
 					if(PrefC.GetString("EmailSMTPserver")==""){
@@ -773,8 +774,8 @@ namespace OpenDental{
 					isPrinting=false;
 					return;
 				}
-				imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
-				savedPdfPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
+				//imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				savedPdfPath=ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum),patFolder);
 				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail){
 					if(pd==null){
 						pd=new PrintDocument();

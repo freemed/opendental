@@ -2896,9 +2896,9 @@ namespace OpenDental{
 					try {
 						Bitmap patPict;
 						Documents.GetPatPict(PIn.PLong(row["PatNum"].ToString()),
-							ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-							row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
-							row["ImageFolder"].ToString(),""}),
+							ODFileUtils.CombinePaths(ImageStore.GetPreferredImagePath(),
+								row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
+								row["ImageFolder"].ToString(),""),
 							out patPict);
 						PicturePat.Image=patPict;
 					}

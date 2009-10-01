@@ -7,7 +7,6 @@ using System.IO;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDentBusiness.Imaging;
 using CodeBase;
 
 namespace OpenDental{
@@ -157,20 +156,21 @@ namespace OpenDental{
 
 		private void SaveAttachment(){
 			Patient PatCur=Patients.GetPat(PatNum);
-			if(PatCur.ImageFolder=="") {
-				MsgBox.Show(this,"Invalid patient image folder.");
-				return;
-			}
+			//if(PatCur.ImageFolder=="") {
+			//	MsgBox.Show(this,"Invalid patient image folder.");
+			//	return;
+			//}
 			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
-			string patfolder=ODFileUtils.CombinePaths(
-				FormPath.GetPreferredImagePath(),PatCur.ImageFolder.Substring(0,1).ToUpper(),PatCur.ImageFolder);
-			if(!Directory.Exists(patfolder)) {
-				MsgBox.Show(this,"Patient folder not found in AtoZ folder.");
-				return;
-			}
+			string patfolder=ImageStore.GetPatientFolder(PatCur);
+				//ODFileUtils.CombinePaths(
+				//FormPath.GetPreferredImagePath(),PatCur.ImageFolder.Substring(0,1).ToUpper(),PatCur.ImageFolder);
+			//if(!Directory.Exists(patfolder)) {
+			//	MsgBox.Show(this,"Patient folder not found in AtoZ folder.");
+			//	return;
+			//}
 			Document doc=Docs[gridMain.GetSelectedIndex()];
 			if(!ImageHelper.HasImageExtension(doc.FileName)){
 				MsgBox.Show(this,"Invalid file.  Only images may be attached, no other file format.");
@@ -195,7 +195,7 @@ namespace OpenDental{
 					{
 						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
 						Bitmap bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
-						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplySettings.ALL);
+						Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ApplyImageSettings.ALL);
 						bitmapnew.Save(newPath);
 					}
 					else {

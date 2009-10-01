@@ -14,7 +14,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDental.Imaging;
 using OpenDental.UI;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -40,7 +39,7 @@ namespace OpenDental{
 		///<summary>Holds the data for one statement.</summary>
 		private DataSet dataSett;
 		private Statement Stmt;
-		private ImageStoreBase imageStore;
+		//private ImageStoreBase imageStore;
 
 		///<summary></summary>
 		public FormRpStatement(){
@@ -255,13 +254,13 @@ namespace OpenDental{
 			dataSett=dataSet;
 			//dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
 			//	stmt.Intermingled);
-			if(ImageStore.UpdatePatient == null){
-				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-			}
+			//if(ImageStore.UpdatePatient == null){
+			//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			//}
 			//The "pat2" could be either the pat or the guarantor
 			Patient pat2=fam.GetPatient(stmt.PatNum);
 			//Patient pat=Patients.GetPat(stmt.PatNum);
-			imageStore = ImageStore.GetImageStore(pat2);
+			//imageStore = ImageStore.GetImageStore(pat2);
 			//Save to a temp pdf--------------------------------------------------------------------------
 			string tempPath=CodeBase.ODFileUtils.CombinePaths(Path.GetTempPath(),pat2.PatNum.ToString()+".pdf");
 			PrintDocument pd=new PrintDocument();
@@ -296,7 +295,7 @@ namespace OpenDental{
 			//create doc--------------------------------------------------------------------------------------
 			OpenDentBusiness.Document docc=null;
 			try {
-				docc=imageStore.Import(tempPath,category);
+				docc=ImageStore.Import(tempPath,category,pat2);
 			} 
 			catch {
 				MsgBox.Show(this,"Error saving document.");

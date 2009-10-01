@@ -7,7 +7,7 @@ using CodeBase;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 
-namespace OpenDentBusiness.Imaging {
+namespace OpenDentBusiness {
 	public static class ImageHelper {
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
 		public static void RenderMountImage(Bitmap mountImage, Bitmap[] originalImages, List <MountItem> mountItems, Document[] documents, int imageSelected) {
@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Imaging {
 			
 			using(Graphics g = Graphics.FromImage(mountImage)) {
 				g.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);//draw box behind image
-				Bitmap image = ApplyDocumentSettingsToImage(mountItemDoc, mountItemImage, ApplySettings.ALL);
+				Bitmap image = ApplyDocumentSettingsToImage(mountItemDoc,mountItemImage,ApplyImageSettings.ALL);
 				if (image == null) {
 					return;
 				}
@@ -75,7 +75,7 @@ namespace OpenDentBusiness.Imaging {
 		}
 
 		///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
-		public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ApplySettings settings) {
+		public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ApplyImageSettings settings) {
 			if (image == null) {//Any operation on a non-existant image produces a non-existant image.
 				return null;
 			}
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Imaging {
 			//CROP - Implies that the croping rectangle must be saved in raw-image-space coordinates, 
 			//with an origin of that equal to the upper left hand portion of the image.
 			Rectangle cropResult;
-			if ((settings & ApplySettings.CROP) != 0 &&	//Crop not requested.
+			if((settings & ApplyImageSettings.CROP) != 0 &&	//Crop not requested.
 				doc.CropW > 0 && doc.CropH > 0)//No clip area yet defined, so no clipping is performed.
 			{
 				float[] cropDims = ODMathLib.IntersectRectangles(0, 0, image.Width, image.Height,//Intersect image rectangle with
@@ -109,12 +109,12 @@ namespace OpenDentBusiness.Imaging {
 			g.DrawImage(image, croppedDims, cropResult, GraphicsUnit.Pixel);
 			g.Dispose();
 			//FLIP AND ROTATE - must match the operations in GetDocumentFlippedRotatedMatrix().
-			if ((settings & ApplySettings.FLIP) != 0) {
+			if((settings & ApplyImageSettings.FLIP) != 0) {
 				if (doc.IsFlipped) {
 					cropped.RotateFlip(RotateFlipType.RotateNoneFlipX);
 				}
 			}
-			if ((settings & ApplySettings.ROTATE) != 0) {
+			if((settings & ApplyImageSettings.ROTATE) != 0) {
 				if (doc.DegreesRotated % 360 == 90) {
 					cropped.RotateFlip(RotateFlipType.Rotate90FlipNone);
 				}
@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Imaging {
 			//APPLY BRIGHTNESS AND CONTRAST - 
 			//TODO: should be updated later for more general functions 
 			//(create inputValues and outputValues from stored db function/table).
-			if ((settings & ApplySettings.COLORFUNCTION) != 0 &&
+			if((settings & ApplyImageSettings.COLORFUNCTION) != 0 &&
 				doc.WindowingMax != 0 && //Do not apply color function if brightness/contrast have never been set (assume normal settings).
 				!(doc.WindowingMax == 255 && doc.WindowingMin == 0)) {//Don't apply if brightness/contrast settings are normal.
 				float[] inputValues = new float[] {
@@ -209,5 +209,14 @@ namespace OpenDentBusiness.Imaging {
 			g.Dispose();
 			return retVal;
 		}
+	}
+
+	public enum ApplyImageSettings {
+		NONE=0x00,
+		ALL=0xFF,
+		CROP=0x01,
+		FLIP=0x02,
+		ROTATE=0x04,
+		COLORFUNCTION=0x08,
 	}
 }
