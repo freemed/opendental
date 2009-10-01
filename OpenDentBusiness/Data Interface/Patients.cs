@@ -1639,7 +1639,7 @@ namespace OpenDentBusiness{
 			return asofDate.Year-birthdate.Year-1;
 		}
 
-		///<summary>If zero, returns empty string.  Otherwise returns simple year.</summary>
+		///<summary>If zero, returns empty string.  Otherwise returns simple year.  Also see PatientLogic.DateToAgeString().</summary>
 		public static string AgeToString(int age){
 			//No need to check RemotingRole; no call to db.
 			if(age==0) {

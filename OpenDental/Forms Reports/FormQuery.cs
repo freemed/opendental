@@ -807,6 +807,10 @@ namespace OpenDental{
 						case "mydate"://this is a workaround for the daily payment report
 							tableOut.Rows[i][j]=PIn.PDate(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;
+						//age
+						case "birthdateforage":
+							tableOut.Rows[i][j]=PatientLogic.DateToAgeString(PIn.PDate(tableOut.Rows[i][j].ToString()));
+							break;
             //time 
 						case "aptdatetime":
             case "starttime":

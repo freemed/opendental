@@ -509,6 +509,7 @@ namespace OpenDental{
 			listOther.Items.Add("SubscriberNameFL");
 			listOther.Items.Add("SubscriberID");
 			listOther.Items.Add("NextSchedAppt");
+			listOther.Items.Add("Age");
 			for(int i=0;i<LetterMergeCur.Fields.Count;i++){
 				for(int j=0;j<listOther.Items.Count;j++){
 					if(listOther.Items[j].ToString()==(string)LetterMergeCur.Fields[i]){
@@ -538,7 +539,10 @@ namespace OpenDental{
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
-#if !DISABLE_MICROSOFT_OFFICE
+			#if DISABLE_MICROSOFT_OFFICE
+				MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+				return;
+			#endif
 			if(!Directory.Exists(PrefC.GetString("LetterMergePath"))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
@@ -576,9 +580,6 @@ namespace OpenDental{
 			WrdApp.WindowState=Word.WdWindowState.wdWindowStateMinimize;
 			wrdDoc=null;
 			MsgBox.Show(this,"Done. You can edit the new template after closing this window.");
-#else
-			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
-#endif
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

@@ -38,31 +38,47 @@ namespace OpenDentBusiness {
 					//other:
 				else if(letter.Fields[i]=="TPResponsPartyNameFL") {
 					command+="CONCAT(patResp.FName,' ',patResp.LName) TPResponsPartyNameFL";
-				} else if(letter.Fields[i]=="TPResponsPartyAddress") {
+				} 
+				else if(letter.Fields[i]=="TPResponsPartyAddress") {
 					command+="patResp.Address TPResponsPartyAddress";
-				} else if(letter.Fields[i]=="TPResponsPartyCityStZip") {
+				} 
+				else if(letter.Fields[i]=="TPResponsPartyCityStZip") {
 					command+="CONCAT(patResp.City,', ',patResp.State,' ',patResp.Zip) TPResponsPartyCityStZip";
-				} else if(letter.Fields[i]=="SiteDescription") {
+				} 
+				else if(letter.Fields[i]=="SiteDescription") {
 					command+="site.Description SiteDescription";
-				} else if(letter.Fields[i]=="DateOfLastSavedTP") {
+				} 
+				else if(letter.Fields[i]=="DateOfLastSavedTP") {
 					command+="DATE(treatplan.DateTP) DateOfLastSavedTP";
-				} else if(letter.Fields[i]=="DateRecallDue") {
+				} 
+				else if(letter.Fields[i]=="DateRecallDue") {
 					command+="recall.DateDue  DateRecallDue";
-				} else if(letter.Fields[i]=="CarrierName") {
+				} 
+				else if(letter.Fields[i]=="CarrierName") {
 					command+="CarrierName";
-				} else if(letter.Fields[i]=="CarrierAddress") {
+				} 
+				else if(letter.Fields[i]=="CarrierAddress") {
 					command+="carrier.Address CarrierAddress";
-				} else if(letter.Fields[i]=="CarrierCityStZip") {
+				} 
+				else if(letter.Fields[i]=="CarrierCityStZip") {
 					command+="CONCAT(carrier.City,', ',carrier.State,' ',carrier.Zip) CarrierCityStZip";
-				} else if(letter.Fields[i]=="SubscriberNameFL") {
+				} 
+				else if(letter.Fields[i]=="SubscriberNameFL") {
 					command+="CONCAT(patSubsc.FName,' ',patSubsc.LName) SubscriberNameFL";
-				} else if(letter.Fields[i]=="SubscriberID") {
+				} 
+				else if(letter.Fields[i]=="SubscriberID") {
 					command+="insplan.SubscriberID";
-				} else if(letter.Fields[i]=="NextSchedAppt") {
+				} 
+				else if(letter.Fields[i]=="NextSchedAppt") {
 					command+="MIN(appointment.AptDateTime) NextSchedAppt";
-				} else if(letter.Fields[i].StartsWith("referral.")) {
+				}
+				else if(letter.Fields[i]=="Age") {
+					command+="patient.Birthdate BirthdateForAge";
+				}
+				else if(letter.Fields[i].StartsWith("referral.")) {
 					command+="referral."+letter.Fields[i].Substring(9);
-				} else {
+				}
+				else {
 					command+="patient."+letter.Fields[i];
 				}
 			}
