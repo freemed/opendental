@@ -312,6 +312,16 @@ namespace OpenDentBusiness{
 				+" AND task.TaskStatus="+POut.PLong((int)TaskStatusEnum.New);
 			return PIn.PInt(Db.GetCount(command));
 		}
+
+		///<summary>Appends a carriage return as well as the text to any task.</summary>
+		public static void Append(long taskNum,string text) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum,text);
+				return;
+			}
+			string command="UPDATE task SET task.Descript=CONCAT(task.Descript,'"+POut.PString("\r\n"+text)+"') WHERE TaskNum="+POut.PLong(taskNum);
+			Db.NonQ(command);
+		}
 	
 	
 
