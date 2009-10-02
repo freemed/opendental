@@ -192,6 +192,20 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		public static bool IsSpecialRecallType(long recallTypeNum) {
+			//No need to check RemotingRole; no call to db.
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")) {
+				return true;
+			}
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")) {
+				return true;
+			}
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")) {
+				return true;
+			}
+			return false;
+		}
+
 		///<summary>Gets a list of all active recall types.  Those without triggers are excluded.  Perio and Prophy are both included.  One of them should later be removed from the collection.</summary>
 		public static List<RecallType> GetActive(){
 			//No need to check RemotingRole; no call to db.
@@ -206,6 +220,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		/*
 		///<summary>Gets a list of all inactive recall types.  Only those without triggers are included.</summary>
 		public static List<RecallType> GetInactive(){
 			//No need to check RemotingRole; no call to db.
@@ -218,7 +233,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>Gets the pref table RecallTypeSpecialProphy RecallTypeNum.</summary>
 		public static long ProphyType{

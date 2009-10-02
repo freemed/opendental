@@ -118,8 +118,8 @@ namespace OpenDentBusiness{
 			//establish the range for this server
 			long rangeStart=10000;
 			long rangeEnd=long.MaxValue;
-			//the following line triggers a separate call to db if server_id=-1.
-			if(server_id!=0) {//if it IS 0, then there is no server_id set.
+			//the following line triggers a separate call to db if server_id=-1.  Must be cap.
+			if(Server_id!=0) {//if it IS 0, then there is no server_id set.
 				ReplicationServer thisServer=null;
 				for(int i=0;i<Listt.Count;i++) {
 					if(Listt[i].ServerId==server_id) {

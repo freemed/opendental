@@ -147,8 +147,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("recallType");
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
+			string command;
 			//get maxDateDue for each family.
-			string command=@"SELECT MAX(recall.DateDue) maxDateDue,patient.Guarantor 
+			//This was an attempt to group families when sorting by due date, but it didn't work so well
+			//Would be better to loop through and set the maxDateDue after deciding which rows will show.
+			/*
+			command=@"SELECT MAX(recall.DateDue) maxDateDue,patient.Guarantor 
 				FROM patient
 				LEFT JOIN recall ON patient.PatNum=recall.PatNum
 				AND recall.DateDue >= "+POut.PDate(fromDate)+" "
@@ -168,7 +172,7 @@ namespace OpenDentBusiness{
 			Dictionary<long,DateTime> dictMaxDateDue=new Dictionary<long,DateTime>();
 			for(int i=0;i<maxTable.Rows.Count;i++) {
 				dictMaxDateDue.Add(PIn.PLong(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
-			}
+			}*/
 			command=
 				@"SELECT patguar.BalTotal,patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
 				DisableUntilBalance,DisableUntilDate,
@@ -177,7 +181,7 @@ namespace OpenDentBusiness{
 				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
 				COUNT(commlog.CommlogNum) _numberOfReminders,
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
-				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
+				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,recall.RecallTypeNum,
 				recalltype.Description _recalltype,patient.WirelessPhone,patient.WkPhone
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
@@ -187,6 +191,7 @@ namespace OpenDentBusiness{
 				AND CommType="+POut.PLong(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
 				//+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
+				//We need to make commlog more restrictive for situations where a manually added recall has no date previous,
 				+"WHERE patient.patstatus=0 ";
 			if(provNum>0){
 				command+="AND (patient.PriProv="+POut.PLong(provNum)+" "
@@ -230,7 +235,7 @@ namespace OpenDentBusiness{
 				}
 				command+=") ";
 			}
-			command+="GROUP BY recall.PatNum ";
+			command+="GROUP BY recall.RecallTypeNum,recall.PatNum ";//this forces both manual and prophy types to show independently.
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
@@ -244,10 +249,13 @@ namespace OpenDentBusiness{
 			DateTime disableUntilDate;
 			double disableUntilBalance;
 			double familyBalance;
+			long recallTypeNum;
 			for(int i=0;i<rawtable.Rows.Count;i++){
+				patNum=PIn.PLong(rawtable.Rows[i]["PatNum"].ToString());
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
 				numberOfReminders=PIn.PInt(rawtable.Rows[i]["_numberOfReminders"].ToString());
+				recallTypeNum=PIn.PLong(rawtable.Rows[i]["RecallTypeNum"].ToString());
 				if(numberOfReminders==0) {
 					//always show
 				}
@@ -305,7 +313,6 @@ namespace OpenDentBusiness{
 						continue;
 					}
 				}
-				patNum=PIn.PLong(rawtable.Rows[i]["PatNum"].ToString());
 				if(excludePatNums.Contains(patNum)){
 					continue;
 				}
@@ -393,12 +400,12 @@ namespace OpenDentBusiness{
 				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
 				guarNum=PIn.PLong(rawtable.Rows[i]["Guarantor"].ToString());
-				if(dictMaxDateDue.ContainsKey(guarNum)) {
-					row["maxDateDue"]=dictMaxDateDue[guarNum];
-				}
-				else {
+				//if(dictMaxDateDue.ContainsKey(guarNum)) {
+				//	row["maxDateDue"]=dictMaxDateDue[guarNum];
+				//}
+				//else {
 					row["maxDateDue"]=DateTime.MinValue;
-				}
+				//}
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				if(numberOfReminders==0) {
 					row["numberOfReminders"]="";
@@ -574,7 +581,8 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			//get previous dates for all types at once
+			//get previous dates for all types at once.
+			//Because of the inner join, this will not include recall types with no trigger.
 			command="SELECT RecallTypeNum,MAX(ProcDate) _procDate "
 				+"FROM procedurelog,recalltrigger "
 				+"WHERE PatNum="+POut.PLong(patNum)
@@ -623,6 +631,10 @@ namespace OpenDentBusiness{
 				}
 			}
 			for(int i=0;i<typeList.Count;i++){
+				if(RecallTriggers.GetForType(typeList[i].RecallTypeNum).Count==0) {
+					//if no triggers for this recall type, then skip it.  Don't try to add or alter.
+					continue;
+				}
 				if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
 					|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum) 
 				{
@@ -701,6 +713,8 @@ namespace OpenDentBusiness{
 				}
 			}
 			//now, we need to loop through all the inactive recall types and clear the DateDueCalc
+			//We don't do this anymore. User must explicitly delete recalls, either one-by-one, or from the recall type window.
+			/*
 			List<RecallType> typeListInactive=RecallTypes.GetInactive();
 			for(int i=0;i<typeListInactive.Count;i++){
 				matchingRecall=null;
@@ -713,16 +727,15 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				Recalls.Delete(matchingRecall);//we'll just delete it
-				/*
 				//There is an existing recall, so alter it if certain conditions are met
-				matchingRecall.DatePrevious=DateTime.MinValue;
-				if(matchingRecall.DateDue==matchingRecall.DateDueCalc){//if user did not enter a DateDue
+				//matchingRecall.DatePrevious=DateTime.MinValue;
+				//if(matchingRecall.DateDue==matchingRecall.DateDueCalc){//if user did not enter a DateDue
 					//we can safely alter the DateDue
-					matchingRecall.DateDue=DateTime.MinValue;
-				}
-				matchingRecall.DateDueCalc=DateTime.MinValue;
-				Recalls.Update(matchingRecall);*/
-			}
+				//	matchingRecall.DateDue=DateTime.MinValue;
+				//}
+				//matchingRecall.DateDueCalc=DateTime.MinValue;
+				//Recalls.Update(matchingRecall);
+			}*/
 		}
 
 		///<summary></summary>
@@ -985,17 +998,20 @@ namespace OpenDentBusiness{
 				else {//sort by maxDateDue
 					DateTime xD=PIn.PDate(x["maxDateDue"].ToString());
 					DateTime yD=PIn.PDate(y["maxDateDue"].ToString());
+					//DateTime xD=(DateTime)x["DateDue"];
+					//DateTime yD=(DateTime)y["DateDue"];
 					if(xD != yD) {
 						return (xD.CompareTo(yD));
 					}
-					//if dates are same, sort by guarantor
+					//if dates are same, sort/group by guarantor
 					if(x["Guarantor"].ToString() != y["Guarantor"].ToString()) {
 						return (x["Guarantor"].ToString().CompareTo(y["Guarantor"].ToString()));
 					}
 					//within the same family, sort by actual DueDate
-					xD=PIn.PDate(x["DateDue"].ToString());
-					yD=PIn.PDate(y["DateDue"].ToString());
-					return (xD.CompareTo(yD));
+					//xD=PIn.PDate(x["DateDue"].ToString());
+					//yD=PIn.PDate(y["DateDue"].ToString());
+					//return (xD.CompareTo(yD));
+					return 0;
 				}
 			}
 			else {//individual patients

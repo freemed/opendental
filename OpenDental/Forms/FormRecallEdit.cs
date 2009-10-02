@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -509,12 +510,19 @@ namespace OpenDental{
 		}
 
 		private void comboType_SelectionChangeCommitted(object sender,EventArgs e) {
-			//not possible unless new recall manually being entered (rare)
+			//not possible unless new recall manually being entered
 			Interval iv=RecallTypeC.Listt[comboType.SelectedIndex].DefaultInterval;
 			textYears.Text=iv.Years.ToString();
 			textMonths.Text=iv.Months.ToString();
 			textWeeks.Text=iv.Weeks.ToString();
 			textDays.Text=iv.Days.ToString();
+			List<RecallTrigger> triggerList=RecallTriggers.GetForType(RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum);
+			if(triggerList.Count==0) {//if no triggers, then it's a manual type
+				RecallCur.DatePrevious=DateTime.Today;
+				//textDatePrevious.Text=DateTime.Today.ToShortDateString();
+				DateTime dueDate=DateTime.Today+iv;
+				textDateDue.Text=dueDate.ToShortDateString();
+			}
 		}
 
 		private void checkIsDisabled_Click(object sender, System.EventArgs e) {

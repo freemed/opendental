@@ -84,9 +84,13 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.groupInterval = new System.Windows.Forms.GroupBox();
+			this.textWeeks = new OpenDental.ValidNum();
 			this.label7 = new System.Windows.Forms.Label();
+			this.textDays = new OpenDental.ValidNum();
 			this.label6 = new System.Windows.Forms.Label();
+			this.textMonths = new OpenDental.ValidNum();
 			this.label9 = new System.Windows.Forms.Label();
+			this.textYears = new OpenDental.ValidNum();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textPattern = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -94,6 +98,8 @@ namespace OpenDental{
 			this.label15 = new System.Windows.Forms.Label();
 			this.listProcs = new System.Windows.Forms.ListBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.butRemoveProc = new OpenDental.UI.Button();
+			this.butAddProc = new OpenDental.UI.Button();
 			this.listTriggers = new System.Windows.Forms.ListBox();
 			this.labelTriggers = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -101,12 +107,6 @@ namespace OpenDental{
 			this.labelSpecial = new System.Windows.Forms.Label();
 			this.butRemoveTrigger = new OpenDental.UI.Button();
 			this.butAddTrigger = new OpenDental.UI.Button();
-			this.butRemoveProc = new OpenDental.UI.Button();
-			this.butAddProc = new OpenDental.UI.Button();
-			this.textWeeks = new OpenDental.ValidNum();
-			this.textDays = new OpenDental.ValidNum();
-			this.textMonths = new OpenDental.ValidNum();
-			this.textYears = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
@@ -148,6 +148,15 @@ namespace OpenDental{
 			this.groupInterval.TabStop = false;
 			this.groupInterval.Text = "Default Interval";
 			// 
+			// textWeeks
+			// 
+			this.textWeeks.Location = new System.Drawing.Point(105,64);
+			this.textWeeks.MaxVal = 255;
+			this.textWeeks.MinVal = 0;
+			this.textWeeks.Name = "textWeeks";
+			this.textWeeks.Size = new System.Drawing.Size(51,20);
+			this.textWeeks.TabIndex = 12;
+			// 
 			// label7
 			// 
 			this.label7.Location = new System.Drawing.Point(11,64);
@@ -156,6 +165,15 @@ namespace OpenDental{
 			this.label7.TabIndex = 11;
 			this.label7.Text = "Weeks";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDays
+			// 
+			this.textDays.Location = new System.Drawing.Point(105,86);
+			this.textDays.MaxVal = 255;
+			this.textDays.MinVal = 0;
+			this.textDays.Name = "textDays";
+			this.textDays.Size = new System.Drawing.Size(51,20);
+			this.textDays.TabIndex = 10;
 			// 
 			// label6
 			// 
@@ -166,6 +184,15 @@ namespace OpenDental{
 			this.label6.Text = "Days";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textMonths
+			// 
+			this.textMonths.Location = new System.Drawing.Point(105,41);
+			this.textMonths.MaxVal = 255;
+			this.textMonths.MinVal = 0;
+			this.textMonths.Name = "textMonths";
+			this.textMonths.Size = new System.Drawing.Size(51,20);
+			this.textMonths.TabIndex = 8;
+			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(11,41);
@@ -174,6 +201,15 @@ namespace OpenDental{
 			this.label9.TabIndex = 7;
 			this.label9.Text = "Months";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textYears
+			// 
+			this.textYears.Location = new System.Drawing.Point(105,18);
+			this.textYears.MaxVal = 127;
+			this.textYears.MinVal = 0;
+			this.textYears.Name = "textYears";
+			this.textYears.Size = new System.Drawing.Size(51,20);
+			this.textYears.TabIndex = 6;
 			// 
 			// label10
 			// 
@@ -240,6 +276,38 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 123;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "When automatically creating appointments";
+			// 
+			// butRemoveProc
+			// 
+			this.butRemoveProc.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRemoveProc.Autosize = true;
+			this.butRemoveProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveProc.CornerRadius = 4F;
+			this.butRemoveProc.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butRemoveProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRemoveProc.Location = new System.Drawing.Point(331,129);
+			this.butRemoveProc.Name = "butRemoveProc";
+			this.butRemoveProc.Size = new System.Drawing.Size(78,24);
+			this.butRemoveProc.TabIndex = 124;
+			this.butRemoveProc.Text = "Remove";
+			this.butRemoveProc.Click += new System.EventHandler(this.butRemoveProc_Click);
+			// 
+			// butAddProc
+			// 
+			this.butAddProc.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddProc.Autosize = true;
+			this.butAddProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddProc.CornerRadius = 4F;
+			this.butAddProc.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddProc.Location = new System.Drawing.Point(331,99);
+			this.butAddProc.Name = "butAddProc";
+			this.butAddProc.Size = new System.Drawing.Size(78,24);
+			this.butAddProc.TabIndex = 123;
+			this.butAddProc.Text = "Add";
+			this.butAddProc.Click += new System.EventHandler(this.butAddProc_Click);
 			// 
 			// listTriggers
 			// 
@@ -316,74 +384,6 @@ namespace OpenDental{
 			this.butAddTrigger.Text = "Add";
 			this.butAddTrigger.Click += new System.EventHandler(this.butAddTrigger_Click);
 			// 
-			// butRemoveProc
-			// 
-			this.butRemoveProc.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRemoveProc.Autosize = true;
-			this.butRemoveProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveProc.CornerRadius = 4F;
-			this.butRemoveProc.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butRemoveProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRemoveProc.Location = new System.Drawing.Point(331,129);
-			this.butRemoveProc.Name = "butRemoveProc";
-			this.butRemoveProc.Size = new System.Drawing.Size(78,24);
-			this.butRemoveProc.TabIndex = 124;
-			this.butRemoveProc.Text = "Remove";
-			this.butRemoveProc.Click += new System.EventHandler(this.butRemoveProc_Click);
-			// 
-			// butAddProc
-			// 
-			this.butAddProc.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddProc.Autosize = true;
-			this.butAddProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddProc.CornerRadius = 4F;
-			this.butAddProc.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddProc.Location = new System.Drawing.Point(331,99);
-			this.butAddProc.Name = "butAddProc";
-			this.butAddProc.Size = new System.Drawing.Size(78,24);
-			this.butAddProc.TabIndex = 123;
-			this.butAddProc.Text = "Add";
-			this.butAddProc.Click += new System.EventHandler(this.butAddProc_Click);
-			// 
-			// textWeeks
-			// 
-			this.textWeeks.Location = new System.Drawing.Point(105,64);
-			this.textWeeks.MaxVal = 255;
-			this.textWeeks.MinVal = 0;
-			this.textWeeks.Name = "textWeeks";
-			this.textWeeks.Size = new System.Drawing.Size(51,20);
-			this.textWeeks.TabIndex = 12;
-			// 
-			// textDays
-			// 
-			this.textDays.Location = new System.Drawing.Point(105,86);
-			this.textDays.MaxVal = 255;
-			this.textDays.MinVal = 0;
-			this.textDays.Name = "textDays";
-			this.textDays.Size = new System.Drawing.Size(51,20);
-			this.textDays.TabIndex = 10;
-			// 
-			// textMonths
-			// 
-			this.textMonths.Location = new System.Drawing.Point(105,41);
-			this.textMonths.MaxVal = 255;
-			this.textMonths.MinVal = 0;
-			this.textMonths.Name = "textMonths";
-			this.textMonths.Size = new System.Drawing.Size(51,20);
-			this.textMonths.TabIndex = 8;
-			// 
-			// textYears
-			// 
-			this.textYears.Location = new System.Drawing.Point(105,18);
-			this.textYears.MaxVal = 127;
-			this.textYears.MinVal = 0;
-			this.textYears.Name = "textYears";
-			this.textYears.Size = new System.Drawing.Size(51,20);
-			this.textYears.TabIndex = 6;
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -417,12 +417,12 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label2.Location = new System.Drawing.Point(52,609);
+			this.label2.Location = new System.Drawing.Point(386,90);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(292,20);
+			this.label2.Size = new System.Drawing.Size(263,60);
 			this.label2.TabIndex = 132;
-			this.label2.Text = "To disable a recall type, simply clear out the triggers.";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label2.Text = "A manual recall type will have no triggers.  To disable an automatic recall type," +
+    " simply clear out the triggers.";
 			// 
 			// FormRecallTypeEdit
 			// 
@@ -645,11 +645,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
+			/*
 			if(listTriggers.Items.Count==0 && comboSpecial.SelectedIndex!=2) {//except child prophy
 				if(!MsgBox.Show(this,true,"Warning! clearing all triggers for a recall type will cause all patient recalls of that type to be deleted, even those with notes.  Continue anyway?")){
 					return;
 				}
-			}
+			}*/
 			RecallCur.Description=textDescription.Text;
 			Interval interval=new Interval(
 				PIn.PInt(textDays.Text),

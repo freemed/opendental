@@ -74,11 +74,12 @@ namespace OpenDentBusiness{
 
 		/// <summary>Specify a date and an interval to return a new date based on adding the interval to the original date.</summary>
 		public static DateTime operator+(DateTime date,Interval interval) {
-			return date
+			DateTime retVal=date
 				.AddYears(interval.Years)
 				.AddMonths(interval.Months)
 				.AddDays(interval.Weeks*7)
 				.AddDays(interval.Days);
+			return retVal;
 		}
 
 		///<summary></summary>
