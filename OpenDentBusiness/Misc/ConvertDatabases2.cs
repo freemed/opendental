@@ -777,6 +777,32 @@ DROP TABLE IF EXISTS etAck";
 				command="UPDATE preference SET ValueString = '6.7.15.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ32(command);
 			}
+			To6_7_22();
+		}
+
+		private static void To6_7_22() {
+			if(FromVersion<new Version("6.7.22.0")) {
+				string command;
+				command="UPDATE preference SET ValueString ='http://opendentalsoft.com:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName='UpdateServerAddress' AND ValueString LIKE '%70.90.133.65%'";
+				Db.NonQ(command);
+				try {
+					command="ALTER TABLE document ADD INDEX (PatNum)";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (BillingTypeOne)";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (BillingTypeTwo)";
+					Db.NonQ(command);
+					command="ALTER TABLE securitylog ADD INDEX (PatNum)";
+					Db.NonQ(command);
+					command="ALTER TABLE toothinitial ADD INDEX (PatNum)";
+					Db.NonQ(command);
+				}
+				catch {
+					//in case any of the indices arlready exists.
+				}
+				command="UPDATE preference SET ValueString = '6.7.22.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To6_8_0();
 		}
 
