@@ -89,7 +89,12 @@ namespace OpenDental.Bridges {
 			writer.WriteElementString("EMail","");//leave this blank until we figure out how to set this trigger.
 			//Account summary-----------------------------------------------------------------------
 			writer.WriteStartElement("AccountSummary");
-			writer.WriteElementString("PriorStatementDate",stmt.DateRangeFrom.AddDays(-1).ToString("MM/dd/yyyy"));
+			if(stmt.DateRangeFrom.Year<1880) {//make up a statement date.
+				writer.WriteElementString("PriorStatementDate",DateTime.Today.AddMonths(-1).ToString("MM/dd/yyyy"));
+			}
+			else {
+				writer.WriteElementString("PriorStatementDate",stmt.DateRangeFrom.AddDays(-1).ToString("MM/dd/yyyy"));
+			}
 			DateTime dueDate;
 			if(PrefC.GetInt("StatementsCalcDueDate")==-1){
 				dueDate=DateTime.Today.AddDays(10);
