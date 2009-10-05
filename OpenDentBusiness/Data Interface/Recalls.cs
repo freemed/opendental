@@ -148,31 +148,6 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command;
-			//get maxDateDue for each family.
-			//This was an attempt to group families when sorting by due date, but it didn't work so well
-			//Would be better to loop through and set the maxDateDue after deciding which rows will show.
-			/*
-			command=@"SELECT MAX(recall.DateDue) maxDateDue,patient.Guarantor 
-				FROM patient
-				LEFT JOIN recall ON patient.PatNum=recall.PatNum
-				AND recall.DateDue >= "+POut.PDate(fromDate)+" "
-				+"AND recall.DateDue <= "+POut.PDate(toDate)+" "
-				+"AND recall.IsDisabled = 0 "
-				+"AND NOT EXISTS("//test for scheduled appt.
-				+"SELECT * FROM appointment,procedurelog,recalltrigger "
-				+"WHERE appointment.AptNum=procedurelog.AptNum "
-				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
-				+"AND recall.PatNum=procedurelog.PatNum "
-				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
-				+"AND (appointment.AptStatus=1 "//Scheduled
-				+"OR appointment.AptStatus=4)) "//ASAP,    end of NOT EXISTS
-				+"GROUP BY patient.Guarantor";
-			DataTable maxTable=Db.GetTable(command);
-			//key=guarantor, value=maxDateDue
-			Dictionary<long,DateTime> dictMaxDateDue=new Dictionary<long,DateTime>();
-			for(int i=0;i<maxTable.Rows.Count;i++) {
-				dictMaxDateDue.Add(PIn.PLong(maxTable.Rows[i]["Guarantor"].ToString()),PIn.PDate(maxTable.Rows[i]["maxDateDue"].ToString()));
-			}*/
 			command=
 				@"SELECT patguar.BalTotal,patient.Birthdate,recall.DateDue,MAX(CommDateTime) _dateLastReminder,
 				DisableUntilBalance,DisableUntilDate,
@@ -181,7 +156,7 @@ namespace OpenDentBusiness{
 				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
 				COUNT(commlog.CommlogNum) _numberOfReminders,
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
-				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,recall.RecallTypeNum,
+				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
 				recalltype.Description _recalltype,patient.WirelessPhone,patient.WkPhone
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
@@ -235,27 +210,24 @@ namespace OpenDentBusiness{
 				}
 				command+=") ";
 			}
-			command+="GROUP BY recall.RecallTypeNum,recall.PatNum ";//this forces both manual and prophy types to show independently.
+			command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//this forces both manual and prophy types to show independently.
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
 			Interval interv;
 			Patient pat;
 			ContactMethod contmeth;
-			long guarNum;
 			int numberOfReminders;
 			int maxNumberReminders=(int)PrefC.GetInt("RecallMaxNumberReminders");
 			long patNum;
 			DateTime disableUntilDate;
 			double disableUntilBalance;
 			double familyBalance;
-			long recallTypeNum;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				patNum=PIn.PLong(rawtable.Rows[i]["PatNum"].ToString());
 				dateDue=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				dateRemind=PIn.PDate(rawtable.Rows[i]["_dateLastReminder"].ToString());
 				numberOfReminders=PIn.PInt(rawtable.Rows[i]["_numberOfReminders"].ToString());
-				recallTypeNum=PIn.PLong(rawtable.Rows[i]["RecallTypeNum"].ToString());
 				if(numberOfReminders==0) {
 					//always show
 				}
@@ -399,13 +371,7 @@ namespace OpenDentBusiness{
 				row["guarFName"]=rawtable.Rows[i]["_guarFName"].ToString();
 				row["guarLName"]=rawtable.Rows[i]["_guarLName"].ToString();
 				row["LName"]=rawtable.Rows[i]["LName"].ToString();
-				guarNum=PIn.PLong(rawtable.Rows[i]["Guarantor"].ToString());
-				//if(dictMaxDateDue.ContainsKey(guarNum)) {
-				//	row["maxDateDue"]=dictMaxDateDue[guarNum];
-				//}
-				//else {
-					row["maxDateDue"]=DateTime.MinValue;
-				//}
+				row["maxDateDue"]=DateTime.MinValue;//we'll set the actual value in a subsequent loop
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				if(numberOfReminders==0) {
 					row["numberOfReminders"]="";
@@ -446,6 +412,31 @@ namespace OpenDentBusiness{
 				row["recallType"]=rawtable.Rows[i]["_recalltype"].ToString();
 				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PLong(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
+			}
+			//Now that we have eliminated some rows, this next section calculates the maxDateDue date for each family
+			//key=guarantor, value=maxDateDue
+			Dictionary<long,DateTime> dictMaxDateDue=new Dictionary<long,DateTime>();
+			long guarNum;
+			for(int i=0;i<rows.Count;i++) {
+				guarNum=PIn.PLong(rows[i]["Guarantor"].ToString());
+				dateDue=(DateTime)rows[i]["DateDue"];
+				if(dictMaxDateDue.ContainsKey(guarNum)) {
+					if(dateDue > dictMaxDateDue[guarNum]) {
+						dictMaxDateDue[guarNum]=dateDue;
+					}
+				}
+				else {//no decision necessary
+					dictMaxDateDue.Add(guarNum,dateDue);
+				}
+			}
+			for(int i=0;i<rows.Count;i++) {
+				guarNum=PIn.PLong(rows[i]["Guarantor"].ToString());
+				if(dictMaxDateDue.ContainsKey(guarNum)) {
+					rows[i]["maxDateDue"]=dictMaxDateDue[guarNum];
+				}
+				else {
+					rows[i]["maxDateDue"]=DateTime.MinValue;//should never happen
+				}
 			}
 			RecallComparer comparer=new RecallComparer();
 			comparer.GroupByFamilies=groupByFamilies;
@@ -998,8 +989,6 @@ namespace OpenDentBusiness{
 				else {//sort by maxDateDue
 					DateTime xD=PIn.PDate(x["maxDateDue"].ToString());
 					DateTime yD=PIn.PDate(y["maxDateDue"].ToString());
-					//DateTime xD=(DateTime)x["DateDue"];
-					//DateTime yD=(DateTime)y["DateDue"];
 					if(xD != yD) {
 						return (xD.CompareTo(yD));
 					}
@@ -1008,10 +997,10 @@ namespace OpenDentBusiness{
 						return (x["Guarantor"].ToString().CompareTo(y["Guarantor"].ToString()));
 					}
 					//within the same family, sort by actual DueDate
-					//xD=PIn.PDate(x["DateDue"].ToString());
-					//yD=PIn.PDate(y["DateDue"].ToString());
-					//return (xD.CompareTo(yD));
-					return 0;
+					xD=PIn.PDate(x["DateDue"].ToString());
+					yD=PIn.PDate(y["DateDue"].ToString());
+					return (xD.CompareTo(yD));
+					//return 0;
 				}
 			}
 			else {//individual patients
