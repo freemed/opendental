@@ -796,6 +796,8 @@ DROP TABLE IF EXISTS etAck";
 					Db.NonQ(command);
 					command="ALTER TABLE toothinitial ADD INDEX (PatNum)";
 					Db.NonQ(command);
+					command="ALTER TABLE patplan ADD INDEX (PlanNum)";
+					Db.NonQ(command);
 				}
 				catch {
 					//in case any of the indices arlready exists.
