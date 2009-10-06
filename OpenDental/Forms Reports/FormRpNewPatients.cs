@@ -362,7 +362,7 @@ namespace OpenDental{
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
 					if(i==0){
-						whereProv+=" AND (";
+						whereProv+=" WHERE (";
 					}
 					else{
 						whereProv+="OR ";
