@@ -2543,6 +2543,13 @@ namespace OpenDental{
 					radioU.Checked=true;
 					break;
 			}
+			for(int i=0;i<ClaimProcsForProc.Count;i++) {
+				if(ClaimProcsForProc[i].ClaimPaymentNum!=0) {
+					continue;//this shouldn't be possible, but it's a good check to make.
+				}
+				ClaimProcs.Delete(ClaimProcsForProc[i]);//that way, completely new ones will be added back, and NoBillIns will be accurate.
+			}
+			ClaimProcsForProc=new List<ClaimProc>();
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcsForProc,false,PlanList,PatPlanList,BenefitList,PatCur.Age);
 			FillIns();
       SetControls();
