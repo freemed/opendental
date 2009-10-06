@@ -1955,7 +1955,7 @@ namespace OpenDental{
 					}
 				}
 				if(!allProcsComplete) {
-					if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
+					if(!Security.IsAuthorized(Permissions.ProcComplCreate,AptCur.AptDateTime)) {
 						return false;
 					}
 					List <PatPlan> PatPlanList=PatPlans.Refresh(AptCur.PatNum);

@@ -150,15 +150,15 @@ namespace OpenDentBusiness{
 			if(!AutoCodeItemC.HList.ContainsKey(codeNum)) {
 				return codeNum;
 			}
-			if(!AutoCodeC.HList.ContainsKey((int)AutoCodeItemC.HList[codeNum])) {
+			if(!AutoCodeC.HList.ContainsKey((long)AutoCodeItemC.HList[codeNum])) {
 				return codeNum;//just in case.
 			}
-			AutoCodeCur=(AutoCode)AutoCodeC.HList[(int)AutoCodeItemC.HList[codeNum]];
+			AutoCodeCur=(AutoCode)AutoCodeC.HList[(long)AutoCodeItemC.HList[codeNum]];
 			if(AutoCodeCur.LessIntrusive) {
 				return codeNum;
 			}
 			bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);
-			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode((int)AutoCodeItemC.HList[codeNum]);
+			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode((long)AutoCodeItemC.HList[codeNum]);
 			List<AutoCodeCond> condList;
 			for(int i=0;i<listForCode.Count;i++) {
 				condList=AutoCodeConds.GetListForItem(listForCode[i].AutoCodeItemNum);
