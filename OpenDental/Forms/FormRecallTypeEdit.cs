@@ -46,6 +46,8 @@ namespace OpenDental{
 		private Label labelSpecial;
 		private Label label2;
 		public RecallType RecallCur;
+		private OpenDental.UI.Button butDelete;
+		private Label label4;
 		private List<RecallTrigger> TriggerList;
 
 		///<summary></summary>
@@ -110,6 +112,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.label4 = new System.Windows.Forms.Label();
 			this.groupInterval.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -416,18 +420,46 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label2.Location = new System.Drawing.Point(386,90);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(263,60);
 			this.label2.TabIndex = 132;
 			this.label2.Text = "A manual recall type will have no triggers.  To disable an automatic recall type," +
-    " simply clear out the triggers.";
+    " clear out the triggers.";
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(42,609);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(78,24);
+			this.butDelete.TabIndex = 133;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.Location = new System.Drawing.Point(130,591);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(263,43);
+			this.label4.TabIndex = 134;
+			this.label4.Text = "There\'s no way yet to delete a recall type.  This deletes all patient recalls of " +
+    "this type.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormRecallTypeEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(732,653);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelSpecial);
 			this.Controls.Add(this.comboSpecial);
@@ -615,7 +647,7 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			//I don't think we should allow this for now.  Would need to check special types.
+			//Before deleting the actual type, we would need to check special types.
 			/*if(RecallCur.IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -630,6 +662,18 @@ namespace OpenDental{
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
 			}*/
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
+			}
+			if(listTriggers.Items.Count>0) {
+				MsgBox.Show(this,"All triggers must first be deleted.");
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Are you absolutely sure you want to delete all recalls of this type?")) {
+				return;
+			}
+			Recalls.DeleteAllOfType(RecallCur.RecallTypeNum);
+			MsgBox.Show(this,"Done.");
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -735,6 +779,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

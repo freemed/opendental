@@ -579,7 +579,7 @@ namespace OpenDentBusiness{
 				+"WHERE PatNum="+POut.PLong(patNum)
 				+" AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND (";
-			if(typeListActive.Count>0) {
+			if(typeListActive.Count>0) {//This will include both prophy and perio, regardless of whether this is a prophy or perio patient.
 				for(int i=0;i<typeListActive.Count;i++) {
 					if(i>0) {
 						command+=" OR";
@@ -607,6 +607,7 @@ namespace OpenDentBusiness{
 				if(PrefC.GetInt("RecallTypeSpecialProphy")!=typeListActive[i].RecallTypeNum
 					&& PrefC.GetInt("RecallTypeSpecialPerio")!=typeListActive[i].RecallTypeNum) 
 				{
+					//we are only working with prophy and perio in this loop.
 					continue;
 				}
 				for(int d=0;d<tableDates.Rows.Count;d++) {//procs for patient
@@ -621,11 +622,12 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			for(int i=0;i<typeList.Count;i++){
+			for(int i=0;i<typeList.Count;i++){//active types for this patient.
 				if(RecallTriggers.GetForType(typeList[i].RecallTypeNum).Count==0) {
 					//if no triggers for this recall type, then skip it.  Don't try to add or alter.
 					continue;
 				}
+				//set prevDate:
 				if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum
 					|| PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum) 
 				{
@@ -727,6 +729,15 @@ namespace OpenDentBusiness{
 				//matchingRecall.DateDueCalc=DateTime.MinValue;
 				//Recalls.Update(matchingRecall);
 			}*/
+		}
+
+		public static void DeleteAllOfType(long recallTypeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),recallTypeNum);
+				return;
+			}
+			string command="DELETE FROM recall WHERE RecallTypeNum= "+POut.PLong(recallTypeNum);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
