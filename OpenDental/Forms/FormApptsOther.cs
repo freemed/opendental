@@ -890,6 +890,7 @@ namespace OpenDental{
 			}
 			PatCur=FamCur.GetPatient(newPatNum);
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
+			textApptModNote.Text=PatCur.ApptModNote;
 			Filltb();
 			CheckStatus();
 		}
